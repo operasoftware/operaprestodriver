@@ -31,7 +31,7 @@ public class OperaBinary {
 		return process;
 	}
 	
-	public OperaBinary(String location, String... args) {
+	public OperaBinary(String location, String... args) throws com.opera.core.systems.FatalException {
 		commands = new ArrayList<String>();
 		commands.add(location);
 		if(args != null && args.length > 0) {
@@ -40,17 +40,18 @@ public class OperaBinary {
 		start();
 	}
 	
-	public void start() {
+	public void start() throws com.opera.core.systems.FatalException
+        {
 		ProcessBuilder builder = new ProcessBuilder(commands);
 		try {
 			process = builder.start();
 			builder.redirectErrorStream(true);
 			watcher = new OutputWatcher(process);
 
-			outputWatcherThread = new Thread(null, watcher , "output-watcher");
-	        outputWatcherThread.start();
+                        outputWatcherThread = new Thread(null, watcher , "output-watcher");
+                        outputWatcherThread.start();
 		} catch (IOException e) {
-			throw new WebDriverException("Could not start the process : " + e.getMessage());
+			throw new com.opera.core.systems.FatalException("Could not start the process : " + e.getMessage());
 		}
 	}
 	
