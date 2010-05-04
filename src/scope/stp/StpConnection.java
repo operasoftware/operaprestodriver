@@ -260,8 +260,9 @@ public class StpConnection implements Runnable {
 	 * @param message to add to the request queue
 	 * @throws IOException 
 	 */
-	public void send(Command command) {
+	public void send(Command command) throws IOException {
 		if (running) {
+                        System.out.println("Command: " + command.getService());
 			byte[] payload = command.toByteArray();
 			int totalSize = payload.length + 1; //increment 1 for message type
 	
@@ -275,8 +276,9 @@ public class StpConnection implements Runnable {
 			buffer.put((byte) 1);
 			buffer.put(payload);
 			requests.add(buffer);
+                        selector.wakeup();
 		}
-		selector.wakeup();
+                throw new IOException("Unable to send message, not connected.");
 	}
 	
 
@@ -286,7 +288,7 @@ public class StpConnection implements Runnable {
 	 * 
 	 * @param message to add to the request queue
 	 */
-	public void send(String message) {
+	public void send(String message) throws IOException {
 		if (running) {
 			String scopeMessage = message.length() + " " + message;
 			logger.log(Level.FINE, "WRITE : {0}", scopeMessage);
@@ -299,8 +301,9 @@ public class StpConnection implements Runnable {
 			ByteBuffer buffer = ByteBuffer.allocate(bytes.length);
 			buffer.put(bytes);
 			requests.add(buffer);
+                        selector.wakeup();
 		}
-		selector.wakeup();
+                throw new IOException("Unable to send message, not connected.");
 	}
 
 	/**
@@ -328,11 +331,14 @@ public class StpConnection implements Runnable {
 	 * @param key
 	 */
 	private void read(SelectionKey key) {
+
 		ByteBuffer buffer = (ByteBuffer) key.attachment();
 		int numRead = 0;
 		// do...while (numRead!=0)
 		try {
 			numRead = socketChannel.read(buffer);
+                        logger.log(Level.WARNING, "STPRead {0} bytes", numRead);
+
 		} catch (Exception e) {
 			cleanUp(key);
 			logger.log(Level.WARNING, "Channel closed", e.getMessage());
@@ -358,7 +364,6 @@ public class StpConnection implements Runnable {
 				selector.wakeup();
 				return;
 			}
-	
 			this.readXmlMessage();
 		}
 	}
@@ -432,6 +437,7 @@ public class StpConnection implements Runnable {
 			do
 			{
 			 written = socketChannel.write(buffer);
+                         logger.log(Level.WARNING, "STPWrite " + written + ", /{0} bytes", buffer.remaining());
 			 if(written == 0)
 			   sleep(1);
 			} while(buffer.hasRemaining());
