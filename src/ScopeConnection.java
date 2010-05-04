@@ -195,7 +195,7 @@ public class ScopeConnection {
 	 */
 	public void send(String message) {
 		responseLatch = new CountDownLatch(1);
-		if(isConnected())
+		if (isConnected())
 			connection.send(message);
 		else
 			throw new WebDriverException("Connection lost");
