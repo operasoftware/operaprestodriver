@@ -76,7 +76,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,FindsB
 	
 	private OperaBinary binary;
 	
-	protected OperaBinary getBinary() {
+	public OperaBinary getBinary() {
 		return binary;
 	}
 
@@ -84,7 +84,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,FindsB
 		return debugger;
 	}
 
-	protected IOperaExec getExecService() {
+	public IOperaExec getExecService() {
 		return exec;
 	}
 
