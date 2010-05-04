@@ -36,7 +36,7 @@ import com.opera.core.systems.scope.protos.ExecProtos.ScreenWatcher.ColorSpec;
 import com.opera.core.systems.scope.protos.ExecProtos.ScreenWatcherResult.ColorMatch;
 import com.opera.core.systems.scope.protos.UmsProtos.Response;
 import com.opera.core.systems.scope.services.IOperaExec;
-import com.sun.xml.internal.ws.util.VersionUtil;
+import com.sun.xml.ws.util.VersionUtil;
 
 /**
  * The exec service actions
@@ -172,7 +172,9 @@ public class OperaExec extends AbstractService implements IOperaExec {
 		ActionList.Builder builder = ActionList.newBuilder();
 		Action.Builder actionBuilder = Action.newBuilder();
 		actionBuilder.setName(using);
-		if(params != null && params.length > 0) {
+                
+		if(params != null && params.length > 0 && params[0] != null) {
+                        System.out.println("Action: param[0] = " + params[0]);
 			actionBuilder.setValue(params[0]);
 		}
 		

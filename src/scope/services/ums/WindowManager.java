@@ -31,7 +31,8 @@ import com.opera.core.systems.scope.protos.WmProtos.WindowID;
 import com.opera.core.systems.scope.protos.WmProtos.WindowInfo;
 import com.opera.core.systems.scope.protos.WmProtos.WindowList;
 import com.opera.core.systems.scope.services.IWindowManager;
-import com.sun.xml.internal.ws.util.VersionUtil;
+import com.sun.xml.ws.util.VersionUtil;
+
 
 /**
  * Handles the windowmanager service

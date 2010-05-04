@@ -8,7 +8,7 @@ import com.opera.core.systems.scope.protos.ScopeProtos.Service;
 import com.opera.core.systems.scope.services.IEcmaScriptDebugger;
 import com.opera.core.systems.scope.services.IOperaExec;
 import com.opera.core.systems.scope.services.IWindowManager;
-import com.sun.xml.internal.ws.util.VersionUtil;
+import com.sun.xml.ws.util.VersionUtil;
 
 public class UmsServices {
 
