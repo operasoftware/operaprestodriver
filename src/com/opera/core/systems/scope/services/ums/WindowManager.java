@@ -23,6 +23,8 @@ import com.opera.core.systems.ScopeServices;
 import com.opera.core.systems.model.ICommand;
 
 import com.opera.core.systems.scope.AbstractService;
+import com.opera.core.systems.scope.exceptions.WindowLoadedException;
+import com.opera.core.systems.scope.exceptions.WindowNotFoundException;
 import com.opera.core.systems.scope.internal.OperaFlags;
 import com.opera.core.systems.scope.internal.OperaIntervals;
 import com.opera.core.systems.scope.protos.UmsProtos.Response;
@@ -191,7 +193,7 @@ public class WindowManager extends AbstractService implements IWindowManager {
 			if (windowId != null) {
 				activeWindowId.set(windowId);
 			} else {
-				throw new WebDriverException("No window is available for driving");
+				throw new WindowNotFoundException("No window is available for driving");
 			}
 			filterActiveWindow();
 		}
@@ -271,7 +273,7 @@ public class WindowManager extends AbstractService implements IWindowManager {
 			throw new WebDriverException("Exception while waiting for page load : " + e.getMessage());
 		}
 		if(!pageLoaded)
-			throw new WebDriverException("Page load timeout");
+			throw new WindowLoadedException("Page load timeout");
 	}
 	
 	public void waitForWindowLoaded() {

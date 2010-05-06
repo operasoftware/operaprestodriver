@@ -11,6 +11,7 @@ import org.openqa.selenium.WebDriverException;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.AbstractMessage.Builder;
 import com.opera.core.systems.model.ICommand;
+import com.opera.core.systems.scope.exceptions.ResponseNotReceivedException;
 import com.opera.core.systems.scope.handlers.AbstractEventHandler;
 import com.opera.core.systems.scope.handlers.IConnectionHandler;
 import com.opera.core.systems.scope.internal.OperaIntervals;
@@ -105,7 +106,7 @@ public class ScopeConnection {
 			throw new WebDriverException("Exception while waiting for a response : " + e.getMessage());
 		}
 		if(!responseReceived) {
-			throw new WebDriverException("Could not get a response in a timely manner");
+			throw new ResponseNotReceivedException("Could not get a response in a timely manner");
 		}
 		
 		
