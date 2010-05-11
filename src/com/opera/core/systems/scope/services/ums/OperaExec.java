@@ -36,7 +36,7 @@ import com.opera.core.systems.scope.protos.ExecProtos.ScreenWatcher.ColorSpec;
 import com.opera.core.systems.scope.protos.ExecProtos.ScreenWatcherResult.ColorMatch;
 import com.opera.core.systems.scope.protos.UmsProtos.Response;
 import com.opera.core.systems.scope.services.IOperaExec;
-import com.sun.xml.internal.ws.util.VersionUtil;
+import com.sun.xml.ws.util.VersionUtil;
 
 /**
  * The exec service actions
