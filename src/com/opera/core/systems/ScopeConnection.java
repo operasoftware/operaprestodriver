@@ -146,8 +146,8 @@ public class ScopeConnection {
 	/**
 	 * Send 'quit' command to scope
 	 */
-	public void quit() {
-		connection.send("*quit");
+	public void quit() throws WebDriverException {
+               connection.send("*quit");
 	}
 	
 	/**
@@ -164,12 +164,12 @@ public class ScopeConnection {
 	 * @return
 	 */
 	public String getResponse(long timeout) {
-		try {
-			responseLatch.await(timeout, TimeUnit.MILLISECONDS);
-			return connection.getAndEmptyResponse();
-		} catch (InterruptedException e) {
-			throw new WebDriverException("Failed to get response in a timely fashion");
-		}
+            try {
+                responseLatch.await(timeout, TimeUnit.MILLISECONDS);
+                return connection.getAndEmptyResponse();
+            } catch (InterruptedException e) {
+                throw new WebDriverException("Failed to get response in a timely fashion");
+            }
 	}
 	
 	/**
@@ -177,16 +177,16 @@ public class ScopeConnection {
 	 * @param services
 	 * @return
 	 */
-	public List<String> enableServices(List<String> services) {
-		for (String requestedService : services) {
-			if(listedServices.contains(requestedService)){
-				connection.send("*enable " + requestedService);
-				enabledServices.add(requestedService);
-			} else {
-				throw new WebDriverException("Error while enabling : " + requestedService + ", service does not exist in announced services");
-			}
-		}
-		return enabledServices;
+	public List<String> enableServices(List<String> services) throws WebDriverException {
+            for (String requestedService : services) {
+                if(listedServices.contains(requestedService)){
+                    connection.send("*enable " + requestedService);
+                    enabledServices.add(requestedService);
+                } else {
+                    throw new WebDriverException("Error while enabling : " + requestedService + ", service does not exist in announced services");
+                }
+            }
+            return enabledServices;
 	}
 
 	/**
@@ -194,11 +194,8 @@ public class ScopeConnection {
 	 * @param message
 	 */
 	public void send(String message) {
-		responseLatch = new CountDownLatch(1);
-		if(isConnected())
-			connection.send(message);
-		else
-			throw new WebDriverException("Connection lost");
+            responseLatch = new CountDownLatch(1);
+            connection.send(message);
 	}
 
 	/**
@@ -207,12 +204,9 @@ public class ScopeConnection {
 	 * @param message
 	 */
 	public void sendXmlMessage(String serviceName, String message) {
-		responseLatch = new CountDownLatch(1);
-		String xml = (serviceName + " <?xml version=\"1.0\"?>" + message);
-		if(isConnected())
-			connection.send(xml);
-		else
-			throw new WebDriverException("Connection lost");
+            responseLatch = new CountDownLatch(1);
+            String xml = (serviceName + " <?xml version=\"1.0\"?>" + message);
+            connection.send(xml);
 	}
 	
 	
@@ -239,25 +233,20 @@ public class ScopeConnection {
 	}
 	
 	public Response executeCommand(ICommand command, String service, Builder<?> builder, long timeout) {
-		ByteString payload = (builder != null) ? builder.build().toByteString() : ByteString.EMPTY; 
-		Command.Builder commandBuilder = buildCommand(command.getCommandID(), service, payload);
-		responseLatch = new CountDownLatch(1);
+            ByteString payload = (builder != null) ? builder.build().toByteString() : ByteString.EMPTY; 
+            Command.Builder commandBuilder = buildCommand(command.getCommandID(), service, payload);
+            responseLatch = new CountDownLatch(1);
+
+            connection.send(commandBuilder.build());
 		
-		if(isConnected()) {
-			connection.send(commandBuilder.build());
-		} else {
-			connection.close();
-			throw new WebDriverException("Connection lost");
-		}
-		
-        waitForResponse(timeout);
-        Response response = connection.getStpResponse();
-        if(response == null)
-        	return null;
-        
-        if(response.getTag() != tag)
-        	throw new WebDriverException("Protocol error, tag mismatch, expected " + tag + ", got " + response.getTag() + "\n " + command.toString());
-        return response;
+            waitForResponse(timeout);
+            Response response = connection.getStpResponse();
+            if(response == null)
+                return null;
+
+            if(response.getTag() != tag)
+                throw new WebDriverException("Protocol error, tag mismatch, expected " + tag + ", got " + response.getTag() + "\n " + command.toString());
+            return response;
 	}
 	
 	/**
@@ -266,13 +255,13 @@ public class ScopeConnection {
 	 * @return
 	 */
 	public List<String> disableServices(List<String> services) {
-		for (String requestedService : services) {
-			if(enabledServices.contains(requestedService)){
-				connection.send("*disable " + requestedService);
-				enabledServices.remove(requestedService);
-			}
-		}
-		return enabledServices;
+            for (String requestedService : services) {
+                if(enabledServices.contains(requestedService)){
+                    connection.send("*disable " + requestedService);
+                    enabledServices.remove(requestedService);
+                }
+            }
+            return enabledServices;
 	}
 	
 }
