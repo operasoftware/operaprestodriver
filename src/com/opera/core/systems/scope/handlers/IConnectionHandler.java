@@ -9,6 +9,11 @@ public interface IConnectionHandler {
          * @return false if the connection should be closed immediately, or true to continue.
          */
         boolean onConnected(StpConnection connection);
+
+        /**
+         * This event is triggered when a handshake has been received successfully.
+         */
+        void onHandshake();
     
 	void onDisconnect();
 	
