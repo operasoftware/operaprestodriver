@@ -136,15 +136,17 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,FindsB
 		versions.put("exec", "2.0");
 		
 		services = new ScopeServices(versions);
-		
-		try {
+                
+                try {
 			services.init();
 		} catch (WebDriverException ex) {
 			if(binary != null)
 				binary.kill();
 			throw ex;
 		}
+                
 		
+                /*
 		this.debugger = services.getDebugger();
 		this.windowManager = services.getWindowManager();
 		this.exec = services.getExec();
@@ -161,6 +163,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,FindsB
 		}
 
 		services.setActionHandler(actionHandler);
+                 */
 	}
 	
 
