@@ -82,13 +82,19 @@ public class StpConnection implements SocketListener {
                     stp0EventHandler = new XmlEventParser(eventHandler);
     }
 
+    private void setState(State state)
+    {
+        logger.fine("Setting state: " + state.toString());
+        this.state = state;
+    }
+
     //FIXME
     public String getAndEmptyResponse() {
-            //synchronized(this) {
-                    String result = response;
-                    response = "";
-                    return result;
-            //}
+        //synchronized(this) {
+                String result = response;
+                response = "";
+                return result;
+        //}
     }
 
     public boolean isConnected() {
@@ -127,7 +133,10 @@ public class StpConnection implements SocketListener {
         builder = new StringBuilder();
         requests = new ArrayBlockingQueue<ByteBuffer>(1024);
         recvBuffer = ByteBuffer.allocateDirect(65536);
-        
+
+        socket.configureBlocking(false);
+
+        SocketMonitor.instance().add(socket, this, SelectionKey.OP_READ);
         if (!handler.onConnected(this))
         {
             close();
@@ -212,10 +221,8 @@ public class StpConnection implements SocketListener {
             numRead = socketChannel.read(buffer);
 
         } catch (IOException e) {
-            logger.log(Level.WARNING, "Channel closed", e.getMessage());
-            connectionHandler.onException(new WebDriverException(e));
-            SocketMonitor.instance().remove(socketChannel);
-            throw e;
+            logger.log(Level.WARNING, "Channel closed, causing exception", e.getMessage());
+            numRead = -1;
         }
 
         if (numRead < 0) {
@@ -249,10 +256,10 @@ public class StpConnection implements SocketListener {
      * Is that something we should avoid?
      */
     private void readXmlMessage() {
-        String response = builder.toString();
-        int countEnd = response.indexOf(' ');
-        String numberOfChars = response.substring(0, countEnd);
-        String messageBody = response.substring(countEnd + 1);
+        String xmlResponse = builder.toString();
+        int countEnd = xmlResponse.indexOf(' ');
+        String numberOfChars = xmlResponse.substring(0, countEnd);
+        String messageBody = xmlResponse.substring(countEnd + 1);
 
         int messageLength = Integer.valueOf(numberOfChars);
         int bodyLength = messageBody.length();
@@ -260,7 +267,7 @@ public class StpConnection implements SocketListener {
         if (bodyLength == messageLength) {
             processXmlMessage(messageBody);
             logger.fine(messageBody);
-            logger.log(Level.FINEST, "READ: {0}", messageBody);
+            logger.log(Level.FINE, "READ: {0}", messageBody);
             builder = new StringBuilder();
             countKnown.set(false);
         }
@@ -271,13 +278,13 @@ public class StpConnection implements SocketListener {
 
         else if (bodyLength > messageLength) {
             int cutPoint = numberOfChars.length() + 1 + messageLength;
-            String firstMessage = response.substring(countEnd + 1, cutPoint);
+            String firstMessage = xmlResponse.substring(countEnd + 1, cutPoint);
             logger.fine(firstMessage);
 
             processXmlMessage(firstMessage);
 
-            logger.log(Level.FINEST, "READ: {0}", firstMessage);
-            String remaining = response.substring(cutPoint);
+            logger.log(Level.FINE, "READ: {0}", firstMessage);
+            String remaining = xmlResponse.substring(cutPoint);
             builder = new StringBuilder();
             builder.append(remaining);
             if (remaining.contains(" ")) {
@@ -389,7 +396,7 @@ public class StpConnection implements SocketListener {
                                     connectionHandler.onException(new WebDriverException("Scope Transport Protocol Error : Handshake"));
                             }
                             buffer.clear();
-                            state = State.EMPTY;
+                            setState(State.EMPTY);
                             connectionHandler.onHandshake();
                             break;
                     }
@@ -401,7 +408,7 @@ public class StpConnection implements SocketListener {
                             buffer.get(prefix);
                             ByteString incomingPrefix = ByteString.copyFrom(prefix);
                             if(stpPrefix.equals(incomingPrefix)){
-                                    state = State.STP;
+                                    setState(State.STP);
                                     if(buffer.hasRemaining()){
                                             buffer.compact();
                                             readMessage(buffer, buffer.position());
@@ -420,7 +427,7 @@ public class StpConnection implements SocketListener {
             case STP:
                     //this one needs more error handling
                     messageSize = readRawVarint32(buffer);
-                    state = State.STP_DATA;
+                    setState(State.STP_DATA);
                     if (buffer.hasRemaining()) {
                             buffer.compact();
                             readMessage(buffer, buffer.position());
@@ -434,7 +441,7 @@ public class StpConnection implements SocketListener {
                             messageType = buffer.get();
                             byte[] payload = new byte[--messageSize];
                             buffer.get(payload);
-                            state = State.EMPTY;
+                            setState(State.EMPTY);
                             try {
                                     processMessage(messageType, payload);
                             } catch (IOException e) {

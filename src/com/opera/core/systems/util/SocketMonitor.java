@@ -88,7 +88,7 @@ public class SocketMonitor {
     }
 
     public boolean add(SelectableChannel channel, SocketListener listener, int selectMask) {
-        logger.fine("Add channel: " + channel.toString());
+        logger.fine("Add channel: " + channel.toString() + ", mask=" + debugMask(selectMask));
 
         synchronized (changes) {
             changes.add(new SocketMonitor.SelectorChangeRequest(channel, Operation.ADD, selectMask, listener));
@@ -98,7 +98,7 @@ public class SocketMonitor {
     }
     
     public boolean modify(SelectableChannel channel, SocketListener listener, int selectMask) {
-        logger.fine("Modify channel: " + channel.toString() + ", locked=" + locked);
+        logger.fine("Modify channel: " + channel.toString() + ", mask=" + debugMask(selectMask));
          synchronized (changes) {
             changes.add(new SocketMonitor.SelectorChangeRequest(channel, Operation.MODIFY, selectMask, listener));
             selector.wakeup();
@@ -191,19 +191,11 @@ public class SocketMonitor {
                         break;
                     case MODIFY:
                         SelectionKey key = req.channel.keyFor(selector);
-                        if (key != null)
-                        {
-                            key.interestOps(req.mask);
-                        } else {
-                            try {
-                                req.channel.register(selector, req.mask, req.listener);
-                            } catch (ClosedChannelException e) {
-                                e.printStackTrace();
-                            }
-                        }
+                        key.interestOps(req.mask);
                         break;
                     case REMOVE:
-                        selector.keys().remove(req.channel);
+                        if (selector.keys().contains(req.channel))
+                            selector.keys().remove(req.channel);
                         break;
                 }
             }
@@ -258,7 +250,6 @@ public class SocketMonitor {
         }
     }
 
-/*
     private String debugMask(int mask)
     {
         String str  = "{";
@@ -278,5 +269,4 @@ public class SocketMonitor {
         str += " }";
         return str;
     }
-*/
 }
