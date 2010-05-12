@@ -18,6 +18,7 @@ import org.openqa.selenium.WebDriverException;
 
 public class OperaBinary extends Thread {
 
+    private ThreadGroup runProcess;
     private Process process;
     private WinProcess winProcess;
     private OutputWatcher watcher;
@@ -27,7 +28,7 @@ public class OperaBinary extends Thread {
     private String processPath;
 
     public OperaBinary(String location, String... args) {
-        super("OperaBinary");
+        super(new ThreadGroup("run-process"), "opera");
         File file = new File(location);
         processPath = file.getAbsolutePath();
         commands = new ArrayList<String>();
@@ -71,7 +72,7 @@ public class OperaBinary extends Thread {
 
             watcher = new OutputWatcher(process, winProcess);
 
-            outputWatcherThread = new Thread(null, watcher , "output-watcher");
+            outputWatcherThread = new Thread(getThreadGroup(), watcher , "output-watcher");
             outputWatcherThread.start();
 
         } catch (IOException e) {
@@ -151,7 +152,6 @@ public class OperaBinary extends Thread {
             } catch (Exception e) {
                 logger.log(Level.SEVERE, "Could not kill process: " + e.getMessage());
             }
-
         }
     }
 
