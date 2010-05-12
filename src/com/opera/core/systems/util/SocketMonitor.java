@@ -70,16 +70,22 @@ public class SocketMonitor {
     
     public static boolean poll()
     {
-        return instance().pollSockets();
+        return instance().pollSockets(java.lang.Long.MAX_VALUE);
     }
     
-    public boolean pollSockets() {
+    public static boolean poll(long ms)
+    {
+        return instance().pollSockets(ms);
+    }
+    
+    
+    public boolean pollSockets(long ms) {
         logger.finest("Poll " + selector.keys().size() + " sockets");
         if (selector.keys().isEmpty())
             return false;
 
         try {
-            selector.select();
+            selector.select(ms);
         } catch (IOException e) {
             e.printStackTrace();
             return false;
