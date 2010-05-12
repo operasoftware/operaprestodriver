@@ -116,7 +116,7 @@ public class SocketMonitor {
     
     public static boolean poll()
     {
-        return instance().pollSockets(java.lang.Long.MAX_VALUE);
+        return poll(java.lang.Long.MAX_VALUE);
     }
     
     public static boolean poll(long ms)
@@ -128,12 +128,13 @@ public class SocketMonitor {
     
     
     protected boolean pollSockets(long ms) {
-        // logger.finest("Poll " + selector.keys().size() + " sockets");
+        logger.finest("Poll " + selector.keys().size() + " sockets");
         
         if (selector.keys().isEmpty())
-            return false;
+        {
+            return true;
+        }
 
-        
         try {
             locked = true;
             selector.select(ms);
