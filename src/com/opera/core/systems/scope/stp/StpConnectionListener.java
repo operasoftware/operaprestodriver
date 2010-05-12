@@ -1,7 +1,15 @@
 package com.opera.core.systems.scope.stp;
 
-import java.net.*;
+import java.nio.channels.ServerSocketChannel;
+import java.nio.channels.SocketChannel;
+import java.nio.channels.SelectionKey;
+import java.nio.channels.SelectableChannel;
+
+import com.opera.core.systems.util.SocketMonitor;
+import com.opera.core.systems.util.SocketListener;
+
 import java.io.IOException;
+import java.net.InetSocketAddress;
 import com.opera.core.systems.scope.handlers.IConnectionHandler;
 import java.util.logging.Logger;
 
@@ -10,75 +18,66 @@ import java.util.logging.Logger;
  *
  * @author Jan Vidar Krey
  */
-public class StpConnectionListener extends Thread {
+public class StpConnectionListener implements SocketListener {
 
     private int port;
-    private ServerSocket server = null;
+    private ServerSocketChannel server = null;
     private IConnectionHandler handler;
     private final Logger logger = Logger.getLogger(this.getClass().getName());
-    private boolean running = true;
         
     public StpConnectionListener(int port, IConnectionHandler handler) {
-            this.port = port;
-            this.handler = handler;
-            start();
+        this.port = port;
+        this.handler = handler;
+        start();
     }
 
     @Override
     protected void finalize() throws Throwable {
-        super.finalize();
         if (server != null) {
-            try {
-                server.close();
-            } catch (IOException ignored) {
-                /* do nothing */
-            }
+            stop();
         }
+        super.finalize();
     }
 
-    public void shutdown()
+    public void stop()
     {
         logger.fine("Shutting down...");
-        running = false;
-        this.interrupt();
-    }
-    
-    @Override
-    public void start()
-    {
-        try {
-            server = new ServerSocket(port, 5);
-            server.setReuseAddress(true);
-            logger.info("webdriver-opera v0.2.100506, ready to accept connections on port " + port);
-            running = true;
-        } catch (IOException e) {
-            handler.onException(e);
-            running = false;
-        }
-    }
-
-    @Override
-    public void run() {
-        while (running) {
-            try {
-                Socket socket = server.accept();
-                StpConnection con = new StpConnection(socket, handler);
-            } catch (IOException ioe) {
-                /* Unable to accept socket */
-                logger.warning("Error while accepting socket: " + ioe.getMessage());
-                continue;
-            }
-        }
-        logger.fine("Stopped.");
-
+        SocketMonitor.instance().remove(server);
         try {
             server.close();
-        } catch (IOException ignored) {
-            /* do nothing */
+        } catch (IOException ignored) { 
+            // ignored
         } finally {
             server = null;
         }
-        
     }
     
+    public void start()
+    {
+        try {
+            server = ServerSocketChannel.open();
+            server.configureBlocking(false);
+            server.socket().setReuseAddress(true);
+            server.socket().bind(new InetSocketAddress(port));
+            
+            SocketMonitor.instance().add(server, this, SelectionKey.OP_ACCEPT);
+            
+            logger.info("webdriver-opera v0.2.100506, ready to accept connections on port " + port);
+        } catch (IOException e) {
+            handler.onException(e);
+        }
+    }
+
+    public boolean canRead(SelectableChannel channel) throws IOException {
+        SocketChannel socket = server.accept();
+        if (socket != null) {
+            logger.fine("Accepted STP connection from " + socket.socket().getLocalAddress());
+            StpConnection con = new StpConnection(socket, handler);
+        }
+        return true;
+    }
+    
+    public boolean canWrite(SelectableChannel ch) throws IOException {
+        return false;
+    }
 }
