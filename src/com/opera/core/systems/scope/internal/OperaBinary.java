@@ -16,20 +16,39 @@ import org.jvnet.winp.WinProcess;
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriverException;
 
-public class OperaBinary {
+public class OperaBinary implements Runnable {
 
 	private Process process;
 	private WinProcess winProcess;
 	private OutputWatcher watcher;
 	private Thread outputWatcherThread;
+        private Thread binaryRunnerThread;
 	List<String> commands;
 	private static Logger logger = Logger.getLogger(OperaBinary.class.getName());
 	private String processPath;
 	
+	public OperaBinary(String location, String... args) {
+            File file = new File(location);
+            processPath = file.getAbsolutePath();
+            commands = new ArrayList<String>();
+            commands.add(location);
+
+            if(args != null && args.length > 0) {
+                    commands.addAll(Arrays.asList(args));
+            }
+            start();
+	}      
+
 	public void kill() {
-		watcher.kill();
+            watcher.kill();
 	}
 	
+        @Override
+        protected void finalize() throws Throwable {
+            kill();
+            super.finalize();
+        }
+        
 	public Process getProcess() {
 		return process;
 	}
@@ -38,34 +57,29 @@ public class OperaBinary {
 		return processPath;
 	}
 	
-	public OperaBinary(String location, String... args) {
-		File file = new File(location);
-		processPath = file.getAbsolutePath();
-		commands = new ArrayList<String>();
-		commands.add(location);
-		
-		if(args != null && args.length > 0) {
-			commands.addAll(Arrays.asList(args));
-		}
-		start();
-	}
-	
+
 	public void start() {
-		ProcessBuilder builder = new ProcessBuilder(commands);
-		try {
-			process = builder.start();
-			builder.redirectErrorStream(true);
-			
-			if(Platform.WINDOWS.is(Platform.getCurrent()))
-				winProcess = new WinProcess(process);
-			
-			watcher = new OutputWatcher(process, winProcess);
-			
-			outputWatcherThread = new Thread(null, watcher , "output-watcher");
-	        outputWatcherThread.start();
-		} catch (IOException e) {
-			throw new WebDriverException("Could not start the process : " + e.getMessage());
-		}
+            ProcessBuilder builder = new ProcessBuilder(commands);
+            try {
+                
+                process = builder.start();
+                builder.redirectErrorStream(true);
+
+                if(Platform.WINDOWS.is(Platform.getCurrent()))
+                    winProcess = new WinProcess(process);
+
+                watcher = new OutputWatcher(process, winProcess);
+
+                outputWatcherThread = new Thread(null, watcher , "output-watcher");
+                outputWatcherThread.start();
+
+                binaryRunnerThread = new Thread("OperaBinary");
+                binaryRunnerThread.start();
+                
+            } catch (IOException e) {
+                throw new WebDriverException("Could not start the process : " + e.getMessage());
+            }
+            
 	}
 	
 	public int getPid() {
@@ -83,6 +97,19 @@ public class OperaBinary {
 		}
 		return "";
 	}
+        
+        public void run()
+        {
+            System.out.println("Waiting for binary to exit.");
+            try
+            {
+                int exit = process.waitFor();
+                System.out.println("Opera exited with return value " + exit);
+            } catch (InterruptedException e) {
+                System.out.println("Got interrupted, killing Opera.");
+                kill();
+            }
+        }
 
 
 	private static class OutputWatcher implements Runnable {
@@ -101,7 +128,7 @@ public class OperaBinary {
 				try {
 					if(stream.read() == -1) return;
 				} catch (IOException e) {
-					//System.err.println(e);
+                                    e.printStackTrace();
 				}
 			}
 		}
@@ -130,5 +157,11 @@ public class OperaBinary {
 		}
 
 	}
+        
+        public static void main(String[] args)
+        {
+            OperaBinary binary = new OperaBinary("/bin/ls", "-l");
+            
+        }
 
 }
