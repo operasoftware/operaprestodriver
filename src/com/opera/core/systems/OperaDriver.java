@@ -115,37 +115,13 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,FindsB
 	 * @param arguments Arguments to pass for execution
 	 */
 	public OperaDriver(String executableLocation, String... arguments) {
-		String operaPath = System.getenv().get("OPERA_PATH");
-		String operaArgs = System.getenv().get("OPERA_ARGS");
-		
-		if(operaPath != null && operaPath.length() > 0) {
-			arguments = (operaArgs != null) ? operaArgs.split(",") : arguments;
-			binary = new OperaBinary(operaPath, arguments);
-		} else if(executableLocation != null) {
-			binary = new OperaBinary(executableLocation, arguments);
-		}
-		
-		Map<String, String> versions = new HashMap<String, String>();
-		versions.put("ecmascript-debugger", "5.0");
-		
-		if(OperaIntervals.BACKWARDS_COMPATIBLE.getValue() != 1)
-			versions.put("window-manager", "2.0.1");
-		else
-			versions.put("window-manager", "2.0");
-		
-		versions.put("exec", "2.0");
-		
-		services = new ScopeServices(versions);
-                
-                try {
-			services.init();
-		} catch (WebDriverException ex) {
-			if(binary != null)
-				binary.kill();
-			throw ex;
-		}
-                
-		
+
+                if (!createScopeSevices())
+                    throw new FatalException("Unable to create scope services.");
+
+                if (!startBinary(executableLocation, arguments))
+                    throw new FatalException("Unable to start binary.");
+
                 /*
 		this.debugger = services.getDebugger();
 		this.windowManager = services.getWindowManager();
@@ -165,6 +141,42 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,FindsB
 		services.setActionHandler(actionHandler);
                  */
 	}
+
+        private boolean createScopeSevices()
+        {
+            try {
+                Map<String, String> versions = new HashMap<String, String>();
+		versions.put("ecmascript-debugger", "5.0");
+
+		if(OperaIntervals.BACKWARDS_COMPATIBLE.getValue() != 1)
+                    versions.put("window-manager", "2.0.1");
+		else
+                    versions.put("window-manager", "2.0");
+
+                versions.put("exec", "2.0");
+                services = new ScopeServices(versions);
+                services.init();
+                return true;
+            } catch (WebDriverException e) {
+                e.printStackTrace();
+                return false;
+            }
+        }
+
+        private boolean startBinary(String executableLocation, String... arguments)
+        {
+            String operaPath = System.getenv().get("OPERA_PATH");
+            String operaArgs = System.getenv().get("OPERA_ARGS");
+
+            if(operaPath != null && operaPath.length() > 0) {
+                arguments = (operaArgs != null) ? operaArgs.split(",") : arguments;
+                binary = new OperaBinary(operaPath, arguments);
+            } else if(executableLocation != null) {
+                binary = new OperaBinary(executableLocation, arguments);
+            }
+
+            return (binary != null);
+        }
 	
 
 	public void get(String url) {
