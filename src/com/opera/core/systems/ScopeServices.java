@@ -29,10 +29,21 @@ import com.opera.core.systems.scope.services.IOperaExec;
 import com.opera.core.systems.scope.services.IWindowManager;
 import com.opera.core.systems.scope.services.ums.UmsServices;
 import com.opera.core.systems.scope.services.xml.XmlServices;
+import com.opera.core.systems.scope.stp.StpConnectionListener;
+import com.opera.core.systems.scope.stp.StpConnection;
 
+import com.opera.core.systems.scope.handlers.PbActionHandler;
+import com.opera.core.systems.scope.handlers.UmsActionHandler;
+import com.opera.core.systems.scope.handlers.XmlActionHandler;
 
-public class ScopeServices implements IConnectionHandler {
+import com.opera.core.systems.util.SocketMonitor;
+
+import java.util.logging.Logger;
+
+public class ScopeServices implements IConnectionHandler, Runnable {
 	
+        private final Logger logger = Logger.getLogger(this.getClass().getName());
+    
 	private IEcmaScriptDebugger debugger;
 	private IOperaExec exec;
 	private IWindowManager windowManager;
@@ -41,8 +52,10 @@ public class ScopeServices implements IConnectionHandler {
 	private Map<String, String> versions;
 	private List<IConsoleListener> listeners;
 	
-	private ScopeConnection connection;	
-	
+	private ScopeConnection connection = null;
+        private StpConnectionListener connectionListener;
+	boolean running = true;
+        
 	public ScopeConnection getConnection() {
 		return connection;
 	}
@@ -62,7 +75,7 @@ public class ScopeServices implements IConnectionHandler {
 	public void setActionHandler(ScopeActions actionHandler) {
 		this.actionHandler = actionHandler;
 	}
-
+        
 	public IEcmaScriptDebugger getDebugger() {
 		return debugger;
 	}
@@ -92,31 +105,33 @@ public class ScopeServices implements IConnectionHandler {
 	}
 	
 	public enum ScopeCommand implements ICommand {
-		CONNECT(3),
-		DISCONNECT(4),
-		ENABLE(5),
-		DISABLE(6),
-		HOST_INFO(10),
-		MESSAGE_INFO(11);
-		
-		private int code;
-		private static final Map<Integer,ScopeCommand> lookup = new HashMap<Integer,ScopeCommand>();
+            CONNECT(3),
+            DISCONNECT(4),
+            ENABLE(5),
+            DISABLE(6),
+            HOST_INFO(10),
+            MESSAGE_INFO(11);
 
-		static {
-        for(ScopeCommand command : EnumSet.allOf(ScopeCommand.class))
-             lookup.put(command.getCommandID(), command);
-		}
+            private int code;
+            private static final Map<Integer,ScopeCommand> lookup = new HashMap<Integer,ScopeCommand>();
 
-		private ScopeCommand(int code) {
-			this.code = code;
-		}
-		 public int getCommandID() { return code; }
+            static {
+            for(ScopeCommand command : EnumSet.allOf(ScopeCommand.class))
+                lookup.put(command.getCommandID(), command);
+            }
 
-	     public static ScopeCommand get(int code) { 
-	          return lookup.get(code); 
-	     }
+            private ScopeCommand(int code) {
+                this.code = code;
+            }
+            
+            public int getCommandID() {
+                return code;
+            }
 
-}
+            public static ScopeCommand get(int code) { 
+                return lookup.get(code); 
+            }
+        }
 	
 	/**
 	 * Creates the scope server on specified address and port
@@ -128,11 +143,14 @@ public class ScopeServices implements IConnectionHandler {
 	public ScopeServices(Map<String, String> versions) {
 		this.versions = versions;
 		listeners = new LinkedList<IConsoleListener>();
-		setupConnection();
-	}
+		connectionListener = new StpConnectionListener((int)OperaIntervals.SERVER_PORT.getValue(), this);
+                
+        }
 	
 	public void init() {
-		connection.waitForHandShake();
+            Thread thread = new Thread(this, "ScopeServices");
+            thread.start();
+            /*
 		boolean isStp1 = connection.isStp1();
 		boolean enableDebugger = (OperaIntervals.ENABLE_DEBUGGER.getValue() != 0);
 		if(isStp1) {
@@ -163,6 +181,7 @@ public class ScopeServices implements IConnectionHandler {
 			connection.enableServices(services);
 		}
 		initializeServices();
+             */
 	}
 	
 	private HostInfo getHostInfo() {
@@ -331,11 +350,6 @@ public class ScopeServices implements IConnectionHandler {
 		return ServiceResult.parseFrom(response.getPayload());
 	}
 	
-	private void setupConnection() {
-		connection = new ScopeConnection(this);
-		connection.init();
-	}
-	
 	private void createXmlServices(boolean enableDebugger) {
 		new XmlServices(this);
 		if(!enableDebugger)
@@ -346,11 +360,48 @@ public class ScopeServices implements IConnectionHandler {
 		exec.init();
 		windowManager.init();
 		debugger.init();
+                
+                ScopeActions actionHandler;
+		List<String> listedServices = getConnection().getListedServices();
+		if(listedServices.contains("stp-1")) {
+			actionHandler = new PbActionHandler(this);
+		} else {
+			if (listedServices.contains("core-2-4")) {
+				actionHandler = new UmsActionHandler(this);
+			} else {
+				actionHandler = new XmlActionHandler(this);
+			}
+		}
+
+		setActionHandler(actionHandler);
 	}
 
-	public void onDisconnect() {
-		// TODO Auto-generated method stub
-		
+        public boolean onConnected(StpConnection con)
+        {
+            if (connection == null)
+            {
+                logger.info("Got StpConnection");
+                connection = new ScopeConnection(con, this);
+                connection.init();
+                
+                
+                
+                return true;
+            }
+            logger.warning("StpConnection already attached - closing incoming connection.");
+            return false;
+        }
+        
+        public void onHandshake()
+        {
+            logger.info("Got handshake!");
+        }
+        
+	public void onDisconnect()
+        {
+            logger.fine("Disconnected, closing StpConnection.");
+            connection.close();
+            connection = null;
 	}
 
 	public void onResponseReceived() {
@@ -366,6 +417,14 @@ public class ScopeServices implements IConnectionHandler {
 	public String getMinVersionFor(String service) {
 		return versions.get(service);
 	}
+
+        public void run() {
+            logger.info("Started ScopeServices.");
+            while (running)
+            {
+                SocketMonitor.poll();
+            }
+        }
 	
 	
 }

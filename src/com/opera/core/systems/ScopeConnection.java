@@ -23,7 +23,7 @@ public class ScopeConnection {
 	
 	private List<String> listedServices;
 	private List<String> enabledServices;
-	private StpConnection connection;
+	private StpConnection connection = null;
 
 	private int tag;
 	
@@ -49,8 +49,8 @@ public class ScopeConnection {
 		return connection.isConnected();
 	}
 
-	public ScopeConnection(IConnectionHandler handler) {
-		connection = new StpConnection((int)OperaIntervals.SERVER_PORT.getValue(), handler);
+	public ScopeConnection(StpConnection con, IConnectionHandler handler) {
+                connection = con;
 	}
 	
 	/**
@@ -59,10 +59,8 @@ public class ScopeConnection {
 	 * After handshake we no longer need to listen as we
 	 * currently only support 1-1
 	 */
-	public void init(){
-		Thread worker = new Thread(null, connection, "stp-connection");
-		//wait for connection
-		worker.start();
+	public void init() {
+            enableStp1();
 	}
 	
 	public void waitForHandShake() {
@@ -71,7 +69,7 @@ public class ScopeConnection {
 		String serviceMessage = getServiceMessage();
 		
 		//after the handshake we no longer need the server channel to listen
-		connection.closeListener();
+		// connection.closeListener();
 		initializeServices(serviceMessage);
 		
 		if(listedServices == null)
@@ -84,7 +82,7 @@ public class ScopeConnection {
 		return listedServices.contains("stp-1");
 	}
 	
-	public void switchToStp0(){
+	public void switchToStp0() {
 		connection.switchToStp0();
 	}
 	
@@ -95,7 +93,7 @@ public class ScopeConnection {
 	
 	private void enableStp1(){
 		send("*enable stp-1");
-		waitForResponse(OperaIntervals.RESPONSE_TIMEOUT.getValue());
+		// waitForResponse(OperaIntervals.RESPONSE_TIMEOUT.getValue());
 	}
 	
 	private void waitForResponse(long timeout) {
@@ -119,7 +117,7 @@ public class ScopeConnection {
 	private String getServiceMessage() {
 		String serviceMessage = getResponse(OperaIntervals.HANDSHAKE_TIMEOUT.getValue());
 		if(serviceMessage.isEmpty()) {
-			connection.closeListener();
+			//connection.closeListener();
 			connection.close();
 			throw new WebDriverException("No handshake recevied in " + (OperaIntervals.HANDSHAKE_TIMEOUT.getValue() / 1000) + " seconds");
 		}
