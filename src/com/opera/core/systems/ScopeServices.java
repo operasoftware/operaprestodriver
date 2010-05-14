@@ -9,6 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import java.util.logging.Level;
 import org.openqa.selenium.WebDriverException;
 
 import com.google.protobuf.InvalidProtocolBufferException;
@@ -127,11 +128,11 @@ public class ScopeServices implements IConnectionHandler {
                 return code;
             }
 
-            public static ScopeCommand get(int code) { 
-                return lookup.get(code); 
+            public static ScopeCommand get(int code) {
+                return lookup.get(code);
             }
         }
-	
+
 	/**
 	 * Creates the scope server on specified address and port
 	 * Enables the required services for webdriver
@@ -144,7 +145,20 @@ public class ScopeServices implements IConnectionHandler {
 		listeners = new LinkedList<IConsoleListener>();
 		stpThread = new StpThread((int)OperaIntervals.SERVER_PORT.getValue(), this);
         }
-	
+
+        public void shutdown()
+        {
+            if (connection != null) {
+                connection.close();
+            }
+            stpThread.shutdown();
+            try {
+                stpThread.join();
+            } catch (InterruptedException ex) {
+                // ignored.
+            }
+        }
+
         public void waitForHandshake()
         {
             synchronized (this)
