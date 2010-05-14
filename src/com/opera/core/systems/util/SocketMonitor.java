@@ -12,7 +12,7 @@ import java.util.LinkedList;
  * ServerSocketChannel and fire canWrite() or canRead() events when such events
  * are detected by poll().
  *
- * @author Jan Vidar Krey
+ * @author Jan Vidar Krey (janv@opera.com)
  */
 public class SocketMonitor {
 
@@ -53,15 +53,15 @@ public class SocketMonitor {
             switch (op)
             {
                 case ADD:
-                        System.out.println("SelectorChangeRequest: Add socket=" + channel.toString() + ", mask=" + mask);
+                        logger.finest("SelectorChangeRequest: Add socket=" + channel.toString() + ", mask=" + mask);
                         break;
 
                 case MODIFY:
-                        System.out.println("SelectorChangeRequest: Modify socket=" + channel.toString() + ", mask=" + mask);
+                        logger.finest("SelectorChangeRequest: Modify socket=" + channel.toString() + ", mask=" + mask);
                         break;
 
                 case REMOVE:
-                        System.out.println("SelectorChangeRequest: Remove socket=" + channel.toString());
+                        logger.finest("SelectorChangeRequest: Remove socket=" + channel.toString());
                         break;
             }
         }
@@ -112,6 +112,8 @@ public class SocketMonitor {
     }
 
     public void remove(SelectableChannel channel) {
+        if (channel == null)
+            return;
         logger.fine("Remove channel: " + channel.toString());
         synchronized (changes) {
             changes.add(new SocketMonitor.SelectorChangeRequest(channel, Operation.REMOVE));
