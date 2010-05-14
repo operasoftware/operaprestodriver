@@ -13,7 +13,7 @@ public interface IConnectionHandler {
         /**
          * This event is triggered when a handshake has been received successfully.
          */
-        void onHandshake();
+        void onHandshake(String handshake);
     
 	void onDisconnect();
 	
