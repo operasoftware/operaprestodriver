@@ -18,7 +18,7 @@ import com.opera.core.systems.scope.protos.Esdbg6Protos.ObjectInfo.Property;
 import com.opera.core.systems.scope.protos.EsdbgProtos.EvalData;
 import com.opera.core.systems.scope.protos.EsdbgProtos.EvalData.Variable;
 import com.opera.core.systems.scope.protos.UmsProtos.Response;
-import com.sun.xml.ws.util.VersionUtil;
+import com.opera.core.systems.util.VersionUtil;
 
 public class EcmaScriptDebugger6 extends EcmaScriptDebugger {
 
