@@ -1,13 +1,10 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package com.opera.core.systems;
 
 /**
+ * This event is to be used when the STP communication fails in an unrecoverable
+ * fashion - connection has been closed.
  *
- * @author janv
+ * @author Jan Vidar Krey (janv@opera.com)
  */
 public class CommunicationException extends org.openqa.selenium.WebDriverException {
 

@@ -1,13 +1,10 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package com.opera.core.systems;
 
 /**
+ * Exception that is used when failing to start opera or the STP connection
+ * during eary phases of initializations.
  *
- * @author janv
+ * @author Jan Vidar Krey (janv@opera.com)
  */
 public class FatalException extends org.openqa.selenium.WebDriverException {
 
@@ -16,7 +13,6 @@ public class FatalException extends org.openqa.selenium.WebDriverException {
      */
     public FatalException() {
     }
-
 
     /**
      * Constructs an instance of <code>FatalException</code> with the specified detail message.
