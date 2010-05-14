@@ -69,7 +69,8 @@ import com.opera.core.systems.scope.services.IWindowManager;
 
 public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,FindsByXPath, FindsByName, FindsByTagName, FindsByClassName,
 		FindsByCssSelector, SearchContext, JavascriptExecutor {
-	private IEcmaScriptDebugger debugger;
+        private final Logger logger = Logger.getLogger(this.getClass().getName());
+        private IEcmaScriptDebugger debugger;
 	private IOperaExec exec;
 	private IWindowManager windowManager;
 	private ScopeServices services;
@@ -184,74 +185,66 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,FindsB
 	
 
 	public void get(String url) {
-		get(url, OperaIntervals.PAGE_LOAD_TIMEOUT.getValue());
-		/*
-		//int oldId = debugger.getRuntimeId();
-		debugger.releaseObjects();
-		windowManager.setLoadCompleteLatch(new CountDownLatch(1));
-		actionHandler.get(url);
-		/*
-		long end = System.currentTimeMillis() + OperaIntervals.PAGE_LOAD_TIMEOUT.getValue();
-		while(debugger.getRuntimeId() == oldId) {
-			sleep(OperaIntervals.POLL_INVERVAL.getValue());
-			if(System.currentTimeMillis() >= end)
-				break;
-		}
-		waitForLoadToComplete();
-		*/
-		/*
-		windowManager.waitForWindowLoaded();
-		*/
+            get(url, OperaIntervals.PAGE_LOAD_TIMEOUT.getValue());
 	}
-	
 	
 	public int get(String url, long timeout) {
-		int oldId = 0;
-		if(services.getConnection().isStp1()) {
-			debugger.releaseObjects();
-			windowManager.setLoadCompleteLatch(new CountDownLatch(1)); 
-		} else {
-			oldId = debugger.getRuntimeId();
-		}
-		
-		//debugger.resetRuntimesList();
-		actionHandler.get(url);
-		
-		if(services.getConnection().isStp1()) {
-			windowManager.waitForWindowLoaded(timeout);
-			return windowManager.getLastHttpResponseCode().getAndSet(0);
-		} else {
-			waitForPageLoad(oldId, timeout);
-			return 0;
-		}
+            logger.fine("get() url=" + url + ", timeout=" + timeout + "ms");
+            if (url == null)
+                throw new NullPointerException("Invalid url");
+
+            int oldId = 0;
+            if(services.getConnection().isStp1()) {
+                debugger.releaseObjects();
+                windowManager.setLoadCompleteLatch(new CountDownLatch(1));
+            } else {
+                oldId = debugger.getRuntimeId();
+            }
+
+            //debugger.resetRuntimesList();
+            actionHandler.get(url);
+
+            if(services.getConnection().isStp1()) {
+                    windowManager.waitForWindowLoaded(timeout);
+                    return windowManager.getLastHttpResponseCode().getAndSet(0);
+            } else {
+                    waitForPageLoad(oldId, timeout);
+                    return 0;
+            }
 	}
 	
+        // FIXME: Using sleep!
 	public void waitForPageLoad(int oldId, long timeout){
-		long end = System.currentTimeMillis() + timeout;
-		while(debugger.getRuntimeId() == oldId) {
-			sleep(OperaIntervals.POLL_INVERVAL.getValue());
-			if(System.currentTimeMillis() >= end)
-				break;
-		}
-		waitForLoadToComplete();
+            logger.fine("waitForPageLoad oldId=" + oldId + ", timeout=" + timeout + "ms");
+            long end = System.currentTimeMillis() + timeout;
+            while(debugger.getRuntimeId() == oldId) {
+                sleep(OperaIntervals.POLL_INVERVAL.getValue());
+                if(System.currentTimeMillis() >= end)
+                    break;
+            }
+            waitForLoadToComplete();
 	}
 
 	public String getCurrentUrl() {
-		return debugger.executeJavascript("return document.location.href");
+            String s = debugger.executeJavascript("return document.location.href");
+            logger.fine("getCurrentUrl => " + s);
+            return s;
 	}
 	
 	public void gc() {
-		debugger.releaseObjects();
+            logger.fine("gc");
+            debugger.releaseObjects();
 	}
 
 	public Dimension getDimensions() {
 		String[] dimensions = (debugger.executeJavascript("return (window.innerWidth + \",\" + window.innerHeight")).split(",");
+                logger.fine("getDimensions => " + dimensions[0] + "x" + dimensions[1]);
 		return new Dimension(Integer.valueOf(dimensions[0]), Integer.valueOf(dimensions[1]));
 	}
 
 	 //Chris' way
     public String getText(){
-        return debugger.executeJavascript("var visibleText = \"\";\n"+
+        String s = debugger.executeJavascript("var visibleText = \"\";\n"+
                 "    var travers = function(ele)\n"+
                 "    {\n"+
                 "      var children = ele.childNodes, child = null, i = 0, computedStyle = null;\n"+
@@ -286,15 +279,19 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,FindsB
                 "    };\n"+
                 "    travers(document);\n"+
                 "    return visibleText;");
+        logger.fine("getText => " + s);
+        return s;
     }
 
 	public void close() {
+            logger.fine("close");
 		closeWindow();
 		//FIXME implement a queuing system
 		windowManager.filterActiveWindow();
 	}
 	
 	public void closeAll() {
+            logger.fine("closeAll");
 		if(exec.getActionList().contains("Close all pages")) {
 			exec.action("Close all pages");
 		} else {
@@ -310,33 +307,43 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,FindsB
 	}
 	
 	private void closeWindow() {
+            logger.fine("closeWindow");
 		windowManager.setWindowClosedLatch(new CountDownLatch(1));
 		exec.action("Close page");
 		windowManager.waitForWindowClosed();
 	}
 
 	public void stop() {
+            logger.fine("stop");
 		exec.action("Stop");
 	}
 
 	public WebElement findElement(By by) {
+            logger.fine("findElement by=" + by.toString());
 		return by.findElement((SearchContext) this);
 	}
 
 	public List<WebElement> findElements(By by) {
+            logger.fine("findElements by=" + by.toString());
 		return by.findElements((SearchContext) this);
 	}
 
 	public String getPageSource() {
-		return debugger.executeJavascript("return document.documentElement.outerHTML");
+            String s = debugger.executeJavascript("return document.documentElement.outerHTML");
+            logger.fine("getPageSource => " + s);
+            return s;
 	}
 
 	public String getTitle() {
-		return debugger.executeJavascript("return document.title;");
+            String s = debugger.executeJavascript("return document.title;");
+            logger.fine("getTitle => " + s);
+            return s;
 	}
 
 	public String getWindowHandle() {
-		return String.valueOf(windowManager.getActiveWindowId());
+            String s = String.valueOf(windowManager.getActiveWindowId());
+            logger.fine("getWindowHandle => " + s);
+            return s;
 	}
 
 	public Set<String> getWindowHandles() {
@@ -352,18 +359,16 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,FindsB
 	}
 
 	public void quit() {
-		if(isConnected()) {
-			if(exec.getActionList().contains("Quit"))
-				exec.action("Quit");
-			else
-				exec.action("Exit");
-		}
-		
-		services.getConnection().close();
-		
-		if(binary != null){
-			binary.kill();
-		}
+            logger.fine("quit");
+            if(isConnected()) {
+                if(exec.getActionList().contains("Quit"))
+                    exec.action("Quit");
+                else
+                    exec.action("Exit");
+            }
+
+            services.shutdown();
+            binary.shutdown();
 	}
 
 	public TargetLocator switchTo() {
@@ -651,179 +656,186 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,FindsB
 		return exec.getActionList();
 	}
 	
+        /**
+         * @deprecated Don't use sleep!
+         */
 	private static void sleep(long timeInMillis) {
-		try {
-			Thread.sleep(timeInMillis);
-		} catch (InterruptedException e) {
-			//ignore
-		}
+            try {
+                Thread.sleep(timeInMillis);
+            } catch (InterruptedException e) {
+                //ignore
+            }
 	}
 
 	public WebElement findElementByTagName(String using) {
-		return findSingleElement("document.getElementsByTagName('" + using +"')[0];", "tag name");
+            return findSingleElement("document.getElementsByTagName('" + using +"')[0];", "tag name");
 	}
 
 
 	public List<WebElement> findElementsByTagName(String using) {
-		return findMultipleElements("document.getElementsByTagName('"+ using + "');\n", "name");
+            return findMultipleElements("document.getElementsByTagName('"+ using + "');\n", "name");
 	}
 
 	public WebElement findElementByCssSelector(String using) {
-		return findSingleElement("document.querySelector('" + using +"');", "selector");
+            return findSingleElement("document.querySelector('" + using +"');", "selector");
 	}
 
 	public List<WebElement> findElementsByCssSelector(String using) {
-		return findMultipleElements("document.querySelectorAll('"+ using + "'), returnValue = [], i=0;for(;returnValue[i]=results[i];i++); return returnValue;", "selector");
+            return findMultipleElements("document.querySelectorAll('"+ using + "'), returnValue = [], i=0;for(;returnValue[i]=results[i];i++); return returnValue;", "selector");
 	}
 
 	private final List<WebElement> findMultipleElements(String script, String type) {
-		Integer id = debugger.getObject(script);
+            Integer id = debugger.getObject(script);
 
-		if (id == null) {
-			throw new NoSuchElementException("Cannot find element(s) with " + type);
-		}
-		return processElements(id);
+            if (id == null) {
+                throw new NoSuchElementException("Cannot find element(s) with " + type);
+            }
+            return processElements(id);
 	}
 	
 	private final WebElement findSingleElement(String script, String type) {
-		Integer id = debugger.getObject(script);
+            Integer id = debugger.getObject(script);
 
-		if (id != null) {
-			return new OperaWebElement(this, id);
-		}
+            if (id != null) {
+                    return new OperaWebElement(this, id);
+            }
 
-		throw new NoSuchElementException("Cannot find element with " + type);
+            throw new NoSuchElementException("Cannot find element with " + type);
 	}
 
 
 	public void saveScreenshot(File pngFile) {
-		actionHandler.saveScreenshot(pngFile);
+            actionHandler.saveScreenshot(pngFile);
 	}
 
 	public String saveScreenshot(String fileName, int timeout, String... hashes) {		
-		return screenWatcher(fileName, timeout, true, hashes);
+            return screenWatcher(fileName, timeout, true, hashes);
 	}
 	
 	public ScreenShotReply saveScreenShot(Canvas canvas, long timeout, boolean includeImage, String... hashes) {		
-		return exec.screenWatcher(canvas, timeout, includeImage, hashes);
+            return exec.screenWatcher(canvas, timeout, includeImage, hashes);
 	}
 	
 	
 	private String screenWatcher(String fileName, int timeout, boolean saveFile, String... hashes){
-		Canvas canvas = new Canvas();
-		canvas.setX(0);
-		canvas.setY(0);
+            Canvas canvas = new Canvas();
+            canvas.setX(0);
+            canvas.setY(0);
 
-		String[] dimensions = debugger.executeJavascript("return (window.innerWidth + \",\" + window.innerHeight);").split(",");
-		canvas.setH(Integer.valueOf(dimensions[1]));
-		canvas.setW(Integer.valueOf(dimensions[0]));
-		canvas.setViewPortRelative(true);
-		
-        ScreenShotReply screenshot = exec.screenWatcher(canvas, timeout, saveFile, hashes);
-        if(saveFile && screenshot.getPng() != null){
-			FileOutputStream stream;
-			try {
-				stream = new FileOutputStream(fileName);
-				stream.write(screenshot.getPng());
-				stream.close();
-			} catch (Exception e) {
-				throw new WebDriverException("Failed to write file: " + e.getMessage());
-			}
-        }
-		return screenshot.getMd5();
+            String[] dimensions = debugger.executeJavascript("return (window.innerWidth + \",\" + window.innerHeight);").split(",");
+            canvas.setH(Integer.valueOf(dimensions[1]));
+            canvas.setW(Integer.valueOf(dimensions[0]));
+            canvas.setViewPortRelative(true);
+
+            ScreenShotReply screenshot = exec.screenWatcher(canvas, timeout, saveFile, hashes);
+            if(saveFile && screenshot.getPng() != null){
+                FileOutputStream stream;
+                try {
+                    stream = new FileOutputStream(fileName);
+                    stream.write(screenshot.getPng());
+                    stream.close();
+                } catch (Exception e) {
+                    throw new WebDriverException("Failed to write file: " + e.getMessage());
+                }
+            }
+            return screenshot.getMd5();
 	}
 
 	public Object executeScript(String script, Object... args) {
-		Object object = debugger.scriptExecutor(script, args);
+            Object object = debugger.scriptExecutor(script, args);
 
-		//we probably have an element OR list
-		if(object instanceof ScriptResult) {
-			ScriptResult result = (ScriptResult) object;
-			Integer objectId = result.getObjectId();
-			if(objectId == null)
-				return null;
-			if(result.getClassName().endsWith("Element"))
-				return new OperaWebElement(this, objectId);
-			if(result.getClassName().equals("NodeList"))
-				return processElements(objectId);
-			if(result.getClassName().equals("Array"))
-				return processObjects(objectId);
-		}
-		return object;
+            //we probably have an element OR list
+            if(object instanceof ScriptResult) {
+                ScriptResult result = (ScriptResult) object;
+                Integer objectId = result.getObjectId();
+                if(objectId == null)
+                    return null;
+                if(result.getClassName().endsWith("Element"))
+                    return new OperaWebElement(this, objectId);
+                if(result.getClassName().equals("NodeList"))
+                    return processElements(objectId);
+                if(result.getClassName().equals("Array"))
+                    return processObjects(objectId);
+            }
+            return object;
 	}
 
 	protected List<Object> processObjects(Integer id) {
-		List<Integer> ids = debugger.examineObjects(id);
-		List<Object> toReturn = new ArrayList<Object>();
-		for (Integer objectId : ids)
-			toReturn.add(debugger.callFunctionOnObject("locator", objectId, true));
-		return toReturn;
-		
+            List<Integer> ids = debugger.examineObjects(id);
+            List<Object> toReturn = new ArrayList<Object>();
+            for (Integer objectId : ids)
+                toReturn.add(debugger.callFunctionOnObject("locator", objectId, true));
+            return toReturn;
 	}
 	
 	public boolean isJavascriptEnabled() {
-		// FIXME we always assume it is true
-		// TODO it should not be possible to register esdbg if js is disabled?
-		return true;
+            // FIXME we always assume it is true
+            // TODO it should not be possible to register esdbg if js is disabled?
+            return true;
 	}
 
 	public void cleanUp() {
-		services.getConnection().close();
+            services.getConnection().close();
 	}
 
 	public void executeActions(Action action) {
-		List<UserInteraction> actions = action.getActions();
-		for (UserInteraction userInteraction : actions) {
-			userInteraction.execute(this);
-		}
-		waitForLoadToComplete();
+            List<UserInteraction> actions = action.getActions();
+            for (UserInteraction userInteraction : actions) {
+                userInteraction.execute(this);
+            }
+            waitForLoadToComplete();
 	}
 	
+        /**
+         * @deprecated This should not be used!
+         */
 	public boolean isConnected() {
-		return windowManager.canPingHost();//services.getConnection().isConnected();
+            boolean val = windowManager.canPingHost();
+            logger.fine("isConnected() => " + val);
+            return val;
 	}
 	
 	public void key(String key) {
-		keyDown(key);
-		keyUp(key);
+            keyDown(key);
+            keyUp(key);
 	}
 
 	public void keyDown(String key) {
-		exec.key(key, false);
+            exec.key(key, false);
 	}
 
 	public void keyUp(String key) {
-		exec.key(key, true);
+            exec.key(key, true);
 	}
 
 	public void releaseKeys() {
-		exec.releaseKeys();
+            exec.releaseKeys();
 	}
 
 	public void type(String using) {
-		exec.type(using);
+            exec.type(using);
 	}
 	
 	public void mouseEvent(int x, int y, int value) {
-		exec.mouseAction(x, y, value, 1);
+            exec.mouseAction(x, y, value, 1);
 	}
 	
 	public int getPid() {
-		if(binary != null) {
-			return binary.getPid();
-		}
-		return 0;
+            if(binary != null) {
+                    return binary.getPid();
+            }
+            return 0;
 	}
 	
 	public String getPath() {
-		if(binary != null) {
-			return binary.getProcessPath();
-		} else
-			throw new UnsupportedOperationException("Opera was not started by webdriver, path can not be retrieved");
+            if(binary != null) {
+                return binary.getProcessPath();
+            } else
+                throw new UnsupportedOperationException("Opera was not started by webdriver, path can not be retrieved");
 	}
 	
 	public void addConsoleListener(IConsoleListener listener) {
-		services.addConsoleListener(listener);
+            services.addConsoleListener(listener);
 	}
 
 }

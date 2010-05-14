@@ -26,6 +26,7 @@ public class OperaBinary extends Thread {
     List<String> commands;
     private static Logger logger = Logger.getLogger(OperaBinary.class.getName());
     private String processPath;
+    private AtomicBoolean running = new AtomicBoolean(false);
 
     public OperaBinary(String location, String... args) {
         super(new ThreadGroup("run-process"), "opera");
@@ -45,6 +46,18 @@ public class OperaBinary extends Thread {
         watcher.kill();
     }
 
+    public void shutdown()
+    {
+        try {
+            running.set(false);
+            interrupt();
+            join(OperaIntervals.KILL_GRACE_TIMEOUT.getValue());
+        } catch (InterruptedException ex) {
+            logger.severe("Unable to shutdown Opera binary in a timely fashion.");
+            kill();
+        }
+    }
+    
     @Override
     protected void finalize() throws Throwable {
         kill();
@@ -66,19 +79,17 @@ public class OperaBinary extends Thread {
 
             process = builder.start();
             builder.redirectErrorStream(true);
-
             if(Platform.WINDOWS.is(Platform.getCurrent()))
                 winProcess = new WinProcess(process);
 
             watcher = new OutputWatcher(process, winProcess);
-
             outputWatcherThread = new Thread(getThreadGroup(), watcher , "output-watcher");
             outputWatcherThread.start();
 
+            running.set(true);
         } catch (IOException e) {
             throw new WebDriverException("Could not start the process : " + e.getMessage());
         }
-
     }
 
     public int getPid() {
@@ -101,13 +112,17 @@ public class OperaBinary extends Thread {
     public void run()
     {
         logger.fine("Waiting for Opera binary to exit.");
-        try
+        while (running.get())
         {
-            int exit = process.waitFor();
-            logger.info("Opera exited with return value " + exit);
-        } catch (InterruptedException e) {
-            logger.severe("Got interrupted, killing Opera.");
-            kill();
+            try
+            {
+                int exit = process.waitFor();
+                running.set(false);
+                logger.info("Opera exited with return value " + exit);
+            } catch (InterruptedException e) {
+                logger.fine("Got interrupted. Will terminate Opera.");
+                process.destroy();
+            }
         }
     }
 

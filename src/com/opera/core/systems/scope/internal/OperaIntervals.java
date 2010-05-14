@@ -16,6 +16,7 @@ public enum OperaIntervals {
 	HANDSHAKE_TIMEOUT(30000),
 	SERVER_PORT(7001),
 	ENABLE_DEBUGGER(1),
+        KILL_GRACE_TIMEOUT(1000),
 	BACKWARDS_COMPATIBLE(1);
 	
 	private long value;
