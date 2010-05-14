@@ -98,14 +98,19 @@ public class SocketMonitor {
     }
     
     public boolean modify(SelectableChannel channel, SocketListener listener, int selectMask) {
-        logger.fine("Modify channel: " + channel.toString() + ", mask=" + debugMask(selectMask));
-         synchronized (changes) {
+        /*
+        logger.fine("Modify channel: " + (channel != null ? channel.toString() : "null") + ", mask=" + debugMask(selectMask));
+        */
+        if (channel == null)
+            return false;
+
+	synchronized (changes) {
             changes.add(new SocketMonitor.SelectorChangeRequest(channel, Operation.MODIFY, selectMask, listener));
             selector.wakeup();
         }
         return true;
     }
-    
+
     public void remove(SelectableChannel channel) {
         logger.fine("Remove channel: " + channel.toString());
         synchronized (changes) {
@@ -113,23 +118,25 @@ public class SocketMonitor {
             selector.wakeup();
         }
     }
-    
+
+    public void stop() {
+        selector.wakeup();
+    }
+
     public static boolean poll()
     {
         return poll(java.lang.Long.MAX_VALUE);
     }
-    
+
     public static boolean poll(long ms)
     {
         boolean ok = instance().pollSockets(ms);
         instance().applyChanges();
         return ok;
     }
-    
-    
+
     protected boolean pollSockets(long ms) {
-        logger.finest("Poll " + selector.keys().size() + " sockets");
-        
+        // logger.finest("Poll " + selector.keys().size() + " sockets");
         if (selector.keys().isEmpty())
         {
             return true;
@@ -137,7 +144,10 @@ public class SocketMonitor {
 
         try {
             locked = true;
-            selector.select(ms);
+            // logger.fine("selecting for " + ms + " milliseconds");
+            synchronized (selector) {
+                selector.select(ms);
+            }
         } catch (IOException e) {
             e.printStackTrace();
             return false;
@@ -145,10 +155,8 @@ public class SocketMonitor {
             locked = false;
         }
 
-        
         locked = true;
         Iterator<SelectionKey> iterator = selector.selectedKeys().iterator();
-        
         while (iterator.hasNext()) {
             SelectionKey key = iterator.next();
             iterator.remove();
@@ -166,10 +174,8 @@ public class SocketMonitor {
     
     protected void applyChanges()
     {
- 
-        synchronized (changes)
+	synchronized (changes)
         {
-        
             if (changes.size() == 0)
                 return;
 
@@ -211,7 +217,9 @@ public class SocketMonitor {
         int currentMask = key.interestOps();
         int triggerMask = key.readyOps();
         int wantedMask = 0;
-        
+
+        logger.fine("processSelectionKey(), events " + debugMask(triggerMask));
+
         if (key.isValid() && key.isAcceptable()) {
             if (listener.canRead(channel))
                 wantedMask |= SelectionKey.OP_ACCEPT;
@@ -223,11 +231,13 @@ public class SocketMonitor {
         }
         
         if (key.isValid() && key.isReadable()) {
+            logger.fine("isReadable()");
             if (listener.canRead(channel))
                 wantedMask |= SelectionKey.OP_READ;
         }
 
         if (key.isValid() && key.isWritable()) {
+            // logger.finest("isReadable()");
             if (listener.canWrite(channel))
                 wantedMask |= SelectionKey.OP_WRITE;
         }
