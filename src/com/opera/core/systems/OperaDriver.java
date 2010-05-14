@@ -32,6 +32,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Cookie;
 import org.openqa.selenium.JavascriptExecutor;
@@ -98,9 +100,8 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,FindsB
 
 	// TODO
 	// Profiling
-	
 	public OperaDriver() {
-		this(null);
+            this(null);
 	}
 	
 	/**
@@ -116,30 +117,32 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,FindsB
 	 */
 	public OperaDriver(String executableLocation, String... arguments) {
 
-                if (!createScopeSevices())
-                    throw new FatalException("Unable to create scope services.");
+            if (!createScopeSevices()) {
+                throw new FatalException("Unable to create scope services.");
+            }
+            if (!startBinary(executableLocation, arguments)) {
+                throw new FatalException("Unable to start binary.");
+            }
 
-                if (!startBinary(executableLocation, arguments))
-                    throw new FatalException("Unable to start binary.");
+            services.waitForHandshake();
+            services.secondaryInit();
 
-                /*
-		this.debugger = services.getDebugger();
-		this.windowManager = services.getWindowManager();
-		this.exec = services.getExec();
-		
-		List<String> listedServices = services.getConnection().getListedServices();
-		if(listedServices.contains("stp-1")) {
-			actionHandler = new PbActionHandler(services);
-		} else {
-			if (services.getConnection().getListedServices().contains("core-2-4")) {
-				actionHandler = new UmsActionHandler(services);
-			} else {
-				actionHandler = new XmlActionHandler(services);
-			}
-		}
+            debugger = services.getDebugger();
+            windowManager = services.getWindowManager();
+            exec = services.getExec();
 
-		services.setActionHandler(actionHandler);
-                 */
+            List<String> listedServices = services.getConnection().getListedServices();
+            if (listedServices.contains("stp-1")) {
+                actionHandler = new PbActionHandler(services);
+            } else {
+                if (!services.getConnection().getListedServices().contains("core-2-3")) {
+                    actionHandler = new UmsActionHandler(services);
+                } else {
+                    actionHandler = new XmlActionHandler(services);
+                }
+            }
+
+            services.setActionHandler(actionHandler);
 	}
 
         private boolean createScopeSevices()
@@ -155,7 +158,6 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,FindsB
 
                 versions.put("exec", "2.0");
                 services = new ScopeServices(versions);
-                services.init();
                 return true;
             } catch (WebDriverException e) {
                 e.printStackTrace();
@@ -175,7 +177,9 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,FindsB
                 binary = new OperaBinary(executableLocation, arguments);
             }
 
-            return (binary != null);
+            if (binary == null)
+                return false;
+            return true;
         }
 	
 

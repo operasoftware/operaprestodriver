@@ -29,18 +29,16 @@ import com.opera.core.systems.scope.services.IOperaExec;
 import com.opera.core.systems.scope.services.IWindowManager;
 import com.opera.core.systems.scope.services.ums.UmsServices;
 import com.opera.core.systems.scope.services.xml.XmlServices;
-import com.opera.core.systems.scope.stp.StpConnectionListener;
+import com.opera.core.systems.scope.stp.StpThread;
 import com.opera.core.systems.scope.stp.StpConnection;
 
 import com.opera.core.systems.scope.handlers.PbActionHandler;
 import com.opera.core.systems.scope.handlers.UmsActionHandler;
 import com.opera.core.systems.scope.handlers.XmlActionHandler;
 
-import com.opera.core.systems.util.SocketMonitor;
-
 import java.util.logging.Logger;
 
-public class ScopeServices implements IConnectionHandler, Runnable {
+public class ScopeServices implements IConnectionHandler {
 	
         private final Logger logger = Logger.getLogger(this.getClass().getName());
     
@@ -53,8 +51,9 @@ public class ScopeServices implements IConnectionHandler, Runnable {
 	private List<IConsoleListener> listeners;
 	
 	private ScopeConnection connection = null;
-        private StpConnectionListener connectionListener;
+        private StpThread stpThread;
 	boolean running = true;
+        boolean handShaken = false;
         
 	public ScopeConnection getConnection() {
 		return connection;
@@ -143,45 +142,55 @@ public class ScopeServices implements IConnectionHandler, Runnable {
 	public ScopeServices(Map<String, String> versions) {
 		this.versions = versions;
 		listeners = new LinkedList<IConsoleListener>();
-		connectionListener = new StpConnectionListener((int)OperaIntervals.SERVER_PORT.getValue(), this);
-                
+		stpThread = new StpThread((int)OperaIntervals.SERVER_PORT.getValue(), this);
         }
 	
-	public void init() {
-            Thread thread = new Thread(this, "ScopeServices");
-            thread.start();
-            /*
-		boolean isStp1 = connection.isStp1();
-		boolean enableDebugger = (OperaIntervals.ENABLE_DEBUGGER.getValue() != 0);
-		if(isStp1) {
-			connection.switchToStp1();
-			HostInfo info = getHostInfo();
-			createUmsServices(enableDebugger, info);
-			connection.setEventHandler(new UmsEventHandler(this));
+        public void waitForHandshake()
+        {
+            synchronized (this)
+            {
+                try {
+                    wait(OperaIntervals.HANDSHAKE_TIMEOUT.getValue());
+                    if (!handShaken)
+                        throw new FatalException("Handshake timed out.");
+                } catch (InterruptedException ex) {
+                    throw new FatalException("Handshake interrupted.");
+                }
+            }
+        }
 
-			connect();
-			if(enableDebugger)
-				enableServices("ecmascript-debugger");
-			enableServices("exec", "window-manager", "console-logger");//, "http-logger");
-		}
-		else {
-			List<String> services = new ArrayList<String>();
-			parser = new Parser();
-			connection.switchToStp0();
-			createXmlServices(enableDebugger);
-			connection.setEventHandler(new EventHandler(this));
-			
-			if(enableDebugger)
-				services.add("ecmascript-debugger");
-			
-			services.add("exec");
-			// services.add("console-logger");
-			//services.add("http-logger");
-			services.add("window-manager");
-			connection.enableServices(services);
-		}
-		initializeServices();
-             */
+        public void secondaryInit()
+        {
+            boolean isStp1 = connection.isStp1();
+            boolean enableDebugger = (OperaIntervals.ENABLE_DEBUGGER.getValue() != 0);
+            if(isStp1) {
+                connection.switchToStp1();
+                HostInfo info = getHostInfo();
+                createUmsServices(enableDebugger, info);
+                connection.setEventHandler(new UmsEventHandler(this));
+
+                connect();
+                if(enableDebugger)
+                    enableServices("ecmascript-debugger");
+                enableServices("exec", "window-manager", "console-logger");//, "http-logger");
+            }
+            else {
+                List<String> services = new ArrayList<String>();
+                parser = new Parser();
+                connection.switchToStp0();
+                createXmlServices(enableDebugger);
+                connection.setEventHandler(new EventHandler(this));
+
+                if(enableDebugger)
+                    services.add("ecmascript-debugger");
+
+                services.add("exec");
+                // services.add("console-logger");
+                //services.add("http-logger");
+                services.add("window-manager");
+                connection.enableServices(services);
+            }
+            initializeServices();
 	}
 	
 	private HostInfo getHostInfo() {
@@ -361,30 +370,29 @@ public class ScopeServices implements IConnectionHandler, Runnable {
 		windowManager.init();
 		debugger.init();
                 
-                ScopeActions actionHandler;
+                ScopeActions scopeActionHandler;
 		List<String> listedServices = getConnection().getListedServices();
 		if(listedServices.contains("stp-1")) {
-			actionHandler = new PbActionHandler(this);
+			scopeActionHandler = new PbActionHandler(this);
 		} else {
 			if (listedServices.contains("core-2-4")) {
-				actionHandler = new UmsActionHandler(this);
+				scopeActionHandler = new UmsActionHandler(this);
 			} else {
-				actionHandler = new XmlActionHandler(this);
+				scopeActionHandler = new XmlActionHandler(this);
 			}
 		}
 
-		setActionHandler(actionHandler);
+		setActionHandler(scopeActionHandler);
 	}
 
         public boolean onConnected(StpConnection con)
         {
             if (connection == null)
             {
+                handShaken = false;
                 logger.info("Got StpConnection");
                 connection = new ScopeConnection(con, this);
                 connection.init();
-                
-                
                 
                 return true;
             }
@@ -392,39 +400,37 @@ public class ScopeServices implements IConnectionHandler, Runnable {
             return false;
         }
         
-        public void onHandshake()
+        public void onHandshake(String message)
         {
-            logger.info("Got handshake!");
+            logger.info("Got Stp handshake!");
+            handShaken = true;
+            connection.initializeServices(message);
+
+            synchronized (this) {
+                notifyAll();
+            }
         }
         
 	public void onDisconnect()
         {
             logger.fine("Disconnected, closing StpConnection.");
-            connection.close();
             connection = null;
 	}
 
 	public void onResponseReceived() {
-		connection.getResponseReceivedLatch().countDown();
-		
+            logger.fine("Got response.");
+            connection.getResponseReceivedLatch().countDown();
 	}
 
 	public void onException(Exception ex) {
-		throw new WebDriverException(ex);
-		
+            logger.fine("Got exception");
+            throw new WebDriverException(ex);
 	}
 
 	public String getMinVersionFor(String service) {
-		return versions.get(service);
+            return versions.get(service);
 	}
 
-        public void run() {
-            logger.info("Started ScopeServices.");
-            while (running)
-            {
-                SocketMonitor.poll();
-            }
-        }
 	
 	
 }

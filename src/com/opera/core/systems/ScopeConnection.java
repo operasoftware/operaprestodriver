@@ -64,18 +64,18 @@ public class ScopeConnection {
 	}
 	
 	public void waitForHandShake() {
-		//wait for handshake, this is a blocking call, so we have to call Opera just
-		//before this one
-		String serviceMessage = getServiceMessage();
-		
-		//after the handshake we no longer need the server channel to listen
-		// connection.closeListener();
-		initializeServices(serviceMessage);
-		
-		if(listedServices == null)
-			throw new WebDriverException("Services response error");
-		
-		enabledServices = new ArrayList<String>();
+            //wait for handshake, this is a blocking call, so we have to call Opera just
+            //before this one
+            String serviceMessage = getServiceMessage();
+
+            //after the handshake we no longer need the server channel to listen
+            // connection.closeListener();
+            initializeServices(serviceMessage);
+
+            if (listedServices == null)
+                throw new WebDriverException("Services response error");
+
+            enabledServices = new ArrayList<String>();
 	}
 	
 	public boolean isStp1() {
@@ -88,26 +88,25 @@ public class ScopeConnection {
 	
 	public void switchToStp1(){
 		connection.switchToStp1();
-		enableStp1();
+		// enableStp1();
 	}
 	
-	private void enableStp1(){
-		send("*enable stp-1");
-		// waitForResponse(OperaIntervals.RESPONSE_TIMEOUT.getValue());
+	private void enableStp1() {
+            send("*enable stp-1");
 	}
 	
 	private void waitForResponse(long timeout) {
-		boolean responseReceived;
-		try {
-			responseReceived = responseLatch.await(timeout, TimeUnit.MILLISECONDS);
-		} catch (InterruptedException e) {
-			throw new WebDriverException("Exception while waiting for a response : " + e.getMessage());
-		}
-		if(!responseReceived) {
-			throw new ResponseNotReceivedException("Could not get a response in a timely manner");
-		}
-		
-		
+            System.out.println("waitForResponse " + timeout);
+            boolean responseReceived;
+            try {
+                responseReceived = responseLatch.await(timeout, TimeUnit.MILLISECONDS);
+                System.out.println("Response received: " + responseReceived);
+            } catch (InterruptedException e) {
+                throw new WebDriverException("Exception while waiting for a response : " + e.getMessage());
+            }
+            if (!responseReceived) {
+                throw new ResponseNotReceivedException("Could not get a response in a timely manner");
+            }
 	}
 
 	/**
@@ -115,13 +114,13 @@ public class ScopeConnection {
 	 * @return
 	 */
 	private String getServiceMessage() {
-		String serviceMessage = getResponse(OperaIntervals.HANDSHAKE_TIMEOUT.getValue());
-		if(serviceMessage.isEmpty()) {
-			//connection.closeListener();
-			connection.close();
-			throw new WebDriverException("No handshake recevied in " + (OperaIntervals.HANDSHAKE_TIMEOUT.getValue() / 1000) + " seconds");
-		}
-		return serviceMessage;
+            String serviceMessage = getResponse(OperaIntervals.HANDSHAKE_TIMEOUT.getValue());
+            if(serviceMessage.isEmpty()) {
+                    //connection.closeListener();
+                    connection.close();
+                    throw new WebDriverException("No handshake recevied in " + (OperaIntervals.HANDSHAKE_TIMEOUT.getValue() / 1000) + " seconds");
+            }
+            return serviceMessage;
 	}
 
 	/**

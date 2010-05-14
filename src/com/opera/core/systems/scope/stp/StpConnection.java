@@ -31,24 +31,22 @@ public class StpConnection implements SocketListener {
     private final Logger logger = Logger.getLogger(this.getClass().getName());
 
     private SocketChannel socketChannel;
-    
+
     // Outgoing send queue
     private final ArrayBlockingQueue<ByteBuffer> requests;
     private ByteBuffer recvBuffer;
     private byte[] remainingBytes = new byte[0];
-    
     private boolean isStp1;
 
     // These are used for STP0
     private final AtomicBoolean countKnown = new AtomicBoolean();
     private StringBuilder builder;
     private String response = "";
-    
+
     // For STP1
     private Response stpResponse;
     byte[] prefix = { 'S', 'T', 'P', 1 };
     private ByteString stpPrefix = ByteString.copyFrom(prefix);
-    
 
     private AbstractEventHandler eventHandler;
     private UmsEventParser stp1EventHandler;
@@ -84,7 +82,7 @@ public class StpConnection implements SocketListener {
 
     private void setState(State state)
     {
-        logger.fine("Setting state: " + state.toString());
+        // logger.fine("Setting state: " + state.toString());
         this.state = state;
     }
 
@@ -122,7 +120,7 @@ public class StpConnection implements SocketListener {
     /**
      * Initializes variables in object scope, sets 'count known' to false to
      * read byte count (STP/0).
-     * 
+     *
      * @param hostAddress Adress to listen on, localhost if null
      * @param port Port to bind to
      */
@@ -157,9 +155,9 @@ public class StpConnection implements SocketListener {
     /**
      * Queues up an STP/1 message sent from another thread and wakes up selector to
      * register it to the key
-     * 
+     *
      * @param message to add to the request queue
-     * @throws IOException 
+     * @throws IOException
      */
     public void send(Command command) {
         logger.log(Level.FINEST, command.toString());
@@ -175,9 +173,11 @@ public class StpConnection implements SocketListener {
         buffer.put(outMessageSize);
         buffer.put((byte) 1);
         buffer.put(payload);
-        
+
+        // log what is being sent.
+        logger.fine("SEND: " + command.toString());
+
         requests.add(buffer);
-        
         SocketMonitor.instance().modify(socketChannel, this, SelectionKey.OP_READ | SelectionKey.OP_WRITE);
     }
 
@@ -185,7 +185,7 @@ public class StpConnection implements SocketListener {
     /**
      * Queues up an STP/0 message sent from another thread and wakes up selector to
      * register it to the key
-     * 
+     *
      * @param message to add to the request queue
      */
     public void send(String message) {
@@ -210,7 +210,7 @@ public class StpConnection implements SocketListener {
      * abort connection) or disconnect. A message is an UTF-16 string, each
      * byte is used in {@link CharBuffer} and read into {@link StringBuilder},
      * space is the seperator in STP/0
-     * 
+     *
      * @param key
      */
     public boolean canRead(SelectableChannel channel) throws IOException {
@@ -219,6 +219,7 @@ public class StpConnection implements SocketListener {
 
         try {
             numRead = socketChannel.read(buffer);
+            logger.fine("Read " + numRead + " bytes, stp1=" + isStp1 + ", state=" + state.toString());
 
         } catch (IOException e) {
             logger.log(Level.WARNING, "Channel closed, causing exception", e.getMessage());
@@ -233,7 +234,7 @@ public class StpConnection implements SocketListener {
         }
 
         if(isStp1) {
-                readMessage(buffer, numRead);
+                readMessage(buffer, numRead, false);
         } else {
                 buffer.flip();
                 builder.append(buffer.asCharBuffer());
@@ -303,9 +304,9 @@ public class StpConnection implements SocketListener {
      * and attach it to key again (avoiding new write events). If there are
      * requests waiting in the queue, we wake up the selector so they can be
      * registered
-     * 
+     *
      * TODO Can't we register them at one go?
-     * 
+     *
      * @param key
      * @throws IOException
      */
@@ -328,6 +329,8 @@ public class StpConnection implements SocketListener {
             } while(buffer.hasRemaining());
         }
 
+        logger.fine("Wrote " + totalWritten + " bytes");
+
         return (!requests.isEmpty());
     }
 
@@ -349,123 +352,133 @@ public class StpConnection implements SocketListener {
 
     /**
      * Processes an incoming message and passes it to event handler if needed,
-     * the following events are to our interest: 
-     * Runtime-Started : ecmascript runtime starts in Opera (that we can inject to) 
-     * Runtime-Stopped : ecmascript runtime stops (not used, buggy) 
-     * Message: fired from console log events 
+     * the following events are to our interest:
+     * Runtime-Started : ecmascript runtime starts in Opera (that we can inject to)
+     * Runtime-Stopped : ecmascript runtime stops (not used, buggy)
+     * Message: fired from console log event
      * Updated-Window: a window is updated OR created (opener-id=0)
      * Active-Window: window focus changed
-     * Window-Closed: self explanatory 
+     * Window-Closed: self explanatory
      * If message matches none it is added to the response queue
      * (probably response to command)
-     * 
+     *
      * @param message
      */
-    public void processXmlMessage(String message) {	
+    public void processXmlMessage(String message) {
             logger.log(Level.FINEST, "READ: {0}", message);
 
-            if (stp0EventHandler == null || !stp0EventHandler.handleIfEvent(message)) {
+            if (state == State.HANDSHAKE)
+            {
+                connectionHandler.onHandshake(message);
+            }
+            else if (stp0EventHandler == null || !stp0EventHandler.handleIfEvent(message)) {
                     response = message;
                     connectionHandler.onResponseReceived();
             }
     }
 
-    private void readMessage(ByteBuffer buffer, int bytesRead) {
+    private void readMessage(ByteBuffer buffer, int bytesRead, boolean recurse) {
 
-            if (remainingBytes.length > 0) {
-                    bytesRead = remainingBytes.length + bytesRead;
-                    buffer.flip();
-                    ByteBuffer swap = ByteBuffer.allocateDirect(bytesRead);
-                    swap.put(remainingBytes);
-                    swap.put(buffer);
-                    remainingBytes = new byte[0];
-                    buffer.clear();
-                    buffer = swap;
-            }
+        logger.fine("readMessage: " + bytesRead + " bytes read, remaining=" + remainingBytes.length + ", state=" + state.toString() + ", recurse=" + recurse);
 
+        if (remainingBytes.length > 0) {
+            bytesRead = remainingBytes.length + bytesRead;
             buffer.flip();
+            ByteBuffer swap = ByteBuffer.allocateDirect(bytesRead);
+            swap.put(remainingBytes);
+            swap.put(buffer);
+            remainingBytes = new byte[0];
+            buffer.clear();
+            buffer = swap;
+        }
 
-            switch (state) {
+        buffer.flip();
+
+        switch (state) {
             case HANDSHAKE:
-                    if(bytesRead >= 6) {
-                            byte[] dst = new byte[6];
-                            buffer.get(dst);
-                            String handShake = new String(dst);
-                            if(!handShake.equals("STP/1\n")) {
-                                    close();
-                                    connectionHandler.onException(new WebDriverException("Scope Transport Protocol Error : Handshake"));
-                            }
-                            buffer.clear();
-                            setState(State.EMPTY);
-                            connectionHandler.onHandshake();
-                            break;
+                if(bytesRead >= 6) {
+                    byte[] dst = new byte[6];
+                    buffer.get(dst);
+                    String handShake = new String(dst);
+                    if(!handShake.equals("STP/1\n")) {
+                        close();
+                        connectionHandler.onException(new WebDriverException("Scope Transport Protocol Error : Handshake"));
                     }
-                    bufferRemaining(buffer, bytesRead);
+                    buffer.clear();
+                    setState(State.EMPTY);
+                    connectionHandler.onResponseReceived();
                     break;
-            case EMPTY:
-                    if(bytesRead >= 4) {
-                            byte[] prefix = new byte[4];
-                            buffer.get(prefix);
-                            ByteString incomingPrefix = ByteString.copyFrom(prefix);
-                            if(stpPrefix.equals(incomingPrefix)){
-                                    setState(State.STP);
-                                    if(buffer.hasRemaining()){
-                                            buffer.compact();
-                                            readMessage(buffer, buffer.position());
-                                    } else {
-                                            buffer.clear();
-                                    }
-                            } else {
-                                    close();
-                                    connectionHandler.onException(new WebDriverException("Scope Transport Protocol Error : Header"));
-                            }
-                            break;
-                    }
-                    // we got less than 4
-                    bufferRemaining(buffer, bytesRead);
-                    break;
-            case STP:
-                    //this one needs more error handling
-                    messageSize = readRawVarint32(buffer);
-                    setState(State.STP_DATA);
-                    if (buffer.hasRemaining()) {
+                }
+                bufferRemaining(buffer, bytesRead);
+                break;
+
+            case EMPTY: /* read 4 byte header: STP\0 */
+                if(bytesRead >= 4) {
+                    byte[] headerPrefix = new byte[4];
+                    buffer.get(headerPrefix);
+                    ByteString incomingPrefix = ByteString.copyFrom(headerPrefix);
+                    if(stpPrefix.equals(incomingPrefix)){
+                        setState(State.STP);
+                        if(buffer.hasRemaining()){
                             buffer.compact();
-                            readMessage(buffer, buffer.position());
-                    } else {
-                            //we have no more bytes, clear the buffer so we can read more
+                            readMessage(buffer, buffer.position(), true);
+                        } else {
                             buffer.clear();
+                        }
+                    } else {
+                        close();
+                        connectionHandler.onException(new WebDriverException("Scope Transport Protocol Error : Header"));
                     }
                     break;
+                }
+                // we got less than 4
+                bufferRemaining(buffer, bytesRead);
+                break;
+
+            case STP:
+                //this one needs more error handling
+                messageSize = readRawVarint32(buffer);
+                setState(State.STP_DATA);
+                if (buffer.hasRemaining()) {
+                        buffer.compact();
+                        readMessage(buffer, buffer.position(), true);
+                } else {
+                        //we have no more bytes, clear the buffer so we can read more
+                        buffer.clear();
+                }
+                break;
+
             case STP_DATA:
-                    if(bytesRead >= messageSize) {
-                            messageType = buffer.get();
-                            byte[] payload = new byte[--messageSize];
-                            buffer.get(payload);
-                            setState(State.EMPTY);
-                            try {
-                                    processMessage(messageType, payload);
-                            } catch (IOException e) {
-                                    close();
-                                    connectionHandler.onException(new WebDriverException("Error while processing the message: "  + e.getMessage()));
-                            }
-                            if(buffer.hasRemaining()){
-                                    buffer.compact();
-                                    readMessage(buffer, buffer.position());
-                                    break;
-                            } else {
-                                    buffer.clear();
-                                    break;
-                            }
-            }
-                    // if we got less than expected, lets keep reading
-                    bufferRemaining(buffer, bytesRead);
-                    break;
-            }
+                if(bytesRead >= messageSize) {
+                    messageType = buffer.get();
+                    byte[] payload = new byte[--messageSize];
+                    buffer.get(payload);
+                    setState(State.EMPTY);
+                    try {
+                        processMessage(messageType, payload);
+                    } catch (IOException e) {
+                        close();
+                        connectionHandler.onException(new WebDriverException("Error while processing the message: "  + e.getMessage()));
+                    }
+                    if(buffer.hasRemaining()){
+                        buffer.compact();
+                        readMessage(buffer, buffer.position(), true);
+                        break;
+                    } else {
+                        buffer.clear();
+                        break;
+                    }
+                }
+                // if we got less than expected, lets keep reading
+                bufferRemaining(buffer, bytesRead);
+                break;
+        }
 
     }
 
     private void bufferRemaining(ByteBuffer buffer, int read) {
             if(read > 0) {
+                logger.warning("Partial read, might lose data here!");
                     remainingBytes = new byte[read];
                     buffer.get(remainingBytes);
                     buffer.clear();
