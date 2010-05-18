@@ -27,6 +27,7 @@ public class StpThread extends Thread {
     
     public void shutdown() {
         running = false;
+        listener.stop();
         SocketMonitor.instance().stop();
     }
     
