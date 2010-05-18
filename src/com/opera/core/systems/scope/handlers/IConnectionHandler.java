@@ -19,5 +19,5 @@ public interface IConnectionHandler {
 	
 	void onException(Exception ex);
 
-	void onResponseReceived();
+	void onResponseReceived(boolean success, int tag);
 }

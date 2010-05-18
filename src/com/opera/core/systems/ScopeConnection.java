@@ -19,16 +19,21 @@ import com.opera.core.systems.scope.protos.UmsProtos.Command;
 import com.opera.core.systems.scope.protos.UmsProtos.Response;
 import com.opera.core.systems.scope.stp.StpConnection;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 public class ScopeConnection {
 	
 	private List<String> listedServices;
 	private List<String> enabledServices;
 	private StpConnection connection = null;
+        AtomicBoolean isWaiting = new AtomicBoolean(false);
+        private WaitState waitState = new WaitState();
 
-	private int tag;
+	private int tagCounter;
 	
 	protected CountDownLatch responseLatch = new CountDownLatch(1);
 	
+        @Deprecated
 	public CountDownLatch getResponseReceivedLatch() {
 		return this.responseLatch;
 	}
@@ -95,18 +100,11 @@ public class ScopeConnection {
             send("*enable stp-1");
 	}
 	
-	private void waitForResponse(long timeout) {
-            System.out.println("waitForResponse " + timeout);
-            boolean responseReceived;
-            try {
-                responseReceived = responseLatch.await(timeout, TimeUnit.MILLISECONDS);
-                System.out.println("Response received: " + responseReceived);
-            } catch (InterruptedException e) {
-                throw new WebDriverException("Exception while waiting for a response : " + e.getMessage());
-            }
-            if (!responseReceived) {
-                throw new ResponseNotReceivedException("Could not get a response in a timely manner");
-            }
+	private Response waitForResponse(int tag, long timeout)
+        {
+            waitState.waitFor(tag, timeout);
+            Response response = connection.getStpResponse();
+            return response;
 	}
 
 	/**
@@ -190,6 +188,7 @@ public class ScopeConnection {
 	 * Send a message directly
 	 * @param message
 	 */
+        @Deprecated
 	public void send(String message) {
             responseLatch = new CountDownLatch(1);
             connection.send(message);
@@ -212,7 +211,7 @@ public class ScopeConnection {
 		command.setCommandID(commandId); //connect
 		command.setFormat(0); //protobuf
 		command.setService(service);
-		command.setTag(++tag);
+		command.setTag(++tagCounter);
 		
 		command.setPayload(payload);
 		return command;
@@ -232,20 +231,11 @@ public class ScopeConnection {
 	public Response executeCommand(ICommand command, String service, Builder<?> builder, long timeout) {
             ByteString payload = (builder != null) ? builder.build().toByteString() : ByteString.EMPTY; 
             Command.Builder commandBuilder = buildCommand(command.getCommandID(), service, payload);
-            responseLatch = new CountDownLatch(1);
-
+            int tag = commandBuilder.getTag();
             connection.send(commandBuilder.build());
-		
-            waitForResponse(timeout);
-            Response response = connection.getStpResponse();
-            if(response == null)
-                return null;
-
-            if(response.getTag() != tag)
-                throw new WebDriverException("Protocol error, tag mismatch, expected " + tag + ", got " + response.getTag() + "\n " + command.toString());
-            return response;
+            return waitForResponse(tag, timeout);
 	}
-	
+
 	/**
 	 * Disable requested services --only if they are enabled before
 	 * @param services
@@ -259,6 +249,11 @@ public class ScopeConnection {
                 }
             }
             return enabledServices;
-	}
-	
+        }
+
+        public WaitState getWaitState()
+        {
+            return waitState;
+        }
+
 }

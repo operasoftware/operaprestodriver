@@ -36,6 +36,8 @@ import com.opera.core.systems.scope.stp.StpConnection;
 import com.opera.core.systems.scope.handlers.PbActionHandler;
 import com.opera.core.systems.scope.handlers.UmsActionHandler;
 import com.opera.core.systems.scope.handlers.XmlActionHandler;
+import java.io.IOException;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import java.util.logging.Logger;
 
@@ -55,7 +57,8 @@ public class ScopeServices implements IConnectionHandler {
         private StpThread stpThread;
 	boolean running = true;
         boolean handShaken = false;
-        
+        AtomicBoolean isWairing = new AtomicBoolean(false);
+
 	public ScopeConnection getConnection() {
 		return connection;
 	}
@@ -140,7 +143,7 @@ public class ScopeServices implements IConnectionHandler {
 	 * @param portNumber
 	 * @param intervals 
 	 */
-	public ScopeServices(Map<String, String> versions) {
+	public ScopeServices(Map<String, String> versions) throws IOException {
 		this.versions = versions;
 		listeners = new LinkedList<IConsoleListener>();
 		stpThread = new StpThread((int)OperaIntervals.SERVER_PORT.getValue(), this);
@@ -428,23 +431,44 @@ public class ScopeServices implements IConnectionHandler {
 	public void onDisconnect()
         {
             logger.fine("Disconnected, closing StpConnection.");
-            connection = null;
+            if (connection != null)
+            {
+                if (connection.getWaitState().isWaiting())
+                {
+                    logger.severe("Unexpected.");
+                    connection.getWaitState().onException(new WebDriverException("Connection closed unexpectedly."));
+                }
+                logger.fine("Cleaning up...");
+                connection = null;
+            }
 	}
 
-	public void onResponseReceived() {
+	public void onResponseReceived(boolean success, int tag) {
             logger.fine("Got response.");
-            connection.getResponseReceivedLatch().countDown();
+            if (success) {
+                connection.getWaitState().onResponse(tag);
+            } else {
+                connection.getWaitState().onError(tag);
+            }
 	}
 
 	public void onException(Exception ex) {
             logger.fine("Got exception");
-            throw new WebDriverException(ex);
+            if (connection != null)
+            {
+                connection.getWaitState().onException(ex);
+            }
 	}
 
 	public String getMinVersionFor(String service) {
             return versions.get(service);
 	}
 
-	
-	
+        public void onBinaryStopped() {
+            if (connection != null)
+            {
+                connection.getWaitState().onBinaryExit();
+            }
+        }
+
 }

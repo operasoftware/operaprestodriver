@@ -51,6 +51,7 @@ import org.openqa.selenium.internal.FindsByName;
 import org.openqa.selenium.internal.FindsByTagName;
 import org.openqa.selenium.internal.FindsByXPath;
 import org.openqa.selenium.internal.ReturnedCookie;
+import java.io.IOException;
 
 import com.opera.core.systems.model.Action;
 import com.opera.core.systems.model.Canvas;
@@ -62,13 +63,14 @@ import com.opera.core.systems.scope.handlers.PbActionHandler;
 import com.opera.core.systems.scope.handlers.UmsActionHandler;
 import com.opera.core.systems.scope.handlers.XmlActionHandler;
 import com.opera.core.systems.scope.internal.OperaBinary;
+import com.opera.core.systems.scope.internal.OperaBinaryListener;
 import com.opera.core.systems.scope.internal.OperaIntervals;
 import com.opera.core.systems.scope.services.IEcmaScriptDebugger;
 import com.opera.core.systems.scope.services.IOperaExec;
 import com.opera.core.systems.scope.services.IWindowManager;
 
 public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,FindsByXPath, FindsByName, FindsByTagName, FindsByClassName,
-		FindsByCssSelector, SearchContext, JavascriptExecutor {
+		FindsByCssSelector, SearchContext, JavascriptExecutor, OperaBinaryListener {
         private final Logger logger = Logger.getLogger(this.getClass().getName());
         private IEcmaScriptDebugger debugger;
 	private IOperaExec exec;
@@ -116,14 +118,10 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,FindsB
 	 * @param executableLocation The exact location of where Opera binary is located
 	 * @param arguments Arguments to pass for execution
 	 */
-	public OperaDriver(String executableLocation, String... arguments) {
+	public OperaDriver(String executableLocation, String... arguments) throws WebDriverException {
 
-            if (!createScopeSevices()) {
-                throw new FatalException("Unable to create scope services.");
-            }
-            if (!startBinary(executableLocation, arguments)) {
-                throw new FatalException("Unable to start binary.");
-            }
+            createScopeSevices();
+            startBinary(executableLocation, arguments);
 
             services.waitForHandshake();
             services.secondaryInit();
@@ -146,41 +144,35 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,FindsB
             services.setActionHandler(actionHandler);
 	}
 
-        private boolean createScopeSevices()
+        private void createScopeSevices() throws WebDriverException
         {
             try {
                 Map<String, String> versions = new HashMap<String, String>();
-		versions.put("ecmascript-debugger", "5.0");
+                versions.put("ecmascript-debugger", "5.0");
 
-		if(OperaIntervals.BACKWARDS_COMPATIBLE.getValue() != 1)
+                if(OperaIntervals.BACKWARDS_COMPATIBLE.getValue() != 1)
                     versions.put("window-manager", "2.0.1");
-		else
+                else
                     versions.put("window-manager", "2.0");
 
                 versions.put("exec", "2.0");
                 services = new ScopeServices(versions);
-                return true;
-            } catch (WebDriverException e) {
-                e.printStackTrace();
-                return false;
+            } catch (IOException e) {
+                throw new WebDriverException(e);
             }
         }
 
-        private boolean startBinary(String executableLocation, String... arguments)
+        private void startBinary(String executableLocation, String... arguments) throws WebDriverException
         {
             String operaPath = System.getenv().get("OPERA_PATH");
             String operaArgs = System.getenv().get("OPERA_ARGS");
 
             if(operaPath != null && operaPath.length() > 0) {
                 arguments = (operaArgs != null) ? operaArgs.split(",") : arguments;
-                binary = new OperaBinary(operaPath, arguments);
+                binary = new OperaBinary(this, operaPath, arguments);
             } else if(executableLocation != null) {
-                binary = new OperaBinary(executableLocation, arguments);
+                binary = new OperaBinary(this, executableLocation, arguments);
             }
-
-            if (binary == null)
-                return false;
-            return true;
         }
 	
 
@@ -359,12 +351,16 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,FindsB
 	}
 
 	public void quit() {
-            logger.fine("quit");
-            if(isConnected()) {
-                if(exec.getActionList().contains("Quit"))
-                    exec.action("Quit");
-                else
-                    exec.action("Exit");
+            logger.info("quit");
+            try {
+                if(isConnected()) {
+                    if(exec.getActionList().contains("Quit"))
+                        exec.action("Quit");
+                    else
+                        exec.action("Exit");
+                }
+            } catch (Exception e) {
+                logger.info("Caught exception when trying to shut down (cannot send quit).");
             }
 
             services.shutdown();
@@ -789,6 +785,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,FindsB
         /**
          * @deprecated This should not be used!
          */
+        @Deprecated
 	public boolean isConnected() {
             boolean val = windowManager.canPingHost();
             logger.fine("isConnected() => " + val);
@@ -837,5 +834,9 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,FindsB
 	public void addConsoleListener(IConsoleListener listener) {
             services.addConsoleListener(listener);
 	}
+
+    public void BinaryStopped() {
+        services.onBinaryStopped();
+    }
 
 }

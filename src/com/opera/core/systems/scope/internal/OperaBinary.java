@@ -27,13 +27,15 @@ public class OperaBinary extends Thread {
     private static Logger logger = Logger.getLogger(OperaBinary.class.getName());
     private String processPath;
     private AtomicBoolean running = new AtomicBoolean(false);
+    private OperaBinaryListener listener;
 
-    public OperaBinary(String location, String... args) {
+    public OperaBinary(OperaBinaryListener listener, String location, String... args) {
         super(new ThreadGroup("run-process"), "opera");
         File file = new File(location);
         processPath = file.getAbsolutePath();
         commands = new ArrayList<String>();
         commands.add(location);
+        this.listener = listener;
 
         if(args != null && args.length > 0) {
                 commands.addAll(Arrays.asList(args));
@@ -123,6 +125,10 @@ public class OperaBinary extends Thread {
                 logger.fine("Got interrupted. Will terminate Opera.");
                 process.destroy();
             }
+        }
+        if (listener != null)
+        {
+            listener.BinaryStopped();
         }
     }
 

@@ -5,6 +5,7 @@ import java.util.logging.Logger;
 import com.opera.core.systems.util.SocketMonitor;
 import com.opera.core.systems.scope.handlers.IConnectionHandler;
 
+
 /**
  *
  * @author Jan Vidar Krey
@@ -16,7 +17,7 @@ public class StpThread extends Thread {
     private StpConnection stpConnection;
     private boolean running = true;
     
-    public StpThread(int port, IConnectionHandler handler)
+    public StpThread(int port, IConnectionHandler handler) throws java.io.IOException
     {
         super("StpThread");
         SocketMonitor.instance();
@@ -35,7 +36,7 @@ public class StpThread extends Thread {
         logger.info("Started StpThread.");
         while (running)
         {
-            SocketMonitor.poll(10);
+            SocketMonitor.poll(50);
         }
         logger.info("Stopping StpThread.");
     }

@@ -188,6 +188,7 @@ public class StpConnection implements SocketListener {
      *
      * @param message to add to the request queue
      */
+    @Deprecated
     public void send(String message) {
         String scopeMessage = message.length() + " " + message;
         logger.log(Level.FINE, "WRITE : {0}", scopeMessage);
@@ -373,9 +374,22 @@ public class StpConnection implements SocketListener {
             }
             else if (stp0EventHandler == null || !stp0EventHandler.handleIfEvent(message)) {
                     response = message;
-                    connectionHandler.onResponseReceived();
+                    /* FIXME! */
+                    signalResponse(true, 0);
             }
     }
+
+    private void signalResponse(boolean success, int tag)
+    {
+        connectionHandler.onResponseReceived(success, tag);
+    }
+
+    private void signalEvent(Event event)
+    {
+        logger.fine("EVENT " + event.toString());
+        stp1EventHandler.handleEvent(event);
+    }
+
 
     private void readMessage(ByteBuffer buffer, int bytesRead, boolean recurse) {
 
@@ -406,7 +420,7 @@ public class StpConnection implements SocketListener {
                     }
                     buffer.clear();
                     setState(State.EMPTY);
-                    connectionHandler.onResponseReceived();
+                    signalResponse(true, -1); /* FIXME: what here */
                     break;
                 }
                 bufferRemaining(buffer, bytesRead);
@@ -487,6 +501,8 @@ public class StpConnection implements SocketListener {
 
     private void processMessage(int stpType, byte[] payload) throws IOException {
 
+            logger.finest("processMessage: " + stpType);
+
             switch (stpType) {
             /*
              * case 1://command //commands are not supposed to be received
@@ -495,22 +511,22 @@ public class StpConnection implements SocketListener {
             case 2:// response
                     stpResponse = Response.parseFrom(payload);
                     logger.log(Level.FINEST, response.toString());
-                    connectionHandler.onResponseReceived();
+                    signalResponse(true, stpResponse.getTag());
                     break;
             case 3:// event
                     Event event = Event.parseFrom(payload);
-                    logger.log(Level.FINEST, event.toString());
-                    stp1EventHandler.handleEvent(event);
+                    signalEvent(event);
                     break;
             case 4:// error
                     Error error = Error.parseFrom(payload);
                     if (error.getService().equals("ecmascript-debugger") && error.getStatus() == Status.INTERNAL_ERROR.getCode()) {
                             stpResponse = null;
-                            connectionHandler.onResponseReceived();
+                            // signalResponse(false, "ES Error - " + error.toString());
+                            signalResponse(false, error.getTag());
                     } else {
                             logger.log(Level.SEVERE, "Error : {0}", error.toString());
                             stpResponse = null;
-                            connectionHandler.onResponseReceived();
+                            // signalResponse(false, "Error - " + error.toString());
                             connectionHandler.onException(new WebDriverException("Error on command : " + error.toString() ));
                     }
                     break;

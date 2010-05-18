@@ -25,7 +25,7 @@ public class StpConnectionListener implements SocketListener {
     private IConnectionHandler handler;
     private final Logger logger = Logger.getLogger(this.getClass().getName());
         
-    public StpConnectionListener(int port, IConnectionHandler handler) {
+    public StpConnectionListener(int port, IConnectionHandler handler) throws IOException {
         this.port = port;
         this.handler = handler;
         start();
@@ -52,20 +52,16 @@ public class StpConnectionListener implements SocketListener {
         }
     }
     
-    public void start()
+    public void start() throws IOException
     {
-        try {
-            server = ServerSocketChannel.open();
-            server.configureBlocking(false);
-            server.socket().setReuseAddress(true);
-            server.socket().bind(new InetSocketAddress(port));
-            
-            SocketMonitor.instance().add(server, this, SelectionKey.OP_ACCEPT);
-            
-            logger.info("webdriver-opera v0.2.100506, ready to accept connections on port " + port);
-        } catch (IOException e) {
-            handler.onException(e);
-        }
+        server = ServerSocketChannel.open();
+        server.configureBlocking(false);
+        server.socket().setReuseAddress(true);
+        server.socket().bind(new InetSocketAddress(port));
+
+        SocketMonitor.instance().add(server, this, SelectionKey.OP_ACCEPT);
+
+        logger.info("webdriver-opera v0.2.100506, ready to accept connections on port " + port);
     }
 
     public boolean canRead(SelectableChannel channel) throws IOException {
