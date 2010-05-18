@@ -186,7 +186,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,FindsB
                 throw new NullPointerException("Invalid url");
 
             int oldId = 0;
-            if(services.getConnection().isStp1()) {
+            if(services.isStp1()) {
                 debugger.releaseObjects();
                 windowManager.setLoadCompleteLatch(new CountDownLatch(1));
             } else {
@@ -196,7 +196,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,FindsB
             //debugger.resetRuntimesList();
             actionHandler.get(url);
 
-            if(services.getConnection().isStp1()) {
+            if(services.isStp1()) {
                     windowManager.waitForWindowLoaded(timeout);
                     return windowManager.getLastHttpResponseCode().getAndSet(0);
             } else {
@@ -770,6 +770,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,FindsB
             return true;
 	}
 
+        @Deprecated
 	public void cleanUp() {
             services.getConnection().close();
 	}
@@ -787,9 +788,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,FindsB
          */
         @Deprecated
 	public boolean isConnected() {
-            boolean val = windowManager.canPingHost();
-            logger.fine("isConnected() => " + val);
-            return val;
+            return services.isConnected();
 	}
 	
 	public void key(String key) {
@@ -835,8 +834,8 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,FindsB
             services.addConsoleListener(listener);
 	}
 
-    public void BinaryStopped() {
-        services.onBinaryStopped();
+    public void BinaryStopped(int code) {
+        services.onBinaryStopped(code);
     }
 
 }

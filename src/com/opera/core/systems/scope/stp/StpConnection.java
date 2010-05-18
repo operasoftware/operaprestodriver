@@ -191,7 +191,7 @@ public class StpConnection implements SocketListener {
     @Deprecated
     public void send(String message) {
         String scopeMessage = message.length() + " " + message;
-        logger.log(Level.FINE, "WRITE : {0}", scopeMessage);
+        logger.log(Level.INFO, "WRITE : {0}", scopeMessage);
         byte[] bytes = null;
         try {
                 bytes = scopeMessage.getBytes("UTF-16BE");
@@ -366,7 +366,7 @@ public class StpConnection implements SocketListener {
      * @param message
      */
     public void processXmlMessage(String message) {
-            logger.log(Level.FINEST, "READ: {0}", message);
+            logger.fine("processXmlMessage: \"" + message + "\"");
 
             if (state == State.HANDSHAKE)
             {
@@ -393,7 +393,7 @@ public class StpConnection implements SocketListener {
 
     private void readMessage(ByteBuffer buffer, int bytesRead, boolean recurse) {
 
-        logger.fine("readMessage: " + bytesRead + " bytes read, remaining=" + remainingBytes.length + ", state=" + state.toString() + ", recurse=" + recurse);
+        logger.finest("readMessage: " + bytesRead + " bytes read, remaining=" + remainingBytes.length + ", state=" + state.toString() + ", recurse=" + recurse);
 
         if (remainingBytes.length > 0) {
             bytesRead = remainingBytes.length + bytesRead;
@@ -420,7 +420,7 @@ public class StpConnection implements SocketListener {
                     }
                     buffer.clear();
                     setState(State.EMPTY);
-                    signalResponse(true, -1); /* FIXME: what here */
+                    /* FIXME: Handshake complete event */
                     break;
                 }
                 bufferRemaining(buffer, bytesRead);

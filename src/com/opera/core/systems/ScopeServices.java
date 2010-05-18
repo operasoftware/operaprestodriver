@@ -57,8 +57,9 @@ public class ScopeServices implements IConnectionHandler {
         private StpThread stpThread;
 	boolean running = true;
         boolean handShaken = false;
-        AtomicBoolean isWairing = new AtomicBoolean(false);
+        boolean stp1;
 
+        @Deprecated
 	public ScopeConnection getConnection() {
 		return connection;
 	}
@@ -176,11 +177,15 @@ public class ScopeServices implements IConnectionHandler {
             }
         }
 
+        public boolean isStp1() {
+            return stp1;
+        }
+
         public void secondaryInit()
         {
-            boolean isStp1 = connection.isStp1();
+            stp1 = connection.isStp1();
             boolean enableDebugger = (OperaIntervals.ENABLE_DEBUGGER.getValue() != 0);
-            if(isStp1) {
+            if(stp1) {
                 connection.switchToStp1();
                 HostInfo info = getHostInfo();
                 createUmsServices(enableDebugger, info);
@@ -433,22 +438,21 @@ public class ScopeServices implements IConnectionHandler {
             logger.fine("Disconnected, closing StpConnection.");
             if (connection != null)
             {
-                if (connection.getWaitState().isWaiting())
-                {
-                    logger.severe("Unexpected.");
-                    connection.getWaitState().onException(new WebDriverException("Connection closed unexpectedly."));
-                }
+                connection.getWaitState().onDisconnected();
                 logger.fine("Cleaning up...");
                 connection = null;
             }
 	}
 
 	public void onResponseReceived(boolean success, int tag) {
-            logger.fine("Got response.");
-            if (success) {
-                connection.getWaitState().onResponse(tag);
-            } else {
-                connection.getWaitState().onError(tag);
+            if (connection != null)
+            {
+                logger.fine("Got response.");
+                if (success) {
+                    connection.getWaitState().onResponse(tag);
+                } else {
+                    connection.getWaitState().onError(tag);
+                }
             }
 	}
 
@@ -457,6 +461,7 @@ public class ScopeServices implements IConnectionHandler {
             if (connection != null)
             {
                 connection.getWaitState().onException(ex);
+                connection = null;
             }
 	}
 
@@ -464,11 +469,15 @@ public class ScopeServices implements IConnectionHandler {
             return versions.get(service);
 	}
 
-        public void onBinaryStopped() {
+        public void onBinaryStopped(int exitValue) {
             if (connection != null)
             {
-                connection.getWaitState().onBinaryExit();
+                connection.getWaitState().onBinaryExit(exitValue);
             }
         }
 
+        public boolean isConnected()
+        {
+            return connection != null;
+        }
 }

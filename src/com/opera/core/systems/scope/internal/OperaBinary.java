@@ -114,13 +114,14 @@ public class OperaBinary extends Thread {
     public void run()
     {
         logger.fine("Waiting for Opera binary to exit.");
+        int exit = 0;
         while (running.get())
         {
             try
             {
-                int exit = process.waitFor();
-                running.set(false);
+                exit = process.waitFor();
                 logger.info("Opera exited with return value " + exit);
+                running.set(false);
             } catch (InterruptedException e) {
                 logger.fine("Got interrupted. Will terminate Opera.");
                 process.destroy();
@@ -128,7 +129,7 @@ public class OperaBinary extends Thread {
         }
         if (listener != null)
         {
-            listener.BinaryStopped();
+            listener.BinaryStopped(exit);
         }
     }
 
@@ -182,7 +183,7 @@ public class OperaBinary extends Thread {
     /*
     public static void main(String[] args)
     {
-        OperaBinary binary = new OperaBinary("/home/janvidar/work/t/spartan/bin", "www.ikke.no");
+        OperaBinary binary = new OperaBinary(null, "/home/janv/crashme", "www.ikke.no");
         try
         {
             binary.join();
@@ -190,6 +191,5 @@ public class OperaBinary extends Thread {
             e.printStackTrace();
         }
     }
-     */
-
+    */
 }
