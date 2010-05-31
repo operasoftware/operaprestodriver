@@ -143,8 +143,9 @@ public abstract class AbstractService {
 	 * @param timeout Wait timeout on queue(other responses might affect)
 	 * @return
 	 */
+        @Deprecated
 	public String waitForResponse(String startsWith, long timeout) {
-		String response = services.getConnection().getResponse(timeout);
+		String response = ""; // services.getConnection().getResponse(timeout);
 		/*
 		if(!response.startsWith(startsWith, this.messageOffset))
 			throw new WebDriverException("Unexpected response");

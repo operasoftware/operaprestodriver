@@ -32,7 +32,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Cookie;
@@ -59,9 +58,6 @@ import com.opera.core.systems.model.ScopeActions;
 import com.opera.core.systems.model.ScreenShotReply;
 import com.opera.core.systems.model.ScriptResult;
 import com.opera.core.systems.model.UserInteraction;
-import com.opera.core.systems.scope.handlers.PbActionHandler;
-import com.opera.core.systems.scope.handlers.UmsActionHandler;
-import com.opera.core.systems.scope.handlers.XmlActionHandler;
 import com.opera.core.systems.scope.internal.OperaBinary;
 import com.opera.core.systems.scope.internal.OperaBinaryListener;
 import com.opera.core.systems.scope.internal.OperaIntervals;
@@ -103,8 +99,14 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,FindsB
 
 	// TODO
 	// Profiling
-	public OperaDriver() {
-            this(null);
+	public OperaDriver()  throws WebDriverException {
+            createScopeServices();
+
+            services.init(null);
+
+            debugger = services.getDebugger();
+            windowManager = services.getWindowManager();
+            exec = services.getExec();
 	}
 	
 	/**
@@ -120,41 +122,23 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,FindsB
 	 */
 	public OperaDriver(String executableLocation, String... arguments) throws WebDriverException {
 
-            createScopeSevices();
+            // Start STP thread and listen for incoming connections.
+            createScopeServices();
+            
+            // Start the Opera binary
             startBinary(executableLocation, arguments);
 
-            services.waitForHandshake();
-            services.secondaryInit();
+            // Wait for Opera to connect to the services.
+            services.init(binary);
 
-            debugger = services.getDebugger();
-            windowManager = services.getWindowManager();
-            exec = services.getExec();
-
-            List<String> listedServices = services.getConnection().getListedServices();
-            if (listedServices.contains("stp-1")) {
-                actionHandler = new PbActionHandler(services);
-            } else {
-                if (!services.getConnection().getListedServices().contains("core-2-3")) {
-                    actionHandler = new UmsActionHandler(services);
-                } else {
-                    actionHandler = new XmlActionHandler(services);
-                }
-            }
-
-            services.setActionHandler(actionHandler);
 	}
 
-        private void createScopeSevices() throws WebDriverException
+        private void createScopeServices() throws WebDriverException
         {
             try {
                 Map<String, String> versions = new HashMap<String, String>();
                 versions.put("ecmascript-debugger", "5.0");
-
-                if(OperaIntervals.BACKWARDS_COMPATIBLE.getValue() != 1)
-                    versions.put("window-manager", "2.0.1");
-                else
-                    versions.put("window-manager", "2.0");
-
+                versions.put("window-manager", "2.0");
                 versions.put("exec", "2.0");
                 services = new ScopeServices(versions);
             } catch (IOException e) {
@@ -186,23 +170,15 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,FindsB
                 throw new NullPointerException("Invalid url");
 
             int oldId = 0;
-            if(services.isStp1()) {
-                debugger.releaseObjects();
-                windowManager.setLoadCompleteLatch(new CountDownLatch(1));
-            } else {
-                oldId = debugger.getRuntimeId();
-            }
+            debugger.releaseObjects();
+            windowManager.setLoadCompleteLatch(new CountDownLatch(1));
 
             //debugger.resetRuntimesList();
             actionHandler.get(url);
 
-            if(services.isStp1()) {
-                    windowManager.waitForWindowLoaded(timeout);
-                    return windowManager.getLastHttpResponseCode().getAndSet(0);
-            } else {
-                    waitForPageLoad(oldId, timeout);
-                    return 0;
-            }
+            
+            windowManager.waitForWindowLoaded(timeout);
+            return windowManager.getLastHttpResponseCode().getAndSet(0);
 	}
 	
         // FIXME: Using sleep!

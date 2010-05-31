@@ -1,34 +1,27 @@
 package com.opera.core.systems;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.WebDriverException;
 
 import com.google.protobuf.ByteString;
 import com.google.protobuf.AbstractMessage.Builder;
 import com.opera.core.systems.model.ICommand;
-import com.opera.core.systems.scope.exceptions.ResponseNotReceivedException;
-import com.opera.core.systems.scope.handlers.AbstractEventHandler;
-import com.opera.core.systems.scope.handlers.IConnectionHandler;
 import com.opera.core.systems.scope.internal.OperaIntervals;
 import com.opera.core.systems.scope.protos.UmsProtos.Command;
 import com.opera.core.systems.scope.protos.UmsProtos.Response;
 import com.opera.core.systems.scope.stp.StpConnection;
-
-import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ScopeConnection {
 	
 	private List<String> listedServices;
 	private List<String> enabledServices;
 	private StpConnection connection = null;
-        AtomicBoolean isWaiting = new AtomicBoolean(false);
-        private WaitState waitState = new WaitState();
-
+        private WaitState waitState;
+        private ScopeServices services;
+       
 	private int tagCounter;
 	
 	protected CountDownLatch responseLatch = new CountDownLatch(1);
@@ -46,80 +39,28 @@ public class ScopeConnection {
 		return listedServices;
 	}
 	
-	public void setEventHandler(AbstractEventHandler eventHandler){
-		connection.setEventHandler(eventHandler);
-	}
-	
 	public boolean isConnected() {
 		return connection.isConnected();
 	}
 
-	public ScopeConnection(StpConnection con, IConnectionHandler handler) {
-                connection = con;
-	}
-	
-	/**
-	 * Initialize the connection, scope connection
-	 * is run at a separate thread on async network IO
-	 * After handshake we no longer need to listen as we
-	 * currently only support 1-1
-	 */
-	public void init() {
-            enableStp1();
-	}
-	
-	public void waitForHandShake() {
-            //wait for handshake, this is a blocking call, so we have to call Opera just
-            //before this one
-            String serviceMessage = getServiceMessage();
-
-            //after the handshake we no longer need the server channel to listen
-            // connection.closeListener();
-            initializeServices(serviceMessage);
-
-            if (listedServices == null)
-                throw new WebDriverException("Services response error");
-
-            enabledServices = new ArrayList<String>();
-	}
-	
-	public boolean isStp1() {
-		return listedServices.contains("stp-1");
-	}
-	
-	public void switchToStp0() {
-		connection.switchToStp0();
-	}
-	
-	public void switchToStp1(){
-		connection.switchToStp1();
-		// enableStp1();
-	}
-	
-	private void enableStp1() {
-            send("*enable stp-1");
+	public ScopeConnection(StpConnection connection, ScopeServices services, WaitState waitState) {
+                this.connection = connection;
+                this.services = services;
+                this.waitState = waitState;
 	}
 	
 	private Response waitForResponse(int tag, long timeout)
         {
-            waitState.waitFor(tag, timeout);
+            try {
+                waitState.waitFor(tag, timeout);
+            } catch (WebDriverException e) {
+                services.shutdown();
+                throw e;
+            }
             Response response = connection.getStpResponse();
             return response;
 	}
 
-	/**
-	 * Get the service message, this is a blocking call
-	 * @return
-	 */
-	private String getServiceMessage() {
-            String serviceMessage = getResponse(OperaIntervals.HANDSHAKE_TIMEOUT.getValue());
-            if(serviceMessage.isEmpty()) {
-                    //connection.closeListener();
-                    connection.close();
-                    throw new WebDriverException("No handshake recevied in " + (OperaIntervals.HANDSHAKE_TIMEOUT.getValue() / 1000) + " seconds");
-            }
-            return serviceMessage;
-	}
 
 	/**
 	 * Parse the services message
@@ -142,7 +83,7 @@ public class ScopeConnection {
 	 * Send 'quit' command to scope
 	 */
 	public void quit() throws WebDriverException {
-               connection.send("*quit");
+               connection.sendQuit();
 	}
 	
 	/**
@@ -153,27 +94,13 @@ public class ScopeConnection {
 	}
 	
 	/**
-	 * Get the response (in specified timeout), if
-	 * response is null (on timeout) throw exception
-	 * @param timeout
-	 * @return
-	 */
-	public String getResponse(long timeout) {
-            try {
-                responseLatch.await(timeout, TimeUnit.MILLISECONDS);
-                return connection.getAndEmptyResponse();
-            } catch (InterruptedException e) {
-                throw new WebDriverException("Failed to get response in a timely fashion");
-            }
-	}
-	
-	/**
 	 * Enable requested services if they were announced
 	 * @param services
 	 * @return
 	 */
 	public List<String> enableServices(List<String> services) throws WebDriverException {
             for (String requestedService : services) {
+                System.out.println("Enable service " + requestedService);
                 if(listedServices.contains(requestedService)){
                     connection.send("*enable " + requestedService);
                     enabledServices.add(requestedService);
@@ -199,7 +126,8 @@ public class ScopeConnection {
 	 * @param serviceName
 	 * @param message
 	 */
-	public void sendXmlMessage(String serviceName, String message) {
+        @Deprecated
+        public void sendXmlMessage(String serviceName, String message) {
             responseLatch = new CountDownLatch(1);
             String xml = (serviceName + " <?xml version=\"1.0\"?>" + message);
             connection.send(xml);
@@ -250,10 +178,4 @@ public class ScopeConnection {
             }
             return enabledServices;
         }
-
-        public WaitState getWaitState()
-        {
-            return waitState;
-        }
-
 }

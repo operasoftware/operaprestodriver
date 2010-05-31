@@ -146,14 +146,8 @@ public class OperaWebElement implements RenderedWebElement, SearchContext, Locat
 	}
 	
 	public void click(int times) {
-		Point point = this.getLocation();
-		if(parent.getScopeServices().getConnection().isStp1()) {
-			execService.mouseAction(point.x, point.y, OperaMouseKeys.LEFT.getValue(), times);
-		} else {
-			for (int i = 0; i < times; i++) {
-				execService.mouseAction(point.x, point.y, OperaMouseKeys.LEFT);
-			}
-		}
+            Point point = this.getLocation();
+            execService.mouseAction(point.x, point.y, OperaMouseKeys.LEFT.getValue(), times);
 	}
 	
 	public void middleClick() {

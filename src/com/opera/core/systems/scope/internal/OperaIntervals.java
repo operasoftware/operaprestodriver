@@ -30,6 +30,8 @@ public enum OperaIntervals {
 	}
 
 	public long getValue() {
-		return value;
+                if (this.equals(SERVER_PORT))
+                    return value;
+		return value * 1000;
 	}
 }

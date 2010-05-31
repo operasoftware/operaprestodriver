@@ -50,6 +50,9 @@ public class OperaBinary extends Thread {
 
     public void shutdown()
     {
+        if (!running.get())
+            return;
+
         try {
             running.set(false);
             interrupt();

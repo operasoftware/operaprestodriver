@@ -15,13 +15,14 @@ public class WaitState {
 
     enum WaitResult
     {
-        NONE,       /* Not waiting */
-        WAITING,    /* Waiting for event to happen */
-        RESPONSE,   /* Got a response */
-        ERROR,      /* Got an error response */
-        EXCEPTION,  /* An exception occured (STP connection is not alive) */
-        DISCONNECTED, /* STP connection is disconnected */
-        BINARY_EXIT /* Opera binary crashed. */
+        NONE,           /* Not waiting */
+        WAITING,        /* Waiting for event to happen */
+        RESPONSE,       /* Got a response */
+        ERROR,          /* Got an error response */
+        EXCEPTION,      /* An exception occured (STP connection is not alive) */
+        DISCONNECTED,   /* STP connection is disconnected */
+        BINARY_EXIT,    /* Opera binary crashed. */
+        HANDSHAKE       /* STP Handshake */
     }
 
     WaitResult result;
@@ -62,6 +63,16 @@ public class WaitState {
         {
             return result != WaitResult.NONE;
         }
+    }
+    
+    void onHandshake()
+    {
+        System.out.println("Got handshake");
+        synchronized (result)
+        {
+            this.result = WaitResult.HANDSHAKE;
+        }
+        wakeup();
     }
 
     void onResponse(int tag)
@@ -139,10 +150,58 @@ public class WaitState {
         wakeup();
     }
     
+    void waitForHandshake(long timeout) throws WebDriverException
+    {
+        if (isWaiting())
+            throw new WebDriverException("Already in wait state.");
+
+        synchronized (result)
+        {
+            this.result = WaitResult.WAITING;
+            this.tag = -1;
+            this.exception = null;
+        }
+
+        internalWait(timeout);
+
+        synchronized (result)
+        {
+            WaitResult old_result = result;
+            result = WaitResult.NONE;
+            switch (old_result)
+            {
+                case WAITING:
+                    throw new ResponseNotReceivedException("No response in a timely fashion.");
+
+                case HANDSHAKE:
+                    return;
+
+                case EXCEPTION:
+                    System.out.println(" -> EXCEPTION");
+                    throw exception;
+
+                case DISCONNECTED:
+                    System.out.println(" -> DISCONNECTED");
+		    throw new WebDriverException("Disconnected STP connection.");
+
+                case BINARY_EXIT:
+                    if (exitCode != 0)
+                        System.out.println(" -> CRASHED");
+                    else
+                        System.out.println(" -> EXIT");
+                    throw new WebDriverException("Binary stopped.");
+
+                default:
+                    throw new WebDriverException("Unexpected result, expecting handshake");
+            }
+        }
+
+    }
+    
     boolean waitFor(int tag, long timeout) throws WebDriverException
     {
         if (isWaiting())
-            throw new WebDriverException("Already wating for " + tag + ", state=" + result.toString());
+            throw new WebDriverException("Already in wait state.");
 
         synchronized (result)
         {

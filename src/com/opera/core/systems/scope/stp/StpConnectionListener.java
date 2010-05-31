@@ -1,5 +1,8 @@
 package com.opera.core.systems.scope.stp;
 
+import java.io.IOException;
+import java.net.InetSocketAddress;
+
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.nio.channels.SelectionKey;
@@ -7,10 +10,9 @@ import java.nio.channels.SelectableChannel;
 
 import com.opera.core.systems.util.SocketMonitor;
 import com.opera.core.systems.util.SocketListener;
-
-import java.io.IOException;
-import java.net.InetSocketAddress;
+import com.opera.core.systems.scope.handlers.AbstractEventHandler;
 import com.opera.core.systems.scope.handlers.IConnectionHandler;
+
 import java.util.logging.Logger;
 
 /**
@@ -23,11 +25,13 @@ public class StpConnectionListener implements SocketListener {
     private int port;
     private ServerSocketChannel server = null;
     private IConnectionHandler handler;
+    private AbstractEventHandler eventHandler;
     private final Logger logger = Logger.getLogger(this.getClass().getName());
         
-    public StpConnectionListener(int port, IConnectionHandler handler) throws IOException {
+    public StpConnectionListener(int port, IConnectionHandler handler, AbstractEventHandler eventHandler) throws IOException {
         this.port = port;
         this.handler = handler;
+        this.eventHandler = eventHandler;
         start();
     }
 
@@ -41,7 +45,7 @@ public class StpConnectionListener implements SocketListener {
 
     public void stop()
     {
-        logger.fine("Shutting down...");
+        logger.fine("Shutting down STP connection listener...");
         SocketMonitor.instance().remove(server);
         try {
             server.close();
@@ -68,7 +72,7 @@ public class StpConnectionListener implements SocketListener {
         SocketChannel socket = server.accept();
         if (socket != null) {
             logger.fine("Accepted STP connection from " + socket.socket().getLocalAddress());
-            StpConnection con = new StpConnection(socket, handler);
+            StpConnection con = new StpConnection(socket, handler, eventHandler);
         }
         return true;
     }

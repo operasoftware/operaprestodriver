@@ -1,4 +1,4 @@
-/* Copyright (C) 2009 Opera Software ASA.  All rights reserved. */
+/* Copyright (C) 2009-2010 Opera Software ASA.  All rights reserved. */
 
 package com.opera.core.systems;
 
@@ -9,9 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import java.util.logging.Level;
 import org.openqa.selenium.WebDriverException;
-
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.opera.core.systems.model.ICommand;
 import com.opera.core.systems.model.ScopeActions;
@@ -32,12 +30,12 @@ import com.opera.core.systems.scope.services.ums.UmsServices;
 import com.opera.core.systems.scope.services.xml.XmlServices;
 import com.opera.core.systems.scope.stp.StpThread;
 import com.opera.core.systems.scope.stp.StpConnection;
+import com.opera.core.systems.scope.internal.OperaBinary;
 
 import com.opera.core.systems.scope.handlers.PbActionHandler;
 import com.opera.core.systems.scope.handlers.UmsActionHandler;
 import com.opera.core.systems.scope.handlers.XmlActionHandler;
 import java.io.IOException;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import java.util.logging.Logger;
 
@@ -52,11 +50,12 @@ public class ScopeServices implements IConnectionHandler {
 	private Parser parser;
 	private Map<String, String> versions;
 	private List<IConsoleListener> listeners;
+        private OperaBinary opera;
 	
-	private ScopeConnection connection = null;
-        private StpThread stpThread;
+        private WaitState waitState = new WaitState();
+        private ScopeConnection connection = null;
+        private StpThread stpThread = null;
 	boolean running = true;
-        boolean handShaken = false;
         boolean stp1;
 
         @Deprecated
@@ -147,7 +146,33 @@ public class ScopeServices implements IConnectionHandler {
 	public ScopeServices(Map<String, String> versions) throws IOException {
 		this.versions = versions;
 		listeners = new LinkedList<IConsoleListener>();
-		stpThread = new StpThread((int)OperaIntervals.SERVER_PORT.getValue(), this);
+		stpThread = new StpThread((int)OperaIntervals.SERVER_PORT.getValue(), this, new UmsEventHandler(this));
+        }
+        
+        public void init(OperaBinary binary) throws WebDriverException
+        {
+            this.opera = binary;
+            waitForHandshake();
+            
+            boolean enableDebugger = (OperaIntervals.ENABLE_DEBUGGER.getValue() != 0);
+            HostInfo info = getHostInfo();
+            createUmsServices(enableDebugger, info);
+
+            connect();
+
+            List<String> wantedServices = new ArrayList<String>();
+
+            if(enableDebugger)
+                wantedServices.add("ecmascript-debugger");
+
+            wantedServices.add("exec");
+            wantedServices.add("window-manager");
+            wantedServices.add("console-logger");
+            // wantedServices.add("http-logger");
+
+            enableServices(wantedServices);
+
+            initializeServices();
         }
 
         public void shutdown()
@@ -161,60 +186,24 @@ public class ScopeServices implements IConnectionHandler {
             } catch (InterruptedException ex) {
                 // ignored.
             }
-        }
 
-        public void waitForHandshake()
-        {
-            synchronized (this)
+            if (opera != null)
             {
-                try {
-                    wait(OperaIntervals.HANDSHAKE_TIMEOUT.getValue());
-                    if (!handShaken)
-                        throw new FatalException("Handshake timed out.");
-                } catch (InterruptedException ex) {
-                    throw new FatalException("Handshake interrupted.");
-                }
+                opera.shutdown();
+                opera = null;
             }
         }
-
-        public boolean isStp1() {
-            return stp1;
-        }
-
-        public void secondaryInit()
+        private void waitForHandshake() throws WebDriverException
         {
-            stp1 = connection.isStp1();
-            boolean enableDebugger = (OperaIntervals.ENABLE_DEBUGGER.getValue() != 0);
-            if(stp1) {
-                connection.switchToStp1();
-                HostInfo info = getHostInfo();
-                createUmsServices(enableDebugger, info);
-                connection.setEventHandler(new UmsEventHandler(this));
-
-                connect();
-                if(enableDebugger)
-                    enableServices("ecmascript-debugger");
-                enableServices("exec", "window-manager", "console-logger");//, "http-logger");
+            try {
+                waitState.waitForHandshake(OperaIntervals.HANDSHAKE_TIMEOUT.getValue());
+            } catch (WebDriverException e) {
+                shutdown();
+                throw e;
             }
-            else {
-                List<String> services = new ArrayList<String>();
-                parser = new Parser();
-                connection.switchToStp0();
-                createXmlServices(enableDebugger);
-                connection.setEventHandler(new EventHandler(this));
-
-                if(enableDebugger)
-                    services.add("ecmascript-debugger");
-
-                services.add("exec");
-                // services.add("console-logger");
-                //services.add("http-logger");
-                services.add("window-manager");
-                connection.enableServices(services);
-            }
-            initializeServices();
-	}
-	
+            
+        }
+        
 	private HostInfo getHostInfo() {
 		Response response = connection.executeCommand(ScopeCommand.HOST_INFO, "scope", null);
 		try {
@@ -355,21 +344,32 @@ public class ScopeServices implements IConnectionHandler {
 			}
 		};
 	}
+        
+        public List<String> getListedServices()
+        {
+            return connection.getListedServices();
+        }
+        
+        public List<String> getEnabledServices()
+        {
+            return connection.getEnabledServices();
+        }
 
 	private void connect() {
-		ClientInfo.Builder info = ClientInfo.newBuilder().setFormat("protobuf");
-		connection.executeCommand(ScopeCommand.CONNECT, "scope", info);
+            ClientInfo.Builder info = ClientInfo.newBuilder().setFormat("protobuf");
+            connection.executeCommand(ScopeCommand.CONNECT, "scope", info);
 	}
-	
-	public void enableServices(String... requiredServices){
-		for (String requiredService : requiredServices) {
-			try {
-				if(connection.getListedServices().contains(requiredService))
-					enable(requiredService);
-			} catch (InvalidProtocolBufferException e) {
-				throw new WebDriverException("Could not parse the message");
-			}
-		}
+
+        // FIXME:
+        public void enableServices(List<String> requiredServices) {
+            for (String requiredService : requiredServices) {
+                try {
+                    if(connection.getListedServices().contains(requiredService))
+                        enable(requiredService);
+                } catch (InvalidProtocolBufferException e) {
+                    throw new WebDriverException("Could not parse the message");
+                }
+            }
 	}
 	
 	private ServiceResult enable(String serviceName) throws InvalidProtocolBufferException {
@@ -391,46 +391,31 @@ public class ScopeServices implements IConnectionHandler {
 		exec.init();
 		windowManager.init();
 		debugger.init();
-                
-                ScopeActions scopeActionHandler;
-		List<String> listedServices = getConnection().getListedServices();
-		if(listedServices.contains("stp-1")) {
-			scopeActionHandler = new PbActionHandler(this);
-		} else {
-			if (listedServices.contains("core-2-4")) {
-				scopeActionHandler = new UmsActionHandler(this);
-			} else {
-				scopeActionHandler = new XmlActionHandler(this);
-			}
-		}
-
-		setActionHandler(scopeActionHandler);
 	}
 
         public boolean onConnected(StpConnection con)
         {
             if (connection == null)
             {
-                handShaken = false;
                 logger.info("Got StpConnection");
-                connection = new ScopeConnection(con, this);
-                connection.init();
-                
+                connection = new ScopeConnection(con, this, waitState);
                 return true;
             }
             logger.warning("StpConnection already attached - closing incoming connection.");
             return false;
         }
         
-        public void onHandshake(String message)
+        public void onServiceList(java.util.List<String> services) {
+            setActionHandler(new PbActionHandler(this));
+            /* initializeServices(); */
+        }
+        
+        
+        public void onHandshake(boolean stp1)
         {
             logger.info("Got Stp handshake!");
-            handShaken = true;
-            connection.initializeServices(message);
-
-            synchronized (this) {
-                notifyAll();
-            }
+            this.stp1 = stp1;
+            waitState.onHandshake();
         }
         
 	public void onDisconnect()
@@ -438,7 +423,7 @@ public class ScopeServices implements IConnectionHandler {
             logger.fine("Disconnected, closing StpConnection.");
             if (connection != null)
             {
-                connection.getWaitState().onDisconnected();
+                waitState.onDisconnected();
                 logger.fine("Cleaning up...");
                 connection = null;
             }
@@ -449,9 +434,9 @@ public class ScopeServices implements IConnectionHandler {
             {
                 logger.fine("Got response.");
                 if (success) {
-                    connection.getWaitState().onResponse(tag);
+                    waitState.onResponse(tag);
                 } else {
-                    connection.getWaitState().onError(tag);
+                    waitState.onError(tag);
                 }
             }
 	}
@@ -460,7 +445,7 @@ public class ScopeServices implements IConnectionHandler {
             logger.fine("Got exception");
             if (connection != null)
             {
-                connection.getWaitState().onException(ex);
+                waitState.onException(ex);
                 connection = null;
             }
 	}
@@ -472,12 +457,14 @@ public class ScopeServices implements IConnectionHandler {
         public void onBinaryStopped(int exitValue) {
             if (connection != null)
             {
-                connection.getWaitState().onBinaryExit(exitValue);
+                waitState.onBinaryExit(exitValue);
             }
+            opera = null;
         }
 
         public boolean isConnected()
         {
             return connection != null;
         }
+
 }

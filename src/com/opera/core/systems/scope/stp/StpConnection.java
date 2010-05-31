@@ -9,9 +9,9 @@ import java.net.*;
 import java.nio.ByteBuffer;
 import java.nio.channels.*;
 
-
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -36,26 +36,19 @@ public class StpConnection implements SocketListener {
     private final ArrayBlockingQueue<ByteBuffer> requests;
     private ByteBuffer recvBuffer;
     private byte[] remainingBytes = new byte[0];
-    private boolean isStp1;
-
-    // These are used for STP0
-    private final AtomicBoolean countKnown = new AtomicBoolean();
-    private StringBuilder builder;
-    private String response = "";
 
     // For STP1
     private Response stpResponse;
     byte[] prefix = { 'S', 'T', 'P', 1 };
     private ByteString stpPrefix = ByteString.copyFrom(prefix);
+    private String serviceMessage;
 
     private AbstractEventHandler eventHandler;
     private UmsEventParser stp1EventHandler;
-    private XmlEventParser stp0EventHandler;
-
     private IConnectionHandler connectionHandler;
 
     public enum State {
-            HANDSHAKE, EMPTY, STP, STP_SIZE, STP_DATA;
+            SERVICELIST, HANDSHAKE, EMPTY, STP, STP_SIZE, STP_DATA;
     }
 
     public Response getStpResponse() {
@@ -65,19 +58,17 @@ public class StpConnection implements SocketListener {
     private int messageSize = 0;
     private int messageType = 0;
 
-    private State state = State.HANDSHAKE;
+    private State state = State.SERVICELIST;
 
 
     /**
      * Sets the event handler and creates the event parsers
      * @param eventHandler
      */
-    public void setEventHandler(final AbstractEventHandler eventHandler) {
-            this.eventHandler = eventHandler;
-            if(isStp1)
-                    stp1EventHandler = new UmsEventParser(eventHandler);
-            else
-                    stp0EventHandler = new XmlEventParser(eventHandler);
+    
+    private void setEventHandler(final AbstractEventHandler eventHandler) {
+        this.eventHandler = eventHandler;
+        stp1EventHandler = new UmsEventParser(eventHandler);
     }
 
     private void setState(State state)
@@ -86,14 +77,6 @@ public class StpConnection implements SocketListener {
         this.state = state;
     }
 
-    //FIXME
-    public String getAndEmptyResponse() {
-        //synchronized(this) {
-                String result = response;
-                response = "";
-                return result;
-        //}
-    }
 
     public boolean isConnected() {
             if (socketChannel == null)
@@ -104,10 +87,6 @@ public class StpConnection implements SocketListener {
 
     public ArrayBlockingQueue<ByteBuffer> getRequests() {
             return requests;
-    }
-
-    public AbstractEventHandler getEventHandler() {
-            return eventHandler;
     }
 
     @Override
@@ -124,32 +103,30 @@ public class StpConnection implements SocketListener {
      * @param hostAddress Adress to listen on, localhost if null
      * @param port Port to bind to
      */
-    public StpConnection(SocketChannel socket, IConnectionHandler handler) throws IOException {
+    public StpConnection(SocketChannel socket, IConnectionHandler handler, AbstractEventHandler eventHandler) throws IOException {
         connectionHandler = handler;
         socketChannel = socket;
-        countKnown.set(false);
-        builder = new StringBuilder();
+        this.eventHandler = eventHandler;
         requests = new ArrayBlockingQueue<ByteBuffer>(1024);
         recvBuffer = ByteBuffer.allocateDirect(65536);
 
         socket.configureBlocking(false);
 
         SocketMonitor.instance().add(socket, this, SelectionKey.OP_READ);
+        
         if (!handler.onConnected(this))
         {
             close();
             throw new IOException("Connection not allowed from IConnectionHandler (already connected)");
         }
+        
+        
     }
 
-    public void switchToStp0() {
-            isStp1 = false;
-            stp0EventHandler = new XmlEventParser(eventHandler);
-    }
-
-    public void switchToStp1() {
-            isStp1 = true;
-            stp1EventHandler = new UmsEventParser(eventHandler);
+    private void switchToStp1() {
+        stp1EventHandler = new UmsEventParser(eventHandler);
+        sendEnableStp1();
+        setState(State.HANDSHAKE);
     }
 
     /**
@@ -181,6 +158,13 @@ public class StpConnection implements SocketListener {
         SocketMonitor.instance().modify(socketChannel, this, SelectionKey.OP_READ | SelectionKey.OP_WRITE);
     }
 
+    public void sendEnableStp1() {
+        send("*enable-stp1");
+    }
+
+    public void sendQuit() {
+        send("*quit");
+    }
 
     /**
      * Queues up an STP/0 message sent from another thread and wakes up selector to
@@ -191,7 +175,7 @@ public class StpConnection implements SocketListener {
     @Deprecated
     public void send(String message) {
         String scopeMessage = message.length() + " " + message;
-        logger.log(Level.INFO, "WRITE : {0}", scopeMessage);
+        logger.log(Level.INFO, "WRITE : " + scopeMessage);
         byte[] bytes = null;
         try {
                 bytes = scopeMessage.getBytes("UTF-16BE");
@@ -215,12 +199,13 @@ public class StpConnection implements SocketListener {
      * @param key
      */
     public boolean canRead(SelectableChannel channel) throws IOException {
+        logger.info("canRead");
         ByteBuffer buffer = recvBuffer; // FIXME
         int numRead = 0;
 
         try {
             numRead = socketChannel.read(buffer);
-            logger.fine("Read " + numRead + " bytes, stp1=" + isStp1 + ", state=" + state.toString());
+            logger.fine("Read " + numRead + " bytes, state=" + state.toString());
 
         } catch (IOException e) {
             logger.log(Level.WARNING, "Channel closed, causing exception", e.getMessage());
@@ -234,69 +219,8 @@ public class StpConnection implements SocketListener {
                 return false;
         }
 
-        if(isStp1) {
-                readMessage(buffer, numRead, false);
-        } else {
-                buffer.flip();
-                builder.append(buffer.asCharBuffer());
-                buffer.clear();
-
-                // FIXME: is this needed?
-                if (!countKnown.get() && !builder.toString().contains(" ")) {
-                        //FIXME should not be needed
-                        return true;
-                }
-
-                this.readXmlMessage();
-        }
+        readMessage(buffer, numRead, false);
         return true;
-    }
-
-    /**
-     * Processes an incoming message/response
-     * TODO There are multiple selector.wakeup calls.
-     * Is that something we should avoid?
-     */
-    private void readXmlMessage() {
-        String xmlResponse = builder.toString();
-        int countEnd = xmlResponse.indexOf(' ');
-        String numberOfChars = xmlResponse.substring(0, countEnd);
-        String messageBody = xmlResponse.substring(countEnd + 1);
-
-        int messageLength = Integer.valueOf(numberOfChars);
-        int bodyLength = messageBody.length();
-        countKnown.set(true);
-        if (bodyLength == messageLength) {
-            processXmlMessage(messageBody);
-            logger.fine(messageBody);
-            logger.log(Level.FINE, "READ: {0}", messageBody);
-            builder = new StringBuilder();
-            countKnown.set(false);
-        }
-
-        else if (bodyLength < messageLength) {
-            return;
-        }
-
-        else if (bodyLength > messageLength) {
-            int cutPoint = numberOfChars.length() + 1 + messageLength;
-            String firstMessage = xmlResponse.substring(countEnd + 1, cutPoint);
-            logger.fine(firstMessage);
-
-            processXmlMessage(firstMessage);
-
-            logger.log(Level.FINE, "READ: {0}", firstMessage);
-            String remaining = xmlResponse.substring(cutPoint);
-            builder = new StringBuilder();
-            builder.append(remaining);
-            if (remaining.contains(" ")) {
-                countKnown.set(true);
-                readXmlMessage();
-            } else {
-                countKnown.set(false);
-                return;
-            }
-        }
     }
 
     /**
@@ -313,6 +237,7 @@ public class StpConnection implements SocketListener {
      */
     public boolean canWrite(SelectableChannel channel) throws IOException
     {
+        logger.info("canWrite");
         int totalWritten = 0;
         while (!requests.isEmpty())
         {
@@ -365,19 +290,35 @@ public class StpConnection implements SocketListener {
      *
      * @param message
      */
-    public void processXmlMessage(String message) {
-            logger.fine("processXmlMessage: \"" + message + "\"");
+    public void parseServiceList(String message) {
+        logger.fine("parseServiceList: \"" + message + "\"");
 
-            if (state == State.HANDSHAKE)
-            {
-                connectionHandler.onHandshake(message);
-            }
-            else if (stp0EventHandler == null || !stp0EventHandler.handleIfEvent(message)) {
-                    response = message;
-                    /* FIXME! */
-                    signalResponse(true, 0);
-            }
+        int split = message.indexOf(" ");
+
+        if (split < 0) {
+           connectionHandler.onException(new WebDriverException("Invalid service list received."));
+           return;
+        }
+
+        List<String> services  = Arrays.asList(message.substring(split+1).split(","));
+        serviceMessage = message;
+        connectionHandler.onServiceList(services);
+        logger.info("Service List OK.");
+
+        if (!services.contains("stp-1"))
+        {
+            connectionHandler.onException(new WebDriverException("Stp-1 is not supported!"));
+            return;
+        }
+
+        switchToStp1();
     }
+    
+    public String getServiceMessage()
+    {
+        return serviceMessage;
+    }
+    
 
     private void signalResponse(boolean success, int tag)
     {
@@ -389,7 +330,6 @@ public class StpConnection implements SocketListener {
         logger.fine("EVENT " + event.toString());
         stp1EventHandler.handleEvent(event);
     }
-
 
     private void readMessage(ByteBuffer buffer, int bytesRead, boolean recurse) {
 
@@ -408,7 +348,15 @@ public class StpConnection implements SocketListener {
 
         buffer.flip();
 
+
         switch (state) {
+            case SERVICELIST:
+                StringBuilder builder = new StringBuilder();
+                builder.append(buffer.asCharBuffer());
+                buffer.clear();
+                parseServiceList(builder.toString());
+                break;
+                
             case HANDSHAKE:
                 if(bytesRead >= 6) {
                     byte[] dst = new byte[6];
@@ -420,7 +368,7 @@ public class StpConnection implements SocketListener {
                     }
                     buffer.clear();
                     setState(State.EMPTY);
-                    /* FIXME: Handshake complete event */
+                    connectionHandler.onHandshake(true);
                     break;
                 }
                 bufferRemaining(buffer, bytesRead);
@@ -510,7 +458,7 @@ public class StpConnection implements SocketListener {
              */
             case 2:// response
                     stpResponse = Response.parseFrom(payload);
-                    logger.log(Level.FINEST, response.toString());
+                    logger.log(Level.FINEST, stpResponse.toString());
                     signalResponse(true, stpResponse.getTag());
                     break;
             case 3:// event
