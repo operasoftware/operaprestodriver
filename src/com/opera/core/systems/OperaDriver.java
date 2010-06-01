@@ -107,6 +107,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,FindsB
             debugger = services.getDebugger();
             windowManager = services.getWindowManager();
             exec = services.getExec();
+            actionHandler = services.getActionHandler();
 	}
 	
 	/**
@@ -131,6 +132,10 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,FindsB
             // Wait for Opera to connect to the services.
             services.init(binary);
 
+            debugger = services.getDebugger();
+            windowManager = services.getWindowManager();
+            exec = services.getExec();
+            actionHandler = services.getActionHandler();
 	}
 
         private void createScopeServices() throws WebDriverException
@@ -621,6 +626,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,FindsB
 	}
 	
 	public void operaAction(String using, String... params) {
+            
 		exec.action(using, params);
 	}
 	

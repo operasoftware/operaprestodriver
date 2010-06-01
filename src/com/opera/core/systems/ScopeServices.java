@@ -347,6 +347,8 @@ public class ScopeServices implements IConnectionHandler {
         
         public List<String> getListedServices()
         {
+            System.out.println("getListedServices");
+            
             return connection.getListedServices();
         }
         
@@ -364,7 +366,8 @@ public class ScopeServices implements IConnectionHandler {
         public void enableServices(List<String> requiredServices) {
             for (String requiredService : requiredServices) {
                 try {
-                    if(connection.getListedServices().contains(requiredService))
+                    System.out.println("Enable service: " + requiredService);
+                    if(getListedServices().contains(requiredService))
                         enable(requiredService);
                 } catch (InvalidProtocolBufferException e) {
                     throw new WebDriverException("Could not parse the message");
@@ -407,7 +410,7 @@ public class ScopeServices implements IConnectionHandler {
         
         public void onServiceList(java.util.List<String> services) {
             setActionHandler(new PbActionHandler(this));
-            /* initializeServices(); */
+            connection.setListedServices(services);
         }
         
         

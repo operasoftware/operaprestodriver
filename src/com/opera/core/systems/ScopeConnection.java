@@ -66,17 +66,8 @@ public class ScopeConnection {
 	 * Parse the services message
 	 * @param serviceMessage
 	 */
-	public void initializeServices(String serviceMessage){
-		int cutPoint = serviceMessage.indexOf(" ");
-		
-		if(cutPoint < 0) {
-			connection.close();
-			throw new WebDriverException("No handshake received or message is incomplete, message received : " + serviceMessage);
-		}
-		
-		cutPoint++;
-		String serviceList = serviceMessage.substring(cutPoint);
-		listedServices = Arrays.asList(serviceList.split(","));
+	public void setListedServices(java.util.List<String> services) {
+		listedServices = services;
 	}
 
 	/**
