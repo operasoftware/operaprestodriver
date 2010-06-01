@@ -64,7 +64,8 @@ public class ScopeServices implements IConnectionHandler {
 	}
 	
 	public ScopeActions getActionHandler() {
-		return actionHandler;
+            System.out.println("getActionHandler: NULL? " + (actionHandler != null ? "NO" : "YES"));
+            return actionHandler;
 	}
 	
 	public List<IConsoleListener> getConsoleListeners() {

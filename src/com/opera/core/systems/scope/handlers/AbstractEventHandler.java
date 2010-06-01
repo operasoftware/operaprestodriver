@@ -21,16 +21,19 @@ import com.opera.core.systems.scope.services.IWindowManager;
  */
 public abstract class AbstractEventHandler {
 	
-	protected IWindowManager windowManager;
+
+        /*protected IWindowManager windowManager;
 	protected IOperaExec exec;
 	protected IEcmaScriptDebugger debugger;
 	protected ScopeConnection connection;
-	
+	*/
 	public AbstractEventHandler(ScopeServices services) {
+            /*
 		this.windowManager = services.getWindowManager();
 		this.debugger = services.getDebugger();
 		this.exec = services.getExec();
 		this.connection = services.getConnection();
+             */
 	}
 	
 	/**

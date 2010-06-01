@@ -55,7 +55,7 @@ public class PbActionHandler extends ScopeActions{
 
 	@Override
 	public void get(String url) {
-		execService.action("Go", url);
+		services.getExec().action("Go", url);
 	}
 
 	@Override
@@ -83,7 +83,7 @@ public class PbActionHandler extends ScopeActions{
 		canvas.setW(Integer.valueOf(dimensions[0]));
 		canvas.setViewPortRelative(true);
 		
-        ScreenShotReply reply = execService.screenWatcher(canvas, 1l, true);
+        ScreenShotReply reply = services.getExec().screenWatcher(canvas, 1l, true);
 		FileOutputStream stream;
 		try {
 			stream = new FileOutputStream(pngFile.getAbsolutePath());

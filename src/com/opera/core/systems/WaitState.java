@@ -44,7 +44,7 @@ public class WaitState {
 
     private void internalWait(long timeout) throws WebDriverException
     {
-        System.out.println("Waiting " + timeout + " ms for response on tag " + tag);
+        System.out.println("**************** Waiting " + timeout + " ms for response on tag " + tag);
         try {
             synchronized (this)
             {
@@ -55,6 +55,8 @@ public class WaitState {
         } catch (InterruptedException e) {
             throw new WebDriverException(e);
         }
+        System.out.println("**************** Waiting stopped.");
+
     }
 
     boolean isWaiting()

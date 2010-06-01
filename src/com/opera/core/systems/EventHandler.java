@@ -22,7 +22,7 @@ public class EventHandler extends AbstractEventHandler {
 	 * Changes the window-manager's active window on active window event
 	 */
 	public void onActiveWindow(Integer id) {
-		windowManager.setActiveWindowId(id);
+		services.getWindowManager().setActiveWindowId(id);
 	}
 
 	public void onMessage(Message message) {
@@ -38,12 +38,12 @@ public class EventHandler extends AbstractEventHandler {
 	 */
 	public void onRuntimeStarted(RuntimeStarted started) {
 		Runtime runtime = started.getRuntime();
-		if(runtime.getHtmlFramePath().equals("_top") && runtime.getWindowId() == windowManager.getActiveWindowId()) {
+		if(runtime.getHtmlFramePath().equals("_top") && runtime.getWindowId() == services.getWindowManager().getActiveWindowId()) {
 			//check if we already have such a runtime and clean them up if needed
-			debugger.cleanUpRuntimes();
-			debugger.setRuntime(runtime);
+			services.getDebugger().cleanUpRuntimes();
+			services.getDebugger().setRuntime(runtime);
 		}
-		debugger.addRuntime(runtime);
+		services.getDebugger().addRuntime(runtime);
 	}
 
 
@@ -53,11 +53,11 @@ public class EventHandler extends AbstractEventHandler {
 	 * in onRuntimeStarted
 	 */
 	public void onRuntimeStopped(Integer id) {
-		debugger.removeRuntime(id);
+		services.getDebugger().removeRuntime(id);
 		//FIXME this event is quite buggy, ignore
 		/*
-		if(stopped.getRuntimeId() == debugger.getRuntimeId())
-			debugger.setRuntimeId(0);
+		if(stopped.getRuntimeId() == services.getDebugger().getRuntimeId())
+			services.getDebugger().setRuntimeId(0);
 		*/
 	}
 
@@ -69,7 +69,7 @@ public class EventHandler extends AbstractEventHandler {
 	public void onUpdatedWindow(UpdatedWindow window) {
 		//logger.log(Level.INFO, window.toString());
 		if(window.getWindow().getOpenerId() == 0)
-			windowManager.addWindow(window.getWindow());
+			services.getWindowManager().addWindow(window.getWindow());
 	}
 
 	/**
@@ -77,13 +77,13 @@ public class EventHandler extends AbstractEventHandler {
 	 * list and removes the runtimes that are associated with it
 	 */
 	public void onWindowClosed(Integer id) {
-		windowManager.removeWindow(id);
-		debugger.cleanUpRuntimes(id);
-		windowManager.getWindowClosedLatch().countDown();
+		services.getWindowManager().removeWindow(id);
+		services.getDebugger().cleanUpRuntimes(id);
+		services.getWindowManager().getWindowClosedLatch().countDown();
 	}
 
 	public void onWindowLoaded() {
-		windowManager.getLoadCompleteLatch().countDown();
+		services.getWindowManager().getLoadCompleteLatch().countDown();
 	}
 
 	@Override
@@ -103,7 +103,7 @@ public class EventHandler extends AbstractEventHandler {
 
 	@Override
 	public void onHttpResponse(int responseCode) {
-		windowManager.getLastHttpResponseCode().compareAndSet(0, responseCode);
+		services.getWindowManager().getLastHttpResponseCode().compareAndSet(0, responseCode);
 	}
 
 }
