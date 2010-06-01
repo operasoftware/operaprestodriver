@@ -119,8 +119,6 @@ public class StpConnection implements SocketListener {
             close();
             throw new IOException("Connection not allowed from IConnectionHandler (already connected)");
         }
-        
-        
     }
 
     private void switchToStp1() {
@@ -159,7 +157,7 @@ public class StpConnection implements SocketListener {
     }
 
     public void sendEnableStp1() {
-        send("*enable-stp1");
+        send("*enable stp-1");
     }
 
     public void sendQuit() {

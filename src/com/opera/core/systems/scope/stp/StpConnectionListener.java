@@ -65,13 +65,14 @@ public class StpConnectionListener implements SocketListener {
 
         SocketMonitor.instance().add(server, this, SelectionKey.OP_ACCEPT);
 
-        logger.info("webdriver-opera v0.2.100506, ready to accept connections on port " + port);
+        logger.info("webdriver-opera v0.2.1, ready to accept connections on port " + port);
     }
 
     public boolean canRead(SelectableChannel channel) throws IOException {
         SocketChannel socket = server.accept();
         if (socket != null) {
             logger.fine("Accepted STP connection from " + socket.socket().getLocalAddress());
+            socket.socket().setTcpNoDelay(true);
             StpConnection con = new StpConnection(socket, handler, eventHandler);
         }
         return true;

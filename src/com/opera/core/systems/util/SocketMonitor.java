@@ -263,8 +263,7 @@ public class SocketMonitor {
             if (wantedMask != 0)
             {
                 System.out.println("New wantedMask=" + debugMask(wantedMask));
-                // key.interestOps(wantedMask);
-                this.modify(channel, listener, wantedMask);
+                key.interestOps(wantedMask);
             }
             else
             {
