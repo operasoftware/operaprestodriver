@@ -10,14 +10,21 @@ import com.opera.core.systems.scope.exceptions.ResponseNotReceivedException;
 public class WaitState {
 
     private int tag;
+    private String xmlResponse;
     private WebDriverException exception = null;
     private int exitCode = 0;
+    
+    enum State
+    {
 
+    }
+    
     enum WaitResult
     {
         NONE,           /* Not waiting */
         WAITING,        /* Waiting for event to happen */
         RESPONSE,       /* Got a response */
+        XMLRESPONSE,    /* Got an XML response */
         ERROR,          /* Got an error response */
         EXCEPTION,      /* An exception occured (STP connection is not alive) */
         DISCONNECTED,   /* STP connection is disconnected */
@@ -44,10 +51,15 @@ public class WaitState {
 
     private void internalWait(long timeout) throws WebDriverException
     {
-        System.out.println("**************** Waiting " + timeout + " ms for response on tag " + tag);
         try {
             synchronized (this)
             {
+                synchronized (result)
+                {
+                    if (result != WaitResult.WAITING)
+                        return;
+                }
+                
                 if (!connected)
                     throw new WebDriverException("Waiting aborted - not connected!");
                 wait(timeout);
@@ -55,8 +67,6 @@ public class WaitState {
         } catch (InterruptedException e) {
             throw new WebDriverException(e);
         }
-        System.out.println("**************** Waiting stopped.");
-
     }
 
     boolean isWaiting()
@@ -92,6 +102,23 @@ public class WaitState {
         }
         wakeup();
     }
+    
+    void onXMLResponse(String response)
+    {
+        System.out.println("Got XML response for " + xmlResponse);
+        synchronized (result)
+        {
+            if (response.contains(xmlResponse)) {
+                this.result = WaitResult.XMLRESPONSE;
+                this.xmlResponse = response;
+            } else {
+                this.result = WaitResult.EXCEPTION;
+                exception = new WebDriverException("Protocol error: Tag mismatch!");
+            }
+        }
+        wakeup();
+    }
+    
 
     void onError(int tag)
     {
@@ -118,6 +145,7 @@ public class WaitState {
         {
             this.result = WaitResult.EXCEPTION;
             exception = new WebDriverException(e);
+            connected = false;
         }
         wakeup();
     }
@@ -154,9 +182,6 @@ public class WaitState {
     
     void waitForHandshake(long timeout) throws WebDriverException
     {
-        if (isWaiting())
-            throw new WebDriverException("Already in wait state.");
-
         synchronized (result)
         {
             this.result = WaitResult.WAITING;
@@ -179,75 +204,108 @@ public class WaitState {
                     return;
 
                 case EXCEPTION:
-                    System.out.println(" -> EXCEPTION");
                     throw exception;
 
                 case DISCONNECTED:
-                    System.out.println(" -> DISCONNECTED");
-		    throw new WebDriverException("Disconnected STP connection.");
+		    throw new CommunicationException("Disconnected STP connection.");
 
                 case BINARY_EXIT:
-                    if (exitCode != 0)
-                        System.out.println(" -> CRASHED");
-                    else
-                        System.out.println(" -> EXIT");
-                    throw new WebDriverException("Binary stopped.");
+                    throw new CommunicationException("Binary stopped/crashed.");
 
                 default:
                     throw new WebDriverException("Unexpected result, expecting handshake");
             }
         }
-
     }
-    
+
     boolean waitFor(int tag, long timeout) throws WebDriverException
     {
-        if (isWaiting())
-            throw new WebDriverException("Already in wait state.");
-
-        synchronized (result)
+        while (true)
         {
-            this.result = WaitResult.WAITING;
-            this.tag = tag;
-            this.exception = null;
-        }
-
-        internalWait(timeout);
-
-        synchronized (result)
-        {
-            WaitResult old_result = result;
-            result = WaitResult.NONE;
-            switch (old_result)
+            synchronized (result)
             {
-                case WAITING:
-                    System.out.println(" -> WAITING");
-                    throw new ResponseNotReceivedException("No response in a timely fashion.");
-                
-                case RESPONSE:
-                    System.out.println(" -> RESPONSE");
-                    return true;
+                this.result = WaitResult.WAITING;
+                this.tag = tag;
+                this.exception = null;
+            }
 
-                case ERROR:
-                    System.out.println(" -> ERROR");
-                    return false;
+            internalWait(timeout);
 
-                case EXCEPTION:
-                    System.out.println(" -> EXCEPTION");
-                    throw exception;
+            synchronized (result)
+            {
+                WaitResult old_result = result;
+                result = WaitResult.NONE;
+                switch (old_result)
+                {
+                    case WAITING:
+                        throw new ResponseNotReceivedException("No response in a timely fashion.");
 
-		case DISCONNECTED:
-                    System.out.println(" -> DISCONNECTED");
-		    throw new WebDriverException("Disconnected STP connection.");
+                    case RESPONSE:
+                        return true;
+                    
+                    case XMLRESPONSE:
+                        continue;
 
-                case BINARY_EXIT:
-                    if (exitCode != 0)
-                        System.out.println(" -> CRASHED");
-                    else
-                        System.out.println(" -> EXIT");
-                    throw new WebDriverException("Binary stopped.");
+                    case ERROR:
+                        return false;
+
+                    case EXCEPTION:
+                        throw exception;
+
+                    case DISCONNECTED:
+                        throw new CommunicationException("Disconnected STP connection.");
+
+                    case BINARY_EXIT:
+                        throw new CommunicationException("Binary stopped/crashed");
+                }
             }
         }
-        return false;
+    }
+
+    @Deprecated
+    boolean waitForXMLResponse(String xmlResponse, long timeout) throws WebDriverException
+    {
+        while (true)
+        {
+            synchronized (result)
+            {
+                this.result = WaitResult.WAITING;
+                this.xmlResponse = xmlResponse;
+                this.tag = -1;
+                this.exception = null;
+            }
+
+            internalWait(timeout);
+
+            synchronized (result)
+            {
+                WaitResult old_result = result;
+                result = WaitResult.NONE;
+                switch (old_result)
+                {
+                    case WAITING:
+                        throw new ResponseNotReceivedException("No response in a timely fashion.");
+
+                    case RESPONSE:
+                        continue;
+
+                    case XMLRESPONSE:
+                        return true;
+
+                    case ERROR:
+                        continue;
+
+                    case EXCEPTION:
+                        throw exception;
+
+                    case DISCONNECTED:
+                        throw new CommunicationException("Disconnected STP connection.");
+
+                    case BINARY_EXIT:
+                        throw new CommunicationException("Binary stopped/crashed");
+                }
+            }
+        }
+        
     }
 }

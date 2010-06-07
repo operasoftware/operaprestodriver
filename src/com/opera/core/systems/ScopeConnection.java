@@ -23,14 +23,14 @@ public class ScopeConnection {
         private ScopeServices services;
        
 	private int tagCounter;
-	
+/*
 	protected CountDownLatch responseLatch = new CountDownLatch(1);
 	
         @Deprecated
 	public CountDownLatch getResponseReceivedLatch() {
 		return this.responseLatch;
 	}
-
+*/
 	public List<String> getEnabledServices() {
 		return enabledServices;
 	}
@@ -108,7 +108,7 @@ public class ScopeConnection {
 	 */
         @Deprecated
 	public void send(String message) {
-            responseLatch = new CountDownLatch(1);
+            // responseLatch = new CountDownLatch(1);
             connection.send(message);
 	}
 
@@ -119,11 +119,10 @@ public class ScopeConnection {
 	 */
         @Deprecated
         public void sendXmlMessage(String serviceName, String message) {
-            responseLatch = new CountDownLatch(1);
+            // responseLatch = new CountDownLatch(1);
             String xml = (serviceName + " <?xml version=\"1.0\"?>" + message);
             connection.send(xml);
 	}
-	
 	
 	private Command.Builder buildCommand(int commandId, String service, ByteString payload){
 		Command.Builder command  = Command.newBuilder();

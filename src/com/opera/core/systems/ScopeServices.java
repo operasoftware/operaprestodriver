@@ -56,6 +56,7 @@ public class ScopeServices implements IConnectionHandler {
         private ScopeConnection connection = null;
         private StpThread stpThread = null;
 	boolean running = true;
+        boolean shuttingDown = false;
         boolean stp1;
 
         @Deprecated
@@ -396,6 +397,26 @@ public class ScopeServices implements IConnectionHandler {
 		windowManager.init();
 		debugger.init();
 	}
+        
+        public void quit() {
+            shuttingDown = true;
+            try {
+                if(exec.getActionList().contains("Quit"))
+                    exec.action("Quit");
+                else
+                    exec.action("Exit");
+            } catch (Exception e) {
+                logger.info("Caught exception when trying to shut down (cannot send quit).");
+            }
+
+            shutdown();
+            
+            if (opera != null)
+            {
+                opera.shutdown();
+            }
+
+        }
 
         public boolean onConnected(StpConnection con)
         {
@@ -427,9 +448,12 @@ public class ScopeServices implements IConnectionHandler {
             logger.fine("Disconnected, closing StpConnection.");
             if (connection != null)
             {
-                waitState.onDisconnected();
-                logger.fine("Cleaning up...");
-                connection = null;
+                if (!shuttingDown)
+                {
+                    waitState.onDisconnected();
+                    logger.fine("Cleaning up...");
+                    connection = null;
+                }
             }
 	}
 
@@ -461,7 +485,10 @@ public class ScopeServices implements IConnectionHandler {
         public void onBinaryStopped(int exitValue) {
             if (connection != null)
             {
-                waitState.onBinaryExit(exitValue);
+                if (!shuttingDown)
+                {
+                    waitState.onBinaryExit(exitValue);
+                }
             }
             opera = null;
         }

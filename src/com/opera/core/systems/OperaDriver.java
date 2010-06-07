@@ -333,19 +333,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,FindsB
 
 	public void quit() {
             logger.info("quit");
-            try {
-                if(isConnected()) {
-                    if(exec.getActionList().contains("Quit"))
-                        exec.action("Quit");
-                    else
-                        exec.action("Exit");
-                }
-            } catch (Exception e) {
-                logger.info("Caught exception when trying to shut down (cannot send quit).");
-            }
-
-            services.shutdown();
-            binary.shutdown();
+            services.quit();
 	}
 
 	public TargetLocator switchTo() {

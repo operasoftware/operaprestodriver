@@ -50,6 +50,7 @@ public abstract class AbstractService {
 		this.messageOffset = serviceName.length() + 22;
 	}
 
+        @Deprecated
 	public static void sleep(long timeInMillis) {
 		try {
 			Thread.sleep(timeInMillis);
@@ -71,7 +72,9 @@ public abstract class AbstractService {
 	 * @param using message to send
 	 */
 	public void post(String using) {
-		connection.sendXmlMessage(serviceName, using);
+            
+            connection.sendXmlMessage(serviceName, using);
+            waitFor("using");
 	}
 	
 	/**
@@ -174,6 +177,7 @@ public abstract class AbstractService {
 	 * @param startsWith
 	 * @return
 	 */
+        @Deprecated
 	public String waitForResponse(String startsWith) {
 		return waitForResponse(startsWith, OperaIntervals.RESPONSE_TIMEOUT.getValue());
 	}
