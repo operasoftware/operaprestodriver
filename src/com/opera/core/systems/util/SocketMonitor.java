@@ -54,18 +54,15 @@ public class SocketMonitor {
             switch (op)
             {
                 case ADD:
-                        // logger.info("SelectorChangeRequest: Add socket=" + channel.toString() + ", mask=" + mask);
-                        System.out.println("SelectorChangeRequest: Add socket=" + channel.toString() + ", mask=" + debugMask(mask));
+                        logger.finest("SelectorChangeRequest: Add socket=" + channel.toString() + ", mask=" + mask);
                         break;
 
                 case MODIFY:
-                        // logger.info("SelectorChangeRequest: Modify socket=" + channel.toString() + ", mask=" + mask);
-                        System.out.println("SelectorChangeRequest: Modify socket=" + channel.toString() + ", mask=" + debugMask(mask));
+                        logger.finest("SelectorChangeRequest: Modify socket=" + channel.toString() + ", mask=" + mask);
                         break;
 
                 case REMOVE:
-                        logger.info("SelectorChangeRequest: Remove socket=" + channel.toString());
-                        System.out.println("SelectorChangeRequest: Remove socket=" + channel.toString());
+                        logger.finest("SelectorChangeRequest: Remove socket=" + channel.toString());
                         break;
             }
         }
@@ -140,7 +137,6 @@ public class SocketMonitor {
     }
 
     protected boolean pollSockets(long ms) {
-        System.out.println("Poll " + selector.keys().size() + " sockets");
         if (selector.keys().isEmpty())
         {
             return true;
@@ -148,7 +144,6 @@ public class SocketMonitor {
 
         try {
             locked = true;
-            System.out.println("selecting for " + ms + " milliseconds");
             synchronized (selector) {
                 selector.select(ms);
             }
@@ -183,8 +178,6 @@ public class SocketMonitor {
         {
             if (changes.size() == 0)
                 return;
-
-            System.out.println("Applying " + changes.size() + " changes to selector.");
 
             Iterator<SocketMonitor.SelectorChangeRequest> it = changes.iterator();
             while (it.hasNext())
@@ -229,8 +222,6 @@ public class SocketMonitor {
         int triggerMask = key.readyOps();
         int wantedMask = 0;
 
-        System.out.println("processSelectionKey(), events " + debugMask(triggerMask));
-
         if (key.isValid() && key.isAcceptable()) {
             if (listener.canRead(channel))
                 wantedMask |= SelectionKey.OP_ACCEPT;
@@ -242,13 +233,11 @@ public class SocketMonitor {
         }
         
         if (key.isValid() && key.isReadable()) {
-            System.out.println("isReadable()");
             if (listener.canRead(channel))
                 wantedMask |= SelectionKey.OP_READ;
         }
 
         if (key.isValid() && key.isWritable()) {
-            System.out.println("isWritable()");
             if (listener.canWrite(channel))
                 wantedMask |= SelectionKey.OP_WRITE;
         }
@@ -262,12 +251,10 @@ public class SocketMonitor {
         {
             if (wantedMask != 0)
             {
-                System.out.println("New wantedMask=" + debugMask(wantedMask));
                 key.interestOps(wantedMask);
             }
             else
             {
-                System.out.println("Canceling key");
                 key.cancel();
             }
         }

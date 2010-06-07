@@ -438,7 +438,7 @@ public class StpConnection implements SocketListener {
 
     private void bufferRemaining(ByteBuffer buffer, int read) {
             if(read > 0) {
-                logger.warning("Partial read, might lose data here!");
+                logger.severe("Partial read, might lose data here!");
                     remainingBytes = new byte[read];
                     buffer.get(remainingBytes);
                     buffer.clear();
