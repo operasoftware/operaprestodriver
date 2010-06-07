@@ -8,6 +8,11 @@ import com.opera.core.systems.scope.handlers.AbstractEventHandler;
 
 
 /**
+ * This thread starts the StpConnectionListener which listens for incoming
+ * connections and accepts those connections.
+ *
+ * This thread also owns the SocketMonitor instance - so all network traffic and
+ * communication is happening on this thread.
  *
  * @author Jan Vidar Krey
  */
