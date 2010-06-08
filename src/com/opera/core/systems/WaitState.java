@@ -1,5 +1,7 @@
 package com.opera.core.systems;
 
+import java.util.logging.Logger;
+
 import org.openqa.selenium.WebDriverException;
 import com.opera.core.systems.scope.exceptions.ResponseNotReceivedException;
 
@@ -8,7 +10,8 @@ import com.opera.core.systems.scope.exceptions.ResponseNotReceivedException;
  * @author Jan Vidar Krey (janv@opera.com)
  */
 public class WaitState {
-
+	private final Logger logger = Logger.getLogger(this.getClass().getName());
+	
     private int tag;
     private String xmlResponse;
     private WebDriverException exception = null;
@@ -79,7 +82,7 @@ public class WaitState {
     
     void onHandshake()
     {
-        System.out.println("Got handshake");
+    	logger.info("Got handshake");
         synchronized (result)
         {
             this.result = WaitResult.HANDSHAKE;
@@ -89,7 +92,7 @@ public class WaitState {
 
     void onResponse(int tag)
     {
-        System.out.println("Got response for " + tag);
+    	logger.info("Got response for " + tag);
         synchronized (result)
         {
             if (tag == this.tag)
@@ -105,7 +108,7 @@ public class WaitState {
     
     void onXMLResponse(String response)
     {
-        System.out.println("Got XML response for " + xmlResponse);
+    	logger.info("Got XML response for " + xmlResponse);
         synchronized (result)
         {
             if (response.contains(xmlResponse)) {
@@ -122,7 +125,7 @@ public class WaitState {
 
     void onError(int tag)
     {
-        System.out.println("Got ERROR for " + tag);
+    	logger.info("Got ERROR for " + tag);
         synchronized (result)
         {
             if (tag == this.tag)
@@ -140,7 +143,7 @@ public class WaitState {
 
     void onException(Exception e)
     {
-        System.out.println("Got exception for " + tag);
+    	logger.info("Got exception for " + tag);
         synchronized (result)
         {
             this.result = WaitResult.EXCEPTION;
@@ -159,7 +162,7 @@ public class WaitState {
 
         if (isWaiting())
         {
-            System.out.println("Got disconnected for " + tag);
+        	logger.info("Got disconnected for " + tag);
             synchronized (result)
             {
                 this.result = WaitResult.DISCONNECTED;
@@ -170,7 +173,7 @@ public class WaitState {
 
     void onBinaryExit(int code)
     {
-        System.out.println("Got BinaryExit for " + tag + ", exit code=" + code);
+    	logger.info("Got BinaryExit for " + tag + ", exit code=" + code);
         synchronized (result)
         {
             this.result = WaitResult.BINARY_EXIT;
