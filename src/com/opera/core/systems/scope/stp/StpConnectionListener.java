@@ -51,7 +51,7 @@ public class StpConnectionListener implements SocketListener {
         SocketMonitor.instance().remove(server);
         try {
             server.close();
-        } catch (IOException ignored) { 
+        } catch (Exception ignored) { // IOException or NullPointerException
             // ignored
         } finally {
             server = null;

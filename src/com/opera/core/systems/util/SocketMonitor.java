@@ -226,7 +226,7 @@ public class SocketMonitor {
             if (listener.canRead(channel))
                 wantedMask |= SelectionKey.OP_ACCEPT;
         }
-
+        
         if (key.isValid() && key.isConnectable()) {
             if (listener.canRead(channel))
                 wantedMask |= SelectionKey.OP_CONNECT;
@@ -236,12 +236,12 @@ public class SocketMonitor {
             if (listener.canRead(channel))
                 wantedMask |= SelectionKey.OP_READ;
         }
-
+        
         if (key.isValid() && key.isWritable()) {
             if (listener.canWrite(channel))
                 wantedMask |= SelectionKey.OP_WRITE;
         }
-
+        
         // In case we did not trigger something we want to poll for
         int not_triggered = (currentMask & ~triggerMask);
         wantedMask |= not_triggered;

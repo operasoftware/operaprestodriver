@@ -35,7 +35,7 @@ public class StpConnection implements SocketListener {
     // Outgoing send queue
     private final ArrayBlockingQueue<ByteBuffer> requests;
     private ByteBuffer recvBuffer;
-    private byte[] remainingBytes = new byte[0];
+    //private byte[] remainingBytes = new byte[0];
 
     // For STP1
     private Response stpResponse;
@@ -48,15 +48,12 @@ public class StpConnection implements SocketListener {
     private IConnectionHandler connectionHandler;
 
     public enum State {
-            SERVICELIST, HANDSHAKE, EMPTY, STP, STP_SIZE, STP_DATA;
+            SERVICELIST, HANDSHAKE, EMPTY, STP;
     }
 
     public Response getStpResponse() {
             return stpResponse;
     }
-
-    private int messageSize = 0;
-    private int messageType = 0;
 
     private State state = State.SERVICELIST;
 
@@ -109,7 +106,8 @@ public class StpConnection implements SocketListener {
         this.eventHandler = eventHandler;
         requests = new ArrayBlockingQueue<ByteBuffer>(1024);
         recvBuffer = ByteBuffer.allocateDirect(65536);
-
+        recvBuffer.limit(0);
+        
         socket.configureBlocking(false);
 
         SocketMonitor.instance().add(socket, this, SelectionKey.OP_READ);
@@ -150,7 +148,7 @@ public class StpConnection implements SocketListener {
         buffer.put(payload);
 
         // log what is being sent.
-        logger.fine("SEND: " + command.toString());
+        logger.log(Level.INFO,"SEND: " + command.toString());
 
         requests.add(buffer);
         SocketMonitor.instance().modify(socketChannel, this, SelectionKey.OP_READ | SelectionKey.OP_WRITE);
@@ -197,12 +195,85 @@ public class StpConnection implements SocketListener {
      * @param key
      */
     public boolean canRead(SelectableChannel channel) throws IOException {
-        logger.info("canRead");
-        ByteBuffer buffer = recvBuffer; // FIXME
+        logger.fine("canRead");
+        if(socketChannel == null) throw new IOException("We dont have a socket :-)");
+        
+        //read as much data as possible into buffer!
+        ByteBuffer readBuffer = ByteBuffer.allocateDirect(1000);
+        int readSize = 0;
+        
+        //continue to read data and read messages until there are no messages
+        boolean didNotFindAnyMessage = false;
+        while(!didNotFindAnyMessage){
+        	logger.fine("canReadLoop!");
+        	
+        	//read as much data as possible (until recvBuffer is full OR we don't get any more data)
+        	do{
+        		readBuffer.clear();
+        		try {
+        			//do we have a socket
+        			if(socketChannel == null){
+        				readSize = -1;
+        				
+        			//do we have room in our buffer?
+        			} else {
+        				
+        				readSize = socketChannel.read(readBuffer);
+        				if(readSize > 0){
+        					readBuffer.limit(readSize);
+        					readBuffer.position(0);
+        				}
+        				
+        			}
+        			
+        		}catch(IOException ex){
+        			logger.log(Level.WARNING, "Channel closed, causing exception", ex.getMessage());
+        			readSize = -1;//same as error from socketChannel.read
+        		}
+        		
+        		if(readSize < 0){
+        			try{
+            			logger.log(Level.INFO, "Channel closed : {0}", socketChannel.socket().getInetAddress().getHostName());
+            		}catch(NullPointerException e){
+            			//ignore
+            		}
+                    connectionHandler.onDisconnect();
+                    SocketMonitor.instance().remove(socketChannel);
+                    return false;
+        		} else if(readSize > 0){
+        			
+        			//double buffer size if needed!
+    				if(recvBuffer.limit() + readBuffer.limit() >= recvBuffer.capacity()){
+    					logger.fine("Doubled the size of our recv buffer!");
+    					ByteBuffer newRecvBuffer = ByteBuffer.allocate(recvBuffer.capacity() * 2);
+    					newRecvBuffer.clear();
+    					recvBuffer.position(0);
+    					newRecvBuffer.limit(recvBuffer.limit());
+    					newRecvBuffer.position(0);
+    					newRecvBuffer.put(recvBuffer);
+    					newRecvBuffer.position(0);
+    					recvBuffer = newRecvBuffer;
+    				}
+        			
+        			recvBuffer.position(recvBuffer.limit());
+        			recvBuffer.limit(recvBuffer.limit() + readSize);//increase limit!
+        			recvBuffer.put(readBuffer);
+        			logger.fine("did read " + readSize + " bytes, new buffer size = " + recvBuffer.limit());
+        		}
+        	} while(readSize > 0);
+        
+        	//read as many messages as possible, and only
+        	didNotFindAnyMessage = true;
+        	while(readMessage(recvBuffer)){
+        		didNotFindAnyMessage = false;
+        	}
+        }
+        return true;
+        
+        /*
         int numRead = 0;
-
         try {
-            numRead = socketChannel.read(buffer);
+            numRead = socketChannel.read(recvBuffer);
             logger.fine("Read " + numRead + " bytes, state=" + state.toString());
 
         } catch (IOException e) {
@@ -211,14 +282,19 @@ public class StpConnection implements SocketListener {
         }
 
         if (numRead < 0) {
-                logger.log(Level.INFO, "Channel closed : {0}", socketChannel.socket().getInetAddress().getHostName());
+        		try{
+        			logger.log(Level.INFO, "Channel closed : {0}", socketChannel.socket().getInetAddress().getHostName());
+        		}catch(NullPointerException e){
+        			logger.log(Level.INFO, "Channel closed : null");
+        		}
                 connectionHandler.onDisconnect();
                 SocketMonitor.instance().remove(socketChannel);
                 return false;
         }
 
-        readMessage(buffer, numRead, false);
+        readMessage(recvBuffer, numRead, false);
         return true;
+        */
     }
 
     /**
@@ -235,7 +311,9 @@ public class StpConnection implements SocketListener {
      */
     public boolean canWrite(SelectableChannel channel) throws IOException
     {
-        logger.info("canWrite");
+        logger.fine("canWrite");
+        if(socketChannel == null) throw new IOException("We dont have a socket :-)");
+        
         int totalWritten = 0;
         while (!requests.isEmpty())
         {
@@ -263,6 +341,7 @@ public class StpConnection implements SocketListener {
      * Switches the wait state and wakes up the selector to process
      */
     public void close() {
+    	if(socketChannel == null) return;
         SocketMonitor.instance().remove(socketChannel);
         try {
             socketChannel.close();
@@ -329,10 +408,145 @@ public class StpConnection implements SocketListener {
         stp1EventHandler.handleEvent(event);
     }
 
-    private void readMessage(ByteBuffer buffer, int bytesRead, boolean recurse) {
+    /**
+     * reads a message from the buffer, and pops the used data out of the buffer!
+     * 
+     * @param buffer the buffer containing messages
+     * @return true if we got a message from the buffer!
+     */
+    private boolean readMessage(ByteBuffer buffer) {
+    	
+        //logger.finest("readMessage: " + bytesRead + " bytes read, remaining=" + remainingBytes.length + ", state=" + state.toString() + ", recurse=" + recurse);
+    	
+    	buffer.position(0);
+        int bytesWeHaveBeenreading = 0;
+        
+    	switch (state) {
+        	case SERVICELIST:
+        		StringBuilder builder = new StringBuilder();
+        		builder.append(buffer.asCharBuffer());
+        		parseServiceList(builder.toString());
+        		buffer.position(0);//reset position!
+        		bytesWeHaveBeenreading = buffer.limit(); //bytesWeHaveBeenreading = all bytes in buffer!
+        		break;
+        	
+        	case HANDSHAKE:
+        		if(buffer.limit() >= 6){
+        			byte[] dst = new byte[6];
+        			buffer.position(0);//read from start!
+                    buffer.get(dst);
+                    buffer.position(0);//reset position!
+                    bytesWeHaveBeenreading = 6; //6 bytes will be removed from buffer
+                    String handShake = new String(dst);
+                    if(!handShake.equals("STP/1\n")) {
+                        close();
+                        connectionHandler.onException(new WebDriverException("Scope Transport Protocol Error : Handshake"));
+                    } else {
+                    	setState(State.EMPTY);
+                    	connectionHandler.onHandshake(true);
+                    }
+        		}
+        		break;
+        		
+        	case EMPTY: // read 4 byte header: STP\0
+        		if(buffer.limit() >= 4){
+        			byte[] headerPrefix = new byte[4];
+                    buffer.get(headerPrefix);
+                    buffer.position(0);
+                    bytesWeHaveBeenreading = 4;
+                    ByteString incomingPrefix = ByteString.copyFrom(headerPrefix);
+                    if(stpPrefix.equals(incomingPrefix)){
+                        setState(State.STP);
+                        /*
+                        if(buffer.hasRemaining()){
+                            buffer.compact();
+                            readMessage(buffer, buffer.position(), true);
+                        } else {
+                            buffer.clear();
+                        }
+                        */
+                    } else {
+                        close();
+                        connectionHandler.onException(new WebDriverException("Scope Transport Protocol Error : Header"));
+                    }
+        		}
+        		break;
 
-        logger.finest("readMessage: " + bytesRead + " bytes read, remaining=" + remainingBytes.length + ", state=" + state.toString() + ", recurse=" + recurse);
-
+        	case STP:
+        		//try to read size,
+        		buffer.position(0);
+        		//FIXME Do we have enough to read size?
+                int messageSize = readRawVarint32(buffer);//read part of buffer
+                bytesWeHaveBeenreading = buffer.position();
+                buffer.position(0);
+                
+                //if we got size, read more, if not just leave it!
+                if(buffer.limit() >= bytesWeHaveBeenreading + messageSize){
+                	buffer.position(bytesWeHaveBeenreading);
+                	
+                	//Read type and Payload!
+                	int messageType = buffer.get();
+                	bytesWeHaveBeenreading += 1;
+                	
+                    byte[] payload = new byte[--messageSize];
+                    buffer.get(payload);
+                    buffer.position(0);
+                    
+                    bytesWeHaveBeenreading += messageSize;//32 bits = 4 bytes :-)
+                    
+                    setState(State.EMPTY);
+                    
+                    try {
+                        processMessage(messageType, payload);
+                    } catch (IOException e) {
+                        close();
+                        connectionHandler.onException(new WebDriverException("Error while processing the message: "  + e.getMessage()));
+                    }
+                } else {
+                	
+                	logger.info("tried to read a message, but expected " + 4 + messageSize + " bytes, and only got " + buffer.limit());
+                	
+                	buffer.position(0);
+                	bytesWeHaveBeenreading = 0;
+                }
+                break;
+        
+    	}
+        
+    	//pop number of readed bytes from 
+    	if(bytesWeHaveBeenreading > 0){
+    		
+    		//pop X bytes, and keep message for the rest!
+    		int rest = buffer.limit()-bytesWeHaveBeenreading;
+    		if(rest == 0){
+    			buffer.clear();
+    			buffer.limit(0);
+    		} else {
+    			byte[] temp = new byte[rest];
+    			
+    			buffer.position(bytesWeHaveBeenreading);
+    			buffer.get(temp, 0, rest);
+    			
+    			buffer.clear();
+    			buffer.limit(rest);
+    			buffer.position(0);
+    			buffer.put(temp, 0, rest);
+    			buffer.position(0);// set position back to start!
+    		}
+    		
+    		logger.fine("did read message of " + bytesWeHaveBeenreading + " bytes, new buffer size = " + buffer.limit());
+    		
+    		return true; // we did read a message :-)
+    	} else {
+    		if(buffer.limit() > 0){
+    			logger.fine("did NOT read message from buffer of size = " + buffer.limit());
+    		} else {
+    			logger.fine("no messages in empty buffer");
+    		}
+    		return false;
+    	}
+        
+        /*
         if (remainingBytes.length > 0) {
             bytesRead = remainingBytes.length + bytesRead;
             buffer.flip();
@@ -372,7 +586,7 @@ public class StpConnection implements SocketListener {
                 bufferRemaining(buffer, bytesRead);
                 break;
 
-            case EMPTY: /* read 4 byte header: STP\0 */
+            case EMPTY: // read 4 byte header: STP\0
                 if(bytesRead >= 4) {
                     byte[] headerPrefix = new byte[4];
                     buffer.get(headerPrefix);
@@ -433,9 +647,10 @@ public class StpConnection implements SocketListener {
                 bufferRemaining(buffer, bytesRead);
                 break;
         }
-
+        */
     }
 
+    /*
     private void bufferRemaining(ByteBuffer buffer, int read) {
             if(read > 0) {
                 logger.severe("Partial read, might lose data here!");
@@ -444,6 +659,7 @@ public class StpConnection implements SocketListener {
                     buffer.clear();
             }
     }
+    */
 
     private void processMessage(int stpType, byte[] payload) throws IOException {
 
@@ -455,16 +671,20 @@ public class StpConnection implements SocketListener {
              * throw new WebDriverException("Received command from host?");
              */
             case 2:// response
+            		// log what is being sent.
                     stpResponse = Response.parseFrom(payload);
-                    logger.log(Level.FINEST, stpResponse.toString());
+                    logger.log(Level.INFO,"RECV RESPONSE: " + stpResponse.toString());
+                    //logger.log(Level.FINEST, stpResponse.toString());
                     signalResponse(true, stpResponse.getTag());
                     break;
             case 3:// event
                     Event event = Event.parseFrom(payload);
+                    logger.log(Level.INFO,"RECV EVENT: " + event.toString());
                     signalEvent(event);
                     break;
             case 4:// error
                     Error error = Error.parseFrom(payload);
+                    logger.log(Level.INFO,"RECV ERROR: " + error.toString());
                     if (error.getService().equals("ecmascript-debugger") && error.getStatus() == Status.INTERNAL_ERROR.getCode()) {
                             stpResponse = null;
                             // signalResponse(false, "ES Error - " + error.toString());
