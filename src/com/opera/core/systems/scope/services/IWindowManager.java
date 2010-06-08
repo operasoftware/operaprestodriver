@@ -47,12 +47,16 @@ public interface IWindowManager {
 
 	void setActiveWindow(String windowName);
 
+        @Deprecated
 	CountDownLatch getLoadCompleteLatch();
 
+        @Deprecated
 	void setLoadCompleteLatch(CountDownLatch loadCompleteLatch);
 	
+        @Deprecated
 	CountDownLatch getWindowClosedLatch();
 
+        @Deprecated
 	void setWindowClosedLatch(CountDownLatch windowClosedLatch);
 
 	void waitForWindowLoaded();

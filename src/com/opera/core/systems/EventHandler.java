@@ -82,8 +82,16 @@ public class EventHandler extends AbstractEventHandler {
 		services.getWindowManager().getWindowClosedLatch().countDown();
 	}
 
+        @Deprecated
 	public void onWindowLoaded() {
 		services.getWindowManager().getLoadCompleteLatch().countDown();
+	}
+
+        /**
+         * This window loaded event contains the windowId
+         */
+	public void onWindowLoaded(int id) {
+                services.onWindowLoaded(id);
 	}
 
 	@Override

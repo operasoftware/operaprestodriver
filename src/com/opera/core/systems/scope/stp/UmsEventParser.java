@@ -63,7 +63,10 @@ public class UmsEventParser {
 				eventHandler.onUpdatedWindow(info);
 				break;
 			case WINDOW_LOADED:
-				eventHandler.onWindowLoaded();
+                                WindowID.Builder loadedWindowBuilder = WindowID.newBuilder();
+				buildPayload(event, loadedWindowBuilder);
+                                Integer loadedWindowID = loadedWindowBuilder.build().getWindowID();
+				eventHandler.onWindowLoaded(loadedWindowID.intValue());
 				break;
 			default:
 				break;

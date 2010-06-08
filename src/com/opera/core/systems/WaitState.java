@@ -1,6 +1,7 @@
 package com.opera.core.systems;
 
 import java.util.logging.Logger;
+import java.util.LinkedList;
 
 import org.openqa.selenium.WebDriverException;
 import com.opera.core.systems.scope.exceptions.ResponseNotReceivedException;
@@ -10,305 +11,279 @@ import com.opera.core.systems.scope.exceptions.ResponseNotReceivedException;
  * @author Jan Vidar Krey (janv@opera.com)
  */
 public class WaitState {
-	private final Logger logger = Logger.getLogger(this.getClass().getName());
-	
-    private int tag;
-    private String xmlResponse;
-    private WebDriverException exception = null;
-    private int exitCode = 0;
-    
-    enum State
-    {
+    private final Logger logger = Logger.getLogger(this.getClass().getName());
+    private boolean connected;
+    private Object lock = new Object();
 
-    }
-    
     enum WaitResult
     {
-        NONE,           /* Not waiting */
-        WAITING,        /* Waiting for event to happen */
         RESPONSE,       /* Got a response */
-        XMLRESPONSE,    /* Got an XML response */
         ERROR,          /* Got an error response */
         EXCEPTION,      /* An exception occured (STP connection is not alive) */
         DISCONNECTED,   /* STP connection is disconnected */
         BINARY_EXIT,    /* Opera binary crashed. */
-        HANDSHAKE       /* STP Handshake */
+        HANDSHAKE,       /* STP Handshake */
+        EVENT_WINDOW_LOADED, /* finished loaded */
     }
 
-    WaitResult result;
-    boolean connected;
+    private class ResultItem
+    {
+        int data;
+        WaitResult result;
+        WebDriverException exception;
+
+        public ResultItem(WebDriverException ex)
+        {
+            result = WaitResult.EXCEPTION;
+            exception = ex;
+            logger.fine("EVENT: " + result.toString() + ", exception: " + ex.toString());
+        }
+
+        public ResultItem(WaitResult result)
+        {
+            this.result = result;
+            logger.fine("EVENT: " + result.toString());
+        }
+
+        // BINARY_EXIT - with exit code.
+        // WINDOW_LOADED with windowId
+        // RESPONSE or ERROR with tag id
+        public ResultItem(WaitResult result, int data)
+        {
+            this.result = result;
+            this.data = data;
+            logger.fine("EVENT: " + result.toString() + ", data=" + data);
+        }
+    }
+
+    LinkedList<ResultItem> events = new LinkedList<ResultItem>();
 
     public WaitState()
     {
-        result = WaitResult.NONE;
+        // result = WaitResult.NONE;
         connected = true;
-    }
-
-    private void wakeup()
-    {
-        synchronized (this)
-        {
-            notifyAll();
-        }
     }
 
     private void internalWait(long timeout) throws WebDriverException
     {
         try {
-            synchronized (this)
-            {
-                synchronized (result)
-                {
-                    if (result != WaitResult.WAITING)
-                        return;
-                }
-                
-                if (!connected)
-                    throw new CommunicationException("Waiting aborted - not connected!");
-                wait(timeout);
-            }
+            if (!connected)
+                throw new CommunicationException("Waiting aborted - not connected!");
+            lock.wait(timeout);
         } catch (InterruptedException e) {
             throw new WebDriverException(e);
         }
     }
 
-    boolean isWaiting()
-    {
-        synchronized (result)
-        {
-            return result != WaitResult.NONE;
-        }
-    }
-    
     void onHandshake()
     {
-    	logger.info("Got handshake");
-        synchronized (result)
+        synchronized (lock)
         {
-            this.result = WaitResult.HANDSHAKE;
+            logger.info("Got handshake");
+            events.add(new ResultItem(WaitResult.HANDSHAKE));
+            lock.notify();
         }
-        wakeup();
     }
 
     void onResponse(int tag)
     {
-    	logger.info("Got response for " + tag);
-        synchronized (result)
+        synchronized (lock)
         {
-            if (tag == this.tag)
-            {
-                this.result = WaitResult.RESPONSE;
-            } else {
-                this.result = WaitResult.EXCEPTION;
-                exception = new WebDriverException("Protocol error: Tag mismatch!");
-            }
+            logger.info("Got response for " + tag);
+            events.add(new ResultItem(WaitResult.RESPONSE, tag));
+            lock.notify();
         }
-        wakeup();
     }
-    
-    void onXMLResponse(String response)
-    {
-    	logger.info("Got XML response for " + xmlResponse);
-        synchronized (result)
-        {
-            if (response.contains(xmlResponse)) {
-                this.result = WaitResult.XMLRESPONSE;
-                this.xmlResponse = response;
-            } else {
-                this.result = WaitResult.EXCEPTION;
-                exception = new WebDriverException("Protocol error: Tag mismatch!");
-            }
-        }
-        wakeup();
-    }
-    
 
     void onError(int tag)
     {
-    	logger.info("Got ERROR for " + tag);
-        synchronized (result)
+
+        synchronized (lock)
         {
-            if (tag == this.tag)
-            {
-                this.result = WaitResult.ERROR;
-            }
-            else
-            {
-                this.result = WaitResult.EXCEPTION;
-                exception = new WebDriverException("Protocol error: Tag mismatch!");
-            }
+            logger.info("Got ERROR for " + tag);
+            events.add(new ResultItem(WaitResult.ERROR, tag));
+            lock.notify();
         }
-        wakeup();
     }
 
     void onException(Exception e)
     {
-    	logger.info("Got exception for " + tag);
-        synchronized (result)
+        synchronized (lock)
         {
-            this.result = WaitResult.EXCEPTION;
-            exception = new WebDriverException(e);
+            logger.info("Got exception");
+            events.add(new ResultItem(new WebDriverException(e)));
             connected = false;
+            lock.notify();
         }
-        wakeup();
     }
 
     void onDisconnected()
     {
-        synchronized (this)
+        synchronized (lock)
         {
+            logger.info("Got disconnected.");
+            events.add(new ResultItem(WaitResult.DISCONNECTED));
             connected = false;
-        }
-
-        if (isWaiting())
-        {
-        	logger.info("Got disconnected for " + tag);
-            synchronized (result)
-            {
-                this.result = WaitResult.DISCONNECTED;
-            }
-            wakeup();
+            lock.notify();
         }
     }
 
     void onBinaryExit(int code)
     {
-    	logger.info("Got BinaryExit for " + tag + ", exit code=" + code);
-        synchronized (result)
+        synchronized (lock)
         {
-            this.result = WaitResult.BINARY_EXIT;
-            this.exitCode = code;
+            logger.info("Got BinaryExit: exit code=" + code);
+            events.add(new ResultItem(WaitResult.BINARY_EXIT, code));
+            connected = false;
+            lock.notify();
         }
-
-        wakeup();
     }
-    
+
+    void onWindowLoaded(int windowId)
+    {
+        synchronized (lock)
+        {
+            logger.info("Event: onWindowLoaded");
+            events.add(new ResultItem(WaitResult.EVENT_WINDOW_LOADED, windowId));
+            lock.notify();
+        }
+    }
+
+    private ResultItem getResult()
+    {
+        if (events.isEmpty())
+            return null;
+
+        return events.removeFirst();
+    }
+
     void waitForHandshake(long timeout) throws WebDriverException
     {
-        synchronized (result)
+        synchronized (lock)
         {
-            this.result = WaitResult.WAITING;
-            this.tag = -1;
-            this.exception = null;
-        }
-
-        internalWait(timeout);
-
-        synchronized (result)
-        {
-            WaitResult old_result = result;
-            result = WaitResult.NONE;
-            switch (old_result)
+            logger.fine("WAIT: for handshake");
+            while (true)
             {
-                case WAITING:
+                ResultItem result = getResult();
+
+                if (result == null)
+                {
+                    internalWait(timeout);
+                    result = getResult();
+                }
+
+                if (result == null)
                     throw new ResponseNotReceivedException("No response in a timely fashion.");
 
-                case HANDSHAKE:
-                    return;
+                switch (result.result)
+                {
+                    case HANDSHAKE:
+                        return;
 
-                case EXCEPTION:
-                    throw exception;
+                    case EXCEPTION:
+                        throw result.exception;
 
-                case DISCONNECTED:
-		    throw new CommunicationException("Disconnected STP connection.");
+                    case DISCONNECTED:
+                        throw new CommunicationException("Disconnected STP connection.");
 
-                case BINARY_EXIT:
-                    throw new CommunicationException("Binary stopped/crashed.");
+                    case BINARY_EXIT:
+                        throw new CommunicationException("Binary stopped/crashed.");
 
-                default:
-                    throw new WebDriverException("Unexpected result, expecting handshake");
+                    case EVENT_WINDOW_LOADED:
+                        break;
+
+                    default:
+                        throw new WebDriverException("Unexpected result, expecting handshake");
+                }
             }
         }
     }
 
     boolean waitFor(int tag, long timeout) throws WebDriverException
     {
-        while (true)
+        synchronized (lock)
         {
-            synchronized (result)
+            logger.fine("WAIT: for response " + tag);
+            while (true)
             {
-                this.result = WaitResult.WAITING;
-                this.tag = tag;
-                this.exception = null;
-            }
+                ResultItem result = getResult();
 
-            internalWait(timeout);
-
-            synchronized (result)
-            {
-                WaitResult old_result = result;
-                result = WaitResult.NONE;
-                switch (old_result)
+                if (result == null)
                 {
-                    case WAITING:
-                        throw new ResponseNotReceivedException("No response in a timely fashion.");
+                    internalWait(timeout);
+                    result = getResult();
+                }
 
+                if (result == null)
+                    throw new ResponseNotReceivedException("No response in a timely fashion.");
+
+
+                switch (result.result)
+                {
                     case RESPONSE:
                         return true;
                     
-                    case XMLRESPONSE:
-                        continue;
-
                     case ERROR:
                         return false;
 
                     case EXCEPTION:
-                        throw exception;
+                        throw result.exception;
 
                     case DISCONNECTED:
                         throw new CommunicationException("Disconnected STP connection.");
 
                     case BINARY_EXIT:
                         throw new CommunicationException("Binary stopped/crashed");
+
+                    case EVENT_WINDOW_LOADED:
+                        break;
                 }
             }
         }
     }
 
-    @Deprecated
-    boolean waitForXMLResponse(String xmlResponse, long timeout) throws WebDriverException
+    boolean waitForWindowLoaded(int windowId, long timeout) throws WebDriverException
     {
-        while (true)
+        synchronized (lock)
         {
-            synchronized (result)
+            logger.fine("WAIT: for window " + windowId + " to finish loading.");
+            while (true)
             {
-                this.result = WaitResult.WAITING;
-                this.xmlResponse = xmlResponse;
-                this.tag = -1;
-                this.exception = null;
-            }
+                ResultItem result = getResult();
 
-            internalWait(timeout);
-
-            synchronized (result)
-            {
-                WaitResult old_result = result;
-                result = WaitResult.NONE;
-                switch (old_result)
+                if (result == null)
                 {
-                    case WAITING:
-                        throw new ResponseNotReceivedException("No response in a timely fashion.");
+                    internalWait(timeout);
+                    result = getResult();
+                }
 
+                if (result == null)
+                    throw new ResponseNotReceivedException("No response in a timely fashion.");
+
+                switch (result.result)
+                {
                     case RESPONSE:
-                        continue;
-
-                    case XMLRESPONSE:
-                        return true;
+                        break;
 
                     case ERROR:
-                        continue;
+                        break;
 
                     case EXCEPTION:
-                        throw exception;
+                        throw result.exception;
 
                     case DISCONNECTED:
                         throw new CommunicationException("Disconnected STP connection.");
 
                     case BINARY_EXIT:
                         throw new CommunicationException("Binary stopped/crashed");
+
+                    case EVENT_WINDOW_LOADED:
+                        if (result.data == windowId)
+                            return true;
+                        break;
                 }
             }
         }
-        
     }
+
 }

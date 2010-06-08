@@ -39,14 +39,15 @@ public class StpConnectionListener implements SocketListener {
 
     @Override
     protected void finalize() throws Throwable {
-        if (server != null) {
-            stop();
-        }
+        stop();
         super.finalize();
     }
 
     public void stop()
     {
+        if (server == null)
+            return;
+
         logger.fine("Shutting down STP connection listener...");
         SocketMonitor.instance().remove(server);
         try {
