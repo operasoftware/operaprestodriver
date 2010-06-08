@@ -263,6 +263,9 @@ public class StpConnection implements SocketListener {
      * Switches the wait state and wakes up the selector to process
      */
     public void close() {
+        if (socketChannel == null)
+            return;
+
         SocketMonitor.instance().remove(socketChannel);
         try {
             socketChannel.close();
