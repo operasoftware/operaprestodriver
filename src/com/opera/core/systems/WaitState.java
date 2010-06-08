@@ -1,6 +1,7 @@
 package com.opera.core.systems;
 
 import java.util.logging.Logger;
+import java.util.LinkedList;
 
 import org.openqa.selenium.WebDriverException;
 import com.opera.core.systems.scope.exceptions.ResponseNotReceivedException;
@@ -11,16 +12,11 @@ import com.opera.core.systems.scope.exceptions.ResponseNotReceivedException;
  */
 public class WaitState {
     private final Logger logger = Logger.getLogger(this.getClass().getName());
-    private int tag;
-    private WebDriverException exception = null;
-    private int exitCode = 0;
+    private boolean connected;
     private Object lock = new Object();
-    private int windowId = 0;
-    
+
     enum WaitResult
     {
-        NONE,           /* Not waiting */
-        WAITING,        /* Waiting for event to happen */
         RESPONSE,       /* Got a response */
         ERROR,          /* Got an error response */
         EXCEPTION,      /* An exception occured (STP connection is not alive) */
@@ -30,12 +26,41 @@ public class WaitState {
         EVENT_WINDOW_LOADED, /* finished loaded */
     }
 
-    WaitResult result;
-    boolean connected;
+    private class ResultItem
+    {
+        int data;
+        WaitResult result;
+        WebDriverException exception;
+
+        public ResultItem(WebDriverException ex)
+        {
+            result = WaitResult.EXCEPTION;
+            exception = ex;
+            logger.fine("EVENT: " + result.toString() + ", exception: " + ex.toString());
+        }
+
+        public ResultItem(WaitResult result)
+        {
+            this.result = result;
+            logger.fine("EVENT: " + result.toString());
+        }
+
+        // BINARY_EXIT - with exit code.
+        // WINDOW_LOADED with windowId
+        // RESPONSE or ERROR with tag id
+        public ResultItem(WaitResult result, int data)
+        {
+            this.result = result;
+            this.data = data;
+            logger.fine("EVENT: " + result.toString() + ", data=" + data);
+        }
+    }
+
+    LinkedList<ResultItem> events = new LinkedList<ResultItem>();
 
     public WaitState()
     {
-        result = WaitResult.NONE;
+        // result = WaitResult.NONE;
         connected = true;
     }
 
@@ -55,7 +80,7 @@ public class WaitState {
         synchronized (lock)
         {
             logger.info("Got handshake");
-            this.result = WaitResult.HANDSHAKE;
+            events.add(new ResultItem(WaitResult.HANDSHAKE));
             lock.notify();
         }
     }
@@ -65,13 +90,7 @@ public class WaitState {
         synchronized (lock)
         {
             logger.info("Got response for " + tag);
-            if (tag == this.tag)
-            {
-                this.result = WaitResult.RESPONSE;
-            } else {
-                this.result = WaitResult.EXCEPTION;
-                exception = new WebDriverException("Protocol error: Tag mismatch!");
-            }
+            events.add(new ResultItem(WaitResult.RESPONSE, tag));
             lock.notify();
         }
     }
@@ -82,16 +101,7 @@ public class WaitState {
         synchronized (lock)
         {
             logger.info("Got ERROR for " + tag);
-
-            if (tag == this.tag)
-            {
-                this.result = WaitResult.ERROR;
-            }
-            else
-            {
-                this.result = WaitResult.EXCEPTION;
-                exception = new WebDriverException("Protocol error: Tag mismatch!");
-            }
+            events.add(new ResultItem(WaitResult.ERROR, tag));
             lock.notify();
         }
     }
@@ -100,10 +110,8 @@ public class WaitState {
     {
         synchronized (lock)
         {
-            logger.info("Got exception for " + tag);
-
-            this.result = WaitResult.EXCEPTION;
-            exception = new WebDriverException(e);
+            logger.info("Got exception");
+            events.add(new ResultItem(new WebDriverException(e)));
             connected = false;
             lock.notify();
         }
@@ -113,8 +121,9 @@ public class WaitState {
     {
         synchronized (lock)
         {
-            logger.info("Got disconnected for " + tag);
-            this.result = WaitResult.DISCONNECTED;
+            logger.info("Got disconnected.");
+            events.add(new ResultItem(WaitResult.DISCONNECTED));
+            connected = false;
             lock.notify();
         }
     }
@@ -123,9 +132,9 @@ public class WaitState {
     {
         synchronized (lock)
         {
-            logger.info("Got BinaryExit for " + tag + ", exit code=" + code);
-            this.result = WaitResult.BINARY_EXIT;
-            this.exitCode = code;
+            logger.info("Got BinaryExit: exit code=" + code);
+            events.add(new ResultItem(WaitResult.BINARY_EXIT, code));
+            connected = false;
             lock.notify();
         }
     }
@@ -135,40 +144,44 @@ public class WaitState {
         synchronized (lock)
         {
             logger.info("Event: onWindowLoaded");
-            this.result = WaitResult.EVENT_WINDOW_LOADED;
-            this.windowId = windowId;
+            events.add(new ResultItem(WaitResult.EVENT_WINDOW_LOADED, windowId));
             lock.notify();
         }
     }
-    
+
+    private ResultItem getResult()
+    {
+        if (events.isEmpty())
+            return null;
+
+        return events.removeFirst();
+    }
+
     void waitForHandshake(long timeout) throws WebDriverException
     {
         synchronized (lock)
         {
+            logger.fine("WAIT: for handshake");
             while (true)
             {
-                if (this.result == WaitResult.NONE)
-                {
-                    this.result = WaitResult.WAITING;
-                    this.tag = -1;
-                    this.exception = null;
-                    this.windowId = 0;
+                ResultItem result = getResult();
 
+                if (result == null)
+                {
                     internalWait(timeout);
+                    result = getResult();
                 }
 
-                WaitResult old_result = result;
-                result = WaitResult.NONE;
-                switch (old_result)
-                {
-                    case WAITING:
-                        throw new ResponseNotReceivedException("No response in a timely fashion.");
+                if (result == null)
+                    throw new ResponseNotReceivedException("No response in a timely fashion.");
 
+                switch (result.result)
+                {
                     case HANDSHAKE:
                         return;
 
                     case EXCEPTION:
-                        throw exception;
+                        throw result.exception;
 
                     case DISCONNECTED:
                         throw new CommunicationException("Disconnected STP connection.");
@@ -190,25 +203,23 @@ public class WaitState {
     {
         synchronized (lock)
         {
+            logger.fine("WAIT: for response " + tag);
             while (true)
             {
-                if (this.result == WaitResult.NONE)
-                {
-                    this.result = WaitResult.WAITING;
-                    this.tag = tag;
-                    this.exception = null;
-                    this.windowId = 0;
+                ResultItem result = getResult();
 
+                if (result == null)
+                {
                     internalWait(timeout);
+                    result = getResult();
                 }
 
-                WaitResult old_result = result;
-                result = WaitResult.NONE;
-                switch (old_result)
-                {
-                    case WAITING:
-                        throw new ResponseNotReceivedException("No response in a timely fashion.");
+                if (result == null)
+                    throw new ResponseNotReceivedException("No response in a timely fashion.");
 
+
+                switch (result.result)
+                {
                     case RESPONSE:
                         return true;
                     
@@ -216,7 +227,7 @@ public class WaitState {
                         return false;
 
                     case EXCEPTION:
-                        throw exception;
+                        throw result.exception;
 
                     case DISCONNECTED:
                         throw new CommunicationException("Disconnected STP connection.");
@@ -235,25 +246,22 @@ public class WaitState {
     {
         synchronized (lock)
         {
+            logger.fine("WAIT: for window " + windowId + " to finish loading.");
             while (true)
             {
-                if (this.result == WaitResult.NONE)
-                {
-                    this.result = WaitResult.WAITING;
-                    this.tag = tag;
-                    this.exception = null;
-                    this.windowId = 0;
+                ResultItem result = getResult();
 
+                if (result == null)
+                {
                     internalWait(timeout);
+                    result = getResult();
                 }
 
-                WaitResult old_result = result;
-                result = WaitResult.NONE;
-                switch (old_result)
-                {
-                    case WAITING:
-                        throw new ResponseNotReceivedException("No response in a timely fashion.");
+                if (result == null)
+                    throw new ResponseNotReceivedException("No response in a timely fashion.");
 
+                switch (result.result)
+                {
                     case RESPONSE:
                         break;
 
@@ -261,7 +269,7 @@ public class WaitState {
                         break;
 
                     case EXCEPTION:
-                        throw exception;
+                        throw result.exception;
 
                     case DISCONNECTED:
                         throw new CommunicationException("Disconnected STP connection.");
@@ -270,7 +278,7 @@ public class WaitState {
                         throw new CommunicationException("Binary stopped/crashed");
 
                     case EVENT_WINDOW_LOADED:
-                        if (this.windowId == windowId)
+                        if (result.data == windowId)
                             return true;
                         break;
                 }
