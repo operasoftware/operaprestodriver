@@ -74,7 +74,7 @@ public abstract class AbstractService {
 	public void post(String using) {
             
             connection.sendXmlMessage(serviceName, using);
-            waitFor("using");
+            waitForResponse("using");
 	}
 	
 	/**

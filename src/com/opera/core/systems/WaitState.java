@@ -61,7 +61,7 @@ public class WaitState {
                 }
                 
                 if (!connected)
-                    throw new WebDriverException("Waiting aborted - not connected!");
+                    throw new CommunicationException("Waiting aborted - not connected!");
                 wait(timeout);
             }
         } catch (InterruptedException e) {
