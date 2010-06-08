@@ -27,7 +27,7 @@ public abstract class AbstractEventHandler {
 	protected IEcmaScriptDebugger debugger;
 	protected ScopeConnection connection;
 	*/
-	public AbstractEventHandler(ScopeServices services) {
+        public AbstractEventHandler(ScopeServices services) {
             /*
 		this.windowManager = services.getWindowManager();
 		this.debugger = services.getDebugger();
@@ -83,8 +83,14 @@ public abstract class AbstractEventHandler {
 	/**
 	 * Fired when a window load is complete
 	 */
+        @Deprecated
 	public abstract void onWindowLoaded();
-	
+
+        /**
+         * @param id the WindowID
+         */
+        public abstract void onWindowLoaded(int id);
+
 	/**
 	 * Fired when a window load is complete
 	 */

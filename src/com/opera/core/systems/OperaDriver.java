@@ -174,16 +174,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,FindsB
             if (url == null)
                 throw new NullPointerException("Invalid url");
 
-            int oldId = 0;
-            debugger.releaseObjects();
-            windowManager.setLoadCompleteLatch(new CountDownLatch(1));
-
-            //debugger.resetRuntimesList();
-            actionHandler.get(url);
-
-            
-            windowManager.waitForWindowLoaded(timeout);
-            return windowManager.getLastHttpResponseCode().getAndSet(0);
+            return services.openUrl(url, timeout);
 	}
 	
         // FIXME: Using sleep!

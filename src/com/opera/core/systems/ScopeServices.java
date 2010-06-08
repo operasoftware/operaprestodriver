@@ -398,6 +398,27 @@ public class ScopeServices implements IConnectionHandler {
 		debugger.init();
 	}
         
+        /**
+         * Open an URL.
+         *
+         * @param url URL to load
+         * @param timeout in milliseconds
+         * @return the HTTP response code, or throws a WebDriverException.
+         */
+        int openUrl(String url, long timeout)
+        {
+            if (connection == null)
+                throw new WebDriverException("Unable to open URL because Opera is not connected.");
+
+            int windowId = windowManager.getActiveWindowId();
+
+            actionHandler.get(url);
+            waitState.waitForWindowLoaded(windowId, timeout);
+            int ret = windowManager.getLastHttpResponseCode().getAndSet(0);
+            System.out.println("openURL => " + ret);
+            return ret;
+        }
+
         public void quit() {
             shuttingDown = true;
             try {
@@ -435,6 +456,11 @@ public class ScopeServices implements IConnectionHandler {
             connection.setListedServices(services);
         }
         
+        public void onWindowLoaded(int id)
+        {
+            logger.info("Window loaded: windowId=" + id);
+            waitState.onWindowLoaded(id);
+        }
         
         public void onHandshake(boolean stp1)
         {

@@ -15,6 +15,7 @@ public class WaitState {
     private WebDriverException exception = null;
     private int exitCode = 0;
     private Object lock = new Object();
+    private int windowId = 0;
     
     enum WaitResult
     {
@@ -25,7 +26,8 @@ public class WaitState {
         EXCEPTION,      /* An exception occured (STP connection is not alive) */
         DISCONNECTED,   /* STP connection is disconnected */
         BINARY_EXIT,    /* Opera binary crashed. */
-        HANDSHAKE       /* STP Handshake */
+        HANDSHAKE,       /* STP Handshake */
+        EVENT_WINDOW_LOADED, /* finished loaded */
     }
 
     WaitResult result;
@@ -54,7 +56,7 @@ public class WaitState {
         {
             logger.info("Got handshake");
             this.result = WaitResult.HANDSHAKE;
-            lock.notifyAll();
+            lock.notify();
         }
     }
 
@@ -70,7 +72,7 @@ public class WaitState {
                 this.result = WaitResult.EXCEPTION;
                 exception = new WebDriverException("Protocol error: Tag mismatch!");
             }
-            lock.notifyAll();
+            lock.notify();
         }
     }
 
@@ -90,7 +92,7 @@ public class WaitState {
                 this.result = WaitResult.EXCEPTION;
                 exception = new WebDriverException("Protocol error: Tag mismatch!");
             }
-            lock.notifyAll();
+            lock.notify();
         }
     }
 
@@ -103,7 +105,7 @@ public class WaitState {
             this.result = WaitResult.EXCEPTION;
             exception = new WebDriverException(e);
             connected = false;
-            lock.notifyAll();
+            lock.notify();
         }
     }
 
@@ -113,7 +115,7 @@ public class WaitState {
         {
             logger.info("Got disconnected for " + tag);
             this.result = WaitResult.DISCONNECTED;
-            lock.notifyAll();
+            lock.notify();
         }
     }
 
@@ -124,7 +126,18 @@ public class WaitState {
             logger.info("Got BinaryExit for " + tag + ", exit code=" + code);
             this.result = WaitResult.BINARY_EXIT;
             this.exitCode = code;
-            lock.notifyAll();
+            lock.notify();
+        }
+    }
+
+    void onWindowLoaded(int windowId)
+    {
+        synchronized (lock)
+        {
+            logger.info("Event: onWindowLoaded");
+            this.result = WaitResult.EVENT_WINDOW_LOADED;
+            this.windowId = windowId;
+            lock.notify();
         }
     }
     
@@ -139,6 +152,7 @@ public class WaitState {
                     this.result = WaitResult.WAITING;
                     this.tag = -1;
                     this.exception = null;
+                    this.windowId = 0;
 
                     internalWait(timeout);
                 }
@@ -162,6 +176,9 @@ public class WaitState {
                     case BINARY_EXIT:
                         throw new CommunicationException("Binary stopped/crashed.");
 
+                    case EVENT_WINDOW_LOADED:
+                        break;
+
                     default:
                         throw new WebDriverException("Unexpected result, expecting handshake");
                 }
@@ -180,6 +197,7 @@ public class WaitState {
                     this.result = WaitResult.WAITING;
                     this.tag = tag;
                     this.exception = null;
+                    this.windowId = 0;
 
                     internalWait(timeout);
                 }
@@ -205,6 +223,56 @@ public class WaitState {
 
                     case BINARY_EXIT:
                         throw new CommunicationException("Binary stopped/crashed");
+
+                    case EVENT_WINDOW_LOADED:
+                        break;
+                }
+            }
+        }
+    }
+
+    boolean waitForWindowLoaded(int windowId, long timeout) throws WebDriverException
+    {
+        synchronized (lock)
+        {
+            while (true)
+            {
+                if (this.result == WaitResult.NONE)
+                {
+                    this.result = WaitResult.WAITING;
+                    this.tag = tag;
+                    this.exception = null;
+                    this.windowId = 0;
+
+                    internalWait(timeout);
+                }
+
+                WaitResult old_result = result;
+                result = WaitResult.NONE;
+                switch (old_result)
+                {
+                    case WAITING:
+                        throw new ResponseNotReceivedException("No response in a timely fashion.");
+
+                    case RESPONSE:
+                        break;
+
+                    case ERROR:
+                        break;
+
+                    case EXCEPTION:
+                        throw exception;
+
+                    case DISCONNECTED:
+                        throw new CommunicationException("Disconnected STP connection.");
+
+                    case BINARY_EXIT:
+                        throw new CommunicationException("Binary stopped/crashed");
+
+                    case EVENT_WINDOW_LOADED:
+                        if (this.windowId == windowId)
+                            return true;
+                        break;
                 }
             }
         }
