@@ -13,11 +13,7 @@ public class WaitState {
     private String xmlResponse;
     private WebDriverException exception = null;
     private int exitCode = 0;
-    
-    enum State
-    {
-
-    }
+    private Object lock = new Object();
     
     enum WaitResult
     {
@@ -41,57 +37,32 @@ public class WaitState {
         connected = true;
     }
 
-    private void wakeup()
-    {
-        synchronized (this)
-        {
-            notifyAll();
-        }
-    }
-
     private void internalWait(long timeout) throws WebDriverException
     {
         try {
-            synchronized (this)
-            {
-                synchronized (result)
-                {
-                    if (result != WaitResult.WAITING)
-                        return;
-                }
-                
-                if (!connected)
-                    throw new WebDriverException("Waiting aborted - not connected!");
-                wait(timeout);
-            }
+            if (!connected)
+                throw new CommunicationException("Waiting aborted - not connected!");
+            lock.wait(timeout);
         } catch (InterruptedException e) {
             throw new WebDriverException(e);
         }
     }
 
-    boolean isWaiting()
-    {
-        synchronized (result)
-        {
-            return result != WaitResult.NONE;
-        }
-    }
-    
     void onHandshake()
     {
-        System.out.println("Got handshake");
-        synchronized (result)
+        synchronized (lock)
         {
+            System.out.println("Got handshake");
             this.result = WaitResult.HANDSHAKE;
+            lock.notifyAll();
         }
-        wakeup();
     }
 
     void onResponse(int tag)
     {
-        System.out.println("Got response for " + tag);
-        synchronized (result)
+        synchronized (lock)
         {
+            System.out.println("Got response for " + tag);
             if (tag == this.tag)
             {
                 this.result = WaitResult.RESPONSE;
@@ -99,15 +70,16 @@ public class WaitState {
                 this.result = WaitResult.EXCEPTION;
                 exception = new WebDriverException("Protocol error: Tag mismatch!");
             }
+            lock.notifyAll();
         }
-        wakeup();
     }
     
     void onXMLResponse(String response)
     {
-        System.out.println("Got XML response for " + xmlResponse);
-        synchronized (result)
+        synchronized (lock)
         {
+            System.out.println("Got XML response for " + xmlResponse);
+
             if (response.contains(xmlResponse)) {
                 this.result = WaitResult.XMLRESPONSE;
                 this.xmlResponse = response;
@@ -115,16 +87,17 @@ public class WaitState {
                 this.result = WaitResult.EXCEPTION;
                 exception = new WebDriverException("Protocol error: Tag mismatch!");
             }
+            lock.notifyAll();
         }
-        wakeup();
     }
     
 
     void onError(int tag)
     {
-        System.out.println("Got ERROR for " + tag);
-        synchronized (result)
+        synchronized (lock)
         {
+            System.out.println("Got ERROR for " + tag);
+
             if (tag == this.tag)
             {
                 this.result = WaitResult.ERROR;
@@ -134,105 +107,94 @@ public class WaitState {
                 this.result = WaitResult.EXCEPTION;
                 exception = new WebDriverException("Protocol error: Tag mismatch!");
             }
+            lock.notifyAll();
         }
-        wakeup();
     }
 
     void onException(Exception e)
     {
-        System.out.println("Got exception for " + tag);
-        synchronized (result)
+        synchronized (lock)
         {
+            System.out.println("Got exception for " + tag);
+
             this.result = WaitResult.EXCEPTION;
             exception = new WebDriverException(e);
             connected = false;
+            lock.notifyAll();
         }
-        wakeup();
     }
 
     void onDisconnected()
     {
-        synchronized (this)
-        {
-            connected = false;
-        }
-
-        if (isWaiting())
+        synchronized (lock)
         {
             System.out.println("Got disconnected for " + tag);
-            synchronized (result)
-            {
-                this.result = WaitResult.DISCONNECTED;
-            }
-            wakeup();
+            this.result = WaitResult.DISCONNECTED;
+            lock.notifyAll();
         }
     }
 
     void onBinaryExit(int code)
     {
-        System.out.println("Got BinaryExit for " + tag + ", exit code=" + code);
-        synchronized (result)
+        synchronized (lock)
         {
+            System.out.println("Got BinaryExit for " + tag + ", exit code=" + code);
             this.result = WaitResult.BINARY_EXIT;
             this.exitCode = code;
+            lock.notifyAll();
         }
-
-        wakeup();
     }
     
     void waitForHandshake(long timeout) throws WebDriverException
     {
-        synchronized (result)
+        synchronized (lock)
         {
-            this.result = WaitResult.WAITING;
-            this.tag = -1;
-            this.exception = null;
-        }
-
-        internalWait(timeout);
-
-        synchronized (result)
-        {
-            WaitResult old_result = result;
-            result = WaitResult.NONE;
-            switch (old_result)
+            while (true)
             {
-                case WAITING:
-                    throw new ResponseNotReceivedException("No response in a timely fashion.");
+                this.result = WaitResult.WAITING;
+                this.tag = -1;
+                this.exception = null;
 
-                case HANDSHAKE:
-                    return;
+                internalWait(timeout);
 
-                case EXCEPTION:
-                    throw exception;
+                WaitResult old_result = result;
+                result = WaitResult.NONE;
+                switch (old_result)
+                {
+                    case WAITING:
+                        throw new ResponseNotReceivedException("No response in a timely fashion.");
 
-                case DISCONNECTED:
-		    throw new CommunicationException("Disconnected STP connection.");
+                    case HANDSHAKE:
+                        return;
 
-                case BINARY_EXIT:
-                    throw new CommunicationException("Binary stopped/crashed.");
+                    case EXCEPTION:
+                        throw exception;
 
-                default:
-                    throw new WebDriverException("Unexpected result, expecting handshake");
+                    case DISCONNECTED:
+                        throw new CommunicationException("Disconnected STP connection.");
+
+                    case BINARY_EXIT:
+                        throw new CommunicationException("Binary stopped/crashed.");
+
+                    default:
+                        throw new WebDriverException("Unexpected result, expecting handshake");
+                }
             }
         }
     }
 
     boolean waitFor(int tag, long timeout) throws WebDriverException
     {
-        while (true)
+        synchronized (lock)
         {
-            synchronized (result)
+            while (true)
             {
                 this.result = WaitResult.WAITING;
                 this.tag = tag;
                 this.exception = null;
-            }
 
-            internalWait(timeout);
+                internalWait(timeout);
 
-            synchronized (result)
-            {
                 WaitResult old_result = result;
                 result = WaitResult.NONE;
                 switch (old_result)
@@ -265,20 +227,18 @@ public class WaitState {
     @Deprecated
     boolean waitForXMLResponse(String xmlResponse, long timeout) throws WebDriverException
     {
-        while (true)
+        synchronized (lock)
         {
-            synchronized (result)
+            while (true)
             {
                 this.result = WaitResult.WAITING;
                 this.xmlResponse = xmlResponse;
                 this.tag = -1;
                 this.exception = null;
-            }
+            
 
-            internalWait(timeout);
+                internalWait(timeout);
 
-            synchronized (result)
-            {
                 WaitResult old_result = result;
                 result = WaitResult.NONE;
                 switch (old_result)
@@ -306,6 +266,5 @@ public class WaitState {
                 }
             }
         }
-        
     }
 }
