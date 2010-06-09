@@ -349,26 +349,17 @@ public class ScopeServices implements IConnectionHandler {
         
         public List<String> getListedServices()
         {
-            System.out.println("getListedServices");
-            
             return connection.getListedServices();
         }
         
-        public List<String> getEnabledServices()
-        {
-            return connection.getEnabledServices();
-        }
-
 	private void connect() {
             ClientInfo.Builder info = ClientInfo.newBuilder().setFormat("protobuf");
             connection.executeCommand(ScopeCommand.CONNECT, "scope", info);
 	}
 
-        // FIXME:
         public void enableServices(List<String> requiredServices) {
             for (String requiredService : requiredServices) {
                 try {
-                    System.out.println("Enable service: " + requiredService);
                     if(getListedServices().contains(requiredService))
                         enable(requiredService);
                 } catch (InvalidProtocolBufferException e) {

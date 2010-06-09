@@ -17,24 +17,12 @@ import com.opera.core.systems.scope.stp.StpConnection;
 public class ScopeConnection {
 	
 	private List<String> listedServices;
-	private List<String> enabledServices;
 	private StpConnection connection = null;
         private WaitState waitState;
         private ScopeServices services;
        
 	private int tagCounter;
-/*
-	protected CountDownLatch responseLatch = new CountDownLatch(1);
-	
-        @Deprecated
-	public CountDownLatch getResponseReceivedLatch() {
-		return this.responseLatch;
-	}
-*/
-	public List<String> getEnabledServices() {
-		return enabledServices;
-	}
-	
+
 	public List<String> getListedServices() {
 		return listedServices;
 	}
@@ -48,7 +36,7 @@ public class ScopeConnection {
                 this.services = services;
                 this.waitState = waitState;
 	}
-	
+
 	private Response waitForResponse(int tag, long timeout)
         {
             try {
@@ -82,24 +70,6 @@ public class ScopeConnection {
 	 */
 	public void close() {
 		connection.close();
-	}
-	
-	/**
-	 * Enable requested services if they were announced
-	 * @param services
-	 * @return
-	 */
-	public List<String> enableServices(List<String> services) throws WebDriverException {
-            for (String requestedService : services) {
-                System.out.println("Enable service " + requestedService);
-                if(listedServices.contains(requestedService)){
-                    connection.send("*enable " + requestedService);
-                    enabledServices.add(requestedService);
-                } else {
-                    throw new WebDriverException("Error while enabling : " + requestedService + ", service does not exist in announced services");
-                }
-            }
-            return enabledServices;
 	}
 
 	/**
@@ -154,18 +124,4 @@ public class ScopeConnection {
             return waitForResponse(tag, timeout);
 	}
 
-	/**
-	 * Disable requested services --only if they are enabled before
-	 * @param services
-	 * @return
-	 */
-	public List<String> disableServices(List<String> services) {
-            for (String requestedService : services) {
-                if(enabledServices.contains(requestedService)){
-                    connection.send("*disable " + requestedService);
-                    enabledServices.remove(requestedService);
-                }
-            }
-            return enabledServices;
-        }
 }
