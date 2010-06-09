@@ -60,7 +60,6 @@ public class WaitState {
 
     public WaitState()
     {
-        // result = WaitResult.NONE;
         connected = true;
     }
 
@@ -221,10 +220,14 @@ public class WaitState {
                 switch (result.result)
                 {
                     case RESPONSE:
-                        return true;
+                        if (result.data == tag)
+                            return true;
+                        break;
                     
                     case ERROR:
-                        return false;
+                        if (result.data == tag)
+                            return false;
+                        break;
 
                     case EXCEPTION:
                         throw result.exception;
