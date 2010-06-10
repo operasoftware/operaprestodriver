@@ -15,9 +15,10 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import org.openqa.selenium.WebDriverException;
 
 import com.opera.core.systems.ScopeServices;
+
 import com.opera.core.systems.model.Canvas;
 import com.opera.core.systems.model.ColorResult;
-import com.opera.core.systems.model.ICommand;
+import com.opera.core.systems.scope.ExecCommand;
 import com.opera.core.systems.model.OperaColor;
 import com.opera.core.systems.model.ScreenShotReply;
 import com.opera.core.systems.scope.AbstractService;
@@ -60,39 +61,6 @@ public class OperaExec extends AbstractService implements IOperaExec {
     command SendMouseAction(MouseAction) returns (Default) = 5;
 	 */
 
-	public enum ExecCommand implements ICommand {
-		EXEC(1), 
-		GET_ACTION_LIST(2), 
-		SETUP_SCREEN_WATCHER(3), 
-		SEND_MOUSE_ACTION(5),
-		DEFAULT(-1);
-
-		private int code;
-		private static final Map<Integer, ExecCommand> lookup = new HashMap<Integer, ExecCommand>();
-
-		static {
-			for (ExecCommand command : EnumSet.allOf(ExecCommand.class))
-				lookup.put(command.getCommandID(), command);
-		}
-
-		private ExecCommand(int code) {
-			this.code = code;
-		}
-
-		public int getCommandID() {
-			return code;
-		}
-
-		public static ExecCommand get(int code) {
-			ExecCommand command = lookup.get(code);
-			if(command == null)
-				return DEFAULT;
-			return command;
-		}
-
-	}
-
-	
 	public OperaExec(ScopeServices services, String serviceName, String version) {
 		super(services, serviceName,version);
 		excludedActions = new ArrayList<String>();

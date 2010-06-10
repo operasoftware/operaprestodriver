@@ -5,11 +5,20 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * This enum maps the commands for the Scope service.
+ *
+ * The declaration can be found here:
+ * http://dragonfly.opera.com/app/scope-interface/Scope.html#service
+ *
+ */
 public enum ScopeCommand implements ICommand {
     CONNECT(3),
     DISCONNECT(4),
     ENABLE(5),
     DISABLE(6),
+    INFO(7),
+    QUIT(8),
     HOST_INFO(10),
     MESSAGE_INFO(11);
 
@@ -33,3 +42,4 @@ public enum ScopeCommand implements ICommand {
         return lookup.get(code);
     }
 }
+
