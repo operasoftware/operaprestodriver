@@ -57,11 +57,11 @@ public abstract class AbstractService {
 	}
 	
 	public Response executeCommand(ICommand command, Builder<?> builder) {
-		return services.executeCommand(command, serviceName, builder);
+		return services.executeCommand(command, builder);
 	}
 	
 	public Response executeCommand(ICommand command, Builder<?> builder, long timeout) {
-		return services.executeCommand(command, serviceName, builder, timeout);
+		return services.executeCommand(command, builder, timeout);
 	}
 
 	/**

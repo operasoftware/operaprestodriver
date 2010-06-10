@@ -118,6 +118,10 @@ public class WindowManager extends AbstractService implements IWindowManager {
 			return code;
 		}
 
+                public String getService() {
+                    return "window-manager";
+                }
+
 		public static WmCommand get(int code) {
 			WmCommand command = lookup.get(code);
 			if(command == null)

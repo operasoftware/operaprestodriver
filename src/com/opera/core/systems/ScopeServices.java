@@ -182,7 +182,7 @@ public class ScopeServices implements IConnectionHandler {
         }
         
 	private HostInfo getHostInfo() {
-            Response response = executeCommand(ScopeCommand.HOST_INFO, "scope", null);
+            Response response = executeCommand(ScopeCommand.HOST_INFO, null);
             try {
                 return HostInfo.parseFrom(response.getPayload());
             } catch (InvalidProtocolBufferException ex) {
@@ -204,7 +204,7 @@ public class ScopeServices implements IConnectionHandler {
 
 	private void connect() {
             ClientInfo.Builder info = ClientInfo.newBuilder().setFormat("protobuf");
-            executeCommand(ScopeCommand.CONNECT, "scope", info);
+            executeCommand(ScopeCommand.CONNECT, info);
 	}
 
         public void enableServices(List<String> requiredServices) {
@@ -221,7 +221,7 @@ public class ScopeServices implements IConnectionHandler {
 	private ServiceResult enable(String serviceName) throws InvalidProtocolBufferException {
             ServiceSelection.Builder selection = ServiceSelection.newBuilder();
             selection.setName(serviceName);
-            Response response = executeCommand(ScopeCommand.ENABLE, "scope", selection);
+            Response response = executeCommand(ScopeCommand.ENABLE, selection);
             return ServiceResult.parseFrom(response.getPayload());
 	}
 	
@@ -376,11 +376,11 @@ public class ScopeServices implements IConnectionHandler {
             connection.close();
 	}
 
-	private Command.Builder buildCommand(ICommand command, String service, ByteString payload) {
+	private Command.Builder buildCommand(ICommand command, ByteString payload) {
             Command.Builder cb = Command.newBuilder();
             cb.setCommandID(command.getCommandID());
             cb.setFormat(0); // protobuf
-            cb.setService(service);
+            cb.setService(command.getService());
             cb.setTag(++tagCounter);
             cb.setPayload(payload);
             return cb;
@@ -392,14 +392,14 @@ public class ScopeServices implements IConnectionHandler {
 	 * @param serviceName
 	 * @param message
 	 */
-	public Response executeCommand(ICommand command, String service, Builder<?> builder) {
-            return executeCommand(command, service, builder, OperaIntervals.RESPONSE_TIMEOUT.getValue());
+	public Response executeCommand(ICommand command, Builder<?> builder) {
+            return executeCommand(command, builder, OperaIntervals.RESPONSE_TIMEOUT.getValue());
 	}
 
        	//FIXME (ask) move the tag control logic from here to another layer?
-	public Response executeCommand(ICommand command, String service, Builder<?> builder, long timeout) {
+	public Response executeCommand(ICommand command, Builder<?> builder, long timeout) {
             ByteString payload = (builder != null) ? builder.build().toByteString() : ByteString.EMPTY; 
-            Command.Builder commandBuilder = buildCommand(command, service, payload);
+            Command.Builder commandBuilder = buildCommand(command, payload);
             int tag = commandBuilder.getTag();
             connection.send(commandBuilder.build());
             return waitForResponse(tag, timeout);

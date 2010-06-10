@@ -4,4 +4,5 @@ public interface ICommand {
 	
 	int getCommandID();
 
+        String getService();
 }

@@ -158,6 +158,10 @@ public class EcmaScriptDebugger extends AbstractService implements IEcmaScriptDe
 			return code;
 		}
 
+                public String getService() {
+                    return "ecmascript-debugger";
+                }
+
 		public static EsdbgCommand get(int code) {
 			EsdbgCommand command = lookup.get(code);
 			if(command == null)

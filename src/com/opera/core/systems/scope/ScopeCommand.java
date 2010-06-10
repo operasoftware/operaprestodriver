@@ -38,6 +38,10 @@ public enum ScopeCommand implements ICommand {
         return code;
     }
 
+    public String getService() {
+        return "scope";
+    }
+
     public static ScopeCommand get(int code) {
         return lookup.get(code);
     }

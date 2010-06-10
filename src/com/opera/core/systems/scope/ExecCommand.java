@@ -35,6 +35,10 @@ public enum ExecCommand implements ICommand {
         return code;
     }
 
+    public String getService() {
+        return "exec";
+    }
+
     public static ExecCommand get(int code) {
         ExecCommand command = lookup.get(code);
         if(command == null)
