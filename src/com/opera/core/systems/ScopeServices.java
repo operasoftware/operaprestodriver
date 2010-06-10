@@ -376,15 +376,14 @@ public class ScopeServices implements IConnectionHandler {
             connection.close();
 	}
 
-	
-	private Command.Builder buildCommand(int commandId, String service, ByteString payload) {
-            Command.Builder command  = Command.newBuilder();
-            command.setCommandID(commandId); //connect
-            command.setFormat(0); // protobuf
-            command.setService(service);
-            command.setTag(++tagCounter);
-            command.setPayload(payload);
-            return command;
+	private Command.Builder buildCommand(ICommand command, String service, ByteString payload) {
+            Command.Builder cb = Command.newBuilder();
+            cb.setCommandID(command.getCommandID());
+            cb.setFormat(0); // protobuf
+            cb.setService(service);
+            cb.setTag(++tagCounter);
+            cb.setPayload(payload);
+            return cb;
 	}
 	
 	/**
@@ -400,7 +399,7 @@ public class ScopeServices implements IConnectionHandler {
        	//FIXME (ask) move the tag control logic from here to another layer?
 	public Response executeCommand(ICommand command, String service, Builder<?> builder, long timeout) {
             ByteString payload = (builder != null) ? builder.build().toByteString() : ByteString.EMPTY; 
-            Command.Builder commandBuilder = buildCommand(command.getCommandID(), service, payload);
+            Command.Builder commandBuilder = buildCommand(command, service, payload);
             int tag = commandBuilder.getTag();
             connection.send(commandBuilder.build());
             return waitForResponse(tag, timeout);
