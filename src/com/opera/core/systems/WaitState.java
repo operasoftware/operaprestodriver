@@ -5,6 +5,7 @@ import java.util.LinkedList;
 
 import org.openqa.selenium.WebDriverException;
 import com.opera.core.systems.scope.exceptions.ResponseNotReceivedException;
+import com.opera.core.systems.scope.protos.UmsProtos.Response;
 
 /**
  *
@@ -31,6 +32,7 @@ public class WaitState {
         int data;
         WaitResult result;
         WebDriverException exception;
+        Response response;
 
         public ResultItem(WebDriverException ex)
         {
@@ -47,11 +49,19 @@ public class WaitState {
 
         // BINARY_EXIT - with exit code.
         // WINDOW_LOADED with windowId
-        // RESPONSE or ERROR with tag id
+        // ERROR with tag id
         public ResultItem(WaitResult result, int data)
         {
             this.result = result;
             this.data = data;
+            logger.fine("EVENT: " + result.toString() + ", data=" + data);
+        }
+
+        public ResultItem(Response response, int tag)
+        {
+            this.response = response;
+            this.data = tag;
+            result = WaitResult.RESPONSE;
             logger.fine("EVENT: " + result.toString() + ", data=" + data);
         }
     }
@@ -84,12 +94,12 @@ public class WaitState {
         }
     }
 
-    void onResponse(int tag)
+    void onResponse(int tag, Response response)
     {
         synchronized (lock)
         {
             logger.info("Got response for " + tag);
-            events.add(new ResultItem(WaitResult.RESPONSE, tag));
+            events.add(new ResultItem(response, tag));
             lock.notify();
         }
     }
@@ -198,7 +208,7 @@ public class WaitState {
         }
     }
 
-    boolean waitFor(int tag, long timeout) throws WebDriverException
+    Response waitFor(int tag, long timeout) throws WebDriverException
     {
         synchronized (lock)
         {
@@ -221,12 +231,12 @@ public class WaitState {
                 {
                     case RESPONSE:
                         if (result.data == tag)
-                            return true;
+                            return result.response;
                         break;
                     
                     case ERROR:
                         if (result.data == tag)
-                            return false;
+                            return null;
                         break;
 
                     case EXCEPTION:

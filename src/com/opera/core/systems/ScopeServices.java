@@ -57,7 +57,6 @@ public class ScopeServices implements IConnectionHandler {
         private StpThread stpThread = null;
 	boolean running = true;
         boolean shuttingDown = false;
-        boolean stp1;
 
         @Deprecated
 	public ScopeConnection getConnection() {
@@ -456,7 +455,6 @@ public class ScopeServices implements IConnectionHandler {
         public void onHandshake(boolean stp1)
         {
             logger.info("Got Stp handshake!");
-            this.stp1 = stp1;
             waitState.onHandshake();
         }
         
@@ -474,12 +472,12 @@ public class ScopeServices implements IConnectionHandler {
             }
 	}
 
-	public void onResponseReceived(boolean success, int tag) {
+	public void onResponseReceived(int tag, Response response) {
             if (connection != null)
             {
                 logger.fine("Got response.");
-                if (success) {
-                    waitState.onResponse(tag);
+                if (response != null) {
+                    waitState.onResponse(tag, response);
                 } else {
                     waitState.onError(tag);
                 }

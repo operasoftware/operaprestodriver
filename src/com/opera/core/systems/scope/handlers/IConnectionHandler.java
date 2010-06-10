@@ -1,5 +1,6 @@
 package com.opera.core.systems.scope.handlers;
 
+import com.opera.core.systems.scope.protos.UmsProtos.Response;
 import com.opera.core.systems.scope.stp.StpConnection;
 
 public interface IConnectionHandler {
@@ -40,11 +41,12 @@ public interface IConnectionHandler {
 	void onException(Exception ex);
 
         /**
-         * This event is triggered whenever a command response is received.
+         * This event is triggered whenever a command error response 
+         * is received.
          * 
-         * @param success if the command succeeded, or false if error.
-         * @param tag the internal command tag.
+         * @param tag the internal command tag corresponging to the request..
+         * @param response null if the response was an error.
          */
-	void onResponseReceived(boolean success, int tag);
+	void onResponseReceived(int tag, Response response);
 
 }

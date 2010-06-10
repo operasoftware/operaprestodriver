@@ -40,13 +40,11 @@ public class ScopeConnection {
 	private Response waitForResponse(int tag, long timeout)
         {
             try {
-                waitState.waitFor(tag, timeout);
+                return waitState.waitFor(tag, timeout);
             } catch (WebDriverException e) {
                 services.shutdown();
                 throw e;
             }
-            Response response = connection.getStpResponse();
-            return response;
 	}
 
 

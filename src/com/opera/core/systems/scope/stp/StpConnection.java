@@ -38,7 +38,6 @@ public class StpConnection implements SocketListener {
     //private byte[] remainingBytes = new byte[0];
 
     // For STP1
-    private Response stpResponse;
     byte[] prefix = { 'S', 'T', 'P', 1 };
     private ByteString stpPrefix = ByteString.copyFrom(prefix);
     private String serviceMessage;
@@ -49,10 +48,6 @@ public class StpConnection implements SocketListener {
 
     public enum State {
             SERVICELIST, HANDSHAKE, EMPTY, STP;
-    }
-
-    public Response getStpResponse() {
-            return stpResponse;
     }
 
     private State state = State.SERVICELIST;
@@ -399,9 +394,9 @@ public class StpConnection implements SocketListener {
     }
     
 
-    private void signalResponse(boolean success, int tag)
+    private void signalResponse(int tag, Response response)
     {
-        connectionHandler.onResponseReceived(success, tag);
+        connectionHandler.onResponseReceived(tag, response);
     }
 
     private void signalEvent(Event event)
@@ -547,121 +542,7 @@ public class StpConnection implements SocketListener {
     		}
     		return false;
     	}
-        
-        /*
-        if (remainingBytes.length > 0) {
-            bytesRead = remainingBytes.length + bytesRead;
-            buffer.flip();
-            ByteBuffer swap = ByteBuffer.allocateDirect(bytesRead);
-            swap.put(remainingBytes);
-            swap.put(buffer);
-            remainingBytes = new byte[0];
-            buffer.clear();
-            buffer = swap;
-        }
-
-        buffer.flip();
-
-
-        switch (state) {
-            case SERVICELIST:
-                StringBuilder builder = new StringBuilder();
-                builder.append(buffer.asCharBuffer());
-                buffer.clear();
-                parseServiceList(builder.toString());
-                break;
-                
-            case HANDSHAKE:
-                if(bytesRead >= 6) {
-                    byte[] dst = new byte[6];
-                    buffer.get(dst);
-                    String handShake = new String(dst);
-                    if(!handShake.equals("STP/1\n")) {
-                        close();
-                        connectionHandler.onException(new WebDriverException("Scope Transport Protocol Error : Handshake"));
-                    }
-                    buffer.clear();
-                    setState(State.EMPTY);
-                    connectionHandler.onHandshake(true);
-                    break;
-                }
-                bufferRemaining(buffer, bytesRead);
-                break;
-
-            case EMPTY: // read 4 byte header: STP\0
-                if(bytesRead >= 4) {
-                    byte[] headerPrefix = new byte[4];
-                    buffer.get(headerPrefix);
-                    ByteString incomingPrefix = ByteString.copyFrom(headerPrefix);
-                    if(stpPrefix.equals(incomingPrefix)){
-                        setState(State.STP);
-                        if(buffer.hasRemaining()){
-                            buffer.compact();
-                            readMessage(buffer, buffer.position(), true);
-                        } else {
-                            buffer.clear();
-                        }
-                    } else {
-                        close();
-                        connectionHandler.onException(new WebDriverException("Scope Transport Protocol Error : Header"));
-                    }
-                    break;
-                }
-                // we got less than 4
-                bufferRemaining(buffer, bytesRead);
-                break;
-
-            case STP:
-                //this one needs more error handling
-                messageSize = readRawVarint32(buffer);
-                setState(State.STP_DATA);
-                if (buffer.hasRemaining()) {
-                        buffer.compact();
-                        readMessage(buffer, buffer.position(), true);
-                } else {
-                        //we have no more bytes, clear the buffer so we can read more
-                        buffer.clear();
-                }
-                break;
-
-            case STP_DATA:
-                if(bytesRead >= messageSize) {
-                    messageType = buffer.get();
-                    byte[] payload = new byte[--messageSize];
-                    buffer.get(payload);
-                    setState(State.EMPTY);
-                    try {
-                        processMessage(messageType, payload);
-                    } catch (IOException e) {
-                        close();
-                        connectionHandler.onException(new WebDriverException("Error while processing the message: "  + e.getMessage()));
-                    }
-                    if(buffer.hasRemaining()){
-                        buffer.compact();
-                        readMessage(buffer, buffer.position(), true);
-                        break;
-                    } else {
-                        buffer.clear();
-                        break;
-                    }
-                }
-                // if we got less than expected, lets keep reading
-                bufferRemaining(buffer, bytesRead);
-                break;
-        }
-        */
     }
-
-    /*
-    private void bufferRemaining(ByteBuffer buffer, int read) {
-            if(read > 0) {
-                logger.severe("Partial read, might lose data here!");
-                    remainingBytes = new byte[read];
-                    buffer.get(remainingBytes);
-                    buffer.clear();
-            }
-    }
-    */
 
     private void processMessage(int stpType, byte[] payload) throws IOException {
 
@@ -673,11 +554,10 @@ public class StpConnection implements SocketListener {
              * throw new WebDriverException("Received command from host?");
              */
             case 2:// response
-            		// log what is being sent.
-                    stpResponse = Response.parseFrom(payload);
-                    logger.log(Level.INFO,"RECV RESPONSE: " + stpResponse.toString());
-                    //logger.log(Level.FINEST, stpResponse.toString());
-                    signalResponse(true, stpResponse.getTag());
+                    // log what is being sent.
+                    Response response = Response.parseFrom(payload);
+                    logger.log(Level.INFO,"RECV RESPONSE: " + response.toString());
+                    signalResponse(response.getTag(), response);
                     break;
             case 3:// event
                     Event event = Event.parseFrom(payload);
@@ -688,13 +568,9 @@ public class StpConnection implements SocketListener {
                     Error error = Error.parseFrom(payload);
                     logger.log(Level.INFO,"RECV ERROR: " + error.toString());
                     if (error.getService().equals("ecmascript-debugger") && error.getStatus() == Status.INTERNAL_ERROR.getCode()) {
-                            stpResponse = null;
-                            // signalResponse(false, "ES Error - " + error.toString());
-                            signalResponse(false, error.getTag());
+                            signalResponse(error.getTag(), null);
                     } else {
                             logger.log(Level.SEVERE, "Error : {0}", error.toString());
-                            stpResponse = null;
-                            // signalResponse(false, "Error - " + error.toString());
                             connectionHandler.onException(new WebDriverException("Error on command : " + error.toString() ));
                     }
                     break;
