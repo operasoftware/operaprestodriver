@@ -4,8 +4,6 @@ package com.opera.core.systems;
 
 import com.google.protobuf.ByteString;
 import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -16,11 +14,10 @@ import com.google.protobuf.InvalidProtocolBufferException;
 
 import com.opera.core.systems.model.ICommand;
 import com.opera.core.systems.model.ScopeActions;
-import com.opera.core.systems.scope.beans.Runtime;
+import com.opera.core.systems.scope.ScopeCommand;
 import com.opera.core.systems.scope.handlers.IConnectionHandler;
 import com.opera.core.systems.scope.internal.OperaIntervals;
 import com.opera.core.systems.scope.internal.Parser;
-import com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeInfo;
 import com.opera.core.systems.scope.protos.ScopeProtos.ClientInfo;
 import com.opera.core.systems.scope.protos.ScopeProtos.HostInfo;
 import com.opera.core.systems.scope.protos.ScopeProtos.ServiceResult;
@@ -36,8 +33,6 @@ import com.opera.core.systems.scope.stp.StpConnection;
 import com.opera.core.systems.scope.internal.OperaBinary;
 
 import com.opera.core.systems.scope.handlers.PbActionHandler;
-import com.opera.core.systems.scope.handlers.UmsActionHandler;
-import com.opera.core.systems.scope.handlers.XmlActionHandler;
 import com.opera.core.systems.scope.protos.UmsProtos.Command;
 import java.io.IOException;
 
@@ -110,35 +105,6 @@ public class ScopeServices implements IConnectionHandler {
 	public Parser getParser() {
 		return parser;
 	}
-	
-	public enum ScopeCommand implements ICommand {
-            CONNECT(3),
-            DISCONNECT(4),
-            ENABLE(5),
-            DISABLE(6),
-            HOST_INFO(10),
-            MESSAGE_INFO(11);
-
-            private int code;
-            private static final Map<Integer,ScopeCommand> lookup = new HashMap<Integer,ScopeCommand>();
-
-            static {
-            for(ScopeCommand command : EnumSet.allOf(ScopeCommand.class))
-                lookup.put(command.getCommandID(), command);
-            }
-
-            private ScopeCommand(int code) {
-                this.code = code;
-            }
-            
-            public int getCommandID() {
-                return code;
-            }
-
-            public static ScopeCommand get(int code) {
-                return lookup.get(code);
-            }
-        }
 
 	/**
 	 * Creates the scope server on specified address and port
@@ -178,6 +144,13 @@ public class ScopeServices implements IConnectionHandler {
 
             initializeServices();
         }
+        
+	private void initializeServices() {
+            exec.init();
+            windowManager.init();
+            debugger.init();
+	}
+
 
         public void shutdown()
         {
@@ -229,12 +202,6 @@ public class ScopeServices implements IConnectionHandler {
                     debugger = new PseudoEcmaScriptDebugger();
 	}
 
-	
-        public List<String> getListedServices()
-        {
-            return listedServices;
-        }
-        
 	private void connect() {
             ClientInfo.Builder info = ClientInfo.newBuilder().setFormat("protobuf");
             executeCommand(ScopeCommand.CONNECT, "scope", info);
@@ -258,13 +225,6 @@ public class ScopeServices implements IConnectionHandler {
             return ServiceResult.parseFrom(response.getPayload());
 	}
 	
-
-	private void initializeServices() {
-            exec.init();
-            windowManager.init();
-            debugger.init();
-	}
-        
         /**
          * Open an URL.
          *
@@ -303,10 +263,6 @@ public class ScopeServices implements IConnectionHandler {
             {
                 opera.shutdown();
             }
-            
-            /*
-            connection.sendQuit();
-            */
         }
 
         public boolean onConnected(StpConnection con)
@@ -404,14 +360,15 @@ public class ScopeServices implements IConnectionHandler {
             }
 	}
 
-        /**
-	 * Parse the services message
-	 * @param serviceMessage
-	 */
 	public void setListedServices(java.util.List<String> services) {
             listedServices = services;
 	}
-	
+
+        public List<String> getListedServices()
+        {
+            return listedServices;
+        }
+
 	/**
 	 * Close the connection and cleanup the channel
 	 */
@@ -420,24 +377,24 @@ public class ScopeServices implements IConnectionHandler {
 	}
 
 	
-	private Command.Builder buildCommand(int commandId, String service, ByteString payload){
-		Command.Builder command  = Command.newBuilder();
-		command.setCommandID(commandId); //connect
-		command.setFormat(0); //protobuf
-		command.setService(service);
-		command.setTag(++tagCounter);
-		
-		command.setPayload(payload);
-		return command;
+	private Command.Builder buildCommand(int commandId, String service, ByteString payload) {
+            Command.Builder command  = Command.newBuilder();
+            command.setCommandID(commandId); //connect
+            command.setFormat(0); // protobuf
+            command.setService(service);
+            command.setTag(++tagCounter);
+            command.setPayload(payload);
+            return command;
 	}
 	
 	/**
-	 * Sends a command
+	 * Sends a command and wait for the response.
+         *
 	 * @param serviceName
 	 * @param message
 	 */
 	public Response executeCommand(ICommand command, String service, Builder<?> builder) {
-		return executeCommand(command, service, builder, OperaIntervals.RESPONSE_TIMEOUT.getValue());
+            return executeCommand(command, service, builder, OperaIntervals.RESPONSE_TIMEOUT.getValue());
 	}
 
        	//FIXME (ask) move the tag control logic from here to another layer?
@@ -451,6 +408,8 @@ public class ScopeServices implements IConnectionHandler {
 
         /**
 	 * Send a message directly
+         * FIXME: Remove - this is used with STP0 only.
+         *
 	 * @param message
 	 */
         @Deprecated
@@ -460,6 +419,8 @@ public class ScopeServices implements IConnectionHandler {
 
 	/**
 	 * Send a message prepending xml tag
+         * FIXME: Remove - this is used for STP0 only.
+         *
 	 * @param serviceName
 	 * @param message
 	 */
