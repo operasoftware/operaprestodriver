@@ -29,35 +29,29 @@ import com.opera.core.systems.scope.protos.UmsProtos.Response;
 public class StpConnection implements SocketListener {
 
     private final Logger logger = Logger.getLogger(this.getClass().getName());
-
     private SocketChannel socketChannel;
 
     // Outgoing send queue
     private final ArrayBlockingQueue<ByteBuffer> requests;
     private ByteBuffer recvBuffer;
-    //private byte[] remainingBytes = new byte[0];
 
     // For STP1
-    byte[] prefix = { 'S', 'T', 'P', 1 };
+    final byte[] prefix = { 'S', 'T', 'P', 1 };
     private ByteString stpPrefix = ByteString.copyFrom(prefix);
-    private String serviceMessage;
 
     private AbstractEventHandler eventHandler;
     private UmsEventParser stp1EventHandler;
     private IConnectionHandler connectionHandler;
 
     public enum State {
-            SERVICELIST, HANDSHAKE, EMPTY, STP;
+        SERVICELIST, HANDSHAKE, EMPTY, STP;
     }
-
     private State state = State.SERVICELIST;
-
 
     /**
      * Sets the event handler and creates the event parsers
      * @param eventHandler
      */
-    
     private void setEventHandler(final AbstractEventHandler eventHandler) {
         this.eventHandler = eventHandler;
         stp1EventHandler = new UmsEventParser(eventHandler);
@@ -69,16 +63,14 @@ public class StpConnection implements SocketListener {
         this.state = state;
     }
 
-
     public boolean isConnected() {
-            if (socketChannel == null)
-                    return false;
-
-            return true;
+        if (socketChannel == null)
+            return false;
+        return true;
     }
 
-    public ArrayBlockingQueue<ByteBuffer> getRequests() {
-            return requests;
+    private ArrayBlockingQueue<ByteBuffer> getRequests() {
+        return requests;
     }
 
     @Override
@@ -163,8 +155,7 @@ public class StpConnection implements SocketListener {
      *
      * @param message to add to the request queue
      */
-    @Deprecated
-    public void send(String message) {
+    private void send(String message) {
         String scopeMessage = message.length() + " " + message;
         logger.log(Level.INFO, "WRITE : " + scopeMessage);
         byte[] bytes = null;
@@ -181,14 +172,6 @@ public class StpConnection implements SocketListener {
         SocketMonitor.instance().modify(socketChannel, this, SelectionKey.OP_READ | SelectionKey.OP_WRITE);
     }
 
-    /**
-     * Reads an incoming message into a buffer, cleans up on exception (host
-     * abort connection) or disconnect. A message is an UTF-16 string, each
-     * byte is used in {@link CharBuffer} and read into {@link StringBuilder},
-     * space is the seperator in STP/0
-     *
-     * @param key
-     */
     public boolean canRead(SelectableChannel channel) throws IOException {
         logger.fine("canRead");
         if(socketChannel == null) throw new IOException("We dont have a socket :-)");
@@ -264,46 +247,8 @@ public class StpConnection implements SocketListener {
         	}
         }
         return true;
-        
-        /*
-        int numRead = 0;
-        try {
-            numRead = socketChannel.read(recvBuffer);
-            logger.fine("Read " + numRead + " bytes, state=" + state.toString());
-
-        } catch (IOException e) {
-            logger.log(Level.WARNING, "Channel closed, causing exception", e.getMessage());
-            numRead = -1;
-        }
-
-        if (numRead < 0) {
-        		try{
-        			logger.log(Level.INFO, "Channel closed : {0}", socketChannel.socket().getInetAddress().getHostName());
-        		}catch(NullPointerException e){
-        			logger.log(Level.INFO, "Channel closed : null");
-        		}
-                connectionHandler.onDisconnect();
-                SocketMonitor.instance().remove(socketChannel);
-                return false;
-        }
-
-        readMessage(recvBuffer, numRead, false);
-        return true;
-        */
     }
 
-    /**
-     * Tries to write the message, the buffer is attached to the selection key
-     * If the write fails (and there is a partial write) we compact the buffer
-     * and attach it to key again (avoiding new write events). If there are
-     * requests waiting in the queue, we wake up the selector so they can be
-     * registered
-     *
-     * TODO Can't we register them at one go?
-     *
-     * @param key
-     * @throws IOException
-     */
     public boolean canWrite(SelectableChannel channel) throws IOException
     {
         logger.fine("canWrite");
@@ -375,7 +320,6 @@ public class StpConnection implements SocketListener {
         }
 
         List<String> services  = Arrays.asList(message.substring(split+1).split(","));
-        serviceMessage = message;
         connectionHandler.onServiceList(services);
         logger.info("Service List OK.");
 
@@ -387,12 +331,6 @@ public class StpConnection implements SocketListener {
 
         switchToStp1();
     }
-    
-    public String getServiceMessage()
-    {
-        return serviceMessage;
-    }
-    
 
     private void signalResponse(int tag, Response response)
     {
