@@ -27,7 +27,6 @@ import com.opera.core.systems.model.ICommand;
 import com.opera.core.systems.model.ScriptResult;
 import com.opera.core.systems.scope.AbstractService;
 import com.opera.core.systems.scope.beans.Runtime;
-import com.opera.core.systems.scope.internal.OperaIntervals;
 import com.opera.core.systems.scope.protos.EsdbgProtos.Configuration;
 import com.opera.core.systems.scope.protos.EsdbgProtos.EvalData;
 import com.opera.core.systems.scope.protos.EsdbgProtos.EvalResult;
@@ -51,8 +50,6 @@ import com.opera.core.systems.scope.services.IWindowManager;
  */
 public class EcmaScriptDebugger extends AbstractService implements IEcmaScriptDebugger {
 	
-	private int retries;
-	private long sleepDuration;
 	protected int activeWindowId;
 	protected final IWindowManager windowManager;
 
@@ -176,7 +173,6 @@ public class EcmaScriptDebugger extends AbstractService implements IEcmaScriptDe
 		services.setDebugger(this);
 		this.windowManager = services.getWindowManager();
 		this.services = services;
-		resetCounters();
 	}
 	
 
@@ -349,35 +345,14 @@ public class EcmaScriptDebugger extends AbstractService implements IEcmaScriptDe
 	
 	protected Response eval(String using, Variable... variables) {
 		
-		if(windowManager.getActiveWindowId() != activeWindowId) {
+		if (windowManager.getActiveWindowId() != activeWindowId) {
 			recover();
 		}
 		
 		EvalData.Builder builder = buildEval(using);
 		builder.addAllVariableList(Arrays.asList(variables));
 		
-		Response response = executeCommand(EsdbgCommand.EVAL, builder);
-		
-		if(response == null && retries < OperaIntervals.SCRIPT_RETRY.getValue()) {
-			retries++;
-			sleepDuration += sleepDuration;
-			sleep(sleepDuration);
-			recover();
-			return eval(using, variables);
-		} else if(retries >= OperaIntervals.SCRIPT_RETRY.getValue()) {
-			resetCounters();
-			throw new WebDriverException("Internal error");
-		}
-		
-		resetCounters();
-		
-        return response;
-
-	}
-	
-	private void resetCounters() {
-		retries = 0;
-		sleepDuration = OperaIntervals.SCRIPT_RETRY_INTERVAL.getValue();
+		return executeCommand(EsdbgCommand.EVAL, builder);
 	}
 	
 	/* (non-Javadoc)

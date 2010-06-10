@@ -17,7 +17,6 @@ import com.opera.core.systems.model.ScopeActions;
 import com.opera.core.systems.scope.ScopeCommand;
 import com.opera.core.systems.scope.handlers.IConnectionHandler;
 import com.opera.core.systems.scope.internal.OperaIntervals;
-import com.opera.core.systems.scope.internal.Parser;
 import com.opera.core.systems.scope.protos.ScopeProtos.ClientInfo;
 import com.opera.core.systems.scope.protos.ScopeProtos.HostInfo;
 import com.opera.core.systems.scope.protos.ScopeProtos.ServiceResult;
@@ -27,7 +26,6 @@ import com.opera.core.systems.scope.services.IEcmaScriptDebugger;
 import com.opera.core.systems.scope.services.IOperaExec;
 import com.opera.core.systems.scope.services.IWindowManager;
 import com.opera.core.systems.scope.services.ums.UmsServices;
-import com.opera.core.systems.scope.services.xml.XmlServices;
 import com.opera.core.systems.scope.stp.StpThread;
 import com.opera.core.systems.scope.stp.StpConnection;
 import com.opera.core.systems.scope.internal.OperaBinary;
@@ -46,7 +44,6 @@ public class ScopeServices implements IConnectionHandler {
 	private IOperaExec exec;
 	private IWindowManager windowManager;
 	private ScopeActions actionHandler;
-	private Parser parser;
 	private Map<String, String> versions;
 	private List<IConsoleListener> listeners;
         private OperaBinary opera;
@@ -100,10 +97,6 @@ public class ScopeServices implements IConnectionHandler {
 
 	public void setWindowManager(IWindowManager windowManager) {
 		this.windowManager = windowManager;
-	}
-
-	public Parser getParser() {
-		return parser;
 	}
 
 	/**
@@ -196,12 +189,6 @@ public class ScopeServices implements IConnectionHandler {
                     debugger = new PseudoEcmaScriptDebugger();
 	}
         
-        private void createXmlServices(boolean enableDebugger) {
-            new XmlServices(this);
-            if(!enableDebugger)
-                    debugger = new PseudoEcmaScriptDebugger();
-	}
-
 	private void connect() {
             ClientInfo.Builder info = ClientInfo.newBuilder().setFormat("protobuf");
             executeCommand(ScopeCommand.CONNECT, info);
@@ -403,29 +390,5 @@ public class ScopeServices implements IConnectionHandler {
             int tag = commandBuilder.getTag();
             connection.send(commandBuilder.build());
             return waitForResponse(tag, timeout);
-	}
-
-        /**
-	 * Send a message directly
-         * FIXME: Remove - this is used with STP0 only.
-         *
-	 * @param message
-	 */
-        @Deprecated
-	public void send(String message) {
-            connection.send(message);
-	}
-
-	/**
-	 * Send a message prepending xml tag
-         * FIXME: Remove - this is used for STP0 only.
-         *
-	 * @param serviceName
-	 * @param message
-	 */
-        @Deprecated
-        public void sendXmlMessage(String serviceName, String message) {
-            String xml = (serviceName + " <?xml version=\"1.0\"?>" + message);
-            connection.send(xml);
 	}
 }
