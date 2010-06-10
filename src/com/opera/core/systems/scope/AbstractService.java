@@ -15,7 +15,6 @@ import org.openqa.selenium.WebDriverException;
 import com.google.protobuf.GeneratedMessage;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.AbstractMessage.Builder;
-import com.opera.core.systems.ScopeConnection;
 import com.opera.core.systems.ScopeServices;
 import com.opera.core.systems.model.ICommand;
 import com.opera.core.systems.scope.internal.OperaIntervals;
@@ -33,7 +32,6 @@ public abstract class AbstractService {
 	private static final Logger logger = Logger.getLogger(AbstractService.class.getName());
 		
 	private String serviceName;
-	private final ScopeConnection connection;
 	private final String version;
 	
 	protected int messageOffset;
@@ -46,7 +44,6 @@ public abstract class AbstractService {
 		this.services = services;
 		this.version = version;
 		this.serviceName = serviceName;
-		this.connection = services.getConnection();
 		this.messageOffset = serviceName.length() + 22;
 	}
 
@@ -60,11 +57,11 @@ public abstract class AbstractService {
 	}
 	
 	public Response executeCommand(ICommand command, Builder<?> builder) {
-		return connection.executeCommand(command, serviceName, builder);
+		return services.executeCommand(command, serviceName, builder);
 	}
 	
 	public Response executeCommand(ICommand command, Builder<?> builder, long timeout) {
-		return connection.executeCommand(command, serviceName, builder, timeout);
+		return services.executeCommand(command, serviceName, builder, timeout);
 	}
 
 	/**
@@ -73,7 +70,7 @@ public abstract class AbstractService {
 	 */
 	public void post(String using) {
             
-            connection.sendXmlMessage(serviceName, using);
+            services.sendXmlMessage(serviceName, using);
             waitForResponse("using");
 	}
 	
@@ -82,7 +79,7 @@ public abstract class AbstractService {
 	 * @param using
 	 */
 	public void postRequest(String using) {
-		connection.send(serviceName + " " + using);
+            services.send(serviceName + " " + using);
 	}
 
 	/**

@@ -1,7 +1,6 @@
 /* Copyright (C) 2009 Opera Software ASA.  All rights reserved. */
 package com.opera.core.systems.scope.handlers;
 
-import com.opera.core.systems.ScopeConnection;
 import com.opera.core.systems.ScopeServices;
 import com.opera.core.systems.scope.beans.Message;
 import com.opera.core.systems.scope.beans.RuntimeStarted;

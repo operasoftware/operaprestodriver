@@ -733,7 +733,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,FindsB
 
         @Deprecated
 	public void cleanUp() {
-            services.getConnection().close();
+            services.close();
 	}
 
 	public void executeActions(Action action) {
