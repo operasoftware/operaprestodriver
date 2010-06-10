@@ -65,24 +65,6 @@ public abstract class AbstractService {
 	}
 
 	/**
-	 * Send an xml message to scope, xml tag is prepended
-	 * @param using message to send
-	 */
-	public void post(String using) {
-            
-            services.sendXmlMessage(serviceName, using);
-            waitForResponse("using");
-	}
-	
-	/**
-	 * Send a message to scope, xml must be intact
-	 * @param using
-	 */
-	public void postRequest(String using) {
-            services.send(serviceName + " " + using);
-	}
-
-	/**
 	 * Query a collection with JXPath and return value of node
 	 * @param collection
 	 * @param query a valid XPath query
