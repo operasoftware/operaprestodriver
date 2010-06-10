@@ -17,7 +17,6 @@ import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.AbstractMessage.Builder;
 import com.opera.core.systems.ScopeServices;
 import com.opera.core.systems.model.ICommand;
-import com.opera.core.systems.scope.internal.OperaIntervals;
 import com.opera.core.systems.scope.protos.UmsProtos.Response;
 
 /**
@@ -34,8 +33,6 @@ public abstract class AbstractService {
 	private String serviceName;
 	private final String version;
 	
-	protected int messageOffset;
-	
 	public String getVersion() {
 		return version;
 	}
@@ -44,17 +41,8 @@ public abstract class AbstractService {
 		this.services = services;
 		this.version = version;
 		this.serviceName = serviceName;
-		this.messageOffset = serviceName.length() + 22;
 	}
 
-        @Deprecated
-	public static void sleep(long timeInMillis) {
-		try {
-			Thread.sleep(timeInMillis);
-		} catch (InterruptedException e) {
-			//ignore
-		}
-	}
 	
 	public Response executeCommand(ICommand command, Builder<?> builder) {
 		return services.executeCommand(command, builder);
@@ -83,6 +71,8 @@ public abstract class AbstractService {
 	
 	/**
 	 * Query a collection JXPath and return a pointer
+         * FIXME: This does not belong here!
+         *
 	 * @param collection
 	 * @param query
 	 * @return Pointer to node
@@ -101,7 +91,9 @@ public abstract class AbstractService {
 	
 	/**
 	 * Query a collection JXPath and return a pointer
-	 * @param collection
+         * FIXME: This does not belong here!
+         *
+ 	 * @param collection
 	 * @param query
 	 * @return Pointer to node
 	 */
@@ -116,50 +108,6 @@ public abstract class AbstractService {
 		return result;
 	}
 	
-	//FIXME revise, and eventually remove
-	
-	/**
-	 * Waits (timeout ms) for a response message that starts with
-	 * given string if there is an internal error returns immediately
-	 * @param startsWith
-	 * @param timeout Wait timeout on queue(other responses might affect)
-	 * @return
-	 */
-        @Deprecated
-	public String waitForResponse(String startsWith, long timeout) {
-		String response = ""; // services.getConnection().getResponse(timeout);
-		/*
-		if(!response.startsWith(startsWith, this.messageOffset))
-			throw new WebDriverException("Unexpected response");
-		*/
-		if(response.isEmpty())
-			throw new WebDriverException("Could not get the response in a timely manner");
-		return response;
-		/*
-		String response;
-		
-		do {
-			response = pollQueue(timeout);
-			if(response.startsWith("<error>Internal error</error>", this.messageOffset)){
-				return response;
-			}
-			discardedResponses.incrementAndGet();
-		} while (!(response.startsWith(startsWith, this.messageOffset)));
-	
-		return response;
-		*/
-	}
-	
-	/**
-	 * Wait for response with default timeout
-	 * FIXME Make configurable
-	 * @param startsWith
-	 * @return
-	 */
-        @Deprecated
-	public String waitForResponse(String startsWith) {
-		return waitForResponse(startsWith, OperaIntervals.RESPONSE_TIMEOUT.getValue());
-	}
 	
 	public static final GeneratedMessage.Builder<?> buildPayload(Response response, GeneratedMessage.Builder<?> builder) {
 		return buildMessage(builder, response.getPayload().toByteArray());
