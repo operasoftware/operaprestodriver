@@ -79,12 +79,6 @@ public abstract class AbstractEventHandler {
 	 */
 	public abstract void onWindowClosed(Integer id);
 
-	/**
-	 * Fired when a window load is complete
-	 */
-        @Deprecated
-	public abstract void onWindowLoaded();
-
         /**
          * @param id the WindowID
          */
