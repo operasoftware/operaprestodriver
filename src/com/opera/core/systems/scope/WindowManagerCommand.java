@@ -13,8 +13,8 @@ import java.util.Map;
  *
  */
 public enum WindowManagerCommand implements ICommand {
-    GET_ACTIVE_WINDOW(1), 
-    LIST_WINDOWS(2), 
+    GET_ACTIVE_WINDOW(1),
+    LIST_WINDOWS(2),
     MODIFY_FILTER(3),
     WINDOW_UPDATED(4),   // event
     WINDOW_CLOSED(5),    // event
@@ -42,8 +42,7 @@ public enum WindowManagerCommand implements ICommand {
     }
 
     public static WindowManagerCommand get(int code) {
-        WindowManagerCommand command = lookup.get(code);
-        return command;
+        return lookup.get(code);
     }
 
 }

@@ -13,13 +13,13 @@ import java.util.Map;
  *
  */
 public enum ESDebuggerCommand implements ICommand {
-    LIST_RUNTIMES(1), 
+    LIST_RUNTIMES(1),
     EVAL(3),
     INSPECT_DOM(13),
-    EXAMINE_OBJECTS(4), 
-    SET_CONFIGURATION(10), 
-    RELEASE_OBJECTS(29), 
-    RUNTIME_STARTED(14), 
+    EXAMINE_OBJECTS(4),
+    SET_CONFIGURATION(10),
+    RELEASE_OBJECTS(29),
+    RUNTIME_STARTED(14),
     RUNTIME_STOPPED(15),
     NEW_SCRIPT(16),
     THREAD_STARTED(17),
@@ -50,8 +50,7 @@ public enum ESDebuggerCommand implements ICommand {
     }
 
     public static ESDebuggerCommand get(int code) {
-        ESDebuggerCommand command = lookup.get(code);
-        return command;
+        return lookup.get(code);
     }
 
 }
