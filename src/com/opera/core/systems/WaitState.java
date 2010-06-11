@@ -194,7 +194,7 @@ public class WaitState {
 					ResultItem result = pollResultItem(timeout);
 					
 					WaitResult waitResult = result.waitResult;
-					
+
 					switch (waitResult) {
 					case HANDSHAKE:
 						if (type == ResponseType.HANDSHAKE)
@@ -204,11 +204,15 @@ public class WaitState {
 					case RESPONSE:
 						if (result.data == match && type == ResponseType.RESPONSE)
 							return result.response;
+                                                else if (type == ResponseType.HANDSHAKE)
+                                                    throw new CommunicationException("Expecting handshake");
 						break;
 
 					case ERROR:
 						if (result.data == match && type == ResponseType.RESPONSE)
 							return null;
+                                                else if (type == ResponseType.HANDSHAKE)
+                                                    throw new CommunicationException("Expecting handshake");
 						break;
 
 					case EXCEPTION:
