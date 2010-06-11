@@ -11,8 +11,8 @@ import com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeInfo;
 import com.opera.core.systems.scope.protos.UmsProtos.Event;
 import com.opera.core.systems.scope.protos.WmProtos.WindowID;
 import com.opera.core.systems.scope.protos.WmProtos.WindowInfo;
-import com.opera.core.systems.scope.services.ums.EcmaScriptDebugger.EsdbgCommand;
-import com.opera.core.systems.scope.services.ums.WindowManager.WmCommand;
+import com.opera.core.systems.scope.ESDebuggerCommand;
+import com.opera.core.systems.scope.WindowManagerCommand;
 
 public class UmsEventParser {
 	
@@ -26,8 +26,8 @@ public class UmsEventParser {
 		String service = event.getService();
 		int eventId = event.getCommandID();
 		
-		if(service.equals("ecmascript-debugger")) {
-			switch (EsdbgCommand.get(eventId)) {
+		if (service.equals("ecmascript-debugger")) {
+			switch (ESDebuggerCommand.get(eventId)) {
 			case RUNTIME_STARTED:
 				RuntimeInfo.Builder infoBuilder = RuntimeInfo.newBuilder();
 				buildPayload(event, infoBuilder);
@@ -42,8 +42,8 @@ public class UmsEventParser {
 			default:
 				break;
 			}
-		} else if(service.equals("window-manager")) {
-			switch (WmCommand.get(eventId)) {
+		} else if (service.equals("window-manager")) {
+			switch (WindowManagerCommand.get(eventId)) {
 			case WINDOW_ACTIVATED:
 				WindowID.Builder activeWindowIdBuilder = WindowID.newBuilder();
 				buildPayload(event, activeWindowIdBuilder);
@@ -72,12 +72,12 @@ public class UmsEventParser {
 				break;
 			}
 		}
-		else if(service.equals("console-logger")) {
+		else if (service.equals("console-logger")) {
 			//console logger only sends one message
 			ConsoleMessage.Builder messageBuilder = ConsoleMessage.newBuilder();
 			buildPayload(event, messageBuilder);
 			eventHandler.onMessage(messageBuilder.build());
-		} /*else if(service.equals("http-logger") && eventId == 2) {
+		} /*else if (service.equals("http-logger") && eventId == 2) {
 			//console logger only sends one message
 			//FIXME make generic
 			Header header;

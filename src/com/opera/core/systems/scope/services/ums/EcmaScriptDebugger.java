@@ -23,9 +23,9 @@ import org.openqa.selenium.WebElement;
 
 import com.opera.core.systems.OperaWebElement;
 import com.opera.core.systems.ScopeServices;
-import com.opera.core.systems.model.ICommand;
 import com.opera.core.systems.model.ScriptResult;
 import com.opera.core.systems.scope.AbstractService;
+import com.opera.core.systems.scope.ESDebuggerCommand;
 import com.opera.core.systems.scope.beans.Runtime;
 import com.opera.core.systems.scope.protos.EsdbgProtos.Configuration;
 import com.opera.core.systems.scope.protos.EsdbgProtos.EvalData;
@@ -83,90 +83,6 @@ public class EcmaScriptDebugger extends AbstractService implements IEcmaScriptDe
 		throw new UnsupportedOperationException("Not suppported in STP/1");
 	}
 	
-	/*
-	  
-    command ListRuntimes(RuntimeSelection) returns (RuntimeList) = 1;
-    command ContinueThread(ThreadMode) returns (Default) = 2;
-    command Eval(EvalData) returns (EvalResult) = 3 {
-        option (cpp_response) = deferred;
-
-    };
-    command ExamineObjects(ExamineList) returns (ObjectList) = 4;
-    command SpotlightObject(SpotlightObjectSelection) returns (Default) = 5;
-    command AddBreakpoint(BreakpointPosition) returns (Default) = 6;
-    command RemoveBreakpoint(BreakpointID) returns (Default) = 7;
-    command AddEventHandler(EventHandler) returns (Default) = 8;
-    command RemoveEventHandler(EventHandlerID) returns (Default) = 9;
-    command SetConfiguration(Configuration) returns (Default) = 10;
-    command GetBacktrace(BacktraceSelection) returns (BacktraceFrameList) = 11;
-    command Break(BreakSelection) returns (Default) = 12;
-    command InspectDom(DomTraversal) returns (NodeList) = 13;
-    command CssGetIndexMap(Default) returns (CssIndexMap) = 22;
-    command CssGetAllStylesheets(RuntimeID) returns (CssStylesheetList) = 23;
-    command CssGetStylesheet(CssStylesheetSelection) returns (CssStylesheetRules) = 24;
-    command CssGetStyleDeclarations(CssElementSelection) returns (CssStyleDeclarations) = 25;
-    command GetSelectedObject(Default) returns (ObjectSelection) = 26;
-    command SpotlightObjects(SpotlightSelection) returns (Default) = 27;
-    
-    //Release all objects (that is, object received through this protocol as objectIDs), so they can be garbage collected by the ecmascript engine. Note that garbage collection is not necessarily run at this point, so the memory for the given objects might not be freed immediately. IMPORTANT: After this call, no object IDs received earlier are valid! All objects needs to be requested again.
-    
-    command ReleaseObjects(Default) returns (Default) = 29;
-    event OnRuntimeStarted returns (RuntimeInfo) = 14;
-    event OnRuntimeStopped returns (RuntimeID) = 15;
-    event OnNewScript returns (ScriptInfo) = 16;
-    event OnThreadStarted returns (ThreadInfo) = 17;
-    event OnThreadFinished returns (ThreadResult) = 18;
-    event OnThreadStoppedAt returns (ThreadStopInfo) = 19;
-    event OnHandleEvent returns (DomEvent) = 20;
-    event OnObjectSelected returns (ObjectSelection) = 21;
-    event OnParseError returns (DomParseError) = 28;
-	 */
-	public enum EsdbgCommand implements ICommand {
-		LIST_RUNTIMES(1), 
-		EVAL(3),
-		INSPECT_DOM(13),
-		EXAMINE_OBJECTS(4), 
-		SET_CONFIGURATION(10), 
-		RELEASE_OBJECTS(29), 
-		RUNTIME_STARTED(14), 
-		RUNTIME_STOPPED(15),
-		NEW_SCRIPT(16),
-		THREAD_STARTED(17),
-		THREAD_FINISHED(18),
-		THREAD_STOPPED_AT(19),
-		HANDLE_EVENT(20),
-		OBJECT_SELECTED(21),
-		PARSE_ERROR(28),
-		DEFAULT(-1);
-
-		private int code;
-		private static final Map<Integer, EsdbgCommand> lookup = new HashMap<Integer, EsdbgCommand>();
-
-		static {
-			for (EsdbgCommand command : EnumSet.allOf(EsdbgCommand.class))
-				lookup.put(command.getCommandID(), command);
-		}
-
-		private EsdbgCommand(int code) {
-			this.code = code;
-		}
-
-		public int getCommandID() {
-			return code;
-		}
-
-                public String getService() {
-                    return "ecmascript-debugger";
-                }
-
-		public static EsdbgCommand get(int code) {
-			EsdbgCommand command = lookup.get(code);
-			if(command == null)
-				return DEFAULT;
-			return command;
-		}
-
-	}
 
 	public EcmaScriptDebugger(ScopeServices services, String serviceName, String version) {	
 		super(services, serviceName, version);
@@ -198,7 +114,7 @@ public class EcmaScriptDebugger extends AbstractService implements IEcmaScriptDe
 		configuration.setStopAtDebuggerStatement(false);
 		configuration.setStopAtGc(false);
 		
-		executeCommand(EsdbgCommand.SET_CONFIGURATION, configuration);
+		executeCommand(ESDebuggerCommand.SET_CONFIGURATION, configuration);
 		
 		if(!updateRuntime())
 			throw new WebDriverException("Could not find a runtime for script injection");
@@ -223,7 +139,7 @@ public class EcmaScriptDebugger extends AbstractService implements IEcmaScriptDe
 	 */
 	protected void createAllRuntimes() {
 		RuntimeSelection.Builder selection = RuntimeSelection.newBuilder().setAllRuntimes(true);
-		Response response = this.executeCommand(EsdbgCommand.LIST_RUNTIMES, selection);
+		Response response = this.executeCommand(ESDebuggerCommand.LIST_RUNTIMES, selection);
 		runtimesList.clear();
 		RuntimeList.Builder builder = RuntimeList.newBuilder();
 		buildPayload(response, builder);
@@ -272,7 +188,7 @@ public class EcmaScriptDebugger extends AbstractService implements IEcmaScriptDe
 			evalBuilder.addVariableList(variable);
 		}
 		
-		Response response = executeCommand(EsdbgCommand.EVAL, evalBuilder);
+		Response response = executeCommand(ESDebuggerCommand.EVAL, evalBuilder);
 		
 		if(response == null)
 			throw new WebDriverException("Internal error while executing script");
@@ -352,7 +268,7 @@ public class EcmaScriptDebugger extends AbstractService implements IEcmaScriptDe
 		EvalData.Builder builder = buildEval(using);
 		builder.addAllVariableList(Arrays.asList(variables));
 		
-		return executeCommand(EsdbgCommand.EVAL, builder);
+		return executeCommand(ESDebuggerCommand.EVAL, builder);
 	}
 	
 	/* (non-Javadoc)
@@ -563,7 +479,7 @@ public class EcmaScriptDebugger extends AbstractService implements IEcmaScriptDe
 		ExamineList.Builder examine = ExamineList.newBuilder();
 		examine.setRuntimeID(getRuntimeId());
 		examine.addObjectList(id);
-		Response response = executeCommand(EsdbgCommand.EXAMINE_OBJECTS, examine);
+		Response response = executeCommand(ESDebuggerCommand.EXAMINE_OBJECTS, examine);
 		
 		ObjectList.Builder builder = ObjectList.newBuilder();
 		buildPayload(response, builder);
@@ -593,7 +509,7 @@ public class EcmaScriptDebugger extends AbstractService implements IEcmaScriptDe
 	}
 
 	public void releaseObjects() {
-		executeCommand(EsdbgCommand.RELEASE_OBJECTS, null);
+		executeCommand(ESDebuggerCommand.RELEASE_OBJECTS, null);
 	}
 
 	public void resetRuntimesList() {

@@ -10,6 +10,7 @@ import org.openqa.selenium.WebElement;
 import com.opera.core.systems.OperaWebElement;
 import com.opera.core.systems.ScopeServices;
 import com.opera.core.systems.model.ScriptResult;
+import com.opera.core.systems.scope.ESDebuggerCommand;
 import com.opera.core.systems.scope.protos.Esdbg6Protos.EvalResult;
 import com.opera.core.systems.scope.protos.Esdbg6Protos.ExamineList;
 import com.opera.core.systems.scope.protos.Esdbg6Protos.ObjectChainList;
@@ -85,7 +86,7 @@ public class EcmaScriptDebugger6 extends EcmaScriptDebugger {
 			evalBuilder.addVariableList(variable);
 		}
 		
-		Response response = executeCommand(EsdbgCommand.EVAL, evalBuilder);
+		Response response = executeCommand(ESDebuggerCommand.EVAL, evalBuilder);
 		
 		if(response == null)
 			throw new WebDriverException("Internal error while executing script");
@@ -105,7 +106,7 @@ public class EcmaScriptDebugger6 extends EcmaScriptDebugger {
 		examine.setExaminePrototypes(false);
 		examine.setRuntimeID(getRuntimeId());
 		examine.addObjectList(id);
-		Response response = executeCommand(EsdbgCommand.EXAMINE_OBJECTS, examine);
+		Response response = executeCommand(ESDebuggerCommand.EXAMINE_OBJECTS, examine);
 		
 		ObjectChainList.Builder builder = ObjectChainList.newBuilder();
 		buildPayload(response, builder);
@@ -181,6 +182,7 @@ public class EcmaScriptDebugger6 extends EcmaScriptDebugger {
 		return responseExpected ? parseEvalReply(parseEvalData(reply)) : null;
 	}
 	
+        
 	public Integer getObject(String using) {
 		EvalResult reply = parseEvalData(eval(using));
 		return (reply.getType().equals("object")) ? reply.getObjectValue().getObjectID() : null;

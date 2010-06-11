@@ -3,8 +3,6 @@
 package com.opera.core.systems.scope.services.ums;
 
 import java.util.Collection;
-import java.util.EnumSet;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -20,10 +18,9 @@ import org.openqa.selenium.NoSuchWindowException;
 import org.openqa.selenium.WebDriverException;
 
 import com.opera.core.systems.ScopeServices;
-import com.opera.core.systems.model.ICommand;
 
 import com.opera.core.systems.scope.AbstractService;
-import com.opera.core.systems.scope.exceptions.WindowLoadedException;
+import com.opera.core.systems.scope.WindowManagerCommand;
 import com.opera.core.systems.scope.exceptions.WindowNotFoundException;
 import com.opera.core.systems.scope.internal.OperaFlags;
 import com.opera.core.systems.scope.internal.OperaIntervals;
@@ -70,55 +67,7 @@ public class WindowManager extends AbstractService implements IWindowManager {
 		this.windowClosedLatch = windowClosedLatch;
 	}
 	
-	/*
-	command GetActiveWindow(Default) returns (WindowID) = 1;
-    command ListWindows(Default) returns (WindowList) = 2;
-    command ModifyFilter(WindowFilter) returns (Default) = 3;
-    event OnWindowUpdated returns (WindowInfo) = 4;
-    event OnWindowClosed returns (WindowID) = 5;
-    event OnWindowActivated returns (WindowID) = 6;
-    event OnWindowLoaded returns (WindowID) = 7;
-	 */
-	
-	public enum WmCommand implements ICommand {
-		GET_ACTIVE_WINDOW(1), 
-		LIST_WINDOWS(2), 
-		MODIFY_FILTER(3),
-		WINDOW_UPDATED(4),
-		WINDOW_CLOSED(5),
-		WINDOW_ACTIVATED(6),
-		WINDOW_LOADED(7),
-		DEFAULT(-1);
 
-		private int code;
-		private static final Map<Integer, WmCommand> lookup = new HashMap<Integer, WmCommand>();
-
-		static {
-			for (WmCommand command : EnumSet.allOf(WmCommand.class))
-				lookup.put(command.getCommandID(), command);
-		}
-
-		private WmCommand(int code) {
-			this.code = code;
-		}
-
-		public int getCommandID() {
-			return code;
-		}
-
-                public String getService() {
-                    return "window-manager";
-                }
-
-		public static WmCommand get(int code) {
-			WmCommand command = lookup.get(code);
-			if(command == null)
-				return DEFAULT;
-			return command;
-		}
-
-	}
-	
     public WindowManager(ScopeServices services, String serviceName, String version) {
 		super(services, serviceName, version);
 		//check if our fixes are in
@@ -195,7 +144,7 @@ public class WindowManager extends AbstractService implements IWindowManager {
 
 	
 	private WindowID findActiveWindow() {
-		Response response = executeCommand(WmCommand.GET_ACTIVE_WINDOW, null);
+		Response response = executeCommand(WindowManagerCommand.GET_ACTIVE_WINDOW, null);
 		WindowID.Builder builder = WindowID.newBuilder();
 		buildPayload(response, builder);
 		return builder.build();
@@ -214,7 +163,7 @@ public class WindowManager extends AbstractService implements IWindowManager {
 		filterBuilder.setClearFilter(true);
 		filterBuilder.addIncludeIDList(getActiveWindowId());
 		
-		executeCommand(WmCommand.MODIFY_FILTER, filterBuilder);
+		executeCommand(WindowManagerCommand.MODIFY_FILTER, filterBuilder);
 	}
 
 
@@ -227,15 +176,15 @@ public class WindowManager extends AbstractService implements IWindowManager {
 		WindowFilter.Builder filterBuilder = WindowFilter.newBuilder();
 		filterBuilder.setClearFilter(true);
 		filterBuilder.addIncludePatternList("*");
-		executeCommand(WmCommand.MODIFY_FILTER, filterBuilder);
-		
-		Response response = executeCommand(WmCommand.LIST_WINDOWS, null);
+		executeCommand(WindowManagerCommand.MODIFY_FILTER, filterBuilder);
+
+		Response response = executeCommand(WindowManagerCommand.LIST_WINDOWS, null);
 		WindowList.Builder builder = WindowList.newBuilder();
 		buildPayload(response, builder);
 		WindowList list = builder.build();
-		
+
 		List<WindowInfo> windowsList = list.getWindowListList();
-		
+
 		windows.clear();
 		for (WindowInfo window : windowsList) {
 			//FIXME workaround for CORE-25866
