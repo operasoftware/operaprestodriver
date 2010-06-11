@@ -1,9 +1,11 @@
 package com.opera.core.systems;
 
-import java.util.logging.Logger;
 import java.util.LinkedList;
+import java.util.logging.Logger;
 
 import org.openqa.selenium.WebDriverException;
+
+import com.opera.core.systems.scope.exceptions.CommunicationException;
 import com.opera.core.systems.scope.exceptions.ResponseNotReceivedException;
 import com.opera.core.systems.scope.protos.UmsProtos.Response;
 
@@ -30,20 +32,20 @@ public class WaitState {
     private class ResultItem
     {
         int data;
-        WaitResult result;
+        WaitResult waitResult;
         WebDriverException exception;
         Response response;
 
         public ResultItem(WebDriverException ex)
         {
-            result = WaitResult.EXCEPTION;
+            waitResult = WaitResult.EXCEPTION;
             exception = ex;
-            logger.fine("EVENT: " + result.toString() + ", exception: " + ex.toString());
+            logger.fine("EVENT: " + waitResult.toString() + ", exception: " + ex.toString());
         }
 
         public ResultItem(WaitResult result)
         {
-            this.result = result;
+            this.waitResult = result;
             logger.fine("EVENT: " + result.toString());
         }
 
@@ -52,7 +54,7 @@ public class WaitState {
         // ERROR with tag id
         public ResultItem(WaitResult result, int data)
         {
-            this.result = result;
+            this.waitResult = result;
             this.data = data;
             logger.fine("EVENT: " + result.toString() + ", data=" + data);
         }
@@ -61,13 +63,18 @@ public class WaitState {
         {
             this.response = response;
             this.data = tag;
-            result = WaitResult.RESPONSE;
-            logger.fine("EVENT: " + result.toString() + ", data=" + data);
+            waitResult = WaitResult.RESPONSE;
+            logger.fine("EVENT: " + waitResult.toString() + ", data=" + data);
         }
     }
 
     LinkedList<ResultItem> events = new LinkedList<ResultItem>();
 
+    enum ResponseType {
+    	HANDSHAKE,
+    	RESPONSE,
+    	WINDOW_LOADED;
+    }
     public WaitState()
     {
         connected = true;
@@ -165,138 +172,71 @@ public class WaitState {
 
         return events.removeFirst();
     }
+    
+    private final ResultItem pollResultItem(long timeout) {
+    	ResultItem result = getResult();
 
-    void waitForHandshake(long timeout) throws WebDriverException
-    {
-        synchronized (lock)
-        {
-            logger.fine("WAIT: for handshake");
-            while (true)
-            {
-                ResultItem result = getResult();
+		if (result == null) {
+			internalWait(timeout);
+			result = getResult();
+		}
 
-                if (result == null)
-                {
-                    internalWait(timeout);
-                    result = getResult();
-                }
-
-                if (result == null)
-                    throw new ResponseNotReceivedException("No response in a timely fashion.");
-
-                switch (result.result)
-                {
-                    case HANDSHAKE:
-                        return;
-
-                    case EXCEPTION:
-                        throw result.exception;
-
-                    case DISCONNECTED:
-                        throw new CommunicationException("Disconnected STP connection.");
-
-                    case BINARY_EXIT:
-                        throw new CommunicationException("Binary stopped/crashed.");
-
-                    case EVENT_WINDOW_LOADED:
-                        break;
-
-                    default:
-                        throw new WebDriverException("Unexpected result, expecting handshake");
-                }
-            }
-        }
+		if (result == null)
+			throw new ResponseNotReceivedException("No response in a timely fashion.");
+		
+		return result;
     }
+    
+	private final Response waitAndParseResult(long timeout, int match, final ResponseType type) {
+		{
+			synchronized (lock) {
+				while (true) {
+					ResultItem result = pollResultItem(timeout);
+					
+					WaitResult waitResult = result.waitResult;
+					
+					switch (waitResult) {
+					case HANDSHAKE:
+						if (type == ResponseType.HANDSHAKE)
+							return null;
+						break;
 
-    Response waitFor(int tag, long timeout) throws WebDriverException
-    {
-        synchronized (lock)
-        {
-            logger.fine("WAIT: for response " + tag);
-            while (true)
-            {
-                ResultItem result = getResult();
+					case RESPONSE:
+						if (result.data == match && type == ResponseType.RESPONSE)
+							return result.response;
+						break;
 
-                if (result == null)
-                {
-                    internalWait(timeout);
-                    result = getResult();
-                }
+					case ERROR:
+						if (result.data == match && type == ResponseType.RESPONSE)
+							return null;
+						break;
 
-                if (result == null)
-                    throw new ResponseNotReceivedException("No response in a timely fashion.");
+					case EXCEPTION:
+						throw result.exception;
 
+					case DISCONNECTED:
+					case BINARY_EXIT:
+						throw new CommunicationException( "Problem encountered : " + waitResult.toString());
 
-                switch (result.result)
-                {
-                    case RESPONSE:
-                        if (result.data == tag)
-                            return result.response;
-                        break;
-                    
-                    case ERROR:
-                        if (result.data == tag)
-                            return null;
-                        break;
+					case EVENT_WINDOW_LOADED:
+						if (result.data == match && type == ResponseType.WINDOW_LOADED)
+							return null;
+						break;
+					}
+				}
+			}
+		}
+	}
 
-                    case EXCEPTION:
-                        throw result.exception;
+	public void waitForHandshake(long value) {
+		waitAndParseResult(value, 0, ResponseType.HANDSHAKE);
+	}
 
-                    case DISCONNECTED:
-                        throw new CommunicationException("Disconnected STP connection.");
+	public void waitForWindowLoaded(int windowId, long timeout) {
+		waitAndParseResult(timeout, windowId, ResponseType.WINDOW_LOADED);
+	}
 
-                    case BINARY_EXIT:
-                        throw new CommunicationException("Binary stopped/crashed");
-
-                    case EVENT_WINDOW_LOADED:
-                        break;
-                }
-            }
-        }
-    }
-
-    boolean waitForWindowLoaded(int windowId, long timeout) throws WebDriverException
-    {
-        synchronized (lock)
-        {
-            logger.fine("WAIT: for window " + windowId + " to finish loading.");
-            while (true)
-            {
-                ResultItem result = getResult();
-
-                if (result == null)
-                {
-                    internalWait(timeout);
-                    result = getResult();
-                }
-
-                if (result == null)
-                    throw new ResponseNotReceivedException("No response in a timely fashion.");
-
-                switch (result.result)
-                {
-                    case RESPONSE:
-                        break;
-
-                    case ERROR:
-                        break;
-
-                    case EXCEPTION:
-                        throw result.exception;
-
-                    case DISCONNECTED:
-                        throw new CommunicationException("Disconnected STP connection.");
-
-                    case BINARY_EXIT:
-                        throw new CommunicationException("Binary stopped/crashed");
-
-                    case EVENT_WINDOW_LOADED:
-                        if (result.data == windowId)
-                            return true;
-                        break;
-                }
-            }
-        }
-    }
-
+	public Response waitFor(int tag, long timeout) {
+		return waitAndParseResult(timeout, tag, ResponseType.RESPONSE);
+	}
 }

@@ -6,7 +6,6 @@ import java.io.File;
 import org.openqa.selenium.RenderedWebElement;
 
 import com.opera.core.systems.ScopeServices;
-import com.opera.core.systems.scope.beans.Action;
 import com.opera.core.systems.scope.services.IEcmaScriptDebugger;
 import com.opera.core.systems.scope.services.IOperaExec;
 
@@ -72,22 +71,5 @@ public abstract class ScopeActions {
 	 * @param pngFile
 	 */
 	public abstract void saveScreenshot(File pngFile);
-
-	/**
-	 * Creates an Opera Action based on specs for each engine version
-	 * 
-	 * @param using Opera Action to execute
-	 * @return {@link Action} to be sent
-	 */
-	public abstract Action createAction(String using);
-
-	/**
-	 * Creates an Opera Action with parameters (2.4+)
-	 * 
-	 * @throws UnsupportedOperationException on 2.3
-	 * @param using Opera Action to execute
-	 * @return {@link Action} to be sent
-	 */
-	public abstract Action createAction(String using, String param);
 
 }

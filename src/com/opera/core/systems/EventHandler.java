@@ -1,9 +1,5 @@
 package com.opera.core.systems;
 
-import com.opera.core.systems.scope.beans.Message;
-import com.opera.core.systems.scope.beans.Runtime;
-import com.opera.core.systems.scope.beans.RuntimeStarted;
-import com.opera.core.systems.scope.beans.UpdatedWindow;
 import com.opera.core.systems.scope.handlers.AbstractEventHandler;
 import com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessage;
 import com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeInfo;
@@ -25,28 +21,6 @@ public class EventHandler extends AbstractEventHandler {
 		services.getWindowManager().setActiveWindowId(id);
 	}
 
-	public void onMessage(Message message) {
-		//FIXME implement
-		System.out.println(message.getDescription().getContent().toString());
-	}
-	
-	/**
-	 * Handles the runtime started event, if the runtime has frame _top and
-	 * it has the id of active window, that means we need to clean up 'old'
-	 * runtimes from our list as they are no longer accessible
-	 * After processing the runtime, we add it to our list for further access
-	 */
-	public void onRuntimeStarted(RuntimeStarted started) {
-		Runtime runtime = started.getRuntime();
-		if(runtime.getHtmlFramePath().equals("_top") && runtime.getWindowId() == services.getWindowManager().getActiveWindowId()) {
-			//check if we already have such a runtime and clean them up if needed
-			services.getDebugger().cleanUpRuntimes();
-			services.getDebugger().setRuntime(runtime);
-		}
-		services.getDebugger().addRuntime(runtime);
-	}
-
-
 	/**
 	 * Remove any runtime that has been stopped. This call
 	 * can be quite late and hence is resolved by cleanup method
@@ -61,16 +35,6 @@ public class EventHandler extends AbstractEventHandler {
 		*/
 	}
 
-	/**
-	 * Handles the new windows, this event triggers even
-	 * on title change so we need to use opener id to
-	 * distinguish a new window even (opener-id=0 is a new window)
-	 */
-	public void onUpdatedWindow(UpdatedWindow window) {
-		//logger.log(Level.INFO, window.toString());
-		if(window.getWindow().getOpenerId() == 0)
-			services.getWindowManager().addWindow(window.getWindow());
-	}
 
 	/**
 	 * Handles windows that have been closed. Removes it from the

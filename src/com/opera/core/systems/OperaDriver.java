@@ -21,6 +21,7 @@ package com.opera.core.systems;
 import java.awt.Dimension;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -31,8 +32,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CountDownLatch;
-
 import java.util.logging.Logger;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.Cookie;
 import org.openqa.selenium.JavascriptExecutor;
@@ -50,10 +51,9 @@ import org.openqa.selenium.internal.FindsByName;
 import org.openqa.selenium.internal.FindsByTagName;
 import org.openqa.selenium.internal.FindsByXPath;
 import org.openqa.selenium.internal.ReturnedCookie;
-import java.io.IOException;
 
-import com.opera.core.systems.model.Action;
 import com.opera.core.systems.model.Canvas;
+import com.opera.core.systems.model.OperaAction;
 import com.opera.core.systems.model.ScopeActions;
 import com.opera.core.systems.model.ScreenShotReply;
 import com.opera.core.systems.model.ScriptResult;
@@ -146,6 +146,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,FindsB
                 versions.put("window-manager", "2.0");
                 versions.put("exec", "2.0");
                 services = new ScopeServices(versions);
+                services.startStpThread();
             } catch (IOException e) {
                 throw new WebDriverException(e);
             }
@@ -739,7 +740,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,FindsB
             services.close();
 	}
 
-	public void executeActions(Action action) {
+	public void executeActions(OperaAction action) {
             List<UserInteraction> actions = action.getActions();
             for (UserInteraction userInteraction : actions) {
                 userInteraction.execute(this);
@@ -798,7 +799,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,FindsB
             services.addConsoleListener(listener);
 	}
 
-    public void BinaryStopped(int code) {
+    public void binaryStopped(int code) {
         services.onBinaryStopped(code);
     }
 

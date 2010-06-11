@@ -6,5 +6,5 @@ package com.opera.core.systems.scope.internal;
  */
 public interface OperaBinaryListener {
 
-    public void BinaryStopped(int exitValue);
+    public void binaryStopped(int exitValue);
 }

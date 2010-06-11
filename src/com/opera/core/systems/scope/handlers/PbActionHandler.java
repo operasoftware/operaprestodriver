@@ -9,13 +9,10 @@ import java.io.IOException;
 import org.openqa.selenium.RenderedWebElement;
 import org.openqa.selenium.WebDriverException;
 
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
 import com.opera.core.systems.ScopeServices;
 import com.opera.core.systems.model.Canvas;
 import com.opera.core.systems.model.ScopeActions;
 import com.opera.core.systems.model.ScreenShotReply;
-import com.opera.core.systems.scope.beans.Action;
 import com.opera.core.systems.scope.internal.OperaMouseKeys;
 
 /**
@@ -41,16 +38,6 @@ public class PbActionHandler extends ScopeActions {
     public void click(RenderedWebElement element, int x, int y) {
             Point point = element.getLocation();
             services.getExec().mouseAction(point.x + x, point.y + y, OperaMouseKeys.LEFT);
-    }
-
-    @Override
-    public Action createAction(String using) {
-            throw new NotImplementedException();
-    }
-
-    @Override
-    public Action createAction(String using, String param) {
-            throw new NotImplementedException();
     }
 
     @Override

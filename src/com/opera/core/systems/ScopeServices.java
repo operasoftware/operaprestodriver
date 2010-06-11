@@ -15,6 +15,7 @@ import com.google.protobuf.InvalidProtocolBufferException;
 import com.opera.core.systems.model.ICommand;
 import com.opera.core.systems.model.ScopeActions;
 import com.opera.core.systems.scope.ScopeCommand;
+import com.opera.core.systems.scope.exceptions.CommunicationException;
 import com.opera.core.systems.scope.handlers.IConnectionHandler;
 import com.opera.core.systems.scope.internal.OperaIntervals;
 import com.opera.core.systems.scope.protos.ScopeProtos.ClientInfo;
@@ -38,23 +39,22 @@ import java.util.logging.Logger;
 
 public class ScopeServices implements IConnectionHandler {
 	
-        private final Logger logger = Logger.getLogger(this.getClass().getName());
-    
+	private final Logger logger = Logger.getLogger(this.getClass().getName());
+
 	private IEcmaScriptDebugger debugger;
 	private IOperaExec exec;
 	private IWindowManager windowManager;
 	private ScopeActions actionHandler;
 	private Map<String, String> versions;
 	private List<IConsoleListener> listeners;
-        private OperaBinary opera;
-	
-        private WaitState waitState = new WaitState();
-        private StpConnection connection = null;
-        private StpThread stpThread = null;
-	boolean running = true;
-        boolean shuttingDown = false;
+	private OperaBinary opera;
 
-        private List<String> listedServices;
+	private WaitState waitState = new WaitState();
+	private StpConnection connection = null;
+	private StpThread stpThread;
+	boolean shuttingDown = false;
+
+	private List<String> listedServices;
 
 	private int tagCounter;
 
@@ -222,7 +222,7 @@ public class ScopeServices implements IConnectionHandler {
         int openUrl(String url, long timeout)
         {
             if (connection == null)
-                throw new CommunicationException("Unable to open URL because Opera is not connected.");
+            	throw new CommunicationException("Unable to open URL because Opera is not connected.");
 
             int windowId = windowManager.getActiveWindowId();
 
@@ -390,5 +390,9 @@ public class ScopeServices implements IConnectionHandler {
             int tag = commandBuilder.getTag();
             connection.send(commandBuilder.build());
             return waitForResponse(tag, timeout);
+	}
+
+	public void startStpThread() {
+		stpThread.start();
 	}
 }

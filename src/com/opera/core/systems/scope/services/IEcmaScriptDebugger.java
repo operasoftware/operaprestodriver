@@ -3,13 +3,10 @@ package com.opera.core.systems.scope.services;
 import java.util.List;
 
 import com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeInfo;
-import com.opera.core.systems.scope.beans.Runtime;
 
 public interface IEcmaScriptDebugger {
 
 	 int getRuntimeId();
-
-	 void setRuntime(Runtime runtime);
 	 
 	 void setRuntime(RuntimeInfo runtime);
 
@@ -19,8 +16,6 @@ public interface IEcmaScriptDebugger {
 	 * @param runtimeId
 	 */
 	 void removeRuntime(int runtimeId);
-	 
-	 void addRuntime(Runtime started);
 	 
 	 void addRuntime(RuntimeInfo info);
 

@@ -2,15 +2,9 @@
 package com.opera.core.systems.scope.handlers;
 
 import com.opera.core.systems.ScopeServices;
-import com.opera.core.systems.scope.beans.Message;
-import com.opera.core.systems.scope.beans.RuntimeStarted;
-import com.opera.core.systems.scope.beans.UpdatedWindow;
 import com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessage;
 import com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeInfo;
 import com.opera.core.systems.scope.protos.WmProtos.WindowInfo;
-import com.opera.core.systems.scope.services.IEcmaScriptDebugger;
-import com.opera.core.systems.scope.services.IOperaExec;
-import com.opera.core.systems.scope.services.IWindowManager;
 
 
 /**
@@ -40,7 +34,6 @@ public abstract class AbstractEventHandler {
 	 * Runtime-started is needed for tracking ecmascript injections
 	 * @param started
 	 */
-	public abstract void onRuntimeStarted(RuntimeStarted started);
 	
 	public abstract void onRuntimeStarted(RuntimeInfo started);
 
@@ -48,7 +41,6 @@ public abstract class AbstractEventHandler {
 	 * Fired on new console messages
 	 * @param message
 	 */
-	public abstract void onMessage(Message message);
 	
 	public abstract void onMessage(ConsoleMessage message);
 	
@@ -63,7 +55,6 @@ public abstract class AbstractEventHandler {
 	 * has incoming changes (such as title change)
 	 * @param window
 	 */
-	public abstract void onUpdatedWindow(UpdatedWindow window);
 	
 	public abstract void onUpdatedWindow(WindowInfo window);
 

@@ -1,7 +1,9 @@
 package com.opera.core.systems;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import com.opera.core.systems.model.FilterRule;
 import com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessage;
@@ -44,12 +46,23 @@ public class UmsEventHandler extends EventHandler {
 		}
 	}
 	
+
+	/**
+	 * Checks if a given message matches any of the filters
+	 * supplied in the filters map
+	 * @param filters Map of filter rules based on fields (description, context, severity)
+	 * @param message The console message to parse
+	 * @return true if any of the filters match the given rule
+	 */
 	private boolean isFilteredMessage(Map<String, FilterRule> filters, ConsoleMessage message) {
-		for (String key : filters.keySet()) {
+		Iterator<Entry<String, FilterRule>> itr = filters.entrySet().iterator();
+		while(itr.hasNext()) {
+			Entry<String, FilterRule> entry = itr.next();
+			String key = entry.getKey();
 			if(message.hasField(ConsoleMessage.getDescriptor().findFieldByName(key))) {
 				FilterRule rule = filters.get(key);
 				String value = message.getField(ConsoleMessage.getDescriptor().findFieldByName(key)).toString();
-				String match = filters.get(key).getValue();
+				String match = entry.getValue().getValue();
 				switch(rule.getType()) {
 				case STARTS_WITH:
 					if(value.startsWith(match))
@@ -68,6 +81,5 @@ public class UmsEventHandler extends EventHandler {
 		}
 		return false;
 	}
-
 
 }

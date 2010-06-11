@@ -1,8 +1,8 @@
 package com.opera.core.systems;
-import com.opera.core.systems.scope.beans.Runtime;
+import java.util.List;
+
 import com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeInfo;
 import com.opera.core.systems.scope.services.IEcmaScriptDebugger;
-import java.util.List;
 
 public class PseudoEcmaScriptDebugger implements IEcmaScriptDebugger {
 
@@ -17,7 +17,6 @@ public class PseudoEcmaScriptDebugger implements IEcmaScriptDebugger {
     }
 
     public Object scriptExecutor(String script, Object... params) {
-        // TODO Auto-generated method stub
         return null;
     }
 

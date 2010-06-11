@@ -45,7 +45,6 @@ import com.opera.core.systems.model.Canvas;
 import com.opera.core.systems.model.ColorResult;
 import com.opera.core.systems.model.ScreenShotReply;
 import com.opera.core.systems.model.ScriptResult;
-import com.opera.core.systems.scope.beans.ValueData;
 import com.opera.core.systems.scope.internal.OperaColors;
 import com.opera.core.systems.scope.internal.OperaFlags;
 import com.opera.core.systems.scope.internal.OperaKeys;

@@ -1,10 +1,11 @@
 package com.opera.core.systems.scope.stp;
 
+import java.io.IOException;
 import java.util.logging.Logger;
 
-import com.opera.core.systems.util.SocketMonitor;
-import com.opera.core.systems.scope.handlers.IConnectionHandler;
 import com.opera.core.systems.scope.handlers.AbstractEventHandler;
+import com.opera.core.systems.scope.handlers.IConnectionHandler;
+import com.opera.core.systems.util.SocketMonitor;
 
 
 /**
@@ -20,19 +21,17 @@ public class StpThread extends Thread {
 
     private final Logger logger = Logger.getLogger(this.getClass().getName());
     private StpConnectionListener listener;
-    private StpConnection stpConnection;
-    private boolean running = true;
+    private volatile boolean cancelled;
     
-    public StpThread(int port, IConnectionHandler handler, AbstractEventHandler eventHandler) throws java.io.IOException
+    public StpThread(int port, IConnectionHandler handler, AbstractEventHandler eventHandler) throws IOException
     {
-        super("StpThread");
         SocketMonitor.instance();
         listener = new StpConnectionListener(port, handler, eventHandler);
-        start();
+        setName("stp-thread");
     }
     
     public void shutdown() {
-        running = false;
+        cancelled = true;
         listener.stop();
         SocketMonitor.instance().stop();
     }
@@ -41,7 +40,7 @@ public class StpThread extends Thread {
     @Override
     public void run() {
         logger.info("Started StpThread.");
-        while (running)
+        while (!cancelled)
         {
             SocketMonitor.poll(60000);
         }

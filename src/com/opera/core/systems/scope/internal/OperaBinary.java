@@ -18,7 +18,6 @@ import org.openqa.selenium.WebDriverException;
 
 public class OperaBinary extends Thread {
 
-    private ThreadGroup runProcess;
     private Process process;
     private WinProcess winProcess;
     private OutputWatcher watcher;
@@ -40,7 +39,7 @@ public class OperaBinary extends Thread {
         }
         init();
     }
-
+    
     public void kill() {
         watcher.kill();
     }
@@ -139,7 +138,7 @@ public class OperaBinary extends Thread {
 
         for (OperaBinaryListener listener : listeners)
         {
-            listener.BinaryStopped(exit);
+            listener.binaryStopped(exit);
         }
     }
 

@@ -4,24 +4,20 @@ package com.opera.core.systems.scope.services.ums;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.EnumSet;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.openqa.selenium.WebDriverException;
 
 import com.opera.core.systems.ScopeServices;
-
 import com.opera.core.systems.model.Canvas;
 import com.opera.core.systems.model.ColorResult;
-import com.opera.core.systems.scope.ExecCommand;
 import com.opera.core.systems.model.OperaColor;
 import com.opera.core.systems.model.ScreenShotReply;
 import com.opera.core.systems.scope.AbstractService;
+import com.opera.core.systems.scope.ExecCommand;
 import com.opera.core.systems.scope.internal.OperaColors;
 import com.opera.core.systems.scope.internal.OperaIntervals;
 import com.opera.core.systems.scope.internal.OperaMouseKeys;

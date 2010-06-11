@@ -1,14 +1,12 @@
 /* Copyright (C) 2009-2010 Opera Software ASA.  All rights reserved. */
 package com.opera.core.systems.scope.stp;
 
-import com.opera.core.systems.util.SocketListener;
-import com.opera.core.systems.util.SocketMonitor;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.net.*;
 import java.nio.ByteBuffer;
-import java.nio.channels.*;
-
+import java.nio.channels.SelectableChannel;
+import java.nio.channels.SelectionKey;
+import java.nio.channels.SocketChannel;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -25,6 +23,8 @@ import com.opera.core.systems.scope.protos.UmsProtos.Command;
 import com.opera.core.systems.scope.protos.UmsProtos.Error;
 import com.opera.core.systems.scope.protos.UmsProtos.Event;
 import com.opera.core.systems.scope.protos.UmsProtos.Response;
+import com.opera.core.systems.util.SocketListener;
+import com.opera.core.systems.util.SocketMonitor;
 
 public class StpConnection implements SocketListener {
 
@@ -48,15 +48,6 @@ public class StpConnection implements SocketListener {
     }
     private State state = State.SERVICELIST;
 
-    /**
-     * Sets the event handler and creates the event parsers
-     * @param eventHandler
-     */
-    private void setEventHandler(final AbstractEventHandler eventHandler) {
-        this.eventHandler = eventHandler;
-        stp1EventHandler = new UmsEventParser(eventHandler);
-    }
-
     private void setState(State state)
     {
         // logger.fine("Setting state: " + state.toString());
@@ -67,10 +58,6 @@ public class StpConnection implements SocketListener {
         if (socketChannel == null)
             return false;
         return true;
-    }
-
-    private ArrayBlockingQueue<ByteBuffer> getRequests() {
-        return requests;
     }
 
     @Override

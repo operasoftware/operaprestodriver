@@ -2,18 +2,16 @@ package com.opera.core.systems.scope.stp;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
-
+import java.nio.channels.SelectableChannel;
+import java.nio.channels.SelectionKey;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
-import java.nio.channels.SelectionKey;
-import java.nio.channels.SelectableChannel;
+import java.util.logging.Logger;
 
-import com.opera.core.systems.util.SocketMonitor;
-import com.opera.core.systems.util.SocketListener;
 import com.opera.core.systems.scope.handlers.AbstractEventHandler;
 import com.opera.core.systems.scope.handlers.IConnectionHandler;
-
-import java.util.logging.Logger;
+import com.opera.core.systems.util.SocketListener;
+import com.opera.core.systems.util.SocketMonitor;
 
 /**
  * This class handles accepting STP connections.
@@ -76,7 +74,7 @@ public class StpConnectionListener implements SocketListener {
         if (socket != null) {
             logger.fine("Accepted STP connection from " + socket.socket().getLocalAddress());
             socket.socket().setTcpNoDelay(true);
-            StpConnection con = new StpConnection(socket, handler, eventHandler);
+            new StpConnection(socket, handler, eventHandler);
         }
         return true;
     }

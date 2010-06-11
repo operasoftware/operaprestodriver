@@ -1,12 +1,16 @@
 package com.opera.core.systems.util;
 
-import java.util.Iterator;
 import java.io.IOException;
-import java.nio.channels.*;
+import java.nio.channels.CancelledKeyException;
+import java.nio.channels.ClosedChannelException;
+import java.nio.channels.SelectableChannel;
+import java.nio.channels.SelectionKey;
+import java.nio.channels.Selector;
 import java.nio.channels.spi.SelectorProvider;
-import java.util.logging.Logger;
-import java.util.logging.Level;
+import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * This will monitor any selectable channel, such as a SocketChannel or 
@@ -72,11 +76,14 @@ public class SocketMonitor {
     private LinkedList<SelectorChangeRequest> changes = new LinkedList<SelectorChangeRequest>();
 
     
-    public static SocketMonitor instance() { 
-        if (monitor == null)
-            monitor = new SocketMonitor();
-        return monitor;
-    }
+	public static SocketMonitor instance() {
+		synchronized (SocketMonitor.class) {
+			if (monitor == null)
+				monitor = new SocketMonitor();
+		}
+		return monitor;
+
+	}
     
     private SocketMonitor() {
         try {
@@ -159,13 +166,13 @@ public class SocketMonitor {
         while (iterator.hasNext()) {
             SelectionKey key = iterator.next();
             iterator.remove();
-
-            try {
-                processSelectionKey(key);
-            } catch (CancelledKeyException cke) {
-                    cke.printStackTrace();
-            } catch (IOException e) {
-                SelectableChannel channel = key.channel();
+			try {
+				processSelectionKey(key);
+			} catch (CancelledKeyException cke) {
+				cke.printStackTrace();
+			} catch (IOException e) {
+            	//what are you doing with the channel variable here?
+                //SelectableChannel channel = key.channel();
                 e.printStackTrace();
                 key.cancel();
             }
@@ -245,8 +252,8 @@ public class SocketMonitor {
         }
         
         // In case we did not trigger something we want to poll for
-        int not_triggered = (currentMask & ~triggerMask);
-        wantedMask |= not_triggered;
+        int notTriggered = (currentMask & ~triggerMask);
+        wantedMask |= notTriggered;
 
         // Update the selection mask, if it now differs
         if (wantedMask != currentMask)
@@ -264,21 +271,22 @@ public class SocketMonitor {
 
     private String debugMask(int mask)
     {
-        String str  = "{";
+    	StringBuilder builder = new StringBuilder();
+        builder.append("{");
         
         if ((mask & SelectionKey.OP_READ) == SelectionKey.OP_READ)
-            str += " READ";
+        	builder.append(" READ");
         
         if ((mask & SelectionKey.OP_WRITE) == SelectionKey.OP_WRITE)
-            str += " WRITE";
+        	builder.append(" WRITE");
 
         if ((mask & SelectionKey.OP_ACCEPT) == SelectionKey.OP_ACCEPT)
-            str += " ACCEPT";
+        	builder.append(" ACCEPT");
         
         if ((mask & SelectionKey.OP_CONNECT) == SelectionKey.OP_CONNECT)
-            str += " CONNECT";
+        	builder.append(" CONNECT");
 
-        str += " }";
-        return str;
+        builder.append("}");
+        return builder.toString();
     }
 }

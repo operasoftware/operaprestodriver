@@ -88,7 +88,7 @@ public class WindowManager extends AbstractService implements IWindowManager {
 		if(!OperaFlags.ENABLE_DIALOGS) {
 			if(window != null && window.getWindowType().equals("normal"))
 				activeWindowId.set(windowId);
-		} else activeWindowId.set(windowId);
+		} else activeWindowId.set(window.getWindowID());
 	}
 
 	public int getActiveWindowId() {

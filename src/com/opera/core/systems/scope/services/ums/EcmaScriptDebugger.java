@@ -6,8 +6,6 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.EnumSet;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -26,7 +24,6 @@ import com.opera.core.systems.ScopeServices;
 import com.opera.core.systems.model.ScriptResult;
 import com.opera.core.systems.scope.AbstractService;
 import com.opera.core.systems.scope.ESDebuggerCommand;
-import com.opera.core.systems.scope.beans.Runtime;
 import com.opera.core.systems.scope.protos.EsdbgProtos.Configuration;
 import com.opera.core.systems.scope.protos.EsdbgProtos.EvalData;
 import com.opera.core.systems.scope.protos.EsdbgProtos.EvalResult;
@@ -73,14 +70,6 @@ public class EcmaScriptDebugger extends AbstractService implements IEcmaScriptDe
 	
 	public void removeRuntime(int runtimeId) {
 		runtimesList.remove(runtimeId);
-	}
-	
-	public void addRuntime(Runtime runtime) {
-		throw new UnsupportedOperationException("Not suppported in STP/1");
-	}
-
-	public void setRuntime(Runtime runtime) {
-		throw new UnsupportedOperationException("Not suppported in STP/1");
 	}
 	
 
