@@ -222,7 +222,7 @@ public class ScopeServices implements IConnectionHandler {
         int openUrl(String url, long timeout)
         {
             if (connection == null)
-                throw new WebDriverException("Unable to open URL because Opera is not connected.");
+                throw new CommunicationException("Unable to open URL because Opera is not connected.");
 
             int windowId = windowManager.getActiveWindowId();
 

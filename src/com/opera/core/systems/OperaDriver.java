@@ -77,7 +77,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,FindsB
 	
 	private OperaBinary binary;
 	
-	protected OperaBinary getBinary() {
+	public OperaBinary getBinary() {
 		return binary;
 	}
 
