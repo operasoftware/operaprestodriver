@@ -158,10 +158,13 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,FindsB
 
             if(operaPath != null && operaPath.length() > 0) {
                 arguments = (operaArgs != null) ? operaArgs.split(",") : arguments;
-                binary = new OperaBinary(this, operaPath, arguments);
+                binary = new OperaBinary(operaPath, arguments);
             } else if(executableLocation != null) {
-                binary = new OperaBinary(this, executableLocation, arguments);
+                binary = new OperaBinary(executableLocation, arguments);
             }
+
+            binary.addListener(this);
+            binary.start();
         }
 	
 

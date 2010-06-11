@@ -23,25 +23,22 @@ public class OperaBinary extends Thread {
     private WinProcess winProcess;
     private OutputWatcher watcher;
     private Thread outputWatcherThread;
-    List<String> commands;
+    private List<String> commands = new ArrayList<String>();
     private static Logger logger = Logger.getLogger(OperaBinary.class.getName());
     private String processPath;
     private AtomicBoolean running = new AtomicBoolean(false);
-    private OperaBinaryListener listener;
+    private List<OperaBinaryListener> listeners = new ArrayList<OperaBinaryListener>();
 
-    public OperaBinary(OperaBinaryListener listener, String location, String... args) {
+    public OperaBinary(String location, String... args) {
         super(new ThreadGroup("run-process"), "opera");
         File file = new File(location);
         processPath = file.getAbsolutePath();
-        commands = new ArrayList<String>();
         commands.add(location);
-        this.listener = listener;
 
         if(args != null && args.length > 0) {
-                commands.addAll(Arrays.asList(args));
+            commands.addAll(Arrays.asList(args));
         }
         init();
-        start();
     }
 
     public void kill() {
@@ -62,7 +59,16 @@ public class OperaBinary extends Thread {
             kill();
         }
     }
-    
+
+    public void addListener(OperaBinaryListener listener) {
+        listeners.add(listener);
+    }
+
+    public void removeListener(OperaBinaryListener listener)
+    {
+        listeners.remove(listener);
+    }
+
     @Override
     protected void finalize() throws Throwable {
         kill();
@@ -130,7 +136,8 @@ public class OperaBinary extends Thread {
                 process.destroy();
             }
         }
-        if (listener != null)
+
+        for (OperaBinaryListener listener : listeners)
         {
             listener.BinaryStopped(exit);
         }
