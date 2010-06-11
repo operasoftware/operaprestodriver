@@ -162,6 +162,8 @@ public class SocketMonitor {
 
             try {
                 processSelectionKey(key);
+            } catch (CancelledKeyException cke) {
+                    cke.printStackTrace();
             } catch (IOException e) {
                 SelectableChannel channel = key.channel();
                 e.printStackTrace();
