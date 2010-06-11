@@ -60,26 +60,14 @@ public class WindowManager extends AbstractService implements IWindowManager {
 		return lastHttpResponseCode;
 	}
 	
+        @Deprecated
 	public CountDownLatch getWindowClosedLatch() {
 		return windowClosedLatch;
 	}
 
+        @Deprecated
 	public void setWindowClosedLatch(CountDownLatch windowClosedLatch) {
 		this.windowClosedLatch = windowClosedLatch;
-	}
-	
-	/* (non-Javadoc)
-	 * @see com.opera.core.systems.scope.services.xml.IWindowManager#getLoadCompleteLatch()
-	 */
-	public CountDownLatch getLoadCompleteLatch() {
-		return loadCompleteLatch;
-	}
-
-	/* (non-Javadoc)
-	 * @see com.opera.core.systems.scope.services.xml.IWindowManager#setLoadCompleteLatch(java.util.concurrent.CountDownLatch)
-	 */
-	public void setLoadCompleteLatch(CountDownLatch loadCompleteLatch) {
-		this.loadCompleteLatch = loadCompleteLatch;
 	}
 	
 	/*
@@ -265,27 +253,8 @@ public class WindowManager extends AbstractService implements IWindowManager {
 			throw new NoSuchWindowException("No such window : " + windowName);
 		activeWindowId.set(windowId);
 	}
-
-
-	/* (non-Javadoc)
-	 * @see com.opera.core.systems.scope.services.xml.IWindowManager#waitForWindowLoaded()
-	 */
-	public void waitForWindowLoaded(long timeout) {
-		boolean pageLoaded;
-		try {
-			pageLoaded = loadCompleteLatch.await(timeout, TimeUnit.MILLISECONDS);
-		} catch (InterruptedException e) {
-			throw new WebDriverException("Exception while waiting for page load : " + e.getMessage());
-		}
-		if(!pageLoaded)
-			throw new WindowLoadedException("Page load timeout");
-	}
 	
-	public void waitForWindowLoaded() {
-		waitForWindowLoaded(OperaIntervals.PAGE_LOAD_TIMEOUT.getValue());
-	}
-	
-	
+        @Deprecated
 	public void waitForWindowClosed() {
 		try {
 			windowClosedLatch.await(OperaIntervals.PAGE_LOAD_TIMEOUT.getValue(), TimeUnit.MILLISECONDS);
@@ -298,10 +267,10 @@ public class WindowManager extends AbstractService implements IWindowManager {
 	 * @see com.opera.core.systems.scope.services.xml.IWindowManager#getWindowHandles()
 	 */
 	public Set<String> getWindowHandles() {
-		Collection<WindowInfo> windows = getWindows().values();
+		Collection<WindowInfo> windowCollection = getWindows().values();
 		Set<String> handles = new HashSet<String>();
 		
-		for (WindowInfo window : windows) {
+		for (WindowInfo window : windowCollection) {
 			handles.add(window.getTitle().toString());
 		}
 		return handles;

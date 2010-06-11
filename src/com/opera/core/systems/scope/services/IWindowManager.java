@@ -4,8 +4,6 @@ import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.openqa.selenium.WebDriverException;
-
 public interface IWindowManager {
 
 	/**
@@ -46,12 +44,6 @@ public interface IWindowManager {
 	void updateActiveWindow();
 
 	void setActiveWindow(String windowName);
-
-        @Deprecated
-	CountDownLatch getLoadCompleteLatch();
-
-        @Deprecated
-	void setLoadCompleteLatch(CountDownLatch loadCompleteLatch);
 	
         @Deprecated
 	CountDownLatch getWindowClosedLatch();
@@ -59,10 +51,7 @@ public interface IWindowManager {
         @Deprecated
 	void setWindowClosedLatch(CountDownLatch windowClosedLatch);
 
-	void waitForWindowLoaded();
-	
-	void waitForWindowLoaded(long timeout);
-	
+        @Deprecated
 	void waitForWindowClosed();
 
 	Set<String> getWindowHandles();

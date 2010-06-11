@@ -4,7 +4,6 @@ import java.util.Set;
 
 import com.opera.core.systems.model.Canvas;
 import com.opera.core.systems.model.ScreenShotReply;
-import com.opera.core.systems.scope.beans.Area;
 import com.opera.core.systems.scope.internal.OperaColors;
 import com.opera.core.systems.scope.internal.OperaMouseKeys;
 
