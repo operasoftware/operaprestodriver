@@ -143,8 +143,7 @@ public class OperaBinary extends Thread {
     }
 
 
-    private static class OutputWatcher implements Runnable {
-        private AtomicBoolean running = new AtomicBoolean(true);
+    private class OutputWatcher implements Runnable {
         private Process process;
         private WinProcess winProcess;
 
