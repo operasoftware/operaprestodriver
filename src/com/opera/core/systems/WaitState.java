@@ -10,6 +10,9 @@ import com.opera.core.systems.scope.exceptions.ResponseNotReceivedException;
 import com.opera.core.systems.scope.protos.UmsProtos.Response;
 
 /**
+ * This class handles a queue of events to be handled from multiple threads.
+ * One thread can wait for events to happen while other threads can post
+ * these events by calling the on{Event} handlers.
  *
  * @author Jan Vidar Krey (janv@opera.com)
  */
@@ -113,7 +116,6 @@ public class WaitState {
 
     void onError(int tag)
     {
-
         synchronized (lock)
         {
             logger.info("Got ERROR for " + tag);
@@ -176,71 +178,68 @@ public class WaitState {
     private final ResultItem pollResultItem(long timeout) {
     	ResultItem result = getResult();
 
-		if (result == null) {
-			internalWait(timeout);
-			result = getResult();
-		}
+        if (result == null) {
+                internalWait(timeout);
+                result = getResult();
+        }
 
-		if (result == null)
-			throw new ResponseNotReceivedException("No response in a timely fashion.");
-		
-		return result;
+        if (result == null)
+                throw new ResponseNotReceivedException("No response in a timely fashion.");
+
+        return result;
     }
     
-	private final Response waitAndParseResult(long timeout, int match, final ResponseType type) {
-		{
-			synchronized (lock) {
-				while (true) {
-					ResultItem result = pollResultItem(timeout);
-					
-					WaitResult waitResult = result.waitResult;
+    private final Response waitAndParseResult(long timeout, int match, final ResponseType type) {
+        synchronized (lock) {
+            while (true) {
+                ResultItem result = pollResultItem(timeout);
+                WaitResult waitResult = result.waitResult;
 
-					switch (waitResult) {
-					case HANDSHAKE:
-						if (type == ResponseType.HANDSHAKE)
-							return null;
-						break;
+                switch (waitResult) {
+                    case HANDSHAKE:
+                        if (type == ResponseType.HANDSHAKE)
+                                return null;
+                        break;
 
-					case RESPONSE:
-						if (result.data == match && type == ResponseType.RESPONSE)
-							return result.response;
-                                                else if (type == ResponseType.HANDSHAKE)
-                                                    throw new CommunicationException("Expecting handshake");
-						break;
+                    case RESPONSE:
+                        if (result.data == match && type == ResponseType.RESPONSE)
+                                return result.response;
+                        else if (type == ResponseType.HANDSHAKE)
+                            throw new CommunicationException("Expecting handshake");
+                        break;
 
-					case ERROR:
-						if (result.data == match && type == ResponseType.RESPONSE)
-							return null;
-                                                else if (type == ResponseType.HANDSHAKE)
-                                                    throw new CommunicationException("Expecting handshake");
-						break;
+                    case ERROR:
+                        if (result.data == match && type == ResponseType.RESPONSE)
+                                return null;
+                        else if (type == ResponseType.HANDSHAKE)
+                            throw new CommunicationException("Expecting handshake");
+                        break;
 
-					case EXCEPTION:
-						throw result.exception;
+                    case EXCEPTION:
+                        throw result.exception;
 
-					case DISCONNECTED:
-					case BINARY_EXIT:
-						throw new CommunicationException( "Problem encountered : " + waitResult.toString());
+                    case DISCONNECTED:
+                    case BINARY_EXIT:
+                        throw new CommunicationException( "Problem encountered : " + waitResult.toString());
 
-					case EVENT_WINDOW_LOADED:
-						if (result.data == match && type == ResponseType.WINDOW_LOADED)
-							return null;
-						break;
-					}
-				}
-			}
-		}
-	}
+                    case EVENT_WINDOW_LOADED:
+                        if (result.data == match && type == ResponseType.WINDOW_LOADED)
+                                return null;
+                        break;
+                }
+            }
+        }
+    }
 
-	public void waitForHandshake(long value) {
-		waitAndParseResult(value, 0, ResponseType.HANDSHAKE);
-	}
+    public void waitForHandshake(long value) {
+        waitAndParseResult(value, 0, ResponseType.HANDSHAKE);
+    }
 
-	public void waitForWindowLoaded(int windowId, long timeout) {
-		waitAndParseResult(timeout, windowId, ResponseType.WINDOW_LOADED);
-	}
+    public void waitForWindowLoaded(int windowId, long timeout) {
+        waitAndParseResult(timeout, windowId, ResponseType.WINDOW_LOADED);
+    }
 
-	public Response waitFor(int tag, long timeout) {
-		return waitAndParseResult(timeout, tag, ResponseType.RESPONSE);
-	}
+    public Response waitFor(int tag, long timeout) {
+        return waitAndParseResult(timeout, tag, ResponseType.RESPONSE);
+    }
 }
