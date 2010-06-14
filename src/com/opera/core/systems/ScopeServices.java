@@ -229,7 +229,6 @@ public class ScopeServices implements IConnectionHandler {
             actionHandler.get(url);
             waitState.waitForWindowLoaded(windowId, timeout);
             int ret = windowManager.getLastHttpResponseCode().getAndSet(0);
-            System.out.println("openURL => " + ret);
             return ret;
         }
 
