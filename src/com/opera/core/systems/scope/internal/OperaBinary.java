@@ -184,20 +184,4 @@ public class OperaBinary extends Thread {
             }
         }
     }
-
-    /*
-     * Some test code for how to use the API.
-     */
-    /*
-    public static void main(String[] args)
-    {
-        OperaBinary binary = new OperaBinary(null, "/home/janv/crashme", "www.ikke.no");
-        try
-        {
-            binary.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-    */
 }
