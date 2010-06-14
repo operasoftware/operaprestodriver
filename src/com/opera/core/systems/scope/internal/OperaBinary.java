@@ -159,7 +159,7 @@ public class OperaBinary extends Thread {
                 try {
                     if(stream.read() == -1) return;
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    /* ignored */
                 }
             }
         }
