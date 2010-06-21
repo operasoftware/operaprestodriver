@@ -29,7 +29,6 @@ import com.opera.core.systems.scope.services.IWindowManager;
 import com.opera.core.systems.scope.services.ums.UmsServices;
 import com.opera.core.systems.scope.stp.StpThread;
 import com.opera.core.systems.scope.stp.StpConnection;
-import com.opera.core.systems.scope.internal.OperaBinary;
 
 import com.opera.core.systems.scope.handlers.PbActionHandler;
 import com.opera.core.systems.scope.protos.UmsProtos.Command;
@@ -47,7 +46,6 @@ public class ScopeServices implements IConnectionHandler {
 	private ScopeActions actionHandler;
 	private Map<String, String> versions;
 	private List<IConsoleListener> listeners;
-	private OperaBinary opera;
 
 	private WaitState waitState = new WaitState();
 	private StpConnection connection = null;
@@ -112,9 +110,8 @@ public class ScopeServices implements IConnectionHandler {
             stpThread = new StpThread((int)OperaIntervals.SERVER_PORT.getValue(), this, new UmsEventHandler(this));
         }
         
-        public void init(OperaBinary binary) throws WebDriverException
+        public void init() throws WebDriverException
         {
-            this.opera = binary;
             waitForHandshake();
             
             boolean enableDebugger = (OperaIntervals.ENABLE_DEBUGGER.getValue() != 0);
@@ -156,13 +153,8 @@ public class ScopeServices implements IConnectionHandler {
             } catch (InterruptedException ex) {
                 // ignored.
             }
-
-            if (opera != null)
-            {
-                opera.shutdown();
-                opera = null;
-            }
         }
+
         private void waitForHandshake() throws WebDriverException
         {
             try {
@@ -244,11 +236,6 @@ public class ScopeServices implements IConnectionHandler {
             }
 
             shutdown();
-            
-            if (opera != null)
-            {
-                opera.shutdown();
-            }
         }
 
         public boolean onConnected(StpConnection con)
@@ -327,7 +314,6 @@ public class ScopeServices implements IConnectionHandler {
                     waitState.onBinaryExit(exitValue);
                 }
             }
-            opera = null;
         }
 
         public boolean isConnected()

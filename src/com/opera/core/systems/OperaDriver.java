@@ -58,29 +58,20 @@ import com.opera.core.systems.model.ScopeActions;
 import com.opera.core.systems.model.ScreenShotReply;
 import com.opera.core.systems.model.ScriptResult;
 import com.opera.core.systems.model.UserInteraction;
-import com.opera.core.systems.scope.internal.OperaBinary;
-import com.opera.core.systems.scope.internal.OperaBinaryListener;
 import com.opera.core.systems.scope.internal.OperaIntervals;
 import com.opera.core.systems.scope.services.IEcmaScriptDebugger;
 import com.opera.core.systems.scope.services.IOperaExec;
 import com.opera.core.systems.scope.services.IWindowManager;
 
 public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,FindsByXPath, FindsByName, FindsByTagName, FindsByClassName,
-		FindsByCssSelector, SearchContext, JavascriptExecutor, OperaBinaryListener {
+		FindsByCssSelector, SearchContext, JavascriptExecutor {
         private final Logger logger = Logger.getLogger(this.getClass().getName());
         private IEcmaScriptDebugger debugger;
 	private IOperaExec exec;
 	private IWindowManager windowManager;
 	private ScopeServices services;
-
 	protected ScopeActions actionHandler;
 	
-	private OperaBinary binary;
-	
-	public OperaBinary getBinary() {
-		return binary;
-	}
-
 	protected IEcmaScriptDebugger getScriptDebugger() {
 		return debugger;
 	}
@@ -99,44 +90,22 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,FindsB
 
 	// TODO
 	// Profiling
-	public OperaDriver()  throws WebDriverException {
-            createScopeServices();
-
-            services.init(null);
-
-            debugger = services.getDebugger();
-            windowManager = services.getWindowManager();
-            exec = services.getExec();
-            actionHandler = services.getActionHandler();
-	}
+	public OperaDriver() throws WebDriverException {
+            init();
+        }
 	
-	/**
-	 * Creates an OperaDriver instance, creates an instance of 
-	 * ScopeServices (common point for managing services) and creates
-	 * the required services (such as exec, window manager and ecmascript-debugger).
-	 * ScopeServices is also the event handler for scope events, and we need to
-	 * initialize window-manager and set filters to be able to use ecmascript debugger
-	 * (To skip that you can just set filter to *).
-	 * This build of driver supports both Core 2.3 and 2.4+
-	 * @param executableLocation The exact location of where Opera binary is located
-	 * @param arguments Arguments to pass for execution
-	 */
-	public OperaDriver(String executableLocation, String... arguments) throws WebDriverException {
-
-            // Start STP thread and listen for incoming connections.
+        /**
+         * For testing override this method.
+         */
+        protected void init() throws WebDriverException
+        {
             createScopeServices();
-            
-            // Start the Opera binary
-            startBinary(executableLocation, arguments);
-
-            // Wait for Opera to connect to the services.
-            services.init(binary);
-
+            services.init();
             debugger = services.getDebugger();
             windowManager = services.getWindowManager();
             exec = services.getExec();
             actionHandler = services.getActionHandler();
-	}
+        }
 
         private void createScopeServices() throws WebDriverException
         {
@@ -151,23 +120,6 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,FindsB
                 throw new WebDriverException(e);
             }
         }
-
-        private void startBinary(String executableLocation, String... arguments) throws WebDriverException
-        {
-            String operaPath = System.getenv().get("OPERA_PATH");
-            String operaArgs = System.getenv().get("OPERA_ARGS");
-
-            if(operaPath != null && operaPath.length() > 0) {
-                arguments = (operaArgs != null) ? operaArgs.split(",") : arguments;
-                binary = new OperaBinary(operaPath, arguments);
-            } else if(executableLocation != null) {
-                binary = new OperaBinary(executableLocation, arguments);
-            }
-
-            binary.addListener(this);
-            binary.start();
-        }
-	
 
 	public void get(String url) {
             get(url, OperaIntervals.PAGE_LOAD_TIMEOUT.getValue());
@@ -779,20 +731,6 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,FindsB
 	
 	public void mouseEvent(int x, int y, int value) {
             exec.mouseAction(x, y, value, 1);
-	}
-	
-	public int getPid() {
-            if(binary != null) {
-                    return binary.getPid();
-            }
-            return 0;
-	}
-	
-	public String getPath() {
-            if(binary != null) {
-                return binary.getProcessPath();
-            } else
-                throw new UnsupportedOperationException("Opera was not started by webdriver, path can not be retrieved");
 	}
 	
 	public void addConsoleListener(IConsoleListener listener) {
