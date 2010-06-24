@@ -11,6 +11,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.Stack;
 
 import org.apache.commons.jxpath.CompiledExpression;
 import org.apache.commons.jxpath.JXPathContext;
@@ -22,7 +23,6 @@ import com.opera.core.systems.ScopeServices;
 import com.opera.core.systems.scope.AbstractService;
 import com.opera.core.systems.scope.WindowManagerCommand;
 import com.opera.core.systems.scope.exceptions.WindowNotFoundException;
-import com.opera.core.systems.scope.internal.OperaFlags;
 import com.opera.core.systems.scope.internal.OperaIntervals;
 import com.opera.core.systems.scope.protos.UmsProtos.Response;
 import com.opera.core.systems.scope.protos.WmProtos.WindowFilter;
@@ -40,13 +40,12 @@ import com.opera.core.systems.util.VersionUtil;
  */
 public class WindowManager extends AbstractService implements IWindowManager {
 
-	//TODO add support for dialogs
-	//TODO allow switching windows
-	private final AtomicInteger activeWindowId = new AtomicInteger();
+        private Map<Integer, WindowInfo> windows = new ConcurrentHashMap<Integer, WindowInfo>();
+        private Stack<Integer> windowStack = new Stack<Integer>();
+        private Object lock = new Object(); // lock for the windowStack. Note windowStack and windows need to be in sync.
 
 	private final CompiledExpression windowFinder;
 	
-	private Map<Integer, WindowInfo> windows = new ConcurrentHashMap<Integer, WindowInfo>();
 	
 	protected CountDownLatch loadCompleteLatch = new CountDownLatch(1);
 	protected CountDownLatch windowClosedLatch = new CountDownLatch(1);
@@ -82,31 +81,58 @@ public class WindowManager extends AbstractService implements IWindowManager {
 	}
     
 	public void setActiveWindowId(int windowId) {
-		//FIXME we wont be switching windows automatically, user must
-		//explicitly call switchTo()
-		WindowInfo window = windows.get(windowId);
-		if(!OperaFlags.ENABLE_DIALOGS) {
-			if(window != null && window.getWindowType().equals("normal"))
-				activeWindowId.set(windowId);
-		} else activeWindowId.set(window.getWindowID());
+            synchronized (lock)
+            {
+                WindowInfo window = windows.get(windowId);
+                if (window == null)
+                    throw new WindowNotFoundException("Window not found: " + windowId);
+
+                windowStack.remove(new Integer(windowId));
+                windowStack.push(windowId);
+            }
 	}
 
 	public int getActiveWindowId() {
-		return activeWindowId.get();
+            synchronized (lock)
+            {
+                if (windowStack.isEmpty())
+                    throw new WindowNotFoundException("No windows open!");
+                return windowStack.peek();
+            }
 	}
-	
+
 	public Map<Integer, WindowInfo> getWindows() {
 		return windows;
 	}
 
 	public void addWindow(Object object) {
-		WindowInfo info = (WindowInfo) object;
-		windows.put(info.getWindowID(), info);
+            synchronized (lock)
+            {
+                WindowInfo info = (WindowInfo) object;
+
+                if (!windows.containsKey(info.getWindowID()))
+                {
+                    windows.put(info.getWindowID(), info);
+                    windowStack.push(info.getWindowID());
+                }
+                else
+                {
+                    updateWindow(info);
+                }
+            }
 	}
+
+        private void updateWindow(WindowInfo info)
+        {
+            windows.put(info.getWindowID(), info);
+        }
 	
 
 	public void removeWindow(int windowId) {
+            synchronized (lock) {
+                windowStack.remove(new Integer(windowId));
 		windows.remove(windowId);
+            }
 	}
 	
 	public void init() {
@@ -120,7 +146,7 @@ public class WindowManager extends AbstractService implements IWindowManager {
 		
 		JXPathContext pathContext = JXPathContext.newContext(windows.values());
 		
-		WindowInfo window = windows.get(activeWindowId.get());
+		WindowInfo window = windows.get(windowStack.peek());
 		
 		if (window == null || !window.getWindowType().equals("normal")) {
 			// we dont deal with anything else, at least for now
@@ -133,7 +159,7 @@ public class WindowManager extends AbstractService implements IWindowManager {
 			Integer windowId = (Integer) windowFinder.getValue(pathContext);
 
 			if (windowId != null) {
-				activeWindowId.set(windowId);
+                            setActiveWindowId(windowId);
 			} else {
 				throw new WindowNotFoundException("No window is available for driving");
 			}
@@ -142,16 +168,17 @@ public class WindowManager extends AbstractService implements IWindowManager {
 
 	}
 
-	
+	// NOTE: This is proven to be not working on Opera side...
 	private WindowID findActiveWindow() {
-		Response response = executeCommand(WindowManagerCommand.GET_ACTIVE_WINDOW, null);
-		WindowID.Builder builder = WindowID.newBuilder();
-		buildPayload(response, builder);
-		return builder.build();
+            Response response = executeCommand(WindowManagerCommand.GET_ACTIVE_WINDOW, null);
+            WindowID.Builder builder = WindowID.newBuilder();
+            buildPayload(response, builder);
+            return builder.build();
 	}
 	
 	public void updateActiveWindow(){
-		setActiveWindowId(findActiveWindow().getWindowID());
+                int activeWindow = findActiveWindow().getWindowID();
+		setActiveWindowId(activeWindow);
 	}
 	
 	/**
@@ -200,7 +227,7 @@ public class WindowManager extends AbstractService implements IWindowManager {
 		Integer windowId = (Integer) xpathPointer(windows.values(), "/.[title='" + windowName + "']/windowID").getValue(); 
 		if(windowId == null)
 			throw new NoSuchWindowException("No such window : " + windowName);
-		activeWindowId.set(windowId);
+                setActiveWindowId(windowId);
 	}
 	
         @Deprecated

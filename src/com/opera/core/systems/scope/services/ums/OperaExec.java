@@ -141,7 +141,6 @@ public class OperaExec extends AbstractService implements IOperaExec {
 		}
 		
 		if(!excludedActions.contains(using)) {
-			services.getWindowManager().updateActiveWindow();
 			actionBuilder.setWindowID(services.getWindowManager().getActiveWindowId());
 		}
 		
