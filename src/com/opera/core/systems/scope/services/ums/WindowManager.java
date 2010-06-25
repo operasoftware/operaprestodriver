@@ -8,10 +8,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.Stack;
+import java.util.LinkedList;
+import java.util.logging.Logger;
 
 import org.apache.commons.jxpath.CompiledExpression;
 import org.apache.commons.jxpath.JXPathContext;
@@ -19,11 +19,9 @@ import org.openqa.selenium.NoSuchWindowException;
 import org.openqa.selenium.WebDriverException;
 
 import com.opera.core.systems.ScopeServices;
-
 import com.opera.core.systems.scope.AbstractService;
 import com.opera.core.systems.scope.WindowManagerCommand;
 import com.opera.core.systems.scope.exceptions.WindowNotFoundException;
-import com.opera.core.systems.scope.internal.OperaIntervals;
 import com.opera.core.systems.scope.protos.UmsProtos.Response;
 import com.opera.core.systems.scope.protos.WmProtos.WindowFilter;
 import com.opera.core.systems.scope.protos.WmProtos.WindowID;
@@ -40,32 +38,18 @@ import com.opera.core.systems.util.VersionUtil;
  */
 public class WindowManager extends AbstractService implements IWindowManager {
 
+        private final Logger logger = Logger.getLogger(this.getClass().getName());
         private Map<Integer, WindowInfo> windows = new ConcurrentHashMap<Integer, WindowInfo>();
         private Stack<Integer> windowStack = new Stack<Integer>();
         private Object lock = new Object(); // lock for the windowStack. Note windowStack and windows need to be in sync.
 
 	private final CompiledExpression windowFinder;
 	
-	
-	protected CountDownLatch loadCompleteLatch = new CountDownLatch(1);
-	protected CountDownLatch windowClosedLatch = new CountDownLatch(1);
-	
 	private final AtomicInteger lastHttpResponseCode = new AtomicInteger();
 	
 	public AtomicInteger getLastHttpResponseCode() {
 		return lastHttpResponseCode;
 	}
-	
-        @Deprecated
-	public CountDownLatch getWindowClosedLatch() {
-		return windowClosedLatch;
-	}
-
-        @Deprecated
-	public void setWindowClosedLatch(CountDownLatch windowClosedLatch) {
-		this.windowClosedLatch = windowClosedLatch;
-	}
-	
 
     public WindowManager(ScopeServices services, String serviceName, String version) {
 		super(services, serviceName, version);
@@ -128,10 +112,14 @@ public class WindowManager extends AbstractService implements IWindowManager {
         }
 	
 
-	public void removeWindow(int windowId) {
+	public void removeWindow(int id) {
             synchronized (lock) {
-                windowStack.remove(new Integer(windowId));
-		windows.remove(windowId);
+                Integer windowId = new Integer(id);
+                if  (windowStack.contains(windowId))
+                    windowStack.remove(new Integer(windowId));
+
+                if (windows.containsKey(windowId))
+                    windows.remove(windowId);
             }
 	}
 	
@@ -229,16 +217,56 @@ public class WindowManager extends AbstractService implements IWindowManager {
 			throw new NoSuchWindowException("No such window : " + windowName);
                 setActiveWindowId(windowId);
 	}
-	
-        @Deprecated
-	public void waitForWindowClosed() {
-		try {
-			windowClosedLatch.await(OperaIntervals.PAGE_LOAD_TIMEOUT.getValue(), TimeUnit.MILLISECONDS);
-		} catch (InterruptedException e) {
-			//ignore
-		}
-	}
-	
+
+        public void closeActiveWindow()
+        {
+            synchronized (lock) {
+                if (!windowStack.isEmpty()) {
+                    Integer windowId = windowStack.pop();
+                    windowStack.remove(windowId);
+                    windows.remove(windowId);
+                }
+            }
+
+            logger.fine("closeActiveWindow");
+            services.getExec().action("Close page");
+        }
+
+        public void closeWindow(Integer windowId) {
+            // TODO: WindowManager 2.1 has a close window command
+            services.getExec().action("Close page", Integer.toString(windowId));
+            removeWindow(windowId);
+        }
+
+        public void closeAllWindows() {
+            logger.fine("closeAllWindows");
+            LinkedList<Integer> list = new LinkedList<Integer>();
+            boolean canCloseAll = services.getExec().getActionList().contains("Close all pages");
+
+            synchronized (lock) {
+                if (!canCloseAll) {
+                    while (!windowStack.isEmpty()) {
+                        Integer windowId = windowStack.peek();
+                        list.add(windowId);
+                        windowStack.remove(windowId);
+                        windows.remove(windowId);
+                    }
+                }
+            }
+
+            if (canCloseAll) {
+                services.getExec().action("Close all pages");
+            } else {
+                while (!list.isEmpty())
+                {
+                    Integer windowId = list.removeFirst();
+                    logger.fine("closeWindow " + windowId);
+                    // TODO: WindowManager 2.1 has a close window command
+                    services.getExec().action("Close page");
+                }
+            }
+        }
+
 	/* (non-Javadoc)
 	 * @see com.opera.core.systems.scope.services.xml.IWindowManager#getWindowHandles()
 	 */
@@ -255,14 +283,4 @@ public class WindowManager extends AbstractService implements IWindowManager {
 	public void resetWindowsList() {
 		initializeWindows();
 	}
-
-	public boolean canPingHost() {
-		try {
-			WindowID id = findActiveWindow();
-			return (id != null);
-		} catch (WebDriverException e) {
-			return false;
-		}
-	}
-
 }

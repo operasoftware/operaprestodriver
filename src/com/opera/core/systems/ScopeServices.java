@@ -260,7 +260,13 @@ public class ScopeServices implements IConnectionHandler {
             logger.info("Window loaded: windowId=" + id);
             waitState.onWindowLoaded(id);
         }
-        
+
+        public void onWindowClosed(int id)
+        {
+            logger.info("Window closed: windowId=" + id);
+            waitState.onWindowClosed(id);
+        }
+
         public void onHandshake(boolean stp1)
         {
             logger.info("Got Stp handshake!");

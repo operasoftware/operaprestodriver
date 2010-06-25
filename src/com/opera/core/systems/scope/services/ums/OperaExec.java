@@ -10,6 +10,7 @@ import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.openqa.selenium.WebDriverException;
+import com.opera.core.systems.scope.exceptions.WindowNotFoundException;
 
 import com.opera.core.systems.ScopeServices;
 import com.opera.core.systems.model.Canvas;
@@ -141,7 +142,10 @@ public class OperaExec extends AbstractService implements IOperaExec {
 		}
 		
 		if(!excludedActions.contains(using)) {
+                    try {
 			actionBuilder.setWindowID(services.getWindowManager().getActiveWindowId());
+                    } catch (WindowNotFoundException e) {
+                    }
 		}
 		
 		//type.setSpace("preserve");

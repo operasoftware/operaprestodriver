@@ -21,6 +21,10 @@ public interface IWindowManager {
 	
 	void filterActiveWindow();
 
+        void closeWindow(Integer window);
+        void closeActiveWindow();
+        void closeAllWindows();
+
 	/**
 	 * Get the list of all windows, then find a driver window (which needs to be 'normal' window)
 	 * after that set the active window to that window
@@ -45,15 +49,6 @@ public interface IWindowManager {
 
 	void setActiveWindow(String windowName);
 	
-        @Deprecated
-	CountDownLatch getWindowClosedLatch();
-
-        @Deprecated
-	void setWindowClosedLatch(CountDownLatch windowClosedLatch);
-
-        @Deprecated
-	void waitForWindowClosed();
-
 	Set<String> getWindowHandles();
 	
 	int getOpenWindowCount();
@@ -61,8 +56,4 @@ public interface IWindowManager {
 	AtomicInteger getLastHttpResponseCode();
 
 	void resetWindowsList();
-	
-	//FIXME ugly hack for ping
-	
-	boolean canPingHost();
 }

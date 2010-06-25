@@ -212,25 +212,11 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,FindsB
 	
 	public void closeAll() {
             logger.fine("closeAll");
-		if(exec.getActionList().contains("Close all pages")) {
-			exec.action("Close all pages");
-		} else {
-			windowManager.resetWindowsList();
-			int openWindows = windowManager.getOpenWindowCount();
-			for (int i = 0; i < openWindows; i++) {
-				closeWindow();
-			}
-		}
-		//clean all window instances
-		windowManager.resetWindowsList();
-		windowManager.findDriverWindow();
+            windowManager.closeAllWindows();
 	}
 	
 	private void closeWindow() {
-            logger.fine("closeWindow");
-		windowManager.setWindowClosedLatch(new CountDownLatch(1));
-		exec.action("Close page");
-		windowManager.waitForWindowClosed();
+            windowManager.closeActiveWindow();
 	}
 
 	public void stop() {

@@ -30,6 +30,7 @@ public class WaitState {
         BINARY_EXIT,    /* Opera binary crashed. */
         HANDSHAKE,       /* STP Handshake */
         EVENT_WINDOW_LOADED, /* finished loaded */
+        EVENT_WINDOW_CLOSED, /* window closed */
     }
 
     private class ResultItem
@@ -167,6 +168,16 @@ public class WaitState {
         }
     }
 
+    void onWindowClosed(int windowId)
+    {
+        synchronized (lock)
+        {
+            logger.info("Event: onWindowClosed");
+            events.add(new ResultItem(WaitResult.EVENT_WINDOW_CLOSED, windowId));
+            lock.notify();
+        }
+    }
+
     private ResultItem getResult()
     {
         if (events.isEmpty())
@@ -225,6 +236,11 @@ public class WaitState {
                     case EVENT_WINDOW_LOADED:
                         if (result.data == match && type == ResponseType.WINDOW_LOADED)
                                 return null;
+                        break;
+
+                    case EVENT_WINDOW_CLOSED:
+                        if (result.data == match && type == ResponseType.WINDOW_LOADED)
+                                throw new CommunicationException("Window closed unexpectedly");
                         break;
                 }
             }

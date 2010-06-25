@@ -41,9 +41,9 @@ public class EventHandler extends AbstractEventHandler {
 	 * list and removes the runtimes that are associated with it
 	 */
 	public void onWindowClosed(Integer id) {
+                services.onWindowClosed(id);
 		services.getWindowManager().removeWindow(id);
 		services.getDebugger().cleanUpRuntimes(id);
-		services.getWindowManager().getWindowClosedLatch().countDown();
 	}
 
         /**
@@ -72,5 +72,4 @@ public class EventHandler extends AbstractEventHandler {
 	public void onHttpResponse(int responseCode) {
 		services.getWindowManager().getLastHttpResponseCode().compareAndSet(0, responseCode);
 	}
-
 }
