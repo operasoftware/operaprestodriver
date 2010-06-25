@@ -17,7 +17,8 @@ public enum OperaIntervals {
 	SERVER_PORT(7001),
 	ENABLE_DEBUGGER(1),
         KILL_GRACE_TIMEOUT(1000),
-	BACKWARDS_COMPATIBLE(1);
+	BACKWARDS_COMPATIBLE(1),
+        DEFAULT_RESPONSE_TIMEOUT(10000);
 	
 	private long value;
 	

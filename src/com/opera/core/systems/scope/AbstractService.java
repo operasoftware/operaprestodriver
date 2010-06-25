@@ -18,6 +18,7 @@ import com.google.protobuf.AbstractMessage.Builder;
 import com.opera.core.systems.ScopeServices;
 import com.opera.core.systems.model.ICommand;
 import com.opera.core.systems.scope.protos.UmsProtos.Response;
+import com.opera.core.systems.scope.internal.OperaIntervals;
 
 /**
  * All scope services derive from this base class for generic operations
@@ -45,7 +46,7 @@ public abstract class AbstractService {
 
 	
 	public Response executeCommand(ICommand command, Builder<?> builder) {
-		return services.executeCommand(command, builder);
+		return executeCommand(command, builder, OperaIntervals.DEFAULT_RESPONSE_TIMEOUT.getValue());
 	}
 	
 	public Response executeCommand(ICommand command, Builder<?> builder, long timeout) {

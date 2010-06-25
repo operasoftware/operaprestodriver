@@ -133,8 +133,11 @@ public class WindowManager extends AbstractService implements IWindowManager {
 		updateActiveWindow();
 		
 		JXPathContext pathContext = JXPathContext.newContext(windows.values());
-		
-		WindowInfo window = windows.get(windowStack.peek());
+		WindowInfo window = null;
+
+                synchronized (lock) {
+                    window = windows.get(windowStack.peek());
+                }
 		
 		if (window == null || !window.getWindowType().equals("normal")) {
 			// we dont deal with anything else, at least for now
