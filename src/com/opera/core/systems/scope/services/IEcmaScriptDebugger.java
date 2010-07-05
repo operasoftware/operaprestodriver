@@ -2,6 +2,7 @@ package com.opera.core.systems.scope.services;
 
 import java.util.List;
 
+import com.opera.core.systems.scope.protos.EcmascriptProtos.ReadyStateChange;
 import com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeInfo;
 
 public interface IEcmaScriptDebugger {
@@ -142,4 +143,17 @@ public interface IEcmaScriptDebugger {
 	  * in cases where runtimes go out of sync
 	  */
 	 void resetRuntimesList();
+
+	 /**
+	  * Triggered on the ecmascript service when the state of a
+	  * runtime changes
+	  * @param a {@link ReadyStateChange} object with runtime info
+	  */
+	 void readyStateChanged(ReadyStateChange change);
+	 
+	 /**
+	  * Releases a specific object
+	  * @param objectId of the object to be released
+	  */
+	 void releaseObject(int objectId);
 }
