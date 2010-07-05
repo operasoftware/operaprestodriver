@@ -47,6 +47,7 @@ import com.opera.core.systems.model.ScreenShotReply;
 import com.opera.core.systems.model.ScriptResult;
 import com.opera.core.systems.scope.internal.OperaColors;
 import com.opera.core.systems.scope.internal.OperaFlags;
+import com.opera.core.systems.scope.internal.OperaIntervals;
 import com.opera.core.systems.scope.internal.OperaKeys;
 import com.opera.core.systems.scope.internal.OperaMouseKeys;
 import com.opera.core.systems.scope.services.IEcmaScriptDebugger;
@@ -160,9 +161,11 @@ public class OperaWebElement implements RenderedWebElement, SearchContext, Locat
 				throw new ElementNotVisibleException("You can't click an element that is not displayed");
 		}
 		parent.actionHandler.click(this, "");
+		//workaround for click synchronization problems
+		sleep(OperaIntervals.EXEC_SLEEP.getValue());
 		parent.waitForLoadToComplete();
 		//TODO this one must be tested throughly
-		parent.gc();
+		//parent.gc();
 	}
 	
 	public void click(int x, int y) {
@@ -334,7 +337,7 @@ public class OperaWebElement implements RenderedWebElement, SearchContext, Locat
 	 */
 	public Point getLocation() {
 		String coordinates = debugger.callFunctionOnObject("locator.scrollIntoView();\n" +
-				"return (locator.getBoundingClientRect().left + ',' + locator.getBoundingClientRect().top);\n", objectId);
+				"return ((window.scrollX + locator.getBoundingClientRect().left) + ',' + (window.scrollY +locator.getBoundingClientRect().top));\n", objectId);
 		String[] location = coordinates.split(",");
 		return new Point(Integer.valueOf(location[0]), Integer.valueOf(location[1]));
 	}
@@ -458,6 +461,7 @@ public class OperaWebElement implements RenderedWebElement, SearchContext, Locat
 		canvas.setY(y);
 		canvas.setH(h);
 		canvas.setW(w);
+		canvas.setViewPortRelative(true);
 		return canvas;
 	}
 	
