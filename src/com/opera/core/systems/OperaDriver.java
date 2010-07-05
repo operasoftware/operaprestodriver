@@ -31,7 +31,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Logger;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.Cookie;
@@ -64,8 +63,8 @@ import com.opera.core.systems.scope.services.IWindowManager;
 
 public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,FindsByXPath, FindsByName, FindsByTagName, FindsByClassName,
 		FindsByCssSelector, SearchContext, JavascriptExecutor {
-        private final Logger logger = Logger.getLogger(this.getClass().getName());
-        private IEcmaScriptDebugger debugger;
+	
+	private IEcmaScriptDebugger debugger;
 	private IOperaExec exec;
 	private IWindowManager windowManager;
 	private ScopeServices services;
@@ -89,52 +88,48 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,FindsB
 
 	// TODO
 	// Profiling
-	public OperaDriver() throws WebDriverException {
-            init();
-        }
-	
-        /**
-         * For testing override this method.
-         */
-        protected void init() throws WebDriverException
-        {
-            createScopeServices();
-            services.init();
-            debugger = services.getDebugger();
-            windowManager = services.getWindowManager();
-            exec = services.getExec();
-            actionHandler = services.getActionHandler();
-        }
+	public OperaDriver() {
+		init();
+	}
 
-        private void createScopeServices() throws WebDriverException
-        {
-            try {
-                Map<String, String> versions = new HashMap<String, String>();
-                versions.put("ecmascript-debugger", "5.0");
-                versions.put("window-manager", "2.0");
-                versions.put("exec", "2.0");
-                services = new ScopeServices(versions);
-                services.startStpThread();
-            } catch (IOException e) {
-                throw new WebDriverException(e);
-            }
-        }
+	/**
+	 * For testing override this method.
+	 */
+	protected void init() {
+		createScopeServices();
+		services.init();
+		debugger = services.getDebugger();
+		windowManager = services.getWindowManager();
+		exec = services.getExec();
+		actionHandler = services.getActionHandler();
+	}
+
+	private void createScopeServices() {
+		try {
+			Map<String, String> versions = new HashMap<String, String>();
+			versions.put("ecmascript-debugger", "5.0");
+			versions.put("window-manager", "2.0");
+			versions.put("exec", "2.0");
+			services = new ScopeServices(versions);
+			services.startStpThread();
+		} catch (IOException e) {
+			throw new WebDriverException(e);
+		}
+	}
 
 	public void get(String url) {
             get(url, OperaIntervals.PAGE_LOAD_TIMEOUT.getValue());
 	}
 	
 	public int get(String url, long timeout) {
-            logger.fine("get() url=" + url + ", timeout=" + timeout + "ms");
             if (url == null)
                 throw new NullPointerException("Invalid url");
 
             return services.openUrl(url, timeout);
 	}
 	
-        // FIXME: Using sleep!
+    // FIXME: Using sleep!
 	public void waitForPageLoad(int oldId, long timeout){
-            logger.fine("waitForPageLoad oldId=" + oldId + ", timeout=" + timeout + "ms");
             long end = System.currentTimeMillis() + timeout;
             while(debugger.getRuntimeId() == oldId) {
                 sleep(OperaIntervals.POLL_INVERVAL.getValue());
@@ -145,25 +140,21 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,FindsB
 	}
 
 	public String getCurrentUrl() {
-            String s = debugger.executeJavascript("return document.location.href");
-            logger.fine("getCurrentUrl => " + s);
-            return s;
+            return debugger.executeJavascript("return document.location.href");
 	}
 	
 	public void gc() {
-            logger.fine("gc");
             debugger.releaseObjects();
 	}
 
 	public Dimension getDimensions() {
 		String[] dimensions = (debugger.executeJavascript("return (window.innerWidth + \",\" + window.innerHeight")).split(",");
-                logger.fine("getDimensions => " + dimensions[0] + "x" + dimensions[1]);
 		return new Dimension(Integer.valueOf(dimensions[0]), Integer.valueOf(dimensions[1]));
 	}
 
 	 //Chris' way
     public String getText(){
-        String s = debugger.executeJavascript("var visibleText = \"\";\n"+
+        return debugger.executeJavascript("var visibleText = \"\";\n"+
                 "    var travers = function(ele)\n"+
                 "    {\n"+
                 "      var children = ele.childNodes, child = null, i = 0, computedStyle = null;\n"+
@@ -198,57 +189,44 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,FindsB
                 "    };\n"+
                 "    travers(document);\n"+
                 "    return visibleText;");
-        logger.fine("getText => " + s);
-        return s;
     }
 
 	public void close() {
-            logger.fine("close");
 		closeWindow();
-		//FIXME implement a queuing system
+		// FIXME implement a queuing system
 		windowManager.filterActiveWindow();
 	}
-	
+
 	public void closeAll() {
-            logger.fine("closeAll");
-            windowManager.closeAllWindows();
+		windowManager.closeAllWindows();
 	}
-	
+
 	private void closeWindow() {
-            windowManager.closeActiveWindow();
+		windowManager.closeActiveWindow();
 	}
 
 	public void stop() {
-            logger.fine("stop");
 		exec.action("Stop");
 	}
 
 	public WebElement findElement(By by) {
-            logger.fine("findElement by=" + by.toString());
 		return by.findElement((SearchContext) this);
 	}
 
 	public List<WebElement> findElements(By by) {
-            logger.fine("findElements by=" + by.toString());
 		return by.findElements((SearchContext) this);
 	}
 
 	public String getPageSource() {
-            String s = debugger.executeJavascript("return document.documentElement.outerHTML");
-            logger.fine("getPageSource => " + s);
-            return s;
+		return debugger.executeJavascript("return document.documentElement.outerHTML");
 	}
 
 	public String getTitle() {
-            String s = debugger.executeJavascript("return document.title;");
-            logger.fine("getTitle => " + s);
-            return s;
+		return debugger.executeJavascript("return document.title;");
 	}
 
 	public String getWindowHandle() {
-            String s = String.valueOf(windowManager.getActiveWindowId());
-            logger.fine("getWindowHandle => " + s);
-            return s;
+		return String.valueOf(windowManager.getActiveWindowId());
 	}
 
 	public Set<String> getWindowHandles() {
@@ -264,8 +242,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,FindsB
 	}
 
 	public void quit() {
-            logger.info("quit");
-            services.quit();
+		services.quit();
 	}
 
 	public TargetLocator switchTo() {
@@ -351,8 +328,6 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,FindsB
 					"}\n"+
 				"}\n" +
 				"return elements;", "link text");
-
-		
 	}
 	
 	protected List<WebElement> processElements(Integer id){		
@@ -554,15 +529,15 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,FindsB
 		return exec.getActionList();
 	}
 	
-        /**
-         * @deprecated Don't use sleep!
-         */
+	/**
+	 * @deprecated Don't use sleep!
+	 */
 	private static void sleep(long timeInMillis) {
-            try {
-                Thread.sleep(timeInMillis);
-            } catch (InterruptedException e) {
-                //ignore
-            }
+		try {
+			Thread.sleep(timeInMillis);
+		} catch (InterruptedException e) {
+			// ignore
+		}
 	}
 
 	public WebElement findElementByTagName(String using) {
@@ -583,12 +558,12 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,FindsB
 	}
 
 	private final List<WebElement> findMultipleElements(String script, String type) {
-            Integer id = debugger.getObject(script);
+		Integer id = debugger.getObject(script);
 
-            if (id == null) {
-                throw new NoSuchElementException("Cannot find element(s) with " + type);
-            }
-            return processElements(id);
+		if (id == null) {
+			throw new NoSuchElementException("Cannot find element(s) with " + type);
+		}
+		return processElements(id);
 	}
 	
 	private final WebElement findSingleElement(String script, String type) {
@@ -672,9 +647,9 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,FindsB
             return true;
 	}
 
-        @Deprecated
+	@Deprecated
 	public void cleanUp() {
-            services.close();
+		services.close();
 	}
 
 	public void executeActions(OperaAction action) {
@@ -685,17 +660,22 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,FindsB
             waitForLoadToComplete();
 	}
 	
-        /**
-         * @deprecated This should not be used!
-         */
-        @Deprecated
+	/**
+	 * @deprecated This should not be used!
+	 */
+	@Deprecated
 	public boolean isConnected() {
-            return services.isConnected();
+		return services.isConnected();
 	}
 	
 	public void key(String key) {
-            keyDown(key);
-            keyUp(key);
+		keyDown(key);
+		keyUp(key);
+		
+		if(key.equalsIgnoreCase("enter")) {
+			sleep(OperaIntervals.EXEC_SLEEP.getValue());
+			waitForLoadToComplete();
+		}
 	}
 
 	public void keyDown(String key) {
