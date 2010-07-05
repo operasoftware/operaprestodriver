@@ -24,6 +24,7 @@ import com.opera.core.systems.ScopeServices;
 import com.opera.core.systems.model.ScriptResult;
 import com.opera.core.systems.scope.AbstractService;
 import com.opera.core.systems.scope.ESDebuggerCommand;
+import com.opera.core.systems.scope.protos.EcmascriptProtos.ReadyStateChange;
 import com.opera.core.systems.scope.protos.EsdbgProtos.Configuration;
 import com.opera.core.systems.scope.protos.EsdbgProtos.EvalData;
 import com.opera.core.systems.scope.protos.EsdbgProtos.EvalResult;
@@ -503,6 +504,15 @@ public class EcmaScriptDebugger extends AbstractService implements IEcmaScriptDe
 
 	public void resetRuntimesList() {
 		runtimesList.clear();
+	}
+
+	public void readyStateChanged(ReadyStateChange change) {
+		//not fired, silently ignore
+		
+	}
+
+	public void releaseObject(int objectId) {
+		//not supported, silently ignore
 	}
 	
 }

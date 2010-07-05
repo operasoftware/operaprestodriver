@@ -619,6 +619,10 @@ public class OperaWebElement implements RenderedWebElement, SearchContext, Locat
 	public List<WebElement> findElementsByCssSelector(String using) {
 		return findMultipleElements("var results = locator.querySelectorAll('"+ using + "'), returnValue = [], i=0;for(;returnValue[i]=results[i];i++); return returnValue;", "selector");
 	}
-
-
+	
+	@Override
+	protected void finalize() throws Throwable {
+		debugger.releaseObject(objectId);
+		super.finalize();
+	}
 }

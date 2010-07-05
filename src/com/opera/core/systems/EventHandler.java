@@ -2,6 +2,7 @@ package com.opera.core.systems;
 
 import com.opera.core.systems.scope.handlers.AbstractEventHandler;
 import com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessage;
+import com.opera.core.systems.scope.protos.EcmascriptProtos.ReadyStateChange;
 import com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeInfo;
 import com.opera.core.systems.scope.protos.WmProtos.WindowInfo;
 
@@ -46,11 +47,14 @@ public class EventHandler extends AbstractEventHandler {
 		services.getDebugger().cleanUpRuntimes(id);
 	}
 
-        /**
-         * This window loaded event contains the windowId
-         */
-	public void onWindowLoaded(int id) {
-                services.onWindowLoaded(id);
+	/**
+	 * Fired when a window is loaded
+	 * 
+	 * @param windowId ID of the window that fired the event
+	 */
+	public void onWindowLoaded(int windowId) {
+		services.getDebugger().cleanUpRuntimes(windowId);
+		services.onWindowLoaded(windowId);
 	}
 
 	@Override
@@ -72,4 +76,10 @@ public class EventHandler extends AbstractEventHandler {
 	public void onHttpResponse(int responseCode) {
 		services.getWindowManager().getLastHttpResponseCode().compareAndSet(0, responseCode);
 	}
+
+	@Override
+	public void onReadyStateChange(ReadyStateChange change) {
+		throw new UnsupportedOperationException("Not supported in STP/0");
+	}
+
 }
