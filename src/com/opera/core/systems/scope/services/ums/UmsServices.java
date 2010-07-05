@@ -30,15 +30,15 @@ public class UmsServices {
 	
 	public UmsServices(ScopeServices services, HostInfo info) {
 		List<Service> serviceList = info.getServiceListList();
-		windowManager = new WindowManager(services, "window-manager", getVersionForService(serviceList, "window-manager"));
+		windowManager = new WindowManager(services, getVersionForService(serviceList, "window-manager"));
 		String esdbgVersion = getVersionForService(serviceList, "ecmascript-debugger");
 		
 		if(VersionUtil.compare(esdbgVersion, "6.0") >= 0)
-			debugger = new EcmaScriptDebugger6(services, "ecmascript-debugger", esdbgVersion);
+			debugger = new EcmaScriptDebugger6(services, esdbgVersion);
 		else
-			debugger = new EcmaScriptDebugger(services, "ecmascript-debugger", esdbgVersion);
+			debugger = new EcmaScriptDebugger(services, esdbgVersion);
 		
-		exec = new OperaExec(services, "exec", getVersionForService(serviceList, "exec"));
+		exec = new OperaExec(services, getVersionForService(serviceList, "exec"));
 	}
 
 	private String getVersionForService(List<Service> serviceList, String name) {

@@ -31,17 +31,15 @@ public abstract class AbstractService {
 	
 	private static final Logger logger = Logger.getLogger(AbstractService.class.getName());
 		
-	private String serviceName;
 	private final String version;
 	
 	public String getVersion() {
 		return version;
 	}
 
-	public AbstractService(ScopeServices services, String serviceName, String version) {
+	public AbstractService(ScopeServices services, String version) {
 		this.services = services;
 		this.version = version;
-		this.serviceName = serviceName;
 	}
 
 	

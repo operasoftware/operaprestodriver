@@ -33,10 +33,10 @@ public class EcmaScriptDebugger6 extends EcmaScriptDebugger {
 	 *         version1 is greater than version2
 	 */
 	
-	public EcmaScriptDebugger6(ScopeServices services, String serviceName,String version) {
-		super(services, serviceName, version);
+	public EcmaScriptDebugger6(ScopeServices services,String version) {
+		super(services, version);
 		if(VersionUtil.compare(version, "7.0") >= 0)
-			throw new UnsupportedOperationException(serviceName + " version " + version + " is not supported");
+			throw new UnsupportedOperationException("ecmascript-debugger version " + version + " is not supported");
 		
 	}
 	
@@ -57,7 +57,7 @@ public class EcmaScriptDebugger6 extends EcmaScriptDebugger {
 		if (params != null && params.length > 0) {
 			StringBuilder builder = new StringBuilder();
 			for (Object object : params) {
-				if (!builder.toString().isEmpty()) {
+				if (builder.toString().length() > 0) {
 					builder.append(",");
 				}
 

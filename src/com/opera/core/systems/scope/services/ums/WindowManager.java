@@ -51,11 +51,11 @@ public class WindowManager extends AbstractService implements IWindowManager {
 		return lastHttpResponseCode;
 	}
 
-    public WindowManager(ScopeServices services, String serviceName, String version) {
-		super(services, serviceName, version);
+    public WindowManager(ScopeServices services, String version) {
+		super(services, version);
 		//check if our fixes are in
 		if(VersionUtil.compare(version, services.getMinVersionFor("window-manager")) == -1)
-			throw new UnsupportedOperationException(serviceName + " version " + version + " is not supported");
+			throw new UnsupportedOperationException("window-manager version " + version + " is not supported");
 		services.setWindowManager(this);
 		windowFinder = JXPathContext.compile("/.[windowType='normal']/windowID");
 	}

@@ -58,14 +58,14 @@ public class OperaExec extends AbstractService implements IOperaExec {
     command SendMouseAction(MouseAction) returns (Default) = 5;
 	 */
 
-	public OperaExec(ScopeServices services, String serviceName, String version) {
-		super(services, serviceName,version);
+	public OperaExec(ScopeServices services, String version) {
+		super(services,version);
 		excludedActions = new ArrayList<String>();
 		excludedActions.add("Select all");
 		excludedActions.add("Delete");
 		
 		if(VersionUtil.compare(version, "3.0") >= 0)
-			throw new UnsupportedOperationException(serviceName + " version " + version + " is not supported");
+			throw new UnsupportedOperationException("exec version " + version + " is not supported");
 		//Another ugly hack for patch version
 		if(VersionUtil.compare(version, "2.0.1") == - 1)
 			excludedActions.add("Close page");

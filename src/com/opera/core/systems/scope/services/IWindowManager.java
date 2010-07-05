@@ -1,8 +1,9 @@
 package com.opera.core.systems.scope.services;
 
 import java.util.Set;
-import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import org.openqa.selenium.WebDriverException;
 
 public interface IWindowManager {
 

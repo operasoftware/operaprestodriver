@@ -73,8 +73,8 @@ public class EcmaScriptDebugger extends AbstractService implements IEcmaScriptDe
 	}
 	
 
-	public EcmaScriptDebugger(ScopeServices services, String serviceName, String version) {	
-		super(services, serviceName, version);
+	public EcmaScriptDebugger(ScopeServices services, String version) {	
+		super(services, version);
 		services.setDebugger(this);
 		this.windowManager = services.getWindowManager();
 		this.services = services;
@@ -148,7 +148,7 @@ public class EcmaScriptDebugger extends AbstractService implements IEcmaScriptDe
 		if (params != null && params.length > 0) {
 			StringBuilder builder = new StringBuilder();
 			for (Object object : params) {
-				if (!builder.toString().isEmpty()) {
+				if (builder.toString().length() > 0) {
 					builder.append(",");
 				}
 
@@ -402,7 +402,7 @@ public class EcmaScriptDebugger extends AbstractService implements IEcmaScriptDe
 				setRuntime(runtimesList.get((Integer) relativeContext.getValue("runtimeId")));
 			}
 		} else {
-			framePath = framePath.isEmpty() ? "" : "/" + framePath;
+			framePath = framePath.length() == 0 ? "" : "/" + framePath;
 			info = (RuntimeInfo) xpathPointer(runtimesList.values(), "/.[htmlFramePath[starts-with(.,'_top"+ framePath + "')] and windowID='" + windowId + "']").getValue();
 			if(runtime == null) {
 				throw new NoSuchFrameException("Frame with name " + framePath + " not found");
