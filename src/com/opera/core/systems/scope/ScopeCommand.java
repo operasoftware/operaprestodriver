@@ -20,7 +20,8 @@ public enum ScopeCommand implements ICommand {
     INFO(7),
     QUIT(8),
     HOST_INFO(10),
-    MESSAGE_INFO(11);
+    MESSAGE_INFO(11),
+    DEFAULT(-1);
 
     private int code;
     private static final Map<Integer, ScopeCommand> lookup = new HashMap<Integer, ScopeCommand>();
@@ -43,7 +44,8 @@ public enum ScopeCommand implements ICommand {
     }
 
     public static ScopeCommand get(int code) {
-        return lookup.get(code);
+    	ScopeCommand command = lookup.get(code);
+        return (command != null) ? command : DEFAULT;
     }
 }
 

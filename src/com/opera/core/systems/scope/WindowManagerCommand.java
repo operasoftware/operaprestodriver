@@ -19,7 +19,8 @@ public enum WindowManagerCommand implements ICommand {
     WINDOW_UPDATED(4),   // event
     WINDOW_CLOSED(5),    // event
     WINDOW_ACTIVATED(6), // event
-    WINDOW_LOADED(7);    // event
+    WINDOW_LOADED(7),
+    DEFAULT(-1);    // event
 
     private int code;
     private static final Map<Integer, WindowManagerCommand> lookup = new HashMap<Integer, WindowManagerCommand>();
@@ -42,7 +43,8 @@ public enum WindowManagerCommand implements ICommand {
     }
 
     public static WindowManagerCommand get(int code) {
-        return lookup.get(code);
+        WindowManagerCommand command = lookup.get(code);
+        return (command != null) ? command : DEFAULT;
     }
 
 }

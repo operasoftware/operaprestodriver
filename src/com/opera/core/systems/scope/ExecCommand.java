@@ -16,7 +16,8 @@ public enum ExecCommand implements ICommand {
     EXEC(1),
     GET_ACTION_LIST(2),
     SETUP_SCREEN_WATCHER(3),
-    SEND_MOUSE_ACTION(5);
+    SEND_MOUSE_ACTION(5),
+    DEFAULT(-1);
 
     private int code;
     private static final Map<Integer, ExecCommand> lookup = new HashMap<Integer, ExecCommand>();
@@ -39,7 +40,8 @@ public enum ExecCommand implements ICommand {
     }
 
     public static ExecCommand get(int code) {
-        return lookup.get(code);
+    	ExecCommand command = lookup.get(code);
+        return (command != null) ? command : DEFAULT;
     }
 
 }
