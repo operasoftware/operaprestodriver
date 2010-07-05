@@ -3,6 +3,7 @@ package com.opera.core.systems.scope.handlers;
 
 import com.opera.core.systems.ScopeServices;
 import com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessage;
+import com.opera.core.systems.scope.protos.EcmascriptProtos.ReadyStateChange;
 import com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeInfo;
 import com.opera.core.systems.scope.protos.WmProtos.WindowInfo;
 
@@ -79,6 +80,8 @@ public abstract class AbstractEventHandler {
 	 * Fired when a window load is complete
 	 */
 	public abstract void onHttpResponse(int responseCode);
+	
+	public abstract void onReadyStateChange(ReadyStateChange change);
 	
 	public int parseHeader(String header) {
 		int responseCode = 0;
