@@ -6,6 +6,10 @@ import com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeInfo;
 
 public interface IEcmaScriptDebugger {
 
+	/**
+	 * Gets the active runtime's id
+	 * @return ID of active runtime
+	 */
 	 int getRuntimeId();
 	 
 	 void setRuntime(RuntimeInfo runtime);
@@ -17,6 +21,11 @@ public interface IEcmaScriptDebugger {
 	 */
 	 void removeRuntime(int runtimeId);
 	 
+	 /**
+	  * Adds a runtime to the list of runtimes
+	  * maintained in the service (STP/1 only)
+	  * @param started
+	  */
 	 void addRuntime(RuntimeInfo info);
 
 	/**
@@ -27,6 +36,12 @@ public interface IEcmaScriptDebugger {
 	 */
 	 void init();
 
+	 /**
+	  * Executes the given javascript via eval call
+	  * @param script The script to be executed on host
+	  * @param params Array of params, can be string, long or web element(s)
+	  * @return
+	  */
 	 Object scriptExecutor(String script, Object... params);
 
 	/**
@@ -46,10 +61,29 @@ public interface IEcmaScriptDebugger {
 	 */
 	 String executeJavascript(String using, boolean responseExpected);
 
+	 /**
+	  * Executes a script and returns the response
+	  * (based on responseExpected)
+	  * @param using The script to be injected
+	  * @param responseExpected The flag to enable/disable parsing response
+	  * @return The raw result object if response is expected, <code>null</code>
+	  * otherwise
+	  */
 	 Object executeScript(String using, boolean responseExpected);
 
+	 /**
+	  * Gets the object id using a script
+	  * @param using the script to find the object
+	  * @return object id with the result
+	  */
 	 Integer getObject(String using);
-
+	 
+	 /**
+	  * The script to be executed on/using an object
+	  * @param using Script with reference to the object "locator"
+	  * @param objectId The object to be used for injection
+	  * @return
+	  */
 	 String callFunctionOnObject(String using, int objectId);
 
 	 Object callFunctionOnObject(String using, int objectId, boolean responseExpected);
@@ -83,11 +117,29 @@ public interface IEcmaScriptDebugger {
 	//TODO needs retry approach?
 	 List<Integer> examineObjects(Integer id);
 
+	 /**
+	  * Lists the frame paths of available runtimes
+	  * @return a {@link List} of {@link String} framepaths
+	  */
 	 List<String> listFramePaths();
 	 
+	 /**
+	  * Makes objects available to gc, this doesn't free
+	  * the objects immediately
+	  */
 	 void releaseObjects();
 	 
+	 /**
+	  * Finds a valid runtime and updates the runtime
+	  * reference (active runtime)
+	  * @return true if a runtime is found and updated
+	  */
 	 boolean updateRuntime();
 
+	 /**
+	  * Resets the list of runtimes and fetches a fresh
+	  * list from Opera, this can be used to recover
+	  * in cases where runtimes go out of sync
+	  */
 	 void resetRuntimesList();
 }
