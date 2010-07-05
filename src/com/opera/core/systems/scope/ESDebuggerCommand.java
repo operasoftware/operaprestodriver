@@ -27,7 +27,8 @@ public enum ESDebuggerCommand implements ICommand {
     THREAD_STOPPED_AT(19),
     HANDLE_EVENT(20),
     OBJECT_SELECTED(21),
-    PARSE_ERROR(28);
+    PARSE_ERROR(28),
+    DEFAULT(-1);
 
     private int code;
     private static final Map<Integer, ESDebuggerCommand> lookup = new HashMap<Integer, ESDebuggerCommand>();
@@ -50,7 +51,8 @@ public enum ESDebuggerCommand implements ICommand {
     }
 
     public static ESDebuggerCommand get(int code) {
-        return lookup.get(code);
+        ESDebuggerCommand command = lookup.get(code);
+        return (command != null) ? command : DEFAULT;
     }
 
 }
