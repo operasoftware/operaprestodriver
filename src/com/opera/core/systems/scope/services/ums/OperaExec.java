@@ -122,7 +122,7 @@ public class OperaExec extends AbstractService implements IOperaExec {
 		actionBuilder.setButtonAction(value);
 		
 		for(int i = 0; i < count; i++)
-			executeCommand(ExecCommand.SEND_MOUSE_ACTION, actionBuilder);
+			executeCommand(ExecCommand.SEND_MOUSE_ACTION, actionBuilder.clone());
 	}
 	
 	public Set<String> getActionList() {
