@@ -6,10 +6,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * This enum maps the commands for the Exec service.
- *
- * The declaration can be found here:
- * http://dragonfly.opera.com/app/scope-interface/Exec.html#error-handling
+ * This enum maps the commands for the <a href=
+ * "http://dragonfly.opera.com/app/scope-interface/services/Exec/Exec_2_0.html"
+ * >Exec 2.0</a>.
  * 
  */
 public enum ExecCommand implements ICommand {
@@ -35,7 +34,7 @@ public enum ExecCommand implements ICommand {
         return code;
     }
 
-    public String getService() {
+    public String getServiceName() {
         return "exec";
     }
 

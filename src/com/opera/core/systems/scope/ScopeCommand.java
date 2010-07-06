@@ -6,11 +6,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * This enum maps the commands for the Scope service.
- *
- * The declaration can be found here:
- * http://dragonfly.opera.com/app/scope-interface/Scope.html#service
- *
+ * This enum maps the commands for the <a href=
+ * "http://dragonfly.opera.com/app/scope-interface/services/Scope/Scope_1_0.html"
+ * >Scope 1.0</a>.
+ * 
  */
 public enum ScopeCommand implements ICommand {
     CONNECT(3),
@@ -39,7 +38,7 @@ public enum ScopeCommand implements ICommand {
         return code;
     }
 
-    public String getService() {
+    public String getServiceName() {
         return "scope";
     }
 

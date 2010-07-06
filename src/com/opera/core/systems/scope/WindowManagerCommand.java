@@ -6,11 +6,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * This enum maps the commands for the Window Manager service.
- *
- * The declaration can be found here:
- * http://dragonfly.opera.com/app/scope-interface/WindowManager.html
- *
+ * This enum maps the commands for the <a href=
+ * "http://dragonfly.opera.com/app/scope-interface/services/WindowManager/WindowManager_2_0.html"
+ * >Window Manager 2.0</a>.
+ * 
  */
 public enum WindowManagerCommand implements ICommand {
     GET_ACTIVE_WINDOW(1),
@@ -38,7 +37,7 @@ public enum WindowManagerCommand implements ICommand {
         return code;
     }
 
-    public String getService() {
+    public String getServiceName() {
         return "window-manager";
     }
 

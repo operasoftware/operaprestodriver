@@ -6,11 +6,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * This enum maps the commands for the EcmaScript Debugger service.
- *
- * The declaration can be found here:
- * http://dragonfly.opera.com/app/scope-interface/EcmascriptDebugger.html
- *
+ * This enum maps the commands for the <a href=
+ * "http://dragonfly.opera.com/app/scope-interface/services/EcmascriptDebugger/EcmascriptDebugger_6_0.html"
+ * >EcmascriptDebugger 6.0</a>.
+ * 
  */
 public enum ESDebuggerCommand implements ICommand {
     LIST_RUNTIMES(1),
@@ -46,7 +45,7 @@ public enum ESDebuggerCommand implements ICommand {
         return code;
     }
 
-    public String getService() {
+    public String getServiceName() {
         return "ecmascript-debugger";
     }
 
