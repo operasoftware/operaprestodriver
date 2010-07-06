@@ -7,6 +7,15 @@ package com.opera.core.systems.util;
  */
 public class VersionUtil {
 
+	/**
+	 * Compares the versions given in string format
+	 * 
+	 * @param version1
+	 * @param version2
+	 * @return -1, 0 or 1 based upon the comparison results -1 if version1 is
+	 *         less than version2 0 if version1 is equal to version2 1 if
+	 *         version1 is greater than version2
+	 */
     public static int compare(String a, String b)
     {
         int minlen = (a.length() < b.length()) ? a.length() : b.length();
