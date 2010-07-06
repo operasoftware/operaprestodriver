@@ -34,6 +34,7 @@ import com.opera.core.systems.scope.handlers.PbActionHandler;
 import com.opera.core.systems.scope.protos.UmsProtos.Command;
 import java.io.IOException;
 
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Logger;
 
 public class ScopeServices implements IConnectionHandler {
@@ -54,9 +55,8 @@ public class ScopeServices implements IConnectionHandler {
 
 	private List<String> listedServices;
 
-	private int tagCounter;
+	private AtomicInteger tagCounter;
 
-	
 	public ScopeActions getActionHandler() {
             return actionHandler;
 	}
@@ -106,6 +106,7 @@ public class ScopeServices implements IConnectionHandler {
 	 */
 	public ScopeServices(Map<String, String> versions) throws IOException {
             this.versions = versions;
+            tagCounter = new AtomicInteger();
             listeners = new LinkedList<IConsoleListener>();
             stpThread = new StpThread((int)OperaIntervals.SERVER_PORT.getValue(), this, new UmsEventHandler(this));
         }
@@ -359,7 +360,7 @@ public class ScopeServices implements IConnectionHandler {
             cb.setCommandID(command.getCommandID());
             cb.setFormat(0); // protobuf
             cb.setService(command.getService());
-            cb.setTag(++tagCounter);
+            cb.setTag(tagCounter.incrementAndGet());
             cb.setPayload(payload);
             return cb;
 	}
