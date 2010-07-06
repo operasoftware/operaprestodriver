@@ -56,6 +56,8 @@ import com.opera.core.systems.model.ScopeActions;
 import com.opera.core.systems.model.ScreenShotReply;
 import com.opera.core.systems.model.ScriptResult;
 import com.opera.core.systems.model.UserInteraction;
+import com.opera.core.systems.scope.exceptions.CommunicationException;
+import com.opera.core.systems.scope.handlers.PbActionHandler;
 import com.opera.core.systems.scope.internal.OperaIntervals;
 import com.opera.core.systems.scope.services.IEcmaScriptDebugger;
 import com.opera.core.systems.scope.services.IOperaExec;
@@ -101,7 +103,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,FindsB
 		debugger = services.getDebugger();
 		windowManager = services.getWindowManager();
 		exec = services.getExec();
-		actionHandler = services.getActionHandler();
+		actionHandler = new PbActionHandler(services);
 	}
 
 	private void createScopeServices() {
@@ -122,10 +124,17 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,FindsB
 	}
 	
 	public int get(String url, long timeout) {
-            if (url == null)
-                throw new NullPointerException("Invalid url");
+		if (url == null)
+			throw new NullPointerException("Invalid url");
 
-            return services.openUrl(url, timeout);
+		if (services.getConnection() == null)
+			throw new CommunicationException("Unable to open URL because Opera is not connected.");
+		
+		int activeWindowId = windowManager.getActiveWindowId();
+		
+		actionHandler.get(url);
+		services.waitForWindowLoaded(activeWindowId, timeout);
+		return windowManager.getLastHttpResponseCode().getAndSet(0);
 	}
 	
     // FIXME: Using sleep!
