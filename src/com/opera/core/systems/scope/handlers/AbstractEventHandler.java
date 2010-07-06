@@ -16,18 +16,19 @@ import com.opera.core.systems.scope.protos.WmProtos.WindowInfo;
 public abstract class AbstractEventHandler {
 	
 
-        /*protected IWindowManager windowManager;
+    /*
+    protected IWindowManager windowManager;
 	protected IOperaExec exec;
 	protected IEcmaScriptDebugger debugger;
 	protected ScopeConnection connection;
 	*/
-        public AbstractEventHandler(ScopeServices services) {
-            /*
+	public AbstractEventHandler(ScopeServices services) {
+     /*
 		this.windowManager = services.getWindowManager();
 		this.debugger = services.getDebugger();
 		this.exec = services.getExec();
 		this.connection = services.getConnection();
-             */
+     */
 	}
 	
 	/**
@@ -71,14 +72,12 @@ public abstract class AbstractEventHandler {
 	 */
 	public abstract void onWindowClosed(Integer id);
 
-        /**
-         * @param id the WindowID
-         */
-        public abstract void onWindowLoaded(int id);
-
 	/**
 	 * Fired when a window load is complete
+	 * @param windowId Id of the window that is loaded 
 	 */
+	public abstract void onWindowLoaded(int windowId);
+	
 	public abstract void onHttpResponse(int responseCode);
 	
 	public abstract void onReadyStateChange(ReadyStateChange change);
