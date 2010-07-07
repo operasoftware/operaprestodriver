@@ -42,6 +42,13 @@ public abstract class AbstractService {
 		this.version = version;
 	}
 
+	public static void sleep(long timeInMillis) {
+		try {
+			Thread.sleep(timeInMillis);
+		} catch (InterruptedException ignored) {
+			//ignore
+		}
+	}
 	
 	public Response executeCommand(ICommand command, Builder<?> builder) {
 		return executeCommand(command, builder, OperaIntervals.DEFAULT_RESPONSE_TIMEOUT.getValue());
@@ -70,8 +77,8 @@ public abstract class AbstractService {
 	
 	/**
 	 * Query a collection JXPath and return a pointer
-         * FIXME: This does not belong here!
-         *
+	 * FIXME: This does not belong here!
+	 * 
 	 * @param collection
 	 * @param query
 	 * @return Pointer to node
@@ -90,9 +97,9 @@ public abstract class AbstractService {
 	
 	/**
 	 * Query a collection JXPath and return a pointer
-         * FIXME: This does not belong here!
-         *
- 	 * @param collection
+	 * FIXME: This does not belong here!
+	 * 
+	 * @param collection
 	 * @param query
 	 * @return Pointer to node
 	 */

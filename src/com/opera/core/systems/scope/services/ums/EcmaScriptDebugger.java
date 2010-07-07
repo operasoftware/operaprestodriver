@@ -8,8 +8,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicStampedReference;
 
 import org.apache.commons.jxpath.JXPathContext;
@@ -24,6 +24,7 @@ import com.opera.core.systems.ScopeServices;
 import com.opera.core.systems.model.ScriptResult;
 import com.opera.core.systems.scope.AbstractService;
 import com.opera.core.systems.scope.ESDebuggerCommand;
+import com.opera.core.systems.scope.internal.OperaIntervals;
 import com.opera.core.systems.scope.protos.EcmascriptProtos.ReadyStateChange;
 import com.opera.core.systems.scope.protos.EsdbgProtos.Configuration;
 import com.opera.core.systems.scope.protos.EsdbgProtos.EvalData;
@@ -48,12 +49,14 @@ import com.opera.core.systems.scope.services.IWindowManager;
  */
 public class EcmaScriptDebugger extends AbstractService implements IEcmaScriptDebugger {
 	
+	private int retries;
+	private long sleepDuration;
 	protected int activeWindowId;
 	protected final IWindowManager windowManager;
 
 	private AtomicStampedReference<RuntimeInfo> runtime = new AtomicStampedReference<RuntimeInfo>(null, 0);
 	
-	private Map<Integer, RuntimeInfo> runtimesList = new ConcurrentHashMap<Integer, RuntimeInfo>();
+	private ConcurrentMap<Integer, RuntimeInfo> runtimesList = new ConcurrentHashMap<Integer, RuntimeInfo>();
 
 	
 	public int getRuntimeId() {
@@ -79,6 +82,7 @@ public class EcmaScriptDebugger extends AbstractService implements IEcmaScriptDe
 		services.setDebugger(this);
 		this.windowManager = services.getWindowManager();
 		this.services = services;
+		resetCounters();
 	}
 	
 
@@ -145,6 +149,38 @@ public class EcmaScriptDebugger extends AbstractService implements IEcmaScriptDe
 	 */
 	public Object scriptExecutor(String script, Object... params) {
 		List<WebElement> elements = new ArrayList<WebElement>();
+		
+		String toSend = buildEvalString(elements, script, params);
+		EvalData.Builder evalBuilder = buildEval(toSend);
+		
+		for (WebElement webElement : elements) {
+			Variable variable = buildVariable(webElement.toString(), ((OperaWebElement) webElement).getObjectId());
+			evalBuilder.addVariableList(variable);
+		}
+		
+		Response response = executeCommand(ESDebuggerCommand.EVAL, evalBuilder);
+		
+		if(response == null)
+			throw new WebDriverException("Internal error while executing script");
+		
+		EvalResult result = parseEvalData(response);
+
+        Object parsed = parseEvalReply(result);
+        if(parsed instanceof ObjectValue) {
+        	ObjectValue data = (ObjectValue) parsed;
+        	return new ScriptResult(data.getObjectID(), data.getName());
+        }
+        else return parsed;
+	}
+	
+	/**
+	 * Build the script to send with arguments
+	 * @param elements The web elements to send with the script as argument
+	 * @param script The script to execute, can have references to argument(s)
+	 * @param params Params to send with the script, will be parsed in to arguments
+	 * @return The script to be sent to Eval command for execution
+	 */
+	private String buildEvalString(List<WebElement> elements, String script, Object... params) {
 		String toSend;
 		if (params != null && params.length > 0) {
 			StringBuilder builder = new StringBuilder();
@@ -170,27 +206,7 @@ public class EcmaScriptDebugger extends AbstractService implements IEcmaScriptDe
 		} else {
 			toSend = script;
 		}
-		
-		EvalData.Builder evalBuilder = buildEval(toSend);
-		
-		for (WebElement webElement : elements) {
-			Variable variable = buildVariable(webElement.toString(), ((OperaWebElement) webElement).getObjectId());
-			evalBuilder.addVariableList(variable);
-		}
-		
-		Response response = executeCommand(ESDebuggerCommand.EVAL, evalBuilder);
-		
-		if(response == null)
-			throw new WebDriverException("Internal error while executing script");
-		
-		EvalResult result = parseEvalData(response);
-
-        Object parsed = parseEvalReply(result);
-        if(parsed instanceof ObjectValue) {
-        	ObjectValue data = (ObjectValue) parsed;
-        	return new ScriptResult(data.getObjectID(), data.getName());
-        }
-        else return parsed;
+		return toSend;
 	}
 	
 	private EvalResult parseEvalData(Response response) {
@@ -258,7 +274,28 @@ public class EcmaScriptDebugger extends AbstractService implements IEcmaScriptDe
 		EvalData.Builder builder = buildEval(using);
 		builder.addAllVariableList(Arrays.asList(variables));
 		
-		return executeCommand(ESDebuggerCommand.EVAL, builder);
+		Response response = executeCommand(ESDebuggerCommand.EVAL, builder);
+		
+		if(response == null && retries < OperaIntervals.SCRIPT_RETRY.getValue()) {
+			retries++;
+			sleepDuration += sleepDuration;
+			sleep(sleepDuration);
+			recover();
+			return eval(using, variables);
+		} else if(retries >= OperaIntervals.SCRIPT_RETRY.getValue()) {
+			resetCounters();
+			throw new WebDriverException("Internal error");
+		}
+		
+		resetCounters();
+		
+        return response;
+
+	}
+	
+	private void resetCounters() {
+		retries = 0;
+		sleepDuration = OperaIntervals.SCRIPT_RETRY_INTERVAL.getValue();
 	}
 	
 	/* (non-Javadoc)

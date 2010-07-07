@@ -22,16 +22,6 @@ import com.opera.core.systems.scope.protos.UmsProtos.Response;
 import com.opera.core.systems.util.VersionUtil;
 
 public class EcmaScriptDebugger6 extends EcmaScriptDebugger {
-
-	
-	/**
-	 * 
-	 * @param version1
-	 * @param version2
-	 * @return -1, 0 or 1 based upon the comparison results -1 if version1 is
-	 *         less than version2 0 if version1 is equal to version2 1 if
-	 *         version1 is greater than version2
-	 */
 	
 	public EcmaScriptDebugger6(ScopeServices services,String version) {
 		super(services, version);
