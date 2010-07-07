@@ -18,7 +18,7 @@ public interface IWindowManager {
 
 	void addWindow(Object window);
 
-	void removeWindow(int windowId);
+	void removeWindow(Integer windowId);
 	
 	void filterActiveWindow();
 
