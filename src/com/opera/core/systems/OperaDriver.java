@@ -202,12 +202,12 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,FindsB
 
 	public void close() {
 		closeWindow();
-		// FIXME implement a queuing system
 		windowManager.filterActiveWindow();
 	}
 
 	public void closeAll() {
 		windowManager.closeAllWindows();
+		windowManager.filterActiveWindow();
 	}
 
 	private void closeWindow() {
