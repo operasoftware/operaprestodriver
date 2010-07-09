@@ -19,6 +19,7 @@ import com.opera.core.systems.ScopeServices;
 import com.opera.core.systems.model.ICommand;
 import com.opera.core.systems.scope.protos.UmsProtos.Response;
 import com.opera.core.systems.scope.internal.OperaIntervals;
+import com.opera.core.systems.util.VersionUtil;
 
 /**
  * All scope services derive from this base class for generic operations
@@ -48,6 +49,12 @@ public abstract class AbstractService {
 		} catch (InterruptedException ignored) {
 			//ignore
 		}
+	}
+	
+	public boolean isVersionInRange(String version, String maxVersion, String serviceName) {
+		if(VersionUtil.compare(version, maxVersion) >= 0 || VersionUtil.compare(services.getMinVersionFor(serviceName), version) < 0)
+			return false;
+		return true;
 	}
 	
 	public Response executeCommand(ICommand command, Builder<?> builder) {
