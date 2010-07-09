@@ -4,13 +4,13 @@ package com.opera.core.systems.scope.services.ums;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Stack;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.Stack;
-import java.util.LinkedList;
 import java.util.logging.Logger;
 
 import org.apache.commons.jxpath.CompiledExpression;
@@ -28,7 +28,6 @@ import com.opera.core.systems.scope.protos.WmProtos.WindowID;
 import com.opera.core.systems.scope.protos.WmProtos.WindowInfo;
 import com.opera.core.systems.scope.protos.WmProtos.WindowList;
 import com.opera.core.systems.scope.services.IWindowManager;
-import com.opera.core.systems.util.VersionUtil;
 
 
 /**
@@ -53,9 +52,12 @@ public class WindowManager extends AbstractService implements IWindowManager {
 
     public WindowManager(ScopeServices services, String version) {
 		super(services, version);
-		//check if our fixes are in
-		if(VersionUtil.compare(version, services.getMinVersionFor("window-manager")) == -1)
-			throw new UnsupportedOperationException("window-manager version " + version + " is not supported");
+		
+		String serviceName = "window-manager";
+		
+		if(!isVersionInRange(version, "3.0", serviceName))
+			throw new UnsupportedOperationException(serviceName + " version " + version + " is not supported");
+		
 		services.setWindowManager(this);
 		windowFinder = JXPathContext.compile("/.[windowType='normal']/windowID");
 	}
@@ -64,14 +66,14 @@ public class WindowManager extends AbstractService implements IWindowManager {
 		return windows.keySet().size();
 	}
     
-	public void setActiveWindowId(int windowId) {
+	public void setActiveWindowId(Integer windowId) {
             synchronized (lock)
             {
                 WindowInfo window = windows.get(windowId);
                 if (window == null)
                     throw new WindowNotFoundException("Window not found: " + windowId);
 
-                windowStack.remove(new Integer(windowId));
+                windowStack.remove(windowId);
                 windowStack.push(windowId);
             }
 	}
@@ -112,11 +114,10 @@ public class WindowManager extends AbstractService implements IWindowManager {
         }
 	
 
-	public void removeWindow(int id) {
+	public void removeWindow(Integer windowId) {
             synchronized (lock) {
-                Integer windowId = new Integer(id);
                 if  (windowStack.contains(windowId))
-                    windowStack.remove(new Integer(windowId));
+                    windowStack.remove(windowId);
 
                 if (windows.containsKey(windowId))
                     windows.remove(windowId);
@@ -286,4 +287,5 @@ public class WindowManager extends AbstractService implements IWindowManager {
 	public void resetWindowsList() {
 		initializeWindows();
 	}
+
 }

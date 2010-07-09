@@ -64,8 +64,11 @@ public class OperaExec extends AbstractService implements IOperaExec {
 		excludedActions.add("Select all");
 		excludedActions.add("Delete");
 		
-		if(VersionUtil.compare(version, "3.0") >= 0)
-			throw new UnsupportedOperationException("exec version " + version + " is not supported");
+		String serviceName = "exec";
+		
+		if(!isVersionInRange(version, "3.0", serviceName))
+			throw new UnsupportedOperationException(serviceName + " version " + version + " is not supported");
+		
 		//Another ugly hack for patch version
 		if(VersionUtil.compare(version, "2.0.1") == - 1)
 			excludedActions.add("Close page");
@@ -141,11 +144,12 @@ public class OperaExec extends AbstractService implements IOperaExec {
 			actionBuilder.setValue(params[0]);
 		}
 		
-		if(!excludedActions.contains(using)) {
-                    try {
-			actionBuilder.setWindowID(services.getWindowManager().getActiveWindowId());
-                    } catch (WindowNotFoundException e) {
-                    }
+		if (!excludedActions.contains(using)) {
+			try {
+				actionBuilder.setWindowID(services.getWindowManager()
+						.getActiveWindowId());
+			} catch (WindowNotFoundException e) {
+			}
 		}
 		
 		//type.setSpace("preserve");
