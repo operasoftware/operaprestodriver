@@ -12,7 +12,7 @@ public interface IWindowManager {
 	 * discards any other window such as 'dialog' or 'unknown'
 	 * @param activeWindowId
 	 */
-	void setActiveWindowId(int windowId);
+	void setActiveWindowId(Integer windowId);
 
 	int getActiveWindowId();
 
