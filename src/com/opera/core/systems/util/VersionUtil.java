@@ -3,15 +3,15 @@ package com.opera.core.systems.util;
 /**
  * A replacement for a subset of com.sun.xml.ws.util.VersionUtil.
  *
- * @author Jan Vidar Krey (janv@opera.com)
+ * @author Jan Vidar Krey
  */
 public class VersionUtil {
 
 	/**
 	 * Compares the versions given in string format
 	 * 
-	 * @param version1
-	 * @param version2
+	 * @param a version2
+	 * @param b version1
 	 * @return -1, 0 or 1 based upon the comparison results -1 if version1 is
 	 *         less than version2 0 if version1 is equal to version2 1 if
 	 *         version1 is greater than version2
