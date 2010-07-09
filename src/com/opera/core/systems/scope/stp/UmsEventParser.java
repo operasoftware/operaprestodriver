@@ -6,6 +6,7 @@ import com.google.protobuf.GeneratedMessage;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.opera.core.systems.scope.handlers.AbstractEventHandler;
 import com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessage;
+import com.opera.core.systems.scope.protos.EcmascriptProtos.ReadyStateChange;
 import com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeID;
 import com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeInfo;
 import com.opera.core.systems.scope.protos.UmsProtos.Event;
@@ -77,7 +78,13 @@ public class UmsEventParser {
 			ConsoleMessage.Builder messageBuilder = ConsoleMessage.newBuilder();
 			buildPayload(event, messageBuilder);
 			eventHandler.onMessage(messageBuilder.build());
-		} /*else if (service.equals("http-logger") && eventId == 2) {
+		} else if(service.equals("ecmascript")) {
+			//we have only one event for this one
+			ReadyStateChange.Builder builder = ReadyStateChange.newBuilder();
+			buildPayload(event, builder);
+			eventHandler.onReadyStateChange(builder.build());
+		}
+		/*else if(service.equals("http-logger") && eventId == 2) {
 			//console logger only sends one message
 			//FIXME make generic
 			Header header;
