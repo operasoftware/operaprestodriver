@@ -58,6 +58,7 @@ import com.opera.core.systems.model.ScriptResult;
 import com.opera.core.systems.model.UserInteraction;
 import com.opera.core.systems.scope.exceptions.CommunicationException;
 import com.opera.core.systems.scope.handlers.PbActionHandler;
+import com.opera.core.systems.scope.internal.OperaBinary;
 import com.opera.core.systems.scope.internal.OperaIntervals;
 import com.opera.core.systems.scope.services.IEcmaScriptDebugger;
 import com.opera.core.systems.scope.services.IOperaExec;
@@ -91,6 +92,19 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,FindsB
 	// TODO
 	// Profiling
 	public OperaDriver() {
+		this(null);
+	}
+	
+	public OperaDriver(String executableLocation, String... arguments){
+		String operaPath = System.getenv().get("OPERA_PATH");
+		String operaArgs = System.getenv().get("OPERA_ARGS");
+		
+		if(operaPath != null && operaPath.length() > 0) {
+			arguments = (operaArgs != null && operaArgs.length() > 0) ? operaArgs.split(",") : null;
+			new OperaBinary(operaPath, arguments);
+		} else if(executableLocation != null) {
+			new OperaBinary(executableLocation, arguments);
+		}
 		init();
 	}
 
