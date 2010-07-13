@@ -168,9 +168,9 @@ public class WindowManager extends AbstractService implements IWindowManager {
             return builder.build();
 	}
 	
-	public void updateActiveWindow(){
-                int activeWindow = findActiveWindow().getWindowID();
-		setActiveWindowId(activeWindow);
+	public void updateActiveWindow() {
+		//int activeWindow = findActiveWindow().getWindowID();
+		setActiveWindowId(windowStack.peek());
 	}
 	
 	/**
@@ -210,6 +210,9 @@ public class WindowManager extends AbstractService implements IWindowManager {
 			//if(window.getTitle().length() > 0)
 				windows.put(window.getWindowID(), window);
 		}
+		//initialize windowStack
+		windowStack.push(findActiveWindow().getWindowID());
+		
 	}
 
 	/* (non-Javadoc)
