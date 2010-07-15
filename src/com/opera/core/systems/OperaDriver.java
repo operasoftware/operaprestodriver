@@ -150,7 +150,9 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,FindsB
 		
 		actionHandler.get(url);
 		services.waitForWindowLoaded(activeWindowId, timeout);
-		switchTo().defaultContent();
+		
+		if(OperaIntervals.ENABLE_DEBUGGER.getValue() == 1)
+			switchTo().defaultContent();
 		
 		return windowManager.getLastHttpResponseCode().getAndSet(0);
 	}
