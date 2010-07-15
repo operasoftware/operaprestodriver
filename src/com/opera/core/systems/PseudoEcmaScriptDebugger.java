@@ -55,7 +55,7 @@ public class PseudoEcmaScriptDebugger implements IEcmaScriptDebugger {
 
     public void cleanUpRuntimes(int windowId) { }
 
-    public void changeRuntime(int index) { }
+    public void changeRuntime(Integer index) { }
 
     public void changeRuntime(String framePath) { }
 
@@ -83,4 +83,6 @@ public class PseudoEcmaScriptDebugger implements IEcmaScriptDebugger {
 	public void readyStateChanged(ReadyStateChange change) { }
 
 	public void releaseObject(int objectId) { }
+
+	public void resetFramePath() { }
 }

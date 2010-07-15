@@ -245,7 +245,7 @@ public class EcmascriptService extends AbstractService implements IEcmaScriptDeb
 		
 	}
 
-	public void changeRuntime(int index) {
+	public void changeRuntime(Integer index) {
 		// TODO re-implement
 		
 	}
@@ -536,6 +536,11 @@ public class EcmascriptService extends AbstractService implements IEcmaScriptDeb
 		} else {
 			executeCommand(ESCommand.RELEASE_OBJECTS, builder);
 		}
+	}
+
+	public void resetFramePath() {
+		// FIXME implement
+		
 	}
 	
 }

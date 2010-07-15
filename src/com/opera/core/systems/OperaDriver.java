@@ -36,6 +36,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.Cookie;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.NoSuchFrameException;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.Speed;
 import org.openqa.selenium.WebDriver;
@@ -138,6 +139,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,FindsB
 	}
 	
 	public int get(String url, long timeout) {
+		
 		if (url == null)
 			throw new NullPointerException("Invalid url");
 
@@ -148,6 +150,8 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,FindsB
 		
 		actionHandler.get(url);
 		services.waitForWindowLoaded(activeWindowId, timeout);
+		switchTo().defaultContent();
+		
 		return windowManager.getLastHttpResponseCode().getAndSet(0);
 	}
 	
@@ -281,18 +285,39 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,FindsB
 		public WebDriver defaultContent() {
 			//change to _top
 			windowManager.filterActiveWindow();
-			debugger.changeRuntime("");
-			waitForLoadToComplete();
+			debugger.resetFramePath();
+			while(findElementsByTagName("frameset").size() > 0) {
+				switchTo().frame(0);
+			}
+			//waitForLoadToComplete();
 			return OperaDriver.this;
 		}
 
 		public WebDriver frame(int frameIndex) {
-			debugger.changeRuntime(frameIndex);
+			//make sure we execute this one on "_top"
+			debugger.resetFramePath();
+			int framesLength = Integer.valueOf(debugger.executeJavascript("return document.frames.length"));
+			
+			//index to id matching
+			if(frameIndex < 0 || frameIndex >= framesLength)
+				throw new NoSuchFrameException("Invalid frame index : " + frameIndex);
+			
+			Integer operaId = debugger.getObject("document.frames[" + frameIndex +"].opera");
+			
+			debugger.changeRuntime(operaId);
+			
+			//debugger.releaseObject(operaId);
+			
 			return OperaDriver.this;
 		}
 
 		public WebDriver frame(String frameName) {
-			debugger.changeRuntime(frameName);
+			Integer id = debugger.getObject("return document.frames['" +  frameName+"']");
+			
+			if(id == null)
+				throw new NoSuchFrameException("Invalid frame name : " + frameName);
+			
+			debugger.changeRuntime(id);
 			return OperaDriver.this;
 		}
 

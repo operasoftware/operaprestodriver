@@ -69,7 +69,7 @@ public class EcmaScriptDebugger6 extends EcmaScriptDebugger {
 			toSend = script;
 		}
 		
-		EvalData.Builder evalBuilder = buildEval(toSend);
+		EvalData.Builder evalBuilder = buildEval(toSend, getRuntimeId());
 		
 		for (WebElement webElement : elements) {
 			Variable variable = buildVariable(webElement.toString(), ((OperaWebElement) webElement).getObjectId());
@@ -168,7 +168,11 @@ public class EcmaScriptDebugger6 extends EcmaScriptDebugger {
 	}
 	
 	public Object executeScript(String using, boolean responseExpected) {
-		Response reply = eval(using);
+		return executeScript(using, responseExpected, getRuntimeId());
+	}
+	
+	public Object executeScript(String using, boolean responseExpected, int runtimeId) {
+		Response reply = eval(using, runtimeId);
 		return responseExpected ? parseEvalReply(parseEvalData(reply)) : null;
 	}
 	
@@ -178,6 +182,11 @@ public class EcmaScriptDebugger6 extends EcmaScriptDebugger {
 		return (reply.getType().equals("object")) ? reply.getObjectValue().getObjectID() : null;
 	}
 	
+	@Override
+	public Integer getObject(String using, int runtimeId) {
+		EvalResult reply = parseEvalData(eval(using, runtimeId));
+		return (reply.getType().equals("object")) ? reply.getObjectValue().getObjectID() : null;
+	}
 	
 	
 	
