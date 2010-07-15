@@ -12,9 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicStampedReference;
 
-import org.apache.commons.jxpath.JXPathContext;
 import org.apache.commons.jxpath.Pointer;
-import org.apache.commons.jxpath.ri.model.beans.NullPointer;
 import org.openqa.selenium.NoSuchFrameException;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
@@ -428,49 +426,6 @@ public class EcmaScriptDebugger extends AbstractService implements IEcmaScriptDe
 		return runtime;
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.opera.core.systems.scope.services.xml.IEcmaScriptDebugger#changeRuntime(java.lang.String)
-	 */
-	public void changeRuntime(String framePath){
-		
-		updateRuntime();
-		int windowId = windowManager.getActiveWindowId();
-		RuntimeInfo info = null;
-		//TODO review :  get nodes and then from the nodes find the one that starts with second frame
-		if(framePath.indexOf('.') > -1) {
-			//we have a nested frame request
-			String[] frames = framePath.split("\\.");
-			//get the relative pointer we can start from
-			
-			JXPathContext pathContext = JXPathContext.newContext(runtimesList);
-			Pointer result = findPointer(pathContext, "/.[htmlFramePath[starts-with(.,'_top/"+ frames[0] + "')] and windowID='" + windowId + "']", framePath);	
-			JXPathContext relativeContext = pathContext.getRelativeContext(result);
-			
-			for (int i = 1; i < frames.length; i++) {
-				String path = (String) relativeContext.getValue("htmlFramePath");
-				result = findPointer(pathContext, "/.[htmlFramePath[starts-with(.,'"+ path + "/" + frames[i] +"')] and windowID='" + windowId + "']", path);
-				
-				relativeContext = pathContext.getRelativeContext(result);
-				setRuntime(runtimesList.get((Integer) relativeContext.getValue("runtimeId")));
-			}
-		} else {
-			framePath = framePath.length() == 0 ? "" : "/" + framePath;
-			info = (RuntimeInfo) xpathPointer(runtimesList.values(), "/.[htmlFramePath[starts-with(.,'_top"+ framePath + "')] and windowID='" + windowId + "']").getValue();
-			if(runtime == null) {
-				throw new NoSuchFrameException("Frame with name " + framePath + " not found");
-			}
-			setRuntime(info);
-		}
-
-	}
-	
-	
-	private Pointer findPointer(JXPathContext context, String query, String framePath) {
-		Pointer result = context.getPointer(query);
-		if(result instanceof NullPointer)
-			throw new NoSuchFrameException("Frame with name " + framePath + " not found");
-		return result;
-	}
 	/* (non-Javadoc)
 	 * @see com.opera.core.systems.scope.services.xml.IEcmaScriptDebugger#changeRuntime(int)
 	 */

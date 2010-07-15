@@ -101,18 +101,11 @@ public interface IEcmaScriptDebugger {
 	Integer executeScriptOnObject(String using, int objectId);
 
 	/**
-	 * Change the runtime so we can inject to other frames
-	 * 
-	 * @param framePath
-	 */
-	void changeRuntime(String framePath);
-
-	/**
-	 * Change frame by index, needed for frames with nonames or duplicate names
+	 * Changes the frame by index
 	 * 
 	 * @param index
 	 */
-	void changeRuntime(int index);
+	void changeRuntime(Integer index);
 
 	/**
 	 * Cleanup possible dead/suspended runtimes on runtime-started or
@@ -168,4 +161,6 @@ public interface IEcmaScriptDebugger {
 	 * @param objectId Id of the object to be released
 	 */
 	void releaseObject(int objectId);
+
+	void resetFramePath();
 }

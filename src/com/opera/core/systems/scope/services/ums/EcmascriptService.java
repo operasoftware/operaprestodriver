@@ -240,11 +240,6 @@ public class EcmascriptService extends AbstractService implements IEcmaScriptDeb
 	}
 	
 
-	public void changeRuntime(String framePath) {
-		// TODO re-implement
-		
-	}
-
 	public void changeRuntime(Integer index) {
 		// TODO re-implement
 		
