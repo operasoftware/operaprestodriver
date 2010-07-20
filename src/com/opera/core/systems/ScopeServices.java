@@ -200,7 +200,7 @@ public class ScopeServices implements IConnectionHandler {
 			else
 				exec.action("Exit");
 		} catch (Exception e) {
-			logger.info("Caught exception when trying to shut down (cannot send quit).");
+			logger.info("Caught exception when trying to shut down (cannot send quit). : " + e.getMessage());
 		}
 
 		shutdown();
