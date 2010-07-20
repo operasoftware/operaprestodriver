@@ -474,9 +474,7 @@ public class EcmaScriptDebugger extends AbstractService implements IEcmaScriptDe
 		List<RuntimeInfo> runtimesInfos = new ArrayList<RuntimeInfo>(runtimesList.values());
 		runtimesInfos.remove(rootInfo);
 		
-		Iterator<RuntimeInfo> itr = runtimesInfos.iterator();
-		while (itr.hasNext()) {
-			RuntimeInfo runtimeInfo = itr.next();
+		for (RuntimeInfo runtimeInfo : runtimesInfos) {
 			addNode(runtimeInfo, root);
 		}
 	}
@@ -516,10 +514,7 @@ public class EcmaScriptDebugger extends AbstractService implements IEcmaScriptDe
 	
 	
 	private RuntimeNode findNodeByName(String name, RuntimeNode rootNode) {
-		Iterator<Entry<Integer,RuntimeNode>> itr = rootNode.getNodes().entrySet().iterator();
-		while(itr.hasNext()) {
-			
-			Entry<Integer, RuntimeNode> entry = itr.next();
+		for (Entry<Integer,RuntimeNode> entry : rootNode.getNodes().entrySet()) {
 			//check if the name is a number
 			if(isNumber(name) && entry.getKey().equals(Integer.valueOf(name) + 1))
 				return entry.getValue();
