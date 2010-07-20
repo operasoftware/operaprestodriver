@@ -337,13 +337,12 @@ public class OperaWebElement implements RenderedWebElement, SearchContext, Locat
 	 */
 	public Point getLocation() {
 		String coordinates = debugger.callFunctionOnObject("locator.scrollIntoView();\n" +
-				"var x = 0, y = 0, curr = window.frameElement;\n" + 
-				"while(curr) {\n" +
-				"x+= curr.getBoundingClientRect().left + curr.clientLeft;\n" +
-				"y+= curr.getBoundingClientRect().top + curr.clientTop;\n" + 
-				"curr = window.parent.frameElement;\n"+
+				"var x = 0, y = 0;\n" + 
+				"if(window.frameElement) {\n" +
+				"x = window.screenLeft - window.top.screenLeft;\n" +
+				"y = window.screenTop - window.top.screenTop;\n" + 
 				"}\n" +
-				"return ((x + window.scrollX + locator.getBoundingClientRect().left) + ',' + (y+ window.scrollY + locator.getBoundingClientRect().top));\n", objectId);
+				"return (( x + window.scrollX + locator.getBoundingClientRect().left) + ',' + ( y + window.scrollY + locator.getBoundingClientRect().top));\n", objectId);
 		String[] location = coordinates.split(",");
 		return new Point(Integer.valueOf(location[0]), Integer.valueOf(location[1]));
 	}
