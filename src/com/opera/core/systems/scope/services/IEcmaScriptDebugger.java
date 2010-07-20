@@ -105,7 +105,16 @@ public interface IEcmaScriptDebugger {
 	 * 
 	 * @param index
 	 */
-	void changeRuntime(Integer index);
+	void changeRuntime(int index);
+	
+	
+	/**
+	 * Changes the frame by frame name
+	 * address nested frames by dot (first.second)
+	 * 
+	 * @param frameName
+	 */
+	void changeRuntime(String frameName);
 
 	/**
 	 * Cleanup possible dead/suspended runtimes on runtime-started or

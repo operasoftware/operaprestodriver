@@ -238,12 +238,6 @@ public class EcmascriptService extends AbstractService implements IEcmaScriptDeb
 		buildPayload(response, builder);
 		return builder.build();
 	}
-	
-
-	public void changeRuntime(Integer index) {
-		// TODO re-implement
-		
-	}
 
 	public void cleanUpRuntimes(int windowId) {
 		for (Runtime runtime : runtimesList.values()) {
@@ -535,6 +529,16 @@ public class EcmascriptService extends AbstractService implements IEcmaScriptDeb
 
 	public void resetFramePath() {
 		// FIXME implement
+		
+	}
+
+	public void changeRuntime(int index) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void changeRuntime(String frameName) {
+		// TODO Auto-generated method stub
 		
 	}
 	

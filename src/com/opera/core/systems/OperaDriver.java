@@ -73,6 +73,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,FindsB
 	private IWindowManager windowManager;
 	private ScopeServices services;
 	protected ScopeActions actionHandler;
+	private OperaBinary binary;
 	
 	protected IEcmaScriptDebugger getScriptDebugger() {
 		return debugger;
@@ -102,9 +103,9 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,FindsB
 		
 		if(operaPath != null && operaPath.length() > 0) {
 			arguments = (operaArgs != null && operaArgs.length() > 0) ? operaArgs.split(",") : null;
-			new OperaBinary(operaPath, arguments);
+			binary = new OperaBinary(operaPath, arguments);
 		} else if(executableLocation != null) {
-			new OperaBinary(executableLocation, arguments);
+			binary = new OperaBinary(executableLocation, arguments);
 		}
 		init();
 	}
@@ -300,28 +301,20 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,FindsB
 			debugger.resetFramePath();
 			int framesLength = Integer.valueOf(debugger.executeJavascript("return document.frames.length"));
 			
-			//index to id matching
 			if(frameIndex < 0 || frameIndex >= framesLength)
 				throw new NoSuchFrameException("Invalid frame index : " + frameIndex);
-			
-			Integer operaId = debugger.getObject("document.frames[" + frameIndex +"].opera");
-			
-			debugger.changeRuntime(operaId);
-			
-			//debugger.releaseObject(operaId);
+
+			debugger.changeRuntime(frameIndex);
 			
 			return OperaDriver.this;
 		}
 
 		public WebDriver frame(String frameName) {
-			Integer id = debugger.getObject("return document.frames['" +  frameName+"']");
-			
-			if(id == null)
-				throw new NoSuchFrameException("Invalid frame name : " + frameName);
-			
-			debugger.changeRuntime(id);
+			debugger.resetFramePath();	
+			debugger.changeRuntime(frameName);
 			return OperaDriver.this;
 		}
+		
 
 		public WebDriver window(String windowName) {
 			windowManager.setActiveWindow(windowName); //find by title
@@ -754,6 +747,10 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,FindsB
 
     public void binaryStopped(int code) {
         services.onBinaryStopped(code);
+    }
+    
+    public int getPid() {
+    	return binary.getPid();
     }
 
 }

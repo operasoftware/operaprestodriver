@@ -1,6 +1,7 @@
 package com.opera.core.systems;
 import java.util.List;
 
+import com.opera.core.systems.model.Canvas;
 import com.opera.core.systems.scope.protos.EcmascriptProtos.ReadyStateChange;
 import com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeInfo;
 import com.opera.core.systems.scope.services.IEcmaScriptDebugger;
@@ -55,8 +56,6 @@ public class PseudoEcmaScriptDebugger implements IEcmaScriptDebugger {
 
     public void cleanUpRuntimes(int windowId) { }
 
-    public void changeRuntime(Integer index) { }
-
     public void changeRuntime(String framePath) { }
 
     public Object callFunctionOnObject(String using, int objectId,
@@ -85,4 +84,13 @@ public class PseudoEcmaScriptDebugger implements IEcmaScriptDebugger {
 	public void releaseObject(int objectId) { }
 
 	public void resetFramePath() { }
+
+	public Canvas getCanvas() {
+		return null;
+	}
+
+	public void changeRuntime(int index) {
+		// TODO Auto-generated method stub
+		
+	}
 }

@@ -6,8 +6,11 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicStampedReference;
@@ -56,7 +59,35 @@ public class EcmaScriptDebugger extends AbstractService implements IEcmaScriptDe
 	private AtomicStampedReference<RuntimeInfo> runtime = new AtomicStampedReference<RuntimeInfo>(null, 0);
 	
 	private ConcurrentMap<Integer, RuntimeInfo> runtimesList = new ConcurrentHashMap<Integer, RuntimeInfo>();
+	
+	private RuntimeNode root;
+	
+	private static class RuntimeNode {
+		private String frameName;
+		private int runtimeID;
+		
+		private Map<Integer,RuntimeNode> nodes = new HashMap<Integer,RuntimeNode>();
+		
+		public String getFrameName() {
+			return frameName;
+		}
 
+		public void setFrameName(String frameName) {
+			this.frameName = frameName;
+		}
+
+		public int getRuntimeID() {
+			return runtimeID;
+		}
+
+		public void setRuntimeID(int runtimeID) {
+			this.runtimeID = runtimeID;
+		}
+
+		public Map<Integer,RuntimeNode> getNodes() {
+			return nodes;
+		}
+	}
 	
 	public int getRuntimeId() {
 		return runtime.getStamp();
@@ -426,30 +457,120 @@ public class EcmaScriptDebugger extends AbstractService implements IEcmaScriptDe
 		return runtime;
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.opera.core.systems.scope.services.xml.IEcmaScriptDebugger#changeRuntime(int)
+	/**
+	 * Updates the runtimes list to most recent version
+	 * TODO this has to be kept up to date with events and
+	 * as failover we should update
+	 * It builds a tree to find the frame we are looking for
+	 * TODO tree also must be kept up to date
 	 */
-	public void changeRuntime(Integer operaId) {
-		createAllRuntimes();
-		List<RuntimeInfo> runtimes = getRuntimesList();
+	private void buildRuntimeTree() {
+		updateRuntime();
+		RuntimeInfo rootInfo = findRuntime();
+		root = new RuntimeNode();
+		root.setFrameName("_top");
+		root.setRuntimeID(rootInfo.getRuntimeID());
+
+		List<RuntimeInfo> runtimesInfos = new ArrayList<RuntimeInfo>(runtimesList.values());
+		runtimesInfos.remove(rootInfo);
 		
-		RuntimeInfo runtimeInfo = null;
-		for(RuntimeInfo info : runtimes) {
-			Integer currentId = getObject("return window.opera;", info.getRuntimeID());
-			if(operaId.equals(currentId)) {
-				runtimeInfo = info;
-				break;
-			}
-			//releaseObject(currentId);
+		Iterator<RuntimeInfo> itr = runtimesInfos.iterator();
+		while (itr.hasNext()) {
+			RuntimeInfo runtimeInfo = itr.next();
+			addNode(runtimeInfo, root);
+		}
+	}
+	
+	public void changeRuntime(int index) {
+		buildRuntimeTree();
+		
+		RuntimeNode node = root.getNodes().get(index + 1);
+		
+		if(node == null) {
+			throw new NoSuchFrameException("Invalid frame index " + index);
 		}
 		
-		
-		//RuntimeInfo info = (RuntimeInfo) xpathPointer(runtimesList.values(), "/.[htmlFramePath[starts-with(.,'_top/[" + frameIndex + "]')] and windowID='" + windowId + "']").getValue();
-		if(runtimeInfo == null)
-			throw new NoSuchFrameException("Cant find the frame");
-		currentFramePath = runtimeInfo.getHtmlFramePath();
-		setRuntime(runtimeInfo);
+		RuntimeInfo info = runtimesList.get(node.getRuntimeID());
+		currentFramePath = info.getHtmlFramePath();
+		setRuntime(info);
 	}
+	
+	public void changeRuntime(String frameName) {
+		buildRuntimeTree();
+		
+		String[] values = frameName.split("\\.");
+		RuntimeNode curr = root;
+		
+		for(int i = 0; i < values.length; i++) {
+			curr = findNodeByName(values[i], curr);
+		}
+		
+		if(curr == null) {
+			throw new NoSuchFrameException("Invalid frame name " + frameName);
+		}
+		
+		RuntimeInfo info = runtimesList.get(curr.getRuntimeID());
+		currentFramePath = info.getHtmlFramePath();
+		setRuntime(info);
+	}
+	
+	
+	private RuntimeNode findNodeByName(String name, RuntimeNode rootNode) {
+		Iterator<Entry<Integer,RuntimeNode>> itr = rootNode.getNodes().entrySet().iterator();
+		while(itr.hasNext()) {
+			
+			Entry<Integer, RuntimeNode> entry = itr.next();
+			//check if the name is a number
+			if(isNumber(name) && entry.getKey().equals(Integer.valueOf(name) + 1))
+				return entry.getValue();
+			//check if it is really the name
+			else if(entry.getValue().getFrameName().equals(name))
+				return entry.getValue();
+			//last resort is id
+			else if(executeScript("frameElement ? frameElement.id : ''", true, entry.getValue().getRuntimeID()).equals(name))
+				return entry.getValue();
+		}
+		return null;
+	}
+	
+	private boolean isNumber(String name) {
+		boolean canParse = true;
+		try {
+			Integer.valueOf(name);
+		} catch (NumberFormatException e) {
+			canParse = false;
+		}
+		return canParse;
+	}
+	
+	private void addNode(RuntimeInfo info, RuntimeNode root) {
+		String[] values = info.getHtmlFramePath().split("/");
+		RuntimeNode curr = root;
+		//first frame is always _top, so we skip it
+		for(int i = 1 ; i < values.length ; ++i) {
+			int index = framePathToIndex(values[i]);
+			if(curr.getNodes().get(index) == null) {
+				//add to this node
+				RuntimeNode node = new RuntimeNode();
+				int end = values[i].indexOf('[');
+				node.setFrameName(values[i].substring(0,end));
+				curr.getNodes().put(index, node);
+				curr = node;
+			} else {
+				curr = curr.getNodes().get(index);
+			}
+			//else we already know about this node, skip it
+		}
+		//last node gets the runtime id
+		curr.setRuntimeID(info.getRuntimeID());
+	}
+
+	private int framePathToIndex(String framePath) {
+		int begin = framePath.indexOf('[');
+		int end = framePath.indexOf(']');
+		return Integer.valueOf(framePath.substring(begin + 1, end));
+	}
+
 
 	/* (non-Javadoc)
 	 * @see com.opera.core.systems.scope.services.xml.IEcmaScriptDebugger#cleanUpRuntimes(int)
@@ -459,8 +580,9 @@ public class EcmaScriptDebugger extends AbstractService implements IEcmaScriptDe
 		// clean all runtimes with that window id
 		//if (findRuntime() != null) {
 			for (RuntimeInfo runtime : runtimesList.values()) {
-				if (runtime.getWindowID() == windowId)
+				if (runtime.getWindowID() == windowId) {
 					runtimesList.remove(runtime.getRuntimeID());
+				}
 			}
 		//}
 	}
