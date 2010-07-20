@@ -37,10 +37,10 @@ import com.opera.core.systems.scope.services.IWindowManager;
  */
 public class WindowManager extends AbstractService implements IWindowManager {
 
-        private final Logger logger = Logger.getLogger(this.getClass().getName());
-        private Map<Integer, WindowInfo> windows = new ConcurrentHashMap<Integer, WindowInfo>();
-        private Stack<Integer> windowStack = new Stack<Integer>();
-        private Object lock = new Object(); // lock for the windowStack. Note windowStack and windows need to be in sync.
+	private final Logger logger = Logger.getLogger(this.getClass().getName());
+	private Map<Integer, WindowInfo> windows = new ConcurrentHashMap<Integer, WindowInfo>();
+	private Stack<Integer> windowStack = new Stack<Integer>();
+	private Object lock = new Object(); // lock for the windowStack. Note windowStack and windows need to be in sync.
 
 	private final CompiledExpression windowFinder;
 	
@@ -69,10 +69,12 @@ public class WindowManager extends AbstractService implements IWindowManager {
 	public void setActiveWindowId(Integer windowId) {
             synchronized (lock)
             {
+            	//active-window can fire before updated-window
+            	/*
                 WindowInfo window = windows.get(windowId);
                 if (window == null)
                     throw new WindowNotFoundException("Window not found: " + windowId);
-
+                 */
                 windowStack.remove(windowId);
                 windowStack.push(windowId);
             }
@@ -126,19 +128,20 @@ public class WindowManager extends AbstractService implements IWindowManager {
 	
 	public void init() {
 		initializeWindows();
+		windowStack.push(findActiveWindow().getWindowID());
 		findDriverWindow();
 	}
 
 	public void findDriverWindow() {
 		
-		updateActiveWindow();
+		//updateActiveWindow();
 		
 		JXPathContext pathContext = JXPathContext.newContext(windows.values());
 		WindowInfo window = null;
 
-                synchronized (lock) {
-                    window = windows.get(windowStack.peek());
-                }
+		synchronized (lock) {
+			window = windows.get(windowStack.peek());
+		}
 		
 		if (window == null || !window.getWindowType().equals("normal")) {
 			// we dont deal with anything else, at least for now
@@ -211,7 +214,6 @@ public class WindowManager extends AbstractService implements IWindowManager {
 				windows.put(window.getWindowID(), window);
 		}
 		//initialize windowStack
-		windowStack.push(findActiveWindow().getWindowID());
 		
 	}
 
