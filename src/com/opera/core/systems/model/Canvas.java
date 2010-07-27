@@ -58,4 +58,26 @@ public class Canvas {
 	public void setH(int h) {
 		this.h = h;
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if(obj == null || !(obj instanceof Canvas))
+			return false;
+		
+		Canvas canvas = (Canvas) obj;
+		return (getX() == canvas.getX() && getY() == canvas.getY() &&
+				getH() == canvas.getH() && getW() == canvas.getW());
+	}
+	
+	@Override
+	public int hashCode() {
+		// TODO implement
+		return super.hashCode();
+	}
+
+	@Override
+	public String toString() {
+		return "Canvas [x=" + x + ", y=" + y + ", w=" + w + ", h=" + h
+				+ ", viewPortRelative=" + viewPortRelative + "]";
+	}
 }
