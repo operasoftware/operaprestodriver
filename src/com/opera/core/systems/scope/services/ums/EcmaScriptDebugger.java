@@ -451,7 +451,10 @@ public class EcmaScriptDebugger extends AbstractService implements IEcmaScriptDe
 	 * @return
 	 */
 	protected RuntimeInfo findRuntime() {
-		int windowId = windowManager.getActiveWindowId();
+		return findRuntime(windowManager.getActiveWindowId());
+	}
+	
+	protected RuntimeInfo findRuntime(int windowId) {
 		createAllRuntimes();
 		RuntimeInfo runtime = (RuntimeInfo) xpathPointer(runtimesList.values(), "/.[htmlFramePath='" + currentFramePath + "' and windowID='" + windowId + "']").getValue();
 		return runtime;
@@ -647,6 +650,13 @@ public class EcmaScriptDebugger extends AbstractService implements IEcmaScriptDe
 	public void resetFramePath() {
 		currentFramePath = "_top";
 		setRuntime(findRuntime());
+	}
+
+	public String executeJavascript(String using, Integer windowId) {
+		RuntimeInfo runtime = findRuntime(windowId);
+		if(runtime == null) //speed dial doesnt have a runtime
+			return "";
+		return (String) executeScript(using, true, runtime.getRuntimeID());
 	}
 	
 }
