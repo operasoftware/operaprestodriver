@@ -541,5 +541,10 @@ public class EcmascriptService extends AbstractService implements IEcmaScriptDeb
 		// TODO Auto-generated method stub
 		
 	}
+
+	public String executeJavascript(String using, Integer windowId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 }
