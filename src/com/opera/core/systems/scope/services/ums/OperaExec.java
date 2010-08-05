@@ -132,9 +132,7 @@ public class OperaExec extends AbstractService implements IOperaExec {
 		return actions;
 	}
 	
-
-	//FIXME sending params, we have commas, space, what?
-	public void action(String using, String... params) {
+	public void action(String using, int windowID, String... params) {
 		if(!actions.contains(using))
 			throw new WebDriverException("The requested action is not supported : " + using);
 		ActionList.Builder builder = ActionList.newBuilder();
@@ -146,9 +144,9 @@ public class OperaExec extends AbstractService implements IOperaExec {
 		
 		if (!excludedActions.contains(using)) {
 			try {
-				actionBuilder.setWindowID(services.getWindowManager()
-						.getActiveWindowId());
+				actionBuilder.setWindowID(windowID);
 			} catch (WindowNotFoundException e) {
+				
 			}
 		}
 		
@@ -156,6 +154,11 @@ public class OperaExec extends AbstractService implements IOperaExec {
 		builder.addActionList(actionBuilder);
 		if(executeCommand(ExecCommand.EXEC, builder) == null)
 			throw new WebDriverException("Unexpected error while calling action : " + using);
+	}
+
+	//FIXME sending params, we have commas, space, what?
+	public void action(String using, String... params) {
+		action(using, services.getWindowManager().getActiveWindowId(), params);
 	}
 
 	public void key(String key) {
