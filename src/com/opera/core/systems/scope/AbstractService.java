@@ -52,7 +52,7 @@ public abstract class AbstractService {
 	}
 	
 	public boolean isVersionInRange(String version, String maxVersion, String serviceName) {
-		if(VersionUtil.compare(version, maxVersion) >= 0 || VersionUtil.compare(services.getMinVersionFor(serviceName), version) < 0)
+		if(VersionUtil.compare(version, maxVersion) >= 0 || VersionUtil.compare(version, services.getMinVersionFor(serviceName)) < 0)
 			return false;
 		return true;
 	}
