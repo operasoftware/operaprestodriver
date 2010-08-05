@@ -66,7 +66,7 @@ public class StpConnectionListener implements SocketListener {
 
         SocketMonitor.instance().add(server, this, SelectionKey.OP_ACCEPT);
 
-        logger.info("webdriver-opera v0.2.1, ready to accept connections on port " + port);
+        logger.info("webdriver-opera v0.2.2.100805, ready to accept connections on port " + port);
     }
 
     public boolean canRead(SelectableChannel channel) throws IOException {
@@ -79,6 +79,7 @@ public class StpConnectionListener implements SocketListener {
         return true;
     }
     
+    //FIXME ?
     public boolean canWrite(SelectableChannel ch) throws IOException {
         return false;
     }

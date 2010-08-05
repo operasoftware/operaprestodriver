@@ -39,12 +39,12 @@ public class StpThread extends Thread {
     
     @Override
     public void run() {
-        logger.info("Started StpThread.");
+        logger.fine("Started StpThread.");
         while (!cancelled)
         {
             SocketMonitor.poll(60000);
         }
-        logger.info("Stopping StpThread.");
+        logger.fine("Stopping StpThread.");
     }
 
 }

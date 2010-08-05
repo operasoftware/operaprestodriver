@@ -91,4 +91,6 @@ public abstract class AbstractEventHandler {
 		}
 		return responseCode;
 	}
+	
+	public abstract void onRequest(int windowId);
 }
