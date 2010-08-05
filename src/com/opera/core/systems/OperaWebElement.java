@@ -164,6 +164,7 @@ public class OperaWebElement implements RenderedWebElement, SearchContext, Locat
 		//workaround for click synchronization problems
 		sleep(OperaIntervals.EXEC_SLEEP.getValue());
 		parent.waitForLoadToComplete();
+		debugger.executeJavascript("window.focus()");
 		//TODO this one must be tested throughly
 		//parent.gc();
 	}
@@ -491,10 +492,12 @@ public class OperaWebElement implements RenderedWebElement, SearchContext, Locat
 		return false;
 	}
 	
-	//FIXME can be more than one
 	@Override
 	public int hashCode() {
-		return (objectId ^ runtimeId);
+		int result = 42;
+		result = 31 * result + objectId;
+		result = 31 * result + runtimeId;
+		return result;
 	}
 	
 	@Override
