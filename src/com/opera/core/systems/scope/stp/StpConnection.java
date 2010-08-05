@@ -62,6 +62,7 @@ public class StpConnection implements SocketListener {
 
     @Override
     public void finalize() throws Throwable {
+    	logger.severe("STPConnection cleanup");
         if (socketChannel != null)
             close();
         super.finalize();
@@ -122,7 +123,7 @@ public class StpConnection implements SocketListener {
         buffer.put(payload);
 
         // log what is being sent.
-        logger.log(Level.INFO,"SEND: " + command.toString());
+        logger.fine("SEND: " + command.toString());
 
         requests.add(buffer);
         SocketMonitor.instance().modify(socketChannel, this, SelectionKey.OP_READ | SelectionKey.OP_WRITE);
@@ -144,7 +145,7 @@ public class StpConnection implements SocketListener {
      */
     private void send(String message) {
         String scopeMessage = message.length() + " " + message;
-        logger.log(Level.INFO, "WRITE : " + scopeMessage);
+        logger.fine("WRITE : " + scopeMessage);
         byte[] bytes = null;
         try {
                 bytes = scopeMessage.getBytes("UTF-16BE");
@@ -308,11 +309,11 @@ public class StpConnection implements SocketListener {
 
         List<String> services  = Arrays.asList(message.substring(split+1).split(","));
         connectionHandler.onServiceList(services);
-        logger.info("Service List OK.");
+        logger.fine("Service List OK.");
 
         if (!services.contains("stp-1"))
         {
-            connectionHandler.onException(new WebDriverException("Stp-1 is not supported!"));
+            connectionHandler.onException(new WebDriverException("STP/0 is not supported!"));
             return;
         }
 
@@ -426,7 +427,7 @@ public class StpConnection implements SocketListener {
                     }
                 } else {
                 	
-                	logger.info("tried to read a message, but expected " + 4 + messageSize + " bytes, and only got " + buffer.limit());
+                	logger.fine("tried to read a message, but expected " + 4 + messageSize + " bytes, and only got " + buffer.limit());
                 	
                 	buffer.position(0);
                 	bytesWeHaveBeenreading = 0;
@@ -435,7 +436,7 @@ public class StpConnection implements SocketListener {
         
     	}
         
-    	//pop number of readed bytes from 
+    	//pop number of read bytes from 
     	if(bytesWeHaveBeenreading > 0){
     		
     		//pop X bytes, and keep message for the rest!
@@ -481,17 +482,17 @@ public class StpConnection implements SocketListener {
             case 2:// response
                     // log what is being sent.
                     Response response = Response.parseFrom(payload);
-                    logger.log(Level.INFO,"RECV RESPONSE: " + response.toString());
+                    logger.fine("RECV RESPONSE: " + response.toString());
                     signalResponse(response.getTag(), response);
                     break;
             case 3:// event
                     Event event = Event.parseFrom(payload);
-                    logger.log(Level.INFO,"RECV EVENT: " + event.toString());
+                    logger.fine("RECV EVENT: " + event.toString());
                     signalEvent(event);
                     break;
             case 4:// error
                     Error error = Error.parseFrom(payload);
-                    logger.log(Level.INFO,"RECV ERROR: " + error.toString());
+                    logger.fine("RECV ERROR: " + error.toString());
                     if (error.getService().equals("ecmascript-debugger") && error.getStatus() == Status.INTERNAL_ERROR.getCode()) {
                             signalResponse(error.getTag(), null);
                     } else {
