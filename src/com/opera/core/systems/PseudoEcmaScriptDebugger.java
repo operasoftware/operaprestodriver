@@ -89,8 +89,9 @@ public class PseudoEcmaScriptDebugger implements IEcmaScriptDebugger {
 		return null;
 	}
 
-	public void changeRuntime(int index) {
-		// TODO Auto-generated method stub
-		
+	public void changeRuntime(int index) { }
+
+	public String executeJavascript(String using, Integer windowId) {
+		return null;
 	}
 }

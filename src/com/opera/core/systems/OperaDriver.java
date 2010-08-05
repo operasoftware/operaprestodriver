@@ -31,12 +31,14 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.Cookie;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.NoSuchFrameException;
+import org.openqa.selenium.NoSuchWindowException;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.Speed;
 import org.openqa.selenium.WebDriver;
@@ -232,7 +234,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,FindsB
 	}
 
 	private void closeWindow() {
-		windowManager.closeActiveWindow();
+		exec.action("Close page");
 	}
 
 	public void stop() {
@@ -252,15 +254,27 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,FindsB
 	}
 
 	public String getTitle() {
-		return debugger.executeJavascript("return document.title;");
+		return debugger.executeJavascript("return top.document.title ? top.document.title : '';");
 	}
 
 	public String getWindowHandle() {
-		return String.valueOf(windowManager.getActiveWindowId());
+		return debugger.executeJavascript("return top.window.name ? top.window.name : top.document.title;");
 	}
 
 	public Set<String> getWindowHandles() {
-		return windowManager.getWindowHandles();
+		windowManager.clearFilter();
+		
+		List<Integer> windowIds = windowManager.getWindowHandles();
+		Set<String> handles = new TreeSet<String>();
+		
+		for (Integer windowId : windowIds) {
+			//windowManager.filterWindow(windowId);
+			handles.add(debugger.executeJavascript("return top.window.name ? top.window.name : top.document.title;", windowId));
+		}
+		
+		windowManager.filterActiveWindow();
+		debugger.resetRuntimesList();
+		return handles;
 	}
 
 	public Options manage() {
@@ -317,7 +331,27 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,FindsB
 		
 
 		public WebDriver window(String windowName) {
-			windowManager.setActiveWindow(windowName); //find by title
+			windowManager.clearFilter();
+			
+			List<Integer> windowIds = windowManager.getWindowHandles();
+			
+			Integer id = 0;
+			
+			for (Integer windowId : windowIds) {
+				String name = debugger.executeJavascript("return top.window.name ? top.window.name : top.document.title;", windowId);
+				if(name.equals(windowName)) {
+					id = windowId;
+					break;
+				}
+			}
+			
+			if(id == 0)
+				throw new NoSuchWindowException("Window with name "  + windowName + " not found");
+			windowManager.setActiveWindowId(id);
+			
+			windowManager.filterActiveWindow();
+			debugger.resetRuntimesList();
+			
 			defaultContent(); //set runtime to _top
 			debugger.executeJavascript("window.focus()", false); //steal focus
 			return OperaDriver.this;

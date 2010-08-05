@@ -296,9 +296,11 @@ public class EcmaScriptDebugger extends AbstractService implements IEcmaScriptDe
 	}
 	
 	protected Response eval(String using, int runtimeId, Variable...variables) {
+		/*
 		if (windowManager.getActiveWindowId() != activeWindowId) {
 			recover();
 		}
+		*/
 		
 		EvalData.Builder builder = buildEval(using, runtimeId);
 		builder.addAllVariableList(Arrays.asList(variables));
@@ -653,7 +655,11 @@ public class EcmaScriptDebugger extends AbstractService implements IEcmaScriptDe
 	}
 
 	public String executeJavascript(String using, Integer windowId) {
+		//FIXME workaround for frame issues when executing in a specific window
+		String tmp = currentFramePath;
+		currentFramePath = "_top";
 		RuntimeInfo runtime = findRuntime(windowId);
+		currentFramePath = tmp;
 		if(runtime == null) //speed dial doesnt have a runtime
 			return "";
 		return (String) executeScript(using, true, runtime.getRuntimeID());
