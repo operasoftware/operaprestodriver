@@ -9,6 +9,7 @@ import com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessage;
 import com.opera.core.systems.scope.protos.EcmascriptProtos.ReadyStateChange;
 import com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeID;
 import com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeInfo;
+import com.opera.core.systems.scope.protos.HttpLoggerProtos.Header;
 import com.opera.core.systems.scope.protos.UmsProtos.Event;
 import com.opera.core.systems.scope.protos.WmProtos.WindowID;
 import com.opera.core.systems.scope.protos.WmProtos.WindowInfo;
@@ -84,7 +85,7 @@ public class UmsEventParser {
 			buildPayload(event, builder);
 			eventHandler.onReadyStateChange(builder.build());
 		}
-		/*else if(service.equals("http-logger") && eventId == 2) {
+		else if(service.equals("http-logger") && eventId == 1) {
 			//console logger only sends one message
 			//FIXME make generic
 			Header header;
@@ -93,10 +94,9 @@ public class UmsEventParser {
 			} catch (InvalidProtocolBufferException e) {
 				throw new WebDriverException("Exception while parsing event");
 			}
-			eventHandler.onHttpResponse(eventHandler.parseHeader(header.getHeader()));
+			eventHandler.onRequest(header.getWindowID());
 		}
-		*/
-		
+
 	}
 	
 	private final GeneratedMessage.Builder<?> buildPayload(Event event, GeneratedMessage.Builder<?> builder) {

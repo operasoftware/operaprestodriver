@@ -346,4 +346,9 @@ public class ScopeServices implements IConnectionHandler {
 	public void startStpThread() {
 		stpThread.start();
 	}
+
+	public void onRequest(int windowId) {
+		logger.info("Window closed: windowId=" + windowId);
+		waitState.onRequest(windowId);
+	}
 }

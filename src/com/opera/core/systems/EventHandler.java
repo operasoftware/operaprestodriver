@@ -37,12 +37,16 @@ public class EventHandler extends AbstractEventHandler {
 	}
 
 
+	public void onRequest(int windowId) {
+		services.onRequest(windowId);
+	}
+	
 	/**
 	 * Handles windows that have been closed. Removes it from the
 	 * list and removes the runtimes that are associated with it
 	 */
 	public void onWindowClosed(Integer id) {
-                services.onWindowClosed(id);
+		services.onWindowClosed(id);
 		services.getWindowManager().removeWindow(id);
 		services.getDebugger().cleanUpRuntimes(id);
 	}

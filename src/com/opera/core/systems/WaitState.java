@@ -31,6 +31,7 @@ public class WaitState {
         HANDSHAKE,       /* STP Handshake */
         EVENT_WINDOW_LOADED, /* finished loaded */
         EVENT_WINDOW_CLOSED, /* window closed */
+        EVENT_REQUEST_FIRED /* sent when a http request is fired */
     }
 
     private class ResultItem
@@ -72,12 +73,14 @@ public class WaitState {
         }
     }
 
+    //Replace with BlockingQueue
     LinkedList<ResultItem> events = new LinkedList<ResultItem>();
 
     enum ResponseType {
     	HANDSHAKE,
     	RESPONSE,
-    	WINDOW_LOADED;
+    	WINDOW_LOADED,
+    	REQUEST_FIRED;
     }
     public WaitState()
     {
@@ -99,7 +102,7 @@ public class WaitState {
     {
         synchronized (lock)
         {
-            logger.info("Got handshake");
+            logger.fine("Got handshake");
             events.add(new ResultItem(WaitResult.HANDSHAKE));
             lock.notify();
         }
@@ -109,7 +112,7 @@ public class WaitState {
     {
         synchronized (lock)
         {
-            logger.info("Got response for " + tag);
+            logger.fine("Got response for " + tag);
             events.add(new ResultItem(response, tag));
             lock.notify();
         }
@@ -119,7 +122,7 @@ public class WaitState {
     {
         synchronized (lock)
         {
-            logger.info("Got ERROR for " + tag);
+            logger.fine("Got ERROR for " + tag);
             events.add(new ResultItem(WaitResult.ERROR, tag));
             lock.notify();
         }
@@ -162,17 +165,26 @@ public class WaitState {
     {
         synchronized (lock)
         {
-            logger.info("Event: onWindowLoaded");
+            logger.fine("Event: onWindowLoaded");
             events.add(new ResultItem(WaitResult.EVENT_WINDOW_LOADED, windowId));
             lock.notify();
         }
     }
+    
+	public void onRequest(int windowId) {
+		synchronized (lock)
+        {
+            logger.info("Event: onRequest");
+            events.add(new ResultItem(WaitResult.EVENT_REQUEST_FIRED, windowId));
+            lock.notify();
+        }
+	}
 
     void onWindowClosed(int windowId)
     {
         synchronized (lock)
         {
-            logger.info("Event: onWindowClosed");
+            logger.fine("Event: onWindowClosed");
             events.add(new ResultItem(WaitResult.EVENT_WINDOW_CLOSED, windowId));
             lock.notify();
         }
@@ -242,6 +254,10 @@ public class WaitState {
                         if (result.data == match && type == ResponseType.WINDOW_LOADED)
                                 throw new CommunicationException("Window closed unexpectedly");
                         break;
+                    case EVENT_REQUEST_FIRED:
+                    	 if (result.data == match && type == ResponseType.REQUEST_FIRED)
+                             return null;
+                     break;
                 }
             }
         }
@@ -257,5 +273,9 @@ public class WaitState {
 
     public Response waitFor(int tag, long timeout) {
         return waitAndParseResult(timeout, tag, ResponseType.RESPONSE);
+    }
+    
+    public void waitForRequest(int windowId, long timeout) {
+        waitAndParseResult(timeout, windowId, ResponseType.REQUEST_FIRED);
     }
 }
