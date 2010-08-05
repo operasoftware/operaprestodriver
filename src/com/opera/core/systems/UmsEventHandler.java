@@ -19,18 +19,20 @@ public class UmsEventHandler extends EventHandler {
 	
 	@Override
 	public void onRuntimeStarted(RuntimeInfo info) {
+		/*
 		if(info.getHtmlFramePath().equals("_top") && info.getWindowID() == services.getWindowManager().getActiveWindowId()) {
 			//check if we already have such a runtime and clean them up if needed
 			services.getDebugger().cleanUpRuntimes();
 			services.getDebugger().setRuntime(info);
 		}
+		*/
 		services.getDebugger().addRuntime(info);
 	}
 	
 	@Override
 	public void onUpdatedWindow(WindowInfo info) {
 		//logger.log(Level.INFO, window.toString());
-		if(info.getOpenerID() == 0)
+		//if(info.getOpenerID() == 0)
 			services.getWindowManager().addWindow(info);
 	}
 	
