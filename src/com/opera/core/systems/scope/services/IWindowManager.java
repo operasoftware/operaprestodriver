@@ -1,9 +1,11 @@
 package com.opera.core.systems.scope.services;
 
-import java.util.Set;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.openqa.selenium.WebDriverException;
+
+import com.opera.core.systems.scope.protos.WmProtos.WindowInfo;
 
 public interface IWindowManager {
 
@@ -16,15 +18,15 @@ public interface IWindowManager {
 
 	int getActiveWindowId();
 
-	void addWindow(Object window);
+	void addWindow(WindowInfo window);
 
 	void removeWindow(Integer windowId);
 	
 	void filterActiveWindow();
 
-        void closeWindow(Integer window);
-        void closeActiveWindow();
-        void closeAllWindows();
+	void closeWindow(Integer window);
+
+	void closeAllWindows();
 
 	/**
 	 * Get the list of all windows, then find a driver window (which needs to be 'normal' window)
@@ -40,21 +42,17 @@ public interface IWindowManager {
 	 */
 	void findDriverWindow();
 
-	/**
-	 * Finds and updates the active window
-	 * In STP/0 this command triggers and event and
-	 * is handled by event handler. This has been fixed
-	 * in STP/1
-	 */
-	void updateActiveWindow();
-
-	void setActiveWindow(String windowName);
+	void setActiveWindow(String title);
 	
-	Set<String> getWindowHandles();
+	List<Integer> getWindowHandles();
 	
 	int getOpenWindowCount();
 	
 	AtomicInteger getLastHttpResponseCode();
 
 	void resetWindowsList();
+
+	void clearFilter();
+
+	void filterWindow(Integer windowId);
 }
