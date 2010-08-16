@@ -98,6 +98,10 @@ public class StackHashMap<K,V> implements Map<K,V> {
 		}
 	}
 	
+	/**
+	 * Removes the first value from the map
+	 * @return the value that was removed
+	 */
 	public V pop() {
 		synchronized (map) {
 			return map.remove(list.removeFirst());
@@ -111,6 +115,9 @@ public class StackHashMap<K,V> implements Map<K,V> {
 		}
 	}
 	
+	/**
+	 * @return the first value in the backing map
+	 */
 	public V peek() {
 		synchronized (map) {
 			K k = peekKey();
@@ -118,18 +125,34 @@ public class StackHashMap<K,V> implements Map<K,V> {
 		}
 	}
 	
+	/**
+	 * @return the first key in the backing linked list
+	 */
 	public K peekKey() {
 		return (list.isEmpty()) ? null : list.getFirst();
 	}
 	
+	/**
+	 * @return an unmodifiable copy of the backing linkedlist(used as a stack)
+	 */
 	public List<K> asStack() {
 		return Collections.unmodifiableList(list);
 	}
 	
+	/**
+	 * @return an unmodifiable copy of the backing map
+	 */
 	public Map<K,V> asMap() {
 		return Collections.unmodifiableMap(map);
 	}
 	
+	/**
+	 * Puts a key to top of the map if absent
+	 * if the key is present in stack it is removed
+	 * @param k
+	 * @param v
+	 * @return the value if it is not contained, null otherwise
+	 */
 	public V pushIfAbsent(K k, V v) {
 		synchronized (map) {
 			if(!list.contains(k)) {
