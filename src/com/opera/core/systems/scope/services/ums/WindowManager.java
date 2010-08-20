@@ -2,11 +2,8 @@
 
 package com.opera.core.systems.scope.services.ums;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Logger;
 
@@ -61,7 +58,7 @@ public class WindowManager extends AbstractService implements IWindowManager {
 	}
     
 	public void setActiveWindowId(Integer windowId) {
-		windows.pushIfAbsent(windowId, null);
+		windows.putIfAbsent(windowId, null);
 	}
 
 	public int getActiveWindowId() {
@@ -73,10 +70,6 @@ public class WindowManager extends AbstractService implements IWindowManager {
 			return findActiveWindow().getWindowID();
 		}
 		return windowID.intValue();
-	}
-
-	private Map<Integer, WindowInfo> getWindows() {
-		return windows.asMap();
 	}
 
 	public void addWindow(WindowInfo info) {
@@ -161,7 +154,7 @@ public class WindowManager extends AbstractService implements IWindowManager {
 				windows.put(window.getWindowID(), window);
 		}
 		//initialize windowStack
-		windows.pushIfAbsent(findActiveWindow().getWindowID(), null);
+		windows.putIfAbsent(findActiveWindow().getWindowID(), null);
 	}
 
 	/* (non-Javadoc)
@@ -198,6 +191,7 @@ public class WindowManager extends AbstractService implements IWindowManager {
 	 * @see com.opera.core.systems.scope.services.xml.IWindowManager#getWindowHandles()
 	 */
 	public List<Integer> getWindowHandles() {
+		/*
 		Collection<WindowInfo> windowCollection = getWindows().values();
 		List<Integer> handles = new ArrayList<Integer>(windowCollection.size());
 		
@@ -205,6 +199,8 @@ public class WindowManager extends AbstractService implements IWindowManager {
 			handles.add(window.getWindowID());
 		}
 		return handles;
+		*/
+		return new LinkedList<Integer>(windows.asStack());//handles;
 	}
 
 	public void resetWindowsList() {

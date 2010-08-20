@@ -8,6 +8,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentMap;
 
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
@@ -23,7 +24,7 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
  * @param <K>
  * @param <V>
  */
-public class StackHashMap<K,V> implements Map<K,V> {
+public class StackHashMap<K,V> implements ConcurrentMap<K,V> {
 	
 	private final Map<K, V> map;
 	private final LinkedList<K> list;
@@ -51,6 +52,8 @@ public class StackHashMap<K,V> implements Map<K,V> {
 			if(!map.containsKey(key))
 				list.addLast(key); //if not add last
 			//if we already have the key, just update the value
+			else
+				 value = (value == null) ? map.get(key) : value; //we already know this key and don't want to nullify it
 			return map.put(key, value);
 		}
 	}
@@ -155,9 +158,10 @@ public class StackHashMap<K,V> implements Map<K,V> {
 	 * @param v
 	 * @return the value if it is not contained, null otherwise
 	 */
-	public V pushIfAbsent(K k, V v) {
+	public V putIfAbsent(K k, V v) {
 		synchronized (map) {
-			if(!list.contains(k)) {
+			if(!containsKey(k)) {
+				list.addFirst(k);
 				return map.put(k, v);				
 			} else {
 				list.remove(k);
@@ -165,6 +169,20 @@ public class StackHashMap<K,V> implements Map<K,V> {
 			list.addFirst(k);
 			return null;
 		}
+	}
+
+
+
+	public boolean remove(Object key, Object value) {
+		throw new NotImplementedException();
+	}
+
+	public boolean replace(K key, V oldValue, V newValue) {
+		throw new NotImplementedException();
+	}
+
+	public V replace(K key, V value) {
+		throw new NotImplementedException();
 	}
 
 }
