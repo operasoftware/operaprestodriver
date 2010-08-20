@@ -183,6 +183,15 @@ public class WindowManager extends AbstractService implements IWindowManager {
 		} else {
 			while (!list.isEmpty()) {
 				closeWindow(list.removeFirst());
+				
+				//BAD HACK! DELAYING CLOSE-WINDOW
+				try {
+					Thread.sleep(10);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				logger.warning("Bad hack: sleeping 10ms between closing of windows, to prevent opera from crashing!");
+				//BAD HACK DONE!
 			}
 		}
 	}

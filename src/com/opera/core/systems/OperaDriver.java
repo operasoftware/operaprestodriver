@@ -272,17 +272,22 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,FindsB
 			}
 			return handles;
 		}
-		
+
 		windowManager.clearFilter();
 		
 		for (Integer windowId : windowIds) {
 			//windowManager.filterWindow(windowId);
-			handles.add(debugger.executeJavascript("return top.window.name ? top.window.name : top.document.title;", windowId));
+			String handleName = debugger.executeJavascript("return top.window.name ? top.window.name : (top.document.title ? top.document.title : 'undefined');", windowId);
+			handles.add(handleName);
 		}
 		
 		windowManager.filterActiveWindow();
 		debugger.resetRuntimesList();
 		return handles;
+	}
+	
+	public int getWindowCount() {
+		return windowManager.getWindowHandles().size();
 	}
 
 	public Options manage() {
