@@ -8,9 +8,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.logging.Logger;
 
 import org.openqa.selenium.WebDriverException;
-import com.opera.core.systems.scope.exceptions.WindowNotFoundException;
 
 import com.opera.core.systems.ScopeServices;
 import com.opera.core.systems.model.Canvas;
@@ -19,6 +19,7 @@ import com.opera.core.systems.model.OperaColor;
 import com.opera.core.systems.model.ScreenShotReply;
 import com.opera.core.systems.scope.AbstractService;
 import com.opera.core.systems.scope.ExecCommand;
+import com.opera.core.systems.scope.exceptions.WindowNotFoundException;
 import com.opera.core.systems.scope.internal.OperaColors;
 import com.opera.core.systems.scope.internal.OperaIntervals;
 import com.opera.core.systems.scope.internal.OperaMouseKeys;
@@ -43,6 +44,8 @@ import com.opera.core.systems.util.VersionUtil;
  */
 public class OperaExec extends AbstractService implements IOperaExec {
 
+	private static Logger logger = Logger.getLogger(OperaExec.class.getName());
+	
 	private List<String> keys;
 	
 	private Set<String> actions;
@@ -146,7 +149,8 @@ public class OperaExec extends AbstractService implements IOperaExec {
 			try {
 				actionBuilder.setWindowID(windowID);
 			} catch (WindowNotFoundException e) {
-				
+				logger.warning("Exception from setWindowID: " + e);
+				e.printStackTrace();
 			}
 		}
 		
