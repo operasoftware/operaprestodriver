@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+
 
 /**
  * A thread safe stack hash map for use in window manager
@@ -46,7 +48,7 @@ public class StackHashMap<K,V> implements Map<K,V> {
 	public V put(K key, V value) {
 		synchronized(map) {
 			//check if we already have the key
-			if(!list.contains(key))
+			if(!map.containsKey(key))
 				list.addLast(key); //if not add last
 			//if we already have the key, just update the value
 			return map.put(key, value);
@@ -65,7 +67,7 @@ public class StackHashMap<K,V> implements Map<K,V> {
 	}
 
 	public Set<K> keySet() {
-		return map.keySet();
+		throw new NotImplementedException();
 	}
 
 	public Collection<V> values() {
@@ -73,7 +75,7 @@ public class StackHashMap<K,V> implements Map<K,V> {
 	}
 
 	public Set<Map.Entry<K, V>> entrySet() {
-		return map.entrySet();
+		throw new NotImplementedException();
 	}
 
 	public int size() {

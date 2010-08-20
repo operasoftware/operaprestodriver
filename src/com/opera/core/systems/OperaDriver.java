@@ -262,7 +262,6 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,FindsB
 	}
 
 	public Set<String> getWindowHandles() {
-		windowManager.clearFilter();
 		
 		List<Integer> windowIds = windowManager.getWindowHandles();
 		Set<String> handles = new TreeSet<String>();
@@ -275,7 +274,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,FindsB
 		}
 
 		windowManager.clearFilter();
-
+		
 		for (Integer windowId : windowIds) {
 			//windowManager.filterWindow(windowId);
 			String handleName = debugger.executeJavascript("return top.window.name ? top.window.name : (top.document.title ? top.document.title : 'undefined');", windowId);
