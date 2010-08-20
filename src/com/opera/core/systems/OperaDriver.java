@@ -262,10 +262,18 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,FindsB
 	}
 
 	public Set<String> getWindowHandles() {
-		windowManager.clearFilter();
 		
 		List<Integer> windowIds = windowManager.getWindowHandles();
 		Set<String> handles = new TreeSet<String>();
+		
+		if(OperaIntervals.ENABLE_DEBUGGER.getValue() != 1) {
+			for (Integer windowId : windowIds) {
+				handles.add(windowId.toString());
+			}
+			return handles;
+		}
+		
+		windowManager.clearFilter();
 		
 		for (Integer windowId : windowIds) {
 			//windowManager.filterWindow(windowId);
