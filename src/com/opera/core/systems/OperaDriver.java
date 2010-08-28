@@ -22,6 +22,7 @@ import java.awt.Dimension;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -30,6 +31,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -60,6 +62,7 @@ import com.opera.core.systems.model.ScreenShotReply;
 import com.opera.core.systems.model.ScriptResult;
 import com.opera.core.systems.model.UserInteraction;
 import com.opera.core.systems.scope.exceptions.CommunicationException;
+import com.opera.core.systems.scope.exceptions.FatalException;
 import com.opera.core.systems.scope.handlers.PbActionHandler;
 import com.opera.core.systems.scope.internal.OperaBinary;
 import com.opera.core.systems.scope.internal.OperaIntervals;
@@ -799,5 +802,42 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,FindsB
     public int getPid() {
     	return binary.getPid();
     }
+    
+    /**
+     * Cache of OperaDriver version.
+     */
+    private static String operaDriverVersion = null;
 
+    /**
+     * Gets the OperaDriver version.  Once the version number has been
+     * loaded from an external flat file, it will be cached and returned
+     * from cache on future calls.
+     * @return 
+     * 
+     * @return OperaDriver version number as a String
+     * @throws IOException if the version file cannot be found
+     */
+    public String getOperaDriverVersion() throws IOException {
+    	if (operaDriverVersion == null) {
+    		InputStream stream = OperaDriver.class.getResourceAsStream("/com/opera/core/systems/VERSION");
+    		
+    		StringBuilder stringBuilder = new StringBuilder();
+    		Scanner scanner = new Scanner(stream);
+
+    		try {
+    			while (scanner.hasNext()) {
+    				stringBuilder.append(scanner.nextLine());
+    			}
+    			
+    			operaDriverVersion = stringBuilder.toString();
+    		} catch (Exception e) {
+    			throw new FatalException("Could not load the version information:"
+    					+ e.getMessage());
+    		} finally {
+    			scanner.close();
+    		}
+    	}
+    	
+    	return operaDriverVersion;
+    }
 }

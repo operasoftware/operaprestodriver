@@ -8,6 +8,7 @@ import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.util.logging.Logger;
 
+//import com.opera.core.systems.OperaDriver;
 import com.opera.core.systems.scope.handlers.AbstractEventHandler;
 import com.opera.core.systems.scope.handlers.IConnectionHandler;
 import com.opera.core.systems.util.SocketListener;
@@ -66,7 +67,8 @@ public class StpConnectionListener implements SocketListener {
 
         SocketMonitor.instance().add(server, this, SelectionKey.OP_ACCEPT);
 
-        logger.info("webdriver-opera v0.2.2.100805, ready to accept connections on port " + port);
+        //logger.info("webdriver-opera " + OperaDriver.getOperaDriverVersion() + ", ready to accept connections on port " + port);
+        logger.info("Ready to accept connections on port " + port);
     }
 
     public boolean canRead(SelectableChannel channel) throws IOException {
