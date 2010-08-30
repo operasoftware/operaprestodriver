@@ -67,13 +67,13 @@ import com.opera.core.systems.scope.services.IEcmaScriptDebugger;
 import com.opera.core.systems.scope.services.IOperaExec;
 import com.opera.core.systems.scope.services.IWindowManager;
 
-public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,FindsByXPath, FindsByName, FindsByTagName, FindsByClassName,
+public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, FindsByXPath, FindsByName, FindsByTagName, FindsByClassName,
 		FindsByCssSelector, SearchContext, JavascriptExecutor {
 	
-	private IEcmaScriptDebugger debugger;
-	private IOperaExec exec;
-	private IWindowManager windowManager;
-	private ScopeServices services;
+	protected IEcmaScriptDebugger debugger;
+	protected IOperaExec exec;
+	protected IWindowManager windowManager;
+	protected ScopeServices services;
 	protected ScopeActions actionHandler;
 	private OperaBinary binary;
 	
