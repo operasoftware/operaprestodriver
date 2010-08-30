@@ -506,6 +506,8 @@ public class EcmaScriptDebugger extends AbstractService implements IEcmaScriptDe
 		
 		for(int i = 0; i < values.length; i++) {
 			curr = findNodeByName(values[i], curr);
+			if(curr == null)
+				break;
 		}
 		
 		if(curr == null) {
