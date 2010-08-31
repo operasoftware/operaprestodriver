@@ -24,6 +24,11 @@ public class OperaDesktopDriver extends OperaDriver {
 		return versions;
 	}
 	
+	public int getActiveWindowID()
+	{
+		return desktopWindowManager.getActiveWindowId();
+	}
+	
 }
 
 
