@@ -9,6 +9,8 @@ import com.opera.core.systems.scope.DesktopWindowManagerCommand;
 import com.opera.core.systems.ScopeServices;
 
 import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo;
+import com.opera.core.systems.scope.protos.UmsProtos.Response;
+import com.opera.core.systems.scope.protos.WmProtos.WindowID;
 //import com.opera.core.systems.scope.protos.UmsProtos.Response;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID;
 import com.opera.core.systems.scope.services.IDesktopWindowManager;
@@ -34,13 +36,10 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 
 	public int getActiveWindowId() {
 		// TODO Auto-generated method stub
-		/*
 		Response response = executeCommand(DesktopWindowManagerCommand.GET_ACTIVE_WINDOW, null);
-		WindowID.Builder builder = WindowID.newBuilder();
+		DesktopWindowID.Builder builder = DesktopWindowID.newBuilder();
 		buildPayload(response, builder);
-		return builder.build();
-		*/
-		return 0;
+		return builder.build().getWindowID();
 	}
 
 	public void addWindow(DesktopWindowInfo window) {
