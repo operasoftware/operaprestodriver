@@ -143,7 +143,7 @@ public class ScopeServices implements IConnectionHandler {
 	private void initializeServices() {
 		exec.init();
 		windowManager.init();
-		if (versions.containsKey("desktop-window-manager"))
+		if (versions.containsKey("desktop-window-manager") && desktopWindowManager != null)
 				desktopWindowManager.init();
 		debugger.init();
 	}
