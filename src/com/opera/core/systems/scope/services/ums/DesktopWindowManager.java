@@ -1,6 +1,9 @@
 package com.opera.core.systems.scope.services.ums;
 
 import java.util.List;
+
+import org.apache.commons.jxpath.JXPathContext;
+
 import com.opera.core.systems.scope.AbstractService;
 import com.opera.core.systems.scope.DesktopWindowManagerCommand;
 import com.opera.core.systems.ScopeServices;
@@ -17,7 +20,7 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 			
 			String serviceName = "desktop-window-manager";
 			
-			if(!isVersionInRange(version, "3.0", serviceName))
+			if(!isVersionInRange(version, "5.0", serviceName))
 				throw new UnsupportedOperationException(serviceName + " version " + version + " is not supported");
 			
 			services.setDesktopWindowManager(this);

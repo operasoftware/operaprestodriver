@@ -5,6 +5,7 @@ import java.util.List;
 import com.opera.core.systems.ScopeServices;
 import com.opera.core.systems.scope.protos.ScopeProtos.HostInfo;
 import com.opera.core.systems.scope.protos.ScopeProtos.Service;
+import com.opera.core.systems.scope.services.IDesktopWindowManager;
 import com.opera.core.systems.scope.services.IEcmaScriptDebugger;
 import com.opera.core.systems.scope.services.IOperaExec;
 import com.opera.core.systems.scope.services.IWindowManager;
@@ -14,6 +15,7 @@ public class UmsServices {
 
 	protected final IEcmaScriptDebugger debugger;
 	protected final IWindowManager windowManager;
+	protected final IDesktopWindowManager desktopWindowManager;
 	protected final IOperaExec exec;
 
 	public IEcmaScriptDebugger getDebugger() {
@@ -31,7 +33,12 @@ public class UmsServices {
 	public UmsServices(ScopeServices services, HostInfo info) {
 		List<Service> serviceList = info.getServiceListList();
 		windowManager = new WindowManager(services, getVersionForService( serviceList, "window-manager"));
-
+		
+		if (findServiceNamed(serviceList, "desktop-window-manager") != null)
+			desktopWindowManager = new DesktopWindowManager(services, getVersionForService( serviceList, "desktop-window-manager"));
+		else
+			desktopWindowManager = null;
+		
 		/*
 		if (findServiceNamed(serviceList, "ecmascript") != null) {
 			
