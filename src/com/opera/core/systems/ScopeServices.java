@@ -25,6 +25,7 @@ import com.opera.core.systems.scope.protos.ScopeProtos.ServiceResult;
 import com.opera.core.systems.scope.protos.ScopeProtos.ServiceSelection;
 import com.opera.core.systems.scope.protos.UmsProtos.Command;
 import com.opera.core.systems.scope.protos.UmsProtos.Response;
+import com.opera.core.systems.scope.services.IDesktopWindowManager;
 import com.opera.core.systems.scope.services.IEcmaScriptDebugger;
 import com.opera.core.systems.scope.services.IOperaExec;
 import com.opera.core.systems.scope.services.IWindowManager;
@@ -39,6 +40,7 @@ public class ScopeServices implements IConnectionHandler {
 	private IEcmaScriptDebugger debugger;
 	private IOperaExec exec;
 	private IWindowManager windowManager;
+	private IDesktopWindowManager desktopWindowManager; 
 	private Map<String, String> versions;
 	private List<IConsoleListener> listeners;
 
@@ -87,6 +89,14 @@ public class ScopeServices implements IConnectionHandler {
 	public void setWindowManager(IWindowManager windowManager) {
 		this.windowManager = windowManager;
 	}
+	
+	public IDesktopWindowManager getDesktopWindowManager() {
+		return desktopWindowManager;
+	}
+
+	public void setDesktopWindowManager(IDesktopWindowManager desktopWindowManager) {
+		this.desktopWindowManager = desktopWindowManager;
+	}
 
 	/**
 	 * Creates the scope server on specified address and port
@@ -118,6 +128,10 @@ public class ScopeServices implements IConnectionHandler {
 
 		wantedServices.add("exec");
 		wantedServices.add("window-manager");
+		
+		if (versions.containsKey("desktop-window-manager"))
+			wantedServices.add("desktop-window-manager");
+		
 		wantedServices.add("console-logger");
 //		wantedServices.add("http-logger");
 
@@ -129,6 +143,8 @@ public class ScopeServices implements IConnectionHandler {
 	private void initializeServices() {
 		exec.init();
 		windowManager.init();
+		if (versions.containsKey("desktop-window-manager"))
+				desktopWindowManager.init();
 		debugger.init();
 	}
 
