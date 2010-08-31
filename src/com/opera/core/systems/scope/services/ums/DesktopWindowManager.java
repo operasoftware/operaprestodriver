@@ -2,17 +2,17 @@ package com.opera.core.systems.scope.services.ums;
 
 import java.util.List;
 import com.opera.core.systems.scope.AbstractService;
-import com.opera.core.systems.scope.WindowManagerCommand;
-import com.opera.core.systems.DesktopScopeServices;
+import com.opera.core.systems.scope.DesktopWindowManagerCommand;
+import com.opera.core.systems.ScopeServices;
 
 import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo;
-import com.opera.core.systems.scope.protos.UmsProtos.Response;
-import com.opera.core.systems.scope.protos.WmProtos.WindowID;
+//import com.opera.core.systems.scope.protos.UmsProtos.Response;
+import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID;
 import com.opera.core.systems.scope.services.IDesktopWindowManager;
 
 public class DesktopWindowManager extends AbstractService implements IDesktopWindowManager {
 
-	 public DesktopWindowManager(DesktopScopeServices services, String version) {
+	 public DesktopWindowManager(ScopeServices services, String version) {
 			super(services, version);
 			
 			String serviceName = "desktop-window-manager";
