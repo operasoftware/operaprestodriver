@@ -38,7 +38,7 @@ public enum DesktopWindowManagerCommand implements ICommand {
 	    }
 
 	    public String getServiceName() {
-	        return "window-manager";
+	        return "desktop-window-manager";
 	    }
 
 	    public static DesktopWindowManagerCommand get(int code) {
