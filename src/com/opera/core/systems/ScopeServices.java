@@ -19,6 +19,7 @@ import com.opera.core.systems.model.ICommand;
 import com.opera.core.systems.scope.ScopeCommand;
 import com.opera.core.systems.scope.handlers.IConnectionHandler;
 import com.opera.core.systems.scope.internal.OperaIntervals;
+import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo;
 import com.opera.core.systems.scope.protos.ScopeProtos.ClientInfo;
 import com.opera.core.systems.scope.protos.ScopeProtos.HostInfo;
 import com.opera.core.systems.scope.protos.ScopeProtos.ServiceResult;
@@ -246,6 +247,22 @@ public class ScopeServices implements IConnectionHandler {
 		waitState.onWindowClosed(id);
 	}
 
+	public void onDesktopWindowClosed(int id) {
+		logger.fine("DesktopWindow closed: windowId=" + id);
+		waitState.onDesktopWindowClosed(id);
+	}
+
+	public void onDesktopWindowActivated(int id) {
+		logger.fine("DesktopWindow active: windowId=" + id);
+		waitState.onDesktopWindowActivated(id);
+	}
+
+	public void onDesktopWindowUpdated(DesktopWindowInfo info) {
+		logger.fine("DesktopWindow updated: windowId=" + info.getWindowID());
+		waitState.onDesktopWindowUpdated(info);
+	}
+
+
 	public void onHandshake(boolean stp1) {
 		logger.fine("Got Stp handshake!");
 		waitState.onHandshake();
@@ -267,6 +284,25 @@ public class ScopeServices implements IConnectionHandler {
 	
 	public void waitForWindowLoaded(int activeWindowId, long timeout) {
 		waitState.waitForWindowLoaded(activeWindowId, timeout);
+	}
+	
+	public void waitStart() {
+		waitState.setWaitEvents(true);
+	}
+
+	public void waitForDesktopWindowUpdated(long timeout) {
+		waitState.setWaitEvents(false);
+		waitState.waitForDesktopWindowUpdated(timeout);
+	}
+
+	public void waitForDesktopWindowActivated(long timeout) {
+		waitState.setWaitEvents(false);
+		waitState.waitForDesktopWindowActivated(timeout);
+	}
+
+	public void waitForDesktopWindowClosed(long timeout) {
+		waitState.setWaitEvents(false);
+		waitState.waitForDesktopWindowClosed(timeout);
 	}
 
 	public void onResponseReceived(int tag, Response response) {

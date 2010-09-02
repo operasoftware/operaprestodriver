@@ -3,6 +3,8 @@ package com.opera.core.systems;
 //import java.util.HashMap;
 import java.util.Map;
 
+import com.opera.core.systems.scope.exceptions.CommunicationException;
+import com.opera.core.systems.scope.internal.OperaIntervals;
 import com.opera.core.systems.scope.services.IDesktopWindowManager;
 
 public class OperaDesktopDriver extends OperaDriver {
@@ -29,6 +31,36 @@ public class OperaDesktopDriver extends OperaDriver {
 		return desktopWindowManager.getActiveWindowId();
 	}
 	
+	public void waitStart() {
+		if (services.getConnection() == null)
+			throw new CommunicationException("waiting for a window failed because Opera is not connected.");
+		
+		services.waitStart();
+	}
+
+	public void waitForWindowUpdated() {
+		if (services.getConnection() == null)
+			throw new CommunicationException("waiting for a window failed because Opera is not connected.");
+		
+		services.waitForDesktopWindowUpdated(OperaIntervals.PAGE_LOAD_TIMEOUT.getValue());
+	}
+
+
+	public int waitForWindowActivated() {
+		if (services.getConnection() == null)
+			throw new CommunicationException("waiting for a window failed because Opera is not connected.");
+		
+		services.waitForDesktopWindowActivated(OperaIntervals.PAGE_LOAD_TIMEOUT.getValue());
+		
+		return 1;
+	}
+
+	public void waitForWindowClose() {
+		if (services.getConnection() == null)
+			throw new CommunicationException("waiting for a window failed because Opera is not connected.");
+		
+		services.waitForDesktopWindowClosed(OperaIntervals.PAGE_LOAD_TIMEOUT.getValue());
+	}
 }
 
 

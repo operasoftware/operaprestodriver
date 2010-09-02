@@ -13,8 +13,11 @@ import com.opera.core.systems.scope.protos.HttpLoggerProtos.Header;
 import com.opera.core.systems.scope.protos.UmsProtos.Event;
 import com.opera.core.systems.scope.protos.WmProtos.WindowID;
 import com.opera.core.systems.scope.protos.WmProtos.WindowInfo;
+import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID;
+import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo;
 import com.opera.core.systems.scope.ESDebuggerCommand;
 import com.opera.core.systems.scope.WindowManagerCommand;
+import com.opera.core.systems.scope.DesktopWindowManagerCommand;
 
 public class UmsEventParser {
 	
@@ -69,6 +72,30 @@ public class UmsEventParser {
 				buildPayload(event, loadedWindowBuilder);
                                 Integer loadedWindowID = loadedWindowBuilder.build().getWindowID();
 				eventHandler.onWindowLoaded(loadedWindowID.intValue());
+				break;
+			default:
+				break;
+			}
+		}
+		else if (service.equals("desktop-window-manager")) {
+			switch (DesktopWindowManagerCommand.get(eventId)) {
+			case WINDOW_ACTIVATED:
+				DesktopWindowID.Builder activeWindowIdBuilder = DesktopWindowID.newBuilder();
+				buildPayload(event, activeWindowIdBuilder);
+				Integer activeWindowID = activeWindowIdBuilder.build().getWindowID();
+				eventHandler.onDesktopWindowActivated(activeWindowID);
+				break;
+			case WINDOW_CLOSED:
+				DesktopWindowID.Builder closedWindowBuilder = DesktopWindowID.newBuilder();
+				buildPayload(event, closedWindowBuilder);
+				Integer closedWindowID = closedWindowBuilder.build().getWindowID();
+				eventHandler.onDesktopWindowClosed(closedWindowID);
+				break;
+			case WINDOW_UPDATED:
+				DesktopWindowInfo.Builder windowInfoBuilder = DesktopWindowInfo.newBuilder();
+				buildPayload(event, windowInfoBuilder);
+				DesktopWindowInfo info = windowInfoBuilder.build();
+				eventHandler.onDesktopWindowUpdated(info);
 				break;
 			default:
 				break;
