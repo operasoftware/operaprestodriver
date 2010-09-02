@@ -14,7 +14,23 @@ class RunDriver {
 	    	System.out.println("Create Driver");
 	        driver = new OperaDesktopDriver();
 	        System.out.println(".Driver created ......");
-
+	        
+	        System.out.println("Do wait start");
+	        driver.waitStart(); // wait for dialog to open
+	        System.out.println("Do add to bookmarks action ");
+	        driver.operaAction("Add to bookmarks");
+	        
+	        System.out.println("Wait for window updated ");
+	        driver.waitForWindowUpdated();
+	        
+	        int id = driver.getWindowID("Bookmark Properties");
+	        
+	        System.out.println("Id of bookmark dialog is " + id);
+	        
+	        driver.getWidgetList(id);
+	        
+	        /*System.out.println("------------ Done with first part ");
+	        
 	        driver.waitStart();
 	        
 	        driver.keyDown("Control");
@@ -31,7 +47,7 @@ class RunDriver {
 	        System.out.println("--Wait for window to close--");
 	        driver.waitForWindowClose();
 	        
-	        /*System.out.println("--Go to Google --");
+	        System.out.println("--Go to Google --");
 	        driver.get("http://www.google.com");
 	        System.out.println("Gone to google ");
 	        

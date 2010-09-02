@@ -30,6 +30,20 @@ public class OperaDesktopDriver extends OperaDriver {
 	{
 		return desktopWindowManager.getActiveWindowId();
 	}
+
+	// OBS: Temporary for testing
+	public void getWidgetList(int id)
+	{
+		desktopWindowManager.getWidgetList(id);
+	}
+	
+	public void getWindowList() {
+		desktopWindowManager.getWindowList();
+	}
+	
+	public int getWindowID(String title) {
+		return desktopWindowManager.getWindowID(title);
+	}
 	
 	public void waitStart() {
 		if (services.getConnection() == null)
@@ -60,12 +74,6 @@ public class OperaDesktopDriver extends OperaDriver {
 			throw new CommunicationException("waiting for a window failed because Opera is not connected.");
 		
 		services.waitForDesktopWindowClosed(OperaIntervals.PAGE_LOAD_TIMEOUT.getValue());
-	}
-
-	// OBS: Temporary for testing
-	public void getWidgetList()
-	{
-		desktopWindowManager.getWidgetList();
 	}
 }
 
