@@ -9,8 +9,9 @@ import com.opera.core.systems.scope.DesktopWindowManagerCommand;
 import com.opera.core.systems.scope.WindowManagerCommand;
 import com.opera.core.systems.ScopeServices;
 
-import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidget;
-import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetList;
+import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowList;
+import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo;
+import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfoList;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo;
 import com.opera.core.systems.scope.protos.UmsProtos.Response;
 import com.opera.core.systems.scope.protos.WmProtos.WindowFilter;
@@ -99,23 +100,52 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 	}
 	
 	// OBS: temporary
-	public void getWidgetList() {
+	public void getWidgetList(int id) {
 		DesktopWindowID.Builder winBuilder = DesktopWindowID.newBuilder();
 		winBuilder.clearWindowID();
-		winBuilder.setWindowID(activeWindowId);
+		if (id >= 0)
+			winBuilder.setWindowID(id);
+		else
+			winBuilder.setWindowID(activeWindowId);
 		
 		Response response = executeCommand(DesktopWindowManagerCommand.LIST_QUICK_WIDGETS, winBuilder);
-		QuickWidgetList.Builder builder = QuickWidgetList.newBuilder();
+		QuickWidgetInfoList.Builder builder = QuickWidgetInfoList.newBuilder();
 		buildPayload(response, builder);
-		QuickWidgetList list = builder.build();
+		QuickWidgetInfoList list = builder.build();
 		
-		List<QuickWidget> widgetList = list.getQuickwidgetListList();
+		List<QuickWidgetInfo> widgetList = list.getQuickwidgetListList();
 		
-		for (QuickWidget widget : widgetList) {
+		for (QuickWidgetInfo widget : widgetList) {
 			//FIXME workaround for CORE-25866
 			//if(window.getTitle().length() > 0)
-			System.out.println("Widget " + widget.getId() + ", " + widget.getTitle() + ", "+ widget.getType() + ", visible = " + widget.getVisible());
+			System.out.println("Widget id =" + widget.getId() + ", title=" + widget.getTitle() + ", type="+ widget.getType() + ", visible = " + widget.getVisible());
 		}
 	}
+	
+	public List<DesktopWindowInfo> getWindowList() {
+		Response response = executeCommand(DesktopWindowManagerCommand.LIST_WINDOWS, null);
+		DesktopWindowList.Builder builder = DesktopWindowList.newBuilder();
+		buildPayload(response, builder);
+		DesktopWindowList list = builder.build();
+		
+		List<DesktopWindowInfo> windowList = list.getWindowListList();
+		
+		for (DesktopWindowInfo window : windowList) {
+			//FIXME workaround for CORE-25866
+			//if(window.getTitle().length() > 0)
+			System.out.println("Window id =" + window.getWindowID() + ", title=" + window.getTitle() + ", type="+ window.getWindowType() + ", titleid=" + window.getTitleid());
+		}
+		return windowList;
+	}
+	
+	public int getWindowID(String title) {
+		List<DesktopWindowInfo> windowList = getWindowList();
+		for (DesktopWindowInfo window : windowList) {
+			if (window.getTitle().equals(title))
+				return window.getWindowID();
+		}
+		return -1; // uh
+	}
+	
 
 }

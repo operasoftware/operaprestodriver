@@ -49,6 +49,8 @@ public interface IDesktopWindowManager {
 	void resetWindowsList();
 	
 	// OBS: Temporary, for testing
-	public void getWidgetList();
+	public void getWidgetList(int id);
+	public int getWindowID(String title);
+	public List<DesktopWindowInfo> getWindowList();
 
 }
