@@ -416,31 +416,31 @@ public final class DesktopWmProtos {
     // @@protoc_insertion_point(class_scope:scope.DesktopWindowInfo)
   }
   
-  public static final class QuickWidget extends
+  public static final class QuickWidgetInfo extends
       com.google.protobuf.GeneratedMessage {
-    // Use QuickWidget.newBuilder() to construct.
-    private QuickWidget() {
+    // Use QuickWidgetInfo.newBuilder() to construct.
+    private QuickWidgetInfo() {
       initFields();
     }
-    private QuickWidget(boolean noInit) {}
+    private QuickWidgetInfo(boolean noInit) {}
     
-    private static final QuickWidget defaultInstance;
-    public static QuickWidget getDefaultInstance() {
+    private static final QuickWidgetInfo defaultInstance;
+    public static QuickWidgetInfo getDefaultInstance() {
       return defaultInstance;
     }
     
-    public QuickWidget getDefaultInstanceForType() {
+    public QuickWidgetInfo getDefaultInstanceForType() {
       return defaultInstance;
     }
     
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return com.opera.core.systems.scope.protos.DesktopWmProtos.internal_static_scope_QuickWidget_descriptor;
+      return com.opera.core.systems.scope.protos.DesktopWmProtos.internal_static_scope_QuickWidgetInfo_descriptor;
     }
     
     protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return com.opera.core.systems.scope.protos.DesktopWmProtos.internal_static_scope_QuickWidget_fieldAccessorTable;
+      return com.opera.core.systems.scope.protos.DesktopWmProtos.internal_static_scope_QuickWidgetInfo_fieldAccessorTable;
     }
     
     // required string title = 1;
@@ -526,41 +526,41 @@ public final class DesktopWmProtos {
       return size;
     }
     
-    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidget parseFrom(
+    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data).buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidget parseFrom(
+    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data, extensionRegistry)
                .buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidget parseFrom(byte[] data)
+    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data).buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidget parseFrom(
+    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data, extensionRegistry)
                .buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidget parseFrom(java.io.InputStream input)
+    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return newBuilder().mergeFrom(input).buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidget parseFrom(
+    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return newBuilder().mergeFrom(input, extensionRegistry)
                .buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidget parseDelimitedFrom(java.io.InputStream input)
+    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       Builder builder = newBuilder();
       if (builder.mergeDelimitedFrom(input)) {
@@ -569,7 +569,7 @@ public final class DesktopWmProtos {
         return null;
       }
     }
-    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidget parseDelimitedFrom(
+    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -580,12 +580,12 @@ public final class DesktopWmProtos {
         return null;
       }
     }
-    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidget parseFrom(
+    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return newBuilder().mergeFrom(input).buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidget parseFrom(
+    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -595,25 +595,25 @@ public final class DesktopWmProtos {
     
     public static Builder newBuilder() { return Builder.create(); }
     public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidget prototype) {
+    public static Builder newBuilder(com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo prototype) {
       return newBuilder().mergeFrom(prototype);
     }
     public Builder toBuilder() { return newBuilder(this); }
     
     public static final class Builder extends
         com.google.protobuf.GeneratedMessage.Builder<Builder> {
-      private com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidget result;
+      private com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo result;
       
-      // Construct using com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidget.newBuilder()
+      // Construct using com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo.newBuilder()
       private Builder() {}
       
       private static Builder create() {
         Builder builder = new Builder();
-        builder.result = new com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidget();
+        builder.result = new com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo();
         return builder;
       }
       
-      protected com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidget internalGetResult() {
+      protected com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo internalGetResult() {
         return result;
       }
       
@@ -622,7 +622,7 @@ public final class DesktopWmProtos {
           throw new IllegalStateException(
             "Cannot call clear() after build().");
         }
-        result = new com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidget();
+        result = new com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo();
         return this;
       }
       
@@ -632,24 +632,24 @@ public final class DesktopWmProtos {
       
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidget.getDescriptor();
+        return com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo.getDescriptor();
       }
       
-      public com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidget getDefaultInstanceForType() {
-        return com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidget.getDefaultInstance();
+      public com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo getDefaultInstanceForType() {
+        return com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo.getDefaultInstance();
       }
       
       public boolean isInitialized() {
         return result.isInitialized();
       }
-      public com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidget build() {
+      public com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo build() {
         if (result != null && !isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return buildPartial();
       }
       
-      private com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidget buildParsed()
+      private com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo buildParsed()
           throws com.google.protobuf.InvalidProtocolBufferException {
         if (!isInitialized()) {
           throw newUninitializedMessageException(
@@ -658,27 +658,27 @@ public final class DesktopWmProtos {
         return buildPartial();
       }
       
-      public com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidget buildPartial() {
+      public com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo buildPartial() {
         if (result == null) {
           throw new IllegalStateException(
             "build() has already been called on this Builder.");
         }
-        com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidget returnMe = result;
+        com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo returnMe = result;
         result = null;
         return returnMe;
       }
       
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidget) {
-          return mergeFrom((com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidget)other);
+        if (other instanceof com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo) {
+          return mergeFrom((com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo)other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
       
-      public Builder mergeFrom(com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidget other) {
-        if (other == com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidget.getDefaultInstance()) return this;
+      public Builder mergeFrom(com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo other) {
+        if (other == com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo.getDefaultInstance()) return this;
         if (other.hasTitle()) {
           setTitle(other.getTitle());
         }
@@ -812,61 +812,61 @@ public final class DesktopWmProtos {
         return this;
       }
       
-      // @@protoc_insertion_point(builder_scope:scope.QuickWidget)
+      // @@protoc_insertion_point(builder_scope:scope.QuickWidgetInfo)
     }
     
     static {
-      defaultInstance = new QuickWidget(true);
+      defaultInstance = new QuickWidgetInfo(true);
       com.opera.core.systems.scope.protos.DesktopWmProtos.internalForceInit();
       defaultInstance.initFields();
     }
     
-    // @@protoc_insertion_point(class_scope:scope.QuickWidget)
+    // @@protoc_insertion_point(class_scope:scope.QuickWidgetInfo)
   }
   
-  public static final class QuickWidgetList extends
+  public static final class QuickWidgetInfoList extends
       com.google.protobuf.GeneratedMessage {
-    // Use QuickWidgetList.newBuilder() to construct.
-    private QuickWidgetList() {
+    // Use QuickWidgetInfoList.newBuilder() to construct.
+    private QuickWidgetInfoList() {
       initFields();
     }
-    private QuickWidgetList(boolean noInit) {}
+    private QuickWidgetInfoList(boolean noInit) {}
     
-    private static final QuickWidgetList defaultInstance;
-    public static QuickWidgetList getDefaultInstance() {
+    private static final QuickWidgetInfoList defaultInstance;
+    public static QuickWidgetInfoList getDefaultInstance() {
       return defaultInstance;
     }
     
-    public QuickWidgetList getDefaultInstanceForType() {
+    public QuickWidgetInfoList getDefaultInstanceForType() {
       return defaultInstance;
     }
     
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return com.opera.core.systems.scope.protos.DesktopWmProtos.internal_static_scope_QuickWidgetList_descriptor;
+      return com.opera.core.systems.scope.protos.DesktopWmProtos.internal_static_scope_QuickWidgetInfoList_descriptor;
     }
     
     protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return com.opera.core.systems.scope.protos.DesktopWmProtos.internal_static_scope_QuickWidgetList_fieldAccessorTable;
+      return com.opera.core.systems.scope.protos.DesktopWmProtos.internal_static_scope_QuickWidgetInfoList_fieldAccessorTable;
     }
     
-    // repeated .scope.QuickWidget quickwidgetList = 1;
+    // repeated .scope.QuickWidgetInfo quickwidgetList = 1;
     public static final int QUICKWIDGETLIST_FIELD_NUMBER = 1;
-    private java.util.List<com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidget> quickwidgetList_ =
+    private java.util.List<com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo> quickwidgetList_ =
       java.util.Collections.emptyList();
-    public java.util.List<com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidget> getQuickwidgetListList() {
+    public java.util.List<com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo> getQuickwidgetListList() {
       return quickwidgetList_;
     }
     public int getQuickwidgetListCount() { return quickwidgetList_.size(); }
-    public com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidget getQuickwidgetList(int index) {
+    public com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo getQuickwidgetList(int index) {
       return quickwidgetList_.get(index);
     }
     
     private void initFields() {
     }
     public final boolean isInitialized() {
-      for (com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidget element : getQuickwidgetListList()) {
+      for (com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo element : getQuickwidgetListList()) {
         if (!element.isInitialized()) return false;
       }
       return true;
@@ -875,7 +875,7 @@ public final class DesktopWmProtos {
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       getSerializedSize();
-      for (com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidget element : getQuickwidgetListList()) {
+      for (com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo element : getQuickwidgetListList()) {
         output.writeMessage(1, element);
       }
       getUnknownFields().writeTo(output);
@@ -887,7 +887,7 @@ public final class DesktopWmProtos {
       if (size != -1) return size;
     
       size = 0;
-      for (com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidget element : getQuickwidgetListList()) {
+      for (com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo element : getQuickwidgetListList()) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(1, element);
       }
@@ -896,41 +896,41 @@ public final class DesktopWmProtos {
       return size;
     }
     
-    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetList parseFrom(
+    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfoList parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data).buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetList parseFrom(
+    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfoList parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data, extensionRegistry)
                .buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetList parseFrom(byte[] data)
+    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfoList parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data).buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetList parseFrom(
+    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfoList parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data, extensionRegistry)
                .buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetList parseFrom(java.io.InputStream input)
+    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfoList parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return newBuilder().mergeFrom(input).buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetList parseFrom(
+    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfoList parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return newBuilder().mergeFrom(input, extensionRegistry)
                .buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetList parseDelimitedFrom(java.io.InputStream input)
+    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfoList parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       Builder builder = newBuilder();
       if (builder.mergeDelimitedFrom(input)) {
@@ -939,7 +939,7 @@ public final class DesktopWmProtos {
         return null;
       }
     }
-    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetList parseDelimitedFrom(
+    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfoList parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -950,12 +950,12 @@ public final class DesktopWmProtos {
         return null;
       }
     }
-    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetList parseFrom(
+    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfoList parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return newBuilder().mergeFrom(input).buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetList parseFrom(
+    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfoList parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -965,25 +965,25 @@ public final class DesktopWmProtos {
     
     public static Builder newBuilder() { return Builder.create(); }
     public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetList prototype) {
+    public static Builder newBuilder(com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfoList prototype) {
       return newBuilder().mergeFrom(prototype);
     }
     public Builder toBuilder() { return newBuilder(this); }
     
     public static final class Builder extends
         com.google.protobuf.GeneratedMessage.Builder<Builder> {
-      private com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetList result;
+      private com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfoList result;
       
-      // Construct using com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetList.newBuilder()
+      // Construct using com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfoList.newBuilder()
       private Builder() {}
       
       private static Builder create() {
         Builder builder = new Builder();
-        builder.result = new com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetList();
+        builder.result = new com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfoList();
         return builder;
       }
       
-      protected com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetList internalGetResult() {
+      protected com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfoList internalGetResult() {
         return result;
       }
       
@@ -992,7 +992,7 @@ public final class DesktopWmProtos {
           throw new IllegalStateException(
             "Cannot call clear() after build().");
         }
-        result = new com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetList();
+        result = new com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfoList();
         return this;
       }
       
@@ -1002,24 +1002,24 @@ public final class DesktopWmProtos {
       
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetList.getDescriptor();
+        return com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfoList.getDescriptor();
       }
       
-      public com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetList getDefaultInstanceForType() {
-        return com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetList.getDefaultInstance();
+      public com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfoList getDefaultInstanceForType() {
+        return com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfoList.getDefaultInstance();
       }
       
       public boolean isInitialized() {
         return result.isInitialized();
       }
-      public com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetList build() {
+      public com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfoList build() {
         if (result != null && !isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return buildPartial();
       }
       
-      private com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetList buildParsed()
+      private com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfoList buildParsed()
           throws com.google.protobuf.InvalidProtocolBufferException {
         if (!isInitialized()) {
           throw newUninitializedMessageException(
@@ -1028,7 +1028,7 @@ public final class DesktopWmProtos {
         return buildPartial();
       }
       
-      public com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetList buildPartial() {
+      public com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfoList buildPartial() {
         if (result == null) {
           throw new IllegalStateException(
             "build() has already been called on this Builder.");
@@ -1037,25 +1037,25 @@ public final class DesktopWmProtos {
           result.quickwidgetList_ =
             java.util.Collections.unmodifiableList(result.quickwidgetList_);
         }
-        com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetList returnMe = result;
+        com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfoList returnMe = result;
         result = null;
         return returnMe;
       }
       
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetList) {
-          return mergeFrom((com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetList)other);
+        if (other instanceof com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfoList) {
+          return mergeFrom((com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfoList)other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
       
-      public Builder mergeFrom(com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetList other) {
-        if (other == com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetList.getDefaultInstance()) return this;
+      public Builder mergeFrom(com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfoList other) {
+        if (other == com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfoList.getDefaultInstance()) return this;
         if (!other.quickwidgetList_.isEmpty()) {
           if (result.quickwidgetList_.isEmpty()) {
-            result.quickwidgetList_ = new java.util.ArrayList<com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidget>();
+            result.quickwidgetList_ = new java.util.ArrayList<com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo>();
           }
           result.quickwidgetList_.addAll(other.quickwidgetList_);
         }
@@ -1085,7 +1085,7 @@ public final class DesktopWmProtos {
               break;
             }
             case 10: {
-              com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidget.Builder subBuilder = com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidget.newBuilder();
+              com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo.Builder subBuilder = com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo.newBuilder();
               input.readMessage(subBuilder, extensionRegistry);
               addQuickwidgetList(subBuilder.buildPartial());
               break;
@@ -1095,48 +1095,48 @@ public final class DesktopWmProtos {
       }
       
       
-      // repeated .scope.QuickWidget quickwidgetList = 1;
-      public java.util.List<com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidget> getQuickwidgetListList() {
+      // repeated .scope.QuickWidgetInfo quickwidgetList = 1;
+      public java.util.List<com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo> getQuickwidgetListList() {
         return java.util.Collections.unmodifiableList(result.quickwidgetList_);
       }
       public int getQuickwidgetListCount() {
         return result.getQuickwidgetListCount();
       }
-      public com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidget getQuickwidgetList(int index) {
+      public com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo getQuickwidgetList(int index) {
         return result.getQuickwidgetList(index);
       }
-      public Builder setQuickwidgetList(int index, com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidget value) {
+      public Builder setQuickwidgetList(int index, com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo value) {
         if (value == null) {
           throw new NullPointerException();
         }
         result.quickwidgetList_.set(index, value);
         return this;
       }
-      public Builder setQuickwidgetList(int index, com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidget.Builder builderForValue) {
+      public Builder setQuickwidgetList(int index, com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo.Builder builderForValue) {
         result.quickwidgetList_.set(index, builderForValue.build());
         return this;
       }
-      public Builder addQuickwidgetList(com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidget value) {
+      public Builder addQuickwidgetList(com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo value) {
         if (value == null) {
           throw new NullPointerException();
         }
         if (result.quickwidgetList_.isEmpty()) {
-          result.quickwidgetList_ = new java.util.ArrayList<com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidget>();
+          result.quickwidgetList_ = new java.util.ArrayList<com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo>();
         }
         result.quickwidgetList_.add(value);
         return this;
       }
-      public Builder addQuickwidgetList(com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidget.Builder builderForValue) {
+      public Builder addQuickwidgetList(com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo.Builder builderForValue) {
         if (result.quickwidgetList_.isEmpty()) {
-          result.quickwidgetList_ = new java.util.ArrayList<com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidget>();
+          result.quickwidgetList_ = new java.util.ArrayList<com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo>();
         }
         result.quickwidgetList_.add(builderForValue.build());
         return this;
       }
       public Builder addAllQuickwidgetList(
-          java.lang.Iterable<? extends com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidget> values) {
+          java.lang.Iterable<? extends com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo> values) {
         if (result.quickwidgetList_.isEmpty()) {
-          result.quickwidgetList_ = new java.util.ArrayList<com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidget>();
+          result.quickwidgetList_ = new java.util.ArrayList<com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo>();
         }
         super.addAll(values, result.quickwidgetList_);
         return this;
@@ -1146,16 +1146,16 @@ public final class DesktopWmProtos {
         return this;
       }
       
-      // @@protoc_insertion_point(builder_scope:scope.QuickWidgetList)
+      // @@protoc_insertion_point(builder_scope:scope.QuickWidgetInfoList)
     }
     
     static {
-      defaultInstance = new QuickWidgetList(true);
+      defaultInstance = new QuickWidgetInfoList(true);
       com.opera.core.systems.scope.protos.DesktopWmProtos.internalForceInit();
       defaultInstance.initFields();
     }
     
-    // @@protoc_insertion_point(class_scope:scope.QuickWidgetList)
+    // @@protoc_insertion_point(class_scope:scope.QuickWidgetInfoList)
   }
   
   public static final class DesktopWindowID extends
@@ -1783,15 +1783,15 @@ public final class DesktopWmProtos {
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_scope_DesktopWindowInfo_fieldAccessorTable;
   private static com.google.protobuf.Descriptors.Descriptor
-    internal_static_scope_QuickWidget_descriptor;
+    internal_static_scope_QuickWidgetInfo_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_scope_QuickWidget_fieldAccessorTable;
+      internal_static_scope_QuickWidgetInfo_fieldAccessorTable;
   private static com.google.protobuf.Descriptors.Descriptor
-    internal_static_scope_QuickWidgetList_descriptor;
+    internal_static_scope_QuickWidgetInfoList_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_scope_QuickWidgetList_fieldAccessorTable;
+      internal_static_scope_QuickWidgetInfoList_fieldAccessorTable;
   private static com.google.protobuf.Descriptors.Descriptor
     internal_static_scope_DesktopWindowID_descriptor;
   private static
@@ -1814,14 +1814,15 @@ public final class DesktopWmProtos {
       "\n!desktop_window_manager_java.proto\022\005sco" +
       "pe\"Y\n\021DesktopWindowInfo\022\020\n\010windowID\030\001 \002(" +
       "\r\022\r\n\005title\030\002 \002(\t\022\017\n\007titleid\030\003 \002(\r\022\022\n\nwin" +
-      "dowType\030\004 \002(\r\"G\n\013QuickWidget\022\r\n\005title\030\001 " +
-      "\002(\t\022\n\n\002id\030\002 \002(\r\022\014\n\004type\030\003 \002(\r\022\017\n\007visible" +
-      "\030\004 \002(\r\">\n\017QuickWidgetList\022+\n\017quickwidget" +
-      "List\030\001 \003(\0132\022.scope.QuickWidget\"#\n\017Deskto" +
-      "pWindowID\022\020\n\010windowID\030\001 \002(\r\"A\n\021DesktopWi" +
-      "ndowList\022,\n\nwindowList\030\001 \003(\0132\030.scope.Des" +
-      "ktopWindowInfoB8\n#com.opera.core.systems",
-      ".scope.protosB\017DesktopWmProtosH\001"
+      "dowType\030\004 \002(\r\"K\n\017QuickWidgetInfo\022\r\n\005titl" +
+      "e\030\001 \002(\t\022\n\n\002id\030\002 \002(\r\022\014\n\004type\030\003 \002(\r\022\017\n\007vis" +
+      "ible\030\004 \002(\r\"F\n\023QuickWidgetInfoList\022/\n\017qui" +
+      "ckwidgetList\030\001 \003(\0132\026.scope.QuickWidgetIn" +
+      "fo\"#\n\017DesktopWindowID\022\020\n\010windowID\030\001 \002(\r\"" +
+      "A\n\021DesktopWindowList\022,\n\nwindowList\030\001 \003(\013" +
+      "2\030.scope.DesktopWindowInfoB8\n#com.opera.",
+      "core.systems.scope.protosB\017DesktopWmProt" +
+      "osH\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -1836,22 +1837,22 @@ public final class DesktopWmProtos {
               new java.lang.String[] { "WindowID", "Title", "Titleid", "WindowType", },
               com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo.class,
               com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo.Builder.class);
-          internal_static_scope_QuickWidget_descriptor =
+          internal_static_scope_QuickWidgetInfo_descriptor =
             getDescriptor().getMessageTypes().get(1);
-          internal_static_scope_QuickWidget_fieldAccessorTable = new
+          internal_static_scope_QuickWidgetInfo_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_scope_QuickWidget_descriptor,
+              internal_static_scope_QuickWidgetInfo_descriptor,
               new java.lang.String[] { "Title", "Id", "Type", "Visible", },
-              com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidget.class,
-              com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidget.Builder.class);
-          internal_static_scope_QuickWidgetList_descriptor =
+              com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo.class,
+              com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo.Builder.class);
+          internal_static_scope_QuickWidgetInfoList_descriptor =
             getDescriptor().getMessageTypes().get(2);
-          internal_static_scope_QuickWidgetList_fieldAccessorTable = new
+          internal_static_scope_QuickWidgetInfoList_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_scope_QuickWidgetList_descriptor,
+              internal_static_scope_QuickWidgetInfoList_descriptor,
               new java.lang.String[] { "QuickwidgetList", },
-              com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetList.class,
-              com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetList.Builder.class);
+              com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfoList.class,
+              com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfoList.Builder.class);
           internal_static_scope_DesktopWindowID_descriptor =
             getDescriptor().getMessageTypes().get(3);
           internal_static_scope_DesktopWindowID_fieldAccessorTable = new
