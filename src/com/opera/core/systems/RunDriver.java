@@ -14,16 +14,32 @@ class RunDriver {
 	    	System.out.println("Create Driver");
 	        driver = new OperaDesktopDriver();
 	        System.out.println(".Driver created ......");
+
+	        driver.waitStart();
 	        
-	        System.out.println("--Go to Google --");
+	        driver.keyDown("Control");
+	        driver.key(",");
+	        driver.keyUp("Control");
+	        
+	        System.out.println("--Wait for window to open--");
+	        driver.waitForWindowUpdated();
+
+	        driver.waitStart();
+	        
+	        driver.key("enter");
+	        
+	        System.out.println("--Wait for window to close--");
+	        driver.waitForWindowClose();
+	        
+	        /*System.out.println("--Go to Google --");
 	        driver.get("http://www.google.com");
 	        System.out.println("Gone to google ");
 	        
 	        OperaWebElement element = (OperaWebElement) driver.findElementByName("q");
 	        element.sendKeys("Opera Software");
 	        element.submit();
-	        
+	        */
 	        System.out.println("Done ");
-	        driver.quit();
+	        //driver.quit();
 	    }
 }

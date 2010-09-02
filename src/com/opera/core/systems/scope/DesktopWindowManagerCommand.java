@@ -18,7 +18,6 @@ public enum DesktopWindowManagerCommand implements ICommand {
 	    WINDOW_UPDATED(4),   // event
 	    WINDOW_CLOSED(5),    // event
 	    WINDOW_ACTIVATED(6), // event
-	    WINDOW_LOADED(7),
 	    DEFAULT(-1);    // event
 
 	    private int code;
