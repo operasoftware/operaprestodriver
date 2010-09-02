@@ -42,10 +42,13 @@ public interface IDesktopWindowManager {
 
 	void setActiveWindow(String title);
 	
-	List<Integer> getWindowHandles();
+	//List<Integer> getWidgetList();
 	
 	int getOpenWindowCount();
 	
 	void resetWindowsList();
+	
+	// OBS: Temporary, for testing
+	public void getWidgetList();
 
 }

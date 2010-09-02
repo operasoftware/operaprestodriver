@@ -61,6 +61,12 @@ public class OperaDesktopDriver extends OperaDriver {
 		
 		services.waitForDesktopWindowClosed(OperaIntervals.PAGE_LOAD_TIMEOUT.getValue());
 	}
+
+	// OBS: Temporary for testing
+	public void getWidgetList()
+	{
+		desktopWindowManager.getWidgetList();
+	}
 }
 
 
