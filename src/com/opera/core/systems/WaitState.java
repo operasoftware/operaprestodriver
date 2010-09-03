@@ -36,7 +36,7 @@ public class WaitState {
         EVENT_WINDOW_CLOSED, /* window closed */
         EVENT_DESKTOP_WINDOW_CLOSED, /* desktop window closed */
         EVENT_DESKTOP_WINDOW_ACTIVATED, /* desktop window activated */
-        EVENT_DESKTOP_WINDOW_UPDATED, /* desktop closed updated*/
+        EVENT_DESKTOP_WINDOW_UPDATED, /* desktop window updated*/
         EVENT_REQUEST_FIRED /* sent when a http request is fired */
     }
 
