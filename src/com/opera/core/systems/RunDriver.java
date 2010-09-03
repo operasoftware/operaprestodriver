@@ -20,17 +20,30 @@ class RunDriver {
 	        System.out.println("Do add to bookmarks action ");
 	        driver.operaAction("Add to bookmarks");
 	        
-	        System.out.println("Wait for window updated ");
-	        driver.waitForWindowUpdated();
+	        //System.out.println("Wait for window activated ");
+	        //driver.waitForWindowActivated();
 	        
+        	// ---- Internal stuff to check text on the dialog -------
 	        int id = driver.getWindowID("Bookmark Properties");
-	        
 	        System.out.println("Id of bookmark dialog is " + id);
-	        
 	        driver.getWidgetList(id);
-	        
-	        /*System.out.println("------------ Done with first part ");
-	        
+	        System.out.println("Get Widget label_for_Nick_edit");
+	        int widget_id = driver.getQuickWidgetID(id, "name", "label_for_Nick_edit");
+	        System.out.println("widget_id returned is " + widget_id);
+	        System.out.println("-- Done --");
+	        // _-----------------------
+
+	        // IN ruby:
+        	//driver.label("name", "label_for_Nick_edit").verify_contains("Nickname");
+	        /*
+	        QuickWidget widget = (QuickWidget) driver.findWidgetByName("label_for_Nick_edit");
+	        if (widget.getText().equals("Nickname"))
+	        	System.out.println("Success");
+	        else
+	        	System.out.println("Failure");
+	        */
+	        // ---------------------
+	        /*
 	        driver.waitStart();
 	        
 	        driver.keyDown("Control");

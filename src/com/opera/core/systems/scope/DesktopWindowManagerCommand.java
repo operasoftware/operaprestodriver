@@ -15,9 +15,10 @@ public enum DesktopWindowManagerCommand implements ICommand {
 	    GET_ACTIVE_WINDOW(1),
 	    LIST_WINDOWS(2),
 	    LIST_QUICK_WIDGETS(3),
-	    WINDOW_UPDATED(4),   // event
-	    WINDOW_CLOSED(5),    // event
-	    WINDOW_ACTIVATED(6), // event
+	    GET_QUICK_WIDGET(4),
+	    WINDOW_UPDATED(5),   // event
+	    WINDOW_CLOSED(6),    // event
+	    WINDOW_ACTIVATED(7), // event
 	    DEFAULT(-1);    // event
 
 	    private int code;
