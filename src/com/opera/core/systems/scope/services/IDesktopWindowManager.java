@@ -52,5 +52,7 @@ public interface IDesktopWindowManager {
 	public void getWidgetList(int id);
 	public int getWindowID(String title);
 	public List<DesktopWindowInfo> getWindowList();
+	public int getQuickWidgetID(int id, String property, String value);
+
 
 }

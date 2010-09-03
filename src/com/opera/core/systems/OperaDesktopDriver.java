@@ -45,6 +45,10 @@ public class OperaDesktopDriver extends OperaDriver {
 		return desktopWindowManager.getWindowID(title);
 	}
 	
+	public int getQuickWidgetID(int windowId, String property, String value){
+		return desktopWindowManager.getQuickWidgetID(windowId, property, value);
+	}
+	
 	public void waitStart() {
 		if (services.getConnection() == null)
 			throw new CommunicationException("waiting for a window failed because Opera is not connected.");
