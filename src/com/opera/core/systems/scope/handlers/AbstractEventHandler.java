@@ -85,19 +85,19 @@ public abstract class AbstractEventHandler {
 	 * @param window
 	 */
 	
-	public abstract void onDesktopWindowUpdated(DesktopWindowInfo window);
+	public abstract void onDesktopWindowUpdated(DesktopWindowInfo info);
 
 	/**
 	 * Fired when a window becomes active (steals focus)
 	 * @param window
 	 */
-	public abstract void onDesktopWindowActivated(Integer id);
+	public abstract void onDesktopWindowActivated(DesktopWindowInfo info);
 
 	/**
 	 * Fired when a window instance is closed
 	 * @param closed
 	 */
-	public abstract void onDesktopWindowClosed(Integer id);
+	public abstract void onDesktopWindowClosed(DesktopWindowInfo info);
 
 	public abstract void onHttpResponse(int responseCode);
 	

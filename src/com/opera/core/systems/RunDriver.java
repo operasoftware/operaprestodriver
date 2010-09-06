@@ -14,7 +14,7 @@ class RunDriver {
 	    	System.out.println("Create Driver");
 	        driver = new OperaDesktopDriver();
 	        System.out.println(".Driver created ......");
-	        
+	        /*
 	        System.out.println("Do wait start");
 	        driver.waitStart(); // wait for dialog to open
 	        System.out.println("Do add to bookmarks action ");
@@ -32,7 +32,7 @@ class RunDriver {
 	        System.out.println("widget_id returned is " + widget_id);
 	        System.out.println("-- Done --");
 	        // _-----------------------
-
+*/
 	        // IN ruby:
         	//driver.label("name", "label_for_Nick_edit").verify_contains("Nickname");
 	        /*
@@ -43,23 +43,25 @@ class RunDriver {
 	        	System.out.println("Failure");
 	        */
 	        // ---------------------
-	        /*
+	        
 	        driver.waitStart();
 	        
-	        driver.keyDown("Control");
-	        driver.key(",");
-	        driver.keyUp("Control");
-	        
+	        //driver.keyDown("Control");
+	        //driver.key(",");
+	        //driver.keyUp("Control");
+	        driver.operaAction("Show preferences");
+
 	        System.out.println("--Wait for window to open--");
-	        driver.waitForWindowUpdated();
+//	        driver.waitForWindowUpdated();
+	        driver.waitForWindowUpdated("Preferences");
 
 	        driver.waitStart();
 	        
 	        driver.key("enter");
 	        
 	        System.out.println("--Wait for window to close--");
-	        driver.waitForWindowClose();
-	        
+	        driver.waitForWindowClose("Preferences");
+	        /*
 	        System.out.println("--Go to Google --");
 	        driver.get("http://www.google.com");
 	        System.out.println("Gone to google ");

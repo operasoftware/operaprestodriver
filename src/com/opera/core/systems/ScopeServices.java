@@ -247,21 +247,20 @@ public class ScopeServices implements IConnectionHandler {
 		waitState.onWindowClosed(id);
 	}
 
-	public void onDesktopWindowClosed(int id) {
-		logger.fine("DesktopWindow closed: windowId=" + id);
-		waitState.onDesktopWindowClosed(id);
-	}
-
-	public void onDesktopWindowActivated(int id) {
-		logger.fine("DesktopWindow active: windowId=" + id);
-		waitState.onDesktopWindowActivated(id);
-	}
-
 	public void onDesktopWindowUpdated(DesktopWindowInfo info) {
 		logger.fine("DesktopWindow updated: windowId=" + info.getWindowID());
 		waitState.onDesktopWindowUpdated(info);
 	}
 
+	public void onDesktopWindowClosed(DesktopWindowInfo info) {
+		logger.fine("DesktopWindow closed: windowId=" + info.getWindowID());
+		waitState.onDesktopWindowClosed(info);
+	}
+
+	public void onDesktopWindowActivated(DesktopWindowInfo info) {
+		logger.fine("DesktopWindow active: windowId=" + info.getWindowID());
+		waitState.onDesktopWindowActivated(info);
+	}
 
 	public void onHandshake(boolean stp1) {
 		logger.fine("Got Stp handshake!");
@@ -290,19 +289,19 @@ public class ScopeServices implements IConnectionHandler {
 		waitState.setWaitEvents(true);
 	}
 
-	public void waitForDesktopWindowUpdated(long timeout) {
+	public void waitForDesktopWindowUpdated(String win_name, long timeout) {
 		waitState.setWaitEvents(false);
-		waitState.waitForDesktopWindowUpdated(timeout);
+		waitState.waitForDesktopWindowUpdated(win_name, timeout);
 	}
 
-	public void waitForDesktopWindowActivated(long timeout) {
+	public void waitForDesktopWindowActivated(String win_name, long timeout) {
 		waitState.setWaitEvents(false);
-		waitState.waitForDesktopWindowActivated(timeout);
+		waitState.waitForDesktopWindowActivated(win_name, timeout);
 	}
 
-	public void waitForDesktopWindowClosed(long timeout) {
+	public void waitForDesktopWindowClosed(String win_name, long timeout) {
 		waitState.setWaitEvents(false);
-		waitState.waitForDesktopWindowClosed(timeout);
+		waitState.waitForDesktopWindowClosed(win_name, timeout);
 	}
 
 	public void onResponseReceived(int tag, Response response) {
