@@ -88,18 +88,18 @@ public class EventHandler extends AbstractEventHandler {
 	}
 
 	@Override
-	public void onDesktopWindowUpdated(DesktopWindowInfo window) {
-		services.onDesktopWindowUpdated(window);
+	public void onDesktopWindowUpdated(DesktopWindowInfo info) {
+		services.onDesktopWindowUpdated(info);
 	}
 
 	@Override
-	public void onDesktopWindowActivated(Integer id) {
-		services.onDesktopWindowActivated(id);
+	public void onDesktopWindowActivated(DesktopWindowInfo info) {
+		services.onDesktopWindowActivated(info);
 	}
 
 	@Override
-	public void onDesktopWindowClosed(Integer id) {
-		services.onDesktopWindowClosed(id);
+	public void onDesktopWindowClosed(DesktopWindowInfo info) {
+		services.onDesktopWindowClosed(info);
 	}
 
 }

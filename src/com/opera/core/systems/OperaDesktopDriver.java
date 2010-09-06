@@ -57,27 +57,39 @@ public class OperaDesktopDriver extends OperaDriver {
 	}
 
 	public void waitForWindowUpdated() {
+		waitForWindowUpdated("");
+	}
+
+	public void waitForWindowActivated() {
+		waitForWindowActivated("");
+	}
+
+	public void waitForWindowClose() {
+		waitForWindowClose("");
+	}
+
+	public void waitForWindowUpdated(String win_name) {
 		if (services.getConnection() == null)
 			throw new CommunicationException("waiting for a window failed because Opera is not connected.");
 		
-		services.waitForDesktopWindowUpdated(OperaIntervals.PAGE_LOAD_TIMEOUT.getValue());
+		services.waitForDesktopWindowUpdated(win_name, OperaIntervals.PAGE_LOAD_TIMEOUT.getValue());
 	}
 
 
-	public int waitForWindowActivated() {
+	public int waitForWindowActivated(String win_name) {
 		if (services.getConnection() == null)
 			throw new CommunicationException("waiting for a window failed because Opera is not connected.");
 		
-		services.waitForDesktopWindowActivated(OperaIntervals.PAGE_LOAD_TIMEOUT.getValue());
+		services.waitForDesktopWindowActivated(win_name, OperaIntervals.PAGE_LOAD_TIMEOUT.getValue());
 		
 		return 1;
 	}
 
-	public void waitForWindowClose() {
+	public void waitForWindowClose(String win_name) {
 		if (services.getConnection() == null)
 			throw new CommunicationException("waiting for a window failed because Opera is not connected.");
 		
-		services.waitForDesktopWindowClosed(OperaIntervals.PAGE_LOAD_TIMEOUT.getValue());
+		services.waitForDesktopWindowClosed(win_name, OperaIntervals.PAGE_LOAD_TIMEOUT.getValue());
 	}
 }
 
