@@ -5,54 +5,37 @@ import java.util.List;
 
 import org.openqa.selenium.WebDriverException;
 
+import com.opera.core.systems.QuickWidget;
+import com.opera.core.systems.QuickWindow;
+import com.opera.core.systems.scope.DesktopWindowManagerCommand;
+import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo;
+import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowList;
+import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo;
+import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfoList;
+import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearch;
+import com.opera.core.systems.scope.protos.UmsProtos.Response;
 
 public interface IDesktopWindowManager {
 
-	/**
-	 * Sets the active window if the window is of type 'normal'
-	 * discards any other window such as 'dialog' or 'unknown'
-	 * @param activeWindowId
-	 */
-	void setActiveWindowId(Integer windowId);
-
 	int getActiveWindowId();
 
-	void addWindow(DesktopWindowInfo window);
-
-	void removeWindow(Integer windowId);
-	
 	void closeWindow(Integer window);
 
 	void closeAllWindows();
 
-	/**
-	 * Get the list of all windows, then find a driver window (which needs to be 'normal' window)
-	 * after that set the active window to that window
-	 */
-	void init();
-
-	/**
-	 * Find a window suitable for driving, find the active window,
-	 * if it is not a normal window, find the first normal window
-	 * via JXPath
-	 * @throws WebDriverException if no window is available for driving
-	 */
-	//void findDriverWindow();
-
-	void setActiveWindow(String title);
-	
-	//List<Integer> getWidgetList();
+	List<Integer> getWindowHandles();
 	
 	int getOpenWindowCount();
 	
-	void resetWindowsList();
+	void init();
 	
 	// OBS: Temporary, for testing
-	public void getWidgetList(int id);
-	public int getWindowID(String title);
-	public List<DesktopWindowInfo> getWindowList();
-	public int getQuickWidgetID(int id, String property, String value);
-
-
+	void getWidgetList(int id);
+	QuickWindow getWindow(String title);
+	int getWindowID(String title);
+	List<DesktopWindowInfo> getWindowList();
+	int getQuickWidgetID(int id, String property, String value);
+	QuickWidget getQuickWidget(int id, String property, String value);
+		
 }

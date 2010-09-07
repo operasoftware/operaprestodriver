@@ -45,8 +45,30 @@ public class OperaDesktopDriver extends OperaDriver {
 		return desktopWindowManager.getWindowID(title);
 	}
 	
+	public QuickWindow getWindow(String title) {
+		return desktopWindowManager.getWindow(title);
+	}
+	
 	public int getQuickWidgetID(int windowId, String property, String value){
 		return desktopWindowManager.getQuickWidgetID(windowId, property, value);
+	}
+	
+	public QuickWidget findWidgetByName(int windowId, String name){
+		return desktopWindowManager.getQuickWidget(windowId, "name", name);
+	}
+	
+	public QuickWidget findWidgetByText(int windowId, String text){
+		return desktopWindowManager.getQuickWidget(windowId, "text", text);
+	}
+	
+	public QuickWidget findWidgetByID(int windowId, String id) {
+		return desktopWindowManager.getQuickWidget(windowId, "id", id);
+	}
+	
+	public int getWindowCount() {
+		//TODO FIXME
+		//return desktopWindowManager.getOpenWindowCount();
+		return 0;
 	}
 	
 	public void waitStart() {
