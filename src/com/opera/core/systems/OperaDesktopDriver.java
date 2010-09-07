@@ -71,7 +71,7 @@ public class OperaDesktopDriver extends OperaDriver {
 		return 0;
 	}
 	
-	public void operaAction(String using, String... params) 
+	public void operaDesktopAction(String using, String... params) 
 	{
         // Desktop never wants the window
 		exec.action(using, 0, params);
