@@ -310,7 +310,7 @@ public class WaitState {
         return result;
     }
     
-    private final Response waitAndParseResult(long timeout, int match, String stringMatch, final ResponseType type) {
+    private final ResultItem waitAndParseResult(long timeout, int match, String stringMatch, final ResponseType type) {
         synchronized (lock) {
             while (true) {
                 ResultItem result = pollResultItem(timeout);
@@ -324,7 +324,7 @@ public class WaitState {
 
                     case RESPONSE:
                         if (result.data == match && type == ResponseType.RESPONSE)
-                                return result.response;
+                                return result;
                         else if (type == ResponseType.HANDSHAKE)
                             throw new CommunicationException("Expecting handshake");
                         break;
@@ -357,13 +357,13 @@ public class WaitState {
                         if (type == ResponseType.DESKTOP_WINDOW_UPDATED)
                         {
                         	if (stringMatch.isEmpty())
-                        		return null;
+                        		return result;
                         	else
                         	{
                         		logger.fine("EVENT_DESKTOP_WINDOW_UPDATED: Title: " + result.desktopWindowInfo.getTitle());
                         		
                         		if (result.desktopWindowInfo.getTitle().equals(stringMatch))
-                        			return null;
+                        			return result;
                         	}
                         }
                         break;
@@ -373,13 +373,13 @@ public class WaitState {
                         if (type == ResponseType.DESKTOP_WINDOW_ACTIVATED)
                         {
                         	if (stringMatch.isEmpty())
-                        		return null;
+                        		return result;
                         	else
                         	{
                         		logger.fine("DESKTOP_WINDOW_ACTIVATED: Title: " + result.desktopWindowInfo.getTitle());
                         		
                         		if (result.desktopWindowInfo.getTitle().equals(stringMatch))
-                        			return null;
+                        			return result;
                         	}
                         }
                         break;
@@ -389,13 +389,13 @@ public class WaitState {
                         if (type == ResponseType.DESKTOP_WINDOW_CLOSED)
                         {
                         	if (stringMatch.isEmpty())
-                        		return null;
+                        		return result;
                         	else
                         	{
                         		logger.fine("EVENT_DESKTOP_WINDOW_CLOSED: Title: " + result.desktopWindowInfo.getTitle());
                         		
                         		if (result.desktopWindowInfo.getTitle().equals(stringMatch))
-                        			return null;
+                        			return result;
                         	}
                         }
                         break;
@@ -418,22 +418,22 @@ public class WaitState {
     }
 
     public Response waitFor(int tag, long timeout) {
-        return waitAndParseResult(timeout, tag, null, ResponseType.RESPONSE);
+        return waitAndParseResult(timeout, tag, null, ResponseType.RESPONSE).response;
     }
     
     public void waitForRequest(int windowId, long timeout) {
         waitAndParseResult(timeout, windowId, null, ResponseType.REQUEST_FIRED);
     }
 
-    public void waitForDesktopWindowUpdated(String win_name, long timeout) {
-        waitAndParseResult(timeout, 0, win_name, ResponseType.DESKTOP_WINDOW_UPDATED);
+    public int waitForDesktopWindowUpdated(String win_name, long timeout) {
+    	return waitAndParseResult(timeout, 0, win_name, ResponseType.DESKTOP_WINDOW_UPDATED).desktopWindowInfo.getWindowID();
     }
 
-    public void waitForDesktopWindowActivated(String win_name, long timeout) {
-        waitAndParseResult(timeout, 0, win_name, ResponseType.DESKTOP_WINDOW_ACTIVATED);
+    public int waitForDesktopWindowActivated(String win_name, long timeout) {
+        return waitAndParseResult(timeout, 0, win_name, ResponseType.DESKTOP_WINDOW_ACTIVATED).desktopWindowInfo.getWindowID();
     }
 
-    public void waitForDesktopWindowClosed(String win_name, long timeout) {
-        waitAndParseResult(timeout, 0, win_name, ResponseType.DESKTOP_WINDOW_CLOSED);
+    public int waitForDesktopWindowClosed(String win_name, long timeout) {
+        return waitAndParseResult(timeout, 0, win_name, ResponseType.DESKTOP_WINDOW_CLOSED).desktopWindowInfo.getWindowID();
     }
 }
