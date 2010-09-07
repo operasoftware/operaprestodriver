@@ -43,7 +43,7 @@ class RunDriver {
 	        	System.out.println("Failure");
 	        */
 	        // ---------------------
-	        
+/*	        
 	        driver.waitStart();
 	        
 	        //driver.keyDown("Control");
@@ -57,10 +57,27 @@ class RunDriver {
 
 	        driver.waitStart();
 	        
-	        driver.key("enter");
+//	        driver.key("enter");
+	        driver.operaAction("Cancel");
+//	        driver.operaAction("Ok");
 	        
 	        System.out.println("--Wait for window to close--");
 	        driver.waitForWindowClose("Preferences");
+*/
+
+	        driver.waitStart();
+	        System.out.println("--Wait for window to open--");
+	        driver.operaAction("Open url in new page", "http://t/security/bts/164110/scary_file-keyboard.kini");
+
+	        driver.waitForWindowUpdated("Potential Security Risk");
+
+	        driver.waitStart();
+	        System.out.println("--Wait for window to close--");
+//	        driver.key("enter");
+//	        driver.operaAction("Close window");
+	        driver.operaAction("Cancel");
+	        driver.waitForWindowClose("Potential Security Risk");
+
 	        /*
 	        System.out.println("--Go to Google --");
 	        driver.get("http://www.google.com");
