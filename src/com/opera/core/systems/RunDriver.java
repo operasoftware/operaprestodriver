@@ -49,7 +49,7 @@ class RunDriver {
 	        //driver.keyDown("Control");
 	        //driver.key(",");
 	        //driver.keyUp("Control");
-	        driver.operaAction("Show preferences");
+	        operaDesktopAction("Show preferences");
 
 	        System.out.println("--Wait for window to open--");
 //	        driver.waitForWindowUpdated();
@@ -58,16 +58,16 @@ class RunDriver {
 	        driver.waitStart();
 	        
 //	        driver.key("enter");
-	        driver.operaAction("Cancel");
+	        operaDesktopAction("Cancel");
 //	        driver.operaAction("Ok");
 	        
 	        System.out.println("--Wait for window to close--");
 	        driver.waitForWindowClose("Preferences");
 */
-
+/*
 	        driver.waitStart();
 	        System.out.println("--Wait for window to open--");
-	        driver.operaAction("Open url in new page", "http://t/security/bts/164110/scary_file-keyboard.kini");
+	        driver.operaDesktopAction("Open url in new page", "http://t/security/bts/164110/scary_file-keyboard.kini");
 
 	        driver.waitForWindowUpdated("Potential Security Risk");
 
@@ -75,9 +75,24 @@ class RunDriver {
 	        System.out.println("--Wait for window to close--");
 //	        driver.key("enter");
 //	        driver.operaAction("Close window");
-	        driver.operaAction("Cancel");
+	        driver.operaDesktopAction("Cancel");
 	        driver.waitForWindowClose("Potential Security Risk");
+*/
 
+	        driver.waitStart();
+	        System.out.println("--Wait for window to open--");
+	        driver.operaDesktopAction("Add to bookmarks");
+	        driver.waitForWindowUpdated("Add Bookmark");
+
+	        QuickWidget qw = driver.findWidgetByName(-1, "label_for_Name_edit");
+	        System.out.println(qw.getText());
+	        		
+	    	driver.waitStart();
+	        System.out.println("--Wait for window to close--");
+	        driver.operaDesktopAction("Cancel");
+	        driver.waitForWindowClose("Add Bookmark");
+
+	        
 	        /*
 	        System.out.println("--Go to Google --");
 	        driver.get("http://www.google.com");
