@@ -71,6 +71,12 @@ public class OperaDesktopDriver extends OperaDriver {
 		return 0;
 	}
 	
+	public void operaAction(String using, String... params) 
+	{
+        // Desktop never wants the window
+		exec.action(using, 0, params);
+	}
+	
 	public void waitStart() {
 		if (services.getConnection() == null)
 			throw new CommunicationException("waiting for a window failed because Opera is not connected.");
