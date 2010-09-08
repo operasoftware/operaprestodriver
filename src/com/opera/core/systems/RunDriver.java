@@ -33,7 +33,25 @@ class RunDriver {
 	        System.out.println("-- Done --");
 	        // _-----------------------
 */
-	        // IN ruby:
+
+	        driver.waitStart(); // wait for dialog to open
+	        System.out.println("-- wait for dialog -- ");
+	        driver.operaDesktopAction("Add to bookmarks");
+	        if (driver.waitForWindowUpdated("Add Bookmark") != 0)
+	        {
+		        QuickWidget widget = driver.findWidgetByName(-1, "label_for_sdNick_edit");
+		        System.out.println("Widget: " + widget.getWidgetID());
+	
+		        driver.waitStart();
+		        driver.operaDesktopAction("Cancel");
+		        System.out.println("--Wait for window to close--");
+		        driver.waitForWindowClose("Add Bookmark");
+	        }
+	        else
+	        {
+	        	System.out.println("Time out waiting for dialog");
+		    }
+		    // IN ruby:
         	//driver.label("name", "label_for_Nick_edit").verify_contains("Nickname");
 	        /*
 	        QuickWidget widget = (QuickWidget) driver.findWidgetByName("label_for_Nick_edit");
@@ -78,7 +96,7 @@ class RunDriver {
 	        driver.operaDesktopAction("Cancel");
 	        driver.waitForWindowClose("Potential Security Risk");
 */
-
+/*
 	        driver.waitStart();
 	        System.out.println("--Wait for window to open--");
 	        driver.operaDesktopAction("Add to bookmarks");
@@ -91,7 +109,7 @@ class RunDriver {
 	        System.out.println("--Wait for window to close--");
 	        driver.operaDesktopAction("Cancel");
 	        driver.waitForWindowClose("Add Bookmark");
-
+*/
 	        
 	        /*
 	        System.out.println("--Go to Google --");
