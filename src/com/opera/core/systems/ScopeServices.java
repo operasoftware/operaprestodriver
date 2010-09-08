@@ -291,17 +291,32 @@ public class ScopeServices implements IConnectionHandler {
 
 	public int waitForDesktopWindowUpdated(String win_name, long timeout) {
 		waitState.setWaitEvents(false);
-		return waitState.waitForDesktopWindowUpdated(win_name, timeout);
+		try {
+			return waitState.waitForDesktopWindowUpdated(win_name, timeout);
+		}
+		catch (Exception e) {
+			return 0;
+		}
 	}
 
 	public int waitForDesktopWindowActivated(String win_name, long timeout) {
 		waitState.setWaitEvents(false);
-		return waitState.waitForDesktopWindowActivated(win_name, timeout);
+		try {
+			return waitState.waitForDesktopWindowActivated(win_name, timeout);
+		}
+		catch (Exception e) {
+			return 0;
+		}
 	}
 
 	public int waitForDesktopWindowClosed(String win_name, long timeout) {
 		waitState.setWaitEvents(false);
-		return waitState.waitForDesktopWindowClosed(win_name, timeout);
+		try	{
+			return waitState.waitForDesktopWindowClosed(win_name, timeout);
+		}
+		catch (Exception e) {
+			return 0;
+		}
 	}
 
 	public void onResponseReceived(int tag, Response response) {
