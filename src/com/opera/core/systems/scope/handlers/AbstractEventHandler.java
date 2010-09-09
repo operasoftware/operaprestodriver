@@ -79,6 +79,15 @@ public abstract class AbstractEventHandler {
 	 */
 	public abstract void onWindowLoaded(int windowId);
 
+	
+	/**
+	 * Fired when a desktop window is shown at the last possible
+	 * moment so the window should be fully visible
+	 * @param window
+	 */
+
+	public abstract void onDesktopWindowShown(DesktopWindowInfo info);
+
 	/**
 	 * Fired when a new window is created or window
 	 * has incoming changes (such as title change)

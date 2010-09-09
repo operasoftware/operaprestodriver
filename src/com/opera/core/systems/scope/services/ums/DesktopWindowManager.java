@@ -9,6 +9,8 @@ import com.opera.core.systems.QuickWidget;
 import com.opera.core.systems.QuickWindow;
 import com.opera.core.systems.ScopeServices;
 
+import org.openqa.selenium.WebDriverException;
+
 import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowList;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfoList;
@@ -66,7 +68,7 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 	}
 
 	private void printQuickWidget(QuickWidgetInfo info) {
-		System.out.println("Widget id =" + info.getWidgetID() + ", title=" + info.getTitle() + ", type="+ info.getType());
+		System.out.println("Widget id =" + info.getWidgetID() + ", name=" + info.getName() + ", type="+ info.getType());
 		System.out.println("    visible = " + info.getVisible() + ", enabled = " + info.getState());
 		System.out.println("    text = " + info.getText());
 		
@@ -74,8 +76,9 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 	
 	public int getQuickWidgetID(int id, String property, String value) {
 		QuickWidget wdg = getQuickWidget(id, property, value);
-		if (wdg != null) return wdg.getWidgetID();
-		return -1;
+		if (wdg != null)
+			return wdg.getWidgetID();
+		return 0;
 	}
 	
 	public QuickWidget getQuickWidget(int id, String property, String value)
@@ -87,23 +90,28 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 		DesktopWindowID.Builder winBuilder = DesktopWindowID.newBuilder();
 		winBuilder.clearWindowID();
 		winBuilder.setWindowID(id);
-		searchBuilder.setWindowId(winBuilder);
+		searchBuilder.setWindowID(winBuilder);
 		searchBuilder.setSearchType(property);
 		searchBuilder.setData(value);
 		
-		Response response = executeCommand(DesktopWindowManagerCommand.GET_QUICK_WIDGET, searchBuilder);
-		QuickWidgetInfo.Builder builder = QuickWidgetInfo.newBuilder();
-		buildPayload(response, builder);
-		QuickWidgetInfo info = builder.build();
-		
-		printQuickWidget(info);
-		
-		return new QuickWidget(info);
+		try {
+			Response response = executeCommand(DesktopWindowManagerCommand.GET_QUICK_WIDGET, searchBuilder);
+			QuickWidgetInfo.Builder builder = QuickWidgetInfo.newBuilder();
+			buildPayload(response, builder);
+			QuickWidgetInfo info = builder.build();
+			
+			printQuickWidget(info);
+			return new QuickWidget(info);
+		}
+		catch (WebDriverException e) { 
+			return null;
+		}
 	}
 	
 	// OBS: temporary
 	public void getWidgetList(int id) {
-		int active_id = getActiveWindowId();
+		// Sets the internal member for the active window
+		getActiveWindowId();
 		
 		DesktopWindowID.Builder winBuilder = DesktopWindowID.newBuilder();
 		winBuilder.clearWindowID();
@@ -133,27 +141,26 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 		List<DesktopWindowInfo> windowList = list.getWindowListList();
 		
 		for (DesktopWindowInfo window : windowList) {
-			System.out.println("Window id =" + window.getWindowID() + ", title=" + window.getTitle() + ", type="+ window.getWindowType() + ", titleid=" + window.getTitleID());
+			System.out.println("Window id =" + window.getWindowID() + ", name=" + window.getName() + ", type="+ window.getWindowType());
 		}
 		
 		return windowList;
 	}
 	
-	public int getWindowID(String title) {
-		QuickWindow win = getWindow(title);
-		if (win != null) return win.getWindowID();
-		else return -1;
+	public int getWindowID(String name) {
+		QuickWindow win = getWindow(name);
+		if (win != null) 
+			return win.getWindowID();
+		else 
+			return -1;
 	}
 	
-	public QuickWindow getWindow(String title) {
+	public QuickWindow getWindow(String name) {
 		List<DesktopWindowInfo> windowList = getWindowList();
 		for (DesktopWindowInfo window : windowList) {
-			if (window.getTitle().equals(title))
+			if (window.getName().equals(name))
 				return new QuickWindow(window);
 		}
 		return null;
 	}
-	
-	
-
 }

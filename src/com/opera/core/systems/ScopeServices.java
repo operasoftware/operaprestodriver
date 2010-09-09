@@ -246,6 +246,11 @@ public class ScopeServices implements IConnectionHandler {
 		logger.fine("Window closed: windowId=" + id);
 		waitState.onWindowClosed(id);
 	}
+	
+	public void onDesktopWindowShown(DesktopWindowInfo info) {
+		logger.fine("DesktopWindow shown: windowId=" + info.getWindowID());
+		waitState.onDesktopWindowShown(info);
+	}
 
 	public void onDesktopWindowUpdated(DesktopWindowInfo info) {
 		logger.fine("DesktopWindow updated: windowId=" + info.getWindowID());
@@ -287,6 +292,16 @@ public class ScopeServices implements IConnectionHandler {
 	
 	public void waitStart() {
 		waitState.setWaitEvents(true);
+	}
+	
+	public int waitForDesktopWindowShown(String win_name, long timeout) {
+		waitState.setWaitEvents(false);
+		try {
+			return waitState.waitForDesktopWindowShown(win_name, timeout);
+		}
+		catch (Exception e) {
+			return 0;
+		}
 	}
 
 	public int waitForDesktopWindowUpdated(String win_name, long timeout) {

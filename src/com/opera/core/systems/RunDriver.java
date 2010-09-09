@@ -2,6 +2,7 @@ package com.opera.core.systems;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.NotFoundException;
+import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 
 import com.opera.core.systems.OperaDriver;
@@ -33,24 +34,27 @@ class RunDriver {
 	        System.out.println("-- Done --");
 	        // _-----------------------
 */
-
+/*
 	        driver.waitStart(); // wait for dialog to open
 	        System.out.println("-- wait for dialog -- ");
 	        driver.operaDesktopAction("Add to bookmarks");
-	        if (driver.waitForWindowUpdated("Add Bookmark") != 0)
+	        if (driver.waitForWindowShown("Add Bookmark Dialog") != 0)
 	        {
-		        QuickWidget widget = driver.findWidgetByName(-1, "label_for_sdNick_edit");
-		        System.out.println("Widget: " + widget.getWidgetID());
-	
+        		QuickWidget widget = driver.findWidgetByName(-1, "label_for_Nick_edit");
+        		if (widget != null)
+        			System.out.println("Widget: " + widget.getWidgetID());
+		        
 		        driver.waitStart();
 		        driver.operaDesktopAction("Cancel");
 		        System.out.println("--Wait for window to close--");
-		        driver.waitForWindowClose("Add Bookmark");
+		        driver.waitForWindowClose("Add Bookmark Dialog");
 	        }
 	        else
 	        {
 	        	System.out.println("Time out waiting for dialog");
 		    }
+		    
+*/		    
 		    // IN ruby:
         	//driver.label("name", "label_for_Nick_edit").verify_contains("Nickname");
 	        /*
@@ -82,20 +86,18 @@ class RunDriver {
 	        System.out.println("--Wait for window to close--");
 	        driver.waitForWindowClose("Preferences");
 */
-/*
+
 	        driver.waitStart();
 	        System.out.println("--Wait for window to open--");
 	        driver.operaDesktopAction("Open url in new page", "http://t/security/bts/164110/scary_file-keyboard.kini");
 
-	        driver.waitForWindowUpdated("Potential Security Risk");
+	        driver.waitForWindowShown("Simple Dialog");
 
 	        driver.waitStart();
 	        System.out.println("--Wait for window to close--");
-//	        driver.key("enter");
-//	        driver.operaAction("Close window");
 	        driver.operaDesktopAction("Cancel");
-	        driver.waitForWindowClose("Potential Security Risk");
-*/
+	        driver.waitForWindowClose("Simple Dialog");
+
 /*
 	        driver.waitStart();
 	        System.out.println("--Wait for window to open--");
