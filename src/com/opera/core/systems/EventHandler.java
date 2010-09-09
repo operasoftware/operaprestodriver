@@ -86,6 +86,11 @@ public class EventHandler extends AbstractEventHandler {
 	public void onReadyStateChange(ReadyStateChange change) {
 		throw new UnsupportedOperationException("Not supported in STP/0");
 	}
+	
+	@Override
+	public void onDesktopWindowShown(DesktopWindowInfo info) {
+		services.onDesktopWindowShown(info);
+	}
 
 	@Override
 	public void onDesktopWindowUpdated(DesktopWindowInfo info) {

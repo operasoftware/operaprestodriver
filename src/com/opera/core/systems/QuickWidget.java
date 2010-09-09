@@ -3,13 +3,8 @@ package com.opera.core.systems;
 import java.awt.Dimension;
 import java.awt.Point;
 
-import org.openqa.selenium.By;
-import com.opera.core.systems.scope.internal.OperaColors;
-import com.opera.core.systems.scope.internal.OperaFlags;
-import com.opera.core.systems.scope.internal.OperaMouseKeys;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetRect;
-import com.opera.core.systems.scope.services.IOperaExec;
 
 public class QuickWidget {
 		private final QuickWidgetInfo info; // or just int objectId
@@ -31,7 +26,7 @@ public class QuickWidget {
 	    }
 		
 		public String getName() {
-			return getText();
+			return info.getName();
 		}
 
 		public String getText() {

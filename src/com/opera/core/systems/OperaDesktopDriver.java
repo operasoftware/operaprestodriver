@@ -41,28 +41,20 @@ public class OperaDesktopDriver extends OperaDriver {
 		desktopWindowManager.getWindowList();
 	}
 	
-	public int getWindowID(String title) {
-		return desktopWindowManager.getWindowID(title);
+	public int getWindowID(String name) {
+		return desktopWindowManager.getWindowID(name);
 	}
 	
-	public QuickWindow getWindow(String title) {
-		return desktopWindowManager.getWindow(title);
-	}
-	
-	public int getQuickWidgetID(int windowId, String property, String value){
-		return desktopWindowManager.getQuickWidgetID(windowId, property, value);
-	}
-	
-	public QuickWidget findWidgetByName(int windowId, String name){
-		return desktopWindowManager.getQuickWidget(windowId, "name", name);
-	}
-	
-	public QuickWidget findWidgetByText(int windowId, String text){
-		return desktopWindowManager.getQuickWidget(windowId, "text", text);
+	public QuickWindow getWindow(String name) {
+		return desktopWindowManager.getWindow(name);
 	}
 	
 	public QuickWidget findWidgetByID(int windowId, String id) {
 		return desktopWindowManager.getQuickWidget(windowId, "id", id);
+	}
+	
+	public QuickWidget findWidgetByName(int windowId, String name){
+		return desktopWindowManager.getQuickWidget(windowId, "name", name);
 	}
 	
 	public int getWindowCount() {
@@ -96,13 +88,19 @@ public class OperaDesktopDriver extends OperaDriver {
 		waitForWindowClose("");
 	}
 
+	public int waitForWindowShown(String win_name) {
+		if (services.getConnection() == null)
+			throw new CommunicationException("waiting for a window failed because Opera is not connected.");
+		
+		return services.waitForDesktopWindowShown(win_name, OperaIntervals.PAGE_LOAD_TIMEOUT.getValue());
+	}
+
 	public int waitForWindowUpdated(String win_name) {
 		if (services.getConnection() == null)
 			throw new CommunicationException("waiting for a window failed because Opera is not connected.");
 		
 		return services.waitForDesktopWindowUpdated(win_name, OperaIntervals.PAGE_LOAD_TIMEOUT.getValue());
 	}
-
 
 	public int waitForWindowActivated(String win_name) {
 		if (services.getConnection() == null)

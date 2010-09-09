@@ -78,6 +78,12 @@ public class UmsEventParser {
 		}
 		else if (service.equals("desktop-window-manager")) {
 			switch (DesktopWindowManagerCommand.get(eventId)) {
+			case WINDOW_SHOWN:
+				DesktopWindowInfo.Builder shownDWBuilder = DesktopWindowInfo.newBuilder();
+				buildPayload(event, shownDWBuilder);
+				DesktopWindowInfo info_shown = shownDWBuilder.build();
+				eventHandler.onDesktopWindowShown(info_shown);
+				break;
 			case WINDOW_UPDATED:
 				DesktopWindowInfo.Builder updatedDWBuilder = DesktopWindowInfo.newBuilder();
 				buildPayload(event, updatedDWBuilder);
