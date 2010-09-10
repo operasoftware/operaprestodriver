@@ -76,13 +76,6 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 		
 	}
 	
-	public int getQuickWidgetID(int id, String property, String value) {
-		QuickWidget wdg = getQuickWidget(id, property, value);
-		if (wdg != null)
-			return wdg.getWidgetID();
-		return 0;
-	}
-	
 	public QuickWidget getQuickWidget(int id, String property, String value)
 	{
 		if (id < 0) {
