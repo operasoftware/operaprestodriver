@@ -45,16 +45,21 @@ public class QuickWidget {
 		 * @see com.opera.core.systems.IOperaWidget#isSelected()
 		 */
 		public boolean isSelected() {
-			// TODO FIXME
-			return false;
+			return info.getState() == 1;
 		}
 		
 		/* (non-Javadoc)
 		 * @see com.opera.core.systems.IOperaWidget#isVisible()
+		 * TODO, FIXME: This needs to handle also if the dialog is not expanded, is off_screen etc.
 		 */
 		public boolean isVisible(){
 			return info.getVisible() != 0 ? true : false; 
 		}
+		
+		public boolean isDefault() {
+			return info.getDefaultLook() &&  info.getFocusedLook();
+		}
+		
 		
 		/* (non-Javadoc)
 		 * @see com.opera.core.systems.IOperaWidget#toggle()
