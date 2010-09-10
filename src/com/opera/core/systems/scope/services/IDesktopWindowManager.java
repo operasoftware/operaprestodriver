@@ -26,7 +26,6 @@ public interface IDesktopWindowManager {
 	QuickWindow getWindow(String title);
 	int getWindowID(String title);
 	List<DesktopWindowInfo> getWindowList();
-	int getQuickWidgetID(int id, String property, String value);
 	QuickWidget getQuickWidget(int id, String property, String value);
 	String getString(String enum_text);
 }

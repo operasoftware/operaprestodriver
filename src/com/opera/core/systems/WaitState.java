@@ -373,7 +373,7 @@ public class WaitState {
                         		return result;
                         	else
                         	{
-                        		logger.info("EVENT_DESKTOP_WINDOW_SHOWN: Name: " + result.desktopWindowInfo.getName() + " ID: " + result.desktopWindowInfo.getWindowID());
+                        		logger.fine("EVENT_DESKTOP_WINDOW_SHOWN: Name: " + result.desktopWindowInfo.getName() + " ID: " + result.desktopWindowInfo.getWindowID());
                         		
                         		if (result.desktopWindowInfo.getName().equals(stringMatch))
                         			return result;

@@ -99,22 +99,22 @@ class RunDriver {
 	        driver.waitForWindowClose("Simple Dialog");
 */
 
-	        System.out.println("Text: " + driver.getString("D_SECURITYALERT_SETUPDOWNLOAD_TITLE"));
+//	        System.out.println("Text: " + driver.getString("D_SECURITYALERT_SETUPDOWNLOAD_TITLE"));
 	        
-/*
+
 	        driver.waitStart();
 	        System.out.println("--Wait for window to open--");
 	        driver.operaDesktopAction("Add to bookmarks");
-	        driver.waitForWindowUpdated("Add Bookmark");
+	        driver.waitForWindowShown("Add Bookmark Dialog");
 
 	        QuickWidget qw = driver.findWidgetByName(-1, "label_for_Name_edit");
-	        System.out.println(qw.getText());
-	        		
+	        System.out.println("By name: " + qw.getText());
+
 	    	driver.waitStart();
 	        System.out.println("--Wait for window to close--");
 	        driver.operaDesktopAction("Cancel");
-	        driver.waitForWindowClose("Add Bookmark");
-*/
+	        driver.waitForWindowClose("Add Bookmark Dialog");
+
 	        
 	        /*
 	        System.out.println("--Go to Google --");
