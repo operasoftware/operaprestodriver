@@ -70,10 +70,20 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 	}
 
 	private void printQuickWidget(QuickWidgetInfo info) {
-		System.out.println("Widget id =" + info.getWidgetID() + ", name=" + info.getName() + ", type="+ info.getType());
-		System.out.println("    visible = " + info.getVisible() + ", enabled = " + info.getState());
-		System.out.println("    text = " + info.getText());
-		
+		System.out.println("Widget name: " + info.getName());
+		System.out.println("         id: " + info.getWidgetID());
+		System.out.println("       type: " + info.getType());
+		System.out.println("    visible: " + info.getVisible());
+		System.out.println("       text: " + info.getText());
+		System.out.println("      state: " + info.getState());
+		System.out.println("    enabled: " + info.getEnabled());
+		System.out.println("    default: " + info.getDefaultLook());
+		System.out.println("    focused: " + info.getFocusedLook());
+		System.out.println("          x: " + info.getRect().getX());
+		System.out.println("          y: " + info.getRect().getY());
+		System.out.println("      width: " + info.getRect().getWidth());
+		System.out.println("     height: " + info.getRect().getHeight());
+		System.out.println(" ");
 	}
 	
 	public QuickWidget getQuickWidget(int id, String property, String value)
