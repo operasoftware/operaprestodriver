@@ -57,6 +57,10 @@ public class OperaDesktopDriver extends OperaDriver {
 		return desktopWindowManager.getQuickWidget(windowId, "name", name);
 	}
 	
+	public String getString(String enum_text){
+		return desktopWindowManager.getString(enum_text);
+	}
+	
 	public int getWindowCount() {
 		//TODO FIXME
 		//return desktopWindowManager.getOpenWindowCount();

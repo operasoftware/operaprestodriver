@@ -18,6 +18,8 @@ import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearch;
 import com.opera.core.systems.scope.protos.UmsProtos.Response;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID;
+import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopStringID;
+import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopStringText;
 import com.opera.core.systems.scope.services.IDesktopWindowManager;
 
 public class DesktopWindowManager extends AbstractService implements IDesktopWindowManager {
@@ -162,5 +164,18 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 				return new QuickWindow(window);
 		}
 		return null;
+	}
+	
+	public String getString(String enum_text) {
+		DesktopStringID.Builder stringBuilder = DesktopStringID.newBuilder();
+		stringBuilder.setEnumText(enum_text);
+		
+		Response response = executeCommand(DesktopWindowManagerCommand.GET_STRING, stringBuilder);
+
+		DesktopStringText.Builder stringTextBuilder = DesktopStringText.newBuilder();
+		buildPayload(response, stringTextBuilder);
+		DesktopStringText string_text = stringTextBuilder.build();
+
+		return string_text.getText();
 	}
 }
