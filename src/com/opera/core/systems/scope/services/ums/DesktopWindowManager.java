@@ -104,8 +104,8 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 			buildPayload(response, builder);
 			QuickWidgetInfo info = builder.build();
 			
-			printQuickWidget(info);
-			return new QuickWidget(info);
+			//printQuickWidget(info);
+			return new QuickWidget(this, info);
 		}
 		catch (WebDriverException e) { 
 			return null;
@@ -134,7 +134,7 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 		List<QuickWidget> quickWidgetList = new LinkedList<QuickWidget>();
 		
 		for (QuickWidgetInfo widgetInfo : widgetList) {
-			quickWidgetList.add(new QuickWidget(widgetInfo));
+			quickWidgetList.add(new QuickWidget(this, widgetInfo));
 		}
 		return quickWidgetList;
 	}
@@ -159,7 +159,7 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 		List<QuickWidgetInfo> widgetList = list.getQuickwidgetListList();
 		
 		for (QuickWidgetInfo widget : widgetList) {
-			printQuickWidget(widget);
+			//printQuickWidget(widget);
 		}
 	}
 	
@@ -195,6 +195,7 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 		return null;
 	}
 	
+	
 	public String getString(String enum_text) {
 		DesktopStringID.Builder stringBuilder = DesktopStringID.newBuilder();
 		stringBuilder.setEnumText(enum_text);
@@ -207,4 +208,6 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 
 		return string_text.getText();
 	}
+	
+	
 }
