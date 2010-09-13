@@ -63,8 +63,15 @@ public final class DesktopWmProtos {
     public boolean hasWindowType() { return hasWindowType; }
     public java.lang.String getWindowType() { return windowType_; }
     
-    // required .scope.DesktopWindowRect rect = 5;
-    public static final int RECT_FIELD_NUMBER = 5;
+    // required bool onScreen = 5;
+    public static final int ONSCREEN_FIELD_NUMBER = 5;
+    private boolean hasOnScreen;
+    private boolean onScreen_ = false;
+    public boolean hasOnScreen() { return hasOnScreen; }
+    public boolean getOnScreen() { return onScreen_; }
+    
+    // required .scope.DesktopWindowRect rect = 6;
+    public static final int RECT_FIELD_NUMBER = 6;
     private boolean hasRect;
     private com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect rect_;
     public boolean hasRect() { return hasRect; }
@@ -78,6 +85,7 @@ public final class DesktopWmProtos {
       if (!hasTitle) return false;
       if (!hasName) return false;
       if (!hasWindowType) return false;
+      if (!hasOnScreen) return false;
       if (!hasRect) return false;
       if (!getRect().isInitialized()) return false;
       return true;
@@ -98,8 +106,11 @@ public final class DesktopWmProtos {
       if (hasWindowType()) {
         output.writeString(4, getWindowType());
       }
+      if (hasOnScreen()) {
+        output.writeBool(5, getOnScreen());
+      }
       if (hasRect()) {
-        output.writeMessage(5, getRect());
+        output.writeMessage(6, getRect());
       }
       getUnknownFields().writeTo(output);
     }
@@ -126,9 +137,13 @@ public final class DesktopWmProtos {
         size += com.google.protobuf.CodedOutputStream
           .computeStringSize(4, getWindowType());
       }
+      if (hasOnScreen()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBoolSize(5, getOnScreen());
+      }
       if (hasRect()) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(5, getRect());
+          .computeMessageSize(6, getRect());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -300,6 +315,9 @@ public final class DesktopWmProtos {
         if (other.hasWindowType()) {
           setWindowType(other.getWindowType());
         }
+        if (other.hasOnScreen()) {
+          setOnScreen(other.getOnScreen());
+        }
         if (other.hasRect()) {
           mergeRect(other.getRect());
         }
@@ -344,7 +362,11 @@ public final class DesktopWmProtos {
               setWindowType(input.readString());
               break;
             }
-            case 42: {
+            case 40: {
+              setOnScreen(input.readBool());
+              break;
+            }
+            case 50: {
               com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect.Builder subBuilder = com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect.newBuilder();
               if (hasRect()) {
                 subBuilder.mergeFrom(getRect());
@@ -439,7 +461,25 @@ public final class DesktopWmProtos {
         return this;
       }
       
-      // required .scope.DesktopWindowRect rect = 5;
+      // required bool onScreen = 5;
+      public boolean hasOnScreen() {
+        return result.hasOnScreen();
+      }
+      public boolean getOnScreen() {
+        return result.getOnScreen();
+      }
+      public Builder setOnScreen(boolean value) {
+        result.hasOnScreen = true;
+        result.onScreen_ = value;
+        return this;
+      }
+      public Builder clearOnScreen() {
+        result.hasOnScreen = false;
+        result.onScreen_ = false;
+        return this;
+      }
+      
+      // required .scope.DesktopWindowRect rect = 6;
       public boolean hasRect() {
         return result.hasRect();
       }
@@ -3514,26 +3554,27 @@ public final class DesktopWmProtos {
   static {
     java.lang.String[] descriptorData = {
       "\n!desktop_window_manager_java.proto\022\005sco" +
-      "pe\"~\n\021DesktopWindowInfo\022\020\n\010windowID\030\001 \002(" +
-      "\r\022\r\n\005title\030\002 \002(\t\022\014\n\004name\030\003 \002(\t\022\022\n\nwindow" +
-      "Type\030\004 \002(\t\022&\n\004rect\030\005 \002(\0132\030.scope.Desktop" +
-      "WindowRect\"H\n\021DesktopWindowRect\022\t\n\001x\030\001 \002" +
-      "(\r\022\t\n\001y\030\002 \002(\r\022\r\n\005width\030\003 \002(\r\022\016\n\006height\030\004" +
-      " \002(\r\"\276\001\n\017QuickWidgetInfo\022\014\n\004name\030\001 \002(\t\022\014" +
-      "\n\004type\030\002 \002(\t\022\017\n\007visible\030\003 \002(\r\022\014\n\004text\030\004 " +
-      "\002(\t\022\r\n\005value\030\005 \002(\r\022\017\n\007enabled\030\006 \002(\010\022\023\n\013d" +
-      "efaultLook\030\007 \002(\010\022\023\n\013focusedLook\030\010 \002(\010\022&\n",
-      "\004rect\030\t \002(\0132\030.scope.DesktopWindowRect\"#\n" +
-      "\017DesktopStringID\022\020\n\010enumText\030\001 \002(\t\"!\n\021De" +
-      "sktopStringText\022\014\n\004text\030\001 \002(\t\"#\n\017Desktop" +
-      "WindowID\022\020\n\010windowID\030\001 \002(\r\"A\n\021DesktopWin" +
-      "dowList\022,\n\nwindowList\030\001 \003(\0132\030.scope.Desk" +
-      "topWindowInfo\"F\n\023QuickWidgetInfoList\022/\n\017" +
-      "quickwidgetList\030\001 \003(\0132\026.scope.QuickWidge" +
-      "tInfo\"_\n\021QuickWidgetSearch\022(\n\010windowID\030\001" +
-      " \002(\0132\026.scope.DesktopWindowID\022\022\n\nsearchTy" +
-      "pe\030\002 \002(\t\022\014\n\004data\030\003 \002(\tB8\n#com.opera.core",
-      ".systems.scope.protosB\017DesktopWmProtosH\001"
+      "pe\"\220\001\n\021DesktopWindowInfo\022\020\n\010windowID\030\001 \002" +
+      "(\r\022\r\n\005title\030\002 \002(\t\022\014\n\004name\030\003 \002(\t\022\022\n\nwindo" +
+      "wType\030\004 \002(\t\022\020\n\010onScreen\030\005 \002(\010\022&\n\004rect\030\006 " +
+      "\002(\0132\030.scope.DesktopWindowRect\"H\n\021Desktop" +
+      "WindowRect\022\t\n\001x\030\001 \002(\r\022\t\n\001y\030\002 \002(\r\022\r\n\005widt" +
+      "h\030\003 \002(\r\022\016\n\006height\030\004 \002(\r\"\276\001\n\017QuickWidgetI" +
+      "nfo\022\014\n\004name\030\001 \002(\t\022\014\n\004type\030\002 \002(\t\022\017\n\007visib" +
+      "le\030\003 \002(\r\022\014\n\004text\030\004 \002(\t\022\r\n\005value\030\005 \002(\r\022\017\n" +
+      "\007enabled\030\006 \002(\010\022\023\n\013defaultLook\030\007 \002(\010\022\023\n\013f",
+      "ocusedLook\030\010 \002(\010\022&\n\004rect\030\t \002(\0132\030.scope.D" +
+      "esktopWindowRect\"#\n\017DesktopStringID\022\020\n\010e" +
+      "numText\030\001 \002(\t\"!\n\021DesktopStringText\022\014\n\004te" +
+      "xt\030\001 \002(\t\"#\n\017DesktopWindowID\022\020\n\010windowID\030" +
+      "\001 \002(\r\"A\n\021DesktopWindowList\022,\n\nwindowList" +
+      "\030\001 \003(\0132\030.scope.DesktopWindowInfo\"F\n\023Quic" +
+      "kWidgetInfoList\022/\n\017quickwidgetList\030\001 \003(\013" +
+      "2\026.scope.QuickWidgetInfo\"_\n\021QuickWidgetS" +
+      "earch\022(\n\010windowID\030\001 \002(\0132\026.scope.DesktopW" +
+      "indowID\022\022\n\nsearchType\030\002 \002(\t\022\014\n\004data\030\003 \002(",
+      "\tB8\n#com.opera.core.systems.scope.protos" +
+      "B\017DesktopWmProtosH\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -3545,7 +3586,7 @@ public final class DesktopWmProtos {
           internal_static_scope_DesktopWindowInfo_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_scope_DesktopWindowInfo_descriptor,
-              new java.lang.String[] { "WindowID", "Title", "Name", "WindowType", "Rect", },
+              new java.lang.String[] { "WindowID", "Title", "Name", "WindowType", "OnScreen", "Rect", },
               com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo.class,
               com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo.Builder.class);
           internal_static_scope_DesktopWindowRect_descriptor =
