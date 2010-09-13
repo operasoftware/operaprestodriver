@@ -1,6 +1,7 @@
 package com.opera.core.systems;
 
 //import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.opera.core.systems.scope.exceptions.CommunicationException;
@@ -19,22 +20,24 @@ public class OperaDesktopDriver extends OperaDriver {
 		desktopWindowManager = services.getDesktopWindowManager();
 	}
 
-	protected Map<String, String> getServicesList()
-	{
+	protected Map<String, String> getServicesList() {
 		Map<String, String> versions = super.getServicesList();
 		versions.put("desktop-window-manager", "1.0");
 		return versions;
 	}
 	
-	public int getActiveWindowID()
-	{
+	public int getActiveWindowID() {
 		return desktopWindowManager.getActiveWindowId();
 	}
 
 	// OBS: Temporary for testing
-	public void getWidgetList(int id)
-	{
+	public void getWidgetList(int id) {
 		desktopWindowManager.getWidgetList(id);
+	}
+	
+	public List<QuickWidget> getQuickWidgetList(String win_name) {
+		int id = getWindowID(win_name);
+		return desktopWindowManager.getQuickWidgetList(id);
 	}
 	
 	public void getWindowList() {
