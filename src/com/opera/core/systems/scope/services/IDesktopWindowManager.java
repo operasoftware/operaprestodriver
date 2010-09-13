@@ -22,6 +22,7 @@ public interface IDesktopWindowManager {
 	void init();
 	
 	// OBS: Temporary, for testing
+	List<QuickWidget> getQuickWidgetList(int id);
 	void getWidgetList(int id);
 	QuickWindow getWindow(String title);
 	int getWindowID(String title);
