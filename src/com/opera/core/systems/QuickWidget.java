@@ -4,20 +4,12 @@ import java.awt.Dimension;
 import java.awt.Point;
 
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo;
-import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetRect;
+import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect;
 
 public class QuickWidget {
 		private final QuickWidgetInfo info; // or just int objectId
 		//private final OperaDriver parent;
 		//private final IOperaExec execService;
-		
-		public int getObjectId() {
-			return getWidgetID();
-		}
-		
-		public int getWidgetID() {
-			return info.getWidgetID();
-		}
 		
 		public QuickWidget(QuickWidgetInfo info) {
 	        //this.parent = parent;
@@ -32,11 +24,18 @@ public class QuickWidget {
 		public String getText() {
 			return info.getText();
 		}
-
 		
 		/* (non-Javadoc)
 		 * @see com.opera.core.systems.IOperaWidget#isEnabled()
 		 */
+		public boolean isDefault() {
+			return info.getDefaultLook();
+		}
+		
+		public boolean hasFocusedLook() {
+			return info.getFocusedLook();
+		}
+
 		public boolean isEnabled() {
 			return info.getEnabled();
 		}
@@ -69,13 +68,13 @@ public class QuickWidget {
 			return false; 
 		}
 		
-		private QuickWidgetRect getRect() {
+		private DesktopWindowRect getRect() {
 			return info.getRect();
 		}
 		
 		
 		public Point getLocation() {
-			QuickWidgetRect rect = getRect();
+			DesktopWindowRect rect = getRect();
 			return new Point(rect.getX(), rect.getY());
 		}
 
@@ -83,7 +82,7 @@ public class QuickWidget {
 		 * @see com.opera.core.systems.IOperaWidget#getSize()
 		 */
 		public Dimension getSize() {
-			QuickWidgetRect rect = getRect();
+			DesktopWindowRect rect = getRect();
 			return new Dimension(rect.getWidth(), rect.getHeight());
 		}
 
@@ -91,7 +90,7 @@ public class QuickWidget {
 		public boolean equals(Object obj) {
 			if(obj instanceof QuickWidget) {
 				QuickWidget ref = (QuickWidget) obj;
-				return (((QuickWidget)ref).getObjectId() == this.getObjectId());
+				return (ref.getName().equals(this.getName()));
 			}
 			return false;
 		}
@@ -99,7 +98,7 @@ public class QuickWidget {
 		@Override
 		public int hashCode() {
 			int result = 42;
-			result = 31 * result + getObjectId();
+			result = 31 * result + getName().hashCode();
 			return result;
 		}
 		
@@ -107,7 +106,6 @@ public class QuickWidget {
 		public String toString() {
 			return "quickwidget" + hashCode();
 		}
-
 }
 
 

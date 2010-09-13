@@ -86,22 +86,24 @@ class RunDriver {
 	        System.out.println("--Wait for window to close--");
 	        driver.waitForWindowClose("Preferences");
 */
-/*
+
 	        driver.waitStart();
 	        System.out.println("--Wait for window to open--");
 	        driver.operaDesktopAction("Open url in new page", "http://t/security/bts/164110/scary_file-keyboard.kini");
 
+	        //driver.getWidgetList(driver.getActiveWindowID());
+	        
 	        driver.waitForWindowShown("Simple Dialog");
 
 	        driver.waitStart();
 	        System.out.println("--Wait for window to close--");
 	        driver.operaDesktopAction("Cancel");
 	        driver.waitForWindowClose("Simple Dialog");
-*/
+
 
 //	        System.out.println("Text: " + driver.getString("D_SECURITYALERT_SETUPDOWNLOAD_TITLE"));
 	        
-
+/*
 	        driver.waitStart();
 	        System.out.println("--Wait for window to open--");
 	        driver.operaDesktopAction("Add to bookmarks");
@@ -114,7 +116,7 @@ class RunDriver {
 	        System.out.println("--Wait for window to close--");
 	        driver.operaDesktopAction("Cancel");
 	        driver.waitForWindowClose("Add Bookmark Dialog");
-
+*/
 	        
 	        /*
 	        System.out.println("--Go to Google --");
