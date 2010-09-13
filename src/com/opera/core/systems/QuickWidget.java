@@ -5,16 +5,16 @@ import java.awt.Point;
 
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect;
+import com.opera.core.systems.scope.services.IDesktopWindowManager;
 
 public class QuickWidget {
 		private final QuickWidgetInfo info; // or just int objectId
-		//private final OperaDriver parent;
-		//private final IOperaExec execService;
+		//private final OperaDesktopDriver parent;
+		private final IDesktopWindowManager desktopWindowManager;
 		
-		public QuickWidget(QuickWidgetInfo info) {
-	        //this.parent = parent;
+		public QuickWidget(IDesktopWindowManager wm, QuickWidgetInfo info) {
 	        this.info = info;
-	        //execService = parent.getExecService();
+	        this.desktopWindowManager = wm;
 	    }
 		
 		public String getName() {
@@ -25,6 +25,16 @@ public class QuickWidget {
 			return info.getText();
 		}
 		
+		public boolean verifyText(String string_id) {
+			String text = desktopWindowManager.getString(string_id);
+			return getText().equals(text);
+		}
+		
+		public boolean verifyContainsText(String string_id) {
+			String text = desktopWindowManager.getString(string_id);
+			return getText().indexOf(text) >= 0;
+		}
+		
 		/* (non-Javadoc)
 		 * @see com.opera.core.systems.IOperaWidget#isEnabled()
 		 */
@@ -32,7 +42,7 @@ public class QuickWidget {
 			return info.getDefaultLook();
 		}
 		
-		// TODO: FIXME . isFocused()
+		// TODO: FIXME . 
 		public boolean hasFocusedLook() {
 			return info.getFocusedLook();
 		}
