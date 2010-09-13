@@ -32,6 +32,7 @@ public class QuickWidget {
 			return info.getDefaultLook();
 		}
 		
+		// TODO: FIXME . isFocused()
 		public boolean hasFocusedLook() {
 			return info.getFocusedLook();
 		}
@@ -44,7 +45,7 @@ public class QuickWidget {
 		 * @see com.opera.core.systems.IOperaWidget#isSelected()
 		 */
 		public boolean isSelected() {
-			return info.getState() == 1;
+			return info.getValue() == 1;
 		}
 		
 		/* (non-Javadoc)
@@ -53,10 +54,6 @@ public class QuickWidget {
 		 */
 		public boolean isVisible(){
 			return info.getVisible() != 0 ? true : false; 
-		}
-		
-		public boolean isDefault() {
-			return info.getDefaultLook() &&  info.getFocusedLook();
 		}
 		
 		
@@ -104,7 +101,23 @@ public class QuickWidget {
 		
 		@Override
 		public String toString() {
-			return "quickwidget" + hashCode();
+			return "QuickWidget " + getName();
+		}
+		
+		public String toFullString() {
+			return "QuickWidget\n" +  
+			  "       Widget name: " + info.getName() + "\n"
+			+ "       type: " + info.getType()  + "\n"
+			+ "    visible: " + info.getVisible() + "\n"
+			+ "       text: " + info.getText() + "\n"
+			+ "      state: " + info.getValue() + "\n"
+			+ "    enabled: " + info.getEnabled() + "\n"
+			+ "    default: " + info.getDefaultLook() + "\n"
+			+ "    focused: " + info.getFocusedLook() + "\n"
+			+ "          x: " + info.getRect().getX() + "\n"
+			+ "          y: " + info.getRect().getY() + "\n"
+			+ "      width: " + info.getRect().getWidth() + "\n"
+			+ "     height: " + info.getRect().getHeight() + " \n";
 		}
 }
 
