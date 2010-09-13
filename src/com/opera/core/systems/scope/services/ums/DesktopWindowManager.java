@@ -112,6 +112,33 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 		}
 	}
 	
+	public List<QuickWidget> getQuickWidgetList(int id) {
+		// TODO FIXME : If no id
+		if (id <= 0)
+			return null;
+		
+		DesktopWindowID.Builder winBuilder = DesktopWindowID.newBuilder();
+		winBuilder.clearWindowID();
+		if (id >= 0)
+			winBuilder.setWindowID(id);
+		else
+			winBuilder.setWindowID(activeWindowId);
+		
+		Response response = executeCommand(DesktopWindowManagerCommand.LIST_QUICK_WIDGETS, winBuilder);
+		QuickWidgetInfoList.Builder builder = QuickWidgetInfoList.newBuilder();
+		builder.clear();
+		buildPayload(response, builder);
+		QuickWidgetInfoList list = builder.build();
+		
+		List<QuickWidgetInfo> widgetList = list.getQuickwidgetListList();
+		List<QuickWidget> quickWidgetList = new LinkedList<QuickWidget>();
+		
+		for (QuickWidgetInfo widgetInfo : widgetList) {
+			quickWidgetList.add(new QuickWidget(widgetInfo));
+		}
+		return quickWidgetList;
+	}
+	
 	// OBS: temporary
 	public void getWidgetList(int id) {
 		// Sets the internal member for the active window
