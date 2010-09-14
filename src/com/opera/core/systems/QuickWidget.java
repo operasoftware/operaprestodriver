@@ -39,11 +39,10 @@ public class QuickWidget {
 	     */
 		public boolean verifyText(String string_id) {
 			String text = desktopWindowManager.getString(string_id);
-			// Hack to remove all \r and \n's as we sometimes get just \n and sometimes
-			// \r\n then the string comparison doesn't work
-			text = text.replaceAll("(\\r|\\n)", "");
+			// Remember to remove all CRLF
+			text = removeCRLF(text);
 			String text_internal = getText();
-			text_internal = text_internal.replaceAll("(\\r|\\n)", "");
+			text_internal = removeCRLF(text_internal);
 			return text_internal.equals(text);
 		}
 		
@@ -55,12 +54,17 @@ public class QuickWidget {
 	     */
 		public boolean verifyContainsText(String string_id) {
 			String text = desktopWindowManager.getString(string_id);
+			// Remember to remove all CRLF
+			text = removeCRLF(text);
+			String text_internal = getText();
+			text_internal = removeCRLF(text_internal);
+			return text_internal.indexOf(text) >= 0;
+		}
+		
+		private String removeCRLF(String text) {
 			// Hack to remove all \r and \n's as we sometimes get just \n and sometimes
 			// \r\n then the string comparison doesn't work
-			text = text.replaceAll("(\\r|\\n)", "");
-			String text_internal = getText();
-			text_internal = text_internal.replaceAll("(\\r|\\n)", "");
-			return text_internal.indexOf(text) >= 0;
+			return text.replaceAll("(\\r|\\n)", "");
 		}
 		
 		/** 
