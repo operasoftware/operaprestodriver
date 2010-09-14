@@ -8,8 +8,7 @@ import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect;
 import com.opera.core.systems.scope.services.IDesktopWindowManager;
 
 public class QuickWidget {
-		private final QuickWidgetInfo info; // or just int objectId
-		//private final OperaDesktopDriver parent;
+		private final QuickWidgetInfo info; 
 		private final IDesktopWindowManager desktopWindowManager;
 		
 		public QuickWidget(IDesktopWindowManager wm, QuickWidgetInfo info) {
@@ -17,76 +16,105 @@ public class QuickWidget {
 	        this.desktopWindowManager = wm;
 	    }
 		
+		/**
+	     * 
+	     * @return name of widget
+	     */
 		public String getName() {
 			return info.getName();
 		}
 
+		/**
+	     * 
+	     * @return text of widget
+	     */
 		public String getText() {
 			return info.getText();
 		}
 		
+		/**
+	     * Check if widget text equals the text specified by @param string_id
+	     * 
+	     * @return true if text specified by string_id equals widget text
+	     */
 		public boolean verifyText(String string_id) {
 			String text = desktopWindowManager.getString(string_id);
 			return getText().equals(text);
 		}
 		
+		/**
+	     * Check if widget text contains the text specified by @param string_id
+	     * 
+	     * @param String string_id - id of string 
+	     * @return true if text specified by string_id is contained in widget text
+	     */
 		public boolean verifyContainsText(String string_id) {
 			String text = desktopWindowManager.getString(string_id);
 			return getText().indexOf(text) >= 0;
 		}
 		
-		/* (non-Javadoc)
-		 * @see com.opera.core.systems.IOperaWidget#isEnabled()
+		/** 
+		 * @return true if widget is default, else false
 		 */
 		public boolean isDefault() {
 			return info.getDefaultLook();
 		}
 		
-		// TODO: FIXME . 
+		/** 
+		 *  
+		 * @return
+		 */
 		public boolean hasFocusedLook() {
 			return info.getFocusedLook();
 		}
 
+		/** 
+		 * Check if widget is enabled  
+		 * @return true if enabled, else false
+		 */
 		public boolean isEnabled() {
 			return info.getEnabled();
 		}
 		
-		/* (non-Javadoc)
-		 * @see com.opera.core.systems.IOperaWidget#isSelected()
+		/**
+		 * @return if widget is selected, else false
 		 */
 		public boolean isSelected() {
 			return info.getValue() == 1;
 		}
 		
-		/* (non-Javadoc)
-		 * @see com.opera.core.systems.IOperaWidget#isVisible()
-		 * TODO, FIXME: This needs to handle also if the dialog is not expanded, is off_screen etc.
+		/**
+		 * @return true if widget is visible
 		 */
+		// TODO, FIXME: This needs to handle also if the dialog is not expanded, is off_screen etc.
 		public boolean isVisible(){
 			return info.getVisible(); 
 		}
 		
-		
-		/* (non-Javadoc)
-		 * @see com.opera.core.systems.IOperaWidget#toggle()
+		/* 
 		 */
 		public boolean toggle() {
 			// TODO FIXME
 			return false; 
 		}
 		
+		/**
+		 * @return DesktopWindowRect of the widget
+		 */
 		private DesktopWindowRect getRect() {
 			return info.getRect();
 		}
 		
-		
+		/**
+		 * @return Point describing location of widget
+		 */
 		public Point getLocation() {
 			DesktopWindowRect rect = getRect();
 			return new Point(rect.getX(), rect.getY());
 		}
 
-		/* (non-Javadoc)
-		 * @see com.opera.core.systems.IOperaWidget#getSize()
+		/**
+		 * @return size of widget
 		 */
 		public Dimension getSize() {
 			DesktopWindowRect rect = getRect();
@@ -94,6 +122,7 @@ public class QuickWidget {
 		}
 
 		@Override
+		// TODO: FIXME
 		public boolean equals(Object obj) {
 			if(obj instanceof QuickWidget) {
 				QuickWidget ref = (QuickWidget) obj;
@@ -103,6 +132,7 @@ public class QuickWidget {
 		}
 		
 		@Override
+		// TODO: Fixme
 		public int hashCode() {
 			int result = 42;
 			result = 31 * result + getName().hashCode();
