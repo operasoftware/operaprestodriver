@@ -134,9 +134,6 @@ public class QuickWidget {
 			return info.getValue();
 		}
 
-		protected String getType() {
-			return info.getType();
-		}
 		@Override
 		// TODO: FIXME
 		public boolean equals(Object obj) {
