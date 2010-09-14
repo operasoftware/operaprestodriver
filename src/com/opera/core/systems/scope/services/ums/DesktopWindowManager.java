@@ -137,7 +137,7 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 		List<DesktopWindowInfo> windowList = list.getWindowListList();
 		
 		for (DesktopWindowInfo window : windowList) {
-			System.out.println("Window id =" + window.getWindowID() + ", name=" + window.getName() + ", type="+ window.getWindowType());
+			//System.out.println("Window id =" + window.getWindowID() + ", name=" + window.getName() + ", type="+ window.getWindowType());
 		}
 		
 		return windowList;
@@ -160,6 +160,14 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 		return null;
 	}
 	
+	public String getWindowName(int win_id) {
+		List<DesktopWindowInfo> windowList = getWindowList();
+		for (DesktopWindowInfo window : windowList) {
+			if (window.getWindowID() == win_id)
+				return window.getName();
+		}
+		return "";
+	}
 	
 	public String getString(String enum_text) {
 		DesktopStringID.Builder stringBuilder = DesktopStringID.newBuilder();
