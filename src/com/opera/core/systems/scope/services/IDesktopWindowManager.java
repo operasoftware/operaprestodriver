@@ -50,7 +50,14 @@ public interface IDesktopWindowManager {
 	 * @return list of all open windows
 	 */
 	List<DesktopWindowInfo> getWindowList();
-	
+
+	/*
+	 * 
+	 * @param windowId
+	 * @return name of the window
+	 */
+	String getWindowName(int windowId);
+
 	/*
 	 * Get the quick widget with value value for property property in the window
 	 * specified by the id
