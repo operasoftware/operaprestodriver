@@ -187,10 +187,6 @@ public class OperaDesktopDriver extends OperaDriver {
 		return services.waitForDesktopWindowClosed(win_name, OperaIntervals.PAGE_LOAD_TIMEOUT.getValue());
 	}
 	
-	// Temporary test/helper methods
-	protected void getWidgetList(int id) {
-		desktopWindowManager.getWidgetList(id);
-	}
 	protected void getWindowList() {
 		desktopWindowManager.getWindowList();
 	}
