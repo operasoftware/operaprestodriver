@@ -72,9 +72,12 @@ class RunDriver {
 	        System.out.println("--Wait for window to open--");
 	        int win_id = driver.waitForWindowShown("New Preferences Dialog");
 
-	        QuickWidget qw = driver.findWidgetByName(-1, "Startup_mode_dropdown");
+	        QuickWidget qw = driver.findWidgetByName(-1, "Popups_dropdown");
 	        System.out.println("By name: " + qw.getText());
-	        qw.verifyText("D_STARTUP_WITH_HOMEPAGE");
+	        //qw.verifyText("D_STARTUP_WITH_HOMEPAGE");
+	        qw.isVisible();
+	        
+	        System.out.println("Window name: " + driver.getWindowName(win_id));
 	        
 	        driver.waitStart();
 	        

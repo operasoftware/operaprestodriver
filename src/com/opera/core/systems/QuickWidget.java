@@ -86,16 +86,15 @@ public class QuickWidget {
 		/**
 		 * @return true if widget is visible
 		 */
-		// TODO, FIXME: This needs to handle also if the dialog is not expanded, is off_screen etc.
 		public boolean isVisible(){
 			return info.getVisible(); 
 		}
 		
-		/* 
+		/**
+		 * @return string which is the type of the widget
 		 */
-		public boolean toggle() {
-			// TODO FIXME
-			return false; 
+		public String getType(){
+			return info.getType(); 
 		}
 		
 		/**
