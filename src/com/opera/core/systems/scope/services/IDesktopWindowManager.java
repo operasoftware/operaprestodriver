@@ -9,24 +9,64 @@ import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo;
 
 public interface IDesktopWindowManager {
 
+	/*
+	 * @return id of active window 
+	 */
 	int getActiveWindowId();
 
-	void closeWindow(Integer window);
-
-	void closeAllWindows();
-
+	/*
+	 * @return list of ids of open windows
+	 */
 	List<Integer> getWindowHandles();
 	
+	/*
+	 * @return number of open windows
+	 */
 	int getOpenWindowCount();
 	
 	void init();
-	
-	// OBS: Temporary, for testing
+
+	/*
+	 * @return list of QuickWidgets in the window given by id id
+	 */
 	List<QuickWidget> getQuickWidgetList(int id);
-	void getWidgetList(int id);
+	
+	/*
+	 * Get the window with title title
+	 * @param title
+	 * @return QuickWindow
+	 */
 	QuickWindow getWindow(String title);
+	
+	/*
+	 * 
+	 * @param title
+	 * @return id of window with the given title
+	 */
 	int getWindowID(String title);
+	
+	/*
+	 * 
+	 * @return list of all open windows
+	 */
 	List<DesktopWindowInfo> getWindowList();
+	
+	/*
+	 * Get the quick widget with value value for property property in the window
+	 * specified by the id
+	 *   
+	 * @param id - window id
+	 * @param property
+	 * @param value - value of property given
+	 * @return
+	 */
 	QuickWidget getQuickWidget(int id, String property, String value);
+	
+	/*
+	 * Get the string specified by the given string id 
+	 * @param enum_text
+	 * @return
+	 */
 	String getString(String enum_text);
+	
 }
