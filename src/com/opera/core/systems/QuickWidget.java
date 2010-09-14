@@ -39,7 +39,12 @@ public class QuickWidget {
 	     */
 		public boolean verifyText(String string_id) {
 			String text = desktopWindowManager.getString(string_id);
-			return getText().equals(text);
+			// Hack to remove all \r and \n's as we sometimes get just \n and sometimes
+			// \r\n then the string comparison doesn't work
+			text = text.replaceAll("(\\r|\\n)", "");
+			String text_internal = getText();
+			text_internal = text_internal.replaceAll("(\\r|\\n)", "");
+			return text_internal.equals(text);
 		}
 		
 		/**
@@ -50,7 +55,12 @@ public class QuickWidget {
 	     */
 		public boolean verifyContainsText(String string_id) {
 			String text = desktopWindowManager.getString(string_id);
-			return getText().indexOf(text) >= 0;
+			// Hack to remove all \r and \n's as we sometimes get just \n and sometimes
+			// \r\n then the string comparison doesn't work
+			text = text.replaceAll("(\\r|\\n)", "");
+			String text_internal = getText();
+			text_internal = text_internal.replaceAll("(\\r|\\n)", "");
+			return text_internal.indexOf(text) >= 0;
 		}
 		
 		/** 
