@@ -31,6 +31,7 @@ public class QuickWindow {
 	@Override
 	// TODO: FIXME
 	public boolean equals(Object obj) {
+		if (obj == this) return true;
 		if(obj instanceof QuickWindow) {
 			QuickWindow ref = (QuickWindow) obj;
 			return (((QuickWindow)ref).getObjectId() == this.getObjectId());
