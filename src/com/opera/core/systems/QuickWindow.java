@@ -4,31 +4,32 @@ import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo;
 
 public class QuickWindow {
 	
-	private final DesktopWindowInfo info; 
-	
-	/* 
-	 */
-	public int getObjectId() {
-		return getWindowID();
-	}
-	
-	/**
-	 * 
-	 * @return
-	 */
-	public int getWindowID() {
-		return info.getWindowID();
-	}
+	private final DesktopWindowInfo info;
 	
 	public QuickWindow(DesktopWindowInfo info) {
         this.info = info;
     }
 	
+	public int getObjectId() {
+		return getWindowID();
+	}
+	
+	/**
+	 * @return window id of this window
+	 */
+	public int getWindowID() {
+		return info.getWindowID();
+	}
+	
+	/**
+	 * @return title of window
+	 */
 	public String getTitle() {
 		return info.getTitle();
 	}
 
 	@Override
+	// TODO: FIXME
 	public boolean equals(Object obj) {
 		if(obj instanceof QuickWindow) {
 			QuickWindow ref = (QuickWindow) obj;
@@ -38,6 +39,7 @@ public class QuickWindow {
 	}
 	
 	@Override
+	// TODO: FIXME
 	public int hashCode() {
 		int result = 42;
 		result = 31 * result + getObjectId();
@@ -46,7 +48,7 @@ public class QuickWindow {
 	
 	@Override
 	public String toString() {
-		return "quickwindow" + hashCode();
+		return "QuickWindow " + getWindowID() + ", " + getTitle();
 	}
 
 }
