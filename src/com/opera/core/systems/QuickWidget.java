@@ -120,19 +120,26 @@ public class QuickWidget {
 			DesktopWindowRect rect = getRect();
 			return new Dimension(rect.getWidth(), rect.getHeight());
 		}
+		
+		protected int getValue() {
+			return info.getValue();
+		}
 
+		protected String getType() {
+			return info.getType();
+		}
 		@Override
 		// TODO: FIXME
 		public boolean equals(Object obj) {
-			if(obj instanceof QuickWidget) {
-				QuickWidget ref = (QuickWidget) obj;
-				return (ref.getName().equals(this.getName()));
-			}
-			return false;
+			if (obj == this) return true;
+			if (!(obj instanceof QuickWidget)) return false;
+			
+			QuickWidget ref = (QuickWidget) obj;
+			return (ref.getName().equals(this.getName()));
 		}
 		
 		@Override
-		// TODO: Fixme
+		// TODO: FIXME
 		public int hashCode() {
 			int result = 42;
 			result = 31 * result + getName().hashCode();
@@ -146,18 +153,18 @@ public class QuickWidget {
 		
 		public String toFullString() {
 			return "QuickWidget\n" +  
-			  "       Widget name: " + info.getName() + "\n"
-			+ "       type: " + info.getType()  + "\n"
-			+ "    visible: " + info.getVisible() + "\n"
-			+ "       text: " + info.getText() + "\n"
-			+ "      state: " + info.getValue() + "\n"
-			+ "    enabled: " + info.getEnabled() + "\n"
-			+ "    default: " + info.getDefaultLook() + "\n"
-			+ "    focused: " + info.getFocusedLook() + "\n"
-			+ "          x: " + info.getRect().getX() + "\n"
-			+ "          y: " + info.getRect().getY() + "\n"
-			+ "      width: " + info.getRect().getWidth() + "\n"
-			+ "     height: " + info.getRect().getHeight() + " \n";
+			  "       Widget name: " + getName() + "\n"
+			+ "       type: " + getType()  + "\n"
+			+ "    visible: " + isVisible() + "\n"
+			+ "       text: " + getText() + "\n"
+			+ "      state: " + getValue() + "\n"
+			+ "    enabled: " + isEnabled() + "\n"
+			+ "    default: " + isDefault() + "\n"
+			+ "    focused: " + hasFocusedLook() + "\n"
+			+ "          x: " + getRect().getX() + "\n"
+			+ "          y: " + getRect().getY() + "\n"
+			+ "      width: " + getRect().getWidth() + "\n"
+			+ "     height: " + getRect().getHeight() + " \n";
 		}
 }
 
