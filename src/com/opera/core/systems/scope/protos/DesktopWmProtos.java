@@ -70,8 +70,15 @@ public final class DesktopWmProtos {
     public boolean hasOnScreen() { return hasOnScreen; }
     public boolean getOnScreen() { return onScreen_; }
     
-    // required .scope.DesktopWindowRect rect = 6;
-    public static final int RECT_FIELD_NUMBER = 6;
+    // required int32 state = 6;
+    public static final int STATE_FIELD_NUMBER = 6;
+    private boolean hasState;
+    private int state_ = 0;
+    public boolean hasState() { return hasState; }
+    public int getState() { return state_; }
+    
+    // required .scope.DesktopWindowRect rect = 7;
+    public static final int RECT_FIELD_NUMBER = 7;
     private boolean hasRect;
     private com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect rect_;
     public boolean hasRect() { return hasRect; }
@@ -86,6 +93,7 @@ public final class DesktopWmProtos {
       if (!hasName) return false;
       if (!hasWindowType) return false;
       if (!hasOnScreen) return false;
+      if (!hasState) return false;
       if (!hasRect) return false;
       if (!getRect().isInitialized()) return false;
       return true;
@@ -109,8 +117,11 @@ public final class DesktopWmProtos {
       if (hasOnScreen()) {
         output.writeBool(5, getOnScreen());
       }
+      if (hasState()) {
+        output.writeInt32(6, getState());
+      }
       if (hasRect()) {
-        output.writeMessage(6, getRect());
+        output.writeMessage(7, getRect());
       }
       getUnknownFields().writeTo(output);
     }
@@ -141,9 +152,13 @@ public final class DesktopWmProtos {
         size += com.google.protobuf.CodedOutputStream
           .computeBoolSize(5, getOnScreen());
       }
+      if (hasState()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(6, getState());
+      }
       if (hasRect()) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(6, getRect());
+          .computeMessageSize(7, getRect());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -318,6 +333,9 @@ public final class DesktopWmProtos {
         if (other.hasOnScreen()) {
           setOnScreen(other.getOnScreen());
         }
+        if (other.hasState()) {
+          setState(other.getState());
+        }
         if (other.hasRect()) {
           mergeRect(other.getRect());
         }
@@ -366,7 +384,11 @@ public final class DesktopWmProtos {
               setOnScreen(input.readBool());
               break;
             }
-            case 50: {
+            case 48: {
+              setState(input.readInt32());
+              break;
+            }
+            case 58: {
               com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect.Builder subBuilder = com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect.newBuilder();
               if (hasRect()) {
                 subBuilder.mergeFrom(getRect());
@@ -479,7 +501,25 @@ public final class DesktopWmProtos {
         return this;
       }
       
-      // required .scope.DesktopWindowRect rect = 6;
+      // required int32 state = 6;
+      public boolean hasState() {
+        return result.hasState();
+      }
+      public int getState() {
+        return result.getState();
+      }
+      public Builder setState(int value) {
+        result.hasState = true;
+        result.state_ = value;
+        return this;
+      }
+      public Builder clearState() {
+        result.hasState = false;
+        result.state_ = 0;
+        return this;
+      }
+      
+      // required .scope.DesktopWindowRect rect = 7;
       public boolean hasRect() {
         return result.hasRect();
       }
@@ -974,12 +1014,12 @@ public final class DesktopWmProtos {
     public boolean hasType() { return hasType; }
     public java.lang.String getType() { return type_; }
     
-    // required uint32 visible = 3;
+    // required bool visible = 3;
     public static final int VISIBLE_FIELD_NUMBER = 3;
     private boolean hasVisible;
-    private int visible_ = 0;
+    private boolean visible_ = false;
     public boolean hasVisible() { return hasVisible; }
-    public int getVisible() { return visible_; }
+    public boolean getVisible() { return visible_; }
     
     // required string text = 4;
     public static final int TEXT_FIELD_NUMBER = 4;
@@ -1050,7 +1090,7 @@ public final class DesktopWmProtos {
         output.writeString(2, getType());
       }
       if (hasVisible()) {
-        output.writeUInt32(3, getVisible());
+        output.writeBool(3, getVisible());
       }
       if (hasText()) {
         output.writeString(4, getText());
@@ -1089,7 +1129,7 @@ public final class DesktopWmProtos {
       }
       if (hasVisible()) {
         size += com.google.protobuf.CodedOutputStream
-          .computeUInt32Size(3, getVisible());
+          .computeBoolSize(3, getVisible());
       }
       if (hasText()) {
         size += com.google.protobuf.CodedOutputStream
@@ -1334,7 +1374,7 @@ public final class DesktopWmProtos {
               break;
             }
             case 24: {
-              setVisible(input.readUInt32());
+              setVisible(input.readBool());
               break;
             }
             case 34: {
@@ -1413,21 +1453,21 @@ public final class DesktopWmProtos {
         return this;
       }
       
-      // required uint32 visible = 3;
+      // required bool visible = 3;
       public boolean hasVisible() {
         return result.hasVisible();
       }
-      public int getVisible() {
+      public boolean getVisible() {
         return result.getVisible();
       }
-      public Builder setVisible(int value) {
+      public Builder setVisible(boolean value) {
         result.hasVisible = true;
         result.visible_ = value;
         return this;
       }
       public Builder clearVisible() {
         result.hasVisible = false;
-        result.visible_ = 0;
+        result.visible_ = false;
         return this;
       }
       
@@ -3554,27 +3594,27 @@ public final class DesktopWmProtos {
   static {
     java.lang.String[] descriptorData = {
       "\n!desktop_window_manager_java.proto\022\005sco" +
-      "pe\"\220\001\n\021DesktopWindowInfo\022\020\n\010windowID\030\001 \002" +
+      "pe\"\237\001\n\021DesktopWindowInfo\022\020\n\010windowID\030\001 \002" +
       "(\r\022\r\n\005title\030\002 \002(\t\022\014\n\004name\030\003 \002(\t\022\022\n\nwindo" +
-      "wType\030\004 \002(\t\022\020\n\010onScreen\030\005 \002(\010\022&\n\004rect\030\006 " +
-      "\002(\0132\030.scope.DesktopWindowRect\"H\n\021Desktop" +
-      "WindowRect\022\t\n\001x\030\001 \002(\r\022\t\n\001y\030\002 \002(\r\022\r\n\005widt" +
-      "h\030\003 \002(\r\022\016\n\006height\030\004 \002(\r\"\276\001\n\017QuickWidgetI" +
-      "nfo\022\014\n\004name\030\001 \002(\t\022\014\n\004type\030\002 \002(\t\022\017\n\007visib" +
-      "le\030\003 \002(\r\022\014\n\004text\030\004 \002(\t\022\r\n\005value\030\005 \002(\r\022\017\n" +
-      "\007enabled\030\006 \002(\010\022\023\n\013defaultLook\030\007 \002(\010\022\023\n\013f",
-      "ocusedLook\030\010 \002(\010\022&\n\004rect\030\t \002(\0132\030.scope.D" +
-      "esktopWindowRect\"#\n\017DesktopStringID\022\020\n\010e" +
-      "numText\030\001 \002(\t\"!\n\021DesktopStringText\022\014\n\004te" +
-      "xt\030\001 \002(\t\"#\n\017DesktopWindowID\022\020\n\010windowID\030" +
-      "\001 \002(\r\"A\n\021DesktopWindowList\022,\n\nwindowList" +
-      "\030\001 \003(\0132\030.scope.DesktopWindowInfo\"F\n\023Quic" +
-      "kWidgetInfoList\022/\n\017quickwidgetList\030\001 \003(\013" +
-      "2\026.scope.QuickWidgetInfo\"_\n\021QuickWidgetS" +
-      "earch\022(\n\010windowID\030\001 \002(\0132\026.scope.DesktopW" +
-      "indowID\022\022\n\nsearchType\030\002 \002(\t\022\014\n\004data\030\003 \002(",
-      "\tB8\n#com.opera.core.systems.scope.protos" +
-      "B\017DesktopWmProtosH\001"
+      "wType\030\004 \002(\t\022\020\n\010onScreen\030\005 \002(\010\022\r\n\005state\030\006" +
+      " \002(\005\022&\n\004rect\030\007 \002(\0132\030.scope.DesktopWindow" +
+      "Rect\"H\n\021DesktopWindowRect\022\t\n\001x\030\001 \002(\r\022\t\n\001" +
+      "y\030\002 \002(\r\022\r\n\005width\030\003 \002(\r\022\016\n\006height\030\004 \002(\r\"\276" +
+      "\001\n\017QuickWidgetInfo\022\014\n\004name\030\001 \002(\t\022\014\n\004type" +
+      "\030\002 \002(\t\022\017\n\007visible\030\003 \002(\010\022\014\n\004text\030\004 \002(\t\022\r\n" +
+      "\005value\030\005 \002(\r\022\017\n\007enabled\030\006 \002(\010\022\023\n\013default",
+      "Look\030\007 \002(\010\022\023\n\013focusedLook\030\010 \002(\010\022&\n\004rect\030" +
+      "\t \002(\0132\030.scope.DesktopWindowRect\"#\n\017Deskt" +
+      "opStringID\022\020\n\010enumText\030\001 \002(\t\"!\n\021DesktopS" +
+      "tringText\022\014\n\004text\030\001 \002(\t\"#\n\017DesktopWindow" +
+      "ID\022\020\n\010windowID\030\001 \002(\r\"A\n\021DesktopWindowLis" +
+      "t\022,\n\nwindowList\030\001 \003(\0132\030.scope.DesktopWin" +
+      "dowInfo\"F\n\023QuickWidgetInfoList\022/\n\017quickw" +
+      "idgetList\030\001 \003(\0132\026.scope.QuickWidgetInfo\"" +
+      "_\n\021QuickWidgetSearch\022(\n\010windowID\030\001 \002(\0132\026" +
+      ".scope.DesktopWindowID\022\022\n\nsearchType\030\002 \002",
+      "(\t\022\014\n\004data\030\003 \002(\tB8\n#com.opera.core.syste" +
+      "ms.scope.protosB\017DesktopWmProtosH\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -3586,7 +3626,7 @@ public final class DesktopWmProtos {
           internal_static_scope_DesktopWindowInfo_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_scope_DesktopWindowInfo_descriptor,
-              new java.lang.String[] { "WindowID", "Title", "Name", "WindowType", "OnScreen", "Rect", },
+              new java.lang.String[] { "WindowID", "Title", "Name", "WindowType", "OnScreen", "State", "Rect", },
               com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo.class,
               com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo.Builder.class);
           internal_static_scope_DesktopWindowRect_descriptor =

@@ -159,7 +159,7 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 		List<QuickWidgetInfo> widgetList = list.getQuickwidgetListList();
 		
 		for (QuickWidgetInfo widget : widgetList) {
-			//printQuickWidget(widget);
+		//	printQuickWidget(widget);
 		}
 	}
 	
