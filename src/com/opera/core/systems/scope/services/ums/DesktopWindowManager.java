@@ -47,14 +47,6 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 		return activeWindowId;
 	}
 	
-	public void closeWindow(Integer window) {
-		// TODO FIXME
-	}
-
-	public void closeAllWindows() {
-		// TODO FIXME
-	}
-
 	public List<Integer> getWindowHandles() {
 		List<DesktopWindowInfo> windows = getWindowList();
 		List<Integer> handles = new LinkedList<Integer>();
@@ -103,8 +95,6 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 			QuickWidgetInfo.Builder builder = QuickWidgetInfo.newBuilder();
 			buildPayload(response, builder);
 			QuickWidgetInfo info = builder.build();
-			
-			//printQuickWidget(info);
 			return new QuickWidget(this, info);
 		}
 		catch (WebDriverException e) { 
@@ -113,9 +103,8 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 	}
 	
 	public List<QuickWidget> getQuickWidgetList(int id) {
-		// TODO FIXME : If no id
 		if (id <= 0)
-			return null;
+			id = getActiveWindowId();
 		
 		DesktopWindowID.Builder winBuilder = DesktopWindowID.newBuilder();
 		winBuilder.clearWindowID();
@@ -137,30 +126,6 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 			quickWidgetList.add(new QuickWidget(this, widgetInfo));
 		}
 		return quickWidgetList;
-	}
-	
-	// OBS: temporary
-	public void getWidgetList(int id) {
-		// Sets the internal member for the active window
-		getActiveWindowId();
-		
-		DesktopWindowID.Builder winBuilder = DesktopWindowID.newBuilder();
-		winBuilder.clearWindowID();
-		if (id >= 0)
-			winBuilder.setWindowID(id);
-		else
-			winBuilder.setWindowID(activeWindowId);
-		
-		Response response = executeCommand(DesktopWindowManagerCommand.LIST_QUICK_WIDGETS, winBuilder);
-		QuickWidgetInfoList.Builder builder = QuickWidgetInfoList.newBuilder();
-		buildPayload(response, builder);
-		QuickWidgetInfoList list = builder.build();
-		
-		List<QuickWidgetInfo> widgetList = list.getQuickwidgetListList();
-		
-		for (QuickWidgetInfo widget : widgetList) {
-		//	printQuickWidget(widget);
-		}
 	}
 	
 	public List<DesktopWindowInfo> getWindowList() {
@@ -208,6 +173,4 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 
 		return string_text.getText();
 	}
-	
-	
 }
