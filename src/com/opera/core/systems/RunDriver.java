@@ -65,7 +65,7 @@ class RunDriver {
 	        	System.out.println("Failure");
 	        */
 	        // ---------------------
-	        
+/*	        
 	        driver.waitStart();
 	        driver.operaDesktopAction("Show preferences");
 
@@ -84,22 +84,24 @@ class RunDriver {
 	        driver.operaDesktopAction("Cancel");
 	        System.out.println("--Wait for window to close--");
 	        driver.waitForWindowClose("New Preferences Dialog");
+*/
 
-/*
 	        driver.waitStart();
 	        System.out.println("--Wait for window to open--");
 	        driver.operaDesktopAction("Open url in new page", "http://t/security/bts/164110/scary_file-keyboard.kini");
-
-	        //driver.getWidgetList(driver.getActiveWindowID());
-	        
 	        driver.waitForWindowShown("Setup Apply Dialog Confirm Dialog");
 
+	        QuickWidget qw = driver.findWidgetByName(-1, "Simple_message");
+	        System.out.println("Text: " + qw.getText());
+	        
+	        System.out.println("Contains Text D_SECURITYALERT_SETUPDOWNLOAD: " + qw.verifyContainsText("D_SECURITYALERT_SETUPDOWNLOAD"));
+	        
+	        
 	        driver.waitStart();
 	        System.out.println("--Wait for window to close--");
-	        driver.key("esc");
-//	        driver.operaDesktopAction("Cancel");
+	        driver.operaDesktopAction("Cancel");
 	        driver.waitForWindowClose("Setup Apply Dialog Confirm Dialog");
-*/
+	        driver.operaDesktopAction("Close page", "1");
 
 //	        System.out.println("Text: " + driver.getString("D_SECURITYALERT_SETUPDOWNLOAD_TITLE"));
 	        
