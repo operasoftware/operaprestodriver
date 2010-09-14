@@ -65,41 +65,38 @@ class RunDriver {
 	        	System.out.println("Failure");
 	        */
 	        // ---------------------
-/*	        
-	        driver.waitStart();
 	        
-	        //driver.keyDown("Control");
-	        //driver.key(",");
-	        //driver.keyUp("Control");
-	        operaDesktopAction("Show preferences");
+	        driver.waitStart();
+	        driver.operaDesktopAction("Show preferences");
 
 	        System.out.println("--Wait for window to open--");
-//	        driver.waitForWindowUpdated();
-	        driver.waitForWindowUpdated("Preferences");
+	        int win_id = driver.waitForWindowShown("New Preferences Dialog");
 
+	        QuickWidget qw = driver.findWidgetByName(-1, "Startup_mode_dropdown");
+	        System.out.println("By name: " + qw.getText());
+	        qw.verifyText("D_STARTUP_WITH_HOMEPAGE");
+	        
 	        driver.waitStart();
 	        
-//	        driver.key("enter");
-	        operaDesktopAction("Cancel");
-//	        driver.operaAction("Ok");
-	        
+	        driver.operaDesktopAction("Cancel");
 	        System.out.println("--Wait for window to close--");
-	        driver.waitForWindowClose("Preferences");
-*/
+	        driver.waitForWindowClose("New Preferences Dialog");
 
+/*
 	        driver.waitStart();
 	        System.out.println("--Wait for window to open--");
 	        driver.operaDesktopAction("Open url in new page", "http://t/security/bts/164110/scary_file-keyboard.kini");
 
 	        //driver.getWidgetList(driver.getActiveWindowID());
 	        
-	        driver.waitForWindowShown("Simple Dialog");
+	        driver.waitForWindowShown("Setup Apply Dialog Confirm Dialog");
 
 	        driver.waitStart();
 	        System.out.println("--Wait for window to close--");
-	        driver.operaDesktopAction("Cancel");
-	        driver.waitForWindowClose("Simple Dialog");
-
+	        driver.key("esc");
+//	        driver.operaDesktopAction("Cancel");
+	        driver.waitForWindowClose("Setup Apply Dialog Confirm Dialog");
+*/
 
 //	        System.out.println("Text: " + driver.getString("D_SECURITYALERT_SETUPDOWNLOAD_TITLE"));
 	        
@@ -111,6 +108,7 @@ class RunDriver {
 
 	        QuickWidget qw = driver.findWidgetByName(-1, "label_for_Name_edit");
 	        System.out.println("By name: " + qw.getText());
+	        qw.verifyText("DI_ID_HLFILEPROP_FNAME_LABEL");
 
 	    	driver.waitStart();
 	        System.out.println("--Wait for window to close--");

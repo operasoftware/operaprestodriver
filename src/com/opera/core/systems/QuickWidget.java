@@ -63,7 +63,7 @@ public class QuickWidget {
 		 * TODO, FIXME: This needs to handle also if the dialog is not expanded, is off_screen etc.
 		 */
 		public boolean isVisible(){
-			return info.getVisible() != 0 ? true : false; 
+			return info.getVisible(); 
 		}
 		
 		
