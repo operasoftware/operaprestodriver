@@ -10,11 +10,16 @@ import com.opera.core.systems.OperaWebElement;
 
 class RunDriver {
 	 private static OperaDesktopDriver driver;
+//	 private static OperaDriver driver;
 	    
 	 public static void main(String[]args) {
 	    	System.out.println("Create Driver");
 	        driver = new OperaDesktopDriver();
+//	        driver = new OperaDriver();
 	        System.out.println(".Driver created ......");
+	        
+//	        driver.get("http://www.google.com");
+	        
 	        /*
 	        System.out.println("Do wait start");
 	        driver.waitStart(); // wait for dialog to open

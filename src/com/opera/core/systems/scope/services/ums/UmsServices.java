@@ -34,7 +34,8 @@ public class UmsServices {
 		List<Service> serviceList = info.getServiceListList();
 		windowManager = new WindowManager(services, getVersionForService( serviceList, "window-manager"));
 		
-		if (findServiceNamed(serviceList, "desktop-window-manager") != null)
+		// Check both the client and the Driver being created support the desktop-window-manager
+		if (findServiceNamed(serviceList, "desktop-window-manager") != null && services.getVersions().containsKey("desktop-window-manager"))
 			desktopWindowManager = new DesktopWindowManager(services, getVersionForService( serviceList, "desktop-window-manager"));
 		else
 			desktopWindowManager = null;
