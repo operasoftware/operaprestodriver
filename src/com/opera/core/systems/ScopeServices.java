@@ -43,6 +43,10 @@ public class ScopeServices implements IConnectionHandler {
 	private IWindowManager windowManager;
 	private IDesktopWindowManager desktopWindowManager; 
 	private Map<String, String> versions;
+	public Map<String, String> getVersions() {
+		return versions;
+	}
+
 	private List<IConsoleListener> listeners;
 
 	private WaitState waitState = new WaitState();
