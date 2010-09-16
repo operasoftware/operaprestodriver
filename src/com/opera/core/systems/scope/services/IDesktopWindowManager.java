@@ -49,7 +49,7 @@ public interface IDesktopWindowManager {
 	 * 
 	 * @return list of all open windows
 	 */
-	List<DesktopWindowInfo> getWindowList();
+	List<QuickWindow> getQuickWindowList();
 
 	/*
 	 * 
