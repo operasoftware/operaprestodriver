@@ -41,6 +41,10 @@ public class OperaDesktopDriver extends OperaDriver {
 		int id = getWindowID(winName);
 		return desktopWindowManager.getQuickWidgetList(id);
 	}
+	
+	public List<QuickWindow> getWindowList() {
+		return desktopWindowManager.getWindowList();
+	}
 
 	/**
 	 * @param name
@@ -195,9 +199,6 @@ public class OperaDesktopDriver extends OperaDriver {
 		return services.waitForDesktopWindowClosed(win_name, OperaIntervals.PAGE_LOAD_TIMEOUT.getValue());
 	}
 	
-	protected void getWindowList() {
-		desktopWindowManager.getWindowList();
-	}
 }
 
 

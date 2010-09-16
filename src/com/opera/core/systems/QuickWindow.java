@@ -1,6 +1,10 @@
 package com.opera.core.systems;
 
+import java.awt.Dimension;
+import java.awt.Point;
+
 import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo;
+import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect;
 
 public class QuickWindow {
 	
@@ -27,7 +31,44 @@ public class QuickWindow {
 	public String getTitle() {
 		return info.getTitle();
 	}
+	
+	/**
+	 * @return true if widget is visible
+	 */
+	public boolean isOnScreen(){
+		return info.getOnScreen(); 
+	}
+	
+	/**
+	 * @return string which is the type of the widget
+	 */
+	public String getType(){
+		return info.getWindowType(); 
+	}
+	
+	/**
+	 * @return DesktopWindowRect of the widget
+	 */
+	private DesktopWindowRect getRect() {
+		return info.getRect();
+	}
+	
+	/**
+	 * @return Point describing location of widget
+	 */
+	public Point getLocation() {
+		DesktopWindowRect rect = getRect();
+		return new Point(rect.getX(), rect.getY());
+	}
 
+	/**
+	 * @return size of widget
+	 */
+	public Dimension getSize() {
+		DesktopWindowRect rect = getRect();
+		return new Dimension(rect.getWidth(), rect.getHeight());
+	}
+	
 	@Override
 	// TODO: FIXME
 	public boolean equals(Object obj) {
