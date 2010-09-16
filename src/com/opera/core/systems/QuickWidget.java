@@ -115,6 +115,11 @@ public class QuickWidget {
 			return info.getValue() == 1;
 		}
 		
+		public boolean isSelected(String string_id) {
+			String text = desktopWindowManager.getString(string_id);
+			return text.equals(info.getText());
+		}
+		
 		/**
 		 * @return true if widget is visible
 		 */
