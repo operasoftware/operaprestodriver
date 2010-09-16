@@ -43,7 +43,7 @@ public class OperaDesktopDriver extends OperaDriver {
 	}
 	
 	public List<QuickWindow> getWindowList() {
-		return desktopWindowManager.getWindowList();
+		return desktopWindowManager.getQuickWindowList();
 	}
 
 	/**
