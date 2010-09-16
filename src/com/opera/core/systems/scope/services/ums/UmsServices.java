@@ -16,6 +16,7 @@ public class UmsServices {
 	protected final IEcmaScriptDebugger debugger;
 	protected final IWindowManager windowManager;
 	protected final IDesktopWindowManager desktopWindowManager;
+	protected final SystemInputManager systemInputManager;
 	protected final IOperaExec exec;
 
 	public IEcmaScriptDebugger getDebugger() {
@@ -40,6 +41,10 @@ public class UmsServices {
 		else
 			desktopWindowManager = null;
 		
+		if (findServiceNamed(serviceList, "system-input") != null && services.getVersions().containsKey("system-input"))
+			systemInputManager = new SystemInputManager(services, getVersionForService( serviceList, "system-input"));
+		else 
+			systemInputManager = null;
 		/*
 		if (findServiceNamed(serviceList, "ecmascript") != null) {
 			

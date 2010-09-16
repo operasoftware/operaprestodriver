@@ -7,10 +7,12 @@ import java.util.Map;
 import com.opera.core.systems.scope.exceptions.CommunicationException;
 import com.opera.core.systems.scope.internal.OperaIntervals;
 import com.opera.core.systems.scope.services.IDesktopWindowManager;
+import com.opera.core.systems.scope.services.ums.SystemInputManager;
 
 public class OperaDesktopDriver extends OperaDriver {
 	
 	private IDesktopWindowManager desktopWindowManager;
+	private SystemInputManager systemInputManager;
 	
 	/**
 	 * For testing override this method.
@@ -18,11 +20,15 @@ public class OperaDesktopDriver extends OperaDriver {
 	protected void init() {
 		super.init();
 		desktopWindowManager = services.getDesktopWindowManager();
+		systemInputManager = services.getSystemInputManager();
+		System.out.println("SystemInput Manager = " + systemInputManager);
 	}
 
+	// TODO: FIXME
 	protected Map<String, String> getServicesList() {
 		Map<String, String> versions = super.getServicesList();
 		versions.put("desktop-window-manager", "1.0");
+		versions.put("system-input", "1.0");
 		return versions;
 	}
 	
