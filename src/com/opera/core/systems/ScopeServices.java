@@ -30,6 +30,7 @@ import com.opera.core.systems.scope.services.IDesktopWindowManager;
 import com.opera.core.systems.scope.services.IEcmaScriptDebugger;
 import com.opera.core.systems.scope.services.IOperaExec;
 import com.opera.core.systems.scope.services.IWindowManager;
+import com.opera.core.systems.scope.services.ums.SystemInputManager;
 import com.opera.core.systems.scope.services.ums.UmsServices;
 import com.opera.core.systems.scope.stp.StpConnection;
 import com.opera.core.systems.scope.stp.StpThread;
@@ -42,6 +43,7 @@ public class ScopeServices implements IConnectionHandler {
 	private IOperaExec exec;
 	private IWindowManager windowManager;
 	private IDesktopWindowManager desktopWindowManager; 
+	private SystemInputManager systemInputManager;
 	private Map<String, String> versions;
 	public Map<String, String> getVersions() {
 		return versions;
@@ -95,7 +97,7 @@ public class ScopeServices implements IConnectionHandler {
 		this.windowManager = windowManager;
 	}
 	
-	public IDesktopWindowManager getDesktopWindowManager() {
+	IDesktopWindowManager getDesktopWindowManager() {
 		return desktopWindowManager;
 	}
 
@@ -103,6 +105,14 @@ public class ScopeServices implements IConnectionHandler {
 		this.desktopWindowManager = desktopWindowManager;
 	}
 
+	SystemInputManager getSystemInputManager() {
+		return systemInputManager;
+	}
+	
+	public void setSystemInputManager(SystemInputManager manager) {
+		this.systemInputManager = manager; 
+	}
+	
 	/**
 	 * Creates the scope server on specified address and port
 	 * Enables the required services for webdriver
@@ -136,6 +146,9 @@ public class ScopeServices implements IConnectionHandler {
 		
 		if (versions.containsKey("desktop-window-manager"))
 			wantedServices.add("desktop-window-manager");
+		
+		if (versions.containsKey("system-input"))
+			wantedServices.add("system-input");
 		
 		wantedServices.add("console-logger");
 //		wantedServices.add("http-logger");
