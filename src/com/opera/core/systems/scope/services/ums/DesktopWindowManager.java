@@ -128,6 +128,22 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 		return quickWidgetList;
 	}
 	
+	public List<QuickWindow> getQuickWindowList() {
+		Response response = executeCommand(DesktopWindowManagerCommand.LIST_WINDOWS, null);
+		DesktopWindowList.Builder builder = DesktopWindowList.newBuilder();
+		builder.clear();
+		buildPayload(response, builder);
+		DesktopWindowList list = builder.build();
+		
+		List<DesktopWindowInfo> windowInfoList = list.getWindowListList();
+		List<QuickWindow> windowList = new LinkedList<QuickWindow>();
+		
+		for (DesktopWindowInfo windowInfo : windowInfoList) {
+			windowList.add(new QuickWindow(windowInfo));
+		}
+		return windowList;
+	}
+	
 	public List<DesktopWindowInfo> getWindowList() {
 		Response response = executeCommand(DesktopWindowManagerCommand.LIST_WINDOWS, null);
 		DesktopWindowList.Builder builder = DesktopWindowList.newBuilder();
