@@ -3,18 +3,36 @@ package com.opera.core.systems;
 import java.awt.Dimension;
 import java.awt.Point;
 
+import org.openqa.selenium.ElementNotVisibleException;
+
+import com.opera.core.systems.scope.internal.OperaFlags;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect;
 import com.opera.core.systems.scope.services.IDesktopWindowManager;
+import com.opera.core.systems.scope.services.ums.DesktopWindowManager;
+import com.opera.core.systems.scope.services.ums.SystemInputManager;
 
 public class QuickWidget {
 		private final QuickWidgetInfo info; 
 		private final IDesktopWindowManager desktopWindowManager;
+		private final SystemInputManager systemInputManager;
 		
-		public QuickWidget(IDesktopWindowManager wm, QuickWidgetInfo info) {
+		public QuickWidget(DesktopWindowManager desktopWindowManager, SystemInputManager inputManager, QuickWidgetInfo info) {
 	        this.info = info;
-	        this.desktopWindowManager = wm;
+	        this.desktopWindowManager = desktopWindowManager;
+	        this.systemInputManager = inputManager;
 	    }
+		
+		
+		public void click() {
+			System.out.println(" Click  "+ info.getName() + "!");
+			if (OperaFlags.ENABLE_CHECKS){
+				if(!isVisible())
+					throw new ElementNotVisibleException("You can't click an element that is not displayed");
+			}
+			systemInputManager.click(getCenterLocation());
+		}
+		
 		
 		/**
 	     * 
@@ -116,6 +134,12 @@ public class QuickWidget {
 		 */
 		private DesktopWindowRect getRect() {
 			return info.getRect();
+		}
+		
+		private Point getCenterLocation() {
+			DesktopWindowRect rect = getRect();
+			Point top_left = getLocation();
+			return new Point(top_left.x + rect.getWidth() / 2, top_left.y + rect.getHeight() / 2);
 		}
 		
 		/**

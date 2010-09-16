@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.opera.core.systems.scope.AbstractService;
 import com.opera.core.systems.scope.DesktopWindowManagerCommand;
+import com.opera.core.systems.OperaDesktopDriver;
 import com.opera.core.systems.QuickWidget;
 import com.opera.core.systems.QuickWindow;
 import com.opera.core.systems.ScopeServices;
@@ -25,10 +26,12 @@ import com.opera.core.systems.scope.services.IDesktopWindowManager;
 public class DesktopWindowManager extends AbstractService implements IDesktopWindowManager {
 	
 	private int activeWindowId = 0;
-
-	 public DesktopWindowManager(ScopeServices services, String version) {
+	private final SystemInputManager systemInputManager;
+	
+	 public DesktopWindowManager(SystemInputManager inputManager, ScopeServices services, String version) {
 			super(services, version);
 			
+			this.systemInputManager = inputManager;
 			String serviceName = "desktop-window-manager";
 			
 			if(!isVersionInRange(version, "5.0", serviceName))
@@ -95,7 +98,7 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 			QuickWidgetInfo.Builder builder = QuickWidgetInfo.newBuilder();
 			buildPayload(response, builder);
 			QuickWidgetInfo info = builder.build();
-			return new QuickWidget(this, info);
+			return new QuickWidget(this, systemInputManager, info);
 		}
 		catch (WebDriverException e) { 
 			return null;
@@ -123,7 +126,7 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 		List<QuickWidget> quickWidgetList = new LinkedList<QuickWidget>();
 		
 		for (QuickWidgetInfo widgetInfo : widgetList) {
-			quickWidgetList.add(new QuickWidget(this, widgetInfo));
+			quickWidgetList.add(new QuickWidget(this, systemInputManager, widgetInfo));
 		}
 		return quickWidgetList;
 	}
