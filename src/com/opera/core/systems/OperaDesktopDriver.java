@@ -32,6 +32,14 @@ public class OperaDesktopDriver extends OperaDriver {
 		return versions;
 	}
 	
+	protected IDesktopWindowManager getDesktopWindowManager() {
+		return desktopWindowManager;
+	}
+	
+	protected SystemInputManager getSystemInputManager() {
+		return systemInputManager;
+	}
+	
 	/**
 	 * @return active window id
 	 */

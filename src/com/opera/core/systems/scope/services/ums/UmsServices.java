@@ -35,16 +35,17 @@ public class UmsServices {
 		List<Service> serviceList = info.getServiceListList();
 		windowManager = new WindowManager(services, getVersionForService( serviceList, "window-manager"));
 		
-		// Check both the client and the Driver being created support the desktop-window-manager
-		if (findServiceNamed(serviceList, "desktop-window-manager") != null && services.getVersions().containsKey("desktop-window-manager"))
-			desktopWindowManager = new DesktopWindowManager(services, getVersionForService( serviceList, "desktop-window-manager"));
-		else
-			desktopWindowManager = null;
-		
 		if (findServiceNamed(serviceList, "system-input") != null && services.getVersions().containsKey("system-input"))
 			systemInputManager = new SystemInputManager(services, getVersionForService( serviceList, "system-input"));
 		else 
 			systemInputManager = null;
+		
+		// Check both the client and the Driver being created support the desktop-window-manager
+		if (findServiceNamed(serviceList, "desktop-window-manager") != null && services.getVersions().containsKey("desktop-window-manager"))
+			desktopWindowManager = new DesktopWindowManager(systemInputManager, services, getVersionForService( serviceList, "desktop-window-manager"));
+		else
+			desktopWindowManager = null;
+		
 		/*
 		if (findServiceNamed(serviceList, "ecmascript") != null) {
 			
