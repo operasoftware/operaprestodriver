@@ -19,16 +19,17 @@ public class PreferencesDialogTest {
     	  driver.waitStart();
     	  driver.operaDesktopAction("Show preferences");
 
-    	  driver.waitForWindowShown("New Preferences Dialog");
+    	  int win_id = driver.waitForWindowShown("New Preferences Dialog");
     	  QuickWidget qw = driver.findWidgetByName(-1, "Startup_mode_dropdown");
     	  assertTrue("Drop down is visible", qw.isVisible());
     	  assertTrue("Chosen entry is startup with homepage", qw.verifyText("D_STARTUP_WITH_HOMEPAGE"));
     	  assertTrue("Startup w/home is selected", qw.isSelected("D_STARTUP_WITH_HOMEPAGE"));
+    	  QuickWidget cancel = driver.findWidgetByName(win_id, "button_Cancel"); 
     	  
-    	  qw.click();
     	  
     	  driver.waitStart();
-    	  driver.operaDesktopAction("Cancel");
+    	  cancel.click();
+    	  //driver.operaDesktopAction("Cancel");
     	  driver.waitForWindowClose("New Preferences Dialog");
     }
    

@@ -29,9 +29,10 @@ public class BookmarkDialogTest {
         System.out.println("By name: " + qw.getText());
         qw.verifyText("DI_ID_HLFILEPROP_FNAME_LABEL");
             
+        QuickWidget btn = driver.findWidgetByName(win_id,"button_Cancel");
+        
         driver.waitStart();
-        driver.operaDesktopAction("Cancel");
-            
+        btn.click();
         System.out.println("--Wait for window to close--");
         driver.waitForWindowClose("Bookmark Properties Dialog");
         
