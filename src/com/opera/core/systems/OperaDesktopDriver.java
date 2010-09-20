@@ -102,6 +102,11 @@ public class OperaDesktopDriver extends OperaDriver {
 		return desktopWindowManager.getString(enum_text);
 	}
 	
+	public void keyPress(String key, int modifier) {
+		systemInputManager.keyPress(key, modifier);
+	}
+
+	
 	public int getWindowCount() {
 		//TODO FIXME
 		//return desktopWindowManager.getOpenWindowCount();
