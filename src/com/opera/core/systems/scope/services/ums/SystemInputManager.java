@@ -11,6 +11,7 @@ import com.opera.core.systems.scope.ExecCommand;
 import com.opera.core.systems.scope.SystemInputCommand;
 import com.opera.core.systems.scope.internal.OperaMouseKeys;
 import com.opera.core.systems.scope.protos.ExecProtos.MouseAction;
+import com.opera.core.systems.scope.protos.SystemInputProtos.KeyPressInfo;
 import com.opera.core.systems.scope.protos.SystemInputProtos.MouseInfo;
 import com.opera.core.systems.scope.services.SystemInput;
 
@@ -29,19 +30,20 @@ public class SystemInputManager extends AbstractService implements SystemInput {
 	
 	public void click(Point location) {
 		System.out.println("SystemInputManager::click( " + location.x + ", " + location.y + ")");
-		//services.getExec().mouseAction(point.x, point.y, OperaMouseKeys.LEFT);
 		MouseInfo.Builder actionBuilder = MouseInfo.newBuilder();
 		actionBuilder.setX(location.x);
 		actionBuilder.setY(location.y);
-		actionBuilder.setButton(0);
+		actionBuilder.setButton(0); // MOUSE_BUTTON_1
 		actionBuilder.setNumClicks(1);
 		executeCommand(SystemInputCommand.CLICK, actionBuilder.clone());
 		
 	}
 
-	public void keyPress() {
-		// TODO Auto-generated method stub
-
+	public void keyPress(String key, int modifier) {
+		KeyPressInfo.Builder actionBuilder = KeyPressInfo.newBuilder();
+		actionBuilder.setKey(key);
+		actionBuilder.setModifier(0); 
+		executeCommand(SystemInputCommand.KEYPRESS, actionBuilder.clone());
 	}
 
 }
