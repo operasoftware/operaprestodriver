@@ -50,14 +50,14 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 		return activeWindowId;
 	}
 	
-	public List<Integer> getWindowHandles() {
+	/*public List<Integer> getWindowHandles() {
 		List<DesktopWindowInfo> windows = getWindowList();
 		List<Integer> handles = new LinkedList<Integer>();
 		for (DesktopWindowInfo info : windows) {
 			handles.add(new Integer(info.getWindowID()));
 		}
 		return handles;
-	}
+	}*/
 
 	public int getOpenWindowCount() {
 		List<DesktopWindowInfo> windows = getWindowList();
