@@ -34,6 +34,7 @@ public class SystemInputManager extends AbstractService implements SystemInput {
 		actionBuilder.setY(location.y);
 		actionBuilder.setButton(0); // MOUSE_BUTTON_1
 		actionBuilder.setNumClicks(1);
+		
 		executeCommand(SystemInputCommand.CLICK, actionBuilder.clone());
 		
 	}
@@ -41,7 +42,7 @@ public class SystemInputManager extends AbstractService implements SystemInput {
 	public void keyPress(String key, int modifier) {
 		KeyPressInfo.Builder actionBuilder = KeyPressInfo.newBuilder();
 		actionBuilder.setKey(key);
-		actionBuilder.setModifier(0); 
+		actionBuilder.setModifier(modifier);
 		executeCommand(SystemInputCommand.KEYPRESS, actionBuilder.clone());
 	}
 
