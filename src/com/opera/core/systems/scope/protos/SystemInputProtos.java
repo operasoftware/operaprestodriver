@@ -63,6 +63,13 @@ public final class SystemInputProtos {
     public boolean hasNumClicks() { return hasNumClicks; }
     public int getNumClicks() { return numClicks_; }
     
+    // required uint32 modifier = 5;
+    public static final int MODIFIER_FIELD_NUMBER = 5;
+    private boolean hasModifier;
+    private int modifier_ = 0;
+    public boolean hasModifier() { return hasModifier; }
+    public int getModifier() { return modifier_; }
+    
     private void initFields() {
     }
     public final boolean isInitialized() {
@@ -70,6 +77,7 @@ public final class SystemInputProtos {
       if (!hasY) return false;
       if (!hasButton) return false;
       if (!hasNumClicks) return false;
+      if (!hasModifier) return false;
       return true;
     }
     
@@ -87,6 +95,9 @@ public final class SystemInputProtos {
       }
       if (hasNumClicks()) {
         output.writeUInt32(4, getNumClicks());
+      }
+      if (hasModifier()) {
+        output.writeUInt32(5, getModifier());
       }
       getUnknownFields().writeTo(output);
     }
@@ -112,6 +123,10 @@ public final class SystemInputProtos {
       if (hasNumClicks()) {
         size += com.google.protobuf.CodedOutputStream
           .computeUInt32Size(4, getNumClicks());
+      }
+      if (hasModifier()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeUInt32Size(5, getModifier());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -283,6 +298,9 @@ public final class SystemInputProtos {
         if (other.hasNumClicks()) {
           setNumClicks(other.getNumClicks());
         }
+        if (other.hasModifier()) {
+          setModifier(other.getModifier());
+        }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
@@ -322,6 +340,10 @@ public final class SystemInputProtos {
             }
             case 32: {
               setNumClicks(input.readUInt32());
+              break;
+            }
+            case 40: {
+              setModifier(input.readUInt32());
               break;
             }
           }
@@ -398,6 +420,24 @@ public final class SystemInputProtos {
       public Builder clearNumClicks() {
         result.hasNumClicks = false;
         result.numClicks_ = 0;
+        return this;
+      }
+      
+      // required uint32 modifier = 5;
+      public boolean hasModifier() {
+        return result.hasModifier();
+      }
+      public int getModifier() {
+        return result.getModifier();
+      }
+      public Builder setModifier(int value) {
+        result.hasModifier = true;
+        result.modifier_ = value;
+        return this;
+      }
+      public Builder clearModifier() {
+        result.hasModifier = false;
+        result.modifier_ = 0;
         return this;
       }
       
@@ -760,12 +800,12 @@ public final class SystemInputProtos {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\027system_input_java.proto\022\005scope\"D\n\tMous" +
+      "\n\027system_input_java.proto\022\005scope\"V\n\tMous" +
       "eInfo\022\t\n\001x\030\001 \002(\r\022\t\n\001y\030\002 \002(\r\022\016\n\006button\030\003 " +
-      "\002(\r\022\021\n\tnumClicks\030\004 \002(\r\"-\n\014KeyPressInfo\022\013" +
-      "\n\003key\030\001 \002(\t\022\020\n\010modifier\030\002 \002(\rB:\n#com.ope" +
-      "ra.core.systems.scope.protosB\021SystemInpu" +
-      "tProtosH\001"
+      "\002(\r\022\021\n\tnumClicks\030\004 \002(\r\022\020\n\010modifier\030\005 \002(\r" +
+      "\"-\n\014KeyPressInfo\022\013\n\003key\030\001 \002(\t\022\020\n\010modifie" +
+      "r\030\002 \002(\rB:\n#com.opera.core.systems.scope." +
+      "protosB\021SystemInputProtosH\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -777,7 +817,7 @@ public final class SystemInputProtos {
           internal_static_scope_MouseInfo_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_scope_MouseInfo_descriptor,
-              new java.lang.String[] { "X", "Y", "Button", "NumClicks", },
+              new java.lang.String[] { "X", "Y", "Button", "NumClicks", "Modifier", },
               com.opera.core.systems.scope.protos.SystemInputProtos.MouseInfo.class,
               com.opera.core.systems.scope.protos.SystemInputProtos.MouseInfo.Builder.class);
           internal_static_scope_KeyPressInfo_descriptor =
