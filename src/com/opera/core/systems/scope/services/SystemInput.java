@@ -4,6 +4,6 @@ import java.awt.Point;
 
 public interface SystemInput {
 		void click(Point location);
-		void keyPress();
+		void keyPress(String key, int modifier);
 }
 
