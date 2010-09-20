@@ -16,7 +16,7 @@ public interface IDesktopWindowManager {
 	/*
 	 * @return list of ids of open windows
 	 */
-	List<Integer> getWindowHandles();
+	//List<Integer> getWindowHandles();
 	
 	/*
 	 * @return number of open windows
