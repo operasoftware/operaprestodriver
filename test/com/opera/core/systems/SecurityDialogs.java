@@ -35,10 +35,12 @@ public class SecurityDialogs {
 		    assertTrue("Server is t", driver.findWidgetByName(win_id, "Simple_message").getText().startsWith("t"));
 			assertTrue("Has security warning message", driver.findWidgetByName(win_id, "Simple_message").verifyContainsText("D_SECURITYALERT_SETUPDOWNLOAD"));
 		    
-		    QuickWidget button = driver.findWidgetByName(win_id, "button_Cancel");
+		    QuickWidget no_btn = driver.findWidgetByName(win_id, "button_Cancel");
 		    QuickWidget yes_btn = driver.findWidgetByName(win_id, "button_Ok");
 		    assertTrue("Yes is not default button", yes_btn != null && !yes_btn.isDefault());
-		    assertTrue("No is default button", button.isDefault());
+		    assertTrue("No is default button", no_btn.isDefault());
+		    
+		    no_btn.click();
 	    }
 
 	    @AfterClass
