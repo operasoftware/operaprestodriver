@@ -35,6 +35,7 @@ public class SystemInputManager extends AbstractService implements SystemInput {
 		actionBuilder.setY(location.y);
 		actionBuilder.setButton(0);
 		actionBuilder.setNumClicks(1);
+		actionBuilder.setModifier(0);
 		executeCommand(SystemInputCommand.CLICK, actionBuilder.clone());
 		
 	}
