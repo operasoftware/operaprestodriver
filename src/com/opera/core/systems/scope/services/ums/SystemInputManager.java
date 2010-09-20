@@ -29,7 +29,6 @@ public class SystemInputManager extends AbstractService implements SystemInput {
 		}
 	
 	public void click(Point location) {
-		System.out.println("SystemInputManager::click( " + location.x + ", " + location.y + ")");
 		MouseInfo.Builder actionBuilder = MouseInfo.newBuilder();
 		actionBuilder.setX(location.x);
 		actionBuilder.setY(location.y);
