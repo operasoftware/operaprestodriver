@@ -23,16 +23,18 @@ public class QuickWidget {
 	        this.systemInputManager = inputManager;
 	    }
 		
-		
 		public void click() {
+			click(0, 1, 0);
+		}
+		
+		public void click(int button, int numClicks, int modifier) {
 			System.out.println(" Click  "+ info.getName() + "!");
 			if (OperaFlags.ENABLE_CHECKS){
 				if(!isVisible())
 					throw new ElementNotVisibleException("You can't click an element that is not displayed");
 			}
-			systemInputManager.click(getCenterLocation());
+			systemInputManager.click(getCenterLocation(), button, numClicks, modifier);
 		}
-		
 		
 		/**
 	     * 
