@@ -29,14 +29,17 @@ public class SystemInputManager extends AbstractService implements SystemInput {
 		}
 	
 	public void click(Point location) {
+		click(location, 0, 1, 0);
+	}
+
+	public void click(Point location, int button, int num_clicks, int modifier) {
 		MouseInfo.Builder actionBuilder = MouseInfo.newBuilder();
 		actionBuilder.setX(location.x);
 		actionBuilder.setY(location.y);
-		actionBuilder.setButton(0); // MOUSE_BUTTON_1
-		actionBuilder.setNumClicks(1);
-		
+		actionBuilder.setButton(button); // MOUSE_BUTTON_1
+		actionBuilder.setNumClicks(num_clicks);
+		actionBuilder.setModifier(modifier);
 		executeCommand(SystemInputCommand.CLICK, actionBuilder.clone());
-		
 	}
 
 	public void keyPress(String key, int modifier) {
