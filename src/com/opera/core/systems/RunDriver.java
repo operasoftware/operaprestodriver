@@ -70,18 +70,20 @@ class RunDriver {
 	        	System.out.println("Failure");
 	        */
 	        // ---------------------
-/*	        
+
 	        driver.waitStart();
 	        driver.operaDesktopAction("Show preferences");
 
 	        System.out.println("--Wait for window to open--");
 	        int win_id = driver.waitForWindowShown("New Preferences Dialog");
 
-	        QuickWidget qw = driver.findWidgetByName(-1, "Popups_dropdown");
+	        QuickWidget qw = driver.findWidgetByName(-1, "Startpage_edit");
 	        System.out.println("By name: " + qw.getText());
 	        //qw.verifyText("D_STARTUP_WITH_HOMEPAGE");
 	        qw.isVisible();
 	        
+	        qw.click(1, 1, 0);
+/*	        
 	        System.out.println("Window name: " + driver.getWindowName(win_id));
 	        
 	        driver.waitStart();
@@ -90,7 +92,7 @@ class RunDriver {
 	        System.out.println("--Wait for window to close--");
 	        driver.waitForWindowClose("New Preferences Dialog");
 */
-
+/*	        
 	        driver.waitStart();
 	        System.out.println("--Wait for window to open--");
 	        driver.operaDesktopAction("Open url in new page", "http://t/security/bts/164110/scary_file-keyboard.kini");
@@ -101,13 +103,17 @@ class RunDriver {
 	        
 	        System.out.println("Contains Text D_SECURITYALERT_SETUPDOWNLOAD: " + qw.verifyContainsText("D_SECURITYALERT_SETUPDOWNLOAD"));
 	        
-	        
+	        QuickWidget qw_button = driver.findWidgetByName(-1, "button_Cancel");
+
+	        qw_button.click();
+*/	        
+/*	        
 	        driver.waitStart();
 	        System.out.println("--Wait for window to close--");
 	        driver.operaDesktopAction("Cancel");
 	        driver.waitForWindowClose("Setup Apply Dialog Confirm Dialog");
 	        driver.operaDesktopAction("Close page", "1");
-
+*/
 //	        System.out.println("Text: " + driver.getString("D_SECURITYALERT_SETUPDOWNLOAD_TITLE"));
 	        
 /*
