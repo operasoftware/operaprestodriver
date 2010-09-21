@@ -32,7 +32,7 @@ public class BookmarkDialogTest {
         QuickWidget btn = driver.findWidgetByName(win_id,"button_Cancel");
         
         driver.waitStart();
-        btn.click();
+        btn.click(0,1,0);
         System.out.println("--Wait for window to close--");
         driver.waitForWindowClose("Bookmark Properties Dialog");
         

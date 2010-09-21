@@ -28,7 +28,7 @@ public class PreferencesDialogTest {
     	  
     	  
     	  driver.waitStart();
-    	  cancel.click();
+    	  cancel.click(0,1,0);
     	  //driver.operaDesktopAction("Cancel");
     	  driver.waitForWindowClose("New Preferences Dialog");
     }

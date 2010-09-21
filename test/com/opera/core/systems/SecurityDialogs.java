@@ -40,7 +40,7 @@ public class SecurityDialogs {
 		    assertTrue("Yes is not default button", yes_btn != null && !yes_btn.isDefault());
 		    assertTrue("No is default button", no_btn.isDefault());
 		    
-		    no_btn.click();
+		    no_btn.click(0,1,0);
 	    }
 
 	    @AfterClass
