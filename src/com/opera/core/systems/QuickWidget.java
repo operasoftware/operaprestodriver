@@ -137,11 +137,11 @@ public class QuickWidget {
 		}
 		
 		/**
+		 * 
 		 * @return 
-		 * @return string which is the type of the widget
 		 */
-		public QuickWidgetType getType(){
-			return info.getType(); 
+		public int getType(){
+			return info.getType().getNumber(); 
 		}
 		
 		/**
