@@ -7,7 +7,7 @@ import com.opera.core.systems.scope.AbstractService;
 import com.opera.core.systems.scope.SystemInputCommand;
 import com.opera.core.systems.scope.protos.SystemInputProtos.KeyPressInfo;
 import com.opera.core.systems.scope.protos.SystemInputProtos.ModifierPressed;
-import com.opera.core.systems.scope.protos.SystemInputProtos.MouseButton;
+import com.opera.core.systems.scope.protos.SystemInputProtos.MouseInfo.MouseButton;
 import com.opera.core.systems.scope.protos.SystemInputProtos.MouseInfo;
 import com.opera.core.systems.scope.services.SystemInput;
 import com.opera.core.systems.scope.internal.OperaKeys;

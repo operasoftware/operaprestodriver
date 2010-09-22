@@ -8,7 +8,7 @@ import org.openqa.selenium.WebElement;
 import com.opera.core.systems.OperaDriver;
 import com.opera.core.systems.OperaWebElement;
 import com.opera.core.systems.scope.protos.SystemInputProtos.ModifierPressed;
-import com.opera.core.systems.scope.protos.SystemInputProtos.MouseButton;
+import com.opera.core.systems.scope.protos.SystemInputProtos.MouseInfo.MouseButton;
 
 class RunDriver {
 	 private static OperaDesktopDriver driver;
