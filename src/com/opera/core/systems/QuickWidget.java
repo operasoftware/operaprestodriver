@@ -140,8 +140,8 @@ public class QuickWidget {
 		 * 
 		 * @return 
 		 */
-		public int getType(){
-			return info.getType().getNumber(); 
+		public QuickWidgetType getType(){
+			return info.getType(); 
 		}
 		
 		/**
