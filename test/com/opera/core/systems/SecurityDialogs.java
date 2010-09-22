@@ -8,6 +8,9 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import com.opera.core.systems.scope.protos.SystemInputProtos.ModifierPressed;
+import com.opera.core.systems.scope.protos.SystemInputProtos.MouseButton;
+
 
 public class SecurityDialogs {
 	 private static OperaDesktopDriver driver;
@@ -40,7 +43,9 @@ public class SecurityDialogs {
 		    assertTrue("Yes is not default button", yes_btn != null && !yes_btn.isDefault());
 		    assertTrue("No is default button", no_btn.isDefault());
 		    
-		    no_btn.click(0,1,0);
+		    driver.operaDesktopAction("Cancel");
+		    //driver.keyPress("F1", ModifierPressed.NONE);
+		    //no_btn.click(MouseButton.LEFT, 1, ModifierPressed.NONE);
 	    }
 
 	    @AfterClass

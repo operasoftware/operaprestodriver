@@ -6,6 +6,9 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import com.opera.core.systems.scope.protos.SystemInputProtos.ModifierPressed;
+import com.opera.core.systems.scope.protos.SystemInputProtos.MouseButton;
+
 
 
 public class BookmarkDialogTest {
@@ -32,7 +35,8 @@ public class BookmarkDialogTest {
         QuickWidget btn = driver.findWidgetByName(win_id,"button_Cancel");
         
         driver.waitStart();
-        btn.click(0,1,0);
+        //btn.click(MouseButton.LEFT,1,ModifierPressed.NONE);
+        driver.operaDesktopAction("Cancel");
         System.out.println("--Wait for window to close--");
         driver.waitForWindowClose("Bookmark Properties Dialog");
         
