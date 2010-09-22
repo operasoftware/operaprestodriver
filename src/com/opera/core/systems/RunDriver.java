@@ -7,6 +7,8 @@ import org.openqa.selenium.WebElement;
 
 import com.opera.core.systems.OperaDriver;
 import com.opera.core.systems.OperaWebElement;
+import com.opera.core.systems.scope.protos.SystemInputProtos.ModifierPressed;
+import com.opera.core.systems.scope.protos.SystemInputProtos.MouseButton;
 
 class RunDriver {
 	 private static OperaDesktopDriver driver;
@@ -82,7 +84,7 @@ class RunDriver {
 	        //qw.verifyText("D_STARTUP_WITH_HOMEPAGE");
 	        qw.isVisible();
 	        
-	        qw.click(1, 1, 0);
+	        qw.click(MouseButton.LEFT, 0, ModifierPressed.NONE);
 /*	        
 	        System.out.println("Window name: " + driver.getWindowName(win_id));
 	        
