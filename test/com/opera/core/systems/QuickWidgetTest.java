@@ -8,6 +8,8 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import com.opera.core.systems.scope.protos.SystemInputProtos.ModifierPressed;
+
 
 public class QuickWidgetTest {
 	private static OperaDesktopDriver driver;
@@ -21,7 +23,7 @@ public class QuickWidgetTest {
     public void testSomething(){
     	driver.waitStart();
        // driver.operaDesktopAction("Open url in new page", "1");
-    	driver.keyPress("t", 1);
+    	driver.keyPress("t", ModifierPressed.CTRL);
     	System.out.println("Done keypress");
         //driver.waitForWindowShown("");
         //driver.close();
@@ -32,8 +34,6 @@ public class QuickWidgetTest {
         List<QuickWindow> windows = driver.getWindowList();
         QuickWindow window = driver.getWindow("Document window");
         List<QuickWidget> list = driver.getQuickWidgetList("Document window");
-        
-        
         
     }
    
