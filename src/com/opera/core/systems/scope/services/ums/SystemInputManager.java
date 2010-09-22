@@ -14,6 +14,7 @@ import com.opera.core.systems.scope.protos.ExecProtos.MouseAction;
 import com.opera.core.systems.scope.protos.SystemInputProtos.KeyPressInfo;
 import com.opera.core.systems.scope.protos.SystemInputProtos.MouseInfo;
 import com.opera.core.systems.scope.services.SystemInput;
+import com.opera.core.systems.scope.internal.OperaKeys;
 
 public class SystemInputManager extends AbstractService implements SystemInput {
 
@@ -37,12 +38,41 @@ public class SystemInputManager extends AbstractService implements SystemInput {
 		actionBuilder.setModifier(modifier);
 		executeCommand(SystemInputCommand.CLICK, actionBuilder.clone());
 	}
+	
+	public void mouseMove(Point location, int button, int modifier) {
+		MouseInfo.Builder actionBuilder = MouseInfo.newBuilder();
+		actionBuilder.setX(location.x);
+		actionBuilder.setButton(button); 
+		actionBuilder.setNumClicks(1); // NOT RELEVANT- SHOULD BE OPTIONAL?
+		actionBuilder.setModifier(modifier);
+		executeCommand(SystemInputCommand.MOUSEMOVE, actionBuilder.clone());
+	}
+	
+	public void mouseUp(Point location, int button, int modifier) {
+		MouseInfo.Builder actionBuilder = MouseInfo.newBuilder();
+		actionBuilder.setX(location.x);
+		actionBuilder.setButton(button); 
+		actionBuilder.setNumClicks(1); // NOT RELEVANT - SHOULD BE OPTIONAL?
+		actionBuilder.setModifier(modifier);
+		executeCommand(SystemInputCommand.MOUSEUP, actionBuilder.clone());
+	}
 
+	public void mouseDown(Point location, int button, int modifier) {
+		MouseInfo.Builder actionBuilder = MouseInfo.newBuilder();
+		actionBuilder.setX(location.x);
+		actionBuilder.setButton(button); 
+		actionBuilder.setNumClicks(1); // NOT RELEVANT - SHOULD BE OPTIONAL?
+		actionBuilder.setModifier(modifier);
+		executeCommand(SystemInputCommand.MOUSEDOWN, actionBuilder.clone());
+	}
+	
 	public void keyPress(String key, int modifier) {
+		String myKey = OperaKeys.get(key);
+		System.out.println("myKey = " + myKey);
 		KeyPressInfo.Builder actionBuilder = KeyPressInfo.newBuilder();
 		actionBuilder.setKey(key);
 		actionBuilder.setModifier(modifier);
 		executeCommand(SystemInputCommand.KEYPRESS, actionBuilder.clone());
 	}
-
+	
 }
