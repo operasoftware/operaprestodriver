@@ -8,6 +8,9 @@ import org.openqa.selenium.ElementNotVisibleException;
 import com.opera.core.systems.scope.internal.OperaFlags;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect;
+import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo.QuickWidgetType;
+import com.opera.core.systems.scope.protos.SystemInputProtos.ModifierPressed;
+import com.opera.core.systems.scope.protos.SystemInputProtos.MouseButton;
 import com.opera.core.systems.scope.services.IDesktopWindowManager;
 import com.opera.core.systems.scope.services.ums.DesktopWindowManager;
 import com.opera.core.systems.scope.services.ums.SystemInputManager;
@@ -23,7 +26,7 @@ public class QuickWidget {
 	        this.systemInputManager = inputManager;
 	    }
 		
-		public void click(int button, int numClicks, int modifier) {
+		public void click(MouseButton button, int numClicks, ModifierPressed modifier) {
 			System.out.println(" Click  "+ info.getName() + "!");
 			if (OperaFlags.ENABLE_CHECKS){
 				if(!isVisible())
@@ -31,6 +34,14 @@ public class QuickWidget {
 			}
 			systemInputManager.click(getCenterLocation(), button, numClicks, modifier);
 		}
+		
+		/*public void dragAndDropOn(QuickWidget element) {
+			Point currentLocation = this.getLocation();
+			Point dragPoint = element.getLocation();
+			systemInputManager.mouseDown(currentLocation, 0, 0);
+			systemInputManager.mouseMove(dragPoint, 0, 0);
+			systemInputManager.mouseUp(dragPoint, 0, 0);
+		}*/
 		
 		/**
 	     * 
@@ -56,7 +67,7 @@ public class QuickWidget {
 		public boolean verifyText(String string_id) {
 			String text = desktopWindowManager.getString(string_id);
 			// Remember to remove all CRLF
-			text = removeCRLF(text);
+			text = removeCRLF(text); 
 			String text_internal = getText();
 			text_internal = removeCRLF(text_internal);
 			return text_internal.equals(text);
@@ -71,7 +82,7 @@ public class QuickWidget {
 		public boolean verifyContainsText(String string_id) {
 			String text = desktopWindowManager.getString(string_id);
 			// Remember to remove all CRLF
-			text = removeCRLF(text);
+			text = removeCRLF(text); 
 			String text_internal = getText();
 			text_internal = removeCRLF(text_internal);
 			return text_internal.indexOf(text) >= 0;
@@ -126,9 +137,10 @@ public class QuickWidget {
 		}
 		
 		/**
+		 * @return 
 		 * @return string which is the type of the widget
 		 */
-		public String getType(){
+		public QuickWidgetType getType(){
 			return info.getType(); 
 		}
 		
@@ -191,7 +203,7 @@ public class QuickWidget {
 		public String toFullString() {
 			return "QuickWidget\n" +  
 			  "       Widget name: " + getName() + "\n"
-			+ "       type: " + getType()  + "\n"
+		//	+ "       type: " + getType()  + "\n" // TODO: FIXME
 			+ "    visible: " + isVisible() + "\n"
 			+ "       text: " + getText() + "\n"
 			+ "      state: " + getValue() + "\n"
