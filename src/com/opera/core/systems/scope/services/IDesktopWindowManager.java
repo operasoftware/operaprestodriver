@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.opera.core.systems.QuickWidget;
 import com.opera.core.systems.QuickWindow;
+import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearch.QuickWidgetSearchType;
 
 public interface IDesktopWindowManager {
 
@@ -66,7 +67,7 @@ public interface IDesktopWindowManager {
 	 * @param value - value of property given
 	 * @return
 	 */
-	QuickWidget getQuickWidget(int id, String property, String value);
+	QuickWidget getQuickWidget(int id, QuickWidgetSearchType property, String value);
 	
 	/*
 	 * Get the string specified by the given string id 

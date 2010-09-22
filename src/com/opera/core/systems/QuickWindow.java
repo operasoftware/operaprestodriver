@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.awt.Point;
 
 import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo;
+import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo.DesktopWindowType;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect;
 
 public class QuickWindow {
@@ -42,7 +43,7 @@ public class QuickWindow {
 	/**
 	 * @return string which is the type of the widget
 	 */
-	public String getType(){
+	public DesktopWindowType getType(){
 		return info.getWindowType(); 
 	}
 	

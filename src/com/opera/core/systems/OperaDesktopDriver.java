@@ -6,6 +6,8 @@ import java.util.Map;
 
 import com.opera.core.systems.scope.exceptions.CommunicationException;
 import com.opera.core.systems.scope.internal.OperaIntervals;
+import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearch.QuickWidgetSearchType;
+import com.opera.core.systems.scope.protos.SystemInputProtos.ModifierPressed;
 import com.opera.core.systems.scope.services.IDesktopWindowManager;
 import com.opera.core.systems.scope.services.ums.SystemInputManager;
 
@@ -21,7 +23,6 @@ public class OperaDesktopDriver extends OperaDriver {
 		super.init();
 		desktopWindowManager = services.getDesktopWindowManager();
 		systemInputManager = services.getSystemInputManager();
-		System.out.println("SystemInput Manager = " + systemInputManager);
 	}
 
 	// TODO: FIXME
@@ -82,7 +83,7 @@ public class OperaDesktopDriver extends OperaDriver {
 	 * @return QuickWidget with the given name in the window with id windowId
 	 */
 	public QuickWidget findWidgetByName(int windowId, String widgetName){
-		return desktopWindowManager.getQuickWidget(windowId, "name", widgetName);
+		return desktopWindowManager.getQuickWidget(windowId, QuickWidgetSearchType.NAME, widgetName);
 	}
 
 	/**
@@ -102,11 +103,18 @@ public class OperaDesktopDriver extends OperaDriver {
 		return desktopWindowManager.getString(enum_text);
 	}
 	
-	public void keyPress(String key, int modifier) {
+	/**
+	 * 
+	 * @param key
+	 * @param modifier
+	 * @return the string specified by the id @param enum_text
+	 */
+	
+	public void keyPress(String key, ModifierPressed modifier) {
+		// lookup the key in OperaKeys?
 		systemInputManager.keyPress(key, modifier);
 	}
 
-	
 	public int getWindowCount() {
 		//TODO FIXME
 		//return desktopWindowManager.getOpenWindowCount();
