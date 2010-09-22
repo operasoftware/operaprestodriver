@@ -2,16 +2,12 @@ package com.opera.core.systems.scope.services.ums;
 
 import java.awt.Point;
 
-import org.openqa.selenium.RenderedWebElement;
-
-import com.opera.core.systems.QuickWidget;
 import com.opera.core.systems.ScopeServices;
 import com.opera.core.systems.scope.AbstractService;
-import com.opera.core.systems.scope.ExecCommand;
 import com.opera.core.systems.scope.SystemInputCommand;
-import com.opera.core.systems.scope.internal.OperaMouseKeys;
-import com.opera.core.systems.scope.protos.ExecProtos.MouseAction;
 import com.opera.core.systems.scope.protos.SystemInputProtos.KeyPressInfo;
+import com.opera.core.systems.scope.protos.SystemInputProtos.ModifierPressed;
+import com.opera.core.systems.scope.protos.SystemInputProtos.MouseButton;
 import com.opera.core.systems.scope.protos.SystemInputProtos.MouseInfo;
 import com.opera.core.systems.scope.services.SystemInput;
 import com.opera.core.systems.scope.internal.OperaKeys;
@@ -29,44 +25,44 @@ public class SystemInputManager extends AbstractService implements SystemInput {
 			services.setSystemInputManager(this);
 		}
 	
-	public void click(Point location, int button, int num_clicks, int modifier) {
+	public void click(Point location, MouseButton button, int num_clicks, ModifierPressed modifier) {
 		MouseInfo.Builder actionBuilder = MouseInfo.newBuilder();
 		actionBuilder.setX(location.x);
 		actionBuilder.setY(location.y);
-		actionBuilder.setButton(button); // MOUSE_BUTTON_1
+		actionBuilder.setButton(button); 
 		actionBuilder.setNumClicks(num_clicks);
-		actionBuilder.setModifier(modifier);
+		actionBuilder.setModifier(modifier); 
 		executeCommand(SystemInputCommand.CLICK, actionBuilder.clone());
 	}
 	
-	public void mouseMove(Point location, int button, int modifier) {
+	public void mouseMove(Point location, MouseButton button, ModifierPressed modifier) {
 		MouseInfo.Builder actionBuilder = MouseInfo.newBuilder();
 		actionBuilder.setX(location.x);
-		actionBuilder.setButton(button); 
+		actionBuilder.setButton(button); // TODO FIXME 
 		actionBuilder.setNumClicks(1); // NOT RELEVANT- SHOULD BE OPTIONAL?
-		actionBuilder.setModifier(modifier);
+		actionBuilder.setModifier(modifier); // TODO FIXME
 		executeCommand(SystemInputCommand.MOUSEMOVE, actionBuilder.clone());
 	}
 	
-	public void mouseUp(Point location, int button, int modifier) {
+	public void mouseUp(Point location, MouseButton button, ModifierPressed modifier) {
 		MouseInfo.Builder actionBuilder = MouseInfo.newBuilder();
 		actionBuilder.setX(location.x);
-		actionBuilder.setButton(button); 
+		actionBuilder.setButton(button); //TODO:FIXME
 		actionBuilder.setNumClicks(1); // NOT RELEVANT - SHOULD BE OPTIONAL?
-		actionBuilder.setModifier(modifier);
+		actionBuilder.setModifier(modifier); // TODO::FIXME
 		executeCommand(SystemInputCommand.MOUSEUP, actionBuilder.clone());
 	}
 
-	public void mouseDown(Point location, int button, int modifier) {
+	public void mouseDown(Point location, MouseButton button, ModifierPressed modifier) {
 		MouseInfo.Builder actionBuilder = MouseInfo.newBuilder();
 		actionBuilder.setX(location.x);
-		actionBuilder.setButton(button); 
+		actionBuilder.setButton(button); // TODO FIXME 
 		actionBuilder.setNumClicks(1); // NOT RELEVANT - SHOULD BE OPTIONAL?
-		actionBuilder.setModifier(modifier);
+		actionBuilder.setModifier(modifier); // TODO: FIXME
 		executeCommand(SystemInputCommand.MOUSEDOWN, actionBuilder.clone());
 	}
 	
-	public void keyPress(String key, int modifier) {
+	public void keyPress(String key, ModifierPressed modifier) {
 		String myKey = OperaKeys.get(key);
 		System.out.println("myKey = " + myKey);
 		KeyPressInfo.Builder actionBuilder = KeyPressInfo.newBuilder();

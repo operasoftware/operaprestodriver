@@ -17,6 +17,7 @@ import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfoList;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearch;
+import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearch.QuickWidgetSearchType;
 import com.opera.core.systems.scope.protos.UmsProtos.Response;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopStringID;
@@ -64,7 +65,7 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 		return windows.size();
 	}
 
-	private void printQuickWidget(QuickWidgetInfo info) {
+	/*private void printQuickWidget(QuickWidgetInfo info) {
 		System.out.println("Widget name: " + info.getName());
 		System.out.println("       type: " + info.getType());
 		System.out.println("    visible: " + info.getVisible());
@@ -78,9 +79,9 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 		System.out.println("      width: " + info.getRect().getWidth());
 		System.out.println("     height: " + info.getRect().getHeight());
 		System.out.println(" ");
-	}
+	}*/
 	
-	public QuickWidget getQuickWidget(int id, String property, String value)
+	public QuickWidget getQuickWidget(int id, QuickWidgetSearchType property, String value)
 	{
 		if (id < 0) {
 			id = getActiveWindowId();
