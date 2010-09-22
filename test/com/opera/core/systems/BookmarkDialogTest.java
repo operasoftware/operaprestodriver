@@ -7,7 +7,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.opera.core.systems.scope.protos.SystemInputProtos.ModifierPressed;
-import com.opera.core.systems.scope.protos.SystemInputProtos.MouseButton;
+import com.opera.core.systems.scope.protos.SystemInputProtos.MouseInfo.MouseButton;
 
 
 
