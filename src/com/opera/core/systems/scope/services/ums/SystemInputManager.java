@@ -80,8 +80,6 @@ public class SystemInputManager extends AbstractService implements SystemInput {
 	}
 	
 	public void keyPress(String key, List<ModifierPressed> modifiers) {
-		String myKey = OperaKeys.get(key);
-		System.out.println("myKey = " + myKey);
 		KeyPressInfo.Builder actionBuilder = KeyPressInfo.newBuilder();
 		actionBuilder.setKey(key);
 		int modifier = ModifierPressed.NONE.getNumber();
