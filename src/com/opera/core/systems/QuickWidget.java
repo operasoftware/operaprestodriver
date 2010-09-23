@@ -2,6 +2,7 @@ package com.opera.core.systems;
 
 import java.awt.Dimension;
 import java.awt.Point;
+import java.util.List;
 
 import org.openqa.selenium.ElementNotVisibleException;
 
@@ -26,13 +27,14 @@ public class QuickWidget {
 	        this.systemInputManager = inputManager;
 	    }
 		
-		public void click(MouseButton button, int numClicks, ModifierPressed modifier) {
+		public void click(MouseButton button, int numClicks, List<ModifierPressed> modifiers) {
 			System.out.println(" Click  "+ info.getName() + "!");
 			if (OperaFlags.ENABLE_CHECKS){
 				if(!isVisible())
 					throw new ElementNotVisibleException("You can't click an element that is not displayed");
 			}
-			systemInputManager.click(getCenterLocation(), button, numClicks, modifier);
+			
+			systemInputManager.click(getCenterLocation(), button, numClicks, modifiers);
 		}
 		
 		/*public void dragAndDropOn(QuickWidget element) {
