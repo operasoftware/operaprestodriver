@@ -84,7 +84,7 @@ class RunDriver {
 	        //qw.verifyText("D_STARTUP_WITH_HOMEPAGE");
 	        qw.isVisible();
 	        
-	        qw.click(MouseButton.LEFT, 0, ModifierPressed.NONE);
+	       // qw.click(MouseButton.LEFT, 0, ModifierPressed.NONE);
 /*	        
 	        System.out.println("Window name: " + driver.getWindowName(win_id));
 	        

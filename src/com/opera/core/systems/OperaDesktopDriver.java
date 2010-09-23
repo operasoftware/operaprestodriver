@@ -1,6 +1,8 @@
 package com.opera.core.systems;
 
 //import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -110,11 +112,20 @@ public class OperaDesktopDriver extends OperaDriver {
 	 * @return the string specified by the id @param enum_text
 	 */
 	
-	public void keyPress(String key, ModifierPressed modifier) {
-		// lookup the key in OperaKeys?
-		systemInputManager.keyPress(key, modifier);
+	public void keyPress(String key, List<ModifierPressed> modifiers) {
+		systemInputManager.keyPress(key, modifiers);
 	}
-
+	
+	/**
+	 *
+	 */
+	public void keyPress(String key, ModifierPressed modifier) {
+		ArrayList mods = new ArrayList();
+		mods.add(modifier);
+		systemInputManager.keyPress(key, mods);
+	}
+	
+	
 	public int getWindowCount() {
 		//TODO FIXME
 		//return desktopWindowManager.getOpenWindowCount();
