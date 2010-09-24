@@ -40,46 +40,10 @@ public class SystemInputManager extends AbstractService implements SystemInput {
 		executeCommand(SystemInputCommand.CLICK, actionBuilder.clone());
 	}
 	
-	public void mouseMove(Point location, MouseButton button, List<ModifierPressed> modifiers) {
-		MouseInfo.Builder actionBuilder = MouseInfo.newBuilder();
-		actionBuilder.setX(location.x);
-		actionBuilder.setButton(button);  
-		actionBuilder.setNumClicks(1); 
-		int modifier = ModifierPressed.NONE.getNumber();
-		for (ModifierPressed mod : modifiers) {
-			modifier |= mod.getNumber();
-		}
-		actionBuilder.setModifier(modifier); // TODO FIXME
-		executeCommand(SystemInputCommand.MOUSEMOVE, actionBuilder.clone());
-	}
-	
-	public void mouseUp(Point location, MouseButton button, List<ModifierPressed> modifiers) {
-		MouseInfo.Builder actionBuilder = MouseInfo.newBuilder();
-		actionBuilder.setX(location.x);
-		actionBuilder.setButton(button); 
-		actionBuilder.setNumClicks(1); 
-		int modifier = ModifierPressed.NONE.getNumber();
-		for (ModifierPressed mod : modifiers) {
-			modifier |= mod.getNumber();
-		}
-		actionBuilder.setModifier(modifier); 
-		executeCommand(SystemInputCommand.MOUSEUP, actionBuilder.clone());
-	}
-
-	public void mouseDown(Point location, MouseButton button, List<ModifierPressed> modifiers) {
-		MouseInfo.Builder actionBuilder = MouseInfo.newBuilder();
-		actionBuilder.setX(location.x);
-		actionBuilder.setButton(button);  
-		actionBuilder.setNumClicks(1); 
-		int modifier = ModifierPressed.NONE.getNumber();
-		for (ModifierPressed mod : modifiers) {
-			modifier |= mod.getNumber();
-		}
-		actionBuilder.setModifier(modifier); 
-		executeCommand(SystemInputCommand.MOUSEDOWN, actionBuilder.clone());
-	}
-	
 	public void keyPress(String key, List<ModifierPressed> modifiers) {
+		String translated_key = OperaKeys.get(key);
+		if (translated_key != null)
+			key = translated_key;
 		KeyPressInfo.Builder actionBuilder = KeyPressInfo.newBuilder();
 		actionBuilder.setKey(key);
 		int modifier = ModifierPressed.NONE.getNumber();
