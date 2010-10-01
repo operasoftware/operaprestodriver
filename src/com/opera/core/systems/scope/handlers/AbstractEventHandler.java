@@ -78,6 +78,11 @@ public abstract class AbstractEventHandler {
 	 */
 	public abstract void onWindowLoaded(int windowId);
 	
+	/**
+	 * Fired when opera is idle
+	 */
+	public abstract void onOperaIdle();
+	
 	public abstract void onHttpResponse(int responseCode);
 	
 	public abstract void onReadyStateChange(ReadyStateChange change);

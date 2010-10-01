@@ -120,7 +120,8 @@ public class ScopeServices implements IConnectionHandler {
 		wantedServices.add("window-manager");
 		wantedServices.add("console-logger");
 //		wantedServices.add("http-logger");
-
+		wantedServices.add("core");
+		
 		enableServices(wantedServices);
 
 		initializeServices();
@@ -249,8 +250,21 @@ public class ScopeServices implements IConnectionHandler {
             }
 	}
 	
+	public void onOperaIdle() {
+		logger.fine("Got Opera Idle event!");
+		waitState.onOperaIdle();
+	}
+	
 	public void waitForWindowLoaded(int activeWindowId, long timeout) {
 		waitState.waitForWindowLoaded(activeWindowId, timeout);
+	}
+	
+	public boolean isOperaIdleAvailable(){
+		for(String service : listedServices){if(service.equals("core")) return true;}
+		return false;
+	}
+	public void waitForOperaIdle(long timeout) {
+		waitState.waitForOperaIdle(timeout);
 	}
 
 	public void onResponseReceived(int tag, Response response) {

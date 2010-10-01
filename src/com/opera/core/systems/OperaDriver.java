@@ -19,8 +19,6 @@ limitations under the License.
 package com.opera.core.systems;
 
 import java.awt.Dimension;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -133,6 +131,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,FindsB
 			versions.put("ecmascript-debugger", "5.0");
 			versions.put("window-manager", "2.0");
 			versions.put("exec", "2.0");
+			versions.put("core", "1.0");
 			services = new ScopeServices(versions);
 			services.startStpThread();
 		} catch (IOException e) {
@@ -155,23 +154,19 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,FindsB
 		int activeWindowId = windowManager.getActiveWindowId();
 		
 		actionHandler.get(url);
-		services.waitForWindowLoaded(activeWindowId, timeout);
+		
+		if(services.isOperaIdleAvailable()){
+			//Wait for opera is idle
+			services.waitForOperaIdle(timeout);
+		} else {
+			//Wait for window is loaded
+			services.waitForWindowLoaded(activeWindowId, timeout);
+		}
 		
 		if(OperaIntervals.ENABLE_DEBUGGER.getValue() == 1)
 			switchTo().defaultContent();
 		
 		return windowManager.getLastHttpResponseCode().getAndSet(0);
-	}
-	
-    // FIXME: Using sleep!
-	public void waitForPageLoad(int oldId, long timeout){
-            long end = System.currentTimeMillis() + timeout;
-            while(debugger.getRuntimeId() == oldId) {
-                sleep(OperaIntervals.POLL_INVERVAL.getValue());
-                if(System.currentTimeMillis() >= end)
-                    break;
-            }
-            waitForLoadToComplete();
 	}
 
 	public String getCurrentUrl() {
@@ -489,12 +484,18 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,FindsB
 
 	//FIXME when timeout has completed, send 'stop' command?
 	public void waitForLoadToComplete() {
-		long endTime = System.currentTimeMillis() + OperaIntervals.PAGE_LOAD_TIMEOUT.getValue();
-		while (!"complete".equals(debugger.executeJavascript("return document.readyState"))) {
-			if(System.currentTimeMillis() < endTime) 
-				sleep(OperaIntervals.POLL_INVERVAL.getValue());
-			else
-				throw new WebDriverException("Timeout while loading page");
+		if(services.isOperaIdleAvailable()){
+			//new opera wait for page
+			services.waitForOperaIdle(OperaIntervals.PAGE_LOAD_TIMEOUT.getValue());
+		} else {
+			//old bad opera wait for page
+			long endTime = System.currentTimeMillis() + OperaIntervals.PAGE_LOAD_TIMEOUT.getValue();
+			while (!"complete".equals(debugger.executeJavascript("return document.readyState"))) {
+				if(System.currentTimeMillis() < endTime) 
+					sleep(OperaIntervals.POLL_INVERVAL.getValue());
+				else
+					throw new WebDriverException("Timeout while loading page");
+			}
 		}
 	}
 
@@ -669,44 +670,13 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,FindsB
             throw new NoSuchElementException("Cannot find element with " + type);
 	}
 
-
-	public void saveScreenshot(File pngFile) {
-            actionHandler.saveScreenshot(pngFile);
-	}
-
-	public String saveScreenshot(String fileName, int timeout, String... hashes) {		
-            return screenWatcher(fileName, timeout, true, hashes);
+	public ScreenShotReply saveScreenShot(Canvas canvas, long timeout, boolean includeImage, String... hashes) {
+		if(services.isOperaIdleAvailable()){
+			timeout = 1;//no reason to wait if we have idle-controle
+		}
+        return exec.screenWatcher(canvas, timeout, includeImage, hashes);
 	}
 	
-	public ScreenShotReply saveScreenShot(Canvas canvas, long timeout, boolean includeImage, String... hashes) {		
-            return exec.screenWatcher(canvas, timeout, includeImage, hashes);
-	}
-	
-	
-	private String screenWatcher(String fileName, int timeout, boolean saveFile, String... hashes){
-            Canvas canvas = new Canvas();
-            canvas.setX(0);
-            canvas.setY(0);
-
-            String[] dimensions = debugger.executeJavascript("return (window.innerWidth + \",\" + window.innerHeight);").split(",");
-            canvas.setH(Integer.valueOf(dimensions[1]));
-            canvas.setW(Integer.valueOf(dimensions[0]));
-            canvas.setViewPortRelative(true);
-
-            ScreenShotReply screenshot = exec.screenWatcher(canvas, timeout, saveFile, hashes);
-            if(saveFile && screenshot.getPng() != null){
-                FileOutputStream stream;
-                try {
-                    stream = new FileOutputStream(fileName);
-                    stream.write(screenshot.getPng());
-                    stream.close();
-                } catch (Exception e) {
-                    throw new WebDriverException("Failed to write file: " + e.getMessage());
-                }
-            }
-            return screenshot.getMd5();
-	}
-
 	public Object executeScript(String script, Object... args) {
             Object object = debugger.scriptExecutor(script, args);
 

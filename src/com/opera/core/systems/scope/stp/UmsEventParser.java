@@ -44,7 +44,8 @@ public class UmsEventParser {
 			default:
 				break;
 			}
-		} else if (service.equals("window-manager")) {
+		}
+		else if (service.equals("window-manager")) {
 			switch (WindowManagerCommand.get(eventId)) {
 			case WINDOW_ACTIVATED:
 				WindowID.Builder activeWindowIdBuilder = WindowID.newBuilder();
@@ -79,7 +80,8 @@ public class UmsEventParser {
 			ConsoleMessage.Builder messageBuilder = ConsoleMessage.newBuilder();
 			buildPayload(event, messageBuilder);
 			eventHandler.onMessage(messageBuilder.build());
-		} else if(service.equals("ecmascript")) {
+		}
+		else if(service.equals("ecmascript")) {
 			//we have only one event for this one
 			ReadyStateChange.Builder builder = ReadyStateChange.newBuilder();
 			buildPayload(event, builder);
@@ -96,7 +98,14 @@ public class UmsEventParser {
 			}
 			eventHandler.onRequest(header.getWindowID());
 		}
-
+		else if(service.equals("core")) {
+			//TODO:
+			if(eventId == 1){
+				//no onActivity-catcher...
+			} else if(eventId == 2){
+				eventHandler.onOperaIdle();
+			}
+		}
 	}
 	
 	private final GeneratedMessage.Builder<?> buildPayload(Event event, GeneratedMessage.Builder<?> builder) {

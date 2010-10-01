@@ -31,7 +31,8 @@ public class WaitState {
         HANDSHAKE,       /* STP Handshake */
         EVENT_WINDOW_LOADED, /* finished loaded */
         EVENT_WINDOW_CLOSED, /* window closed */
-        EVENT_REQUEST_FIRED /* sent when a http request is fired */
+        EVENT_REQUEST_FIRED, /* sent when a http request is fired */
+        EVENT_OPERA_IDLE	 /* opera is now idle */
     }
 
     private class ResultItem
@@ -80,7 +81,8 @@ public class WaitState {
     	HANDSHAKE,
     	RESPONSE,
     	WINDOW_LOADED,
-    	REQUEST_FIRED;
+    	REQUEST_FIRED,
+    	OPERA_IDLE;
     }
     public WaitState()
     {
@@ -190,6 +192,16 @@ public class WaitState {
         }
     }
 
+    void onOperaIdle()
+    {
+        synchronized (lock)
+        {
+            logger.fine("Event: onOperaIdle");
+            events.add(new ResultItem(WaitResult.EVENT_OPERA_IDLE,0));//0 is important to match later
+            lock.notify();
+        }
+    }
+    
     private ResultItem getResult()
     {
         if (events.isEmpty())
@@ -257,6 +269,11 @@ public class WaitState {
                     case EVENT_REQUEST_FIRED:
                     	 if (result.data == match && type == ResponseType.REQUEST_FIRED)
                              return null;
+                    	 
+                    case EVENT_OPERA_IDLE:
+                    	logger.finest("RECV EVENT_OPERA_IDLE!");
+                   	 	if (result.data == match && type == ResponseType.OPERA_IDLE)
+                   	 		 	return null;
                      break;
                 }
             }
@@ -269,6 +286,10 @@ public class WaitState {
 
     public void waitForWindowLoaded(int windowId, long timeout) {
         waitAndParseResult(timeout, windowId, ResponseType.WINDOW_LOADED);
+    }
+    
+    public void waitForOperaIdle(long timeout) {
+        waitAndParseResult(timeout, 0/*0 = no window id!*/, ResponseType.OPERA_IDLE);
     }
 
     public Response waitFor(int tag, long timeout) {

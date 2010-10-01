@@ -60,6 +60,13 @@ public class EventHandler extends AbstractEventHandler {
 		services.getDebugger().cleanUpRuntimes(windowId);
 		services.onWindowLoaded(windowId);
 	}
+	
+	/**
+	 * Fired when opera is idle
+	 */
+	public void onOperaIdle(){
+		services.onOperaIdle();
+	}
 
 	@Override
 	public void onRuntimeStarted(RuntimeInfo started) {
