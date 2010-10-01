@@ -28,7 +28,7 @@ public class QuickWidget {
 	    }
 		
 		public void click(MouseButton button, int numClicks, List<ModifierPressed> modifiers) {
-			System.out.println(" Click  "+ info.getName() + "!");
+			//System.out.println(" Click  "+ info.getName() + "!");
 			if (OperaFlags.ENABLE_CHECKS){
 				if(!isVisible())
 					throw new ElementNotVisibleException("You can't click an element that is not displayed");

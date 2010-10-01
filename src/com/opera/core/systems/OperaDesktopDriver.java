@@ -113,11 +113,11 @@ public class OperaDesktopDriver extends OperaDriver {
 	 */
 	
 	public void keyPress(String key, List<ModifierPressed> modifiers) {
-		//System.out.print("keyPress(key="+key +",");
+		/*System.out.print("keyPress(key="+key +",");
 		for (ModifierPressed mod : modifiers) {
 			System.out.print(mod.toString() + ",");
 		}
-		//System.out.println(")");
+		System.out.println(")");*/
 		systemInputManager.keyPress(key, modifiers);
 	}
 	
