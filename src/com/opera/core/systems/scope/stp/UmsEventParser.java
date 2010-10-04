@@ -102,6 +102,12 @@ public class UmsEventParser {
 				DesktopWindowInfo info_closed = closedDWBuilder.build();
 				eventHandler.onDesktopWindowClosed(info_closed);
 				break;
+			case WINDOW_LOADED:
+				DesktopWindowInfo.Builder loadedDWBuilder = DesktopWindowInfo.newBuilder();
+				buildPayload(event, loadedDWBuilder);
+				DesktopWindowInfo info_loaded = loadedDWBuilder.build();
+				eventHandler.onDesktopWindowClosed(info_loaded);
+				break;
 			default:
 				break;
 			}

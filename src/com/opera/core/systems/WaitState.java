@@ -38,6 +38,7 @@ public class WaitState {
         EVENT_DESKTOP_WINDOW_CLOSED, /* desktop window closed */
         EVENT_DESKTOP_WINDOW_ACTIVATED, /* desktop window activated */
         EVENT_DESKTOP_WINDOW_UPDATED, /* desktop window updated*/
+        EVENT_DESKTOP_WINDOW_LOADED, 
         EVENT_REQUEST_FIRED /* sent when a http request is fired */
     }
 
@@ -95,6 +96,7 @@ public class WaitState {
 			case EVENT_DESKTOP_WINDOW_CLOSED:
 			case EVENT_DESKTOP_WINDOW_UPDATED:
 			case EVENT_DESKTOP_WINDOW_SHOWN:
+			case EVENT_DESKTOP_WINDOW_LOADED:
 				return true;
 			}
 			return false;
@@ -116,6 +118,7 @@ public class WaitState {
     	DESKTOP_WINDOW_UPDATED,
     	DESKTOP_WINDOW_ACTIVATED,
     	DESKTOP_WINDOW_CLOSED,
+    	DESKTOP_WINDOW_LOADED,
     	REQUEST_FIRED;
     }
     public WaitState()
@@ -271,6 +274,17 @@ public class WaitState {
             lock.notify();
         }
     }
+    
+    void onDesktopWindowLoaded(DesktopWindowInfo info)
+    {
+        synchronized (lock)
+        {
+            logger.fine("Event: onDesktopWindowLoaded");
+            events.add(new ResultItem(WaitResult.EVENT_DESKTOP_WINDOW_LOADED, info));
+            lock.notify();
+        }
+    }
+    
 
     private ResultItem getResult()
     {
@@ -427,6 +441,21 @@ public class WaitState {
                         	}
                         }
                         break;
+                        
+                    case EVENT_DESKTOP_WINDOW_LOADED:
+                        if (type == ResponseType.DESKTOP_WINDOW_LOADED)
+                        {
+                        	if (stringMatch.isEmpty())
+                        		return result;
+                        	else
+                        	{
+                        		logger.fine("EVENT_DESKTOP_WINDOW_LOADED: Name: " + result.desktopWindowInfo.getName() + " ID: " + result.desktopWindowInfo.getWindowID());
+                        		
+                        		if (result.desktopWindowInfo.getName().equals(stringMatch))
+                        			return result;
+                        	}
+                        }
+                        break;
 
                     case EVENT_REQUEST_FIRED:
                     	 if (result.data == match && type == ResponseType.REQUEST_FIRED)
@@ -486,6 +515,14 @@ public class WaitState {
 
     public int waitForDesktopWindowClosed(String win_name, long timeout) {
         ResultItem item = waitAndParseResult(timeout, 0, win_name, ResponseType.DESKTOP_WINDOW_CLOSED);
+        if (item != null) {
+        	return item.desktopWindowInfo.getWindowID();
+        }
+        return 0;
+    }
+    
+    public int waitForDesktopWindowLoaded(String win_name, long timeout) {
+        ResultItem item = waitAndParseResult(timeout, 0, win_name, ResponseType.DESKTOP_WINDOW_LOADED);
         if (item != null) {
         	return item.desktopWindowInfo.getWindowID();
         }

@@ -5,7 +5,6 @@ import java.util.List;
 
 import com.opera.core.systems.scope.AbstractService;
 import com.opera.core.systems.scope.DesktopWindowManagerCommand;
-import com.opera.core.systems.OperaDesktopDriver;
 import com.opera.core.systems.QuickWidget;
 import com.opera.core.systems.QuickWindow;
 import com.opera.core.systems.ScopeServices;
