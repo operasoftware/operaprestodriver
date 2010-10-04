@@ -289,7 +289,7 @@ public class WaitState {
     }
     
     public void waitForOperaIdle(long timeout) {
-        waitAndParseResult(timeout, 0/*0 = no window id!*/, ResponseType.OPERA_IDLE);
+    	waitAndParseResult(timeout, 0/*0 = no window id!*/, ResponseType.OPERA_IDLE);
     }
 
     public Response waitFor(int tag, long timeout) {

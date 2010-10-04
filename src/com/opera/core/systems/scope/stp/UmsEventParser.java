@@ -13,6 +13,7 @@ import com.opera.core.systems.scope.protos.HttpLoggerProtos.Header;
 import com.opera.core.systems.scope.protos.UmsProtos.Event;
 import com.opera.core.systems.scope.protos.WmProtos.WindowID;
 import com.opera.core.systems.scope.protos.WmProtos.WindowInfo;
+import com.opera.core.systems.scope.CoreCommand;
 import com.opera.core.systems.scope.ESDebuggerCommand;
 import com.opera.core.systems.scope.WindowManagerCommand;
 
@@ -99,11 +100,15 @@ public class UmsEventParser {
 			eventHandler.onRequest(header.getWindowID());
 		}
 		else if(service.equals("core")) {
-			//TODO:
-			if(eventId == 1){
-				//no onActivity-catcher...
-			} else if(eventId == 2){
+			switch(CoreCommand.get(eventId)){
+			case ONACTIVE:
+				//No active event handler... 
+				//Opera only becomes active as reaction on other event
+				//sent from operadriver, so we already know.
+				break;
+			case ONIDLE:
 				eventHandler.onOperaIdle();
+				break;
 			}
 		}
 	}
