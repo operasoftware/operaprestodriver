@@ -9,9 +9,19 @@ public class FilterRule {
 		EQUALS;
 	}
 	
+	private String field;
 	private String value;
 	private FilterType type;
 
+	public FilterRule(){
+		
+	}
+	public FilterRule(String field, FilterType type, String value){
+		this.field = field;
+		this.type = type;
+		this.value = value;
+	}
+	
 	public FilterType getType() {
 		return type;
 	}
@@ -26,5 +36,13 @@ public class FilterRule {
 
 	public void setValue(String value) {
 		this.value = value;
+	}
+	
+	public String getField() {
+		return field;
+	}
+
+	public void setField(String value) {
+		this.field = value;
 	}
 }

@@ -1,6 +1,6 @@
 package com.opera.core.systems;
 
-import java.util.Map;
+import java.util.List;
 
 import com.opera.core.systems.model.FilterRule;
 
@@ -10,7 +10,7 @@ public interface IConsoleListener {
 	 * only be called if the message description matches
 	 * that rule
 	 */
-	Map<String, FilterRule> getFilters();
+	List<FilterRule> getFilters();
 	
 	/**
 	 * Called back when a message is is received
