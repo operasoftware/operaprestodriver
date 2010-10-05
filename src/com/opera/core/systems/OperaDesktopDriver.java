@@ -97,6 +97,17 @@ public class OperaDesktopDriver extends OperaDriver {
 		return desktopWindowManager.getQuickWidget(windowId, QuickWidgetSearchType.NAME, widgetName);
 	}
 
+	public QuickWidget findWidgetByText(int windowId, String text){
+		return desktopWindowManager.getQuickWidget(windowId, QuickWidgetSearchType.TEXT, text);
+	}
+
+	public QuickWidget findWidgetByStringId(int windowId, String stringId){
+		String text = desktopWindowManager.getString(stringId);
+		// Remember to remove all CRLF
+		QuickWidget widget = desktopWindowManager.getQuickWidget(windowId, QuickWidgetSearchType.TEXT, text);
+		return widget;
+	}
+
 	/**
 	 * @param windowId
 	 * @return String: name of the window
@@ -250,6 +261,14 @@ public class OperaDesktopDriver extends OperaDriver {
 		
 		return services.waitForDesktopWindowClosed(win_name, OperaIntervals.PAGE_LOAD_TIMEOUT.getValue());
 	}
+	
+	public int waitForWindowLoaded(String win_name) {
+		if (services.getConnection() == null)
+			throw new CommunicationException("waiting for a window failed because Opera is not connected.");
+		
+		return services.waitForDesktopWindowLoaded(win_name, OperaIntervals.PAGE_LOAD_TIMEOUT.getValue());
+	}
+	
 	
 }
 

@@ -108,7 +108,7 @@ public class UmsEventParser {
 				DesktopWindowInfo.Builder loadedDWBuilder = DesktopWindowInfo.newBuilder();
 				buildPayload(event, loadedDWBuilder);
 				DesktopWindowInfo info_loaded = loadedDWBuilder.build();
-				eventHandler.onDesktopWindowClosed(info_loaded);
+				eventHandler.onDesktopWindowLoaded(info_loaded);
 				break;
 			default:
 				break;
