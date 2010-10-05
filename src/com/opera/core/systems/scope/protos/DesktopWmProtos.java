@@ -1167,11 +1167,12 @@ public final class DesktopWmProtos {
       EDITFIELD(5, 5),
       LABEL(6, 6),
       RADIOBUTTON(7, 7),
-      SEARCH(8, 8),
-      TOOLBAR(9, 9),
-      TREEVIEW(10, 10),
-      TREEITEM(11, 11),
-      TREEHEADERITEM(12, 12),
+      ADDRESSFIELD(8, 8),
+      SEARCH(9, 9),
+      TOOLBAR(10, 10),
+      TREEVIEW(11, 11),
+      TREEITEM(12, 12),
+      TREEHEADERITEM(13, 13),
       ;
       
       
@@ -1187,11 +1188,12 @@ public final class DesktopWmProtos {
           case 5: return EDITFIELD;
           case 6: return LABEL;
           case 7: return RADIOBUTTON;
-          case 8: return SEARCH;
-          case 9: return TOOLBAR;
-          case 10: return TREEVIEW;
-          case 11: return TREEITEM;
-          case 12: return TREEHEADERITEM;
+          case 8: return ADDRESSFIELD;
+          case 9: return SEARCH;
+          case 10: return TOOLBAR;
+          case 11: return TREEVIEW;
+          case 12: return TREEITEM;
+          case 13: return TREEHEADERITEM;
           default: return null;
         }
       }
@@ -1222,7 +1224,7 @@ public final class DesktopWmProtos {
       }
       
       private static final QuickWidgetType[] VALUES = {
-        UNKNOWN, BUTTON, CHECKBOX, DIALOGTAB, DROPDOWN, EDITFIELD, LABEL, RADIOBUTTON, SEARCH, TOOLBAR, TREEVIEW, TREEITEM, TREEHEADERITEM, 
+        UNKNOWN, BUTTON, CHECKBOX, DIALOGTAB, DROPDOWN, EDITFIELD, LABEL, RADIOBUTTON, ADDRESSFIELD, SEARCH, TOOLBAR, TREEVIEW, TREEITEM, TREEHEADERITEM, 
       };
       public static QuickWidgetType valueOf(
           com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
@@ -3545,6 +3547,7 @@ public final class DesktopWmProtos {
     public enum QuickWidgetSearchType
         implements com.google.protobuf.ProtocolMessageEnum {
       NAME(0, 0),
+      TEXT(1, 1),
       ;
       
       
@@ -3553,6 +3556,7 @@ public final class DesktopWmProtos {
       public static QuickWidgetSearchType valueOf(int value) {
         switch (value) {
           case 0: return NAME;
+          case 1: return TEXT;
           default: return null;
         }
       }
@@ -3583,7 +3587,7 @@ public final class DesktopWmProtos {
       }
       
       private static final QuickWidgetSearchType[] VALUES = {
-        NAME, 
+        NAME, TEXT, 
       };
       public static QuickWidgetSearchType valueOf(
           com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
@@ -4050,31 +4054,32 @@ public final class DesktopWmProtos {
       "dowState\022\014\n\010RESTORED\020\000\022\r\n\tMINIMIZED\020\001\022\r\n",
       "\tMAXIMIZED\020\002\022\016\n\nFULLSCREEN\020\003\"H\n\021DesktopW" +
       "indowRect\022\t\n\001x\030\001 \002(\r\022\t\n\001y\030\002 \002(\r\022\r\n\005width" +
-      "\030\003 \002(\r\022\016\n\006height\030\004 \002(\r\"\341\003\n\017QuickWidgetIn" +
+      "\030\003 \002(\r\022\016\n\006height\030\004 \002(\r\"\363\003\n\017QuickWidgetIn" +
       "fo\022\014\n\004name\030\001 \002(\t\0224\n\004type\030\002 \002(\0162&.scope.Q" +
       "uickWidgetInfo.QuickWidgetType\022\017\n\007visibl" +
       "e\030\003 \002(\010\022\014\n\004text\030\004 \002(\t\022\r\n\005value\030\005 \002(\r\022\017\n\007" +
       "enabled\030\006 \002(\010\022\023\n\013defaultLook\030\007 \002(\010\022\023\n\013fo" +
       "cusedLook\030\010 \002(\010\022&\n\004rect\030\t \002(\0132\030.scope.De" +
       "sktopWindowRect\022\023\n\013parent_name\030\n \001(\t\022\013\n\003" +
-      "row\030\013 \001(\r\022\013\n\003col\030\014 \001(\r\"\311\001\n\017QuickWidgetTy",
+      "row\030\013 \001(\r\022\013\n\003col\030\014 \001(\r\"\333\001\n\017QuickWidgetTy",
       "pe\022\013\n\007UNKNOWN\020\000\022\n\n\006BUTTON\020\001\022\014\n\010CHECKBOX\020" +
       "\002\022\r\n\tDIALOGTAB\020\003\022\014\n\010DROPDOWN\020\004\022\r\n\tEDITFI" +
-      "ELD\020\005\022\t\n\005LABEL\020\006\022\017\n\013RADIOBUTTON\020\007\022\n\n\006SEA" +
-      "RCH\020\010\022\013\n\007TOOLBAR\020\t\022\014\n\010TREEVIEW\020\n\022\014\n\010TREE" +
-      "ITEM\020\013\022\022\n\016TREEHEADERITEM\020\014\"#\n\017DesktopStr" +
-      "ingID\022\020\n\010enumText\030\001 \002(\t\"!\n\021DesktopString" +
-      "Text\022\014\n\004text\030\001 \002(\t\"#\n\017DesktopWindowID\022\020\n" +
-      "\010windowID\030\001 \002(\r\"A\n\021DesktopWindowList\022,\n\n" +
-      "windowList\030\001 \003(\0132\030.scope.DesktopWindowIn" +
-      "fo\"F\n\023QuickWidgetInfoList\022/\n\017quickwidget",
-      "List\030\001 \003(\0132\026.scope.QuickWidgetInfo\"\262\001\n\021Q" +
-      "uickWidgetSearch\022(\n\010windowID\030\001 \002(\0132\026.sco" +
-      "pe.DesktopWindowID\022B\n\nsearchType\030\002 \002(\0162." +
-      ".scope.QuickWidgetSearch.QuickWidgetSear" +
-      "chType\022\014\n\004data\030\003 \002(\t\"!\n\025QuickWidgetSearc" +
-      "hType\022\010\n\004NAME\020\000B8\n#com.opera.core.system" +
-      "s.scope.protosB\017DesktopWmProtosH\001"
+      "ELD\020\005\022\t\n\005LABEL\020\006\022\017\n\013RADIOBUTTON\020\007\022\020\n\014ADD" +
+      "RESSFIELD\020\010\022\n\n\006SEARCH\020\t\022\013\n\007TOOLBAR\020\n\022\014\n\010" +
+      "TREEVIEW\020\013\022\014\n\010TREEITEM\020\014\022\022\n\016TREEHEADERIT" +
+      "EM\020\r\"#\n\017DesktopStringID\022\020\n\010enumText\030\001 \002(" +
+      "\t\"!\n\021DesktopStringText\022\014\n\004text\030\001 \002(\t\"#\n\017" +
+      "DesktopWindowID\022\020\n\010windowID\030\001 \002(\r\"A\n\021Des" +
+      "ktopWindowList\022,\n\nwindowList\030\001 \003(\0132\030.sco" +
+      "pe.DesktopWindowInfo\"F\n\023QuickWidgetInfoL",
+      "ist\022/\n\017quickwidgetList\030\001 \003(\0132\026.scope.Qui" +
+      "ckWidgetInfo\"\274\001\n\021QuickWidgetSearch\022(\n\010wi" +
+      "ndowID\030\001 \002(\0132\026.scope.DesktopWindowID\022B\n\n" +
+      "searchType\030\002 \002(\0162..scope.QuickWidgetSear" +
+      "ch.QuickWidgetSearchType\022\014\n\004data\030\003 \002(\t\"+" +
+      "\n\025QuickWidgetSearchType\022\010\n\004NAME\020\000\022\010\n\004TEX" +
+      "T\020\001B8\n#com.opera.core.systems.scope.prot" +
+      "osB\017DesktopWmProtosH\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
