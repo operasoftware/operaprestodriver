@@ -52,11 +52,21 @@ public class OperaDesktopDriver extends OperaDriver {
 	/**
 	 * @param win_name
 	 * @return list of widgets in the window with name win_name
+	 *       If no winName is empty, it gets the widgets in the active window
 	 */
 	public List<QuickWidget> getQuickWidgetList(String winName) {
 		int id = getWindowID(winName);
+		if (id >= 0 || winName.isEmpty()) {
+			return getQuickWidgetList(id);
+		} 
+		// Couldn't find window with winName
+		return null;
+	}
+	
+	public List<QuickWidget> getQuickWidgetList(int id) {
 		return desktopWindowManager.getQuickWidgetList(id);
 	}
+	
 	
 	public List<QuickWindow> getWindowList() {
 		return desktopWindowManager.getQuickWindowList();

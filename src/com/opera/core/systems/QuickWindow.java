@@ -33,6 +33,14 @@ public class QuickWindow {
 		return info.getTitle();
 	}
 	
+
+	/**
+	 * @return name of window
+	 */
+	public String getName() {
+		return info.getName();
+	}
+	
 	/**
 	 * @return true if widget is visible
 	 */
