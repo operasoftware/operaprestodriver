@@ -19,6 +19,7 @@ import com.google.protobuf.ByteString;
 import com.google.protobuf.CodedOutputStream;
 import com.opera.core.systems.scope.handlers.AbstractEventHandler;
 import com.opera.core.systems.scope.handlers.IConnectionHandler;
+import com.opera.core.systems.scope.internal.OperaIntervals;
 import com.opera.core.systems.scope.protos.UmsProtos.Command;
 import com.opera.core.systems.scope.protos.UmsProtos.Error;
 import com.opera.core.systems.scope.protos.UmsProtos.Event;
@@ -130,6 +131,12 @@ public class StpConnection implements SocketListener {
     }
 
     public void sendEnableStp1() {
+    	//temporary fix for CORE-33057
+    	try {
+			Thread.sleep(OperaIntervals.EXEC_SLEEP.getValue());
+		} catch (InterruptedException e) {
+			Thread.currentThread().interrupt();
+		}
         send("*enable stp-1");
     }
 
