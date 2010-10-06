@@ -101,8 +101,24 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 			return new QuickWidget(this, systemInputManager, info);
 		}
 		catch (WebDriverException e) { 
+			System.out.println("Catching webdriver exception");
 			return null;
 		}
+	}
+	
+	// TODO: FIXME: Do this without getting the list
+	public QuickWidget getQuickWidget(int id, QuickWidgetSearchType property, String value, String parentName)
+	{
+		if (id < 0) {
+			id = getActiveWindowId();
+		}
+		List<QuickWidget> widgets = getQuickWidgetList(id);
+		for (QuickWidget widget : widgets) {
+			if (widget.getParentName().equals(parentName)) {
+				return widget;
+			}
+		}
+		return null;
 	}
 	
 	public List<QuickWidget> getQuickWidgetList(int id) {

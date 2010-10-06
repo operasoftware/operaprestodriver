@@ -68,6 +68,7 @@ public interface IDesktopWindowManager {
 	 * @return
 	 */
 	QuickWidget getQuickWidget(int id, QuickWidgetSearchType property, String value);
+	QuickWidget getQuickWidget(int id, QuickWidgetSearchType property, String value, String parentName);
 	
 	/*
 	 * Get the string specified by the given string id 
