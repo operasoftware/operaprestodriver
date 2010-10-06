@@ -100,6 +100,10 @@ public class OperaDesktopDriver extends OperaDriver {
 	public QuickWidget findWidgetByText(int windowId, String text){
 		return desktopWindowManager.getQuickWidget(windowId, QuickWidgetSearchType.TEXT, text);
 	}
+	
+	public QuickWidget findWidgetByText(int windowId, String text, String parentName){
+		return desktopWindowManager.getQuickWidget(windowId, QuickWidgetSearchType.TEXT, text, parentName);
+	}
 
 	public QuickWidget findWidgetByStringId(int windowId, String stringId){
 		String text = desktopWindowManager.getString(stringId);
@@ -133,9 +137,9 @@ public class OperaDesktopDriver extends OperaDriver {
 	 */
 	
 	public void keyPress(String key, List<ModifierPressed> modifiers) {
-		/*System.out.print("keyPress(key="+key +",");
-		for (ModifierPressed mod : modifiers) {
-			System.out.print(mod.toString() + ",");
+		/*for (ModifierPressed mod : modifiers) {
+			if (mod != null)
+				System.out.print(mod.toString() + "(" + i + ",");
 		}
 		System.out.println(")");*/
 		systemInputManager.keyPress(key, modifiers);
