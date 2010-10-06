@@ -33,7 +33,7 @@ public class QuickWidget {
 				if(!isVisible())
 					throw new ElementNotVisibleException("You can't click an element that is not displayed");
 			}
-			
+
 			systemInputManager.click(getCenterLocation(), button, numClicks, modifiers);
 		}
 		
@@ -177,6 +177,10 @@ public class QuickWidget {
 		
 		protected int getValue() {
 			return info.getValue();
+		}
+		
+		public String getParentName() {
+			return info.getParentName();
 		}
 
 		@Override
