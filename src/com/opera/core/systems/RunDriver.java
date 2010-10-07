@@ -1,6 +1,9 @@
 package com.opera.core.systems;
 
-/*
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Iterator;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.NotFoundException;
 import org.openqa.selenium.WebDriverException;
@@ -10,7 +13,6 @@ import com.opera.core.systems.OperaDriver;
 import com.opera.core.systems.OperaWebElement;
 import com.opera.core.systems.scope.protos.SystemInputProtos.ModifierPressed;
 import com.opera.core.systems.scope.protos.SystemInputProtos.MouseInfo.MouseButton;
-*/
 
 class RunDriver {
 	 private static OperaDesktopDriver driver;
@@ -21,17 +23,82 @@ class RunDriver {
 	        driver = new OperaDesktopDriver();
 //	        driver = new OperaDriver();
 	        System.out.println(".Driver created ......");
+
 	        
+//	        String window_name = "New Preferences Dialog", action_name = "Show preferences";
+	        String window_name = "", action_name = "Delete private data";
+
+	        driver.waitStart(); // wait for dialog to open
+	        System.out.println("-- wait for dialog -- ");
+	        driver.operaDesktopAction(action_name);
+	        if (driver.waitForWindowShown(window_name) != 0)
+	        {
+	        	List<QuickWidget> qw_list = driver.getQuickWidgetList("New Preferences Dialog");
+	        	
+//	        	QuickWidget qw = qw_list.get(84);
+
+	        	System.out.println("Widgets\n=======\n\n");
+	        	
+	        	for (Iterator<QuickWidget> it = qw_list.iterator(); it.hasNext(); ) {
+	        		QuickWidget qw = it.next(); 
+
+	        		System.out.println("   Name:" + qw.getName());
+	        		System.out.println("   Text:" + qw.getText());
+	        		System.out.println("   Type:" + qw.getType().toString());
+	        		System.out.println("Visible:" + qw.isVisible());
+	        		System.out.println("Enabled:" + qw.isEnabled());
+	        		System.out.println("");
+	        	} 
+	        	
+		        driver.waitStart();
+		        driver.operaDesktopAction("Cancel");
+		        System.out.println("--Wait for window to close--");
+		        driver.waitForWindowClose(window_name);
+	        }
+	        else
+	        {
+	        	System.out.println("Time out waiting for dialog");
+		    }
+		    
+		    
+	        
+	        
+/*	        
+	        driver.waitStart();
+	        driver.operaDesktopAction("Show preferences");
+//	        driver.keyPress(",", ModifierPressed.CTRL);
+
+	        int win_id = driver.waitForWindowShown("New Preferences Dialog");
+
+	        QuickWidget qw = driver.findWidgetByName(-1, "Startpage_edit");
+	        System.out.println("By name: " + qw.getText());
+	        //qw.verifyText("D_STARTUP_WITH_HOMEPAGE");
+	        qw.isVisible();
+	        
+			ArrayList mods = new ArrayList();
+			mods.add(ModifierPressed.NONE);
+	        
+	        qw.click(MouseButton.LEFT, 1, mods);
+	        
+	        driver.keyPress("h", ModifierPressed.NONE);
+	        driver.keyPress("t", ModifierPressed.NONE);
+	        driver.keyPress("t", ModifierPressed.NONE);
+	        driver.keyPress("p", ModifierPressed.NONE);
+	        
+	        
+	        driver.sleep(5000);
+	        
+
 //	        driver.get("http://www.google.com");
-	        
+	*/        
 	        /*
 	        System.out.println("Do wait start");
 	        driver.waitStart(); // wait for dialog to open
 	        System.out.println("Do add to bookmarks action ");
 	        driver.operaAction("Add to bookmarks");
 	        
-	        //System.out.println("Wait for window activated ");
-	        //driver.waitForWindowActivated();
+	        System.out.println("Wait for window activated ");
+	        driver.waitForWindowShown();
 	        
         	// ---- Internal stuff to check text on the dialog -------
 	        int id = driver.getWindowID("Bookmark Properties");
@@ -74,7 +141,7 @@ class RunDriver {
 	        	System.out.println("Failure");
 	        */
 	        // ---------------------
-
+/*
 	        driver.waitStart();
 	        driver.operaDesktopAction("Show preferences");
 
@@ -85,7 +152,7 @@ class RunDriver {
 	        System.out.println("By name: " + qw.getText());
 	        //qw.verifyText("D_STARTUP_WITH_HOMEPAGE");
 	        qw.isVisible();
-	        
+	        */
 	       // qw.click(MouseButton.LEFT, 0, ModifierPressed.NONE);
 /*	        
 	        System.out.println("Window name: " + driver.getWindowName(win_id));
