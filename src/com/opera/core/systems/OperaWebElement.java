@@ -86,7 +86,7 @@ public class OperaWebElement implements RenderedWebElement, SearchContext, Locat
      * @param using
      * @return response of ecmascript in string presentation
      */
-    private final String callMethod(String using) {
+    public final String callMethod(String using) {
     	return debugger.callFunctionOnObject(using, objectId);
     }
     
