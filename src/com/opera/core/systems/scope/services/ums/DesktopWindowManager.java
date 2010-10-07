@@ -114,8 +114,16 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 		}
 		List<QuickWidget> widgets = getQuickWidgetList(id);
 		for (QuickWidget widget : widgets) {
-			if (widget.getParentName().equals(parentName)) {
-				return widget;
+			if (property.equals(QuickWidgetSearchType.NAME)){
+				if (widget.getParentName().equals(parentName) && widget.getName().equals(value)) {
+					return widget;
+				}
+			}
+			else
+			{
+				if (widget.getParentName().equals(parentName) && widget.getText().equals(value)) {
+					return widget;
+				}
 			}
 		}
 		return null;

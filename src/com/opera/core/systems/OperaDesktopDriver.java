@@ -97,6 +97,10 @@ public class OperaDesktopDriver extends OperaDriver {
 		return desktopWindowManager.getQuickWidget(windowId, QuickWidgetSearchType.NAME, widgetName);
 	}
 
+	public QuickWidget findWidgetByName(int windowId, String widgetName, String parentName){
+		return desktopWindowManager.getQuickWidget(windowId, QuickWidgetSearchType.NAME, widgetName, parentName);
+	}
+
 	public QuickWidget findWidgetByText(int windowId, String text){
 		return desktopWindowManager.getQuickWidget(windowId, QuickWidgetSearchType.TEXT, text);
 	}
