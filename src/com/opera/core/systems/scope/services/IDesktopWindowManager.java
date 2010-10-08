@@ -71,6 +71,15 @@ public interface IDesktopWindowManager {
 	QuickWidget getQuickWidget(int id, QuickWidgetSearchType property, String value, String parentName);
 	
 	/*
+	 * Get the quick window with value value for property property 
+	 *   
+	 * @param property
+	 * @param value - value of property given
+	 * @return
+	 */
+	QuickWindow getQuickWindow(QuickWidgetSearchType property, String value);
+
+	/*
 	 * Get the string specified by the given string id 
 	 * @param enum_text
 	 * @return

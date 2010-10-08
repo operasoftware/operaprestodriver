@@ -149,7 +149,7 @@ public class QuickWidget {
 		/**
 		 * @return DesktopWindowRect of the widget
 		 */
-		private DesktopWindowRect getRect() {
+		public DesktopWindowRect getRect() {
 			return info.getRect();
 		}
 		

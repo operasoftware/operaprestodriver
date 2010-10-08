@@ -128,7 +128,20 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 		}
 		return null;
 	}
-	
+
+	public QuickWindow getQuickWindow(QuickWidgetSearchType property, String value)
+	{
+		List<QuickWindow> windows = getQuickWindowList();
+		for (QuickWindow window : windows) {
+			if (property.equals(QuickWidgetSearchType.NAME)){
+				if (window.getName().equals(value)) {
+					return window;
+				}
+			}
+		}
+		return null;
+	}
+
 	public List<QuickWidget> getQuickWidgetList(int id) {
 		if (id <= 0)
 			id = getActiveWindowId();
