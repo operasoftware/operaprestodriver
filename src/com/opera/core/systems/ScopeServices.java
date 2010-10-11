@@ -124,13 +124,14 @@ public class ScopeServices implements IConnectionHandler {
 		
 		enableServices(wantedServices);
 
-		initializeServices();
+		initializeServices(enableDebugger);
 	}
         
-	private void initializeServices() {
+	private void initializeServices(boolean enableDebugger) {
 		exec.init();
 		windowManager.init();
-		debugger.init();
+		if(enableDebugger)
+			debugger.init();
 	}
 
 	public void shutdown() {
