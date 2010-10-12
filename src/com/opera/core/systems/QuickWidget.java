@@ -20,12 +20,18 @@ public class QuickWidget {
 		private final QuickWidgetInfo info; 
 		private final IDesktopWindowManager desktopWindowManager;
 		private final SystemInputManager systemInputManager;
+		private final int parentWindowId;
 		
-		public QuickWidget(DesktopWindowManager desktopWindowManager, SystemInputManager inputManager, QuickWidgetInfo info) {
+		public QuickWidget(DesktopWindowManager desktopWindowManager, SystemInputManager inputManager, QuickWidgetInfo info, int parentWindowId) {
 	        this.info = info;
 	        this.desktopWindowManager = desktopWindowManager;
 	        this.systemInputManager = inputManager;
+	        this.parentWindowId = parentWindowId;
 	    }
+		
+		public int getParentWindowId() {
+			return parentWindowId;
+		}
 		
 		public void click(MouseButton button, int numClicks, List<ModifierPressed> modifiers) {
 			//System.out.println(" Click  "+ info.getName() + "!");

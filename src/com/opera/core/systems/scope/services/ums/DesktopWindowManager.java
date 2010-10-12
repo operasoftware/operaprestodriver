@@ -85,6 +85,7 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 		if (id < 0) {
 			id = getActiveWindowId();
 		}
+		
 		QuickWidgetSearch.Builder searchBuilder = QuickWidgetSearch.newBuilder();
 		DesktopWindowID.Builder winBuilder = DesktopWindowID.newBuilder();
 		winBuilder.clearWindowID();
@@ -98,10 +99,10 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 			QuickWidgetInfo.Builder builder = QuickWidgetInfo.newBuilder();
 			buildPayload(response, builder);
 			QuickWidgetInfo info = builder.build();
-			return new QuickWidget(this, systemInputManager, info);
+			return new QuickWidget(this, systemInputManager, info, id);
 		}
 		catch (WebDriverException e) { 
-			System.out.println("Catching webdriver exception");
+			//System.out.println("Catching webdriver exception");
 			return null;
 		}
 	}
@@ -114,6 +115,7 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 		}
 		List<QuickWidget> widgets = getQuickWidgetList(id);
 		for (QuickWidget widget : widgets) {
+			//System.out.println("Widget " + widget.getName() + " in parent " + widget.getParentName());
 			if (property.equals(QuickWidgetSearchType.NAME)){
 				if (widget.getParentName().equals(parentName) && widget.getName().equals(value)) {
 					return widget;
@@ -150,8 +152,10 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 		winBuilder.clearWindowID();
 		if (id >= 0)
 			winBuilder.setWindowID(id);
-		else
+		else {
 			winBuilder.setWindowID(activeWindowId);
+			id = activeWindowId;
+		}
 		
 		Response response = executeCommand(DesktopWindowManagerCommand.LIST_QUICK_WIDGETS, winBuilder);
 		QuickWidgetInfoList.Builder builder = QuickWidgetInfoList.newBuilder();
@@ -163,7 +167,7 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 		List<QuickWidget> quickWidgetList = new LinkedList<QuickWidget>();
 		
 		for (QuickWidgetInfo widgetInfo : widgetList) {
-			quickWidgetList.add(new QuickWidget(this, systemInputManager, widgetInfo));
+			quickWidgetList.add(new QuickWidget(this, systemInputManager, widgetInfo, id));
 		}
 		return quickWidgetList;
 	}
