@@ -180,7 +180,15 @@ public class QuickWidget {
 			DesktopWindowRect rect = getRect();
 			return new Dimension(rect.getWidth(), rect.getHeight());
 		}
-		
+
+		public int getRow() {
+			return info.getRow();
+		}
+
+		public int getColumn() {
+			return info.getCol();
+		}
+
 		protected int getValue() {
 			return info.getValue();
 		}
