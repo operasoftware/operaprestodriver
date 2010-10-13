@@ -29,6 +29,8 @@ public class OperaDesktopDriver extends OperaDriver {
 	// TODO: FIXME
 	protected Map<String, String> getServicesList() {
 		Map<String, String> versions = super.getServicesList();
+		// This is the minimum versions of the services this version
+		// of the web-driver require work
 		versions.put("desktop-window-manager", "1.0");
 		versions.put("system-input", "1.0");
 		return versions;
