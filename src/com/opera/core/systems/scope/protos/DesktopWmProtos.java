@@ -8,6 +8,75 @@ public final class DesktopWmProtos {
   public static void registerAllExtensions(
       com.google.protobuf.ExtensionRegistry registry) {
   }
+  public enum QuickWidgetSearchType
+      implements com.google.protobuf.ProtocolMessageEnum {
+    NAME(0, 0),
+    TEXT(1, 1),
+    POS(2, 2),
+    ;
+    
+    
+    public final int getNumber() { return value; }
+    
+    public static QuickWidgetSearchType valueOf(int value) {
+      switch (value) {
+        case 0: return NAME;
+        case 1: return TEXT;
+        case 2: return POS;
+        default: return null;
+      }
+    }
+    
+    public static com.google.protobuf.Internal.EnumLiteMap<QuickWidgetSearchType>
+        internalGetValueMap() {
+      return internalValueMap;
+    }
+    private static com.google.protobuf.Internal.EnumLiteMap<QuickWidgetSearchType>
+        internalValueMap =
+          new com.google.protobuf.Internal.EnumLiteMap<QuickWidgetSearchType>() {
+            public QuickWidgetSearchType findValueByNumber(int number) {
+              return QuickWidgetSearchType.valueOf(number)
+    ;        }
+          };
+    
+    public final com.google.protobuf.Descriptors.EnumValueDescriptor
+        getValueDescriptor() {
+      return getDescriptor().getValues().get(index);
+    }
+    public final com.google.protobuf.Descriptors.EnumDescriptor
+        getDescriptorForType() {
+      return getDescriptor();
+    }
+    public static final com.google.protobuf.Descriptors.EnumDescriptor
+        getDescriptor() {
+      return com.opera.core.systems.scope.protos.DesktopWmProtos.getDescriptor().getEnumTypes().get(0);
+    }
+    
+    private static final QuickWidgetSearchType[] VALUES = {
+      NAME, TEXT, POS, 
+    };
+    public static QuickWidgetSearchType valueOf(
+        com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
+      if (desc.getType() != getDescriptor()) {
+        throw new java.lang.IllegalArgumentException(
+          "EnumValueDescriptor is not for this type.");
+      }
+      return VALUES[desc.getIndex()];
+    }
+    private final int index;
+    private final int value;
+    private QuickWidgetSearchType(int index, int value) {
+      this.index = index;
+      this.value = value;
+    }
+    
+    static {
+      com.opera.core.systems.scope.protos.DesktopWmProtos.getDescriptor();
+    }
+    
+    // @@protoc_insertion_point(enum_scope:scope.QuickWidgetSearchType)
+  }
+  
   public static final class DesktopWindowInfo extends
       com.google.protobuf.GeneratedMessage {
     // Use DesktopWindowInfo.newBuilder() to construct.
@@ -1332,9 +1401,17 @@ public final class DesktopWmProtos {
     public boolean hasCol() { return hasCol; }
     public int getCol() { return col_; }
     
+    // optional .scope.QuickWidgetSearchType parent_type = 13;
+    public static final int PARENT_TYPE_FIELD_NUMBER = 13;
+    private boolean hasParentType;
+    private com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearchType parentType_;
+    public boolean hasParentType() { return hasParentType; }
+    public com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearchType getParentType() { return parentType_; }
+    
     private void initFields() {
       type_ = com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo.QuickWidgetType.UNKNOWN;
       rect_ = com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect.getDefaultInstance();
+      parentType_ = com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearchType.NAME;
     }
     public final boolean isInitialized() {
       if (!hasName) return false;
@@ -1388,6 +1465,9 @@ public final class DesktopWmProtos {
       }
       if (hasCol()) {
         output.writeUInt32(12, getCol());
+      }
+      if (hasParentType()) {
+        output.writeEnum(13, getParentType().getNumber());
       }
       getUnknownFields().writeTo(output);
     }
@@ -1445,6 +1525,10 @@ public final class DesktopWmProtos {
       if (hasCol()) {
         size += com.google.protobuf.CodedOutputStream
           .computeUInt32Size(12, getCol());
+      }
+      if (hasParentType()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeEnumSize(13, getParentType().getNumber());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -1640,6 +1724,9 @@ public final class DesktopWmProtos {
         if (other.hasCol()) {
           setCol(other.getCol());
         }
+        if (other.hasParentType()) {
+          setParentType(other.getParentType());
+        }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
@@ -1722,6 +1809,16 @@ public final class DesktopWmProtos {
             }
             case 96: {
               setCol(input.readUInt32());
+              break;
+            }
+            case 104: {
+              int rawValue = input.readEnum();
+              com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearchType value = com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearchType.valueOf(rawValue);
+              if (value == null) {
+                unknownFields.mergeVarintField(13, rawValue);
+              } else {
+                setParentType(value);
+              }
               break;
             }
           }
@@ -1973,6 +2070,27 @@ public final class DesktopWmProtos {
       public Builder clearCol() {
         result.hasCol = false;
         result.col_ = 0;
+        return this;
+      }
+      
+      // optional .scope.QuickWidgetSearchType parent_type = 13;
+      public boolean hasParentType() {
+        return result.hasParentType();
+      }
+      public com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearchType getParentType() {
+        return result.getParentType();
+      }
+      public Builder setParentType(com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearchType value) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        result.hasParentType = true;
+        result.parentType_ = value;
+        return this;
+      }
+      public Builder clearParentType() {
+        result.hasParentType = false;
+        result.parentType_ = com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearchType.NAME;
         return this;
       }
       
@@ -3544,73 +3662,6 @@ public final class DesktopWmProtos {
       return com.opera.core.systems.scope.protos.DesktopWmProtos.internal_static_scope_QuickWidgetSearch_fieldAccessorTable;
     }
     
-    public enum QuickWidgetSearchType
-        implements com.google.protobuf.ProtocolMessageEnum {
-      NAME(0, 0),
-      TEXT(1, 1),
-      ;
-      
-      
-      public final int getNumber() { return value; }
-      
-      public static QuickWidgetSearchType valueOf(int value) {
-        switch (value) {
-          case 0: return NAME;
-          case 1: return TEXT;
-          default: return null;
-        }
-      }
-      
-      public static com.google.protobuf.Internal.EnumLiteMap<QuickWidgetSearchType>
-          internalGetValueMap() {
-        return internalValueMap;
-      }
-      private static com.google.protobuf.Internal.EnumLiteMap<QuickWidgetSearchType>
-          internalValueMap =
-            new com.google.protobuf.Internal.EnumLiteMap<QuickWidgetSearchType>() {
-              public QuickWidgetSearchType findValueByNumber(int number) {
-                return QuickWidgetSearchType.valueOf(number)
-      ;        }
-            };
-      
-      public final com.google.protobuf.Descriptors.EnumValueDescriptor
-          getValueDescriptor() {
-        return getDescriptor().getValues().get(index);
-      }
-      public final com.google.protobuf.Descriptors.EnumDescriptor
-          getDescriptorForType() {
-        return getDescriptor();
-      }
-      public static final com.google.protobuf.Descriptors.EnumDescriptor
-          getDescriptor() {
-        return com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearch.getDescriptor().getEnumTypes().get(0);
-      }
-      
-      private static final QuickWidgetSearchType[] VALUES = {
-        NAME, TEXT, 
-      };
-      public static QuickWidgetSearchType valueOf(
-          com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
-        if (desc.getType() != getDescriptor()) {
-          throw new java.lang.IllegalArgumentException(
-            "EnumValueDescriptor is not for this type.");
-        }
-        return VALUES[desc.getIndex()];
-      }
-      private final int index;
-      private final int value;
-      private QuickWidgetSearchType(int index, int value) {
-        this.index = index;
-        this.value = value;
-      }
-      
-      static {
-        com.opera.core.systems.scope.protos.DesktopWmProtos.getDescriptor();
-      }
-      
-      // @@protoc_insertion_point(enum_scope:scope.QuickWidgetSearch.QuickWidgetSearchType)
-    }
-    
     // required .scope.DesktopWindowID windowID = 1;
     public static final int WINDOWID_FIELD_NUMBER = 1;
     private boolean hasWindowID;
@@ -3618,12 +3669,12 @@ public final class DesktopWmProtos {
     public boolean hasWindowID() { return hasWindowID; }
     public com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID getWindowID() { return windowID_; }
     
-    // required .scope.QuickWidgetSearch.QuickWidgetSearchType searchType = 2;
+    // required .scope.QuickWidgetSearchType searchType = 2;
     public static final int SEARCHTYPE_FIELD_NUMBER = 2;
     private boolean hasSearchType;
-    private com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearch.QuickWidgetSearchType searchType_;
+    private com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearchType searchType_;
     public boolean hasSearchType() { return hasSearchType; }
-    public com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearch.QuickWidgetSearchType getSearchType() { return searchType_; }
+    public com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearchType getSearchType() { return searchType_; }
     
     // required string data = 3;
     public static final int DATA_FIELD_NUMBER = 3;
@@ -3634,7 +3685,7 @@ public final class DesktopWmProtos {
     
     private void initFields() {
       windowID_ = com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID.getDefaultInstance();
-      searchType_ = com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearch.QuickWidgetSearchType.NAME;
+      searchType_ = com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearchType.NAME;
     }
     public final boolean isInitialized() {
       if (!hasWindowID) return false;
@@ -3880,7 +3931,7 @@ public final class DesktopWmProtos {
             }
             case 16: {
               int rawValue = input.readEnum();
-              com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearch.QuickWidgetSearchType value = com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearch.QuickWidgetSearchType.valueOf(rawValue);
+              com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearchType value = com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearchType.valueOf(rawValue);
               if (value == null) {
                 unknownFields.mergeVarintField(2, rawValue);
               } else {
@@ -3934,14 +3985,14 @@ public final class DesktopWmProtos {
         return this;
       }
       
-      // required .scope.QuickWidgetSearch.QuickWidgetSearchType searchType = 2;
+      // required .scope.QuickWidgetSearchType searchType = 2;
       public boolean hasSearchType() {
         return result.hasSearchType();
       }
-      public com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearch.QuickWidgetSearchType getSearchType() {
+      public com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearchType getSearchType() {
         return result.getSearchType();
       }
-      public Builder setSearchType(com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearch.QuickWidgetSearchType value) {
+      public Builder setSearchType(com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearchType value) {
         if (value == null) {
           throw new NullPointerException();
         }
@@ -3951,7 +4002,7 @@ public final class DesktopWmProtos {
       }
       public Builder clearSearchType() {
         result.hasSearchType = false;
-        result.searchType_ = com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearch.QuickWidgetSearchType.NAME;
+        result.searchType_ = com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearchType.NAME;
         return this;
       }
       
@@ -4054,32 +4105,33 @@ public final class DesktopWmProtos {
       "dowState\022\014\n\010RESTORED\020\000\022\r\n\tMINIMIZED\020\001\022\r\n",
       "\tMAXIMIZED\020\002\022\016\n\nFULLSCREEN\020\003\"H\n\021DesktopW" +
       "indowRect\022\t\n\001x\030\001 \002(\r\022\t\n\001y\030\002 \002(\r\022\r\n\005width" +
-      "\030\003 \002(\r\022\016\n\006height\030\004 \002(\r\"\363\003\n\017QuickWidgetIn" +
+      "\030\003 \002(\r\022\016\n\006height\030\004 \002(\r\"\246\004\n\017QuickWidgetIn" +
       "fo\022\014\n\004name\030\001 \002(\t\0224\n\004type\030\002 \002(\0162&.scope.Q" +
       "uickWidgetInfo.QuickWidgetType\022\017\n\007visibl" +
       "e\030\003 \002(\010\022\014\n\004text\030\004 \002(\t\022\r\n\005value\030\005 \002(\r\022\017\n\007" +
       "enabled\030\006 \002(\010\022\023\n\013defaultLook\030\007 \002(\010\022\023\n\013fo" +
       "cusedLook\030\010 \002(\010\022&\n\004rect\030\t \002(\0132\030.scope.De" +
       "sktopWindowRect\022\023\n\013parent_name\030\n \001(\t\022\013\n\003" +
-      "row\030\013 \001(\r\022\013\n\003col\030\014 \001(\r\"\333\001\n\017QuickWidgetTy",
-      "pe\022\013\n\007UNKNOWN\020\000\022\n\n\006BUTTON\020\001\022\014\n\010CHECKBOX\020" +
-      "\002\022\r\n\tDIALOGTAB\020\003\022\014\n\010DROPDOWN\020\004\022\r\n\tEDITFI" +
-      "ELD\020\005\022\t\n\005LABEL\020\006\022\017\n\013RADIOBUTTON\020\007\022\020\n\014ADD" +
-      "RESSFIELD\020\010\022\n\n\006SEARCH\020\t\022\013\n\007TOOLBAR\020\n\022\014\n\010" +
-      "TREEVIEW\020\013\022\014\n\010TREEITEM\020\014\022\022\n\016TREEHEADERIT" +
-      "EM\020\r\"#\n\017DesktopStringID\022\020\n\010enumText\030\001 \002(" +
-      "\t\"!\n\021DesktopStringText\022\014\n\004text\030\001 \002(\t\"#\n\017" +
-      "DesktopWindowID\022\020\n\010windowID\030\001 \002(\r\"A\n\021Des" +
-      "ktopWindowList\022,\n\nwindowList\030\001 \003(\0132\030.sco" +
-      "pe.DesktopWindowInfo\"F\n\023QuickWidgetInfoL",
-      "ist\022/\n\017quickwidgetList\030\001 \003(\0132\026.scope.Qui" +
-      "ckWidgetInfo\"\274\001\n\021QuickWidgetSearch\022(\n\010wi" +
-      "ndowID\030\001 \002(\0132\026.scope.DesktopWindowID\022B\n\n" +
-      "searchType\030\002 \002(\0162..scope.QuickWidgetSear" +
-      "ch.QuickWidgetSearchType\022\014\n\004data\030\003 \002(\t\"+" +
-      "\n\025QuickWidgetSearchType\022\010\n\004NAME\020\000\022\010\n\004TEX" +
-      "T\020\001B8\n#com.opera.core.systems.scope.prot" +
-      "osB\017DesktopWmProtosH\001"
+      "row\030\013 \001(\r\022\013\n\003col\030\014 \001(\r\0221\n\013parent_type\030\r ",
+      "\001(\0162\034.scope.QuickWidgetSearchType\"\333\001\n\017Qu" +
+      "ickWidgetType\022\013\n\007UNKNOWN\020\000\022\n\n\006BUTTON\020\001\022\014" +
+      "\n\010CHECKBOX\020\002\022\r\n\tDIALOGTAB\020\003\022\014\n\010DROPDOWN\020" +
+      "\004\022\r\n\tEDITFIELD\020\005\022\t\n\005LABEL\020\006\022\017\n\013RADIOBUTT" +
+      "ON\020\007\022\020\n\014ADDRESSFIELD\020\010\022\n\n\006SEARCH\020\t\022\013\n\007TO" +
+      "OLBAR\020\n\022\014\n\010TREEVIEW\020\013\022\014\n\010TREEITEM\020\014\022\022\n\016T" +
+      "REEHEADERITEM\020\r\"#\n\017DesktopStringID\022\020\n\010en" +
+      "umText\030\001 \002(\t\"!\n\021DesktopStringText\022\014\n\004tex" +
+      "t\030\001 \002(\t\"#\n\017DesktopWindowID\022\020\n\010windowID\030\001" +
+      " \002(\r\"A\n\021DesktopWindowList\022,\n\nwindowList\030",
+      "\001 \003(\0132\030.scope.DesktopWindowInfo\"F\n\023Quick" +
+      "WidgetInfoList\022/\n\017quickwidgetList\030\001 \003(\0132" +
+      "\026.scope.QuickWidgetInfo\"}\n\021QuickWidgetSe" +
+      "arch\022(\n\010windowID\030\001 \002(\0132\026.scope.DesktopWi" +
+      "ndowID\0220\n\nsearchType\030\002 \002(\0162\034.scope.Quick" +
+      "WidgetSearchType\022\014\n\004data\030\003 \002(\t*4\n\025QuickW" +
+      "idgetSearchType\022\010\n\004NAME\020\000\022\010\n\004TEXT\020\001\022\007\n\003P" +
+      "OS\020\002B8\n#com.opera.core.systems.scope.pro" +
+      "tosB\017DesktopWmProtosH\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -4107,7 +4159,7 @@ public final class DesktopWmProtos {
           internal_static_scope_QuickWidgetInfo_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_scope_QuickWidgetInfo_descriptor,
-              new java.lang.String[] { "Name", "Type", "Visible", "Text", "Value", "Enabled", "DefaultLook", "FocusedLook", "Rect", "ParentName", "Row", "Col", },
+              new java.lang.String[] { "Name", "Type", "Visible", "Text", "Value", "Enabled", "DefaultLook", "FocusedLook", "Rect", "ParentName", "Row", "Col", "ParentType", },
               com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo.class,
               com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo.Builder.class);
           internal_static_scope_DesktopStringID_descriptor =

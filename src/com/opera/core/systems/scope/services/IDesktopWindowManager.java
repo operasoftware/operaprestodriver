@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.opera.core.systems.QuickWidget;
 import com.opera.core.systems.QuickWindow;
-import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearch.QuickWidgetSearchType;
+import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearchType;
 
 public interface IDesktopWindowManager {
 
