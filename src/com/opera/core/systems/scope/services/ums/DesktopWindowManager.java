@@ -107,16 +107,6 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 		}
 	}
 	
-	/*public boolean isParentOf(QuickWidget child, String parent_property_name) {
-		if (child.getParentSearchType() == QuickWidgetSearchType.NAME)
-			return widget.getParentName().equals(parent_property_name);
-		else if (child.getParentSearchType() == QuickWidgetSearchType.TEXT)
-			return widget.getParentName().equals(parent_property_name);
-		else if (child.getParentSearchType() == QuickWidgetSearchType.POS)
-			return widget.getParentName().equals(parent_property_name);		
-		return false;
-	}*/
-	
 	// TODO: FIXME: Do this without getting the list
 	// parentName is set to name, pos or text depending on widget.getParentType
 	public QuickWidget getQuickWidget(int id, QuickWidgetSearchType property, String value, String parentName)
@@ -126,7 +116,6 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 		}
 		List<QuickWidget> widgets = getQuickWidgetList(id);
 		for (QuickWidget widget : widgets) {
-			//System.out.println("Widget " + widget.getName() + " in parent " + widget.getParentName());
 			if (property.equals(QuickWidgetSearchType.NAME)){
 				if (widget.getParentName().equals(parentName) 
 							&& widget.getName().equals(value)) {
