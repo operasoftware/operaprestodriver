@@ -34,7 +34,7 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 			this.systemInputManager = inputManager;
 			String serviceName = "desktop-window-manager";
 			
-			if(!isVersionInRange(version, "5.0", serviceName))
+			if(!isVersionInRange(version, "2.0", serviceName))
 				throw new UnsupportedOperationException(serviceName + " version " + version + " is not supported");
 			
 			services.setDesktopWindowManager(this);
