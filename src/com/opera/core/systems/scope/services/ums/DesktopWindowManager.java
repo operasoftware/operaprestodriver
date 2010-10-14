@@ -16,7 +16,7 @@ import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfoList;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearch;
-import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearchType;
+import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearch.QuickWidgetSearchType;
 import com.opera.core.systems.scope.protos.UmsProtos.Response;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopStringID;
@@ -127,6 +127,26 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 							&& widget.getText().equals(value)) {
 					return widget;
 				}
+			}
+		}
+		return null;
+	}
+
+	public QuickWidget getQuickWidgetByPos(int id, int row, int column)
+	{
+		return getQuickWidgetByPos(id, row, column, "");
+	}
+	
+	public QuickWidget getQuickWidgetByPos(int id, int row, int column, String parentName)
+	{
+		if (id < 0) {
+			id = getActiveWindowId();
+		}
+		List<QuickWidget> widgets = getQuickWidgetList(id);
+		for (QuickWidget widget : widgets) {
+			if ((parentName.isEmpty() || widget.getParentName().equals(parentName)) && 
+					widget.getRow() == row && widget.getColumn() == column) {
+				return widget;
 			}
 		}
 		return null;

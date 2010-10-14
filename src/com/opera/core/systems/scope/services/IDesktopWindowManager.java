@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.opera.core.systems.QuickWidget;
 import com.opera.core.systems.QuickWindow;
-import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearchType;
+import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearch.QuickWidgetSearchType;
 
 public interface IDesktopWindowManager {
 
@@ -69,7 +69,19 @@ public interface IDesktopWindowManager {
 	 */
 	QuickWidget getQuickWidget(int id, QuickWidgetSearchType property, String value);
 	QuickWidget getQuickWidget(int id, QuickWidgetSearchType property, String value, String parentName);
-	
+
+	/*
+	 * Get the quick widget with value value by position
+	 *   
+	 * @param id - window id
+	 * @param row - row of the widget
+	 * @param column - column of the widget
+	 * @param parentName - Parent name of the widget
+	 * @return
+	 */
+	QuickWidget getQuickWidgetByPos(int id, int row, int column);
+	QuickWidget getQuickWidgetByPos(int id, int row, int column, String parentName);
+
 	/*
 	 * Get the quick window with value value for property property 
 	 *   

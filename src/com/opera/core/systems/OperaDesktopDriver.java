@@ -7,7 +7,7 @@ import java.util.Map;
 
 import com.opera.core.systems.scope.exceptions.CommunicationException;
 import com.opera.core.systems.scope.internal.OperaIntervals;
-import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearchType;
+import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearch.QuickWidgetSearchType;
 import com.opera.core.systems.scope.protos.SystemInputProtos.ModifierPressed;
 import com.opera.core.systems.scope.services.IDesktopWindowManager;
 import com.opera.core.systems.scope.services.ums.SystemInputManager;
@@ -122,6 +122,13 @@ public class OperaDesktopDriver extends OperaDriver {
 		return findWidgetByText(windowId, text, parentName);
 	}
 
+	public QuickWidget findWidgetByPosition(int windowId, int row, int column){
+		return desktopWindowManager.getQuickWidgetByPos(windowId, row, column);
+	}
+	
+	public QuickWidget findWidgetByPosition(int windowId, int row, int column, String parentName){
+		return desktopWindowManager.getQuickWidgetByPos(windowId, row, column, parentName);
+	}
 
 	public QuickWindow findWindowByName(String windowName){
 		return desktopWindowManager.getQuickWindow(QuickWidgetSearchType.NAME, windowName);
