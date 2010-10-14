@@ -270,7 +270,7 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 	public String removeCRLF(String text) {
 		// Hack to remove all \r and \n's as we sometimes get just \n and sometimes
 		// \r\n then the string comparison doesn't work
-		return text.replaceAll("(\\r|\\n)", "");
+		return text.replaceAll("(\\r)", "");
 	}
 
 }
