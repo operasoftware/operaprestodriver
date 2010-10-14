@@ -97,5 +97,7 @@ public interface IDesktopWindowManager {
 	 * @return
 	 */
 	String getString(String enum_text);
+	// Used to stop problems comparing strings that have just \n with those with \r\n
+	String removeCRLF(String text);
 	
 }

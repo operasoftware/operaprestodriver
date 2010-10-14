@@ -263,6 +263,14 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 		buildPayload(response, stringTextBuilder);
 		DesktopStringText string_text = stringTextBuilder.build();
 
-		return string_text.getText();
+		// Remember to remove all CRLF
+		return removeCRLF(string_text.getText());
 	}
+	
+	public String removeCRLF(String text) {
+		// Hack to remove all \r and \n's as we sometimes get just \n and sometimes
+		// \r\n then the string comparison doesn't work
+		return text.replaceAll("(\\r|\\n)", "");
+	}
+
 }

@@ -113,7 +113,6 @@ public class OperaDesktopDriver extends OperaDriver {
 
 	public QuickWidget findWidgetByStringId(int windowId, String stringId){
 		String text = desktopWindowManager.getString(stringId);
-		// Remember to remove all CRLF
 		return findWidgetByText(windowId, text);
 	}
 	
