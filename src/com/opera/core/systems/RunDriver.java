@@ -25,18 +25,26 @@ class RunDriver {
 	        System.out.println(".Driver created ......");
 
 	        
-//	        String window_name = "New Preferences Dialog", action_name = "Show preferences";
-	        String window_name = "", action_name = "Delete private data";
+	        String window_name = "New Preferences Dialog", action_name = "Show preferences";
+//	        String window_name = "", action_name = "Delete private data";
 
+	        driver.waitStart(); // wait for dialog to open
+	        System.out.println("-- wait for dialog -- ");
+	        driver.operaDesktopAction(action_name);
+	        int window_id = driver.waitForWindowShown(window_name);
+
+	        QuickWidget ti = driver.findWidgetByStringId(window_id, "D_NEW_PREFS_PROGRAMS", "Advanced_treeview");
+
+/*	        
 	        QuickWindow qw = driver.findWindowByName("Browser Window");
 	        QuickWidget tb = driver.findWidgetByName(qw.getWindowID(), "Status Toolbar Head");
 	        QuickWidget b = driver.findWidgetByName(qw.getWindowID(), "tbb_Panel", "Status Toolbar Head");
-	        
+
 			ArrayList mods = new ArrayList();
 			mods.add(ModifierPressed.NONE);
 			
 	        b.click(MouseButton.LEFT, 1, mods);
-	        
+	*/        
 /*	        
 	        driver.waitStart(); // wait for dialog to open
 	        System.out.println("-- wait for dialog -- ");
