@@ -34,8 +34,7 @@ public class WaitState {
         HANDSHAKE,       /* STP Handshake */
         EVENT_WINDOW_LOADED, /* finished loaded */
         EVENT_WINDOW_CLOSED, /* window closed */
-        EVENT_REQUEST_FIRED, /* sent when a http request is fired */
-        EVENT_OPERA_IDLE	 /* opera is now idle */
+        EVENT_OPERA_IDLE,	 /* opera is now idle */
         EVENT_DESKTOP_WINDOW_SHOWN,  /* desktop window has shown and should be visible */
         EVENT_DESKTOP_WINDOW_CLOSED, /* desktop window closed */
         EVENT_DESKTOP_WINDOW_ACTIVATED, /* desktop window activated */
@@ -493,7 +492,7 @@ public class WaitState {
     }
     
     public void waitForOperaIdle(long timeout) {
-    	waitAndParseResult(timeout, 0/*0 = no window id!*/, ResponseType.OPERA_IDLE);
+    	waitAndParseResult(timeout, 0/*0 = no window id!*/, null, ResponseType.OPERA_IDLE);
     }
 
     public Response waitFor(int tag, long timeout) {

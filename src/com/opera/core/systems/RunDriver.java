@@ -1,5 +1,6 @@
 package com.opera.core.systems;
 
+/*
 import org.openqa.selenium.By;
 import org.openqa.selenium.NotFoundException;
 import org.openqa.selenium.WebDriverException;
@@ -9,6 +10,7 @@ import com.opera.core.systems.OperaDriver;
 import com.opera.core.systems.OperaWebElement;
 import com.opera.core.systems.scope.protos.SystemInputProtos.ModifierPressed;
 import com.opera.core.systems.scope.protos.SystemInputProtos.MouseInfo.MouseButton;
+*/
 
 class RunDriver {
 	 private static OperaDesktopDriver driver;
@@ -77,7 +79,7 @@ class RunDriver {
 	        driver.operaDesktopAction("Show preferences");
 
 	        System.out.println("--Wait for window to open--");
-	        int win_id = driver.waitForWindowShown("New Preferences Dialog");
+	        //int win_id = driver.waitForWindowShown("New Preferences Dialog");
 
 	        QuickWidget qw = driver.findWidgetByName(-1, "Startpage_edit");
 	        System.out.println("By name: " + qw.getText());

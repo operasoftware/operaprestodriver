@@ -2,7 +2,6 @@ package com.opera.core.systems;
 
 //import java.util.HashMap;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -125,7 +124,7 @@ public class OperaDesktopDriver extends OperaDriver {
 	 *
 	 */
 	public void keyPress(String key, ModifierPressed modifier) {
-		ArrayList mods = new ArrayList();
+		ArrayList<ModifierPressed> mods = new ArrayList<ModifierPressed>();
 		mods.add(modifier);
 		systemInputManager.keyPress(key, mods);
 	}

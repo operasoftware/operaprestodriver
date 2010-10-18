@@ -156,9 +156,11 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 		
 		List<DesktopWindowInfo> windowList = list.getWindowListList();
 		
+		/*
 		for (DesktopWindowInfo window : windowList) {
 			//System.out.println("Window id =" + window.getWindowID() + ", name=" + window.getName() + ", type="+ window.getWindowType());
 		}
+		*/
 		
 		return windowList;
 	}
