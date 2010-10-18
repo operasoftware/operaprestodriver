@@ -114,6 +114,7 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 		if (id < 0) {
 			id = getActiveWindowId();
 		}
+		
 		List<QuickWidget> widgets = getQuickWidgetList(id);
 		for (QuickWidget widget : widgets) {
 			if (property.equals(QuickWidgetSearchType.NAME)){
@@ -124,7 +125,7 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 			}
 			else if (property.equals(QuickWidgetSearchType.TEXT)) {
 				if (widget.getParentName().equals(parentName) 
-							&& widget.getText().equals(value)) {
+							&& widget.getText().trim().equals(value)) {
 					return widget;
 				}
 			}
