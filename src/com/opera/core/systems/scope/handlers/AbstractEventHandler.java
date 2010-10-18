@@ -6,6 +6,7 @@ import com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessage;
 import com.opera.core.systems.scope.protos.EcmascriptProtos.ReadyStateChange;
 import com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeInfo;
 import com.opera.core.systems.scope.protos.WmProtos.WindowInfo;
+import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo;
 
 
 /**
@@ -77,12 +78,41 @@ public abstract class AbstractEventHandler {
 	 * @param windowId Id of the window that is loaded 
 	 */
 	public abstract void onWindowLoaded(int windowId);
+
+	
+	/**
+	 * Fired when a desktop window is shown at the last possible
+	 * moment so the window should be fully visible
+	 * @param window
+	 */
+
+	public abstract void onDesktopWindowShown(DesktopWindowInfo info);
+
+	/**
+	 * Fired when a new window is created or window
+	 * has incoming changes (such as title change)
+	 * @param window
+	 */
 	
 	/**
 	 * Fired when opera is idle
 	 */
 	public abstract void onOperaIdle();
 	
+	public abstract void onDesktopWindowUpdated(DesktopWindowInfo info);
+
+	/**
+	 * Fired when a window becomes active (steals focus)
+	 * @param window
+	 */
+	public abstract void onDesktopWindowActivated(DesktopWindowInfo info);
+
+	/**
+	 * Fired when a window instance is closed
+	 * @param closed
+	 */
+	public abstract void onDesktopWindowClosed(DesktopWindowInfo info);
+
 	public abstract void onHttpResponse(int responseCode);
 	
 	public abstract void onReadyStateChange(ReadyStateChange change);
@@ -99,3 +129,4 @@ public abstract class AbstractEventHandler {
 	
 	public abstract void onRequest(int windowId);
 }
+

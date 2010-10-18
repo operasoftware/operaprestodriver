@@ -68,13 +68,13 @@ import com.opera.core.systems.scope.services.IEcmaScriptDebugger;
 import com.opera.core.systems.scope.services.IOperaExec;
 import com.opera.core.systems.scope.services.IWindowManager;
 
-public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,FindsByXPath, FindsByName, FindsByTagName, FindsByClassName,
+public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, FindsByXPath, FindsByName, FindsByTagName, FindsByClassName,
 		FindsByCssSelector, SearchContext, JavascriptExecutor {
 	
-	private IEcmaScriptDebugger debugger;
-	private IOperaExec exec;
-	private IWindowManager windowManager;
-	private ScopeServices services;
+	protected IEcmaScriptDebugger debugger;
+	protected IOperaExec exec;
+	protected IWindowManager windowManager;
+	protected ScopeServices services;
 	protected ScopeActions actionHandler;
 	private OperaBinary binary;
 	
@@ -124,14 +124,20 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,FindsB
 		exec = services.getExec();
 		actionHandler = new PbActionHandler(services);
 	}
+	
+	protected Map<String, String> getServicesList()
+	{
+		Map<String, String> versions = new HashMap<String, String>();
+		versions.put("ecmascript-debugger", "5.0");
+		versions.put("window-manager", "2.0");
+		versions.put("exec", "2.0");
+    versions.put("core", "1.0");
+		return versions;
+	}
 
 	private void createScopeServices() {
 		try {
-			Map<String, String> versions = new HashMap<String, String>();
-			versions.put("ecmascript-debugger", "5.0");
-			versions.put("window-manager", "2.0");
-			versions.put("exec", "2.0");
-			versions.put("core", "1.0");
+			Map<String, String> versions = getServicesList();
 			services = new ScopeServices(versions);
 			services.startStpThread();
 		} catch (IOException e) {
@@ -811,3 +817,4 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,FindsB
     	return operaDriverVersion;
     }
 }
+
