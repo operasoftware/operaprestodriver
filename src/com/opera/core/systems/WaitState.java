@@ -8,6 +8,7 @@ import org.openqa.selenium.WebDriverException;
 import com.opera.core.systems.scope.exceptions.CommunicationException;
 import com.opera.core.systems.scope.exceptions.ResponseNotReceivedException;
 import com.opera.core.systems.scope.protos.UmsProtos.Response;
+import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo;
 
 /**
  * This class handles a queue of events to be handled from multiple threads.
@@ -19,7 +20,9 @@ import com.opera.core.systems.scope.protos.UmsProtos.Response;
 public class WaitState {
     private final Logger logger = Logger.getLogger(this.getClass().getName());
     private boolean connected;
-    private Object lock = new Object();
+	private boolean wait_events;
+
+	private Object lock = new Object();
 
     enum WaitResult
     {
@@ -31,8 +34,13 @@ public class WaitState {
         HANDSHAKE,       /* STP Handshake */
         EVENT_WINDOW_LOADED, /* finished loaded */
         EVENT_WINDOW_CLOSED, /* window closed */
-        EVENT_REQUEST_FIRED, /* sent when a http request is fired */
-        EVENT_OPERA_IDLE	 /* opera is now idle */
+        EVENT_OPERA_IDLE,	 /* opera is now idle */
+        EVENT_DESKTOP_WINDOW_SHOWN,  /* desktop window has shown and should be visible */
+        EVENT_DESKTOP_WINDOW_CLOSED, /* desktop window closed */
+        EVENT_DESKTOP_WINDOW_ACTIVATED, /* desktop window activated */
+        EVENT_DESKTOP_WINDOW_UPDATED, /* desktop window updated*/
+        EVENT_DESKTOP_WINDOW_LOADED, 
+        EVENT_REQUEST_FIRED /* sent when a http request is fired */
     }
 
     private class ResultItem
@@ -41,6 +49,8 @@ public class WaitState {
         WaitResult waitResult;
         WebDriverException exception;
         Response response;
+        boolean seen;
+        DesktopWindowInfo desktopWindowInfo; // No idea if this is right but it will store the data for now, but it seems wasteful
 
         public ResultItem(WebDriverException ex)
         {
@@ -65,6 +75,13 @@ public class WaitState {
             logger.fine("EVENT: " + result.toString() + ", data=" + data);
         }
 
+        public ResultItem(WaitResult result, DesktopWindowInfo info)
+        {
+            this.waitResult = result;
+            this.desktopWindowInfo = info;
+            logger.fine("EVENT: " + result.toString() + ", desktop window=" + info.getWindowID());
+        }
+
         public ResultItem(Response response, int tag)
         {
             this.response = response;
@@ -72,6 +89,23 @@ public class WaitState {
             waitResult = WaitResult.RESPONSE;
             logger.fine("EVENT: " + waitResult.toString() + ", data=" + data);
         }
+
+		public boolean isEventToWaitFor() {
+			switch (waitResult)
+			{
+			case EVENT_DESKTOP_WINDOW_ACTIVATED:
+			case EVENT_DESKTOP_WINDOW_CLOSED:
+			case EVENT_DESKTOP_WINDOW_UPDATED:
+			case EVENT_DESKTOP_WINDOW_SHOWN:
+			case EVENT_DESKTOP_WINDOW_LOADED:
+				return true;
+			}
+			return false;
+		}
+
+		public boolean wasSeen() {
+			return seen;
+		}
     }
 
     //Replace with BlockingQueue
@@ -82,12 +116,24 @@ public class WaitState {
     	RESPONSE,
     	WINDOW_LOADED,
     	REQUEST_FIRED,
-    	OPERA_IDLE;
+    	OPERA_IDLE,
+    	DESKTOP_WINDOW_SHOWN,
+    	DESKTOP_WINDOW_UPDATED,
+    	DESKTOP_WINDOW_ACTIVATED,
+    	DESKTOP_WINDOW_CLOSED,
+    	DESKTOP_WINDOW_LOADED;
     }
+
     public WaitState()
     {
         connected = true;
+        wait_events = false;
     }
+
+    public void setWaitEvents(boolean wait_events) 
+    {
+		this.wait_events = wait_events;
+	}
 
     private void internalWait(long timeout) throws WebDriverException
     {
@@ -205,13 +251,92 @@ public class WaitState {
             lock.notify();
         }
     }
+
+    void onDesktopWindowClosed(DesktopWindowInfo info)
+    {
+        synchronized (lock)
+        {
+            logger.fine("Event: onDesktopWindowClosed");
+            events.add(new ResultItem(WaitResult.EVENT_DESKTOP_WINDOW_CLOSED, info));
+            lock.notify();
+        }
+    }
+
+    void onDesktopWindowActivated(DesktopWindowInfo info)
+    {
+        synchronized (lock)
+        {
+            logger.fine("Event: onDesktopWindowActivated");
+            events.add(new ResultItem(WaitResult.EVENT_DESKTOP_WINDOW_ACTIVATED, info));
+            lock.notify();
+        }
+    }
+
+    void onDesktopWindowShown(DesktopWindowInfo info)
+    {
+        synchronized (lock)
+        {
+            logger.fine("Event: onDesktopWindowShown");
+            events.add(new ResultItem(WaitResult.EVENT_DESKTOP_WINDOW_SHOWN, info));
+            lock.notify();
+        }
+    }
+
+    void onDesktopWindowUpdated(DesktopWindowInfo info)
+    {
+        synchronized (lock)
+        {
+            logger.fine("Event: onDesktopWindowUpdated");
+            events.add(new ResultItem(WaitResult.EVENT_DESKTOP_WINDOW_UPDATED, info));
+            lock.notify();
+        }
+    }
+    
+    void onDesktopWindowLoaded(DesktopWindowInfo info)
+    {
+        synchronized (lock)
+        {
+            logger.fine("Event: onDesktopWindowLoaded");
+            events.add(new ResultItem(WaitResult.EVENT_DESKTOP_WINDOW_LOADED, info));
+            lock.notify();
+        }
+    }
     
     private ResultItem getResult()
     {
         if (events.isEmpty())
             return null;
 
-        return events.removeFirst();
+        // Test if we are listening to wait events
+        // We don't want to remove them from the list while we are
+        if (wait_events)
+        {
+        	ResultItem result_item = events.getFirst();
+        	while (true)
+        	{
+        		if (!result_item.isEventToWaitFor())
+        		{
+        	    	events.remove(result_item);
+        			return result_item;
+        		}
+        		
+	        	if (!result_item.wasSeen())
+	        	{
+                	result_item.seen = true;
+	        		return result_item;
+	        	}
+	        	
+	        	int index = events.indexOf(result_item);
+	        	if (index + 1 >= events.size())
+	        	{
+	        		return null;
+	        	}
+
+	        	result_item = events.get(index + 1);
+        	}
+        }
+
+    	return events.removeFirst();
     }
     
     private final ResultItem pollResultItem(long timeout) {
@@ -228,12 +353,12 @@ public class WaitState {
         return result;
     }
     
-    private final Response waitAndParseResult(long timeout, int match, final ResponseType type) {
+    private final ResultItem waitAndParseResult(long timeout, int match, String stringMatch, final ResponseType type) {
         synchronized (lock) {
             while (true) {
                 ResultItem result = pollResultItem(timeout);
                 WaitResult waitResult = result.waitResult;
-
+        		
                 switch (waitResult) {
                     case HANDSHAKE:
                         if (type == ResponseType.HANDSHAKE)
@@ -242,7 +367,7 @@ public class WaitState {
 
                     case RESPONSE:
                         if (result.data == match && type == ResponseType.RESPONSE)
-                                return result.response;
+                                return result;
                         else if (type == ResponseType.HANDSHAKE)
                             throw new CommunicationException("Expecting handshake");
                         break;
@@ -270,6 +395,84 @@ public class WaitState {
                         if (result.data == match && type == ResponseType.WINDOW_LOADED)
                                 throw new CommunicationException("Window closed unexpectedly");
                         break;
+
+                    case EVENT_DESKTOP_WINDOW_SHOWN:
+                        if (type == ResponseType.DESKTOP_WINDOW_SHOWN)
+                        {
+                        	if (stringMatch.isEmpty())
+                        		return result;
+                        	else
+                        	{
+                        		logger.fine("EVENT_DESKTOP_WINDOW_SHOWN: Name: " + result.desktopWindowInfo.getName() + " ID: " + result.desktopWindowInfo.getWindowID() + " OnScreen: " + result.desktopWindowInfo.getOnScreen());
+                        		
+                        		if (result.desktopWindowInfo.getName().equals(stringMatch))
+                        			return result;
+                        	}
+                        }
+                        break;
+
+                    case EVENT_DESKTOP_WINDOW_UPDATED:
+                        if (type == ResponseType.DESKTOP_WINDOW_UPDATED)
+                        {
+                        	if (stringMatch.isEmpty())
+                        		return result;
+                        	else
+                        	{
+                        		logger.fine("EVENT_DESKTOP_WINDOW_UPDATED: Name: " + result.desktopWindowInfo.getName() + " ID: " + result.desktopWindowInfo.getWindowID());
+                        		
+                        		if (result.desktopWindowInfo.getName().equals(stringMatch))
+                        			return result;
+                        	}
+                        }
+                        break;
+
+
+                    case EVENT_DESKTOP_WINDOW_ACTIVATED:
+                        if (type == ResponseType.DESKTOP_WINDOW_ACTIVATED)
+                        {
+                        	if (stringMatch.isEmpty())
+                        		return result;
+                        	else
+                        	{
+                        		logger.fine("DESKTOP_WINDOW_ACTIVATED: Name: " + result.desktopWindowInfo.getName() + " ID: " + result.desktopWindowInfo.getWindowID());
+                        		
+                        		if (result.desktopWindowInfo.getName().equals(stringMatch))
+                        			return result;
+                        	}
+                        }
+                        break;
+
+
+                    case EVENT_DESKTOP_WINDOW_CLOSED:
+                        if (type == ResponseType.DESKTOP_WINDOW_CLOSED)
+                        {
+                        	if (stringMatch.isEmpty())
+                        		return result;
+                        	else
+                        	{
+                        		logger.fine("EVENT_DESKTOP_WINDOW_CLOSED: Name: " + result.desktopWindowInfo.getName() + " ID: " + result.desktopWindowInfo.getWindowID());
+                        		
+                        		if (result.desktopWindowInfo.getName().equals(stringMatch))
+                        			return result;
+                        	}
+                        }
+                        break;
+                        
+                    case EVENT_DESKTOP_WINDOW_LOADED:
+                        if (type == ResponseType.DESKTOP_WINDOW_LOADED)
+                        {
+                        	if (stringMatch.isEmpty())
+                        		return result;
+                        	else
+                        	{
+                        		logger.fine("EVENT_DESKTOP_WINDOW_LOADED: Name: " + result.desktopWindowInfo.getName() + " ID: " + result.desktopWindowInfo.getWindowID());
+                        		
+                        		if (result.desktopWindowInfo.getName().equals(stringMatch))
+                        			return result;
+                        	}
+                        }
+                        break;
+
                     case EVENT_REQUEST_FIRED:
                     	 if (result.data == match && type == ResponseType.REQUEST_FIRED)
                              return null;
@@ -285,22 +488,70 @@ public class WaitState {
     }
 
     public void waitForHandshake(long value) {
-        waitAndParseResult(value, 0, ResponseType.HANDSHAKE);
+        waitAndParseResult(value, 0, null, ResponseType.HANDSHAKE);
     }
 
     public void waitForWindowLoaded(int windowId, long timeout) {
-        waitAndParseResult(timeout, windowId, ResponseType.WINDOW_LOADED);
+        waitAndParseResult(timeout, windowId, null, ResponseType.WINDOW_LOADED);
     }
     
     public void waitForOperaIdle(long timeout) {
-    	waitAndParseResult(timeout, 0/*0 = no window id!*/, ResponseType.OPERA_IDLE);
+    	waitAndParseResult(timeout, 0/*0 = no window id!*/, null, ResponseType.OPERA_IDLE);
     }
 
     public Response waitFor(int tag, long timeout) {
-        return waitAndParseResult(timeout, tag, ResponseType.RESPONSE);
+        ResultItem item = waitAndParseResult(timeout, tag, null, ResponseType.RESPONSE);
+        if (item != null) {
+        	return item.response;
+        }
+        return null;
     }
     
     public void waitForRequest(int windowId, long timeout) {
-        waitAndParseResult(timeout, windowId, ResponseType.REQUEST_FIRED);
+        waitAndParseResult(timeout, windowId, null, ResponseType.REQUEST_FIRED);
+    }
+
+    public int waitForDesktopWindowShown(String win_name, long timeout) {
+    	ResultItem item = waitAndParseResult(timeout, 0, win_name, ResponseType.DESKTOP_WINDOW_SHOWN);
+    	if (item != null)
+    	{
+    		return item.desktopWindowInfo.getWindowID();
+    	}
+    	return 0;
+    }
+
+    public int waitForDesktopWindowUpdated(String win_name, long timeout) {
+    	ResultItem item = waitAndParseResult(timeout, 0, win_name, ResponseType.DESKTOP_WINDOW_UPDATED);
+    	if (item != null)
+    	{
+    		return item.desktopWindowInfo.getWindowID();
+    	}
+    	return 0;
+    }
+
+    public int waitForDesktopWindowActivated(String win_name, long timeout) {
+    	ResultItem item = waitAndParseResult(timeout, 0, win_name, ResponseType.DESKTOP_WINDOW_ACTIVATED);
+    	if (item != null) {
+    		return item.desktopWindowInfo.getWindowID();
+    	}
+    	return 0;
+        
+    }
+
+    public int waitForDesktopWindowClosed(String win_name, long timeout) {
+        ResultItem item = waitAndParseResult(timeout, 0, win_name, ResponseType.DESKTOP_WINDOW_CLOSED);
+        if (item != null) {
+        	return item.desktopWindowInfo.getWindowID();
+        }
+        return 0;
+    }
+    
+    public int waitForDesktopWindowLoaded(String win_name, long timeout) {
+        ResultItem item = waitAndParseResult(timeout, 0, win_name, ResponseType.DESKTOP_WINDOW_LOADED);
+        if (item != null) {
+        	return item.desktopWindowInfo.getWindowID();
+        }
+        return 0;
     }
 }
+

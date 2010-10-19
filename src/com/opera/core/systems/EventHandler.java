@@ -2,6 +2,7 @@ package com.opera.core.systems;
 
 import com.opera.core.systems.scope.handlers.AbstractEventHandler;
 import com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessage;
+import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo;
 import com.opera.core.systems.scope.protos.EcmascriptProtos.ReadyStateChange;
 import com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeInfo;
 import com.opera.core.systems.scope.protos.WmProtos.WindowInfo;
@@ -91,6 +92,26 @@ public class EventHandler extends AbstractEventHandler {
 	@Override
 	public void onReadyStateChange(ReadyStateChange change) {
 		throw new UnsupportedOperationException("Not supported in STP/0");
+	}
+	
+	@Override
+	public void onDesktopWindowShown(DesktopWindowInfo info) {
+		services.onDesktopWindowShown(info);
+	}
+
+	@Override
+	public void onDesktopWindowUpdated(DesktopWindowInfo info) {
+		services.onDesktopWindowUpdated(info);
+	}
+
+	@Override
+	public void onDesktopWindowActivated(DesktopWindowInfo info) {
+		services.onDesktopWindowActivated(info);
+	}
+
+	@Override
+	public void onDesktopWindowClosed(DesktopWindowInfo info) {
+		services.onDesktopWindowClosed(info);
 	}
 
 }

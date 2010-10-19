@@ -19,15 +19,18 @@ import com.opera.core.systems.model.ICommand;
 import com.opera.core.systems.scope.ScopeCommand;
 import com.opera.core.systems.scope.handlers.IConnectionHandler;
 import com.opera.core.systems.scope.internal.OperaIntervals;
+import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo;
 import com.opera.core.systems.scope.protos.ScopeProtos.ClientInfo;
 import com.opera.core.systems.scope.protos.ScopeProtos.HostInfo;
 import com.opera.core.systems.scope.protos.ScopeProtos.ServiceResult;
 import com.opera.core.systems.scope.protos.ScopeProtos.ServiceSelection;
 import com.opera.core.systems.scope.protos.UmsProtos.Command;
 import com.opera.core.systems.scope.protos.UmsProtos.Response;
+import com.opera.core.systems.scope.services.IDesktopWindowManager;
 import com.opera.core.systems.scope.services.IEcmaScriptDebugger;
 import com.opera.core.systems.scope.services.IOperaExec;
 import com.opera.core.systems.scope.services.IWindowManager;
+import com.opera.core.systems.scope.services.ums.SystemInputManager;
 import com.opera.core.systems.scope.services.ums.UmsServices;
 import com.opera.core.systems.scope.stp.StpConnection;
 import com.opera.core.systems.scope.stp.StpThread;
@@ -39,7 +42,13 @@ public class ScopeServices implements IConnectionHandler {
 	private IEcmaScriptDebugger debugger;
 	private IOperaExec exec;
 	private IWindowManager windowManager;
+	private IDesktopWindowManager desktopWindowManager; 
+	private SystemInputManager systemInputManager;
 	private Map<String, String> versions;
+	public Map<String, String> getVersions() {
+		return versions;
+	}
+
 	private List<IConsoleListener> listeners;
 
 	private WaitState waitState = new WaitState();
@@ -87,7 +96,23 @@ public class ScopeServices implements IConnectionHandler {
 	public void setWindowManager(IWindowManager windowManager) {
 		this.windowManager = windowManager;
 	}
+	
+	IDesktopWindowManager getDesktopWindowManager() {
+		return desktopWindowManager;
+	}
 
+	public void setDesktopWindowManager(IDesktopWindowManager desktopWindowManager) {
+		this.desktopWindowManager = desktopWindowManager;
+	}
+
+	SystemInputManager getSystemInputManager() {
+		return systemInputManager;
+	}
+	
+	public void setSystemInputManager(SystemInputManager manager) {
+		this.systemInputManager = manager; 
+	}
+	
 	/**
 	 * Creates the scope server on specified address and port
 	 * Enables the required services for webdriver
@@ -118,6 +143,13 @@ public class ScopeServices implements IConnectionHandler {
 
 		wantedServices.add("exec");
 		wantedServices.add("window-manager");
+		
+		if (versions.containsKey("desktop-window-manager"))
+			wantedServices.add("desktop-window-manager");
+		
+		if (versions.containsKey("system-input"))
+			wantedServices.add("system-input");
+		
 		wantedServices.add("console-logger");
 //		wantedServices.add("http-logger");
 		wantedServices.add("core");
@@ -130,8 +162,12 @@ public class ScopeServices implements IConnectionHandler {
 	private void initializeServices(boolean enableDebugger) {
 		exec.init();
 		windowManager.init();
+
+		if (versions.containsKey("desktop-window-manager") && desktopWindowManager != null)
+      desktopWindowManager.init();
+
 		if(enableDebugger)
-			debugger.init();
+      debugger.init();
 	}
 
 	public void shutdown() {
@@ -231,6 +267,26 @@ public class ScopeServices implements IConnectionHandler {
 		logger.fine("Window closed: windowId=" + id);
 		waitState.onWindowClosed(id);
 	}
+	
+	public void onDesktopWindowShown(DesktopWindowInfo info) {
+		logger.fine("DesktopWindow shown: windowId=" + info.getWindowID());
+		waitState.onDesktopWindowShown(info);
+	}
+
+	public void onDesktopWindowUpdated(DesktopWindowInfo info) {
+		logger.fine("DesktopWindow updated: windowId=" + info.getWindowID());
+		waitState.onDesktopWindowUpdated(info);
+	}
+
+	public void onDesktopWindowClosed(DesktopWindowInfo info) {
+		logger.fine("DesktopWindow closed: windowId=" + info.getWindowID());
+		waitState.onDesktopWindowClosed(info);
+	}
+
+	public void onDesktopWindowActivated(DesktopWindowInfo info) {
+		logger.fine("DesktopWindow active: windowId=" + info.getWindowID());
+		waitState.onDesktopWindowActivated(info);
+	}
 
 	public void onHandshake(boolean stp1) {
 		logger.fine("Got Stp handshake!");
@@ -264,12 +320,57 @@ public class ScopeServices implements IConnectionHandler {
 		for(String service : listedServices){if(service.equals("core")) return true;}
 		return false;
 	}
+
 	public void waitForOperaIdle(long timeout) {
 		logger.info("====================================");
 		logger.info("|       WAITING FOR OPERA_IDLE     |");
 		logger.info("====================================");
 		
 		waitState.waitForOperaIdle(timeout);
+  }
+
+	public void waitStart() {
+		waitState.setWaitEvents(true);
+	}
+	
+	public int waitForDesktopWindowShown(String win_name, long timeout) {
+		waitState.setWaitEvents(false);
+		try {
+			return waitState.waitForDesktopWindowShown(win_name, timeout);
+		}
+		catch (Exception e) {
+			return 0;
+		}
+	}
+
+	public int waitForDesktopWindowUpdated(String win_name, long timeout) {
+		waitState.setWaitEvents(false);
+		try {
+			return waitState.waitForDesktopWindowUpdated(win_name, timeout);
+		}
+		catch (Exception e) {
+			return 0;
+		}
+	}
+
+	public int waitForDesktopWindowActivated(String win_name, long timeout) {
+		waitState.setWaitEvents(false);
+		try {
+			return waitState.waitForDesktopWindowActivated(win_name, timeout);
+		}
+		catch (Exception e) {
+			return 0;
+		}
+	}
+
+	public int waitForDesktopWindowClosed(String win_name, long timeout) {
+		waitState.setWaitEvents(false);
+		try	{
+			return waitState.waitForDesktopWindowClosed(win_name, timeout);
+		}
+		catch (Exception e) {
+			return 0;
+		}
 	}
 
 	public void onResponseReceived(int tag, Response response) {
@@ -371,3 +472,4 @@ public class ScopeServices implements IConnectionHandler {
 		waitState.onRequest(windowId);
 	}
 }
+

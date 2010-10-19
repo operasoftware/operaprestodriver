@@ -14,8 +14,10 @@ import com.opera.core.systems.scope.protos.UmsProtos.Event;
 import com.opera.core.systems.scope.protos.WmProtos.WindowID;
 import com.opera.core.systems.scope.protos.WmProtos.WindowInfo;
 import com.opera.core.systems.scope.CoreCommand;
+import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo;
 import com.opera.core.systems.scope.ESDebuggerCommand;
 import com.opera.core.systems.scope.WindowManagerCommand;
+import com.opera.core.systems.scope.DesktopWindowManagerCommand;
 
 public class UmsEventParser {
 	
@@ -76,6 +78,42 @@ public class UmsEventParser {
 				break;
 			}
 		}
+		else if (service.equals("desktop-window-manager")) {
+			switch (DesktopWindowManagerCommand.get(eventId)) {
+			case WINDOW_SHOWN:
+				DesktopWindowInfo.Builder shownDWBuilder = DesktopWindowInfo.newBuilder();
+				buildPayload(event, shownDWBuilder);
+				DesktopWindowInfo info_shown = shownDWBuilder.build();
+				eventHandler.onDesktopWindowShown(info_shown);
+				break;
+			case WINDOW_UPDATED:
+				DesktopWindowInfo.Builder updatedDWBuilder = DesktopWindowInfo.newBuilder();
+				buildPayload(event, updatedDWBuilder);
+				DesktopWindowInfo info_updated = updatedDWBuilder.build();
+				eventHandler.onDesktopWindowUpdated(info_updated);
+				break;
+			case WINDOW_ACTIVATED:
+				DesktopWindowInfo.Builder activatedDWBuilder = DesktopWindowInfo.newBuilder();
+				buildPayload(event, activatedDWBuilder);
+				DesktopWindowInfo info_activated = activatedDWBuilder.build();
+				eventHandler.onDesktopWindowActivated(info_activated);
+				break;
+			case WINDOW_CLOSED:
+				DesktopWindowInfo.Builder closedDWBuilder = DesktopWindowInfo.newBuilder();
+				buildPayload(event, closedDWBuilder);
+				DesktopWindowInfo info_closed = closedDWBuilder.build();
+				eventHandler.onDesktopWindowClosed(info_closed);
+				break;
+			case WINDOW_LOADED:
+				DesktopWindowInfo.Builder loadedDWBuilder = DesktopWindowInfo.newBuilder();
+				buildPayload(event, loadedDWBuilder);
+				DesktopWindowInfo info_loaded = loadedDWBuilder.build();
+				eventHandler.onDesktopWindowClosed(info_loaded);
+				break;
+			default:
+				break;
+			}
+		}
 		else if (service.equals("console-logger")) {
 			//console logger only sends one message
 			ConsoleMessage.Builder messageBuilder = ConsoleMessage.newBuilder();
@@ -124,6 +162,5 @@ public class UmsEventParser {
 			throw new WebDriverException("Could not build " + builder.getDescriptorForType().getFullName() +  " : " + ex.getMessage());
 		}
 	}
-
-
 }
+
