@@ -17,6 +17,11 @@ public class ScreenShotReply {
 		this.colorResult = colorResult;
 	}
 
+	public ScreenShotReply(String md5) {
+		this.md5 = md5;
+		this.png = null;
+	}
+	
 	public ScreenShotReply(String md5, byte[] png) {
 		this.md5 = md5;
 		this.png = png;
