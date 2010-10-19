@@ -196,6 +196,10 @@ public class WaitState {
     {
         synchronized (lock)
         {
+        	logger.info("====================================");
+    		logger.info("|       GOT OPERA_IDLE MESSAGE     |");
+    		logger.info("====================================");
+        	
             logger.fine("Event: onOperaIdle");
             events.add(new ResultItem(WaitResult.EVENT_OPERA_IDLE,0));//0 is important to match later
             lock.notify();
