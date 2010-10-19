@@ -19,6 +19,7 @@ limitations under the License.
 package com.opera.core.systems;
 
 import java.awt.Dimension;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -675,12 +676,55 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 
             throw new NoSuchElementException("Cannot find element with " + type);
 	}
+	
+	public String saveScreenshot(String fileName, int timeout, String... hashes) {
+		return screenWatcher(fileName, timeout, true, hashes);
+	}
 
-	public ScreenShotReply saveScreenShot(Canvas canvas, long timeout, boolean includeImage, String... hashes) {
-		if(services.isOperaIdleAvailable()){
-			timeout = 1;//no reason to wait if we have idle-controle
+	public ScreenShotReply saveScreenshot(Canvas canvas, long timeout, boolean includeImage, String... hashes) {
+		/*
+		 * FIXME: This _needs_ be cleaned up.  All things related to 
+		 * `timeout` should, ideally, be removed and handled elsewhere.
+		 */
+		
+		/*
+		 * No reason to wait if we have idle control.  Builds without
+		 * OperaIdle enabled will fail if timeout is 1 or less.
+		 */
+		if(services.isOperaIdleAvailable()) {
+			timeout = 1;
+		} else if (!services.isOperaIdleAvailable() && timeout <= 1) {
+			timeout = 10;
 		}
+
         return exec.screenWatcher(canvas, timeout, includeImage, hashes);
+	}
+	
+	private String screenWatcher(String fileName, int timeout, boolean saveFile, String... hashes) {
+		Canvas canvas = new Canvas();
+		canvas.setX(0);
+		canvas.setY(0);
+		
+		String[] dimensions = debugger.executeJavascript("return (window.innerWidth + \",\" + window.innerHeight);").split(",");
+		canvas.setH(Integer.valueOf(dimensions[1]));
+		canvas.setW(Integer.valueOf(dimensions[0]));
+		canvas.setViewPortRelative(true);
+		 
+		ScreenShotReply screenshot = saveScreenshot(canvas, timeout, saveFile, hashes);
+		
+		if(saveFile && screenshot.getPng() != null) {
+			FileOutputStream stream;
+			
+			try {
+				stream = new FileOutputStream(fileName);
+				stream.write(screenshot.getPng());
+				stream.close();
+			} catch (Exception e) {
+				throw new WebDriverException("Failed to write file: " + e.getMessage());
+			}
+		}
+		
+		return screenshot.getMd5();
 	}
 	
 	public Object executeScript(String script, Object... args) {
