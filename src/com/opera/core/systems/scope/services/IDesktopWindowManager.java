@@ -90,6 +90,7 @@ public interface IDesktopWindowManager {
 	 * @return
 	 */
 	QuickWindow getQuickWindow(QuickWidgetSearchType property, String value);
+	QuickWindow getQuickWindowById(int windowId);
 
 	/*
 	 * Get the string specified by the given string id 

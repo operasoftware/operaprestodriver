@@ -132,6 +132,11 @@ public class OperaDesktopDriver extends OperaDriver {
 	public QuickWindow findWindowByName(String windowName){
 		return desktopWindowManager.getQuickWindow(QuickWidgetSearchType.NAME, windowName);
 	}
+	
+	public QuickWindow findWindowById(int windowId){
+		return desktopWindowManager.getQuickWindowById(windowId);
+	}
+
 
 	/**
 	 * @param windowId

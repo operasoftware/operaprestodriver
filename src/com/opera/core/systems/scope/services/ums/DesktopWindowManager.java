@@ -138,13 +138,17 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 		return getQuickWidgetByPos(id, row, column, "");
 	}
 	
+	// FIXME. TODO: ADD check type of widget too. Also to the other funcs to find widget!
 	public QuickWidget getQuickWidgetByPos(int id, int row, int column, String parentName)
 	{
 		if (id < 0) {
 			id = getActiveWindowId();
 		}
+		//System.out.println("getQuickWidgetByPos activeWindowId = " + id);
+		//System.out.println("--- Look for Widget with parent "+ parentName + " at pos (" + row + ", " + column + ")");
 		List<QuickWidget> widgets = getQuickWidgetList(id);
 		for (QuickWidget widget : widgets) {
+			//System.out.println("Widget " + widget.getText() + " parent = " + widget.getParentName() + ", pos = (" + widget.getRow() + ", " + widget.getColumn() + ")");
 			if ((parentName.isEmpty() || widget.getParentName().equals(parentName)) && 
 					widget.getRow() == row && widget.getColumn() == column) {
 				return widget;
@@ -245,13 +249,24 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 		return null;
 	}
 	
-	public String getWindowName(int win_id) {
+	public QuickWindow getQuickWindowById(int windowId) {
 		List<DesktopWindowInfo> windowList = getWindowList();
+		for (DesktopWindowInfo window : windowList) {
+			if (window.getWindowID() == windowId)
+				return new QuickWindow(window);
+		}
+		return null;
+	}
+	
+	public String getWindowName(int win_id) {
+		QuickWindow window = getQuickWindowById(win_id);
+		return (window == null ? "" : window.getName());
+		/*List<DesktopWindowInfo> windowList = getWindowList();
 		for (DesktopWindowInfo window : windowList) {
 			if (window.getWindowID() == win_id)
 				return window.getName();
 		}
-		return "";
+		return "";*/
 	}
 	
 	public String getString(String enum_text) {
