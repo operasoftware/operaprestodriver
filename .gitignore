@@ -1,2 +1,3 @@
 bin/**/*
+pkg/**/*
 src/com/opera/core/systems/test/**/*
