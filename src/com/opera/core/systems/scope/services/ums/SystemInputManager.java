@@ -41,9 +41,9 @@ public class SystemInputManager extends AbstractService implements SystemInput {
 	}
 	
 	public void keyPress(String key, List<ModifierPressed> modifiers) {
-		String translated_key = OperaKeys.get(key);
+		/*String translated_key = OperaKeys.get(key);
 		if (translated_key != null)
-			key = translated_key;
+			key = translated_key;*/
 		KeyPressInfo.Builder actionBuilder = KeyPressInfo.newBuilder();
 		actionBuilder.setKey(key);
 		int modifier = ModifierPressed.NONE.getNumber();
