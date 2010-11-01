@@ -41,8 +41,8 @@
 
     <copy includeemptydirs="false" todir="bin">
       <fileset dir="src">
-	<exclude name="**/*.launch" />
-	<exclude name="**/*.java" />
+      	<exclude name="**/*.launch" />
+      	<exclude name="**/*.java" />
       </fileset>
     </copy>
 
@@ -54,20 +54,20 @@
 
   <target name="jar" depends="compile">
     <mkdir dir="pkg" />
-    <loadfile srcfile="src/com/opera/core/systems/VERSION" property="version" />
+    <loadfile srcfile="src/com/opera/core/systems/VERSION" property="versionfile" />
 
     <!-- Will remove new line in version file. -->
     <propertyregex property="version"
-		   input="${version}"
+		   input="${versionfile}"
 		   regexp="\n"
 		   replace=""
-		   global="true" />
+       global="true" />
 
     <jar destfile="pkg/webdriver-opera-${version}.jar">
       <fileset dir="bin" includes="**/*.class" />
       <manifest>
-	<attribute name="Main-Class" value="com.opera.core.systems.OperaDriver" />
-	<attribute name="Implementation-Version" value="${version}" />
+      	<attribute name="Main-Class" value="com.opera.core.systems.OperaDriver" />
+      	<attribute name="Implementation-Version" value="${version}" />
       </manifest>
     </jar>
   </target>
