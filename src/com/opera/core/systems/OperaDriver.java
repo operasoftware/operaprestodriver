@@ -106,7 +106,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 		String operaArgs = System.getenv().get("OPERA_ARGS");
 		
 		if(operaPath != null && operaPath.length() > 0) {
-			arguments = (operaArgs != null && operaArgs.length() > 0) ? operaArgs.split(",") : null;
+			arguments = (operaArgs != null && operaArgs.length() > 0) ? operaArgs.split(",") : arguments;
 			binary = new OperaBinary(operaPath, arguments);
 		} else if(executableLocation != null) {
 			binary = new OperaBinary(executableLocation, arguments);
