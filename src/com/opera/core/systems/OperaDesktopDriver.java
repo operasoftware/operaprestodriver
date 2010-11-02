@@ -10,12 +10,14 @@ import com.opera.core.systems.scope.internal.OperaIntervals;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearch.QuickWidgetSearchType;
 import com.opera.core.systems.scope.protos.SystemInputProtos.ModifierPressed;
 import com.opera.core.systems.scope.services.IDesktopWindowManager;
+import com.opera.core.systems.scope.services.IDesktopUtils;
 import com.opera.core.systems.scope.services.ums.SystemInputManager;
 
 public class OperaDesktopDriver extends OperaDriver {
 	
 	private IDesktopWindowManager desktopWindowManager;
 	private SystemInputManager systemInputManager;
+	private IDesktopUtils desktopUtils;
 	
 	/**
 	 * For testing override this method.
@@ -24,6 +26,7 @@ public class OperaDesktopDriver extends OperaDriver {
 		super.init();
 		desktopWindowManager = services.getDesktopWindowManager();
 		systemInputManager = services.getSystemInputManager();
+		desktopUtils = services.getDesktopUtils();
 	}
 
 	// TODO: FIXME
@@ -31,8 +34,9 @@ public class OperaDesktopDriver extends OperaDriver {
 		Map<String, String> versions = super.getServicesList();
 		// This is the minimum versions of the services this version
 		// of the web-driver require work
-		versions.put("desktop-window-manager", "1.0");
+		versions.put("desktop-window-manager", "2.0");
 		versions.put("system-input", "1.0");
+		versions.put("desktop-utils", "1.0");
 		return versions;
 	}
 	
@@ -112,12 +116,12 @@ public class OperaDesktopDriver extends OperaDriver {
 	}
 
 	public QuickWidget findWidgetByStringId(int windowId, String stringId){
-		String text = desktopWindowManager.getString(stringId);
+		String text = desktopUtils.getString(stringId);
 		return findWidgetByText(windowId, text);
 	}
 	
 	public QuickWidget findWidgetByStringId(int windowId, String stringId, String parentName){
-		String text = desktopWindowManager.getString(stringId);
+		String text = desktopUtils.getString(stringId);
 		return findWidgetByText(windowId, text, parentName);
 	}
 
@@ -152,7 +156,7 @@ public class OperaDesktopDriver extends OperaDriver {
 	 * @return the string specified by the id @param enum_text
 	 */
 	public String getString(String enum_text){
-		return desktopWindowManager.getString(enum_text);
+		return desktopUtils.getString(enum_text);
 	}
 	
 	/**

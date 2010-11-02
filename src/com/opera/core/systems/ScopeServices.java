@@ -179,6 +179,9 @@ public class ScopeServices implements IConnectionHandler {
 		if (versions.containsKey("desktop-window-manager") && desktopWindowManager != null)
 			desktopWindowManager.init();
 
+		if (versions.containsKey("system-input") && systemInputManager != null)
+			systemInputManager.init();
+
 		if (versions.containsKey("desktop-utils") && desktopUtils != null)
 			desktopUtils.init();
 

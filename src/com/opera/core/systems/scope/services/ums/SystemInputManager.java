@@ -24,7 +24,9 @@ public class SystemInputManager extends AbstractService implements SystemInput {
 			
 			services.setSystemInputManager(this);
 		}
-	
+
+	 public void init() {}
+
 	public void click(Point location, MouseButton button, int num_clicks, List<ModifierPressed> modifiers) {
 		MouseInfo.Builder actionBuilder = MouseInfo.newBuilder();
 		actionBuilder.setX(location.x);
