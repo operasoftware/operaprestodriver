@@ -27,6 +27,7 @@ import com.opera.core.systems.scope.protos.ScopeProtos.ServiceSelection;
 import com.opera.core.systems.scope.protos.UmsProtos.Command;
 import com.opera.core.systems.scope.protos.UmsProtos.Response;
 import com.opera.core.systems.scope.services.IDesktopWindowManager;
+import com.opera.core.systems.scope.services.IDesktopUtils;
 import com.opera.core.systems.scope.services.IEcmaScriptDebugger;
 import com.opera.core.systems.scope.services.IOperaExec;
 import com.opera.core.systems.scope.services.IWindowManager;
@@ -43,6 +44,7 @@ public class ScopeServices implements IConnectionHandler {
 	private IOperaExec exec;
 	private IWindowManager windowManager;
 	private IDesktopWindowManager desktopWindowManager; 
+	private IDesktopUtils desktopUtils; 
 	private SystemInputManager systemInputManager;
 	private Map<String, String> versions;
 	public Map<String, String> getVersions() {
@@ -105,6 +107,14 @@ public class ScopeServices implements IConnectionHandler {
 		this.desktopWindowManager = desktopWindowManager;
 	}
 
+	IDesktopUtils getDesktopUtils() {
+		return desktopUtils;
+	}
+
+	public void setDesktopUtils(IDesktopUtils desktopUtils) {
+		this.desktopUtils = desktopUtils;
+	}
+
 	SystemInputManager getSystemInputManager() {
 		return systemInputManager;
 	}
@@ -149,6 +159,9 @@ public class ScopeServices implements IConnectionHandler {
 		
 		if (versions.containsKey("system-input"))
 			wantedServices.add("system-input");
+
+		if (versions.containsKey("desktop-utils"))
+			wantedServices.add("desktop-utils");
 		
 		wantedServices.add("console-logger");
 //		wantedServices.add("http-logger");
@@ -164,10 +177,13 @@ public class ScopeServices implements IConnectionHandler {
 		windowManager.init();
 
 		if (versions.containsKey("desktop-window-manager") && desktopWindowManager != null)
-      desktopWindowManager.init();
+			desktopWindowManager.init();
+
+		if (versions.containsKey("desktop-utils") && desktopUtils != null)
+			desktopUtils.init();
 
 		if(enableDebugger)
-      debugger.init();
+			debugger.init();
 	}
 
 	public void shutdown() {

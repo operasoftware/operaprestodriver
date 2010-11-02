@@ -11,7 +11,6 @@ import com.opera.core.systems.scope.protos.SystemInputProtos.ModifierPressed;
 import com.opera.core.systems.scope.protos.SystemInputProtos.MouseInfo.MouseButton;
 import com.opera.core.systems.scope.protos.SystemInputProtos.MouseInfo;
 import com.opera.core.systems.scope.services.SystemInput;
-import com.opera.core.systems.scope.internal.OperaKeys;
 
 public class SystemInputManager extends AbstractService implements SystemInput {
 
@@ -20,7 +19,7 @@ public class SystemInputManager extends AbstractService implements SystemInput {
 			
 			String serviceName = "system-input";
 			
-			if(!isVersionInRange(version, "5.0", serviceName))
+			if(!isVersionInRange(version, "2.0", serviceName))
 				throw new UnsupportedOperationException(serviceName + " version " + version + " is not supported");
 			
 			services.setSystemInputManager(this);

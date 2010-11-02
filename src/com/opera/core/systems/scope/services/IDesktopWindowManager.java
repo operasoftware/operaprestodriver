@@ -91,14 +91,4 @@ public interface IDesktopWindowManager {
 	 */
 	QuickWindow getQuickWindow(QuickWidgetSearchType property, String value);
 	QuickWindow getQuickWindowById(int windowId);
-
-	/*
-	 * Get the string specified by the given string id 
-	 * @param enum_text
-	 * @return
-	 */
-	String getString(String enum_text);
-	// Used to stop problems comparing strings that have just \n with those with \r\n
-	String removeCRLF(String text);
-	
 }
