@@ -701,6 +701,11 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
         return exec.screenWatcher(canvas, timeout, includeImage, hashes);
 	}
 	
+	public boolean isOperaIdleAvailable()
+	{
+		return services.isOperaIdleAvailable();
+	}
+	
 	private String screenWatcher(String fileName, int timeout, boolean saveFile, String... hashes) {
 		Canvas canvas = new Canvas();
 		canvas.setX(0);
