@@ -12,7 +12,9 @@ import java.util.Map;
 public enum DesktopUtilsCommand implements ICommand {
 	GET_STRING(1),
 	GET_OPERA_PATH(2),
-	GET_PREFERENCES_PATHS(3),
+	GET_LARGE_PREFERENCES_PATH(3),
+	GET_SMALL_PREFERENCES_PATH(4),
+	GET_CACHE_PREFERENCES_PATH(5),
 	DEFAULT(-1);    // event
 	
 	private int code;

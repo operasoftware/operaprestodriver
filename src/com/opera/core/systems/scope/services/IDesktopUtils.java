@@ -1,7 +1,5 @@
 package com.opera.core.systems.scope.services;
 
-import java.util.List;
-//import java.util.concurrent.atomic.AtomicInteger;
 
 public interface IDesktopUtils {
 	void init();
@@ -12,11 +10,20 @@ public interface IDesktopUtils {
 	String getOperaPath();
 
 	/*
-	 * @return List of full paths to each of the folders
-	 * 			that contains Opera preferences
+	 * @return Full path to large preferences folder
 	 */
-	List<String> getPreferencesPaths();
-	
+	String getLargePreferencesPath();
+
+	/*
+	 * @return Full path to small preferences folder
+	 */
+	String getSmallPreferencesPath();
+
+	/*
+	 * @return Full path to cache preferences folder
+	 */
+	String getCachePreferencesPath();
+
 	/*
 	 * Get the string specified by the given string id
 	 *  

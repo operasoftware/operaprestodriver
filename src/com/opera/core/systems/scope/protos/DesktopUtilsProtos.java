@@ -584,31 +584,31 @@ public final class DesktopUtilsProtos {
     // @@protoc_insertion_point(class_scope:scope.DesktopStringText)
   }
   
-  public static final class DesktopOperaPath extends
+  public static final class DesktopPath extends
       com.google.protobuf.GeneratedMessage {
-    // Use DesktopOperaPath.newBuilder() to construct.
-    private DesktopOperaPath() {
+    // Use DesktopPath.newBuilder() to construct.
+    private DesktopPath() {
       initFields();
     }
-    private DesktopOperaPath(boolean noInit) {}
+    private DesktopPath(boolean noInit) {}
     
-    private static final DesktopOperaPath defaultInstance;
-    public static DesktopOperaPath getDefaultInstance() {
+    private static final DesktopPath defaultInstance;
+    public static DesktopPath getDefaultInstance() {
       return defaultInstance;
     }
     
-    public DesktopOperaPath getDefaultInstanceForType() {
+    public DesktopPath getDefaultInstanceForType() {
       return defaultInstance;
     }
     
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return com.opera.core.systems.scope.protos.DesktopUtilsProtos.internal_static_scope_DesktopOperaPath_descriptor;
+      return com.opera.core.systems.scope.protos.DesktopUtilsProtos.internal_static_scope_DesktopPath_descriptor;
     }
     
     protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return com.opera.core.systems.scope.protos.DesktopUtilsProtos.internal_static_scope_DesktopOperaPath_fieldAccessorTable;
+      return com.opera.core.systems.scope.protos.DesktopUtilsProtos.internal_static_scope_DesktopPath_fieldAccessorTable;
     }
     
     // required string path = 1;
@@ -649,41 +649,41 @@ public final class DesktopUtilsProtos {
       return size;
     }
     
-    public static com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopOperaPath parseFrom(
+    public static com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopPath parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data).buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopOperaPath parseFrom(
+    public static com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopPath parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data, extensionRegistry)
                .buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopOperaPath parseFrom(byte[] data)
+    public static com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopPath parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data).buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopOperaPath parseFrom(
+    public static com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopPath parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data, extensionRegistry)
                .buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopOperaPath parseFrom(java.io.InputStream input)
+    public static com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopPath parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return newBuilder().mergeFrom(input).buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopOperaPath parseFrom(
+    public static com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopPath parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return newBuilder().mergeFrom(input, extensionRegistry)
                .buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopOperaPath parseDelimitedFrom(java.io.InputStream input)
+    public static com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopPath parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       Builder builder = newBuilder();
       if (builder.mergeDelimitedFrom(input)) {
@@ -692,7 +692,7 @@ public final class DesktopUtilsProtos {
         return null;
       }
     }
-    public static com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopOperaPath parseDelimitedFrom(
+    public static com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopPath parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -703,12 +703,12 @@ public final class DesktopUtilsProtos {
         return null;
       }
     }
-    public static com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopOperaPath parseFrom(
+    public static com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopPath parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return newBuilder().mergeFrom(input).buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopOperaPath parseFrom(
+    public static com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopPath parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -718,25 +718,25 @@ public final class DesktopUtilsProtos {
     
     public static Builder newBuilder() { return Builder.create(); }
     public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopOperaPath prototype) {
+    public static Builder newBuilder(com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopPath prototype) {
       return newBuilder().mergeFrom(prototype);
     }
     public Builder toBuilder() { return newBuilder(this); }
     
     public static final class Builder extends
         com.google.protobuf.GeneratedMessage.Builder<Builder> {
-      private com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopOperaPath result;
+      private com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopPath result;
       
-      // Construct using com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopOperaPath.newBuilder()
+      // Construct using com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopPath.newBuilder()
       private Builder() {}
       
       private static Builder create() {
         Builder builder = new Builder();
-        builder.result = new com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopOperaPath();
+        builder.result = new com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopPath();
         return builder;
       }
       
-      protected com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopOperaPath internalGetResult() {
+      protected com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopPath internalGetResult() {
         return result;
       }
       
@@ -745,7 +745,7 @@ public final class DesktopUtilsProtos {
           throw new IllegalStateException(
             "Cannot call clear() after build().");
         }
-        result = new com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopOperaPath();
+        result = new com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopPath();
         return this;
       }
       
@@ -755,24 +755,24 @@ public final class DesktopUtilsProtos {
       
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopOperaPath.getDescriptor();
+        return com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopPath.getDescriptor();
       }
       
-      public com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopOperaPath getDefaultInstanceForType() {
-        return com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopOperaPath.getDefaultInstance();
+      public com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopPath getDefaultInstanceForType() {
+        return com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopPath.getDefaultInstance();
       }
       
       public boolean isInitialized() {
         return result.isInitialized();
       }
-      public com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopOperaPath build() {
+      public com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopPath build() {
         if (result != null && !isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return buildPartial();
       }
       
-      private com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopOperaPath buildParsed()
+      private com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopPath buildParsed()
           throws com.google.protobuf.InvalidProtocolBufferException {
         if (!isInitialized()) {
           throw newUninitializedMessageException(
@@ -781,27 +781,27 @@ public final class DesktopUtilsProtos {
         return buildPartial();
       }
       
-      public com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopOperaPath buildPartial() {
+      public com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopPath buildPartial() {
         if (result == null) {
           throw new IllegalStateException(
             "build() has already been called on this Builder.");
         }
-        com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopOperaPath returnMe = result;
+        com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopPath returnMe = result;
         result = null;
         return returnMe;
       }
       
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopOperaPath) {
-          return mergeFrom((com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopOperaPath)other);
+        if (other instanceof com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopPath) {
+          return mergeFrom((com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopPath)other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
       
-      public Builder mergeFrom(com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopOperaPath other) {
-        if (other == com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopOperaPath.getDefaultInstance()) return this;
+      public Builder mergeFrom(com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopPath other) {
+        if (other == com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopPath.getDefaultInstance()) return this;
         if (other.hasPath()) {
           setPath(other.getPath());
         }
@@ -860,339 +860,16 @@ public final class DesktopUtilsProtos {
         return this;
       }
       
-      // @@protoc_insertion_point(builder_scope:scope.DesktopOperaPath)
+      // @@protoc_insertion_point(builder_scope:scope.DesktopPath)
     }
     
     static {
-      defaultInstance = new DesktopOperaPath(true);
+      defaultInstance = new DesktopPath(true);
       com.opera.core.systems.scope.protos.DesktopUtilsProtos.internalForceInit();
       defaultInstance.initFields();
     }
     
-    // @@protoc_insertion_point(class_scope:scope.DesktopOperaPath)
-  }
-  
-  public static final class DesktopPreferencesPaths extends
-      com.google.protobuf.GeneratedMessage {
-    // Use DesktopPreferencesPaths.newBuilder() to construct.
-    private DesktopPreferencesPaths() {
-      initFields();
-    }
-    private DesktopPreferencesPaths(boolean noInit) {}
-    
-    private static final DesktopPreferencesPaths defaultInstance;
-    public static DesktopPreferencesPaths getDefaultInstance() {
-      return defaultInstance;
-    }
-    
-    public DesktopPreferencesPaths getDefaultInstanceForType() {
-      return defaultInstance;
-    }
-    
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return com.opera.core.systems.scope.protos.DesktopUtilsProtos.internal_static_scope_DesktopPreferencesPaths_descriptor;
-    }
-    
-    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-        internalGetFieldAccessorTable() {
-      return com.opera.core.systems.scope.protos.DesktopUtilsProtos.internal_static_scope_DesktopPreferencesPaths_fieldAccessorTable;
-    }
-    
-    // repeated string preferencePathList = 1;
-    public static final int PREFERENCEPATHLIST_FIELD_NUMBER = 1;
-    private java.util.List<java.lang.String> preferencePathList_ =
-      java.util.Collections.emptyList();
-    public java.util.List<java.lang.String> getPreferencePathListList() {
-      return preferencePathList_;
-    }
-    public int getPreferencePathListCount() { return preferencePathList_.size(); }
-    public java.lang.String getPreferencePathList(int index) {
-      return preferencePathList_.get(index);
-    }
-    
-    private void initFields() {
-    }
-    public final boolean isInitialized() {
-      return true;
-    }
-    
-    public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
-      getSerializedSize();
-      for (java.lang.String element : getPreferencePathListList()) {
-        output.writeString(1, element);
-      }
-      getUnknownFields().writeTo(output);
-    }
-    
-    private int memoizedSerializedSize = -1;
-    public int getSerializedSize() {
-      int size = memoizedSerializedSize;
-      if (size != -1) return size;
-    
-      size = 0;
-      {
-        int dataSize = 0;
-        for (java.lang.String element : getPreferencePathListList()) {
-          dataSize += com.google.protobuf.CodedOutputStream
-            .computeStringSizeNoTag(element);
-        }
-        size += dataSize;
-        size += 1 * getPreferencePathListList().size();
-      }
-      size += getUnknownFields().getSerializedSize();
-      memoizedSerializedSize = size;
-      return size;
-    }
-    
-    public static com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopPreferencesPaths parseFrom(
-        com.google.protobuf.ByteString data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data).buildParsed();
-    }
-    public static com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopPreferencesPaths parseFrom(
-        com.google.protobuf.ByteString data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
-    }
-    public static com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopPreferencesPaths parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data).buildParsed();
-    }
-    public static com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopPreferencesPaths parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
-    }
-    public static com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopPreferencesPaths parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return newBuilder().mergeFrom(input).buildParsed();
-    }
-    public static com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopPreferencesPaths parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
-    }
-    public static com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopPreferencesPaths parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      Builder builder = newBuilder();
-      if (builder.mergeDelimitedFrom(input)) {
-        return builder.buildParsed();
-      } else {
-        return null;
-      }
-    }
-    public static com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopPreferencesPaths parseDelimitedFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      Builder builder = newBuilder();
-      if (builder.mergeDelimitedFrom(input, extensionRegistry)) {
-        return builder.buildParsed();
-      } else {
-        return null;
-      }
-    }
-    public static com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopPreferencesPaths parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
-      return newBuilder().mergeFrom(input).buildParsed();
-    }
-    public static com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopPreferencesPaths parseFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
-    }
-    
-    public static Builder newBuilder() { return Builder.create(); }
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopPreferencesPaths prototype) {
-      return newBuilder().mergeFrom(prototype);
-    }
-    public Builder toBuilder() { return newBuilder(this); }
-    
-    public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> {
-      private com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopPreferencesPaths result;
-      
-      // Construct using com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopPreferencesPaths.newBuilder()
-      private Builder() {}
-      
-      private static Builder create() {
-        Builder builder = new Builder();
-        builder.result = new com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopPreferencesPaths();
-        return builder;
-      }
-      
-      protected com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopPreferencesPaths internalGetResult() {
-        return result;
-      }
-      
-      public Builder clear() {
-        if (result == null) {
-          throw new IllegalStateException(
-            "Cannot call clear() after build().");
-        }
-        result = new com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopPreferencesPaths();
-        return this;
-      }
-      
-      public Builder clone() {
-        return create().mergeFrom(result);
-      }
-      
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
-        return com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopPreferencesPaths.getDescriptor();
-      }
-      
-      public com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopPreferencesPaths getDefaultInstanceForType() {
-        return com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopPreferencesPaths.getDefaultInstance();
-      }
-      
-      public boolean isInitialized() {
-        return result.isInitialized();
-      }
-      public com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopPreferencesPaths build() {
-        if (result != null && !isInitialized()) {
-          throw newUninitializedMessageException(result);
-        }
-        return buildPartial();
-      }
-      
-      private com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopPreferencesPaths buildParsed()
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        if (!isInitialized()) {
-          throw newUninitializedMessageException(
-            result).asInvalidProtocolBufferException();
-        }
-        return buildPartial();
-      }
-      
-      public com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopPreferencesPaths buildPartial() {
-        if (result == null) {
-          throw new IllegalStateException(
-            "build() has already been called on this Builder.");
-        }
-        if (result.preferencePathList_ != java.util.Collections.EMPTY_LIST) {
-          result.preferencePathList_ =
-            java.util.Collections.unmodifiableList(result.preferencePathList_);
-        }
-        com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopPreferencesPaths returnMe = result;
-        result = null;
-        return returnMe;
-      }
-      
-      public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopPreferencesPaths) {
-          return mergeFrom((com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopPreferencesPaths)other);
-        } else {
-          super.mergeFrom(other);
-          return this;
-        }
-      }
-      
-      public Builder mergeFrom(com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopPreferencesPaths other) {
-        if (other == com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopPreferencesPaths.getDefaultInstance()) return this;
-        if (!other.preferencePathList_.isEmpty()) {
-          if (result.preferencePathList_.isEmpty()) {
-            result.preferencePathList_ = new java.util.ArrayList<java.lang.String>();
-          }
-          result.preferencePathList_.addAll(other.preferencePathList_);
-        }
-        this.mergeUnknownFields(other.getUnknownFields());
-        return this;
-      }
-      
-      public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder(
-            this.getUnknownFields());
-        while (true) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              this.setUnknownFields(unknownFields.build());
-              return this;
-            default: {
-              if (!parseUnknownField(input, unknownFields,
-                                     extensionRegistry, tag)) {
-                this.setUnknownFields(unknownFields.build());
-                return this;
-              }
-              break;
-            }
-            case 10: {
-              addPreferencePathList(input.readString());
-              break;
-            }
-          }
-        }
-      }
-      
-      
-      // repeated string preferencePathList = 1;
-      public java.util.List<java.lang.String> getPreferencePathListList() {
-        return java.util.Collections.unmodifiableList(result.preferencePathList_);
-      }
-      public int getPreferencePathListCount() {
-        return result.getPreferencePathListCount();
-      }
-      public java.lang.String getPreferencePathList(int index) {
-        return result.getPreferencePathList(index);
-      }
-      public Builder setPreferencePathList(int index, java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  result.preferencePathList_.set(index, value);
-        return this;
-      }
-      public Builder addPreferencePathList(java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  if (result.preferencePathList_.isEmpty()) {
-          result.preferencePathList_ = new java.util.ArrayList<java.lang.String>();
-        }
-        result.preferencePathList_.add(value);
-        return this;
-      }
-      public Builder addAllPreferencePathList(
-          java.lang.Iterable<? extends java.lang.String> values) {
-        if (result.preferencePathList_.isEmpty()) {
-          result.preferencePathList_ = new java.util.ArrayList<java.lang.String>();
-        }
-        super.addAll(values, result.preferencePathList_);
-        return this;
-      }
-      public Builder clearPreferencePathList() {
-        result.preferencePathList_ = java.util.Collections.emptyList();
-        return this;
-      }
-      
-      // @@protoc_insertion_point(builder_scope:scope.DesktopPreferencesPaths)
-    }
-    
-    static {
-      defaultInstance = new DesktopPreferencesPaths(true);
-      com.opera.core.systems.scope.protos.DesktopUtilsProtos.internalForceInit();
-      defaultInstance.initFields();
-    }
-    
-    // @@protoc_insertion_point(class_scope:scope.DesktopPreferencesPaths)
+    // @@protoc_insertion_point(class_scope:scope.DesktopPath)
   }
   
   private static com.google.protobuf.Descriptors.Descriptor
@@ -1206,15 +883,10 @@ public final class DesktopUtilsProtos {
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_scope_DesktopStringText_fieldAccessorTable;
   private static com.google.protobuf.Descriptors.Descriptor
-    internal_static_scope_DesktopOperaPath_descriptor;
+    internal_static_scope_DesktopPath_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_scope_DesktopOperaPath_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
-    internal_static_scope_DesktopPreferencesPaths_descriptor;
-  private static
-    com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_scope_DesktopPreferencesPaths_fieldAccessorTable;
+      internal_static_scope_DesktopPath_fieldAccessorTable;
   
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -1226,11 +898,9 @@ public final class DesktopUtilsProtos {
     java.lang.String[] descriptorData = {
       "\n\030desktop_utils_java.proto\022\005scope\"#\n\017Des" +
       "ktopStringID\022\020\n\010enumText\030\001 \002(\t\"!\n\021Deskto" +
-      "pStringText\022\014\n\004text\030\001 \002(\t\" \n\020DesktopOper" +
-      "aPath\022\014\n\004path\030\001 \002(\t\"5\n\027DesktopPreference" +
-      "sPaths\022\032\n\022preferencePathList\030\001 \003(\tB;\n#co" +
-      "m.opera.core.systems.scope.protosB\022Deskt" +
-      "opUtilsProtosH\001"
+      "pStringText\022\014\n\004text\030\001 \002(\t\"\033\n\013DesktopPath" +
+      "\022\014\n\004path\030\001 \002(\tB;\n#com.opera.core.systems" +
+      ".scope.protosB\022DesktopUtilsProtosH\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -1253,22 +923,14 @@ public final class DesktopUtilsProtos {
               new java.lang.String[] { "Text", },
               com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopStringText.class,
               com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopStringText.Builder.class);
-          internal_static_scope_DesktopOperaPath_descriptor =
+          internal_static_scope_DesktopPath_descriptor =
             getDescriptor().getMessageTypes().get(2);
-          internal_static_scope_DesktopOperaPath_fieldAccessorTable = new
+          internal_static_scope_DesktopPath_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_scope_DesktopOperaPath_descriptor,
+              internal_static_scope_DesktopPath_descriptor,
               new java.lang.String[] { "Path", },
-              com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopOperaPath.class,
-              com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopOperaPath.Builder.class);
-          internal_static_scope_DesktopPreferencesPaths_descriptor =
-            getDescriptor().getMessageTypes().get(3);
-          internal_static_scope_DesktopPreferencesPaths_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_scope_DesktopPreferencesPaths_descriptor,
-              new java.lang.String[] { "PreferencePathList", },
-              com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopPreferencesPaths.class,
-              com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopPreferencesPaths.Builder.class);
+              com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopPath.class,
+              com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopPath.Builder.class);
           return null;
         }
       };

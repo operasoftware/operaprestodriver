@@ -1,8 +1,5 @@
 package com.opera.core.systems.scope.services.ums;
 
-//import java.util.LinkedList;
-import java.util.List;
-
 import com.opera.core.systems.scope.AbstractService;
 import com.opera.core.systems.scope.DesktopUtilsCommand;
 import com.opera.core.systems.ScopeServices;
@@ -14,8 +11,7 @@ import com.opera.core.systems.scope.protos.UmsProtos.Response;
 import com.opera.core.systems.scope.services.IDesktopUtils;
 import com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopStringID;
 import com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopStringText;
-import com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopOperaPath;
-import com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopPreferencesPaths;
+import com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopPath;
 
 public class DesktopUtils extends AbstractService implements IDesktopUtils {
 
@@ -55,21 +51,41 @@ public class DesktopUtils extends AbstractService implements IDesktopUtils {
 	public String getOperaPath() {
 		Response response = executeCommand(DesktopUtilsCommand.GET_OPERA_PATH, null);
 
-		DesktopOperaPath.Builder pathBuilder = DesktopOperaPath.newBuilder();
+		DesktopPath.Builder pathBuilder = DesktopPath.newBuilder();
 		buildPayload(response, pathBuilder);
-		DesktopOperaPath string_path = pathBuilder.build();
+		DesktopPath string_path = pathBuilder.build();
 
 		return string_path.getPath();
 	}
 
-	public List<String> getPreferencesPaths() {
-		Response response = executeCommand(DesktopUtilsCommand.GET_PREFERENCES_PATHS, null);
+	public String getLargePreferencesPath() {
+		Response response = executeCommand(DesktopUtilsCommand.GET_LARGE_PREFERENCES_PATH, null);
 
-		DesktopPreferencesPaths.Builder pathsBuilder = DesktopPreferencesPaths.newBuilder();
-		buildPayload(response, pathsBuilder);
-		DesktopPreferencesPaths string_paths = pathsBuilder.build();
+		DesktopPath.Builder pathBuilder = DesktopPath.newBuilder();
+		buildPayload(response, pathBuilder);
+		DesktopPath string_path = pathBuilder.build();
 
-		return string_paths.getPreferencePathListList();
+		return string_path.getPath();
+	}
+
+	public String getSmallPreferencesPath() {
+		Response response = executeCommand(DesktopUtilsCommand.GET_SMALL_PREFERENCES_PATH, null);
+
+		DesktopPath.Builder pathBuilder = DesktopPath.newBuilder();
+		buildPayload(response, pathBuilder);
+		DesktopPath string_path = pathBuilder.build();
+
+		return string_path.getPath();
+	}
+
+	public String getCachePreferencesPath() {
+		Response response = executeCommand(DesktopUtilsCommand.GET_CACHE_PREFERENCES_PATH, null);
+
+		DesktopPath.Builder pathBuilder = DesktopPath.newBuilder();
+		buildPayload(response, pathBuilder);
+		DesktopPath string_path = pathBuilder.build();
+
+		return string_path.getPath();
 	}
 
 }

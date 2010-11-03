@@ -18,6 +18,14 @@ public class OperaDesktopDriver extends OperaDriver {
 	private IDesktopWindowManager desktopWindowManager;
 	private SystemInputManager systemInputManager;
 	private IDesktopUtils desktopUtils;
+
+	public OperaDesktopDriver(){
+		super();
+	}
+
+	public OperaDesktopDriver(String executableLocation, String... arguments){
+		super(executableLocation, arguments);
+	}
 	
 	/**
 	 * For testing override this method.
@@ -158,7 +166,23 @@ public class OperaDesktopDriver extends OperaDriver {
 	public String getString(String enum_text){
 		return desktopUtils.getString(enum_text);
 	}
-	
+
+	public String getOperaPath() {
+		return desktopUtils.getOperaPath();
+	}
+
+	public String getLargePreferencesPath() {
+		return desktopUtils.getLargePreferencesPath();
+	}
+
+	public String getSmallPreferencesPath() {
+		return desktopUtils.getSmallPreferencesPath();
+	}
+
+	public String getCachePreferencesPath() {
+		return desktopUtils.getCachePreferencesPath();
+	}
+
 	/**
 	 * 
 	 * @param key
