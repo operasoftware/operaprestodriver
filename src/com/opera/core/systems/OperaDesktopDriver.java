@@ -55,7 +55,14 @@ public class OperaDesktopDriver extends OperaDriver {
 	protected SystemInputManager getSystemInputManager() {
 		return systemInputManager;
 	}
-	
+
+	/**
+	 * Shutdown the driver without quiting Opera
+	 */
+	public void shutdown() {
+		services.shutdown();
+	}
+
 	/**
 	 * @return active window id
 	 */
