@@ -392,26 +392,21 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 	
 
 	// TODO Benchmark, XPath is supposed to be faster?
-	public WebElement findElementByLinkText(String using) {	
-		return findSingleElement("var elements = document.getElementsByTagName('a');\n" +
-				"var element = null;\n" +
-				"var i = 0;\n" +
-				"for(;element = elements[i]; i++) {\n" +
-				" if(element.textContent == '"+ using + "'){\n"+
-				" return element; }\n"+
+	public WebElement findElementByLinkText(String using) {
+		return findSingleElement("var elements = document.getElementsByTagName('a');" +
+				"for (var i = 0; i < elements.length; i++) {" +
+				"	if (elements[i].textContent == '" + using + "')" +
+				"		return elements[i];" +
 				"}", "link text");
 	}
 
 	public WebElement findElementByPartialLinkText(String using) {
-		return findSingleElement("var elements = document.getElementsByTagName('a');\n" +
-				"var element = null;\n" +
-				"var i = 0;\n" +
-				"for(;element = elements[i]; i++) {\n" +
-				"if( element.textContent.indexOf('"+ using + "') > -1 ){\n"+
-				"return element; }\n"+
-				"} return \"No element found\";", "partial link text");
-		
-		
+		return findSingleElement("var elements = document.getElementsByTagName('a');" +
+				"for (var i = 0; i < elements.length; i++) {" +
+				"	if (elements[i].textContent.indexOf('" + using + "') > -1)" +
+				"		return elements[i];" +
+				"}" +
+				"return 'No element found';", "partial link text");
 	}
 
 	public List<WebElement> findElementsByLinkText(String using) {
