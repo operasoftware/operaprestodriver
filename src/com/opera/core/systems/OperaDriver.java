@@ -395,16 +395,14 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 	public WebElement findElementByLinkText(String using) {
 		return findSingleElement("var elements = document.getElementsByTagName('a');" +
 				"for (var i = 0; i < elements.length; i++) {" +
-				"	if (elements[i].textContent == '" + using + "')" +
-				"		return elements[i];" +
+				"	if (elements[i].textContent == '" + using + "') { elements[i]; }" +
 				"}", "link text");
 	}
 
 	public WebElement findElementByPartialLinkText(String using) {
 		return findSingleElement("var elements = document.getElementsByTagName('a');" +
 				"for (var i = 0; i < elements.length; i++) {" +
-				"	if (elements[i].textContent.indexOf('" + using + "') > -1)" +
-				"		return elements[i];" +
+				"	if (elements[i].textContent.indexOf('" + using + "') > -1) { elements[i]; }" +
 				"}" +
 				"return 'No element found';", "partial link text");
 	}
