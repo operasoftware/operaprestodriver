@@ -34,7 +34,7 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 			this.systemInputManager = inputManager;
 			String serviceName = "desktop-window-manager";
 			
-			if(!isVersionInRange(version, "5.0", serviceName))
+			if(!isVersionInRange(version, "2.0", serviceName))
 				throw new UnsupportedOperationException(serviceName + " version " + version + " is not supported");
 			
 			services.setDesktopWindowManager(this);
@@ -85,6 +85,7 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 		if (id < 0) {
 			id = getActiveWindowId();
 		}
+		
 		QuickWidgetSearch.Builder searchBuilder = QuickWidgetSearch.newBuilder();
 		DesktopWindowID.Builder winBuilder = DesktopWindowID.newBuilder();
 		winBuilder.clearWindowID();
@@ -98,13 +99,74 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 			QuickWidgetInfo.Builder builder = QuickWidgetInfo.newBuilder();
 			buildPayload(response, builder);
 			QuickWidgetInfo info = builder.build();
-			return new QuickWidget(this, systemInputManager, info);
+			return new QuickWidget(this, systemInputManager, info, id);
 		}
 		catch (WebDriverException e) { 
+			//System.out.println("Catching webdriver exception");
 			return null;
 		}
 	}
 	
+	// TODO: FIXME: Do this without getting the list
+	// parentName is set to name, pos or text depending on widget.getParentType
+	public QuickWidget getQuickWidget(int id, QuickWidgetSearchType property, String value, String parentName)
+	{
+		if (id < 0) {
+			id = getActiveWindowId();
+		}
+		
+		List<QuickWidget> widgets = getQuickWidgetList(id);
+		for (QuickWidget widget : widgets) {
+			if (property.equals(QuickWidgetSearchType.NAME)){
+				if (widget.getParentName().equals(parentName) 
+							&& widget.getName().equals(value)) {
+					return widget;
+				}
+			}
+			else if (property.equals(QuickWidgetSearchType.TEXT)) {
+				if (widget.getParentName().equals(parentName) 
+							&& widget.getText().trim().equals(value)) {
+					return widget;
+				}
+			}
+		}
+		return null;
+	}
+
+	public QuickWidget getQuickWidgetByPos(int id, int row, int column)
+	{
+		return getQuickWidgetByPos(id, row, column, "");
+	}
+	
+	// FIXME. TODO: ADD check type of widget too. Also to the other funcs to find widget!
+	public QuickWidget getQuickWidgetByPos(int id, int row, int column, String parentName)
+	{
+		if (id < 0) {
+			id = getActiveWindowId();
+		}
+		List<QuickWidget> widgets = getQuickWidgetList(id);
+		for (QuickWidget widget : widgets) {
+			if ((parentName.isEmpty() || widget.getParentName().equals(parentName)) && 
+					widget.getRow() == row && widget.getColumn() == column) {
+				return widget;
+			}
+		}
+		return null;
+	}
+
+	public QuickWindow getQuickWindow(QuickWidgetSearchType property, String value)
+	{
+		List<QuickWindow> windows = getQuickWindowList();
+		for (QuickWindow window : windows) {
+			if (property.equals(QuickWidgetSearchType.NAME)){
+				if (window.getName().equals(value)) {
+					return window;
+				}
+			}
+		}
+		return null;
+	}
+
 	public List<QuickWidget> getQuickWidgetList(int id) {
 		if (id <= 0)
 			id = getActiveWindowId();
@@ -113,8 +175,10 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 		winBuilder.clearWindowID();
 		if (id >= 0)
 			winBuilder.setWindowID(id);
-		else
+		else {
 			winBuilder.setWindowID(activeWindowId);
+			id = activeWindowId;
+		}
 		
 		Response response = executeCommand(DesktopWindowManagerCommand.LIST_QUICK_WIDGETS, winBuilder);
 		QuickWidgetInfoList.Builder builder = QuickWidgetInfoList.newBuilder();
@@ -126,7 +190,7 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 		List<QuickWidget> quickWidgetList = new LinkedList<QuickWidget>();
 		
 		for (QuickWidgetInfo widgetInfo : widgetList) {
-			quickWidgetList.add(new QuickWidget(this, systemInputManager, widgetInfo));
+			quickWidgetList.add(new QuickWidget(this, systemInputManager, widgetInfo, id));
 		}
 		return quickWidgetList;
 	}
@@ -182,13 +246,24 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 		return null;
 	}
 	
-	public String getWindowName(int win_id) {
+	public QuickWindow getQuickWindowById(int windowId) {
 		List<DesktopWindowInfo> windowList = getWindowList();
+		for (DesktopWindowInfo window : windowList) {
+			if (window.getWindowID() == windowId)
+				return new QuickWindow(window);
+		}
+		return null;
+	}
+	
+	public String getWindowName(int win_id) {
+		QuickWindow window = getQuickWindowById(win_id);
+		return (window == null ? "" : window.getName());
+		/*List<DesktopWindowInfo> windowList = getWindowList();
 		for (DesktopWindowInfo window : windowList) {
 			if (window.getWindowID() == win_id)
 				return window.getName();
 		}
-		return "";
+		return "";*/
 	}
 	
 	public String getString(String enum_text) {
@@ -201,6 +276,14 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 		buildPayload(response, stringTextBuilder);
 		DesktopStringText string_text = stringTextBuilder.build();
 
-		return string_text.getText();
+		// Remember to remove all CRLF
+		return removeCRLF(string_text.getText());
 	}
+	
+	public String removeCRLF(String text) {
+		// Hack to remove all \r and \n's as we sometimes get just \n and sometimes
+		// \r\n then the string comparison doesn't work
+		return text.replaceAll("(\\r)", "");
+	}
+
 }

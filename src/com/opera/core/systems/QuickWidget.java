@@ -20,12 +20,18 @@ public class QuickWidget {
 		private final QuickWidgetInfo info; 
 		private final IDesktopWindowManager desktopWindowManager;
 		private final SystemInputManager systemInputManager;
+		private final int parentWindowId;
 		
-		public QuickWidget(DesktopWindowManager desktopWindowManager, SystemInputManager inputManager, QuickWidgetInfo info) {
+		public QuickWidget(DesktopWindowManager desktopWindowManager, SystemInputManager inputManager, QuickWidgetInfo info, int parentWindowId) {
 	        this.info = info;
 	        this.desktopWindowManager = desktopWindowManager;
 	        this.systemInputManager = inputManager;
+	        this.parentWindowId = parentWindowId;
 	    }
+		
+		public int getParentWindowId() {
+			return parentWindowId;
+		}
 		
 		public void click(MouseButton button, int numClicks, List<ModifierPressed> modifiers) {
 			//System.out.println(" Click  "+ info.getName() + "!");
@@ -33,7 +39,7 @@ public class QuickWidget {
 				if(!isVisible())
 					throw new ElementNotVisibleException("You can't click an element that is not displayed");
 			}
-			
+
 			systemInputManager.click(getCenterLocation(), button, numClicks, modifiers);
 		}
 		
@@ -58,7 +64,7 @@ public class QuickWidget {
 	     * @return text of widget
 	     */
 		public String getText() {
-			return info.getText();
+			return desktopWindowManager.removeCRLF(info.getText());
 		}
 		
 		/**
@@ -69,10 +75,7 @@ public class QuickWidget {
 		public boolean verifyText(String string_id) {
 			String text = desktopWindowManager.getString(string_id);
 			// Remember to remove all CRLF
-			text = removeCRLF(text); 
-			String text_internal = getText();
-			text_internal = removeCRLF(text_internal);
-			return text_internal.equals(text);
+			return getText().indexOf(text) >= 0;
 		}
 		
 		/**
@@ -83,17 +86,7 @@ public class QuickWidget {
 	     */
 		public boolean verifyContainsText(String string_id) {
 			String text = desktopWindowManager.getString(string_id);
-			// Remember to remove all CRLF
-			text = removeCRLF(text); 
-			String text_internal = getText();
-			text_internal = removeCRLF(text_internal);
-			return text_internal.indexOf(text) >= 0;
-		}
-		
-		private String removeCRLF(String text) {
-			// Hack to remove all \r and \n's as we sometimes get just \n and sometimes
-			// \r\n then the string comparison doesn't work
-			return text.replaceAll("(\\r|\\n)", "");
+			return getText().indexOf(text) >= 0;
 		}
 		
 		/** 
@@ -149,7 +142,7 @@ public class QuickWidget {
 		/**
 		 * @return DesktopWindowRect of the widget
 		 */
-		private DesktopWindowRect getRect() {
+		public DesktopWindowRect getRect() {
 			return info.getRect();
 		}
 		
@@ -174,11 +167,23 @@ public class QuickWidget {
 			DesktopWindowRect rect = getRect();
 			return new Dimension(rect.getWidth(), rect.getHeight());
 		}
-		
+
+		public int getRow() {
+			return info.getRow();
+		}
+
+		public int getColumn() {
+			return info.getCol();
+		}
+
 		protected int getValue() {
 			return info.getValue();
 		}
-
+		
+		public String getParentName() {
+			return info.getParent();
+		}
+		
 		@Override
 		// TODO: FIXME
 		public boolean equals(Object obj) {

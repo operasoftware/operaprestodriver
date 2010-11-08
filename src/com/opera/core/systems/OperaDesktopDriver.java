@@ -29,6 +29,8 @@ public class OperaDesktopDriver extends OperaDriver {
 	// TODO: FIXME
 	protected Map<String, String> getServicesList() {
 		Map<String, String> versions = super.getServicesList();
+		// This is the minimum versions of the services this version
+		// of the web-driver require work
 		versions.put("desktop-window-manager", "1.0");
 		versions.put("system-input", "1.0");
 		return versions;
@@ -52,11 +54,21 @@ public class OperaDesktopDriver extends OperaDriver {
 	/**
 	 * @param win_name
 	 * @return list of widgets in the window with name win_name
+	 *       If no winName is empty, it gets the widgets in the active window
 	 */
 	public List<QuickWidget> getQuickWidgetList(String winName) {
 		int id = getWindowID(winName);
+		if (id >= 0 || winName.isEmpty()) {
+			return getQuickWidgetList(id);
+		} 
+		// Couldn't find window with winName
+		return null;
+	}
+	
+	public List<QuickWidget> getQuickWidgetList(int id) {
 		return desktopWindowManager.getQuickWidgetList(id);
 	}
+	
 	
 	public List<QuickWindow> getWindowList() {
 		return desktopWindowManager.getQuickWindowList();
@@ -87,6 +99,45 @@ public class OperaDesktopDriver extends OperaDriver {
 		return desktopWindowManager.getQuickWidget(windowId, QuickWidgetSearchType.NAME, widgetName);
 	}
 
+	public QuickWidget findWidgetByName(int windowId, String widgetName, String parentName){
+		return desktopWindowManager.getQuickWidget(windowId, QuickWidgetSearchType.NAME, widgetName, parentName);
+	}
+
+	public QuickWidget findWidgetByText(int windowId, String text){
+		return desktopWindowManager.getQuickWidget(windowId, QuickWidgetSearchType.TEXT, text);
+	}
+	
+	public QuickWidget findWidgetByText(int windowId, String text, String parentName){
+		return desktopWindowManager.getQuickWidget(windowId, QuickWidgetSearchType.TEXT, text, parentName);
+	}
+
+	public QuickWidget findWidgetByStringId(int windowId, String stringId){
+		String text = desktopWindowManager.getString(stringId);
+		return findWidgetByText(windowId, text);
+	}
+	
+	public QuickWidget findWidgetByStringId(int windowId, String stringId, String parentName){
+		String text = desktopWindowManager.getString(stringId);
+		return findWidgetByText(windowId, text, parentName);
+	}
+
+	public QuickWidget findWidgetByPosition(int windowId, int row, int column){
+		return desktopWindowManager.getQuickWidgetByPos(windowId, row, column);
+	}
+	
+	public QuickWidget findWidgetByPosition(int windowId, int row, int column, String parentName){
+		return desktopWindowManager.getQuickWidgetByPos(windowId, row, column, parentName);
+	}
+
+	public QuickWindow findWindowByName(String windowName){
+		return desktopWindowManager.getQuickWindow(QuickWidgetSearchType.NAME, windowName);
+	}
+	
+	public QuickWindow findWindowById(int windowId){
+		return desktopWindowManager.getQuickWindowById(windowId);
+	}
+
+
 	/**
 	 * @param windowId
 	 * @return String: name of the window
@@ -112,9 +163,9 @@ public class OperaDesktopDriver extends OperaDriver {
 	 */
 	
 	public void keyPress(String key, List<ModifierPressed> modifiers) {
-		/*System.out.print("keyPress(key="+key +",");
-		for (ModifierPressed mod : modifiers) {
-			System.out.print(mod.toString() + ",");
+		/*for (ModifierPressed mod : modifiers) {
+			if (mod != null)
+				System.out.print(mod.toString() + "(" + i + ",");
 		}
 		System.out.println(")");*/
 		systemInputManager.keyPress(key, modifiers);
@@ -240,6 +291,14 @@ public class OperaDesktopDriver extends OperaDriver {
 		
 		return services.waitForDesktopWindowClosed(win_name, OperaIntervals.PAGE_LOAD_TIMEOUT.getValue());
 	}
+	
+	public int waitForWindowLoaded(String win_name) {
+		if (services.getConnection() == null)
+			throw new CommunicationException("waiting for a window failed because Opera is not connected.");
+		
+		return services.waitForDesktopWindowLoaded(win_name, OperaIntervals.PAGE_LOAD_TIMEOUT.getValue());
+	}
+	
 	
 }
 

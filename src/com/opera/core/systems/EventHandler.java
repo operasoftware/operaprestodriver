@@ -113,5 +113,10 @@ public class EventHandler extends AbstractEventHandler {
 	public void onDesktopWindowClosed(DesktopWindowInfo info) {
 		services.onDesktopWindowClosed(info);
 	}
+	
+	@Override
+	public void onDesktopWindowLoaded(DesktopWindowInfo info) {
+		services.onDesktopWindowLoaded(info);
+	}
 
 }

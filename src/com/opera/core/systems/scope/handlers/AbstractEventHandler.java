@@ -112,6 +112,12 @@ public abstract class AbstractEventHandler {
 	 * @param closed
 	 */
 	public abstract void onDesktopWindowClosed(DesktopWindowInfo info);
+	
+	/**
+	 * Fired when loading Finished event
+	 * @param closed
+	 */
+	public abstract void onDesktopWindowLoaded(DesktopWindowInfo info);
 
 	public abstract void onHttpResponse(int responseCode);
 	

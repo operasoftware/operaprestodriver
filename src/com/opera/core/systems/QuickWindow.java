@@ -33,6 +33,14 @@ public class QuickWindow {
 		return info.getTitle();
 	}
 	
+
+	/**
+	 * @return name of window
+	 */
+	public String getName() {
+		return info.getName();
+	}
+	
 	/**
 	 * @return true if widget is visible
 	 */
@@ -50,7 +58,7 @@ public class QuickWindow {
 	/**
 	 * @return DesktopWindowRect of the widget
 	 */
-	private DesktopWindowRect getRect() {
+	public DesktopWindowRect getRect() {
 		return info.getRect();
 	}
 	
@@ -69,7 +77,7 @@ public class QuickWindow {
 		DesktopWindowRect rect = getRect();
 		return new Dimension(rect.getWidth(), rect.getHeight());
 	}
-	
+
 	@Override
 	// TODO: FIXME
 	public boolean equals(Object obj) {

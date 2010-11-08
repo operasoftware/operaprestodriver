@@ -68,12 +68,37 @@ public interface IDesktopWindowManager {
 	 * @return
 	 */
 	QuickWidget getQuickWidget(int id, QuickWidgetSearchType property, String value);
-	
+	QuickWidget getQuickWidget(int id, QuickWidgetSearchType property, String value, String parentName);
+
+	/*
+	 * Get the quick widget with value value by position
+	 *   
+	 * @param id - window id
+	 * @param row - row of the widget
+	 * @param column - column of the widget
+	 * @param parentName - Parent name of the widget
+	 * @return
+	 */
+	QuickWidget getQuickWidgetByPos(int id, int row, int column);
+	QuickWidget getQuickWidgetByPos(int id, int row, int column, String parentName);
+
+	/*
+	 * Get the quick window with value value for property property 
+	 *   
+	 * @param property
+	 * @param value - value of property given
+	 * @return
+	 */
+	QuickWindow getQuickWindow(QuickWidgetSearchType property, String value);
+	QuickWindow getQuickWindowById(int windowId);
+
 	/*
 	 * Get the string specified by the given string id 
 	 * @param enum_text
 	 * @return
 	 */
 	String getString(String enum_text);
+	// Used to stop problems comparing strings that have just \n with those with \r\n
+	String removeCRLF(String text);
 	
 }
