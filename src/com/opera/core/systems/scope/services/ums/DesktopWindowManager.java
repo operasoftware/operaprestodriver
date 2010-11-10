@@ -121,13 +121,13 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 		List<QuickWidget> widgets = getQuickWidgetList(id);
 		for (QuickWidget widget : widgets) {
 			if (property.equals(QuickWidgetSearchType.NAME)){
-				if (widget.getParentName().equals(parentName) 
+				if ((parentName.isEmpty() || widget.getParentName().equals(parentName)) 
 							&& widget.getName().equals(value)) {
 					return widget;
 				}
 			}
 			else if (property.equals(QuickWidgetSearchType.TEXT)) {
-				if (widget.getParentName().equals(parentName) 
+				if ((parentName.isEmpty() || widget.getParentName().equals(parentName)) 
 							&& widget.getText().trim().equals(value)) {
 					return widget;
 				}
