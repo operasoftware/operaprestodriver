@@ -190,6 +190,7 @@ public class ScopeServices implements IConnectionHandler {
 	}
 
 	public void shutdown() {
+		shuttingDown = true;
 		if (connection != null) {
 			connection.close();
 		}
@@ -250,7 +251,6 @@ public class ScopeServices implements IConnectionHandler {
 	}
 
 	public void quit() {
-		shuttingDown = true;
 		try {
 			if (exec.getActionList().contains("Quit"))
 				exec.action("Quit");

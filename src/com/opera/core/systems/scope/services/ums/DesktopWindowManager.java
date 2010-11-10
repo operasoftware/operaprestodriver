@@ -9,13 +9,13 @@ import com.opera.core.systems.QuickWidget;
 import com.opera.core.systems.QuickWindow;
 import com.opera.core.systems.ScopeServices;
 
-import org.openqa.selenium.WebDriverException;
+//import org.openqa.selenium.WebDriverException;
 
 import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowList;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfoList;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo;
-import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearch;
+//import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearch;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearch.QuickWidgetSearchType;
 import com.opera.core.systems.scope.protos.UmsProtos.Response;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID;
