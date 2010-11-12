@@ -206,14 +206,21 @@ public class OperaDesktopDriver extends OperaDriver {
 		systemInputManager.keyPress(key, modifiers);
 	}
 	
+	public void keyUp(String key, List<ModifierPressed> modifiers) {
+		systemInputManager.keyUp(key, modifiers);
+	}
+	public void keyDown(String key, List<ModifierPressed> modifiers) {
+		systemInputManager.keyDown(key, modifiers);
+	}
+	
 	/**
 	 *
 	 */
-	public void keyPress(String key, ModifierPressed modifier) {
+	/*public void keyPress(String key, ModifierPressed modifier) {
 		ArrayList<ModifierPressed> mods = new ArrayList<ModifierPressed>();
 		mods.add(modifier);
 		systemInputManager.keyPress(key, mods);
-	}
+	}*/
 	
 	
 	public int getWindowCount() {
