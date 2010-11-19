@@ -58,7 +58,7 @@ public class OperaDesktopDriver extends OperaDriver {
 	 */
 	public List<QuickWidget> getQuickWidgetList(String winName) {
 		int id = getWindowID(winName);
-		if (id >= 0 || winName.isEmpty()) {
+		if (id >= 0 || winName.length() == 0) {
 			return getQuickWidgetList(id);
 		} 
 		// Couldn't find window with winName

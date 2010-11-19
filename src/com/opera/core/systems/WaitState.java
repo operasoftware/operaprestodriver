@@ -399,7 +399,7 @@ public class WaitState {
                     case EVENT_DESKTOP_WINDOW_SHOWN:
                         if (type == ResponseType.DESKTOP_WINDOW_SHOWN)
                         {
-                        	if (stringMatch.isEmpty())
+                        	if (stringMatch.length() == 0)
                         		return result;
                         	else
                         	{
@@ -414,7 +414,7 @@ public class WaitState {
                     case EVENT_DESKTOP_WINDOW_UPDATED:
                         if (type == ResponseType.DESKTOP_WINDOW_UPDATED)
                         {
-                        	if (stringMatch.isEmpty())
+                        	if (stringMatch.length() == 0)
                         		return result;
                         	else
                         	{
@@ -430,7 +430,7 @@ public class WaitState {
                     case EVENT_DESKTOP_WINDOW_ACTIVATED:
                         if (type == ResponseType.DESKTOP_WINDOW_ACTIVATED)
                         {
-                        	if (stringMatch.isEmpty())
+                        	if (stringMatch.length() == 0)
                         		return result;
                         	else
                         	{
@@ -446,7 +446,7 @@ public class WaitState {
                     case EVENT_DESKTOP_WINDOW_CLOSED:
                         if (type == ResponseType.DESKTOP_WINDOW_CLOSED)
                         {
-                        	if (stringMatch.isEmpty())
+                        	if (stringMatch.length() == 0)
                         		return result;
                         	else
                         	{
@@ -461,7 +461,7 @@ public class WaitState {
                     case EVENT_DESKTOP_WINDOW_LOADED:
                         if (type == ResponseType.DESKTOP_WINDOW_LOADED)
                         {
-                        	if (stringMatch.isEmpty())
+                        	if (stringMatch.length() == 0)
                         		return result;
                         	else
                         	{
