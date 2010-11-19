@@ -11,7 +11,6 @@ import com.opera.core.systems.scope.protos.SystemInputProtos.ModifierPressed;
 import com.opera.core.systems.scope.protos.SystemInputProtos.MouseInfo.MouseButton;
 import com.opera.core.systems.scope.protos.SystemInputProtos.MouseInfo;
 import com.opera.core.systems.scope.services.SystemInput;
-import com.opera.core.systems.scope.internal.OperaKeys;
 
 public class SystemInputManager extends AbstractService implements SystemInput {
 
@@ -20,12 +19,14 @@ public class SystemInputManager extends AbstractService implements SystemInput {
 			
 			String serviceName = "system-input";
 			
-			if(!isVersionInRange(version, "5.0", serviceName))
+			if(!isVersionInRange(version, "2.0", serviceName))
 				throw new UnsupportedOperationException(serviceName + " version " + version + " is not supported");
 			
 			services.setSystemInputManager(this);
 		}
-	
+
+	 public void init() {}
+
 	public void click(Point location, MouseButton button, int num_clicks, List<ModifierPressed> modifiers) {
 		MouseInfo.Builder actionBuilder = MouseInfo.newBuilder();
 		actionBuilder.setX(location.x);
@@ -41,9 +42,9 @@ public class SystemInputManager extends AbstractService implements SystemInput {
 	}
 	
 	public void keyPress(String key, List<ModifierPressed> modifiers) {
-		String translated_key = OperaKeys.get(key);
+		/*String translated_key = OperaKeys.get(key);
 		if (translated_key != null)
-			key = translated_key;
+			key = translated_key;*/
 		KeyPressInfo.Builder actionBuilder = KeyPressInfo.newBuilder();
 		actionBuilder.setKey(key);
 		int modifier = ModifierPressed.NONE.getNumber();

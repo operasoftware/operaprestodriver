@@ -12,19 +12,18 @@ import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo.QuickWidgetType;
 import com.opera.core.systems.scope.protos.SystemInputProtos.ModifierPressed;
 import com.opera.core.systems.scope.protos.SystemInputProtos.MouseInfo.MouseButton;
-import com.opera.core.systems.scope.services.IDesktopWindowManager;
-import com.opera.core.systems.scope.services.ums.DesktopWindowManager;
+import com.opera.core.systems.scope.services.IDesktopUtils;
 import com.opera.core.systems.scope.services.ums.SystemInputManager;
 
 public class QuickWidget {
 		private final QuickWidgetInfo info; 
-		private final IDesktopWindowManager desktopWindowManager;
+		private final IDesktopUtils desktopUtils;
 		private final SystemInputManager systemInputManager;
 		private final int parentWindowId;
 		
-		public QuickWidget(DesktopWindowManager desktopWindowManager, SystemInputManager inputManager, QuickWidgetInfo info, int parentWindowId) {
+		public QuickWidget(IDesktopUtils desktopUtils, SystemInputManager inputManager, QuickWidgetInfo info, int parentWindowId) {
 	        this.info = info;
-	        this.desktopWindowManager = desktopWindowManager;
+	        this.desktopUtils = desktopUtils;
 	        this.systemInputManager = inputManager;
 	        this.parentWindowId = parentWindowId;
 	    }
@@ -64,7 +63,7 @@ public class QuickWidget {
 	     * @return text of widget
 	     */
 		public String getText() {
-			return desktopWindowManager.removeCRLF(info.getText());
+			return desktopUtils.removeCR(info.getText());
 		}
 		
 		/**
@@ -73,7 +72,7 @@ public class QuickWidget {
 	     * @return true if text specified by string_id equals widget text
 	     */
 		public boolean verifyText(String string_id) {
-			String text = desktopWindowManager.getString(string_id);
+			String text = desktopUtils.getString(string_id);
 			// Remember to remove all CRLF
 			return getText().indexOf(text) >= 0;
 		}
@@ -85,7 +84,7 @@ public class QuickWidget {
 	     * @return true if text specified by string_id is contained in widget text
 	     */
 		public boolean verifyContainsText(String string_id) {
-			String text = desktopWindowManager.getString(string_id);
+			String text = desktopUtils.getString(string_id);
 			return getText().indexOf(text) >= 0;
 		}
 		
@@ -120,7 +119,7 @@ public class QuickWidget {
 		}
 		
 		public boolean isSelected(String string_id) {
-			String text = desktopWindowManager.getString(string_id);
+			String text = desktopUtils.getString(string_id);
 			return text.equals(info.getText());
 		}
 		
