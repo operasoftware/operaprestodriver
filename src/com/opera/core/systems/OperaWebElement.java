@@ -239,7 +239,7 @@ public class OperaWebElement implements RenderedWebElement, SearchContext, Locat
         		execService.type(seq.toString());
         }
         
-        	//executeMethod("locator.blur()");
+        //executeMethod("locator.blur()");
 	}
 
 	//FIXME isDisplayed is not working for select elements, revise
@@ -340,10 +340,10 @@ public class OperaWebElement implements RenderedWebElement, SearchContext, Locat
 		String coordinates = debugger.callFunctionOnObject("locator.scrollIntoView();\n" +
 				"var x = 0, y = 0;\n" + 
 				"if(window.frameElement) {\n" +
-				"x = window.screenLeft - window.top.screenLeft;\n" +
-				"y = window.screenTop - window.top.screenTop;\n" + 
+				"x = (window.screenLeft - window.top.screenLeft) + window.scrollX;\n" +
+				"y = (window.screenTop - window.top.screenTop) + window.scrollY;\n" + 
 				"}\n" +
-				"return (( x + window.scrollX + locator.getBoundingClientRect().left) + ',' + ( y + window.scrollY + locator.getBoundingClientRect().top));\n", objectId);
+				"return (( x + locator.getBoundingClientRect().left) + ',' + ( y + locator.getBoundingClientRect().top));\n", objectId);
 		String[] location = coordinates.split(",");
 		return new Point(Integer.valueOf(location[0]), Integer.valueOf(location[1]));
 	}
