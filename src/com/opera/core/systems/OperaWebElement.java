@@ -239,7 +239,7 @@ public class OperaWebElement implements RenderedWebElement, SearchContext, Locat
         		execService.type(seq.toString());
         }
         
-        	executeMethod("locator.blur()");
+        	//executeMethod("locator.blur()");
 	}
 
 	//FIXME isDisplayed is not working for select elements, revise
