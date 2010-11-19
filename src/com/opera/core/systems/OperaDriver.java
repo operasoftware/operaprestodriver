@@ -640,12 +640,32 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 	}
 
 	public WebElement findElementByTagName(String using) {
-            return findSingleElement("document.getElementsByTagName('" + using +"')[0];", "tag name");
+		if(using.contains(":")) {//has prefix
+			String[] tagInfo = using.split(":");
+			return findSingleElement("(function() { var elements = document.getElementsByTagName('" + tagInfo[1] + "'), element = null;" +
+					"for( var i = 0; i < elements.length; i++ ) {" +
+					"if( elements[i].prefix == '" + tagInfo[0] + "' ) {" +
+					"element = elements[i];" +
+					"}" +
+					"}" +
+					"return element; })()", "tag name");
+		}
+		return findSingleElement("document.getElementsByTagName('" + using +"')[0];", "tag name");
 	}
 
 
 	public List<WebElement> findElementsByTagName(String using) {
-            return findMultipleElements("document.getElementsByTagName('"+ using + "');\n", "name");
+		if(using.contains(":")) {//has prefix
+			String[] tagInfo = using.split(":");
+			return findMultipleElements("(function() { var elements = document.getElementsByTagName('" + tagInfo[1] + "'), output = [];" +
+					"for( var i = 0; i < elements.length; i++ ) {" +
+					"if( elements[i].prefix == '" + tagInfo[0] + "' ) {" +
+					"output.push(elements[i]);" +
+					"}" +
+					"}" +
+					"return output; })()", "tag name");
+		}
+		return findMultipleElements("document.getElementsByTagName('"+ using + "');\n", "name");
 	}
 
 	public WebElement findElementByCssSelector(String using) {
