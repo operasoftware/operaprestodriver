@@ -393,10 +393,14 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 
 	// TODO Benchmark, XPath is supposed to be faster?
 	public WebElement findElementByLinkText(String using) {
-		return findSingleElement("var elements = document.getElementsByTagName('a');" +
-				"for (var i = 0; i < elements.length; i++) {" +
-				"	if (elements[i].textContent == '" + using + "') { elements[i]; }" +
-				"}", "link text");
+		return findSingleElement("(function(){\n"+
+	        "var links = document.getElementsByTagName('a'), element = null;\n"+
+	        "for (var i = 0; i < links.length && !element; ++i) {\n"+
+	        "if (links[i].textContent == '" + using + "') {\n"+
+	        "element = links[i];\n"+
+	        "}\n"+
+	        "}\n"+
+	        "return element;\n})()", "link text");
 	}
 
 	public WebElement findElementByPartialLinkText(String using) {
