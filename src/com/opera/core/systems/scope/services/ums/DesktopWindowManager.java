@@ -9,32 +9,33 @@ import com.opera.core.systems.QuickWidget;
 import com.opera.core.systems.QuickWindow;
 import com.opera.core.systems.ScopeServices;
 
-import org.openqa.selenium.WebDriverException;
+//import org.openqa.selenium.WebDriverException;
 
 import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowList;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfoList;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo;
-import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearch;
+//import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearch;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearch.QuickWidgetSearchType;
 import com.opera.core.systems.scope.protos.UmsProtos.Response;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID;
-import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopStringID;
-import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopStringText;
 import com.opera.core.systems.scope.services.IDesktopWindowManager;
+import com.opera.core.systems.scope.services.IDesktopUtils;
 
 public class DesktopWindowManager extends AbstractService implements IDesktopWindowManager {
 	
 	private int activeWindowId = 0;
 	private final SystemInputManager systemInputManager;
+	private final IDesktopUtils desktopUtils;
 	
-	 public DesktopWindowManager(SystemInputManager inputManager, ScopeServices services, String version) {
+	 public DesktopWindowManager(IDesktopUtils desktopUtils, SystemInputManager inputManager, ScopeServices services, String version) {
 			super(services, version);
 			
 			this.systemInputManager = inputManager;
+			this.desktopUtils = desktopUtils;
 			String serviceName = "desktop-window-manager";
 			
-			if(!isVersionInRange(version, "2.0", serviceName))
+			if(!isVersionInRange(version, "3.0", serviceName))
 				throw new UnsupportedOperationException(serviceName + " version " + version + " is not supported");
 			
 			services.setDesktopWindowManager(this);
@@ -82,7 +83,9 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 	
 	public QuickWidget getQuickWidget(int id, QuickWidgetSearchType property, String value)
 	{
-		if (id < 0) {
+		
+		return getQuickWidget(id, property, value, "");
+		/*if (id < 0) {
 			id = getActiveWindowId();
 		}
 		
@@ -99,12 +102,12 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 			QuickWidgetInfo.Builder builder = QuickWidgetInfo.newBuilder();
 			buildPayload(response, builder);
 			QuickWidgetInfo info = builder.build();
-			return new QuickWidget(this, systemInputManager, info, id);
+			return new QuickWidget(desktopUtils, systemInputManager, info, id);
 		}
 		catch (WebDriverException e) { 
 			//System.out.println("Catching webdriver exception");
 			return null;
-		}
+		}*/
 	}
 	
 	// TODO: FIXME: Do this without getting the list
@@ -118,13 +121,13 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 		List<QuickWidget> widgets = getQuickWidgetList(id);
 		for (QuickWidget widget : widgets) {
 			if (property.equals(QuickWidgetSearchType.NAME)){
-				if (widget.getParentName().equals(parentName) 
+				if ((parentName.length() == 0 || widget.getParentName().equals(parentName)) 
 							&& widget.getName().equals(value)) {
 					return widget;
 				}
 			}
 			else if (property.equals(QuickWidgetSearchType.TEXT)) {
-				if (widget.getParentName().equals(parentName) 
+				if ((parentName.length() == 0|| widget.getParentName().equals(parentName)) 
 							&& widget.getText().trim().equals(value)) {
 					return widget;
 				}
@@ -190,7 +193,7 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 		List<QuickWidget> quickWidgetList = new LinkedList<QuickWidget>();
 		
 		for (QuickWidgetInfo widgetInfo : widgetList) {
-			quickWidgetList.add(new QuickWidget(this, systemInputManager, widgetInfo, id));
+			quickWidgetList.add(new QuickWidget(desktopUtils, systemInputManager, widgetInfo, id));
 		}
 		return quickWidgetList;
 	}
@@ -265,25 +268,4 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 		}
 		return "";*/
 	}
-	
-	public String getString(String enum_text) {
-		DesktopStringID.Builder stringBuilder = DesktopStringID.newBuilder();
-		stringBuilder.setEnumText(enum_text);
-		
-		Response response = executeCommand(DesktopWindowManagerCommand.GET_STRING, stringBuilder);
-
-		DesktopStringText.Builder stringTextBuilder = DesktopStringText.newBuilder();
-		buildPayload(response, stringTextBuilder);
-		DesktopStringText string_text = stringTextBuilder.build();
-
-		// Remember to remove all CRLF
-		return removeCRLF(string_text.getText());
-	}
-	
-	public String removeCRLF(String text) {
-		// Hack to remove all \r and \n's as we sometimes get just \n and sometimes
-		// \r\n then the string comparison doesn't work
-		return text.replaceAll("(\\r)", "");
-	}
-
 }

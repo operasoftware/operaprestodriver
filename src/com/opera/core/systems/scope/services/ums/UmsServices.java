@@ -6,6 +6,7 @@ import com.opera.core.systems.ScopeServices;
 import com.opera.core.systems.scope.protos.ScopeProtos.HostInfo;
 import com.opera.core.systems.scope.protos.ScopeProtos.Service;
 import com.opera.core.systems.scope.services.IDesktopWindowManager;
+import com.opera.core.systems.scope.services.IDesktopUtils;
 import com.opera.core.systems.scope.services.IEcmaScriptDebugger;
 import com.opera.core.systems.scope.services.IOperaExec;
 import com.opera.core.systems.scope.services.IWindowManager;
@@ -16,6 +17,7 @@ public class UmsServices {
 	protected final IEcmaScriptDebugger debugger;
 	protected final IWindowManager windowManager;
 	protected final IDesktopWindowManager desktopWindowManager;
+	protected final IDesktopUtils desktopUtils;
 	protected final SystemInputManager systemInputManager;
 	protected final IOperaExec exec;
 
@@ -35,6 +37,11 @@ public class UmsServices {
 		List<Service> serviceList = info.getServiceListList();
 		windowManager = new WindowManager(services, getVersionForService( serviceList, "window-manager"));
 		
+		if (findServiceNamed(serviceList, "desktop-utils") != null && services.getVersions().containsKey("desktop-utils"))
+			desktopUtils = new DesktopUtils(services, getVersionForService( serviceList, "desktop-utils"));
+		else 
+			desktopUtils = null;
+		
 		if (findServiceNamed(serviceList, "system-input") != null && services.getVersions().containsKey("system-input"))
 			systemInputManager = new SystemInputManager(services, getVersionForService( serviceList, "system-input"));
 		else 
@@ -42,7 +49,7 @@ public class UmsServices {
 		
 		// Check both the client and the Driver being created support the desktop-window-manager
 		if (findServiceNamed(serviceList, "desktop-window-manager") != null && services.getVersions().containsKey("desktop-window-manager"))
-			desktopWindowManager = new DesktopWindowManager(systemInputManager, services, getVersionForService( serviceList, "desktop-window-manager"));
+			desktopWindowManager = new DesktopWindowManager(desktopUtils, systemInputManager, services, getVersionForService( serviceList, "desktop-window-manager"));
 		else
 			desktopWindowManager = null;
 		
