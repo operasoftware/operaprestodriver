@@ -355,7 +355,7 @@ public class OperaWebElement implements RenderedWebElement, SearchContext, Locat
 	}
 
 	public String getValueOfCssProperty(String property) {
-		return callMethod("return getComputedStyle(locator,null)." + property + ";");
+		return callMethod("return getComputedStyle(locator,null).getPropertyValue('" + property + "');");
 	}
 
 	public boolean isDisplayed() {
