@@ -121,13 +121,13 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 		List<QuickWidget> widgets = getQuickWidgetList(id);
 		for (QuickWidget widget : widgets) {
 			if (property.equals(QuickWidgetSearchType.NAME)){
-				if ((parentName.isEmpty() || widget.getParentName().equals(parentName)) 
+				if ((parentName.length() == 0 || widget.getParentName().equals(parentName)) 
 							&& widget.getName().equals(value)) {
 					return widget;
 				}
 			}
 			else if (property.equals(QuickWidgetSearchType.TEXT)) {
-				if ((parentName.isEmpty() || widget.getParentName().equals(parentName)) 
+				if ((parentName.length() == 0|| widget.getParentName().equals(parentName)) 
 							&& widget.getText().trim().equals(value)) {
 					return widget;
 				}
@@ -149,7 +149,7 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 		}
 		List<QuickWidget> widgets = getQuickWidgetList(id);
 		for (QuickWidget widget : widgets) {
-			if ((parentName.isEmpty() || widget.getParentName().equals(parentName)) && 
+			if ((parentName.length() == 0 || widget.getParentName().equals(parentName)) && 
 					widget.getRow() == row && widget.getColumn() == column) {
 				return widget;
 			}
