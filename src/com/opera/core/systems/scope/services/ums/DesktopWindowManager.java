@@ -13,6 +13,7 @@ import com.opera.core.systems.ScopeServices;
 
 import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowList;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo;
+import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo.QuickWidgetType;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfoList;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo;
 //import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearch;
@@ -136,20 +137,24 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 		return null;
 	}
 
-	public QuickWidget getQuickWidgetByPos(int id, int row, int column)
+	public QuickWidget getQuickWidgetByPos( int id, int row, int column)
 	{
 		return getQuickWidgetByPos(id, row, column, "");
 	}
 	
 	// FIXME. TODO: ADD check type of widget too. Also to the other funcs to find widget!
-	public QuickWidget getQuickWidgetByPos(int id, int row, int column, String parentName)
+	public QuickWidget getQuickWidgetByPos( int id, int row, int column, String parentName)
 	{
 		if (id < 0) {
 			id = getActiveWindowId();
 		}
 		List<QuickWidget> widgets = getQuickWidgetList(id);
 		for (QuickWidget widget : widgets) {
-			if ((parentName.length() == 0 || widget.getParentName().equals(parentName)) && 
+			if ((parentName.length() == 0 || widget.getParentName().equals(parentName)) &&
+					// Position is only set on tabbuttons and treeitems
+					// so only look for these 
+					(widget.getType() == QuickWidgetType.TABBUTTON ||
+					widget.getType() == QuickWidgetType.TREEITEM) &&
 					widget.getRow() == row && widget.getColumn() == column) {
 				return widget;
 			}
