@@ -10,10 +10,9 @@ public enum SystemInputCommand implements ICommand {
 	    KEYPRESS(2),
 	    KEYUP(3),
 	    KEYDOWN(4),
-	    /*MOUSEUP(3),
-	    MOUSEDOWN(4),
-	    MOUSEMOVE(5),
-	    KEYUP(6),*/
+	    MOUSEDOWN(5),
+	    MOUSEUP(6),
+	    MOUSEMOVE(7),
 	    DEFAULT(-1);
 	    
 	    private int code;
