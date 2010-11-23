@@ -94,4 +94,9 @@ public class PseudoEcmaScriptDebugger implements IEcmaScriptDebugger {
 	public String executeJavascript(String using, Integer windowId) {
 		return null;
 	}
+
+	public Object examineScriptResult(Integer id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

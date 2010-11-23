@@ -665,7 +665,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 					"}" +
 					"return output; })()", "tag name");
 		}
-		return findMultipleElements("document.getElementsByTagName('"+ using + "');\n", "name");
+		return findMultipleElements("document.getElementsByTagName('"+ using + "');\n", "tag name");
 	}
 
 	public WebElement findElementByCssSelector(String using) {
@@ -763,18 +763,10 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
                     return new OperaWebElement(this, objectId);
                 if(result.getClassName().equals("NodeList"))
                     return processElements(objectId);
-                if(result.getClassName().equals("Array"))
-                    return processObjects(objectId);
+                if(result.getClassName().equals("Array") || result.getClassName().equals("Object"))
+                    return debugger.examineScriptResult(objectId);         	
             }
             return object;
-	}
-
-	protected List<Object> processObjects(Integer id) {
-            List<Integer> ids = debugger.examineObjects(id);
-            List<Object> toReturn = new ArrayList<Object>();
-            for (Integer objectId : ids)
-                toReturn.add(debugger.callFunctionOnObject("locator", objectId, true));
-            return toReturn;
 	}
 	
 	public boolean isJavascriptEnabled() {

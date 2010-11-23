@@ -2,7 +2,9 @@ package com.opera.core.systems.scope.services.ums;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
@@ -56,7 +58,12 @@ public class EcmaScriptDebugger6 extends EcmaScriptDebugger {
 					Collection<?> collection = (Collection<?>) object;
 					for (Object argument : collection) {
 						processArgument(argument, builder, elements);
+						builder.append(",");
 					}
+					int lastCharIndex = builder.length() - 1;
+					if(builder.charAt(lastCharIndex) != '[')
+						builder.deleteCharAt(lastCharIndex);
+					
 					builder.append("]");
 				} else {
 					processArgument(object, builder, elements);
@@ -92,17 +99,9 @@ public class EcmaScriptDebugger6 extends EcmaScriptDebugger {
 	}
 	
 	public List<Integer> examineObjects(Integer id) {
-		ExamineList.Builder examine = ExamineList.newBuilder();
-		examine.setExaminePrototypes(false);
-		examine.setRuntimeID(getRuntimeId());
-		examine.addObjectList(id);
-		Response response = executeCommand(ESDebuggerCommand.EXAMINE_OBJECTS, examine);
-		
-		ObjectChainList.Builder builder = ObjectChainList.newBuilder();
-		buildPayload(response, builder);
-		ObjectChainList list = builder.build();
-		
 		List<Integer> ids = new ArrayList<Integer>();
+		
+		ObjectChainList list = getChainList(id);
 		List<Property> properties = list.getObjectChainList(0).getObjectListList().get(0).getPropertyListList();
 		for (Property property : properties) {
 			if(property.getType().equals("object"))
@@ -111,6 +110,53 @@ public class EcmaScriptDebugger6 extends EcmaScriptDebugger {
 		
 		return ids;
 		
+	}
+	
+	private ObjectChainList getChainList(Integer id) {
+		ExamineList.Builder examine = ExamineList.newBuilder();
+		examine.setExaminePrototypes(false);
+		examine.setRuntimeID(getRuntimeId());
+		examine.addObjectList(id);
+		Response response = executeCommand(ESDebuggerCommand.EXAMINE_OBJECTS, examine);
+		
+		ObjectChainList.Builder builder = ObjectChainList.newBuilder();
+		buildPayload(response, builder);
+		return builder.build();
+
+	}
+	
+	public Object examineScriptResult(Integer id) {
+		ObjectChainList list = getChainList(id);
+		List<Property> properties = list.getObjectChainList(0).getObjectListList().get(0).getPropertyListList();
+		String className = list.getObjectChainListList().get(0).getObjectList(0).getValue().getClassName();
+		if (className.equals("Array")) {
+			List<Object> result = new ArrayList<Object>();
+
+			for (Property property : properties) {
+				if (property.getType().equals("number") && property.getName().equals("length")) {
+					// ignore ?!?
+				} else if (property.getType().equals("object")) {
+					result.add(examineScriptResult(property.getObjectValue().getObjectID()));
+				} else {
+					result.add(parseValue(property.getType(), property.getValue()));
+				}
+			}
+			return result;
+		} else {
+			// we have a map
+			Map<String, Object> result = new HashMap<String, Object>();
+
+			for (Property property : properties) {
+				if (property.getType().equals("number") && property.getName().equals("length")) {
+					// ignore ?!?
+				} else if (property.getType().equals("object")) {
+					result.put(property.getName(), examineScriptResult(property.getObjectValue().getObjectID()));
+				} else {
+					result.put(property.getName(), parseValue(property.getType(), property.getValue()));
+				}
+			}
+			return result;
+		}
 	}
 	
 	private EvalResult parseEvalData(Response response) {
