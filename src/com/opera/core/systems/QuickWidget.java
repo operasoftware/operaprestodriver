@@ -44,8 +44,8 @@ public class QuickWidget {
 		}
 		
 		public void dragAndDropOn(QuickWidget element) {
-			Point currentLocation = this.getLocation();
-			Point dragPoint = element.getLocation();
+			Point currentLocation = this.getCenterLocation();
+			Point dragPoint = element.getCenterLocation();
 			List<ModifierPressed> alist = new ArrayList<ModifierPressed>();
 			alist.add(ModifierPressed.NONE);
 			systemInputManager.mouseDown(currentLocation, MouseButton.LEFT, alist);
