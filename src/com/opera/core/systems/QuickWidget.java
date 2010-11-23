@@ -53,6 +53,12 @@ public class QuickWidget {
 			systemInputManager.mouseUp(dragPoint, MouseButton.LEFT, alist);
 		}
 		
+		public void hover() {
+			List<ModifierPressed> alist = new ArrayList<ModifierPressed>();
+			alist.add(ModifierPressed.NONE);
+			systemInputManager.mouseMove(getCenterLocation(), MouseButton.LEFT, alist);
+		}
+		
 		/**
 	     * 
 	     * @return name of widget
