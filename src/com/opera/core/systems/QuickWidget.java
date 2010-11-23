@@ -3,6 +3,7 @@ package com.opera.core.systems;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.util.List;
+import java.util.ArrayList;
 
 import org.openqa.selenium.ElementNotVisibleException;
 
@@ -42,13 +43,15 @@ public class QuickWidget {
 			systemInputManager.click(getCenterLocation(), button, numClicks, modifiers);
 		}
 		
-		/*public void dragAndDropOn(QuickWidget element) {
+		public void dragAndDropOn(QuickWidget element) {
 			Point currentLocation = this.getLocation();
 			Point dragPoint = element.getLocation();
-			systemInputManager.mouseDown(currentLocation, 0, 0);
-			systemInputManager.mouseMove(dragPoint, 0, 0);
-			systemInputManager.mouseUp(dragPoint, 0, 0);
-		}*/
+			List<ModifierPressed> alist = new ArrayList<ModifierPressed>();
+			alist.add(ModifierPressed.NONE);
+			systemInputManager.mouseDown(currentLocation, MouseButton.LEFT, alist);
+			systemInputManager.mouseMove(dragPoint, MouseButton.LEFT, alist);
+			systemInputManager.mouseUp(dragPoint, MouseButton.LEFT, alist);
+		}
 		
 		/**
 	     * 
