@@ -46,6 +46,7 @@ public class SystemInputManager extends AbstractService implements SystemInput {
 		actionBuilder.setX(location.x);
 		actionBuilder.setY(location.y);
 		actionBuilder.setButton(button); 
+		actionBuilder.setNumClicks(1);
 		int modifier = ModifierPressed.NONE.getNumber();
 		for (ModifierPressed mod : modifiers) {
 			modifier |= mod.getNumber();
@@ -59,6 +60,7 @@ public class SystemInputManager extends AbstractService implements SystemInput {
 		actionBuilder.setX(location.x);
 		actionBuilder.setY(location.y);
 		actionBuilder.setButton(button); 
+		actionBuilder.setNumClicks(1);
 		int modifier = ModifierPressed.NONE.getNumber();
 		for (ModifierPressed mod : modifiers) {
 			modifier |= mod.getNumber();
@@ -72,6 +74,7 @@ public class SystemInputManager extends AbstractService implements SystemInput {
 		actionBuilder.setX(location.x);
 		actionBuilder.setY(location.y);
 		actionBuilder.setButton(button); 
+		actionBuilder.setNumClicks(1);
 		int modifier = ModifierPressed.NONE.getNumber();
 		for (ModifierPressed mod : modifiers) {
 			modifier |= mod.getNumber();
