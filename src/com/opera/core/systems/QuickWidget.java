@@ -22,12 +22,12 @@ public class QuickWidget {
 		private final SystemInputManager systemInputManager;
 		private final int parentWindowId;
 		
-		public enum MousePosition {
-			MIDDLE(0),
-			LEFT(1),
-			RIGHT(2),
+		public enum DropPosition {
+			CENTER(0),
+			EDGE(1),
+			BETWEEN(2),
 			;
-			private MousePosition(int value) {
+			private DropPosition(int value) {
 				this.value = value;
 			}
 			
@@ -37,7 +37,7 @@ public class QuickWidget {
 				return value;
 			}
 		}
-		
+
 		public QuickWidget(IDesktopUtils desktopUtils, SystemInputManager inputManager, QuickWidgetInfo info, int parentWindowId) {
 	        this.info = info;
 	        this.desktopUtils = desktopUtils;
@@ -59,20 +59,92 @@ public class QuickWidget {
 			systemInputManager.click(getCenterLocation(), button, numClicks, modifiers);
 		}
 		
-		public void dragAndDropOn(QuickWidget element, MousePosition pos) {
+		public void dragAndDropOn(QuickWidget element, DropPosition dropPos) {
 			/*
 			 * FIXME: Handle MousePosition
 			 * 
 			 */
 			Point currentLocation = this.getCenterLocation();
-			Point dragPoint = element.getCenterLocation();
+			Point dropPoint = getDropPoint(element, dropPos);
+			
 			List<ModifierPressed> alist = new ArrayList<ModifierPressed>();
 			alist.add(ModifierPressed.NONE);
+			
 			systemInputManager.mouseDown(currentLocation, MouseButton.LEFT, alist);
-			systemInputManager.mouseMove(dragPoint, MouseButton.LEFT, alist);
-			systemInputManager.mouseUp(dragPoint, MouseButton.LEFT, alist);
+			systemInputManager.mouseMove(dropPoint, MouseButton.LEFT, alist);
+			systemInputManager.mouseUp(dropPoint, MouseButton.LEFT, alist);
+		}
+
+		// Intersect two lines
+		private Point intersection(int x1,int y1,int x2,int y2, int x3, int y3, int x4,int y4) {
+			double gradient1 = (y2-y1)/(x2-x1); 
+			double gradient2 = (y4-y3)/(x4-x3); 
+			
+			// Parallel
+			if (gradient1 == gradient2)
+				return null;
+
+			double intercept1 = y1-gradient1*x1;
+			double intercept2 = y3-gradient2*x3;
+
+			double xi = (intercept1-intercept2)/(gradient1-gradient2); 
+			double yi = gradient1*xi + intercept1; 
+			
+			// Check the point isn't off the ends of the lines
+			if ((x1-xi)*(xi-x2)>=0 && (x3-xi)*(xi-x4)>=0 && (y1-yi)*(yi-y2)>=0 && (y3-yi)*(yi-y4)>=0)
+				return new Point((int)xi, (int)yi);
+			
+			return null;
+		}
+
+		// Intersect a line and a DesktopWindowRect
+		private Point intersection(int x1,int y1,int x2,int y2, DesktopWindowRect rect) {
+			Point bottom = intersection(x1, y1, x2, y2, rect.getX(), rect.getY(), rect.getX() + rect.getHeight(), rect.getY());
+			if (bottom != null)
+				return bottom;
+			
+			Point right = intersection(x1, y1, x2, y2, rect.getX() + rect.getWidth(), rect.getY(), rect.getX() + rect.getWidth(), rect.getY() + rect.getHeight());
+			if (right != null)
+				return right;
+
+			Point top = intersection(x1, y1, x2, y2, rect.getX(), rect.getY() + rect.getHeight(), rect.getX() + rect.getWidth(), rect.getY() + rect.getHeight());
+			if (top != null)
+				return top;
+
+			Point left = intersection(x1, y1, x2, y2, rect.getX(), rect.getY(), rect.getX(), rect.getY() + rect.getHeight());
+			if (left != null)
+				return left;
+
+			return null;
 		}
 		
+		// Gets the coordinates of the drop point between the two quick widgets
+		// The drop point is on the quick widget passed in
+		public Point getDropPoint(QuickWidget element, DropPosition pos) {
+			Point dropPoint = new Point(element.getCenterLocation().x, element.getCenterLocation().y);
+			if (pos == DropPosition.CENTER) 
+				return dropPoint;
+			
+			Point dragPoint = new Point(this.getCenterLocation().x, this.getCenterLocation().y);
+			
+			// Find the side of the DesktopWindowRect of the widget that as the intersect
+			Point dragIntersectPoint = intersection(dragPoint.x, dragPoint.y, dropPoint.x, dropPoint.y, this.getRect());
+			
+			if (dragIntersectPoint != null) {
+				Point dropIntersectPoint = intersection(dragPoint.x, dragPoint.y, dropPoint.x, dropPoint.y, element.getRect());
+			
+				if (dropIntersectPoint != null) {
+					if (pos == DropPosition.EDGE) 
+						return dropIntersectPoint;
+
+					// Get the mid point of the line
+					return new Point(dragIntersectPoint.x - dropIntersectPoint.x, dragIntersectPoint.y - dropIntersectPoint.y);
+				}
+			}
+			
+			return null;
+		}
+
 		public void hover() {
 			List<ModifierPressed> alist = new ArrayList<ModifierPressed>();
 			alist.add(ModifierPressed.NONE);
