@@ -22,6 +22,22 @@ public class QuickWidget {
 		private final SystemInputManager systemInputManager;
 		private final int parentWindowId;
 		
+		public enum MousePosition {
+			MIDDLE(0),
+			LEFT(1),
+			RIGHT(2),
+			;
+			private MousePosition(int value) {
+				this.value = value;
+			}
+			
+			private Integer value;
+
+			public Integer getValue() {
+				return value;
+			}
+		}
+		
 		public QuickWidget(IDesktopUtils desktopUtils, SystemInputManager inputManager, QuickWidgetInfo info, int parentWindowId) {
 	        this.info = info;
 	        this.desktopUtils = desktopUtils;
@@ -43,7 +59,11 @@ public class QuickWidget {
 			systemInputManager.click(getCenterLocation(), button, numClicks, modifiers);
 		}
 		
-		public void dragAndDropOn(QuickWidget element) {
+		public void dragAndDropOn(QuickWidget element, MousePosition pos) {
+			/*
+			 * FIXME: Handle MousePosition
+			 * 
+			 */
 			Point currentLocation = this.getCenterLocation();
 			Point dragPoint = element.getCenterLocation();
 			List<ModifierPressed> alist = new ArrayList<ModifierPressed>();
