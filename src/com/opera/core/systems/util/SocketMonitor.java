@@ -110,7 +110,7 @@ public class SocketMonitor {
         if (channel == null)
             return false;
 
-	synchronized (changes) {
+        synchronized (changes) {
             changes.add(new SocketMonitor.SelectorChangeRequest(channel, Operation.MODIFY, selectMask, listener));
             selector.wakeup();
         }

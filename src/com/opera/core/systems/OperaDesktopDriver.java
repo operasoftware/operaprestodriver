@@ -11,11 +11,16 @@ import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearch.Qui
 import com.opera.core.systems.scope.protos.SystemInputProtos.ModifierPressed;
 import com.opera.core.systems.scope.services.IDesktopWindowManager;
 import com.opera.core.systems.scope.services.ums.SystemInputManager;
+import com.opera.core.systems.settings.OperaDriverSettings;
 
 public class OperaDesktopDriver extends OperaDriver {
 	
 	private IDesktopWindowManager desktopWindowManager;
 	private SystemInputManager systemInputManager;
+	
+	public OperaDesktopDriver(OperaDriverSettings settings){
+		super(settings);
+	}
 	
 	/**
 	 * For testing override this method.

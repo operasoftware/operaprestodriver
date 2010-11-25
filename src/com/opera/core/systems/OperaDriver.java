@@ -60,71 +60,93 @@ import com.opera.core.systems.model.ScopeActions;
 import com.opera.core.systems.model.ScreenShotReply;
 import com.opera.core.systems.model.ScriptResult;
 import com.opera.core.systems.model.UserInteraction;
+import com.opera.core.systems.runner.OperaRunner;
+import com.opera.core.systems.runner.launcher.OperaLauncherRunner;
 import com.opera.core.systems.scope.exceptions.CommunicationException;
 import com.opera.core.systems.scope.exceptions.FatalException;
 import com.opera.core.systems.scope.handlers.PbActionHandler;
-import com.opera.core.systems.scope.internal.OperaBinary;
 import com.opera.core.systems.scope.internal.OperaIntervals;
 import com.opera.core.systems.scope.services.IEcmaScriptDebugger;
 import com.opera.core.systems.scope.services.IOperaExec;
 import com.opera.core.systems.scope.services.IWindowManager;
+import com.opera.core.systems.settings.OperaDriverSettings;
 
 public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, FindsByXPath, FindsByName, FindsByTagName, FindsByClassName,
 		FindsByCssSelector, SearchContext, JavascriptExecutor {
+	
+	private OperaDriverSettings settings;
+	private OperaRunner operaRunner;
+	
+	private boolean isDriverStarted = false; //Does this driver have a started opera? Makes it possible to restart opera without throwing out the driver.
 	
 	protected IEcmaScriptDebugger debugger;
 	protected IOperaExec exec;
 	protected IWindowManager windowManager;
 	protected ScopeServices services;
 	protected ScopeActions actionHandler;
-	private OperaBinary binary;
 	
-	protected IEcmaScriptDebugger getScriptDebugger() {
-		return debugger;
-	}
+	/**
+	 * Constructor that starts opera.
+	 */
+	public OperaDriver(OperaDriverSettings settings){
 
-	protected IOperaExec getExecService() {
-		return exec;
-	}
-
-	protected IWindowManager getWindowManager() {
-		return windowManager;
-	}
-
-	protected ScopeServices getScopeServices() {
-		return services;
-	}
-
-	// TODO
-	// Profiling
-	public OperaDriver() {
-		this(null);
-	}
-	
-	public OperaDriver(String executableLocation, String... arguments){
-		String operaPath = System.getenv().get("OPERA_PATH");
-		String operaArgs = System.getenv().get("OPERA_ARGS");
+		this.settings = settings;
+		this.operaRunner = new OperaLauncherRunner(this.settings);
 		
-		if(executableLocation != null) {
-			binary = new OperaBinary(executableLocation, arguments);
-		} else if(operaPath != null) {
-			arguments = (operaArgs != null && operaArgs.length() > 0) ? operaArgs.split(",") : arguments;
-			binary = new OperaBinary(operaPath, arguments);
+		this.operaRunner.startOpera();
+		this.init();
+	}
+	/**
+	 * Start opera : DONT USE YET
+	 */
+	/*
+	public void startOpera(){
+		if(!this.isDriverStarted){
+			this.operaRunner.startOpera();
+			this.init();
+			this.isDriverStarted = true;
 		}
-		
-		init();
 	}
-
+	*/
+	/**
+	 * Stops opera : DONT USE YET
+	 */
+	/*
+	public void stopOpera(){
+		if(this.isDriverStarted){
+			operaRunner.stopOpera();
+			isDriverStarted = false;
+		}
+	}
+	*/
+	/**
+	 * Restarts opera : DONT USE YET
+	 */
+	/*
+	public void restartOpera(){
+		this.stopOpera();
+		this.startOpera();
+	}
+	*/
+	/**
+	 * Shutdown webdriver, will kill opera an such if running.
+	 */
+	public void shutdown(){
+		if(this.isDriverStarted)
+			this.quit();
+		this.operaRunner.shutdown();
+	}
+	
 	/**
 	 * For testing override this method.
 	 */
 	protected void init() {
-		createScopeServices();
-		services.init();
-		debugger = services.getDebugger();
-		windowManager = services.getWindowManager();
-		exec = services.getExec();
-		actionHandler = new PbActionHandler(services);
+		this.createScopeServices();
+		this.services.init();
+		this.debugger = services.getDebugger();
+		this.windowManager = services.getWindowManager();
+		this.exec = services.getExec();
+		this.actionHandler = new PbActionHandler(services);
 	}
 	
 	protected Map<String, String> getServicesList()
@@ -182,7 +204,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 	}
 	
 	public void gc() {
-            debugger.releaseObjects();
+    	debugger.releaseObjects();
 	}
 
 	public Dimension getDimensions() {
@@ -818,10 +840,6 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
         services.onBinaryStopped(code);
     }
     
-    public int getPid() {
-    	return binary.getPid();
-    }
-    
     /**
      * Cache of OperaDriver version.
      */
@@ -859,5 +877,21 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
     	
     	return operaDriverVersion;
     }
+    
+    protected IEcmaScriptDebugger getScriptDebugger() {
+		return debugger;
+	}
+
+	protected IOperaExec getExecService() {
+		return exec;
+	}
+
+	protected IWindowManager getWindowManager() {
+		return windowManager;
+	}
+
+	protected ScopeServices getScopeServices() {
+		return services;
+	}
 }
 
