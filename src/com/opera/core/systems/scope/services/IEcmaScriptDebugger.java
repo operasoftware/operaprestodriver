@@ -174,4 +174,6 @@ public interface IEcmaScriptDebugger {
 	void resetFramePath();
 
 	String executeJavascript(String using, Integer windowId);
+
+	Object examineScriptResult(Integer id);
 }

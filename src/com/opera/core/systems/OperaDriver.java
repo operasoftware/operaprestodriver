@@ -415,10 +415,14 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 
 	// TODO Benchmark, XPath is supposed to be faster?
 	public WebElement findElementByLinkText(String using) {
-		return findSingleElement("var elements = document.getElementsByTagName('a');" +
-				"for (var i = 0; i < elements.length; i++) {" +
-				"	if (elements[i].textContent == '" + using + "') { elements[i]; }" +
-				"}", "link text");
+		return findSingleElement("(function(){\n"+
+	        "var links = document.getElementsByTagName('a'), element = null;\n"+
+	        "for (var i = 0; i < links.length && !element; ++i) {\n"+
+	        "if (links[i].textContent == '" + using + "') {\n"+
+	        "element = links[i];\n"+
+	        "}\n"+
+	        "}\n"+
+	        "return element;\n})()", "link text");
 	}
 
 	public WebElement findElementByPartialLinkText(String using) {
@@ -658,12 +662,32 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 	}
 
 	public WebElement findElementByTagName(String using) {
-            return findSingleElement("document.getElementsByTagName('" + using +"')[0];", "tag name");
+		if(using.contains(":")) {//has prefix
+			String[] tagInfo = using.split(":");
+			return findSingleElement("(function() { var elements = document.getElementsByTagName('" + tagInfo[1] + "'), element = null;" +
+					"for( var i = 0; i < elements.length; i++ ) {" +
+					"if( elements[i].prefix == '" + tagInfo[0] + "' ) {" +
+					"element = elements[i];" +
+					"}" +
+					"}" +
+					"return element; })()", "tag name");
+		}
+		return findSingleElement("document.getElementsByTagName('" + using +"')[0];", "tag name");
 	}
 
 
 	public List<WebElement> findElementsByTagName(String using) {
-            return findMultipleElements("document.getElementsByTagName('"+ using + "');\n", "name");
+		if(using.contains(":")) {//has prefix
+			String[] tagInfo = using.split(":");
+			return findMultipleElements("(function() { var elements = document.getElementsByTagName('" + tagInfo[1] + "'), output = [];" +
+					"for( var i = 0; i < elements.length; i++ ) {" +
+					"if( elements[i].prefix == '" + tagInfo[0] + "' ) {" +
+					"output.push(elements[i]);" +
+					"}" +
+					"}" +
+					"return output; })()", "tag name");
+		}
+		return findMultipleElements("document.getElementsByTagName('"+ using + "');\n", "tag name");
 	}
 
 	public WebElement findElementByCssSelector(String using) {
@@ -761,18 +785,10 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
                     return new OperaWebElement(this, objectId);
                 if(result.getClassName().equals("NodeList"))
                     return processElements(objectId);
-                if(result.getClassName().equals("Array"))
-                    return processObjects(objectId);
+                if(result.getClassName().equals("Array") || result.getClassName().equals("Object"))
+                    return debugger.examineScriptResult(objectId);         	
             }
             return object;
-	}
-
-	protected List<Object> processObjects(Integer id) {
-            List<Integer> ids = debugger.examineObjects(id);
-            List<Object> toReturn = new ArrayList<Object>();
-            for (Integer objectId : ids)
-                toReturn.add(debugger.callFunctionOnObject("locator", objectId, true));
-            return toReturn;
 	}
 	
 	public boolean isJavascriptEnabled() {

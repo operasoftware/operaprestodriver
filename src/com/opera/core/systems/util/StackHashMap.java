@@ -10,8 +10,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentMap;
 
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
 
 /**
  * A thread safe stack hash map for use in window manager
@@ -70,7 +68,7 @@ public class StackHashMap<K,V> implements ConcurrentMap<K,V> {
 	}
 
 	public Set<K> keySet() {
-		throw new NotImplementedException();
+		throw new UnsupportedOperationException();
 	}
 
 	public Collection<V> values() {
@@ -78,7 +76,7 @@ public class StackHashMap<K,V> implements ConcurrentMap<K,V> {
 	}
 
 	public Set<Map.Entry<K, V>> entrySet() {
-		throw new NotImplementedException();
+		throw new UnsupportedOperationException();
 	}
 
 	public int size() {
@@ -174,15 +172,15 @@ public class StackHashMap<K,V> implements ConcurrentMap<K,V> {
 
 
 	public boolean remove(Object key, Object value) {
-		throw new NotImplementedException();
+		throw new UnsupportedOperationException();
 	}
 
 	public boolean replace(K key, V oldValue, V newValue) {
-		throw new NotImplementedException();
+		throw new UnsupportedOperationException();
 	}
 
 	public V replace(K key, V value) {
-		throw new NotImplementedException();
+		throw new UnsupportedOperationException();
 	}
 
 }

@@ -224,7 +224,12 @@ public class SocketMonitor {
 
     protected void processSelectionKey(SelectionKey key) throws IOException
     {
+    	
         SelectableChannel channel = key.channel();
+        
+    	if(!key.isValid())
+    		return;
+    	
         SocketListener listener = (SocketListener) key.attachment();
         
         int currentMask = key.interestOps();

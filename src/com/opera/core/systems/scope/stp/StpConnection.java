@@ -169,6 +169,10 @@ public class StpConnection implements SocketListener {
 
     public boolean canRead(SelectableChannel channel) throws IOException {
         logger.fine("canRead");
+        
+        if(!channel.isOpen())
+        	return false;
+        
         if(socketChannel == null) throw new IOException("We dont have a socket :-)");
         
         //read as much data as possible into buffer!

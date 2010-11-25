@@ -546,5 +546,10 @@ public class EcmascriptService extends AbstractService implements IEcmaScriptDeb
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	public Object examineScriptResult(Integer id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 }

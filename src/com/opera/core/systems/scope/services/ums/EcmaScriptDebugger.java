@@ -419,19 +419,22 @@ public class EcmaScriptDebugger extends AbstractService implements IEcmaScriptDe
 
 		String dataType = result.getType();
 		
-        if (dataType.equals("string")) {
-        	return result.getValue();
+		if (dataType.equals("object")) {
+            return result.getObjectValue();
+        } else return parseValue(dataType, result.getValue());
+	}
+	
+	protected Object parseValue(String dataType, String value) {
+		if (dataType.equals("string")) {
+        	return value;
         } else if (dataType.equals("number")) {
-            return parseNumber(result.getValue());
+            return parseNumber(value);
         } else if (dataType.equals("boolean")) {
-            return Boolean.valueOf(result.getValue());
+            return Boolean.valueOf(value);
         } else if (dataType.equals("undefined")) {
             return null;
-        } else if (dataType.equals("object")) {
-            return result.getObjectValue();
         }
-        //return null if none
-        return null;
+		return null;
 	}
 	
 	protected Object parseNumber(String value) {
@@ -597,11 +600,7 @@ public class EcmaScriptDebugger extends AbstractService implements IEcmaScriptDe
 		cleanUpRuntimes(windowId);
 	}
 
-	//TODO needs retry approach?
-	/* (non-Javadoc)
-	 * @see com.opera.core.systems.scope.services.xml.IEcmaScriptDebugger#examineObjects(java.lang.Integer)
-	 */
-	public List<Integer> examineObjects(Integer id) {
+	private ObjectList getObjectList(Integer id) {
 		ExamineList.Builder examine = ExamineList.newBuilder();
 		examine.setRuntimeID(getRuntimeId());
 		examine.addObjectList(id);
@@ -609,8 +608,15 @@ public class EcmaScriptDebugger extends AbstractService implements IEcmaScriptDe
 		
 		ObjectList.Builder builder = ObjectList.newBuilder();
 		buildPayload(response, builder);
-		ObjectList list = builder.build();
-		
+		return builder.build();
+	}
+	
+	//TODO needs retry approach?
+	/* (non-Javadoc)
+	 * @see com.opera.core.systems.scope.services.xml.IEcmaScriptDebugger#examineObjects(java.lang.Integer)
+	 */
+	public List<Integer> examineObjects(Integer id) {
+		ObjectList list = getObjectList(id);
 		List<Integer> ids = new ArrayList<Integer>();
 		List<Property> properties = list.getObjectList(0).getPropertyListList();
 		for (Property property : properties) {
@@ -665,6 +671,40 @@ public class EcmaScriptDebugger extends AbstractService implements IEcmaScriptDe
 		if(runtime == null) //speed dial doesnt have a runtime
 			return "";
 		return (String) executeScript(using, true, runtime.getRuntimeID());
+	}
+
+	public Object examineScriptResult(Integer id) {
+		ObjectList list = getObjectList(id);
+		String className = list.getObjectList(0).getValue().getName();
+		List<Property> properties = list.getObjectList(0).getPropertyListList();
+		if (className.equals("Array")) {
+			List<Object> result = new ArrayList<Object>();
+
+			for (Property property : properties) {
+				if (property.getType().equals("number") && property.getName().equals("length")) {
+					// ignore ?!?
+				} else if (property.getType().equals("object")) {
+					result.add(examineScriptResult(property.getObjectValue().getObjectID()));
+				} else {
+					result.add(parseValue(property.getType(), property.getValue()));
+				}
+			}
+			return result;
+		} else {
+			// we have a map
+			Map<String, Object> result = new HashMap<String, Object>();
+
+			for (Property property : properties) {
+				if (property.getType().equals("number") && property.getName().equals("length")) {
+					// ignore ?!?
+				} else if (property.getType().equals("object")) {
+					result.put(property.getName(), examineScriptResult(property.getObjectValue().getObjectID()));
+				} else {
+					result.put(property.getName(), parseValue(property.getType(), property.getValue()));
+				}
+			}
+			return result;
+		}
 	}
 	
 }
