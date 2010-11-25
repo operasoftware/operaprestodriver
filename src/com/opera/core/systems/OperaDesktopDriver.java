@@ -20,6 +20,7 @@ public class OperaDesktopDriver extends OperaDriver {
 	private SystemInputManager systemInputManager;
 	private IDesktopUtils desktopUtils;
 
+	/*
 	public OperaDesktopDriver(){
 		super();
 	}
@@ -27,6 +28,7 @@ public class OperaDesktopDriver extends OperaDriver {
 	public OperaDesktopDriver(String executableLocation, String... arguments){
 		super(executableLocation, arguments);
 	}
+	*/
 	
 	public OperaDesktopDriver(OperaDriverSettings settings){
 		super(settings);
