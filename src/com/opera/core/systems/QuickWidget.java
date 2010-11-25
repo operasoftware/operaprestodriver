@@ -134,7 +134,7 @@ public class QuickWidget {
 					}
 
 					// Get the mid point of the line
-					return new Point(dragIntersectPoint.x - dropIntersectPoint.x, dragIntersectPoint.y - dropIntersectPoint.y);
+					return new Point((dragIntersectPoint.x + dropIntersectPoint.x) / 2, (dragIntersectPoint.y + dropIntersectPoint.y) / 2);
 				}
 			}
 			
