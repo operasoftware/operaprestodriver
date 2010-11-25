@@ -77,19 +77,12 @@ public class QuickWidget {
 
 		// Intersect two lines
 		private Point intersection(int x1,int y1,int x2,int y2, int x3, int y3, int x4,int y4) {
-			double gradient1 = (y2-y1)/(x2-x1); 
-			double gradient2 = (y4-y3)/(x4-x3); 
-			
-			// Parallel
-			if (gradient1 == gradient2)
-				return null;
+			double dem = (x1 -x2) * (y3 -y4) - (y1 - y2) * (x3 -x4);
 
-			double intercept1 = y1-gradient1*x1;
-			double intercept2 = y3-gradient2*x3;
+			// Solve the intersect point
+			double xi = ((x1*y2 - y1*x2) * (x3 - x4) - (x1 - x2) * (x3*y4 - y3*x4)) / dem;
+			double yi = ((x1*y2 - y1*x2) * (y3 - y4) - (y1 - y2) * (x3*y4 - y3*x4)) / dem;
 
-			double xi = (intercept1-intercept2)/(gradient1-gradient2); 
-			double yi = gradient1*xi + intercept1; 
-			
 			// Check the point isn't off the ends of the lines
 			if ((x1-xi)*(xi-x2)>=0 && (x3-xi)*(xi-x4)>=0 && (y1-yi)*(yi-y2)>=0 && (y3-yi)*(yi-y4)>=0)
 				return new Point((int)xi, (int)yi);
@@ -134,8 +127,11 @@ public class QuickWidget {
 				Point dropIntersectPoint = intersection(dragPoint.x, dragPoint.y, dropPoint.x, dropPoint.y, element.getRect());
 			
 				if (dropIntersectPoint != null) {
-					if (pos == DropPosition.EDGE) 
+					if (pos == DropPosition.EDGE)
+					{
+						//System.out.println(" DropPoint  x: " + dropIntersectPoint.x + " y: " + dropIntersectPoint.y);
 						return dropIntersectPoint;
+					}
 
 					// Get the mid point of the line
 					return new Point(dragIntersectPoint.x - dropIntersectPoint.x, dragIntersectPoint.y - dropIntersectPoint.y);
