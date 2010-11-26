@@ -96,44 +96,14 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 		this.operaRunner.startOpera();
 		this.init();
 	}
-	/**
-	 * Start opera : DONT USE YET
-	 */
-	/*
-	public void startOpera(){
-		if(!this.isDriverStarted){
-			this.operaRunner.startOpera();
-			this.init();
-			this.isDriverStarted = true;
-		}
-	}
-	*/
-	/**
-	 * Stops opera : DONT USE YET
-	 */
-	/*
-	public void stopOpera(){
-		if(this.isDriverStarted){
-			operaRunner.stopOpera();
-			isDriverStarted = false;
-		}
-	}
-	*/
-	/**
-	 * Restarts opera : DONT USE YET
-	 */
-	/*
-	public void restartOpera(){
-		this.stopOpera();
-		this.startOpera();
-	}
-	*/
+	
 	/**
 	 * Shutdown webdriver, will kill opera an such if running.
 	 */
 	public void shutdown(){
 		if(this.isDriverStarted)
 			this.quit();
+		this.services.shutdown();
 		this.operaRunner.shutdown();
 	}
 	

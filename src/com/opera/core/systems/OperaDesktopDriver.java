@@ -67,7 +67,7 @@ public class OperaDesktopDriver extends OperaDriver {
 	 * Shutdown the driver without quiting Opera
 	 */
 	public void shutdown() {
-		services.shutdown();
+		super.shutdown();
 	}
 
 	/**
