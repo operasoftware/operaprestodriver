@@ -160,6 +160,22 @@ public class OperaExec extends AbstractService implements IOperaExec {
 			throw new WebDriverException("Unexpected error while calling action : " + using);
 	}
 
+	public void action(String using, int data, String dataString, String dataStringParam) {
+		if(!actions.contains(using))
+			throw new WebDriverException("The requested action is not supported : " + using);
+		ActionList.Builder builder = ActionList.newBuilder();
+		Action.Builder actionBuilder = Action.newBuilder();
+		actionBuilder.setName(using);
+		actionBuilder.setValue(dataString);
+		actionBuilder.setData(data);
+		actionBuilder.setStringParam(dataStringParam);
+		
+		//type.setSpace("preserve");
+		builder.addActionList(actionBuilder);
+		if(executeCommand(ExecCommand.EXEC, builder) == null)
+			throw new WebDriverException("Unexpected error while calling action : " + using);
+	}
+
 	//FIXME sending params, we have commas, space, what?
 	public void action(String using, String... params) {
 		action(using, services.getWindowManager().getActiveWindowId(), params);

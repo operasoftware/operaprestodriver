@@ -232,12 +232,12 @@ public class OperaDesktopDriver extends OperaDriver {
 	/**
 	 * Execute opera action
 	 * @param using - action_name
-	 * @param params - parameters to the action
+	 * @param data -  data parameter
+	 * @param dataString - data string parameter
+	 * @param dataStringParam - parameter to data string
 	 */
-	public void operaDesktopAction(String using, String... params) 
-	{
-        // Desktop never wants the window
-		exec.action(using, 0, params);
+	public void operaDesktopAction(String using, int data, String dataString, String dataStringParam) {
+		exec.action(using, data, dataString, dataStringParam);
 	}
 	
 	/*
