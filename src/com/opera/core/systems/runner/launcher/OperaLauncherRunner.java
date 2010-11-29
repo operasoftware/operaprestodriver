@@ -9,11 +9,14 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.google.protobuf.GeneratedMessage;
+import com.opera.core.systems.model.ScreenShotReply;
 import com.opera.core.systems.runner.OperaRunner;
 import com.opera.core.systems.runner.OperaRunnerException;
 import com.opera.core.systems.runner.launcher.OperaLauncherProtocol.MessageType;
 import com.opera.core.systems.runner.launcher.OperaLauncherProtocol.ResponseEncapsulation;
 import com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherHandshakeRequest;
+import com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherScreenshotRequest;
+import com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherScreenshotResponse;
 import com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStartRequest;
 import com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStatusRequest;
 import com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStatusResponse;
@@ -194,4 +197,30 @@ public class OperaLauncherRunner implements OperaRunner{
         return status;
     }
 	
+	/**
+	 * Take screenshots!
+	 */
+	public ScreenShotReply saveScreenshot(long timeout, String... hashes){
+		String resultMd5 = null;
+		byte[] resultBytes = null;
+
+		logger.log(Level.INFO, "Get opera screenshot");
+        try {
+            LauncherScreenshotRequest.Builder request = LauncherScreenshotRequest.newBuilder();
+            for(int i=0;i<hashes.length;i++){
+            	request.addKnownMD5S(hashes[i]);
+            }
+            request.setKnownMD5STimeoutMs((int)timeout);
+            
+            ResponseEncapsulation res = launcherProtocol.sendRequest(MessageType.MSG_SCREENSHOT, request.build().toByteArray());
+            LauncherScreenshotResponse response = (LauncherScreenshotResponse) res.getResponse();
+            resultMd5 = response.getMd5();
+            resultBytes = response.getImagedata().toByteArray();
+            
+        } catch (IOException e){
+        	throw new OperaRunnerException("Could not get state of opera", e);
+        }
+		
+		return new ScreenShotReply(resultMd5, resultBytes);
+	}
 }

@@ -19,7 +19,6 @@ limitations under the License.
 package com.opera.core.systems;
 
 import java.awt.Dimension;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -54,7 +53,6 @@ import org.openqa.selenium.internal.FindsByTagName;
 import org.openqa.selenium.internal.FindsByXPath;
 import org.openqa.selenium.internal.ReturnedCookie;
 
-import com.opera.core.systems.model.Canvas;
 import com.opera.core.systems.model.OperaAction;
 import com.opera.core.systems.model.ScopeActions;
 import com.opera.core.systems.model.ScreenShotReply;
@@ -687,20 +685,21 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
             throw new NoSuchElementException("Cannot find element with " + type);
 	}
 	
+	/*
 	public String saveScreenshot(String fileName, int timeout, String... hashes) {
 		return screenWatcher(fileName, timeout, true, hashes);
 	}
 
 	public ScreenShotReply saveScreenshot(Canvas canvas, long timeout, boolean includeImage, String... hashes) {
-		/*
+		
 		 * FIXME: This _needs_ be cleaned up.  All things related to 
 		 * `timeout` should, ideally, be removed and handled elsewhere.
-		 */
+		 
 		
-		/*
-		 * No reason to wait if we have idle control.  Builds without
-		 * OperaIdle enabled will fail if timeout is 1 or less.
-		 */
+		//
+		// * No reason to wait if we have idle control.  Builds without
+		// * OperaIdle enabled will fail if timeout is 1 or less.
+		// 
 		if(services.isOperaIdleAvailable()) {
 			timeout = 1;
 		} else if (!services.isOperaIdleAvailable() && timeout <= 1) {
@@ -708,11 +707,6 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 		}
 
         return exec.screenWatcher(canvas, timeout, includeImage, hashes);
-	}
-	
-	public boolean isOperaIdleAvailable()
-	{
-		return services.isOperaIdleAvailable();
 	}
 	
 	private String screenWatcher(String fileName, int timeout, boolean saveFile, String... hashes) {
@@ -740,6 +734,24 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 		}
 		
 		return screenshot.getMd5();
+	}
+	*/
+	
+	public ScreenShotReply saveScreenshot(long timeout, String... hashes)
+	{
+		/*
+		if(services.isOperaIdleAvailable()) {
+			timeout = 1;
+		} else if (!services.isOperaIdleAvailable() && timeout <= 1) {
+			timeout = 10;
+		}
+		*/
+		return operaRunner.saveScreenshot(timeout, hashes);
+	}
+	
+	public boolean isOperaIdleAvailable()
+	{
+		return services.isOperaIdleAvailable();
 	}
 	
 	public Object executeScript(String script, Object... args) {
