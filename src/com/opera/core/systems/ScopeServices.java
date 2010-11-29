@@ -31,6 +31,7 @@ import com.opera.core.systems.scope.services.IDesktopUtils;
 import com.opera.core.systems.scope.services.IEcmaScriptDebugger;
 import com.opera.core.systems.scope.services.IOperaExec;
 import com.opera.core.systems.scope.services.IWindowManager;
+import com.opera.core.systems.scope.services.IPrefs;
 import com.opera.core.systems.scope.services.ums.SystemInputManager;
 import com.opera.core.systems.scope.services.ums.UmsServices;
 import com.opera.core.systems.scope.stp.StpConnection;
@@ -45,6 +46,7 @@ public class ScopeServices implements IConnectionHandler {
 	private IWindowManager windowManager;
 	private IDesktopWindowManager desktopWindowManager; 
 	private IDesktopUtils desktopUtils; 
+	private IPrefs prefs; 
 	private SystemInputManager systemInputManager;
 	private Map<String, String> versions;
 	public Map<String, String> getVersions() {
@@ -98,7 +100,15 @@ public class ScopeServices implements IConnectionHandler {
 	public void setWindowManager(IWindowManager windowManager) {
 		this.windowManager = windowManager;
 	}
-	
+
+	IPrefs getPrefs() {
+		return prefs;
+	}
+
+	public void setPrefs(IPrefs prefs) {
+		this.prefs = prefs;
+	}
+
 	IDesktopWindowManager getDesktopWindowManager() {
 		return desktopWindowManager;
 	}
@@ -153,7 +163,10 @@ public class ScopeServices implements IConnectionHandler {
 
 		wantedServices.add("exec");
 		wantedServices.add("window-manager");
-		
+
+		if (versions.containsKey("prefs"))
+			wantedServices.add("prefs");
+
 		if (versions.containsKey("desktop-window-manager"))
 			wantedServices.add("desktop-window-manager");
 		
@@ -175,6 +188,9 @@ public class ScopeServices implements IConnectionHandler {
 	private void initializeServices(boolean enableDebugger) {
 		exec.init();
 		windowManager.init();
+
+		if (versions.containsKey("prefs") && prefs != null)
+			prefs.init();
 
 		if (versions.containsKey("desktop-window-manager") && desktopWindowManager != null)
 			desktopWindowManager.init();
