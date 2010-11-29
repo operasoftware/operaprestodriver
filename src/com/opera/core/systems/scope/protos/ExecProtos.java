@@ -3421,8 +3421,8 @@ public final class ExecProtos {
       public boolean hasData() { return hasData; }
       public int getData() { return data_; }
       
-      // optional string string_param = 5;
-      public static final int STRING_PARAM_FIELD_NUMBER = 5;
+      // optional string stringParam = 5;
+      public static final int STRINGPARAM_FIELD_NUMBER = 5;
       private boolean hasStringParam;
       private java.lang.String stringParam_ = "";
       public boolean hasStringParam() { return hasStringParam; }
@@ -3783,7 +3783,7 @@ public final class ExecProtos {
           return this;
         }
         
-        // optional string string_param = 5;
+        // optional string stringParam = 5;
         public boolean hasStringParam() {
           return result.hasStringParam();
         }
@@ -4201,12 +4201,12 @@ public final class ExecProtos {
       "\001 \002(\r\022\021\n\006redLow\030\002 \001(\r:\0010\022\024\n\007redHigh\030\003 \001(" +
       "\r:\003255\022\023\n\010greenLow\030\004 \001(\r:\0010\022\026\n\tgreenHigh" +
       "\030\005 \001(\r:\003255\022\022\n\007blueLow\030\006 \001(\r:\0010\022\025\n\010blueH" +
-      "igh\030\007 \001(\r:\003255\"\227\001\n\nActionList\022,\n\nactionL",
-      "ist\030\001 \003(\0132\030.scope.ActionList.Action\032[\n\006A" +
+      "igh\030\007 \001(\r:\003255\"\226\001\n\nActionList\022,\n\nactionL",
+      "ist\030\001 \003(\0132\030.scope.ActionList.Action\032Z\n\006A" +
       "ction\022\014\n\004name\030\001 \002(\t\022\r\n\005value\030\002 \001(\t\022\020\n\010wi" +
-      "ndowID\030\003 \001(\r\022\014\n\004data\030\004 \001(\005\022\024\n\014string_par" +
-      "am\030\005 \001(\tB3\n#com.opera.core.systems.scope" +
-      ".protosB\nExecProtosH\001"
+      "ndowID\030\003 \001(\r\022\014\n\004data\030\004 \001(\005\022\023\n\013stringPara" +
+      "m\030\005 \001(\tB3\n#com.opera.core.systems.scope." +
+      "protosB\nExecProtosH\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
