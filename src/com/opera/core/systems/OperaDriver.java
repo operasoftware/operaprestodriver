@@ -65,8 +65,11 @@ import com.opera.core.systems.scope.exceptions.FatalException;
 import com.opera.core.systems.scope.handlers.PbActionHandler;
 import com.opera.core.systems.scope.internal.OperaBinary;
 import com.opera.core.systems.scope.internal.OperaIntervals;
+import com.opera.core.systems.scope.protos.PrefsProtos.Pref;
+import com.opera.core.systems.scope.protos.PrefsProtos.GetPrefArg.Mode;
 import com.opera.core.systems.scope.services.IEcmaScriptDebugger;
 import com.opera.core.systems.scope.services.IOperaExec;
+import com.opera.core.systems.scope.services.IPrefs;
 import com.opera.core.systems.scope.services.IWindowManager;
 
 public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, FindsByXPath, FindsByName, FindsByTagName, FindsByClassName,
@@ -74,6 +77,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 	
 	protected IEcmaScriptDebugger debugger;
 	protected IOperaExec exec;
+	protected IPrefs prefs;
 	protected IWindowManager windowManager;
 	protected ScopeServices services;
 	protected ScopeActions actionHandler;
@@ -125,6 +129,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 		windowManager = services.getWindowManager();
 		exec = services.getExec();
 		actionHandler = new PbActionHandler(services);
+		prefs = services.getPrefs();
 	}
 	
 	protected Map<String, String> getServicesList()
@@ -133,7 +138,8 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 		versions.put("ecmascript-debugger", "5.0");
 		versions.put("window-manager", "2.0");
 		versions.put("exec", "2.0");
-    versions.put("core", "1.0");
+		versions.put("core", "1.0");
+		versions.put("prefs", "1.0");
 		return versions;
 	}
 
@@ -883,5 +889,21 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
     	
     	return operaDriverVersion;
     }
+    
+	public String getPref(String section, String key) {
+		return services.getPrefs().getPref(section, key, Mode.CURRENT);
+	}
+
+	public String getDefaultPref(String section, String key) {
+		return services.getPrefs().getPref(section, key, Mode.DEFAULT);
+	}
+
+	public List<Pref> listPrefs(boolean sort, String section) {
+		return services.getPrefs().listPrefs(sort, section);
+	}
+	
+	public void setPref(String section, String key, String value) {
+		services.getPrefs().setPrefs(section, key, value);
+	}
 }
 

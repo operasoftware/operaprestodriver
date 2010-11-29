@@ -10,6 +10,7 @@ import com.opera.core.systems.scope.services.IDesktopUtils;
 import com.opera.core.systems.scope.services.IEcmaScriptDebugger;
 import com.opera.core.systems.scope.services.IOperaExec;
 import com.opera.core.systems.scope.services.IWindowManager;
+import com.opera.core.systems.scope.services.IPrefs;
 import com.opera.core.systems.util.VersionUtil;
 
 public class UmsServices {
@@ -19,6 +20,7 @@ public class UmsServices {
 	protected final IDesktopWindowManager desktopWindowManager;
 	protected final IDesktopUtils desktopUtils;
 	protected final SystemInputManager systemInputManager;
+	protected final IPrefs prefs;
 	protected final IOperaExec exec;
 
 	public IEcmaScriptDebugger getDebugger() {
@@ -36,7 +38,12 @@ public class UmsServices {
 	public UmsServices(ScopeServices services, HostInfo info) {
 		List<Service> serviceList = info.getServiceListList();
 		windowManager = new WindowManager(services, getVersionForService( serviceList, "window-manager"));
-		
+
+		if (findServiceNamed(serviceList, "prefs") != null && services.getVersions().containsKey("prefs"))
+			prefs = new Prefs(services, getVersionForService( serviceList, "prefs"));
+		else 
+			prefs = null;
+
 		if (findServiceNamed(serviceList, "desktop-utils") != null && services.getVersions().containsKey("desktop-utils"))
 			desktopUtils = new DesktopUtils(services, getVersionForService( serviceList, "desktop-utils"));
 		else 
