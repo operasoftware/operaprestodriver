@@ -10,8 +10,7 @@ import com.opera.core.systems.scope.protos.SystemInputProtos.ModifierPressed;
 import com.opera.core.systems.scope.protos.SystemInputProtos.MouseInfo.MouseButton;
 
 
-
-public class BookmarkDialogTest {
+public class OperaBlank {
 	private static OperaDesktopDriver driver;
     
     @BeforeClass
