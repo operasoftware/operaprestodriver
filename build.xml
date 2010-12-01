@@ -137,7 +137,7 @@
   <!-- Run all junit tests -->
   <target name="test" depends="test_jar">			
     <junit fork="yes" haltonfailure="yes" printsummary="yes">
-      <sysproperty key="test_gogi_binary_location" value="/test/ramdisk/install/opera/profiles/release_tv/lingogi_release_tv" />
+      <sysproperty key="test_gogi_binary_location" value="/test/ramdisk/install/opera/profiles/release_desktop/lingogi_release_desktop" />
       <sysproperty key="test_launcher_binary_location" value="/home/jlivermo/opera-launcher/projects/linux/launcher" />
       <classpath refid="webdriver-opera.path" />
       <classpath refid="test.dir.path" />

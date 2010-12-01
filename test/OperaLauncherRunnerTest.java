@@ -1,6 +1,5 @@
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import junit.framework.*;
 import junit.textui.*;
@@ -168,7 +167,7 @@ public class OperaLauncherRunnerTest extends TestCase
 	public void testOperaLauncherRunnerConstructorWithSettings3()
 	{
 		settings.setRunOperaLauncherFromOperaDriver(true);
-		settings.setOperaBinaryArguments("-driver x11 -geometry 800x600 -nohw");
+		settings.setOperaBinaryArguments(" -geometry 800x600 -nohw");
 		runner = new OperaLauncherRunner(settings);
 		runner.startOpera();
 		Assert.assertTrue(runner.isOperaRunning());	

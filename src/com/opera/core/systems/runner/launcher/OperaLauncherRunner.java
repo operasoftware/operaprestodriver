@@ -32,30 +32,32 @@ public class OperaLauncherRunner implements OperaRunner{
 	
 	public OperaLauncherRunner(OperaDriverSettings settings){
 		this.settings = settings;
+		StringTokenizer tokanizer;
 		
 		if(this.settings.doRunOperaLauncherFromOperaDriver()){
 			
-			List<String> stringArray = new ArrayList<String>();
-			stringArray.add("-host");
+			List<String> stringArray = new ArrayList<String>();			stringArray.add("-host");
 			stringArray.add("127.0.0.1");
 			stringArray.add("-port");
 			stringArray.add(Integer.toString(this.settings.getOperaLauncherListeningPort()));
 			stringArray.add("-bin");
 			stringArray.add(this.settings.getOperaBinaryLocation());
+
+			// make sure that the arguments string is not null
+			if (this.settings.getOperaBinaryArguments() != null)
+			{
+				tokanizer = new StringTokenizer(this.settings.getOperaBinaryArguments(), " ");
+			}
+			else
+			{
+				tokanizer = new StringTokenizer(" ");
+			}
 			
-			StringTokenizer tokanizer = new StringTokenizer(this.settings.getOperaBinaryArguments(), " ");
 			while(tokanizer.hasMoreTokens()){
 				stringArray.add(tokanizer.nextToken());
 			}
 			
-			String argumentString = "";
-
-			for (String s : stringArray)
-			{
-				argumentString = argumentString + " " + s;
-			}
-			
-			logger.info("Starting Opera Launcher: " + this.settings.getOperaLauncherBinary() + " " + argumentString);
+			logger.info("Starting Opera Launcher: " + this.settings.getOperaLauncherBinary() + " " + this.settings.getOperaBinaryArguments());
 			launcherRunner = new OperaLauncherBinary(this.settings.getOperaLauncherBinary(), stringArray.toArray(new String[stringArray.size()]));
 		}			
 		
