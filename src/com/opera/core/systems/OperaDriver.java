@@ -125,7 +125,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 		versions.put("ecmascript-debugger", "5.0");
 		versions.put("window-manager", "2.0");
 		versions.put("exec", "2.0");
-    versions.put("core", "1.0");
+		versions.put("core", "1.0");
 		return versions;
 	}
 

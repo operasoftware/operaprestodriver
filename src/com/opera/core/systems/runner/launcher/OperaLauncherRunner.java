@@ -48,13 +48,21 @@ public class OperaLauncherRunner implements OperaRunner{
 				stringArray.add(tokanizer.nextToken());
 			}
 			
-			launcherRunner = new OperaLauncherBinary(this.settings.getOperaLauncherBinary(),stringArray.toArray(new String[stringArray.size()]));
-		}
+			String argumentString = "";
+
+			for (String s : stringArray)
+			{
+				argumentString = argumentString + " " + s;
+			}
 			
-		logger.log(Level.INFO, "Waiting for Opera Launcher connection on port " + this.settings.getOperaLauncherListeningPort());
+			logger.info("Starting Opera Launcher: " + this.settings.getOperaLauncherBinary() + " " + argumentString);
+			launcherRunner = new OperaLauncherBinary(this.settings.getOperaLauncherBinary(), stringArray.toArray(new String[stringArray.size()]));
+		}			
+		
+		logger.info("Waiting for Opera Launcher connection on port " + this.settings.getOperaLauncherListeningPort());
         try {
         	//setup listener server
-        	ServerSocket listenerServer = new ServerSocket(settings.getOperaLauncherListeningPort());
+        	ServerSocket listenerServer = new ServerSocket(settings.getOperaLauncherListeningPort());        	        	        	
         	//try to connect
         	launcherProtocol = new OperaLauncherProtocol(listenerServer.accept());
         	//we did it!
@@ -120,28 +128,36 @@ public class OperaLauncherRunner implements OperaRunner{
 		return chrashlog;
 	}
 	
-	public void shutdown() {
-		
-		try {
-			//Send a shutdown to the launcher!
-			if(this.settings.doRunOperaLauncherFromOperaDriver()){
-				try {
-					launcherProtocol.sendRequestWithoutResponse(MessageType.MSG_SHUTDOWN, null);
-				} catch (Exception e) {
-					//will give us read-response issues!
-					e.printStackTrace();
+	public void shutdown() {	
+		if (launcherRunner != null)
+		{
+			try {
+				//Send a shutdown to the launcher!
+				if(this.settings.doRunOperaLauncherFromOperaDriver()){
+					try {
+						launcherProtocol.sendRequestWithoutResponse(MessageType.MSG_SHUTDOWN, null);
+					} catch (Exception e) {
+						//will give us read-response issues!
+						e.printStackTrace();
+					}
 				}
+				//Then shutdown the protocol-connection
+				launcherProtocol.shutdown();
+			} catch (IOException e) {
+				//dont care
+				throw new OperaRunnerException("IOException encountered while terminating communication with the launcher", e);
 			}
-			//Then shutdown the protocol-connection
-			launcherProtocol.shutdown();
-		} catch (IOException e) {
-			//dont care
-			throw new OperaRunnerException("Do we get a shutdown exception?", e);
-		}
-		
-		if(launcherRunner != null){
-			launcherRunner.shutdown();
-			launcherRunner = null;
+			
+			try
+			{
+				launcherRunner.shutdown();
+			}
+			catch (Exception e)
+			{
+				throw new OperaRunnerException("Exception encountered while shutting down the launcher", e);
+			}
+			
+			launcherRunner = null;			
 		}
 	}
 	
