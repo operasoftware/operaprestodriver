@@ -3,6 +3,7 @@ package com.opera.core.systems.model;
 import java.util.List;
 
 public class ScreenShotReply {
+	
 	protected int windowId;
 	protected String md5;
 	protected byte[] png;
