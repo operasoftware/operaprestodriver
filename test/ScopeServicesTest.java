@@ -1,18 +1,35 @@
 import java.io.*;
 import java.util.*;
-import java.util.ArrayList;
-import java.util.List;
 
 import junit.framework.*;
 import junit.textui.*;
 
 import com.opera.core.systems.*;
+import com.opera.core.systems.runner.*;
+import com.opera.core.systems.runner.launcher.*;
+import com.opera.core.systems.settings.*;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.Platform;
 
 public class ScopeServicesTest extends TestCase 
 {
 	static ScopeServices services;
+	static OperaDriverSettings settings;
+	static OperaLauncherRunner runner;	
+	
+	public void testOperaAndLauncherInitializationForServices()
+	{
+		settings = new OperaDriverSettings();
+		settings.setRunOperaLauncherFromOperaDriver(true);
+		settings.setOperaBinaryLocation(System.getProperty("test_gogi_binary_location"));
+		settings.setOperaLauncherBinary(System.getProperty("test_launcher_binary_location"));
+		settings.setOperaBinaryArguments(" -geometry 800x600 -nohw");
+		
+		runner = new OperaLauncherRunner(settings);
+		runner.startOpera();
+		
+		Assert.assertNotNull(runner);
+	}
 	
 	public void testScopeServicesConstructor()
 	{
@@ -36,7 +53,7 @@ public class ScopeServicesTest extends TestCase
 	}
 	
 	public void testInitializeScopeServices()
-	{
+	{		
 		services.startStpThread();
 		
 		try
@@ -46,12 +63,23 @@ public class ScopeServicesTest extends TestCase
 		catch (WebDriverException e)
 		{	
 			fail("WebDriverException encountered while initializing Scope Services");
+			e.printStackTrace();
 		}					
 	}
 	
 	public void testIsConnected()
-	{
+	{		
 		Assert.assertTrue(services.isConnected());
+	}
+	
+	public void testShutdown()
+	{
+		services.shutdown();
+		Assert.assertFalse(services.isConnected());
+		
+		// now shutdown the launcher and Opera
+		runner.stopOpera();
+		runner.shutdown();
 	}
 
 }
