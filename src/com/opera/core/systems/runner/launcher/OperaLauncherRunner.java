@@ -66,7 +66,7 @@ public class OperaLauncherRunner implements OperaRunner{
 			}
 			
 			String allArgs = "";
-			
+
 			for (String s: stringArray)
 			{
 				allArgs = allArgs + s + " ";

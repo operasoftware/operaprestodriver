@@ -136,7 +136,7 @@
 
   <!-- Run all junit tests -->
   <target name="test" depends="test_jar">
-    <junit fork="yes" haltonfailure="no" printsummary="yes">
+    <junit fork="no" haltonfailure="no" printsummary="yes">
       <sysproperty key="test_gogi_binary_location" value="/test/ramdisk/install/opera/profiles/release_desktop/lingogi_release_desktop" />
       <sysproperty key="test_launcher_binary_location" value="/home/jlivermo/opera-launcher/projects/linux/launcher" />
       <classpath refid="webdriver-opera.path" />
@@ -152,6 +152,8 @@
       <test name="JavascriptTest" />
       <test name="CrashTest" />
       <test name="JavascriptTest" />
+      <test name="OperaLauncherRunnerTest" />
+      <test name="ScopeServicesTest" />
     </junit>
   </target>
 </project>
