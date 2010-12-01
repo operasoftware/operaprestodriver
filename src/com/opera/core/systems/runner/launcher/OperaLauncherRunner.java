@@ -71,7 +71,7 @@ public class OperaLauncherRunner implements OperaRunner{
 			{
 				allArgs = allArgs + s + " ";
 			}
-			
+
 			logger.info("Starting Opera Launcher: " + this.settings.getOperaLauncherBinary() + " " + allArgs);
 			launcherRunner = new OperaLauncherBinary(this.settings.getOperaLauncherBinary(), stringArray.toArray(new String[stringArray.size()]));
 		}			
