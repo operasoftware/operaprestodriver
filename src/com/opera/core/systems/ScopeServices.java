@@ -205,8 +205,10 @@ public class ScopeServices implements IConnectionHandler {
 
 	public void shutdown() {
 		shuttingDown = true;
-		if (connection != null) {
+		if (connection != null) 
+		{
 			connection.close();
+			connection = null;
 		}
 		stpThread.shutdown();
 		try {
@@ -274,7 +276,7 @@ public class ScopeServices implements IConnectionHandler {
 			logger.info("Caught exception when trying to shut down (cannot send quit). : " + e.getMessage());
 		}
 
-		shutdown();
+		shutdown();		
 	}
 
 	public boolean onConnected(StpConnection con) {
