@@ -160,13 +160,13 @@ public class FindElementsTest extends TestCase
   }
 
   // CSS selector
-  public void testName()
+  public void testCssSelector()
   {
     WebElement el = driver.findElementByCssSelector("p > span + a");
     Assert.assertEquals(el.getAttribute("id"), "local");
   }
 
-  public void testElementsName()
+  public void testElementsCssSelector()
   {
     List<WebElement> els = driver.findElementsByName("div input[name=radios]");
 
