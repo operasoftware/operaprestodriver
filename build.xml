@@ -144,6 +144,9 @@
       <formatter type="brief" usefile="false" />
       <test name="OperaLauncherRunnerTest" />
       <test name="ScopeServicesTest" />
+      <test name="CrashTest" />
+      <test name="FindElementsTest" />
+      <test name="NavigationTest" />
     </junit>
   </target>
 </project>
