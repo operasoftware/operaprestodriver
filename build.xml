@@ -8,7 +8,7 @@
    ant jar      creates a jar file in package directory (/pkg).
 
    Use “ant jar” for normal releases.
-   
+
    ant test     compiles test classes and generates a test jar and runs junit tests
 -->
 
@@ -28,21 +28,21 @@
       <pathelement location="/usr/share/java/ant-contrib.jar"/>
     </classpath>
   </taskdef>
-  
+
   <path id="webdriver-opera.path">
     <pathelement location="bin" />
     <fileset dir="lib" includes="**/*.jar" />
   </path>
-	
+
   <path id="pkg.dir.path">
     <pathelement location="pkg" />
     <fileset dir="pkg"/>
-  </path>	
-	
+  </path>
+
   <path id="test.dir.path">
     <pathelement location="test" />
     <fileset dir="test"/>
-  </path>	
+  </path>
 
   <!-- Delete the bin and pkg dirs -->
   <target name="clean">
@@ -66,8 +66,8 @@
       <classpath refid="webdriver-opera.path" />
     </javac>
   </target>
-	
-  <!-- Build the jar -->	
+
+  <!-- Build the jar -->
   <target name="jar" depends="compile">
     <mkdir dir="pkg" />
     <loadfile srcfile="src/com/opera/core/systems/VERSION" property="versionfile" />
@@ -77,7 +77,7 @@
 		   input="${versionfile}"
 		   regexp="\n"
 		   replace=""
-       global="true" />  	
+       global="true" />
 
     <jar destfile="pkg/webdriver-opera-${version}.jar">
       <fileset dir="bin" includes="**/*.class" />
@@ -87,9 +87,9 @@
       	<attribute name="Implementation-Version" value="${version}" />
       </manifest>
     </jar>
-  </target>	
-	
-  <!-- Compile any modified classes including test classes -->	
+  </target>
+
+  <!-- Compile any modified classes including test classes -->
   <target name="test_compile">
     <fileset dir="bin" />
     <mkdir dir="bin" />
@@ -98,21 +98,21 @@
       <fileset dir="src">
       	<exclude name="**/*.launch" />
       	<exclude name="**/*.java" />
-      </fileset> 	
-    </copy>	
+      </fileset>
+    </copy>
 
     <javac debug="true" destdir="bin" includeantruntime="false">
       <src path="src" />
       <classpath refid="webdriver-opera.path" />
     </javac>
-  	
+
     <javac debug="true" destdir="test" includeantruntime="false">
       <src path="test" />
       <classpath refid="webdriver-opera.path" />
-    </javac>  	
-  </target>	
-	
-  <!-- Build a test jar after running test_compile -->	
+    </javac>
+  </target>
+
+  <!-- Build a test jar after running test_compile -->
   <target name="test_jar" depends="test_compile">
   	<delete dir="pkg" />
     <mkdir dir="pkg" />
@@ -123,7 +123,7 @@
 		   input="${versionfile}"
 		   regexp="\n"
 		   replace=""
-       global="true" />  	
+       global="true" />
 
     <jar destfile="pkg/webdriver-opera-${version}.jar">
       <fileset dir="bin" includes="**/*.class" />
@@ -132,10 +132,10 @@
       	<attribute name="Implementation-Version" value="${version}" />
       </manifest>
     </jar>
-  </target>	
+  </target>
 
   <!-- Run all junit tests -->
-  <target name="test" depends="test_jar">			
+  <target name="test" depends="test_jar">
     <junit fork="yes" haltonfailure="yes" printsummary="yes">
       <sysproperty key="test_gogi_binary_location" value="/test/ramdisk/install/opera/profiles/release_desktop/lingogi_release_desktop" />
       <sysproperty key="test_launcher_binary_location" value="/home/jlivermo/opera-launcher/projects/linux/launcher" />
