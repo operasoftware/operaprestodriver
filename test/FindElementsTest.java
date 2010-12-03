@@ -26,7 +26,7 @@ public class FindElementsTest extends TestCase
 
     // Won't know if this works until OperaDriver works
     // Mad hacks to load the test.html file in the test directory
-    driver.get(getClass().getProtectionDomain().getCodeSource().getLocation()+File.pathSeparator+"test.html");
+    driver.get(getClass().getProtectionDomain().getCodeSource().getLocation()+File.pathSeparator+"fixtures/test.html");
   }
 
   public void testActiveElement()
