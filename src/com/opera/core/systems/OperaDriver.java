@@ -83,15 +83,21 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 	protected ScopeServices services;
 	protected ScopeActions actionHandler;
 	
+	
+	public OperaDriver() {
+		this(null);
+	}
+	
 	/**
 	 * Constructor that starts opera.
 	 */
 	public OperaDriver(OperaDriverSettings settings){
-
-		this.settings = settings;
-		this.operaRunner = new OperaLauncherRunner(this.settings);
+		if(settings != null) {
+			this.settings = settings;
+			this.operaRunner = new OperaLauncherRunner(this.settings);
 		
-		this.operaRunner.startOpera();
+			this.operaRunner.startOpera();
+		}
 		this.init();
 	}
 	
