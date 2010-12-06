@@ -157,6 +157,7 @@
       <test name="CrashTest" />
       <test name="FindElementsTest" />
       <test name="NavigationTest" />
+      <test name="JavascriptTest" />
     </junit>
   </target>
 </project>
