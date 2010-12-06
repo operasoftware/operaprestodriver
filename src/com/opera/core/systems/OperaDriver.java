@@ -879,4 +879,8 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 	protected ScopeServices getScopeServices() {
 		return services;
 	}
+
+	public OperaRunner getRunner() {
+		return operaRunner;
+	}
 }
