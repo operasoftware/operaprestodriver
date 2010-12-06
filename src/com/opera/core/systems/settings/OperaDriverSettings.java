@@ -4,8 +4,8 @@ public class OperaDriverSettings {
 
 	private boolean runOperaLauncherFromOperaDriver = true;
 	private String operaLauncherBinary = null;
-	private int    operaLauncherListeningPort = 9999; 
-	
+	private int    operaLauncherListeningPort = 9999;
+
 	private String operaBinaryLocation;
 	private String operaBinaryArguments;
 	
