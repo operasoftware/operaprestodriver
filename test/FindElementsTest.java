@@ -20,6 +20,7 @@ public class FindElementsTest extends TestCase
     settings = new OperaDriverSettings();
     settings.setOperaBinaryLocation(System.getProperty("test_gogi_binary_location"));
     settings.setOperaLauncherBinary(System.getProperty("test_launcher_binary_location"));
+    // Could set -url here to navigate to the fixture page
     settings.setOperaBinaryArguments("");
 
     driver = new OperaDriver(settings);
