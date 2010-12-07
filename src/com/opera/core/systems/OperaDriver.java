@@ -324,6 +324,11 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
     	return settings;
     }	
     
+    public OperaRunner getRunner()
+    {
+    	return operaRunner;
+    }
+    
 	public Set<String> getOperaActionList() 
 	{
 		return exec.getActionList();
