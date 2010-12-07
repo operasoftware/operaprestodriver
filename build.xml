@@ -46,6 +46,7 @@
   <!-- Delete the bin and pkg dirs -->
   <target name="clean">
     <delete dir="bin" />
+    <delete dir="pkg" />
   </target>
 
   <!-- Compile all classes after cleaning-->

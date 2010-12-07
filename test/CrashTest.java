@@ -14,14 +14,16 @@ public class CrashTest extends TestCase
   private static OperaDriverSettings settings;
   private static OperaDriver driver;
 
-  public CrashTest()
+  public void testCrashTest()
   {
     settings = new OperaDriverSettings();
+    settings.setRunOperaLauncherFromOperaDriver(true);
     settings.setOperaBinaryLocation(System.getProperty("test_gogi_binary_location"));
     settings.setOperaLauncherBinary(System.getProperty("test_launcher_binary_location"));
-    settings.setOperaBinaryArguments("");
+    settings.setOperaBinaryArguments("-geometry 800x600");
 
     driver = new OperaDriver(settings);
+    Assert.assertNotNull(driver);
   }
 
   public void testCore32291()
@@ -58,5 +60,10 @@ public class CrashTest extends TestCase
   {
     driver.get("http://t/core/bts/crashers/visual/CORE-32224/001.html");
     Assert.assertTrue(driver.getRunner().hasOperaCrashed());
+  }
+  
+  public void testShutDownOperaDriver()
+  {
+	  driver.shutdown();
   }
 }
