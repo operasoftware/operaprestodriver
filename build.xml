@@ -41,7 +41,6 @@
 	
   <path id="test.dir.path">
     <pathelement location="test" />
-    <fileset dir="test"/>
   </path>	
 
   <!-- Delete the bin and pkg dirs -->
@@ -136,14 +135,23 @@
 
   <!-- Run all junit tests -->
   <target name="test" depends="test_jar">			
-    <junit fork="yes" haltonfailure="yes" printsummary="yes">
+    <junit fork="yes" haltonfailure="yes" printsummary="yes" showoutput="yes" outputtoformatters="yes">
       <sysproperty key="test_gogi_binary_location" value="/test/ramdisk/install/opera/profiles/release_desktop/lingogi_release_desktop" />
       <sysproperty key="test_launcher_binary_location" value="/home/jlivermo/opera-launcher/projects/linux/launcher" />
+      <env key="OPERA_PATH" value="/test/ramdisk/install/opera/profiles/release_desktop/lingogi_release_desktop"/>
+      <env key="LAUNCHER_PATH" value="/home/jlivermo/opera-launcher/projects/linux/launcher"/>
+      <env key="OPERA_ARGS" value="-geometry 800x600 -nohw -url www.yahoo.com"/>
+      <env key="OPERA_PORT" value="7001"/>
+
       <classpath refid="webdriver-opera.path" />
       <classpath refid="test.dir.path" />
-      <formatter type="brief" usefile="false" />
-      <test name="OperaLauncherRunnerTest" />
-      <test name="ScopeServicesTest" />
+      <formatter type="plain" usefile="false" /> 
+
+      <!--
+      <test name="OperaLauncherRunnerTest" />  
+      <test name="ScopeServicesTest" /> 
+      -->
+      <test name="OperaDriverTest" />
     </junit>
   </target>
 </project>

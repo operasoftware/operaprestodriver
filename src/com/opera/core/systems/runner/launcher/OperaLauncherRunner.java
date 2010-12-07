@@ -39,7 +39,12 @@ public class OperaLauncherRunner implements OperaRunner{
 		
 		if(this.settings.doRunOperaLauncherFromOperaDriver()){
 			
-			List<String> stringArray = new ArrayList<String>();			stringArray.add("-host");
+			List<String> stringArray = new ArrayList<String>();			
+			stringArray.add("-log");
+			stringArray.add("/tmp/jim.launcher");
+			stringArray.add("-verbosity");
+			stringArray.add("FINEST");
+			stringArray.add("-host");
 			stringArray.add("127.0.0.1");
 			stringArray.add("-port");
 			stringArray.add(Integer.toString(this.settings.getOperaLauncherListeningPort()));
@@ -60,7 +65,14 @@ public class OperaLauncherRunner implements OperaRunner{
 				stringArray.add(tokanizer.nextToken());
 			}
 			
-			logger.info("Starting Opera Launcher: " + this.settings.getOperaLauncherBinary() + " " + this.settings.getOperaBinaryArguments());
+			String allArgs = "";
+			
+			for (String s: stringArray)
+			{
+				allArgs = allArgs + s + " ";
+			}
+			
+			logger.info("Starting Opera Launcher: " + this.settings.getOperaLauncherBinary() + " " + allArgs);
 			launcherRunner = new OperaLauncherBinary(this.settings.getOperaLauncherBinary(), stringArray.toArray(new String[stringArray.size()]));
 		}			
 		

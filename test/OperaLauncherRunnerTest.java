@@ -167,7 +167,7 @@ public class OperaLauncherRunnerTest extends TestCase
 	public void testOperaLauncherRunnerConstructorWithSettings3()
 	{
 		settings.setRunOperaLauncherFromOperaDriver(true);
-		settings.setOperaBinaryArguments(" -geometry 800x600 -nohw");
+		settings.setOperaBinaryArguments(" -geometry 1024x768 -nohw");
 		runner = new OperaLauncherRunner(settings);
 		runner.startOpera();
 		Assert.assertTrue(runner.isOperaRunning());	
@@ -184,6 +184,7 @@ public class OperaLauncherRunnerTest extends TestCase
 	
 	public void testStartAndStopOperaTenTimesRoundOneStart()
 	{
+		settings.setOperaBinaryArguments(" -geometry 640x480 -nohw");
 		runner = new OperaLauncherRunner(settings);
 		runner.startOpera();
 		Assert.assertTrue(runner.isOperaRunning());
