@@ -41,11 +41,12 @@
 
   <path id="test.dir.path">
     <pathelement location="test" />
-  </path>	
+  </path>
 
   <!-- Delete the bin and pkg dirs -->
   <target name="clean">
     <delete dir="bin" />
+    <delete dir="pkg" />
   </target>
 
   <!-- Compile all classes after cleaning-->
@@ -134,8 +135,9 @@
   </target>
 
   <!-- Run all junit tests -->
-  <target name="test" depends="test_jar">
-    <junit fork="yes" haltonfailure="yes" printsummary="yes" showoutput="yes" outputtoformatters="yes">
+  <target name="test" depends="test_jar">			
+    <!-- IF YOU WANT TO SEE OUTPUT, SET showoutput and outputtoformatters to "yes" -->
+    <junit fork="yes" haltonfailure="no" printsummary="yes" showoutput="no" outputtoformatters="no">
       <sysproperty key="test_gogi_binary_location" value="/test/ramdisk/install/opera/profiles/release_desktop/lingogi_release_desktop" />
       <sysproperty key="test_launcher_binary_location" value="/home/jlivermo/opera-launcher/projects/linux/launcher" />
       <env key="OPERA_PATH" value="/test/ramdisk/install/opera/profiles/release_desktop/lingogi_release_desktop"/>
