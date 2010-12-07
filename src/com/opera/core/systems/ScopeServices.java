@@ -223,9 +223,9 @@ public class ScopeServices implements IConnectionHandler {
 			waitState.waitForHandshake(OperaIntervals.HANDSHAKE_TIMEOUT.getValue());
 		} catch (WebDriverException e) {
 			shutdown();
+			e.printStackTrace();
 			throw e;
 		}
-
 	}
 
 	private HostInfo getHostInfo() {
@@ -333,8 +333,7 @@ public class ScopeServices implements IConnectionHandler {
 		waitState.onHandshake();
 	}
         
-	public void onDisconnect()
-        {
+	public void onDisconnect() {
             logger.fine("Disconnected, closing StpConnection.");
             if (connection != null)
             {
