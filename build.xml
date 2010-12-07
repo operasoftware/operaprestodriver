@@ -148,11 +148,14 @@
       <classpath refid="webdriver-opera.path" />
       <classpath refid="test.dir.path" />
       <formatter type="plain" usefile="false" /> 
-      <test name="OperaLauncherRunnerTest" />
-      <test name="ScopeServicesTest" />
-      <test name="CrashTest" />
+
+      <test name="OperaLauncherRunnerTest" />  
+      <test name="ScopeServicesTest" /> 
+      <test name="OperaDriverTest" />
       <test name="FindElementsTest" />
       <test name="NavigationTest" />
+      <test name="JavascriptTest" />
+      <test name="CrashTest" />
       <test name="JavascriptTest" />
     </junit>
   </target>
