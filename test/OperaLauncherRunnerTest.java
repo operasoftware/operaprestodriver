@@ -59,7 +59,7 @@ public class OperaLauncherRunnerTest extends TestCase
 	public void testDefaultOperaBinaryArguments()
 	{
 		// the opera binary arguments should default to null
-		Assert.assertNull(settings.getOperaBinaryArguments());		
+		Assert.assertEquals(settings.getOperaBinaryArguments(), "");		
 	}	
 	
 	public void testSetOperaBinaryArguments()
