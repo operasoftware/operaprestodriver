@@ -41,7 +41,6 @@
 
   <path id="test.dir.path">
     <pathelement location="test" />
-    <fileset dir="test"/>
   </path>
 
   <!-- Delete the bin and pkg dirs -->
