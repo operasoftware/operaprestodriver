@@ -392,7 +392,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 		return findSingleElement("(function(){\n"+
 	        "var links = document.getElementsByTagName('a'), element = null;\n"+
 	        "for (var i = 0; i < links.length && !element; ++i) {\n"+
-	        "if (links[i].textContent == '" + using + "') {\n"+
+	        "if(links[i].textContent.replace(/\\s+/g, ' ') == \"" + using +"\".replace(/\\s+/g, ' ')) {\n"+
 	        "element = links[i];\n"+
 	        "}\n"+
 	        "}\n"+
@@ -408,15 +408,16 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 	}
 
 	public List<WebElement> findElementsByLinkText(String using) {
-		return findMultipleElements("var links = document.links, link = null, i = 0, elements = [];\n"+
+		return findMultipleElements("(function(){\n"+
+				"var links = document.links, link = null, i = 0, elements = [];\n"+
 				"for( ; link = links[i]; i++)\n"+
 				"{\n"+
-				"if(link.textContent == '" + using +"')\n"+
+				"if(link.textContent.replace(/\\s+/g, ' ') == \"" + using +"\".replace(/\\s+/g, ' '))\n"+
 				"{\n"+
 				"elements.push(link);\n"+
 					"}\n"+
 				"}\n" +
-				"return elements;", "link text");
+				"return elements; })()", "link text");
 	}
 	
 	protected List<WebElement> processElements(Integer id){		
