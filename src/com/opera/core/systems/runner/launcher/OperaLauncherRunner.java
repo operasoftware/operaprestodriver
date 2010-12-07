@@ -40,10 +40,6 @@ public class OperaLauncherRunner implements OperaRunner{
 		if(this.settings.doRunOperaLauncherFromOperaDriver()){
 			
 			List<String> stringArray = new ArrayList<String>();			
-			stringArray.add("-log");
-			stringArray.add("/tmp/jim.launcher");
-			stringArray.add("-verbosity");
-			stringArray.add("FINEST");
 			stringArray.add("-host");
 			stringArray.add("127.0.0.1");
 			stringArray.add("-port");

@@ -75,7 +75,7 @@ public class OperaDriverTest extends TestCase
 		settings.setRunOperaLauncherFromOperaDriver(true);
 		settings.setOperaBinaryLocation(System.getProperty("test_gogi_binary_location"));
 		settings.setOperaLauncherBinary(System.getProperty("test_launcher_binary_location"));			
-		settings.setOperaBinaryArguments(" -fullscreen -nohw");
+		settings.setOperaBinaryArguments(" -fullscreen -nohw -url www.opera.com");
 		driver = new OperaDriver(settings);
 		Assert.assertNotNull(driver);			
 	}
@@ -88,18 +88,18 @@ public class OperaDriverTest extends TestCase
 	public void testGetWindowHandle()
 	{
 		driver.get("http://t/core/standards/dom0/link/pathname/002.html");
-		Assert.assertEquals(driver.getWindowHandle(), "URL with explicit pathname and hash");
+		Assert.assertEquals("URL with explicit pathname and hash", driver.getWindowHandle());
 	}	
 	
 	public void testGetTitle()
 	{
-		Assert.assertEquals(driver.getTitle(), "URL with explicit pathname and hash");
+		Assert.assertEquals("URL with explicit pathname and hash", driver.getTitle());
 	}
 	
 	public void testGetText()
 	{
 		driver.get("http://t/core/standards/quotes/none.html");	
-		Assert.assertEquals(driver.getText().trim(), "you should see nothing below");
+		Assert.assertEquals("you should see nothing below", driver.getText().trim());
 	}
 	
 	public void testGetScreenshot()
@@ -119,13 +119,13 @@ public class OperaDriverTest extends TestCase
 	public void testGetURL()
 	{
 		driver.get("www.ebay.co.uk");
-		Assert.assertTrue(driver.getCurrentUrl().equals("www.ebay.co.uk"));
+		Assert.assertTrue(driver.getCurrentUrl().indexOf("www.ebay.co.uk") > 0);
 	}
 	
 	public void testGetURL2()
 	{
 		driver.get("www.nyt.com", 15000);
-		Assert.assertTrue(driver.getCurrentUrl().equals("www.nyt.com"));
+		Assert.assertTrue(driver.getCurrentUrl().indexOf("www.nytimes.com") > 0);
 	}	
 	
 	public void testGetWindowWidth()

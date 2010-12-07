@@ -16,77 +16,57 @@ public class JavascriptTest extends TestCase
 {
   private static OperaDriverSettings settings;
   private static OperaDriver driver;
+  private static String base_dir;
 
-  public JavascriptTest()
+  public void testJavascriptTest()
   {
     settings = new OperaDriverSettings();
     settings.setRunOperaLauncherFromOperaDriver(true);
     settings.setOperaBinaryLocation(System.getProperty("test_gogi_binary_location"));
     settings.setOperaLauncherBinary(System.getProperty("test_launcher_binary_location"));
-    settings.setOperaBinaryArguments("");
+    settings.setOperaBinaryArguments("-geometry 1024x768 -url opera:blank");
 
     driver = new OperaDriver(settings);
-  }
-
-  private void loadFixture(String filename)
-  {
-    // Won't know if this works until OperaDriver works
-    driver.get(getClass().getProtectionDomain().getCodeSource().getLocation()+
-      File.pathSeparator+"fixtures/"+filename
-    );
-  }
-
-  //@Before
-  public void setup()
-  {
-    loadFixture("javascript.html");
+    
+    String separator = System.getProperty("file.separator");
+    base_dir = System.getProperty("user.dir");
+    base_dir = base_dir + separator + "test" + separator + "fixtures" + separator;    
+    File base_directory = new File(base_dir);
+    
+    Assert.assertTrue(base_directory.isDirectory());    
   }
 
   public void testTyping()
   {
-    String text = "Hello, world!";
+	  driver.get(base_dir + "javascript.html");
+	  String text = "Hello, world!";
 
-    driver.executeScript("document.getElementById('one').focus()");
-    driver.type(text);
+	  driver.executeScript("document.getElementById('one').focus()");	 
+	  driver.type(text);
 
-    Assert.assertEquals(driver.findElementById("one").getValue(), text);
+	  Assert.assertEquals(text, driver.findElementById("one").getValue());
   }
 
   // Make sure that typing actually happens. When the focus switches half way
   // through typing we should continue typing on the other textbox
   public void testTypingReal()
   {
-    // Changes text field focus after 200ms
-    driver.executeScript("autofocus()");
-    driver.type("abcdefghijklmnopqrstuvwxyz");
+	  driver.get(base_dir + "javascript.html");
+    
+	  // Changes text field focus after 200ms
+	  driver.executeScript("autofocus()");
+	  driver.type("abcdefghijklmnopqrstuvwxyz");
 
-    Assert.assertTrue(driver.findElementById("one").getValue().startsWith("ab"));
-    Assert.assertTrue(driver.findElementById("two").getValue().endsWith("yz"));
+	  Assert.assertTrue(driver.findElementById("one").getValue().startsWith("ab"));
   }
-
-  public void testTypingKeyEvents()
+  
+  public void testTypingReal2()
   {
-    loadFixture("keys.html");
-    driver.type("one");
-
-    //String[] log = driver.findElementById("log").text.split("\n");
-    //Assert.assertEquals(log.length, 9);
-
-  }
-
-  // TODO finish this test
-  public void testConsoleListener()
+	  Assert.assertTrue(driver.findElementById("two").getValue().endsWith("yz"));
+  }  
+  
+  public void testTakeDown()
   {
-    driver.addConsoleListener(new IConsoleListener() {
-      public List<FilterRule> getFilters() {
-        List<FilterRule> list = new ArrayList<FilterRule>();
-        list.add(new FilterRule("*", FilterRule.FilterType.STARTS_WITH, ""));
-        return list;
-      }
-
-      public void onMessage(String message) {
-        System.out.println("!!!"+message);
-      }
-    });
-  }
+	  driver.shutdown();
+  }    
 }
