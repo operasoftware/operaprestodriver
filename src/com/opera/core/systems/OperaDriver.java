@@ -174,7 +174,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 	}
 
 	public String getCurrentUrl() {
-            return debugger.executeJavascript("return document.location.href");
+		return debugger.executeJavascript("return document.location.href");
 	}
 	
 	public void gc() {
@@ -182,7 +182,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 	}
 
 	public Dimension getDimensions() {
-		String[] dimensions = (debugger.executeJavascript("return (window.innerWidth + \",\" + window.innerHeight")).split(",");
+		String[] dimensions = (debugger.executeJavascript("return (window.innerWidth + ',' + window.innerHeight)")).split(",");
 		return new Dimension(Integer.valueOf(dimensions[0]), Integer.valueOf(dimensions[1]));
 	}
 
