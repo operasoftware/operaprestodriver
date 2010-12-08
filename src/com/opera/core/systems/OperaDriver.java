@@ -32,6 +32,7 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.Cookie;
@@ -51,7 +52,6 @@ import org.openqa.selenium.internal.FindsByLinkText;
 import org.openqa.selenium.internal.FindsByName;
 import org.openqa.selenium.internal.FindsByTagName;
 import org.openqa.selenium.internal.FindsByXPath;
-import org.openqa.selenium.internal.ReturnedCookie;
 
 import com.opera.core.systems.model.OperaAction;
 import com.opera.core.systems.model.ScopeActions;
@@ -400,11 +400,14 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 	}
 
 	public WebElement findElementByPartialLinkText(String using) {
-		return findSingleElement("var elements = document.getElementsByTagName('a');" +
-				"for (var i = 0; i < elements.length; i++) {" +
-				"	if (elements[i].textContent.indexOf('" + using + "') > -1) { elements[i]; }" +
-				"}" +
-				"return 'No element found';", "partial link text");
+		return findSingleElement("(function(){\n"+
+		        "var links = document.getElementsByTagName('a'), element = null;\n"+
+		        "for (var i = 0; i < links.length && !element; ++i) {\n"+
+		        "if(links[i].textContent.replace(/\\s+/g, ' ').indexOf('" + using +"') > -1){\n"+
+		        "element = links[i];\n"+
+		        "}\n"+
+		        "}\n"+
+		        "return element;\n})()", "link text");
 	}
 
 	public List<WebElement> findElementsByLinkText(String using) {
@@ -429,15 +432,17 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 	}
 	
 	public List<WebElement> findElementsByPartialLinkText(String using) {
-		return findMultipleElements("var links = document.links, link = null, i = 0, elements = [];\n" +
-				"for( ; link = links[i]; i++)\n" +
-				"{\n" +
-				"if(link.textContent.indexOf('" + using +"') > -1)\n" +
-				"{\n" +
-				"elements.push(link);\n" +
-					"}\n" +
+		
+		return findMultipleElements("(function(){\n"+
+				"var links = document.links, link = null, i = 0, elements = [];\n"+
+				"for( ; link = links[i]; i++)\n"+
+				"{\n"+
+				"if(link.textContent.replace(/\\s+/g, ' ').indexOf('" + using +"') > -1)\n"+
+				"{\n"+
+				"elements.push(link);\n"+
+					"}\n"+
 				"}\n" +
-				"return elements;", "partial link text");
+				"return elements; })()", "partial link text");
 	}
 
 	public WebElement findElementById(String using) {
@@ -548,17 +553,17 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 	private class OperaOptions implements Options {
 		public void addCookie(Cookie cookie) {
 			if(cookie.getExpiry() == null)
-				cookie = new ReturnedCookie(cookie.getName(), cookie.getValue(), cookie.getDomain(), cookie.getPath(), new Date(new Date().getTime() + (10 * 365 * 24 * 60 * 60 * 1000)), false);
+				cookie = new Cookie(cookie.getName(), cookie.getValue(), cookie.getDomain(), cookie.getPath(), new Date(new Date().getTime() + (10 * 365 * 24 * 60 * 60 * 1000)), false);
 			debugger.executeJavascript("document.cookie='" + cookie.toString() + "'", false);
 		}
 
 		public void deleteCookieNamed(String name) {
-			deleteCookie(new ReturnedCookie(name, "", getCurrentHost(), "", null, false));
+			deleteCookie(new Cookie(name, "", getCurrentHost(), "", null, false));
 		}
 
 		public void deleteCookie(Cookie cookie) {
 			Date dateInPast = new Date(0);
-			Cookie toDelete = new ReturnedCookie(cookie.getName(), cookie.getValue(), cookie.getDomain(), cookie.getPath(), dateInPast, false);
+			Cookie toDelete = new Cookie(cookie.getName(), cookie.getValue(), cookie.getDomain(), cookie.getPath(), dateInPast, false);
 			addCookie(toDelete);
 		}
 
@@ -582,7 +587,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 					continue;
 				}
 
-				toReturn.add(new ReturnedCookie(parts[0].trim(), parts[1].trim(), currentUrl,"", null, false));
+				toReturn.add(new Cookie(parts[0].trim(), parts[1].trim(), currentUrl,"", null, false));
 			}
 
 			return toReturn;
@@ -614,6 +619,19 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 														  "return getCookieNamed('" + name + "')");
 			return (value == null) ? null : new Cookie(name, value);
 		}
+
+		public Timeouts timeouts() {
+			return new OperaTimeouts();
+		}
+	}
+	
+	private class OperaTimeouts implements Timeouts {
+
+		public Timeouts implicitlyWait(long time, TimeUnit unit) {
+			OperaIntervals.WAIT_FOR_ELEMENT.setValue(TimeUnit.MILLISECONDS.convert(time, unit));
+			return this;
+		}
+		
 	}
 	
 	public void operaAction(String using, String... params) {
@@ -674,24 +692,60 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 	}
 
 	private final List<WebElement> findMultipleElements(String script, String type) {
-		Integer id = debugger.getObject(script);
+		Integer id;
+		
+		long start = System.currentTimeMillis();
+		int count = 0;
 
-		if (id == null) {
+		List<WebElement> elements;
+		
+		do {
+			id = debugger.getObject(script);
+			elements = processElements(id);
+			
+			if(elements != null)
+				count = elements.size();
+
+			if (count == 0)
+				sleep(OperaIntervals.EXEC_SLEEP.getValue());
+
+		} while (count == 0 && hasTimeRemaining(start));
+
+		if (id != null) {
+			return elements;
+		} else {
 			throw new NoSuchElementException("Cannot find element(s) with " + type);
 		}
-		return processElements(id);
 	}
 	
 	private final WebElement findSingleElement(String script, String type) {
-            Integer id = debugger.getObject(script);
+		long start = System.currentTimeMillis();
+		boolean isAvailable = false;
 
-            if (id != null) {
-                    return new OperaWebElement(this, id);
-            }
+		do {
+			isAvailable = isElementAvailable(script);
 
-            throw new NoSuchElementException("Cannot find element with " + type);
+			if (!isAvailable)
+				sleep(OperaIntervals.EXEC_SLEEP.getValue());
+
+		} while (!isAvailable && hasTimeRemaining(start));
+
+		if (isAvailable) {
+			Integer id = debugger.getObject(script);
+			return new OperaWebElement(this, id);
+		} else {
+			throw new NoSuchElementException("Cannot find element(s) with " + type);
+		}
 	}
 	
+	
+	private boolean hasTimeRemaining(long start) {
+		return System.currentTimeMillis() - start < OperaIntervals.WAIT_FOR_ELEMENT.getValue();
+	}
+
+	private final boolean isElementAvailable(String script) {
+		return debugger.getObject(script) != null;
+	}
 	/*
 	public String saveScreenshot(String fileName, int timeout, String... hashes) {
 		return screenWatcher(fileName, timeout, true, hashes);
