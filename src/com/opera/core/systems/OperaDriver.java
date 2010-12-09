@@ -42,6 +42,7 @@ import org.openqa.selenium.NoSuchFrameException;
 import org.openqa.selenium.NoSuchWindowException;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.Speed;
+import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
@@ -83,6 +84,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 	protected ScopeServices services;
 	protected ScopeActions actionHandler;
 	
+	protected Set<Integer> objectIds = new HashSet<Integer>();
 	
 	public OperaDriver() {
 		this(null);
@@ -155,6 +157,8 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 		if (services.getConnection() == null)
 			throw new CommunicationException("Unable to open URL because Opera is not connected.");
 		
+		gc();
+		
 		int activeWindowId = windowManager.getActiveWindowId();
 		
 		actionHandler.get(url);
@@ -179,6 +183,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 	
 	public void gc() {
     	debugger.releaseObjects();
+    	objectIds.clear();
 	}
 
 	public Dimension getDimensions() {
@@ -392,7 +397,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 		return findSingleElement("(function(){\n"+
 	        "var links = document.getElementsByTagName('a'), element = null;\n"+
 	        "for (var i = 0; i < links.length && !element; ++i) {\n"+
-	        "if(links[i].textContent.replace(/\\s+/g, ' ') == \"" + using +"\".replace(/\\s+/g, ' ')) {\n"+
+	        "if(links[i].textContent.replace(/\\s+/g, ' ').trim() == \"" + using +"\".replace(/\\s+/g, ' ')) {\n"+
 	        "element = links[i];\n"+
 	        "}\n"+
 	        "}\n"+
@@ -415,7 +420,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 				"var links = document.links, link = null, i = 0, elements = [];\n"+
 				"for( ; link = links[i]; i++)\n"+
 				"{\n"+
-				"if(link.textContent.replace(/\\s+/g, ' ') == \"" + using +"\".replace(/\\s+/g, ' '))\n"+
+				"if(link.textContent.replace(/\\s+/g, ' ').trim() == \"" + using +"\".replace(/\\s+/g, ' '))\n"+
 				"{\n"+
 				"elements.push(link);\n"+
 					"}\n"+
@@ -712,6 +717,11 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 		} while (count == 0 && hasTimeRemaining(start));
 
 		if (id != null) {
+			
+			for (WebElement webElement : elements) {
+				objectIds.add(((OperaWebElement) webElement).getObjectId());
+			}
+			
 			return elements;
 		} else {
 			throw new NoSuchElementException("Cannot find element(s) with " + type);
@@ -732,6 +742,13 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 
 		if (isAvailable) {
 			Integer id = debugger.getObject(script);
+			Boolean isStale = Boolean.valueOf(debugger.callFunctionOnObject("locator.parentNode == undefined", id));
+			
+			if(isStale)
+				throw new StaleElementReferenceException("This element is no longer part of DOM");
+			
+			objectIds.add(id);
+			
 			return new OperaWebElement(this, id);
 		} else {
 			throw new NoSuchElementException("Cannot find element(s) with " + type);

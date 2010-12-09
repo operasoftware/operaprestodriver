@@ -184,6 +184,10 @@ public class OperaWebElement implements RenderedWebElement, SearchContext, Locat
 	}
 
 	public String getAttribute(String name) {
+		
+		if(!parent.objectIds.contains(objectId))
+			throw new StaleElementReferenceException("You cant interact with stale elements");
+		
 		String attribute = name.toLowerCase();
 		if(attribute.equals("disabled")) {
 			return String.valueOf(!isEnabled());
@@ -203,7 +207,28 @@ public class OperaWebElement implements RenderedWebElement, SearchContext, Locat
 	}
 
 	public String getText() {
-		return callMethod("return locator.textContent").trim();
+		/*
+		return callMethod("function getVisibleContents(node,checkDisplay,trimmed) {\n"
+				+ "var trim = /^\\s*|\\s*$/g;\n"
+				+ "var forbidden = /^(head|title|script|style|select|textarea)$/ig;\n"
+				+ "if( node.nodeType == 3 || node.nodeType == 4 ) {\n"
+				+ "return trimmed ? node.nodeValue.replace(trim,'') : node.nodeValue;\n"
+				+ "}\n"
+				+ "var s = '';\n"
+				+ "if( node.nodeType == 1 ) {\n"
+				+ "if( ( checkDisplay && getComputedStyle(node).display == 'none' ) || ( !checkDisplay && node.nodeName.match(forbidden) ) ) {\n"
+				+ "return s;\n"
+				+ "}\n"
+				+ "}\n"
+				+ "if( node.nodeType == 1 || node.nodeType == 9 || node.nodeType == 11 ) {\n"
+				+ "for( var i = 0; i < node.childNodes.length; i++ ) {\n"
+				+ "s += getVisibleContents(node.childNodes[i],checkDisplay,false);\n"
+				+ "}\n"
+				+ "}\n"
+				+ "return trimmed ? s.replace(trim,'') : s;\n"
+				+ "} return getVisibleContents(locator, false, true)").replaceAll("\r\n", "\n");
+				*/
+		return callMethod("return locator.textContent");
 	}
 
 	
@@ -367,6 +392,9 @@ public class OperaWebElement implements RenderedWebElement, SearchContext, Locat
 	}
 
 	public Dimension getSize() {
+		if(!parent.objectIds.contains(objectId))
+			throw new StaleElementReferenceException("You cant interact with stale elements");
+		
 		String widthAndHeight = debugger.callFunctionOnObject("return (locator.getBoundingClientRect().width + ',' + locator.getBoundingClientRect().height);", objectId);
 		String[] dimension = widthAndHeight.split(",");
 		return new Dimension(Integer.valueOf(dimension[0]), Integer.valueOf(dimension[1]));
@@ -378,8 +406,12 @@ public class OperaWebElement implements RenderedWebElement, SearchContext, Locat
 
 	public boolean isDisplayed() {
 		boolean isDisplayed = false;
+		if(!parent.objectIds.contains(objectId))
+			throw new StaleElementReferenceException("You cant interact with stale elements");
+			
 		try {
-		isDisplayed = (Boolean) evaluateMethod("var el = locator;\n"
+		isDisplayed = (Boolean) evaluateMethod("if(locator.parentNode == null) return false;\n"
+				+ "var el = locator;\n"
 				+ "while (el.nodeType != 1 && !(el.nodeType >= 9 && el.nodeType <= 11)) {\n"
 				+ "el = el.parentNode;\n"
 				+ "}\n"
@@ -526,8 +558,10 @@ public class OperaWebElement implements RenderedWebElement, SearchContext, Locat
 
 	private WebElement findSingleElement(String using, String type) {
 		Integer id = debugger.executeScriptOnObject(using, objectId);
-		if(id != null)
+		if(id != null) {
+			parent.objectIds.add(id);
 			return new OperaWebElement(parent, id);
+		}
 		
 		throw new NoSuchElementException("Cannot find element with " + type);
 	}
@@ -537,7 +571,12 @@ public class OperaWebElement implements RenderedWebElement, SearchContext, Locat
 		if(id == null)
 			throw new NoSuchElementException("Cannot find element(s) with " + type);
 		
-		return parent.processElements(id);
+		List<WebElement> elements = parent.processElements(id);
+		for (WebElement webElement : elements) {
+			parent.objectIds.add(((OperaWebElement) webElement).getObjectId());
+		}
+		
+		return elements;
 	}
 	
 	public WebElement findElementByLinkText(String using) {
