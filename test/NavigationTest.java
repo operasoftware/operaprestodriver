@@ -62,8 +62,8 @@ public class NavigationTest extends TestCase
     Assert.assertTrue(driver.getCurrentUrl().indexOf("keys.html") > 0);
   }  
   
-  public void testTakeDown()
+  public void testShutDownOperaDriver()
   {
 	  driver.shutdown();
-  }  
+  }
 }
