@@ -17,21 +17,13 @@ public class JavascriptTest extends TestCase
 {
   private static OperaDriverSettings settings;
   private static OperaDriver driver;
-
-  private void loadFixture(String filename)
-  {
-    String path = getClass().getProtectionDomain().getCodeSource().getLocation()+
-      "fixtures/"+filename;
-
-    // Won't know if this works until OperaDriver works
-    driver.get(path);
-  }
+  private static String base_dir;
 
   public void setUp()
   {
     if (driver != null)
     {
-      loadFixture("javascript.html");
+	  driver.get(base_dir + "javascript.html");
       // Click to focus the document
       driver.mouseEvent(1, 1, 1);
     }
@@ -46,23 +38,31 @@ public class JavascriptTest extends TestCase
     settings.setOperaBinaryArguments("");
 
     driver = new OperaDriver(settings);
+    
+    String separator = System.getProperty("file.separator");
+    base_dir = System.getProperty("user.dir");
+    base_dir = base_dir + separator + "test" + separator + "fixtures" + separator;    
+    File base_directory = new File(base_dir);
+    
+    Assert.assertTrue(base_directory.isDirectory());    
   }
 
   public void testTyping()
   {
-    String text = "Hello, world!";
+	  driver.get(base_dir + "javascript.html");
+	  String text = "Hello, world!";
 
-    driver.executeScript("document.getElementById('one').focus()");
-    driver.type(text);
-    try { Thread.sleep(1000); } catch (Exception e) {}
-    Assert.assertEquals(text, driver.findElementById("one").getValue());
+	  driver.executeScript("document.getElementById('one').focus()");	 
+	  driver.type(text);
+
+	  Assert.assertEquals(text, driver.findElementById("one").getValue());
   }
 
   // Make sure that typing actually happens. When the focus switches half way
   // through typing we should continue typing on the other textbox
   public void testTypingKeyEvents()
   {
-    loadFixture("keys.html");
+	  driver.get(base_dir + "keys.html");
 
     driver.type("hi");
 

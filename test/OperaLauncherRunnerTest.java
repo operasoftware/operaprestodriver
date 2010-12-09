@@ -35,13 +35,13 @@ public class OperaLauncherRunnerTest extends TestCase
 	public void testDefaultLauncherListeningPort()
 	{
 		// the listening port should default to 9999
-		Assert.assertEquals(settings.getOperaLauncherListeningPort(), 9999);		
+		Assert.assertEquals(9999, settings.getOperaLauncherListeningPort());		
 	}
 	
 	public void testSetLauncherListeningPort()
 	{
 		settings.setOperaLauncherListeningPort(5555);
-		Assert.assertEquals(settings.getOperaLauncherListeningPort(), 5555);
+		Assert.assertEquals(5555, settings.getOperaLauncherListeningPort());
 	}
 	
 	public void testDefaultOperaBinaryLocation()
@@ -53,7 +53,7 @@ public class OperaLauncherRunnerTest extends TestCase
 	public void testSetOperaBinaryLocation()
 	{
 		settings.setOperaBinaryLocation("/spartan/ramdisk/launcher");
-		Assert.assertEquals(settings.getOperaBinaryLocation(), "/spartan/ramdisk/launcher");
+		Assert.assertEquals("/spartan/ramdisk/launcher", settings.getOperaBinaryLocation());
 	}	
 	
 	public void testDefaultOperaBinaryArguments()
@@ -65,7 +65,7 @@ public class OperaLauncherRunnerTest extends TestCase
 	public void testSetOperaBinaryArguments()
 	{
 		settings.setOperaBinaryArguments("-host 127.0.0.1 -port 12199 -bin /spartan/ramdisk/install/launcher");
-		Assert.assertEquals(settings.getOperaBinaryArguments(), "-host 127.0.0.1 -port 12199 -bin /spartan/ramdisk/install/launcher");
+		Assert.assertEquals("-host 127.0.0.1 -port 12199 -bin /spartan/ramdisk/install/launcher", settings.getOperaBinaryArguments());
 	}		
 	
 	public void testSetOperaBinaryLocationFromPropertyInBuildXML()

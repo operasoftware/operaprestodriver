@@ -15,19 +15,26 @@ public class FindElementsTest extends TestCase
   private static OperaDriverSettings settings;
   private static OperaDriver driver;
 
-  public FindElementsTest()
+  public void testFindElementsTest()
   {
     settings = new OperaDriverSettings();
+    settings.setRunOperaLauncherFromOperaDriver(true);
     settings.setOperaBinaryLocation(System.getProperty("test_gogi_binary_location"));
     settings.setOperaLauncherBinary(System.getProperty("test_launcher_binary_location"));
-    // Could set -url here to navigate to the fixture page
-    settings.setOperaBinaryArguments("");
-
+    settings.setOperaBinaryArguments("-geometry 1024x768 -url opera:blank");
     driver = new OperaDriver(settings);
+    
+    String separator = System.getProperty("file.separator");
+    String base_dir = System.getProperty("user.dir");
+    String test_page = base_dir + separator + "test" + separator + "fixtures" + separator + "test.html";
+    
+    File page = new File(test_page);
+    if (!page.exists())
+    {
+    	fail("Unable to locate test page for tests in test class FindElementsTest; tried " + test_page + " but that was not valid.");
+    }
 
-    // Won't know if this works until OperaDriver works
-    // Mad hacks to load the test.html file in the test directory
-    driver.get(getClass().getProtectionDomain().getCodeSource().getLocation()+File.pathSeparator+"fixtures/test.html");
+    driver.get(test_page);
   }
 
   public void testActiveElement()
@@ -156,7 +163,7 @@ public class FindElementsTest extends TestCase
     Assert.assertEquals(els.size(), 4);
     for (WebElement el : els)
     {
-      Assert.assertEquals(el.getTagName(), "label");
+      Assert.assertEquals(el.getTagName(), "LABEL");
     }
   }
 
