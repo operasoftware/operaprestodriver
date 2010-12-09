@@ -178,4 +178,8 @@ public class FindElementsTest extends TestCase
     }
   }
 
+  public void testShutDownOperaDriver()
+  {
+	  driver.shutdown();
+  }
 }

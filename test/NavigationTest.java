@@ -46,4 +46,9 @@ public class NavigationTest extends TestCase
 
     Assert.assertEquals(driver.getCurrentUrl(), SERVER+"?test=75");
   }
+
+  public void testShutDownOperaDriver()
+  {
+	  driver.shutdown();
+  }
 }
