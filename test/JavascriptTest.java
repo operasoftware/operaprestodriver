@@ -11,62 +11,94 @@ import com.opera.core.systems.model.FilterRule;
 
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.Platform;
+import org.openqa.selenium.WebElement;
 
 public class JavascriptTest extends TestCase
 {
   private static OperaDriverSettings settings;
   private static OperaDriver driver;
-  private static String base_dir;
 
-  public void testJavascriptTest()
+  private void loadFixture(String filename)
+  {
+    String path = getClass().getProtectionDomain().getCodeSource().getLocation()+
+      "fixtures/"+filename;
+
+    // Won't know if this works until OperaDriver works
+    driver.get(path);
+  }
+
+  public void setUp()
+  {
+    if (driver != null)
+    {
+      loadFixture("javascript.html");
+      // Click to focus the document
+      driver.mouseEvent(1, 1, 1);
+    }
+  }
+
+  public void testInit()
   {
     settings = new OperaDriverSettings();
     settings.setRunOperaLauncherFromOperaDriver(true);
     settings.setOperaBinaryLocation(System.getProperty("test_gogi_binary_location"));
     settings.setOperaLauncherBinary(System.getProperty("test_launcher_binary_location"));
-    settings.setOperaBinaryArguments("-geometry 1024x768 -url opera:blank");
+    settings.setOperaBinaryArguments("");
 
     driver = new OperaDriver(settings);
-    
-    String separator = System.getProperty("file.separator");
-    base_dir = System.getProperty("user.dir");
-    base_dir = base_dir + separator + "test" + separator + "fixtures" + separator;    
-    File base_directory = new File(base_dir);
-    
-    Assert.assertTrue(base_directory.isDirectory());    
   }
 
   public void testTyping()
   {
-	  driver.get(base_dir + "javascript.html");
-	  String text = "Hello, world!";
+    String text = "Hello, world!";
 
-	  driver.executeScript("document.getElementById('one').focus()");	 
-	  driver.type(text);
-
-	  Assert.assertEquals(text, driver.findElementById("one").getValue());
+    driver.executeScript("document.getElementById('one').focus()");
+    driver.type(text);
+    try { Thread.sleep(1000); } catch (Exception e) {}
+    Assert.assertEquals(text, driver.findElementById("one").getValue());
   }
 
   // Make sure that typing actually happens. When the focus switches half way
   // through typing we should continue typing on the other textbox
-  public void testTypingReal()
+  public void testTypingKeyEvents()
   {
-	  driver.get(base_dir + "javascript.html");
-    
-	  // Changes text field focus after 200ms
-	  driver.executeScript("autofocus()");
-	  driver.type("abcdefghijklmnopqrstuvwxyz");
+    loadFixture("keys.html");
 
-	  Assert.assertTrue(driver.findElementById("one").getValue().startsWith("ab"));
+    driver.type("hi");
+
+    String log = driver.findElementById("log").getValue();
+    Assert.assertTrue(log.contains("press, 104, h,"));
+    Assert.assertTrue(log.contains("up, 73, I,"));
   }
-  
-  public void testTypingReal2()
+
+  // TODO finish this test
+  /*
+oper  public void testConsoleListener()
   {
-	  Assert.assertTrue(driver.findElementById("two").getValue().endsWith("yz"));
-  }  
-  
-  public void testTakeDown()
+    driver.addConsoleListener(new IConsoleListener() {
+      public List<FilterRule> getFilters() {
+        List<FilterRule> list = new ArrayList<FilterRule>();
+        list.add(new FilterRule("*", FilterRule.FilterType.STARTS_WITH, ""));
+        return list;
+      }
+
+      public void onMessage(String message) {
+        Assert.assertEquals("one", message);
+      }
+    });
+  }
+  */
+
+  public void testDoubleClick()
+  {
+    WebElement one = driver.findElementById("one");
+    one.click();
+    one.click();
+    Assert.assertEquals(driver.findElementById("two").getValue(), "double");
+  }
+
+  public void testShutDownOperaDriver()
   {
 	  driver.shutdown();
-  }    
+  }
 }

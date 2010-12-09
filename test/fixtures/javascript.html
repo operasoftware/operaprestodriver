@@ -17,12 +17,9 @@
   var one = document.getElementById("one");
   var two = document.getElementById("two");
 
-  function autofocus() {
-    one.focus();
-    setTimeout(function(){
-      two.focus();
-    }, 200);
-  }
+  one.addEventListener("dblclick", function (e) {
+    two.value = "double";
+  }, false);
  </script>
 </body>
 </html>
