@@ -185,7 +185,7 @@ public class FindElementsTest extends TestCase
     }
   }
 
-  public void testTakeDown()
+  public void testShutDownOperaDriver()
   {
 	  driver.shutdown();
   }
