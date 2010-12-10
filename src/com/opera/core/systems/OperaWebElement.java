@@ -406,12 +406,10 @@ public class OperaWebElement implements RenderedWebElement, SearchContext, Locat
 
 	public boolean isDisplayed() {
 		boolean isDisplayed = false;
-		if(!parent.objectIds.contains(objectId))
+		if(!parent.objectIds.contains(objectId) || callMethod("locator.parentNode") == null)
 			throw new StaleElementReferenceException("You cant interact with stale elements");
-			
 		try {
-		isDisplayed = (Boolean) evaluateMethod("if(locator.parentNode == null) return false;\n"
-				+ "var el = locator;\n"
+		isDisplayed = (Boolean) evaluateMethod("var el = locator;\n"
 				+ "while (el.nodeType != 1 && !(el.nodeType >= 9 && el.nodeType <= 11)) {\n"
 				+ "el = el.parentNode;\n"
 				+ "}\n"
