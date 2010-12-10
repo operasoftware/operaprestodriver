@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <!--
-
    Makefile for OperaDriver.  Available tasks:
 
    ant          defaults to compile.
@@ -11,11 +9,17 @@
 
    Use “ant jar” for normal releases.
 
+   ant test     compiles test classes and generates a test jar and runs junit tests
 -->
 
 <project basedir="." default="compile" name="OperaDriver">
+  <!--
+       !!!!!!!!!!!!!!! VERY IMPORTANT !!!!!!!!!!!!!!!
+       Update the property below with the absolute path to a local launcher binary and gogi binary to be used for testing
 
-  <!-- 
+  <property name="test_gogi_binary_location" value="/spartan/ramdisk/install/opera/profiles/release_tv/lingogi_release_tv"/>
+  <property name="test_launcher_binary_location" value="/home/jlivermo/launcher/opera-launcher/projects/linux/launcher"/>
+
      Used to perform regular expression on version file.  Make sure
      that you have the package “ant-contrib” installed.
   -->
@@ -24,17 +28,28 @@
       <pathelement location="/usr/share/java/ant-contrib.jar"/>
     </classpath>
   </taskdef>
-  
-  <path id="webdriver-opera.classpath">
+
+  <path id="webdriver-opera.path">
     <pathelement location="bin" />
     <fileset dir="lib" includes="**/*.jar" />
   </path>
 
+  <path id="pkg.dir.path">
+    <pathelement location="pkg" />
+    <fileset dir="pkg"/>
+  </path>
+
+  <path id="test.dir.path">
+    <pathelement location="test" />
+  </path>
+
+  <!-- Delete the bin and pkg dirs -->
   <target name="clean">
     <delete dir="bin" />
     <delete dir="pkg" />
   </target>
 
+  <!-- Compile all classes after cleaning-->
   <target name="compile" depends="clean">
     <fileset dir="bin" />
     <mkdir dir="bin" />
@@ -48,10 +63,11 @@
 
     <javac debug="true" destdir="bin" includeantruntime="false">
       <src path="src" />
-      <classpath refid="webdriver-opera.classpath" />
+      <classpath refid="webdriver-opera.path" />
     </javac>
   </target>
 
+  <!-- Build the jar -->
   <target name="jar" depends="compile">
     <mkdir dir="pkg" />
     <loadfile srcfile="src/com/opera/core/systems/VERSION" property="versionfile" />
@@ -72,11 +88,74 @@
     </jar>
   </target>
 
-  <!--
-  <target name="test">
-    <java classname="test" failonerror="true" fork="yes">
-      <classpath refid="webdriver-opera.classpath" />
-    </java>
+  <!-- Compile any modified classes including test classes -->
+  <target name="test_compile">
+    <fileset dir="bin" />
+    <mkdir dir="bin" />
+
+    <copy includeemptydirs="false" todir="bin">
+      <fileset dir="src">
+      	<exclude name="**/*.launch" />
+      	<exclude name="**/*.java" />
+      </fileset>
+    </copy>
+
+    <javac debug="true" destdir="bin" includeantruntime="false">
+      <src path="src" />
+      <classpath refid="webdriver-opera.path" />
+    </javac>
+
+    <javac debug="true" destdir="test" includeantruntime="false">
+      <src path="test" />
+      <classpath refid="webdriver-opera.path" />
+    </javac>
   </target>
-  -->
+
+  <!-- Build a test jar after running test_compile -->
+  <target name="test_jar" depends="test_compile">
+  	<delete dir="pkg" />
+    <mkdir dir="pkg" />
+    <loadfile srcfile="src/com/opera/core/systems/VERSION" property="versionfile" />
+
+    <!-- Will remove new line in version file -->
+    <propertyregex property="version"
+		   input="${versionfile}"
+		   regexp="\n"
+		   replace=""
+       global="true" />
+
+    <jar destfile="pkg/webdriver-opera-${version}.jar">
+      <fileset dir="bin" includes="**/*.class" />
+      <manifest>
+      	<attribute name="Main-Class" value="com.opera.core.systems.OperaDriver" />
+      	<attribute name="Implementation-Version" value="${version}" />
+      </manifest>
+    </jar>
+  </target>
+
+  <!-- Run all junit tests -->
+  <target name="test" depends="test_jar">			
+    <!-- IF YOU WANT TO SEE OUTPUT, SET showoutput and outputtoformatters to "yes" -->
+    <junit fork="yes" haltonfailure="no" printsummary="yes" showoutput="no" outputtoformatters="no">
+      <sysproperty key="test_gogi_binary_location" value="/test/ramdisk/install/opera/profiles/release_desktop/lingogi_release_desktop" />
+      <sysproperty key="test_launcher_binary_location" value="/home/jlivermo/opera-launcher/projects/linux/launcher" />
+      <env key="OPERA_PATH" value="/test/ramdisk/install/opera/profiles/release_desktop/lingogi_release_desktop"/>
+      <env key="LAUNCHER_PATH" value="/home/jlivermo/opera-launcher/projects/linux/launcher"/>
+      <env key="OPERA_ARGS" value="-geometry 800x600 -nohw -url www.yahoo.com"/>
+      <env key="OPERA_PORT" value="7001"/>
+
+      <classpath refid="webdriver-opera.path" />
+      <classpath refid="test.dir.path" />
+      <formatter type="plain" usefile="false" /> 
+
+      <test name="OperaLauncherRunnerTest" />  
+      <test name="ScopeServicesTest" /> 
+      <test name="OperaDriverTest" />
+      <test name="FindElementsTest" />
+      <test name="NavigationTest" />
+      <test name="JavascriptTest" />
+      <test name="CrashTest" />
+      <test name="JavascriptTest" />
+    </junit>
+  </target>
 </project>

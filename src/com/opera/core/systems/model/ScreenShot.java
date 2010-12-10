@@ -1,8 +1,12 @@
 package com.opera.core.systems.model;
 
-import java.util.List;
 
+@Deprecated
 public class ScreenShot {
+	
+	//IDENTICAL TO ScreenShotReply
+	
+	/*
 	protected int windowId;
 	protected String md5;
 	protected byte[] png;
@@ -50,4 +54,5 @@ public class ScreenShot {
 	public void setPng(byte[] png) {
 		this.png = png;
 	}
+	*/
 }
