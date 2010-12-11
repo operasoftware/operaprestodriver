@@ -3,6 +3,7 @@ package com.opera.core.systems.scope.internal;
 
 /**
  * 
+ * @author Deniz Turkoglu
  * Enumerator for delay values
  */
 public enum OperaIntervals {

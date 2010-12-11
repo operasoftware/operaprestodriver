@@ -35,47 +35,29 @@ public class OperaLauncherRunner implements OperaRunner{
 	
 	public OperaLauncherRunner(OperaDriverSettings settings){
 		this.settings = settings;
-		StringTokenizer tokanizer;
 		
 		if(this.settings.doRunOperaLauncherFromOperaDriver()){
 			
-			List<String> stringArray = new ArrayList<String>();			
+			List<String> stringArray = new ArrayList<String>();
 			stringArray.add("-host");
 			stringArray.add("127.0.0.1");
 			stringArray.add("-port");
 			stringArray.add(Integer.toString(this.settings.getOperaLauncherListeningPort()));
 			stringArray.add("-bin");
 			stringArray.add(this.settings.getOperaBinaryLocation());
-
-			// make sure that the arguments string is not null
-			if (this.settings.getOperaBinaryArguments() != null)
-			{
-				tokanizer = new StringTokenizer(this.settings.getOperaBinaryArguments(), " ");
-			}
-			else
-			{
-				tokanizer = new StringTokenizer(" ");
-			}
 			
+			StringTokenizer tokanizer = new StringTokenizer(this.settings.getOperaBinaryArguments(), " ");
 			while(tokanizer.hasMoreTokens()){
 				stringArray.add(tokanizer.nextToken());
 			}
 			
-			String allArgs = "";
+			launcherRunner = new OperaLauncherBinary(this.settings.getOperaLauncherBinary(),stringArray.toArray(new String[stringArray.size()]));
+		}
 			
-			for (String s: stringArray)
-			{
-				allArgs = allArgs + s + " ";
-			}
-			
-			logger.info("Starting Opera Launcher: " + this.settings.getOperaLauncherBinary() + " " + allArgs);
-			launcherRunner = new OperaLauncherBinary(this.settings.getOperaLauncherBinary(), stringArray.toArray(new String[stringArray.size()]));
-		}			
-		
-		logger.info("Waiting for Opera Launcher connection on port " + this.settings.getOperaLauncherListeningPort());
+		logger.log(Level.INFO, "Waiting for Opera Launcher connection on port " + this.settings.getOperaLauncherListeningPort());
         try {
         	//setup listener server
-        	ServerSocket listenerServer = new ServerSocket(settings.getOperaLauncherListeningPort());        	        	        	
+        	ServerSocket listenerServer = new ServerSocket(settings.getOperaLauncherListeningPort());
         	//try to connect
         	launcherProtocol = new OperaLauncherProtocol(listenerServer.accept());
         	//we did it!
@@ -141,36 +123,28 @@ public class OperaLauncherRunner implements OperaRunner{
 		return chrashlog;
 	}
 	
-	public void shutdown() {	
-		if (launcherRunner != null)
-		{
-			try {
-				//Send a shutdown to the launcher!
-				if(this.settings.doRunOperaLauncherFromOperaDriver()){
-					try {
-						launcherProtocol.sendRequestWithoutResponse(MessageType.MSG_SHUTDOWN, null);
-					} catch (Exception e) {
-						//will give us read-response issues!
-						e.printStackTrace();
-					}
+	public void shutdown() {
+		
+		try {
+			//Send a shutdown to the launcher!
+			if(this.settings.doRunOperaLauncherFromOperaDriver()){
+				try {
+					launcherProtocol.sendRequestWithoutResponse(MessageType.MSG_SHUTDOWN, null);
+				} catch (Exception e) {
+					//will give us read-response issues!
+					e.printStackTrace();
 				}
-				//Then shutdown the protocol-connection
-				launcherProtocol.shutdown();
-			} catch (IOException e) {
-				//dont care
-				throw new OperaRunnerException("IOException encountered while terminating communication with the launcher", e);
 			}
-			
-			try
-			{
-				launcherRunner.shutdown();
-			}
-			catch (Exception e)
-			{
-				throw new OperaRunnerException("Exception encountered while shutting down the launcher", e);
-			}
-			
-			launcherRunner = null;			
+			//Then shutdown the protocol-connection
+			launcherProtocol.shutdown();
+		} catch (IOException e) {
+			//dont care
+			throw new OperaRunnerException("Do we get a shutdown exception?", e);
+		}
+		
+		if(launcherRunner != null){
+			launcherRunner.shutdown();
+			launcherRunner = null;
 		}
 	}
 	

@@ -57,6 +57,7 @@ public class OperaLauncherBinary extends Thread {
     public void init() {
         ProcessBuilder builder = new ProcessBuilder(commands);
         try {
+
             process = builder.start();
             builder.redirectErrorStream(true);
             if(Platform.WINDOWS.is(Platform.getCurrent()))
@@ -72,7 +73,7 @@ public class OperaLauncherBinary extends Thread {
         }
     }
 
-    public String pid() {
+    private static String pid(Process process) {
         try {
             Field field = process.getClass().getDeclaredField("pid");
             field.setAccessible(true);
@@ -127,23 +128,19 @@ public class OperaLauncherBinary extends Thread {
         public void kill() {
             running.set(false);
             if(winProcess != null)
-            {
                 winProcess.killRecursively();
-                winProcess = null;
-            }
             else {
                 killProcess(process);
                 //TODO process should be gced after forced kill?
                 if(process != null) {
                     process.destroy();
                 }
-                process = null;
             }
         }
 
         private void killProcess(Process process) {
             try {
-                (new ProcessBuilder(new String[] { "kill", "-9", pid() })).start();
+                (new ProcessBuilder(new String[] { "kill", "-9", pid(process) })).start();
             } catch (Exception e) {
                 logger.log(Level.SEVERE, "Could not kill process: " + e.getMessage());
             }
