@@ -34,6 +34,9 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.concurrent.TimeUnit;
 
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.Cookie;
 import org.openqa.selenium.JavascriptExecutor;
@@ -77,6 +80,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 	private OperaRunner operaRunner;
 	
 	private boolean isDriverStarted = false; //Does this driver have a started opera? Makes it possible to restart opera without throwing out the driver.
+	private final Logger logger = Logger.getLogger(this.getClass().getName());
 	
 	protected IEcmaScriptDebugger debugger;
 	protected IOperaExec exec;
@@ -85,6 +89,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 	protected ScopeActions actionHandler;
 	
 	protected Set<Integer> objectIds = new HashSet<Integer>();
+
 	
 	public OperaDriver() {
 		this(null);
@@ -94,12 +99,15 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 	 * Constructor that starts opera.
 	 */
 	public OperaDriver(OperaDriverSettings settings){
+		loadLoggerConfiguration();
+		
 		if(settings != null) {
 			this.settings = settings;
 			this.operaRunner = new OperaLauncherRunner(this.settings);
 		
 			this.operaRunner.startOpera();
 		}
+		
 		this.init();
 	}
 	
@@ -123,6 +131,16 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 		this.windowManager = services.getWindowManager();
 		this.exec = services.getExec();
 		this.actionHandler = new PbActionHandler(services);
+	}
+	
+	protected void loadLoggerConfiguration() {
+		try {
+			InputStream config = this.getClass().getClassLoader().getResourceAsStream("logger.properties");
+			LogManager.getLogManager().readConfiguration(config);
+			config.close();
+		} catch (IOException e) {
+			logger.warning("Not able to load logger configuration file, using defaults");
+		}
 	}
 	
 	protected Map<String, String> getServicesList()
