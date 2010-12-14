@@ -203,7 +203,8 @@ public class OperaLauncherRunner implements OperaRunner{
 	public ScreenShotReply saveScreenshot(long timeout, String... hashes){
 		String resultMd5 = null;
 		byte[] resultBytes = null;
-
+		boolean blank = false;
+		
 		logger.log(Level.INFO, "Get opera screenshot");
         try {
             LauncherScreenshotRequest.Builder request = LauncherScreenshotRequest.newBuilder();
@@ -217,10 +218,16 @@ public class OperaLauncherRunner implements OperaRunner{
             resultMd5 = response.getMd5();
             resultBytes = response.getImagedata().toByteArray();
             
+            if(response.hasBlank()){
+            	blank = response.getBlank();
+            }
+            
         } catch (IOException e){
         	throw new OperaRunnerException("Could not get state of opera", e);
         }
 		
-		return new ScreenShotReply(resultMd5, resultBytes);
+        ScreenShotReply screenshotreply = new ScreenShotReply(resultMd5, resultBytes);
+        screenshotreply.setBlank(blank);
+		return screenshotreply;
 	}
 }
