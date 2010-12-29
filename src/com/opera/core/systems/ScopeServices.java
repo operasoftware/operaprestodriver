@@ -26,6 +26,7 @@ import com.opera.core.systems.scope.protos.ScopeProtos.ServiceResult;
 import com.opera.core.systems.scope.protos.ScopeProtos.ServiceSelection;
 import com.opera.core.systems.scope.protos.UmsProtos.Command;
 import com.opera.core.systems.scope.protos.UmsProtos.Response;
+import com.opera.core.systems.scope.services.ICookieManager;
 import com.opera.core.systems.scope.services.IDesktopWindowManager;
 import com.opera.core.systems.scope.services.IDesktopUtils;
 import com.opera.core.systems.scope.services.IEcmaScriptDebugger;
@@ -46,10 +47,9 @@ public class ScopeServices implements IConnectionHandler {
 	private IDesktopWindowManager desktopWindowManager; 
 	private IDesktopUtils desktopUtils; 
 	private SystemInputManager systemInputManager;
+	private ICookieManager cookieManager;
+	
 	private Map<String, String> versions;
-	public Map<String, String> getVersions() {
-		return versions;
-	}
 
 	private List<IConsoleListener> listeners;
 
@@ -62,6 +62,19 @@ public class ScopeServices implements IConnectionHandler {
 	private List<String> listedServices;
 
 	private AtomicInteger tagCounter;
+	
+	public ICookieManager getCookieManager() {
+		return cookieManager;
+	}
+
+	public void setCookieManager(ICookieManager cookieManager) {
+		this.cookieManager = cookieManager;
+	}
+
+	
+	public Map<String, String> getVersions() {
+		return versions;
+	}
 
 	public StpConnection getConnection() {
 		return connection;
@@ -166,6 +179,7 @@ public class ScopeServices implements IConnectionHandler {
 		wantedServices.add("console-logger");
 //		wantedServices.add("http-logger");
 		wantedServices.add("core");
+		wantedServices.add("cookie-manager");
 		
 		enableServices(wantedServices);
 
@@ -198,7 +212,7 @@ public class ScopeServices implements IConnectionHandler {
 		try {
 			stpThread.join();
 		} catch (InterruptedException ex) {
-			// ignored.
+			Thread.currentThread().interrupt();
 		}
 	}
 

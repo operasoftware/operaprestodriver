@@ -21,7 +21,6 @@ package com.opera.core.systems;
 import java.awt.Dimension;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
@@ -33,9 +32,6 @@ import java.util.Scanner;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.concurrent.TimeUnit;
-
-import java.util.logging.LogManager;
-import java.util.logging.Logger;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.Cookie;
@@ -68,6 +64,7 @@ import com.opera.core.systems.scope.exceptions.CommunicationException;
 import com.opera.core.systems.scope.exceptions.FatalException;
 import com.opera.core.systems.scope.handlers.PbActionHandler;
 import com.opera.core.systems.scope.internal.OperaIntervals;
+import com.opera.core.systems.scope.services.ICookieManager;
 import com.opera.core.systems.scope.services.IEcmaScriptDebugger;
 import com.opera.core.systems.scope.services.IOperaExec;
 import com.opera.core.systems.scope.services.IWindowManager;
@@ -80,11 +77,11 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 	private OperaRunner operaRunner;
 	
 	private boolean isDriverStarted = false; //Does this driver have a started opera? Makes it possible to restart opera without throwing out the driver.
-	private final Logger logger = Logger.getLogger(this.getClass().getName());
 	
 	protected IEcmaScriptDebugger debugger;
 	protected IOperaExec exec;
 	protected IWindowManager windowManager;
+	protected ICookieManager cookieManager;
 	protected ScopeServices services;
 	protected ScopeActions actionHandler;
 	
@@ -99,7 +96,6 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 	 * Constructor that starts opera.
 	 */
 	public OperaDriver(OperaDriverSettings settings){
-		loadLoggerConfiguration();
 		
 		if(settings != null) {
 			this.settings = settings;
@@ -131,16 +127,8 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 		this.windowManager = services.getWindowManager();
 		this.exec = services.getExec();
 		this.actionHandler = new PbActionHandler(services);
-	}
-	
-	protected void loadLoggerConfiguration() {
-		try {
-			InputStream config = this.getClass().getClassLoader().getResourceAsStream("logger.properties");
-			LogManager.getLogManager().readConfiguration(config);
-			config.close();
-		} catch (IOException e) {
-			logger.warning("Not able to load logger configuration file, using defaults");
-		}
+		this.cookieManager = services.getCookieManager();
+		//cookieManager.updateCookieSettings();
 	}
 	
 	protected Map<String, String> getServicesList()
@@ -149,7 +137,8 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 		versions.put("ecmascript-debugger", "5.0");
 		versions.put("window-manager", "2.0");
 		versions.put("exec", "2.0");
-    versions.put("core", "1.0");
+		versions.put("core", "1.0");
+		versions.put("cookie-manager", "1.0");
 		return versions;
 	}
 
@@ -267,11 +256,11 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 	}
 
 	public WebElement findElement(By by) {
-		return by.findElement((SearchContext) this);
+		return by.findElement(this);
 	}
 
 	public List<WebElement> findElements(By by) {
-		return by.findElements((SearchContext) this);
+		return by.findElements(this);
 	}
 
 	public String getPageSource() {
@@ -581,39 +570,39 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 		}
 
 		public void deleteCookieNamed(String name) {
-			deleteCookie(new Cookie(name, "", getCurrentHost(), "", null, false));
+			deleteCookie(new Cookie(name, ""));
 		}
 
 		public void deleteCookie(Cookie cookie) {
+			if(cookieManager == null)
+				throw new UnsupportedOperationException("Deleting cookies are not supported without the cookie-manager service");
+			
+			cookieManager.removeCookie(cookie.getDomain(), cookie.getPath(), cookie.getName());
+			/*
 			Date dateInPast = new Date(0);
 			Cookie toDelete = new Cookie(cookie.getName(), cookie.getValue(), cookie.getDomain(), cookie.getPath(), dateInPast, false);
 			addCookie(toDelete);
+			*/
 		}
 
 		public void deleteAllCookies() {
+			if(cookieManager == null)
+				throw new UnsupportedOperationException("Deleting cookies are not supported without the cookie-manager service");
+			
+			cookieManager.removeAllCookies();
+			/*
 			Set<Cookie> cookies = getCookies();
 			for (Cookie cookie : cookies) {
 				deleteCookie(cookie);
 			}
+			*/
 		}
 
 		public Set<Cookie> getCookies() {
-			String currentUrl = getCurrentHost();
-
-			Set<Cookie> toReturn = new HashSet<Cookie>();
-			String allDomainCookies = debugger.executeJavascript("return document.cookie");
-
-			String[] cookies = allDomainCookies.split(";");
-			for (String cookie : cookies) {
-				String[] parts = cookie.split("=");
-				if (parts.length != 2) {
-					continue;
-				}
-
-				toReturn.add(new Cookie(parts[0].trim(), parts[1].trim(), currentUrl,"", null, false));
-			}
-
-			return toReturn;
+			if(cookieManager == null)
+				throw new UnsupportedOperationException("Setting cookies are not supported without the cookie-manager service");
+			
+			return cookieManager.getCookie(debugger.executeJavascript("window.location.hostname"), null);
 		}
 
 		public Speed getSpeed() {
@@ -624,16 +613,17 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 			throw new UnsupportedOperationException("setMouseSpeed");
 		}
 
-		private String getCurrentHost() {
-			try {
-				URL url = new URL(getCurrentUrl());
-				return url.getHost();
-			} catch (MalformedURLException e) {
-				return "";
-			}
-		}
-
 		public Cookie getCookieNamed(String name) {
+			Set<Cookie> allCookies = getCookies();
+			
+			for (Cookie cookie : allCookies) {
+				System.out.println(cookie.toString());
+				if(cookie.getName().equals(name))
+					return cookie;
+			}
+			
+			return null;
+			/*
 			String value = debugger.executeJavascript("var getCookieNamed = function(key)\n"+
 														  "{"+
 														  "var value = new RegExp(key + \"=([^;]*)\").exec(document.cookie);"+
@@ -641,6 +631,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 														  "}\n"+
 														  "return getCookieNamed('" + name + "')");
 			return (value == null) ? null : new Cookie(name, value);
+			*/
 		}
 
 		public Timeouts timeouts() {
@@ -673,7 +664,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 		try {
 			Thread.sleep(timeInMillis);
 		} catch (InterruptedException e) {
-			// ignore
+			Thread.currentThread().interrupt();
 		}
 	}
 
@@ -734,12 +725,9 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 
 		} while (count == 0 && hasTimeRemaining(start));
 
+		OperaIntervals.WAIT_FOR_ELEMENT.setValue(0L);
+		
 		if (id != null) {
-			
-			for (WebElement webElement : elements) {
-				objectIds.add(((OperaWebElement) webElement).getObjectId());
-			}
-			
 			return elements;
 		} else {
 			throw new NoSuchElementException("Cannot find element(s) with " + type);
@@ -758,14 +746,14 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 
 		} while (!isAvailable && hasTimeRemaining(start));
 
+		OperaIntervals.WAIT_FOR_ELEMENT.setValue(0L);
+		
 		if (isAvailable) {
 			Integer id = debugger.getObject(script);
 			Boolean isStale = Boolean.valueOf(debugger.callFunctionOnObject("locator.parentNode == undefined", id));
 			
 			if(isStale)
 				throw new StaleElementReferenceException("This element is no longer part of DOM");
-			
-			objectIds.add(id);
 			
 			return new OperaWebElement(this, id);
 		} else {

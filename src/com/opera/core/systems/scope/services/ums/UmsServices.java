@@ -5,8 +5,9 @@ import java.util.List;
 import com.opera.core.systems.ScopeServices;
 import com.opera.core.systems.scope.protos.ScopeProtos.HostInfo;
 import com.opera.core.systems.scope.protos.ScopeProtos.Service;
-import com.opera.core.systems.scope.services.IDesktopWindowManager;
+import com.opera.core.systems.scope.services.ICookieManager;
 import com.opera.core.systems.scope.services.IDesktopUtils;
+import com.opera.core.systems.scope.services.IDesktopWindowManager;
 import com.opera.core.systems.scope.services.IEcmaScriptDebugger;
 import com.opera.core.systems.scope.services.IOperaExec;
 import com.opera.core.systems.scope.services.IWindowManager;
@@ -20,6 +21,7 @@ public class UmsServices {
 	protected final IDesktopUtils desktopUtils;
 	protected final SystemInputManager systemInputManager;
 	protected final IOperaExec exec;
+	private final ICookieManager cookieManager;
 
 	public IEcmaScriptDebugger getDebugger() {
 		return debugger;
@@ -31,6 +33,10 @@ public class UmsServices {
 
 	public IOperaExec getExec() {
 		return exec;
+	}
+	
+	public ICookieManager getCookieManager() {
+		return cookieManager;
 	}
 	
 	public UmsServices(ScopeServices services, HostInfo info) {
@@ -70,6 +76,11 @@ public class UmsServices {
 		/* } */
 		exec = new OperaExec(services,
 				getVersionForService(serviceList, "exec"));
+		
+		if (findServiceNamed(serviceList, "cookie-manager") != null && services.getVersions().containsKey("cookie-manager"))
+			cookieManager = new CookieManager(services, getVersionForService(serviceList, "cookie-manager"));
+		else
+			cookieManager = null;
 	}
 
 	private String getVersionForService(List<Service> serviceList, String name) {
