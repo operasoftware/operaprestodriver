@@ -63,12 +63,6 @@ public class OperaDesktopDriver extends OperaDriver {
 		return systemInputManager;
 	}
 
-	/**
-	 * Shutdown the driver without quiting Opera
-	 */
-	public void shutdown() {
-		super.shutdown();
-	}
 
 	/**
 	 * @return active window id
