@@ -74,6 +74,7 @@ public class OperaWebElement implements RenderedWebElement, SearchContext, Locat
     public OperaWebElement(OperaDriver parent, int objectId) {
         this.parent = parent;
         this.objectId = objectId;
+        parent.objectIds.add(objectId);
         
         debugger = parent.getScriptDebugger();
         execService = parent.getExecService();
@@ -206,30 +207,51 @@ public class OperaWebElement implements RenderedWebElement, SearchContext, Locat
 		return callMethod("locator.nodeName");
 	}
 
-	public String getText() {
-		/*
-		return callMethod("function getVisibleContents(node,checkDisplay,trimmed) {\n"
-				+ "var trim = /^\\s*|\\s*$/g;\n"
-				+ "var forbidden = /^(head|title|script|style|select|textarea)$/ig;\n"
-				+ "if( node.nodeType == 3 || node.nodeType == 4 ) {\n"
-				+ "return trimmed ? node.nodeValue.replace(trim,'') : node.nodeValue;\n"
-				+ "}\n"
-				+ "var s = '';\n"
-				+ "if( node.nodeType == 1 ) {\n"
-				+ "if( ( checkDisplay && getComputedStyle(node).display == 'none' ) || ( !checkDisplay && node.nodeName.match(forbidden) ) ) {\n"
-				+ "return s;\n"
-				+ "}\n"
-				+ "}\n"
-				+ "if( node.nodeType == 1 || node.nodeType == 9 || node.nodeType == 11 ) {\n"
-				+ "for( var i = 0; i < node.childNodes.length; i++ ) {\n"
-				+ "s += getVisibleContents(node.childNodes[i],checkDisplay,false);\n"
-				+ "}\n"
-				+ "}\n"
-				+ "return trimmed ? s.replace(trim,'') : s;\n"
-				+ "} return getVisibleContents(locator, false, true)").replaceAll("\r\n", "\n");
-				*/
-		return callMethod("return locator.textContent");
-	}
+	public String getText() {		
+        return callMethod("function getVisibleContents(node, checkDisplay, trimmed, preformatted_parent) {\n"+
+        		"if(node.tagName.toLowerCase() == 'title') return document.title;\n"+
+                "var s = '';\n"+
+                "var trim = /^\\s+|\\s+$/g;\n"+
+                "var forbidden = /^(head|script|style|select|textarea)$/ig;\n"+
+                "\n"+
+                "preformatted_parent = preformatted_parent || false;\n"+
+                "\n"+
+                "if (node.nodeType == Node.TEXT_NODE || node.nodeType == Node.CDATA_SECTION_NODE)\n"+
+                    "return trimmed ? node.nodeValue.replace(trim, '') : node.nodeValue;\n"+
+                    "\n"+
+                "if (node.nodeType == Node.DOCUMENT_POSITION_DISCONNECTED)\n"+
+                    "if (node.nodeName.match(forbidden) || (checkDisplay && getComputedStyle(node).display == 'none'))\n"+
+                        "return s;\n"+
+                        "\n"+
+                "if (node.nodeType == Node.DOCUMENT_POSITION_DISCONNECTED\n"+
+                    "|| node.nodeType == Node.DOCUMENT_NODE\n"+
+                    "|| node.nodeType == Node.DOCUMENT_FRAGMENT_NODE)\n"+
+                "{\n"+
+                    "if (getComputedStyle(node).whiteSpace != 'normal')\n"+
+                        "preformatted_parent = true;\n"+
+                        "\n"+
+                    "for (var i = 0, n; n = node.childNodes[i]; i++)\n"+
+                    "{\n"+
+                        "var n_s = getVisibleContents(n, checkDisplay, false, preformatted_parent);\n"+
+                        "\n"+
+                        // Parent element with non pre formatting. Remove all duplicated white-spaces
+                        "if (n.nodeType == Node.TEXT_NODE && !preformatted_parent)\n"+
+                            "n_s = n_s.replace(/\\s+/g, ' ');\n"+
+                            "\n"+
+                        // Wrap with newlines if this is block element.
+                        "if (n.nodeType == Node.ELEMENT_NODE && getComputedStyle(n).display == 'block')\n"+
+                            "s += '\\n' + n_s + '\\n';\n"+
+                        "else if (n.tagName == 'BR')\n"+
+                            "s += '\\n';\n"+
+                        "else\n"+
+                            "s += n_s;\n"+
+                    "}\n"+
+                "}\n"+
+                "\n"+
+                "return trimmed ? s.replace(trim, '') : s;\n"+
+            "}\n"+
+            "return getVisibleContents(locator, true, true).replace(/(\\r*\\n)+/g, '\\n');\n");
+    }
 
 	
 	public String getValue(){
@@ -269,8 +291,10 @@ public class OperaWebElement implements RenderedWebElement, SearchContext, Locat
         		execService.key(OperaKeys.get(((Keys)seq).name()));
         	else if (seq.toString().equals("\n"))
         		execService.key("enter");
-        	else
-        		execService.type(seq.toString());
+        	else {
+        		if(seq.toString().length() > 0)
+        			execService.type(seq.toString());
+        	}
         }
         parent.waitForLoadToComplete();
         //executeMethod("locator.blur()");
@@ -290,6 +314,7 @@ public class OperaWebElement implements RenderedWebElement, SearchContext, Locat
 		if (getTagName().equalsIgnoreCase("option")) {
 			Integer id = debugger.executeScriptOnObject("return locator.parentNode", objectId);
 			OperaWebElement parentNode = new OperaWebElement(this.parent, id.intValue());
+			
 			if (parentNode.getAttribute("multiple") == null) {
 				if (OperaFlags.ENABLE_CHECKS) {
 					if (!parentNode.isDisplayed())
@@ -309,6 +334,8 @@ public class OperaWebElement implements RenderedWebElement, SearchContext, Locat
 			} else {
 				debugger.callFunctionOnObject("locator.selected = true;", objectId, false);
 			}
+			
+			parent.waitForLoadToComplete();
 		} else {// if(getTagName().equalsIgnoreCase("input")) {
 			if(!isSelected())
 				click();
@@ -355,7 +382,7 @@ public class OperaWebElement implements RenderedWebElement, SearchContext, Locat
 		try {
 			Thread.sleep(timeInMillis);
 		} catch (InterruptedException e) {
-			//ignore
+			Thread.currentThread().interrupt();
 		}
 	}
 
@@ -448,7 +475,7 @@ public class OperaWebElement implements RenderedWebElement, SearchContext, Locat
 	}
 
 	public String getImageHash() {
-		return getImageHash(10l);
+		return getImageHash(10L);
 	}
 	
 	public String getImageHash(long timeout, String... hashes) {
@@ -456,7 +483,7 @@ public class OperaWebElement implements RenderedWebElement, SearchContext, Locat
 	}
 	
 	public String saveScreenshot(String filename){
-		return this.saveScreenshot(filename, 10l, true);
+		return this.saveScreenshot(filename, 10L, true);
 	}
 	
 	public String saveScreenshot(String filename,long timeout){
@@ -484,7 +511,7 @@ public class OperaWebElement implements RenderedWebElement, SearchContext, Locat
 		//List<String> keys = Arrays.asList(hashes);
 		
 		Canvas canvas = buildCanvas();
-        ScreenShotReply reply = execService.containsColor(canvas, 100l, colors);
+        ScreenShotReply reply = execService.containsColor(canvas, 100L, colors);
         List<ColorResult> results = reply.getColorResult();
         for (ColorResult result : results) {
 			if(result.getCount() > 0)
@@ -557,7 +584,6 @@ public class OperaWebElement implements RenderedWebElement, SearchContext, Locat
 	private WebElement findSingleElement(String using, String type) {
 		Integer id = debugger.executeScriptOnObject(using, objectId);
 		if(id != null) {
-			parent.objectIds.add(id);
 			return new OperaWebElement(parent, id);
 		}
 		
@@ -570,9 +596,6 @@ public class OperaWebElement implements RenderedWebElement, SearchContext, Locat
 			throw new NoSuchElementException("Cannot find element(s) with " + type);
 		
 		List<WebElement> elements = parent.processElements(id);
-		for (WebElement webElement : elements) {
-			parent.objectIds.add(((OperaWebElement) webElement).getObjectId());
-		}
 		
 		return elements;
 	}
