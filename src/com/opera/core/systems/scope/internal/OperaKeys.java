@@ -9,14 +9,14 @@ public enum OperaKeys {
 	NULL         ("null"),
 	CANCEL       ("cancel"), // ^break
 	HELP         ("help"),
-	BACK_SPACE   ("back space"),
+	BACK_SPACE   ("backspace"),
 	TAB          ("Tab"),
 	CLEAR        ("clear"),
 	RETURN       ("return"),
 	ENTER        ("enter"),
 	SHIFT        ("Shift"),
 	LEFT_SHIFT   ("Shift"), // alias
-	CONTROL      ("Control"),
+	CONTROL      ("control"),
 	LEFT_CONTROL ("ctrl"), // alias
 	ALT          ("alt"),
 	LEFT_ALT     ("alt"), // alias
@@ -37,7 +37,7 @@ public enum OperaKeys {
 	ARROW_DOWN   ("down"), // alias
 	INSERT       ("insert"),
 	DELETE       ("del"),
-	SEMICOLON    (":"),
+	SEMICOLON    (";"),
 	EQUALS       ("="),
 
 	NUMPAD0      ("0"),  // number pad keys
@@ -52,7 +52,7 @@ public enum OperaKeys {
 	NUMPAD9      ("9"),
 	MULTIPLY     ("*"),
 	ADD          ("+"),
-	SEPARATOR    (" "),
+	SEPARATOR    (","),
 	SUBTRACT     ("-"),
 	DECIMAL      ("."),
 	DIVIDE       ("/"),
