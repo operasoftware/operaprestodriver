@@ -22,16 +22,17 @@ import com.opera.core.systems.scope.ExecCommand;
 import com.opera.core.systems.scope.exceptions.WindowNotFoundException;
 import com.opera.core.systems.scope.internal.OperaColors;
 import com.opera.core.systems.scope.internal.OperaIntervals;
+import com.opera.core.systems.scope.internal.OperaKeys;
 import com.opera.core.systems.scope.internal.OperaMouseKeys;
 import com.opera.core.systems.scope.protos.ExecProtos.ActionInfoList;
+import com.opera.core.systems.scope.protos.ExecProtos.ActionInfoList.ActionInfo;
 import com.opera.core.systems.scope.protos.ExecProtos.ActionList;
+import com.opera.core.systems.scope.protos.ExecProtos.ActionList.Action;
 import com.opera.core.systems.scope.protos.ExecProtos.Area;
 import com.opera.core.systems.scope.protos.ExecProtos.MouseAction;
 import com.opera.core.systems.scope.protos.ExecProtos.ScreenWatcher;
-import com.opera.core.systems.scope.protos.ExecProtos.ScreenWatcherResult;
-import com.opera.core.systems.scope.protos.ExecProtos.ActionInfoList.ActionInfo;
-import com.opera.core.systems.scope.protos.ExecProtos.ActionList.Action;
 import com.opera.core.systems.scope.protos.ExecProtos.ScreenWatcher.ColorSpec;
+import com.opera.core.systems.scope.protos.ExecProtos.ScreenWatcherResult;
 import com.opera.core.systems.scope.protos.ExecProtos.ScreenWatcherResult.ColorMatch;
 import com.opera.core.systems.scope.protos.UmsProtos.Response;
 import com.opera.core.systems.scope.services.IOperaExec;
@@ -101,7 +102,25 @@ public class OperaExec extends AbstractService implements IOperaExec {
 	}
 
 	public void type(String using) {
+		if(using == null)
+			throw new NullPointerException("You must provide something to type");
+		if(using.length() == 0)
+			throw new IllegalArgumentException("Can't type empty string");
+		
+		for (int i = 0; i < using.length(); ++i) {
+			char ch = using.charAt(i);
+			if(Character.isUpperCase(ch)) {
+				key(OperaKeys.SHIFT.getValue(),false);
+				key(String.valueOf(ch));
+				key(OperaKeys.SHIFT.getValue(),true);
+			} else {
+				key(String.valueOf(ch));
+			}
+		}
+		
+		/*
 		action("_type", using);
+		*/
 	}
 
 	public void mouseAction(int x, int y, OperaMouseKeys... keys) {
