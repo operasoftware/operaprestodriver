@@ -209,10 +209,9 @@ public class OperaWebElement implements RenderedWebElement, SearchContext, Locat
 
 	public String getText() {		
         return callMethod("function getVisibleContents(node, checkDisplay, trimmed, preformatted_parent) {\n"+
-        		"if(node.tagName.toLowerCase() == 'title') return document.title;\n"+
                 "var s = '';\n"+
                 "var trim = /^\\s+|\\s+$/g;\n"+
-                "var forbidden = /^(head|script|style|select|textarea)$/ig;\n"+
+                "var forbidden = /^(head|script|title|style|select|textarea)$/ig;\n"+
                 "\n"+
                 "preformatted_parent = preformatted_parent || false;\n"+
                 "\n"+
@@ -250,6 +249,7 @@ public class OperaWebElement implements RenderedWebElement, SearchContext, Locat
                 "\n"+
                 "return trimmed ? s.replace(trim, '') : s;\n"+
             "}\n"+
+            "if(locator.tagName.toLowerCase() == 'title') return document.title;\n"+
             "return getVisibleContents(locator, true, true).replace(/(\\r*\\n)+/g, '\\n');\n");
     }
 
