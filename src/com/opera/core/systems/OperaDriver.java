@@ -168,14 +168,20 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 		
 		int activeWindowId = windowManager.getActiveWindowId();
 		
+		String oldUrl = getCurrentUrl();
+		
 		actionHandler.get(url);
 		
-		if(services.isOperaIdleAvailable()){
-			//Wait for opera is idle
-			services.waitForOperaIdle(timeout);
-		} else {
-			//Wait for window is loaded
-			services.waitForWindowLoaded(activeWindowId, timeout);
+		if(!url.replace(oldUrl, "").startsWith("#")) {
+		
+			if (services.isOperaIdleAvailable()) {
+				// Wait for opera is idle
+				services.waitForOperaIdle(timeout);
+			} else {
+				// Wait for window is loaded
+				services.waitForWindowLoaded(activeWindowId, timeout);
+			}
+
 		}
 		
 		if(OperaIntervals.ENABLE_DEBUGGER.getValue() == 1)
