@@ -214,8 +214,7 @@ public class OperaExec extends AbstractService implements IOperaExec {
 
 	public ScreenShotReply containsColor(Canvas canvas, long timeout, OperaColors... colors){
 		//command SetupScreenWatcher(ScreenWatcher) returns (ScreenWatcherResult) = 3 
-		int i = 0;
-		
+
 		ScreenWatcher.Builder builder = ScreenWatcher.newBuilder();
 		Area.Builder areaBuilder = Area.newBuilder();
 		
@@ -226,22 +225,14 @@ public class OperaExec extends AbstractService implements IOperaExec {
 		
 		builder.setArea(areaBuilder);
 		
+		int i = 0;
 		for (OperaColors color : colors) {
 			ColorSpec.Builder colorSpec = convertColor(color.getColour());
 			colorSpec.setId(++i);
 			builder.addColorSpecList(colorSpec);
 		}
 		
-		builder.setTimeOut((int)timeout);
-		
-		int windowId = services.getWindowManager().getActiveWindowId();
-		builder.setWindowID(windowId);
-		
-		Response response = executeCommand(ExecCommand.SETUP_SCREEN_WATCHER, builder);
-		
-		ScreenWatcherResult.Builder watcherBuilder = ScreenWatcherResult.newBuilder();
-		buildPayload(response, watcherBuilder);
-		ScreenWatcherResult result = watcherBuilder.build();		
+		ScreenWatcherResult result = executeScreenWatcher(builder, (int)timeout);
 				
 		List<ColorResult> matches = new ArrayList<ColorResult>();
 		
@@ -251,6 +242,28 @@ public class OperaExec extends AbstractService implements IOperaExec {
 		
 		return new ScreenShotReply(result.getMd5(), matches);
 
+	}
+	
+	/**
+	 * Executes a screenwatcher with the given timeout and returns the result
+	 * @param builder
+	 * @param timeout
+	 * @return
+	 */
+	private ScreenWatcherResult executeScreenWatcher(ScreenWatcher.Builder builder, int timeout) {
+		
+		if(timeout <= 0)
+			timeout = 1;
+		
+		builder.setTimeOut(timeout);
+		
+		builder.setWindowID(services.getWindowManager().getActiveWindowId());
+		
+		Response response = executeCommand(ExecCommand.SETUP_SCREEN_WATCHER, builder, OperaIntervals.RESPONSE_TIMEOUT.getValue() + timeout);
+		
+		ScreenWatcherResult.Builder watcherBuilder = ScreenWatcherResult.newBuilder();
+		buildPayload(response, watcherBuilder);
+		return watcherBuilder.build();	
 	}
 	
 	private ColorSpec.Builder convertColor(OperaColor color) {
@@ -275,25 +288,16 @@ public class OperaExec extends AbstractService implements IOperaExec {
 		areaBuilder.setW(canvas.getW());
 		
 		builder.setArea(areaBuilder);
-		
-		int windowId = services.getWindowManager().getActiveWindowId();
-		
+				
 		if (hashes.length > 0) {
 			builder.addAllMd5List(Arrays.asList(hashes));
 		}
 
-		builder.setWindowID(windowId);
-		builder.setTimeOut((int) timeout);
-		
 		if(!includeImage) {
 			builder.setIncludeImage(false);
 		}
 		
-		Response response = executeCommand(ExecCommand.SETUP_SCREEN_WATCHER, builder, OperaIntervals.RESPONSE_TIMEOUT.getValue() + timeout);
-		
-		ScreenWatcherResult.Builder watcherBuilder = ScreenWatcherResult.newBuilder();
-		buildPayload(response, watcherBuilder);
-		ScreenWatcherResult result = watcherBuilder.build();
+		ScreenWatcherResult result = executeScreenWatcher(builder, (int)timeout);
 		
 		return new ScreenShotReply(result.getMd5(), result.getPng().toByteArray());
 	}
