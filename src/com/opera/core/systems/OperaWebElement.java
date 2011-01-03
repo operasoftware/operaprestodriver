@@ -159,7 +159,7 @@ public class OperaWebElement implements RenderedWebElement, SearchContext, Locat
 	public void click() {
 		if(OperaFlags.ENABLE_CHECKS) {
 			if(!isDisplayed())
-				throw new UnsupportedOperationException("You can't click an element that is not displayed");
+				throw new ElementNotVisibleException("You can't click an element that is not displayed");
 		}
 		parent.actionHandler.click(this, "");
 		//workaround for click synchronization problems
@@ -249,8 +249,8 @@ public class OperaWebElement implements RenderedWebElement, SearchContext, Locat
                 "\n"+
                 "return trimmed ? s.replace(trim, '') : s;\n"+
             "}\n"+
-            "if(locator.tagName.toLowerCase() == 'title') return document.title;\n"+
-            "return getVisibleContents(locator, true, true).replace(/(\\r*\\n)+/g, '\\n');\n");
+            "if(locator.tagName.toLowerCase() == 'title') document.title;\n"+
+            "else getVisibleContents(locator, true, true).replace(/(\\r*\\n)+/g, '\\n');\n");
     }
 
 	
@@ -358,20 +358,22 @@ public class OperaWebElement implements RenderedWebElement, SearchContext, Locat
 		
 	}
 
-	//FIXME  revise with javascript guys
+	//FIXME revise with javascript guys
 	public boolean toggle() {
 		if(getTagName().equalsIgnoreCase("input") && getAttribute("type").equalsIgnoreCase("radio"))
 			throw new UnsupportedOperationException("You can't toggle an radio element");
 		
-		if(OperaFlags.ENABLE_CHECKS) {
-			if(!isDisplayed())
-				throw new UnsupportedOperationException("You can't toggle an element that is not displayed");
-		}
 		Integer id = debugger.executeScriptOnObject("return locator.parentNode", objectId);
 		OperaWebElement parentNode = new OperaWebElement(this.parent, id);
 		if(parentNode.getTagName().equalsIgnoreCase("SELECT") && parentNode.getAttribute("multiple") == null) {
 			throw new UnsupportedOperationException("You can't toggle on a regular select");
 		}
+		
+		if(OperaFlags.ENABLE_CHECKS) {
+			if(!isDisplayed())
+				throw new ElementNotVisibleException("You can't toggle an element that is not displayed");
+		}
+		
 		if(getTagName().equalsIgnoreCase("option"))
 			return (Boolean) debugger.callFunctionOnObject("locator.selected = !locator.selected; return locator.selected;", objectId, true);
 		
@@ -641,10 +643,30 @@ public class OperaWebElement implements RenderedWebElement, SearchContext, Locat
 	}
 	
 	public WebElement findElementByTagName(String using) {
+		if(using.contains(":")) {//has prefix
+			String[] tagInfo = using.split(":");
+			return findSingleElement("(function(obj) { var elements = obj.getElementsByTagName('" + tagInfo[1] + "'), element = null;" +
+					"for( var i = 0; i < elements.length; i++ ) {" +
+					"if( elements[i].prefix == '" + tagInfo[0] + "' ) {" +
+					"element = elements[i];" +
+					"}" +
+					"}" +
+					"return element; })(locator)", "tag name");
+		}
 		return findSingleElement("locator.getElementsByTagName('" + using +"')[0]", "tag name");
 	}
 
 	public List<WebElement> findElementsByTagName(String using) {
+		if(using.contains(":")) {//has prefix
+			String[] tagInfo = using.split(":");
+			return findMultipleElements("(function(obj) { var elements = obj.getElementsByTagName('" + tagInfo[1] + "'), output = [];" +
+					"for( var i = 0; i < elements.length; i++ ) {" +
+					"if( elements[i].prefix == '" + tagInfo[0] + "' ) {" +
+					"output.push(elements[i]);" +
+					"}" +
+					"}" +
+					"return output; })(locator)", "tag name");
+		}
 		return findMultipleElements("locator.getElementsByTagName('" + using +"')", "tag name");
 	}
 
