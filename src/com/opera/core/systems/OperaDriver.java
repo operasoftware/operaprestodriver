@@ -681,6 +681,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 					"for( var i = 0; i < elements.length; i++ ) {" +
 					"if( elements[i].prefix == '" + tagInfo[0] + "' ) {" +
 					"element = elements[i];" +
+					"break;"+
 					"}" +
 					"}" +
 					"return element; })()", "tag name");

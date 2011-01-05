@@ -662,6 +662,7 @@ public class OperaWebElement implements RenderedWebElement, SearchContext, Locat
 					"for( var i = 0; i < elements.length; i++ ) {" +
 					"if( elements[i].prefix == '" + tagInfo[0] + "' ) {" +
 					"element = elements[i];" +
+					"break;"+
 					"}" +
 					"}" +
 					"return element; })(locator)", "tag name");
