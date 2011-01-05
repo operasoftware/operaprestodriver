@@ -726,10 +726,11 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 			if(elements != null)
 				count = elements.size();
 
-			if (count == 0)
+			if (count == 0 && hasTimeRemaining(start))
 				sleep(OperaIntervals.EXEC_SLEEP.getValue());
+			else break;
 
-		} while (count == 0 && hasTimeRemaining(start));
+		} while (true);
 
 		OperaIntervals.WAIT_FOR_ELEMENT.setValue(0L);
 		
@@ -747,10 +748,11 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 		do {
 			isAvailable = isElementAvailable(script);
 
-			if (!isAvailable)
+			if (!isAvailable && hasTimeRemaining(start))
 				sleep(OperaIntervals.EXEC_SLEEP.getValue());
+			else break;
 
-		} while (!isAvailable && hasTimeRemaining(start));
+		} while (true);
 
 		OperaIntervals.WAIT_FOR_ELEMENT.setValue(0L);
 		
@@ -768,7 +770,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 	}
 	
 	
-	private boolean hasTimeRemaining(long start) {
+	boolean hasTimeRemaining(long start) {
 		return System.currentTimeMillis() - start < OperaIntervals.WAIT_FOR_ELEMENT.getValue();
 	}
 

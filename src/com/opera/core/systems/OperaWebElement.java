@@ -277,6 +277,19 @@ public class OperaWebElement implements RenderedWebElement, SearchContext, Locat
 	
 	public void sendKeys(CharSequence... keysToSend) {
 		if(OperaFlags.ENABLE_CHECKS) {
+			
+			long start = System.currentTimeMillis();
+			boolean isDisplayed = false;
+
+			do {
+				isDisplayed = isDisplayed();
+
+				if (!isDisplayed && parent.hasTimeRemaining(start))
+					sleep(OperaIntervals.EXEC_SLEEP.getValue());
+				else break;
+
+			} while (true);
+			
 			if(!isDisplayed())
 				throw new ElementNotVisibleException("You can't type on an element that is not displayed");
 			if(!isEnabled())
