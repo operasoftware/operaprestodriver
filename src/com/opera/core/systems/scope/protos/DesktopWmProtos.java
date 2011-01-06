@@ -1334,6 +1334,20 @@ public final class DesktopWmProtos {
     public boolean hasCol() { return hasCol; }
     public int getCol() { return col_; }
     
+    // optional string visible_text = 13;
+    public static final int VISIBLE_TEXT_FIELD_NUMBER = 13;
+    private boolean hasVisibleText;
+    private java.lang.String visibleText_ = "";
+    public boolean hasVisibleText() { return hasVisibleText; }
+    public java.lang.String getVisibleText() { return visibleText_; }
+    
+    // optional string additional_text = 14;
+    public static final int ADDITIONAL_TEXT_FIELD_NUMBER = 14;
+    private boolean hasAdditionalText;
+    private java.lang.String additionalText_ = "";
+    public boolean hasAdditionalText() { return hasAdditionalText; }
+    public java.lang.String getAdditionalText() { return additionalText_; }
+    
     private void initFields() {
       type_ = com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo.QuickWidgetType.UNKNOWN;
       rect_ = com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect.getDefaultInstance();
@@ -1391,6 +1405,12 @@ public final class DesktopWmProtos {
       if (hasCol()) {
         output.writeUInt32(12, getCol());
       }
+      if (hasVisibleText()) {
+        output.writeString(13, getVisibleText());
+      }
+      if (hasAdditionalText()) {
+        output.writeString(14, getAdditionalText());
+      }
       getUnknownFields().writeTo(output);
     }
     
@@ -1447,6 +1467,14 @@ public final class DesktopWmProtos {
       if (hasCol()) {
         size += com.google.protobuf.CodedOutputStream
           .computeUInt32Size(12, getCol());
+      }
+      if (hasVisibleText()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeStringSize(13, getVisibleText());
+      }
+      if (hasAdditionalText()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeStringSize(14, getAdditionalText());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -1642,6 +1670,12 @@ public final class DesktopWmProtos {
         if (other.hasCol()) {
           setCol(other.getCol());
         }
+        if (other.hasVisibleText()) {
+          setVisibleText(other.getVisibleText());
+        }
+        if (other.hasAdditionalText()) {
+          setAdditionalText(other.getAdditionalText());
+        }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
@@ -1724,6 +1758,14 @@ public final class DesktopWmProtos {
             }
             case 96: {
               setCol(input.readUInt32());
+              break;
+            }
+            case 106: {
+              setVisibleText(input.readString());
+              break;
+            }
+            case 114: {
+              setAdditionalText(input.readString());
               break;
             }
           }
@@ -1975,6 +2017,48 @@ public final class DesktopWmProtos {
       public Builder clearCol() {
         result.hasCol = false;
         result.col_ = 0;
+        return this;
+      }
+      
+      // optional string visible_text = 13;
+      public boolean hasVisibleText() {
+        return result.hasVisibleText();
+      }
+      public java.lang.String getVisibleText() {
+        return result.getVisibleText();
+      }
+      public Builder setVisibleText(java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  result.hasVisibleText = true;
+        result.visibleText_ = value;
+        return this;
+      }
+      public Builder clearVisibleText() {
+        result.hasVisibleText = false;
+        result.visibleText_ = getDefaultInstance().getVisibleText();
+        return this;
+      }
+      
+      // optional string additional_text = 14;
+      public boolean hasAdditionalText() {
+        return result.hasAdditionalText();
+      }
+      public java.lang.String getAdditionalText() {
+        return result.getAdditionalText();
+      }
+      public Builder setAdditionalText(java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  result.hasAdditionalText = true;
+        result.additionalText_ = value;
+        return this;
+      }
+      public Builder clearAdditionalText() {
+        result.hasAdditionalText = false;
+        result.additionalText_ = getDefaultInstance().getAdditionalText();
         return this;
       }
       
@@ -3472,31 +3556,32 @@ public final class DesktopWmProtos {
       "dowState\022\014\n\010RESTORED\020\000\022\r\n\tMINIMIZED\020\001\022\r\n",
       "\tMAXIMIZED\020\002\022\016\n\nFULLSCREEN\020\003\"H\n\021DesktopW" +
       "indowRect\022\t\n\001x\030\001 \002(\r\022\t\n\001y\030\002 \002(\r\022\r\n\005width" +
-      "\030\003 \002(\r\022\016\n\006height\030\004 \002(\r\"\370\003\n\017QuickWidgetIn" +
+      "\030\003 \002(\r\022\016\n\006height\030\004 \002(\r\"\247\004\n\017QuickWidgetIn" +
       "fo\022\014\n\004name\030\001 \002(\t\0224\n\004type\030\002 \002(\0162&.scope.Q" +
       "uickWidgetInfo.QuickWidgetType\022\017\n\007visibl" +
       "e\030\003 \002(\010\022\014\n\004text\030\004 \002(\t\022\r\n\005value\030\005 \002(\r\022\017\n\007" +
       "enabled\030\006 \002(\010\022\023\n\013defaultLook\030\007 \002(\010\022\023\n\013fo" +
       "cusedLook\030\010 \002(\010\022&\n\004rect\030\t \002(\0132\030.scope.De" +
       "sktopWindowRect\022\016\n\006parent\030\n \001(\t\022\013\n\003row\030\013" +
-      " \001(\r\022\013\n\003col\030\014 \001(\r\"\345\001\n\017QuickWidgetType\022\013\n",
-      "\007UNKNOWN\020\000\022\n\n\006BUTTON\020\001\022\014\n\010CHECKBOX\020\002\022\r\n\t" +
-      "DIALOGTAB\020\003\022\014\n\010DROPDOWN\020\004\022\r\n\tEDITFIELD\020\005" +
-      "\022\t\n\005LABEL\020\006\022\017\n\013RADIOBUTTON\020\007\022\020\n\014ADDRESSF" +
-      "IELD\020\010\022\n\n\006SEARCH\020\t\022\013\n\007TOOLBAR\020\n\022\014\n\010TREEV" +
-      "IEW\020\013\022\014\n\010TREEITEM\020\014\022\r\n\tTABBUTTON\020\r\022\r\n\tTH" +
-      "UMBNAIL\020\016\"#\n\017DesktopWindowID\022\020\n\010windowID" +
-      "\030\001 \002(\r\"A\n\021DesktopWindowList\022,\n\nwindowLis" +
-      "t\030\001 \003(\0132\030.scope.DesktopWindowInfo\"F\n\023Qui" +
-      "ckWidgetInfoList\022/\n\017quickwidgetList\030\001 \003(" +
-      "\0132\026.scope.QuickWidgetInfo\"\305\001\n\021QuickWidge",
-      "tSearch\022(\n\010windowID\030\001 \002(\0132\026.scope.Deskto" +
-      "pWindowID\022B\n\nsearchType\030\002 \002(\0162..scope.Qu" +
-      "ickWidgetSearch.QuickWidgetSearchType\022\014\n" +
-      "\004data\030\003 \002(\t\"4\n\025QuickWidgetSearchType\022\010\n\004" +
-      "NAME\020\000\022\010\n\004TEXT\020\001\022\007\n\003POS\020\002B8\n#com.opera.c" +
-      "ore.systems.scope.protosB\017DesktopWmProto" +
-      "sH\001"
+      " \001(\r\022\013\n\003col\030\014 \001(\r\022\024\n\014visible_text\030\r \001(\t\022",
+      "\027\n\017additional_text\030\016 \001(\t\"\345\001\n\017QuickWidget" +
+      "Type\022\013\n\007UNKNOWN\020\000\022\n\n\006BUTTON\020\001\022\014\n\010CHECKBO" +
+      "X\020\002\022\r\n\tDIALOGTAB\020\003\022\014\n\010DROPDOWN\020\004\022\r\n\tEDIT" +
+      "FIELD\020\005\022\t\n\005LABEL\020\006\022\017\n\013RADIOBUTTON\020\007\022\020\n\014A" +
+      "DDRESSFIELD\020\010\022\n\n\006SEARCH\020\t\022\013\n\007TOOLBAR\020\n\022\014" +
+      "\n\010TREEVIEW\020\013\022\014\n\010TREEITEM\020\014\022\r\n\tTABBUTTON\020" +
+      "\r\022\r\n\tTHUMBNAIL\020\016\"#\n\017DesktopWindowID\022\020\n\010w" +
+      "indowID\030\001 \002(\r\"A\n\021DesktopWindowList\022,\n\nwi" +
+      "ndowList\030\001 \003(\0132\030.scope.DesktopWindowInfo" +
+      "\"F\n\023QuickWidgetInfoList\022/\n\017quickwidgetLi",
+      "st\030\001 \003(\0132\026.scope.QuickWidgetInfo\"\305\001\n\021Qui" +
+      "ckWidgetSearch\022(\n\010windowID\030\001 \002(\0132\026.scope" +
+      ".DesktopWindowID\022B\n\nsearchType\030\002 \002(\0162..s" +
+      "cope.QuickWidgetSearch.QuickWidgetSearch" +
+      "Type\022\014\n\004data\030\003 \002(\t\"4\n\025QuickWidgetSearchT" +
+      "ype\022\010\n\004NAME\020\000\022\010\n\004TEXT\020\001\022\007\n\003POS\020\002B8\n#com." +
+      "opera.core.systems.scope.protosB\017Desktop" +
+      "WmProtosH\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -3524,7 +3609,7 @@ public final class DesktopWmProtos {
           internal_static_scope_QuickWidgetInfo_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_scope_QuickWidgetInfo_descriptor,
-              new java.lang.String[] { "Name", "Type", "Visible", "Text", "Value", "Enabled", "DefaultLook", "FocusedLook", "Rect", "Parent", "Row", "Col", },
+              new java.lang.String[] { "Name", "Type", "Visible", "Text", "Value", "Enabled", "DefaultLook", "FocusedLook", "Rect", "Parent", "Row", "Col", "VisibleText", "AdditionalText", },
               com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo.class,
               com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo.Builder.class);
           internal_static_scope_DesktopWindowID_descriptor =

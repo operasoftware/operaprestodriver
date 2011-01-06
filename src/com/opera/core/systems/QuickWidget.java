@@ -164,6 +164,23 @@ public class QuickWidget {
 		}
 		
 		/**
+	     * 
+	     * @return text of widget
+	     */
+		public String getVisibleText() {
+			return desktopUtils.removeCR(info.getVisibleText());
+		}
+		
+		/**
+	     * 
+	     * @return text of widget
+	     */
+		public String getAdditionalText() {
+			return desktopUtils.removeCR(info.getAdditionalText());
+		}
+		
+		
+		/**
 	     * Check if widget text equals the text specified by @param string_id
 	     * 
 	     * @return true if text specified by string_id equals widget text
