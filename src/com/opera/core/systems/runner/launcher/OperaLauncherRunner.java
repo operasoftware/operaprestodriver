@@ -45,7 +45,7 @@ public class OperaLauncherRunner implements OperaRunner{
 			stringArray.add(Integer.toString(this.settings.getOperaLauncherListeningPort()));
 			if(this.settings.getOperaLauncherXvfbDisplay() != null){
 				stringArray.add("-display");
-				stringArray.add(Integer.toString(this.settings.getOperaLauncherXvfbDisplay()));
+				stringArray.add(":" + Integer.toString(this.settings.getOperaLauncherXvfbDisplay()));
 			}
 			stringArray.add("-bin");
 			stringArray.add(this.settings.getOperaBinaryLocation());
