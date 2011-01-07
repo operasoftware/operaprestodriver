@@ -43,6 +43,10 @@ public class OperaLauncherRunner implements OperaRunner{
 			stringArray.add("127.0.0.1");
 			stringArray.add("-port");
 			stringArray.add(Integer.toString(this.settings.getOperaLauncherListeningPort()));
+			if(this.settings.getOperaLauncherXvfbDisplay() != null){
+				stringArray.add("-display");
+				stringArray.add(Integer.toString(this.settings.getOperaLauncherXvfbDisplay()));
+			}
 			stringArray.add("-bin");
 			stringArray.add(this.settings.getOperaBinaryLocation());
 			
