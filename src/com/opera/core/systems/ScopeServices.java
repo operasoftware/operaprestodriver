@@ -220,7 +220,7 @@ public class ScopeServices implements IConnectionHandler {
 		}
 	}
 
-	private void waitForHandshake() throws WebDriverException {
+	public void waitForHandshake() throws WebDriverException {
 		try {
 			waitState.waitForHandshake(OperaIntervals.HANDSHAKE_TIMEOUT.getValue());
 		} catch (WebDriverException e) {
@@ -268,7 +268,7 @@ public class ScopeServices implements IConnectionHandler {
 		return ServiceResult.parseFrom(response.getPayload());
 	}
 
-	public void quit() {
+	public void quit_opera() {
 		try {
 			if (exec.getActionList().contains("Quit"))
 				exec.action("Quit");
@@ -277,11 +277,15 @@ public class ScopeServices implements IConnectionHandler {
 		} catch (Exception e) {
 			logger.info("Caught exception when trying to shut down (cannot send quit). : " + e.getMessage());
 		}
+	}
 
+	public void quit() {
+		quit_opera();
 		shutdown();
 	}
 
 	public boolean onConnected(StpConnection con) {
+		logger.info("onConnect fired");
 		if (connection == null) {
 			logger.fine("Got StpConnection");
 			connection = con;
@@ -337,7 +341,7 @@ public class ScopeServices implements IConnectionHandler {
         
 	public void onDisconnect()
         {
-            logger.fine("Disconnected, closing StpConnection.");
+            logger.info("Disconnected, closing StpConnection.");
             if (connection != null)
             {
                 if (!shuttingDown)

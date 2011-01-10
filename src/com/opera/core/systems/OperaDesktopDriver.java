@@ -5,6 +5,7 @@ package com.opera.core.systems;
 import java.util.List;
 import java.util.Map;
 
+import com.opera.core.systems.runner.launcher.OperaLauncherRunner;
 import com.opera.core.systems.scope.exceptions.CommunicationException;
 import com.opera.core.systems.scope.internal.OperaIntervals;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearch.QuickWidgetSearchType;
@@ -15,7 +16,6 @@ import com.opera.core.systems.scope.services.ums.SystemInputManager;
 import com.opera.core.systems.settings.OperaDriverSettings;
 
 public class OperaDesktopDriver extends OperaDriver {
-	
 	private IDesktopWindowManager desktopWindowManager;
 	private SystemInputManager systemInputManager;
 	private IDesktopUtils desktopUtils;
@@ -42,6 +42,31 @@ public class OperaDesktopDriver extends OperaDriver {
 		desktopWindowManager = services.getDesktopWindowManager();
 		systemInputManager = services.getSystemInputManager();
 		desktopUtils = services.getDesktopUtils();
+
+		// If the Opera Binary isn't set we are assuming Opera is up and we 
+		// can ask it for the location of itself
+		if (this.settings != null && this.settings.getOperaBinaryLocation() == null) {
+			String opera_path = desktopUtils.getOperaPath();
+			
+			logger.info("OperaBinaryLocation retrieved from Opera: " + opera_path);
+
+			if (!opera_path.isEmpty()) {
+				this.settings.setOperaBinaryLocation(opera_path);
+				
+				// Now create the OperaLauncherRunner that we have the binary path
+				this.operaRunner = new OperaLauncherRunner(this.settings);
+
+				// Quit Opera and shutdown the services
+				this.services.quit();
+
+				// Work around stop and restart Opera so the Launcher has control of it now
+				this.operaRunner.startOpera();
+				
+				// restart the services once Opera is up
+				this.createScopeServices();
+				this.services.init();
+			}
+		}
 	}
 
 	// TODO: FIXME
@@ -63,6 +88,21 @@ public class OperaDesktopDriver extends OperaDriver {
 		return systemInputManager;
 	}
 
+
+	/**
+	 * Quit Opera
+	 */
+	public void quit_opera() {
+		if (this.operaRunner != null){
+			if (this.operaRunner.isOperaRunning()) {
+				this.operaRunner.stopOpera();
+			}
+			else{
+				// Quit with action as opera wasn't started with the launcher
+				services.quit();
+			}
+		}
+	}
 
 	/**
 	 * @return active window id

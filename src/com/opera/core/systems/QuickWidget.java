@@ -5,9 +5,6 @@ import java.awt.Point;
 import java.util.List;
 import java.util.ArrayList;
 
-import org.openqa.selenium.ElementNotVisibleException;
-
-import com.opera.core.systems.scope.internal.OperaFlags;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo.QuickWidgetType;
