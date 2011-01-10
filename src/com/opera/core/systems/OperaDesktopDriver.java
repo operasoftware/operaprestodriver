@@ -20,16 +20,6 @@ public class OperaDesktopDriver extends OperaDriver {
 	private SystemInputManager systemInputManager;
 	private IDesktopUtils desktopUtils;
 
-	/*
-	public OperaDesktopDriver(){
-		super();
-	}
-
-	public OperaDesktopDriver(String executableLocation, String... arguments){
-		super(executableLocation, arguments);
-	}
-	*/
-	
 	public OperaDesktopDriver(OperaDriverSettings settings){
 		super(settings);
 	}
@@ -60,11 +50,9 @@ public class OperaDesktopDriver extends OperaDriver {
 				this.services.quit();
 
 				// Work around stop and restart Opera so the Launcher has control of it now
-				this.operaRunner.startOpera();
-				
-				// restart the services once Opera is up
-				this.createScopeServices();
-				this.services.init();
+				// Initialising the services will start Opera if the OperaLauncherRunner is
+				// setup correctly
+				this.init();
 			}
 		}
 	}

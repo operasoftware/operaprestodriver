@@ -111,8 +111,6 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 			if (this.settings.getOperaBinaryLocation() != null) {
 				// If there is an Opera binary passed in then launch Opera
 				this.operaRunner = new OperaLauncherRunner(this.settings);
-				logger.info("Constructor start Opera");
-				this.operaRunner.startOpera();
 			}
 		}
 		
@@ -136,6 +134,11 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 	 */
 	protected void init() {
 		createScopeServices();
+
+		// Launch Opera is there runner has been setup
+		if (operaRunner != null)
+			operaRunner.startOpera();
+
 		services.init();
 		debugger = services.getDebugger();
 		windowManager = services.getWindowManager();
@@ -158,7 +161,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 		return versions;
 	}
 
-	protected void createScopeServices() {
+	private void createScopeServices() {
 		try {
 			Map<String, String> versions = getServicesList();
 			services = new ScopeServices(versions);
