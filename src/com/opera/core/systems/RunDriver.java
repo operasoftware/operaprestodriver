@@ -20,7 +20,7 @@ class RunDriver {
 		 	
 			settings.setRunOperaLauncherFromOperaDriver(true);
 			settings.setOperaBinaryLocation("/Users/minch/Documents/DesktopDev/Kjevik/work/output/Debug/Opera.app/Contents/MacOS/Opera");
-			settings.setOperaBinaryArguments("-nostartdialogs");
+			settings.setOperaBinaryArguments("-watirtest");
 			settings.setOperaLauncherBinary("/Users/minch/Documents/DesktopDev/OperaWatir/opera-watir/utils/launchers/launcher-mac"); // Hardcoded to Mac
 		 
 	    	System.out.println("Create Driver");
