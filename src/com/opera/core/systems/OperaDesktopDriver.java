@@ -45,7 +45,7 @@ public class OperaDesktopDriver extends OperaDriver {
 				
 				// Now create the OperaLauncherRunner that we have the binary path
 				this.operaRunner = new OperaLauncherRunner(this.settings);
-
+				
 				this.services.quit();
 				
 				// Give Opera time to quit properly
@@ -70,7 +70,7 @@ public class OperaDesktopDriver extends OperaDriver {
 		// of the web-driver require work
 		versions.put("desktop-window-manager", "2.0");
 		versions.put("system-input", "1.0");
-		versions.put("desktop-utils", "1.0");
+		versions.put("desktop-utils", "2.0");
 		return versions;
 	}
 	
