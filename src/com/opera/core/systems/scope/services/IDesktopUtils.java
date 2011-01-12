@@ -42,4 +42,11 @@ public interface IDesktopUtils {
 	 */
 	String removeCR(String text);
 	
+	/**
+	 * 
+	 * Get Pid of connected Opera instance
+	 * @return
+	 */
+	int getOperaPid();
+	
 }

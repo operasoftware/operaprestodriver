@@ -9,6 +9,7 @@ import com.opera.core.systems.ScopeServices;
 import com.opera.core.systems.scope.protos.UmsProtos.Response;
 
 import com.opera.core.systems.scope.services.IDesktopUtils;
+import com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopPid;
 import com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopStringID;
 import com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopStringText;
 import com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopPath;
@@ -20,7 +21,7 @@ public class DesktopUtils extends AbstractService implements IDesktopUtils {
 		
 		String serviceName = "desktop-utils";
 		
-		if(!isVersionInRange(version, "2.0", serviceName))
+		if(!isVersionInRange(version, "3.0", serviceName))
 			throw new UnsupportedOperationException(serviceName + " version " + version + " is not supported");
 		
 		services.setDesktopUtils(this);
@@ -86,6 +87,16 @@ public class DesktopUtils extends AbstractService implements IDesktopUtils {
 		DesktopPath string_path = pathBuilder.build();
 
 		return string_path.getPath();
+	}
+	
+	public int getOperaPid() {
+		Response response = executeCommand(DesktopUtilsCommand.GET_OPERA_PID, null);
+
+		DesktopPid.Builder pathBuilder = DesktopPid.newBuilder();
+		buildPayload(response, pathBuilder);
+		DesktopPid desktopPid = pathBuilder.build();
+
+		return desktopPid.getPid();
 	}
 
 }
