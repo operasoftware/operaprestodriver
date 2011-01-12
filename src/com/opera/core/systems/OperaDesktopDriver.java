@@ -43,21 +43,17 @@ public class OperaDesktopDriver extends OperaDriver {
 			if (!opera_path.isEmpty()) {
 				this.settings.setOperaBinaryLocation(opera_path);
 				
-				// OBS: Have to quit opera before creating the LauncherRunner, and sleep,
-				// else the restart doesn't work on linux, even with the external launcher
-				
-				// Quit Opera and shutdown the services
-				this.services.quit();
-				
-				try {
-					Thread.sleep(6000);
-				} catch (InterruptedException e) {
-					// ignore
-				}
-				
 				// Now create the OperaLauncherRunner that we have the binary path
 				this.operaRunner = new OperaLauncherRunner(this.settings);
 
+				this.services.quit();
+				
+				// Give Opera time to quit properly
+				try {
+					Thread.sleep(2000);
+				} catch (InterruptedException e) {
+					// ignore
+				}
 				
 				// Work around stop and restart Opera so the Launcher has control of it now
 				// Initialising the services will start Opera if the OperaLauncherRunner is
