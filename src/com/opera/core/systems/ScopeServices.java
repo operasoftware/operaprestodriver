@@ -277,9 +277,6 @@ public class ScopeServices implements IConnectionHandler {
 		} catch (Exception e) {
 			logger.info("Caught exception when trying to shut down (cannot send quit). : " + e.getMessage());
 		}
-		/* Add polling loop to check if opera actually quit
-		int pid = desktopUtils.getOperaPid();
-		*/
 	}
 
 	public void quit() {
