@@ -5,8 +5,6 @@ package com.opera.core.systems;
 import java.util.List;
 import java.util.Map;
 
-import org.openqa.selenium.WebDriverException;
-
 import com.opera.core.systems.runner.launcher.OperaLauncherRunner;
 import com.opera.core.systems.scope.exceptions.CommunicationException;
 import com.opera.core.systems.scope.internal.OperaIntervals;

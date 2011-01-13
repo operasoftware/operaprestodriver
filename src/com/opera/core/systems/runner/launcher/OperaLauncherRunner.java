@@ -22,8 +22,6 @@ import com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStatus
 import com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStatusResponse;
 import com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStopRequest;
 import com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStatusResponse.StatusType;
-import com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopPid;
-import com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopStringID;
 import com.opera.core.systems.settings.OperaDriverSettings;
 
 public class OperaLauncherRunner implements OperaRunner{
