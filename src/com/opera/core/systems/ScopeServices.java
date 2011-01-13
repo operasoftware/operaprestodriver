@@ -15,6 +15,7 @@ import com.google.protobuf.AbstractMessage.Builder;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.opera.core.systems.model.ICommand;
+import com.opera.core.systems.runner.OperaRunner;
 import com.opera.core.systems.scope.ScopeCommand;
 import com.opera.core.systems.scope.handlers.IConnectionHandler;
 import com.opera.core.systems.scope.internal.OperaIntervals;
@@ -268,7 +269,7 @@ public class ScopeServices implements IConnectionHandler {
 		return ServiceResult.parseFrom(response.getPayload());
 	}
 
-	public void quit_opera() {
+	public void quit_opera(OperaRunner runner, int pid) {
 		try {
 			if (exec.getActionList().contains("Quit"))
 				exec.action("Quit");
@@ -277,10 +278,28 @@ public class ScopeServices implements IConnectionHandler {
 		} catch (Exception e) {
 			logger.info("Caught exception when trying to shut down (cannot send quit). : " + e.getMessage());
 		}
+		
+		if (runner != null && pid > 0) {
+			int interval = 100;
+			int timeout = 10000;
+			while (runner.isOperaRunning(pid) && timeout > 0)
+			{
+				try {
+					Thread.sleep(interval);
+				} catch (InterruptedException e) {
+					// ignore
+				}
+				timeout -= interval;
+			}
+		}
 	}
 
 	public void quit() {
-		quit_opera();
+		quit(null, 0);
+	}
+	
+	public void quit(OperaRunner runner, int pid) {
+		quit_opera(runner, pid);
 		shutdown();
 	}
 

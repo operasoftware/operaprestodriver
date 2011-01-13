@@ -52,24 +52,9 @@ public class OperaDesktopDriver extends OperaDriver {
 				// Now create the OperaLauncherRunner that we have the binary path
 				this.operaRunner = new OperaLauncherRunner(this.settings);
 				
-				this.services.quit();
+				// Quit and wait for opera to quit properly
+				this.services.quit(this.operaRunner, pid);
 				
-				// 
-				int interval = 100;
-				int timeout = 10000;
-				//long endTime = System.currentTimeMillis() + OperaIntervals.PAGE_LOAD_TIMEOUT.getValue();
-				while (this.operaRunner.isOperaRunning(pid) && timeout > 0)
-				{
-					try {
-						Thread.sleep(interval);
-					} catch (InterruptedException e) {
-						// ignore
-					}
-					timeout -= interval;
-				}
-				
-				// When opera has quit - copy over preferences if needed
-
 				// Work around stop and restart Opera so the Launcher has control of it now
 				// Initialising the services will start Opera if the OperaLauncherRunner is
 				// setup correctly
