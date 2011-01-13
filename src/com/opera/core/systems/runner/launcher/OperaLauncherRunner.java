@@ -22,6 +22,8 @@ import com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStatus
 import com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStatusResponse;
 import com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStopRequest;
 import com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStatusResponse.StatusType;
+import com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopPid;
+import com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopStringID;
 import com.opera.core.systems.settings.OperaDriverSettings;
 
 public class OperaLauncherRunner implements OperaRunner{
@@ -109,9 +111,16 @@ public class OperaLauncherRunner implements OperaRunner{
 	}
 	
 	public boolean isOperaRunning() {
+		return isOperaRunning(0);
+	}
+	
+	public boolean isOperaRunning(int process_id) {
 		logger.log(Level.INFO, "Get opera status");
         try {
             LauncherStatusRequest.Builder request = LauncherStatusRequest.newBuilder();
+            if (process_id > 0)
+            	request.setProcessid(process_id);
+            
             ResponseEncapsulation res = launcherProtocol.sendRequest(MessageType.MSG_STATUS, request.build().toByteArray());
             return handleStatusMessage(res.getResponse()) == StatusType.RUNNING;
         } catch (IOException e){
