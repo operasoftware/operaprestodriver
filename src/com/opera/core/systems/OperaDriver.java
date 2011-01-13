@@ -113,6 +113,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
    * Constructor that starts opera.
    */
   public OperaDriver(OperaDriverSettings settings) {
+    logger.fine("Constructing OperaDriver with settings");
     if (settings != null) {
       this.settings = settings;
 
@@ -142,6 +143,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
     }
 
     init();
+    logger.fine("init() done");
   }
 
   /**
@@ -181,6 +183,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
 
     // Launch Opera if the runner has been setup
     if (operaRunner != null) {
+      logger.fine("Calling startOpera");
       operaRunner.startOpera();
     }
 

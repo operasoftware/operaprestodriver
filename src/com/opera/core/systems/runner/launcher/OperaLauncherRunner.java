@@ -52,6 +52,7 @@ public class OperaLauncherRunner implements OperaRunner {
   private String crashlog = null;
 
   public OperaLauncherRunner(OperaDriverSettings settings) {
+	logger.fine("Creating OperaLauncherRunner");
     this.settings = settings;
 
     if (settings.getOperaLauncherBinary() == null) throw new WebDriverException(
@@ -61,6 +62,7 @@ public class OperaLauncherRunner implements OperaRunner {
         "You need to set Opera's path to use opera-launcher");
 
     if (this.settings.doRunOperaLauncherFromOperaDriver()) {
+      logger.fine("Running launcher from OperaDriver");
 
       List<String> stringArray = new ArrayList<String>();
       stringArray.add("-host");
@@ -73,6 +75,15 @@ public class OperaLauncherRunner implements OperaRunner {
             + Integer.toString(this.settings.getOperaLauncherXvfbDisplay()));
       }
 
+      if( logger.isLoggable(Level.FINEST) )
+      {
+        stringArray.add("-console");
+        stringArray.add("-verbosity");
+        stringArray.add("FINEST");
+      }
+
+      //  == Note any launcher arguments must be before this line! ==
+
       if (this.settings.getNoQuit()) stringArray.add("-noquit");
       stringArray.add("-bin");
       stringArray.add(this.settings.getOperaBinaryLocation());
@@ -82,6 +93,8 @@ public class OperaLauncherRunner implements OperaRunner {
       while (tokanizer.hasMoreTokens()) {
         stringArray.add(tokanizer.nextToken());
       }
+
+      logger.fine("Launcher arguments: " + stringArray);
 
       // Enable auto test mode, always starts Opera on opera:debug and prevents
       // interrupting dialogues appearing
