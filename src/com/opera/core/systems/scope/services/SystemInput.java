@@ -7,7 +7,15 @@ import com.opera.core.systems.scope.protos.SystemInputProtos.ModifierPressed;
 import com.opera.core.systems.scope.protos.SystemInputProtos.MouseInfo.MouseButton;
 
 public interface SystemInput {
-		void click(Point location, MouseButton button, int num_clicks, List<ModifierPressed> modifiers);
-		void keyPress(String key, List<ModifierPressed> modifiers);
+	
+	/*
+	 * click MouseButton button num_clicks times with the given modifiers
+	 */
+	void click(Point location, MouseButton button, int num_clicks, List<ModifierPressed> modifiers);
+	
+	/*
+	 * 
+	 */
+	void keyPress(String key, List<ModifierPressed> modifiers);
 }
 
