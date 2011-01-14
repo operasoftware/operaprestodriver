@@ -1,7 +1,5 @@
 package com.opera.core.systems;
 
-//import java.util.HashMap;
-//import java.util.ArrayList;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -43,7 +41,7 @@ public class OperaDesktopDriver extends OperaDriver {
 		// If the Opera Binary isn't set we are assuming Opera is up and we 
 		// can ask it for the location of itself
 		if (this.settings != null && this.settings.getOperaBinaryLocation() == null) {
-			String opera_path = desktopUtils.getOperaPath();
+			String opera_path = getOperaPath();
 			
 			logger.info("OperaBinaryLocation retrieved from Opera: " + opera_path);
 
@@ -133,9 +131,9 @@ public class OperaDesktopDriver extends OperaDriver {
 	}
 
 	/**
-	 * @param win_name
-	 * @return list of widgets in the window with name win_name
-	 *       If no winName is empty, it gets the widgets in the active window
+	 * @param winName
+	 * @return list of widgets in the window with name winName
+	 *       If winName is empty, it gets the widgets in the active window
 	 */
 	public List<QuickWidget> getQuickWidgetList(String winName) {
 		int id = getWindowID(winName);
@@ -146,25 +144,35 @@ public class OperaDesktopDriver extends OperaDriver {
 		return null;
 	}
 	
-	public List<QuickWidget> getQuickWidgetList(int id) {
-		return desktopWindowManager.getQuickWidgetList(id);
+	/**
+	 * @param winId - windowId of window to get widgets in
+	 * @return list of widgets in the window with id winId
+	 *       If winId -1, gets the widgets in the active window
+	 */
+	public List<QuickWidget> getQuickWidgetList(int winId) {
+		return desktopWindowManager.getQuickWidgetList(winId);
 	}
 	
 	
+	/**
+	 * 
+	 * 
+	 * @returnlist of windows
+	 */
 	public List<QuickWindow> getWindowList() {
 		return desktopWindowManager.getQuickWindowList();
 	}
 
 	/**
 	 * @param name
-	 * @return window id of window with window_name 
+	 * @return window id of window with windowName 
 	 */
 	public int getWindowID(String windowName) {
 		return desktopWindowManager.getWindowID(windowName);
 	}
 	
 	/**
-	 * @param name
+	 * @param windowName
 	 * @return QuickWindow with the given name
 	 */
 	public QuickWindow getWindow(String windowName) {
@@ -172,7 +180,7 @@ public class OperaDesktopDriver extends OperaDriver {
 	}
 	
 	/**
-	 * @param windowId
+	 * @param windowId 
 	 * @param widgetName
 	 * @return QuickWidget with the given name in the window with id windowId
 	 */
@@ -180,6 +188,13 @@ public class OperaDesktopDriver extends OperaDriver {
 		return desktopWindowManager.getQuickWidget(windowId, QuickWidgetSearchType.NAME, widgetName);
 	}
 
+	/**
+	 * 
+	 * @param windowId
+	 * @param widgetName
+	 * @param parentName
+	 * @return QuickWidget with widgetName and parent in the window given by windowId
+	 */
 	public QuickWidget findWidgetByName(int windowId, String widgetName, String parentName){
 		return desktopWindowManager.getQuickWidget(windowId, QuickWidgetSearchType.NAME, widgetName, parentName);
 	}
@@ -256,15 +271,9 @@ public class OperaDesktopDriver extends OperaDriver {
 	 * 
 	 * @param key
 	 * @param modifier
-	 * @return the string specified by the id @param enum_text
+	 * @return 
 	 */
-	
 	public void keyPress(String key, List<ModifierPressed> modifiers) {
-		/*for (ModifierPressed mod : modifiers) {
-			if (mod != null)
-				System.out.print(mod.toString() + "(" + i + ",");
-		}
-		System.out.println(")");*/
 		systemInputManager.keyPress(key, modifiers);
 	}
 	
@@ -274,16 +283,6 @@ public class OperaDesktopDriver extends OperaDriver {
 	public void keyDown(String key, List<ModifierPressed> modifiers) {
 		systemInputManager.keyDown(key, modifiers);
 	}
-	
-	/**
-	 *
-	 */
-	/*public void keyPress(String key, ModifierPressed modifier) {
-		ArrayList<ModifierPressed> mods = new ArrayList<ModifierPressed>();
-		mods.add(modifier);
-		systemInputManager.keyPress(key, mods);
-	}*/
-	
 	
 	public int getWindowCount() {
 		//TODO FIXME
