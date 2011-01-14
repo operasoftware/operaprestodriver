@@ -2,6 +2,12 @@ package com.opera.core.systems;
 
 //import java.util.HashMap;
 //import java.util.ArrayList;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.List;
 import java.util.Map;
 
@@ -95,7 +101,7 @@ public class OperaDesktopDriver extends OperaDriver {
 			}
 		}
 	}
-
+	
 	/**
 	 * @return active window id
 	 */
@@ -374,7 +380,80 @@ public class OperaDesktopDriver extends OperaDriver {
 		return services.waitForDesktopWindowLoaded(win_name, OperaIntervals.PAGE_LOAD_TIMEOUT.getValue());
 	}
 	
+	// ----------------------
 	
+	public void resetOperaPrefs(String newPrefs) {
+		resetOperaPrefs(this.getLargePreferencesPath(), newPrefs);
+	}
+	
+	public void resetOperaPrefs(String prefsPath, String newPrefs) {
+		quit_opera();
+		deleteFolder(prefsPath);
+		copyFolder(newPrefs, prefsPath);
+		start_opera();
+	}
+	
+	private void start_opera() {
+		init();
+	}
+	
+	private boolean deleteFolder(String folderpath) {
+		File dir = new File(folderpath);
+		if (dir.isDirectory()) {
+			String[] children = dir.list();
+			for (int i=0; i<children.length; i++) {
+				boolean success = deleteFolder(children[i]);
+				if (!success) {
+					//return false;
+				}
+	        }
+		}
+        // The directory/file is now empty so delete it
+        return dir.delete();
+	}
+	
+	private void copyFolder(String from, String to) {
+		try {
+			copyFolder(new File(from), new File(to));
+		} catch (IOException ex) {
+			
+		}
+	}
+	
+	private void copyFolder(File srcPath, File dstPath) throws IOException {
+		
+		if (srcPath.isDirectory()){
+			
+			// Create destination folder if needed
+			if (!dstPath.exists()){
+				dstPath.mkdir();
+			}
+			
+			String files[] = srcPath.list();
+			for(int i = 0; i < files.length; i++){
+				copyFolder(new File(srcPath, files[i]), new File(dstPath, files[i]));
+			}
+		}
+		else {
+			if(!srcPath.exists()){
+				System.out.println("File or directory does not exist.");
+			}
+			else
+			{
+				InputStream in = new FileInputStream(srcPath);
+				OutputStream out = new FileOutputStream(dstPath); 
+
+				byte[] buf = new byte[1024];
+				int len;
+				while ((len = in.read(buf)) > 0) {
+					out.write(buf, 0, len);
+				}
+				
+				in.close();
+				out.close();
+			}
+		}
+	}
 }
 
 
