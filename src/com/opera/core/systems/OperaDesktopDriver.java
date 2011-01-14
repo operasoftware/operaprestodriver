@@ -406,13 +406,13 @@ public class OperaDesktopDriver extends OperaDriver {
 	// ----------------------
 	
 	public void resetOperaPrefs(String newPrefs) {
-		resetOperaPrefs(this.getLargePreferencesPath(), newPrefs);
+		resetOperaPrefs(this.getLargePreferencesPath(), getLargePreferencesPath(), getCachePreferencesPath(), newPrefs);
 	}
 	
-	public void resetOperaPrefs(String prefsPath, String newPrefs) {
+	public void resetOperaPrefs(String largePrefsPath, String smallPrefspath, String cachePrefsPath, String newPrefs) {
 		quitOpera();
-		deleteFolder(prefsPath);
-		copyFolder(newPrefs, prefsPath);
+		deleteFolder(largePrefsPath);
+		copyFolder(newPrefs, largePrefsPath);
 		startOpera();
 	}
 	
