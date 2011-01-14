@@ -42,28 +42,28 @@ public class QuickWindow {
 	}
 	
 	/**
-	 * @return true if widget is visible
+	 * @return true if window is on screen
 	 */
 	public boolean isOnScreen(){
 		return info.getOnScreen(); 
 	}
 	
 	/**
-	 * @return string which is the type of the widget
+	 * @return the type of the window
 	 */
 	public DesktopWindowType getType(){
 		return info.getWindowType(); 
 	}
 	
 	/**
-	 * @return DesktopWindowRect of the widget
+	 * @return DesktopWindowRect of the window
 	 */
 	public DesktopWindowRect getRect() {
 		return info.getRect();
 	}
 	
 	/**
-	 * @return Point describing location of widget
+	 * @return Point describing location of window
 	 */
 	public Point getLocation() {
 		DesktopWindowRect rect = getRect();
@@ -71,7 +71,7 @@ public class QuickWindow {
 	}
 
 	/**
-	 * @return size of widget
+	 * @return size of this window
 	 */
 	public Dimension getSize() {
 		DesktopWindowRect rect = getRect();

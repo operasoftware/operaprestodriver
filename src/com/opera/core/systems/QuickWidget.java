@@ -133,6 +133,9 @@ public class QuickWidget {
 			return null;
 		}
 
+		/**
+		 * Hover this widget
+		 */
 		public void hover() {
 			List<ModifierPressed> alist = new ArrayList<ModifierPressed>();
 			alist.add(ModifierPressed.NONE);
@@ -238,7 +241,7 @@ public class QuickWidget {
 		
 		/**
 		 * 
-		 * @return 
+		 * @return QuickWidgetType type of this widget
 		 */
 		public QuickWidgetType getType(){
 			return info.getType(); 
