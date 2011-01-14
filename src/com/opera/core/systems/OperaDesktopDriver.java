@@ -86,6 +86,12 @@ public class OperaDesktopDriver extends OperaDriver {
 		return systemInputManager;
 	}
 
+	/**
+	 * Shutdown the driver without quiting Opera
+	 */
+	public void quit_driver() {
+		super.shutdown();
+	}
 
 	/**
 	 * Quit Opera
@@ -95,9 +101,26 @@ public class OperaDesktopDriver extends OperaDriver {
 			if (this.operaRunner.isOperaRunning()) {
 				this.operaRunner.stopOpera();
 			}
-			else{
+			else {
 				// Quit with action as opera wasn't started with the launcher
-				services.quit();
+				String opera_path = desktopUtils.getOperaPath();
+				logger.info("OperaBinaryLocation retrieved from Opera: " + opera_path);
+
+				int pid = 0;
+				if (!opera_path.isEmpty()) {
+					this.settings.setOperaBinaryLocation(opera_path);
+					pid = desktopUtils.getOperaPid();
+				}
+				
+				// Now create the OperaLauncherRunner that we have the binary path
+				// So we can control the shutdown
+				this.operaRunner = new OperaLauncherRunner(this.settings);
+				
+				// Quit and wait for opera to quit properly
+				this.services.quit(this.operaRunner, pid);
+				
+				// Reset the runner
+				this.operaRunner = null;
 			}
 		}
 	}

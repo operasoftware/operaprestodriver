@@ -19,14 +19,18 @@ class RunDriver {
 			OperaDriverSettings settings = new OperaDriverSettings();
 		 	
 			settings.setRunOperaLauncherFromOperaDriver(true);
-			settings.setOperaBinaryLocation("/Users/minch/Documents/DesktopDev/Kjevik/work/output/Debug/Opera.app/Contents/MacOS/Opera");
+//			settings.setOperaBinaryLocation("/Users/minch/Documents/DesktopDev/Kjevik/work/output/Debug/Opera.app/Contents/MacOS/Opera");
 			settings.setOperaBinaryArguments("-watirtest");
 			settings.setOperaLauncherBinary("/Users/minch/Documents/DesktopDev/OperaWatir/opera-watir/utils/launchers/launcher-mac"); // Hardcoded to Mac
+			settings.setNoQuit(true);
 		 
 	    	System.out.println("Create Driver");
 	        driver = new OperaDesktopDriver(settings);
 //	        driver = new OperaDriver();
 	        System.out.println(".Driver created ......");
+	        
+//	        driver.quit_opera();
+	        driver.quit_driver();
 	        
 //	        driver.get("http://www.google.com");
 	        

@@ -10,6 +10,7 @@ public class OperaDriverSettings {
 	private String operaBinaryArguments;
 	
 	private Integer operaLauncherXvfbDisplay; //could be null
+	private boolean noQuit = false;
 	
 	//Generated getters and setters:
 	public boolean doRunOperaLauncherFromOperaDriver() {
@@ -49,4 +50,10 @@ public class OperaDriverSettings {
 	public void setOperaLauncherXvfbDisplay(Integer operaLauncherXvfbDisplay) {
 		this.operaLauncherXvfbDisplay = operaLauncherXvfbDisplay;
 	}	
+	public void setNoQuit(boolean noQuit) {
+		this.noQuit = noQuit;
+	}
+	public boolean getNoQuit() {
+		return noQuit;
+	}
 }
