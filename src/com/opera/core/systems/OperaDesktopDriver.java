@@ -89,14 +89,14 @@ public class OperaDesktopDriver extends OperaDriver {
 	/**
 	 * Shutdown the driver without quiting Opera
 	 */
-	public void quit_driver() {
+	public void quitDriver() {
 		super.shutdown();
 	}
 
 	/**
 	 * Quit Opera
 	 */
-	public void quit_opera() {
+	public void quitOpera() {
 		if (this.operaRunner != null){
 			if (this.operaRunner.isOperaRunning()) {
 				this.operaRunner.stopOpera();
@@ -410,13 +410,13 @@ public class OperaDesktopDriver extends OperaDriver {
 	}
 	
 	public void resetOperaPrefs(String prefsPath, String newPrefs) {
-		quit_opera();
+		quitOpera();
 		deleteFolder(prefsPath);
 		copyFolder(newPrefs, prefsPath);
-		start_opera();
+		startOpera();
 	}
 	
-	private void start_opera() {
+	private void startOpera() {
 		init();
 	}
 	
