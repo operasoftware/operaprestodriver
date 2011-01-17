@@ -269,7 +269,7 @@ public class ScopeServices implements IConnectionHandler {
 		return ServiceResult.parseFrom(response.getPayload());
 	}
 
-	public void quit_opera(OperaRunner runner, int pid) {
+	public void quitOpera(OperaRunner runner, int pid) {
 		try {
 			if (exec.getActionList().contains("Quit"))
 				exec.action("Quit");
@@ -299,7 +299,7 @@ public class ScopeServices implements IConnectionHandler {
 	}
 	
 	public void quit(OperaRunner runner, int pid) {
-		quit_opera(runner, pid);
+		quitOpera(runner, pid);
 		shutdown();
 	}
 
