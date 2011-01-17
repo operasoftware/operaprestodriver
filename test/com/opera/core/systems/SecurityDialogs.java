@@ -24,7 +24,7 @@ public class SecurityDialogs {
 	    public void testShowSecurityInfo(){
 	        driver.waitStart();
 	        
-	        //driver.operaDesktopAction("Open url in new page", "http://t/security/bts/164110/scary_file-keyboard.kini");
+	        driver.operaDesktopAction("Open url in new page", "http://t/security/bts/164110/scary_file-keyboard.kini");
 	        
 	        // Add try-catch for timeout
 	    	int win_id = driver.waitForWindowShown("Setup Apply Dialog Confirm Dialog");
@@ -43,7 +43,7 @@ public class SecurityDialogs {
 		    assertTrue("Yes is not default button", yes_btn != null && !yes_btn.isDefault());
 		    assertTrue("No is default button", no_btn.isDefault());
 		    
-		    //driver.operaDesktopAction("Cancel");
+		    driver.operaDesktopAction("Cancel");
 		    //driver.keyPress("F1", ModifierPressed.NONE);
 		    //no_btn.click(MouseButton.LEFT, 1, ModifierPressed.NONE);
 	    }
