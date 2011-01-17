@@ -10,6 +10,11 @@ public class OperaDriverSettings {
 	private String operaBinaryArguments;
 	
 	private Integer operaLauncherXvfbDisplay; //could be null
+
+	private String largePrefsFolder;
+	private String smallPrefsFolder;
+	private String cachePrefsFolder;
+	
 	private boolean noQuit = false;
 	
 	//Generated getters and setters:
@@ -56,4 +61,29 @@ public class OperaDriverSettings {
 	public boolean getNoQuit() {
 		return noQuit;
 	}
+	
+	public void SetLargePrefsFolder(String largePrefsFolder) {
+		this.largePrefsFolder = largePrefsFolder;
+	}
+	
+	public String getLargePrefsFolder() {
+		return largePrefsFolder;
+	}
+	
+	public void SetSmallPrefsFolder(String smallPrefsFolder) {
+		this.smallPrefsFolder = smallPrefsFolder;
+	}
+	
+	public String getSmallPrefsFolder() {
+		return smallPrefsFolder;
+	}
+	
+	public void SetCachePrefsFolder(String cachePrefsFolder) {
+		this.cachePrefsFolder = cachePrefsFolder;
+	}
+	
+	public String getCachePrefsFolder() {
+		return cachePrefsFolder;
+	}
+	
 }
