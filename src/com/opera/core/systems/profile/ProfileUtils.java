@@ -29,7 +29,12 @@ public class ProfileUtils {
 	
 	public void copyProfile(String newPrefs) {
 		// For now, copy all to smallPrefsFolder
-		copyFolder(newPrefs, smallPrefsFolder);
+		
+		// TODO: If newPrefs doesn't exist
+		if (new File(newPrefs).exists())
+		{
+			copyFolder(newPrefs, smallPrefsFolder);
+		}
 	}
 	
 	public boolean deleteFolder(String folderPath) {
