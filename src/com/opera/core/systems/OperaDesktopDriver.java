@@ -100,7 +100,11 @@ public class OperaDesktopDriver extends OperaDriver {
 	public void quitOpera() {
 		if (this.operaRunner != null){
 			if (this.operaRunner.isOperaRunning()) {
+				// Quit Opera
 				this.operaRunner.stopOpera();
+				
+				// Cut off the services connection to free the port
+				this.services.shutdown();
 			}
 		}
 		else {
@@ -408,15 +412,13 @@ public class OperaDesktopDriver extends OperaDriver {
 	// ---------------------- 
 	
 	public void resetOperaPrefs(String newPrefs) {
-		// OBS: Using quitOpera gives an 'Address already in use'
-		// quitOpera();
-
 		// Quit and wait for opera to quit properly
-		int pid = desktopUtils.getOperaPid();
-		this.services.quit(this.operaRunner, pid);
+		quitOpera();
 		
 		profileUtils.deleteProfile();
 		profileUtils.copyProfile(newPrefs);
+		System.out.println("\n\nAbout to start Opera\n\n");
+		
 		startOpera();
 	}
 	
