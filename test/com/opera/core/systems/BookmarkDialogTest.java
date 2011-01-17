@@ -27,4 +27,5 @@ public class BookmarkDialogTest extends DesktopTestBase {
     driver.waitForWindowClose("Bookmark Properties Dialog");
 
   }
+
 }

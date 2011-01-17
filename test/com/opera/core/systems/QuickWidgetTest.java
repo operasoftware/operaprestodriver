@@ -6,7 +6,7 @@ import org.junit.Test;
 
 import com.opera.core.systems.scope.protos.SystemInputProtos.ModifierPressed;
 
-public class QuickWidgetTest  extends DesktopTestBase {
+public class QuickWidgetTest extends DesktopTestBase {
     @Test
     public void testSomething(){
     	driver.waitStart();
