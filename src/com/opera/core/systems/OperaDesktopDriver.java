@@ -439,6 +439,10 @@ public class OperaDesktopDriver extends OperaDriver {
 		firstTestRun = false;
 	}
 	
+	public void deleteOperaPrefs() {
+		profileUtils.deleteProfile();
+	}
+	
 	private void startOpera() {
 		init();
 	}
