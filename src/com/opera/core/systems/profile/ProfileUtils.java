@@ -33,7 +33,6 @@ public class ProfileUtils {
 	}
 	
 	public boolean deleteFolder(String folderPath) {
-		System.out.println("[ProfileUtils]: deleteFolder(" + folderPath + ")");
 		File dir = new File(folderPath);
 		if (dir.isDirectory()) {
 			String[] children = dir.list();
@@ -45,15 +44,11 @@ public class ProfileUtils {
 	        }
 		}
         // The directory/file is now empty so delete it
-		System.out.println("File.exists? " + dir.exists());
-		System.out.println("Can we write/change the file? " + dir.canWrite());
 		boolean res = dir.delete();
-		System.out.println("Dir.delete() " + folderPath + " => " + res);
         return res;
 	}
 	
 	public void copyFolder(String from, String to) {
-		System.out.println("[ProfileUtils]: copyFolder(from=" + from + "), to=" + to + ")");
 		try {
 			copyFolder(new File(from), new File(to));
 		} catch (IOException ex) {
@@ -62,15 +57,10 @@ public class ProfileUtils {
 	}
 	
 	public void copyFolder(File srcFile, File dstFile) throws IOException {
-		System.out.println("[ProfileUtils]: copyFolder[2](" + srcFile.getAbsolutePath() + ", " + dstFile.getAbsolutePath() + ")");
 		if (srcFile.isDirectory()){
-			System.out.println(srcFile.getAbsolutePath() + " is a directory");
 			// Create destination folder if needed
 			if (!dstFile.exists()){
-				System.out.println(dstFile.getAbsolutePath() + " exists? " + dstFile.exists());
-				System.out.println("Create it");
 				dstFile.mkdir();
-				System.out.println(dstFile.getAbsolutePath() + " exists now? " + dstFile.exists());
 			}
 			
 			String files[] = srcFile.list();
@@ -79,10 +69,10 @@ public class ProfileUtils {
 			}
 		}
 		else {
-			if(!srcFile.exists()){
+			/*if(!srcFile.exists()){
 				System.out.println("File or directory " + srcFile.getAbsolutePath() + " does not exist.");
 			}
-			else
+			else*/
 			{
 				InputStream in = new FileInputStream(srcFile);
 				OutputStream out = new FileOutputStream(dstFile); 
