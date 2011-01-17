@@ -1,5 +1,6 @@
 package com.opera.core.systems;
 
+import java.io.File;
 import java.util.List;
 import java.util.Map;
 
@@ -19,6 +20,7 @@ public class OperaDesktopDriver extends OperaDriver {
 	private SystemInputManager systemInputManager;
 	private IDesktopUtils desktopUtils;
 	private ProfileUtils profileUtils;
+	private boolean	firstTestRun = true;
 
 	public OperaDesktopDriver(OperaDriverSettings settings){
 		super(settings);
@@ -33,7 +35,14 @@ public class OperaDesktopDriver extends OperaDriver {
 		desktopWindowManager = services.getDesktopWindowManager();
 		systemInputManager = services.getSystemInputManager();
 		desktopUtils = services.getDesktopUtils();
-		
+
+		// Opera will be running at this point so we can retrieve and
+		// store all the profile folders
+		settings.SetLargePrefsFolder(getLargePreferencesPath());
+		settings.SetSmallPrefsFolder(getSmallPreferencesPath());
+		settings.SetCachePrefsFolder(getCachePreferencesPath());
+		profileUtils = new ProfileUtils(settings);
+
 		// If the Opera Binary isn't set we are assuming Opera is up and we 
 		// can ask it for the location of itself
 		if (this.settings != null && this.settings.getOperaBinaryLocation() == null
@@ -55,17 +64,15 @@ public class OperaDesktopDriver extends OperaDriver {
 				// Quit and wait for opera to quit properly
 				this.services.quit(this.operaRunner, pid);
 				
+				// Delete the profile to start the first test with a clean profile
+				this.profileUtils.deleteProfile();
+				
 				// Work around stop and restart Opera so the Launcher has control of it now
 				// Initialising the services will start Opera if the OperaLauncherRunner is
 				// setup correctly
-				this.init();
+				startOpera();
 			}
 		}
-		
-		settings.SetLargePrefsFolder(getLargePreferencesPath());
-		settings.SetSmallPrefsFolder(getSmallPreferencesPath());
-		settings.SetCachePrefsFolder(getCachePreferencesPath());
-		profileUtils = new ProfileUtils(settings);
 	}
 
 	// TODO: FIXME
@@ -412,14 +419,24 @@ public class OperaDesktopDriver extends OperaDriver {
 	// ---------------------- 
 	
 	public void resetOperaPrefs(String newPrefs) {
-		// Quit and wait for opera to quit properly
-		quitOpera();
+		// Always delete and copy over a test profile except for when running
+		// the first test which doesn't have a profile to copy over
+		if (firstTestRun == false || new File(newPrefs).exists())
+		{
+			// Quit and wait for opera to quit properly
+			quitOpera();
+			
+			// Cleanup old profile 
+			profileUtils.deleteProfile();
+			// Copy in the profile for the test (only if it exists)
+			profileUtils.copyProfile(newPrefs);
+			
+			// Relaunch Opera and the webdriver service connection
+			startOpera();
+		}
 		
-		profileUtils.deleteProfile();
-		profileUtils.copyProfile(newPrefs);
-		System.out.println("\n\nAbout to start Opera\n\n");
-		
-		startOpera();
+		// No longer the first test run
+		firstTestRun = false;
 	}
 	
 	private void startOpera() {
