@@ -1,14 +1,9 @@
 package com.opera.core.systems;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.List;
 import java.util.Map;
 
+import com.opera.core.systems.profile.ProfileUtils;
 import com.opera.core.systems.runner.launcher.OperaLauncherRunner;
 import com.opera.core.systems.scope.exceptions.CommunicationException;
 import com.opera.core.systems.scope.internal.OperaIntervals;
@@ -23,6 +18,7 @@ public class OperaDesktopDriver extends OperaDriver {
 	private IDesktopWindowManager desktopWindowManager;
 	private SystemInputManager systemInputManager;
 	private IDesktopUtils desktopUtils;
+	private ProfileUtils profileUtils;
 
 	public OperaDesktopDriver(OperaDriverSettings settings){
 		super(settings);
@@ -51,6 +47,7 @@ public class OperaDesktopDriver extends OperaDriver {
 				// Get pid of Opera, needed to wait for it to quit after calling quit_opera
 				int pid = desktopUtils.getOperaPid();
 				
+				
 				// Now create the OperaLauncherRunner that we have the binary path
 				this.operaRunner = new OperaLauncherRunner(this.settings);
 				
@@ -63,6 +60,11 @@ public class OperaDesktopDriver extends OperaDriver {
 				this.init();
 			}
 		}
+		
+		settings.SetLargePrefsFolder(getLargePreferencesPath());
+		settings.SetSmallPrefsFolder(getSmallPreferencesPath());
+		settings.SetCachePrefsFolder(getCachePreferencesPath());
+		profileUtils = new ProfileUtils(settings);
 	}
 
 	// TODO: FIXME
@@ -99,27 +101,27 @@ public class OperaDesktopDriver extends OperaDriver {
 			if (this.operaRunner.isOperaRunning()) {
 				this.operaRunner.stopOpera();
 			}
-			else {
-				// Quit with action as opera wasn't started with the launcher
-				String opera_path = desktopUtils.getOperaPath();
-				logger.info("OperaBinaryLocation retrieved from Opera: " + opera_path);
-
-				int pid = 0;
-				if (!opera_path.isEmpty()) {
-					this.settings.setOperaBinaryLocation(opera_path);
-					pid = desktopUtils.getOperaPid();
-				}
-				
-				// Now create the OperaLauncherRunner that we have the binary path
-				// So we can control the shutdown
-				this.operaRunner = new OperaLauncherRunner(this.settings);
-				
-				// Quit and wait for opera to quit properly
-				this.services.quit(this.operaRunner, pid);
-				
-				// Reset the runner
-				this.operaRunner = null;
+		}
+		else {
+			// Quit with action as opera wasn't started with the launcher
+			String opera_path = desktopUtils.getOperaPath();
+			logger.info("OperaBinaryLocation retrieved from Opera: " + opera_path);
+			
+			int pid = 0;
+			if (!opera_path.isEmpty()) {
+				this.settings.setOperaBinaryLocation(opera_path);
+				pid = desktopUtils.getOperaPid();
 			}
+				
+			// Now create the OperaLauncherRunner that we have the binary path
+			// So we can control the shutdown
+			this.operaRunner = new OperaLauncherRunner(this.settings);
+			
+			// Quit and wait for opera to quit properly
+			this.services.quit(this.operaRunner, pid);
+			
+			// Reset the runner
+			this.operaRunner = null;
 		}
 	}
 	
@@ -402,79 +404,23 @@ public class OperaDesktopDriver extends OperaDriver {
 		return services.waitForDesktopWindowLoaded(win_name, OperaIntervals.PAGE_LOAD_TIMEOUT.getValue());
 	}
 	
-	// ----------------------
+	// ---------------------- 
 	
 	public void resetOperaPrefs(String newPrefs) {
-		resetOperaPrefs(this.getLargePreferencesPath(), getLargePreferencesPath(), getCachePreferencesPath(), newPrefs);
-	}
-	
-	public void resetOperaPrefs(String largePrefsPath, String smallPrefspath, String cachePrefsPath, String newPrefs) {
-		quitOpera();
-		deleteFolder(largePrefsPath);
-		copyFolder(newPrefs, largePrefsPath);
+		// OBS: Using quitOpera gives an 'Address already in use'
+		// quitOpera();
+
+		// Quit and wait for opera to quit properly
+		int pid = desktopUtils.getOperaPid();
+		this.services.quit(this.operaRunner, pid);
+		
+		profileUtils.deleteProfile();
+		profileUtils.copyProfile(newPrefs);
 		startOpera();
 	}
 	
 	private void startOpera() {
 		init();
-	}
-	
-	private boolean deleteFolder(String folderpath) {
-		File dir = new File(folderpath);
-		if (dir.isDirectory()) {
-			String[] children = dir.list();
-			for (int i=0; i<children.length; i++) {
-				boolean success = deleteFolder(children[i]);
-				if (!success) {
-					//return false;
-				}
-	        }
-		}
-        // The directory/file is now empty so delete it
-        return dir.delete();
-	}
-	
-	private void copyFolder(String from, String to) {
-		try {
-			copyFolder(new File(from), new File(to));
-		} catch (IOException ex) {
-			
-		}
-	}
-	
-	private void copyFolder(File srcPath, File dstPath) throws IOException {
-		
-		if (srcPath.isDirectory()){
-			
-			// Create destination folder if needed
-			if (!dstPath.exists()){
-				dstPath.mkdir();
-			}
-			
-			String files[] = srcPath.list();
-			for(int i = 0; i < files.length; i++){
-				copyFolder(new File(srcPath, files[i]), new File(dstPath, files[i]));
-			}
-		}
-		else {
-			if(!srcPath.exists()){
-				System.out.println("File or directory does not exist.");
-			}
-			else
-			{
-				InputStream in = new FileInputStream(srcPath);
-				OutputStream out = new FileOutputStream(dstPath); 
-
-				byte[] buf = new byte[1024];
-				int len;
-				while ((len = in.read(buf)) > 0) {
-					out.write(buf, 0, len);
-				}
-				
-				in.close();
-				out.close();
-			}
-		}
 	}
 }
 
