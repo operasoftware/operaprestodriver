@@ -36,7 +36,8 @@ public class OperaDesktopDriver extends OperaDriver {
 		
 		// If the Opera Binary isn't set we are assuming Opera is up and we 
 		// can ask it for the location of itself
-		if (this.settings != null && this.settings.getOperaBinaryLocation() == null) {
+		if (this.settings != null && this.settings.getOperaBinaryLocation() == null
+				&& this.settings.getNoRestart() == false) {
 			String opera_path = getOperaPath();
 			
 			logger.info("OperaBinaryLocation retrieved from Opera: " + opera_path);
