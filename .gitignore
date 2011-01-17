@@ -1,5 +1,5 @@
 *.class
-bin/**/*
-pkg/**/*
+bin/*
+pkg/*
 src/com/opera/core/systems/test/**/*
 test_apc.txt

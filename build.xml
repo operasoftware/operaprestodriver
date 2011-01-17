@@ -46,7 +46,6 @@
   <!-- Delete the bin and pkg dirs -->
   <target name="clean">
     <delete dir="bin" />
-    <delete dir="pkg" />
   </target>
 
   <!-- Compile all classes after cleaning-->
@@ -81,6 +80,7 @@
 
     <jar destfile="pkg/webdriver-opera-${version}.jar">
       <fileset dir="bin" includes="**/*.class" />
+      <fileset dir="bin" includes="**/*.properties" />
       <manifest>
       	<attribute name="Main-Class" value="com.opera.core.systems.OperaDriver" />
       	<attribute name="Implementation-Version" value="${version}" />

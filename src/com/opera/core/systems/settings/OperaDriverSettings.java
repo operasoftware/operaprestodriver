@@ -4,11 +4,13 @@ public class OperaDriverSettings {
 
 	private boolean runOperaLauncherFromOperaDriver = true;
 	private String operaLauncherBinary = null;
-	private int    operaLauncherListeningPort = 9999;
-
+	private int    operaLauncherListeningPort = 9999; 
+	
 	private String operaBinaryLocation;
-	private String operaBinaryArguments = "";
-
+	private String operaBinaryArguments;
+	
+	private Integer operaLauncherXvfbDisplay; //could be null
+	
 	//Generated getters and setters:
 	public boolean doRunOperaLauncherFromOperaDriver() {
 		return runOperaLauncherFromOperaDriver;
@@ -41,4 +43,10 @@ public class OperaDriverSettings {
 	public void setOperaBinaryArguments(String operaBinaryArguments) {
 		this.operaBinaryArguments = operaBinaryArguments;
 	}
+	public Integer getOperaLauncherXvfbDisplay() {
+		return operaLauncherXvfbDisplay;
+	}
+	public void setOperaLauncherXvfbDisplay(Integer operaLauncherXvfbDisplay) {
+		this.operaLauncherXvfbDisplay = operaLauncherXvfbDisplay;
+	}	
 }

@@ -158,13 +158,14 @@ public class OperaWebElement implements RenderedWebElement, SearchContext, Locat
 	public void click() {
 		if(OperaFlags.ENABLE_CHECKS) {
 			if(!isDisplayed())
-				throw new ElementNotVisibleException("You can't click an element that is not displayed");
+				throw new UnsupportedOperationException("You can't click an element that is not displayed");
 		}
 		parent.actionHandler.click(this, "");
 		//workaround for click synchronization problems
 		sleep(OperaIntervals.EXEC_SLEEP.getValue());
 		parent.waitForLoadToComplete();
-		debugger.executeJavascript("window.focus()");
+		//TODO remove below once we get proper wm support
+		//debugger.executeJavascript("window.focus()");
 		//TODO this one must be tested throughly
 		//parent.gc();
 	}
@@ -183,11 +184,17 @@ public class OperaWebElement implements RenderedWebElement, SearchContext, Locat
 	}
 
 	public String getAttribute(String name) {
+		
+		if(!parent.objectIds.contains(objectId))
+			throw new StaleElementReferenceException("You cant interact with stale elements");
+		
 		String attribute = name.toLowerCase();
 		if(attribute.equals("disabled")) {
 			return String.valueOf(!isEnabled());
 		} else if(attribute.equals("checked") || attribute.equals("selected")) {
-			return String.valueOf(isSelected());
+			boolean selected = isSelected();
+			if(!selected) return null;
+			return String.valueOf(selected);
 		} else if(attribute.equals("index")) {
 			return callMethod("locator.index");
 		}
@@ -200,6 +207,27 @@ public class OperaWebElement implements RenderedWebElement, SearchContext, Locat
 	}
 
 	public String getText() {
+		/*
+		return callMethod("function getVisibleContents(node,checkDisplay,trimmed) {\n"
+				+ "var trim = /^\\s*|\\s*$/g;\n"
+				+ "var forbidden = /^(head|title|script|style|select|textarea)$/ig;\n"
+				+ "if( node.nodeType == 3 || node.nodeType == 4 ) {\n"
+				+ "return trimmed ? node.nodeValue.replace(trim,'') : node.nodeValue;\n"
+				+ "}\n"
+				+ "var s = '';\n"
+				+ "if( node.nodeType == 1 ) {\n"
+				+ "if( ( checkDisplay && getComputedStyle(node).display == 'none' ) || ( !checkDisplay && node.nodeName.match(forbidden) ) ) {\n"
+				+ "return s;\n"
+				+ "}\n"
+				+ "}\n"
+				+ "if( node.nodeType == 1 || node.nodeType == 9 || node.nodeType == 11 ) {\n"
+				+ "for( var i = 0; i < node.childNodes.length; i++ ) {\n"
+				+ "s += getVisibleContents(node.childNodes[i],checkDisplay,false);\n"
+				+ "}\n"
+				+ "}\n"
+				+ "return trimmed ? s.replace(trim,'') : s;\n"
+				+ "} return getVisibleContents(locator, false, true)").replaceAll("\r\n", "\n");
+				*/
 		return callMethod("return locator.textContent");
 	}
 
@@ -229,17 +257,27 @@ public class OperaWebElement implements RenderedWebElement, SearchContext, Locat
 		if(OperaFlags.ENABLE_CHECKS) {
 			if(!isDisplayed())
 				throw new ElementNotVisibleException("You can't type on an element that is not displayed");
+			if(!isEnabled())
+				throw new UnsupportedOperationException("You can't type on an element that is disabled");
 		}
 		
-		executeMethod("locator.focus()");
+		if(getTagName().equalsIgnoreCase("input") && (hasAttribute("type") && getAttribute("type").equals("file"))) {
+			click();
+		} else executeMethod("locator.focus()");
         for (CharSequence seq : keysToSend) {
         	if(seq instanceof Keys)
         		execService.key(OperaKeys.get(((Keys)seq).name()));
+        	else if (seq.toString().equals("\n"))
+        		execService.key("enter");
         	else
         		execService.type(seq.toString());
         }
-        
+        parent.waitForLoadToComplete();
         //executeMethod("locator.blur()");
+	}
+
+	private boolean hasAttribute(String attr) {
+		return getAttribute(attr) != null;
 	}
 
 	//FIXME isDisplayed is not working for select elements, revise
@@ -255,7 +293,7 @@ public class OperaWebElement implements RenderedWebElement, SearchContext, Locat
 			if (parentNode.getAttribute("multiple") == null) {
 				if (OperaFlags.ENABLE_CHECKS) {
 					if (!parentNode.isDisplayed())
-						throw new ElementNotVisibleException("You can't select an element that is not displayed");
+						throw new UnsupportedOperationException("You can't select an element that is not displayed");
 				}
 
 				// find all nodes
@@ -272,7 +310,8 @@ public class OperaWebElement implements RenderedWebElement, SearchContext, Locat
 				debugger.callFunctionOnObject("locator.selected = true;", objectId, false);
 			}
 		} else {// if(getTagName().equalsIgnoreCase("input")) {
-			click();
+			if(!isSelected())
+				click();
 		}
 	}
 
@@ -283,8 +322,9 @@ public class OperaWebElement implements RenderedWebElement, SearchContext, Locat
 							"} return element;", this);
 		ScriptResult result = (ScriptResult) debugger.scriptExecutor("return arguments[0];", element);
 		
-		if(result.getClassName().equals("HTMLFormElement"))
-			debugger.callFunctionOnObject("locator.submit()", element.getObjectId(), false);
+		if(result.getClassName().equals("HTMLFormElement")) {
+			debugger.callFunctionOnObject("if(locator.onsubmit == undefined || locator.onsubmit()) locator.submit()", element.getObjectId(), false);
+		}
 		else throw new WebDriverException("Element is not in a form, can't submit");
 		
 		parent.waitForLoadToComplete();
@@ -293,9 +333,12 @@ public class OperaWebElement implements RenderedWebElement, SearchContext, Locat
 
 	//FIXME  revise with javascript guys
 	public boolean toggle() {
+		if(getTagName().equalsIgnoreCase("input") && getAttribute("type").equalsIgnoreCase("radio"))
+			throw new UnsupportedOperationException("You can't toggle an radio element");
+		
 		if(OperaFlags.ENABLE_CHECKS) {
 			if(!isDisplayed())
-				throw new ElementNotVisibleException("You can't toggle an element that is not displayed");
+				throw new UnsupportedOperationException("You can't toggle an element that is not displayed");
 		}
 		Integer id = debugger.executeScriptOnObject("return locator.parentNode", objectId);
 		OperaWebElement parentNode = new OperaWebElement(this.parent, id);
@@ -349,6 +392,9 @@ public class OperaWebElement implements RenderedWebElement, SearchContext, Locat
 	}
 
 	public Dimension getSize() {
+		if(!parent.objectIds.contains(objectId))
+			throw new StaleElementReferenceException("You cant interact with stale elements");
+		
 		String widthAndHeight = debugger.callFunctionOnObject("return (locator.getBoundingClientRect().width + ',' + locator.getBoundingClientRect().height);", objectId);
 		String[] dimension = widthAndHeight.split(",");
 		return new Dimension(Integer.valueOf(dimension[0]), Integer.valueOf(dimension[1]));
@@ -360,6 +406,8 @@ public class OperaWebElement implements RenderedWebElement, SearchContext, Locat
 
 	public boolean isDisplayed() {
 		boolean isDisplayed = false;
+		if(!parent.objectIds.contains(objectId) || callMethod("locator.parentNode") == null)
+			throw new StaleElementReferenceException("You cant interact with stale elements");
 		try {
 		isDisplayed = (Boolean) evaluateMethod("var el = locator;\n"
 				+ "while (el.nodeType != 1 && !(el.nodeType >= 9 && el.nodeType <= 11)) {\n"
@@ -508,8 +556,10 @@ public class OperaWebElement implements RenderedWebElement, SearchContext, Locat
 
 	private WebElement findSingleElement(String using, String type) {
 		Integer id = debugger.executeScriptOnObject(using, objectId);
-		if(id != null)
+		if(id != null) {
+			parent.objectIds.add(id);
 			return new OperaWebElement(parent, id);
+		}
 		
 		throw new NoSuchElementException("Cannot find element with " + type);
 	}
@@ -519,7 +569,12 @@ public class OperaWebElement implements RenderedWebElement, SearchContext, Locat
 		if(id == null)
 			throw new NoSuchElementException("Cannot find element(s) with " + type);
 		
-		return parent.processElements(id);
+		List<WebElement> elements = parent.processElements(id);
+		for (WebElement webElement : elements) {
+			parent.objectIds.add(((OperaWebElement) webElement).getObjectId());
+		}
+		
+		return elements;
 	}
 	
 	public WebElement findElementByLinkText(String using) {
