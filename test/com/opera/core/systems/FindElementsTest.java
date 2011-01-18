@@ -85,11 +85,6 @@ public class FindElementsTest extends TestBase
   @Test
   public void testXPath()
   {
-    // TODO This test fails. Something is messed up in XPath I think.
-    // document.evaluate("//span[1]", document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue
-    // = "Ante", the first span
-    // document.evaluate("//span[2]", document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue
-    // = "ante", the LAST span?!
     WebElement el = driver.findElementByXPath("(//span)[4]");
     Assert.assertEquals(el.getText(), "ante");
   }
