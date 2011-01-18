@@ -2,29 +2,9 @@ package com.opera.core.systems;
 
 import static org.junit.Assert.assertTrue;
 
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.opera.core.systems.settings.OperaDriverSettings;
-
-public class PreferencesDialogTest extends TestBase {
-  private static OperaDesktopDriver driver;
-
-  @BeforeClass
-  public static void setUpBeforeClass() throws Exception {
-    OperaDriverSettings settings = new OperaDriverSettings();
-    // TODO make work everywhere
-    settings.setOperaBinaryLocation(binary);
-    settings.setOperaLauncherBinary(launcher);
-
-    driver = new OperaDesktopDriver(settings);
-  }
-
-  // FIXME shutdown driver
-  @AfterClass
-  public static void tearDownAfterClass() throws Exception {}
-
+public class PreferencesDialogTest extends DesktopTestBase {
   @Test
   public void testPreferencesDialog() {
     driver.waitStart();

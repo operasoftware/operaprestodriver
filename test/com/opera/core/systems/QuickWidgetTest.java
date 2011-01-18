@@ -2,31 +2,11 @@ package com.opera.core.systems;
 
 import java.util.List;
 
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.opera.core.systems.scope.protos.SystemInputProtos.ModifierPressed;
-import com.opera.core.systems.settings.OperaDriverSettings;
 
-
-public class QuickWidgetTest  extends TestBase {
-  private static OperaDesktopDriver driver;
-
-  @BeforeClass
-  public static void setUpBeforeClass() throws Exception {
-    OperaDriverSettings settings = new OperaDriverSettings();
-    // TODO make work everywhere
-    settings.setOperaBinaryLocation(binary);
-    settings.setOperaLauncherBinary(launcher);
-
-    driver = new OperaDesktopDriver(settings);
-  }
-
-  // FIXME shutdown driver
-  @AfterClass
-  public static void tearDownAfterClass() throws Exception {}
-
+public class QuickWidgetTest  extends DesktopTestBase {
     @Test
     public void testSomething(){
     	driver.waitStart();
