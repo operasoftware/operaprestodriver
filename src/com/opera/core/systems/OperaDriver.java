@@ -76,8 +76,10 @@ import com.opera.core.systems.settings.OperaDriverSettings;
 public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, FindsByXPath, FindsByName, FindsByTagName, FindsByClassName,
 		FindsByCssSelector, SearchContext, JavascriptExecutor {
 
-	private OperaDriverSettings settings;
-	private OperaRunner operaRunner;
+  // These are "protected" and not "private" so that we can extend this class
+  // and add methods to access these variable in tests
+	protected OperaDriverSettings settings;
+	protected OperaRunner operaRunner;
 
 	private boolean isDriverStarted = false; //Does this driver have a started opera? Makes it possible to restart opera without throwing out the driver.
 
