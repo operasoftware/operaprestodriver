@@ -23,10 +23,7 @@ abstract public class TestBase {
   public static void setUpBeforeClass() throws Exception {
     // Start up the driver
     OperaDriverSettings settings = new OperaDriverSettings();
-    settings.setRunOperaLauncherFromOperaDriver(true);
-    // TODO make work everywhere
-    settings.setOperaBinaryLocation(binary);
-    settings.setOperaLauncherBinary(launcher);
+    setUpSettings(settings);
 
     driver = new TestOperaDriver(settings);
     Assert.assertNotNull(driver);
@@ -40,6 +37,17 @@ abstract public class TestBase {
     Assert.assertTrue(new File(fixture_dir).isDirectory());
   }
 
+  public static void setUpSettings(OperaDriverSettings settings) {
+    settings.setRunOperaLauncherFromOperaDriver(true);
+
+    // TODO make work everywhere
+    settings.setOperaBinaryLocation(binary);
+    settings.setOperaLauncherBinary(launcher);
+
+    // FIXME -nosession doesn't work on Windows
+    settings.setOperaBinaryArguments("opera:debug");
+  }
+
   @AfterClass
   public static void tearDownAfterClass() throws Exception {
     driver.shutdown();
@@ -47,12 +55,12 @@ abstract public class TestBase {
 
   // Easy access to fixtures
 
-  /// Get the URL of the given fixture file
+  // / Get the URL of the given fixture file
   protected String fixture(String file) {
     return fixture_dir + file;
   }
 
-  /// Navigate to the given fixture file
+  // / Navigate to the given fixture file
   protected void getFixture(String file) {
     driver.get(fixture(file));
   }
