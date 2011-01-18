@@ -1,58 +1,27 @@
-import java.io.*;
-import java.util.*;
+package com.opera.core.systems;
 
-import junit.framework.*;
-import junit.textui.*;
-import junit.*;
-
-import com.opera.core.systems.*;
-import com.opera.core.systems.settings.*;
-import com.opera.core.systems.model.FilterRule;
-
-import org.openqa.selenium.WebDriverException;
-import org.openqa.selenium.Platform;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 import org.openqa.selenium.WebElement;
 
-public class JavascriptTest extends TestCase
+public class JavascriptTest extends TestBase
 {
-  private static OperaDriverSettings settings;
-  private static OperaDriver driver;
-  private static String base_dir;
 
+  @Before
   public void setUp()
   {
-    if (driver != null)
-    {
-	  driver.get(base_dir + "javascript.html");
-      // Click to focus the document
-      driver.mouseEvent(1, 1, 1);
-    }
+    driver.get(fixture("javascript.html"));
+    // Click to focus the document
+    driver.mouseEvent(1, 1, 1);
   }
 
-  public void testInit()
-  {
-    settings = new OperaDriverSettings();
-    settings.setRunOperaLauncherFromOperaDriver(true);
-    settings.setOperaBinaryLocation(System.getProperty("test_gogi_binary_location"));
-    settings.setOperaLauncherBinary(System.getProperty("test_launcher_binary_location"));
-    settings.setOperaBinaryArguments("");
-
-    driver = new OperaDriver(settings);
-    
-    String separator = System.getProperty("file.separator");
-    base_dir = System.getProperty("user.dir");
-    base_dir = base_dir + separator + "test" + separator + "fixtures" + separator;    
-    File base_directory = new File(base_dir);
-    
-    Assert.assertTrue(base_directory.isDirectory());    
-  }
-
+  @Test
   public void testTyping()
   {
-	  driver.get(base_dir + "javascript.html");
 	  String text = "Hello, world!";
 
-	  driver.executeScript("document.getElementById('one').focus()");	 
+	  driver.executeScript("document.getElementById('one').focus()");
 	  driver.type(text);
 
 	  Assert.assertEquals(text, driver.findElementById("one").getValue());
@@ -60,9 +29,10 @@ public class JavascriptTest extends TestCase
 
   // Make sure that typing actually happens. When the focus switches half way
   // through typing we should continue typing on the other textbox
+  @Test
   public void testTypingKeyEvents()
   {
-	  driver.get(base_dir + "keys.html");
+	  driver.get(fixture("keys.html"));
 
     driver.type("hi");
 
@@ -89,16 +59,12 @@ oper  public void testConsoleListener()
   }
   */
 
+  @Test
   public void testDoubleClick()
   {
     WebElement one = driver.findElementById("one");
     one.click();
     one.click();
     Assert.assertEquals(driver.findElementById("two").getValue(), "double");
-  }
-
-  public void testShutDownOperaDriver()
-  {
-	  driver.shutdown();
   }
 }
