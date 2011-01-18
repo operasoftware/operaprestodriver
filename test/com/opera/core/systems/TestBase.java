@@ -55,12 +55,12 @@ abstract public class TestBase {
 
   // Easy access to fixtures
 
-  // / Get the URL of the given fixture file
+  /// Get the URL of the given fixture file
   protected String fixture(String file) {
     return fixture_dir + file;
   }
 
-  // / Navigate to the given fixture file
+  /// Navigate to the given fixture file
   protected void getFixture(String file) {
     driver.get(fixture(file));
   }
