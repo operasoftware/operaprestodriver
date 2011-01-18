@@ -1,42 +1,21 @@
-import java.io.*;
-import java.util.*;
+package com.opera.core.systems;
 
-import junit.framework.*;
-import junit.textui.*;
+import java.util.List;
 
-import com.opera.core.systems.*;
-import com.opera.core.systems.settings.*;
-import org.openqa.selenium.WebDriverException;
-import org.openqa.selenium.Platform;
+import junit.framework.Assert;
+
+import org.junit.Before;
+import org.junit.Test;
 import org.openqa.selenium.WebElement;
 
-public class FindElementsTest extends TestCase
+public class FindElementsTest extends TestBase
 {
-  private static OperaDriverSettings settings;
-  private static OperaDriver driver;
-
-  public void testFindElementsTest()
-  {
-    settings = new OperaDriverSettings();
-    settings.setRunOperaLauncherFromOperaDriver(true);
-    settings.setOperaBinaryLocation(System.getProperty("test_gogi_binary_location"));
-    settings.setOperaLauncherBinary(System.getProperty("test_launcher_binary_location"));
-    settings.setOperaBinaryArguments("-geometry 1024x768 -url opera:blank");
-    driver = new OperaDriver(settings);
-    
-    String separator = System.getProperty("file.separator");
-    String base_dir = System.getProperty("user.dir");
-    String test_page = base_dir + separator + "test" + separator + "fixtures" + separator + "test.html";
-    
-    File page = new File(test_page);
-    if (!page.exists())
-    {
-    	fail("Unable to locate test page for tests in test class FindElementsTest; tried " + test_page + " but that was not valid.");
-    }
-
-    driver.get(test_page);
+  @Before
+  public void setUp() {
+    driver.get(fixture("test.html"));
   }
 
+  @Test
   public void testActiveElement()
   {
     driver.executeScript("document.getElementById('local').focus()");
@@ -44,7 +23,7 @@ public class FindElementsTest extends TestCase
     Assert.assertEquals(el.getAttribute("id"), "local");
   }
 
-  // Link text
+  @Test
   public void testLinkText()
   {
     WebElement el = driver.findElementByLinkText("accumsan ante");
@@ -63,12 +42,14 @@ public class FindElementsTest extends TestCase
   }
 
   // Partial link text
+  @Test
   public void testPartialLinkText()
   {
     WebElement el = driver.findElementByPartialLinkText("pell");
     Assert.assertEquals(el.getAttribute("id"), "external");
   }
 
+  @Test
   public void testElementsPartialLinkText()
   {
     List<WebElement> els = driver.findElementsByPartialLinkText("te");
@@ -81,6 +62,7 @@ public class FindElementsTest extends TestCase
   }
 
   // ID
+  @Test
   public void testId()
   {
     WebElement el = driver.findElementById("call-to-action");
@@ -88,6 +70,7 @@ public class FindElementsTest extends TestCase
     Assert.assertEquals(el.getTagName().toLowerCase(), "p");
   }
 
+  @Test
   public void testElementsId()
   {
     List<WebElement> els = driver.findElementsById("external");
@@ -99,8 +82,14 @@ public class FindElementsTest extends TestCase
   }
 
   // XPath
+  @Test
   public void testXPath()
   {
+    // TODO This test fails. Something is messed up in XPath I think.
+    // document.evaluate("//span[1]", document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue
+    // = "Ante", the first span
+    // document.evaluate("//span[2]", document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue
+    // = "ante", the LAST span?!
     WebElement el = driver.findElementByXPath("//span[4]");
     Assert.assertEquals(el.getText(), "ante");
   }
@@ -115,12 +104,14 @@ public class FindElementsTest extends TestCase
   }
 
   // Class
+  @Test
   public void testClass()
   {
     WebElement el = driver.findElementByClassName("invert");
     Assert.assertEquals(el.getText(), "Ante");
   }
 
+  @Test
   public void testElementsClass()
   {
     List<WebElement> els = driver.findElementsByClassName("invert");
@@ -132,12 +123,14 @@ public class FindElementsTest extends TestCase
   }
 
   // Name
+  @Test
   public void testName()
   {
     WebElement el = driver.findElementByName("radios");
     Assert.assertEquals(el.getAttribute("id"), "radio_little");
   }
 
+  @Test
   public void testElementsName()
   {
     List<WebElement> els = driver.findElementsByName("radios");
@@ -150,12 +143,14 @@ public class FindElementsTest extends TestCase
   }
 
   // Tag name
+  @Test
   public void testTagName()
   {
     WebElement el = driver.findElementByTagName("label");
     Assert.assertEquals(el.getAttribute("for"), "input_email");
   }
 
+  @Test
   public void testElementsTagName()
   {
     List<WebElement> els = driver.findElementsByTagName("label");
@@ -168,25 +163,22 @@ public class FindElementsTest extends TestCase
   }
 
   // CSS selector
+  @Test
   public void testCssSelector()
   {
     WebElement el = driver.findElementByCssSelector("p > span + a");
     Assert.assertEquals(el.getAttribute("id"), "local");
   }
 
+  @Test
   public void testElementsCssSelector()
   {
-    List<WebElement> els = driver.findElementsByName("div input[name=radios]");
+    List<WebElement> els = driver.findElementsByCssSelector("div input[name=radios]");
 
-    Assert.assertEquals(els.size(), 3);
+    Assert.assertEquals(3, els.size());
     for (WebElement el : els)
     {
       Assert.assertEquals(el.getAttribute("name"), "radios");
     }
-  }
-
-  public void testShutDownOperaDriver()
-  {
-	  driver.shutdown();
   }
 }
