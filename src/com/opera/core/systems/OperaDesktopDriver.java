@@ -27,7 +27,11 @@ public class OperaDesktopDriver extends OperaDriver {
 	}
 	
 	/**
-	 * For testing override this method.
+	 * Initializes services and starts Opera
+	 * If OperaBinaryLocation is not set, the binary location is retrieved from the connected
+	 * Opera instance, before shutting it down, waiting for it to quit properly, 
+	 * and then restarting it under the control of the LauncherRunner.
+	 * 
 	 */
 	protected void init() {
 		super.init();
@@ -103,6 +107,8 @@ public class OperaDesktopDriver extends OperaDriver {
 
 	/**
 	 * Quit Opera
+	 * 
+	 * Quits Opera, cuts the connection to free the port and shutdown the services 
 	 */
 	public void quitOpera() {
 		if (this.operaRunner != null){
@@ -136,7 +142,7 @@ public class OperaDesktopDriver extends OperaDriver {
 			this.operaRunner = null;
 		}
 	}
-	
+
 	/**
 	 * @return active window id
 	 */
@@ -418,6 +424,17 @@ public class OperaDesktopDriver extends OperaDriver {
 	
 	// ---------------------- 
 	
+	/**
+	 *
+	 * resetOperaPrefs - restart Opera after copying over newPrefs to profile, if newPrefs
+	 *                   folder exists.
+	 * 
+	 * Copies prefs in folder newPrefs to the profile for the connected Opera instance.
+	 * Will first quit Opera, then delete the old prefs, and copy the new prefs over, then
+	 * restart Opera with the new prefs.
+	 * 
+	 * @param newPrefs - path to where new prefs to be copied into the prefs folders are located
+	 */
 	public void resetOperaPrefs(String newPrefs) {
 		// Always delete and copy over a test profile except for when running
 		// the first test which doesn't have a profile to copy over
@@ -438,14 +455,25 @@ public class OperaDesktopDriver extends OperaDriver {
 		// No longer the first test run
 		firstTestRun = false;
 	}
-	
+
+	/**
+	 * deleteOperaPrefs - delete the profile for the connected Opera instance.
+	 *                    should only be called after the given Opera instance has quit
+	 * 
+	 */
 	public void deleteOperaPrefs() {
 		profileUtils.deleteProfile();
 	}
 	
+	/**
+	 *  Start Opera. This will reinitialize services.
+	 * 
+	 */
 	private void startOpera() {
 		init();
 	}
+	
+
 }
 
 
