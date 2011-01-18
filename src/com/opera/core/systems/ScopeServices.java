@@ -143,10 +143,10 @@ public class ScopeServices implements IConnectionHandler {
 	 * @param portNumber
 	 * @param intervals 
 	 */
-	public ScopeServices(Map<String, String> versions) throws IOException {
+	public ScopeServices(Map<String, String> versions, boolean manual_connect) throws IOException {
 		this.versions = versions;
 		tagCounter = new AtomicInteger();
-		stpThread = new StpThread((int) OperaIntervals.SERVER_PORT.getValue(), this, new UmsEventHandler(this));
+		stpThread = new StpThread((int) OperaIntervals.SERVER_PORT.getValue(), this, new UmsEventHandler(this), manual_connect);
 	}
 
 	public void init() {

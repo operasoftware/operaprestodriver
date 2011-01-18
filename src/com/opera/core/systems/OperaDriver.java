@@ -166,7 +166,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 	private void createScopeServices() {
 		try {
 			Map<String, String> versions = getServicesList();
-			services = new ScopeServices(versions);
+			services = new ScopeServices(versions, settings.getOperaBinaryLocation() == null);
 			services.startStpThread();
 		} catch (IOException e) {
 			throw new WebDriverException(e);

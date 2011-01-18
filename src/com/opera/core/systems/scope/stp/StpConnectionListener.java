@@ -26,12 +26,14 @@ public class StpConnectionListener implements SocketListener {
     private ServerSocketChannel server = null;
     private IConnectionHandler handler;
     private AbstractEventHandler eventHandler;
+    private boolean manual_connect = false;
     private final Logger logger = Logger.getLogger(this.getClass().getName());
         
-    public StpConnectionListener(int port, IConnectionHandler handler, AbstractEventHandler eventHandler) throws IOException {
+    public StpConnectionListener(int port, IConnectionHandler handler, AbstractEventHandler eventHandler, boolean manual_connect) throws IOException {
         this.port = port;
         this.handler = handler;
         this.eventHandler = eventHandler;
+        this.manual_connect = manual_connect;
         start();
     }
 
@@ -67,6 +69,11 @@ public class StpConnectionListener implements SocketListener {
         SocketMonitor.instance().add(server, this, SelectionKey.OP_ACCEPT);
 
         logger.info("webdriver-opera " + "0.2.9" /*VERSION*/ + " is ready to accept connections on port " + port);
+        
+        // Print a message when we are waiting to connect manually
+        if (manual_connect == true) {
+        	System.out.println("Ready to accept connections on port " + port);
+        }
     }
 
     public boolean canRead(SelectableChannel channel) throws IOException {
