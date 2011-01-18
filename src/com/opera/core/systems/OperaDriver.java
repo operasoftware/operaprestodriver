@@ -109,6 +109,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 			// The runner will be setup based on if there is an
 			// Opera binary passed in or not
 			if (this.settings.getOperaBinaryLocation() != null) {
+				
 				// If there is an Opera binary passed in then launch Opera
 				this.operaRunner = new OperaLauncherRunner(this.settings);
 			}
@@ -118,7 +119,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 	}
 	
 	/**
-	 * Shutdown webdriver, will kill opera an such if running.
+	 * Shutdown webdriver, will kill opera and such if running.
 	 */
 	public void shutdown(){
 		if(isDriverStarted)
@@ -134,10 +135,11 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 	 */
 	protected void init() {
 		createScopeServices();
-
-		// Launch Opera is there runner has been setup
-		if (operaRunner != null)
+		
+		// Launch Opera if the runner has been setup
+		if (operaRunner != null) {
 			operaRunner.startOpera();
+		}
 
 		services.init();
 		debugger = services.getDebugger();
