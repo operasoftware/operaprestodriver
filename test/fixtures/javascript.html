@@ -10,8 +10,11 @@
   <form action="">
     <input type="text" id="one" />
     <input type="text" id="two" />
+    <input type="text" id="input_email" value="test@example.com"
+      onchange="log('email changed')" />
   </form>
 
+ <pre id="log"></pre>
 
  <script type="text/javascript">
   var one = document.getElementById("one");
@@ -20,6 +23,11 @@
   one.addEventListener("dblclick", function (e) {
     two.value = "double";
   }, false);
+
+  var logbox = document.getElementById("log");
+  function log(msg) {
+    logbox.value += msg+"\n";
+  }
  </script>
 </body>
 </html>
