@@ -12,7 +12,7 @@ public interface IDesktopWindowManager {
 	/*
 	 * @return id of active window 
 	 */
-	int getActiveWindowId();
+	int getActiveQuickWindowId();
 
 	/*
 	 * @return list of ids of open windows
@@ -22,7 +22,7 @@ public interface IDesktopWindowManager {
 	/*
 	 * @return number of open windows
 	 */
-	int getOpenWindowCount();
+	int getOpenQuickWindowCount();
 	
 	void init();
 
@@ -36,14 +36,14 @@ public interface IDesktopWindowManager {
 	 * @param title
 	 * @return QuickWindow
 	 */
-	QuickWindow getWindow(String title);
+	QuickWindow getQuickWindow(String title);
 	
 	/*
 	 * 
 	 * @param title
 	 * @return id of window with the given title
 	 */
-	int getWindowID(String title);
+	int getQuickWindowID(String title);
 	
 	/*
 	 * 
@@ -56,7 +56,7 @@ public interface IDesktopWindowManager {
 	 * @param windowId
 	 * @return name of the window
 	 */
-	String getWindowName(int windowId);
+	String getQuickWindowName(int windowId);
 
 	/*
 	 * Get the quick widget with value value for property property in the window

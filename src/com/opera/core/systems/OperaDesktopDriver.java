@@ -146,7 +146,7 @@ public class OperaDesktopDriver extends OperaDriver {
 	 * @return active window id
 	 */
 	public int getActiveWindowID() {
-		return desktopWindowManager.getActiveWindowId();
+		return desktopWindowManager.getActiveQuickWindowId();
 	}
 
 	/**
@@ -187,7 +187,7 @@ public class OperaDesktopDriver extends OperaDriver {
 	 * @return window id of window with windowName 
 	 */
 	public int getWindowID(String windowName) {
-		return desktopWindowManager.getWindowID(windowName);
+		return desktopWindowManager.getQuickWindowID(windowName);
 	}
 	
 	/**
@@ -195,7 +195,7 @@ public class OperaDesktopDriver extends OperaDriver {
 	 * @return QuickWindow with the given name
 	 */
 	public QuickWindow getWindow(String windowName) {
-		return desktopWindowManager.getWindow(windowName);
+		return desktopWindowManager.getQuickWindow(windowName);
 	}
 	
 	/**
@@ -258,7 +258,7 @@ public class OperaDesktopDriver extends OperaDriver {
 	 * @return String: name of the window
 	 */
 	public String getWindowName(int windowId) {
-		return desktopWindowManager.getWindowName(windowId);
+		return desktopWindowManager.getQuickWindowName(windowId);
 	}
 	
 	/**

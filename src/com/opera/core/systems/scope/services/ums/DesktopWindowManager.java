@@ -44,7 +44,7 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 	 
 	 public void init() {}
 	  
-	 public int getActiveWindowId() {
+	 public int getActiveQuickWindowId() {
 		Response response = executeCommand(DesktopWindowManagerCommand.GET_ACTIVE_WINDOW, null);
 		DesktopWindowID.Builder builder = DesktopWindowID.newBuilder();
 		buildPayload(response, builder);
@@ -52,16 +52,7 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 		return activeWindowId;
 	}
 	
-	/*public List<Integer> getWindowHandles() {
-		List<DesktopWindowInfo> windows = getWindowList();
-		List<Integer> handles = new LinkedList<Integer>();
-		for (DesktopWindowInfo info : windows) {
-			handles.add(new Integer(info.getWindowID()));
-		}
-		return handles;
-	}*/
-
-	public int getOpenWindowCount() {
+	public int getOpenQuickWindowCount() {
 		List<DesktopWindowInfo> windows = getDesktopWindowInfoList();
 		return windows.size();
 	}
@@ -116,7 +107,7 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 	public QuickWidget getQuickWidget(int id, QuickWidgetSearchType property, String value, String parentName)
 	{
 		if (id < 0) {
-			id = getActiveWindowId();
+			id = getActiveQuickWindowId();
 		}
 		
 		List<QuickWidget> widgets = getQuickWidgetList(id);
@@ -146,7 +137,7 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 	public QuickWidget getQuickWidgetByPos( int id, int row, int column, String parentName)
 	{
 		if (id < 0) {
-			id = getActiveWindowId();
+			id = getActiveQuickWindowId();
 		}
 		
 		List<QuickWidget> widgets = getQuickWidgetList(id);
@@ -179,7 +170,7 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 
 	public List<QuickWidget> getQuickWidgetList(int id) {
 		if (id <= 0)
-			id = getActiveWindowId();
+			id = getActiveQuickWindowId();
 		
 		DesktopWindowID.Builder winBuilder = DesktopWindowID.newBuilder();
 		winBuilder.clearWindowID();
@@ -239,15 +230,15 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 		return windowList;
 	}
 	
-	public int getWindowID(String name) {
-		QuickWindow win = getWindow(name);
+	public int getQuickWindowID(String name) {
+		QuickWindow win = getQuickWindow(name);
 		if (win != null) 
 			return win.getWindowID();
 		else 
 			return -1;
 	}
 	
-	public QuickWindow getWindow(String name) {
+	public QuickWindow getQuickWindow(String name) {
 		List<DesktopWindowInfo> windowList = getDesktopWindowInfoList();
 		for (DesktopWindowInfo window : windowList) {
 			if (window.getName().equals(name))
@@ -265,7 +256,7 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 		return null;
 	}
 	
-	public String getWindowName(int win_id) {
+	public String getQuickWindowName(int win_id) {
 		QuickWindow window = getQuickWindowById(win_id);
 		return (window == null ? "" : window.getName());
 		/*List<DesktopWindowInfo> windowList = getWindowList();
