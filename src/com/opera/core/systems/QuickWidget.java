@@ -167,7 +167,7 @@ public class QuickWidget {
 		}
 
 		/**
-	     * 
+	     *
 	     * @return text of widget
 	     */
 		public String getAdditionalText() {
@@ -176,44 +176,44 @@ public class QuickWidget {
 
 
 		/**
-	     * Check if widget text equals the text specified by @param string_id
-	     * 
-	     * @return true if text specified by string_id equals widget text
+	     * Check if widget text equals the text specified by @param stringId
+	     *
+	     * @return true if text specified by stringId equals widget text
 	     */
-		public boolean verifyText(String string_id) {
-			String text = desktopUtils.getString(string_id);
+		public boolean verifyText(String stringId) {
+			String text = desktopUtils.getString(stringId);
 			// Remember to remove all CRLF
 			return getText().indexOf(text) >= 0;
 		}
 
 		/**
-	     * Check if widget text contains the text specified by @param string_id
+	     * Check if widget text contains the text specified by @param stringId
 	     * 
-	     * @param String string_id - id of string 
-	     * @return true if text specified by string_id is contained in widget text
+	     * @param String stringId - id of string 
+	     * @return true if text specified by stringId is contained in widget text
 	     */
-		public boolean verifyContainsText(String string_id) {
-			String text = desktopUtils.getString(string_id);
+		public boolean verifyContainsText(String stringId) {
+			String text = desktopUtils.getString(stringId);
 			return getText().indexOf(text) >= 0;
 		}
 
-		/** 
+		/**
 		 * @return true if widget is default, else false
 		 */
 		public boolean isDefault() {
 			return info.getDefaultLook();
 		}
 
-		/** 
-		 *  
+		/**
+		 *
 		 * @return
 		 */
 		public boolean hasFocusedLook() {
 			return info.getFocusedLook();
 		}
 
-		/** 
-		 * Check if widget is enabled  
+		/**
+		 * Check if widget is enabled
 		 * @return true if enabled, else false
 		 */
 		public boolean isEnabled() {
@@ -227,8 +227,8 @@ public class QuickWidget {
 			return info.getValue() == 1;
 		}
 
-		public boolean isSelected(String string_id) {
-			String text = desktopUtils.getString(string_id);
+		public boolean isSelected(String stringId) {
+			String text = desktopUtils.getString(stringId);
 			return text.equals(info.getText());
 		}
 
@@ -256,8 +256,8 @@ public class QuickWidget {
 
 		private Point getCenterLocation() {
 			DesktopWindowRect rect = getRect();
-			Point top_left = getLocation();
-			return new Point(top_left.x + rect.getWidth() / 2, top_left.y + rect.getHeight() / 2);
+			Point topLeft = getLocation();
+			return new Point(topLeft.x + rect.getWidth() / 2, topLeft.y + rect.getHeight() / 2);
 		}
 
 		/**
@@ -295,8 +295,12 @@ public class QuickWidget {
 		@Override
 		// TODO: FIXME
 		public boolean equals(Object obj) {
-			if (obj == this) return true;
-			if (!(obj instanceof QuickWidget)) return false;
+			if (obj == this) {
+				return true;
+			}
+			if (!(obj instanceof QuickWidget)) {
+				return false;
+			}
 
 			QuickWidget ref = (QuickWidget) obj;
 			return (ref.getName().equals(this.getName()));

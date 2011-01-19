@@ -29,18 +29,18 @@ public class DesktopUtils extends AbstractService implements IDesktopUtils {
 	 
 	public void init() {}
 	  
-	public String getString(String enum_text) {
+	public String getString(String enumText) {
 		DesktopStringID.Builder stringBuilder = DesktopStringID.newBuilder();
-		stringBuilder.setEnumText(enum_text);
+		stringBuilder.setEnumText(enumText);
 		
 		Response response = executeCommand(DesktopUtilsCommand.GET_STRING, stringBuilder);
 
 		DesktopStringText.Builder stringTextBuilder = DesktopStringText.newBuilder();
 		buildPayload(response, stringTextBuilder);
-		DesktopStringText string_text = stringTextBuilder.build();
+		DesktopStringText stringText = stringTextBuilder.build();
 
 		// Remember to remove all CRLF
-		return removeCR(string_text.getText());
+		return removeCR(stringText.getText());
 	}
 	
 	public String removeCR(String text) {
@@ -64,9 +64,9 @@ public class DesktopUtils extends AbstractService implements IDesktopUtils {
 
 		DesktopPath.Builder pathBuilder = DesktopPath.newBuilder();
 		buildPayload(response, pathBuilder);
-		DesktopPath string_path = pathBuilder.build();
+		DesktopPath stringPath = pathBuilder.build();
 
-		return string_path.getPath();
+		return stringPath.getPath();
 	}
 
 	public String getSmallPreferencesPath() {
@@ -74,9 +74,9 @@ public class DesktopUtils extends AbstractService implements IDesktopUtils {
 
 		DesktopPath.Builder pathBuilder = DesktopPath.newBuilder();
 		buildPayload(response, pathBuilder);
-		DesktopPath string_path = pathBuilder.build();
+		DesktopPath stringPath = pathBuilder.build();
 
-		return string_path.getPath();
+		return stringPath.getPath();
 	}
 
 	public String getCachePreferencesPath() {
@@ -84,9 +84,9 @@ public class DesktopUtils extends AbstractService implements IDesktopUtils {
 
 		DesktopPath.Builder pathBuilder = DesktopPath.newBuilder();
 		buildPayload(response, pathBuilder);
-		DesktopPath string_path = pathBuilder.build();
+		DesktopPath stringPath = pathBuilder.build();
 
-		return string_path.getPath();
+		return stringPath.getPath();
 	}
 	
 	public int getOperaPid() {

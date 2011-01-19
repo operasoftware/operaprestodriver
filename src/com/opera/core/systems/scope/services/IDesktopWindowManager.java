@@ -18,50 +18,50 @@ public interface IDesktopWindowManager {
 	 * @return list of ids of open windows
 	 */
 	//List<Integer> getWindowHandles();
-	
+
 	/*
 	 * @return number of open windows
 	 */
 	int getOpenQuickWindowCount();
-	
+
 	void init();
 
 	/*
 	 * @return list of QuickWidgets in the window given by id id
 	 */
 	List<QuickWidget> getQuickWidgetList(int id);
-	
+
 	/*
 	 * Get the window with title title
 	 * @param title
 	 * @return QuickWindow
 	 */
 	QuickWindow getQuickWindow(String title);
-	
+
 	/*
 	 * 
 	 * @param title
 	 * @return id of window with the given title
 	 */
 	int getQuickWindowID(String title);
-	
+
 	/*
-	 * 
+	 *
 	 * @return list of all open windows
 	 */
 	List<QuickWindow> getQuickWindowList();
 
 	/*
-	 * 
+	 *
 	 * @param windowId
 	 * @return name of the window
 	 */
 	String getQuickWindowName(int windowId);
 
-	/*
-	 * Get the quick widget with value value for property property in the window
-	 * specified by the id
-	 *   
+	/**
+	 * Get the quick widget with value value for property property in 
+	 * the window specified by the id.
+	 *
 	 * @param id - window id
 	 * @param property
 	 * @param value - value of property given
@@ -70,9 +70,9 @@ public interface IDesktopWindowManager {
 	QuickWidget getQuickWidget(int id, QuickWidgetSearchType property, String value);
 	QuickWidget getQuickWidget(int id, QuickWidgetSearchType property, String value, String parentName);
 
-	/*
-	 * Get the quick widget with value value by position
-	 *   
+	/**
+	 * Get the quick widget with value value by position.
+	 *
 	 * @param id - window id
 	 * @param row - row of the widget
 	 * @param column - column of the widget
@@ -82,9 +82,9 @@ public interface IDesktopWindowManager {
 	QuickWidget getQuickWidgetByPos(int id, int row, int column);
 	QuickWidget getQuickWidgetByPos(int id, int row, int column, String parentName);
 
-	/*
-	 * Get the quick window with value value for property property 
-	 *   
+	/**
+	 * Get the quick window with value value for property property.
+	 *
 	 * @param property
 	 * @param value - value of property given
 	 * @return

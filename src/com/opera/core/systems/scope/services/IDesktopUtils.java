@@ -26,26 +26,26 @@ public interface IDesktopUtils {
 
 	/*
 	 * Get the string specified by the given string id
-	 *  
+	 *
 	 * @param enum_text
 	 * @return
 	 */
 	String getString(String enum_text);
 
-	// 
+
 	/*
 	 * Used to stop problems comparing strings that have 
 	 * 		just \n with those with \r\n
-	 *  
+	 *
 	 * @param text, to remove the \r's from
 	 * @return string without \r's
 	 */
 	String removeCR(String text);
-	
+
 	/*
 	 * Get Pid of connected Opera instance
 	 * @return
 	 */
 	int getOperaPid();
-	
+
 }

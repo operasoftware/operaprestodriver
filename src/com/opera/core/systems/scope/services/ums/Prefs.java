@@ -25,7 +25,6 @@ public class Prefs extends AbstractService implements IPrefs {
 
 	public Prefs(ScopeServices services, String version) {
 		super(services, version);
-
 		String serviceName = "prefs";
 
 		if (!isVersionInRange(version, "2.0", serviceName)) {

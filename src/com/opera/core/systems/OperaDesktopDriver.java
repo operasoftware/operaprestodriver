@@ -106,8 +106,8 @@ public class OperaDesktopDriver extends OperaDriver {
 	}
 
 	/**
-	 * Quit Opera
-	 * 
+	 * Quit Opera.
+	 *
 	 * Quits Opera, cuts the connection to free the port and shutdown the services 
 	 */
 	public void quitOpera() {
@@ -120,8 +120,7 @@ public class OperaDesktopDriver extends OperaDriver {
 				// Cut off the services connection to free the port
 				this.services.shutdown();
 			}
-		}
-		else {
+		} else {
 			// Quit with action as opera wasn't started with the launcher
 			String opera_path = desktopUtils.getOperaPath();
 			logger.info("OperaBinaryLocation retrieved from Opera: " + opera_path);
@@ -135,7 +134,7 @@ public class OperaDesktopDriver extends OperaDriver {
 			// Now create the OperaLauncherRunner that we have the binary path
 			// So we can control the shutdown
 			this.operaRunner = new OperaLauncherRunner(this.settings);
-			
+
 			// Quit and wait for opera to quit properly
 			this.services.quit(this.operaRunner, pid);
 
@@ -158,7 +157,7 @@ public class OperaDesktopDriver extends OperaDriver {
 		int id = getQuickWindowID(winName);
 		if (id >= 0 || winName.length() == 0) {
 			return getQuickWidgetList(id);
-		} 
+		}
 		// Couldn't find window with winName
 		return null;
 	}
@@ -174,8 +173,8 @@ public class OperaDesktopDriver extends OperaDriver {
 
 
 	/**
-	 * 
-	 * 
+	 *
+	 *
 	 * @returnlist of windows
 	 */
 	public List<QuickWindow> getQuickWindowList() {
@@ -189,7 +188,7 @@ public class OperaDesktopDriver extends OperaDriver {
 	public int getQuickWindowID(String windowName) {
 		return desktopWindowManager.getQuickWindowID(windowName);
 	}
-	
+
 	/**
 	 * @param windowName
 	 * @return QuickWindow with the given name
@@ -197,7 +196,7 @@ public class OperaDesktopDriver extends OperaDriver {
 	public QuickWindow getQuickWindow(String windowName) {
 		return desktopWindowManager.getQuickWindow(windowName);
 	}
-	
+
 	/**
 	 * @param windowId 
 	 * @param widgetName
@@ -208,7 +207,7 @@ public class OperaDesktopDriver extends OperaDriver {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param windowId
 	 * @param widgetName
 	 * @param parentName
@@ -221,7 +220,7 @@ public class OperaDesktopDriver extends OperaDriver {
 	public QuickWidget findWidgetByText(int windowId, String text){
 		return desktopWindowManager.getQuickWidget(windowId, QuickWidgetSearchType.TEXT, text);
 	}
-	
+
 	public QuickWidget findWidgetByText(int windowId, String text, String parentName){
 		return desktopWindowManager.getQuickWidget(windowId, QuickWidgetSearchType.TEXT, text, parentName);
 	}
@@ -230,7 +229,7 @@ public class OperaDesktopDriver extends OperaDriver {
 		String text = desktopUtils.getString(stringId);
 		return findWidgetByText(windowId, text);
 	}
-	
+
 	public QuickWidget findWidgetByStringId(int windowId, String stringId, String parentName){
 		String text = desktopUtils.getString(stringId);
 		return findWidgetByText(windowId, text, parentName);
@@ -239,7 +238,7 @@ public class OperaDesktopDriver extends OperaDriver {
 	public QuickWidget findWidgetByPosition(int windowId, int row, int column){
 		return desktopWindowManager.getQuickWidgetByPos(windowId, row, column);
 	}
-	
+
 	public QuickWidget findWidgetByPosition(int windowId, int row, int column, String parentName){
 		return desktopWindowManager.getQuickWidgetByPos(windowId, row, column, parentName);
 	}
@@ -247,7 +246,7 @@ public class OperaDesktopDriver extends OperaDriver {
 	public QuickWindow findWindowByName(String windowName){
 		return desktopWindowManager.getQuickWindow(QuickWidgetSearchType.NAME, windowName);
 	}
-	
+
 	public QuickWindow findWindowById(int windowId){
 		return desktopWindowManager.getQuickWindowById(windowId);
 	}
@@ -260,9 +259,9 @@ public class OperaDesktopDriver extends OperaDriver {
 	public String getQuickWindowName(int windowId) {
 		return desktopWindowManager.getQuickWindowName(windowId);
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @param enum_text
 	 * @return the string specified by the id @param enum_text
 	 */
@@ -287,28 +286,28 @@ public class OperaDesktopDriver extends OperaDriver {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param key
 	 * @param modifier
-	 * @return 
+	 * @return
 	 */
 	public void keyPress(String key, List<ModifierPressed> modifiers) {
 		systemInputManager.keyPress(key, modifiers);
 	}
-	
+
 	public void keyUp(String key, List<ModifierPressed> modifiers) {
 		systemInputManager.keyUp(key, modifiers);
 	}
 	public void keyDown(String key, List<ModifierPressed> modifiers) {
 		systemInputManager.keyDown(key, modifiers);
 	}
-	
+
 	public int getQuickWindowCount() {
 		//TODO FIXME
 		//return desktopWindowManager.getOpenQuickWindowCount();
 		return 0;
 	}
-	
+
 	/**
 	 * Execute opera action
 	 * @param using - action_name
@@ -319,7 +318,7 @@ public class OperaDesktopDriver extends OperaDriver {
 	public void operaDesktopAction(String using, int data, String dataString, String dataStringParam) {
 		exec.action(using, data, dataString, dataStringParam);
 	}
-	
+
 	/*
 	 * Starts a process of waiting for a window to show
 	 * After this call, messages to the driver about window events are not thrown away,
@@ -328,7 +327,7 @@ public class OperaDesktopDriver extends OperaDriver {
 	public void waitStart() {
 		if (services.getConnection() == null)
 			throw new CommunicationException("waiting for a window failed because Opera is not connected.");
-		
+
 		services.waitStart();
 	}
 
@@ -356,47 +355,47 @@ public class OperaDesktopDriver extends OperaDriver {
 	/**
 	 * Wait until the window given by the @param win_name is shown, and then returns the
 	 * window id of this window
-	 * 
+	 *
 	 * @param win_name - window to wait for shown event on
 	 * @return id of window
 	 * @throws CommuncationException if no connection
 	 */
-	public int waitForWindowShown(String win_name) {
+	public int waitForWindowShown(String winName) {
 		if (services.getConnection() == null)
 			throw new CommunicationException("waiting for a window failed because Opera is not connected.");
-		
-		return services.waitForDesktopWindowShown(win_name, OperaIntervals.PAGE_LOAD_TIMEOUT.getValue());
+
+		return services.waitForDesktopWindowShown(winName, OperaIntervals.PAGE_LOAD_TIMEOUT.getValue());
 	}
 
 	/**
 	 * Wait until the window given by the @param win_name is updated, and then returns the
 	 * window id of this window
-	 * 
+	 *
 	 * @param win_name - window to wait for shown event on
 	 * @return id of window
 	 * @throws CommuncationException if no connection
 	 */
-	public int waitForWindowUpdated(String win_name) {
+	public int waitForWindowUpdated(String winName) {
 		if (services.getConnection() == null)
 			throw new CommunicationException("waiting for a window failed because Opera is not connected.");
-		
-		return services.waitForDesktopWindowUpdated(win_name, OperaIntervals.PAGE_LOAD_TIMEOUT.getValue());
+
+		return services.waitForDesktopWindowUpdated(winName, OperaIntervals.PAGE_LOAD_TIMEOUT.getValue());
 	}
 
 	/**
 	 * Wait until the window given by the @param win_name is activated, and then returns the
 	 * window id of this window
-	 * 
+	 *
 	 * @param win_name - window to wait for shown event on
 	 * @return id of window
 	 * @throws CommuncationException if no connection
 	 */
-	public int waitForWindowActivated(String win_name) {
+	public int waitForWindowActivated(String winName) {
 		if (services.getConnection() == null)
 			throw new CommunicationException("waiting for a window failed because Opera is not connected.");
-		
-		return services.waitForDesktopWindowActivated(win_name, OperaIntervals.PAGE_LOAD_TIMEOUT.getValue());
-		
+
+		return services.waitForDesktopWindowActivated(winName, OperaIntervals.PAGE_LOAD_TIMEOUT.getValue());
+
 	}
 
 	/**
@@ -407,22 +406,22 @@ public class OperaDesktopDriver extends OperaDriver {
 	 * @return id of window
 	 * @throws CommuncationException if no connection
 	 */
-	public int waitForWindowClose(String win_name) {
+	public int waitForWindowClose(String winName) {
 		if (services.getConnection() == null)
 			throw new CommunicationException("waiting for a window failed because Opera is not connected.");
 		
-		return services.waitForDesktopWindowClosed(win_name, OperaIntervals.PAGE_LOAD_TIMEOUT.getValue());
+		return services.waitForDesktopWindowClosed(winName, OperaIntervals.PAGE_LOAD_TIMEOUT.getValue());
 	}
 	
-	public int waitForWindowLoaded(String win_name) {
+	public int waitForWindowLoaded(String winName) {
 		if (services.getConnection() == null)
 			throw new CommunicationException("waiting for a window failed because Opera is not connected.");
-		
-		return services.waitForDesktopWindowLoaded(win_name, OperaIntervals.PAGE_LOAD_TIMEOUT.getValue());
+
+		return services.waitForDesktopWindowLoaded(winName, OperaIntervals.PAGE_LOAD_TIMEOUT.getValue());
 	}
-	
+
 	// ---------------------- 
-	
+
 	/**
 	 *
 	 * resetOperaPrefs - restart Opera after copying over newPrefs to profile, if newPrefs
@@ -441,16 +440,16 @@ public class OperaDesktopDriver extends OperaDriver {
 		{
 			// Quit and wait for opera to quit properly
 			quitOpera();
-			
-			// Cleanup old profile 
+
+			// Cleanup old profile
 			profileUtils.deleteProfile();
 			// Copy in the profile for the test (only if it exists)
 			profileUtils.copyProfile(newPrefs);
-			
+
 			// Relaunch Opera and the webdriver service connection
 			startOpera();
 		}
-		
+
 		// No longer the first test run
 		firstTestRun = false;
 	}
@@ -458,21 +457,19 @@ public class OperaDesktopDriver extends OperaDriver {
 	/**
 	 * deleteOperaPrefs - delete the profile for the connected Opera instance.
 	 *                    should only be called after the given Opera instance has quit
-	 * 
+	 *
 	 */
 	public void deleteOperaPrefs() {
 		profileUtils.deleteProfile();
 	}
-	
+
 	/**
 	 *  Start Opera. This will reinitialize services.
-	 * 
+	 *
 	 */
 	private void startOpera() {
 		init();
 	}
-	
-
 }
 
 
