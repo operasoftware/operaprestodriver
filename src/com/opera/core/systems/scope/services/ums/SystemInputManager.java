@@ -28,12 +28,12 @@ public class SystemInputManager extends AbstractService implements SystemInput {
 
 	 public void init() { }
 
-	 public void click(Point location, MouseButton button, int num_clicks, List<ModifierPressed> modifiers) {
+	 public void click(Point location, MouseButton button, int numClicks, List<ModifierPressed> modifiers) {
 		MouseInfo.Builder actionBuilder = MouseInfo.newBuilder();
 		actionBuilder.setX(location.x);
 		actionBuilder.setY(location.y);
 		actionBuilder.setButton(button);
-		actionBuilder.setNumClicks(num_clicks);
+		actionBuilder.setNumClicks(numClicks);
 		int modifier = ModifierPressed.NONE.getNumber();
 		for (ModifierPressed mod : modifiers) {
 			modifier |= mod.getNumber();
@@ -41,7 +41,7 @@ public class SystemInputManager extends AbstractService implements SystemInput {
 		actionBuilder.setModifier(modifier);
 		executeCommand(SystemInputCommand.CLICK, actionBuilder.clone());
 	}
-	
+
 	public void mouseMove(Point location, MouseButton button, List<ModifierPressed> modifiers) {
 		MouseInfo.Builder actionBuilder = MouseInfo.newBuilder();
 		actionBuilder.setX(location.x);
@@ -85,9 +85,6 @@ public class SystemInputManager extends AbstractService implements SystemInput {
 	}
 
 	public void keyPress(String key, List<ModifierPressed> modifiers) {
-		/*String translated_key = OperaKeys.get(key);
-		if (translated_key != null)
-			key = translated_key;*/
 		KeyPressInfo.Builder actionBuilder = KeyPressInfo.newBuilder();
 		actionBuilder.setKey(key);
 		int modifier = ModifierPressed.NONE.getNumber();
@@ -97,10 +94,8 @@ public class SystemInputManager extends AbstractService implements SystemInput {
 		actionBuilder.setModifier(modifier);
 		executeCommand(SystemInputCommand.KEYPRESS, actionBuilder.clone());
 	}
+	
 	public void keyDown(String key, List<ModifierPressed> modifiers) {
-		/*String translated_key = OperaKeys.get(key);
-		if (translated_key != null)
-			key = translated_key;*/
 		KeyPressInfo.Builder actionBuilder = KeyPressInfo.newBuilder();
 		actionBuilder.setKey(key);
 		int modifier = ModifierPressed.NONE.getNumber();
@@ -110,10 +105,8 @@ public class SystemInputManager extends AbstractService implements SystemInput {
 		actionBuilder.setModifier(modifier);
 		executeCommand(SystemInputCommand.KEYDOWN, actionBuilder.clone());
 	}
+	
 	public void keyUp(String key, List<ModifierPressed> modifiers) {
-		/*String translated_key = OperaKeys.get(key);
-		if (translated_key != null)
-			key = translated_key;*/
 		KeyPressInfo.Builder actionBuilder = KeyPressInfo.newBuilder();
 		actionBuilder.setKey(key);
 		int modifier = ModifierPressed.NONE.getNumber();
