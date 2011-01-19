@@ -111,6 +111,7 @@ public class OperaDesktopDriver extends OperaDriver {
 	 * Quits Opera, cuts the connection to free the port and shutdown the services 
 	 */
 	public void quitOpera() {
+		// running opera under the launcher
 		if (this.operaRunner != null){
 			if (this.operaRunner.isOperaRunning()) {
 				// Quit Opera
@@ -138,8 +139,6 @@ public class OperaDesktopDriver extends OperaDriver {
 			// Quit and wait for opera to quit properly
 			this.services.quit(this.operaRunner, pid);
 			
-			// Reset the runner
-			this.operaRunner = null;
 		}
 	}
 
