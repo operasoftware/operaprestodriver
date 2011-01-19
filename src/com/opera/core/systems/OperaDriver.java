@@ -66,6 +66,7 @@ import com.opera.core.systems.runner.OperaRunner;
 import com.opera.core.systems.runner.launcher.OperaLauncherRunner;
 import com.opera.core.systems.scope.exceptions.CommunicationException;
 import com.opera.core.systems.scope.exceptions.FatalException;
+import com.opera.core.systems.scope.exceptions.ResponseNotReceivedException;
 import com.opera.core.systems.scope.handlers.PbActionHandler;
 import com.opera.core.systems.scope.internal.OperaIntervals;
 import com.opera.core.systems.scope.services.IEcmaScriptDebugger;
@@ -182,8 +183,14 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 		actionHandler.get(url);
 		
 		if(services.isOperaIdleAvailable()){
-			//Wait for opera is idle
-			services.waitForOperaIdle(timeout);
+			try {
+				//Wait for opera is idle
+				services.waitForOperaIdle(timeout);
+			} catch (WebDriverException e) {
+				//This could for example be a gif animation, preventing idle from being passed.
+				//Common case, and should not result in test error.
+				System.out.println("Opera Idle timed out, continue test... exception: " + e);
+			}
 		} else {
 			//Wait for window is loaded
 			services.waitForWindowLoaded(activeWindowId, timeout);
