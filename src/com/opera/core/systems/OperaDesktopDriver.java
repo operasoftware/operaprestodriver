@@ -145,7 +145,7 @@ public class OperaDesktopDriver extends OperaDriver {
 	/**
 	 * @return active window id
 	 */
-	public int getActiveWindowID() {
+	public int getActiveQuickWindowID() {
 		return desktopWindowManager.getActiveQuickWindowId();
 	}
 
@@ -155,7 +155,7 @@ public class OperaDesktopDriver extends OperaDriver {
 	 *       If winName is empty, it gets the widgets in the active window
 	 */
 	public List<QuickWidget> getQuickWidgetList(String winName) {
-		int id = getWindowID(winName);
+		int id = getQuickWindowID(winName);
 		if (id >= 0 || winName.length() == 0) {
 			return getQuickWidgetList(id);
 		} 
@@ -178,7 +178,7 @@ public class OperaDesktopDriver extends OperaDriver {
 	 * 
 	 * @returnlist of windows
 	 */
-	public List<QuickWindow> getWindowList() {
+	public List<QuickWindow> getQuickWindowList() {
 		return desktopWindowManager.getQuickWindowList();
 	}
 
@@ -186,7 +186,7 @@ public class OperaDesktopDriver extends OperaDriver {
 	 * @param name
 	 * @return window id of window with windowName 
 	 */
-	public int getWindowID(String windowName) {
+	public int getQuickWindowID(String windowName) {
 		return desktopWindowManager.getQuickWindowID(windowName);
 	}
 	
@@ -194,7 +194,7 @@ public class OperaDesktopDriver extends OperaDriver {
 	 * @param windowName
 	 * @return QuickWindow with the given name
 	 */
-	public QuickWindow getWindow(String windowName) {
+	public QuickWindow getQuickWindow(String windowName) {
 		return desktopWindowManager.getQuickWindow(windowName);
 	}
 	
@@ -257,7 +257,7 @@ public class OperaDesktopDriver extends OperaDriver {
 	 * @param windowId
 	 * @return String: name of the window
 	 */
-	public String getWindowName(int windowId) {
+	public String getQuickWindowName(int windowId) {
 		return desktopWindowManager.getQuickWindowName(windowId);
 	}
 	
@@ -303,9 +303,9 @@ public class OperaDesktopDriver extends OperaDriver {
 		systemInputManager.keyDown(key, modifiers);
 	}
 	
-	public int getWindowCount() {
+	public int getQuickWindowCount() {
 		//TODO FIXME
-		//return desktopWindowManager.getOpenWindowCount();
+		//return desktopWindowManager.getOpenQuickWindowCount();
 		return 0;
 	}
 	
