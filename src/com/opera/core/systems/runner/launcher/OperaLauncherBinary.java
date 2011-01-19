@@ -37,6 +37,7 @@ public class OperaLauncherBinary extends Thread {
 
   public OperaLauncherBinary(String location, String... args) {
     super(new ThreadGroup("run-process"), "launcher");
+    logger.fine("Constructor");
     commands.add(location);
 
     if (args != null && args.length > 0) {
@@ -54,23 +55,31 @@ public class OperaLauncherBinary extends Thread {
   }
 
   public void init() {
+    logger.fine("About to create ProcessBuilder with command: " + commands);
     ProcessBuilder builder = new ProcessBuilder(commands);
+    logger.fine("ProcessBuilder created");
     try {
-
+      logger.fine("builder.start");
       process = builder.start();
+      logger.fine("builder.start done");
       builder.redirectErrorStream(true);
+      logger.fine("redirected error stream");
 
+      logger.fine("About to create OutputWatcher");
       watcher = new OutputWatcher(process);
+      logger.fine("OutputWatcher created");
 
-      outputWatcherThread = new Thread(getThreadGroup(), watcher,
-          "output-watcher");
+      outputWatcherThread = new Thread(getThreadGroup(), watcher, "output-watcher");
+      logger.fine("Thread created");
       outputWatcherThread.start();
+      logger.fine("Thread started");
 
       running.set(true);
     } catch (IOException e) {
       throw new WebDriverException("Could not start the process : "
           + e.getMessage());
     }
+    logger.fine("init done");
   }
 
   @Override
