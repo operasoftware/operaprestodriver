@@ -42,7 +42,7 @@ public class Prefs extends AbstractService implements IPrefs {
 		getPrefBuilder.setKey(key);
 		getPrefBuilder.setMode(mode);
 		
-		Response response = executeCommand(PrefsCommand.GETPREF, getPrefBuilder);
+		Response response = executeCommand(PrefsCommand.GET_PREF, getPrefBuilder);
 
 		PrefValue.Builder prefValueBuilder = PrefValue.newBuilder();
 		buildPayload(response, prefValueBuilder);
@@ -56,7 +56,7 @@ public class Prefs extends AbstractService implements IPrefs {
 		listPrefBuilder.setSort(sort);
 		listPrefBuilder.setSection(section);
 		
-		Response response = executeCommand(PrefsCommand.LISTPREFS, listPrefBuilder);
+		Response response = executeCommand(PrefsCommand.LIST_PREFS, listPrefBuilder);
 
 		PrefList.Builder prefListBuilder = PrefList.newBuilder();
 		buildPayload(response, prefListBuilder);
@@ -71,7 +71,7 @@ public class Prefs extends AbstractService implements IPrefs {
 		setPrefBuilder.setKey(key);
 		setPrefBuilder.setValue(value);
 		
-		Response response = executeCommand(PrefsCommand.SETPREF, setPrefBuilder);
+		Response response = executeCommand(PrefsCommand.SET_PREF, setPrefBuilder);
 
 		if(response == null)
 			throw new WebDriverException("Internal error while setting a preference");
