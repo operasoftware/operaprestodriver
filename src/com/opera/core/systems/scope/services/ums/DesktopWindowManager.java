@@ -62,7 +62,7 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 	}*/
 
 	public int getOpenWindowCount() {
-		List<DesktopWindowInfo> windows = getWindowList();
+		List<DesktopWindowInfo> windows = getDesktopWindowInfoList();
 		return windows.size();
 	}
 
@@ -222,7 +222,7 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 		return windowList;
 	}
 	
-	public List<DesktopWindowInfo> getWindowList() {
+	public List<DesktopWindowInfo> getDesktopWindowInfoList() {
 		Response response = executeCommand(DesktopWindowManagerCommand.LIST_WINDOWS, null);
 		DesktopWindowList.Builder builder = DesktopWindowList.newBuilder();
 		buildPayload(response, builder);
@@ -248,7 +248,7 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 	}
 	
 	public QuickWindow getWindow(String name) {
-		List<DesktopWindowInfo> windowList = getWindowList();
+		List<DesktopWindowInfo> windowList = getDesktopWindowInfoList();
 		for (DesktopWindowInfo window : windowList) {
 			if (window.getName().equals(name))
 				return new QuickWindow(window);
@@ -257,7 +257,7 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 	}
 	
 	public QuickWindow getQuickWindowById(int windowId) {
-		List<DesktopWindowInfo> windowList = getWindowList();
+		List<DesktopWindowInfo> windowList = getDesktopWindowInfoList();
 		for (DesktopWindowInfo window : windowList) {
 			if (window.getWindowID() == windowId)
 				return new QuickWindow(window);
