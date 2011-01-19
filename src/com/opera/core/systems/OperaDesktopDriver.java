@@ -22,10 +22,10 @@ public class OperaDesktopDriver extends OperaDriver {
 	private ProfileUtils profileUtils;
 	private boolean	firstTestRun = true;
 
-	public OperaDesktopDriver(OperaDriverSettings settings){
+	public OperaDesktopDriver(OperaDriverSettings settings) {
 		super(settings);
 	}
-	
+
 	/**
 	 * Initializes services and starts Opera
 	 * If OperaBinaryLocation is not set, the binary location is retrieved from the connected
@@ -52,25 +52,25 @@ public class OperaDesktopDriver extends OperaDriver {
 		if (this.settings != null && this.settings.getOperaBinaryLocation() == null
 				&& this.settings.getNoRestart() == false) {
 			String opera_path = getOperaPath();
-			
+
 			logger.info("OperaBinaryLocation retrieved from Opera: " + opera_path);
 
 			if (!opera_path.isEmpty()) {
 				this.settings.setOperaBinaryLocation(opera_path);
-				
+
 				// Get pid of Opera, needed to wait for it to quit after calling quit_opera
 				int pid = desktopUtils.getOperaPid();
-				
-				
+
+
 				// Now create the OperaLauncherRunner that we have the binary path
 				this.operaRunner = new OperaLauncherRunner(this.settings);
-				
+
 				// Quit and wait for opera to quit properly
 				this.services.quit(this.operaRunner, pid);
-				
+
 				// Delete the profile to start the first test with a clean profile
 				this.profileUtils.deleteProfile();
-				
+
 				// Work around stop and restart Opera so the Launcher has control of it now
 				// Initialising the services will start Opera if the OperaLauncherRunner is
 				// setup correctly
@@ -89,17 +89,17 @@ public class OperaDesktopDriver extends OperaDriver {
 		versions.put("desktop-utils", "2.0");
 		return versions;
 	}
-	
+
 	protected IDesktopWindowManager getDesktopWindowManager() {
 		return desktopWindowManager;
 	}
-	
+
 	protected SystemInputManager getSystemInputManager() {
 		return systemInputManager;
 	}
 
 	/**
-	 * Shutdown the driver without quiting Opera
+	 * Shutdown the driver without quiting Opera.
 	 */
 	public void quitDriver() {
 		super.shutdown();
@@ -116,7 +116,7 @@ public class OperaDesktopDriver extends OperaDriver {
 			if (this.operaRunner.isOperaRunning()) {
 				// Quit Opera
 				this.operaRunner.stopOpera();
-				
+
 				// Cut off the services connection to free the port
 				this.services.shutdown();
 			}
@@ -131,14 +131,14 @@ public class OperaDesktopDriver extends OperaDriver {
 				this.settings.setOperaBinaryLocation(opera_path);
 				pid = desktopUtils.getOperaPid();
 			}
-				
+
 			// Now create the OperaLauncherRunner that we have the binary path
 			// So we can control the shutdown
 			this.operaRunner = new OperaLauncherRunner(this.settings);
 			
 			// Quit and wait for opera to quit properly
 			this.services.quit(this.operaRunner, pid);
-			
+
 		}
 	}
 
@@ -162,7 +162,7 @@ public class OperaDesktopDriver extends OperaDriver {
 		// Couldn't find window with winName
 		return null;
 	}
-	
+
 	/**
 	 * @param winId - windowId of window to get widgets in
 	 * @return list of widgets in the window with id winId
@@ -171,8 +171,8 @@ public class OperaDesktopDriver extends OperaDriver {
 	public List<QuickWidget> getQuickWidgetList(int winId) {
 		return desktopWindowManager.getQuickWidgetList(winId);
 	}
-	
-	
+
+
 	/**
 	 * 
 	 * 

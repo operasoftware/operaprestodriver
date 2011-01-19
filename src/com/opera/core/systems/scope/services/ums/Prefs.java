@@ -25,29 +25,30 @@ public class Prefs extends AbstractService implements IPrefs {
 
 	public Prefs(ScopeServices services, String version) {
 		super(services, version);
-		
+
 		String serviceName = "prefs";
-		
-		if(!isVersionInRange(version, "2.0", serviceName))
+
+		if (!isVersionInRange(version, "2.0", serviceName)) {
 			throw new UnsupportedOperationException(serviceName + " version " + version + " is not supported");
-		
+		}
+
 		services.setPrefs(this);
 	}
-	 
-	public void init() {}
-	  
+
+	public void init() { }
+
 	public String getPref(String section, String key, Mode mode) {
 		GetPrefArg.Builder getPrefBuilder = GetPrefArg.newBuilder();
 		getPrefBuilder.setSection(section);
 		getPrefBuilder.setKey(key);
 		getPrefBuilder.setMode(mode);
-		
+
 		Response response = executeCommand(PrefsCommand.GET_PREF, getPrefBuilder);
 
 		PrefValue.Builder prefValueBuilder = PrefValue.newBuilder();
 		buildPayload(response, prefValueBuilder);
 		PrefValue prefsString = prefValueBuilder.build();
-		
+
 		return prefsString.getValue();
 	}
 
@@ -55,13 +56,13 @@ public class Prefs extends AbstractService implements IPrefs {
 		ListPrefsArg.Builder listPrefBuilder = ListPrefsArg.newBuilder();
 		listPrefBuilder.setSort(sort);
 		listPrefBuilder.setSection(section);
-		
+
 		Response response = executeCommand(PrefsCommand.LIST_PREFS, listPrefBuilder);
 
 		PrefList.Builder prefListBuilder = PrefList.newBuilder();
 		buildPayload(response, prefListBuilder);
 		PrefList prefList = prefListBuilder.build();
-		
+
 		return prefList.getPrefListList();
 	}
 
@@ -70,11 +71,12 @@ public class Prefs extends AbstractService implements IPrefs {
 		setPrefBuilder.setSection(section);
 		setPrefBuilder.setKey(key);
 		setPrefBuilder.setValue(value);
-		
+
 		Response response = executeCommand(PrefsCommand.SET_PREF, setPrefBuilder);
 
-		if(response == null)
+		if (response == null) {
 			throw new WebDriverException("Internal error while setting a preference");
+		}
 	}
 
 }

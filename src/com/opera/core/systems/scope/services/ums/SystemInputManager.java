@@ -16,28 +16,29 @@ public class SystemInputManager extends AbstractService implements SystemInput {
 
 	 SystemInputManager(ScopeServices services, String version) {
 			super(services, version);
-			
+
 			String serviceName = "system-input";
-			
-			if(!isVersionInRange(version, "2.0", serviceName))
+
+			if (!isVersionInRange(version, "2.0", serviceName)) {
 				throw new UnsupportedOperationException(serviceName + " version " + version + " is not supported");
-			
+			}
+
 			services.setSystemInputManager(this);
 		}
 
-	 public void init() {}
+	 public void init() { }
 
-	public void click(Point location, MouseButton button, int num_clicks, List<ModifierPressed> modifiers) {
+	 public void click(Point location, MouseButton button, int num_clicks, List<ModifierPressed> modifiers) {
 		MouseInfo.Builder actionBuilder = MouseInfo.newBuilder();
 		actionBuilder.setX(location.x);
 		actionBuilder.setY(location.y);
-		actionBuilder.setButton(button); 
+		actionBuilder.setButton(button);
 		actionBuilder.setNumClicks(num_clicks);
 		int modifier = ModifierPressed.NONE.getNumber();
 		for (ModifierPressed mod : modifiers) {
 			modifier |= mod.getNumber();
 		}
-		actionBuilder.setModifier(modifier); 
+		actionBuilder.setModifier(modifier);
 		executeCommand(SystemInputCommand.CLICK, actionBuilder.clone());
 	}
 	
@@ -45,13 +46,13 @@ public class SystemInputManager extends AbstractService implements SystemInput {
 		MouseInfo.Builder actionBuilder = MouseInfo.newBuilder();
 		actionBuilder.setX(location.x);
 		actionBuilder.setY(location.y);
-		actionBuilder.setButton(button); 
+		actionBuilder.setButton(button);
 		actionBuilder.setNumClicks(1);
 		int modifier = ModifierPressed.NONE.getNumber();
 		for (ModifierPressed mod : modifiers) {
 			modifier |= mod.getNumber();
 		}
-		actionBuilder.setModifier(modifier); 
+		actionBuilder.setModifier(modifier);
 		executeCommand(SystemInputCommand.MOUSEMOVE, actionBuilder.clone());
 	}
 	
@@ -59,13 +60,13 @@ public class SystemInputManager extends AbstractService implements SystemInput {
 		MouseInfo.Builder actionBuilder = MouseInfo.newBuilder();
 		actionBuilder.setX(location.x);
 		actionBuilder.setY(location.y);
-		actionBuilder.setButton(button); 
+		actionBuilder.setButton(button);
 		actionBuilder.setNumClicks(1);
 		int modifier = ModifierPressed.NONE.getNumber();
 		for (ModifierPressed mod : modifiers) {
 			modifier |= mod.getNumber();
 		}
-		actionBuilder.setModifier(modifier); 
+		actionBuilder.setModifier(modifier);
 		executeCommand(SystemInputCommand.MOUSEUP, actionBuilder.clone());
 	}
 	
@@ -73,16 +74,16 @@ public class SystemInputManager extends AbstractService implements SystemInput {
 		MouseInfo.Builder actionBuilder = MouseInfo.newBuilder();
 		actionBuilder.setX(location.x);
 		actionBuilder.setY(location.y);
-		actionBuilder.setButton(button); 
+		actionBuilder.setButton(button);
 		actionBuilder.setNumClicks(1);
 		int modifier = ModifierPressed.NONE.getNumber();
 		for (ModifierPressed mod : modifiers) {
 			modifier |= mod.getNumber();
 		}
-		actionBuilder.setModifier(modifier); 
+		actionBuilder.setModifier(modifier);
 		executeCommand(SystemInputCommand.MOUSEDOWN, actionBuilder.clone());
 	}
-	
+
 	public void keyPress(String key, List<ModifierPressed> modifiers) {
 		/*String translated_key = OperaKeys.get(key);
 		if (translated_key != null)
@@ -122,5 +123,5 @@ public class SystemInputManager extends AbstractService implements SystemInput {
 		actionBuilder.setModifier(modifier);
 		executeCommand(SystemInputCommand.KEYUP, actionBuilder.clone());
 	}
-	
+
 }
