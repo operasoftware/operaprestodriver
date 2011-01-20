@@ -143,11 +143,15 @@ public class OperaExec extends AbstractService implements IOperaExec {
 		actionBuilder.setWindowID(services.getWindowManager().getActiveWindowId());
 		actionBuilder.setX(x);
 		actionBuilder.setY(y);
-		//actionBuilder.setCount(count);
 		actionBuilder.setButtonAction(value);
-		
-		for(int i = 0; i < count; i++)
-			executeCommand(ExecCommand.SEND_MOUSE_ACTION, actionBuilder.clone());
+		if(VersionUtil.compare(getVersion(), "2.1") >= 0) {
+			actionBuilder.setCount(count);
+			executeCommand(ExecCommand.SEND_MOUSE_ACTION, actionBuilder);
+		} else {
+			for(int i = 0; i < count; i++)
+				executeCommand(ExecCommand.SEND_MOUSE_ACTION, actionBuilder.clone());
+		}
+
 	}
 	
 	public Set<String> getActionList() {
