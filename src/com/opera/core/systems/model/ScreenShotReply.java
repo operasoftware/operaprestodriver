@@ -7,6 +7,7 @@ public class ScreenShotReply {
 	protected int windowId;
 	protected String md5;
 	protected byte[] png;
+	protected boolean blank;
 
 	protected List<ColorResult> colorResult;
 	
@@ -55,5 +56,13 @@ public class ScreenShotReply {
 
 	public void setPng(byte[] png) {
 		this.png = png;
+	}
+
+	public boolean isBlank() {
+		return blank;
+	}
+
+	public void setBlank(boolean blank) {
+		this.blank = blank;
 	}
 }

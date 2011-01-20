@@ -157,36 +157,44 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 	}
 	
 	public int get(String url, long timeout) {
-		
+
 		if (url == null)
 			throw new NullPointerException("Invalid url");
 
 		if (services.getConnection() == null)
-			throw new CommunicationException("Unable to open URL because Opera is not connected.");
-		
+			throw new CommunicationException(
+					"Unable to open URL because Opera is not connected.");
+
 		gc();
-		
+
 		int activeWindowId = windowManager.getActiveWindowId();
-		
+
 		String oldUrl = getCurrentUrl();
-		
+
 		actionHandler.get(url);
-		
-		if(!url.replace(oldUrl, "").startsWith("#")) {
-		
+
+		if (!url.replace(oldUrl, "").startsWith("#")) {
+
 			if (services.isOperaIdleAvailable()) {
-				// Wait for opera is idle
-				services.waitForOperaIdle(timeout);
+				try {
+					// Wait for opera is idle
+					services.waitForOperaIdle(timeout);
+				} catch (WebDriverException e) {
+					// This could for example be a gif animation, preventing
+					// idle from being passed.
+					// Common case, and should not result in test error.
+					System.out.println("Opera Idle timed out, continue test... exception: " + e);
+				}
 			} else {
 				// Wait for window is loaded
 				services.waitForWindowLoaded(activeWindowId, timeout);
 			}
 
 		}
-		
-		if(OperaIntervals.ENABLE_DEBUGGER.getValue() == 1)
+
+		if (OperaIntervals.ENABLE_DEBUGGER.getValue() == 1)
 			switchTo().defaultContent();
-		
+
 		return windowManager.getLastHttpResponseCode().getAndSet(0);
 	}
 
