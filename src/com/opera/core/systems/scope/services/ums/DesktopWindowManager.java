@@ -58,26 +58,9 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 		return windows.size();
 	}
 
-	/*private void printQuickWidget(QuickWidgetInfo info) {
-		System.out.println("Widget name: " + info.getName());
-		System.out.println("       type: " + info.getType());
-		System.out.println("    visible: " + info.getVisible());
-		System.out.println("       text: " + info.getText());
-		System.out.println("      state: " + info.getValue());
-		System.out.println("    enabled: " + info.getEnabled());
-		System.out.println("    default: " + info.getDefaultLook());
-		System.out.println("    focused: " + info.getFocusedLook());
-		System.out.println("          x: " + info.getRect().getX());
-		System.out.println("          y: " + info.getRect().getY());
-		System.out.println("      width: " + info.getRect().getWidth());
-		System.out.println("     height: " + info.getRect().getHeight());
-		System.out.println(" ");
-	}*/
-
-	public QuickWidget getQuickWidget(int id, QuickWidgetSearchType property, String value)
+	public QuickWidget getQuickWidget(int windowId, QuickWidgetSearchType property, String value)
 	{
-
-		return getQuickWidget(id, property, value, "");
+		return getQuickWidget(windowId, property, value, "");
 		/*if (id < 0) {
 			id = getActiveWindowId();
 		}
@@ -102,16 +85,15 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 			return null;
 		}*/
 	}
-	
-	// TODO: FIXME: Do this without getting the list
+
 	// parentName is set to name, pos or text depending on widget.getParentType
-	public QuickWidget getQuickWidget(int id, QuickWidgetSearchType property, String value, String parentName)
+	public QuickWidget getQuickWidget(int windowId, QuickWidgetSearchType property, String value, String parentName)
 	{
-		if (id < 0) {
-			id = getActiveQuickWindowId();
+		if (windowId < 0) {
+			windowId = getActiveQuickWindowId();
 		}
 
-		List<QuickWidget> widgets = getQuickWidgetList(id);
+		List<QuickWidget> widgets = getQuickWidgetList(windowId);
 		for (QuickWidget widget : widgets) {
 			if (property.equals(QuickWidgetSearchType.NAME)) {
 				if ((parentName.length() == 0 || widget.getParentName().equals(parentName))
@@ -132,21 +114,20 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 		return getQuickWidgetByPos(id, row, column, "");
 	}
 
-	// FIXME. TODO: ADD check type of widget too. Also to the other funcs to find widget!
-	public QuickWidget getQuickWidgetByPos(int id, int row, int column, String parentName)
+	public QuickWidget getQuickWidgetByPos(int windowId, int row, int column, String parentName)
 	{
-		if (id < 0) {
-			id = getActiveQuickWindowId();
+		if (windowId < 0) {
+			windowId = getActiveQuickWindowId();
 		}
 
-		List<QuickWidget> widgets = getQuickWidgetList(id);
+		List<QuickWidget> widgets = getQuickWidgetList(windowId);
 		for (QuickWidget widget : widgets) {
-			if ((parentName.length() == 0 || widget.getParentName().equals(parentName)) 
+			if ((parentName.length() == 0 || widget.getParentName().equals(parentName))
 					// Position is only set on tabbuttons and treeitems
-					// so only look for these 
-					&& (widget.getType() == QuickWidgetType.TABBUTTON 
-					|| widget.getType() == QuickWidgetType.TREEITEM 
-					|| widget.getType() == QuickWidgetType.THUMBNAIL) 
+					// so only look for these
+					&& (widget.getType() == QuickWidgetType.TABBUTTON
+					|| widget.getType() == QuickWidgetType.TREEITEM
+					|| widget.getType() == QuickWidgetType.THUMBNAIL)
 					&& widget.getRow() == row && widget.getColumn() == column) {
 				return widget;
 			}
@@ -167,18 +148,18 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 		return null;
 	}
 
-	public List<QuickWidget> getQuickWidgetList(int id) {
-		if (id <= 0) {
-			id = getActiveQuickWindowId();
+	public List<QuickWidget> getQuickWidgetList(int windowId) {
+		if (windowId <= 0) {
+			windowId = getActiveQuickWindowId();
 		}
 
 		DesktopWindowID.Builder winBuilder = DesktopWindowID.newBuilder();
 		winBuilder.clearWindowID();
-		if (id >= 0) {
-			winBuilder.setWindowID(id);
+		if (windowId >= 0) {
+			winBuilder.setWindowID(windowId);
 		} else {
 			winBuilder.setWindowID(activeWindowId);
-			id = activeWindowId;
+			windowId = activeWindowId;
 		}
 
 		Response response = executeCommand(DesktopWindowManagerCommand.LIST_QUICK_WIDGETS, winBuilder);
@@ -191,7 +172,7 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 		List<QuickWidget> quickWidgetList = new LinkedList<QuickWidget>();
 
 		for (QuickWidgetInfo widgetInfo : widgetList) {
-			quickWidgetList.add(new QuickWidget(desktopUtils, systemInputManager, widgetInfo, id));
+			quickWidgetList.add(new QuickWidget(desktopUtils, systemInputManager, widgetInfo, windowId));
 		}
 		return quickWidgetList;
 	}
@@ -259,8 +240,8 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 		return null;
 	}
 
-	public String getQuickWindowName(int winId) {
-		QuickWindow window = getQuickWindowById(winId);
+	public String getQuickWindowName(int windowId) {
+		QuickWindow window = getQuickWindowById(windowId);
 		return (window == null ? "" : window.getName());
 		/*List<DesktopWindowInfo> windowList = getWindowList();
 		for (DesktopWindowInfo window : windowList) {
@@ -269,4 +250,22 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 		}
 		return "";*/
 	}
+
+	/*private void printQuickWidget(QuickWidgetInfo info) {
+	System.out.println("Widget name: " + info.getName());
+	System.out.println("       type: " + info.getType());
+	System.out.println("    visible: " + info.getVisible());
+	System.out.println("       text: " + info.getText());
+	System.out.println("      state: " + info.getValue());
+	System.out.println("    enabled: " + info.getEnabled());
+	System.out.println("    default: " + info.getDefaultLook());
+	System.out.println("    focused: " + info.getFocusedLook());
+	System.out.println("          x: " + info.getRect().getX());
+	System.out.println("          y: " + info.getRect().getY());
+	System.out.println("      width: " + info.getRect().getWidth());
+	System.out.println("     height: " + info.getRect().getHeight());
+	System.out.println(" ");
+	}*/
+
+
 }

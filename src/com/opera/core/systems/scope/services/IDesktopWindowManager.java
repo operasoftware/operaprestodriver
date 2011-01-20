@@ -9,27 +9,25 @@ import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearch.Qui
 
 public interface IDesktopWindowManager {
 
-	/*
-	 * @return id of active window 
+	/**
+	 * init - do initalization neccessary to set up the service
 	 */
-	int getActiveQuickWindowId();
+	void init();
 
 	/*
-	 * @return list of ids of open windows
+	 * @return id of active window
 	 */
-	//List<Integer> getWindowHandles();
+	int getActiveQuickWindowId();
 
 	/*
 	 * @return number of open windows
 	 */
 	int getOpenQuickWindowCount();
 
-	void init();
-
 	/*
 	 * @return list of QuickWidgets in the window given by id id
 	 */
-	List<QuickWidget> getQuickWidgetList(int id);
+	List<QuickWidget> getQuickWidgetList(int windowId);
 
 	/*
 	 * Get the window with title title
@@ -39,7 +37,7 @@ public interface IDesktopWindowManager {
 	QuickWindow getQuickWindow(String title);
 
 	/*
-	 * 
+	 *
 	 * @param title
 	 * @return id of window with the given title
 	 */
@@ -59,36 +57,63 @@ public interface IDesktopWindowManager {
 	String getQuickWindowName(int windowId);
 
 	/**
+	 * Get the quick widget with value value for property property in
+	 * the window specified by the id.
+	 *
+	 * @param windowId - window id of the window containing the widget
+	 * @param property - property specified for the search, NAME, POS or TEXT
+	 * @param value - value of property given
+	 * @return QuickWidget matching the property, or null if no such widget
+	 */
+	QuickWidget getQuickWidget(int windowId, QuickWidgetSearchType property, String value);
+	
+	/**
 	 * Get the quick widget with value value for property property in 
 	 * the window specified by the id.
 	 *
-	 * @param id - window id
-	 * @param property
+	 * @param windowId - window id of the window containing the widget
+	 * @param property - property specified for the search, NAME, POS or TEXT
 	 * @param value - value of property given
-	 * @return
+	 * @param parentName - Name of the widgets parent widget
+	 * @return QuickWidget matching the property, or null if no such widget
 	 */
-	QuickWidget getQuickWidget(int id, QuickWidgetSearchType property, String value);
-	QuickWidget getQuickWidget(int id, QuickWidgetSearchType property, String value, String parentName);
+	QuickWidget getQuickWidget(int windowId, QuickWidgetSearchType property, String value, String parentName);
 
 	/**
 	 * Get the quick widget with value value by position.
 	 *
-	 * @param id - window id
+	 * @param windowId - window id of the window containing the widget
 	 * @param row - row of the widget
 	 * @param column - column of the widget
-	 * @param parentName - Parent name of the widget
-	 * @return
+	 * @return QuickWidget matching the parameters, or null if no such widget
 	 */
-	QuickWidget getQuickWidgetByPos(int id, int row, int column);
-	QuickWidget getQuickWidgetByPos(int id, int row, int column, String parentName);
+	QuickWidget getQuickWidgetByPos(int windowId, int row, int column);
+
+	/**
+	 * Get the quick widget with value value by position.
+	 *
+	 * @param windowId - window id of the window containing the widget
+	 * @param row - row of the widget
+	 * @param column - column of the widget
+	 * @param parentName - Name of the widgets parent widget
+	 * @return QuickWidget matching the parameters, or null if no such widget
+	 */
+	QuickWidget getQuickWidgetByPos(int windowId, int row, int column, String parentName);
 
 	/**
 	 * Get the quick window with value value for property property.
 	 *
-	 * @param property
+	 * @param property - property to search by, NAME, POS or TEXT
 	 * @param value - value of property given
-	 * @return
+	 * @return QuickWindow matching the parameters, or null if no such widget
 	 */
 	QuickWindow getQuickWindow(QuickWidgetSearchType property, String value);
+
+	/**
+	 * Get the quick window with value value for property property.
+	 *
+	 * @param windowId - id of the window
+	 * @return QuickWindow with id windowId, if any, else null. 
+	 */
 	QuickWindow getQuickWindowById(int windowId);
 }

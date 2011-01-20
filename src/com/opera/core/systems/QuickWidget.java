@@ -35,6 +35,13 @@ public class QuickWidget {
 			}
 		}
 
+		/**
+		 *
+		 * @param desktopUtils
+		 * @param inputManager
+		 * @param info
+		 * @param parentWindowId
+		 */
 		public QuickWidget(IDesktopUtils desktopUtils, SystemInputManager inputManager, QuickWidgetInfo info, int parentWindowId) {
 	        this.info = info;
 	        this.desktopUtils = desktopUtils;
@@ -42,15 +49,30 @@ public class QuickWidget {
 	        this.parentWindowId = parentWindowId;
 	    }
 
+		/**
+		 *
+		 * @return windowId of parent window of this QuickWidget
+		 */
 		public int getParentWindowId() {
 			return parentWindowId;
 		}
 
+		/**
+		 *
+		 * @param button
+		 * @param numClicks
+		 * @param modifiers
+		 */
 		public void click(MouseButton button, int numClicks, List<ModifierPressed> modifiers) {
 			//System.out.println(" Click  "+ info.getName() + "!");
 			systemInputManager.click(getCenterLocation(), button, numClicks, modifiers);
 		}
 
+		/**
+		 *
+		 * @param element
+		 * @param dropPos
+		 */
 		public void dragAndDropOn(QuickWidget element, DropPosition dropPos) {
 			/*
 			 * FIXME: Handle MousePosition
@@ -65,42 +87,6 @@ public class QuickWidget {
 			systemInputManager.mouseDown(currentLocation, MouseButton.LEFT, alist);
 			systemInputManager.mouseMove(dropPoint, MouseButton.LEFT, alist);
 			systemInputManager.mouseUp(dropPoint, MouseButton.LEFT, alist);
-		}
-
-		// Intersect two lines
-		private Point intersection(int x1,int y1,int x2,int y2, int x3, int y3, int x4,int y4) {
-			double dem = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4);
-
-			// Solve the intersect point
-			double xi = ((x1 * y2 - y1 * x2) * (x3 - x4) - (x1 - x2) * (x3 * y4 - y3 * x4)) / dem;
-			double yi = ((x1 * y2 - y1 * x2) * (y3 - y4) - (y1 - y2) * (x3 * y4 - y3 * x4)) / dem;
-
-			// Check the point isn't off the ends of the lines
-			if ((x1 - xi) * (xi - x2) >= 0 && (x3 - xi) * (xi - x4) >= 0 && (y1 - yi) * (yi - y2) >= 0 && (y3 - yi) * (yi - y4) >= 0) {
-				return new Point((int) xi, (int) yi);
-			}
-			return null;
-		}
-
-		// Intersect a line and a DesktopWindowRect
-		private Point intersection(int x1,int y1,int x2,int y2, DesktopWindowRect rect) {
-			Point bottom = intersection(x1, y1, x2, y2, rect.getX(), rect.getY(), rect.getX() + rect.getHeight(), rect.getY());
-			if (bottom != null)
-				return bottom;
-
-			Point right = intersection(x1, y1, x2, y2, rect.getX() + rect.getWidth(), rect.getY(), rect.getX() + rect.getWidth(), rect.getY() + rect.getHeight());
-			if (right != null)
-				return right;
-
-			Point top = intersection(x1, y1, x2, y2, rect.getX(), rect.getY() + rect.getHeight(), rect.getX() + rect.getWidth(), rect.getY() + rect.getHeight());
-			if (top != null)
-				return top;
-
-			Point left = intersection(x1, y1, x2, y2, rect.getX(), rect.getY(), rect.getX(), rect.getY() + rect.getHeight());
-			if (left != null)
-				return left;
-
-			return null;
 		}
 
 		// Gets the coordinates of the drop point between the two quick widgets
@@ -121,7 +107,6 @@ public class QuickWidget {
 				if (dropIntersectPoint != null) {
 					if (pos == DropPosition.EDGE)
 					{
-						//System.out.println(" DropPoint  x: " + dropIntersectPoint.x + " y: " + dropIntersectPoint.y);
 						return dropIntersectPoint;
 					}
 
@@ -134,7 +119,7 @@ public class QuickWidget {
 		}
 
 		/**
-		 * Hover this widget
+		 * Hover this widget.
 		 */
 		public void hover() {
 			List<ModifierPressed> alist = new ArrayList<ModifierPressed>();
@@ -151,7 +136,7 @@ public class QuickWidget {
 		}
 
 		/**
-	     * 
+	     *
 	     * @return text of widget
 	     */
 		public String getText() {
@@ -159,7 +144,7 @@ public class QuickWidget {
 		}
 
 		/**
-	     * 
+	     *
 	     * @return text of widget
 	     */
 		public String getVisibleText() {
@@ -213,7 +198,7 @@ public class QuickWidget {
 		}
 
 		/**
-		 * Check if widget is enabled
+		 * Check if widget is enabled.
 		 * @return true if enabled, else false
 		 */
 		public boolean isEnabled() {
@@ -221,12 +206,17 @@ public class QuickWidget {
 		}
 
 		/**
-		 * @return if widget is selected, else false
+		 * @return true if widget is selected, else false
 		 */
 		public boolean isSelected() {
 			return info.getValue() == 1;
 		}
 
+		/**
+		 * 
+		 * @param stringId
+		 * @return 
+		 */
 		public boolean isSelected(String stringId) {
 			String text = desktopUtils.getString(stringId);
 			return text.equals(info.getText());
@@ -252,12 +242,6 @@ public class QuickWidget {
 		 */
 		public DesktopWindowRect getRect() {
 			return info.getRect();
-		}
-
-		private Point getCenterLocation() {
-			DesktopWindowRect rect = getRect();
-			Point topLeft = getLocation();
-			return new Point(topLeft.x + rect.getWidth() / 2, topLeft.y + rect.getHeight() / 2);
 		}
 
 		/**
@@ -333,6 +317,48 @@ public class QuickWidget {
 			+ "          y: " + getRect().getY() + "\n"
 			+ "      width: " + getRect().getWidth() + "\n"
 			+ "     height: " + getRect().getHeight() + " \n";
+		}
+
+		private Point getCenterLocation() {
+			DesktopWindowRect rect = getRect();
+			Point topLeft = getLocation();
+			return new Point(topLeft.x + rect.getWidth() / 2, topLeft.y + rect.getHeight() / 2);
+		}
+		
+		// Intersect two lines
+		private Point intersection(int x1,int y1,int x2,int y2, int x3, int y3, int x4,int y4) {
+			double dem = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4);
+
+			// Solve the intersect point
+			double xi = ((x1 * y2 - y1 * x2) * (x3 - x4) - (x1 - x2) * (x3 * y4 - y3 * x4)) / dem;
+			double yi = ((x1 * y2 - y1 * x2) * (y3 - y4) - (y1 - y2) * (x3 * y4 - y3 * x4)) / dem;
+
+			// Check the point isn't off the ends of the lines
+			if ((x1 - xi) * (xi - x2) >= 0 && (x3 - xi) * (xi - x4) >= 0 && (y1 - yi) * (yi - y2) >= 0 && (y3 - yi) * (yi - y4) >= 0) {
+				return new Point((int) xi, (int) yi);
+			}
+			return null;
+		}
+
+		// Intersect a line and a DesktopWindowRect
+		private Point intersection(int x1,int y1,int x2,int y2, DesktopWindowRect rect) {
+			Point bottom = intersection(x1, y1, x2, y2, rect.getX(), rect.getY(), rect.getX() + rect.getHeight(), rect.getY());
+			if (bottom != null)
+				return bottom;
+
+			Point right = intersection(x1, y1, x2, y2, rect.getX() + rect.getWidth(), rect.getY(), rect.getX() + rect.getWidth(), rect.getY() + rect.getHeight());
+			if (right != null)
+				return right;
+
+			Point top = intersection(x1, y1, x2, y2, rect.getX(), rect.getY() + rect.getHeight(), rect.getX() + rect.getWidth(), rect.getY() + rect.getHeight());
+			if (top != null)
+				return top;
+
+			Point left = intersection(x1, y1, x2, y2, rect.getX(), rect.getY(), rect.getX(), rect.getY() + rect.getHeight());
+			if (left != null)
+				return left;
+
+			return null;
 		}
 }
 
