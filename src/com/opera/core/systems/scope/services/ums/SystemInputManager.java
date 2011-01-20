@@ -55,7 +55,7 @@ public class SystemInputManager extends AbstractService implements SystemInput {
 		actionBuilder.setModifier(modifier);
 		executeCommand(SystemInputCommand.MOUSEMOVE, actionBuilder.clone());
 	}
-	
+
 	public void mouseUp(Point location, MouseButton button, List<ModifierPressed> modifiers) {
 		MouseInfo.Builder actionBuilder = MouseInfo.newBuilder();
 		actionBuilder.setX(location.x);
@@ -69,7 +69,7 @@ public class SystemInputManager extends AbstractService implements SystemInput {
 		actionBuilder.setModifier(modifier);
 		executeCommand(SystemInputCommand.MOUSEUP, actionBuilder.clone());
 	}
-	
+
 	public void mouseDown(Point location, MouseButton button, List<ModifierPressed> modifiers) {
 		MouseInfo.Builder actionBuilder = MouseInfo.newBuilder();
 		actionBuilder.setX(location.x);
@@ -94,7 +94,7 @@ public class SystemInputManager extends AbstractService implements SystemInput {
 		actionBuilder.setModifier(modifier);
 		executeCommand(SystemInputCommand.KEYPRESS, actionBuilder.clone());
 	}
-	
+
 	public void keyDown(String key, List<ModifierPressed> modifiers) {
 		KeyPressInfo.Builder actionBuilder = KeyPressInfo.newBuilder();
 		actionBuilder.setKey(key);
@@ -105,7 +105,7 @@ public class SystemInputManager extends AbstractService implements SystemInput {
 		actionBuilder.setModifier(modifier);
 		executeCommand(SystemInputCommand.KEYDOWN, actionBuilder.clone());
 	}
-	
+
 	public void keyUp(String key, List<ModifierPressed> modifiers) {
 		KeyPressInfo.Builder actionBuilder = KeyPressInfo.newBuilder();
 		actionBuilder.setKey(key);

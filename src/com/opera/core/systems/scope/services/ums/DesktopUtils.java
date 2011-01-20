@@ -18,21 +18,21 @@ public class DesktopUtils extends AbstractService implements IDesktopUtils {
 
 	public DesktopUtils(ScopeServices services, String version) {
 		super(services, version);
-		
+
 		String serviceName = "desktop-utils";
-		
+
 		if(!isVersionInRange(version, "3.0", serviceName))
 			throw new UnsupportedOperationException(serviceName + " version " + version + " is not supported");
-		
+
 		services.setDesktopUtils(this);
 	}
-	 
+
 	public void init() {}
-	  
+
 	public String getString(String enumText) {
 		DesktopStringID.Builder stringBuilder = DesktopStringID.newBuilder();
 		stringBuilder.setEnumText(enumText);
-		
+
 		Response response = executeCommand(DesktopUtilsCommand.GET_STRING, stringBuilder);
 
 		DesktopStringText.Builder stringTextBuilder = DesktopStringText.newBuilder();
@@ -42,7 +42,7 @@ public class DesktopUtils extends AbstractService implements IDesktopUtils {
 		// Remember to remove all CRLF
 		return removeCR(stringText.getText());
 	}
-	
+
 	public String removeCR(String text) {
 		// Hack to remove all the \r's as we sometimes get just \n and sometimes
 		// \r\n then the string comparison doesn't work
@@ -88,7 +88,7 @@ public class DesktopUtils extends AbstractService implements IDesktopUtils {
 
 		return stringPath.getPath();
 	}
-	
+
 	public int getOperaPid() {
 		Response response = executeCommand(DesktopUtilsCommand.GET_OPERA_PID, null);
 
