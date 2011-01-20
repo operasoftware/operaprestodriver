@@ -84,7 +84,7 @@ public class QuickWindow {
 		if (obj == this) return true;
 		if(obj instanceof QuickWindow) {
 			QuickWindow ref = (QuickWindow) obj;
-			return (((QuickWindow)ref).getObjectId() == this.getObjectId());
+			return (ref.getObjectId() == this.getObjectId());
 		}
 		return false;
 	}
