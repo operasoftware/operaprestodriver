@@ -13,6 +13,12 @@ import com.opera.core.systems.scope.protos.SystemInputProtos.MouseInfo.MouseButt
 import com.opera.core.systems.scope.services.IDesktopUtils;
 import com.opera.core.systems.scope.services.ums.SystemInputManager;
 
+/**
+ *  QuickWidget - represents a widget in the desktop UI
+ *
+ * @version 
+ * @author  Karianne Ekern, Adam Minchinton
+ */
 public class QuickWidget {
 		private final QuickWidgetInfo info;
 		private final IDesktopUtils desktopUtils;
