@@ -9,7 +9,10 @@ import java.io.OutputStream;
 
 import com.opera.core.systems.settings.OperaDriverSettings;
 
-
+/**
+ * Class to manage browser profile 
+ *
+ */
 public class ProfileUtils {
 	private String largePrefsFolder;
 	private String smallPrefsFolder;
@@ -72,23 +75,17 @@ public class ProfileUtils {
 			}
 		}
 		else {
-			/*if(!srcFile.exists()){
-				System.out.println("File or directory " + srcFile.getAbsolutePath() + " does not exist.");
+			InputStream in = new FileInputStream(srcFile);
+			OutputStream out = new FileOutputStream(dstFile); 
+			
+			byte[] buf = new byte[1024];
+			int len;
+			while ((len = in.read(buf)) > 0) {
+				out.write(buf, 0, len);
 			}
-			else*/
-			{
-				InputStream in = new FileInputStream(srcFile);
-				OutputStream out = new FileOutputStream(dstFile); 
-
-				byte[] buf = new byte[1024];
-				int len;
-				while ((len = in.read(buf)) > 0) {
-					out.write(buf, 0, len);
-				}
-				
-				in.close();
-				out.close();
-			}
+			
+			in.close();
+			out.close();
 		}
 	}
 }

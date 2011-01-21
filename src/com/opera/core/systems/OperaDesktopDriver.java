@@ -15,6 +15,12 @@ import com.opera.core.systems.scope.services.IDesktopUtils;
 import com.opera.core.systems.scope.services.ums.SystemInputManager;
 import com.opera.core.systems.settings.OperaDriverSettings;
 
+/**
+ * Desktop Driver
+ *
+ * @author Adam Minchinton, Karianne Ekern
+ *
+ */
 public class OperaDesktopDriver extends OperaDriver {
 	private IDesktopWindowManager desktopWindowManager;
 	private SystemInputManager systemInputManager;
@@ -22,15 +28,21 @@ public class OperaDesktopDriver extends OperaDriver {
 	private ProfileUtils profileUtils;
 	private boolean	firstTestRun = true;
 
+	/**
+	 * Constructor that starts Opera if it's not running
+	 * 
+	 * @param settings settings for binary path to Opera, prefs directory, and arguments
+	 */
 	public OperaDesktopDriver(OperaDriverSettings settings) {
 		super(settings);
 	}
 
 	/**
-	 * Initializes services and starts Opera
+	 * Initializes services and starts Opera.
+	 * 
 	 * If OperaBinaryLocation is not set, the binary location is retrieved from the connected
 	 * Opera instance, before shutting it down, waiting for it to quit properly,
-	 * and then restarting it under the control of the LauncherRunner.
+	 * and then restarting it under the control of the {@link OperaLauncherRunner}.
 	 *
 	 */
 	protected void init() {
@@ -89,25 +101,23 @@ public class OperaDesktopDriver extends OperaDriver {
 		return versions;
 	}
 
-	protected IDesktopWindowManager getDesktopWindowManager() {
+	/*protected IDesktopWindowManager getDesktopWindowManager() {
 		return desktopWindowManager;
 	}
 
 	protected SystemInputManager getSystemInputManager() {
 		return systemInputManager;
-	}
+	}*/
 
 	/**
-	 * Shutdown the driver without quiting Opera.
+	 * Shuts down the driver without quiting Opera.
 	 */
 	public void quitDriver() {
 		super.shutdown();
 	}
 
 	/**
-	 * Quit Opera.
-	 *
-	 * Quits Opera, cuts the connection to free the port and shutdown the services 
+	 * Quits Opera, cuts the connection to free the port and shuts down the services.
 	 */
 	public void quitOpera() {
 		// running opera under the launcher
@@ -141,6 +151,8 @@ public class OperaDesktopDriver extends OperaDriver {
 	}
 
 	/**
+	 * Gets the id of the active QuickWindow
+	 * 
 	 * @return id of active window
 	 */
 	public int getActiveQuickWindowID() {
@@ -148,8 +160,9 @@ public class OperaDesktopDriver extends OperaDriver {
 	}
 
 	/**
+	 * Gets a list of all widgets in the window with the given window name
 	 *
-	 * @param windowName
+	 * @param windowName name of window to list widgets inside
 	 * @return list of widgets in the window with name windowName
 	 *       If windowName is empty, it gets the widgets in the active window
 	 */
@@ -163,6 +176,8 @@ public class OperaDesktopDriver extends OperaDriver {
 	}
 
 	/**
+	 * Gets a list of all widgets in the window with the given window id.
+	 * 
 	 * @param windowId - windowId of window to get widgets in
 	 * @return list of widgets in the window with id windowId
 	 *       If windowId -1, gets the widgets in the active window
@@ -173,7 +188,7 @@ public class OperaDesktopDriver extends OperaDriver {
 
 
 	/**
-	 * Get a list of all QuickWindows.
+	 * Gets a list of all open QuickWindows.
 	 *
 	 * @return list of windows
 	 */
@@ -182,78 +197,156 @@ public class OperaDesktopDriver extends OperaDriver {
 	}
 
 	/**
-	 * @param windowName
-	 * @return window id of the QuickWindow with name windowName
+	 * 
+	 * @param windowName name of the window
+	 * @return window id of the QuickWindow with name windowName, or -1
+	 *   if no such window exists
 	 */
 	public int getQuickWindowID(String windowName) {
 		return desktopWindowManager.getQuickWindowID(windowName);
 	}
 
 	/**
-	 * @param windowName
-	 * @return QuickWindow with the given name
+	 * @param windowName name of the window
+	 * @return QuickWindow with the given name, or null if no such window exists
 	 */
 	public QuickWindow getQuickWindow(String windowName) {
 		return desktopWindowManager.getQuickWindow(windowName);
 	}
 
 	/**
-	 * @param windowId
-	 * @param widgetName
-	 * @return QuickWidget with the given name in the window with id windowId
+	 * Finds widget with the given name in the window with the given window id
+	 * 
+	 * @param windowId window id of parent window
+	 * @param widgetName name of widget to find
+	 * 
+	 * @return QuickWidget with the given name in the window with id windowId, or null
+	 *   if no such widget exists.
 	 */
 	public QuickWidget findWidgetByName(int windowId, String widgetName) {
 		return desktopWindowManager.getQuickWidget(windowId, QuickWidgetSearchType.NAME, widgetName);
 	}
 
 	/**
+	 * Finds widget with the given name and parent with name as specified in the window
+	 * with the specified window id
 	 *
-	 * @param windowId
-	 * @param widgetName
-	 * @param parentName
-	 * @return QuickWidget with widgetName and parent in the window given by windowId
+	 * @param windowId id of parent window
+	 * @param widgetName name of widget
+	 * @param parentName name of parent widget
+	 * @return QuickWidget with widgetName and parent in the window given by windowId,
+	 *   or null if no such widget exists
 	 */
 	public QuickWidget findWidgetByName(int windowId, String widgetName, String parentName) {
 		return desktopWindowManager.getQuickWidget(windowId, QuickWidgetSearchType.NAME, widgetName, parentName);
 	}
 
+	/**
+	 * Finds widget with the text specified in the window with the given window id.
+	 * 
+	 * Note, if there are several widgets in this window with the same text, the widget 
+	 * returned can be any one of those
+	 * 	
+	 * @param windowId - id of parent window
+	 * @param text - text of widget
+	 * @return QuickWidget with the given text in the specified window, or null if no
+	 *   such widget exists.
+	 */
 	public QuickWidget findWidgetByText(int windowId, String text) {
 		return desktopWindowManager.getQuickWidget(windowId, QuickWidgetSearchType.TEXT, text);
 	}
 
+	/**
+	 * Find widget by text and parent widget name in the given window.
+	 * 
+	 * @param windowId id of parent window
+	 * @param text text of widget
+	 * @param parentName name of parent widget
+	 * @return QuickWidget with the given text and parent in the window with id windowId, or
+	 *  null if no such widget exists
+	 */
 	public QuickWidget findWidgetByText(int windowId, String text, String parentName) {
 		return desktopWindowManager.getQuickWidget(windowId, QuickWidgetSearchType.TEXT, text, parentName);
 	}
 
+	/**
+	 * Finds widget with the text specified by string id in the window with the given id.
+	 * 	
+	 * @param windowId id of parent window
+	 * @param stringId string id of the widget
+	 * @return QuickWidget or null if no matching widget found
+	 */
 	public QuickWidget findWidgetByStringId(int windowId, String stringId) {
 		String text = desktopUtils.getString(stringId);
 		return findWidgetByText(windowId, text);
 	}
 
+	/**
+	 * Finds widget with the text specified by string id and widget with parentName in the 
+	 * specified window.
+	 * 
+	 * @param windowId id of parent window
+	 * @param stringId stringid of the widget
+	 * @param parentName name of parent widget
+	 * @return QuickWidget, or null if no matching widget found
+	 */
 	public QuickWidget findWidgetByStringId(int windowId, String stringId, String parentName) {
 		String text = desktopUtils.getString(stringId);
 		return findWidgetByText(windowId, text, parentName);
 	}
 
+	/**
+	 * Find widget by specified position. Used for widgets that have a position only,
+	 * e.g. treeviewitems and tabs. 
+	 * 
+	 * @param windowId id of parent window
+	 * @param row row of widget within its parent
+	 * @param column column of widget within its parent
+	 * @return QuickWidget matching, or null if no matching widget is  found
+	 */
 	public QuickWidget findWidgetByPosition(int windowId, int row, int column) {
 		return desktopWindowManager.getQuickWidgetByPos(windowId, row, column);
 	}
 
+	/**
+	 * Finds widget by specified position. Used for widgets that have a position,
+	 * e.g. treeviewitems and tabs.
+	 * 
+	 * @param windowId id of parent window
+	 * @param row row of widget within its parent
+	 * @param column column of widget within its parent
+	 * @param parentName name of parent widget
+	 * @return QuickWidget, or null if no matching widget is found
+	 */
 	public QuickWidget findWidgetByPosition(int windowId, int row, int column, String parentName) {
 		return desktopWindowManager.getQuickWidgetByPos(windowId, row, column, parentName);
 	}
 
+	/**
+	 * Finds a Window by its name
+	 * 
+	 * @param windowName name of window
+	 * @return QuickWindow or null if no window with windowName is found
+	 */
 	public QuickWindow findWindowByName(String windowName) {
 		return desktopWindowManager.getQuickWindow(QuickWidgetSearchType.NAME, windowName);
 	}
 
+	/**
+	 * Find window by window id
+	 * 
+	 * @param windowId id of window
+	 * @return QuickWindow or null if no window with the id found
+	 */
 	public QuickWindow findWindowById(int windowId) {
 		return desktopWindowManager.getQuickWindowById(windowId);
 	}
 
 
 	/**
-	 * @param windowId
+	 * Gets the name of the window from its window id
+	 * 
+	 * @param windowId window id of window
 	 * @return String: name of the window with id windowId
 	 */
 	public String getQuickWindowName(int windowId) {
@@ -269,26 +362,44 @@ public class OperaDesktopDriver extends OperaDriver {
 		return desktopUtils.getString(enumText);
 	}
 
+	/**
+	 * Gets the path to the connected Opera instance
+	 * 
+	 * @return the path to the connected Opera instance
+	 */
 	public String getOperaPath() {
 		return desktopUtils.getOperaPath();
 	}
 
+	/**
+	 * 
+	 * @return large preferences path
+	 */
 	public String getLargePreferencesPath() {
 		return desktopUtils.getLargePreferencesPath();
 	}
 
+	/**
+	 * 
+	 * @return small preferences path
+	 */
 	public String getSmallPreferencesPath() {
 		return desktopUtils.getSmallPreferencesPath();
 	}
 
+	/**
+	 * 
+	 * @return cache preferences path
+	 */
 	public String getCachePreferencesPath() {
 		return desktopUtils.getCachePreferencesPath();
 	}
 
 	/**
+	 * Press Key with modifiers held down
 	 *
-	 * @param key
-	 * @param modifier
+	 * @param key key to press
+	 * @param modifier modifiers held
 	 * @return
 	 */
 	public void keyPress(String key, List<ModifierPressed> modifiers) {
@@ -302,14 +413,17 @@ public class OperaDesktopDriver extends OperaDriver {
 		systemInputManager.keyDown(key, modifiers);
 	}
 
+	/**
+	 * 
+	 * @return number of open windows
+	 */
 	public int getQuickWindowCount() {
-		//TODO FIXME
-		//return desktopWindowManager.getOpenQuickWindowCount();
-		return 0;
+		return desktopWindowManager.getOpenQuickWindowCount();
 	}
 
 	/**
-	 * Execute opera action.
+	 * Executes an opera action.
+	 * 
 	 * @param using - action_name
 	 * @param data -  data parameter
 	 * @param dataString - data string parameter
@@ -320,7 +434,8 @@ public class OperaDesktopDriver extends OperaDriver {
 	}
 
 	/*
-	 * Starts a process of waiting for a window to show
+	 * Starts a process of waiting for some event.
+	 * 
 	 * After this call, messages to the driver about window events are not thrown away,
 	 * so that the notification about window shown is not lost because of other events or messages 
 	 */
@@ -332,29 +447,29 @@ public class OperaDesktopDriver extends OperaDriver {
 	}
 
 	/**
-	 * Wait for any window update event
+	 * Waits for any window update event
 	 */
 	public void waitForWindowUpdated() {
 		waitForWindowUpdated("");
 	}
 
 	/**
-	 * Wait for any window activated event
+	 * Waits for any window activated event
 	 */
 	public void waitForWindowActivated() {
 		waitForWindowActivated("");
 	}
 
 	/**
-	 * Wait for any window close event
+	 * Waits for any window close event
 	 */
 	public void waitForWindowClose() {
 		waitForWindowClose("");
 	}
 
 	/**
-	 * Wait until the window given by the @param win_name is shown, and then returns the
-	 * window id of this window
+	 * Waits until the window is shown, and then returns the
+	 * window id of the window
 	 *
 	 * @param windowName - window to wait for shown event on
 	 * @return id of window
@@ -368,8 +483,8 @@ public class OperaDesktopDriver extends OperaDriver {
 	}
 
 	/**
-	 * Wait until the window given by the @param win_name is updated,
-	 * and then returns the window id of this window.
+	 * Waits until the window is updated,
+	 * and then returns the window id of the window.
 	 *
 	 * @param windowName - window to wait for shown event on
 	 * @return id of window
@@ -383,8 +498,8 @@ public class OperaDesktopDriver extends OperaDriver {
 	}
 
 	/**
-	 * Wait until the window given by the @param windowName is activated, 
-	 * and then returns the window id of this window.
+	 * Waits until the window is activated, 
+	 * and then returns the window id of the window.
 	 *
 	 * @param windowName - window to wait for shown event on
 	 * @return id of window
@@ -399,8 +514,8 @@ public class OperaDesktopDriver extends OperaDriver {
 	}
 
 	/**
-	 * Wait until the window given by the @param win_name is closed, 
-	 * and then returns the window id of this window.
+	 * Waits until the window is closed, 
+	 * and then returns the window id of the window.
 	 * 
 	 * @param windowName - window to wait for shown event on
 	 * @return id of window
@@ -422,7 +537,7 @@ public class OperaDesktopDriver extends OperaDriver {
 
 	/**
 	 *
-	 * resetOperaPrefs - restart Opera after copying over newPrefs to profile,
+	 * resetOperaPrefs - restarts Opera after copying over newPrefs to profile,
 	 *                    if newPrefs folder exists.
 	 *
 	 * Copies prefs in folder newPrefs to the profile for the connected Opera instance.
@@ -452,17 +567,17 @@ public class OperaDesktopDriver extends OperaDriver {
 	}
 
 	/**
-	 * deleteOperaPrefs - delete the profile for the connected Opera instance.
-	 *                    should only be called after the given Opera instance has quit
-	 *
+	 * Deletes the profile for the connected Opera instance.
+	 * 
+	 * Should only be called after the given Opera instance has quit
+	 * Presupposes the connected Opera instance is running on same node
 	 */
 	public void deleteOperaPrefs() {
 		profileUtils.deleteProfile();
 	}
 
 	/**
-	 *  Start Opera. This will reinitialize services.
-	 *
+	 *  Starts Opera. This will reinitialize services.
 	 */
 	private void startOpera() {
 		init();
