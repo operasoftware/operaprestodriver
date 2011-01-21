@@ -54,18 +54,7 @@ public class OperaDriverTest extends TestBase
 		Assert.assertTrue(OperaIntervals.SERVER_PORT.getValue() == 7001);
 	}
 
-  @Test
-	public void testIsOperaIdleAvailable()
-	{
-		Assert.assertTrue(testDriver.isOperaIdleAvailable());
-	}
 
-  @Test
-	public void testGetActionList()
-	{
-		Set<String> actionHash = testDriver.getOperaActionList();
-		Assert.assertTrue(actionHash.size() > 0);
-	}
 
   @Test
 	public void testOperaDriverShutdown()
