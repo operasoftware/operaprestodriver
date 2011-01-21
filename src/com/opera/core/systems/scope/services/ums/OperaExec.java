@@ -144,13 +144,15 @@ public class OperaExec extends AbstractService implements IOperaExec {
 		actionBuilder.setX(x);
 		actionBuilder.setY(y);
 		actionBuilder.setButtonAction(value);
-		if(VersionUtil.compare(getVersion(), "2.1") >= 0) {
+		/*
+		if(VersionUtil.compare(getVersion(), "2.2") >= 0) {
 			actionBuilder.setCount(count);
 			executeCommand(ExecCommand.SEND_MOUSE_ACTION, actionBuilder);
 		} else {
+		*/
 			for(int i = 0; i < count; i++)
 				executeCommand(ExecCommand.SEND_MOUSE_ACTION, actionBuilder.clone());
-		}
+		/*}*/
 
 	}
 	
@@ -224,8 +226,8 @@ public class OperaExec extends AbstractService implements IOperaExec {
 		
 		areaBuilder.setX(canvas.getX());
 		areaBuilder.setY(canvas.getY());
-		areaBuilder.setH(canvas.getH());
-		areaBuilder.setW(canvas.getW());
+		areaBuilder.setH(canvas.getHeight());
+		areaBuilder.setW(canvas.getWidth());
 		
 		builder.setArea(areaBuilder);
 		
@@ -288,8 +290,8 @@ public class OperaExec extends AbstractService implements IOperaExec {
 		//FIXME viewport relative
 		areaBuilder.setX(canvas.getX());
 		areaBuilder.setY(canvas.getY());
-		areaBuilder.setH(canvas.getH());
-		areaBuilder.setW(canvas.getW());
+		areaBuilder.setH(canvas.getHeight());
+		areaBuilder.setW(canvas.getWidth());
 		
 		builder.setArea(areaBuilder);
 				
