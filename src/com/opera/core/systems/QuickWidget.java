@@ -14,7 +14,7 @@ import com.opera.core.systems.scope.services.IDesktopUtils;
 import com.opera.core.systems.scope.services.ums.SystemInputManager;
 
 /**
- *  Represents a widget in the Desktop UI
+ *  A widget in the Desktop UI
  *
  * @version 
  * @author  Karianne Ekern, Adam Minchinton

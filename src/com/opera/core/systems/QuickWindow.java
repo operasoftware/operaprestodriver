@@ -7,17 +7,24 @@ import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo.DesktopWindowType;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect;
 
+/**
+ * A window in the Desktop UI
+ *
+ * @author Karianne Ekern, Adam Minchinton
+ *
+ */
 public class QuickWindow {
 
 	private final DesktopWindowInfo info;
 
+	/**
+	 * Constructor.
+	 * 
+	 * @param info DesktopWindowInfo describing the window
+	 */
 	public QuickWindow(DesktopWindowInfo info) {
         this.info = info;
     }
-
-	public int getObjectId() {
-		return getWindowID();
-	}
 
 	/**
 	 * @return window id of this window
@@ -27,7 +34,7 @@ public class QuickWindow {
 	}
 
 	/**
-	 * @return title of window
+	 * @return title of this window
 	 */
 	public String getTitle() {
 		return info.getTitle();
@@ -35,21 +42,21 @@ public class QuickWindow {
 
 
 	/**
-	 * @return name of window
+	 * @return name of this window
 	 */
 	public String getName() {
 		return info.getName();
 	}
 
 	/**
-	 * @return true if window is on screen
+	 * @return true if the window is on screen, otherwise false.
 	 */
 	public boolean isOnScreen() {
 		return info.getOnScreen();
 	}
 
 	/**
-	 * @return the type of the window
+	 * @return the type of the window.
 	 */
 	public DesktopWindowType getType() {
 		return info.getWindowType();
@@ -86,7 +93,7 @@ public class QuickWindow {
 		}
 		if (obj instanceof QuickWindow) {
 			QuickWindow ref = (QuickWindow) obj;
-			return (ref.getObjectId() == this.getObjectId());
+			return (ref.getWindowID() == this.getWindowID());
 		}
 		return false;
 	}
@@ -95,7 +102,7 @@ public class QuickWindow {
 	// TODO: FIXME
 	public int hashCode() {
 		int result = 42;
-		result = 31 * result + getObjectId();
+		result = 31 * result + getWindowID();
 		return result;
 	}
 
