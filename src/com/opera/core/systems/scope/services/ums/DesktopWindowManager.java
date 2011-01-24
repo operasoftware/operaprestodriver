@@ -188,7 +188,6 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 		List<QuickWindow> windowList = new LinkedList<QuickWindow>();
 
 		for (DesktopWindowInfo windowInfo : windowInfoList) {
-			//System.out.println("Window id =" + window.getWindowID() + ", name=" + window.getName() + ", type="+ window.getWindowType());
 			windowList.add(new QuickWindow(windowInfo));
 		}
 		return windowList;
@@ -201,18 +200,11 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 		DesktopWindowList list = builder.build();
 
 		List<DesktopWindowInfo> windowList = list.getWindowListList();
-
-		/*
-		for (DesktopWindowInfo window : windowList) {
-			//System.out.println("Window id =" + window.getWindowID() + ", name=" + window.getName() + ", type="+ window.getWindowType());
-		}
-		*/
-
 		return windowList;
 	}
 
 	public int getQuickWindowID(String name) {
-		QuickWindow win = getQuickWindow(name);
+		QuickWindow win = getQuickWindowByName(name);
 		if (win != null) {
 			return win.getWindowID();
 		} else {
@@ -220,7 +212,7 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 		}
 	}
 
-	public QuickWindow getQuickWindow(String name) {
+	public QuickWindow getQuickWindowByName(String name) {
 		List<DesktopWindowInfo> windowList = getDesktopWindowInfoList();
 		for (DesktopWindowInfo window : windowList) {
 			if (window.getName().equals(name)) {
@@ -243,12 +235,6 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 	public String getQuickWindowName(int windowId) {
 		QuickWindow window = getQuickWindowById(windowId);
 		return (window == null ? "" : window.getName());
-		/*List<DesktopWindowInfo> windowList = getWindowList();
-		for (DesktopWindowInfo window : windowList) {
-			if (window.getWindowID() == win_id)
-				return window.getName();
-		}
-		return "";*/
 	}
 
 	/*private void printQuickWidget(QuickWidgetInfo info) {
