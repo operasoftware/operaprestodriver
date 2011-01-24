@@ -1,6 +1,7 @@
 package com.opera.core.systems;
 
 import java.io.File;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -172,7 +173,7 @@ public class OperaDesktopDriver extends OperaDriver {
 		if (id >= 0 || windowName.length() == 0) {
 			return getQuickWidgetList(id);
 		}
-		return null;
+		return Collections.emptyList();
 	}
 
 	/**
@@ -211,7 +212,7 @@ public class OperaDesktopDriver extends OperaDriver {
 	 * @return QuickWindow with the given name, or null if no such window exists
 	 */
 	public QuickWindow getQuickWindow(String windowName) {
-		return desktopWindowManager.getQuickWindow(windowName);
+		return desktopWindowManager.getQuickWindowByName(windowName);
 	}
 
 	/**
@@ -582,6 +583,34 @@ public class OperaDesktopDriver extends OperaDriver {
 	private void startOpera() {
 		init();
 	}
+	
+	//=======================================================
+	/* Methods in OperaDriver (superclass) that will do the wrong thing
+	 * 
+	 * 
+	 * 	public void quit() {
+		services.quit();
+	}
+
+	  	public void close() {
+		closeWindow();
+		windowManager.filterActiveWindow();
+	}
+
+	public void closeAll() {
+		windowManager.closeAllWindows();
+		windowManager.filterActiveWindow();
+	}
+
+	private void closeWindow() {
+		exec.action("Close page");
+	}
+
+	public void stop() {
+		exec.action("Stop");
+	}
+
+	 */
 }
 
 
