@@ -17,7 +17,7 @@ import com.opera.core.systems.scope.services.ums.SystemInputManager;
 import com.opera.core.systems.settings.OperaDriverSettings;
 
 /**
- * Desktop Driver
+ * Desktop Driver.
  *
  * @author Adam Minchinton, Karianne Ekern
  *
@@ -30,7 +30,7 @@ public class OperaDesktopDriver extends OperaDriver {
 	private boolean	firstTestRun = true;
 
 	/**
-	 * Constructor that starts Opera if it's not running
+	 * Constructor that starts Opera if it's not running.
 	 * 
 	 * @param settings settings for binary path to Opera, prefs directory, and arguments
 	 */
@@ -102,14 +102,6 @@ public class OperaDesktopDriver extends OperaDriver {
 		return versions;
 	}
 
-	/*protected IDesktopWindowManager getDesktopWindowManager() {
-		return desktopWindowManager;
-	}
-
-	protected SystemInputManager getSystemInputManager() {
-		return systemInputManager;
-	}*/
-
 	/**
 	 * Shuts down the driver without quiting Opera.
 	 */
@@ -145,14 +137,14 @@ public class OperaDesktopDriver extends OperaDriver {
 			// So we can control the shutdown
 			this.operaRunner = new OperaLauncherRunner(this.settings);
 
-			// Quit and wait for opera to quit properly
+			// Quit and wait for opera to quit properly (calls services.shutdown)
 			this.services.quit(this.operaRunner, pid);
 
 		}
 	}
 
 	/**
-	 * Gets the id of the active QuickWindow
+	 * Gets the id of the active QuickWindow.
 	 * 
 	 * @return id of active window
 	 */
@@ -161,7 +153,7 @@ public class OperaDesktopDriver extends OperaDriver {
 	}
 
 	/**
-	 * Gets a list of all widgets in the window with the given window name
+	 * Gets a list of all widgets in the window with the given window name.
 	 *
 	 * @param windowName name of window to list widgets inside
 	 * @return list of widgets in the window with name windowName
@@ -216,7 +208,7 @@ public class OperaDesktopDriver extends OperaDriver {
 	}
 
 	/**
-	 * Finds widget with the given name in the window with the given window id
+	 * Finds widget with the given name in the window with the given window id.
 	 * 
 	 * @param windowId window id of parent window
 	 * @param widgetName name of widget to find
@@ -230,7 +222,7 @@ public class OperaDesktopDriver extends OperaDriver {
 
 	/**
 	 * Finds widget with the given name and parent with name as specified in the window
-	 * with the specified window id
+	 * with the specified window id.
 	 *
 	 * @param windowId id of parent window
 	 * @param widgetName name of widget
@@ -324,7 +316,7 @@ public class OperaDesktopDriver extends OperaDriver {
 	}
 
 	/**
-	 * Finds a Window by its name
+	 * Finds a Window by its name.
 	 * 
 	 * @param windowName name of window
 	 * @return QuickWindow or null if no window with windowName is found
@@ -334,7 +326,7 @@ public class OperaDesktopDriver extends OperaDriver {
 	}
 
 	/**
-	 * Find window by window id
+	 * Find window by window id.
 	 * 
 	 * @param windowId id of window
 	 * @return QuickWindow or null if no window with the id found
@@ -345,7 +337,7 @@ public class OperaDesktopDriver extends OperaDriver {
 
 
 	/**
-	 * Gets the name of the window from its window id
+	 * Gets the name of the window from its window id.
 	 * 
 	 * @param windowId window id of window
 	 * @return String: name of the window with id windowId
@@ -364,7 +356,7 @@ public class OperaDesktopDriver extends OperaDriver {
 	}
 
 	/**
-	 * Gets the path to the connected Opera instance
+	 * Gets the path to the connected Opera instance.
 	 * 
 	 * @return the path to the connected Opera instance
 	 */
@@ -397,24 +389,37 @@ public class OperaDesktopDriver extends OperaDriver {
 	}
 
 	/**
-	 * Press Key with modifiers held down
+	 * Press Key with modifiers held down.
 	 *
 	 * @param key key to press
 	 * @param modifier modifiers held
-	 * @return
 	 */
 	public void keyPress(String key, List<ModifierPressed> modifiers) {
 		systemInputManager.keyPress(key, modifiers);
 	}
 
+	/**
+	 * Release key.
+	 *
+	 * @param key key to press
+	 * @param modifier modifiers held
+	 */
 	public void keyUp(String key, List<ModifierPressed> modifiers) {
 		systemInputManager.keyUp(key, modifiers);
 	}
+	
+	/**
+	 * Press Key.
+	 *
+	 * @param key key to press
+	 * @param modifier modifiers held
+	 */
 	public void keyDown(String key, List<ModifierPressed> modifiers) {
 		systemInputManager.keyDown(key, modifiers);
 	}
 
 	/**
+	 * Gets number of open windows.
 	 * 
 	 * @return number of open windows
 	 */
@@ -434,11 +439,12 @@ public class OperaDesktopDriver extends OperaDriver {
 		exec.action(using, data, dataString, dataStringParam);
 	}
 
-	/*
+	/**
 	 * Starts a process of waiting for some event.
 	 * 
 	 * After this call, messages to the driver about window events are not thrown away,
-	 * so that the notification about window shown is not lost because of other events or messages 
+	 * so that the notification about window shown is not lost because of other events or messages
+	 * @throws CommuncationException if no connection 
 	 */
 	public void waitStart() {
 		if (services.getConnection() == null)
@@ -448,21 +454,27 @@ public class OperaDesktopDriver extends OperaDriver {
 	}
 
 	/**
-	 * Waits for any window update event
+	 * Waits for any window update event.
+	 * 
+	 * @throws CommuncationException if no connection
 	 */
 	public void waitForWindowUpdated() {
 		waitForWindowUpdated("");
 	}
 
 	/**
-	 * Waits for any window activated event
+	 * Waits for any window activated event.
+	 * 
+	 * @throws CommuncationException if no connection
 	 */
 	public void waitForWindowActivated() {
 		waitForWindowActivated("");
 	}
 
 	/**
-	 * Waits for any window close event
+	 * Waits for any window close event.
+	 * 
+	 * @throws CommuncationException if no connection
 	 */
 	public void waitForWindowClose() {
 		waitForWindowClose("");
@@ -529,6 +541,14 @@ public class OperaDesktopDriver extends OperaDriver {
 		return services.waitForDesktopWindowClosed(windowName, OperaIntervals.PAGE_LOAD_TIMEOUT.getValue());
 	}
 	
+	/**
+	 * Waits until the window is loaded 
+	 * and then returns the window id of the window.
+	 * 
+	 * @param windowName - window to wait for shown event on
+	 * @return id of window
+	 * @throws CommuncationException if no connection
+	 */
 	public int waitForWindowLoaded(String windowName) {
 		if (services.getConnection() == null)
 			throw new CommunicationException("waiting for a window failed because Opera is not connected.");
@@ -583,34 +603,6 @@ public class OperaDesktopDriver extends OperaDriver {
 	private void startOpera() {
 		init();
 	}
-	
-	//=======================================================
-	/* Methods in OperaDriver (superclass) that will do the wrong thing
-	 * 
-	 * 
-	 * 	public void quit() {
-		services.quit();
-	}
-
-	  	public void close() {
-		closeWindow();
-		windowManager.filterActiveWindow();
-	}
-
-	public void closeAll() {
-		windowManager.closeAllWindows();
-		windowManager.filterActiveWindow();
-	}
-
-	private void closeWindow() {
-		exec.action("Close page");
-	}
-
-	public void stop() {
-		exec.action("Stop");
-	}
-
-	 */
 }
 
 
