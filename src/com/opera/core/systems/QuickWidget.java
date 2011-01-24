@@ -42,14 +42,15 @@ public class QuickWidget {
 		}
 
 		/**
-		 * Constructor
+		 * Constructor.
 		 *
 		 * @param desktopUtils
 		 * @param inputManager
 		 * @param info QuickWidgetInfo of the widget
 		 * @param parentWindowId id of parent window
 		 */
-		public QuickWidget(IDesktopUtils desktopUtils, SystemInputManager inputManager, QuickWidgetInfo info, int parentWindowId) {
+		public QuickWidget(IDesktopUtils desktopUtils, SystemInputManager inputManager,
+				QuickWidgetInfo info, int parentWindowId) {
 	        this.info = info;
 	        this.desktopUtils = desktopUtils;
 	        this.systemInputManager = inputManager;
@@ -57,7 +58,7 @@ public class QuickWidget {
 	    }
 
 		/**
-		 * Gets window id of this widgets parent window
+		 * Gets window id of this widgets parent window.
 		 *
 		 * @return window id of parent window of this QuickWidget
 		 */
@@ -66,7 +67,7 @@ public class QuickWidget {
 		}
 
 		/**
-		 * Clicks this widget
+		 * Clicks this widget.
 		 *
 		 * @param button button to click
 		 * @param numClicks number of clicks
@@ -176,9 +177,9 @@ public class QuickWidget {
 			alist.add(ModifierPressed.NONE);
 			systemInputManager.mouseMove(getCenterLocation(), MouseButton.LEFT, alist);
 		}
-		
+
 		/**
-	     * 
+	     *
 	     * @return name of widget
 	     */
 		public String getName() {
@@ -194,7 +195,7 @@ public class QuickWidget {
 		}
 
 		/**
-	     * Gets the visible text of the widget
+	     * Gets the visible text of the widget.
 	     *
 	     * @return visible text of widget
 	     */
@@ -226,7 +227,7 @@ public class QuickWidget {
 		}
 
 		/**
-	     * Check if widget text contains the text specified by the given string id
+	     * Checks if widget text contains the text specified by the given string id
 	     * 
 	     * @param String stringId id of string 
 	     * @return true if text specified by stringId is contained in widget text
@@ -257,8 +258,8 @@ public class QuickWidget {
 		}
 
 		/**
-		 * Check if widget is enabled.
-		 * 
+		 * Checks if widget is enabled.
+		 *
 		 * @return true if enabled, else false
 		 */
 		public boolean isEnabled() {
@@ -266,7 +267,7 @@ public class QuickWidget {
 		}
 
 		/**
-		 * 
+		 *
 		 * @return true if widget is selected, else false
 		 */
 		public boolean isSelected() {
@@ -274,7 +275,7 @@ public class QuickWidget {
 		}
 
 		/**
-		 * 
+		 *
 		 * @param stringId stringid of entry to check if is selected
 		 * @return true if the entry given by stringId is selected, else false
 		 */
@@ -360,28 +361,6 @@ public class QuickWidget {
 		 */
 		public String getParentName() {
 			return info.getParent();
-		}
-
-		@Override
-		// TODO: FIXME
-		public boolean equals(Object obj) {
-			if (obj == this) {
-				return true;
-			}
-			if (!(obj instanceof QuickWidget)) {
-				return false;
-			}
-
-			QuickWidget ref = (QuickWidget) obj;
-			return (ref.getName().equals(this.getName()));
-		}
-
-		@Override
-		// TODO: FIXME
-		public int hashCode() {
-			int result = 42;
-			result = 31 * result + getName().hashCode();
-			return result;
 		}
 
 		@Override

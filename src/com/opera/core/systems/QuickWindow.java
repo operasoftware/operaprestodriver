@@ -19,7 +19,7 @@ public class QuickWindow {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param info DesktopWindowInfo describing the window
 	 */
 	public QuickWindow(DesktopWindowInfo info) {
@@ -86,29 +86,8 @@ public class QuickWindow {
 	}
 
 	@Override
-	// TODO: FIXME
-	public boolean equals(Object obj) {
-		if (obj == this) {
-			return true;
-		}
-		if (obj instanceof QuickWindow) {
-			QuickWindow ref = (QuickWindow) obj;
-			return (ref.getWindowID() == this.getWindowID());
-		}
-		return false;
-	}
-
-	@Override
-	// TODO: FIXME
-	public int hashCode() {
-		int result = 42;
-		result = 31 * result + getWindowID();
-		return result;
-	}
-
-	@Override
 	public String toString() {
-		return "QuickWindow " + getWindowID() + ", " + getTitle();
+		return "QuickWindow " + getWindowID() + ", " + getName() + ", " + getTitle();
 	}
 
 }
