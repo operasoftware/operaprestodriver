@@ -1,8 +1,9 @@
 /* Copyright (C) 2009 Opera Software ASA.  All rights reserved. */
-package com.opera.core.systems.model;
+package com.opera.core.systems.interaction;
 
 import java.util.Arrays;
 import java.util.List;
+
 
 public class OperaAction {
 

@@ -120,7 +120,7 @@ public class EcmaScriptDebugger extends AbstractService implements IEcmaScriptDe
 	
 	private List<RuntimeInfo> getRuntimesList() {
 		int windowId = services.getWindowManager().getActiveWindowId();
-		Iterator<?> iterator = (Iterator<?>) xpathIterator(runtimesList.values(), "/.[windowID='" + windowId + "']");
+		Iterator<?> iterator = xpathIterator(runtimesList.values(), "/.[windowID='" + windowId + "']");
 		List<RuntimeInfo> runtimes = new ArrayList<RuntimeInfo>();
 		while (iterator.hasNext()) {
 			runtimes.add((RuntimeInfo) ((Pointer)iterator.next()).getNode());
@@ -144,6 +144,8 @@ public class EcmaScriptDebugger extends AbstractService implements IEcmaScriptDe
 		if(!updateRuntime())
 			throw new WebDriverException("Could not find a runtime for script injection");
 		//FIXME workaround for internal dialog
+		//The dialog is finally removed but just keeping this here
+		//until every platform upgrades to core 2.7+
 		executeJavascript("return 1;", true);
 	}
 	
