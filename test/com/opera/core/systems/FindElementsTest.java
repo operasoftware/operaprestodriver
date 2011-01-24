@@ -16,14 +16,6 @@ public class FindElementsTest extends TestBase
   }
 
   @Test
-  public void testActiveElement()
-  {
-    driver.executeScript("document.getElementById('local').focus()");
-    WebElement el = driver.findActiveElement();
-    Assert.assertEquals(el.getAttribute("id"), "local");
-  }
-
-  @Test
   public void testLinkText()
   {
     WebElement el = driver.findElementByLinkText("accumsan ante");
