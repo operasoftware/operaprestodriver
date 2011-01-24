@@ -161,8 +161,6 @@ public class DriverKeysTest extends TestBase {
     Thread.sleep(1000);
     driver.keyUp("a");
 
-    ((OperaWebElement) fieldOne).sendKeys("a");
-
     Assert.assertTrue("multiple 'a's", fieldOne.getValue().contains("aa"));
   }
 
