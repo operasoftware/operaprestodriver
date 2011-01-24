@@ -139,6 +139,8 @@ public class OperaExec extends AbstractService implements IOperaExec {
 	 * @param value
 	 */
 	public void mouseAction(int x, int y, int value, int count) {
+		if(x < 0 || y < 0)
+			throw new IllegalArgumentException();
 		MouseAction.Builder actionBuilder = MouseAction.newBuilder();
 		actionBuilder.setWindowID(services.getWindowManager().getActiveWindowId());
 		actionBuilder.setX(x);
