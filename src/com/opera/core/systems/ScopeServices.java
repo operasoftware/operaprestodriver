@@ -280,8 +280,8 @@ public class ScopeServices implements IConnectionHandler {
 		}
 		
 		if (runner != null && pid > 0) {
-			int interval = 100;
-			int timeout = 10000;
+			long interval = OperaIntervals.QUIT_POLL_INTERVAL.getValue();
+			long timeout = OperaIntervals.QUIT_RESPONSE_TIMEOUT.getValue();
 			while (runner.isOperaRunning(pid) && timeout > 0)
 			{
 				try {
