@@ -115,7 +115,7 @@ public interface IDesktopWindowManager {
 	/**
 	 * Gets the quick window with the given window id.
 	 *
-	 * @param windowId - id of the window
+	 * @param windowId id of the window
 	 * @return QuickWindow with id windowId, if any, else null. 
 	 */
 	QuickWindow getQuickWindowById(int windowId);

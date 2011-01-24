@@ -10,7 +10,7 @@ import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect;
 /**
  * A window in the Desktop UI
  *
- * @author Karianne Ekern, Adam Minchinton
+ * @author Adam Minchinton, Karianne Ekern 
  *
  */
 public class QuickWindow {
@@ -49,14 +49,14 @@ public class QuickWindow {
 	}
 
 	/**
-	 * @return true if the window is on screen, otherwise false.
+	 * @return true if the window is on screen, otherwise false
 	 */
 	public boolean isOnScreen() {
 		return info.getOnScreen();
 	}
 
 	/**
-	 * @return the type of the window.
+	 * @return the type of the window
 	 */
 	public DesktopWindowType getType() {
 		return info.getWindowType();

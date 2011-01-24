@@ -208,7 +208,7 @@ public class OperaDesktopDriver extends OperaDriver {
 	}
 
 	/**
-	 * Finds widget with the given name in the window with the given window id.
+	 * Finds widget by name in the window specified by windowId.
 	 * 
 	 * @param windowId window id of parent window
 	 * @param widgetName name of widget to find
@@ -221,7 +221,7 @@ public class OperaDesktopDriver extends OperaDriver {
 	}
 
 	/**
-	 * Finds widget with the given name and parent with name as specified in the window
+	 * Finds widget by name and parent in the window
 	 * with the specified window id.
 	 *
 	 * @param windowId id of parent window
@@ -250,7 +250,7 @@ public class OperaDesktopDriver extends OperaDriver {
 	}
 
 	/**
-	 * Find widget by text and parent widget name in the given window.
+	 * Finds widget by text and parent widget name.
 	 * 
 	 * @param windowId id of parent window
 	 * @param text text of widget
@@ -275,7 +275,7 @@ public class OperaDesktopDriver extends OperaDriver {
 	}
 
 	/**
-	 * Finds widget with the text specified by string id and widget with parentName in the 
+	 * Finds widget with the text specified by string id and parentName in the 
 	 * specified window.
 	 * 
 	 * @param windowId id of parent window
@@ -289,7 +289,7 @@ public class OperaDesktopDriver extends OperaDriver {
 	}
 
 	/**
-	 * Find widget by specified position. Used for widgets that have a position only,
+	 * Finds widget by specified position. Used for widgets that have a position only,
 	 * e.g. treeviewitems and tabs. 
 	 * 
 	 * @param windowId id of parent window

@@ -17,7 +17,7 @@ import com.opera.core.systems.scope.services.ums.SystemInputManager;
  *  A widget in the Desktop UI
  *
  * @version 
- * @author  Karianne Ekern, Adam Minchinton
+ * @author Adam Minchinton,  Karianne Ekern.
  */
 public class QuickWidget {
 		private final QuickWidgetInfo info;
@@ -120,7 +120,7 @@ public class QuickWidget {
 		}
 
 		/**
-		 * Drags this widget onto the widget given as parameter at the given drop position
+		 * Drags this widget onto the specified widget at the given drop position
 		 *
 		 * @param widget the widget to drop this widget onto
 		 * @param dropPos the position to drop this widget into, CENTER, EDGE or BETWEEN
@@ -216,7 +216,7 @@ public class QuickWidget {
 
 
 		/**
-	     * Check if widget text equals the text specified by the given string id
+	     * Checks if widget text equals the text specified by the given string id
 	     *
 	     * @return true if text specified by stringId equals widget text
 	     */
@@ -238,10 +238,10 @@ public class QuickWidget {
 		}
 
 		/**
-		 * Check if widget is default.
+		 * Checks if widget is default.
 		 * 
-		 * Typically used to check if e.g. a button is the default chosen among
-		 * buttons in a dialog, and such.
+		 * Typically used to check if e.g. a button is the default pressed button
+		 * among buttons in a dialog, and such.
 		 *
 		 * @return true if widget is default, else false
 		 */
@@ -326,7 +326,7 @@ public class QuickWidget {
 		/**
 		 * Gets the row of the widget within its parent, 
 		 * e.g. of a treeviewitem in a treeview.
-		 * Returns 0 for all widgets that dont' have a row
+		 * Returns 0 for all widgets that don't have a row
 		 * within its parent
 		 * 
 		 * @return row of widget\
@@ -338,7 +338,7 @@ public class QuickWidget {
 		/**
  		 * Gets the column of the widget within its parent, 
 		 * e.g. for a tab within the pagebar, or a treeviewitem in a treeview
-		 * returns 0 for widgets that dont have a column number within its
+		 * returns 0 for widgets that don't have a column number within its
 		 * parent
 		 *
 		 * @return column of widget
@@ -355,7 +355,7 @@ public class QuickWidget {
 		}
 
 		/**
-		 * Get name of parent widget of this widget
+		 * Gets name of parent widget of this widget
 		 * 
 		 * @return name of parent widget
 		 */
