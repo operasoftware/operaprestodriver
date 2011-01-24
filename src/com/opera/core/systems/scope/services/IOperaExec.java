@@ -45,6 +45,8 @@ public interface IOperaExec {
 	
 	void action(String using, int windowID, String... params);
 
+	void action(String using, int data, String dataString, String dataStringParam);
+
 	/**
 	 * Execute a keypress (immediately send key down and up) 
 	 * @param key

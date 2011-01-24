@@ -8,10 +8,11 @@ import java.util.Map;
 public enum SystemInputCommand implements ICommand {
 	    CLICK(1),
 	    KEYPRESS(2),
-	    MOUSEUP(3),
-	    MOUSEDOWN(4),
-	    MOUSEMOVE(5),
-	    KEYUP(6),
+	    KEYUP(3),
+	    KEYDOWN(4),
+	    MOUSEDOWN(5),
+	    MOUSEUP(6),
+	    MOUSEMOVE(7),
 	    DEFAULT(-1);
 	    
 	    private int code;

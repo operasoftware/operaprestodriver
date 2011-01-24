@@ -1,7 +1,7 @@
 package com.opera.core.systems;
 
 //import java.util.HashMap;
-import java.util.ArrayList;
+//import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -207,14 +207,21 @@ public class OperaDesktopDriver extends OperaDriver {
 		systemInputManager.keyPress(key, modifiers);
 	}
 	
+	public void keyUp(String key, List<ModifierPressed> modifiers) {
+		systemInputManager.keyUp(key, modifiers);
+	}
+	public void keyDown(String key, List<ModifierPressed> modifiers) {
+		systemInputManager.keyDown(key, modifiers);
+	}
+	
 	/**
 	 *
 	 */
-	public void keyPress(String key, ModifierPressed modifier) {
+	/*public void keyPress(String key, ModifierPressed modifier) {
 		ArrayList<ModifierPressed> mods = new ArrayList<ModifierPressed>();
 		mods.add(modifier);
 		systemInputManager.keyPress(key, mods);
-	}
+	}*/
 	
 	
 	public int getWindowCount() {
@@ -226,12 +233,12 @@ public class OperaDesktopDriver extends OperaDriver {
 	/**
 	 * Execute opera action
 	 * @param using - action_name
-	 * @param params - parameters to the action
+	 * @param data -  data parameter
+	 * @param dataString - data string parameter
+	 * @param dataStringParam - parameter to data string
 	 */
-	public void operaDesktopAction(String using, String... params) 
-	{
-        // Desktop never wants the window
-		exec.action(using, 0, params);
+	public void operaDesktopAction(String using, int data, String dataString, String dataStringParam) {
+		exec.action(using, data, dataString, dataStringParam);
 	}
 	
 	/*

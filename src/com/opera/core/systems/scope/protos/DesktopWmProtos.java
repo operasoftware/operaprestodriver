@@ -1173,6 +1173,7 @@ public final class DesktopWmProtos {
       TREEVIEW(11, 11),
       TREEITEM(12, 12),
       TABBUTTON(13, 13),
+      THUMBNAIL(14, 14),
       ;
       
       
@@ -1194,6 +1195,7 @@ public final class DesktopWmProtos {
           case 11: return TREEVIEW;
           case 12: return TREEITEM;
           case 13: return TABBUTTON;
+          case 14: return THUMBNAIL;
           default: return null;
         }
       }
@@ -1224,7 +1226,7 @@ public final class DesktopWmProtos {
       }
       
       private static final QuickWidgetType[] VALUES = {
-        UNKNOWN, BUTTON, CHECKBOX, DIALOGTAB, DROPDOWN, EDITFIELD, LABEL, RADIOBUTTON, ADDRESSFIELD, SEARCH, TOOLBAR, TREEVIEW, TREEITEM, TABBUTTON, 
+        UNKNOWN, BUTTON, CHECKBOX, DIALOGTAB, DROPDOWN, EDITFIELD, LABEL, RADIOBUTTON, ADDRESSFIELD, SEARCH, TOOLBAR, TREEVIEW, TREEITEM, TABBUTTON, THUMBNAIL, 
       };
       public static QuickWidgetType valueOf(
           com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
@@ -1332,6 +1334,20 @@ public final class DesktopWmProtos {
     public boolean hasCol() { return hasCol; }
     public int getCol() { return col_; }
     
+    // optional string visible_text = 13;
+    public static final int VISIBLE_TEXT_FIELD_NUMBER = 13;
+    private boolean hasVisibleText;
+    private java.lang.String visibleText_ = "";
+    public boolean hasVisibleText() { return hasVisibleText; }
+    public java.lang.String getVisibleText() { return visibleText_; }
+    
+    // optional string additional_text = 14;
+    public static final int ADDITIONAL_TEXT_FIELD_NUMBER = 14;
+    private boolean hasAdditionalText;
+    private java.lang.String additionalText_ = "";
+    public boolean hasAdditionalText() { return hasAdditionalText; }
+    public java.lang.String getAdditionalText() { return additionalText_; }
+    
     private void initFields() {
       type_ = com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo.QuickWidgetType.UNKNOWN;
       rect_ = com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect.getDefaultInstance();
@@ -1389,6 +1405,12 @@ public final class DesktopWmProtos {
       if (hasCol()) {
         output.writeUInt32(12, getCol());
       }
+      if (hasVisibleText()) {
+        output.writeString(13, getVisibleText());
+      }
+      if (hasAdditionalText()) {
+        output.writeString(14, getAdditionalText());
+      }
       getUnknownFields().writeTo(output);
     }
     
@@ -1445,6 +1467,14 @@ public final class DesktopWmProtos {
       if (hasCol()) {
         size += com.google.protobuf.CodedOutputStream
           .computeUInt32Size(12, getCol());
+      }
+      if (hasVisibleText()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeStringSize(13, getVisibleText());
+      }
+      if (hasAdditionalText()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeStringSize(14, getAdditionalText());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -1640,6 +1670,12 @@ public final class DesktopWmProtos {
         if (other.hasCol()) {
           setCol(other.getCol());
         }
+        if (other.hasVisibleText()) {
+          setVisibleText(other.getVisibleText());
+        }
+        if (other.hasAdditionalText()) {
+          setAdditionalText(other.getAdditionalText());
+        }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
@@ -1722,6 +1758,14 @@ public final class DesktopWmProtos {
             }
             case 96: {
               setCol(input.readUInt32());
+              break;
+            }
+            case 106: {
+              setVisibleText(input.readString());
+              break;
+            }
+            case 114: {
+              setAdditionalText(input.readString());
               break;
             }
           }
@@ -1976,6 +2020,48 @@ public final class DesktopWmProtos {
         return this;
       }
       
+      // optional string visible_text = 13;
+      public boolean hasVisibleText() {
+        return result.hasVisibleText();
+      }
+      public java.lang.String getVisibleText() {
+        return result.getVisibleText();
+      }
+      public Builder setVisibleText(java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  result.hasVisibleText = true;
+        result.visibleText_ = value;
+        return this;
+      }
+      public Builder clearVisibleText() {
+        result.hasVisibleText = false;
+        result.visibleText_ = getDefaultInstance().getVisibleText();
+        return this;
+      }
+      
+      // optional string additional_text = 14;
+      public boolean hasAdditionalText() {
+        return result.hasAdditionalText();
+      }
+      public java.lang.String getAdditionalText() {
+        return result.getAdditionalText();
+      }
+      public Builder setAdditionalText(java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  result.hasAdditionalText = true;
+        result.additionalText_ = value;
+        return this;
+      }
+      public Builder clearAdditionalText() {
+        result.hasAdditionalText = false;
+        result.additionalText_ = getDefaultInstance().getAdditionalText();
+        return this;
+      }
+      
       // @@protoc_insertion_point(builder_scope:scope.QuickWidgetInfo)
     }
     
@@ -1986,582 +2072,6 @@ public final class DesktopWmProtos {
     }
     
     // @@protoc_insertion_point(class_scope:scope.QuickWidgetInfo)
-  }
-  
-  public static final class DesktopStringID extends
-      com.google.protobuf.GeneratedMessage {
-    // Use DesktopStringID.newBuilder() to construct.
-    private DesktopStringID() {
-      initFields();
-    }
-    private DesktopStringID(boolean noInit) {}
-    
-    private static final DesktopStringID defaultInstance;
-    public static DesktopStringID getDefaultInstance() {
-      return defaultInstance;
-    }
-    
-    public DesktopStringID getDefaultInstanceForType() {
-      return defaultInstance;
-    }
-    
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return com.opera.core.systems.scope.protos.DesktopWmProtos.internal_static_scope_DesktopStringID_descriptor;
-    }
-    
-    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-        internalGetFieldAccessorTable() {
-      return com.opera.core.systems.scope.protos.DesktopWmProtos.internal_static_scope_DesktopStringID_fieldAccessorTable;
-    }
-    
-    // required string enumText = 1;
-    public static final int ENUMTEXT_FIELD_NUMBER = 1;
-    private boolean hasEnumText;
-    private java.lang.String enumText_ = "";
-    public boolean hasEnumText() { return hasEnumText; }
-    public java.lang.String getEnumText() { return enumText_; }
-    
-    private void initFields() {
-    }
-    public final boolean isInitialized() {
-      if (!hasEnumText) return false;
-      return true;
-    }
-    
-    public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
-      getSerializedSize();
-      if (hasEnumText()) {
-        output.writeString(1, getEnumText());
-      }
-      getUnknownFields().writeTo(output);
-    }
-    
-    private int memoizedSerializedSize = -1;
-    public int getSerializedSize() {
-      int size = memoizedSerializedSize;
-      if (size != -1) return size;
-    
-      size = 0;
-      if (hasEnumText()) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeStringSize(1, getEnumText());
-      }
-      size += getUnknownFields().getSerializedSize();
-      memoizedSerializedSize = size;
-      return size;
-    }
-    
-    public static com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopStringID parseFrom(
-        com.google.protobuf.ByteString data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data).buildParsed();
-    }
-    public static com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopStringID parseFrom(
-        com.google.protobuf.ByteString data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
-    }
-    public static com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopStringID parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data).buildParsed();
-    }
-    public static com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopStringID parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
-    }
-    public static com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopStringID parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return newBuilder().mergeFrom(input).buildParsed();
-    }
-    public static com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopStringID parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
-    }
-    public static com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopStringID parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      Builder builder = newBuilder();
-      if (builder.mergeDelimitedFrom(input)) {
-        return builder.buildParsed();
-      } else {
-        return null;
-      }
-    }
-    public static com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopStringID parseDelimitedFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      Builder builder = newBuilder();
-      if (builder.mergeDelimitedFrom(input, extensionRegistry)) {
-        return builder.buildParsed();
-      } else {
-        return null;
-      }
-    }
-    public static com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopStringID parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
-      return newBuilder().mergeFrom(input).buildParsed();
-    }
-    public static com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopStringID parseFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
-    }
-    
-    public static Builder newBuilder() { return Builder.create(); }
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopStringID prototype) {
-      return newBuilder().mergeFrom(prototype);
-    }
-    public Builder toBuilder() { return newBuilder(this); }
-    
-    public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> {
-      private com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopStringID result;
-      
-      // Construct using com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopStringID.newBuilder()
-      private Builder() {}
-      
-      private static Builder create() {
-        Builder builder = new Builder();
-        builder.result = new com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopStringID();
-        return builder;
-      }
-      
-      protected com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopStringID internalGetResult() {
-        return result;
-      }
-      
-      public Builder clear() {
-        if (result == null) {
-          throw new IllegalStateException(
-            "Cannot call clear() after build().");
-        }
-        result = new com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopStringID();
-        return this;
-      }
-      
-      public Builder clone() {
-        return create().mergeFrom(result);
-      }
-      
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
-        return com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopStringID.getDescriptor();
-      }
-      
-      public com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopStringID getDefaultInstanceForType() {
-        return com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopStringID.getDefaultInstance();
-      }
-      
-      public boolean isInitialized() {
-        return result.isInitialized();
-      }
-      public com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopStringID build() {
-        if (result != null && !isInitialized()) {
-          throw newUninitializedMessageException(result);
-        }
-        return buildPartial();
-      }
-      
-      private com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopStringID buildParsed()
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        if (!isInitialized()) {
-          throw newUninitializedMessageException(
-            result).asInvalidProtocolBufferException();
-        }
-        return buildPartial();
-      }
-      
-      public com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopStringID buildPartial() {
-        if (result == null) {
-          throw new IllegalStateException(
-            "build() has already been called on this Builder.");
-        }
-        com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopStringID returnMe = result;
-        result = null;
-        return returnMe;
-      }
-      
-      public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopStringID) {
-          return mergeFrom((com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopStringID)other);
-        } else {
-          super.mergeFrom(other);
-          return this;
-        }
-      }
-      
-      public Builder mergeFrom(com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopStringID other) {
-        if (other == com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopStringID.getDefaultInstance()) return this;
-        if (other.hasEnumText()) {
-          setEnumText(other.getEnumText());
-        }
-        this.mergeUnknownFields(other.getUnknownFields());
-        return this;
-      }
-      
-      public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder(
-            this.getUnknownFields());
-        while (true) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              this.setUnknownFields(unknownFields.build());
-              return this;
-            default: {
-              if (!parseUnknownField(input, unknownFields,
-                                     extensionRegistry, tag)) {
-                this.setUnknownFields(unknownFields.build());
-                return this;
-              }
-              break;
-            }
-            case 10: {
-              setEnumText(input.readString());
-              break;
-            }
-          }
-        }
-      }
-      
-      
-      // required string enumText = 1;
-      public boolean hasEnumText() {
-        return result.hasEnumText();
-      }
-      public java.lang.String getEnumText() {
-        return result.getEnumText();
-      }
-      public Builder setEnumText(java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  result.hasEnumText = true;
-        result.enumText_ = value;
-        return this;
-      }
-      public Builder clearEnumText() {
-        result.hasEnumText = false;
-        result.enumText_ = getDefaultInstance().getEnumText();
-        return this;
-      }
-      
-      // @@protoc_insertion_point(builder_scope:scope.DesktopStringID)
-    }
-    
-    static {
-      defaultInstance = new DesktopStringID(true);
-      com.opera.core.systems.scope.protos.DesktopWmProtos.internalForceInit();
-      defaultInstance.initFields();
-    }
-    
-    // @@protoc_insertion_point(class_scope:scope.DesktopStringID)
-  }
-  
-  public static final class DesktopStringText extends
-      com.google.protobuf.GeneratedMessage {
-    // Use DesktopStringText.newBuilder() to construct.
-    private DesktopStringText() {
-      initFields();
-    }
-    private DesktopStringText(boolean noInit) {}
-    
-    private static final DesktopStringText defaultInstance;
-    public static DesktopStringText getDefaultInstance() {
-      return defaultInstance;
-    }
-    
-    public DesktopStringText getDefaultInstanceForType() {
-      return defaultInstance;
-    }
-    
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return com.opera.core.systems.scope.protos.DesktopWmProtos.internal_static_scope_DesktopStringText_descriptor;
-    }
-    
-    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-        internalGetFieldAccessorTable() {
-      return com.opera.core.systems.scope.protos.DesktopWmProtos.internal_static_scope_DesktopStringText_fieldAccessorTable;
-    }
-    
-    // required string text = 1;
-    public static final int TEXT_FIELD_NUMBER = 1;
-    private boolean hasText;
-    private java.lang.String text_ = "";
-    public boolean hasText() { return hasText; }
-    public java.lang.String getText() { return text_; }
-    
-    private void initFields() {
-    }
-    public final boolean isInitialized() {
-      if (!hasText) return false;
-      return true;
-    }
-    
-    public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
-      getSerializedSize();
-      if (hasText()) {
-        output.writeString(1, getText());
-      }
-      getUnknownFields().writeTo(output);
-    }
-    
-    private int memoizedSerializedSize = -1;
-    public int getSerializedSize() {
-      int size = memoizedSerializedSize;
-      if (size != -1) return size;
-    
-      size = 0;
-      if (hasText()) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeStringSize(1, getText());
-      }
-      size += getUnknownFields().getSerializedSize();
-      memoizedSerializedSize = size;
-      return size;
-    }
-    
-    public static com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopStringText parseFrom(
-        com.google.protobuf.ByteString data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data).buildParsed();
-    }
-    public static com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopStringText parseFrom(
-        com.google.protobuf.ByteString data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
-    }
-    public static com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopStringText parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data).buildParsed();
-    }
-    public static com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopStringText parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
-    }
-    public static com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopStringText parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return newBuilder().mergeFrom(input).buildParsed();
-    }
-    public static com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopStringText parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
-    }
-    public static com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopStringText parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      Builder builder = newBuilder();
-      if (builder.mergeDelimitedFrom(input)) {
-        return builder.buildParsed();
-      } else {
-        return null;
-      }
-    }
-    public static com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopStringText parseDelimitedFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      Builder builder = newBuilder();
-      if (builder.mergeDelimitedFrom(input, extensionRegistry)) {
-        return builder.buildParsed();
-      } else {
-        return null;
-      }
-    }
-    public static com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopStringText parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
-      return newBuilder().mergeFrom(input).buildParsed();
-    }
-    public static com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopStringText parseFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
-    }
-    
-    public static Builder newBuilder() { return Builder.create(); }
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopStringText prototype) {
-      return newBuilder().mergeFrom(prototype);
-    }
-    public Builder toBuilder() { return newBuilder(this); }
-    
-    public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> {
-      private com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopStringText result;
-      
-      // Construct using com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopStringText.newBuilder()
-      private Builder() {}
-      
-      private static Builder create() {
-        Builder builder = new Builder();
-        builder.result = new com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopStringText();
-        return builder;
-      }
-      
-      protected com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopStringText internalGetResult() {
-        return result;
-      }
-      
-      public Builder clear() {
-        if (result == null) {
-          throw new IllegalStateException(
-            "Cannot call clear() after build().");
-        }
-        result = new com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopStringText();
-        return this;
-      }
-      
-      public Builder clone() {
-        return create().mergeFrom(result);
-      }
-      
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
-        return com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopStringText.getDescriptor();
-      }
-      
-      public com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopStringText getDefaultInstanceForType() {
-        return com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopStringText.getDefaultInstance();
-      }
-      
-      public boolean isInitialized() {
-        return result.isInitialized();
-      }
-      public com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopStringText build() {
-        if (result != null && !isInitialized()) {
-          throw newUninitializedMessageException(result);
-        }
-        return buildPartial();
-      }
-      
-      private com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopStringText buildParsed()
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        if (!isInitialized()) {
-          throw newUninitializedMessageException(
-            result).asInvalidProtocolBufferException();
-        }
-        return buildPartial();
-      }
-      
-      public com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopStringText buildPartial() {
-        if (result == null) {
-          throw new IllegalStateException(
-            "build() has already been called on this Builder.");
-        }
-        com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopStringText returnMe = result;
-        result = null;
-        return returnMe;
-      }
-      
-      public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopStringText) {
-          return mergeFrom((com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopStringText)other);
-        } else {
-          super.mergeFrom(other);
-          return this;
-        }
-      }
-      
-      public Builder mergeFrom(com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopStringText other) {
-        if (other == com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopStringText.getDefaultInstance()) return this;
-        if (other.hasText()) {
-          setText(other.getText());
-        }
-        this.mergeUnknownFields(other.getUnknownFields());
-        return this;
-      }
-      
-      public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder(
-            this.getUnknownFields());
-        while (true) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              this.setUnknownFields(unknownFields.build());
-              return this;
-            default: {
-              if (!parseUnknownField(input, unknownFields,
-                                     extensionRegistry, tag)) {
-                this.setUnknownFields(unknownFields.build());
-                return this;
-              }
-              break;
-            }
-            case 10: {
-              setText(input.readString());
-              break;
-            }
-          }
-        }
-      }
-      
-      
-      // required string text = 1;
-      public boolean hasText() {
-        return result.hasText();
-      }
-      public java.lang.String getText() {
-        return result.getText();
-      }
-      public Builder setText(java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  result.hasText = true;
-        result.text_ = value;
-        return this;
-      }
-      public Builder clearText() {
-        result.hasText = false;
-        result.text_ = getDefaultInstance().getText();
-        return this;
-      }
-      
-      // @@protoc_insertion_point(builder_scope:scope.DesktopStringText)
-    }
-    
-    static {
-      defaultInstance = new DesktopStringText(true);
-      com.opera.core.systems.scope.protos.DesktopWmProtos.internalForceInit();
-      defaultInstance.initFields();
-    }
-    
-    // @@protoc_insertion_point(class_scope:scope.DesktopStringText)
   }
   
   public static final class DesktopWindowID extends
@@ -4006,16 +3516,6 @@ public final class DesktopWmProtos {
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_scope_QuickWidgetInfo_fieldAccessorTable;
   private static com.google.protobuf.Descriptors.Descriptor
-    internal_static_scope_DesktopStringID_descriptor;
-  private static
-    com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_scope_DesktopStringID_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
-    internal_static_scope_DesktopStringText_descriptor;
-  private static
-    com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_scope_DesktopStringText_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
     internal_static_scope_DesktopWindowID_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
@@ -4056,32 +3556,32 @@ public final class DesktopWmProtos {
       "dowState\022\014\n\010RESTORED\020\000\022\r\n\tMINIMIZED\020\001\022\r\n",
       "\tMAXIMIZED\020\002\022\016\n\nFULLSCREEN\020\003\"H\n\021DesktopW" +
       "indowRect\022\t\n\001x\030\001 \002(\r\022\t\n\001y\030\002 \002(\r\022\r\n\005width" +
-      "\030\003 \002(\r\022\016\n\006height\030\004 \002(\r\"\351\003\n\017QuickWidgetIn" +
+      "\030\003 \002(\r\022\016\n\006height\030\004 \002(\r\"\247\004\n\017QuickWidgetIn" +
       "fo\022\014\n\004name\030\001 \002(\t\0224\n\004type\030\002 \002(\0162&.scope.Q" +
       "uickWidgetInfo.QuickWidgetType\022\017\n\007visibl" +
       "e\030\003 \002(\010\022\014\n\004text\030\004 \002(\t\022\r\n\005value\030\005 \002(\r\022\017\n\007" +
       "enabled\030\006 \002(\010\022\023\n\013defaultLook\030\007 \002(\010\022\023\n\013fo" +
       "cusedLook\030\010 \002(\010\022&\n\004rect\030\t \002(\0132\030.scope.De" +
       "sktopWindowRect\022\016\n\006parent\030\n \001(\t\022\013\n\003row\030\013" +
-      " \001(\r\022\013\n\003col\030\014 \001(\r\"\326\001\n\017QuickWidgetType\022\013\n",
-      "\007UNKNOWN\020\000\022\n\n\006BUTTON\020\001\022\014\n\010CHECKBOX\020\002\022\r\n\t" +
-      "DIALOGTAB\020\003\022\014\n\010DROPDOWN\020\004\022\r\n\tEDITFIELD\020\005" +
-      "\022\t\n\005LABEL\020\006\022\017\n\013RADIOBUTTON\020\007\022\020\n\014ADDRESSF" +
-      "IELD\020\010\022\n\n\006SEARCH\020\t\022\013\n\007TOOLBAR\020\n\022\014\n\010TREEV" +
-      "IEW\020\013\022\014\n\010TREEITEM\020\014\022\r\n\tTABBUTTON\020\r\"#\n\017De" +
-      "sktopStringID\022\020\n\010enumText\030\001 \002(\t\"!\n\021Deskt" +
-      "opStringText\022\014\n\004text\030\001 \002(\t\"#\n\017DesktopWin" +
-      "dowID\022\020\n\010windowID\030\001 \002(\r\"A\n\021DesktopWindow" +
-      "List\022,\n\nwindowList\030\001 \003(\0132\030.scope.Desktop" +
-      "WindowInfo\"F\n\023QuickWidgetInfoList\022/\n\017qui",
-      "ckwidgetList\030\001 \003(\0132\026.scope.QuickWidgetIn" +
-      "fo\"\305\001\n\021QuickWidgetSearch\022(\n\010windowID\030\001 \002" +
-      "(\0132\026.scope.DesktopWindowID\022B\n\nsearchType" +
-      "\030\002 \002(\0162..scope.QuickWidgetSearch.QuickWi" +
-      "dgetSearchType\022\014\n\004data\030\003 \002(\t\"4\n\025QuickWid" +
-      "getSearchType\022\010\n\004NAME\020\000\022\010\n\004TEXT\020\001\022\007\n\003POS" +
-      "\020\002B8\n#com.opera.core.systems.scope.proto" +
-      "sB\017DesktopWmProtosH\001"
+      " \001(\r\022\013\n\003col\030\014 \001(\r\022\024\n\014visible_text\030\r \001(\t\022",
+      "\027\n\017additional_text\030\016 \001(\t\"\345\001\n\017QuickWidget" +
+      "Type\022\013\n\007UNKNOWN\020\000\022\n\n\006BUTTON\020\001\022\014\n\010CHECKBO" +
+      "X\020\002\022\r\n\tDIALOGTAB\020\003\022\014\n\010DROPDOWN\020\004\022\r\n\tEDIT" +
+      "FIELD\020\005\022\t\n\005LABEL\020\006\022\017\n\013RADIOBUTTON\020\007\022\020\n\014A" +
+      "DDRESSFIELD\020\010\022\n\n\006SEARCH\020\t\022\013\n\007TOOLBAR\020\n\022\014" +
+      "\n\010TREEVIEW\020\013\022\014\n\010TREEITEM\020\014\022\r\n\tTABBUTTON\020" +
+      "\r\022\r\n\tTHUMBNAIL\020\016\"#\n\017DesktopWindowID\022\020\n\010w" +
+      "indowID\030\001 \002(\r\"A\n\021DesktopWindowList\022,\n\nwi" +
+      "ndowList\030\001 \003(\0132\030.scope.DesktopWindowInfo" +
+      "\"F\n\023QuickWidgetInfoList\022/\n\017quickwidgetLi",
+      "st\030\001 \003(\0132\026.scope.QuickWidgetInfo\"\305\001\n\021Qui" +
+      "ckWidgetSearch\022(\n\010windowID\030\001 \002(\0132\026.scope" +
+      ".DesktopWindowID\022B\n\nsearchType\030\002 \002(\0162..s" +
+      "cope.QuickWidgetSearch.QuickWidgetSearch" +
+      "Type\022\014\n\004data\030\003 \002(\t\"4\n\025QuickWidgetSearchT" +
+      "ype\022\010\n\004NAME\020\000\022\010\n\004TEXT\020\001\022\007\n\003POS\020\002B8\n#com." +
+      "opera.core.systems.scope.protosB\017Desktop" +
+      "WmProtosH\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -4109,27 +3609,11 @@ public final class DesktopWmProtos {
           internal_static_scope_QuickWidgetInfo_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_scope_QuickWidgetInfo_descriptor,
-              new java.lang.String[] { "Name", "Type", "Visible", "Text", "Value", "Enabled", "DefaultLook", "FocusedLook", "Rect", "Parent", "Row", "Col", },
+              new java.lang.String[] { "Name", "Type", "Visible", "Text", "Value", "Enabled", "DefaultLook", "FocusedLook", "Rect", "Parent", "Row", "Col", "VisibleText", "AdditionalText", },
               com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo.class,
               com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo.Builder.class);
-          internal_static_scope_DesktopStringID_descriptor =
-            getDescriptor().getMessageTypes().get(3);
-          internal_static_scope_DesktopStringID_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_scope_DesktopStringID_descriptor,
-              new java.lang.String[] { "EnumText", },
-              com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopStringID.class,
-              com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopStringID.Builder.class);
-          internal_static_scope_DesktopStringText_descriptor =
-            getDescriptor().getMessageTypes().get(4);
-          internal_static_scope_DesktopStringText_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_scope_DesktopStringText_descriptor,
-              new java.lang.String[] { "Text", },
-              com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopStringText.class,
-              com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopStringText.Builder.class);
           internal_static_scope_DesktopWindowID_descriptor =
-            getDescriptor().getMessageTypes().get(5);
+            getDescriptor().getMessageTypes().get(3);
           internal_static_scope_DesktopWindowID_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_scope_DesktopWindowID_descriptor,
@@ -4137,7 +3621,7 @@ public final class DesktopWmProtos {
               com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID.class,
               com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID.Builder.class);
           internal_static_scope_DesktopWindowList_descriptor =
-            getDescriptor().getMessageTypes().get(6);
+            getDescriptor().getMessageTypes().get(4);
           internal_static_scope_DesktopWindowList_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_scope_DesktopWindowList_descriptor,
@@ -4145,7 +3629,7 @@ public final class DesktopWmProtos {
               com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowList.class,
               com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowList.Builder.class);
           internal_static_scope_QuickWidgetInfoList_descriptor =
-            getDescriptor().getMessageTypes().get(7);
+            getDescriptor().getMessageTypes().get(5);
           internal_static_scope_QuickWidgetInfoList_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_scope_QuickWidgetInfoList_descriptor,
@@ -4153,7 +3637,7 @@ public final class DesktopWmProtos {
               com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfoList.class,
               com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfoList.Builder.class);
           internal_static_scope_QuickWidgetSearch_descriptor =
-            getDescriptor().getMessageTypes().get(8);
+            getDescriptor().getMessageTypes().get(6);
           internal_static_scope_QuickWidgetSearch_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_scope_QuickWidgetSearch_descriptor,

@@ -2,6 +2,7 @@ package com.opera.core.systems;
 
 import static org.junit.Assert.assertTrue;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.AfterClass;
@@ -23,7 +24,9 @@ public class QuickWidgetTest {
     public void testSomething(){
     	driver.waitStart();
        // driver.operaDesktopAction("Open url in new page", "1");
-    	driver.keyPress("t", ModifierPressed.CTRL);
+    	ArrayList<ModifierPressed> list = new ArrayList();
+    	list.add(ModifierPressed.CTRL);
+    	driver.keyPress("t", list);
     	System.out.println("Done keypress");
         //driver.waitForWindowShown("");
         //driver.close();
@@ -33,7 +36,7 @@ public class QuickWidgetTest {
         System.out.println("Window name = " + driver.getWindowName(win_id));
         List<QuickWindow> windows = driver.getWindowList();
         QuickWindow window = driver.getWindow("Document window");
-        List<QuickWidget> list = driver.getQuickWidgetList("Document window");
+        List<QuickWidget> list2 = driver.getQuickWidgetList("Document window");
         
     }
    
