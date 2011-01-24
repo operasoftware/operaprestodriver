@@ -32,7 +32,6 @@ import java.util.Scanner;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Logger;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.Cookie;
@@ -77,8 +76,8 @@ import com.opera.core.systems.settings.OperaDriverSettings;
 public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, FindsByXPath, FindsByName, FindsByTagName, FindsByClassName,
 		FindsByCssSelector, SearchContext, JavascriptExecutor {
 
-  // These are "protected" and not "private" so that we can extend this class
-  // and add methods to access these variable in tests
+	// These are "protected" and not "private" so that we can extend this class
+	// and add methods to access these variable in tests
 	protected OperaDriverSettings settings;
 	protected OperaRunner operaRunner;
 
@@ -91,14 +90,14 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 	protected ICookieManager cookieManager;
 	protected ScopeServices services;
 	protected ScopeActions actionHandler;
-	
+
 	protected Set<Integer> objectIds = new HashSet<Integer>();
 
-	
+
 	public OperaDriver() {
 		this(null);
 	}
-	
+
 	/**
 	 * Constructor that starts opera.
 	 */
@@ -210,7 +209,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 	public String getCurrentUrl() {
 		return debugger.executeJavascript("return document.location.href");
 	}
-	
+
 	private void gc() {
     	debugger.releaseObjects();
     	objectIds.clear();
@@ -600,7 +599,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 		public void deleteCookie(Cookie cookie) {
 			if(cookieManager == null)
 				throw new UnsupportedOperationException("Deleting cookies are not supported without the cookie-manager service");
-			
+
 			cookieManager.removeCookie(cookie.getDomain(), cookie.getPath(), cookie.getName());
 			gc();
 			/*
@@ -613,7 +612,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 		public void deleteAllCookies() {
 			if(cookieManager == null)
 				throw new UnsupportedOperationException("Deleting cookies are not supported without the cookie-manager service");
-			
+
 			cookieManager.removeAllCookies();
 			/*
 			Set<Cookie> cookies = getCookies();
@@ -626,7 +625,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 		public Set<Cookie> getCookies() {
 			if(cookieManager == null)
 				throw new UnsupportedOperationException("Setting cookies are not supported without the cookie-manager service");
-			
+
 			return cookieManager.getCookie(debugger.executeJavascript("window.location.hostname"), null);
 		}
 
@@ -640,12 +639,12 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 
 		public Cookie getCookieNamed(String name) {
 			Set<Cookie> allCookies = getCookies();
-			
+
 			for (Cookie cookie : allCookies) {
 				if(cookie.getName().equals(name))
 					return cookie;
 			}
-			
+
 			return null;
 			/*
 			String value = debugger.executeJavascript("var getCookieNamed = function(key)\n"+
@@ -669,7 +668,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 			OperaIntervals.WAIT_FOR_ELEMENT.setValue(TimeUnit.MILLISECONDS.convert(time, unit));
 			return this;
 		}
-		
+
 	}
 
 	public void operaAction(String using, String... params) {
@@ -684,7 +683,8 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 	/**
 	 * @deprecated Don't use sleep!
 	 */
-	private static void sleep(long timeInMillis) {
+  @Deprecated
+  private static void sleep(long timeInMillis) {
 		try {
 			Thread.sleep(timeInMillis);
 		} catch (InterruptedException e) {
@@ -732,16 +732,16 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 
 	private final List<WebElement> findMultipleElements(String script, String type) {
 		Integer id;
-		
+
 		long start = System.currentTimeMillis();
 		int count = 0;
 
 		List<WebElement> elements;
-		
+
 		do {
 			id = debugger.getObject(script);
 			elements = processElements(id);
-			
+
 			if(elements != null)
 				count = elements.size();
 
@@ -752,7 +752,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 		} while (true);
 
 		OperaIntervals.WAIT_FOR_ELEMENT.setValue(0L);
-		
+
 		if (id != null) {
 			return elements;
 		} else {
@@ -774,21 +774,21 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 		} while (true);
 
 		OperaIntervals.WAIT_FOR_ELEMENT.setValue(0L);
-		
+
 		if (isAvailable) {
 			Integer id = debugger.getObject(script);
 			Boolean isStale = Boolean.valueOf(debugger.callFunctionOnObject("locator.parentNode == undefined", id));
-			
+
 			if(isStale)
 				throw new StaleElementReferenceException("This element is no longer part of DOM");
-			
+
 			return new OperaWebElement(this, id);
 		} else {
 			throw new NoSuchElementException("Cannot find element(s) with " + type);
 		}
 	}
-	
-	
+
+
 	boolean hasTimeRemaining(long start) {
 		return System.currentTimeMillis() - start < OperaIntervals.WAIT_FOR_ELEMENT.getValue();
 	}
@@ -805,12 +805,12 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 
 		 * FIXME: This _needs_ be cleaned up.  All things related to 
 		 * `timeout` should, ideally, be removed and handled elsewhere.
-		 
+
 
 		//
 		// * No reason to wait if we have idle control.  Builds without
 		// * OperaIdle enabled will fail if timeout is 1 or less.
-		// 
+		//
 		if(services.isOperaIdleAvailable()) {
 			timeout = 1;
 		} else if (!services.isOperaIdleAvailable() && timeout <= 1) {
