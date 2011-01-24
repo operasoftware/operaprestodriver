@@ -1,28 +1,39 @@
+/* Copyright (C) 2009-2011 Opera Software ASA.  All rights reserved. */
 package com.opera.core.systems.model;
 
+/**
+ * A canvas object to use in taking screenshots of Opera's viewport.
+ * 
+ */
 public class Canvas {
 	protected int x;
 	protected int y;
-	protected int w;
-	protected int h;
-	
-	public Canvas(int x, int y, int w, int h) {
-		this.x = x;
-		this.y = y;
-		this.w = w;
-		this.h = h;
-	}
-	
-	public Canvas() {
-	}
-	
+	protected int width;
+	protected int height;
+
+	// Should the screenshot be relative to top of the page or viewport
 	protected boolean viewPortRelative;
 
+	public Canvas(int x, int y, int width, int height) {
+		this.x = x;
+		this.y = y;
+		this.width = width;
+		this.height = height;
+	}
+
+	public Canvas() {
+	}
 
 	public boolean isViewPortRelative() {
 		return viewPortRelative;
 	}
 
+	/**
+	 * Sets the screenshots to be relative to screen or to window, default is
+	 * window.
+	 * 
+	 * @param viewPortRelative true if relative to window
+	 */
 	public void setViewPortRelative(boolean viewPortRelative) {
 		this.viewPortRelative = viewPortRelative;
 	}
@@ -43,41 +54,41 @@ public class Canvas {
 		this.y = y;
 	}
 
-	public int getW() {
-		return w;
+	public int getWidth() {
+		return width;
 	}
 
-	public void setW(int w) {
-		this.w = w;
+	public void setWidth(int width) {
+		this.width = width;
 	}
 
-	public int getH() {
-		return h;
+	public int getHeight() {
+		return height;
 	}
 
-	public void setH(int h) {
-		this.h = h;
+	public void setHeight(int height) {
+		this.height = height;
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
-		if(obj == null || !(obj instanceof Canvas))
+		if (obj == null || !(obj instanceof Canvas))
 			return false;
-		
+
 		Canvas canvas = (Canvas) obj;
-		return (getX() == canvas.getX() && getY() == canvas.getY() &&
-				getH() == canvas.getH() && getW() == canvas.getW());
+		return (getX() == canvas.getX() && getY() == canvas.getY()
+				&& getHeight() == canvas.getHeight()
+				&& getWidth() == canvas.getWidth());
 	}
-	
+
 	@Override
 	public int hashCode() {
-		// TODO implement
 		return super.hashCode();
 	}
 
 	@Override
 	public String toString() {
-		return "Canvas [x=" + x + ", y=" + y + ", w=" + w + ", h=" + h
-				+ ", viewPortRelative=" + viewPortRelative + "]";
+		return "Canvas [x=" + x + ", y=" + y + ", width=" + width + ", height="
+				+ height + ", viewPortRelative=" + viewPortRelative + "]";
 	}
 }

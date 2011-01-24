@@ -67,8 +67,8 @@ public class PbActionHandler extends ScopeActions {
         canvas.setY(0);
 
         String[] dimensions = scriptDebugger.executeJavascript("return (window.innerWidth + \",\" + window.innerHeight);").split(",");
-        canvas.setH(Integer.valueOf(dimensions[1]));
-        canvas.setW(Integer.valueOf(dimensions[0]));
+        canvas.setHeight(Integer.valueOf(dimensions[1]));
+        canvas.setWidth(Integer.valueOf(dimensions[0]));
         canvas.setViewPortRelative(true);
 
         ScreenShotReply reply = services.getExec().screenWatcher(canvas, 1l, true);

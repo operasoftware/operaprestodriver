@@ -555,8 +555,8 @@ public class OperaWebElement implements RenderedWebElement, SearchContext, Locat
 		int h = dimension.height;
 		canvas.setX(x);
 		canvas.setY(y);
-		canvas.setH(h);
-		canvas.setW(w);
+		canvas.setHeight(h);
+		canvas.setWidth(w);
 		canvas.setViewPortRelative(true);
 		return canvas;
 	}

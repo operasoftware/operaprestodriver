@@ -202,7 +202,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 		return debugger.executeJavascript("return document.location.href");
 	}
 	
-	public void gc() {
+	private void gc() {
     	debugger.releaseObjects();
     	objectIds.clear();
 	}
@@ -408,7 +408,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 		return debugger.listFramePaths();
 	}
 	
-	public WebElement findActiveElement() {
+	private WebElement findActiveElement() {
 		return findSingleElement("document.activeElement;", "active element");
 	}
 	
@@ -584,7 +584,8 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 		}
 
 		public void deleteCookieNamed(String name) {
-			deleteCookie(new Cookie(name, ""));
+			Cookie cookie = getCookieNamed(name);
+			deleteCookie(cookie);
 		}
 
 		public void deleteCookie(Cookie cookie) {
@@ -592,6 +593,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 				throw new UnsupportedOperationException("Deleting cookies are not supported without the cookie-manager service");
 			
 			cookieManager.removeCookie(cookie.getDomain(), cookie.getPath(), cookie.getName());
+			gc();
 			/*
 			Date dateInPast = new Date(0);
 			Cookie toDelete = new Cookie(cookie.getName(), cookie.getValue(), cookie.getDomain(), cookie.getPath(), dateInPast, false);
@@ -631,7 +633,6 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 			Set<Cookie> allCookies = getCookies();
 			
 			for (Cookie cookie : allCookies) {
-				System.out.println(cookie.toString());
 				if(cookie.getName().equals(name))
 					return cookie;
 			}
