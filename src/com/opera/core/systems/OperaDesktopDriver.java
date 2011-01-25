@@ -137,11 +137,11 @@ public class OperaDesktopDriver extends OperaDriver {
 		// running opera under the launcher
 		if (this.operaRunner != null){
 			if (this.operaRunner.isOperaRunning()) {
-				// Quit Opera
-				this.operaRunner.stopOpera();
-
 				// Cut off the services connection to free the port
 				this.services.shutdown();
+
+				// Quit Opera
+				this.operaRunner.stopOpera();
 			}
 		} else {
 			// Quit with action as opera wasn't started with the launcher
