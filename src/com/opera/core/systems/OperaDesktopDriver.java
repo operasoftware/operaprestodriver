@@ -35,7 +35,32 @@ public class OperaDesktopDriver extends OperaDriver {
 	 * @param settings settings for binary path to Opera, prefs directory, and arguments
 	 */
 	public OperaDesktopDriver(OperaDriverSettings settings) {
+		// OperaDriver constructor will initialize services and start Opera
+		// if the binaryPath is set in settings (by calling init in OperaDriver)
 		super(settings);
+		initDesktopDriver();
+	}
+	
+	private void setPrefsPaths() {
+		// Opera will be running at this point so we can retrieve and
+		// store all the profile folders
+		settings.SetLargePrefsFolder(getLargePreferencesPath());
+		settings.SetSmallPrefsFolder(getSmallPreferencesPath());
+		settings.SetCachePrefsFolder(getCachePreferencesPath());
+		profileUtils = new ProfileUtils(settings);
+	}
+	
+	private void setServices() {
+		desktopWindowManager = services.getDesktopWindowManager();
+		systemInputManager   = services.getSystemInputManager();
+		desktopUtils         = services.getDesktopUtils();
+	}
+	
+	private void startOpera() {
+		// Reinitialize services, and start Opera if binaryLoc is set
+		super.init();		
+		setServices();
+		setPrefsPaths();
 	}
 
 	/**
@@ -46,29 +71,25 @@ public class OperaDesktopDriver extends OperaDriver {
 	 * and then restarting it under the control of the {@link OperaLauncherRunner}.
 	 *
 	 */
-	protected void init() {
-		super.init();
-
-		desktopWindowManager = services.getDesktopWindowManager();
-		systemInputManager = services.getSystemInputManager();
-		desktopUtils = services.getDesktopUtils();
-
-		// Opera will be running at this point so we can retrieve and
-		// store all the profile folders
-		settings.SetLargePrefsFolder(getLargePreferencesPath());
-		settings.SetSmallPrefsFolder(getSmallPreferencesPath());
-		settings.SetCachePrefsFolder(getCachePreferencesPath());
-		profileUtils = new ProfileUtils(settings);
+	protected void initDesktopDriver() {
+		//super.init();
+		
+		setServices();
+		setPrefsPaths();
+		
+		// Start Opera if it is not already running
 
 		// If the Opera Binary isn't set we are assuming Opera is up and we 
 		// can ask it for the location of itself
 		if (this.settings != null && this.settings.getOperaBinaryLocation() == null
 				&& !this.settings.getNoRestart()) {
+			
 			String operaPath = getOperaPath();
 
 			logger.info("OperaBinaryLocation retrieved from Opera: " + operaPath);
 
-			if (!operaPath.isEmpty()) {
+			if (operaPath.length() > 0) {
+				
 				this.settings.setOperaBinaryLocation(operaPath);
 
 				// Get pid of Opera, needed to wait for it to quit
@@ -128,7 +149,7 @@ public class OperaDesktopDriver extends OperaDriver {
 			logger.info("OperaBinaryLocation retrieved from Opera: " + operaPath);
 
 			int pid = 0;
-			if (!operaPath.isEmpty()) {
+			if (operaPath.length() > 0) {
 				this.settings.setOperaBinaryLocation(operaPath);
 				pid = desktopUtils.getOperaPid();
 			}
@@ -567,6 +588,9 @@ public class OperaDesktopDriver extends OperaDriver {
 	 *
 	 * @param newPrefs - path to where new prefs to be copied into the prefs folders are located
 	 */
+	
+	// This presupposes Opera is already running
+	// meaning operaBinaryLocation will be set already
 	public void resetOperaPrefs(String newPrefs) {
 		// Always delete and copy over a test profile except for when running
 		// the first test which doesn't have a profile to copy over
@@ -600,9 +624,9 @@ public class OperaDesktopDriver extends OperaDriver {
 	/**
 	 *  Starts Opera. This will reinitialize services.
 	 */
-	private void startOpera() {
+	/*private void startOpera() {
 		init();
-	}
+	}*/
 }
 
 
