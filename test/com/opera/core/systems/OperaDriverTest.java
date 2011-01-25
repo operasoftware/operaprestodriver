@@ -2,18 +2,15 @@ package com.opera.core.systems;
 
 import java.awt.Dimension;
 import java.io.File;
-import java.util.Set;
 
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-
 import com.opera.core.systems.model.ScreenShotReply;
 import com.opera.core.systems.scope.internal.OperaIntervals;
 import com.opera.core.systems.settings.OperaDriverSettings;
-import com.opera.core.systems.TestOperaDriver;
 
 public class OperaDriverTest extends TestBase
 {

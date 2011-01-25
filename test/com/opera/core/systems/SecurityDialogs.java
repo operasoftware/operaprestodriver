@@ -27,6 +27,7 @@ public class SecurityDialogs extends DesktopTestBase {
 
     assertTrue("Server is t", driver.findWidgetByName(win_id, "Simple_message")
         .getText().startsWith("t"));
+
     assertTrue("Has security warning message", driver.findWidgetByName(win_id,
         "Simple_message").verifyContainsText("D_SECURITYALERT_SETUPDOWNLOAD"));
 

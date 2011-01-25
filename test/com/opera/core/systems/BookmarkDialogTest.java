@@ -12,8 +12,10 @@ public class BookmarkDialogTest extends DesktopTestBase {
 
     int win_id = driver.waitForWindowShown("Bookmark Properties Dialog");
     assertTrue("Got bookmark dialog", win_id >= 0);
+
     QuickWidget widget = driver.findWidgetByName(-1, "label_for_Nick_edit");
     assertTrue("Has name edit", widget != null);
+
     QuickWidget qw = driver.findWidgetByName(-1, "label_for_Name_edit");
     System.out.println("By name: " + qw.getText());
     qw.verifyText("DI_ID_HLFILEPROP_FNAME_LABEL");
