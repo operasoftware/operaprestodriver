@@ -32,6 +32,7 @@ import java.util.Scanner;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Logger;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.Cookie;
@@ -54,10 +55,10 @@ import org.openqa.selenium.internal.FindsByTagName;
 import org.openqa.selenium.internal.FindsByXPath;
 
 import com.opera.core.systems.interaction.OperaAction;
-import com.opera.core.systems.interaction.UserInteraction;
 import com.opera.core.systems.model.ScopeActions;
 import com.opera.core.systems.model.ScreenShotReply;
 import com.opera.core.systems.model.ScriptResult;
+import com.opera.core.systems.interaction.UserInteraction;
 import com.opera.core.systems.runner.OperaRunner;
 import com.opera.core.systems.runner.launcher.OperaLauncherRunner;
 import com.opera.core.systems.scope.exceptions.CommunicationException;
@@ -65,8 +66,6 @@ import com.opera.core.systems.scope.exceptions.FatalException;
 import com.opera.core.systems.scope.handlers.PbActionHandler;
 import com.opera.core.systems.scope.internal.OperaIntervals;
 import com.opera.core.systems.scope.services.ICookieManager;
-import com.opera.core.systems.scope.protos.PrefsProtos.Pref;
-import com.opera.core.systems.scope.protos.PrefsProtos.GetPrefArg.Mode;
 import com.opera.core.systems.scope.services.IEcmaScriptDebugger;
 import com.opera.core.systems.scope.services.IOperaExec;
 import com.opera.core.systems.scope.services.IPrefs;
@@ -81,7 +80,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 	protected OperaDriverSettings settings;
 	protected OperaRunner operaRunner;
 
-	private boolean isDriverStarted = false; //Does this driver have a started opera? Makes it possible to restart opera without throwing out the driver.
+	private final boolean isDriverStarted = false; //Does this driver have a started opera? Makes it possible to restart opera without throwing out the driver.
 
 	protected IEcmaScriptDebugger debugger;
 	protected IOperaExec exec;
@@ -146,7 +145,6 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 		versions.put("exec", "2.0");
 		versions.put("core", "1.0");
 		versions.put("cookie-manager", "1.0");
-		versions.put("prefs", "1.0");
 		return versions;
 	}
 
@@ -803,7 +801,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 
 	public ScreenShotReply saveScreenshot(Canvas canvas, long timeout, boolean includeImage, String... hashes) {
 
-		 * FIXME: This _needs_ be cleaned up.  All things related to 
+		 * FIXME: This _needs_ be cleaned up.  All things related to
 		 * `timeout` should, ideally, be removed and handled elsewhere.
 
 
@@ -1002,20 +1000,9 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 	protected ScopeServices getScopeServices() {
 		return services;
 	}
-    
-	public String getPref(String section, String key) {
-		return services.getPrefs().getPref(section, key, Mode.CURRENT);
-	}
 
-	public String getDefaultPref(String section, String key) {
-		return services.getPrefs().getPref(section, key, Mode.DEFAULT);
-	}
-
-	public List<Pref> listPrefs(boolean sort, String section) {
-		return services.getPrefs().listPrefs(sort, section);
-	}
-	
-	public void setPref(String section, String key, String value) {
-		services.getPrefs().setPrefs(section, key, value);
+	public OperaRunner getRunner() {
+		return operaRunner;
 	}
 }
+
