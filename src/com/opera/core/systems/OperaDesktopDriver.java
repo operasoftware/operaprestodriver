@@ -229,7 +229,19 @@ public class OperaDesktopDriver extends OperaDriver {
 		//return desktopWindowManager.getOpenWindowCount();
 		return 0;
 	}
-	
+
+	 /**
+   * Execute opera action
+   * @param using - action_name
+   */
+  public void operaDesktopAction(String using) {
+    exec.action(using);
+  }
+
+  public void operaDesktopAction(String using, String params) {
+    exec.action(using, params);
+  }
+
 	/**
 	 * Execute opera action
 	 * @param using - action_name
@@ -323,7 +335,7 @@ public class OperaDesktopDriver extends OperaDriver {
 	/**
 	 * Wait until the window given by the @param win_name is closed, and then returns the
 	 * window id of this window
-	 * 
+	 *
 	 * @param win_name - window to wait for shown event on
 	 * @return id of window
 	 * @throws CommuncationException if no connection
@@ -331,18 +343,18 @@ public class OperaDesktopDriver extends OperaDriver {
 	public int waitForWindowClose(String win_name) {
 		if (services.getConnection() == null)
 			throw new CommunicationException("waiting for a window failed because Opera is not connected.");
-		
+
 		return services.waitForDesktopWindowClosed(win_name, OperaIntervals.PAGE_LOAD_TIMEOUT.getValue());
 	}
-	
+
 	public int waitForWindowLoaded(String win_name) {
 		if (services.getConnection() == null)
 			throw new CommunicationException("waiting for a window failed because Opera is not connected.");
-		
+
 		return services.waitForDesktopWindowLoaded(win_name, OperaIntervals.PAGE_LOAD_TIMEOUT.getValue());
 	}
-	
-	
+
+
 }
 
 
