@@ -64,8 +64,9 @@ public class StpConnection implements SocketListener {
     @Override
     public void finalize() throws Throwable {
     	logger.severe("STPConnection cleanup");
-        if (socketChannel != null)
+        if (socketChannel != null && socketChannel.isOpen()) {
             close();
+        }
         super.finalize();
     }
 
