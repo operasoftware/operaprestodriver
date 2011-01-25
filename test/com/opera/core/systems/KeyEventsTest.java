@@ -87,4 +87,14 @@ public class KeyEventsTest extends TestBase {
     driver.key("backspace");
     Assert.assertTrue("backspace", logContains("press, 8"));
   }
+
+  @Test
+  public void testReleaseKeys() throws Exception {
+    driver.keyDown("control");
+    driver.keyDown("shift");
+
+    driver.releaseKeys();
+    Assert.assertTrue("released", logContains("up, 16"));
+    Assert.assertTrue("released", logContains("up, 17"));
+  }
 }
