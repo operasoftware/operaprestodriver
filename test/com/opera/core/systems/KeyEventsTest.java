@@ -67,6 +67,7 @@ public class KeyEventsTest extends TestBase {
     Assert.assertTrue("control down", logContains("down, 17"));
     Assert.assertTrue("shift down", logContains("down, 16"));
     Assert.assertTrue("control up", logContains("up, 17"));
+    // shift should not have come up
     Assert.assertFalse("shift up", logContains("up, 16"));
   }
 
@@ -89,12 +90,37 @@ public class KeyEventsTest extends TestBase {
   }
 
   @Test
+  public void testAffectsOpera() throws Exception {
+    // Fixture that doesn't preventDefault
+    getFixture("test.html");
+    ((OperaWebElement) driver.findElementById("input_email")).sendKeys("before refresh");
+
+    driver.key("f5");
+    //driver.waitForLoadToComplete();
+    Assert.assertEquals("", driver.findElementById("input_email").getValue());
+  }
+
+  @Test
   public void testReleaseKeys() throws Exception {
     driver.keyDown("control");
     driver.keyDown("shift");
 
     driver.releaseKeys();
+
     Assert.assertTrue("released", logContains("up, 16"));
     Assert.assertTrue("released", logContains("up, 17"));
+  }
+
+  @Test
+  public void testReleaseAndPressKey() throws Exception {
+    driver.keyDown("control");
+    driver.releaseKeys();
+
+    Assert.assertTrue("released", logContains("down, 17"));
+    Assert.assertTrue("released", logContains("up, 17"));
+
+    driver.keyDown("control");
+
+    Assert.assertTrue("released", logEl.getValue().endsWith("down, 17, , ctrl\n"));
   }
 }
