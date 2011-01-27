@@ -57,7 +57,7 @@ abstract public class TestBase {
 
   // / Get the URL of the given fixture file
   protected String fixture(String file) {
-    return fixture_dir + file;
+    return "file://localhost"+fixture_dir + file;
   }
 
   // / Navigate to the given fixture file
