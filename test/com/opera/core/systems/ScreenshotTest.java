@@ -15,6 +15,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.opera.core.systems.model.ScreenShotReply;
+
 public class ScreenshotTest extends TestBase {
 
   private OperaWebElement text;
@@ -102,8 +104,6 @@ public class ScreenshotTest extends TestBase {
     getFixture("timer.html");
     OperaWebElement text = (OperaWebElement) driver.findElementById("one");
 
-    driver.saveScreenshot(timeout, hashes)
-
     String original = text.saveScreenshot("/tmp/one.png");
     String changed = text.saveScreenshot("/tmp/two.png", 2000);
 
@@ -118,7 +118,30 @@ public class ScreenshotTest extends TestBase {
     File one = new File("/tmp/one.png");
     File two = new File("/tmp/two.png");
 
+    // Confirm that a png is not returned when the hash matches
     Assert.assertNotSame(0, one.length());
     Assert.assertEquals(0, two.length());
+  }
+
+  @Test
+  public void testRealPng() throws Exception {
+    ScreenShotReply reply = driver.saveScreenshot(0);
+    byte[] png = reply.getPng();
+
+    System.out.println("bytes:");
+    System.out.println(png);
+
+    Assert.assertTrue("PNG magic bytes match",
+       png[0] == (byte) 0x89 &&
+       png[1] == (byte) 0x50 &&
+       png[2] == (byte) 0x4E &&
+       png[3] == (byte) 0x47 &&
+       png[4] == (byte) 0x0D &&
+       png[5] == (byte) 0x0A &&
+       png[6] == (byte) 0x1A &&
+       png[7] == (byte) 0x0A
+    );
+
+
   }
 }
