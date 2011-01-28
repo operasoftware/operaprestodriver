@@ -10,22 +10,19 @@ public class OperaActionTest extends TestBase {
     driver.operaAction("this action does exist");
   }
 
-  // FIXME does not fail
-  @Test
+  // I think the next two tests should throw exceptions... but I'm not sure
+  @Test(expected=org.openqa.selenium.WebDriverException.class)
   public void testMissingParam() throws Exception {
     driver.operaAction("Set preference");
   }
-
-  // FIXME does not fail
-  @Test
+  @Test(expected=org.openqa.selenium.WebDriverException.class)
   public void testExtraParam() throws Exception {
     driver.operaAction("Go to end", "an", "extra", "param");
   }
 
   /*
-   * The tests below test the commonly used Opera actions
+   * The tests below test some of the commonly used Opera actions
    */
-
   @Test
   public void testGo() throws Exception {
     driver.operaAction("Go", fixture("test.html"));
