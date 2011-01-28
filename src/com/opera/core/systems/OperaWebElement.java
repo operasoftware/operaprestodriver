@@ -119,6 +119,9 @@ public class OperaWebElement implements RenderedWebElement, SearchContext, Locat
     	executeMethod("locator.blur()");
 	}
 	
+	/**
+	 * Right clicks on the element.
+	 */
 	public void rightClick() {
 		parent.actionHandler.rightClick(this);
 	}
@@ -129,28 +132,45 @@ public class OperaWebElement implements RenderedWebElement, SearchContext, Locat
 		execService.mouseAction(point.x, point.y);
 	}
 	
+	/**
+	 * Moves the mouse from the top left of the element to the top left of the
+	 * page, generating a mouseOut event.
+	 */
 	public void mouseOut() {
 		Point point = this.getLocation();
 		execService.mouseAction(point.x, point.y);
 		execService.mouseAction(0, 0);
 	}
 	
+	/**
+	 * Presses the left mouse button down on the top left of the element.
+	 */
 	public void mouseDown() {
 		Point point = this.getLocation();
 		execService.mouseAction(point.x, point.y, OperaMouseKeys.LEFT_DOWN);
 	}
 	
 	//TODO add check if mouse not down?
+	/**
+	 * Releases the left mouse button at the top left of the element.
+	 */
 	public void mouseUp() {
 		Point point = this.getLocation();
 		execService.mouseAction(point.x, point.y, OperaMouseKeys.LEFT_DOWN);
 	}
 	
+	/**
+	 * Click this element many times.
+	 * @param times The number of times to click
+	 */
 	public void click(int times) {
             Point point = this.getLocation();
             execService.mouseAction(point.x, point.y, OperaMouseKeys.LEFT.getValue(), times);
 	}
 	
+	/**
+	 * Click the middle mouse button at the top left of the element.
+	 */
 	public void middleClick() {
 		Point point = this.getLocation();
 		execService.mouseAction(point.x, point.y, OperaMouseKeys.MIDDLE);
@@ -171,6 +191,11 @@ public class OperaWebElement implements RenderedWebElement, SearchContext, Locat
 		//parent.gc();
 	}
 	
+	/**
+	 * Click the element at the given x, y offset from the top left. 
+	 * @param x The distance from the left to click
+	 * @param y The distance from the top to click
+	 */
 	public void click(int x, int y) {
 		parent.actionHandler.click(this, x, y);
 		parent.waitForLoadToComplete();
@@ -203,6 +228,10 @@ public class OperaWebElement implements RenderedWebElement, SearchContext, Locat
 		return callMethod("locator.getAttribute('" + attribute + "')");
 	}
 
+	/**
+	 * Get the tag name of this element.
+	 * @return The tag name in upper-case
+	 */
 	public String getElementName() {
 		return callMethod("locator.nodeName");
 	}
@@ -271,6 +300,10 @@ public class OperaWebElement implements RenderedWebElement, SearchContext, Locat
 		return (Boolean) evaluateMethod("return locator.checked != null ? locator.checked : locator.selected != null ? locator.selected : false;");
 	}
 	
+	/**
+	 * @deprecated Use {@link #isDisplayed()} instead
+	 */
+	@Deprecated
 	public boolean isVisible(){
 		return isDisplayed();//(Boolean) evaluateMethod("return (locator.offsetWidth > 0)"); 
 	}
@@ -497,10 +530,24 @@ public class OperaWebElement implements RenderedWebElement, SearchContext, Locat
 		return saveScreenshot("", timeout, false, hashes);
 	}
 	
+	/**
+	 * Take a screenshot of the area this element covers. Saves a copy of the
+	 * image to the given filename.
+	 * @param filename The location to save the screenshot
+	 * @return The MD5 hash of the screenshot
+	 */
 	public String saveScreenshot(String filename){
 		return this.saveScreenshot(filename, 10L, true);
 	}
 	
+	/**
+   * Take a screenshot of the area this element covers. Saves a copy of the
+   * image to the given filename.
+   * @param filename The location to save the screenshot
+	 * @param timeout The number of milliseconds to wait before taking the
+	 * screenshot
+	 * @return The MD5 hash of the screenshot
+	 */
 	public String saveScreenshot(String filename,long timeout){
 		return this.saveScreenshot(filename, timeout, true);
 	}

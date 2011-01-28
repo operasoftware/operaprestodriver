@@ -64,6 +64,7 @@ import com.opera.core.systems.scope.exceptions.CommunicationException;
 import com.opera.core.systems.scope.exceptions.FatalException;
 import com.opera.core.systems.scope.handlers.PbActionHandler;
 import com.opera.core.systems.scope.internal.OperaIntervals;
+import com.opera.core.systems.scope.internal.OperaKeys;
 import com.opera.core.systems.scope.services.ICookieManager;
 import com.opera.core.systems.scope.protos.PrefsProtos.Pref;
 import com.opera.core.systems.scope.protos.PrefsProtos.GetPrefArg.Mode;
@@ -262,6 +263,9 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 		windowManager.filterActiveWindow();
 	}
 
+	/**
+	 * Closes all open windows.
+	 */
 	public void closeAll() {
 		windowManager.closeAllWindows();
 		windowManager.filterActiveWindow();
@@ -271,6 +275,9 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 		exec.action("Close page");
 	}
 
+	/**
+	 * Stops the loading of the current page.
+	 */
 	public void stop() {
 		exec.action("Stop");
 	}
@@ -669,6 +676,12 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 		
 	}
 	
+	/**
+	 * Performs a special action, such as setting an Opera preference. 
+	 * @param using The action to perform. For a list of actions call
+	 * {@link #getOperaActionList()} at run time
+	 * @param params Parameters to pass to the action call
+	 */
 	public void operaAction(String using, String... params) {
             
 		exec.action(using, params);
@@ -845,6 +858,14 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 	}
 	*/
 	
+	/**
+	 * Takes a screenshot of the whole screen, including areas outside of the 
+	 * Opera browser window.
+	 * @param timeout The number of milliseconds to wait before taking the
+	 * screenshot
+	 * @param hashes A previous screenshot MD5 hash. If it matches the hash
+	 * of this screenshot then no image data is returned.
+	 */
 	public ScreenShotReply saveScreenshot(long timeout, String... hashes)
 	{
 		/*
@@ -908,6 +929,13 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 		return services.isConnected();
 	}
 	
+	/**
+	 * Presses and releases the given key. If the key is "enter" then OperaDriver
+	 * waits for the page to finish loading.
+	 * @param key A string containing the key to press. This can be a single
+	 * character (e.g. "a") or a special key (e.g. "left"), and is matched
+	 * case insensitively. For a list of keys see {@link OperaKeys}.
+	 */
 	public void key(String key) {
 		keyDown(key);
 		keyUp(key);
@@ -918,18 +946,36 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 		}
 	}
 
+	/**
+	 * Presses and holds the given key. You cannot press a key that is already
+	 * down.
+	 * @param key The key to press. See {@link #key(String)} for more information.
+	 */
 	public void keyDown(String key) {
             exec.key(key, false);
 	}
 
+	/**
+   * Releases the given key.
+   * @param key The key to release. See {@link #key(String)} for more
+   * information.
+   */
 	public void keyUp(String key) {
             exec.key(key, true);
 	}
 
+	/**
+	 * Releases all the currently pressed keys.
+	 */
 	public void releaseKeys() {
             exec.releaseKeys();
 	}
 
+	/**
+	 * Types the given string as-is in to the browser window. To press special
+	 * keys use {@link #key(String)}. 
+	 * @param using The string to type
+	 */
 	public void type(String using) {
             exec.type(using);
 	}
