@@ -937,10 +937,6 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 	public void mouseEvent(int x, int y, int value) {
             exec.mouseAction(x, y, value, 1);
 	}
-	
-	public void addConsoleListener(IConsoleListener listener) {
-            services.addConsoleListener(listener);
-	}
 
     public void binaryStopped(int code) {
         services.onBinaryStopped(code);

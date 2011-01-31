@@ -4,7 +4,6 @@ package com.opera.core.systems;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -27,12 +26,12 @@ import com.opera.core.systems.scope.protos.ScopeProtos.ServiceSelection;
 import com.opera.core.systems.scope.protos.UmsProtos.Command;
 import com.opera.core.systems.scope.protos.UmsProtos.Response;
 import com.opera.core.systems.scope.services.ICookieManager;
-import com.opera.core.systems.scope.services.IDesktopWindowManager;
 import com.opera.core.systems.scope.services.IDesktopUtils;
+import com.opera.core.systems.scope.services.IDesktopWindowManager;
 import com.opera.core.systems.scope.services.IEcmaScriptDebugger;
 import com.opera.core.systems.scope.services.IOperaExec;
-import com.opera.core.systems.scope.services.IWindowManager;
 import com.opera.core.systems.scope.services.IPrefs;
+import com.opera.core.systems.scope.services.IWindowManager;
 import com.opera.core.systems.scope.services.ums.SystemInputManager;
 import com.opera.core.systems.scope.services.ums.UmsServices;
 import com.opera.core.systems.scope.stp.StpConnection;
@@ -52,8 +51,6 @@ public class ScopeServices implements IConnectionHandler {
 	private ICookieManager cookieManager;
 	
 	private Map<String, String> versions;
-
-	private List<IConsoleListener> listeners;
 
 	private WaitState waitState = new WaitState();
 	private StpConnection connection = null;
@@ -80,14 +77,6 @@ public class ScopeServices implements IConnectionHandler {
 
 	public StpConnection getConnection() {
 		return connection;
-	}
-	
-	public List<IConsoleListener> getConsoleListeners() {
-		return listeners;
-	}
-	
-	public void addConsoleListener(IConsoleListener listener) {
-		listeners.add(listener);
 	}
         
 	public IEcmaScriptDebugger getDebugger() {
@@ -156,7 +145,6 @@ public class ScopeServices implements IConnectionHandler {
 	public ScopeServices(Map<String, String> versions) throws IOException {
 		this.versions = versions;
 		tagCounter = new AtomicInteger();
-		listeners = new LinkedList<IConsoleListener>();
 		stpThread = new StpThread((int) OperaIntervals.SERVER_PORT.getValue(), this, new UmsEventHandler(this));
 	}
 
