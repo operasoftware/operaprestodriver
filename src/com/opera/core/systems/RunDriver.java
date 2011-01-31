@@ -1,12 +1,8 @@
 package com.opera.core.systems;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.NotFoundException;
-import org.openqa.selenium.WebDriverException;
-import org.openqa.selenium.WebElement;
-
-import com.opera.core.systems.OperaDriver;
-import com.opera.core.systems.OperaWebElement;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 import com.opera.core.systems.scope.protos.SystemInputProtos.ModifierPressed;
 import com.opera.core.systems.scope.protos.SystemInputProtos.MouseInfo.MouseButton;
 import com.opera.core.systems.settings.OperaDriverSettings;
@@ -17,22 +13,42 @@ class RunDriver {
 	    
 	 public static void main(String[]args) {
 			OperaDriverSettings settings = new OperaDriverSettings();
+			settings.setNoQuit(true);
+			settings.setNoRestart(true);
 		 	
 			settings.setRunOperaLauncherFromOperaDriver(true);
-//			settings.setOperaBinaryLocation("/Users/minch/Documents/DesktopDev/Kjevik/work/output/Debug/Opera.app/Contents/MacOS/Opera");
+			//settings.setOperaBinaryLocation("/home/karianne/work/auto_common/run/lib/opera/opera");
 			settings.setOperaBinaryArguments("-watirtest");
-			settings.setOperaLauncherBinary("/Users/minch/Documents/DesktopDev/OperaWatir/opera-watir/utils/launchers/launcher-mac"); // Hardcoded to Mac
+			settings.setOperaLauncherBinary("/home/karianne/ui_test/launcher/opera-launcher/projects/linux/launcher");
 			settings.setNoQuit(true);
+			
 		 
 	    	System.out.println("Create Driver");
 	        driver = new OperaDesktopDriver(settings);
 //	        driver = new OperaDriver();
 	        System.out.println(".Driver created ......");
 	        
-//	        driver.quit_opera();
-	        driver.quit_driver();
+	        for (int i = 0; i < 100; i++) {
+	        	driver.waitStart();
+	        	List<ModifierPressed> list = new ArrayList<ModifierPressed>();
+	        	driver.keyPress("t", list);
+	        	int id = driver.waitForWindowShown("Document Window");
+	        	System.out.println(" id of window shown = " + id);
+	        	
+	        	QuickWidget widget = (QuickWidget) driver.findWidgetByName(id, "pb_CloseButton");
+	        	if (widget != null) {
+	        		driver.waitStart();
+	        		widget.click(MouseButton.LEFT, 1, list);
+	        		driver.waitForWindowClose("Document Window");
+	        	}
 	        
-//	        driver.get("http://www.google.com");
+	        	driver.resetOperaPrefs("new_prefs2");
+	        	
+	        	System.out.println("-------------------------------------------------");
+	        	System.out.println("------- Runinng test no " + i + "----------------");
+	        	System.out.println("--------------------------------------------------");
+	        	
+	        }
 	        
 	        /*
 	        System.out.println("Do wait start");
