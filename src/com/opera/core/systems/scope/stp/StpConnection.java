@@ -61,6 +61,7 @@ public class StpConnection implements SocketListener {
         return true;
     }
 
+    /*
     @Override
     public void finalize() throws Throwable {
     	logger.severe("STPConnection cleanup");
@@ -69,6 +70,7 @@ public class StpConnection implements SocketListener {
         }
         super.finalize();
     }
+    */
 
     /**
      * Initializes variables in object scope, sets 'count known' to false to
