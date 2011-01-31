@@ -58,7 +58,7 @@ public class OperaDesktopDriver extends OperaDriver {
 	
 	private void startOpera() {
 		// Reinitialize services, and start Opera if binaryLoc is set
-		super.init();		
+		super.init();
 		setServices();
 		setPrefsPaths();
 	}
@@ -94,8 +94,7 @@ public class OperaDesktopDriver extends OperaDriver {
 
 				// Get pid of Opera, needed to wait for it to quit
 				int pid = desktopUtils.getOperaPid();
-
-
+				
 				// Now create the OperaLauncherRunner that we have the binary path
 				this.operaRunner = new OperaLauncherRunner(this.settings);
 
@@ -602,13 +601,14 @@ public class OperaDesktopDriver extends OperaDriver {
 			profileUtils.deleteProfile();
 			// Copy in the profile for the test (only if it exists)
 			profileUtils.copyProfile(newPrefs);
-
+		
 			// Relaunch Opera and the webdriver service connection
 			startOpera();
 		}
 
 		// No longer the first test run
 		firstTestRun = false;
+		
 	}
 
 	/**
@@ -619,6 +619,10 @@ public class OperaDesktopDriver extends OperaDriver {
 	 */
 	public void deleteOperaPrefs() {
 		profileUtils.deleteProfile();
+	}
+	
+	public int getPid() {
+		return desktopUtils.getOperaPid();
 	}
 
 	/**
