@@ -103,35 +103,35 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 		
 		if(settings != null) {
 			this.settings = settings;
-			this.operaRunner = new OperaLauncherRunner(this.settings);
+			operaRunner = new OperaLauncherRunner(this.settings);
 		
-			this.operaRunner.startOpera();
+			operaRunner.startOpera();
 		}
 		
-		this.init();
+		init();
 	}
 	
 	/**
 	 * Shutdown webdriver, will kill opera an such if running.
 	 */
 	public void shutdown(){
-		if(this.isDriverStarted)
-			this.quit();
-		this.services.shutdown();
-		this.operaRunner.shutdown();
+		if(isDriverStarted)
+			quit();
+		services.shutdown();
+		operaRunner.shutdown();
 	}
 	
 	/**
 	 * For testing override this method.
 	 */
 	protected void init() {
-		this.createScopeServices();
-		this.services.init();
-		this.debugger = services.getDebugger();
-		this.windowManager = services.getWindowManager();
-		this.exec = services.getExec();
-		this.actionHandler = new PbActionHandler(services);
-		this.cookieManager = services.getCookieManager();
+		createScopeServices();
+		services.init();
+		debugger = services.getDebugger();
+		windowManager = services.getWindowManager();
+		exec = services.getExec();
+		actionHandler = new PbActionHandler(services);
+		cookieManager = services.getCookieManager();
 		//cookieManager.updateCookieSettings();
 		prefs = services.getPrefs();
 	}
