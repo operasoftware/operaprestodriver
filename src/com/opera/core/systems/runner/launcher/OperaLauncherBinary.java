@@ -7,7 +7,6 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -21,10 +20,6 @@ public class OperaLauncherBinary extends Thread {
     private Process process;
     private WinProcess winProcess;
     private OutputWatcher watcher;
-<<<<<<< HEAD
-=======
-    private WinProcess winProcess;
->>>>>>> Testing winProcess
     private Thread outputWatcherThread;
     private List<String> commands = new ArrayList<String>();
     private static Logger logger = Logger.getLogger(OperaLauncherBinary.class.getName());
@@ -66,19 +61,12 @@ public class OperaLauncherBinary extends Thread {
 
             process = builder.start();
             builder.redirectErrorStream(true);
-<<<<<<< HEAD
 
             if(Platform.WINDOWS.is(Platform.getCurrent()))
                 winProcess = new WinProcess(process);
 
             watcher = new OutputWatcher(process, winProcess);
 
-=======
-            if(Platform.WINDOWS.is(Platform.getCurrent()))
-            	winProcess = new WinProcess(process);
-
-            watcher = new OutputWatcher(process, winProcess);
->>>>>>> Testing winProcess
             outputWatcherThread = new Thread(getThreadGroup(), watcher , "output-watcher");
             outputWatcherThread.start();
 
@@ -99,6 +87,7 @@ public class OperaLauncherBinary extends Thread {
         }
         return "";
     }
+
 
     @Override
     public void run()
