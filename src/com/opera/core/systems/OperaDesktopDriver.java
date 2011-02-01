@@ -81,8 +81,8 @@ public class OperaDesktopDriver extends OperaDriver {
 
 		// If the Opera Binary isn't set we are assuming Opera is up and we 
 		// can ask it for the location of itself
-		if (this.settings != null && this.settings.getOperaBinaryLocation() == null
-				&& !this.settings.getNoRestart()) {
+		if (settings != null && settings.getOperaBinaryLocation() == null
+				&& !settings.getNoRestart()) {
 			
 			String operaPath = getOperaPath();
 
@@ -90,19 +90,19 @@ public class OperaDesktopDriver extends OperaDriver {
 
 			if (operaPath.length() > 0) {
 				
-				this.settings.setOperaBinaryLocation(operaPath);
+				settings.setOperaBinaryLocation(operaPath);
 
 				// Get pid of Opera, needed to wait for it to quit
 				int pid = desktopUtils.getOperaPid();
 				
 				// Now create the OperaLauncherRunner that we have the binary path
-				this.operaRunner = new OperaLauncherRunner(this.settings);
+				operaRunner = new OperaLauncherRunner(settings);
 
 				// Quit and wait for opera to quit properly
-				this.services.quit(this.operaRunner, pid);
+				services.quit(operaRunner, pid);
 
 				// Delete the profile to start the first test with a clean profile
-				this.profileUtils.deleteProfile();
+				profileUtils.deleteProfile();
 
 				// Work around stop and restart Opera so the Launcher has control of it now
 				// Initialising the services will start Opera if the OperaLauncherRunner is
@@ -134,13 +134,13 @@ public class OperaDesktopDriver extends OperaDriver {
 	 */
 	public void quitOpera() {
 		// running opera under the launcher
-		if (this.operaRunner != null){
-			if (this.operaRunner.isOperaRunning()) {
+		if (operaRunner != null){
+			if (operaRunner.isOperaRunning()) {
 				// Cut off the services connection to free the port
-				this.services.shutdown();
+				services.shutdown();
 
 				// Quit Opera
-				this.operaRunner.stopOpera();
+				operaRunner.stopOpera();
 			}
 		} else {
 			// Quit with action as opera wasn't started with the launcher
@@ -149,16 +149,16 @@ public class OperaDesktopDriver extends OperaDriver {
 
 			int pid = 0;
 			if (operaPath.length() > 0) {
-				this.settings.setOperaBinaryLocation(operaPath);
+				settings.setOperaBinaryLocation(operaPath);
 				pid = desktopUtils.getOperaPid();
 			}
 
 			// Now create the OperaLauncherRunner that we have the binary path
 			// So we can control the shutdown
-			this.operaRunner = new OperaLauncherRunner(this.settings);
+			operaRunner = new OperaLauncherRunner(settings);
 
 			// Quit and wait for opera to quit properly (calls services.shutdown)
-			this.services.quit(this.operaRunner, pid);
+			services.quit(operaRunner, pid);
 
 		}
 	}
