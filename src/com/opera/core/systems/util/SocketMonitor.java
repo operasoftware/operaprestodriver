@@ -266,7 +266,7 @@ public class SocketMonitor {
         {
             if (wantedMask != 0)
             {
-                key.interestOps(wantedMask);
+                if(key.isValid()) key.interestOps(wantedMask);
             }
             else
             {
