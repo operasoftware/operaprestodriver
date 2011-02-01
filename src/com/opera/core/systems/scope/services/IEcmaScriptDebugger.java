@@ -91,7 +91,7 @@ public interface IEcmaScriptDebugger {
 	 * 
 	 * @param using Script with reference to the object "locator"
 	 * @param objectId The object to be used for injection
-	 * @return
+	 * @return The string value returned by the executed Javascript
 	 */
 	String callFunctionOnObject(String using, int objectId);
 
