@@ -15,6 +15,7 @@ public enum DesktopUtilsCommand implements ICommand {
 	GET_LARGE_PREFERENCES_PATH(3),
 	GET_SMALL_PREFERENCES_PATH(4),
 	GET_CACHE_PREFERENCES_PATH(5),
+	GET_OPERA_PID(6),
 	DEFAULT(-1);    // event
 	
 	private int code;

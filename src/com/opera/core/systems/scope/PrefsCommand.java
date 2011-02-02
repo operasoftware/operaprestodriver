@@ -6,9 +6,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public enum PrefsCommand implements ICommand {
-	    GETPREF(1),
-	    LISTPREFS(2),
-	    SETPREF(3),
+	    GET_PREF(1),
+	    LIST_PREFS(2),
+	    SET_PREF(3),
 	    DEFAULT(-1);
 	    
 	    private int code;

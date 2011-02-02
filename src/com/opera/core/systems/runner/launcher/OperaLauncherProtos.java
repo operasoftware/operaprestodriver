@@ -525,6 +525,13 @@ public final class OperaLauncherProtos {
       return com.opera.core.systems.runner.launcher.OperaLauncherProtos.internal_static_LauncherStatusRequest_fieldAccessorTable;
     }
     
+    // optional int32 processid = 1;
+    public static final int PROCESSID_FIELD_NUMBER = 1;
+    private boolean hasProcessid;
+    private int processid_ = 0;
+    public boolean hasProcessid() { return hasProcessid; }
+    public int getProcessid() { return processid_; }
+    
     private void initFields() {
     }
     public final boolean isInitialized() {
@@ -534,6 +541,9 @@ public final class OperaLauncherProtos {
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       getSerializedSize();
+      if (hasProcessid()) {
+        output.writeInt32(1, getProcessid());
+      }
       getUnknownFields().writeTo(output);
     }
     
@@ -543,6 +553,10 @@ public final class OperaLauncherProtos {
       if (size != -1) return size;
     
       size = 0;
+      if (hasProcessid()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(1, getProcessid());
+      }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
       return size;
@@ -701,6 +715,9 @@ public final class OperaLauncherProtos {
       
       public Builder mergeFrom(com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStatusRequest other) {
         if (other == com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStatusRequest.getDefaultInstance()) return this;
+        if (other.hasProcessid()) {
+          setProcessid(other.getProcessid());
+        }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
@@ -726,10 +743,32 @@ public final class OperaLauncherProtos {
               }
               break;
             }
+            case 8: {
+              setProcessid(input.readInt32());
+              break;
+            }
           }
         }
       }
       
+      
+      // optional int32 processid = 1;
+      public boolean hasProcessid() {
+        return result.hasProcessid();
+      }
+      public int getProcessid() {
+        return result.getProcessid();
+      }
+      public Builder setProcessid(int value) {
+        result.hasProcessid = true;
+        result.processid_ = value;
+        return this;
+      }
+      public Builder clearProcessid() {
+        result.hasProcessid = false;
+        result.processid_ = 0;
+        return this;
+      }
       
       // @@protoc_insertion_point(builder_scope:LauncherStatusRequest)
     }
@@ -2983,24 +3022,24 @@ public final class OperaLauncherProtos {
   static {
     java.lang.String[] descriptorData = {
       "\n\016launcher.proto\"\032\n\030LauncherHandshakeReq" +
-      "uest\"\026\n\024LauncherStartRequest\"\027\n\025Launcher" +
-      "StatusRequest\"\025\n\023LauncherStopRequest\"}\n\031" +
-      "LauncherHandshakeResponse\022\022\n\nidentifier\030" +
-      "\001 \002(\t\022\016\n\006device\030\002 \001(\t\022\020\n\010platform\030\003 \001(\t\022" +
-      "\025\n\rconfiguration\030\004 \001(\t\022\023\n\013logmessages\030\005 " +
-      "\003(\t\"\306\001\n\026LauncherStatusResponse\0222\n\006status" +
-      "\030\001 \002(\0162\".LauncherStatusResponse.StatusTy" +
-      "pe\022\020\n\010exitcode\030\002 \001(\005\022\020\n\010crashlog\030\003 \001(\014\022\023" +
-      "\n\013logmessages\030\004 \003(\t\"?\n\nStatusType\022\013\n\007RUN",
-      "NING\020\000\022\013\n\007STOPPED\020\001\022\013\n\007CRASHED\020\002\022\n\n\006FROZ" +
-      "EN\020\003\"J\n\031LauncherScreenshotRequest\022\021\n\tkno" +
-      "wnMD5s\030\001 \003(\t\022\032\n\022knownMD5sTimeoutMs\030\002 \001(\005" +
-      "\"\217\001\n\032LauncherScreenshotResponse\022\013\n\003md5\030\001" +
-      " \001(\t\022\016\n\006format\030\002 \001(\t\022\r\n\005width\030\003 \001(\005\022\016\n\006h" +
-      "eight\030\004 \001(\005\022\021\n\timagedata\030\005 \001(\014\022\r\n\005blank\030" +
-      "\006 \001(\010\022\023\n\013logmessages\030\007 \003(\tB<\n#com.opera." +
-      "core.operalauncher.protosB\023OperaLauncher" +
-      "ProtosH\001"
+      "uest\"\026\n\024LauncherStartRequest\"*\n\025Launcher" +
+      "StatusRequest\022\021\n\tprocessid\030\001 \001(\005\"\025\n\023Laun" +
+      "cherStopRequest\"}\n\031LauncherHandshakeResp" +
+      "onse\022\022\n\nidentifier\030\001 \002(\t\022\016\n\006device\030\002 \001(\t" +
+      "\022\020\n\010platform\030\003 \001(\t\022\025\n\rconfiguration\030\004 \001(" +
+      "\t\022\023\n\013logmessages\030\005 \003(\t\"\306\001\n\026LauncherStatu" +
+      "sResponse\0222\n\006status\030\001 \002(\0162\".LauncherStat" +
+      "usResponse.StatusType\022\020\n\010exitcode\030\002 \001(\005\022" +
+      "\020\n\010crashlog\030\003 \001(\014\022\023\n\013logmessages\030\004 \003(\t\"?",
+      "\n\nStatusType\022\013\n\007RUNNING\020\000\022\013\n\007STOPPED\020\001\022\013" +
+      "\n\007CRASHED\020\002\022\n\n\006FROZEN\020\003\"J\n\031LauncherScree" +
+      "nshotRequest\022\021\n\tknownMD5s\030\001 \003(\t\022\032\n\022known" +
+      "MD5sTimeoutMs\030\002 \001(\005\"\217\001\n\032LauncherScreensh" +
+      "otResponse\022\013\n\003md5\030\001 \001(\t\022\016\n\006format\030\002 \001(\t\022" +
+      "\r\n\005width\030\003 \001(\005\022\016\n\006height\030\004 \001(\005\022\021\n\timaged" +
+      "ata\030\005 \001(\014\022\r\n\005blank\030\006 \001(\010\022\023\n\013logmessages\030" +
+      "\007 \003(\tB?\n&com.opera.core.systems.runner.l" +
+      "auncherB\023OperaLauncherProtosH\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -3028,7 +3067,7 @@ public final class OperaLauncherProtos {
           internal_static_LauncherStatusRequest_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_LauncherStatusRequest_descriptor,
-              new java.lang.String[] { },
+              new java.lang.String[] { "Processid", },
               com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStatusRequest.class,
               com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStatusRequest.Builder.class);
           internal_static_LauncherStopRequest_descriptor =

@@ -47,6 +47,8 @@ public class OperaLauncherRunner implements OperaRunner{
 				stringArray.add("-display");
 				stringArray.add(":" + Integer.toString(this.settings.getOperaLauncherXvfbDisplay()));
 			}
+			if (this.settings.getNoQuit())
+				stringArray.add("-noquit");
 			stringArray.add("-bin");
 			stringArray.add(this.settings.getOperaBinaryLocation());
 			
@@ -109,9 +111,16 @@ public class OperaLauncherRunner implements OperaRunner{
 	}
 	
 	public boolean isOperaRunning() {
+		return isOperaRunning(0);
+	}
+	
+	public boolean isOperaRunning(int processId) {
 		logger.log(Level.INFO, "Get opera status");
         try {
             LauncherStatusRequest.Builder request = LauncherStatusRequest.newBuilder();
+            if (processId > 0)
+            	request.setProcessid(processId);
+            
             ResponseEncapsulation res = launcherProtocol.sendRequest(MessageType.MSG_STATUS, request.build().toByteArray());
             return handleStatusMessage(res.getResponse()) == StatusType.RUNNING;
         } catch (IOException e){

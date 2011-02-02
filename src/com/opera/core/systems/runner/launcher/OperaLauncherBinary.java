@@ -29,7 +29,7 @@ public class OperaLauncherBinary extends Thread {
         super(new ThreadGroup("run-process"), "launcher");
         commands.add(location);
 
-        if(args != null && args.length > 0) {
+        if (args != null && args.length > 0) {
             commands.addAll(Arrays.asList(args));
         }
         init();
@@ -56,14 +56,17 @@ public class OperaLauncherBinary extends Thread {
 
     public void init() {
         ProcessBuilder builder = new ProcessBuilder(commands);
+        
         try {
 
             process = builder.start();
             builder.redirectErrorStream(true);
+
             if(Platform.WINDOWS.is(Platform.getCurrent()))
                 winProcess = new WinProcess(process);
 
             watcher = new OutputWatcher(process, winProcess);
+
             outputWatcherThread = new Thread(getThreadGroup(), watcher , "output-watcher");
             outputWatcherThread.start();
 
@@ -84,6 +87,7 @@ public class OperaLauncherBinary extends Thread {
         }
         return "";
     }
+
 
     @Override
     public void run()
@@ -118,15 +122,18 @@ public class OperaLauncherBinary extends Thread {
             InputStream stream = process.getInputStream();
             while (running.get()) {
                 try {
-                    if(stream.read() == -1) return;
+                    if(stream.read() == -1) {
+                    	return;
+                    }
                 } catch (IOException e) {
                     /* ignored */
                 }
             }
         }
-
+        
         public void kill() {
             running.set(false);
+
             if(winProcess != null)
                 winProcess.killRecursively();
             else {
@@ -145,5 +152,6 @@ public class OperaLauncherBinary extends Thread {
                 logger.log(Level.SEVERE, "Could not kill process: " + e.getMessage());
             }
         }
+        
     }
 }

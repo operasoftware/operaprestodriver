@@ -15,6 +15,7 @@ import com.google.protobuf.AbstractMessage.Builder;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.opera.core.systems.model.ICommand;
+import com.opera.core.systems.runner.OperaRunner;
 import com.opera.core.systems.scope.ScopeCommand;
 import com.opera.core.systems.scope.handlers.IConnectionHandler;
 import com.opera.core.systems.scope.internal.OperaIntervals;
@@ -142,10 +143,10 @@ public class ScopeServices implements IConnectionHandler {
 	 * @param portNumber
 	 * @param intervals 
 	 */
-	public ScopeServices(Map<String, String> versions) throws IOException {
+	public ScopeServices(Map<String, String> versions, boolean manualConnect) throws IOException {
 		this.versions = versions;
 		tagCounter = new AtomicInteger();
-		stpThread = new StpThread((int) OperaIntervals.SERVER_PORT.getValue(), this, new UmsEventHandler(this));
+		stpThread = new StpThread((int) OperaIntervals.SERVER_PORT.getValue(), this, new UmsEventHandler(this), manualConnect);
 	}
 
 	public void init() {
@@ -268,7 +269,7 @@ public class ScopeServices implements IConnectionHandler {
 		return ServiceResult.parseFrom(response.getPayload());
 	}
 
-	public void quit() {
+	public void quitOpera(OperaRunner runner, int pid) {
 		try {
 			if (exec.getActionList().contains("Quit"))
 				exec.action("Quit");
@@ -277,11 +278,33 @@ public class ScopeServices implements IConnectionHandler {
 		} catch (Exception e) {
 			logger.info("Caught exception when trying to shut down (cannot send quit). : " + e.getMessage());
 		}
+		
+		if (runner != null && pid > 0) {
+			long interval = OperaIntervals.QUIT_POLL_INTERVAL.getValue();
+			long timeout = OperaIntervals.QUIT_RESPONSE_TIMEOUT.getValue();
+			while (runner.isOperaRunning(pid) && timeout > 0)
+			{
+				try {
+					Thread.sleep(interval);
+				} catch (InterruptedException e) {
+					// ignore
+				}
+				timeout -= interval;
+			}
+		}
+	}
 
+	public void quit() {
+		quit(null, 0);
+	}
+	
+	public void quit(OperaRunner runner, int pid) {
+		quitOpera(runner, pid);
 		shutdown();
 	}
 
 	public boolean onConnected(StpConnection con) {
+		logger.fine("onConnect fired");
 		if (connection == null) {
 			logger.fine("Got StpConnection");
 			connection = con;

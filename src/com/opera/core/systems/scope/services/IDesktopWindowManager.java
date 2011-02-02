@@ -9,86 +9,122 @@ import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearch.Qui
 
 public interface IDesktopWindowManager {
 
-	/*
-	 * @return id of active window 
+	/**
+	 * Does initalization neccessary to set up the service.
 	 */
-	int getActiveWindowId();
-
-	/*
-	 * @return list of ids of open windows
-	 */
-	//List<Integer> getWindowHandles();
-	
-	/*
-	 * @return number of open windows
-	 */
-	int getOpenWindowCount();
-	
 	void init();
 
-	/*
+	/**
+	 * Gets id of active window.
+	 *
+	 * @return id of active window
+	 */
+	int getActiveQuickWindowId();
+
+	/**
+	 * Gets number of open windows.
+	 *
+	 * @return number of open windows
+	 */
+	int getOpenQuickWindowCount();
+
+	/**
+	 * Gets list of all QuickWidgets in the window.
+	 *
+	 * @param windowId id of window
 	 * @return list of QuickWidgets in the window given by id id
 	 */
-	List<QuickWidget> getQuickWidgetList(int id);
-	
-	/*
-	 * Get the window with title title
-	 * @param title
-	 * @return QuickWindow
+	List<QuickWidget> getQuickWidgetList(int windowId);
+
+	/**
+	 * Gets window id of window with the given name
+	 *
+	 * @param name window name
+	 * @return id of window with the given name
 	 */
-	QuickWindow getWindow(String title);
-	
-	/*
-	 * 
-	 * @param title
-	 * @return id of window with the given title
-	 */
-	int getWindowID(String title);
-	
-	/*
-	 * 
+	int getQuickWindowID(String name);
+
+	/**
+	 * Gets a list of all open windows.
+	 *
 	 * @return list of all open windows
 	 */
 	List<QuickWindow> getQuickWindowList();
 
-	/*
-	 * 
-	 * @param windowId
+	/**
+	 * Gets the name of the window with windowId.
+	 *
+	 * @param windowId id of window
 	 * @return name of the window
 	 */
-	String getWindowName(int windowId);
+	String getQuickWindowName(int windowId);
 
-	/*
-	 * Get the quick widget with value value for property property in the window
-	 * specified by the id
-	 *   
-	 * @param id - window id
-	 * @param property
-	 * @param value - value of property given
-	 * @return
+	/**
+	 * Gets a QuickWidget based on a specific property.
+	 *
+	 * @param windowId window id of the window containing the widget
+	 * @param property property specified for the search
+	 * @param value value of property given
+	 * @return QuickWidget matching the property, or null if no such widget
 	 */
-	QuickWidget getQuickWidget(int id, QuickWidgetSearchType property, String value);
-	QuickWidget getQuickWidget(int id, QuickWidgetSearchType property, String value, String parentName);
+	QuickWidget getQuickWidget(int windowId, QuickWidgetSearchType property, String value);
 
-	/*
-	 * Get the quick widget with value value by position
-	 *   
-	 * @param id - window id
+	/**
+	 * Gets the quick widget in a specified window based on a specific
+	 * property and its parent widgets name.
+	 *
+	 * @param windowId - window id of the window containing the widget
+	 * @param property - property specified for the search
+	 * @param value - value of property given
+	 * @param parentName - Name of the widgets parent widget
+	 * @return QuickWidget matching the property, or null if no such widget
+	 */
+	QuickWidget getQuickWidget(int windowId, QuickWidgetSearchType property, String value, String parentName);
+
+	/**
+	 * Gets the quick widget based on its position.
+	 *
+	 * @param windowId - window id of the window containing the widget
 	 * @param row - row of the widget
 	 * @param column - column of the widget
-	 * @param parentName - Parent name of the widget
-	 * @return
+	 * @return QuickWidget matching the parameters, or null if no such widget
 	 */
-	QuickWidget getQuickWidgetByPos(int id, int row, int column);
-	QuickWidget getQuickWidgetByPos(int id, int row, int column, String parentName);
+	QuickWidget getQuickWidgetByPos(int windowId, int row, int column);
 
-	/*
-	 * Get the quick window with value value for property property 
-	 *   
-	 * @param property
+	/**
+	 * Gets the quick widget based on its position and
+	 * its parent widgets name.
+	 *
+	 * @param windowId - window id of the window containing the widget
+	 * @param row - row of the widget
+	 * @param column - column of the widget
+	 * @param parentName - Name of the widgets parent widget
+	 * @return QuickWidget matching the parameters, or null if no such widget
+	 */
+	QuickWidget getQuickWidgetByPos(int windowId, int row, int column, String parentName);
+
+	/**
+	 * Gets the quick window based on a specific property.
+	 *
+	 * @param property - property to search by
 	 * @param value - value of property given
-	 * @return
+	 * @return QuickWindow matching the parameters, or null if no such widget
 	 */
 	QuickWindow getQuickWindow(QuickWidgetSearchType property, String value);
+
+	/**
+	 * Gets the quick window with the given window id.
+	 *
+	 * @param windowId id of the window
+	 * @return QuickWindow with id windowId, if any, else null. 
+	 */
 	QuickWindow getQuickWindowById(int windowId);
+	
+	/**
+	 * Gets the window with name name.
+	 *
+	 * @param name window name
+	 * @return QuickWindow
+	 */
+	QuickWindow getQuickWindowByName(String name);
 }

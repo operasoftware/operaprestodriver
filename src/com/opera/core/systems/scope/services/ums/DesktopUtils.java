@@ -9,6 +9,7 @@ import com.opera.core.systems.ScopeServices;
 import com.opera.core.systems.scope.protos.UmsProtos.Response;
 
 import com.opera.core.systems.scope.services.IDesktopUtils;
+import com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopPid;
 import com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopStringID;
 import com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopStringText;
 import com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopPath;
@@ -17,31 +18,31 @@ public class DesktopUtils extends AbstractService implements IDesktopUtils {
 
 	public DesktopUtils(ScopeServices services, String version) {
 		super(services, version);
-		
+
 		String serviceName = "desktop-utils";
-		
-		if(!isVersionInRange(version, "2.0", serviceName))
+
+		if(!isVersionInRange(version, "3.0", serviceName))
 			throw new UnsupportedOperationException(serviceName + " version " + version + " is not supported");
-		
+
 		services.setDesktopUtils(this);
 	}
-	 
+
 	public void init() {}
-	  
-	public String getString(String enum_text) {
+
+	public String getString(String enumText) {
 		DesktopStringID.Builder stringBuilder = DesktopStringID.newBuilder();
-		stringBuilder.setEnumText(enum_text);
-		
+		stringBuilder.setEnumText(enumText);
+
 		Response response = executeCommand(DesktopUtilsCommand.GET_STRING, stringBuilder);
 
 		DesktopStringText.Builder stringTextBuilder = DesktopStringText.newBuilder();
 		buildPayload(response, stringTextBuilder);
-		DesktopStringText string_text = stringTextBuilder.build();
+		DesktopStringText stringText = stringTextBuilder.build();
 
 		// Remember to remove all CRLF
-		return removeCR(string_text.getText());
+		return removeCR(stringText.getText());
 	}
-	
+
 	public String removeCR(String text) {
 		// Hack to remove all the \r's as we sometimes get just \n and sometimes
 		// \r\n then the string comparison doesn't work
@@ -63,9 +64,9 @@ public class DesktopUtils extends AbstractService implements IDesktopUtils {
 
 		DesktopPath.Builder pathBuilder = DesktopPath.newBuilder();
 		buildPayload(response, pathBuilder);
-		DesktopPath string_path = pathBuilder.build();
+		DesktopPath stringPath = pathBuilder.build();
 
-		return string_path.getPath();
+		return stringPath.getPath();
 	}
 
 	public String getSmallPreferencesPath() {
@@ -73,9 +74,9 @@ public class DesktopUtils extends AbstractService implements IDesktopUtils {
 
 		DesktopPath.Builder pathBuilder = DesktopPath.newBuilder();
 		buildPayload(response, pathBuilder);
-		DesktopPath string_path = pathBuilder.build();
+		DesktopPath stringPath = pathBuilder.build();
 
-		return string_path.getPath();
+		return stringPath.getPath();
 	}
 
 	public String getCachePreferencesPath() {
@@ -83,9 +84,19 @@ public class DesktopUtils extends AbstractService implements IDesktopUtils {
 
 		DesktopPath.Builder pathBuilder = DesktopPath.newBuilder();
 		buildPayload(response, pathBuilder);
-		DesktopPath string_path = pathBuilder.build();
+		DesktopPath stringPath = pathBuilder.build();
 
-		return string_path.getPath();
+		return stringPath.getPath();
+	}
+
+	public int getOperaPid() {
+		Response response = executeCommand(DesktopUtilsCommand.GET_OPERA_PID, null);
+
+		DesktopPid.Builder pathBuilder = DesktopPid.newBuilder();
+		buildPayload(response, pathBuilder);
+		DesktopPid desktopPid = pathBuilder.build();
+
+		return desktopPid.getPid();
 	}
 
 }

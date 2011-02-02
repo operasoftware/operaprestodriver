@@ -21,7 +21,7 @@ public enum DesktopWindowManagerCommand implements ICommand {
 	    WINDOW_CLOSED(7),    // event
 	    WINDOW_ACTIVATED(8), // event
 	    WINDOW_LOADED(9), // event
-	    DEFAULT(-1);    // event
+	    DEFAULT(-1);   
 
 	    private int code;
 	    private static final Map<Integer, DesktopWindowManagerCommand> lookup = new HashMap<Integer, DesktopWindowManagerCommand>();
