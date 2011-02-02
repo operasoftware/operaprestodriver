@@ -110,8 +110,8 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 
       settings.setOperaBinaryLocation(paths.operaPath());
       settings.setOperaLauncherBinary(paths.launcherPath());
-      
-      settings.setOperaBinaryArguments("opera:debug");
+
+      settings.setOperaBinaryArguments("");
     }
     
     this.settings = settings;
