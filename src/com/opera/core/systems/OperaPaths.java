@@ -49,11 +49,17 @@ public class OperaPaths {
   }
 
   /**
-   * This method will try and find Opera Launcher on any system.
+   * This method will try and find Opera Launcher on any system. Currently it
+   * just looks at the OPERA_LAUNCHER environment variable.
+   * TODO: Do we want to package the launchers in the jar? If so this can
+   *  find them there.
    * @return The path to Opera Launcher, or null
    */
   public String launcherPath() {
-    return "/home/stuart/bin/opera-launcher";
+    String path = null;
+    if ((path = checkPath(System.getenv("OPERA_LAUNCHER"))) != null) return path;
+
+    return null;
   }
 
   /**
