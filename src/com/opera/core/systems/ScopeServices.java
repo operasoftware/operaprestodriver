@@ -177,7 +177,7 @@ public class ScopeServices implements IConnectionHandler {
 		if (versions.containsKey("desktop-utils"))
 			wantedServices.add("desktop-utils");
 		
-		wantedServices.add("console-logger");
+//		wantedServices.add("console-logger");
 //		wantedServices.add("http-logger");
 		wantedServices.add("core");
 		wantedServices.add("cookie-manager");
