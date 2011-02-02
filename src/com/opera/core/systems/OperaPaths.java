@@ -20,23 +20,28 @@ public class OperaPaths {
    * @return The path to Opera, or null
    */
   public String operaPath() {
-    String path;
-    if ((path = System.getenv("OPERA_PATH")) != null) return path;
-    
-    if (Platform.getCurrent().is(Platform.LINUX)) {
-      // TODO run which to see if we can get the Opera location
-      
-      // Check the default location
-      path = "/usr/bin/opera";     
+    String path = null;
+    if ((path = checkPath(System.getenv("OPERA_PATH"))) != null) return path;
+    Platform platform = Platform.getCurrent();
+
+    if (platform.is(Platform.UNIX)) {
+      // TODO run `which` to see if we can get the Opera location
     }
-    else if (Platform.getCurrent().is(Platform.WINDOWS)) {
+
+    if (platform.is(Platform.LINUX)) {
+      if ((path = checkPath("/usr/bin/opera")) != null) return path;
+
+    } else if (platform.is(Platform.WINDOWS)) {
       String progfiles = System.getenv("PROGRAMFILES");
       if (progfiles == null) progfiles = "\\Program Files";
-      
-      path = progfiles + "\\Opera\\opera.exe";  
+
+      if ((path = checkPath(progfiles + "\\Opera\\opera.exe")) != null) return path;
+
+    } else if (platform.is(Platform.MAC)) {
+      if ((path = checkPath("/Applications/Opera.app")) != null) return path;
+
     }
-    
-    if (new File(path).exists()) return path;    
+
     return null;
   }
 
