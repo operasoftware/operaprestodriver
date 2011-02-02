@@ -210,8 +210,9 @@ public class SocketMonitor {
                                 key.interestOps(req.mask);
                             break;
                         case REMOVE:
-                            if (selector.keys().contains(req.channel))
-                                selector.keys().remove(req.channel);
+                        	SelectionKey selKey = req.channel.keyFor(selector); 
+                            if (selKey != null)
+                                selKey.cancel();
                             break;
                     }
                 } catch (CancelledKeyException e) {
@@ -265,7 +266,7 @@ public class SocketMonitor {
         {
             if (wantedMask != 0)
             {
-                key.interestOps(wantedMask);
+                if(key.isValid()) key.interestOps(wantedMask);
             }
             else
             {

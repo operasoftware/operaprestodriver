@@ -54,10 +54,10 @@ import org.openqa.selenium.internal.FindsByTagName;
 import org.openqa.selenium.internal.FindsByXPath;
 
 import com.opera.core.systems.interaction.OperaAction;
+import com.opera.core.systems.interaction.UserInteraction;
 import com.opera.core.systems.model.ScopeActions;
 import com.opera.core.systems.model.ScreenShotReply;
 import com.opera.core.systems.model.ScriptResult;
-import com.opera.core.systems.interaction.UserInteraction;
 import com.opera.core.systems.runner.OperaRunner;
 import com.opera.core.systems.runner.launcher.OperaLauncherRunner;
 import com.opera.core.systems.scope.exceptions.CommunicationException;
@@ -65,6 +65,8 @@ import com.opera.core.systems.scope.exceptions.FatalException;
 import com.opera.core.systems.scope.handlers.PbActionHandler;
 import com.opera.core.systems.scope.internal.OperaIntervals;
 import com.opera.core.systems.scope.services.ICookieManager;
+import com.opera.core.systems.scope.protos.PrefsProtos.Pref;
+import com.opera.core.systems.scope.protos.PrefsProtos.GetPrefArg.Mode;
 import com.opera.core.systems.scope.services.IEcmaScriptDebugger;
 import com.opera.core.systems.scope.services.IOperaExec;
 import com.opera.core.systems.scope.services.IPrefs;
@@ -79,7 +81,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 	protected OperaDriverSettings settings;
 	protected OperaRunner operaRunner;
 
-	private final boolean isDriverStarted = false; //Does this driver have a started opera? Makes it possible to restart opera without throwing out the driver.
+	private boolean isDriverStarted = false; //Does this driver have a started opera? Makes it possible to restart opera without throwing out the driver.
 
 	protected IEcmaScriptDebugger debugger;
 	protected IOperaExec exec;
@@ -103,35 +105,36 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 
 		if(settings != null) {
 			this.settings = settings;
-			this.operaRunner = new OperaLauncherRunner(this.settings);
-
-			this.operaRunner.startOpera();
+			operaRunner = new OperaLauncherRunner(this.settings);
+		
+			operaRunner.startOpera();
 		}
-
-		this.init();
+		
+		init();
 	}
-
+	
 	/**
 	 * Shutdown webdriver, will kill opera an such if running.
 	 */
 	public void shutdown(){
-		if(this.isDriverStarted)
-			this.quit();
-		this.services.shutdown();
-		this.operaRunner.shutdown();
+		if(isDriverStarted)
+			quit();
+		else
+			services.shutdown();
+		operaRunner.shutdown();
 	}
 
 	/**
 	 * For testing override this method.
 	 */
 	protected void init() {
-		this.createScopeServices();
-		this.services.init();
-		this.debugger = services.getDebugger();
-		this.windowManager = services.getWindowManager();
-		this.exec = services.getExec();
-		this.actionHandler = new PbActionHandler(services);
-		this.cookieManager = services.getCookieManager();
+		createScopeServices();
+		services.init();
+		debugger = services.getDebugger();
+		windowManager = services.getWindowManager();
+		exec = services.getExec();
+		actionHandler = new PbActionHandler(services);
+		cookieManager = services.getCookieManager();
 		//cookieManager.updateCookieSettings();
 		prefs = services.getPrefs();
 	}
@@ -144,6 +147,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 		versions.put("exec", "2.0");
 		versions.put("core", "1.0");
 		versions.put("cookie-manager", "1.0");
+		versions.put("prefs", "1.0");
 		return versions;
 	}
 
@@ -938,10 +942,6 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
             exec.mouseAction(x, y, value, 1);
 	}
 
-	public void addConsoleListener(IConsoleListener listener) {
-            services.addConsoleListener(listener);
-	}
-
     public void binaryStopped(int code) {
         services.onBinaryStopped(code);
     }
@@ -999,9 +999,21 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 	protected ScopeServices getScopeServices() {
 		return services;
 	}
+    
+	public String getPref(String section, String key) {
+		return services.getPrefs().getPref(section, key, Mode.CURRENT);
+	}
 
-	public OperaRunner getRunner() {
-		return operaRunner;
+	public String getDefaultPref(String section, String key) {
+		return services.getPrefs().getPref(section, key, Mode.DEFAULT);
+	}
+
+	public List<Pref> listPrefs(boolean sort, String section) {
+		return services.getPrefs().listPrefs(sort, section);
+	}
+	
+	public void setPref(String section, String key, String value) {
+		services.getPrefs().setPrefs(section, key, value);
 	}
 }
 
