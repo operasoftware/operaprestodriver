@@ -58,7 +58,7 @@ public class ScopeServicesTest extends TestBase
 
 		try
 		{
-			services = new ScopeServices(versions);
+			services = new ScopeServices(versions, false);
 		}
 		catch (IOException e)
 		{

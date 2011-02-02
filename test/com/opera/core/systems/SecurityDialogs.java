@@ -12,16 +12,16 @@ public class SecurityDialogs extends DesktopTestBase {
     driver.waitStart();
 
     driver.operaDesktopAction("Open url in new page",
-        "http://t/security/bts/164110/scary_file-keyboard.kini");
+        0, "http://t/security/bts/164110/scary_file-keyboard.kini", null);
 
     // Add try-catch for timeout
     int win_id = driver.waitForWindowShown("Setup Apply Dialog Confirm Dialog");
 
     QuickWindow security_win = driver
-        .getWindow("Setup Apply Dialog Confirm Dialog");
+        .getQuickWindow("Setup Apply Dialog Confirm Dialog");
     assertTrue(win_id == security_win.getWindowID());
 
-    List<QuickWindow> windows = driver.getWindowList();
+    List<QuickWindow> windows = driver.getQuickWindowList();
     List<QuickWidget> widgets = driver
         .getQuickWidgetList("Setup Apply Dialog Confirm Dialog");
 
@@ -37,7 +37,7 @@ public class SecurityDialogs extends DesktopTestBase {
         && !yes_btn.isDefault());
     assertTrue("No is default button", no_btn.isDefault());
 
-    driver.operaDesktopAction("Cancel");
+    driver.operaDesktopAction("Cancel", 0, null, null);
     // driver.keyPress("F1", ModifierPressed.NONE);
     // no_btn.click(MouseButton.LEFT, 1, ModifierPressed.NONE);
   }

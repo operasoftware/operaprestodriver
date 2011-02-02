@@ -8,7 +8,7 @@ public class PreferencesDialogTest extends DesktopTestBase {
   @Test
   public void testPreferencesDialog() {
     driver.waitStart();
-    driver.operaDesktopAction("Show preferences");
+    driver.operaDesktopAction("Show preferences", 0, null, null);
 
     driver.waitForWindowShown("New Preferences Dialog");
     QuickWidget qw = driver.findWidgetByName(-1, "Startup_mode_dropdown");
@@ -23,7 +23,7 @@ public class PreferencesDialogTest extends DesktopTestBase {
 
     driver.waitStart();
 
-    driver.operaDesktopAction("Cancel");
+    driver.operaDesktopAction("Cancel", 0, null, null);
     driver.waitForWindowClose("New Preferences Dialog");
   }
 }

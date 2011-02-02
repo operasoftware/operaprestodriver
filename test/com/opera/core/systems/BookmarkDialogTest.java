@@ -8,7 +8,7 @@ public class BookmarkDialogTest extends DesktopTestBase {
   @Test
   public void testBookmarkDialog() {
     driver.waitStart();
-    driver.operaDesktopAction("Add to bookmarks");
+    driver.operaDesktopAction("Add to bookmarks", 0, null, null);
 
     int win_id = driver.waitForWindowShown("Bookmark Properties Dialog");
     assertTrue("Got bookmark dialog", win_id >= 0);
@@ -24,7 +24,7 @@ public class BookmarkDialogTest extends DesktopTestBase {
 
     driver.waitStart();
     // btn.click(MouseButton.LEFT,1,ModifierPressed.NONE);
-    driver.operaDesktopAction("Cancel");
+    driver.operaDesktopAction("Cancel", 0, null, null);
     System.out.println("--Wait for window to close--");
     driver.waitForWindowClose("Bookmark Properties Dialog");
 
