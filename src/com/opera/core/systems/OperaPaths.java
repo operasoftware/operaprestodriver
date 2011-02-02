@@ -1,11 +1,14 @@
 package com.opera.core.systems;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.InputStreamReader;
 
 import org.openqa.selenium.Platform;
 
 /**
  * @author stuartk
+ * This class tries to find the paths to Opera and Opera Launcher on any system
  */
 public class OperaPaths {
 
@@ -25,7 +28,7 @@ public class OperaPaths {
     Platform platform = Platform.getCurrent();
 
     if (platform.is(Platform.UNIX)) {
-      // TODO run `which` to see if we can get the Opera location
+      if ((path = checkPath(execProg("which opera"))) != null) return path;
     }
 
     if (platform.is(Platform.LINUX)) {
@@ -60,8 +63,34 @@ public class OperaPaths {
    * the given path.
    */
   private String checkPath(String path) {
-    if (path != null && new File(path).exists()) return path;
-    else return null;
+    if (path == null) return null;
+
+    File file = new File(path);
+    if (file.exists() && file.canExecute()) return path;
+
+    return null;
+  }
+
+  private String execProg(String cmd) {
+    String output = "";
+    try {
+      Process process = Runtime.getRuntime().exec(cmd);
+
+      BufferedReader out= new BufferedReader(new InputStreamReader(process
+          .getInputStream()));
+
+      String line = null;
+
+      while ((line = out.readLine()) != null) {
+        output += line;
+      }
+
+      process.waitFor();
+    } catch (Exception e) {
+      return null;
+    }
+
+    return output;
   }
 
 }
