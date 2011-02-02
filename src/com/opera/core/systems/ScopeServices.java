@@ -143,10 +143,10 @@ public class ScopeServices implements IConnectionHandler {
 	 * @param portNumber
 	 * @param intervals 
 	 */
-	public ScopeServices(Map<String, String> versions, boolean manual_connect) throws IOException {
+	public ScopeServices(Map<String, String> versions, boolean manualConnect) throws IOException {
 		this.versions = versions;
 		tagCounter = new AtomicInteger();
-		stpThread = new StpThread((int) OperaIntervals.SERVER_PORT.getValue(), this, new UmsEventHandler(this), manual_connect);
+		stpThread = new StpThread((int) OperaIntervals.SERVER_PORT.getValue(), this, new UmsEventHandler(this), manualConnect);
 	}
 
 	public void init() {
@@ -221,7 +221,7 @@ public class ScopeServices implements IConnectionHandler {
 		}
 	}
 
-	public void waitForHandshake() throws WebDriverException {
+	private void waitForHandshake() throws WebDriverException {
 		try {
 			waitState.waitForHandshake(OperaIntervals.HANDSHAKE_TIMEOUT.getValue());
 		} catch (WebDriverException e) {
@@ -304,7 +304,7 @@ public class ScopeServices implements IConnectionHandler {
 	}
 
 	public boolean onConnected(StpConnection con) {
-		logger.info("onConnect fired");
+		logger.fine("onConnect fired");
 		if (connection == null) {
 			logger.fine("Got StpConnection");
 			connection = con;
@@ -360,7 +360,7 @@ public class ScopeServices implements IConnectionHandler {
         
 	public void onDisconnect()
         {
-            logger.info("Disconnected, closing StpConnection.");
+            logger.fine("Disconnected, closing StpConnection.");
             if (connection != null)
             {
                 if (!shuttingDown)

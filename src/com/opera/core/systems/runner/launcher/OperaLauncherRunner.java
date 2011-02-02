@@ -114,12 +114,12 @@ public class OperaLauncherRunner implements OperaRunner{
 		return isOperaRunning(0);
 	}
 	
-	public boolean isOperaRunning(int process_id) {
+	public boolean isOperaRunning(int processId) {
 		logger.log(Level.INFO, "Get opera status");
         try {
             LauncherStatusRequest.Builder request = LauncherStatusRequest.newBuilder();
-            if (process_id > 0)
-            	request.setProcessid(process_id);
+            if (processId > 0)
+            	request.setProcessid(processId);
             
             ResponseEncapsulation res = launcherProtocol.sendRequest(MessageType.MSG_STATUS, request.build().toByteArray());
             return handleStatusMessage(res.getResponse()) == StatusType.RUNNING;
