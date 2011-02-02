@@ -39,7 +39,6 @@ public class ProfileUtils {
 	}
 	
 	public boolean deleteFolder(String folderPath) {
-		System.out.println("DeleteFolder(" + folderPath + ")");
 		return FileUtils.deleteQuietly(new File(folderPath));
 	}
 }
