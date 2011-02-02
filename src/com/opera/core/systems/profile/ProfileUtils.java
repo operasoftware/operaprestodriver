@@ -1,12 +1,8 @@
 package com.opera.core.systems.profile;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-
+import org.apache.commons.io.FileUtils;
 import com.opera.core.systems.settings.OperaDriverSettings;
 
 /**
@@ -26,66 +22,24 @@ public class ProfileUtils {
 	
 	public void deleteProfile() {
 		deleteFolder(smallPrefsFolder);
-		deleteFolder(largePrefsFolder);
-		deleteFolder(cachePrefsFolder);
+		if (!smallPrefsFolder.equals(largePrefsFolder))
+			deleteFolder(largePrefsFolder);
+		if (!smallPrefsFolder.equals(cachePrefsFolder) && !largePrefsFolder.equals(cachePrefsFolder))
+			deleteFolder(cachePrefsFolder);
 	}
 	
 	public void copyProfile(String newPrefs) {
-		// For now, copy all to smallPrefsFolder
-		if (new File(newPrefs).exists())
-		{
-			copyFolder(newPrefs, smallPrefsFolder);
+		try {
+			FileUtils.copyDirectory(new File(newPrefs), new File(smallPrefsFolder));
+		} catch (IOException e) {
+			// Ignore
+			// e.printStackTrace();
 		}
+		
 	}
 	
 	public boolean deleteFolder(String folderPath) {
-		File dir = new File(folderPath);
-		if (dir.isDirectory()) {
-			String[] children = dir.list();
-			for (int i=0; i<children.length; i++) {
-				boolean success = deleteFolder(folderPath + children[i]);
-				if (!success) {
-					//return false;
-				}
-	        }
-		}
-        // The directory/file is now empty so delete it
-		boolean res = dir.delete();
-        return res;
-	}
-	
-	public void copyFolder(String from, String to) {
-		try {
-			copyFolder(new File(from), new File(to));
-		} catch (IOException ex) {
-			
-		}
-	}
-	
-	public void copyFolder(File srcFile, File dstFile) throws IOException {
-		if (srcFile.isDirectory()){
-			// Create destination folder if needed
-			if (!dstFile.exists()){
-				dstFile.mkdir();
-			}
-			
-			String files[] = srcFile.list();
-			for(int i = 0; i < files.length; i++){
-				copyFolder(new File(srcFile, files[i]), new File(dstFile, files[i]));
-			}
-		}
-		else {
-			InputStream in = new FileInputStream(srcFile);
-			OutputStream out = new FileOutputStream(dstFile); 
-			
-			byte[] buf = new byte[1024];
-			int len;
-			while ((len = in.read(buf)) > 0) {
-				out.write(buf, 0, len);
-			}
-			
-			in.close();
-			out.close();
-		}
+		System.out.println("DeleteFolder(" + folderPath + ")");
+		return FileUtils.deleteQuietly(new File(folderPath));
 	}
 }
