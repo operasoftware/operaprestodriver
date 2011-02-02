@@ -19,6 +19,7 @@ public interface OperaRunner {
 	 * @return true if running, false if not running or crashed.
 	 */
 	public boolean isOperaRunning();
+	public boolean isOperaRunning(int processId);
 	
 	/**
 	 * Did opera crash? This is reset on next call, so If you dont chech, you wont know

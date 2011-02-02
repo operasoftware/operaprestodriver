@@ -32,6 +32,7 @@ import java.util.Scanner;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Logger;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.Cookie;
@@ -82,6 +83,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 	protected OperaRunner operaRunner;
 
 	private boolean isDriverStarted = false; //Does this driver have a started opera? Makes it possible to restart opera without throwing out the driver.
+	protected final Logger logger = Logger.getLogger(this.getClass().getName());
 
 	protected IEcmaScriptDebugger debugger;
 	protected IOperaExec exec;
@@ -105,23 +107,29 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 
 		if(settings != null) {
 			this.settings = settings;
-			operaRunner = new OperaLauncherRunner(this.settings);
-		
-			operaRunner.startOpera();
+
+			// The runner will be setup based on if there is an
+			// Opera binary passed in or not
+			if (this.settings.getOperaBinaryLocation() != null) {
+				
+				// If there is an Opera binary passed in then launch Opera
+				this.operaRunner = new OperaLauncherRunner(this.settings);
+			}
 		}
 		
 		init();
 	}
 	
 	/**
-	 * Shutdown webdriver, will kill opera an such if running.
+	 * Shutdown webdriver, will kill opera and such if running.
 	 */
 	public void shutdown(){
 		if(isDriverStarted)
 			quit();
 		else
 			services.shutdown();
-		operaRunner.shutdown();
+		if (operaRunner != null)
+			operaRunner.shutdown();
 	}
 
 	/**
@@ -129,6 +137,12 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 	 */
 	protected void init() {
 		createScopeServices();
+		
+		// Launch Opera if the runner has been setup
+		if (operaRunner != null) {
+			operaRunner.startOpera();
+		}
+
 		services.init();
 		debugger = services.getDebugger();
 		windowManager = services.getWindowManager();
@@ -154,7 +168,12 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 	private void createScopeServices() {
 		try {
 			Map<String, String> versions = getServicesList();
-			services = new ScopeServices(versions);
+			boolean manualStart = true;
+			
+			if(settings != null && settings.getOperaBinaryLocation() != null)
+				manualStart = false;
+			
+			services = new ScopeServices(versions, manualStart);
 			services.startStpThread();
 		} catch (IOException e) {
 			throw new WebDriverException(e);
