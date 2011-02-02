@@ -38,4 +38,15 @@ public class NavigationTest extends TestBase
     driver.navigate().forward();
     Assert.assertTrue(driver.getCurrentUrl().indexOf("keys.html") > 0);
   }
+  
+  @Test
+  public void testHttpRedirect() throws Exception {
+    driver.get("http://t/core/bts/javascript/CORE-26410/003-2.php");
+    
+    // Wait for redirect
+    Thread.sleep(1000);
+    
+    Assert.assertEquals("http://t/core/bts/javascript/CORE-26410/001-3.php",
+        driver.getCurrentUrl());
+  }
 }
