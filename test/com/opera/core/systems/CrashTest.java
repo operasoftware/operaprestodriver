@@ -8,8 +8,11 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import com.opera.core.systems.scope.exceptions.CommunicationException;
+
 // FIXME make tests pass
 public class CrashTest extends TestBase {
+
   @BeforeClass
   public static void setUpBeforeClass() throws Exception {}
   @AfterClass
@@ -24,44 +27,30 @@ public class CrashTest extends TestBase {
   public void tearDown() throws Exception {
     super.tearDownAfterClass();
     // Make sure Opera is gone
-    Runtime.getRuntime().exec("kill `pgrep opera`").waitFor();
-  }
-
-  @Test
-  public void testCore32291() {
-    driver.get("http://t/core/bts/crashers/visual/CORE-32291/001.html");
-    Assert.assertTrue(driver.getRunner().hasOperaCrashed());
-  }
-
-  @Test
-  public void testCore32766() {
-    driver.get("http://t/core/bts/crashers/visual/CORE-32766/002.html");
-    Assert.assertTrue(driver.getRunner().hasOperaCrashed());
-  }
-
-  @Test
-  public void testCore33582() {
-    driver.get("http://t/core/bts/crashers/visual/CORE-33582/001.html");
-    Assert.assertTrue(driver.getRunner().hasOperaCrashed());
-  }
-
-  @Test
-  public void testCore34039() {
-    driver.get("http://t/core/bts/crashers/visual/CORE-34039/001.html");
-    Assert.assertTrue(driver.getRunner().hasOperaCrashed());
+    Runtime.getRuntime().exec("kill `pgrep opera").waitFor();
   }
 
   @Test
   public void testCore34284() {
+    Assert.assertTrue(driver.getRunner().isOperaRunning());
 
-    driver.get("http://t/core/bts/crashers/visual/CORE-34284/001.html");
-    Assert.assertTrue(driver.getRunner().hasOperaCrashed());
+    try {
+      driver.get("http://t/core/bts/crashers/visual/CORE-34284/001.html");
+    } catch (CommunicationException e) {}
 
+    Assert.assertFalse(driver.getRunner().isOperaRunning());
   }
+
 
   @Test
   public void testCore32224() {
-    driver.get("http://t/core/bts/crashers/visual/CORE-32224/001.html");
-    Assert.assertTrue(driver.getRunner().hasOperaCrashed());
+    Assert.assertTrue(driver.getRunner().isOperaRunning());
+
+    try {
+      driver.get("http://t/core/bts/crashers/visual/CORE-32224/001.html");
+    } catch (CommunicationException e) {}
+
+    Assert.assertFalse(driver.getRunner().isOperaRunning());
   }
+
 }
