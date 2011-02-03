@@ -65,9 +65,9 @@ import com.opera.core.systems.scope.exceptions.CommunicationException;
 import com.opera.core.systems.scope.exceptions.FatalException;
 import com.opera.core.systems.scope.handlers.PbActionHandler;
 import com.opera.core.systems.scope.internal.OperaIntervals;
-import com.opera.core.systems.scope.services.ICookieManager;
-import com.opera.core.systems.scope.protos.PrefsProtos.Pref;
 import com.opera.core.systems.scope.protos.PrefsProtos.GetPrefArg.Mode;
+import com.opera.core.systems.scope.protos.PrefsProtos.Pref;
+import com.opera.core.systems.scope.services.ICookieManager;
 import com.opera.core.systems.scope.services.IEcmaScriptDebugger;
 import com.opera.core.systems.scope.services.IOperaExec;
 import com.opera.core.systems.scope.services.IPrefs;
@@ -370,7 +370,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 			//change to _top
 			windowManager.filterActiveWindow();
 			debugger.resetFramePath();
-			while(findElementsByTagName("frameset").size() > 0) {
+			if(findElementsByTagName("frameset").size() > 0) {
 				switchTo().frame(0);
 			}
 			//waitForLoadToComplete();
@@ -1031,5 +1031,6 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 	public void setPref(String section, String key, String value) {
 		services.getPrefs().setPrefs(section, key, value);
 	}
+
 }
 
