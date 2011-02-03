@@ -95,7 +95,6 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 
 	protected Set<Integer> objectIds = new HashSet<Integer>();
 
-
 	public OperaDriver() {
 		this(makeSettings());
 	}
@@ -111,12 +110,12 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 			// The runner will be setup based on if there is an
 			// Opera binary passed in or not
 			if (this.settings.getOperaBinaryLocation() != null) {
-				
+
 				// If there is an Opera binary passed in then launch Opera
 				this.operaRunner = new OperaLauncherRunner(this.settings);
 			}
 		}
-		
+
 		init();
   }
 
@@ -156,7 +155,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 	 */
 	protected void init() {
 		createScopeServices();
-		
+
 		// Launch Opera if the runner has been setup
 		if (operaRunner != null) {
 			operaRunner.startOpera();
@@ -188,10 +187,10 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 		try {
 			Map<String, String> versions = getServicesList();
 			boolean manualStart = true;
-			
+
 			if(settings != null && settings.getOperaBinaryLocation() != null)
 				manualStart = false;
-			
+
 			services = new ScopeServices(versions, manualStart);
 			services.startStpThread();
 		} catch (IOException e) {
@@ -1037,7 +1036,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 	protected ScopeServices getScopeServices() {
 		return services;
 	}
-    
+
 	public String getPref(String section, String key) {
 		return services.getPrefs().getPref(section, key, Mode.CURRENT);
 	}
@@ -1049,7 +1048,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 	public List<Pref> listPrefs(boolean sort, String section) {
 		return services.getPrefs().listPrefs(sort, section);
 	}
-	
+
 	public void setPref(String section, String key, String value) {
 		services.getPrefs().setPrefs(section, key, value);
 	}
