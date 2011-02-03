@@ -28,8 +28,7 @@ public class OperaPaths {
     Platform platform = Platform.getCurrent();
 
     // TODO find if Mac supports `which`
-    if (platform.is(Platform.LINUX) || platform.is(Platform.MAC) ||
-        platform.is(Platform.UNIX)) {
+    if (platform.is(Platform.LINUX) || platform.is(Platform.UNIX)) {
       if ((path = checkPath(execProg("which opera"))) != null) return path;
     }
 
@@ -43,7 +42,7 @@ public class OperaPaths {
       if ((path = checkPath(progfiles + "\\Opera\\opera.exe")) != null) return path;
 
     } else if (platform.is(Platform.MAC)) {
-      if ((path = checkPath("/Applications/Opera.app")) != null) return path;
+      if ((path = checkPath("/Applications/Opera.app/Contents/MacOS/Opera")) != null) return path;
 
     }
 
