@@ -10,6 +10,13 @@ public class OperaDriverSettings {
 	private String operaBinaryArguments;
 	
 	private Integer operaLauncherXvfbDisplay; //could be null
+
+	private String largePrefsFolder;
+	private String smallPrefsFolder;
+	private String cachePrefsFolder;
+	
+	private boolean noRestart = false;
+	private boolean noQuit = false;
 	
 	//Generated getters and setters:
 	public boolean doRunOperaLauncherFromOperaDriver() {
@@ -43,10 +50,51 @@ public class OperaDriverSettings {
 	public void setOperaBinaryArguments(String operaBinaryArguments) {
 		this.operaBinaryArguments = operaBinaryArguments;
 	}
+
 	public Integer getOperaLauncherXvfbDisplay() {
 		return operaLauncherXvfbDisplay;
 	}
 	public void setOperaLauncherXvfbDisplay(Integer operaLauncherXvfbDisplay) {
 		this.operaLauncherXvfbDisplay = operaLauncherXvfbDisplay;
 	}	
+
+	public void setNoQuit(boolean noQuit) {
+		this.noQuit = noQuit;
+	}
+	public boolean getNoQuit() {
+		return noQuit;
+	}
+	
+	public void SetLargePrefsFolder(String largePrefsFolder) {
+		this.largePrefsFolder = largePrefsFolder;
+	}
+	
+	public String getLargePrefsFolder() {
+		return largePrefsFolder;
+	}
+	
+	public void SetSmallPrefsFolder(String smallPrefsFolder) {
+		this.smallPrefsFolder = smallPrefsFolder;
+	}
+	
+	public String getSmallPrefsFolder() {
+		return smallPrefsFolder;
+	}
+	
+	public void SetCachePrefsFolder(String cachePrefsFolder) {
+		this.cachePrefsFolder = cachePrefsFolder;
+	}
+	
+	public String getCachePrefsFolder() {
+		return cachePrefsFolder;
+	}
+	
+	public void setNoRestart(boolean noRestart) {
+		this.noRestart = noRestart;
+	}
+	
+	public boolean getNoRestart() {
+		return noRestart;
+	}
+	
 }

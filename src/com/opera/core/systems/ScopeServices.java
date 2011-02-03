@@ -4,7 +4,6 @@ package com.opera.core.systems;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -16,10 +15,13 @@ import com.google.protobuf.AbstractMessage.Builder;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.opera.core.systems.model.ICommand;
+import com.opera.core.systems.runner.OperaRunner;
 import com.opera.core.systems.scope.ScopeCommand;
 import com.opera.core.systems.scope.handlers.IConnectionHandler;
 import com.opera.core.systems.scope.internal.OperaIntervals;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo;
+import com.opera.core.systems.scope.protos.EcmascriptProtos.ReadyStateChange;
+import com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeInfo;
 import com.opera.core.systems.scope.protos.ScopeProtos.ClientInfo;
 import com.opera.core.systems.scope.protos.ScopeProtos.HostInfo;
 import com.opera.core.systems.scope.protos.ScopeProtos.ServiceResult;
@@ -27,12 +29,12 @@ import com.opera.core.systems.scope.protos.ScopeProtos.ServiceSelection;
 import com.opera.core.systems.scope.protos.UmsProtos.Command;
 import com.opera.core.systems.scope.protos.UmsProtos.Response;
 import com.opera.core.systems.scope.services.ICookieManager;
-import com.opera.core.systems.scope.services.IDesktopWindowManager;
 import com.opera.core.systems.scope.services.IDesktopUtils;
+import com.opera.core.systems.scope.services.IDesktopWindowManager;
 import com.opera.core.systems.scope.services.IEcmaScriptDebugger;
 import com.opera.core.systems.scope.services.IOperaExec;
-import com.opera.core.systems.scope.services.IWindowManager;
 import com.opera.core.systems.scope.services.IPrefs;
+import com.opera.core.systems.scope.services.IWindowManager;
 import com.opera.core.systems.scope.services.ums.SystemInputManager;
 import com.opera.core.systems.scope.services.ums.UmsServices;
 import com.opera.core.systems.scope.stp.StpConnection;
@@ -52,8 +54,6 @@ public class ScopeServices implements IConnectionHandler {
 	private ICookieManager cookieManager;
 	
 	private Map<String, String> versions;
-
-	private List<IConsoleListener> listeners;
 
 	private WaitState waitState = new WaitState();
 	private StpConnection connection = null;
@@ -80,14 +80,6 @@ public class ScopeServices implements IConnectionHandler {
 
 	public StpConnection getConnection() {
 		return connection;
-	}
-	
-	public List<IConsoleListener> getConsoleListeners() {
-		return listeners;
-	}
-	
-	public void addConsoleListener(IConsoleListener listener) {
-		listeners.add(listener);
 	}
         
 	public IEcmaScriptDebugger getDebugger() {
@@ -153,11 +145,10 @@ public class ScopeServices implements IConnectionHandler {
 	 * @param portNumber
 	 * @param intervals 
 	 */
-	public ScopeServices(Map<String, String> versions) throws IOException {
+	public ScopeServices(Map<String, String> versions, boolean manualConnect) throws IOException {
 		this.versions = versions;
 		tagCounter = new AtomicInteger();
-		listeners = new LinkedList<IConsoleListener>();
-		stpThread = new StpThread((int) OperaIntervals.SERVER_PORT.getValue(), this, new UmsEventHandler(this));
+		stpThread = new StpThread((int) OperaIntervals.SERVER_PORT.getValue(), this, new UmsEventHandler(this), manualConnect);
 	}
 
 	public void init() {
@@ -189,7 +180,7 @@ public class ScopeServices implements IConnectionHandler {
 		if (versions.containsKey("desktop-utils"))
 			wantedServices.add("desktop-utils");
 		
-		wantedServices.add("console-logger");
+//		wantedServices.add("console-logger");
 //		wantedServices.add("http-logger");
 		wantedServices.add("core");
 		wantedServices.add("cookie-manager");
@@ -254,7 +245,91 @@ public class ScopeServices implements IConnectionHandler {
 	private void createUmsServices(boolean enableDebugger, HostInfo info) {
 		new UmsServices(this, info);
 		if (!enableDebugger)
-			debugger = new PseudoEcmaScriptDebugger();
+			debugger = new IEcmaScriptDebugger() {
+				
+			public void setRuntime(RuntimeInfo runtime) { }
+
+		    public Object scriptExecutor(String script, Object... params) {
+		        return null;
+		    }
+
+		    public void removeRuntime(int runtimeId) { }
+
+		    public List<String> listFramePaths() {
+		        return null;
+		    }
+
+		    public void init() { }
+
+		    public int getRuntimeId() {
+		        return 0;
+		    }
+
+		    public Integer getObject(String using) {
+		        return null;
+		    }
+
+		    public Integer executeScriptOnObject(String using, int objectId) {
+		        return null;
+		    }
+
+		    public Object executeScript(String using, boolean responseExpected) {
+		        return null;
+		    }
+
+		    public String executeJavascript(String using, boolean responseExpected) {
+		        return null;
+		    }
+
+		    public String executeJavascript(String using) {
+		        return null;
+		    }
+
+		    public List<Integer> examineObjects(Integer id) {
+		        return null;
+		    }
+
+		    public void cleanUpRuntimes() { }
+
+		    public void cleanUpRuntimes(int windowId) { }
+
+		    public void changeRuntime(String framePath) { }
+
+		    public Object callFunctionOnObject(String using, int objectId,
+		                boolean responseExpected) {
+		        return null;
+		    }
+
+		    public String callFunctionOnObject(String using, int objectId) {
+		        return null;
+		    }
+
+		    public void addRuntime(RuntimeInfo info) { }
+
+		    public void releaseObjects() { }
+
+		    public boolean updateRuntime() {
+		        return false;
+		    }
+
+		    public void resetRuntimesList() { }
+
+			public void readyStateChanged(ReadyStateChange change) { }
+
+			public void releaseObject(int objectId) { }
+
+			public void resetFramePath() { }
+
+			public void changeRuntime(int index) { }
+
+			public String executeJavascript(String using, Integer windowId) {
+				return null;
+			}
+
+			public Object examineScriptResult(Integer id) {
+				return null;
+			}
+			};
 	}
 
 	private void connect() {
@@ -280,7 +355,7 @@ public class ScopeServices implements IConnectionHandler {
 		return ServiceResult.parseFrom(response.getPayload());
 	}
 
-	public void quit() {
+	public void quitOpera(OperaRunner runner, int pid) {
 		try {
 			if (exec.getActionList().contains("Quit"))
 				exec.action("Quit");
@@ -289,11 +364,33 @@ public class ScopeServices implements IConnectionHandler {
 		} catch (Exception e) {
 			logger.info("Caught exception when trying to shut down (cannot send quit). : " + e.getMessage());
 		}
+		
+		if (runner != null && pid > 0) {
+			long interval = OperaIntervals.QUIT_POLL_INTERVAL.getValue();
+			long timeout = OperaIntervals.QUIT_RESPONSE_TIMEOUT.getValue();
+			while (runner.isOperaRunning(pid) && timeout > 0)
+			{
+				try {
+					Thread.sleep(interval);
+				} catch (InterruptedException e) {
+					// ignore
+				}
+				timeout -= interval;
+			}
+		}
+	}
 
+	public void quit() {
+		quit(null, 0);
+	}
+	
+	public void quit(OperaRunner runner, int pid) {
+		quitOpera(runner, pid);
 		shutdown();
 	}
 
 	public boolean onConnected(StpConnection con) {
+		logger.fine("onConnect fired");
 		if (connection == null) {
 			logger.fine("Got StpConnection");
 			connection = con;

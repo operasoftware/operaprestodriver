@@ -23,10 +23,10 @@ public class StpThread extends Thread {
     private StpConnectionListener listener;
     private volatile boolean cancelled;
     
-    public StpThread(int port, IConnectionHandler handler, AbstractEventHandler eventHandler) throws IOException
+    public StpThread(int port, IConnectionHandler handler, AbstractEventHandler eventHandler, boolean manualConnect) throws IOException
     {
         SocketMonitor.instance();
-        listener = new StpConnectionListener(port, handler, eventHandler);
+        listener = new StpConnectionListener(port, handler, eventHandler, manualConnect);
         setName("stp-thread");
     }
     

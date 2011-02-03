@@ -32,6 +32,7 @@ import java.util.Scanner;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Logger;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.Cookie;
@@ -64,10 +65,9 @@ import com.opera.core.systems.scope.exceptions.CommunicationException;
 import com.opera.core.systems.scope.exceptions.FatalException;
 import com.opera.core.systems.scope.handlers.PbActionHandler;
 import com.opera.core.systems.scope.internal.OperaIntervals;
-import com.opera.core.systems.scope.internal.OperaKeys;
-import com.opera.core.systems.scope.services.ICookieManager;
-import com.opera.core.systems.scope.protos.PrefsProtos.Pref;
 import com.opera.core.systems.scope.protos.PrefsProtos.GetPrefArg.Mode;
+import com.opera.core.systems.scope.protos.PrefsProtos.Pref;
+import com.opera.core.systems.scope.services.ICookieManager;
 import com.opera.core.systems.scope.services.IEcmaScriptDebugger;
 import com.opera.core.systems.scope.services.IOperaExec;
 import com.opera.core.systems.scope.services.IPrefs;
@@ -77,10 +77,11 @@ import com.opera.core.systems.settings.OperaDriverSettings;
 public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, FindsByXPath, FindsByName, FindsByTagName, FindsByClassName,
 		FindsByCssSelector, SearchContext, JavascriptExecutor {
 	
-	private OperaDriverSettings settings;
-	private OperaRunner operaRunner;
+	protected OperaDriverSettings settings;
+	protected OperaRunner operaRunner;
 	
 	private boolean isDriverStarted = false; //Does this driver have a started opera? Makes it possible to restart opera without throwing out the driver.
+	protected final Logger logger = Logger.getLogger(this.getClass().getName());
 	
 	protected IEcmaScriptDebugger debugger;
 	protected IOperaExec exec;
@@ -104,35 +105,48 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 		
 		if(settings != null) {
 			this.settings = settings;
-			this.operaRunner = new OperaLauncherRunner(this.settings);
-		
-			this.operaRunner.startOpera();
+
+			// The runner will be setup based on if there is an
+			// Opera binary passed in or not
+			if (this.settings.getOperaBinaryLocation() != null) {
+				
+				// If there is an Opera binary passed in then launch Opera
+				this.operaRunner = new OperaLauncherRunner(this.settings);
+			}
 		}
 		
-		this.init();
+		init();
 	}
 	
 	/**
-	 * Shutdown webdriver, will kill opera an such if running.
+	 * Shutdown webdriver, will kill opera and such if running.
 	 */
 	public void shutdown(){
-		if(this.isDriverStarted)
-			this.quit();
-		this.services.shutdown();
-		this.operaRunner.shutdown();
+		if(isDriverStarted)
+			quit();
+		else
+			services.shutdown();
+		if (operaRunner != null)
+			operaRunner.shutdown();
 	}
 	
 	/**
 	 * For testing override this method.
 	 */
 	protected void init() {
-		this.createScopeServices();
-		this.services.init();
-		this.debugger = services.getDebugger();
-		this.windowManager = services.getWindowManager();
-		this.exec = services.getExec();
-		this.actionHandler = new PbActionHandler(services);
-		this.cookieManager = services.getCookieManager();
+		createScopeServices();
+		
+		// Launch Opera if the runner has been setup
+		if (operaRunner != null) {
+			operaRunner.startOpera();
+		}
+
+		services.init();
+		debugger = services.getDebugger();
+		windowManager = services.getWindowManager();
+		exec = services.getExec();
+		actionHandler = new PbActionHandler(services);
+		cookieManager = services.getCookieManager();
 		//cookieManager.updateCookieSettings();
 		prefs = services.getPrefs();
 	}
@@ -152,7 +166,12 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 	private void createScopeServices() {
 		try {
 			Map<String, String> versions = getServicesList();
-			services = new ScopeServices(versions);
+			boolean manualStart = true;
+			
+			if(settings != null && settings.getOperaBinaryLocation() != null)
+				manualStart = false;
+			
+			services = new ScopeServices(versions, manualStart);
 			services.startStpThread();
 		} catch (IOException e) {
 			throw new WebDriverException(e);
@@ -357,7 +376,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 			//change to _top
 			windowManager.filterActiveWindow();
 			debugger.resetFramePath();
-			while(findElementsByTagName("frameset").size() > 0) {
+			if(findElementsByTagName("frameset").size() > 0) {
 				switchTo().frame(0);
 			}
 			//waitForLoadToComplete();
@@ -983,10 +1002,6 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 	public void mouseEvent(int x, int y, int value) {
             exec.mouseAction(x, y, value, 1);
 	}
-	
-	public void addConsoleListener(IConsoleListener listener) {
-            services.addConsoleListener(listener);
-	}
 
     public void binaryStopped(int code) {
         services.onBinaryStopped(code);
@@ -1061,5 +1076,6 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 	public void setPref(String section, String key, String value) {
 		services.getPrefs().setPrefs(section, key, value);
 	}
+
 }
 

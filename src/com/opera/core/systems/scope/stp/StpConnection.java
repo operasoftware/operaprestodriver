@@ -61,13 +61,16 @@ public class StpConnection implements SocketListener {
         return true;
     }
 
+    /*
     @Override
     public void finalize() throws Throwable {
     	logger.severe("STPConnection cleanup");
-        if (socketChannel != null)
+        if (socketChannel != null && socketChannel.isOpen()) {
             close();
+        }
         super.finalize();
     }
+    */
 
     /**
      * Initializes variables in object scope, sets 'count known' to false to

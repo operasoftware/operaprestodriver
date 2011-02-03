@@ -9,6 +9,6 @@
 			<attribute name="javadoc_location" value="http://webdriver.googlecode.com/svn/javadoc/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="lib/winp-1.14.jar"/>
+	<classpathentry kind="lib" path="lib/commons-io-2.0.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
