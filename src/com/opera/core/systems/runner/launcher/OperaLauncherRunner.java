@@ -60,7 +60,7 @@ public class OperaLauncherRunner implements OperaRunner{
 			launcherRunner = new OperaLauncherBinary(this.settings.getOperaLauncherBinary(),stringArray.toArray(new String[stringArray.size()]));
 		}
 			
-		logger.log(Level.INFO, "Waiting for Opera Launcher connection on port " + this.settings.getOperaLauncherListeningPort());
+		logger.fine("Waiting for Opera Launcher connection on port " + this.settings.getOperaLauncherListeningPort());
         try {
         	//setup listener server
         	ServerSocket listenerServer = new ServerSocket(settings.getOperaLauncherListeningPort());
@@ -85,7 +85,7 @@ public class OperaLauncherRunner implements OperaRunner{
 	}
 	
 	public void startOpera() {
-		logger.log(Level.INFO, "Launcher starting opera...");
+		logger.fine("Launcher starting opera...");
         try {
             LauncherStartRequest.Builder request = LauncherStartRequest.newBuilder();
             ResponseEncapsulation res = launcherProtocol.sendRequest(MessageType.MSG_START, request.build().toByteArray());
@@ -98,7 +98,7 @@ public class OperaLauncherRunner implements OperaRunner{
 	}
 	
 	public void stopOpera() {
-		logger.log(Level.INFO, "Launcher stopping opera...");
+		logger.fine("Launcher stopping opera...");
         try {
             LauncherStopRequest.Builder request = LauncherStopRequest.newBuilder();
             ResponseEncapsulation res = launcherProtocol.sendRequest(MessageType.MSG_STOP, request.build().toByteArray());
@@ -115,7 +115,7 @@ public class OperaLauncherRunner implements OperaRunner{
 	}
 	
 	public boolean isOperaRunning(int processId) {
-		logger.log(Level.INFO, "Get opera status");
+		logger.info("Get opera status");
         try {
             LauncherStatusRequest.Builder request = LauncherStatusRequest.newBuilder();
             if (processId > 0)

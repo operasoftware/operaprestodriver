@@ -20,6 +20,8 @@ import com.opera.core.systems.scope.ScopeCommand;
 import com.opera.core.systems.scope.handlers.IConnectionHandler;
 import com.opera.core.systems.scope.internal.OperaIntervals;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo;
+import com.opera.core.systems.scope.protos.EcmascriptProtos.ReadyStateChange;
+import com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeInfo;
 import com.opera.core.systems.scope.protos.ScopeProtos.ClientInfo;
 import com.opera.core.systems.scope.protos.ScopeProtos.HostInfo;
 import com.opera.core.systems.scope.protos.ScopeProtos.ServiceResult;
@@ -243,7 +245,91 @@ public class ScopeServices implements IConnectionHandler {
 	private void createUmsServices(boolean enableDebugger, HostInfo info) {
 		new UmsServices(this, info);
 		if (!enableDebugger)
-			debugger = new PseudoEcmaScriptDebugger();
+			debugger = new IEcmaScriptDebugger() {
+				
+			public void setRuntime(RuntimeInfo runtime) { }
+
+		    public Object scriptExecutor(String script, Object... params) {
+		        return null;
+		    }
+
+		    public void removeRuntime(int runtimeId) { }
+
+		    public List<String> listFramePaths() {
+		        return null;
+		    }
+
+		    public void init() { }
+
+		    public int getRuntimeId() {
+		        return 0;
+		    }
+
+		    public Integer getObject(String using) {
+		        return null;
+		    }
+
+		    public Integer executeScriptOnObject(String using, int objectId) {
+		        return null;
+		    }
+
+		    public Object executeScript(String using, boolean responseExpected) {
+		        return null;
+		    }
+
+		    public String executeJavascript(String using, boolean responseExpected) {
+		        return null;
+		    }
+
+		    public String executeJavascript(String using) {
+		        return null;
+		    }
+
+		    public List<Integer> examineObjects(Integer id) {
+		        return null;
+		    }
+
+		    public void cleanUpRuntimes() { }
+
+		    public void cleanUpRuntimes(int windowId) { }
+
+		    public void changeRuntime(String framePath) { }
+
+		    public Object callFunctionOnObject(String using, int objectId,
+		                boolean responseExpected) {
+		        return null;
+		    }
+
+		    public String callFunctionOnObject(String using, int objectId) {
+		        return null;
+		    }
+
+		    public void addRuntime(RuntimeInfo info) { }
+
+		    public void releaseObjects() { }
+
+		    public boolean updateRuntime() {
+		        return false;
+		    }
+
+		    public void resetRuntimesList() { }
+
+			public void readyStateChanged(ReadyStateChange change) { }
+
+			public void releaseObject(int objectId) { }
+
+			public void resetFramePath() { }
+
+			public void changeRuntime(int index) { }
+
+			public String executeJavascript(String using, Integer windowId) {
+				return null;
+			}
+
+			public Object examineScriptResult(Integer id) {
+				return null;
+			}
+			};
 	}
 
 	private void connect() {

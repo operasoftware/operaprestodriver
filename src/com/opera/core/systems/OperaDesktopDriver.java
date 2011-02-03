@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import com.opera.core.systems.profile.ProfileUtils;
 import com.opera.core.systems.runner.launcher.OperaLauncherRunner;
 import com.opera.core.systems.scope.exceptions.CommunicationException;
 import com.opera.core.systems.scope.internal.OperaIntervals;
@@ -15,6 +14,7 @@ import com.opera.core.systems.scope.services.IDesktopWindowManager;
 import com.opera.core.systems.scope.services.IDesktopUtils;
 import com.opera.core.systems.scope.services.ums.SystemInputManager;
 import com.opera.core.systems.settings.OperaDriverSettings;
+import com.opera.core.systems.util.ProfileUtils;
 
 /**
  * Desktop Driver.
