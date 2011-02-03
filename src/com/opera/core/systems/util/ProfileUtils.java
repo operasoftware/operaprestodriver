@@ -1,4 +1,4 @@
-package com.opera.core.systems.profile;
+package com.opera.core.systems.util;
 
 import java.io.File;
 import java.io.IOException;
