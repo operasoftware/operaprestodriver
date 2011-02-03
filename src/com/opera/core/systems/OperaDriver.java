@@ -105,7 +105,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
     if (settings == null) {
       settings = new OperaDriverSettings();
       settings.setRunOperaLauncherFromOperaDriver(true);
-      
+
       OperaPaths paths = new OperaPaths();
 
       settings.setOperaBinaryLocation(paths.operaPath());
@@ -113,14 +113,14 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 
       settings.setOperaBinaryArguments("");
     }
-    
+
     this.settings = settings;
     operaRunner = new OperaLauncherRunner(this.settings);
-    operaRunner.startOpera();    
-    
+    operaRunner.startOpera();
+
     init();
   }
-	
+
 	/**
 	 * Shutdown webdriver, will kill opera and such if running.
 	 */
