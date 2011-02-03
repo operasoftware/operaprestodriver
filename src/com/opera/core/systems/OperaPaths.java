@@ -27,11 +27,13 @@ public class OperaPaths {
     if ((path = checkPath(System.getenv("OPERA_PATH"))) != null) return path;
     Platform platform = Platform.getCurrent();
 
-    if (platform.is(Platform.UNIX)) {
+    // TODO find if Mac supports `which`
+    if (platform.is(Platform.LINUX) || platform.is(Platform.MAC) ||
+        platform.is(Platform.UNIX)) {
       if ((path = checkPath(execProg("which opera"))) != null) return path;
     }
 
-    if (platform.is(Platform.LINUX)) {
+    if (platform.is(Platform.LINUX) || platform.is(Platform.UNIX)) {
       if ((path = checkPath("/usr/bin/opera")) != null) return path;
 
     } else if (platform.is(Platform.WINDOWS)) {
