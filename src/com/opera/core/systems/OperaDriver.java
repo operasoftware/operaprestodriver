@@ -97,7 +97,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 
 
 	public OperaDriver() {
-		this(null);
+		this(makeSettings());
 	}
 
 	/**
@@ -118,8 +118,27 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 		}
 		
 		init();
-	}
-	
+  }
+
+	 /**
+   * Make a new settings object, automatically finding the Opera and launcher
+   * binaries.
+   * @return A new settings object that is correctly set up.
+   */
+  private static OperaDriverSettings makeSettings() {
+    OperaDriverSettings settings = new OperaDriverSettings();
+    settings.setRunOperaLauncherFromOperaDriver(true);
+
+    OperaPaths paths = new OperaPaths();
+
+    settings.setOperaBinaryLocation(paths.operaPath());
+    settings.setOperaLauncherBinary(paths.launcherPath());
+
+    settings.setOperaBinaryArguments("");
+
+    return settings;
+  }
+
 	/**
 	 * Shutdown webdriver, will kill opera and such if running.
 	 */
