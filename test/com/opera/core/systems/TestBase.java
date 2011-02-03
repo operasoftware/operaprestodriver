@@ -21,11 +21,7 @@ abstract public class TestBase {
 
   @BeforeClass
   public static void setUpBeforeClass() throws Exception {
-    // Start up the driver
-    OperaDriverSettings settings = new OperaDriverSettings();
-    setUpSettings(settings);
-
-    driver = new TestOperaDriver(settings);
+    driver = new TestOperaDriver();
     Assert.assertNotNull(driver);
 
     // Setup the fixture directory
@@ -35,17 +31,6 @@ abstract public class TestBase {
         + separator;
 
     Assert.assertTrue(new File(fixture_dir).isDirectory());
-  }
-
-  public static void setUpSettings(OperaDriverSettings settings) {
-    settings.setRunOperaLauncherFromOperaDriver(true);
-
-    // TODO make work everywhere
-    settings.setOperaBinaryLocation(binary);
-    settings.setOperaLauncherBinary(launcher);
-
-    // FIXME -nosession doesn't work on Windows
-    settings.setOperaBinaryArguments("opera:debug");
   }
 
   @AfterClass
@@ -68,6 +53,10 @@ abstract public class TestBase {
 
 // Provides access to the Opera Runner, so we can detect crashes
 class TestOperaDriver extends OperaDriver {
+  public TestOperaDriver() {
+    super();
+  }
+
   public TestOperaDriver(OperaDriverSettings settings) {
     super(settings);
   }
