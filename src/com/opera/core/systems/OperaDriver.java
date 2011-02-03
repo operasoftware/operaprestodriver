@@ -103,20 +103,22 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 	 * Constructor that starts opera.
 	 */
 	public OperaDriver(OperaDriverSettings settings){
+    if (settings != null) {
+      this.settings = settings;
 
-		if(settings != null) {
-			this.settings = settings;
+      OperaPaths paths = new OperaPaths();
+      if (this.settings.getOperaBinaryLocation() == null) {
+        settings.setOperaBinaryLocation(paths.operaPath());
+      }
+      if (this.settings.getOperaLauncherBinary() == null) {
+        settings.setOperaLauncherBinary(paths.launcherPath());
+      }
 
-			// The runner will be setup based on if there is an
-			// Opera binary passed in or not
-			if (this.settings.getOperaBinaryLocation() != null) {
+      this.operaRunner = new OperaLauncherRunner(this.settings);
+    }
 
-				// If there is an Opera binary passed in then launch Opera
-				this.operaRunner = new OperaLauncherRunner(this.settings);
-			}
-		}
 
-		init();
+    init();
   }
 
 	 /**
