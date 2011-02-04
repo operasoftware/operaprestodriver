@@ -65,7 +65,7 @@
   <!-- Build the jar -->
   <target name="jar" depends="compile">
     <mkdir dir="pkg" />
-    <loadfile srcfile="src/com/opera/core/systems/VERSION" property="versionfile" />
+    <loadfile srcfile="VERSION" property="versionfile" />
 
     <!-- Will remove new line in version file. -->
     <propertyregex property="version"
@@ -120,7 +120,7 @@
   <target name="test_jar" depends="test_compile">
   	<delete dir="pkg" />
     <mkdir dir="pkg" />
-    <loadfile srcfile="src/com/opera/core/systems/VERSION" property="versionfile" />
+    <loadfile srcfile="VERSION" property="versionfile" />
 
     <!-- Will remove new line in version file -->
     <propertyregex property="version"
