@@ -71,6 +71,14 @@
       	<attribute name="Implementation-Version" value="${version}" />
       </manifest>
     </jar>
+  	
+  	<!-- Add the launchers. We do it this way to preserve their permissions. 
+  	In Ant 1.8+ we can add preservepermissions="true" to the <jar> element -->
+    <exec executable="zip" os="Linux">
+    	<arg value="-r" />    	
+      <arg value="pkg/webdriver-opera-${version}.jar" />
+      <arg value="launchers/" />
+    </exec>  	
   </target>
 
   <!--
