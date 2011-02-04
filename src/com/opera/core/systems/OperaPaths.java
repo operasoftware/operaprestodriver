@@ -73,7 +73,7 @@ public class OperaPaths {
     if (path == null) return null;
 
     File file = new File(path);
-    if (file.exists() && file.canExecute()) return path;
+    if (file.exists()) return path;
 
     return null;
   }
@@ -83,8 +83,7 @@ public class OperaPaths {
     try {
       Process process = Runtime.getRuntime().exec(cmd);
 
-      BufferedReader out= new BufferedReader(new InputStreamReader(process
-          .getInputStream()));
+      BufferedReader out= new BufferedReader(new InputStreamReader(process.getInputStream()));
 
       String line = null;
 
