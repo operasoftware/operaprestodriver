@@ -6,6 +6,7 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.opera.core.systems.scope.exceptions.CommunicationException;
@@ -30,6 +31,7 @@ public class CrashTest extends TestBase {
     Runtime.getRuntime().exec("kill `pgrep opera").waitFor();
   }
 
+  @Ignore
   @Test
   public void testCore34284() {
     Assert.assertTrue(driver.getRunner().isOperaRunning());
@@ -41,7 +43,7 @@ public class CrashTest extends TestBase {
     Assert.assertFalse(driver.getRunner().isOperaRunning());
   }
 
-
+  @Ignore
   @Test
   public void testCore32224() {
     Assert.assertTrue(driver.getRunner().isOperaRunning());
