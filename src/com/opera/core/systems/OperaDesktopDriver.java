@@ -71,7 +71,7 @@ public class OperaDesktopDriver extends OperaDriver {
 	 * and then restarting it under the control of the {@link OperaLauncherRunner}.
 	 *
 	 */
-	protected void initDesktopDriver() {
+	private void initDesktopDriver() {
 		//super.init();
 		
 		setServices();
@@ -123,7 +123,8 @@ public class OperaDesktopDriver extends OperaDriver {
 	}
 
 	/**
-	 * Shuts down the driver without quiting Opera.
+	 * Shuts down the driver.
+	 * If settings.NoQuit is set, this will not quit Opera.
 	 */
 	public void quitDriver() {
 		super.shutdown();
@@ -615,22 +616,21 @@ public class OperaDesktopDriver extends OperaDriver {
 	 * Deletes the profile for the connected Opera instance.
 	 * 
 	 * Should only be called after the given Opera instance has quit
-	 * Presupposes the connected Opera instance is running on same node
+	 * 
 	 */
 	public void deleteOperaPrefs() {
-		profileUtils.deleteProfile();
+		// Only delete if Opera is currently not running
+		// Don't delete in no-launcher mode
+		if (operaRunner != null && !operaRunner.isOperaRunning())
+			profileUtils.deleteProfile();
+		else
+			logger.warning("Cannot delete profile while Opera is running");
 	}
 	
 	public int getPid() {
 		return desktopUtils.getOperaPid();
 	}
 
-	/**
-	 *  Starts Opera. This will reinitialize services.
-	 */
-	/*private void startOpera() {
-		init();
-	}*/
 }
 
 
