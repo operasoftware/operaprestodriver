@@ -230,7 +230,6 @@ public class ScopeServices implements IConnectionHandler {
 			shutdown();
 			throw e;
 		}
-
 	}
 
 	private HostInfo getHostInfo() {
@@ -444,8 +443,7 @@ public class ScopeServices implements IConnectionHandler {
 		waitState.onHandshake();
 	}
         
-	public void onDisconnect()
-        {
+	public void onDisconnect() {
             logger.fine("Disconnected, closing StpConnection.");
             if (connection != null)
             {

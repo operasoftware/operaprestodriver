@@ -18,20 +18,21 @@ limitations under the License.
 
 package com.opera.core.systems;
 
-import java.awt.Dimension;
-import java.awt.Point;
 import java.io.FileOutputStream;
 import java.util.List;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.Dimension;
 import org.openqa.selenium.ElementNotVisibleException;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.Point;
 import org.openqa.selenium.RenderedWebElement;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.internal.Coordinates;
 import org.openqa.selenium.internal.FindsByClassName;
 import org.openqa.selenium.internal.FindsByCssSelector;
 import org.openqa.selenium.internal.FindsById;
@@ -750,5 +751,10 @@ public class OperaWebElement implements RenderedWebElement, SearchContext, Locat
 	protected void finalize() throws Throwable {
 		debugger.releaseObject(objectId);
 		super.finalize();
+	}
+
+	public Coordinates getCoordinates() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

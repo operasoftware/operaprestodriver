@@ -34,6 +34,7 @@ import java.util.TreeSet;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Cookie;
 import org.openqa.selenium.JavascriptExecutor;
@@ -76,13 +77,15 @@ import com.opera.core.systems.settings.OperaDriverSettings;
 
 public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, FindsByXPath, FindsByName, FindsByTagName, FindsByClassName,
 		FindsByCssSelector, SearchContext, JavascriptExecutor {
-	
+
+	// These are "protected" and not "private" so that we can extend this class
+	// and add methods to access these variable in tests
 	protected OperaDriverSettings settings;
 	protected OperaRunner operaRunner;
-	
+
 	private boolean isDriverStarted = false; //Does this driver have a started opera? Makes it possible to restart opera without throwing out the driver.
 	protected final Logger logger = Logger.getLogger(this.getClass().getName());
-	
+
 	protected IEcmaScriptDebugger debugger;
 	protected IOperaExec exec;
 	protected IPrefs prefs;
@@ -90,34 +93,54 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 	protected ICookieManager cookieManager;
 	protected ScopeServices services;
 	protected ScopeActions actionHandler;
-	
+
 	protected Set<Integer> objectIds = new HashSet<Integer>();
 
-	
 	public OperaDriver() {
-		this(null);
+		this(makeSettings());
 	}
-	
+
 	/**
 	 * Constructor that starts opera.
 	 */
 	public OperaDriver(OperaDriverSettings settings){
-		
-		if(settings != null) {
-			this.settings = settings;
+    if (settings != null) {
+      this.settings = settings;
 
-			// The runner will be setup based on if there is an
-			// Opera binary passed in or not
-			if (this.settings.getOperaBinaryLocation() != null) {
-				
-				// If there is an Opera binary passed in then launch Opera
-				this.operaRunner = new OperaLauncherRunner(this.settings);
-			}
-		}
-		
-		init();
-	}
-	
+      OperaPaths paths = new OperaPaths();
+      if (settings.getOperaBinaryLocation() == null) {
+        settings.setOperaBinaryLocation(paths.operaPath());
+      }
+      if (settings.getOperaLauncherBinary() == null) {
+        settings.setOperaLauncherBinary(paths.launcherPath());
+      }
+      
+      this.operaRunner = new OperaLauncherRunner(this.settings);
+    }
+
+
+    init();
+  }
+
+	 /**
+   * Make a new settings object, automatically finding the Opera and launcher
+   * binaries.
+   * @return A new settings object that is correctly set up.
+   */
+  private static OperaDriverSettings makeSettings() {
+    OperaDriverSettings settings = new OperaDriverSettings();
+    settings.setRunOperaLauncherFromOperaDriver(true);
+
+    OperaPaths paths = new OperaPaths();
+
+    settings.setOperaBinaryLocation(paths.operaPath());
+    settings.setOperaLauncherBinary(paths.launcherPath());
+
+    settings.setOperaBinaryArguments("");
+
+    return settings;
+  }
+
 	/**
 	 * Shutdown webdriver, will kill opera and such if running.
 	 */
@@ -129,13 +152,13 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 		if (operaRunner != null)
 			operaRunner.shutdown();
 	}
-	
+
 	/**
 	 * For testing override this method.
 	 */
 	protected void init() {
 		createScopeServices();
-		
+
 		// Launch Opera if the runner has been setup
 		if (operaRunner != null) {
 			operaRunner.startOpera();
@@ -150,7 +173,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 		//cookieManager.updateCookieSettings();
 		prefs = services.getPrefs();
 	}
-	
+
 	protected Map<String, String> getServicesList()
 	{
 		Map<String, String> versions = new HashMap<String, String>();
@@ -167,10 +190,10 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 		try {
 			Map<String, String> versions = getServicesList();
 			boolean manualStart = true;
-			
+
 			if(settings != null && settings.getOperaBinaryLocation() != null)
 				manualStart = false;
-			
+
 			services = new ScopeServices(versions, manualStart);
 			services.startStpThread();
 		} catch (IOException e) {
@@ -181,7 +204,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 	public void get(String url) {
             get(url, OperaIntervals.PAGE_LOAD_TIMEOUT.getValue());
 	}
-	
+
 	public int get(String url, long timeout) {
 
 		if (url == null)
@@ -227,7 +250,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 	public String getCurrentUrl() {
 		return debugger.executeJavascript("return document.location.href");
 	}
-	
+
 	private void gc() {
     	debugger.releaseObjects();
     	objectIds.clear();
@@ -316,10 +339,10 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 	}
 
 	public Set<String> getWindowHandles() {
-		
+
 		List<Integer> windowIds = windowManager.getWindowHandles();
 		Set<String> handles = new TreeSet<String>();
-		
+
 		if(OperaIntervals.ENABLE_DEBUGGER.getValue() != 1) {
 			for (Integer windowId : windowIds) {
 				handles.add(windowId.toString());
@@ -328,18 +351,18 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 		}
 
 		windowManager.clearFilter();
-		
+
 		for (Integer windowId : windowIds) {
 			//windowManager.filterWindow(windowId);
 			String handleName = debugger.executeJavascript("return top.window.name ? top.window.name : (top.document.title ? top.document.title : 'undefined');", windowId);
 			handles.add(handleName);
 		}
-		
+
 		windowManager.filterActiveWindow();
 		debugger.resetRuntimesList();
 		return handles;
 	}
-	
+
 	public int getWindowCount() {
 		return windowManager.getWindowHandles().size();
 	}
@@ -359,7 +382,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 	public TargetLocator switchTo() {
 		return new OperaTargetLocator();
 	}
-	
+
 	private class OperaTargetLocator implements TargetLocator {
 
 		public WebElement activeElement() {
@@ -381,29 +404,29 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 			//make sure we execute this one on "_top"
 			debugger.resetFramePath();
 			int framesLength = Integer.valueOf(debugger.executeJavascript("return document.frames.length"));
-			
+
 			if(frameIndex < 0 || frameIndex >= framesLength)
 				throw new NoSuchFrameException("Invalid frame index : " + frameIndex);
 
 			debugger.changeRuntime(frameIndex);
-			
+
 			return OperaDriver.this;
 		}
 
 		public WebDriver frame(String frameName) {
-			debugger.resetFramePath();	
+			debugger.resetFramePath();
 			debugger.changeRuntime(frameName);
 			return OperaDriver.this;
 		}
-		
+
 
 		public WebDriver window(String windowName) {
 			windowManager.clearFilter();
-			
+
 			List<Integer> windowIds = windowManager.getWindowHandles();
-			
+
 			Integer id = 0;
-			
+
 			for (Integer windowId : windowIds) {
 				String name = debugger.executeJavascript("return top.window.name ? top.window.name : top.document.title;", windowId);
 				if(name.equals(windowName)) {
@@ -411,21 +434,31 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 					break;
 				}
 			}
-			
+
 			if(id == 0)
 				throw new NoSuchWindowException("Window with name "  + windowName + " not found");
 			windowManager.setActiveWindowId(id);
-			
+
 			windowManager.filterActiveWindow();
 			debugger.resetRuntimesList();
-			
+
 			defaultContent(); //set runtime to _top
 			debugger.executeJavascript("window.focus()", false); //steal focus
 			return OperaDriver.this;
 		}
-		
+
+		public WebDriver frame(WebElement frameElement) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		// This and more functionality will be provided natively in near future, in progress
+		public Alert alert() {
+			throw new UnsupportedOperationException();
+		}
+
 	}
-	
+
 	/**
 	 * TODO: Add to official API?
 	 * @return list of frames available for chosing
@@ -433,11 +466,11 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 	public List<String> listFrames(){
 		return debugger.listFramePaths();
 	}
-	
+
 	private WebElement findActiveElement() {
 		return findSingleElement("document.activeElement;", "active element");
 	}
-	
+
 
 	// TODO Benchmark, XPath is supposed to be faster?
 	public WebElement findElementByLinkText(String using) {
@@ -474,17 +507,17 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 				"}\n" +
 				"return elements; })()", "link text");
 	}
-	
-	protected List<WebElement> processElements(Integer id){		
+
+	protected List<WebElement> processElements(Integer id){
 		List<Integer> ids = debugger.examineObjects(id);
 		List<WebElement> toReturn = new ArrayList<WebElement>();
 		for (Integer objectId : ids)
 			toReturn.add(new OperaWebElement(this, objectId));
 		return toReturn;
 	}
-	
+
 	public List<WebElement> findElementsByPartialLinkText(String using) {
-		
+
 		return findMultipleElements("(function(){\n"+
 				"var links = document.links, link = null, i = 0, elements = [];\n"+
 				"for( ; link = links[i]; i++)\n"+
@@ -550,7 +583,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 			//old bad opera wait for page
 			long endTime = System.currentTimeMillis() + OperaIntervals.PAGE_LOAD_TIMEOUT.getValue();
 			while (!"complete".equals(debugger.executeJavascript("return document.readyState"))) {
-				if(System.currentTimeMillis() < endTime) 
+				if(System.currentTimeMillis() < endTime)
 					sleep(OperaIntervals.POLL_INVERVAL.getValue());
 				else
 					throw new WebDriverException("Timeout while loading page");
@@ -617,7 +650,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 		public void deleteCookie(Cookie cookie) {
 			if(cookieManager == null)
 				throw new UnsupportedOperationException("Deleting cookies are not supported without the cookie-manager service");
-			
+
 			cookieManager.removeCookie(cookie.getDomain(), cookie.getPath(), cookie.getName());
 			gc();
 			/*
@@ -630,7 +663,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 		public void deleteAllCookies() {
 			if(cookieManager == null)
 				throw new UnsupportedOperationException("Deleting cookies are not supported without the cookie-manager service");
-			
+
 			cookieManager.removeAllCookies();
 			/*
 			Set<Cookie> cookies = getCookies();
@@ -643,7 +676,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 		public Set<Cookie> getCookies() {
 			if(cookieManager == null)
 				throw new UnsupportedOperationException("Setting cookies are not supported without the cookie-manager service");
-			
+
 			return cookieManager.getCookie(debugger.executeJavascript("window.location.hostname"), null);
 		}
 
@@ -657,12 +690,12 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 
 		public Cookie getCookieNamed(String name) {
 			Set<Cookie> allCookies = getCookies();
-			
+
 			for (Cookie cookie : allCookies) {
 				if(cookie.getName().equals(name))
 					return cookie;
 			}
-			
+
 			return null;
 			/*
 			String value = debugger.executeJavascript("var getCookieNamed = function(key)\n"+
@@ -679,29 +712,35 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 			return new OperaTimeouts();
 		}
 	}
-	
+
 	private class OperaTimeouts implements Timeouts {
 
 		public Timeouts implicitlyWait(long time, TimeUnit unit) {
 			OperaIntervals.WAIT_FOR_ELEMENT.setValue(TimeUnit.MILLISECONDS.convert(time, unit));
 			return this;
 		}
-		
+
+		public Timeouts setScriptTimeout(long time, TimeUnit unit) {
+			OperaIntervals.SCRIPT_TIMEOUT.setValue(TimeUnit.MILLISECONDS.convert(time, unit));
+			return this;
+		}
+
 	}
-	
+
 	public void operaAction(String using, String... params) {
-            
+
 		exec.action(using, params);
 	}
-	
+
 	public Set<String> getOperaActionList() {
 		return exec.getActionList();
 	}
-	
+
 	/**
 	 * @deprecated Don't use sleep!
 	 */
-	private static void sleep(long timeInMillis) {
+  @Deprecated
+  private static void sleep(long timeInMillis) {
 		try {
 			Thread.sleep(timeInMillis);
 		} catch (InterruptedException e) {
@@ -749,16 +788,16 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 
 	private final List<WebElement> findMultipleElements(String script, String type) {
 		Integer id;
-		
+
 		long start = System.currentTimeMillis();
 		int count = 0;
 
 		List<WebElement> elements;
-		
+
 		do {
 			id = debugger.getObject(script);
 			elements = processElements(id);
-			
+
 			if(elements != null)
 				count = elements.size();
 
@@ -769,14 +808,14 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 		} while (true);
 
 		OperaIntervals.WAIT_FOR_ELEMENT.setValue(0L);
-		
+
 		if (id != null) {
 			return elements;
 		} else {
 			throw new NoSuchElementException("Cannot find element(s) with " + type);
 		}
 	}
-	
+
 	private final WebElement findSingleElement(String script, String type) {
 		long start = System.currentTimeMillis();
 		boolean isAvailable = false;
@@ -791,21 +830,21 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 		} while (true);
 
 		OperaIntervals.WAIT_FOR_ELEMENT.setValue(0L);
-		
+
 		if (isAvailable) {
 			Integer id = debugger.getObject(script);
 			Boolean isStale = Boolean.valueOf(debugger.callFunctionOnObject("locator.parentNode == undefined", id));
-			
+
 			if(isStale)
 				throw new StaleElementReferenceException("This element is no longer part of DOM");
-			
+
 			return new OperaWebElement(this, id);
 		} else {
 			throw new NoSuchElementException("Cannot find element(s) with " + type);
 		}
 	}
-	
-	
+
+
 	boolean hasTimeRemaining(long start) {
 		return System.currentTimeMillis() - start < OperaIntervals.WAIT_FOR_ELEMENT.getValue();
 	}
@@ -819,15 +858,15 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 	}
 
 	public ScreenShotReply saveScreenshot(Canvas canvas, long timeout, boolean includeImage, String... hashes) {
-		
-		 * FIXME: This _needs_ be cleaned up.  All things related to 
+
+		 * FIXME: This _needs_ be cleaned up.  All things related to
 		 * `timeout` should, ideally, be removed and handled elsewhere.
-		 
-		
+
+
 		//
 		// * No reason to wait if we have idle control.  Builds without
 		// * OperaIdle enabled will fail if timeout is 1 or less.
-		// 
+		//
 		if(services.isOperaIdleAvailable()) {
 			timeout = 1;
 		} else if (!services.isOperaIdleAvailable() && timeout <= 1) {
@@ -836,22 +875,22 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 
         return exec.screenWatcher(canvas, timeout, includeImage, hashes);
 	}
-	
+
 	private String screenWatcher(String fileName, int timeout, boolean saveFile, String... hashes) {
 		Canvas canvas = new Canvas();
 		canvas.setX(0);
 		canvas.setY(0);
-		
+
 		String[] dimensions = debugger.executeJavascript("return (window.innerWidth + \",\" + window.innerHeight);").split(",");
 		canvas.setH(Integer.valueOf(dimensions[1]));
 		canvas.setW(Integer.valueOf(dimensions[0]));
 		canvas.setViewPortRelative(true);
-		 
+
 		ScreenShotReply screenshot = saveScreenshot(canvas, timeout, saveFile, hashes);
-		
+
 		if(saveFile && screenshot.getPng() != null) {
 			FileOutputStream stream;
-			
+
 			try {
 				stream = new FileOutputStream(fileName);
 				stream.write(screenshot.getPng());
@@ -860,11 +899,11 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 				throw new WebDriverException("Failed to write file: " + e.getMessage());
 			}
 		}
-		
+
 		return screenshot.getMd5();
 	}
 	*/
-	
+
 	public ScreenShotReply saveScreenshot(long timeout, String... hashes)
 	{
 		/*
@@ -876,12 +915,12 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 		*/
 		return operaRunner.saveScreenshot(timeout, hashes);
 	}
-	
+
 	public boolean isOperaIdleAvailable()
 	{
 		return services.isOperaIdleAvailable();
 	}
-	
+
 	public Object executeScript(String script, Object... args) {
             Object object = debugger.scriptExecutor(script, args);
 
@@ -896,11 +935,11 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
                 if(result.getClassName().equals("NodeList"))
                     return processElements(objectId);
                 if(result.getClassName().equals("Array") || result.getClassName().equals("Object"))
-                    return debugger.examineScriptResult(objectId);         	
+                    return debugger.examineScriptResult(objectId);
             }
             return object;
 	}
-	
+
 	public boolean isJavascriptEnabled() {
             // FIXME we always assume it is true
             // TODO it should not be possible to register esdbg if js is disabled?
@@ -919,7 +958,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
             }
             waitForLoadToComplete();
 	}
-	
+
 	/**
 	 * @deprecated This should not be used!
 	 */
@@ -927,11 +966,11 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 	public boolean isConnected() {
 		return services.isConnected();
 	}
-	
+
 	public void key(String key) {
 		keyDown(key);
 		keyUp(key);
-		
+
 		if(key.equalsIgnoreCase("enter")) {
 			sleep(OperaIntervals.EXEC_SLEEP.getValue());
 			waitForLoadToComplete();
@@ -953,7 +992,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 	public void type(String using) {
             exec.type(using);
 	}
-	
+
 	public void mouseEvent(int x, int y, int value) {
             exec.mouseAction(x, y, value, 1);
 	}
@@ -961,7 +1000,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
     public void binaryStopped(int code) {
         services.onBinaryStopped(code);
     }
-    
+
     /**
      * Cache of OperaDriver version.
      */
@@ -971,15 +1010,15 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
      * Gets the OperaDriver version.  Once the version number has been
      * loaded from an external flat file, it will be cached and returned
      * from cache on future calls.
-     * @return 
-     * 
+     * @return
+     *
      * @return OperaDriver version number as a String
      * @throws IOException if the version file cannot be found
      */
     public String getOperaDriverVersion() throws IOException {
     	if (operaDriverVersion == null) {
     		InputStream stream = OperaDriver.class.getResourceAsStream("/com/opera/core/systems/VERSION");
-    		
+
     		StringBuilder stringBuilder = new StringBuilder();
     		Scanner scanner = new Scanner(stream);
 
@@ -987,7 +1026,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
     			while (scanner.hasNext()) {
     				stringBuilder.append(scanner.nextLine());
     			}
-    			
+
     			operaDriverVersion = stringBuilder.toString();
     		} catch (Exception e) {
     			throw new FatalException("Could not load the version information:"
@@ -996,10 +1035,10 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
     			scanner.close();
     		}
     	}
-    	
+
     	return operaDriverVersion;
     }
-    
+    	  
     protected IEcmaScriptDebugger getScriptDebugger() {
 		return debugger;
 	}
@@ -1015,7 +1054,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 	protected ScopeServices getScopeServices() {
 		return services;
 	}
-    
+
 	public String getPref(String section, String key) {
 		return services.getPrefs().getPref(section, key, Mode.CURRENT);
 	}
@@ -1027,9 +1066,13 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 	public List<Pref> listPrefs(boolean sort, String section) {
 		return services.getPrefs().listPrefs(sort, section);
 	}
-	
+
 	public void setPref(String section, String key, String value) {
 		services.getPrefs().setPrefs(section, key, value);
+	}
+
+	public Object executeAsyncScript(String script, Object... args) {
+		throw new UnsupportedOperationException();
 	}
 
 }
