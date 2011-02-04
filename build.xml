@@ -89,7 +89,7 @@
     <exec executable="zip" os="Linux">
       <arg value="-r" />
       <arg value="pkg/webdriver-opera-${version}.jar" />
-      <arg value="launchers/" />
+      <arg value="launcher/" />
     </exec>
   </target>
 
