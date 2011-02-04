@@ -19,14 +19,9 @@ limitations under the License.
 package com.opera.core.systems;
 
 import java.awt.Dimension;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
-import java.net.URISyntaxException;
 import java.net.URL;
-import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -39,15 +34,13 @@ import java.util.TreeSet;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Cookie;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.NoSuchFrameException;
 import org.openqa.selenium.NoSuchWindowException;
-import org.openqa.selenium.Platform;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.Speed;
 import org.openqa.selenium.StaleElementReferenceException;
@@ -115,13 +108,13 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
       this.settings = settings;
 
       OperaPaths paths = new OperaPaths();
-      if (this.settings.getOperaBinaryLocation() == null) {
+      if (settings.getOperaBinaryLocation() == null) {
         settings.setOperaBinaryLocation(paths.operaPath());
       }
-      if (this.settings.getOperaLauncherBinary() == null) {
+      if (settings.getOperaLauncherBinary() == null) {
         settings.setOperaLauncherBinary(paths.launcherPath());
       }
-
+      
       this.operaRunner = new OperaLauncherRunner(this.settings);
     }
 
@@ -454,6 +447,16 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 			return OperaDriver.this;
 		}
 
+		public WebDriver frame(WebElement frameElement) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		// This and more functionality will be provided natively in near future, in progress
+		public Alert alert() {
+			throw new UnsupportedOperationException();
+		}
+
 	}
 
 	/**
@@ -714,6 +717,11 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 
 		public Timeouts implicitlyWait(long time, TimeUnit unit) {
 			OperaIntervals.WAIT_FOR_ELEMENT.setValue(TimeUnit.MILLISECONDS.convert(time, unit));
+			return this;
+		}
+
+		public Timeouts setScriptTimeout(long time, TimeUnit unit) {
+			OperaIntervals.SCRIPT_TIMEOUT.setValue(TimeUnit.MILLISECONDS.convert(time, unit));
 			return this;
 		}
 
@@ -1030,93 +1038,6 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 
     	return operaDriverVersion;
     }
-
-	public String getOperaLauncherPath() {
-		String launcherName = getLauncherNameForOS();
-
-		URL res = OperaDriver.class.getClassLoader().getResource(launcherName);
-		if (res != null) {
-			String url = res.toExternalForm();
-			if ((url.startsWith("jar:")) || (url.startsWith("wsjar:"))) {
-				int idx = url.lastIndexOf('!');
-				String filePortion = url.substring(url.indexOf(':') + 1, idx);
-
-				while (filePortion.startsWith("/")) {
-					filePortion = filePortion.substring(1);
-				}
-
-				if (filePortion.startsWith("file:/")) {
-					filePortion = filePortion.substring(6);
-
-					if (filePortion.startsWith("//"))
-						filePortion = filePortion.substring(2);
-					
-					
-					try {
-						filePortion = URLDecoder.decode(filePortion, "UTF-8");
-					} catch (UnsupportedEncodingException ex) {
-						throw new WebDriverException("Can't decode path name, UTF-8 is not supported");
-					}
-					
-					File jarFile = new File(filePortion);
-					String executablePath = FileUtils.getUserDirectoryPath() + IOUtils.DIR_SEPARATOR + "." + launcherName;
-					
-					File executable = new File(executablePath);
-					
-					if ((!executable.exists()) || FileUtils.isFileNewer(jarFile, executable)) {
-						try {
-							if(!executable.exists()) FileUtils.touch(executable);
-							
-							IOUtils.copy(res.openStream(), new FileOutputStream(executable));
-							executable.setLastModified(jarFile.lastModified());
-						} catch (IOException e) {
-							throw new WebDriverException("Cant write file to disk : " + e.getMessage());
-						}
-					}
-					
-					return executable.getAbsolutePath();
-				}
-			} else if (url.startsWith("file:")) {
-				File f;
-				try {
-					f = new File(res.toURI());
-				} catch (URISyntaxException e) {
-					f = new File(res.getPath());
-				}
-				return f.getAbsolutePath();
-			}
-		}
-		return null;
-	}
-	
-	private String getLauncherNameForOS() {
-		boolean is64 = "64".equals(System.getProperty("sun.arch.data.model"));
-		Platform currentPlatform = Platform.getCurrent();
-		
-		StringBuilder launcherBuilder = new StringBuilder();
-		
-		launcherBuilder.append("launcher");
-		launcherBuilder.append(File.separatorChar);
-		
-		switch (currentPlatform) {
-		case LINUX:
-		case UNIX:
-			launcherBuilder.append(is64 ? "launcher-linux-x86_64" : "launcher-linux-i686");
-			break;
-		case MAC:
-			launcherBuilder.append("launcher-mac");
-			break;
-		case WINDOWS:
-		case VISTA:
-		case XP:
-			launcherBuilder.append("launcher-win32-i86pc.exe");
-			break;
-		default:
-			throw new WebDriverException("Could not find a platfom that supports bundled launchers, please set it manually");
-		}
-		
-		return launcherBuilder.toString();
-	}
     	  
     protected IEcmaScriptDebugger getScriptDebugger() {
 		return debugger;
@@ -1148,6 +1069,10 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 
 	public void setPref(String section, String key, String value) {
 		services.getPrefs().setPrefs(section, key, value);
+	}
+
+	public Object executeAsyncScript(String script, Object... args) {
+		throw new UnsupportedOperationException();
 	}
 
 }

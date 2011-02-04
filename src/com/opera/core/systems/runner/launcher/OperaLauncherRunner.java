@@ -8,6 +8,8 @@ import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.openqa.selenium.WebDriverException;
+
 import com.google.protobuf.GeneratedMessage;
 import com.opera.core.systems.model.ScreenShotReply;
 import com.opera.core.systems.runner.OperaRunner;
@@ -35,6 +37,9 @@ public class OperaLauncherRunner implements OperaRunner{
 	
 	public OperaLauncherRunner(OperaDriverSettings settings){
 		this.settings = settings;
+		
+		if(settings.getOperaLauncherBinary() == null)
+			throw new WebDriverException("Launcher not available, please set it in path or use the JAR file");
 		
 		if(this.settings.doRunOperaLauncherFromOperaDriver()){
 			

@@ -1,11 +1,11 @@
 package com.opera.core.systems.scope.handlers;
 
-import java.awt.Point;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import org.openqa.selenium.Point;
 import org.openqa.selenium.RenderedWebElement;
 import org.openqa.selenium.WebDriverException;
 
