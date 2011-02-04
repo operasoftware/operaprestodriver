@@ -41,24 +41,6 @@ public class JavascriptTest extends TestBase
     Assert.assertTrue(log.contains("up, 73, I,"));
   }
 
-  // TODO finish this test
-  /*
-oper  public void testConsoleListener()
-  {
-    driver.addConsoleListener(new IConsoleListener() {
-      public List<FilterRule> getFilters() {
-        List<FilterRule> list = new ArrayList<FilterRule>();
-        list.add(new FilterRule("*", FilterRule.FilterType.STARTS_WITH, ""));
-        return list;
-      }
-
-      public void onMessage(String message) {
-        Assert.assertEquals("one", message);
-      }
-    });
-  }
-  */
-
   @Test
   public void testDoubleClick()
   {
@@ -67,22 +49,22 @@ oper  public void testConsoleListener()
     one.click();
     Assert.assertEquals(driver.findElementById("two").getValue(), "double");
   }
-  
+
   @Test
   public void testWindowCount() throws Exception {
     int numWindows = driver.getWindowCount();
-    
+
     driver.findElementById("open_window").click();
-    
+
     Assert.assertEquals(numWindows + 1, driver.getWindowCount());
   }
-  
+
   @Test
   public void testWindowCount2() throws Exception {
     int numWindows = driver.getWindowCount();
-    
+
     driver.close();
-    
-    Assert.assertEquals(numWindows - 1, driver.getWindowCount()); 
+
+    Assert.assertEquals(numWindows - 1, driver.getWindowCount());
   }
 }
