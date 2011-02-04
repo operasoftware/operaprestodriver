@@ -1,0 +1,58 @@
+<!doctype HTML>
+<html>
+<head>
+ <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+ <title>Mouse fixture</title>
+</head>
+<body>
+
+  <h1>Mouse test</h1>
+  <div id="test" style="">
+    Test area
+  </div>
+  <pre id="log"></pre>
+
+<style type="text/css">
+#test {
+  width: 100px;
+  height: 100px;
+  background: #CCC;
+}
+
+#test:hover {
+  background: #FAA;
+}
+</style>
+
+<script type="text/javascript">
+logEl = document.getElementById("log");
+
+function handler(e) {
+  e.preventDefault();
+
+  var modifiers = []
+  if (e.altKey)  modifiers.push('alt');
+  if (e.ctrlKey) modifiers.push('ctrl');
+  if (e.metaKey) modifiers.push('meta');
+  if (e.shiftKey) modifiers.push('shift');
+
+  logEl.innerHTML = logEl.innerHTML + [
+    e.type,
+    e.button,
+    modifiers
+  ].join(" ") +
+  "\n";
+
+  console.log(e);
+
+  return false;
+}
+
+document.getElementById("test");
+test.addEventListener('mousedown', handler, false);
+test.addEventListener('mouseup', handler, false);
+test.addEventListener('click', handler, false);
+</script>
+
+</body>
+</html>
