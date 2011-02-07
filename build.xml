@@ -155,7 +155,7 @@
 
   <target name="doc">
     <javadoc access="public" author="true"
-      classpath="lib/selenium-common.jar:lib/commons-jxpath-1.3.jar:lib/protobuf-java-2.3.0.jar:lib/winp-1.14.jar"
+      classpath="lib/selenium-common.jar:lib/commons-io-2.0.1.jar:lib/commons-jxpath-1.3.jar:lib/protobuf-java-2.3.0.jar:lib/winp-1.14.jar"
       destdir="doc" doctitle="OperaDriver" nodeprecated="false"
       nodeprecatedlist="false" noindex="false" nonavbar="false"
       notree="false" source="1.5" sourcepath="src" splitindex="true" use="true" version="true">
