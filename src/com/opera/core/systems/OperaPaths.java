@@ -3,6 +3,8 @@ package com.opera.core.systems;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -110,11 +112,16 @@ public class OperaPaths {
 
 					if ((!executable.exists()) || FileUtils.isFileNewer(jarFile, executable)) {
 						try {
-							if (!executable.exists())
-								FileUtils.touch(executable);
+							if (!executable.exists()) FileUtils.touch(executable);
 
-							IOUtils.copy(res.openStream(),
-									new FileOutputStream(executable));
+							InputStream is = res.openStream();
+							OutputStream os = new FileOutputStream(executable);
+
+							IOUtils.copy(is, os);
+
+							is.close();
+							os.close();
+
 							executable.setLastModified(jarFile.lastModified());
 						} catch (IOException e) {
 							throw new WebDriverException("Cant write file to disk : " + e.getMessage());
