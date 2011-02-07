@@ -28,8 +28,8 @@ public interface OperaRunner {
 	public boolean hasOperaCrashed();
 	
 	/**
-	 * If opera crashed ther should be a 
-	 * @return
+	 * If opera crashed there should be a crashlog. 
+	 * @return Returns the crashlog, or null if it does not exist.
 	 */
 	public String getOperaCrashlog();
 	

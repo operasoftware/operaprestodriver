@@ -29,7 +29,7 @@ public interface IEcmaScriptDebugger {
 	 * Adds a runtime to the list of runtimes maintained in the service (STP/1
 	 * only)
 	 * 
-	 * @param started
+	 * @param info
 	 */
 	void addRuntime(RuntimeInfo info);
 
@@ -160,7 +160,7 @@ public interface IEcmaScriptDebugger {
 	/**
 	 * Triggered on the ecmascript service when the state of a runtime changes
 	 * 
-	 * @param a {@link ReadyStateChange} object with runtime info
+	 * @param change {@link ReadyStateChange} object with runtime info
 	 */
 	void readyStateChanged(ReadyStateChange change);
 

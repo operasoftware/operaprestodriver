@@ -27,7 +27,7 @@ public interface IDesktopUtils {
 	/**
 	 * Gets the string specified by the given string id.
 	 *
-	 * @param enum_text
+	 * @param enumText
 	 * @return string corresponding to the enumText
 	 */
 	String getString(String enumText);
@@ -37,7 +37,7 @@ public interface IDesktopUtils {
 	 * Used to stop problems comparing strings that have 
 	 * 		just \n with those with \r\n.
 	 *
-	 * @param text, to remove the \r's from
+	 * @param text to remove the \r's from
 	 * @return string without \r's
 	 */
 	String removeCR(String text);

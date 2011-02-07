@@ -143,13 +143,13 @@ public class ScopeServices implements IConnectionHandler {
 	public void setSystemInputManager(SystemInputManager manager) {
 		this.systemInputManager = manager; 
 	}
-	
+	 
 	/**
-	 * Creates the scope server on specified address and port
-	 * Enables the required services for webdriver
-	 * @param ipAddress
-	 * @param portNumber
-	 * @param intervals 
+   * Creates the scope server on specified address and port
+   * Enables the required services for webdriver 
+	 * @param versions
+	 * @param manualConnect
+	 * @throws IOException
 	 */
 	public ScopeServices(Map<String, String> versions, boolean manualConnect) throws IOException {
 		this.versions = versions;
@@ -611,10 +611,10 @@ public class ScopeServices implements IConnectionHandler {
 	}
 	
 	/**
-	 * Sends a command and wait for the response.
-     *
-	 * @param serviceName
-	 * @param message
+   * Sends a command and wait for the response.
+	 * @param command
+	 * @param builder
+	 * @return
 	 */
 	public Response executeCommand(ICommand command, Builder<?> builder) {
 		return executeCommand(command, builder, OperaIntervals.RESPONSE_TIMEOUT.getValue());

@@ -66,6 +66,7 @@ import com.opera.core.systems.scope.exceptions.CommunicationException;
 import com.opera.core.systems.scope.exceptions.FatalException;
 import com.opera.core.systems.scope.handlers.PbActionHandler;
 import com.opera.core.systems.scope.internal.OperaIntervals;
+import com.opera.core.systems.scope.internal.OperaKeys;
 import com.opera.core.systems.scope.protos.PrefsProtos.GetPrefArg.Mode;
 import com.opera.core.systems.scope.protos.PrefsProtos.Pref;
 import com.opera.core.systems.scope.services.ICookieManager;
@@ -1061,7 +1062,6 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
      * Gets the OperaDriver version.  Once the version number has been
      * loaded from an external flat file, it will be cached and returned
      * from cache on future calls.
-     * @return
      *
      * @return OperaDriver version number as a String
      * @throws IOException if the version file cannot be found

@@ -418,7 +418,7 @@ public class OperaDesktopDriver extends OperaDriver {
 	 * Press Key with modifiers held down.
 	 *
 	 * @param key key to press
-	 * @param modifier modifiers held
+	 * @param modifiers modifiers held
 	 */
 	public void keyPress(String key, List<ModifierPressed> modifiers) {
 		systemInputManager.keyPress(key, modifiers);
@@ -428,7 +428,7 @@ public class OperaDesktopDriver extends OperaDriver {
 	 * Release key.
 	 *
 	 * @param key key to press
-	 * @param modifier modifiers held
+	 * @param modifiers modifiers held
 	 */
 	public void keyUp(String key, List<ModifierPressed> modifiers) {
 		systemInputManager.keyUp(key, modifiers);
@@ -438,7 +438,7 @@ public class OperaDesktopDriver extends OperaDriver {
 	 * Press Key.
 	 *
 	 * @param key key to press
-	 * @param modifier modifiers held
+	 * @param modifiers modifiers held
 	 */
 	public void keyDown(String key, List<ModifierPressed> modifiers) {
 		systemInputManager.keyDown(key, modifiers);
