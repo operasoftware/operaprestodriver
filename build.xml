@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <!--
-
    Makefile for OperaDriver.  Available tasks:
 
    ant          defaults to compile.
@@ -11,11 +9,12 @@
 
    Use “ant jar” for normal releases.
 
+   ant test     compiles test classes and generates a test jar and runs junit tests
 -->
 
 <project basedir="." default="compile" name="OperaDriver">
 
-  <!-- 
+  <!--
      Used to perform regular expression on version file.  Make sure
      that you have the package “ant-contrib” installed.
   -->
@@ -24,16 +23,28 @@
       <pathelement location="/usr/share/java/ant-contrib.jar"/>
     </classpath>
   </taskdef>
-  
-  <path id="webdriver-opera.classpath">
+
+  <path id="webdriver-opera.path">
     <pathelement location="bin" />
     <fileset dir="lib" includes="**/*.jar" />
   </path>
 
+  <path id="pkg.dir.path">
+    <pathelement location="pkg" />
+    <fileset dir="pkg"/>
+  </path>
+
+  <path id="test.dir.path">
+    <pathelement location="test/com/opera/core/systems" />
+  </path>
+
+  <!-- Delete the bin and pkg dirs -->
   <target name="clean">
     <delete dir="bin" />
+    <delete dir="pkg" />
   </target>
 
+  <!-- Compile all classes after cleaning-->
   <target name="compile" depends="clean">
     <fileset dir="bin" />
     <mkdir dir="bin" />
@@ -47,13 +58,14 @@
 
     <javac debug="true" destdir="bin" includeantruntime="false">
       <src path="src" />
-      <classpath refid="webdriver-opera.classpath" />
+      <classpath refid="webdriver-opera.path" />
     </javac>
   </target>
 
+  <!-- Build the jar -->
   <target name="jar" depends="compile">
     <mkdir dir="pkg" />
-    <loadfile srcfile="src/com/opera/core/systems/VERSION" property="versionfile" />
+    <loadfile srcfile="VERSION" property="versionfile" />
 
     <!-- Will remove new line in version file. -->
     <propertyregex property="version"
@@ -65,6 +77,60 @@
     <jar destfile="pkg/webdriver-opera-${version}.jar">
       <fileset dir="bin" includes="**/*.class" />
       <fileset dir="bin" includes="**/*.properties" />
+      <zipgroupfileset dir="lib" includes="*.jar"/>
+      <manifest>
+      	<attribute name="Main-Class" value="com.opera.core.systems.OperaDriver" />
+      	<attribute name="Implementation-Version" value="${version}" />
+      </manifest>
+    </jar>
+
+    <!-- Add the launchers. We do it this way to preserve their permissions.
+    In Ant 1.8+ we can add preservepermissions="true" to the <jar> element -->
+    <exec executable="zip" os="Linux">
+      <arg value="-r" />
+      <arg value="pkg/webdriver-opera-${version}.jar" />
+      <arg value="launcher/" />
+    </exec>
+  </target>
+
+  <!-- Compile any modified classes including test classes -->
+  <target name="test_compile">
+    <fileset dir="bin" />
+    <mkdir dir="bin" />
+
+    <copy includeemptydirs="false" todir="bin">
+      <fileset dir="src">
+      	<exclude name="**/*.launch" />
+      	<exclude name="**/*.java" />
+      </fileset>
+    </copy>
+
+    <javac debug="true" destdir="bin" includeantruntime="false">
+      <src path="src" />
+      <classpath refid="webdriver-opera.path" />
+    </javac>
+
+    <javac debug="true" destdir="test" includeantruntime="false">
+      <src path="test" />
+      <classpath refid="webdriver-opera.path" />
+    </javac>
+  </target>
+
+  <!-- Build a test jar after running test_compile -->
+  <target name="test_jar" depends="test_compile">
+  	<delete dir="pkg" />
+    <mkdir dir="pkg" />
+    <loadfile srcfile="VERSION" property="versionfile" />
+
+    <!-- Will remove new line in version file -->
+    <propertyregex property="version"
+		   input="${versionfile}"
+		   regexp="\n"
+		   replace=""
+       global="true" />
+
+    <jar destfile="pkg/webdriver-opera-${version}.jar">
+      <fileset dir="bin" includes="**/*.class" />
       <manifest>
       	<attribute name="Main-Class" value="com.opera.core.systems.OperaDriver" />
       	<attribute name="Implementation-Version" value="${version}" />
@@ -72,11 +138,17 @@
     </jar>
   </target>
 
-  <!--
-  <target name="test">
-    <java classname="test" failonerror="true" fork="yes">
-      <classpath refid="webdriver-opera.classpath" />
-    </java>
+  <!-- Run all junit tests -->
+  <target name="test" depends="test_jar">
+    <junit fork="yes" haltonfailure="no" printsummary="yes" showoutput="no" outputtoformatters="no">
+      <formatter type="plain" usefile="true" />
+
+      <batchtest todir="test-output">
+        <fileset dir="test" includes="**/*Test.class" />
+      </batchtest>
+
+      <classpath refid="webdriver-opera.path" />
+    	<classpath location="test" />
+    </junit>
   </target>
-  -->
 </project>

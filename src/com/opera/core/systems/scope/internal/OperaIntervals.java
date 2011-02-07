@@ -3,7 +3,6 @@ package com.opera.core.systems.scope.internal;
 
 /**
  * 
- * @author Deniz Turkoglu
  * Enumerator for delay values
  */
 public enum OperaIntervals {
@@ -21,7 +20,8 @@ public enum OperaIntervals {
 	DEFAULT_RESPONSE_TIMEOUT(10000),
 	WAIT_FOR_ELEMENT(0),
 	QUIT_POLL_INTERVAL(100),
-	QUIT_RESPONSE_TIMEOUT(10000);
+	QUIT_RESPONSE_TIMEOUT(10000), 
+	SCRIPT_TIMEOUT(10000);
 	
 	private long value;
 	

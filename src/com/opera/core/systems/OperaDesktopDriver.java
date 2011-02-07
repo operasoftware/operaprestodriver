@@ -29,9 +29,14 @@ public class OperaDesktopDriver extends OperaDriver {
 	private ProfileUtils profileUtils;
 	private boolean	firstTestRun = true;
 
+	public OperaDesktopDriver() {
+    super();
+    initDesktopDriver();
+  }
+
 	/**
 	 * Constructor that starts Opera if it's not running.
-	 * 
+	 *
 	 * @param settings settings for binary path to Opera, prefs directory, and arguments
 	 */
 	public OperaDesktopDriver(OperaDriverSettings settings) {

@@ -9,8 +9,8 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Logger;
 
-import org.openqa.selenium.ProcessUtils;
 import org.openqa.selenium.WebDriverException;
+import org.openqa.selenium.os.ProcessUtils;
 
 public class OperaLauncherBinary extends Thread {
 

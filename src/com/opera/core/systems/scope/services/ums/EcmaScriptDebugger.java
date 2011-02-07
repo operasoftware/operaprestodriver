@@ -307,7 +307,7 @@ public class EcmaScriptDebugger extends AbstractService implements IEcmaScriptDe
 		EvalData.Builder builder = buildEval(using, runtimeId);
 		builder.addAllVariableList(Arrays.asList(variables));
 		
-		Response response = executeCommand(ESDebuggerCommand.EVAL, builder);
+		Response response = executeCommand(ESDebuggerCommand.EVAL, builder, OperaIntervals.SCRIPT_TIMEOUT.getValue());
 		
 		if(response == null && retries < OperaIntervals.SCRIPT_RETRY.getValue()) {
 			retries++;
