@@ -2,7 +2,6 @@ package com.opera.core.systems;
 
 import static org.junit.Assert.assertTrue;
 
-import org.junit.AfterClass;
 import org.junit.Test;
 
 public class OperaBlank extends DesktopTestBase {
