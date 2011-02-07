@@ -1,3 +1,18 @@
+/*
+Copyright 2008-2011 Opera Software ASA
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
 package com.opera.core.systems;
 
 import java.util.LinkedList;
@@ -39,7 +54,7 @@ public class WaitState {
         EVENT_DESKTOP_WINDOW_CLOSED, /* desktop window closed */
         EVENT_DESKTOP_WINDOW_ACTIVATED, /* desktop window activated */
         EVENT_DESKTOP_WINDOW_UPDATED, /* desktop window updated*/
-        EVENT_DESKTOP_WINDOW_LOADED, 
+        EVENT_DESKTOP_WINDOW_LOADED,
         EVENT_REQUEST_FIRED /* sent when a http request is fired */
     }
 
@@ -130,7 +145,7 @@ public class WaitState {
         wait_events = false;
     }
 
-    public void setWaitEvents(boolean wait_events) 
+    public void setWaitEvents(boolean wait_events)
     {
 		this.wait_events = wait_events;
 	}
@@ -218,7 +233,7 @@ public class WaitState {
             lock.notify();
         }
     }
-    
+
 	public void onRequest(int windowId) {
 		synchronized (lock)
         {
@@ -245,7 +260,7 @@ public class WaitState {
         	logger.info("====================================");
     		logger.info("|       GOT OPERA_IDLE MESSAGE     |");
     		logger.info("====================================");
-        	
+
             logger.fine("Event: onOperaIdle");
             events.add(new ResultItem(WaitResult.EVENT_OPERA_IDLE,0));//0 is important to match later
             lock.notify();
@@ -291,7 +306,7 @@ public class WaitState {
             lock.notify();
         }
     }
-    
+
     void onDesktopWindowLoaded(DesktopWindowInfo info)
     {
         synchronized (lock)
@@ -301,7 +316,7 @@ public class WaitState {
             lock.notify();
         }
     }
-    
+
     private ResultItem getResult()
     {
         if (events.isEmpty())
@@ -319,13 +334,13 @@ public class WaitState {
         	    	events.remove(result_item);
         			return result_item;
         		}
-        		
+
 	        	if (!result_item.wasSeen())
 	        	{
                 	result_item.seen = true;
 	        		return result_item;
 	        	}
-	        	
+
 	        	int index = events.indexOf(result_item);
 	        	if (index + 1 >= events.size())
 	        	{
@@ -338,7 +353,7 @@ public class WaitState {
 
     	return events.removeFirst();
     }
-    
+
     private final ResultItem pollResultItem(long timeout) {
     	ResultItem result = getResult();
 
@@ -352,13 +367,13 @@ public class WaitState {
 
         return result;
     }
-    
+
     private final ResultItem waitAndParseResult(long timeout, int match, String stringMatch, final ResponseType type) {
         synchronized (lock) {
             while (true) {
                 ResultItem result = pollResultItem(timeout);
                 WaitResult waitResult = result.waitResult;
-        		
+
                 switch (waitResult) {
                     case HANDSHAKE:
                         if (type == ResponseType.HANDSHAKE)
@@ -404,7 +419,7 @@ public class WaitState {
                         	else
                         	{
                         		logger.fine("EVENT_DESKTOP_WINDOW_SHOWN: Name: " + result.desktopWindowInfo.getName() + " ID: " + result.desktopWindowInfo.getWindowID() + " OnScreen: " + result.desktopWindowInfo.getOnScreen());
-                        		
+
                         		if (result.desktopWindowInfo.getName().equals(stringMatch))
                         			return result;
                         	}
@@ -419,7 +434,7 @@ public class WaitState {
                         	else
                         	{
                         		logger.fine("EVENT_DESKTOP_WINDOW_UPDATED: Name: " + result.desktopWindowInfo.getName() + " ID: " + result.desktopWindowInfo.getWindowID());
-                        		
+
                         		if (result.desktopWindowInfo.getName().equals(stringMatch))
                         			return result;
                         	}
@@ -435,7 +450,7 @@ public class WaitState {
                         	else
                         	{
                         		logger.fine("DESKTOP_WINDOW_ACTIVATED: Name: " + result.desktopWindowInfo.getName() + " ID: " + result.desktopWindowInfo.getWindowID());
-                        		
+
                         		if (result.desktopWindowInfo.getName().equals(stringMatch))
                         			return result;
                         	}
@@ -451,13 +466,13 @@ public class WaitState {
                         	else
                         	{
                         		logger.fine("EVENT_DESKTOP_WINDOW_CLOSED: Name: " + result.desktopWindowInfo.getName() + " ID: " + result.desktopWindowInfo.getWindowID());
-                        		
+
                         		if (result.desktopWindowInfo.getName().equals(stringMatch))
                         			return result;
                         	}
                         }
                         break;
-                        
+
                     case EVENT_DESKTOP_WINDOW_LOADED:
                         if (type == ResponseType.DESKTOP_WINDOW_LOADED)
                         {
@@ -466,7 +481,7 @@ public class WaitState {
                         	else
                         	{
                         		logger.fine("EVENT_DESKTOP_WINDOW_LOADED: Name: " + result.desktopWindowInfo.getName() + " ID: " + result.desktopWindowInfo.getWindowID());
-                        		
+
                         		if (result.desktopWindowInfo.getName().equals(stringMatch))
                         			return result;
                         	}
@@ -476,7 +491,7 @@ public class WaitState {
                     case EVENT_REQUEST_FIRED:
                     	 if (result.data == match && type == ResponseType.REQUEST_FIRED)
                              return null;
-                    	 
+
                     case EVENT_OPERA_IDLE:
                     	logger.finest("RECV EVENT_OPERA_IDLE!");
                    	 	if (result.data == match && type == ResponseType.OPERA_IDLE)
@@ -494,7 +509,7 @@ public class WaitState {
     public void waitForWindowLoaded(int windowId, long timeout) {
         waitAndParseResult(timeout, windowId, null, ResponseType.WINDOW_LOADED);
     }
-    
+
     public void waitForOperaIdle(long timeout) {
     	waitAndParseResult(timeout, 0/*0 = no window id!*/, null, ResponseType.OPERA_IDLE);
     }
@@ -506,7 +521,7 @@ public class WaitState {
         }
         return null;
     }
-    
+
     public void waitForRequest(int windowId, long timeout) {
         waitAndParseResult(timeout, windowId, null, ResponseType.REQUEST_FIRED);
     }
@@ -535,7 +550,7 @@ public class WaitState {
     		return item.desktopWindowInfo.getWindowID();
     	}
     	return 0;
-        
+
     }
 
     public int waitForDesktopWindowClosed(String win_name, long timeout) {
@@ -545,7 +560,7 @@ public class WaitState {
         }
         return 0;
     }
-    
+
     public int waitForDesktopWindowLoaded(String win_name, long timeout) {
         ResultItem item = waitAndParseResult(timeout, 0, win_name, ResponseType.DESKTOP_WINDOW_LOADED);
         if (item != null) {

@@ -1,3 +1,18 @@
+/*
+Copyright 2008-2011 Opera Software ASA
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
 package com.opera.core.systems.scope.stp;
 
 import java.io.IOException;
@@ -18,7 +33,7 @@ import com.opera.core.systems.util.SocketMonitor;
  * STP connections are accepted in the canRead() metod, which then
  * spawns an StpConnection.
  *
- * @author Jan Vidar Krey
+ * @author Jan Vidar Krey <janv@opera.com>
  */
 public class StpConnectionListener implements SocketListener {
 
@@ -28,7 +43,7 @@ public class StpConnectionListener implements SocketListener {
     private AbstractEventHandler eventHandler;
     private boolean manualConnect = false;
     private final Logger logger = Logger.getLogger(this.getClass().getName());
-        
+
     public StpConnectionListener(int port, IConnectionHandler handler, AbstractEventHandler eventHandler, boolean manualConnect) throws IOException {
         this.port = port;
         this.handler = handler;
@@ -58,7 +73,7 @@ public class StpConnectionListener implements SocketListener {
             server = null;
         }
     }
-    
+
     public void start() throws IOException
     {
         server = ServerSocketChannel.open();
@@ -68,8 +83,8 @@ public class StpConnectionListener implements SocketListener {
 
         SocketMonitor.instance().add(server, this, SelectionKey.OP_ACCEPT);
 
-        logger.info("webdriver-opera " + "0.2.9" /*VERSION*/ + " is ready to accept connections on port " + port);
-        
+        logger.info("webdriver-opera " + "0.3.5" /*VERSION*/ + " is ready to accept connections on port " + port);
+
         // Print a message when we are waiting to connect manually
         if (manualConnect) {
         	System.out.println("Ready to accept connections on port " + port);
@@ -77,11 +92,11 @@ public class StpConnectionListener implements SocketListener {
     }
 
     public boolean canRead(SelectableChannel channel) throws IOException {
-    	
+
 		if (!server.isOpen()) {
 			return false;
 		}
-		
+
         SocketChannel socket = server.accept();
         if (socket != null) {
             logger.fine("Accepted STP connection from " + socket.socket().getLocalAddress());
@@ -90,7 +105,7 @@ public class StpConnectionListener implements SocketListener {
         }
         return true;
     }
-    
+
     //FIXME ?
     public boolean canWrite(SelectableChannel ch) throws IOException {
         return false;

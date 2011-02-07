@@ -1,3 +1,18 @@
+/*
+Copyright 2008-2011 Opera Software ASA
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
 package com.opera.core.systems.util;
 
 import java.io.IOException;
@@ -13,7 +28,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * This will monitor any selectable channel, such as a SocketChannel or 
+ * This will monitor any selectable channel, such as a SocketChannel or
  * ServerSocketChannel and fire canWrite() or canRead() events when such events
  * are detected by poll().
  *
@@ -29,7 +44,7 @@ public class SocketMonitor {
     private enum Operation {
         ADD, MODIFY, REMOVE
     }
-    
+
     class SelectorChangeRequest
     {
         protected SelectableChannel channel;
@@ -52,7 +67,7 @@ public class SocketMonitor {
             this.mask = 0;
             this.listener = null;
         }
-        
+
         public void dump()
         {
             switch (op)
@@ -75,7 +90,7 @@ public class SocketMonitor {
 
     private LinkedList<SelectorChangeRequest> changes = new LinkedList<SelectorChangeRequest>();
 
-    
+
 	public static SocketMonitor instance() {
 		synchronized (SocketMonitor.class) {
 			if (monitor == null)
@@ -84,7 +99,7 @@ public class SocketMonitor {
 		return monitor;
 
 	}
-    
+
     private SocketMonitor() {
         try {
             selector = SelectorProvider.provider().openSelector();
@@ -104,7 +119,7 @@ public class SocketMonitor {
         }
         return true;
     }
-    
+
     public boolean modify(SelectableChannel channel, SocketListener listener, int selectMask) {
         logger.info("Modify channel: " + (channel != null ? channel.toString() : "null") + ", mask=" + debugMask(selectMask));
         if (channel == null)
@@ -180,7 +195,7 @@ public class SocketMonitor {
         locked = false;
         return true;
     }
-    
+
     protected void applyChanges()
     {
 	synchronized (changes)
@@ -210,7 +225,7 @@ public class SocketMonitor {
                                 key.interestOps(req.mask);
                             break;
                         case REMOVE:
-                        	SelectionKey selKey = req.channel.keyFor(selector); 
+                        	SelectionKey selKey = req.channel.keyFor(selector);
                             if (selKey != null)
                                 selKey.cancel();
                             break;
@@ -225,14 +240,14 @@ public class SocketMonitor {
 
     protected void processSelectionKey(SelectionKey key) throws IOException
     {
-    	
+
         SelectableChannel channel = key.channel();
-        
+
     	if(!key.isValid())
     		return;
-    	
+
         SocketListener listener = (SocketListener) key.attachment();
-        
+
         int currentMask = key.interestOps();
         int triggerMask = key.readyOps();
         int wantedMask = 0;
@@ -241,22 +256,22 @@ public class SocketMonitor {
             if (listener.canRead(channel))
                 wantedMask |= SelectionKey.OP_ACCEPT;
         }
-        
+
         if (key.isValid() && key.isConnectable()) {
             if (listener.canRead(channel))
                 wantedMask |= SelectionKey.OP_CONNECT;
         }
-        
+
         if (key.isValid() && key.isReadable()) {
             if (listener.canRead(channel))
                 wantedMask |= SelectionKey.OP_READ;
         }
-        
+
         if (key.isValid() && key.isWritable()) {
             if (listener.canWrite(channel))
                 wantedMask |= SelectionKey.OP_WRITE;
         }
-        
+
         // In case we did not trigger something we want to poll for
         int notTriggered = (currentMask & ~triggerMask);
         wantedMask |= notTriggered;
@@ -279,16 +294,16 @@ public class SocketMonitor {
     {
     	StringBuilder builder = new StringBuilder();
         builder.append("{");
-        
+
         if ((mask & SelectionKey.OP_READ) == SelectionKey.OP_READ)
         	builder.append(" READ");
-        
+
         if ((mask & SelectionKey.OP_WRITE) == SelectionKey.OP_WRITE)
         	builder.append(" WRITE");
 
         if ((mask & SelectionKey.OP_ACCEPT) == SelectionKey.OP_ACCEPT)
         	builder.append(" ACCEPT");
-        
+
         if ((mask & SelectionKey.OP_CONNECT) == SelectionKey.OP_CONNECT)
         	builder.append(" CONNECT");
 

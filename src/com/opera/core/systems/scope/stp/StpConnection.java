@@ -1,4 +1,18 @@
-/* Copyright (C) 2009-2010 Opera Software ASA.  All rights reserved. */
+/*
+Copyright 2008-2011 Opera Software ASA
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
 package com.opera.core.systems.scope.stp;
 
 import java.io.IOException;
@@ -88,11 +102,11 @@ public class StpConnection implements SocketListener {
         requests = new ArrayBlockingQueue<ByteBuffer>(1024);
         recvBuffer = ByteBuffer.allocateDirect(65536);
         recvBuffer.limit(0);
-        
+
         socket.configureBlocking(false);
 
         SocketMonitor.instance().add(socket, this, SelectionKey.OP_READ);
-        
+
         if (!handler.onConnected(this))
         {
             close();
@@ -174,21 +188,21 @@ public class StpConnection implements SocketListener {
 
     public boolean canRead(SelectableChannel channel) throws IOException {
         logger.fine("canRead");
-        
+
         if(!channel.isOpen())
         	return false;
-        
+
         if(socketChannel == null) throw new IOException("We dont have a socket :-)");
-        
+
         //read as much data as possible into buffer!
         ByteBuffer readBuffer = ByteBuffer.allocateDirect(1000);
         int readSize = 0;
-        
+
         //continue to read data and read messages until there are no messages
         boolean didNotFindAnyMessage = false;
         while(!didNotFindAnyMessage){
         	logger.fine("canReadLoop!");
-        	
+
         	//read as much data as possible (until recvBuffer is full OR we don't get any more data)
         	do{
         		readBuffer.clear();
@@ -196,23 +210,23 @@ public class StpConnection implements SocketListener {
         			//do we have a socket
         			if(socketChannel == null){
         				readSize = -1;
-        				
+
         			//do we have room in our buffer?
         			} else {
-        				
+
         				readSize = socketChannel.read(readBuffer);
         				if(readSize > 0){
         					readBuffer.limit(readSize);
         					readBuffer.position(0);
         				}
-        				
+
         			}
-        			
+
         		}catch(IOException ex){
         			logger.log(Level.WARNING, "Channel closed, causing exception", ex.getMessage());
         			readSize = -1;//same as error from socketChannel.read
         		}
-        		
+
         		if(readSize < 0){
         			try{
             			logger.log(Level.INFO, "Channel closed : {0}", socketChannel.socket().getInetAddress().getHostName());
@@ -223,7 +237,7 @@ public class StpConnection implements SocketListener {
                     SocketMonitor.instance().remove(socketChannel);
                     return false;
         		} else if(readSize > 0){
-        			
+
         			//double buffer size if needed!
     				if(recvBuffer.limit() + readBuffer.limit() >= recvBuffer.capacity()){
     					logger.fine("Doubled the size of our recv buffer!");
@@ -236,14 +250,14 @@ public class StpConnection implements SocketListener {
     					newRecvBuffer.position(0);
     					recvBuffer = newRecvBuffer;
     				}
-        			
+
         			recvBuffer.position(recvBuffer.limit());
         			recvBuffer.limit(recvBuffer.limit() + readSize);//increase limit!
         			recvBuffer.put(readBuffer);
         			logger.fine("did read " + readSize + " bytes, new buffer size = " + recvBuffer.limit());
         		}
         	} while(readSize > 0);
-        
+
         	//read as many messages as possible, and only
         	didNotFindAnyMessage = true;
         	while(readMessage(recvBuffer)){
@@ -257,7 +271,7 @@ public class StpConnection implements SocketListener {
     {
         logger.fine("canWrite");
         if(socketChannel == null) throw new IOException("We dont have a socket :-)");
-        
+
         int totalWritten = 0;
         while (!requests.isEmpty())
         {
@@ -349,17 +363,17 @@ public class StpConnection implements SocketListener {
 
     /**
      * reads a message from the buffer, and pops the used data out of the buffer!
-     * 
+     *
      * @param buffer the buffer containing messages
      * @return true if we got a message from the buffer!
      */
     private boolean readMessage(ByteBuffer buffer) {
-    	
+
         //logger.finest("readMessage: " + bytesRead + " bytes read, remaining=" + remainingBytes.length + ", state=" + state.toString() + ", recurse=" + recurse);
-    	
+
     	buffer.position(0);
         int bytesWeHaveBeenreading = 0;
-        
+
     	switch (state) {
         	case SERVICELIST:
         		StringBuilder builder = new StringBuilder();
@@ -368,7 +382,7 @@ public class StpConnection implements SocketListener {
         		buffer.position(0);//reset position!
         		bytesWeHaveBeenreading = buffer.limit(); //bytesWeHaveBeenreading = all bytes in buffer!
         		break;
-        	
+
         	case HANDSHAKE:
         		if(buffer.limit() >= 6){
         			byte[] dst = new byte[6];
@@ -386,7 +400,7 @@ public class StpConnection implements SocketListener {
                     }
         		}
         		break;
-        		
+
         	case EMPTY: // read 4 byte header: STP\0
         		if(buffer.limit() >= 4){
         			byte[] headerPrefix = new byte[4];
@@ -418,23 +432,23 @@ public class StpConnection implements SocketListener {
                 int messageSize = readRawVarint32(buffer);//read part of buffer
                 bytesWeHaveBeenreading = buffer.position();
                 buffer.position(0);
-                
+
                 //if we got size, read more, if not just leave it!
                 if(buffer.limit() >= bytesWeHaveBeenreading + messageSize){
                 	buffer.position(bytesWeHaveBeenreading);
-                	
+
                 	//Read type and Payload!
                 	int messageType = buffer.get();
                 	bytesWeHaveBeenreading += 1;
-                	
+
                     byte[] payload = new byte[--messageSize];
                     buffer.get(payload);
                     buffer.position(0);
-                    
+
                     bytesWeHaveBeenreading += messageSize;//32 bits = 4 bytes :-)
-                    
+
                     setState(State.EMPTY);
-                    
+
                     try {
                         processMessage(messageType, payload);
                     } catch (IOException e) {
@@ -442,19 +456,19 @@ public class StpConnection implements SocketListener {
                         connectionHandler.onException(new WebDriverException("Error while processing the message: "  + e.getMessage()));
                     }
                 } else {
-                	
+
                 	logger.fine("tried to read a message, but expected " + 4 + messageSize + " bytes, and only got " + buffer.limit());
-                	
+
                 	buffer.position(0);
                 	bytesWeHaveBeenreading = 0;
                 }
                 break;
-        
+
     	}
-        
-    	//pop number of read bytes from 
+
+    	//pop number of read bytes from
     	if(bytesWeHaveBeenreading > 0){
-    		
+
     		//pop X bytes, and keep message for the rest!
     		int rest = buffer.limit()-bytesWeHaveBeenreading;
     		if(rest == 0){
@@ -462,19 +476,19 @@ public class StpConnection implements SocketListener {
     			buffer.limit(0);
     		} else {
     			byte[] temp = new byte[rest];
-    			
+
     			buffer.position(bytesWeHaveBeenreading);
     			buffer.get(temp, 0, rest);
-    			
+
     			buffer.clear();
     			buffer.limit(rest);
     			buffer.position(0);
     			buffer.put(temp, 0, rest);
     			buffer.position(0);// set position back to start!
     		}
-    		
+
     		logger.fine("did read message of " + bytesWeHaveBeenreading + " bytes, new buffer size = " + buffer.limit());
-    		
+
     		return true; // we did read a message :-)
     	} else {
     		if(buffer.limit() > 0){

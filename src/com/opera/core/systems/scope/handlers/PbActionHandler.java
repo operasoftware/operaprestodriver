@@ -1,3 +1,18 @@
+/*
+Copyright 2008-2011 Opera Software ASA
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
 package com.opera.core.systems.scope.handlers;
 
 import java.io.File;
@@ -17,11 +32,16 @@ import com.opera.core.systems.scope.internal.OperaMouseKeys;
 
 /**
  * This library handles actions for Core 2.5+
- * Core 2.5 uses a different (binary) protocol
- * and different serializers
- * @author Deniz Turkoglu
+ *
+ * Core 2.5 uses a different (binary) protocol and
+ * different serializers
+ *
+ * @author Deniz Turkoglu <denizt@opera.com>
  *
  */
+
+// TODO Support for < Core 2.5 is deprecated, merge
+
 public class PbActionHandler extends ScopeActions {
 
     public PbActionHandler(ScopeServices services) {

@@ -1,5 +1,18 @@
-/* Copyright (C) 2009 Opera Software ASA.  All rights reserved. */
+/*
+Copyright 2008-2011 Opera Software ASA
 
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
 package com.opera.core.systems.scope.services.ums;
 
 import java.util.ArrayList;
@@ -40,25 +53,29 @@ import com.opera.core.systems.util.VersionUtil;
 
 /**
  * The exec service actions
- * @author Deniz Turkoglu
+ * This service handles user interactions such as keypresses,
+ * mouse clicks, screenshot grabber and executing actions
+ * on Opera
+ *
+ * @author Deniz Turkoglu <denizt@opera.com>
  *
  */
 public class OperaExec extends AbstractService implements IOperaExec {
 
 	private static Logger logger = Logger.getLogger(OperaExec.class.getName());
-	
+
 	private List<String> keys;
-	
+
 	private Set<String> actions;
 
 	private ScopeServices services;
-	
+
 	//FIXME remove me, VERY UGLY HACK FOR window-id bug
 	private List<String> excludedActions;
 	/*
 	command Exec(ActionList) returns (Default) = 1;
     command GetActionInfoList(Default) returns (ActionInfoList) = 2;
-    command SetupScreenWatcher(ScreenWatcher) returns (ScreenWatcherResult) = 3 
+    command SetupScreenWatcher(ScreenWatcher) returns (ScreenWatcherResult) = 3
     command SendMouseAction(MouseAction) returns (Default) = 5;
 	 */
 
@@ -67,16 +84,16 @@ public class OperaExec extends AbstractService implements IOperaExec {
 		excludedActions = new ArrayList<String>();
 		excludedActions.add("Select all");
 		excludedActions.add("Delete");
-		
+
 		String serviceName = "exec";
-		
+
 		if(!isVersionInRange(version, "3.0", serviceName))
 			throw new UnsupportedOperationException(serviceName + " version " + version + " is not supported");
-		
+
 		//Another ugly hack for patch version
 		if(VersionUtil.compare(version, "2.0.1") == - 1)
 			excludedActions.add("Close page");
-		
+
 		services.setExec(this);
 		this.services = services;
 		keys = new CopyOnWriteArrayList<String>();
@@ -91,13 +108,13 @@ public class OperaExec extends AbstractService implements IOperaExec {
 		ActionInfoList.Builder builder = ActionInfoList.newBuilder();
 		buildPayload(response, builder);
 		ActionInfoList infoList = builder.build();
-		
+
 		Set<String> actions = new HashSet<String>();
-		
+
 		for (ActionInfo info : infoList.getActionInfoListList()) {
 			actions.add(info.getName());
 		}
-		
+
 		return actions;
 	}
 
@@ -106,7 +123,7 @@ public class OperaExec extends AbstractService implements IOperaExec {
 			throw new NullPointerException("You must provide something to type");
 		if(using.length() == 0)
 			throw new IllegalArgumentException("Can't type empty string");
-		
+
 		for (int i = 0; i < using.length(); ++i) {
 			char ch = using.charAt(i);
 			if(Character.isUpperCase(ch)) {
@@ -117,7 +134,7 @@ public class OperaExec extends AbstractService implements IOperaExec {
 				key(String.valueOf(ch));
 			}
 		}
-		
+
 		/*
 		action("_type", using);
 		*/
@@ -125,13 +142,13 @@ public class OperaExec extends AbstractService implements IOperaExec {
 
 	public void mouseAction(int x, int y, OperaMouseKeys... keys) {
 		int key  = 0;
-		
+
 		for (OperaMouseKeys operaMouseKeys : keys) {
 			key |= operaMouseKeys.getValue();
 		}
 		this.mouseAction(x, y, key, 1);
 	}
-	
+
 	/**
 	 * Added as a quick workaround for watir API
 	 * @param x an unsigned int
@@ -157,11 +174,11 @@ public class OperaExec extends AbstractService implements IOperaExec {
 		/*}*/
 
 	}
-	
+
 	public Set<String> getActionList() {
 		return actions;
 	}
-	
+
 	public void action(String using, int windowID, String... params) {
 		if(!actions.contains(using))
 			throw new WebDriverException("The requested action is not supported : " + using);
@@ -171,7 +188,7 @@ public class OperaExec extends AbstractService implements IOperaExec {
 		if(params != null && params.length > 0) {
 			actionBuilder.setValue(params[0]);
 		}
-		
+
 		if (!excludedActions.contains(using)) {
 			try {
 				actionBuilder.setWindowID(windowID);
@@ -180,7 +197,7 @@ public class OperaExec extends AbstractService implements IOperaExec {
 				e.printStackTrace();
 			}
 		}
-		
+
 		//type.setSpace("preserve");
 		builder.addActionList(actionBuilder);
 		if(executeCommand(ExecCommand.EXEC, builder) == null)
@@ -196,7 +213,7 @@ public class OperaExec extends AbstractService implements IOperaExec {
 		actionBuilder.setValue(dataString);
 		actionBuilder.setData(data);
 		actionBuilder.setStringParam(dataStringParam);
-		
+
 		//type.setSpace("preserve");
 		builder.addActionList(actionBuilder);
 		if(executeCommand(ExecCommand.EXEC, builder) == null)
@@ -237,37 +254,37 @@ public class OperaExec extends AbstractService implements IOperaExec {
 	}
 
 	public ScreenShotReply containsColor(Canvas canvas, long timeout, OperaColors... colors){
-		//command SetupScreenWatcher(ScreenWatcher) returns (ScreenWatcherResult) = 3 
+		//command SetupScreenWatcher(ScreenWatcher) returns (ScreenWatcherResult) = 3
 
 		ScreenWatcher.Builder builder = ScreenWatcher.newBuilder();
 		Area.Builder areaBuilder = Area.newBuilder();
-		
+
 		areaBuilder.setX(canvas.getX());
 		areaBuilder.setY(canvas.getY());
 		areaBuilder.setH(canvas.getHeight());
 		areaBuilder.setW(canvas.getWidth());
-		
+
 		builder.setArea(areaBuilder);
-		
+
 		int i = 0;
 		for (OperaColors color : colors) {
 			ColorSpec.Builder colorSpec = convertColor(color.getColour());
 			colorSpec.setId(++i);
 			builder.addColorSpecList(colorSpec);
 		}
-		
+
 		ScreenWatcherResult result = executeScreenWatcher(builder, (int)timeout);
-				
+
 		List<ColorResult> matches = new ArrayList<ColorResult>();
-		
+
 		for (ColorMatch match : result.getColorMatchListList()) {
 			matches.add(new ColorResult(match.getCount(), match.getId()));
 		}
-		
+
 		return new ScreenShotReply(result.getMd5(), matches);
 
 	}
-	
+
 	/**
 	 * Executes a screenwatcher with the given timeout and returns the result
 	 * @param builder
@@ -275,23 +292,23 @@ public class OperaExec extends AbstractService implements IOperaExec {
 	 * @return
 	 */
 	private ScreenWatcherResult executeScreenWatcher(ScreenWatcher.Builder builder, int timeout) {
-		
+
 		if(timeout <= 0)
 			timeout = 1;
-		
+
 		builder.setTimeOut(timeout);
-		
+
 		builder.setWindowID(services.getWindowManager().getActiveWindowId());
-		
+
 		Response response = executeCommand(ExecCommand.SETUP_SCREEN_WATCHER, builder, OperaIntervals.RESPONSE_TIMEOUT.getValue() + timeout);
-		
+
 		ScreenWatcherResult.Builder watcherBuilder = ScreenWatcherResult.newBuilder();
 		buildPayload(response, watcherBuilder);
-		return watcherBuilder.build();	
+		return watcherBuilder.build();
 	}
-	
+
 	private ColorSpec.Builder convertColor(OperaColor color) {
-		ColorSpec.Builder builder = ColorSpec.newBuilder(); 
+		ColorSpec.Builder builder = ColorSpec.newBuilder();
 		builder.setBlueHigh(color.getHighBlue());
 		builder.setGreenHigh(color.getHighGreen());
 		builder.setRedHigh(color.getHighRed());
@@ -302,7 +319,7 @@ public class OperaExec extends AbstractService implements IOperaExec {
 	}
 
 	public ScreenShotReply screenWatcher(Canvas canvas, long timeout, boolean includeImage, String... hashes) {
-		
+
 		ScreenWatcher.Builder builder = ScreenWatcher.newBuilder();
 		Area.Builder areaBuilder = Area.newBuilder();
 		//FIXME viewport relative
@@ -310,9 +327,9 @@ public class OperaExec extends AbstractService implements IOperaExec {
 		areaBuilder.setY(canvas.getY());
 		areaBuilder.setH(canvas.getHeight());
 		areaBuilder.setW(canvas.getWidth());
-		
+
 		builder.setArea(areaBuilder);
-				
+
 		if (hashes.length > 0) {
 			builder.addAllMd5List(Arrays.asList(hashes));
 		}
@@ -320,9 +337,9 @@ public class OperaExec extends AbstractService implements IOperaExec {
 		if(!includeImage) {
 			builder.setIncludeImage(false);
 		}
-		
+
 		ScreenWatcherResult result = executeScreenWatcher(builder, (int)timeout);
-		
+
 		return new ScreenShotReply(result.getMd5(), result.getPng().toByteArray());
 	}
 

@@ -1,3 +1,18 @@
+/*
+Copyright 2008-2011 Opera Software ASA
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
 package com.opera.core.systems;
 
 import com.opera.core.systems.scope.handlers.AbstractEventHandler;
@@ -14,9 +29,9 @@ import com.opera.core.systems.scope.protos.WmProtos.WindowInfo;
  *
  */
 public class EventHandler extends AbstractEventHandler {
-	
+
 	protected ScopeServices services;
-	
+
 	public EventHandler(ScopeServices services) {
 		super(services);
 		this.services = services;
@@ -25,6 +40,7 @@ public class EventHandler extends AbstractEventHandler {
 	/**
 	 * Changes the window-manager's active window on active window event
 	 */
+	@Override
 	public void onActiveWindow(Integer id) {
 		services.getWindowManager().setActiveWindowId(id);
 	}
@@ -34,6 +50,7 @@ public class EventHandler extends AbstractEventHandler {
 	 * can be quite late and hence is resolved by cleanup method
 	 * in onRuntimeStarted
 	 */
+	@Override
 	public void onRuntimeStopped(Integer id) {
 		services.getDebugger().removeRuntime(id);
 		//FIXME this event is quite buggy, ignore
@@ -44,14 +61,16 @@ public class EventHandler extends AbstractEventHandler {
 	}
 
 
+	@Override
 	public void onRequest(int windowId) {
 		services.onRequest(windowId);
 	}
-	
+
 	/**
 	 * Handles windows that have been closed. Removes it from the
 	 * list and removes the runtimes that are associated with it
 	 */
+	@Override
 	public void onWindowClosed(Integer id) {
 		services.onWindowClosed(id);
 		services.getWindowManager().removeWindow(id);
@@ -60,17 +79,19 @@ public class EventHandler extends AbstractEventHandler {
 
 	/**
 	 * Fired when a window is loaded
-	 * 
+	 *
 	 * @param windowId ID of the window that fired the event
 	 */
+	@Override
 	public void onWindowLoaded(int windowId) {
 		services.getDebugger().cleanUpRuntimes(windowId);
 		services.onWindowLoaded(windowId);
 	}
-	
+
 	/**
 	 * Fired when opera is idle
 	 */
+	@Override
 	public void onOperaIdle(){
 		services.onOperaIdle();
 	}
@@ -99,7 +120,7 @@ public class EventHandler extends AbstractEventHandler {
 	public void onReadyStateChange(ReadyStateChange change) {
 		throw new UnsupportedOperationException("Not supported in STP/0");
 	}
-	
+
 	@Override
 	public void onDesktopWindowShown(DesktopWindowInfo info) {
 		services.onDesktopWindowShown(info);
@@ -119,7 +140,7 @@ public class EventHandler extends AbstractEventHandler {
 	public void onDesktopWindowClosed(DesktopWindowInfo info) {
 		services.onDesktopWindowClosed(info);
 	}
-	
+
 	@Override
 	public void onDesktopWindowLoaded(DesktopWindowInfo info) {
 		services.onDesktopWindowLoaded(info);

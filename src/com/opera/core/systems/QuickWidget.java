@@ -1,4 +1,18 @@
-package com.opera.core.systems;
+/*
+Copyright 2008-2011 Opera Software ASA
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/package com.opera.core.systems;
 
 import java.awt.Dimension;
 import java.awt.Point;
@@ -76,13 +90,13 @@ public class QuickWidget {
 		public void click(MouseButton button, int numClicks, List<ModifierPressed> modifiers) {
 			systemInputManager.click(getCenterLocation(), button, numClicks, modifiers);
 		}
-		
+
 		private Point getCenterLocation() {
 			DesktopWindowRect rect = getRect();
 			Point topLeft = getLocation();
 			return new Point(topLeft.x + rect.getWidth() / 2, topLeft.y + rect.getHeight() / 2);
 		}
-		
+
 		// Intersect two lines
 		private Point intersection(int x1,int y1,int x2,int y2, int x3, int y3, int x4,int y4) {
 			double dem = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4);
@@ -144,7 +158,7 @@ public class QuickWidget {
 		// The drop point is on the quick widget passed in
 		private Point getDropPoint(QuickWidget element, DropPosition pos) {
 			Point dropPoint = new Point(element.getCenterLocation().x, element.getCenterLocation().y);
-			if (pos == DropPosition.CENTER) 
+			if (pos == DropPosition.CENTER)
 				return dropPoint;
 
 			Point dragPoint = new Point(this.getCenterLocation().x, this.getCenterLocation().y);
@@ -204,7 +218,7 @@ public class QuickWidget {
 		}
 
 		/**
-	     * Gets additional text of this widget. 
+	     * Gets additional text of this widget.
 	     * Used for widgets that have more text attributes, e.g.
 	     * for highlighted text in the address field
 	     *
@@ -228,7 +242,7 @@ public class QuickWidget {
 
 		/**
 	     * Checks if widget text contains the text specified by the given string id
-	     * 
+	     *
 	     * @param stringId String id of string 
 	     * @return true if text specified by stringId is contained in widget text
 	     */
@@ -239,7 +253,7 @@ public class QuickWidget {
 
 		/**
 		 * Checks if widget is default.
-		 * 
+		 *
 		 * Typically used to check if e.g. a button is the default pressed button
 		 * among buttons in a dialog, and such.
 		 *
@@ -288,16 +302,16 @@ public class QuickWidget {
 		 * @return true if widget is visible, else false
 		 */
 		public boolean isVisible(){
-			return info.getVisible(); 
+			return info.getVisible();
 		}
 
 		/**
-		 * 
-		 * @return QuickWidgetType type of this widget. See {@link QuickWidgetType} 
+		 *
+		 * @return QuickWidgetType type of this widget. See {@link QuickWidgetType}
 		 * 			for the possible types
 		 */
 		public QuickWidgetType getType(){
-			return info.getType(); 
+			return info.getType();
 		}
 
 		/**
@@ -324,11 +338,11 @@ public class QuickWidget {
 		}
 
 		/**
-		 * Gets the row of the widget within its parent, 
+		 * Gets the row of the widget within its parent,
 		 * e.g. of a treeviewitem in a treeview.
 		 * Returns 0 for all widgets that don't have a row
 		 * within its parent
-		 * 
+		 *
 		 * @return row of widget\
 		 */
 		public int getRow() {
@@ -336,7 +350,7 @@ public class QuickWidget {
 		}
 
 		/**
- 		 * Gets the column of the widget within its parent, 
+ 		 * Gets the column of the widget within its parent,
 		 * e.g. for a tab within the pagebar, or a treeviewitem in a treeview
 		 * returns 0 for widgets that don't have a column number within its
 		 * parent
@@ -356,7 +370,7 @@ public class QuickWidget {
 
 		/**
 		 * Gets name of parent widget of this widget
-		 * 
+		 *
 		 * @return name of parent widget
 		 */
 		public String getParentName() {
@@ -369,7 +383,7 @@ public class QuickWidget {
 		}
 
 		public String toFullString() {
-			return "QuickWidget\n" +  
+			return "QuickWidget\n" +
 			  "       Widget name: " + getName() + "\n"
 		//	+ "       type: " + getType()  + "\n" // TODO: FIXME
 			+ "    visible: " + isVisible() + "\n"

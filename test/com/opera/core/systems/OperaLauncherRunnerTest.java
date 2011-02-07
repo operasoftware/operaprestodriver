@@ -11,8 +11,8 @@ import com.opera.core.systems.settings.OperaDriverSettings;
 
 public class OperaLauncherRunnerTest
 {
-	static OperaDriverSettings settings;
-	static OperaLauncherRunner runner;
+	OperaDriverSettings settings;
+	OperaLauncherRunner runner;
 
 	@Test
 	public void testOperaDriverSettings()

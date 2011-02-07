@@ -1,3 +1,18 @@
+/*
+Copyright 2008-2011 Opera Software ASA
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
 package com.opera.core.systems.runner.launcher;
 
 import com.google.protobuf.GeneratedMessage;
@@ -65,7 +80,7 @@ public class OperaLauncherProtocol {
 
         public GeneratedMessage getResponse() { return response; }
         public boolean IsSuccess() { return success; }
-    }    
+    }
 
     public OperaLauncherProtocol(Socket socket)
     {
@@ -77,7 +92,7 @@ public class OperaLauncherProtocol {
     {
     	this.socket.close();
     }
-    
+
     /**
      * Send the 8 byte header before a Opera Launcher message body (payload).
      *
@@ -91,11 +106,11 @@ public class OperaLauncherProtocol {
         buf.order(ByteOrder.BIG_ENDIAN);
         buf.put((byte) 'L');
         buf.put((byte) '1');
-        buf.put((byte) type.getValue());
+        buf.put(type.getValue());
         buf.put((byte) 0); // request
         buf.putInt(size);
         buf.flip();
-        logger.finest("SEND: type=" + ((int) 0) + ", command=" + ((int) type.getValue()) + ", size=" + size);
+        logger.finest("SEND: type=" + (0) + ", command=" + ((int) type.getValue()) + ", size=" + size);
         socket.getOutputStream().write(buf.array());
     }
 
@@ -130,7 +145,7 @@ public class OperaLauncherProtocol {
         if (body  != null)
             socket.getOutputStream().write(body);
     }
-    
+
     /**
      * Receive and block until *all* length bytes are placed in buffer.
      *
@@ -170,11 +185,11 @@ public class OperaLauncherProtocol {
         buf.order(ByteOrder.BIG_ENDIAN);
         buf.put(headers, 4, 4);
         buf.flip();
-        
+
         int size = buf.getInt();
-        
+
         logger.finest("RECV: type=" + ((int) headers[3]) + ", command=" + ((int) headers[2]) + ", size=" + size);
-        
+
         byte[] data = new byte[size];
         recv(data, size);
 

@@ -14,9 +14,9 @@ import com.opera.core.systems.settings.OperaDriverSettings;
 
 public class OperaDriverTest extends TestBase
 {
-	static OperaDriver driver;
-	static TestOperaDriver testDriver;
-	static OperaDriverSettings settings;
+	OperaDriver driver;
+	TestOperaDriver testDriver;
+	OperaDriverSettings settings;
 
   // Replace the TestBase setup and teardown so that we don't launch opera
 	@BeforeClass
@@ -102,7 +102,7 @@ public class OperaDriverTest extends TestBase
 	{
 		driver.get("http://t/core/standards/SVG/Testsuites/W3C-1_1F2/images/paths-data-04-f.png");
 		ScreenShotReply png = driver.saveScreenshot(3);
-		Assert.assertTrue(png.getPng().toString().length() > 0);
+		Assert.assertTrue(png.getPng().length > 0);
 	}
 
   @Test

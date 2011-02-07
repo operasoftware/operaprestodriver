@@ -1,5 +1,18 @@
-/* Copyright (C) 2009-2010 Opera Software ASA.  All rights reserved. */
+/*
+Copyright 2008-2011 Opera Software ASA
 
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
 package com.opera.core.systems;
 
 import java.io.IOException;
@@ -47,18 +60,18 @@ import com.opera.core.systems.scope.stp.StpThread;
  *
  */
 public class ScopeServices implements IConnectionHandler {
-	
+
 	private final Logger logger = Logger.getLogger(this.getClass().getName());
 
 	private IEcmaScriptDebugger debugger;
 	private IOperaExec exec;
 	private IWindowManager windowManager;
-	private IDesktopWindowManager desktopWindowManager; 
-	private IDesktopUtils desktopUtils; 
-	private IPrefs prefs; 
+	private IDesktopWindowManager desktopWindowManager;
+	private IDesktopUtils desktopUtils;
+	private IPrefs prefs;
 	private SystemInputManager systemInputManager;
 	private ICookieManager cookieManager;
-	
+
 	private Map<String, String> versions;
 
 	private WaitState waitState = new WaitState();
@@ -70,7 +83,7 @@ public class ScopeServices implements IConnectionHandler {
 	private List<String> listedServices;
 
 	private AtomicInteger tagCounter;
-	
+
 	public ICookieManager getCookieManager() {
 		return cookieManager;
 	}
@@ -79,7 +92,7 @@ public class ScopeServices implements IConnectionHandler {
 		this.cookieManager = cookieManager;
 	}
 
-	
+
 	public Map<String, String> getVersions() {
 		return versions;
 	}
@@ -87,7 +100,7 @@ public class ScopeServices implements IConnectionHandler {
 	public StpConnection getConnection() {
 		return connection;
 	}
-        
+
 	public IEcmaScriptDebugger getDebugger() {
 		return debugger;
 	}
@@ -139,11 +152,11 @@ public class ScopeServices implements IConnectionHandler {
 	SystemInputManager getSystemInputManager() {
 		return systemInputManager;
 	}
-	
+
 	public void setSystemInputManager(SystemInputManager manager) {
-		this.systemInputManager = manager; 
+		this.systemInputManager = manager;
 	}
-	 
+
 	/**
    * Creates the scope server on specified address and port
    * Enables the required services for webdriver 
@@ -179,23 +192,23 @@ public class ScopeServices implements IConnectionHandler {
 
 		if (versions.containsKey("desktop-window-manager"))
 			wantedServices.add("desktop-window-manager");
-		
+
 		if (versions.containsKey("system-input"))
 			wantedServices.add("system-input");
 
 		if (versions.containsKey("desktop-utils"))
 			wantedServices.add("desktop-utils");
-		
+
 //		wantedServices.add("console-logger");
 //		wantedServices.add("http-logger");
 		wantedServices.add("core");
 		wantedServices.add("cookie-manager");
-		
+
 		enableServices(wantedServices);
 
 		initializeServices(enableDebugger);
 	}
-        
+
 	private void initializeServices(boolean enableDebugger) {
 		exec.init();
 		windowManager.init();
@@ -251,7 +264,7 @@ public class ScopeServices implements IConnectionHandler {
 		new UmsServices(this, info);
 		if (!enableDebugger)
 			debugger = new IEcmaScriptDebugger() {
-				
+
 			public void setRuntime(RuntimeInfo runtime) { }
 
 		    public Object scriptExecutor(String script, Object... params) {
@@ -352,7 +365,7 @@ public class ScopeServices implements IConnectionHandler {
 			}
 		}
 	}
-	
+
 	private ServiceResult enable(String serviceName) throws InvalidProtocolBufferException {
 		ServiceSelection.Builder selection = ServiceSelection.newBuilder();
 		selection.setName(serviceName);
@@ -369,7 +382,7 @@ public class ScopeServices implements IConnectionHandler {
 		} catch (Exception e) {
 			logger.info("Caught exception when trying to shut down (cannot send quit). : " + e.getMessage());
 		}
-		
+
 		if (runner != null && pid > 0) {
 			long interval = OperaIntervals.QUIT_POLL_INTERVAL.getValue();
 			long timeout = OperaIntervals.QUIT_RESPONSE_TIMEOUT.getValue();
@@ -388,7 +401,7 @@ public class ScopeServices implements IConnectionHandler {
 	public void quit() {
 		quit(null, 0);
 	}
-	
+
 	public void quit(OperaRunner runner, int pid) {
 		quitOpera(runner, pid);
 		shutdown();
@@ -404,7 +417,7 @@ public class ScopeServices implements IConnectionHandler {
 		logger.warning("StpConnection already attached - closing incoming connection.");
 		return false;
 	}
-        
+
 	public void onServiceList(List<String> services) {
 		setListedServices(services);
 	}
@@ -418,7 +431,7 @@ public class ScopeServices implements IConnectionHandler {
 		logger.fine("Window closed: windowId=" + id);
 		waitState.onWindowClosed(id);
 	}
-	
+
 	public void onDesktopWindowShown(DesktopWindowInfo info) {
 		logger.fine("DesktopWindow shown: windowId=" + info.getWindowID());
 		waitState.onDesktopWindowShown(info);
@@ -438,7 +451,7 @@ public class ScopeServices implements IConnectionHandler {
 		logger.fine("DesktopWindow active: windowId=" + info.getWindowID());
 		waitState.onDesktopWindowActivated(info);
 	}
-	
+
 	public void onDesktopWindowLoaded(DesktopWindowInfo info) {
 		logger.fine("DesktopWindow loaded: windowId=" + info.getWindowID());
 		waitState.onDesktopWindowLoaded(info);
@@ -448,7 +461,7 @@ public class ScopeServices implements IConnectionHandler {
 		logger.fine("Got Stp handshake!");
 		waitState.onHandshake();
 	}
-        
+
 	public void onDisconnect() {
             logger.fine("Disconnected, closing StpConnection.");
             if (connection != null)
@@ -461,16 +474,16 @@ public class ScopeServices implements IConnectionHandler {
                 }
             }
 	}
-	
+
 	public void onOperaIdle() {
 		logger.fine("Got Opera Idle event!");
 		waitState.onOperaIdle();
 	}
-	
+
 	public void waitForWindowLoaded(int activeWindowId, long timeout) {
 		waitState.waitForWindowLoaded(activeWindowId, timeout);
 	}
-	
+
 	public boolean isOperaIdleAvailable(){
 		for(String service : listedServices){if(service.equals("core")) return true;}
 		return false;
@@ -480,14 +493,14 @@ public class ScopeServices implements IConnectionHandler {
 		logger.info("====================================");
 		logger.info("|       WAITING FOR OPERA_IDLE     |");
 		logger.info("====================================");
-		
+
 		waitState.waitForOperaIdle(timeout);
   }
 
 	public void waitStart() {
 		waitState.setWaitEvents(true);
 	}
-	
+
 	public int waitForDesktopWindowLoaded(String win_name, long timeout) {
 		waitState.setWaitEvents(false);
 		try {
@@ -497,7 +510,7 @@ public class ScopeServices implements IConnectionHandler {
 			return 0;
 		}
 	}
-	
+
 	public int waitForDesktopWindowShown(String win_name, long timeout) {
 		waitState.setWaitEvents(false);
 		try {
@@ -575,7 +588,7 @@ public class ScopeServices implements IConnectionHandler {
 		return connection != null;
 	}
 
-        
+
 	private Response waitForResponse(int tag, long timeout) {
 		try {
 			return waitState.waitFor(tag, timeout);
@@ -609,9 +622,9 @@ public class ScopeServices implements IConnectionHandler {
 		cb.setPayload(payload);
 		return cb;
 	}
-	
+
 	/**
-   * Sends a command and wait for the response.
+	 * Sends a command and wait for the response.
 	 * @param command
 	 * @param builder
 	 * @return
