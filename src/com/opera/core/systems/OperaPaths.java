@@ -38,9 +38,10 @@ public class OperaPaths {
     Platform platform = Platform.getCurrent();
 
     if (platform.is(Platform.LINUX) || platform.is(Platform.UNIX)) {
-    	CommandLine line = new CommandLine("which opera");
+    	CommandLine line = new CommandLine("which", "opera");
     	line.execute();
-      if ((path = checkPath(line.getStdOut())) != null) return path;
+    	path = line.getStdOut().trim();
+      if (checkPath(path) != null) return path;
     }
 
     if (platform.is(Platform.LINUX) || platform.is(Platform.UNIX)) {
