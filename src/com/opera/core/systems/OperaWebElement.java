@@ -54,6 +54,12 @@ import com.opera.core.systems.scope.internal.OperaMouseKeys;
 import com.opera.core.systems.scope.services.IEcmaScriptDebugger;
 import com.opera.core.systems.scope.services.IOperaExec;
 
+/**
+ * Extends the default WebElement with Opera specific methods.
+ * 
+ * @author Deniz Turkoglu
+ *
+ */
 public class OperaWebElement implements RenderedWebElement, SearchContext, Locatable, FindsByTagName, FindsByLinkText, FindsByClassName, FindsByXPath, FindsByName, FindsById, FindsByCssSelector {
 
 	

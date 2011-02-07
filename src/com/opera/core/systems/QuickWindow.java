@@ -8,9 +8,9 @@ import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo.Des
 import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect;
 
 /**
- * A window in the Desktop UI
+ * Represents a window in the Desktop UI.
  *
- * @author Adam Minchinton, Karianne Ekern 
+ * @author Adam Minchinton, Karianne Ekern
  *
  */
 public class QuickWindow {

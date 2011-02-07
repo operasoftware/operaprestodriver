@@ -75,6 +75,12 @@ import com.opera.core.systems.scope.services.IPrefs;
 import com.opera.core.systems.scope.services.IWindowManager;
 import com.opera.core.systems.settings.OperaDriverSettings;
 
+/**
+ * The implementation of WebDriver for Opera.
+ *
+ * @author Deniz Turkoglu, Stuart Knightley
+ *
+ */
 public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, FindsByXPath, FindsByName, FindsByTagName, FindsByClassName,
 		FindsByCssSelector, SearchContext, JavascriptExecutor {
 

@@ -16,7 +16,6 @@ import java.nio.ByteOrder;
 
 /**
  * Implements the Opera launcher protocol.
- * See http://dvcs/cgit/core-systems/opera-launcher.git/ for more information.
  *
  * @author Jan Vidar Krey (janv@opera.com)
  */

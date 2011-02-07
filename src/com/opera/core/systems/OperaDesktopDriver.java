@@ -17,7 +17,8 @@ import com.opera.core.systems.settings.OperaDriverSettings;
 import com.opera.core.systems.util.ProfileUtils;
 
 /**
- * Desktop Driver.
+ * An extension of OperaDriver for testing the interface of the Opera desktop
+ * browser.
  *
  * @author Adam Minchinton, Karianne Ekern
  *

@@ -40,6 +40,12 @@ import com.opera.core.systems.scope.services.ums.UmsServices;
 import com.opera.core.systems.scope.stp.StpConnection;
 import com.opera.core.systems.scope.stp.StpThread;
 
+/**
+ * Implements the interface to the Scope protocol.
+ *
+ * @author Deniz Turkoglu
+ *
+ */
 public class ScopeServices implements IConnectionHandler {
 	
 	private final Logger logger = Logger.getLogger(this.getClass().getName());

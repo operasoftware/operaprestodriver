@@ -1,5 +1,11 @@
 package com.opera.core.systems.settings;
 
+/**
+ * Stores settings for OperaDriver
+ * 
+ * @author Deniz Turkoglu
+ *
+ */
 public class OperaDriverSettings {
 
 	private boolean runOperaLauncherFromOperaDriver = true;

@@ -14,10 +14,10 @@ import com.opera.core.systems.scope.services.IDesktopUtils;
 import com.opera.core.systems.scope.services.ums.SystemInputManager;
 
 /**
- *  A widget in the Desktop UI
+ * Represents a widget in the Opera desktop UI.
  *
- * @version 
  * @author Adam Minchinton,  Karianne Ekern.
+ *
  */
 public class QuickWidget {
 		private final QuickWidgetInfo info;
