@@ -1,5 +1,18 @@
-/* Copyright (C) 2009 Opera Software ASA.  All rights reserved. */
+/*
+Copyright 2008-2011 Opera Software ASA
 
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
 package com.opera.core.systems.scope.services.ums;
 
 import java.util.LinkedList;
@@ -25,8 +38,11 @@ import com.opera.core.systems.util.StackHashMap;
 
 
 /**
- * Handles the windowmanager service
- * @author Deniz Turkoglu
+ * window-manager service implementation, handles
+ * events such as window-closed and updated and
+ * tracks window being loaded
+ *
+ * @author Deniz Turkoglu <denizt@opera.com>
  *
  */
 public class WindowManager extends AbstractService implements IWindowManager {
@@ -34,29 +50,29 @@ public class WindowManager extends AbstractService implements IWindowManager {
 	private final Logger logger = Logger.getLogger(this.getClass().getName());
 	private final StackHashMap<Integer,WindowInfo> windows = new StackHashMap<Integer, WindowInfo>();
 	private final CompiledExpression windowFinder;
-	
+
 	private final AtomicInteger lastHttpResponseCode = new AtomicInteger();
-	
+
 	public AtomicInteger getLastHttpResponseCode() {
 		return lastHttpResponseCode;
 	}
 
     public WindowManager(ScopeServices services, String version) {
 		super(services, version);
-		
+
 		String serviceName = "window-manager";
-		
+
 		if(!isVersionInRange(version, "3.0", serviceName))
 			throw new UnsupportedOperationException(serviceName + " version " + version + " is not supported");
-		
+
 		services.setWindowManager(this);
 		windowFinder = JXPathContext.compile("/.[windowType='normal']/windowID");
 	}
-    
+
     public int getOpenWindowCount() {
 		return windows.size();
 	}
-    
+
 	public void setActiveWindowId(Integer windowId) {
 		windows.putIfAbsent(windowId, null);
 	}
@@ -79,7 +95,7 @@ public class WindowManager extends AbstractService implements IWindowManager {
 	public void removeWindow(Integer windowId) {
 		windows.remove(windowId);
 	}
-	
+
 	public void init() {
 		initializeWindows();
 		findDriverWindow();
@@ -88,17 +104,17 @@ public class WindowManager extends AbstractService implements IWindowManager {
 	public void findDriverWindow() {
 		JXPathContext pathContext = JXPathContext.newContext(windows.values());
 		WindowInfo window = windows.peek();
-		
+
 		if (window == null || !window.getWindowType().equals("normal")) {
 			// we dont deal with anything else, at least for now
 			// select a window that is normal and return first
-			
+
 			//Fix for Windows OS, we dont encounter this problem on linux at all
 			/*
 			if(windowsStack.isEmpty())
 				throw new WebDriverException("List of windows is empty");
 			*/
-			
+
 			Integer windowId = (Integer) windowFinder.getValue(pathContext);
 
 			if (windowId != null) {
@@ -119,7 +135,7 @@ public class WindowManager extends AbstractService implements IWindowManager {
 		return builder.build();
 	}
 
-	
+
 	/**
 	 * Filter only the active window so we don't get messages from
 	 * other windows (like thread messages)
@@ -128,7 +144,7 @@ public class WindowManager extends AbstractService implements IWindowManager {
 		WindowFilter.Builder filterBuilder = WindowFilter.newBuilder();
 		filterBuilder.setClearFilter(true);
 		filterBuilder.addIncludeIDList(getActiveWindowId());
-		
+
 		executeCommand(WindowManagerCommand.MODIFY_FILTER, filterBuilder);
 	}
 
@@ -146,7 +162,7 @@ public class WindowManager extends AbstractService implements IWindowManager {
 		WindowList list = builder.build();
 
 		List<WindowInfo> windowsList = list.getWindowListList();
-		
+
 		windows.clear();
 		for (WindowInfo window : windowsList) {
 			//FIXME workaround for CORE-25866
@@ -183,7 +199,7 @@ public class WindowManager extends AbstractService implements IWindowManager {
 		} else {
 			while (!list.isEmpty()) {
 				closeWindow(list.removeFirst());
-				
+
 				//BAD HACK! DELAYING CLOSE-WINDOW
 				try {
 					Thread.sleep(100);
@@ -203,7 +219,7 @@ public class WindowManager extends AbstractService implements IWindowManager {
 		/*
 		Collection<WindowInfo> windowCollection = getWindows().values();
 		List<Integer> handles = new ArrayList<Integer>(windowCollection.size());
-		
+
 		for (WindowInfo window : windowCollection) {
 			handles.add(window.getWindowID());
 		}
@@ -220,7 +236,7 @@ public class WindowManager extends AbstractService implements IWindowManager {
 		WindowFilter.Builder filterBuilder = WindowFilter.newBuilder();
 		filterBuilder.setClearFilter(true);
 		filterBuilder.addIncludePatternList("*");
-		
+
 		executeCommand(WindowManagerCommand.MODIFY_FILTER, filterBuilder);
 	}
 
@@ -228,9 +244,9 @@ public class WindowManager extends AbstractService implements IWindowManager {
 		WindowFilter.Builder filterBuilder = WindowFilter.newBuilder();
 		filterBuilder.setClearFilter(true);
 		filterBuilder.addIncludeIDList(windowId);
-		
+
 		executeCommand(WindowManagerCommand.MODIFY_FILTER, filterBuilder);
-		
+
 	}
 
 	public String getActiveWindowTitle() {

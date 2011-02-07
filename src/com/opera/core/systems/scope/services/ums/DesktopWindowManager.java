@@ -1,3 +1,18 @@
+/*
+Copyright 2008-2011 Opera Software ASA
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
 package com.opera.core.systems.scope.services.ums;
 
 import java.util.LinkedList;
@@ -23,6 +38,11 @@ import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID;
 import com.opera.core.systems.scope.services.IDesktopWindowManager;
 import com.opera.core.systems.scope.services.IDesktopUtils;
 
+/**
+ *
+ * @author Adam Minchinton, Karianne Ekern
+ *
+ */
 public class DesktopWindowManager extends AbstractService implements IDesktopWindowManager {
 
 	private int activeWindowId = 0;
@@ -61,29 +81,6 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 	public QuickWidget getQuickWidget(int windowId, QuickWidgetSearchType property, String value)
 	{
 		return getQuickWidget(windowId, property, value, "");
-		/*if (id < 0) {
-			id = getActiveWindowId();
-		}
-
-		QuickWidgetSearch.Builder searchBuilder = QuickWidgetSearch.newBuilder();
-		DesktopWindowID.Builder winBuilder = DesktopWindowID.newBuilder();
-		winBuilder.clearWindowID();
-		winBuilder.setWindowID(id);
-		searchBuilder.setWindowID(winBuilder);
-		searchBuilder.setSearchType(property);
-		searchBuilder.setData(value);
-
-		try {
-			Response response = executeCommand(DesktopWindowManagerCommand.GET_QUICK_WIDGET, searchBuilder);
-			QuickWidgetInfo.Builder builder = QuickWidgetInfo.newBuilder();
-			buildPayload(response, builder);
-			QuickWidgetInfo info = builder.build();
-			return new QuickWidget(desktopUtils, systemInputManager, info, id);
-		}
-		catch (WebDriverException e) { 
-			//System.out.println("Catching webdriver exception");
-			return null;
-		}*/
 	}
 
 	// parentName is set to name, pos or text depending on widget.getParentType
@@ -236,22 +233,5 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 		QuickWindow window = getQuickWindowById(windowId);
 		return (window == null ? "" : window.getName());
 	}
-
-	/*private void printQuickWidget(QuickWidgetInfo info) {
-	System.out.println("Widget name: " + info.getName());
-	System.out.println("       type: " + info.getType());
-	System.out.println("    visible: " + info.getVisible());
-	System.out.println("       text: " + info.getText());
-	System.out.println("      state: " + info.getValue());
-	System.out.println("    enabled: " + info.getEnabled());
-	System.out.println("    default: " + info.getDefaultLook());
-	System.out.println("    focused: " + info.getFocusedLook());
-	System.out.println("          x: " + info.getRect().getX());
-	System.out.println("          y: " + info.getRect().getY());
-	System.out.println("      width: " + info.getRect().getWidth());
-	System.out.println("     height: " + info.getRect().getHeight());
-	System.out.println(" ");
-	}*/
-
 
 }

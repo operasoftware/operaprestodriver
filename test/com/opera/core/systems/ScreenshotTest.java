@@ -1,6 +1,3 @@
-/**
- *
- */
 package com.opera.core.systems;
 
 import java.io.File;
@@ -124,9 +121,6 @@ public class ScreenshotTest extends TestBase {
   public void testRealPng() throws Exception {
     ScreenShotReply reply = driver.saveScreenshot(0);
     byte[] png = reply.getPng();
-
-    System.out.println("bytes:");
-    System.out.println(png);
 
     Assert.assertTrue("PNG magic bytes match",
        png[0] == (byte) 0x89 &&

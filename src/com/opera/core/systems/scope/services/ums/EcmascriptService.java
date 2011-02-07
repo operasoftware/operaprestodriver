@@ -1,3 +1,19 @@
+/*
+Copyright 2008-2011 Opera Software ASA
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
 package com.opera.core.systems.scope.services.ums;
 
 import java.text.NumberFormat;
@@ -42,11 +58,18 @@ import com.opera.core.systems.scope.services.IEcmaScriptDebugger;
 import com.opera.core.systems.scope.services.IWindowManager;
 
 
+/**
+ * Ecmascript service is a lightweight service
+ * to enable javascript injection (incomplete)
+ *
+ * @author Deniz Turkoglu <denizt@opera.com>
+ *
+ */
 // TODO extend ecmascript debugger? the signatures do vary a lot, might
 // be a better idea to keep this interface seperate, maybe create an abstract
 // ecmascript service?
 public class EcmascriptService extends AbstractService implements IEcmaScriptDebugger {
-	
+
 	/*
      * List all runtimes (in all Windows).
      * For instance to fetch all runtimes of all windows one can do::
@@ -87,16 +110,16 @@ public class EcmascriptService extends AbstractService implements IEcmaScriptDeb
     /**
      * Release protected ECMAScript objects. This will just make them garbage
      * collectible. Released objects are not necessarily freed immediately.
-     * 
+     *
      * Calling ReleaseObjects with an empty list causes all objects to be
      * released. Otherwise, only the specified objects will be released.
      * Attempting to release a non-existent object has no effect, and will
      * fail silently.
-     * 
+     *
      * Releasing objects invalidates associated object IDs immediately.
      */
     //command ReleaseObjects(ReleaseObjectsArg) returns (Default) = 4;
-	
+
 	private AtomicStampedReference<Runtime> runtime = new AtomicStampedReference<Runtime>(null, 0);
 	private IWindowManager windowManager;
 	private int retries;
@@ -106,7 +129,7 @@ public class EcmascriptService extends AbstractService implements IEcmaScriptDeb
 	private Queue<Integer> garbageQueue = new LinkedList<Integer>();
 
 	private ConcurrentMap<Integer, Runtime> runtimesList = new ConcurrentHashMap<Integer, Runtime>();
-	
+
 	public EcmascriptService(ScopeServices services, String version) {
 		super(services, version);
 		services.setDebugger(this);
@@ -122,21 +145,21 @@ public class EcmascriptService extends AbstractService implements IEcmaScriptDeb
 
 	public void addRuntime(com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeInfo info) {
 		throw new UnsupportedOperationException("Not suppported without ecmascript-debugger");
-		
+
 	}
-	
+
 	private Response eval(String using, Variable... variables) {
-		
+
 		if(windowManager.getActiveWindowId() != activeWindowId)
 			recover();
-		
+
 		processQueues();
-		
+
 		EvalArg.Builder builder = buildEval(using);
 		builder.addAllVariableList(Arrays.asList(variables));
-		
+
 		Response response = executeCommand(ESCommand.EVAL, builder);
-		
+
 		if(response == null && retries < OperaIntervals.SCRIPT_RETRY.getValue()) {
 			retries++;
 			sleepDuration += sleepDuration;
@@ -147,9 +170,9 @@ public class EcmascriptService extends AbstractService implements IEcmaScriptDeb
 			resetCounters();
 			throw new WebDriverException("Internal error");
 		}
-		
+
 		resetCounters();
-		
+
         return response;
 	}
 
@@ -170,7 +193,7 @@ public class EcmascriptService extends AbstractService implements IEcmaScriptDeb
 		Response response = eval(using, variable);
 		return responseExpected ? parseEvalReply(parseEvalData(response)) : null;
 	}
-	
+
 	private Object parseEvalReply(EvalResult result) {
 		Status status = result.getStatus();
 		switch (status) {
@@ -186,7 +209,7 @@ public class EcmascriptService extends AbstractService implements IEcmaScriptDeb
 		default:
 			break;
 		}
-		
+
 		Value value = result.getValue();
 		Type type = value.getType();
 		switch (type) {
@@ -212,7 +235,7 @@ public class EcmascriptService extends AbstractService implements IEcmaScriptDeb
 			return null;
 		}
 	}
-	
+
 	protected Object parseNumber(String value) {
 		Number number;
 		try {
@@ -225,14 +248,14 @@ public class EcmascriptService extends AbstractService implements IEcmaScriptDeb
 			throw new WebDriverException("The result from the script can not be parsed");
 		}
 	}
-	
+
 	protected final Variable buildVariable(String name, int objectId) {
 		Variable.Builder variable = Variable.newBuilder();
 		variable.setName(name);
 		variable.setObjectID(objectId);
 		return variable.build();
 	}
-	
+
 	private EvalResult parseEvalData(Response response) {
 		EvalResult.Builder builder = EvalResult.newBuilder();
 		buildPayload(response, builder);
@@ -257,19 +280,19 @@ public class EcmascriptService extends AbstractService implements IEcmaScriptDeb
 		builder.setRuntimeID(getRuntimeId());
 		builder.addObjectList(objectId);
 		Response response = executeCommand(ESCommand.EXAMINE_OBJECTS, builder);
-		
+
 		ObjectList.Builder objListBuilder = ObjectList.newBuilder();
 		buildPayload(response, objListBuilder);
 		ObjectList list = objListBuilder.build();
-		
+
 		List<Integer> ids = new ArrayList<Integer>();
 		List<Property> objects = list.getPrototypeListList().get(0).getObjectListList().get(0).getPropertyListList();
-		
+
 		for(Property obj : objects) {
 			if(obj.getValue().getType().equals(Value.Type.OBJECT))
 				ids.add(obj.getValue().getObject().getObjectID());
 		}
-		
+
 		return ids;
 	}
 
@@ -338,24 +361,24 @@ public class EcmascriptService extends AbstractService implements IEcmaScriptDeb
 	public Object scriptExecutor(String script, Object... params) {
 		if(windowManager.getActiveWindowId() != activeWindowId)
 			recover();
-		
+
 		processQueues();
-		
+
 		List<WebElement> elements = new ArrayList<WebElement>();
-		
+
 		String toSend = buildEvalString(elements, script, params);
 		EvalArg.Builder evalBuilder = buildEval(toSend);
-		
+
 		for (WebElement webElement : elements) {
 			Variable variable = buildVariable(webElement.toString(), ((OperaWebElement) webElement).getObjectId());
 			evalBuilder.addVariableList(variable);
 		}
-		
+
 		Response response = executeCommand(ESCommand.EVAL, evalBuilder);
-		
+
 		if(response == null)
 			throw new WebDriverException("Internal error while executing script");
-		
+
 		EvalResult result = parseEvalData(response);
 
         Object parsed = parseEvalReply(result);
@@ -365,7 +388,7 @@ public class EcmascriptService extends AbstractService implements IEcmaScriptDeb
         }
         else return parsed;
 	}
-	
+
 	private EvalArg.Builder buildEval(String toSend) {
 		EvalArg.Builder builder = EvalArg.newBuilder();
 		builder.setRuntimeID(getRuntimeId());
@@ -408,7 +431,7 @@ public class EcmascriptService extends AbstractService implements IEcmaScriptDeb
 		}
 		return toSend;
 	}
-	
+
 	protected void processArgument(Object object, StringBuilder builder, List<WebElement> elements) {
 		if(object instanceof WebElement) {
 			elements.add((WebElement) object);
@@ -435,18 +458,18 @@ public class EcmascriptService extends AbstractService implements IEcmaScriptDeb
 		}
 		return false;
 	}
-	
+
 	public void setRuntime(Runtime runtime) {
 		this.runtime.set(runtime, runtime.getRuntimeID());
 		activeWindowId = runtime.getWindowID();
 	}
-	
+
 	protected Runtime findRuntime() {
 		int windowId = windowManager.getActiveWindowId();
 		Runtime runtime = (Runtime) xpathPointer(runtimesList.values(), "/.[htmlFramePath='_top' and windowID='" + windowId + "']").getValue();
 		return runtime;
 	}
-	
+
 	protected void createAllRuntimes() {
 		ListRuntimesArg.Builder builder = ListRuntimesArg.newBuilder();
 		builder.setCreate(true);
@@ -469,18 +492,18 @@ public class EcmascriptService extends AbstractService implements IEcmaScriptDeb
 			runtimesQueue.add(change.getRuntimeID());
 		}
 	}
-	
+
 	private void processQueues() {
 		if(!garbageQueue.isEmpty())
 			processGcObjects();
-		
+
 		if(!runtimesQueue.isEmpty())
 			processNewRuntimes();
-		
+
 		if(runtimesList.isEmpty())
 			updateRuntime();
 	}
-	
+
 	private void processNewRuntimes() {
 		while(!runtimesQueue.isEmpty()) {
 			Runtime runtime = getRuntime(runtimesQueue.poll());
@@ -492,14 +515,14 @@ public class EcmascriptService extends AbstractService implements IEcmaScriptDeb
 			}
 		}
 	}
-	
+
 	private void processGcObjects() {
 		ReleaseObjectsArg.Builder builder = ReleaseObjectsArg.newBuilder();
 		builder.addAllObjectList(garbageQueue);
 		executeCommand(ESCommand.RELEASE_OBJECTS, builder);
 		garbageQueue.clear();
 	}
-	
+
 	/**
 	 * Queries for the given runtime ID
 	 * @param runtimeID The runtime id to query for
@@ -509,7 +532,7 @@ public class EcmascriptService extends AbstractService implements IEcmaScriptDeb
 		ListRuntimesArg.Builder builder = ListRuntimesArg.newBuilder();
 		builder.addRuntimeList(runtimeID);
 		builder.setCreate(true);
-		
+
 		Response response = executeCommand(ESCommand.LIST_RUNTIMES, builder);
 		RuntimeList.Builder runtimeListBuilder = RuntimeList.newBuilder();
 		buildPayload(response, runtimeListBuilder);
@@ -519,7 +542,7 @@ public class EcmascriptService extends AbstractService implements IEcmaScriptDeb
 
 	public void releaseObject(int objectId) {
 		ReleaseObjectsArg.Builder builder = ReleaseObjectsArg.newBuilder();
-		
+
 		if(objectId != 0) {
 			garbageQueue.add(objectId);
 		} else {
@@ -529,17 +552,17 @@ public class EcmascriptService extends AbstractService implements IEcmaScriptDeb
 
 	public void resetFramePath() {
 		// FIXME implement
-		
+
 	}
 
 	public void changeRuntime(int index) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public void changeRuntime(String frameName) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public String executeJavascript(String using, Integer windowId) {
@@ -551,5 +574,5 @@ public class EcmascriptService extends AbstractService implements IEcmaScriptDeb
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
+
 }

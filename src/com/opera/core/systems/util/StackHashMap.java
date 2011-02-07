@@ -1,3 +1,18 @@
+/*
+Copyright 2008-2011 Opera Software ASA
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
 package com.opera.core.systems.util;
 
 import java.util.Collection;
@@ -16,17 +31,17 @@ import java.util.concurrent.ConcurrentMap;
  * The backing map is a {@link LinkedHashMap} that provides
  * predictable iteration order. All the operations that require
  * thread safety are protected by the lock of synchronized map.
- * 
- * @author Deniz Turkoglu
+ *
+ * @author Deniz Turkoglu <denizt@opera.com>
  *
  * @param <K>
  * @param <V>
  */
 public class StackHashMap<K,V> implements ConcurrentMap<K,V> {
-	
+
 	private final Map<K, V> map;
 	private final LinkedList<K> list;
-	
+
 	public StackHashMap() {
 		map = Collections.synchronizedMap(new LinkedHashMap<K,V>());
 		list = new LinkedList<K>();
@@ -100,7 +115,7 @@ public class StackHashMap<K,V> implements ConcurrentMap<K,V> {
 			map.clear();
 		}
 	}
-	
+
 	/**
 	 * Removes the first value from the map
 	 * @return the value that was removed
@@ -110,14 +125,14 @@ public class StackHashMap<K,V> implements ConcurrentMap<K,V> {
 			return map.remove(list.removeFirst());
 		}
 	}
-	
+
 	public V push(K k,V v) {
 		synchronized (map) {
 			list.addFirst(k);
 			return map.put(k, v);
 		}
 	}
-	
+
 	/**
 	 * @return the first value in the backing map
 	 */
@@ -127,28 +142,28 @@ public class StackHashMap<K,V> implements ConcurrentMap<K,V> {
 			return (k == null) ? null : map.get(k);
 		}
 	}
-	
+
 	/**
 	 * @return the first key in the backing linked list
 	 */
 	public K peekKey() {
 		return (list.isEmpty()) ? null : list.getFirst();
 	}
-	
+
 	/**
 	 * @return an unmodifiable copy of the backing linkedlist(used as a stack)
 	 */
 	public List<K> asStack() {
 		return Collections.unmodifiableList(list);
 	}
-	
+
 	/**
 	 * @return an unmodifiable copy of the backing map
 	 */
 	public Map<K,V> asMap() {
 		return Collections.unmodifiableMap(map);
 	}
-	
+
 	/**
 	 * Puts a key to top of the map if absent
 	 * if the key is present in stack it is removed
@@ -160,7 +175,7 @@ public class StackHashMap<K,V> implements ConcurrentMap<K,V> {
 		synchronized (map) {
 			if(!containsKey(k)) {
 				list.addFirst(k);
-				return map.put(k, v);				
+				return map.put(k, v);
 			} else {
 				list.remove(k);
 			}

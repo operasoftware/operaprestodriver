@@ -1,9 +1,26 @@
-/* Copyright (C) 2009-2011 Opera Software ASA.  All rights reserved. */
+/*
+Copyright 2008-2011 Opera Software ASA
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
 package com.opera.core.systems.model;
 
 /**
  * A canvas object to use in taking screenshots of Opera's viewport.
- * 
+ * The screenshot can be relative to viewport or to the window
+ *
+ * @author Deniz Turkoglu <denizt@opera.com>
+ *
  */
 public class Canvas {
 	protected int x;
@@ -31,7 +48,7 @@ public class Canvas {
 	/**
 	 * Sets the screenshots to be relative to screen or to window, default is
 	 * window.
-	 * 
+	 *
 	 * @param viewPortRelative true if relative to window
 	 */
 	public void setViewPortRelative(boolean viewPortRelative) {

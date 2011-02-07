@@ -2,8 +2,6 @@ package com.opera.core.systems;
 
 import static org.junit.Assert.assertTrue;
 
-import java.util.List;
-
 import org.junit.Test;
 
 public class SecurityDialogs extends DesktopTestBase {
@@ -21,9 +19,8 @@ public class SecurityDialogs extends DesktopTestBase {
         .getQuickWindow("Setup Apply Dialog Confirm Dialog");
     assertTrue(win_id == security_win.getWindowID());
 
-    List<QuickWindow> windows = driver.getQuickWindowList();
-    List<QuickWidget> widgets = driver
-        .getQuickWidgetList("Setup Apply Dialog Confirm Dialog");
+    driver.getQuickWindowList();
+    driver.getQuickWidgetList("Setup Apply Dialog Confirm Dialog");
 
     assertTrue("Server is t", driver.findWidgetByName(win_id, "Simple_message")
         .getText().startsWith("t"));

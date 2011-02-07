@@ -1,3 +1,18 @@
+/*
+Copyright 2008-2011 Opera Software ASA
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
 package com.opera.core.systems.scope.stp;
 
 import org.openqa.selenium.WebDriverException;
@@ -20,17 +35,17 @@ import com.opera.core.systems.scope.WindowManagerCommand;
 import com.opera.core.systems.scope.DesktopWindowManagerCommand;
 
 public class UmsEventParser {
-	
+
 	private AbstractEventHandler eventHandler;
 
 	public UmsEventParser(AbstractEventHandler eventHandler) {
 		this.eventHandler = eventHandler;
 	}
-	
+
 	public void handleEvent(Event event) {
 		String service = event.getService();
 		int eventId = event.getCommandID();
-		
+
 		if (service.equals("ecmascript-debugger")) {
 			switch (ESDebuggerCommand.get(eventId)) {
 			case RUNTIME_STARTED:
@@ -69,9 +84,9 @@ public class UmsEventParser {
 				eventHandler.onUpdatedWindow(info);
 				break;
 			case WINDOW_LOADED:
-                                WindowID.Builder loadedWindowBuilder = WindowID.newBuilder();
+                 WindowID.Builder loadedWindowBuilder = WindowID.newBuilder();
 				buildPayload(event, loadedWindowBuilder);
-                                Integer loadedWindowID = loadedWindowBuilder.build().getWindowID();
+                Integer loadedWindowID = loadedWindowBuilder.build().getWindowID();
 				eventHandler.onWindowLoaded(loadedWindowID.intValue());
 				break;
 			default:
@@ -140,7 +155,7 @@ public class UmsEventParser {
 		else if(service.equals("core")) {
 			switch(CoreCommand.get(eventId)){
 			case ONACTIVE:
-				//No active event handler... 
+				//No active event handler...
 				//Opera only becomes active as reaction on other event
 				//sent from operadriver, so we already know.
 				break;
@@ -150,11 +165,11 @@ public class UmsEventParser {
 			}
 		}
 	}
-	
+
 	private final GeneratedMessage.Builder<?> buildPayload(Event event, GeneratedMessage.Builder<?> builder) {
 		return buildMessage(builder, event.getPayload().toByteArray());
 	}
-	
+
 	private final GeneratedMessage.Builder<?> buildMessage(GeneratedMessage.Builder<?> builder, byte[] message) {
 		try {
 			return builder.mergeFrom(message);
