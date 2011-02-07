@@ -160,6 +160,12 @@
       nodeprecatedlist="false" noindex="false" nonavbar="false"
       notree="false" source="1.5" sourcepath="src" splitindex="true" use="true" version="true">
       <packageset dir="src/" />
+
+      <!-- This generates all the selenium docs as well. Do not want.
+      <sourcefiles>
+        <fileset dir="../selenium/java/client/src" />
+      </sourcefiles>
+      -->
       <link href="http://webdriver.googlecode.com/svn/javadoc/"/>
       <link href="http://java.sun.com/javase/6/docs/api/"/>
     </javadoc>
