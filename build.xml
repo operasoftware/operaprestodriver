@@ -154,7 +154,12 @@
 
 
   <target name="doc">
-    <javadoc access="public" author="true" classpath="lib/selenium-common.jar:lib/commons-jxpath-1.3.jar:lib/protobuf-java-2.3.0.jar:lib/winp-1.14.jar" destdir="doc" doctitle="OperaDriver" nodeprecated="false" nodeprecatedlist="false" noindex="false" nonavbar="false" notree="false" packagenames="com.opera.core.systems.util,com.opera.core.systems.scope.internal,com.opera.core.systems.interaction,com.opera.core.systems.scope.services.ums,com.opera.core.systems.model,com.opera.core.systems.scope.handlers,com.opera.core.systems.runner,com.opera.core.systems.scope.exceptions,com.opera.core.systems.scope,com.opera.core.systems,com.opera.core.systems.scope.services,com.opera.core.systems.runner.launcher,com.opera.core.systems.scope.stp,com.opera.core.systems.settings,com.opera.core.systems.scope.protos" source="1.5" sourcepath="src" splitindex="true" use="true" version="true">
+    <javadoc access="public" author="true"
+      classpath="lib/selenium-common.jar:lib/commons-jxpath-1.3.jar:lib/protobuf-java-2.3.0.jar:lib/winp-1.14.jar"
+      destdir="doc" doctitle="OperaDriver" nodeprecated="false"
+      nodeprecatedlist="false" noindex="false" nonavbar="false"
+      notree="false" source="1.5" sourcepath="src" splitindex="true" use="true" version="true">
+      <packageset dir="src/" />
       <link href="http://webdriver.googlecode.com/svn/javadoc/"/>
       <link href="http://java.sun.com/javase/6/docs/api/"/>
     </javadoc>
