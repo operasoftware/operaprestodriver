@@ -100,7 +100,11 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 	protected Set<Integer> objectIds = new HashSet<Integer>();
 
 	public OperaDriver() {
-		this(makeSettings());
+		this(true);
+	}
+
+	public OperaDriver(boolean autoStart) {
+		this(autoStart ? makeSettings() : null);
 	}
 
 	/**
