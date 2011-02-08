@@ -60,6 +60,7 @@ import com.opera.core.systems.runner.launcher.OperaLauncherRunner;
 import com.opera.core.systems.scope.exceptions.CommunicationException;
 import com.opera.core.systems.scope.handlers.PbActionHandler;
 import com.opera.core.systems.scope.internal.OperaIntervals;
+import com.opera.core.systems.scope.internal.OperaKeys;
 import com.opera.core.systems.scope.protos.PrefsProtos.GetPrefArg.Mode;
 import com.opera.core.systems.scope.protos.PrefsProtos.Pref;
 import com.opera.core.systems.scope.services.ICookieManager;
@@ -71,9 +72,7 @@ import com.opera.core.systems.settings.OperaDriverSettings;
 
 /**
  * Opera's webdriver implementation.
- * See CREDITS and LICENSE
- *
- * @author Deniz Turkoglu, Stuart Knightley
+ * See AUTHORS and LICENSE for details
  *
  */
 public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, FindsByXPath, FindsByName, FindsByTagName, FindsByClassName,
@@ -868,57 +867,6 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 	private final boolean isElementAvailable(String script) {
 		return debugger.getObject(script) != null;
 	}
-	/*
-	public String saveScreenshot(String fileName, int timeout, String... hashes) {
-		return screenWatcher(fileName, timeout, true, hashes);
-	}
-
-	public ScreenShotReply saveScreenshot(Canvas canvas, long timeout, boolean includeImage, String... hashes) {
-
-		 * FIXME: This _needs_ be cleaned up.  All things related to
-		 * `timeout` should, ideally, be removed and handled elsewhere.
-
-
-		//
-		// * No reason to wait if we have idle control.  Builds without
-		// * OperaIdle enabled will fail if timeout is 1 or less.
-		//
-		if(services.isOperaIdleAvailable()) {
-			timeout = 1;
-		} else if (!services.isOperaIdleAvailable() && timeout <= 1) {
-			timeout = 10;
-		}
-
-        return exec.screenWatcher(canvas, timeout, includeImage, hashes);
-	}
-
-	private String screenWatcher(String fileName, int timeout, boolean saveFile, String... hashes) {
-		Canvas canvas = new Canvas();
-		canvas.setX(0);
-		canvas.setY(0);
-
-		String[] dimensions = debugger.executeJavascript("return (window.innerWidth + \",\" + window.innerHeight);").split(",");
-		canvas.setH(Integer.valueOf(dimensions[1]));
-		canvas.setW(Integer.valueOf(dimensions[0]));
-		canvas.setViewPortRelative(true);
-
-		ScreenShotReply screenshot = saveScreenshot(canvas, timeout, saveFile, hashes);
-
-		if(saveFile && screenshot.getPng() != null) {
-			FileOutputStream stream;
-
-			try {
-				stream = new FileOutputStream(fileName);
-				stream.write(screenshot.getPng());
-				stream.close();
-			} catch (Exception e) {
-				throw new WebDriverException("Failed to write file: " + e.getMessage());
-			}
-		}
-
-		return screenshot.getMd5();
-	}
-	*/
 
 	/**
 	 * Takes a screenshot of the whole screen, including areas outside of the
@@ -930,13 +878,6 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 	 */
 	public ScreenShotReply saveScreenshot(long timeout, String... hashes)
 	{
-		/*
-		if(services.isOperaIdleAvailable()) {
-			timeout = 1;
-		} else if (!services.isOperaIdleAvailable() && timeout <= 1) {
-			timeout = 10;
-		}
-		*/
 		return operaRunner.saveScreenshot(timeout, hashes);
 	}
 
@@ -1035,7 +976,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 	/**
 	 * Returns the version number of driver.
 	 * Replaced with the version during build
-	 * 
+	 *
 	 */
     public String getVersion() {
     	return "{VERSION}";
