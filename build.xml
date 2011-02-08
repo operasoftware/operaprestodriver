@@ -24,6 +24,9 @@
     </classpath>
   </taskdef>
 
+  <!--
+      Variables
+  -->
   <path id="webdriver-opera.path">
     <pathelement location="bin" />
     <fileset dir="lib" includes="**/*.jar" />
@@ -38,11 +41,24 @@
     <pathelement location="test/com/opera/core/systems" />
   </path>
 
+  <loadfile srcfile="VERSION" property="versionfile" />
+  <!-- Will remove new line in version file. -->
+  <propertyregex property="version"
+	   input="${versionfile}"
+	   regexp="\n"
+	   replace=""
+     global="true" />
+
+  <!--
+      Targets
+  -->
+
   <!-- Delete the bin and pkg dirs -->
   <target name="clean">
     <delete dir="bin" />
     <delete dir="pkg" />
     <delete dir="docs" />
+    <delete dir="release" />
   </target>
 
   <!-- Compile all classes after cleaning-->
@@ -66,14 +82,6 @@
   <!-- Build the jar -->
   <target name="jar" depends="compile">
     <mkdir dir="pkg" />
-    <loadfile srcfile="VERSION" property="versionfile" />
-
-    <!-- Will remove new line in version file. -->
-    <propertyregex property="version"
-		   input="${versionfile}"
-		   regexp="\n"
-		   replace=""
-       global="true" />
 
     <jar destfile="pkg/webdriver-opera-${version}.jar">
       <fileset dir="bin" includes="**/*.class" />
@@ -178,5 +186,18 @@
       <link href="http://webdriver.googlecode.com/svn/javadoc/"/>
       <link href="http://download.oracle.com/javase/1.5.0/docs/api/"/>
     </javadoc>
+  </target>
+
+  <target name="release" depends="clean,jar,doc">
+    <mkdir dir="release" />
+    <zip destfile="release/operadriver-${version}.zip">
+      <!-- Add the docs -->
+      <zipfileset dir="docs/" prefix="docs"/>
+      <!-- add OperaDriver jar to the lib directory -->
+      <zipfileset dir="pkg" prefix="lib"/>
+      <!-- Add all the jar libs -->
+      <zipfileset dir="lib" prefix="lib"/>
+      <zipfileset dir="." includes="AUTHORS LICENSE"/>
+    </zip>
   </target>
 </project>
