@@ -75,7 +75,7 @@ import com.opera.core.systems.scope.services.IWindowManager;
 import com.opera.core.systems.settings.OperaDriverSettings;
 
 /**
- * Opera's webdriver implementation
+ * Opera's webdriver implementation.
  * See CREDITS and LICENSE
  *
  * @author Deniz Turkoglu, Stuart Knightley
