@@ -190,14 +190,15 @@
 
   <target name="release" depends="clean,jar,doc">
     <mkdir dir="release" />
-    <zip destfile="release/operadriver-${version}.zip">
+    <property name="release-zip.name" value="operadriver-${version}" />
+    <zip destfile="release/${release-zip.name}.zip">
       <!-- Add the docs -->
-      <zipfileset dir="docs/" prefix="docs"/>
+      <zipfileset prefix="${release-zip.name}/docs" dir="docs/" />
       <!-- add OperaDriver jar to the lib directory -->
-      <zipfileset dir="pkg" prefix="lib"/>
+      <zipfileset prefix="${release-zip.name}/lib" dir="pkg" />
       <!-- Add all the jar libs -->
-      <zipfileset dir="lib" prefix="lib"/>
-      <zipfileset dir="." includes="AUTHORS.txt LICENSE.txt"/>
+      <zipfileset prefix="${release-zip.name}/lib" dir="lib" excludes="junit*.jar"/>
+      <zipfileset prefix="${release-zip.name}" dir="." includes="AUTHORS.txt LICENSE.txt"/>
     </zip>
   </target>
 </project>
