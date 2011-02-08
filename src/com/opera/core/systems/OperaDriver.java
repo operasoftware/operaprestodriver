@@ -338,6 +338,14 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 		return by.findElements(this);
 	}
 
+	/**
+   * Get the source of the last loaded page.
+   *
+   * The source will be of the modified DOM, <em>not</em> the original HTML.
+   * The page source returned is a representation of the underlying DOM: do not
+   * expect it to be formatted or escaped in the same way as the response sent
+   * from the web server.
+	 */
 	public String getPageSource() {
 		return debugger.executeJavascript("return document.documentElement.outerHTML");
 	}
@@ -738,7 +746,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 	}
 
 	/**
-	 * Performs a special action, such as setting an Opera preference. 
+	 * Performs a special action, such as setting an Opera preference.
 	 * @param using The action to perform. For a list of actions call
 	 * {@link #getOperaActionList()} at run time
 	 * @param params Parameters to pass to the action call
@@ -921,7 +929,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 	*/
 
 	/**
-	 * Takes a screenshot of the whole screen, including areas outside of the 
+	 * Takes a screenshot of the whole screen, including areas outside of the
 	 * Opera browser window.
 	 * @param timeout The number of milliseconds to wait before taking the
 	 * screenshot
@@ -1034,7 +1042,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 
 	/**
 	 * Types the given string as-is in to the browser window. To press special
-	 * keys use {@link #key(String)}. 
+	 * keys use {@link #key(String)}.
 	 * @param using The string to type
 	 */
 	public void type(String using) {
@@ -1102,18 +1110,43 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 		return services;
 	}
 
+	/**
+	 * Get the value of the requested preference.
+	 * @param section The section the preference is in.
+	 * @param key The key name of the preference to get.
+	 * @return The value of the preference.
+	 */
 	public String getPref(String section, String key) {
 		return services.getPrefs().getPref(section, key, Mode.CURRENT);
 	}
 
+	/**
+	 * Gets the default value of the requested preference.
+	 * @param section The section the preference is in.
+	 * @param key The key name of the preference.
+	 * @return The default string value of the preference.
+	 */
 	public String getDefaultPref(String section, String key) {
 		return services.getPrefs().getPref(section, key, Mode.DEFAULT);
 	}
 
+	/**
+	 * Returns a list of preferences in the requested section.
+	 * @param sort Whether to alphabetically sort the preference keys.
+	 * @param section The section to retreive the preferences from.
+	 * @return A list of preferences.
+	 */
 	public List<Pref> listPrefs(boolean sort, String section) {
 		return services.getPrefs().listPrefs(sort, section);
 	}
 
+	/**
+	 * Set the {@link value} of the preference, {@link key}, in section
+	 * {@link section}.
+	 * @param section The section the preference is in.
+	 * @param key The key name of the preference to set.
+	 * @param value The value to set the preference to.
+	 */
 	public void setPref(String section, String key, String value) {
 		services.getPrefs().setPrefs(section, key, value);
 	}
