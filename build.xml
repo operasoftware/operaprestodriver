@@ -78,7 +78,6 @@
     <jar destfile="pkg/webdriver-opera-${version}.jar">
       <fileset dir="bin" includes="**/*.class" />
       <fileset dir="bin" includes="**/*.properties" />
-      <zipgroupfileset dir="lib" includes="*.jar"/>
       <manifest>
       	<attribute name="Main-Class" value="com.opera.core.systems.OperaDriver" />
       	<attribute name="Implementation-Version" value="${version}" />
