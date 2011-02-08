@@ -42,6 +42,7 @@
   <target name="clean">
     <delete dir="bin" />
     <delete dir="pkg" />
+    <delete dir="docs" />
   </target>
 
   <!-- Compile all classes after cleaning-->
@@ -154,20 +155,29 @@
 
 
   <target name="doc">
-    <javadoc access="public" author="true"
-      classpath="lib/selenium-common.jar:lib/commons-io-2.0.1.jar:lib/commons-jxpath-1.3.jar:lib/protobuf-java-2.3.0.jar:lib/winp-1.14.jar"
-      destdir="doc" doctitle="OperaDriver" nodeprecated="false"
-      nodeprecatedlist="false" noindex="false" nonavbar="false"
-      notree="false" source="1.5" sourcepath="src" splitindex="true" use="true" version="true">
-      <packageset dir="src/" />
+    <javadoc destdir="docs" doctitle="OperaDriver" access="public" author="true">
+      <classpath>
+        <!-- Include all the jars except selenium, as we're getting the docs
+        straight from the source -->
+        <dirset dir="lib">
+          <include name="*.jar"/>
+          <exclude name="selenium-common.jar"/>
+        </dirset>
+      </classpath>
 
-      <!-- This generates all the selenium docs as well. Do not want.
-      <sourcefiles>
-        <fileset dir="../selenium/java/client/src" />
-      </sourcefiles>
-      -->
+      <!-- include our source, and the selenium source so that we can inherit
+      the javadocs -->
+      <sourcepath>
+        <pathelement location="src" />
+        <pathelement location="../selenium/java/client/src" />
+      </sourcepath>
+
+      <!-- only generate docs for Opera stuff, not selenium as well -->
+      <package name="com.opera.core.systems.*" />
+
+      <!-- Link to online selenium documentation, and the Java docs -->
       <link href="http://webdriver.googlecode.com/svn/javadoc/"/>
-      <link href="http://java.sun.com/javase/6/docs/api/"/>
+      <link href="http://download.oracle.com/javase/1.5.0/docs/api/"/>
     </javadoc>
   </target>
 </project>
