@@ -197,7 +197,7 @@
       <zipfileset dir="pkg" prefix="lib"/>
       <!-- Add all the jar libs -->
       <zipfileset dir="lib" prefix="lib"/>
-      <zipfileset dir="." includes="AUTHORS LICENSE"/>
+      <zipfileset dir="." includes="AUTHORS.txt LICENSE.txt"/>
     </zip>
   </target>
 </project>
