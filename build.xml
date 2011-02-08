@@ -194,6 +194,8 @@
     <zip destfile="release/${release-zip.name}.zip">
       <!-- Add the docs -->
       <zipfileset prefix="${release-zip.name}/docs" dir="docs/" />
+      <!-- Add the examples -->
+      <zipfileset prefix="${release-zip.name}/examples" dir="examples/" />
       <!-- add OperaDriver jar to the lib directory -->
       <zipfileset prefix="${release-zip.name}/lib" dir="pkg" />
       <!-- Add all the jar libs -->
