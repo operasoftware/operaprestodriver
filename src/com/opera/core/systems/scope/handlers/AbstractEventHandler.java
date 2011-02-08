@@ -51,7 +51,7 @@ public abstract class AbstractEventHandler {
 
 	/**
 	 * Fired when a runtime is stopped and no longer injectable
-	 * @param stopped
+	 * @param id
 	 */
 	public abstract void onRuntimeStopped(Integer id);
 
@@ -60,18 +60,17 @@ public abstract class AbstractEventHandler {
 	 * has incoming changes (such as title change)
 	 * @param window
 	 */
-
 	public abstract void onUpdatedWindow(WindowInfo window);
 
 	/**
 	 * Fired when a window becomes active (steals focus)
-	 * @param window
+	 * @param id
 	 */
 	public abstract void onActiveWindow(Integer id);
 
 	/**
 	 * Fired when a window instance is closed
-	 * @param closed
+	 * @param id
 	 */
 	public abstract void onWindowClosed(Integer id);
 
@@ -85,39 +84,37 @@ public abstract class AbstractEventHandler {
 	/**
 	 * Fired when a desktop window is shown at the last possible
 	 * moment so the window should be fully visible
-	 * @param window
+	 * @param info
 	 */
-
 	public abstract void onDesktopWindowShown(DesktopWindowInfo info);
-
-	/**
-	 * Fired when a new window is created or window
-	 * has incoming changes (such as title change)
-	 * @param window
-	 */
 
 	/**
 	 * Fired when opera is idle
 	 */
 	public abstract void onOperaIdle();
 
+  /**
+   * Fired when a new window is created or window
+   * has incoming changes (such as title change)
+   * @param info
+   */
 	public abstract void onDesktopWindowUpdated(DesktopWindowInfo info);
 
 	/**
 	 * Fired when a window becomes active (steals focus)
-	 * @param window
+	 * @param info
 	 */
 	public abstract void onDesktopWindowActivated(DesktopWindowInfo info);
 
 	/**
 	 * Fired when a window instance is closed
-	 * @param closed
+	 * @param info
 	 */
 	public abstract void onDesktopWindowClosed(DesktopWindowInfo info);
 
 	/**
 	 * Fired when loading Finished event
-	 * @param closed
+	 * @param info
 	 */
 	public abstract void onDesktopWindowLoaded(DesktopWindowInfo info);
 

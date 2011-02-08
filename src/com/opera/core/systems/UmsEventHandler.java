@@ -19,7 +19,14 @@ import com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessage;
 import com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeInfo;
 import com.opera.core.systems.scope.protos.WmProtos.WindowInfo;
 
-
+/**
+ * Provided support for an alternate protocol. To be removed.
+ *
+ * @deprecated
+ * @author Deniz Turkoglu
+ *
+ */
+@Deprecated
 public class UmsEventHandler extends EventHandler {
 
 	public UmsEventHandler(ScopeServices services) {

@@ -28,10 +28,10 @@ import com.opera.core.systems.scope.services.IDesktopUtils;
 import com.opera.core.systems.scope.services.ums.SystemInputManager;
 
 /**
- *  A widget in the Desktop UI
+ * Represents a widget in the Opera desktop UI.
  *
- * @version
  * @author Adam Minchinton,  Karianne Ekern.
+ *
  */
 public class QuickWidget {
 		private final QuickWidgetInfo info;
@@ -243,7 +243,7 @@ public class QuickWidget {
 		/**
 	     * Checks if widget text contains the text specified by the given string id
 	     *
-	     * @param String stringId id of string
+	     * @param stringId String id of string 
 	     * @return true if text specified by stringId is contained in widget text
 	     */
 		public boolean verifyContainsText(String stringId) {

@@ -28,7 +28,7 @@ public interface IWindowManager {
 	/**
 	 * Sets the active window if the window is of type 'normal'
 	 * discards any other window such as 'dialog' or 'unknown'
-	 * @param activeWindowId
+	 * @param windowId
 	 */
 	void setActiveWindowId(Integer windowId);
 

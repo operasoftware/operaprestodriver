@@ -32,8 +32,12 @@ import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.os.CommandLine;
 
 /**
- * @author Stuart Knightley <stuark@opera.com>
- * This class tries to find the paths to Opera and Opera Launcher on any system
+ * This class tries to find the paths to Opera and Opera Launcher on any
+ * system. If it cannot find a launcher it will extract the appropriate one
+ * from the jar it is in.
+ *
+ * @author Stuart Knightley, Deniz Turkoglu
+ *
  */
 public class OperaPaths {
 

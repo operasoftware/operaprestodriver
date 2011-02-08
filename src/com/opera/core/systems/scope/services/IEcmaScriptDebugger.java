@@ -45,7 +45,7 @@ public interface IEcmaScriptDebugger {
 	 * Adds a runtime to the list of runtimes maintained in the service (STP/1
 	 * only)
 	 *
-	 * @param started
+	 * @param info
 	 */
 	void addRuntime(RuntimeInfo info);
 
@@ -107,7 +107,7 @@ public interface IEcmaScriptDebugger {
 	 *
 	 * @param using Script with reference to the object "locator"
 	 * @param objectId The object to be used for injection
-	 * @return
+	 * @return The string value returned by the executed Javascript
 	 */
 	String callFunctionOnObject(String using, int objectId);
 
@@ -176,7 +176,7 @@ public interface IEcmaScriptDebugger {
 	/**
 	 * Triggered on the ecmascript service when the state of a runtime changes
 	 *
-	 * @param a {@link ReadyStateChange} object with runtime info
+	 * @param change {@link ReadyStateChange} object with runtime info
 	 */
 	void readyStateChanged(ReadyStateChange change);
 

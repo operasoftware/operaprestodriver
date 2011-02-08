@@ -22,6 +22,12 @@ import com.opera.core.systems.scope.protos.EcmascriptProtos.ReadyStateChange;
 import com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeInfo;
 import com.opera.core.systems.scope.protos.WmProtos.WindowInfo;
 
+/**
+ * Provides an interface to the Scope protocol.
+ * 
+ * @author Deniz Turkoglu
+ *
+ */
 public class EventHandler extends AbstractEventHandler {
 
 	protected ScopeServices services;

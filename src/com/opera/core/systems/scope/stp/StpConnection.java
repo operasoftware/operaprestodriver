@@ -78,7 +78,7 @@ public class StpConnection implements SocketListener {
     /*
     @Override
     public void finalize() throws Throwable {
-    	logger.severe("STPConnection cleanup");
+      logger.severe("STPConnection cleanup");
         if (socketChannel != null && socketChannel.isOpen()) {
             close();
         }
@@ -90,8 +90,10 @@ public class StpConnection implements SocketListener {
      * Initializes variables in object scope, sets 'count known' to false to
      * read byte count (STP/0).
      *
-     * @param hostAddress Adress to listen on, localhost if null
-     * @param port Port to bind to
+     * @param socket
+     * @param handler
+     * @param eventHandler
+     * @throws IOException
      */
     public StpConnection(SocketChannel socket, IConnectionHandler handler, AbstractEventHandler eventHandler) throws IOException {
         connectionHandler = handler;
@@ -122,7 +124,7 @@ public class StpConnection implements SocketListener {
      * Queues up an STP/1 message sent from another thread and wakes up selector to
      * register it to the key
      *
-     * @param message to add to the request queue
+     * @param command to add to the request queue
      * @throws IOException
      */
     public void send(Command command) {

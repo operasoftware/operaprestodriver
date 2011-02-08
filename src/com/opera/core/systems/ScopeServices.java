@@ -53,6 +53,12 @@ import com.opera.core.systems.scope.services.ums.UmsServices;
 import com.opera.core.systems.scope.stp.StpConnection;
 import com.opera.core.systems.scope.stp.StpThread;
 
+/**
+ * Implements the interface to the Scope protocol.
+ *
+ * @author Deniz Turkoglu
+ *
+ */
 public class ScopeServices implements IConnectionHandler {
 
 	private final Logger logger = Logger.getLogger(this.getClass().getName());
@@ -152,11 +158,11 @@ public class ScopeServices implements IConnectionHandler {
 	}
 
 	/**
-	 * Creates the scope server on specified address and port
-	 * Enables the required services for webdriver
-	 * @param ipAddress
-	 * @param portNumber
-	 * @param intervals
+   * Creates the scope server on specified address and port
+   * Enables the required services for webdriver 
+	 * @param versions
+	 * @param manualConnect
+	 * @throws IOException
 	 */
 	public ScopeServices(Map<String, String> versions, boolean manualConnect) throws IOException {
 		this.versions = versions;
@@ -607,9 +613,9 @@ public class ScopeServices implements IConnectionHandler {
 
 	/**
 	 * Sends a command and wait for the response.
-     *
-	 * @param serviceName
-	 * @param message
+	 * @param command
+	 * @param builder
+	 * @return
 	 */
 	public Response executeCommand(ICommand command, Builder<?> builder) {
 		return executeCommand(command, builder, OperaIntervals.RESPONSE_TIMEOUT.getValue());

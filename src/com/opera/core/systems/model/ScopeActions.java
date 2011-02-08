@@ -54,11 +54,12 @@ public abstract class ScopeActions {
 	public abstract void click(RenderedWebElement element, String locator);
 
 	/**
-	 * Creates a native left mouse click (2.4+)
-	 *
-	 * @throws UnsupportedOperationException on 2.3
-	 * @param element The element to be clicked with x and y coordinates added to top left
-	 * @param locator The index of the element in elements array
+   * Creates a native left mouse click (2.4+)
+   *
+   * @throws UnsupportedOperationException on 2.3
+   * @param element The element to be clicked with x and y coordinates added to top left
+	 * @param x
+	 * @param y
 	 */
 	public abstract void click(RenderedWebElement element, int x, int y);
 
@@ -67,7 +68,6 @@ public abstract class ScopeActions {
 	 *
 	 * @throws UnsupportedOperationException on 2.3
 	 * @param element The element to be clicked on top left
-	 * @param locator The index of the element in elements array
 	 */
 	public abstract void rightClick(RenderedWebElement element);
 

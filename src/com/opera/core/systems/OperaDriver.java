@@ -70,8 +70,10 @@ import com.opera.core.systems.scope.services.IWindowManager;
 import com.opera.core.systems.settings.OperaDriverSettings;
 
 /**
- * Opera's webdriver implementation
+ * Opera's webdriver implementation.
  * See CREDITS and LICENSE
+ *
+ * @author Deniz Turkoglu, Stuart Knightley
  *
  */
 public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, FindsByXPath, FindsByName, FindsByTagName, FindsByClassName,
@@ -303,6 +305,9 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 		windowManager.filterActiveWindow();
 	}
 
+	/**
+	 * Closes all open windows.
+	 */
 	public void closeAll() {
 		windowManager.closeAllWindows();
 		windowManager.filterActiveWindow();
@@ -312,6 +317,9 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 		exec.action("Close page");
 	}
 
+	/**
+	 * Stops the loading of the current page.
+	 */
 	public void stop() {
 		exec.action("Stop");
 	}
@@ -324,6 +332,14 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 		return by.findElements(this);
 	}
 
+	/**
+   * Get the source of the last loaded page.
+   *
+   * The source will be of the modified DOM, <em>not</em> the original HTML.
+   * The page source returned is a representation of the underlying DOM: do not
+   * expect it to be formatted or escaped in the same way as the response sent
+   * from the web server.
+	 */
 	public String getPageSource() {
 		return debugger.executeJavascript("return document.documentElement.outerHTML");
 	}
@@ -722,8 +738,15 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 
 	}
 
+	/**
+	 * Performs a special action, such as setting an Opera preference.
+	 * @param using The action to perform. For a list of actions call
+	 * {@link #getOperaActionList()} at run time
+	 * @param params Parameters to pass to the action call
+	 */
 	@SuppressWarnings("unused")
-	private void operaAction(String using, String... params) {
+	public void operaAction(String using, String... params) {
+
 		exec.action(using, params);
 	}
 
@@ -897,6 +920,14 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 	}
 	*/
 
+	/**
+	 * Takes a screenshot of the whole screen, including areas outside of the
+	 * Opera browser window.
+	 * @param timeout The number of milliseconds to wait before taking the
+	 * screenshot
+	 * @param hashes A previous screenshot MD5 hash. If it matches the hash
+	 * of this screenshot then no image data is returned.
+	 */
 	public ScreenShotReply saveScreenshot(long timeout, String... hashes)
 	{
 		/*
@@ -946,6 +977,13 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
             waitForLoadToComplete();
 	}
 
+	/**
+	 * Presses and releases the given key. If the key is "enter" then OperaDriver
+	 * waits for the page to finish loading.
+	 * @param key A string containing the key to press. This can be a single
+	 * character (e.g. "a") or a special key (e.g. "left"), and is matched
+	 * case insensitively. For a list of keys see {@link OperaKeys}.
+	 */
 	public void key(String key) {
 		keyDown(key);
 		keyUp(key);
@@ -956,18 +994,36 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 		}
 	}
 
+	/**
+	 * Presses and holds the given key. You cannot press a key that is already
+	 * down.
+	 * @param key The key to press. See {@link #key(String)} for more information.
+	 */
 	public void keyDown(String key) {
             exec.key(key, false);
 	}
 
+	/**
+   * Releases the given key.
+   * @param key The key to release. See {@link #key(String)} for more
+   * information.
+   */
 	public void keyUp(String key) {
             exec.key(key, true);
 	}
 
+	/**
+	 * Releases all the currently pressed keys.
+	 */
 	public void releaseKeys() {
             exec.releaseKeys();
 	}
 
+	/**
+	 * Types the given string as-is in to the browser window. To press special
+	 * keys use {@link #key(String)}.
+	 * @param using The string to type
+	 */
 	public void type(String using) {
             exec.type(using);
 	}
@@ -977,8 +1033,8 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 	}
 
 	/**
-	 * Returns the version number of driver
-	 * replaced with the version during build
+	 * Returns the version number of driver.
+	 * Replaced with the version during build
 	 * 
 	 */
     public String getVersion() {
@@ -1001,18 +1057,43 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 		return services;
 	}
 
+	/**
+	 * Get the value of the requested preference.
+	 * @param section The section the preference is in.
+	 * @param key The key name of the preference to get.
+	 * @return The value of the preference.
+	 */
 	public String getPref(String section, String key) {
 		return services.getPrefs().getPref(section, key, Mode.CURRENT);
 	}
 
+	/**
+	 * Gets the default value of the requested preference.
+	 * @param section The section the preference is in.
+	 * @param key The key name of the preference.
+	 * @return The default string value of the preference.
+	 */
 	public String getDefaultPref(String section, String key) {
 		return services.getPrefs().getPref(section, key, Mode.DEFAULT);
 	}
 
+	/**
+	 * Returns a list of preferences in the requested section.
+	 * @param sort Whether to alphabetically sort the preference keys.
+	 * @param section The section to retreive the preferences from.
+	 * @return A list of preferences.
+	 */
 	public List<Pref> listPrefs(boolean sort, String section) {
 		return services.getPrefs().listPrefs(sort, section);
 	}
 
+	/**
+	 * Set the {@link value} of the preference, {@link key}, in section
+	 * {@link section}.
+	 * @param section The section the preference is in.
+	 * @param key The key name of the preference to set.
+	 * @param value The value to set the preference to.
+	 */
 	public void setPref(String section, String key, String value) {
 		services.getPrefs().setPrefs(section, key, value);
 	}
