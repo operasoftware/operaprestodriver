@@ -51,34 +51,40 @@ public class OperaPaths {
    *  4. Give up and return null
    * @return The path to Opera, or null
    */
-  public String operaPath() {
-    String path = null;
-    if ((path = checkPath(System.getenv("OPERA_PATH"))) != null) return path;
-    Platform platform = Platform.getCurrent();
+	public String operaPath() {
+		String path = null;
+		if ((path = checkPath(System.getenv("OPERA_PATH"))) != null)
+			return path;
+		Platform platform = Platform.getCurrent();
 
-    if (platform.is(Platform.LINUX) || platform.is(Platform.UNIX)) {
-    	CommandLine line = new CommandLine("which", "opera");
-    	line.execute();
-    	path = line.getStdOut().trim();
-      if (checkPath(path) != null) return path;
-    }
+		if (platform.is(Platform.LINUX) || platform.is(Platform.UNIX)) {
+			CommandLine line = new CommandLine("which", "opera");
+			line.execute();
+			path = line.getStdOut().trim();
+			if (checkPath(path) != null)
+				return path;
+		}
 
-    if (platform.is(Platform.LINUX) || platform.is(Platform.UNIX)) {
-      if ((path = checkPath("/usr/bin/opera")) != null) return path;
+		if (platform.is(Platform.LINUX) || platform.is(Platform.UNIX)) {
+			if ((path = checkPath("/usr/bin/opera")) != null)
+				return path;
 
-    } else if (platform.is(Platform.WINDOWS)) {
-      String progfiles = System.getenv("PROGRAMFILES");
-      if (progfiles == null) progfiles = "\\Program Files";
+		} else if (platform.is(Platform.WINDOWS)) {
+			String x86 = System.getenv("ProgramFiles(x86)");
+			String progfiles = (x86 == null) ? System.getenv("PROGRAMFILES") : x86;
+			if (progfiles == null) progfiles = "\\Program Files";
 
-      if ((path = checkPath(progfiles + "\\Opera\\opera.exe")) != null) return path;
+			if ((path = checkPath(progfiles + "\\Opera\\opera.exe")) != null)
+				return path;
 
-    } else if (platform.is(Platform.MAC)) {
-      if ((path = checkPath("/Applications/Opera.app/Contents/MacOS/Opera")) != null) return path;
+		} else if (platform.is(Platform.MAC)) {
+			if ((path = checkPath("/Applications/Opera.app/Contents/MacOS/Opera")) != null)
+				return path;
 
-    }
+		}
 
-    return null;
-  }
+		return null;
+	}
 
   /**
    * This method will try and find Opera Launcher on any system.
@@ -102,7 +108,8 @@ public class OperaPaths {
 		String launcherName = getLauncherNameForOS();
 
 		String executablePath = null;
-		URL res = OperaDriver.class.getClassLoader().getResource(launcherName);
+
+		URL res = OperaDriver.class.getClassLoader().getResource("launcher/" + launcherName);
 		if (res != null) {
 			String url = res.toExternalForm();
 			if ((url.startsWith("jar:")) || (url.startsWith("wsjar:"))) {
@@ -126,7 +133,7 @@ public class OperaPaths {
 					}
 
 					File jarFile = new File(filePortion);
-					executablePath = FileUtils.getUserDirectoryPath() + IOUtils.DIR_SEPARATOR + "." + launcherName;
+					executablePath = FileUtils.getUserDirectoryPath() + File.separatorChar + ".launcher" + File.separatorChar + launcherName;
 
 					File executable = new File(executablePath);
 
@@ -181,29 +188,20 @@ public class OperaPaths {
 		boolean is64 = "64".equals(System.getProperty("sun.arch.data.model"));
 		Platform currentPlatform = Platform.getCurrent();
 
-		StringBuilder launcherBuilder = new StringBuilder();
-
-		launcherBuilder.append("launcher");
-		launcherBuilder.append(File.separatorChar);
 
 		switch (currentPlatform) {
 		case LINUX:
 		case UNIX:
-			launcherBuilder.append(is64 ? "launcher-linux-x86_64" : "launcher-linux-i686");
-			break;
+			return (is64 ? "launcher-linux-x86_64" : "launcher-linux-i686");
 		case MAC:
-			launcherBuilder.append("launcher-mac");
-			break;
+			return "launcher-mac";
 		case WINDOWS:
 		case VISTA:
 		case XP:
-			launcherBuilder.append("launcher-win32-i86pc.exe");
-			break;
+			return "launcher-win32-i86pc.exe";
 		default:
 			throw new WebDriverException("Could not find a platfom that supports bundled launchers, please set it manually");
 		}
-
-		return launcherBuilder.toString();
 	}
 
   /**
