@@ -570,18 +570,6 @@ public class ScopeServices implements IConnectionHandler {
 		return versions.get(service);
 	}
 
-	public void onBinaryStopped(int exitValue) {
-		if (connection != null) {
-			if (!shuttingDown) {
-				waitState.onBinaryExit(exitValue);
-			}
-		}
-	}
-
-	public boolean isConnected() {
-		return connection != null;
-	}
-
 
 	private Response waitForResponse(int tag, long timeout) {
 		try {

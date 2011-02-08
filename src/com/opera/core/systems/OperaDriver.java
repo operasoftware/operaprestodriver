@@ -16,9 +16,7 @@ limitations under the License.
 
 package com.opera.core.systems;
 
-import java.awt.Dimension;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
@@ -26,7 +24,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Scanner;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.concurrent.TimeUnit;
@@ -61,7 +58,6 @@ import com.opera.core.systems.model.ScriptResult;
 import com.opera.core.systems.runner.OperaRunner;
 import com.opera.core.systems.runner.launcher.OperaLauncherRunner;
 import com.opera.core.systems.scope.exceptions.CommunicationException;
-import com.opera.core.systems.scope.exceptions.FatalException;
 import com.opera.core.systems.scope.handlers.PbActionHandler;
 import com.opera.core.systems.scope.internal.OperaIntervals;
 import com.opera.core.systems.scope.protos.PrefsProtos.GetPrefArg.Mode;
@@ -263,13 +259,8 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
     	objectIds.clear();
 	}
 
-	public Dimension getDimensions() {
-		String[] dimensions = (debugger.executeJavascript("return (window.innerWidth + ',' + window.innerHeight)")).split(",");
-		return new Dimension(Integer.valueOf(dimensions[0]), Integer.valueOf(dimensions[1]));
-	}
-
-	 //Chris' way
-    public String getText(){
+	@SuppressWarnings("unused")
+	private String getText(){
         return debugger.executeJavascript("var visibleText = \"\";\n"+
                 "    var travers = function(ele)\n"+
                 "    {\n"+
@@ -467,7 +458,6 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 	}
 
 	/**
-	 * TODO: Add to official API?
 	 * @return list of frames available for chosing
 	 */
 	public List<String> listFrames(){
@@ -732,20 +722,18 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 
 	}
 
-	public void operaAction(String using, String... params) {
-
+	@SuppressWarnings("unused")
+	private void operaAction(String using, String... params) {
 		exec.action(using, params);
 	}
 
-	public Set<String> getOperaActionList() {
+	@SuppressWarnings("unused")
+	private Set<String> getOperaActionList() {
 		return exec.getActionList();
 	}
 
-	/**
-	 * @deprecated Don't use sleep!
-	 */
-  @Deprecated
-  private static void sleep(long timeInMillis) {
+
+	private static void sleep(long timeInMillis) {
 		try {
 			Thread.sleep(timeInMillis);
 		} catch (InterruptedException e) {
@@ -950,25 +938,12 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 		return (OperaIntervals.ENABLE_DEBUGGER.getValue() == 1);
 	}
 
-	@Deprecated
-	public void cleanUp() {
-		services.close();
-	}
-
 	public void executeActions(OperaAction action) {
             List<UserInteraction> actions = action.getActions();
             for (UserInteraction userInteraction : actions) {
                 userInteraction.execute(this);
             }
             waitForLoadToComplete();
-	}
-
-	/**
-	 * @deprecated This should not be used!
-	 */
-	@Deprecated
-	public boolean isConnected() {
-		return services.isConnected();
 	}
 
 	public void key(String key) {
@@ -1001,46 +976,13 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
             exec.mouseAction(x, y, value, 1);
 	}
 
-    public void binaryStopped(int code) {
-        services.onBinaryStopped(code);
-    }
-
-    /**
-     * Cache of OperaDriver version.
-     */
-    private static String operaDriverVersion = null;
-
-    /**
-     * Gets the OperaDriver version.  Once the version number has been
-     * loaded from an external flat file, it will be cached and returned
-     * from cache on future calls.
-     * @return
-     *
-     * @return OperaDriver version number as a String
-     * @throws IOException if the version file cannot be found
-     */
-    public String getOperaDriverVersion() throws IOException {
-    	if (operaDriverVersion == null) {
-    		InputStream stream = OperaDriver.class.getResourceAsStream("/com/opera/core/systems/VERSION");
-
-    		StringBuilder stringBuilder = new StringBuilder();
-    		Scanner scanner = new Scanner(stream);
-
-    		try {
-    			while (scanner.hasNext()) {
-    				stringBuilder.append(scanner.nextLine());
-    			}
-
-    			operaDriverVersion = stringBuilder.toString();
-    		} catch (Exception e) {
-    			throw new FatalException("Could not load the version information:"
-    					+ e.getMessage());
-    		} finally {
-    			scanner.close();
-    		}
-    	}
-
-    	return operaDriverVersion;
+	/**
+	 * Returns the version number of driver
+	 * replaced with the version during build
+	 * 
+	 */
+    public String getVersion() {
+    	return "{VERSION}";
     }
 
     protected IEcmaScriptDebugger getScriptDebugger() {

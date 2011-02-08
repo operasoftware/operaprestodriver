@@ -45,7 +45,6 @@ public class WaitState {
         ERROR,          /* Got an error response */
         EXCEPTION,      /* An exception occured (STP connection is not alive) */
         DISCONNECTED,   /* STP connection is disconnected */
-        BINARY_EXIT,    /* Opera binary crashed. */
         HANDSHAKE,       /* STP Handshake */
         EVENT_WINDOW_LOADED, /* finished loaded */
         EVENT_WINDOW_CLOSED, /* window closed */
@@ -208,17 +207,6 @@ public class WaitState {
         {
             logger.info("Got disconnected.");
             events.add(new ResultItem(WaitResult.DISCONNECTED));
-            connected = false;
-            lock.notify();
-        }
-    }
-
-    void onBinaryExit(int code)
-    {
-        synchronized (lock)
-        {
-            logger.info("Got BinaryExit: exit code=" + code);
-            events.add(new ResultItem(WaitResult.BINARY_EXIT, code));
             connected = false;
             lock.notify();
         }
@@ -398,7 +386,6 @@ public class WaitState {
                         throw result.exception;
 
                     case DISCONNECTED:
-                    case BINARY_EXIT:
                         throw new CommunicationException( "Problem encountered : " + waitResult.toString());
 
                     case EVENT_WINDOW_LOADED:

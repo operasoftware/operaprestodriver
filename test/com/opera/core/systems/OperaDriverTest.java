@@ -1,12 +1,13 @@
 package com.opera.core.systems;
 
-import java.awt.Dimension;
 import java.io.File;
 
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.openqa.selenium.Dimension;
+import org.openqa.selenium.RenderedWebElement;
 
 import com.opera.core.systems.model.ScreenShotReply;
 import com.opera.core.systems.scope.internal.OperaIntervals;
@@ -94,7 +95,7 @@ public class OperaDriverTest extends TestBase
 	public void testGetText()
 	{
 		driver.get("http://t/core/standards/quotes/none.html");
-		Assert.assertEquals("you should see nothing below", driver.getText().trim());
+		Assert.assertEquals("you should see nothing below", driver.findElementByTagName("body").getText().trim());
 	}
 
   @Test
@@ -130,14 +131,14 @@ public class OperaDriverTest extends TestBase
   @Test
 	public void testGetWindowWidth()
 	{
-		Dimension dimension = driver.getDimensions();
+		Dimension dimension = ((RenderedWebElement)driver.findElementByTagName("body")).getSize();
 		Assert.assertTrue(dimension.getWidth() == 1024);
 	}
 
   @Test
 	public void testGetWindowHeight()
 	{
-		Dimension dimension = driver.getDimensions();
+		Dimension dimension = ((RenderedWebElement)driver.findElementByTagName("body")).getSize();
 		Assert.assertTrue(dimension.getHeight() == 768);
 	}
 

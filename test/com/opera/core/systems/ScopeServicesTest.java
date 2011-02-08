@@ -94,12 +94,6 @@ public class ScopeServicesTest extends TestBase
 		}
 	}
 
-	@Test
-	public void testIsConnected()
-	{
-		Assert.assertTrue(services.isConnected());
-	}
-
 	// this is effectively a test to see if the core service is available or not
 	@Test
 	public void testIsOperaIdleAvailable()
@@ -134,10 +128,4 @@ public class ScopeServicesTest extends TestBase
 		Assert.assertTrue(list.contains("window-manager"));
 	}
 
-	@Test
-	public void testShutdownScopeServices()
-	{
-		services.quit();
-		Assert.assertFalse(services.isConnected());
-	}
 }
