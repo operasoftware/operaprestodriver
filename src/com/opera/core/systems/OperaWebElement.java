@@ -54,7 +54,7 @@ import com.opera.core.systems.scope.services.IOperaExec;
 
 /**
  * Extends the default WebElement with Opera specific methods.
- * 
+ *
  * @author Deniz Turkoglu
  *
  */
@@ -197,7 +197,7 @@ public class OperaWebElement implements RenderedWebElement, SearchContext, Locat
 	}
 
 	/**
-	 * Click the element at the given x, y offset from the top left. 
+	 * Click the element at the given x, y offset from the top left.
 	 * @param x The distance from the left to click
 	 * @param y The distance from the top to click
 	 */
@@ -527,17 +527,31 @@ public class OperaWebElement implements RenderedWebElement, SearchContext, Locat
 		return isDisplayed;
 	}
 
+	/**
+	 * Takes a screenshot of the area this element's bounding-box covers and
+	 * returns the MD5 hash.
+	 * @return A MD5 hash as a string.
+	 */
 	public String getImageHash() {
 		return getImageHash(10L);
 	}
 
+	/**
+   * Takes a screenshot after {@link timeout} milliseconds of the area this
+   * element's bounding-box covers and returns the MD5 hash.
+	 * @param timeout The number of milliseconds to wait before taking the
+	 * screenshot.
+	 * @param hashes
+	 * @return A MD5 hash as a string.
+	 */
 	public String getImageHash(long timeout, String... hashes) {
 		return saveScreenshot("", timeout, false, hashes);
 	}
 
 	/**
-	 * Take a screenshot of the area this element covers. Saves a copy of the
-	 * image to the given filename.
+	 * Take a screenshot of the area this element's bounding-box covers. Saves a
+	 * copy of the image to the given filename, and returns an MD5 hash of the
+	 * image.
 	 * @param filename The location to save the screenshot
 	 * @return The MD5 hash of the screenshot
 	 */
