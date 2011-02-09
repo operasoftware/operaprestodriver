@@ -28,7 +28,7 @@ public class OperaDriverSettings {
 	private int    operaLauncherListeningPort = 9999;
 
 	private String operaBinaryLocation;
-	private String operaBinaryArguments;
+	private String operaBinaryArguments = "";
 
 	private Integer operaLauncherXvfbDisplay; //could be null
 
