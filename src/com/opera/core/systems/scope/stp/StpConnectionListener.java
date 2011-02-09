@@ -83,7 +83,7 @@ public class StpConnectionListener implements SocketListener {
 
         SocketMonitor.instance().add(server, this, SelectionKey.OP_ACCEPT);
 
-        logger.info("webdriver-opera " + "0.3.6" /*VERSION*/ + " is ready to accept connections on port " + port);
+        logger.info("webdriver-opera " + "{VERSION}" + " is ready to accept connections on port " + port);
 
         // Print a message when we are waiting to connect manually
         if (manualConnect) {
