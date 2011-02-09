@@ -1,0 +1,35 @@
+<!doctype HTML>
+<html>
+<head>
+ <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+ <title>Javascript fixture</title>
+</head>
+<body>
+  <h1>Hello</h1>
+
+  <form action="">
+    <input type="text" id="one" />
+    <input type="text" id="two" />
+    <input type="text" id="input_email" value="test@example.com"
+      onchange="log('email changed')" />
+  </form>
+
+ <input type="button" id="open_window" onclick="window.open('test.html')" value="Open window"/>
+
+ <pre id="log"></pre>
+
+ <script type="text/javascript">
+  var one = document.getElementById("one");
+  var two = document.getElementById("two");
+
+  one.addEventListener("dblclick", function (e) {
+    two.value = "double";
+  }, false);
+
+  var logbox = document.getElementById("log");
+  function log(msg) {
+    logbox.innerHTML += msg+"\n";
+  }
+ </script>
+</body>
+</html>
