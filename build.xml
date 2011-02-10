@@ -15,16 +15,6 @@
 <project basedir="." default="compile" name="OperaDriver">
 
   <!--
-     Used to perform regular expression on version file.  Make sure
-     that you have the package “ant-contrib” installed.
-  -->
-  <taskdef resource="net/sf/antcontrib/antcontrib.properties">
-    <classpath>
-      <pathelement location="/usr/share/java/ant-contrib.jar"/>
-    </classpath>
-  </taskdef>
-
-  <!--
       Variables
   -->
   <path id="webdriver-opera.path">
@@ -41,13 +31,13 @@
     <pathelement location="test/com/opera/core/systems" />
   </path>
 
-  <loadfile srcfile="VERSION" property="versionfile" />
   <!-- Will remove new line in version file. -->
-  <propertyregex property="version"
-	   input="${versionfile}"
-	   regexp="\n"
-	   replace=""
-     global="true" />
+  <replace file="VERSION">
+    <replacetoken><![CDATA[
+]]></replacetoken>
+    <replacevalue></replacevalue>
+  </replace>
+  <loadfile srcfile="VERSION" property="version" />
 
   <!--
       Targets
@@ -130,14 +120,13 @@
   <target name="test_jar" depends="test_compile">
   	<delete dir="pkg" />
     <mkdir dir="pkg" />
-    <loadfile srcfile="VERSION" property="versionfile" />
 
-    <!-- Will remove new line in version file -->
-    <propertyregex property="version"
-		   input="${versionfile}"
-		   regexp="\n"
-		   replace=""
-       global="true" />
+  <replace file="VERSION">
+    <replacetoken><![CDATA[
+]]></replacetoken>
+    <replacevalue></replacevalue>
+  </replace>
+  <loadfile srcfile="VERSION" property="version" />
 
     <jar destfile="pkg/webdriver-opera-${version}.jar">
       <fileset dir="bin" includes="**/*.class" />
