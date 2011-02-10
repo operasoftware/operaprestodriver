@@ -58,6 +58,8 @@
     <delete dir="bin" />
     <delete dir="pkg" />
     <delete dir="docs" />
+    <delete dir="test-output" />
+    <delete dir="test-reports" />
     <delete dir="release" />
   </target>
 
@@ -147,9 +149,11 @@
   </target>
 
   <!-- Run all junit tests -->
-  <target name="test" depends="test_jar">
+  <target name="test" depends="clean, test_jar">
+    <mkdir dir="test-output" />
+    <mkdir dir="test-reports" />
     <junit fork="yes" haltonfailure="no" printsummary="yes" showoutput="no" outputtoformatters="no">
-      <formatter type="plain" usefile="true" />
+      <formatter type="xml" usefile="true" />
 
       <batchtest todir="test-output">
         <fileset dir="test" includes="**/*Test.class" />
@@ -158,6 +162,11 @@
       <classpath refid="webdriver-opera.path" />
     	<classpath location="test" />
     </junit>
+    <junitreport todir="test-output">
+      <fileset dir="test-output"/>
+      <report todir="test-reports"/>
+    </junitreport>
+    <fail if="junit.failure" message="Unit test(s) failed.  See reports!"/>
   </target>
 
 
