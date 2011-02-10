@@ -1,4 +1,5 @@
 *.class
+.DS_Store
 bin/*
 pkg/*
 src/com/opera/core/systems/test/**/*

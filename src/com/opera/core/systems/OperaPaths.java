@@ -47,7 +47,7 @@ public class OperaPaths {
    *  1. Check the environment variable "OPERA_PATH". If it exists, and the
    *     file it points to exists, then return
    *  2. Check if Opera exists at the default location on the respective OS
-   *  3. (Unix) Call `which opera` to find the location
+   *  3. (Unix) Call `which opera` to find the location
    *  4. Give up and return null
    * @return The path to Opera, or null
    */
@@ -82,7 +82,6 @@ public class OperaPaths {
 		default:
 			throw new WebDriverException("Auto find is not support on this platform"); //android?
 		}
-
 		return (isPathValid(path)) ? path : null;
 	}
 
