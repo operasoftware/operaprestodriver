@@ -28,7 +28,7 @@ public class OperaDriverTest extends TestBase
 	@Test
 	public void testConstructorWithoutSettingsObject()
 	{
-		testDriver = new TestOperaDriver(null);
+		testDriver = new TestOperaDriver();
 		Assert.assertNotNull(driver);
 	}
 
