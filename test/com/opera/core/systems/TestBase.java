@@ -14,9 +14,6 @@ abstract public class TestBase {
   protected static TestOperaDriver driver;
   protected static OperaDriverSettings settings;
 
-  protected static String binary = "/usr/bin/opera";
-  protected static String launcher = "/home/stuart/bin/opera-launcher";
-
   private static String fixture_dir;
 
   @BeforeClass
