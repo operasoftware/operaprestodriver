@@ -1,24 +1,12 @@
 package com.opera.core.systems;
 
-import java.io.File;
-
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.openqa.selenium.Dimension;
-import org.openqa.selenium.RenderedWebElement;
-
-import com.opera.core.systems.model.ScreenShotReply;
-import com.opera.core.systems.scope.internal.OperaIntervals;
-import com.opera.core.systems.settings.OperaDriverSettings;
 
 public class OperaDriverTest extends TestBase
 {
-	OperaDriver driver;
-	TestOperaDriver testDriver;
-	OperaDriverSettings settings;
-
   // Replace the TestBase setup and teardown so that we don't launch opera
 	@BeforeClass
   public static void setUpBeforeClass() throws Exception {}
@@ -26,56 +14,21 @@ public class OperaDriverTest extends TestBase
   public static void tearDownAfterClass() throws Exception {}
 
 	@Test
-	public void testConstructorWithoutSettingsObject()
+	public void testWithoutSettingsObject()
 	{
-		testDriver = new TestOperaDriver();
+		driver = new TestOperaDriver();
+
 		Assert.assertNotNull(driver);
-	}
 
-  @Test
-	public void testOperaBinaryPathPulledFromEnv()
-	{
-		File operaBinary = new File(testDriver.getSettings().getOperaBinaryLocation());
-		Assert.assertTrue(operaBinary.exists());
-	}
-
-  @Test
-	public void testLauncherBinaryPathPulledFromEnv()
-	{
-		File launcherBinary = new File(testDriver.getSettings().getOperaLauncherBinary());
-		Assert.assertTrue(launcherBinary.exists());
-	}
-
-  @Test
-	public void testDebugPortPulledFromEnv()
-	{
-		Assert.assertTrue(OperaIntervals.SERVER_PORT.getValue() == 7001);
-	}
-
-
-
-  @Test
-	public void testOperaDriverShutdown()
-	{
-    testDriver.shutdown();
-	}
-
-  @Test
-	public void testConstructorWithSettingsObject()
-	{
-		settings = new OperaDriverSettings();
-		settings.setRunOperaLauncherFromOperaDriver(true);
-		settings.setOperaBinaryLocation(binary);
-		settings.setOperaLauncherBinary(launcher);
-		settings.setOperaBinaryArguments(" -fullscreen -nohw -url www.opera.com");
-		driver = new OperaDriver(settings);
-		Assert.assertNotNull(driver);
+		driver.shutdown();
 	}
 
   @Test
 	public void testDefaultWindowCount()
 	{
+    driver = new TestOperaDriver();
 		Assert.assertTrue(driver.getWindowCount() == 1);
+		System.out.println("opera");
 	}
 
   @Test
@@ -99,22 +52,6 @@ public class OperaDriverTest extends TestBase
 	}
 
   @Test
-	public void testGetScreenshot()
-	{
-		driver.get("http://t/core/standards/SVG/Testsuites/W3C-1_1F2/images/paths-data-04-f.png");
-		ScreenShotReply png = driver.saveScreenshot(3);
-		Assert.assertTrue(png.getPng().length > 0);
-	}
-
-  @Test
-	public void testGetScreenshot2()
-	{
-		driver.get("http://t/core/standards/SVG/Testsuites/W3C-1_1F2/images/shapes-ellipse-01-f.png");
-		ScreenShotReply png = driver.saveScreenshot(5, "0x81634ade48e575508756a00a8a4f3bc9");
-		Assert.assertTrue(png.getMd5().length() > 0);
-	}
-
-  @Test
 	public void testGetURL()
 	{
 		driver.get("www.ebay.co.uk");
@@ -129,21 +66,7 @@ public class OperaDriverTest extends TestBase
 	}
 
   @Test
-	public void testGetWindowWidth()
-	{
-		Dimension dimension = ((RenderedWebElement)driver.findElementByTagName("body")).getSize();
-		Assert.assertTrue(dimension.getWidth() == 1024);
-	}
-
-  @Test
-	public void testGetWindowHeight()
-	{
-		Dimension dimension = ((RenderedWebElement)driver.findElementByTagName("body")).getSize();
-		Assert.assertTrue(dimension.getHeight() == 768);
-	}
-
-  @Test
-	public void testOperaDriverShutdown2()
+	public void testOperaDriverShutdown()
 	{
 		driver.shutdown();
 	}
