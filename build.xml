@@ -14,11 +14,27 @@
 
 <project basedir="." default="compile" name="OperaDriver">
 
+  <!-- Will remove new line in version file. -->
+  <replace file="VERSION">
+    <replacetoken><![CDATA[
+]]></replacetoken>
+    <replacevalue></replacevalue>
+  </replace>
+  <!-- Get the current version -->
+  <loadfile srcfile="VERSION" property="version" />
+
   <!--
       Variables
   -->
-  <path id="webdriver-opera.path">
+  <property name="jar.filename" value="webdriver-opera-${version}.jar" />
+
+  <path id="classpath.path">
     <pathelement location="bin" />
+    <fileset dir="lib" includes="**/*.jar" />
+  </path>
+
+  <path id="test-classpath.path">
+    <fileset file="pkg/${jar.filename}"/>
     <fileset dir="lib" includes="**/*.jar" />
   </path>
 
@@ -31,21 +47,16 @@
     <pathelement location="test/com/opera/core/systems" />
   </path>
 
-  <!-- Will remove new line in version file. -->
-  <replace file="VERSION">
-    <replacetoken><![CDATA[
-]]></replacetoken>
-    <replacevalue></replacevalue>
-  </replace>
-  <loadfile srcfile="VERSION" property="version" />
-
   <!--
       Targets
   -->
 
   <!-- Delete the bin and pkg dirs -->
-  <target name="clean">
+  <target name="clean" description="Delete all generated files">
     <delete dir="bin" />
+    <delete>
+      <fileset dir="." includes="**/*.class"/>
+    </delete>
     <delete dir="pkg" />
     <delete dir="docs" />
     <delete dir="test-output" />
@@ -54,7 +65,7 @@
   </target>
 
   <!-- Compile all classes after cleaning-->
-  <target name="compile" depends="clean">
+  <target name="compile" description="Compile all the source files" depends="clean">
     <fileset dir="bin" />
     <mkdir dir="bin" />
 
@@ -67,15 +78,15 @@
 
     <javac debug="true" destdir="bin" includeantruntime="false">
       <src path="src" />
-      <classpath refid="webdriver-opera.path" />
+      <classpath refid="classpath.path" />
     </javac>
   </target>
 
   <!-- Build the jar -->
-  <target name="jar" depends="compile">
+  <target name="jar" description="Make a JAR file including launchers" depends="compile">
     <mkdir dir="pkg" />
 
-    <jar destfile="pkg/webdriver-opera-${version}.jar">
+    <jar destfile="pkg/${jar.filename}">
       <fileset dir="bin" includes="**/*.class" />
       <fileset dir="bin" includes="**/*.properties" />
       <manifest>
@@ -88,57 +99,21 @@
     In Ant 1.8+ we can add preservepermissions="true" to the <jar> element -->
     <exec executable="zip" os="Linux">
       <arg value="-r" />
-      <arg value="pkg/webdriver-opera-${version}.jar" />
+      <arg value="pkg/${jar.filename}" />
       <arg value="launcher/" />
     </exec>
   </target>
 
   <!-- Compile any modified classes including test classes -->
-  <target name="test_compile">
-    <fileset dir="bin" />
-    <mkdir dir="bin" />
-
-    <copy includeemptydirs="false" todir="bin">
-      <fileset dir="src">
-      	<exclude name="**/*.launch" />
-      	<exclude name="**/*.java" />
-      </fileset>
-    </copy>
-
-    <javac debug="true" destdir="bin" includeantruntime="false">
-      <src path="src" />
-      <classpath refid="webdriver-opera.path" />
-    </javac>
-
+  <target name="compile_tests">
     <javac debug="true" destdir="test" includeantruntime="false">
       <src path="test" />
-      <classpath refid="webdriver-opera.path" />
+      <classpath refid="test-classpath.path" />
     </javac>
-  </target>
-
-  <!-- Build a test jar after running test_compile -->
-  <target name="test_jar" depends="test_compile">
-  	<delete dir="pkg" />
-    <mkdir dir="pkg" />
-
-  <replace file="VERSION">
-    <replacetoken><![CDATA[
-]]></replacetoken>
-    <replacevalue></replacevalue>
-  </replace>
-  <loadfile srcfile="VERSION" property="version" />
-
-    <jar destfile="pkg/webdriver-opera-${version}.jar">
-      <fileset dir="bin" includes="**/*.class" />
-      <manifest>
-      	<attribute name="Main-Class" value="com.opera.core.systems.OperaDriver" />
-      	<attribute name="Implementation-Version" value="${version}" />
-      </manifest>
-    </jar>
   </target>
 
   <!-- Run all junit tests -->
-  <target name="test" depends="clean, test_jar">
+  <target name="test" description="Run all tests on the JAR" depends="clean, jar, compile_tests">
     <mkdir dir="test-output" />
     <mkdir dir="test-reports" />
     <junit fork="yes" haltonfailure="no" printsummary="yes" showoutput="no" outputtoformatters="no">
@@ -148,8 +123,8 @@
         <fileset dir="test" includes="**/*Test.class" />
       </batchtest>
 
-      <classpath refid="webdriver-opera.path" />
-    	<classpath location="test" />
+      <classpath refid="test-classpath.path" />
+      <classpath location="test" />
     </junit>
     <junitreport todir="test-output">
       <fileset dir="test-output"/>
@@ -159,7 +134,7 @@
   </target>
 
 
-  <target name="doc">
+  <target name="doc" description="Generate the Javadocs">
     <javadoc destdir="docs" doctitle="OperaDriver" access="public" author="true">
       <classpath>
         <!-- Include all the jars except selenium, as we're getting the docs
@@ -186,7 +161,7 @@
     </javadoc>
   </target>
 
-  <target name="release" depends="clean,jar,doc">
+  <target name="release" description="Generate a ZIP for realease including the JAR, docs and examples" depends="clean,jar,doc">
     <mkdir dir="release" />
     <property name="release-zip.name" value="operadriver-${version}" />
     <zip destfile="release/${release-zip.name}.zip">
