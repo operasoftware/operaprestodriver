@@ -11,8 +11,8 @@ import com.opera.core.systems.settings.OperaDriverSettings;
 
 public class OperaLauncherRunnerTest
 {
-	OperaDriverSettings settings;
-	OperaLauncherRunner runner;
+	private static OperaDriverSettings settings;
+	private static OperaLauncherRunner runner;
 
 	@Test
 	public void testOperaDriverSettings()
@@ -75,22 +75,6 @@ public class OperaLauncherRunnerTest
 	{
 		settings.setOperaBinaryArguments("-host 127.0.0.1 -port 12199 -bin /spartan/ramdisk/install/launcher");
 		Assert.assertEquals("-host 127.0.0.1 -port 12199 -bin /spartan/ramdisk/install/launcher", settings.getOperaBinaryArguments());
-	}
-
-	@Test
-	public void testSetOperaBinaryLocationFromPropertyInBuildXML()
-	{
-		settings.setOperaBinaryLocation("");
-		settings.setOperaBinaryLocation(TestBase.binary);
-		Assert.assertNotSame(settings.getOperaBinaryLocation(), "");
-	}
-
-	@Test
-	public void testSetOperaLauncherBinaryLocationFromPropertyInBuildXML()
-	{
-		settings.setOperaLauncherBinary("");
-		settings.setOperaLauncherBinary(TestBase.launcher);
-		Assert.assertNotSame(settings.getOperaLauncherBinary(), "");
 	}
 
 	@Test
