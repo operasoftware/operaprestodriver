@@ -104,52 +104,33 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 		this(autoStart ? makeSettings() : null);
 	}
 	
-	public OperaDriver(OperaDriverSettings settings) {
-		if (settings != null) {
-			this.settings = settings;
-			
-			// Get launcher path from OPERA_LAUNCHER, or from jar package
-			OperaPaths paths = new OperaPaths();
-			if (settings.getOperaLauncherBinary() == null) {
-				settings.setOperaLauncherBinary(paths.launcherPath());
-        	}
-		
-			// Get opera path from OPERA_PATH, if it's set
-			if (settings.getOperaBinaryLocation() == null) {
-				String path = System.getenv("OPERA_PATH");
-				if (path != null && path.length() > 0)
-					settings.setOperaBinaryLocation(path);
-			}
-			
-			if (this.settings.getOperaBinaryLocation() != null) {
-				// If there is an Opera binary passed in then launch Opera
-				this.operaRunner = new OperaLauncherRunner(this.settings);
-			}
-		}
-		init();
-	}
-
 	/**
 	 * Constructor that starts opera.
 	 */
-	/*public OperaDriver(OperaDriverSettings settings){
+	public OperaDriver(OperaDriverSettings settings){
     if (settings != null) {
       this.settings = settings;
 
       OperaPaths paths = new OperaPaths();
-      if (settings.getOperaBinaryLocation() == null) {
+      if (settings.guessOperaPath() && settings.getOperaBinaryLocation() == null) {
         settings.setOperaBinaryLocation(paths.operaPath());
+      } else if (settings.getOperaBinaryLocation() == null) {
+    	  // Don't guess, only check environment variable
+    	  String path = System.getenv("OPERA_PATH");
+    	  if (path != null && path.length() > 0)
+    		  settings.setOperaBinaryLocation(path);
       }
+    	  
       if (settings.getOperaLauncherBinary() == null) {
         settings.setOperaLauncherBinary(paths.launcherPath());
       }
 
-      this.operaRunner = new OperaLauncherRunner(this.settings);
+      if (settings.getOperaBinaryLocation() != null)
+    	  this.operaRunner = new OperaLauncherRunner(this.settings);
     }
 
-
     init();
-  }*/
+  }
 
 	 /**
    * Make a new settings object, automatically finding the Opera and launcher
@@ -220,8 +201,9 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 			Map<String, String> versions = getServicesList();
 			boolean manualStart = true;
 
-			if(settings != null && settings.getOperaBinaryLocation() != null)
+			if(settings != null && settings.getOperaBinaryLocation() != null) {
 				manualStart = false;
+			}
 
 			services = new ScopeServices(versions, manualStart);
 			services.startStpThread();
