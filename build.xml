@@ -1,18 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-   Makefile for OperaDriver.  Available tasks:
-
-   ant          defaults to compile.
-   ant compile  will compile source into class-files.
-   ant clean    removes binary (/bin) directory.
-   ant jar      creates a jar file in package directory (/pkg).
-
-   Use “ant jar” for normal releases.
-
-   ant test     compiles test classes and generates a test jar and runs junit tests
--->
-
 <project basedir="." default="compile" name="OperaDriver">
+
+  <!-- Location of the selenium source. Used to generate docs and inherit
+  the javadoc -->
+  <property name="selenium.src" value="../selenium/java/client/src" />
 
   <!-- Will remove new line in version file. -->
   <replace file="VERSION">
@@ -23,33 +14,28 @@
   <!-- Get the current version -->
   <loadfile srcfile="VERSION" property="version" />
 
-  <!--
-      Variables
-  -->
+  <!-- Variables  -->
+
   <property name="jar.filename" value="webdriver-opera-${version}.jar" />
+  <property name="jar.path" value="pkg/${jar.filename}" />
 
   <path id="classpath.path">
     <pathelement location="bin" />
     <fileset dir="lib" includes="**/*.jar" />
   </path>
-
-  <path id="test-classpath.path">
-    <fileset file="pkg/${jar.filename}"/>
+  <path id="test.classpath.path">
+    <fileset file="${jar.path}"/>
     <fileset dir="lib" includes="**/*.jar" />
-  </path>
-
-  <path id="pkg.dir.path">
-    <pathelement location="pkg" />
-    <fileset dir="pkg"/>
   </path>
 
   <path id="test.dir.path">
     <pathelement location="test/com/opera/core/systems" />
   </path>
+  <property name="test.output.path" value="test-output" />
+  <property name="test.report.path" value="test-reports" />
 
-  <!--
-      Targets
-  -->
+
+  <!--  Targets  -->
 
   <!-- Delete the bin and pkg dirs -->
   <target name="clean" description="Delete all generated files">
@@ -59,8 +45,8 @@
     </delete>
     <delete dir="pkg" />
     <delete dir="docs" />
-    <delete dir="test-output" />
-    <delete dir="test-reports" />
+    <delete dir="${test.output.path}" />
+    <delete dir="${test.report.path}" />
     <delete dir="release" />
   </target>
 
@@ -86,7 +72,7 @@
   <target name="jar" description="Make a JAR file including launchers" depends="compile">
     <mkdir dir="pkg" />
 
-    <jar destfile="pkg/${jar.filename}">
+    <jar destfile="${jar.path}">
       <fileset dir="bin" includes="**/*.class" />
       <fileset dir="bin" includes="**/*.properties" />
       <manifest>
@@ -99,7 +85,7 @@
     In Ant 1.8+ we can add preservepermissions="true" to the <jar> element -->
     <exec executable="zip" os="Linux">
       <arg value="-r" />
-      <arg value="pkg/${jar.filename}" />
+      <arg value="${jar.path}" />
       <arg value="launcher/" />
     </exec>
   </target>
@@ -108,37 +94,38 @@
   <target name="compile_tests">
     <javac debug="true" destdir="test" includeantruntime="false">
       <src path="test" />
-      <classpath refid="test-classpath.path" />
+      <classpath refid="test.classpath.path" />
     </javac>
   </target>
 
   <!-- Run all junit tests -->
   <target name="test" description="Run all tests on the JAR. Pass -Dclass=&lt;classname&gt; to only run one test" depends="jar, compile_tests">
-    <mkdir dir="test-output" />
-    <mkdir dir="test-reports" />
+    <mkdir dir="${test.output.path}" />
+    <mkdir dir="${test.report.path}" />
 
     <junit fork="yes" haltonfailure="no" printsummary="yes" showoutput="no" outputtoformatters="no">
       <formatter type="xml" usefile="true" />
-      <classpath refid="test-classpath.path" />
+      <classpath refid="test.classpath.path" />
       <classpath location="test" />
 
       <!-- run all of the tests -->
-      <batchtest unless="class" todir="test-output">
+      <batchtest unless="class" todir="${test.output.path}">
         <fileset dir="test" includes="**/*Test.class" />
       </batchtest>
 
       <!-- run just one file/class. Happens when -Dfile=<file> is passed -->
-      <test if="class" todir="test-output" name="${class}" />
+      <test if="class" todir="${test.output.path}" name="${class}" />
     </junit>
 
-    <junitreport todir="test-output">
-      <fileset dir="test-output"/>
-      <report todir="test-reports"/>
+    <junitreport todir="${test.output.path}">
+      <fileset dir="${test.output.path}"/>
+      <report todir="${test.report.path}"/>
     </junitreport>
     <fail if="junit.failure" message="Unit test(s) failed.  See reports!"/>
   </target>
 
-
+  <!-- Generate the docs. This will output lots of errors and warnings, but
+  that's okay because they're (mostly) from selenium, not OperaDriver -->
   <target name="doc" description="Generate the Javadocs">
     <javadoc destdir="docs" doctitle="OperaDriver" access="public" author="true">
       <classpath>
@@ -154,7 +141,7 @@
       the javadocs -->
       <sourcepath>
         <pathelement location="src" />
-        <pathelement location="../selenium/java/client/src" />
+        <pathelement location="${selenium.src}" />
       </sourcepath>
 
       <!-- only generate docs for Opera stuff, not selenium as well -->
