@@ -112,29 +112,19 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
       this.settings = settings;
 
       OperaPaths paths = new OperaPaths();
-      
-      // Set Opera Path
-      if (settings.getOperaBinaryLocation() == null) {
-    	  settings.setOperaBinaryLocation(paths.operaPath());
+      if (settings.guessOperaPath() && settings.getOperaBinaryLocation() == null) {
+        settings.setOperaBinaryLocation(paths.operaPath());
+      } else if (settings.getOperaBinaryLocation() == null) {
+    	  // Don't guess, only check environment variable
+    	  String path = System.getenv("OPERA_PATH");
+    	  if (path != null && path.length() > 0)
+    		  settings.setOperaBinaryLocation(path);
       }
-      
-      // If path empty, try OPERA_PATH
-      if (settings.getOperaBinaryLocation().length() == 0){
-    	String path = System.getenv("OPERA_PATH");
-    	if (path != null && path.length() > 0)
-  		  settings.setOperaBinaryLocation(path);
-    	else {
-    		// Avoid starting launcher if Opera path is not set
-    		settings.setOperaBinaryLocation(null);
-    	}
-      }
-    	
-      // Set launcher path
+    	  
       if (settings.getOperaLauncherBinary() == null) {
         settings.setOperaLauncherBinary(paths.launcherPath());
       }
 
-      // start launcher if opera path is set
       if (settings.getOperaBinaryLocation() != null)
     	  this.operaRunner = new OperaLauncherRunner(this.settings);
     }
