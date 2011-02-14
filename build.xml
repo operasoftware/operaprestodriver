@@ -65,7 +65,7 @@
   </target>
 
   <!-- Compile all classes after cleaning-->
-  <target name="compile" description="Compile all the source files" depends="clean">
+  <target name="compile" description="Compile all the source files">
     <fileset dir="bin" />
     <mkdir dir="bin" />
 
@@ -113,19 +113,24 @@
   </target>
 
   <!-- Run all junit tests -->
-  <target name="test" description="Run all tests on the JAR" depends="clean, jar, compile_tests">
+  <target name="test" description="Run all tests on the JAR. Pass -Dclass=&lt;classname&gt; to only run one test" depends="jar, compile_tests">
     <mkdir dir="test-output" />
     <mkdir dir="test-reports" />
+
     <junit fork="yes" haltonfailure="no" printsummary="yes" showoutput="no" outputtoformatters="no">
       <formatter type="xml" usefile="true" />
+      <classpath refid="test-classpath.path" />
+      <classpath location="test" />
 
-      <batchtest todir="test-output">
+      <!-- run all of the tests -->
+      <batchtest unless="class" todir="test-output">
         <fileset dir="test" includes="**/*Test.class" />
       </batchtest>
 
-      <classpath refid="test-classpath.path" />
-      <classpath location="test" />
+      <!-- run just one file/class. Happens when -Dfile=<file> is passed -->
+      <test if="class" todir="test-output" name="${class}" />
     </junit>
+
     <junitreport todir="test-output">
       <fileset dir="test-output"/>
       <report todir="test-reports"/>
@@ -161,7 +166,7 @@
     </javadoc>
   </target>
 
-  <target name="release" description="Generate a ZIP for realease including the JAR, docs and examples" depends="clean,jar,doc">
+  <target name="release" description="Generate a ZIP for release including the JAR, docs and examples" depends="clean,jar,doc">
     <mkdir dir="release" />
     <property name="release-zip.name" value="operadriver-${version}" />
     <zip destfile="release/${release-zip.name}.zip">
