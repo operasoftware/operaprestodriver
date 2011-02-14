@@ -80,8 +80,12 @@ public class OperaLauncherRunnerTest
 	@Test
 	public void testOperaLauncherRunnerConstructorWithSettings()
 	{
+	  OperaPaths paths = new OperaPaths();
 		settings.setRunOperaLauncherFromOperaDriver(true);
 		settings.setOperaBinaryArguments("");
+		settings.setOperaBinaryLocation(paths.operaPath());
+		settings.setOperaLauncherBinary(paths.launcherPath());
+
 		runner = new OperaLauncherRunner(settings);
 		Assert.assertNotNull(runner);
 	}
@@ -101,6 +105,7 @@ public class OperaLauncherRunnerTest
 	@Test
 	public void testStartOpera()
 	{
+	  Assert.assertNotNull(runner);
 		runner.startOpera();
 		Assert.assertTrue(runner.isOperaRunning());
 	}
@@ -127,13 +132,11 @@ public class OperaLauncherRunnerTest
 		}
 	}
 
-	// BEGIN TESTING WITH DIFFERENT OPERA ARGUMENTS
-
 	@Test
 	public void testOperaLauncherRunnerConstructorWithSettings2()
 	{
 		settings.setRunOperaLauncherFromOperaDriver(true);
-		settings.setOperaBinaryArguments("-nowindow");
+		settings.setOperaBinaryArguments("-geometry 1024x768");
 		runner = new OperaLauncherRunner(settings);
 		runner.startOpera();
 		Assert.assertTrue(runner.isOperaRunning());
@@ -145,32 +148,6 @@ public class OperaLauncherRunnerTest
 		runner.stopOpera();
 		runner.shutdown();
 
-		try
-		{
-			runner.isOperaRunning();
-			fail("This test should have generated a OperaRunnerException as we tried to check on the Opera process after being shutdown...");
-		}
-		catch (OperaRunnerException e)
-		{
-		}
-	}
-
-	@Test
-	public void testOperaLauncherRunnerConstructorWithSettings3()
-	{
-		settings.setRunOperaLauncherFromOperaDriver(true);
-		settings.setOperaBinaryArguments(" -geometry 1024x768 -nohw");
-		runner = new OperaLauncherRunner(settings);
-		runner.startOpera();
-		Assert.assertTrue(runner.isOperaRunning());
-	}
-
-	@Test
-	public void testShutdown3()
-	{
-		runner.stopOpera();
-		runner.shutdown();
-
 		// verify that a second shutdown call doesn't do any harm (shouldn't)
 		runner.shutdown();
 	}
@@ -178,7 +155,7 @@ public class OperaLauncherRunnerTest
 	@Test
 	public void testStartAndStopOperaTenTimesRoundOneStart()
 	{
-		settings.setOperaBinaryArguments(" -geometry 640x480 -nohw");
+		settings.setOperaBinaryArguments("-geometry 640x480");
 		runner = new OperaLauncherRunner(settings);
 		runner.startOpera();
 		Assert.assertTrue(runner.isOperaRunning());
