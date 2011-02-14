@@ -66,8 +66,10 @@ public class OperaDriverTest extends TestBase
 	}
 
   @Test
-	public void testOperaDriverShutdown()
-	{
-		driver.shutdown();
-	}
+  public void testOperaDriverShutdown()
+  {
+    // leave with a fast loading page
+    driver.get("about:blank");
+    driver.shutdown();
+  }
 }
