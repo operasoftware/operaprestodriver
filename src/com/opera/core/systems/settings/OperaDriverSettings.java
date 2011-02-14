@@ -38,7 +38,6 @@ public class OperaDriverSettings {
 
 	private boolean noRestart = false;
 	private boolean noQuit = false;
-	private boolean guessOperaPath = true;
 
 	//Generated getters and setters:
 	public boolean doRunOperaLauncherFromOperaDriver() {
@@ -172,12 +171,4 @@ public class OperaDriverSettings {
 		return noRestart;
 	}
 	
-	public void setGuessOperaPath(boolean guess){
-		this.guessOperaPath = guess;
-	}
-	
-	public boolean guessOperaPath() {
-		return guessOperaPath;
-	}
-
 }
