@@ -7,7 +7,7 @@ from BeautifulSoup import BeautifulSoup, Tag, NavigableString
 import re
 
 drivers = {
-#  'Chrome': 'http://www.jarvana.com/jarvana/view/org/seleniumhq/selenium/selenium-chrome-driver/2.0a2/selenium-chrome-driver-2.0a2-javadoc.jar!/org/openqa/selenium/chrome/ChromeDriver.html',
+  'Chrome': 'http://selenium.googlecode.com/svn-history/r8075/webdriver/javadoc/org/openqa/selenium/chrome/ChromeDriver.html',
   'EventFiring': 'http://webdriver.googlecode.com/svn/javadoc/org/openqa/selenium/support/events/EventFiringWebDriver.html',
   'Firefox': 'http://webdriver.googlecode.com/svn/javadoc/org/openqa/selenium/firefox/FirefoxDriver.html',
   'HtmlUnit': 'http://webdriver.googlecode.com/svn/javadoc/org/openqa/selenium/htmlunit/HtmlUnitDriver.html',
@@ -121,8 +121,8 @@ def generate(methods):
   tr = appendEl(table, "<tr></tr>")
   appendEl(tr, "<th>Method</th>")
   # Add all the drivers to the heading
-  for driver, docs in drivers.items():
-    appendEl(tr, """<th><a href="%s">%s</a></th>""" % (docs, driver))
+  for driver in sorted(drivers.keys()):
+    appendEl(tr, """<th><a href="%s">%s</a></th>""" % (drivers[driver], driver))
   appendEl(tr, "<th>Interface</th>")
 
   prevInterface = ""
@@ -133,7 +133,7 @@ def generate(methods):
     appendEl(tr, "<td>%s</td>" % method['method'])
 
     support = method['support']
-    for driver in drivers.keys():
+    for driver in sorted(drivers.keys()):
       if driver in support and support[driver] == True:
         appendEl(tr, """<td class="yes">yes</td>""")
       else:
@@ -148,29 +148,30 @@ def generate(methods):
 
 ############# Main #############
 
-for driver, docs in drivers.items():
-  get_methods(driver, docs)
+if __name__ == "__main__":
+  for driver, docs in drivers.items():
+    get_methods(driver, docs)
 
-methods_list = [{'method': k, 'support': v} for k, v in methods.items()]
+  methods_list = [{'method': k, 'support': v} for k, v in methods.items()]
 
-def comp(a, b):
-  # sort on amount of support
-  x = len(b['support']) - len(a['support'])
-  if not x == 0: return x
-  # Sort in interface name
-  if '_interface' in a['support'] and '_interface' in b['support']:
-    x = cmp(a['support']['_interface'], b['support']['_interface'])
-  if not x == 0: return x
+  def comp(a, b):
+    # sort on amount of support
+    x = len(b['support']) - len(a['support'])
+    if not x == 0: return x
+    # Sort in interface name
+    if '_interface' in a['support'] and '_interface' in b['support']:
+      x = cmp(a['support']['_interface'], b['support']['_interface'])
+    if not x == 0: return x
 
-  # If proprietary sort on driver name
-  if len(a['support']) == 1 and len(b['support']) == 1:
-    x = cmp(a['support'].keys()[0], b['support'].keys()[0])
-  if not x == 0: return x
+    # If proprietary sort on driver name
+    if len(a['support']) == 1 and len(b['support']) == 1:
+      x = cmp(a['support'].keys()[0], b['support'].keys()[0])
+    if not x == 0: return x
 
-  return cmp(a['method'], b['method'])
+    return cmp(a['method'], b['method'])
 
-methods_sorted = sorted(methods_list, cmp = comp)
+  methods_sorted = sorted(methods_list, cmp = comp)
 
-gen = generate(methods_sorted)
+  gen = generate(methods_sorted)
 
-print gen
+  print gen
