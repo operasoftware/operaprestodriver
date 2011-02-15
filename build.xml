@@ -6,13 +6,10 @@
   <property name="selenium.src" value="../selenium/java/client/src" />
 
   <!-- Will remove new line in version file. -->
-  <replace file="VERSION">
-    <replacetoken><![CDATA[
-]]></replacetoken>
-    <replacevalue></replacevalue>
-  </replace>
-  <!-- Get the current version -->
-  <loadfile srcfile="VERSION" property="version" />
+  <exec executable="git" outputproperty="version">
+    <arg value="describe" />
+    <arg value="--tags" />    
+  </exec>
 
   <!-- Variables  -->
 
