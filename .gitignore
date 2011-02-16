@@ -5,4 +5,5 @@ pkg/*
 src/com/opera/core/systems/test/**/*
 test_apc.txt
 test-output/
+test-reports/
 doc/
