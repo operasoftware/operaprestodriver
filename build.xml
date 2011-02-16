@@ -100,8 +100,10 @@
 
   <!-- Run all junit tests -->
   <target name="test" description="Run all tests on the JAR. Pass -Dclass=&lt;classname&gt; to only run one test" depends="jar, compile_tests">
-    <mkdir dir="${test.output.path}" />
-    <mkdir dir="${test.report.path}" />
+    <delete dir="${test.output.path}" />
+    <mkdir  dir="${test.output.path}" />
+    <delete dir="${test.report.path}" />
+    <mkdir  dir="${test.report.path}" />
 
     <junit fork="yes" haltonfailure="no" printsummary="yes" showoutput="no" outputtoformatters="no">
       <formatter type="xml" usefile="true" />
