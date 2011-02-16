@@ -19,7 +19,7 @@ public class FramesTest extends TestBase {
 
   @Test
   public void testList() throws Exception {
-    // frameset page, and two frames
+    // frameset page, and three frames
     Assert.assertEquals(4, frames.size());
   }
 
@@ -27,41 +27,32 @@ public class FramesTest extends TestBase {
   public void testSwitchString() throws Exception {
     driver.switchTo().frame("a");
 
-    // double click
-    WebElement one = driver.findElementById("one");
-    one.click();
-    one.click();
-
-    Assert.assertEquals("double", driver.findElementById("two").getValue());
+    // first frame
+    Assert.assertNotNull(driver.findElementById("one"));
   }
 
   @Test
   public void testSwitchString2() throws Exception {
     driver.switchTo().frame("b");
 
-    // only exists in the second frame
-    driver.findElementById("input_email");
+    // second frame
+    Assert.assertNotNull(driver.findElementById("radio_little"));
   }
 
   @Test
   public void testSwitchInt() throws Exception {
     driver.switchTo().frame(0);
 
-    // double click
-    WebElement one = driver.findElementById("one");
-    one.click();
-    one.click();
-
-    Assert.assertEquals("double", driver.findElementById("two").getValue());
+    // first frame
+    Assert.assertNotNull(driver.findElementById("one"));
   }
 
   @Test
   public void testSwitchIntUnnamed() throws Exception {
-    System.out.println(frames);
     driver.switchTo().frame(2);
 
     // only exists in third frame
-    driver.findElementById("img_container");
+    Assert.assertNotNull(driver.findElementById("img_container"));
   }
 
 }
