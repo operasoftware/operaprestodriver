@@ -66,6 +66,13 @@ public class OperaDriverTest extends TestBase
 	}
 
   @Test
+  public void testGetVersion() throws Exception {
+    String version = driver.getVersion();
+    Assert.assertNotNull(version);
+    Assert.assertNotSame("(Unknown)", version);
+  }
+
+  @Test
   public void testOperaDriverShutdown()
   {
     // leave with a fast loading page

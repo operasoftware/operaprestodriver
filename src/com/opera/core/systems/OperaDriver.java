@@ -17,6 +17,7 @@ limitations under the License.
 package com.opera.core.systems;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
@@ -29,6 +30,7 @@ import java.util.TreeSet;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
+import org.apache.commons.io.IOUtils;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Cookie;
@@ -61,8 +63,8 @@ import com.opera.core.systems.scope.exceptions.CommunicationException;
 import com.opera.core.systems.scope.handlers.PbActionHandler;
 import com.opera.core.systems.scope.internal.OperaIntervals;
 import com.opera.core.systems.scope.internal.OperaKeys;
-import com.opera.core.systems.scope.protos.PrefsProtos.GetPrefArg.Mode;
 import com.opera.core.systems.scope.protos.PrefsProtos.Pref;
+import com.opera.core.systems.scope.protos.PrefsProtos.GetPrefArg.Mode;
 import com.opera.core.systems.scope.services.ICookieManager;
 import com.opera.core.systems.scope.services.IEcmaScriptDebugger;
 import com.opera.core.systems.scope.services.IOperaExec;
@@ -95,6 +97,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 	protected ScopeActions actionHandler;
 
 	protected Set<Integer> objectIds = new HashSet<Integer>();
+	private String version;
 
 	public OperaDriver() {
 		this(true);
@@ -103,7 +106,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 	public OperaDriver(boolean autoStart) {
 		this(autoStart ? makeSettings() : null);
 	}
-	
+
 	/**
 	 * Constructor that starts opera.
 	 */
@@ -120,7 +123,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
     	  if (path != null && path.length() > 0)
     		  settings.setOperaBinaryLocation(path);
       }
-    	  
+
       if (settings.getOperaLauncherBinary() == null) {
         settings.setOperaLauncherBinary(paths.launcherPath());
       }
@@ -970,16 +973,25 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
             exec.mouseAction(x, y, value, 1);
 	}
 
-	/**
-	 * Returns the version number of driver.
-	 * Replaced with the version during build
-	 *
-	 */
-    public String getVersion() {
-    	return "{VERSION}";
-    }
+  /**
+   * Returns the version number of driver.
+   */
+  public String getVersion() {
+    if (version == null) {
+      URL res = OperaDriver.class.getClassLoader().getResource("VERSION");
 
-    protected IEcmaScriptDebugger getScriptDebugger() {
+      try {
+        InputStream stream = res.openStream();
+        version = IOUtils.toString(stream);
+        stream.close();
+      } catch (Exception e) {
+        version = "(Unknown)";
+      }
+    }
+    return version;
+  }
+
+  protected IEcmaScriptDebugger getScriptDebugger() {
 		return debugger;
 	}
 
