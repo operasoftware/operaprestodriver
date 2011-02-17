@@ -103,7 +103,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 	public OperaDriver(boolean autoStart) {
 		this(autoStart ? makeSettings() : null);
 	}
-
+	
 	/**
 	 * Constructor that starts opera.
 	 */
@@ -112,16 +112,22 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
       this.settings = settings;
 
       OperaPaths paths = new OperaPaths();
-      if (settings.getOperaBinaryLocation() == null) {
+      if (settings.guessOperaPath() && settings.getOperaBinaryLocation() == null) {
         settings.setOperaBinaryLocation(paths.operaPath());
+      } else if (settings.getOperaBinaryLocation() == null) {
+    	  // Don't guess, only check environment variable
+    	  String path = System.getenv("OPERA_PATH");
+    	  if (path != null && path.length() > 0)
+    		  settings.setOperaBinaryLocation(path);
       }
+    	  
       if (settings.getOperaLauncherBinary() == null) {
         settings.setOperaLauncherBinary(paths.launcherPath());
       }
 
-      this.operaRunner = new OperaLauncherRunner(this.settings);
+      if (settings.getOperaBinaryLocation() != null)
+    	  this.operaRunner = new OperaLauncherRunner(this.settings);
     }
-
 
     init();
   }
@@ -195,8 +201,9 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 			Map<String, String> versions = getServicesList();
 			boolean manualStart = true;
 
-			if(settings != null && settings.getOperaBinaryLocation() != null)
+			if(settings != null && settings.getOperaBinaryLocation() != null) {
 				manualStart = false;
+			}
 
 			services = new ScopeServices(versions, manualStart);
 			services.startStpThread();
