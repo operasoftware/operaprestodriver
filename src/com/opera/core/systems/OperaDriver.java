@@ -103,7 +103,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 	public OperaDriver(boolean autoStart) {
 		this(autoStart ? makeSettings() : null);
 	}
-
+	
 	/**
 	 * Constructor that starts opera.
 	 */
@@ -112,16 +112,22 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
       this.settings = settings;
 
       OperaPaths paths = new OperaPaths();
-      if (settings.getOperaBinaryLocation() == null) {
+      if (settings.guessOperaPath() && settings.getOperaBinaryLocation() == null) {
         settings.setOperaBinaryLocation(paths.operaPath());
+      } else if (settings.getOperaBinaryLocation() == null) {
+    	  // Don't guess, only check environment variable
+    	  String path = System.getenv("OPERA_PATH");
+    	  if (path != null && path.length() > 0)
+    		  settings.setOperaBinaryLocation(path);
       }
+    	  
       if (settings.getOperaLauncherBinary() == null) {
         settings.setOperaLauncherBinary(paths.launcherPath());
       }
 
-      this.operaRunner = new OperaLauncherRunner(this.settings);
+      if (settings.getOperaBinaryLocation() != null)
+    	  this.operaRunner = new OperaLauncherRunner(this.settings);
     }
-
 
     init();
   }
@@ -195,8 +201,9 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 			Map<String, String> versions = getServicesList();
 			boolean manualStart = true;
 
-			if(settings != null && settings.getOperaBinaryLocation() != null)
+			if(settings != null && settings.getOperaBinaryLocation() != null) {
 				manualStart = false;
+			}
 
 			services = new ScopeServices(versions, manualStart);
 			services.startStpThread();
@@ -612,21 +619,11 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 	private class OperaNavigation implements Navigation {
 		public void back() {
 			exec.action("Back");
-			sleep(OperaIntervals.SCRIPT_RETRY_INTERVAL.getValue());
-			for(int i = 0; i < 5; i++) {
-				if(debugger.updateRuntime()) break;
-				sleep(i * OperaIntervals.SCRIPT_RETRY_INTERVAL.getValue());
-			}
 			waitForLoadToComplete();
 		}
 
 		public void forward() {
 			exec.action("Forward");
-			sleep(OperaIntervals.SCRIPT_RETRY_INTERVAL.getValue());
-			for(int i = 0; i < 5; i++) {
-				if(debugger.updateRuntime()) break;
-				sleep(i * OperaIntervals.SCRIPT_RETRY_INTERVAL.getValue());
-			}
 			waitForLoadToComplete();
 		}
 

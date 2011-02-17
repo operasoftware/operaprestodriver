@@ -7,11 +7,13 @@
 <body>
   <h1>Hello</h1>
 
-  <form action="">
+  <form id="test_form" action="test.html" method="get">
     <input type="text" id="one" />
     <input type="text" id="two" />
     <input type="text" id="input_email" value="test@example.com"
       onchange="log('email changed')" />
+    <input type="checkbox" id="check" />
+    <input type="submit" />
   </form>
 
  <input type="button" id="open_window" onclick="window.open('test.html')" value="Open window"/>
@@ -24,6 +26,10 @@
 
   one.addEventListener("dblclick", function (e) {
     two.value = "double";
+  }, false);
+
+  document.getElementById("check").addEventListener("change", function () {
+    document.getElementById("test_form").submit();
   }, false);
 
   var logbox = document.getElementById("log");
