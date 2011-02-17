@@ -612,21 +612,11 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 	private class OperaNavigation implements Navigation {
 		public void back() {
 			exec.action("Back");
-			sleep(OperaIntervals.SCRIPT_RETRY_INTERVAL.getValue());
-			for(int i = 0; i < 5; i++) {
-				if(debugger.updateRuntime()) break;
-				sleep(i * OperaIntervals.SCRIPT_RETRY_INTERVAL.getValue());
-			}
 			waitForLoadToComplete();
 		}
 
 		public void forward() {
 			exec.action("Forward");
-			sleep(OperaIntervals.SCRIPT_RETRY_INTERVAL.getValue());
-			for(int i = 0; i < 5; i++) {
-				if(debugger.updateRuntime()) break;
-				sleep(i * OperaIntervals.SCRIPT_RETRY_INTERVAL.getValue());
-			}
 			waitForLoadToComplete();
 		}
 
