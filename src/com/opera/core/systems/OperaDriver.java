@@ -743,7 +743,6 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 	 * {@link #getOperaActionList()} at run time
 	 * @param params Parameters to pass to the action call
 	 */
-	@SuppressWarnings("unused")
 	public void operaAction(String using, String... params) {
 
 		exec.action(using, params);

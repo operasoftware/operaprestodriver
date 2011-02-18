@@ -67,6 +67,7 @@ public class OperaPathsTest {
    *
    * @param newenv The new environment to set
    */
+  @SuppressWarnings("unchecked")
   private static void setEnv(Map<String, String> newenv) throws Exception {
     Class[] classes = Collections.class.getDeclaredClasses();
     Map<String, String> env = System.getenv();
