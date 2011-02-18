@@ -44,6 +44,10 @@ public class OperaDesktopDriver extends OperaDriver {
 	private IDesktopUtils desktopUtils;
 	private ProfileUtils profileUtils;
 	private boolean	firstTestRun = true;
+	
+	private String largePreferencesPath;
+	private String smallPreferencesPath;
+	private String cachePreferencesPath;
 
 	public OperaDesktopDriver() {
     super();
@@ -65,10 +69,10 @@ public class OperaDesktopDriver extends OperaDriver {
 	private void setPrefsPaths() {
 		// Opera will be running at this point so we can retrieve and
 		// store all the profile folders
-		settings.setLargePrefsFolder(getLargePreferencesPath());
-		settings.setSmallPrefsFolder(getSmallPreferencesPath());
-		settings.setCachePrefsFolder(getCachePreferencesPath());
-		profileUtils = new ProfileUtils(settings);
+		largePreferencesPath = getLargePreferencesPath();
+		smallPreferencesPath = getSmallPreferencesPath();
+		cachePreferencesPath = getCachePreferencesPath();
+		profileUtils = new ProfileUtils(largePreferencesPath, smallPreferencesPath, cachePreferencesPath);
 	}
 
 	private void setServices() {
@@ -412,7 +416,10 @@ public class OperaDesktopDriver extends OperaDriver {
 	 * @return large preferences path
 	 */
 	public String getLargePreferencesPath() {
-		return desktopUtils.getLargePreferencesPath();
+		if (largePreferencesPath == null)
+			return desktopUtils.getLargePreferencesPath();
+		else
+			return largePreferencesPath;
 	}
 
 	/**
@@ -420,7 +427,10 @@ public class OperaDesktopDriver extends OperaDriver {
 	 * @return small preferences path
 	 */
 	public String getSmallPreferencesPath() {
-		return desktopUtils.getSmallPreferencesPath();
+		if (smallPreferencesPath == null)
+			return desktopUtils.getSmallPreferencesPath();
+		else
+			return smallPreferencesPath;
 	}
 
 	/**
@@ -428,7 +438,10 @@ public class OperaDesktopDriver extends OperaDriver {
 	 * @return cache preferences path
 	 */
 	public String getCachePreferencesPath() {
-		return desktopUtils.getCachePreferencesPath();
+		if (cachePreferencesPath == null)
+			return desktopUtils.getCachePreferencesPath();
+		else
+			return cachePreferencesPath;
 	}
 
 	/**

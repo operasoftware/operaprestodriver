@@ -29,10 +29,10 @@ public class ProfileUtils {
 	private String smallPrefsFolder;
 	private String cachePrefsFolder;
 
-	public ProfileUtils(OperaDriverSettings settings){
-		this.largePrefsFolder = settings.getLargePrefsFolder();
-		this.smallPrefsFolder = settings.getSmallPrefsFolder();
-		this.cachePrefsFolder = settings.getCachePrefsFolder();
+	public ProfileUtils(String largePrefsFolder, String smallPrefsFolder, String cachePrefsFolder){
+		this.largePrefsFolder = largePrefsFolder;
+		this.smallPrefsFolder = smallPrefsFolder;
+		this.cachePrefsFolder = cachePrefsFolder;
 	}
 
 	public void deleteProfile() {
