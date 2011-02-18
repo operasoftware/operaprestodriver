@@ -1,0 +1,17 @@
+<!doctype HTML>
+<html>
+<head>
+ <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+ <title>Timeout ecmascript fixture</title>
+</head>
+<body>
+ <h1 id="out">Waiting</h1>
+ <p id="result"></p>
+
+ <script type="text/javascript">
+  setTimeout(function() {
+    document.getElementById("out").innerHTML = "done";
+  }, 1000);
+ </script>
+</body>
+</html>

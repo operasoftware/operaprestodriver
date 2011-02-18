@@ -1,0 +1,27 @@
+<!doctype HTML>
+<html>
+<head>
+ <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+ <title>CSS animation fixture. Should cause reflows.</title>
+ <style type="text/css">
+  #box {
+    float: left;
+    background-color: #FCC;
+    width: 100px;
+    height: 100px;
+    -o-transition-property: width background-color;
+    -o-transition-duration: 2s;
+    -o-transition-timing-function: linear;
+  }
+
+  #box:target {
+    background-color: #CCF;
+    width: 200px;
+  }
+ </style>
+</head>
+<body>
+ <div id="box">box</div>
+ <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis augue lacus, porttitor eget tristique vel, imperdiet nec sapien. Aenean et lectus in odio auctor auctor sed id nibh. Maecenas tempus orci nec lorem elementum nec tincidunt urna laoreet. Phasellus felis quam, condimentum eu semper ac, laoreet at tellus. Donec nisl augue, consectetur tristique mattis non, dapibus in orci. Sed a purus orci. Pellentesque gravida, quam vitae rutrum dapibus, elit elit venenatis felis, feugiat suscipit velit turpis eu nulla. Nam sit amet orci eget sapien imperdiet molestie et sed velit. Etiam pretium venenatis erat, pulvinar tempor augue congue a. Morbi ultrices vulputate lorem molestie ullamcorper. Integer bibendum augue nisi, id cursus elit. Praesent quis pellentesque ante. Pellentesque feugiat, ipsum quis faucibus feugiat, justo est egestas sapien, ac tempor ipsum nibh vitae justo. Curabitur non metus eget risus convallis suscipit eget quis quam. Aenean pellentesque aliquam imperdiet. Sed scelerisque, quam sit amet molestie laoreet, mi lectus adipiscing purus, vulputate auctor augue urna nec mi. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Mauris fringilla, elit pellentesque eleifend dictum, dui enim vehicula massa, rutrum gravida lorem nunc pulvinar risus. Donec luctus lectus id nibh suscipit iaculis.</p>
+</body>
+</html>
