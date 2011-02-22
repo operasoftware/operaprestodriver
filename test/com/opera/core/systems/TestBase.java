@@ -24,8 +24,8 @@ abstract public class TestBase {
     // Setup the fixture directory
     String separator = System.getProperty("file.separator");
     fixture_dir = System.getProperty("user.dir");
-    fixture_dir = fixture_dir + separator + "test" + separator + "fixtures"
-        + separator;
+    fixture_dir = separator + fixture_dir + separator + separator + "test" +
+      separator + "fixtures" + separator;
 
     Assert.assertTrue(new File(fixture_dir).isDirectory());
   }
