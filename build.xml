@@ -74,20 +74,13 @@
     <jar destfile="${jar.path}">
       <fileset dir="bin" includes="**/*.class" />
       <fileset dir="bin" includes="**/*.properties" />
+      <fileset dir="." includes="launcher/*" />
       <fileset file="VERSION" />
       <manifest>
       	<attribute name="Main-Class" value="com.opera.core.systems.OperaDriver" />
       	<attribute name="Implementation-Version" value="${version}" />
       </manifest>
     </jar>
-
-    <!-- Add the launchers. We do it this way to preserve their permissions.
-    In Ant 1.8+ we can add preservepermissions="true" to the <jar> element -->
-    <exec executable="zip" os="Linux">
-      <arg value="-r" />
-      <arg value="${jar.path}" />
-      <arg value="launcher/" />
-    </exec>
   </target>
 
   <!-- Compile any modified classes including test classes -->
