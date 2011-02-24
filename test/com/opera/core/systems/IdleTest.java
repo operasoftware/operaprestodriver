@@ -177,6 +177,15 @@ public class IdleTest extends TestBase {
   }
 
   @Test
+  public void testEcmascriptTimeoutLoop() throws Exception {
+    start();
+    getFixture("idle/ecmascript-timeout-loop.html");
+    stop();
+
+    Assert.assertEquals("done", driver.findElementById("out").getText());
+  }
+
+  @Test
   public void testReflow() throws Exception {
     // Need #box to activate the :target pseudo class
     start();
