@@ -7,9 +7,11 @@
 
   <!-- Get version from Git, and output it to the VERSION file.
        This file is later copied to other locations. -->
-  <exec executable="git" outputproperty="version">
+  <exec executable="git" outputproperty="version" failifexecutionfails="false">
     <arg value="describe" />
   </exec>
+  <!-- If we can't get the version from git, set a default  -->
+  <property name="version" value="UNKNOWN-VERSION" />
   <echo message="${version}" file="VERSION" />
 
   <!-- Variables  -->
@@ -74,20 +76,13 @@
     <jar destfile="${jar.path}">
       <fileset dir="bin" includes="**/*.class" />
       <fileset dir="bin" includes="**/*.properties" />
+      <fileset dir="." includes="launcher/*" />
       <fileset file="VERSION" />
       <manifest>
       	<attribute name="Main-Class" value="com.opera.core.systems.OperaDriver" />
       	<attribute name="Implementation-Version" value="${version}" />
       </manifest>
     </jar>
-
-    <!-- Add the launchers. We do it this way to preserve their permissions.
-    In Ant 1.8+ we can add preservepermissions="true" to the <jar> element -->
-    <exec executable="zip" os="Linux">
-      <arg value="-r" />
-      <arg value="${jar.path}" />
-      <arg value="launcher/" />
-    </exec>
   </target>
 
   <!-- Compile any modified classes including test classes -->
@@ -105,7 +100,7 @@
     <delete dir="${test.report.path}" />
     <mkdir  dir="${test.report.path}" />
 
-    <junit fork="yes" haltonfailure="no" printsummary="yes" showoutput="no" outputtoformatters="no">
+    <junit fork="yes" haltonfailure="no" printsummary="yes" showoutput="yes" outputtoformatters="no">
       <formatter type="xml" usefile="true" />
       <classpath refid="test.classpath.path" />
       <classpath location="test" />
