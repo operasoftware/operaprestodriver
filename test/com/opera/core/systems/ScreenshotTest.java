@@ -89,18 +89,6 @@ public class ScreenshotTest extends TestBase {
   }
 
   @Test
-  public void testFlash() throws Exception {
-    getFixture("flash.html");
-    OperaWebElement img = (OperaWebElement) driver.findElementById("img_container");
-    OperaWebElement flash = (OperaWebElement) driver.findElementById("flash_container");
-
-    String imgMD5 = img.saveScreenshot("one.png");
-    String flashMD5 = flash.saveScreenshot("two.png");
-
-    Assert.assertEquals(imgMD5, flashMD5);
-  }
-
-  @Test
   public void testTimout() throws Exception {
     getFixture("timer.html");
     OperaWebElement text = (OperaWebElement) driver.findElementById("one");
@@ -139,6 +127,18 @@ public class ScreenshotTest extends TestBase {
        png[6] == (byte) 0x1A &&
        png[7] == (byte) 0x0A
     );
+  }
 
+  // Can cause problems on Windows, so moved to last
+  @Test
+  public void testFlash() throws Exception {
+    getFixture("flash.html");
+    OperaWebElement img = (OperaWebElement) driver.findElementById("img_container");
+    OperaWebElement flash = (OperaWebElement) driver.findElementById("flash_container");
+
+    String imgMD5 = img.saveScreenshot("one.png");
+    String flashMD5 = flash.saveScreenshot("two.png");
+
+    Assert.assertEquals(imgMD5, flashMD5);
   }
 }
