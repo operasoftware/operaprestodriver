@@ -13,6 +13,7 @@ import org.junit.Test;
 
 public class OperaPathsTest {
   private static OperaPaths paths = new OperaPaths();
+  private static String knownDir = System.getProperty("user.home");
 
   @Test
   public void testOperaPath() throws Exception {
@@ -39,24 +40,24 @@ public class OperaPathsTest {
 
   @Test
   public void testOperaEnvVar() throws Exception {
-    assertNotSame("/", paths.operaPath());
+    assertNotSame(knownDir, paths.operaPath());
 
     Map<String, String> env = new HashMap<String, String>();
-    env.put("OPERA_PATH", "/");
+    env.put("OPERA_PATH", knownDir);
     setEnv(env);
 
-    assertEquals("/", paths.operaPath());
+    assertEquals(knownDir, paths.operaPath());
   }
 
   @Test
   public void testLauncherEnvVar() throws Exception {
-    assertNotSame("/", paths.launcherPath());
+    assertNotSame(knownDir, paths.launcherPath());
 
     Map<String, String> env = new HashMap<String, String>();
-    env.put("OPERA_LAUNCHER", "/");
+    env.put("OPERA_LAUNCHER", knownDir);
     setEnv(env);
 
-    assertEquals("/", paths.launcherPath());
+    assertEquals(knownDir, paths.launcherPath());
   }
 
   /**
