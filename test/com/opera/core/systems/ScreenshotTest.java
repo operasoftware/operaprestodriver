@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.zip.Adler32;
 
+import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -28,6 +29,12 @@ public class ScreenshotTest extends TestBase {
     radioLots = (OperaWebElement) driver.findElementById("radio_lots");
   }
 
+  @AfterClass
+  public static void tearDownAfterClass() throws Exception {
+    new File("one.png").delete();
+    new File("two.png").delete();
+  }
+
   private static int digest(String filename) throws IOException {
     FileInputStream fis= new FileInputStream(filename);
     byte[] data = new byte[fis.available()];
@@ -47,15 +54,15 @@ public class ScreenshotTest extends TestBase {
 
   @Test
   public void testElementsSame() throws Exception {
-    String one = radioLittle.saveScreenshot("/tmp/one.png");
-    String two = radioSome.saveScreenshot("/tmp/two.png");
+    String one = radioLittle.saveScreenshot("one.png");
+    String two = radioSome.saveScreenshot("two.png");
 
     Assert.assertEquals(one, two);
   }
 
   @Test
   public void testWrittenFilesSame() throws Exception {
-    String one = "/tmp/one.png", two = "/tmp/two.png";
+    String one = "one.png", two = "two.png";
 
     radioLittle.saveScreenshot(one);
     radioSome.saveScreenshot(two);
@@ -65,15 +72,15 @@ public class ScreenshotTest extends TestBase {
 
   @Test
   public void testElementsNotSame() throws Exception {
-    String one = radioLittle.saveScreenshot("/tmp/one.png");
-    String two = radioLots.saveScreenshot("/tmp/two.png");
+    String one = radioLittle.saveScreenshot("one.png");
+    String two = radioLots.saveScreenshot("two.png");
 
     Assert.assertNotSame(one, two);
   }
 
   @Test
   public void testWrittenFilesNotSame() throws Exception {
-    String one = "/tmp/one.png", two = "/tmp/two.png";
+    String one = "one.png", two = "two.png";
 
     radioLittle.saveScreenshot(one);
     radioLots.saveScreenshot(two);
@@ -87,8 +94,8 @@ public class ScreenshotTest extends TestBase {
     OperaWebElement img = (OperaWebElement) driver.findElementById("img_container");
     OperaWebElement flash = (OperaWebElement) driver.findElementById("flash_container");
 
-    String imgMD5 = img.saveScreenshot("/tmp/one.png");
-    String flashMD5 = flash.saveScreenshot("/tmp/two.png");
+    String imgMD5 = img.saveScreenshot("one.png");
+    String flashMD5 = flash.saveScreenshot("two.png");
 
     Assert.assertEquals(imgMD5, flashMD5);
   }
@@ -98,19 +105,19 @@ public class ScreenshotTest extends TestBase {
     getFixture("timer.html");
     OperaWebElement text = (OperaWebElement) driver.findElementById("one");
 
-    String original = text.saveScreenshot("/tmp/one.png");
-    String changed = text.saveScreenshot("/tmp/two.png", 2000);
+    String original = text.saveScreenshot("one.png");
+    String changed = text.saveScreenshot("two.png", 2000);
 
     Assert.assertNotSame(original, changed);
   }
 
   @Test
   public void testHashes() throws Exception {
-    String md5 = text.saveScreenshot("/tmp/one.png");
-    text.saveScreenshot("/tmp/two.png", 0, true, md5);
+    String md5 = text.saveScreenshot("one.png");
+    text.saveScreenshot("two.png", 0, true, md5);
 
-    File one = new File("/tmp/one.png");
-    File two = new File("/tmp/two.png");
+    File one = new File("one.png");
+    File two = new File("two.png");
 
     // Confirm that a png is not returned when the hash matches
     Assert.assertNotSame(0, one.length());
@@ -132,7 +139,6 @@ public class ScreenshotTest extends TestBase {
        png[6] == (byte) 0x1A &&
        png[7] == (byte) 0x0A
     );
-
 
   }
 }
