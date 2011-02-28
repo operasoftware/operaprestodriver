@@ -35,7 +35,7 @@ public class IdleTest extends TestBase {
     getFixture("test.html");
     stop();
 
-    Assert.assertEquals(fixture("test.html"), driver.getCurrentUrl());
+    Assert.assertTrue(driver.getCurrentUrl().endsWith("test.html"));
   }
 
   @Test
@@ -46,7 +46,7 @@ public class IdleTest extends TestBase {
     driver.navigate().back();
     stop();
 
-    Assert.assertEquals(fixture("test.html"), driver.getCurrentUrl());
+    Assert.assertTrue(driver.getCurrentUrl().endsWith("test.html"));
   }
 
   @Test
@@ -55,7 +55,7 @@ public class IdleTest extends TestBase {
     driver.navigate().forward();
     stop();
 
-    Assert.assertEquals(fixture("javascript.html"), driver.getCurrentUrl());
+    Assert.assertTrue(driver.getCurrentUrl().endsWith("javascript.html"));
   }
 
   @Test
@@ -64,7 +64,7 @@ public class IdleTest extends TestBase {
     driver.navigate().back();
     stop();
 
-    Assert.assertEquals(fixture("test.html"), driver.getCurrentUrl());
+    Assert.assertTrue(driver.getCurrentUrl().endsWith("test.html"));
   }
 
   @Test
@@ -87,7 +87,7 @@ public class IdleTest extends TestBase {
     driver.findElementById("local").click();
     stop();
 
-    Assert.assertEquals(fixture("two_input_fields.html"), driver.getCurrentUrl());
+    Assert.assertTrue(driver.getCurrentUrl().endsWith("two_input_fields.html"));
   }
 
   @Test
@@ -98,7 +98,7 @@ public class IdleTest extends TestBase {
     ((OperaWebElement) driver.findElementById("local")).click(3, 5);
     stop();
 
-    Assert.assertEquals(fixture("two_input_fields.html"), driver.getCurrentUrl());
+    Assert.assertTrue(driver.getCurrentUrl().endsWith("two_input_fields.html"));
   }
 
   @Test
@@ -114,7 +114,7 @@ public class IdleTest extends TestBase {
     stop();
 
     // +"?" for submitted query string
-    Assert.assertEquals(fixture("test.html")+"?", driver.getCurrentUrl());
+    Assert.assertTrue(driver.getCurrentUrl().endsWith("test.html?"));
   }
 
   @Test
@@ -127,7 +127,7 @@ public class IdleTest extends TestBase {
     stop();
 
     // +"?" for submitted query string
-    Assert.assertEquals(fixture("test.html")+"?", driver.getCurrentUrl());
+    Assert.assertTrue(driver.getCurrentUrl().endsWith("test.html?"));
   }
 
   @Test
@@ -140,7 +140,7 @@ public class IdleTest extends TestBase {
     stop();
 
     // +"?" for submitted query string
-    Assert.assertEquals(fixture("test.html")+"?", driver.getCurrentUrl());
+    Assert.assertTrue(driver.getCurrentUrl().endsWith("test.html?"));
   }
 
   @Test
@@ -153,7 +153,7 @@ public class IdleTest extends TestBase {
     stop();
 
     // +"?" for submitted query string
-    Assert.assertEquals(fixture("test.html")+"?", driver.getCurrentUrl());
+    Assert.assertTrue(driver.getCurrentUrl().endsWith("test.html?"));
   }
 
   /* Begin testing OperaIdle conditions */
@@ -200,6 +200,6 @@ public class IdleTest extends TestBase {
   public void testMetarefresh() throws Exception {
     getFixture("idle/metarefresh.html");
 
-    Assert.assertEquals(fixture("test.html"), driver.getCurrentUrl());
+    Assert.assertTrue(driver.getCurrentUrl().endsWith("test.html?"));
   }
 }
