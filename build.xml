@@ -7,9 +7,11 @@
 
   <!-- Get version from Git, and output it to the VERSION file.
        This file is later copied to other locations. -->
-  <exec executable="git" outputproperty="version">
+  <exec executable="git" outputproperty="version" failifexecutionfails="false">
     <arg value="describe" />
   </exec>
+  <!-- If we can't get the version from git, set a default  -->
+  <property name="version" value="UNKNOWN-VERSION" />
   <echo message="${version}" file="VERSION" />
 
   <!-- Variables  -->
@@ -98,7 +100,7 @@
     <delete dir="${test.report.path}" />
     <mkdir  dir="${test.report.path}" />
 
-    <junit fork="yes" haltonfailure="no" printsummary="yes" showoutput="no" outputtoformatters="no">
+    <junit fork="yes" haltonfailure="no" printsummary="yes" showoutput="yes" outputtoformatters="no">
       <formatter type="xml" usefile="true" />
       <classpath refid="test.classpath.path" />
       <classpath location="test" />
