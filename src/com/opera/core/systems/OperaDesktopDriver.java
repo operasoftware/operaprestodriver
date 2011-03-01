@@ -620,6 +620,8 @@ public class OperaDesktopDriver extends OperaDriver {
 	 * Copies prefs in folder newPrefs to the profile for the connected Opera instance.
 	 * Will first quit Opera, then delete the old prefs, and copy the new prefs over, then
 	 * restart Opera with the new prefs.
+	 * 
+	 * Does nothing if profile used is default main user profile
 	 *
 	 * @param newPrefs - path to where new prefs to be copied into the prefs folders are located
 	 */
@@ -630,16 +632,24 @@ public class OperaDesktopDriver extends OperaDriver {
 		// Always delete and copy over a test profile except for when running
 		// the first test which doesn't have a profile to copy over
 		if (!firstTestRun || new File(newPrefs).exists()) {
-			// Quit and wait for opera to quit properly
-			quitOpera();
+			if (!profileUtils.isMainProfile(smallPreferencesPath) &&
+					!profileUtils.isMainProfile(largePreferencesPath) &&
+					!profileUtils.isMainProfile(cachePreferencesPath))
+			{
+				// Quit and wait for opera to quit properly
+				quitOpera();
 
-			// Cleanup old profile
-			profileUtils.deleteProfile();
-			// Copy in the profile for the test (only if it exists)
-			profileUtils.copyProfile(newPrefs);
-
-			// Relaunch Opera and the webdriver service connection
-			startOpera();
+				// Cleanup old profile
+				profileUtils.deleteProfile();
+				// Copy in the profile for the test (only if it exists)
+				profileUtils.copyProfile(newPrefs);
+				
+				// Relaunch Opera and the webdriver service connection
+				startOpera();
+			}
+			else {
+				System.out.println("\nWarning: Running tests in main user profile");
+			}
 		}
 
 		// No longer the first test run
@@ -656,10 +666,13 @@ public class OperaDesktopDriver extends OperaDriver {
 	public void deleteOperaPrefs() {
 		// Only delete if Opera is currently not running
 		// Don't delete in no-launcher mode
-		if (operaRunner != null && !operaRunner.isOperaRunning())
+		if (operaRunner != null && !operaRunner.isOperaRunning()) {
+			// Will only delete profile if it's not a default main profile
 			profileUtils.deleteProfile();
-		else
+		}
+		else {
 			logger.warning("Cannot delete profile while Opera is running");
+		}
 	}
 
 	public int getPid() {

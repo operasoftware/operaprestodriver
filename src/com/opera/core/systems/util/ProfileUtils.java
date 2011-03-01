@@ -18,7 +18,6 @@ package com.opera.core.systems.util;
 import java.io.File;
 import java.io.IOException;
 import org.apache.commons.io.FileUtils;
-import com.opera.core.systems.settings.OperaDriverSettings;
 
 /**
  * Class to manage browser profile
@@ -34,8 +33,55 @@ public class ProfileUtils {
 		this.smallPrefsFolder = smallPrefsFolder;
 		this.cachePrefsFolder = cachePrefsFolder;
 	}
+	
+	public boolean isMainProfile(String prefsPath) {
+		// TODO: Get platform
+		
+		
+		File prefsFile = new File(prefsPath);
+		// Get user home
+		String path = System.getProperty("user.home");
+		
+		//String os = System.getProperty("os.name");
+		
+		/* *nix */
+		File dotOpera = new File(path + "/.opera");
+		
+		if (/*platform nix && */ prefsFile.equals(dotOpera))
+			return true;
+		
+		/* Mac
+		 * ~/Library/Application Support/Opera 
+		 * ~/Library/Caches/Opera 
+		 * ~/Library/Preferences/Opera Preferences
+		 */
+		File appSupport = new File(path + "/Library/Application Support/Opera");
+		File cache = new File(path + "/Library/Caches/Opera");
+		File prefs = new File(path + "/Library/Preferences/Opera Preference");
+		
+		if (/* platform mac && */ prefsFile.equals(appSupport) || 
+				prefsFile.equals(cache) ||
+				prefsFile.equals(prefs))
+			return true;
+		
+		/* TODO: Windows */
+		
+		return false;
+	}
 
+	/**
+	 * Deletes prefs folders for
+	 * Does nothing if prefs folders are default main user profile
+	 */
 	public void deleteProfile() {
+		// Assuming if any of those are main profile, skip the whole delete
+		if (isMainProfile(smallPrefsFolder) ||
+				isMainProfile(largePrefsFolder) ||
+				isMainProfile(cachePrefsFolder))
+		{
+			return;
+		}
+		
 		deleteFolder(smallPrefsFolder);
 		if (!smallPrefsFolder.equals(largePrefsFolder))
 			deleteFolder(largePrefsFolder);
@@ -53,7 +99,7 @@ public class ProfileUtils {
 
 	}
 
-	public boolean deleteFolder(String folderPath) {
+	private boolean deleteFolder(String folderPath) {
 		return FileUtils.deleteQuietly(new File(folderPath));
 	}
 }
