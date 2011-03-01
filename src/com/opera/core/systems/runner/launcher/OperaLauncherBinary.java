@@ -51,17 +51,7 @@ public class OperaLauncherBinary extends Thread {
 
     public void shutdown()
     {
-        if (!running.get())
-            return;
-
-        try {
-            running.set(false);
-            interrupt();
-            join(1000);
-        } catch (InterruptedException ex) {
-            logger.severe("Unable to shutdown Opera binary in a timely fashion.");
-            kill();
-        }
+      kill();
     }
 
     public void init() {
