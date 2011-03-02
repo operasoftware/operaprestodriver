@@ -10,6 +10,7 @@ import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.Statement;
 
 import com.opera.core.systems.scope.internal.OperaIntervals;
+import com.opera.core.systems.settings.OperaDriverSettings;
 
 public class IdleTest extends TestBase {
   // Timeout vars for every test
@@ -229,5 +230,17 @@ public class IdleTest extends TestBase {
 
     // Check we hit the timeout (+ a 100ms margin)
     Assert.assertTrue("Custom timout", end - start < 500 + 100);
+  }
+
+  @Test
+  public void testIdleOff() throws Exception {
+    driver.shutdown();
+    OperaDriverSettings settings = new OperaDriverSettings();
+    settings.setUseOperaIdle(false);
+    driver = new TestOperaDriver(settings);
+
+    getFixture("timer.html");
+    // Idle will wait for timeout before firing
+    Assert.assertEquals("default", driver.findElementById("one").getValue());
   }
 }

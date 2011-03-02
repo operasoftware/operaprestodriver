@@ -130,6 +130,9 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 
       if (settings.getOperaBinaryLocation() != null)
     	  this.operaRunner = new OperaLauncherRunner(this.settings);
+    } else {
+      // Create a default settings object
+      this.settings = new OperaDriverSettings();
     }
 
     init();
@@ -204,7 +207,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 			Map<String, String> versions = getServicesList();
 			boolean manualStart = true;
 
-			if(settings != null && settings.getOperaBinaryLocation() != null) {
+			if(settings.getOperaBinaryLocation() != null) {
 				manualStart = false;
 			}
 
@@ -238,7 +241,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 
 		if (!url.replace(oldUrl, "").startsWith("#")) {
 
-			if (services.isOperaIdleAvailable()) {
+			if (useOperaIdle()) {
 				try {
 					// Wait for opera is idle
 				  if (timeout == OperaIntervals.PAGE_LOAD_TIMEOUT.getValue())
@@ -885,6 +888,10 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 	public boolean isOperaIdleAvailable()
 	{
 		return services.isOperaIdleAvailable();
+	}
+
+	private boolean useOperaIdle() {
+	  return (settings.getUseOperaIdle() && isOperaIdleAvailable());
 	}
 
 	public Object executeScript(String script, Object... args) {

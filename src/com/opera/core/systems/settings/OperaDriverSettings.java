@@ -17,7 +17,7 @@ package com.opera.core.systems.settings;
 
 /**
  * Stores settings for OperaDriver.
- * 
+ *
  * @author Deniz Turkoglu
  *
  */
@@ -39,6 +39,8 @@ public class OperaDriverSettings {
 	private boolean noRestart = false;
 	private boolean noQuit = false;
 	private boolean guessOperaPath = true;
+
+	private boolean useOperaIdle = true;
 
 	//Generated getters and setters:
 	public boolean doRunOperaLauncherFromOperaDriver() {
@@ -70,7 +72,7 @@ public class OperaDriverSettings {
 	}
 	/**
 	 * Set the location of the Opera launcher binary.
-	 * @param operaLauncherBinary The absolute path to the Opera launcher. 
+	 * @param operaLauncherBinary The absolute path to the Opera launcher.
 	 */
 	public void setOperaLauncherBinary(String operaLauncherBinary) {
 		this.operaLauncherBinary = operaLauncherBinary;
@@ -90,7 +92,7 @@ public class OperaDriverSettings {
 	}
 	/**
 	 * Set the arguments that will be passed to Opera.
-	 * 
+	 *
 	 * For example:
 	 * <code>opera -nosession opera:debug</code> to start without restoring a
 	 * session (on *nix systems), and load the <code>opera:debug</code> page in
@@ -154,7 +156,7 @@ public class OperaDriverSettings {
 	public String getCachePrefsFolder() {
 		return cachePrefsFolder;
 	}
-	
+
 	/**
 	 * @deprecated
 	 * @param noRestart
@@ -171,13 +173,21 @@ public class OperaDriverSettings {
 	public boolean getNoRestart() {
 		return noRestart;
 	}
-	
+
 	public void setGuessOperaPath(boolean guess){
 		this.guessOperaPath = guess;
 	}
-	
+
 	public boolean guessOperaPath() {
 		return guessOperaPath;
+	}
+
+	public void setUseOperaIdle(boolean useOperaIdle) {
+	  this.useOperaIdle = useOperaIdle;
+	}
+
+	public boolean getUseOperaIdle() {
+	  return useOperaIdle;
 	}
 
 }
