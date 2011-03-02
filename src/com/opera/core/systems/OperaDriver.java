@@ -100,9 +100,10 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 	private String version;
 
 	public OperaDriver() {
-		this(true);
+		this(makeSettings());
 	}
 
+	@Deprecated
 	public OperaDriver(boolean autoStart) {
 		this(autoStart ? makeSettings() : null);
 	}
@@ -111,7 +112,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 	 * Constructor that starts opera.
 	 */
 	public OperaDriver(OperaDriverSettings settings){
-    if (settings != null) {
+    if (settings != null && settings.getAutostart() == true) {
       this.settings = settings;
 
       OperaPaths paths = new OperaPaths();
@@ -128,11 +129,11 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
         settings.setOperaLauncherBinary(paths.launcherPath());
       }
 
-      if (settings.getOperaBinaryLocation() != null)
-    	  this.operaRunner = new OperaLauncherRunner(this.settings);
+      this.operaRunner = new OperaLauncherRunner(this.settings);
     } else {
       // Create a default settings object
       this.settings = new OperaDriverSettings();
+      this.settings.setAutostart(false);
     }
 
     init();
@@ -145,7 +146,6 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
    */
   private static OperaDriverSettings makeSettings() {
     OperaDriverSettings settings = new OperaDriverSettings();
-    settings.setRunOperaLauncherFromOperaDriver(true);
 
     OperaPaths paths = new OperaPaths();
 
@@ -205,11 +205,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 	private void createScopeServices() {
 		try {
 			Map<String, String> versions = getServicesList();
-			boolean manualStart = true;
-
-			if(settings.getOperaBinaryLocation() != null) {
-				manualStart = false;
-			}
+			boolean manualStart = !settings.getAutostart();
 
 			services = new ScopeServices(versions, manualStart);
 			services.startStpThread();
@@ -1061,4 +1057,3 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 	}
 
 }
-
