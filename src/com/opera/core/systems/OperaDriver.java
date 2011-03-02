@@ -241,6 +241,8 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 			if (services.isOperaIdleAvailable()) {
 				try {
 					// Wait for opera is idle
+				  if (timeout == OperaIntervals.PAGE_LOAD_TIMEOUT.getValue())
+				    timeout = OperaIntervals.OPERA_IDLE_TIMEOUT.getValue();
 					services.waitForOperaIdle(timeout);
 				} catch (WebDriverException e) {
 					// This could for example be a gif animation, preventing
