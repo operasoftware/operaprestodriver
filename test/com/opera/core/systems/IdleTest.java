@@ -9,7 +9,7 @@ import com.opera.core.systems.scope.internal.OperaIntervals;
 public class IdleTest extends TestBase {
   // Timeout vars for every test
   private static long start, end;
-  private static long timout = OperaIntervals.PAGE_LOAD_TIMEOUT.getValue();
+  private static long timout = OperaIntervals.OPERA_IDLE_TIMEOUT.getValue();
 
   @After
   public void tearDown() {
@@ -146,5 +146,15 @@ public class IdleTest extends TestBase {
 
     // +"?" for submitted query string
     Assert.assertEquals(fixture("test.html")+"?", driver.getCurrentUrl());
+  }
+
+  @Test
+  public void testCustomTimeout() throws Exception {
+    start = System.currentTimeMillis();
+    driver.get(fixture("http://nytimes.com"), 500);
+    end = System.currentTimeMillis();
+
+    // Check we hit the timeout (+ a 100ms margin)
+    Assert.assertTrue("Custom timout", end - start < 500 + 100);
   }
 }
