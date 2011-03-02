@@ -3,8 +3,11 @@ package com.opera.core.systems;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.MethodRule;
+import org.junit.runners.model.FrameworkMethod;
+import org.junit.runners.model.Statement;
 
 import com.opera.core.systems.scope.internal.OperaIntervals;
 
@@ -13,6 +16,20 @@ public class IdleTest extends TestBase {
   private static long start, end;
   // Make sure we're actually using Idle, and not hitting the timeout
   private static long timeout = OperaIntervals.PAGE_LOAD_TIMEOUT.getValue();
+
+  // Make sure these tests only run if OperaIdle is available
+  @Rule
+  public MethodRule random = new MethodRule() {
+    public Statement apply(Statement base, FrameworkMethod method, Object target) {
+      // If Idle available return the test
+      if (driver.isOperaIdleAvailable()) return base;
+      // otherwise return an empty statement -> test doesn't run
+      else return new Statement() {
+          @Override
+          public void evaluate() throws Throwable {}
+        };
+    }
+  };
 
   @Before
   public void setUp() {
