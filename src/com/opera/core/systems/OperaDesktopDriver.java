@@ -72,7 +72,7 @@ public class OperaDesktopDriver extends OperaDriver {
 		largePreferencesPath = getLargePreferencesPath();
 		smallPreferencesPath = getSmallPreferencesPath();
 		cachePreferencesPath = getCachePreferencesPath();
-		profileUtils = new ProfileUtils(largePreferencesPath, smallPreferencesPath, cachePreferencesPath);
+		profileUtils = new ProfileUtils(largePreferencesPath, smallPreferencesPath, cachePreferencesPath, settings);
 	}
 
 	private void setServices() {
