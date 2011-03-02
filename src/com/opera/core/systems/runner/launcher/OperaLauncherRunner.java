@@ -74,6 +74,9 @@ public class OperaLauncherRunner implements OperaRunner{
 			stringArray.add("-bin");
 			stringArray.add(this.settings.getOperaBinaryLocation());
 
+			// Enable auto test mode, always starts Opera on opera:debug and prevents
+			// interrupting diagloges appearing
+			stringArray.add("-autotestmode");
 			StringTokenizer tokanizer = new StringTokenizer(this.settings.getOperaBinaryArguments(), " ");
 			while(tokanizer.hasMoreTokens()){
 				stringArray.add(tokanizer.nextToken());
