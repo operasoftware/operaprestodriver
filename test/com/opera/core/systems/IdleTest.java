@@ -2,61 +2,87 @@ package com.opera.core.systems;
 
 import org.junit.After;
 import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.MethodRule;
+import org.junit.runners.model.FrameworkMethod;
+import org.junit.runners.model.Statement;
 
 import com.opera.core.systems.scope.internal.OperaIntervals;
 
 public class IdleTest extends TestBase {
   // Timeout vars for every test
   private static long start, end;
-  private static long timout = OperaIntervals.OPERA_IDLE_TIMEOUT.getValue();
+
+  // Make sure we're actually using Idle, and not hitting the timeout
+  private static long timeout = OperaIntervals.OPERA_IDLE_TIMEOUT.getValue();
+
+  // Make sure these tests only run if OperaIdle is available
+  @Rule
+  public MethodRule random = new MethodRule() {
+    public Statement apply(Statement base, FrameworkMethod method, Object target) {
+      // If Idle available return the test
+      if (driver.isOperaIdleAvailable()) return base;
+      // otherwise return an empty statement -> test doesn't run
+      else return new Statement() {
+          @Override
+          public void evaluate() throws Throwable {}
+        };
+    }
+  };
+
+  @Before
+  public void setUp() {
+    start = end = 0;
+  }
 
   @After
   public void tearDown() {
     // Make sure the test hasn't passed because we hit the page load
     // timeout instead of using OperaIdle
-    Assert.assertTrue("Timout", end - start < timout);
+    Assert.assertTrue("Took longer than page timeout", end - start < timeout);
   }
 
-  // Make sure we're actually using Idle, and not hitting the timeout
-  // this should be OperaIntervals.PAGE_LOAD_TIMEOUT, but JUnit requires
-  // a constant. This timeout is the same for all tests.
+  private void start() { start = System.currentTimeMillis(); }
+  private void stop() { end = System.currentTimeMillis(); }
+
   @Test
   public void testGet() throws Exception {
-    start = System.currentTimeMillis();
+    start();
     getFixture("test.html");
-    end = System.currentTimeMillis();
+    stop();
 
-    Assert.assertEquals(fixture("test.html"), driver.getCurrentUrl());
+    Assert.assertTrue(driver.getCurrentUrl().endsWith("test.html"));
   }
 
   @Test
   public void testBack() throws Exception {
     getFixture("javascript.html");
 
-    start = System.currentTimeMillis();
+    start();
     driver.navigate().back();
-    end = System.currentTimeMillis();
+    stop();
 
-    Assert.assertEquals(fixture("test.html"), driver.getCurrentUrl());
+    Assert.assertTrue(driver.getCurrentUrl().endsWith("test.html"));
   }
 
   @Test
   public void testForward() throws Exception {
-    start = System.currentTimeMillis();
+    start();
     driver.navigate().forward();
-    end = System.currentTimeMillis();
+    stop();
 
-    Assert.assertEquals(fixture("javascript.html"), driver.getCurrentUrl());
+    Assert.assertTrue(driver.getCurrentUrl().endsWith("javascript.html"));
   }
 
   @Test
   public void testBack2() throws Exception {
-    start = System.currentTimeMillis();
+    start();
     driver.navigate().back();
-    end = System.currentTimeMillis();
+    stop();
 
-    Assert.assertEquals(fixture("test.html"), driver.getCurrentUrl());
+    Assert.assertTrue(driver.getCurrentUrl().endsWith("test.html"));
   }
 
   @Test
@@ -64,9 +90,9 @@ public class IdleTest extends TestBase {
     getFixture("test.html");
     ((OperaWebElement) driver.findElementById("input_email")).sendKeys("before refresh");
 
-    start = System.currentTimeMillis();
+    start();
     driver.navigate().refresh();
-    end = System.currentTimeMillis();
+    stop();
 
     Assert.assertEquals("", driver.findElementById("input_email").getValue());
   }
@@ -75,22 +101,22 @@ public class IdleTest extends TestBase {
   public void testClick() throws Exception {
     getFixture("test.html");
 
-    start = System.currentTimeMillis();
+    start();
     driver.findElementById("local").click();
-    end = System.currentTimeMillis();
+    stop();
 
-    Assert.assertEquals(fixture("two_input_fields.html"), driver.getCurrentUrl());
+    Assert.assertTrue(driver.getCurrentUrl().endsWith("two_input_fields.html"));
   }
 
   @Test
   public void testClickXY() throws Exception {
     getFixture("test.html");
 
-    start = System.currentTimeMillis();
+    start();
     ((OperaWebElement) driver.findElementById("local")).click(3, 5);
-    end = System.currentTimeMillis();
+    stop();
 
-    Assert.assertEquals(fixture("two_input_fields.html"), driver.getCurrentUrl());
+    Assert.assertTrue(driver.getCurrentUrl().endsWith("two_input_fields.html"));
   }
 
   @Test
@@ -101,12 +127,12 @@ public class IdleTest extends TestBase {
     driver.findElementById("one").click();
 
     // submit form
-    start = System.currentTimeMillis();
+    start();
     driver.key("Enter");
-    end = System.currentTimeMillis();
+    stop();
 
     // +"?" for submitted query string
-    Assert.assertEquals(fixture("test.html")+"?", driver.getCurrentUrl());
+    Assert.assertTrue(driver.getCurrentUrl().endsWith("test.html?"));
   }
 
   @Test
@@ -114,12 +140,12 @@ public class IdleTest extends TestBase {
     getFixture("javascript.html");
 
     // Focus textbox
-    start = System.currentTimeMillis();
+    start();
     ((OperaWebElement) driver.findElementById("one")).sendKeys("\n");
-    end = System.currentTimeMillis();
+    stop();
 
     // +"?" for submitted query string
-    Assert.assertEquals(fixture("test.html")+"?", driver.getCurrentUrl());
+    Assert.assertTrue(driver.getCurrentUrl().endsWith("test.html?"));
   }
 
   @Test
@@ -127,12 +153,12 @@ public class IdleTest extends TestBase {
     getFixture("javascript.html");
 
     // Check checkbox, fires a submit even on the form
-    start = System.currentTimeMillis();
+    start();
     ((OperaWebElement) driver.findElementById("check")).setSelected();
-    end = System.currentTimeMillis();
+    stop();
 
     // +"?" for submitted query string
-    Assert.assertEquals(fixture("test.html")+"?", driver.getCurrentUrl());
+    Assert.assertTrue(driver.getCurrentUrl().endsWith("test.html?"));
   }
 
   @Test
@@ -140,12 +166,59 @@ public class IdleTest extends TestBase {
     getFixture("javascript.html");
 
     // Check checkbox, fires a submit even on the form
-    start = System.currentTimeMillis();
+    start();
     ((OperaWebElement) driver.findElementById("test_form")).submit();
-    end = System.currentTimeMillis();
+    stop();
 
     // +"?" for submitted query string
-    Assert.assertEquals(fixture("test.html")+"?", driver.getCurrentUrl());
+    Assert.assertTrue(driver.getCurrentUrl().endsWith("test.html?"));
+  }
+
+  /* Begin testing OperaIdle conditions */
+
+  @Test
+  public void testEcmascriptLoop() throws Exception {
+    start();
+    getFixture("idle/ecmascript-loop.html");
+    stop();
+
+    Assert.assertEquals("done", driver.findElementById("out").getText());
+  }
+
+  @Test
+  public void testEcmascriptTimeout() throws Exception {
+    start();
+    getFixture("idle/ecmascript-timeout.html");
+    stop();
+
+    Assert.assertEquals("done", driver.findElementById("out").getText());
+  }
+
+  @Test
+  public void testEcmascriptTimeoutLoop() throws Exception {
+    start();
+    getFixture("idle/ecmascript-timeout-loop.html");
+    stop();
+
+    Assert.assertEquals("done", driver.findElementById("out").getText());
+  }
+
+  @Test
+  public void testReflow() throws Exception {
+    // Need #box to activate the :target pseudo class
+    start();
+    getFixture("idle/reflow.html#box");
+    stop();
+
+    OperaWebElement box = (OperaWebElement) driver.findElementById("box");
+    Assert.assertEquals(200, box.getSize().width);
+  }
+
+  @Test
+  public void testMetarefresh() throws Exception {
+    getFixture("idle/metarefresh.html");
+
+    Assert.assertTrue(driver.getCurrentUrl().endsWith("test.html?"));
   }
 
   @Test
