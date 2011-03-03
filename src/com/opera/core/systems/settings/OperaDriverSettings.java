@@ -87,21 +87,25 @@ public class OperaDriverSettings {
 	public void setOperaBinaryLocation(String operaBinaryLocation) {
 		this.operaBinaryLocation = operaBinaryLocation;
 	}
+
 	public String getOperaBinaryArguments() {
 		return operaBinaryArguments;
 	}
-	/**
-	 * Set the arguments that will be passed to Opera.
-	 *
-	 * For example:
-	 * <code>opera -nosession opera:debug</code> to start without restoring a
-	 * session (on *nix systems), and load the <code>opera:debug</code> page in
-	 * a tab.
-	 * @param operaBinaryArguments The arguments to pass, separated by spaces.
-	 */
-	public void setOperaBinaryArguments(String operaBinaryArguments) {
-		this.operaBinaryArguments = operaBinaryArguments;
-	}
+
+  /**
+   * Set the arguments that will be passed to Opera.
+   *
+   * For example: <code>opera -nosession opera:debug</code> to start without
+   * restoring a session (on *nix systems), and load the
+   * <code>opera:debug</code> page in a tab.
+   *
+   * @param operaBinaryArguments
+   *          The arguments to pass, separated by spaces.
+   */
+  public void setOperaBinaryArguments(String operaBinaryArguments) {
+    if (operaBinaryArguments == null) operaBinaryArguments = "";
+    this.operaBinaryArguments = operaBinaryArguments;
+  }
 
 	public Integer getOperaLauncherXvfbDisplay() {
 		return operaLauncherXvfbDisplay;
