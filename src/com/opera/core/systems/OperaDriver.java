@@ -131,7 +131,8 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
           settings.setOperaLauncherBinary(paths.launcherPath());
         }
 
-        this.operaRunner = new OperaLauncherRunner(this.settings);
+        if (settings.getOperaBinaryLocation() != null)
+          this.operaRunner = new OperaLauncherRunner(this.settings);
       }
     } else {
       // Create a default settings object
@@ -208,7 +209,11 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 	private void createScopeServices() {
 		try {
 			Map<String, String> versions = getServicesList();
-			boolean manualStart = !settings.getAutostart();
+			boolean manualStart = true;
+
+			if(settings.getOperaBinaryLocation() != null) {
+				manualStart = false;
+			}
 
 			services = new ScopeServices(versions, manualStart);
 			services.startStpThread();
