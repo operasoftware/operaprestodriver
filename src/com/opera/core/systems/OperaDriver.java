@@ -112,24 +112,27 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 	 * Constructor that starts opera.
 	 */
 	public OperaDriver(OperaDriverSettings settings){
-    if (settings != null && settings.getAutostart() == true) {
+    if (settings != null) {
       this.settings = settings;
 
-      OperaPaths paths = new OperaPaths();
-      if (settings.guessOperaPath() && settings.getOperaBinaryLocation() == null) {
-        settings.setOperaBinaryLocation(paths.operaPath());
-      } else if (settings.getOperaBinaryLocation() == null) {
-    	  // Don't guess, only check environment variable
-    	  String path = System.getenv("OPERA_PATH");
-    	  if (path != null && path.length() > 0)
-    		  settings.setOperaBinaryLocation(path);
-      }
+      if (settings.getAutostart() == true) {
+        OperaPaths paths = new OperaPaths();
 
-      if (settings.getOperaLauncherBinary() == null) {
-        settings.setOperaLauncherBinary(paths.launcherPath());
-      }
+        if (settings.guessOperaPath() && settings.getOperaBinaryLocation() == null) {
+          settings.setOperaBinaryLocation(paths.operaPath());
+        } else if (settings.getOperaBinaryLocation() == null) {
+      	  // Don't guess, only check environment variable
+      	  String path = System.getenv("OPERA_PATH");
+      	  if (path != null && path.length() > 0)
+      		  settings.setOperaBinaryLocation(path);
+        }
 
-      this.operaRunner = new OperaLauncherRunner(this.settings);
+        if (settings.getOperaLauncherBinary() == null) {
+          settings.setOperaLauncherBinary(paths.launcherPath());
+        }
+
+        this.operaRunner = new OperaLauncherRunner(this.settings);
+      }
     } else {
       // Create a default settings object
       this.settings = new OperaDriverSettings();
