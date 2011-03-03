@@ -165,10 +165,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 	 * Shutdown webdriver, will kill opera and such if running.
 	 */
 	public void shutdown(){
-		if(isDriverStarted)
-			quit();
-		else
-			services.shutdown();
+		quit();
 		if (operaRunner != null)
 			operaRunner.shutdown();
 	}
