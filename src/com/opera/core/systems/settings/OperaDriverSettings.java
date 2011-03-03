@@ -42,6 +42,8 @@ public class OperaDriverSettings {
 
 	private boolean useOperaIdle = true;
 
+	private boolean autostart = true;
+
 	//Generated getters and setters:
 	public boolean doRunOperaLauncherFromOperaDriver() {
 		return runOperaLauncherFromOperaDriver;
@@ -189,5 +191,17 @@ public class OperaDriverSettings {
 	public boolean getUseOperaIdle() {
 	  return useOperaIdle;
 	}
+
+  /**
+   * Whether OperaDriver should try and automatically launch Opera.
+   * @param autostart true to autostart, false to wait for connection
+   */
+  public void setAutostart(boolean autostart) {
+    this.autostart = autostart;
+  }
+
+  public boolean getAutostart() {
+    return autostart;
+  }
 
 }
