@@ -36,6 +36,7 @@ import com.opera.core.systems.scope.internal.OperaIntervals;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo;
 import com.opera.core.systems.scope.protos.EcmascriptProtos.ReadyStateChange;
 import com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeInfo;
+import com.opera.core.systems.scope.protos.ScopeProtos;
 import com.opera.core.systems.scope.protos.ScopeProtos.ClientInfo;
 import com.opera.core.systems.scope.protos.ScopeProtos.HostInfo;
 import com.opera.core.systems.scope.protos.ScopeProtos.ServiceResult;
@@ -53,6 +54,7 @@ import com.opera.core.systems.scope.services.ums.SystemInputManager;
 import com.opera.core.systems.scope.services.ums.UmsServices;
 import com.opera.core.systems.scope.stp.StpConnection;
 import com.opera.core.systems.scope.stp.StpThread;
+import com.opera.core.systems.util.VersionUtil;
 
 /**
  * Implements the interface to the Scope protocol.
@@ -71,6 +73,7 @@ public class ScopeServices implements IConnectionHandler {
   private IDesktopUtils desktopUtils;
   private IPrefs prefs;
   private SystemInputManager systemInputManager;
+  private HostInfo hostInfo;
   private ICookieManager cookieManager;
 
   private Map<String, String> versions;
@@ -177,8 +180,8 @@ public class ScopeServices implements IConnectionHandler {
     waitForHandshake();
 
     boolean enableDebugger = (OperaIntervals.ENABLE_DEBUGGER.getValue() != 0);
-    HostInfo info = getHostInfo();
-    createUmsServices(enableDebugger, info);
+    hostInfo = getHostInfo();
+    createUmsServices(enableDebugger, hostInfo);
 
     connect();
 
@@ -499,9 +502,21 @@ public class ScopeServices implements IConnectionHandler {
   }
 
   public boolean isOperaIdleAvailable() {
-    for (String service : listedServices) {
-      if (service.equals("core")) return true;
+    for( ScopeProtos.Service service : hostInfo.getServiceListList() )
+    {
+      if( service.getName().equals("core") )
+      {
+        String version = service.getVersion();
+
+        // Version 1.1 introduced some important fixes
+        // we don't want to use idle detection without this.
+        boolean ok = VersionUtil.compare(version,"1.1") >= 0;
+        logger.fine("Core service version check: " + ok + " (" + version + ")");
+        return ok;
+      }
     }
+
+    logger.fine("Core service not found");
     return false;
   }
 
