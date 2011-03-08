@@ -78,7 +78,10 @@ public class OperaLauncherRunner implements OperaRunner{
 			while(tokanizer.hasMoreTokens()){
 				stringArray.add(tokanizer.nextToken());
 			}
-
+			
+			if (!stringArray.contains("-autotestmode"))
+				stringArray.add("-autotestmode");
+			
 			launcherRunner = new OperaLauncherBinary(this.settings.getOperaLauncherBinary(),stringArray.toArray(new String[stringArray.size()]));
 		}
 
