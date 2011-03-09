@@ -165,7 +165,10 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 	 * Shutdown webdriver, will kill opera and such if running.
 	 */
 	public void shutdown(){
-		quit();
+		if(settings.getNoQuit())
+		  services.shutdown();
+		else
+		  quit();
 		if (operaRunner != null)
 			operaRunner.shutdown();
 	}
@@ -1062,3 +1065,4 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 	}
 
 }
+
