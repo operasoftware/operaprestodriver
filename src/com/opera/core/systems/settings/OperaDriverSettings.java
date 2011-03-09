@@ -32,10 +32,6 @@ public class OperaDriverSettings {
 
 	private Integer operaLauncherXvfbDisplay; //could be null
 
-	private String largePrefsFolder;
-	private String smallPrefsFolder;
-	private String cachePrefsFolder;
-
 	private boolean noRestart = false;
 	private boolean noQuit = false;
 	private boolean guessOperaPath = true;
@@ -133,30 +129,6 @@ public class OperaDriverSettings {
 	@Deprecated
 	public boolean getNoQuit() {
 		return noQuit;
-	}
-
-	public void setLargePrefsFolder(String largePrefsFolder) {
-		this.largePrefsFolder = largePrefsFolder;
-	}
-
-	public String getLargePrefsFolder() {
-		return largePrefsFolder;
-	}
-
-	public void setSmallPrefsFolder(String smallPrefsFolder) {
-		this.smallPrefsFolder = smallPrefsFolder;
-	}
-
-	public String getSmallPrefsFolder() {
-		return smallPrefsFolder;
-	}
-
-	public void setCachePrefsFolder(String cachePrefsFolder) {
-		this.cachePrefsFolder = cachePrefsFolder;
-	}
-
-	public String getCachePrefsFolder() {
-		return cachePrefsFolder;
 	}
 
 	/**

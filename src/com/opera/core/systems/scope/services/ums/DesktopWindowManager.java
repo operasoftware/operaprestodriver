@@ -132,6 +132,7 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 		return null;
 	}
 
+	// Note: This grabs the first window with a matching name, there might be more
 	public QuickWindow getQuickWindow(QuickWidgetSearchType property, String value)
 	{
 		List<QuickWindow> windows = getQuickWindowList();
