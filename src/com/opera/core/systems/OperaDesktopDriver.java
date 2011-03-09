@@ -648,7 +648,7 @@ public class OperaDesktopDriver extends OperaDriver {
 				startOpera();
 			}
 			else {
-				System.out.println("\nWarning: Running tests in main user profile");
+				logger.warning("\nWarning: Running tests in main user profile");
 			}
 		}
 
