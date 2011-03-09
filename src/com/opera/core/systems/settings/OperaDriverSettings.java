@@ -32,15 +32,13 @@ public class OperaDriverSettings {
 
 	private Integer operaLauncherXvfbDisplay; //could be null
 
-	private String largePrefsFolder;
-	private String smallPrefsFolder;
-	private String cachePrefsFolder;
-
 	private boolean noRestart = false;
 	private boolean noQuit = false;
 	private boolean guessOperaPath = true;
 
 	private boolean useOperaIdle = true;
+
+	private boolean autostart = true;
 
 	//Generated getters and setters:
 	public boolean doRunOperaLauncherFromOperaDriver() {
@@ -137,30 +135,6 @@ public class OperaDriverSettings {
 		return noQuit;
 	}
 
-	public void setLargePrefsFolder(String largePrefsFolder) {
-		this.largePrefsFolder = largePrefsFolder;
-	}
-
-	public String getLargePrefsFolder() {
-		return largePrefsFolder;
-	}
-
-	public void setSmallPrefsFolder(String smallPrefsFolder) {
-		this.smallPrefsFolder = smallPrefsFolder;
-	}
-
-	public String getSmallPrefsFolder() {
-		return smallPrefsFolder;
-	}
-
-	public void setCachePrefsFolder(String cachePrefsFolder) {
-		this.cachePrefsFolder = cachePrefsFolder;
-	}
-
-	public String getCachePrefsFolder() {
-		return cachePrefsFolder;
-	}
-
 	/**
 	 * @deprecated
 	 * @param noRestart
@@ -193,5 +167,17 @@ public class OperaDriverSettings {
 	public boolean getUseOperaIdle() {
 	  return useOperaIdle;
 	}
+
+  /**
+   * Whether OperaDriver should try and automatically launch Opera.
+   * @param autostart true to autostart, false to wait for connection
+   */
+  public void setAutostart(boolean autostart) {
+    this.autostart = autostart;
+  }
+
+  public boolean getAutostart() {
+    return autostart;
+  }
 
 }

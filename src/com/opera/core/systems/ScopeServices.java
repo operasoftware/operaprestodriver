@@ -490,9 +490,9 @@ public class ScopeServices implements IConnectionHandler {
 	}
 
 	public void waitForOperaIdle(long timeout) {
-		logger.info("OperaIdle: Waiting for");
+		logger.fine("OperaIdle: Waiting for");
 		waitState.waitForOperaIdle(timeout);
-		logger.info("OperaIdle: Finished waiting");
+		logger.fine("OperaIdle: Finished waiting");
   }
 
 	public void waitStart() {

@@ -44,6 +44,10 @@ public class OperaDesktopDriver extends OperaDriver {
 	private IDesktopUtils desktopUtils;
 	private ProfileUtils profileUtils;
 	private boolean	firstTestRun = true;
+	
+	private String largePreferencesPath;
+	private String smallPreferencesPath;
+	private String cachePreferencesPath;
 
 	public OperaDesktopDriver() {
     super();
@@ -65,10 +69,10 @@ public class OperaDesktopDriver extends OperaDriver {
 	private void setPrefsPaths() {
 		// Opera will be running at this point so we can retrieve and
 		// store all the profile folders
-		settings.setLargePrefsFolder(getLargePreferencesPath());
-		settings.setSmallPrefsFolder(getSmallPreferencesPath());
-		settings.setCachePrefsFolder(getCachePreferencesPath());
-		profileUtils = new ProfileUtils(settings);
+		largePreferencesPath = getLargePreferencesPath();
+		smallPreferencesPath = getSmallPreferencesPath();
+		cachePreferencesPath = getCachePreferencesPath();
+		profileUtils = new ProfileUtils(largePreferencesPath, smallPreferencesPath, cachePreferencesPath, settings);
 	}
 
 	private void setServices() {
@@ -412,7 +416,10 @@ public class OperaDesktopDriver extends OperaDriver {
 	 * @return large preferences path
 	 */
 	public String getLargePreferencesPath() {
-		return desktopUtils.getLargePreferencesPath();
+		if (largePreferencesPath == null)
+			return desktopUtils.getLargePreferencesPath();
+		else
+			return largePreferencesPath;
 	}
 
 	/**
@@ -420,7 +427,10 @@ public class OperaDesktopDriver extends OperaDriver {
 	 * @return small preferences path
 	 */
 	public String getSmallPreferencesPath() {
-		return desktopUtils.getSmallPreferencesPath();
+		if (smallPreferencesPath == null)
+			return desktopUtils.getSmallPreferencesPath();
+		else
+			return smallPreferencesPath;
 	}
 
 	/**
@@ -428,7 +438,10 @@ public class OperaDesktopDriver extends OperaDriver {
 	 * @return cache preferences path
 	 */
 	public String getCachePreferencesPath() {
-		return desktopUtils.getCachePreferencesPath();
+		if (cachePreferencesPath == null)
+			return desktopUtils.getCachePreferencesPath();
+		else
+			return cachePreferencesPath;
 	}
 
 	/**
@@ -535,7 +548,7 @@ public class OperaDesktopDriver extends OperaDriver {
 		if (services.getConnection() == null)
 			throw new CommunicationException("waiting for a window failed because Opera is not connected.");
 
-		return services.waitForDesktopWindowShown(windowName, OperaIntervals.PAGE_LOAD_TIMEOUT.getValue());
+		return services.waitForDesktopWindowShown(windowName, OperaIntervals.WINDOW_EVENT_TIMEOUT.getValue());
 	}
 
 	/**
@@ -550,7 +563,7 @@ public class OperaDesktopDriver extends OperaDriver {
 		if (services.getConnection() == null)
 			throw new CommunicationException("waiting for a window failed because Opera is not connected.");
 
-		return services.waitForDesktopWindowUpdated(windowName, OperaIntervals.PAGE_LOAD_TIMEOUT.getValue());
+		return services.waitForDesktopWindowUpdated(windowName, OperaIntervals.WINDOW_EVENT_TIMEOUT.getValue());
 	}
 
 	/**
@@ -565,7 +578,7 @@ public class OperaDesktopDriver extends OperaDriver {
 		if (services.getConnection() == null)
 			throw new CommunicationException("waiting for a window failed because Opera is not connected.");
 
-		return services.waitForDesktopWindowActivated(windowName, OperaIntervals.PAGE_LOAD_TIMEOUT.getValue());
+		return services.waitForDesktopWindowActivated(windowName, OperaIntervals.WINDOW_EVENT_TIMEOUT.getValue());
 
 	}
 
@@ -581,7 +594,7 @@ public class OperaDesktopDriver extends OperaDriver {
 		if (services.getConnection() == null)
 			throw new CommunicationException("waiting for a window failed because Opera is not connected.");
 
-		return services.waitForDesktopWindowClosed(windowName, OperaIntervals.PAGE_LOAD_TIMEOUT.getValue());
+		return services.waitForDesktopWindowClosed(windowName, OperaIntervals.WINDOW_EVENT_TIMEOUT.getValue());
 	}
 
 	/**
@@ -607,6 +620,8 @@ public class OperaDesktopDriver extends OperaDriver {
 	 * Copies prefs in folder newPrefs to the profile for the connected Opera instance.
 	 * Will first quit Opera, then delete the old prefs, and copy the new prefs over, then
 	 * restart Opera with the new prefs.
+	 * 
+	 * Does nothing if profile used is default main user profile
 	 *
 	 * @param newPrefs - path to where new prefs to be copied into the prefs folders are located
 	 */
@@ -617,16 +632,24 @@ public class OperaDesktopDriver extends OperaDriver {
 		// Always delete and copy over a test profile except for when running
 		// the first test which doesn't have a profile to copy over
 		if (!firstTestRun || new File(newPrefs).exists()) {
-			// Quit and wait for opera to quit properly
-			quitOpera();
+			if (!profileUtils.isMainProfile(smallPreferencesPath) &&
+					!profileUtils.isMainProfile(largePreferencesPath) &&
+					!profileUtils.isMainProfile(cachePreferencesPath))
+			{
+				// Quit and wait for opera to quit properly
+				quitOpera();
 
-			// Cleanup old profile
-			profileUtils.deleteProfile();
-			// Copy in the profile for the test (only if it exists)
-			profileUtils.copyProfile(newPrefs);
-
-			// Relaunch Opera and the webdriver service connection
-			startOpera();
+				// Cleanup old profile
+				profileUtils.deleteProfile();
+				// Copy in the profile for the test (only if it exists)
+				profileUtils.copyProfile(newPrefs);
+				
+				// Relaunch Opera and the webdriver service connection
+				startOpera();
+			}
+			else {
+				logger.warning("\nWarning: Running tests in main user profile");
+			}
 		}
 
 		// No longer the first test run
@@ -643,10 +666,13 @@ public class OperaDesktopDriver extends OperaDriver {
 	public void deleteOperaPrefs() {
 		// Only delete if Opera is currently not running
 		// Don't delete in no-launcher mode
-		if (operaRunner != null && !operaRunner.isOperaRunning())
+		if (operaRunner != null && !operaRunner.isOperaRunning()) {
+			// Will only delete profile if it's not a default main profile
 			profileUtils.deleteProfile();
-		else
+		}
+		else {
 			logger.warning("Cannot delete profile while Opera is running");
+		}
 	}
 
 	public int getPid() {

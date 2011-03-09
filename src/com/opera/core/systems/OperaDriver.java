@@ -100,9 +100,10 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 	private String version;
 
 	public OperaDriver() {
-		this(true);
+		this(makeSettings());
 	}
 
+	@Deprecated
 	public OperaDriver(boolean autoStart) {
 		this(autoStart ? makeSettings() : null);
 	}
@@ -114,25 +115,29 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
     if (settings != null) {
       this.settings = settings;
 
-      OperaPaths paths = new OperaPaths();
-      if (settings.guessOperaPath() && settings.getOperaBinaryLocation() == null) {
-        settings.setOperaBinaryLocation(paths.operaPath());
-      } else if (settings.getOperaBinaryLocation() == null) {
-    	  // Don't guess, only check environment variable
-    	  String path = System.getenv("OPERA_PATH");
-    	  if (path != null && path.length() > 0)
-    		  settings.setOperaBinaryLocation(path);
-      }
+      if (settings.getAutostart() == true) {
+        OperaPaths paths = new OperaPaths();
 
-      if (settings.getOperaLauncherBinary() == null) {
-        settings.setOperaLauncherBinary(paths.launcherPath());
-      }
+        if (settings.guessOperaPath() && settings.getOperaBinaryLocation() == null) {
+          settings.setOperaBinaryLocation(paths.operaPath());
+        } else if (settings.getOperaBinaryLocation() == null) {
+      	  // Don't guess, only check environment variable
+      	  String path = System.getenv("OPERA_PATH");
+      	  if (path != null && path.length() > 0)
+      		  settings.setOperaBinaryLocation(path);
+        }
 
-      if (settings.getOperaBinaryLocation() != null)
-    	  this.operaRunner = new OperaLauncherRunner(this.settings);
+        if (settings.getOperaLauncherBinary() == null) {
+          settings.setOperaLauncherBinary(paths.launcherPath());
+        }
+
+        if (settings.getOperaBinaryLocation() != null)
+          this.operaRunner = new OperaLauncherRunner(this.settings);
+      }
     } else {
       // Create a default settings object
       this.settings = new OperaDriverSettings();
+      this.settings.setAutostart(false);
     }
 
     init();
@@ -145,7 +150,6 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
    */
   private static OperaDriverSettings makeSettings() {
     OperaDriverSettings settings = new OperaDriverSettings();
-    settings.setRunOperaLauncherFromOperaDriver(true);
 
     OperaPaths paths = new OperaPaths();
 
@@ -161,10 +165,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 	 * Shutdown webdriver, will kill opera and such if running.
 	 */
 	public void shutdown(){
-		if(isDriverStarted)
-			quit();
-		else
-			services.shutdown();
+		quit();
 		if (operaRunner != null)
 			operaRunner.shutdown();
 	}
@@ -1061,4 +1062,3 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 	}
 
 }
-

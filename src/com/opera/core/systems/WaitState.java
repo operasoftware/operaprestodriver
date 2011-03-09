@@ -245,7 +245,7 @@ public class WaitState {
     {
         synchronized (lock)
         {
-            logger.info("OperaIdle: Got message");
+            logger.fine("OperaIdle: Got message");
 
             logger.fine("Event: onOperaIdle");
             events.add(new ResultItem(WaitResult.EVENT_OPERA_IDLE,0));//0 is important to match later
