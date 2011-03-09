@@ -162,14 +162,15 @@ public class OperaDesktopDriver extends OperaDriver {
 	public void quitOpera() {
 		// running opera under the launcher
 		if (operaRunner != null){
-			if (operaRunner.isOperaRunning()) {
+			if (operaRunner.isOperaRunning() || operaRunner.hasOperaCrashed()) {
 				// Cut off the services connection to free the port
 				services.shutdown();
 
 				// Quit Opera
 				operaRunner.stopOpera();
-			}
+			} 
 		} else {
+			
 			// Quit with action as opera wasn't started with the launcher
 			String operaPath = desktopUtils.getOperaPath();
 			logger.info("OperaBinaryLocation retrieved from Opera: " + operaPath);
