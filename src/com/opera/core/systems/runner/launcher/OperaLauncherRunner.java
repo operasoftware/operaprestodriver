@@ -47,7 +47,7 @@ public class OperaLauncherRunner implements OperaRunner{
 
 	private OperaDriverSettings settings;
 	private OperaLauncherProtocol launcherProtocol = null;
-	private String chrashlog = null;
+	private String crashlog = null;
 
 	public OperaLauncherRunner(OperaDriverSettings settings){
 		this.settings = settings;
@@ -69,6 +69,7 @@ public class OperaLauncherRunner implements OperaRunner{
 				stringArray.add("-display");
 				stringArray.add(":" + Integer.toString(this.settings.getOperaLauncherXvfbDisplay()));
 			}
+			
 			if (this.settings.getNoQuit())
 				stringArray.add("-noquit");
 			stringArray.add("-bin");
@@ -157,11 +158,11 @@ public class OperaLauncherRunner implements OperaRunner{
 	}
 
 	public boolean hasOperaCrashed() {
-		return chrashlog != null;
+		return crashlog != null;
 	}
 
 	public String getOperaCrashlog() {
-		return chrashlog;
+		return crashlog;
 	}
 
 	public void shutdown() {
@@ -221,12 +222,12 @@ public class OperaLauncherRunner implements OperaRunner{
         StatusType status = response.getStatus();
         if(status == StatusType.CRASHED){
         	if(response.hasCrashlog()){
-        		chrashlog = response.getCrashlog().toStringUtf8();
+        		crashlog = response.getCrashlog().toStringUtf8();
         	} else {
-        		chrashlog = "";// != NULL :-|
+        		crashlog = "";// != NULL :-|
         	}
         } else {
-        	chrashlog = null;
+        	crashlog = null;
         }
 
         //TODO: send something to the operalistener....
