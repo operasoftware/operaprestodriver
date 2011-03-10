@@ -23,7 +23,7 @@ package com.opera.core.systems.scope.internal;
  */
 public enum OperaIntervals {
 	RESPONSE_TIMEOUT(5000),
-	PAGE_LOAD_TIMEOUT(20000),
+	PAGE_LOAD_TIMEOUT(60000),
 	WINDOW_EVENT_TIMEOUT(5000),
 	OPERA_IDLE_TIMEOUT(5000),
 	POLL_INVERVAL(10),
