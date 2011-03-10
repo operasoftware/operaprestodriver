@@ -428,7 +428,10 @@ public class StpConnection implements SocketListener {
         	case STP:
         		//try to read size,
         		buffer.position(0);
-        		//FIXME Do we have enough to read size?
+        		if (buffer.limit() <= 0) {
+        		  logger.fine("STP: Empty buffer");
+        		  break;
+        		}
                 int messageSize = readRawVarint32(buffer);//read part of buffer
                 bytesWeHaveBeenreading = buffer.position();
                 buffer.position(0);
