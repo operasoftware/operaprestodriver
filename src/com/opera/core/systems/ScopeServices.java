@@ -30,6 +30,7 @@ import com.google.protobuf.InvalidProtocolBufferException;
 import com.opera.core.systems.model.ICommand;
 import com.opera.core.systems.runner.OperaRunner;
 import com.opera.core.systems.scope.ScopeCommand;
+import com.opera.core.systems.scope.exceptions.CommunicationException;
 import com.opera.core.systems.scope.handlers.IConnectionHandler;
 import com.opera.core.systems.scope.internal.OperaIntervals;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo;
@@ -159,7 +160,7 @@ public class ScopeServices implements IConnectionHandler {
 
 	/**
    * Creates the scope server on specified address and port
-   * Enables the required services for webdriver 
+   * Enables the required services for webdriver
 	 * @param versions
 	 * @param manualConnect
 	 * @throws IOException
@@ -230,6 +231,10 @@ public class ScopeServices implements IConnectionHandler {
 	}
 
 	public void shutdown() {
+	  // This can get called twice if we get a DISCONNECTED exception when
+	  // closing down Opera. Check if we're already shutting down and bail.
+	  if (shuttingDown) return;
+
 		shuttingDown = true;
 		if (connection != null) {
 			connection.close();
@@ -380,7 +385,11 @@ public class ScopeServices implements IConnectionHandler {
 			else
 				exec.action("Exit");
 		} catch (Exception e) {
-			logger.info("Caught exception when trying to shut down (cannot send quit). : " + e.getMessage());
+		  // We expect a CommunicationException here, because as Opera is shutting
+		  // down the connection will be closed.
+		  if (!(e instanceof CommunicationException)) {
+        logger.info("Caught exception when trying to shut down : " + e.getMessage());
+		  }
 		}
 
 		if (runner != null && pid > 0) {

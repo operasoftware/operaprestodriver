@@ -28,7 +28,6 @@ public class OperaDriverTest extends TestBase
 	{
     driver = new TestOperaDriver();
 		Assert.assertTrue(driver.getWindowCount() == 1);
-		System.out.println("opera");
 	}
 
   @Test
