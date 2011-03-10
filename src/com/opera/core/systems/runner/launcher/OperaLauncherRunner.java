@@ -54,10 +54,10 @@ public class OperaLauncherRunner implements OperaRunner{
 
 		if(settings.getOperaLauncherBinary() == null)
 			throw new WebDriverException("Launcher not available, please set it in path or use the JAR file");
-		
+
 		if(settings.getOperaBinaryLocation() == null)
 			throw new WebDriverException("You need to set Opera's path to use opera-launcher");
-		
+
 		if(this.settings.doRunOperaLauncherFromOperaDriver()){
 
 			List<String> stringArray = new ArrayList<String>();
@@ -74,17 +74,16 @@ public class OperaLauncherRunner implements OperaRunner{
 			stringArray.add("-bin");
 			stringArray.add(this.settings.getOperaBinaryLocation());
 
-			// Enable auto test mode, always starts Opera on opera:debug and prevents
-			// interrupting diagloges appearing
-			stringArray.add("-autotestmode");
 			StringTokenizer tokanizer = new StringTokenizer(this.settings.getOperaBinaryArguments(), " ");
 			while(tokanizer.hasMoreTokens()){
 				stringArray.add(tokanizer.nextToken());
 			}
-			
+
+			// Enable auto test mode, always starts Opera on opera:debug and prevents
+			// interrupting dialogues appearing
 			if (!stringArray.contains("-autotestmode"))
 				stringArray.add("-autotestmode");
-			
+
 			launcherRunner = new OperaLauncherBinary(this.settings.getOperaLauncherBinary(),stringArray.toArray(new String[stringArray.size()]));
 		}
 
