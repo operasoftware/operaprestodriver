@@ -605,7 +605,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 
 	//FIXME when timeout has completed, send 'stop' command?
 	public void waitForLoadToComplete() {
-		if(services.isOperaIdleAvailable()){
+		if(useOperaIdle()){
 			//new opera wait for page
 			services.waitForOperaIdle(OperaIntervals.PAGE_LOAD_TIMEOUT.getValue());
 		} else {
