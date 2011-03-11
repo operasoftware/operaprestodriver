@@ -238,6 +238,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
 
     String oldUrl = getCurrentUrl();
 
+		services.captureOperaIdle();
     actionHandler.get(url);
 
     if (!url.replace(oldUrl, "").startsWith("#")) {
@@ -638,11 +639,13 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
 
   private class OperaNavigation implements Navigation {
     public void back() {
+		  services.captureOperaIdle();
       exec.action("Back");
       waitForLoadToComplete();
     }
 
     public void forward() {
+		  services.captureOperaIdle();
       exec.action("Forward");
       waitForLoadToComplete();
     }
@@ -656,6 +659,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
     }
 
     public void refresh() {
+		  services.captureOperaIdle();
       exec.action("Reload");
       waitForLoadToComplete();
     }

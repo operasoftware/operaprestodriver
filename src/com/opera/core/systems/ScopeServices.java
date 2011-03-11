@@ -505,6 +505,34 @@ public class ScopeServices implements IConnectionHandler {
     return false;
   }
 
+	/**
+	 * Enables the capturing on OperaIdle events.
+	 *
+	 * Sometimes when executing a command OperaIdle events will fire before
+	 * the response is received for the sent command. This results in missing
+	 * the Idle events, and later probably hitting a timeout.
+	 *
+	 * To prevent this you can call this function which will enable the tracking
+	 * of any Idle events received between now and when you call
+	 * waitForOperaIdle(). If Idle events have been received then
+	 * waitForOperaIdle() will return immediately.
+	 */
+	public void captureOperaIdle() {
+	  logger.fine("Capturing OperaIdle");
+	  waitState.captureOperaIdle();
+	}
+
+  /**
+   * Waits for an OperaIdle event before continuing.
+   *
+   * If captureOperaIdle() has been called since the last call of
+   * waitForOperaIdle(), and one or more OperaIdle events have occurred then
+   * this function will return immediately.
+   *
+   * After calling this function the capturing of OperaIdle events is
+   * disabled until the next call of captureOperaIdle()
+   * @param timeout Time in milliseconds to wait before aborting
+   */
   public void waitForOperaIdle(long timeout) {
     logger.fine("OperaIdle: Waiting for");
     waitState.waitForOperaIdle(timeout);
