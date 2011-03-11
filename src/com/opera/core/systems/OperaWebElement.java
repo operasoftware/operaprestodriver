@@ -186,14 +186,12 @@ public class OperaWebElement implements RenderedWebElement, SearchContext, Locat
 			if(!isDisplayed())
 				throw new ElementNotVisibleException("You can't click an element that is not displayed");
 		}
+
+		parent.getScopeServices().captureOperaIdle();
 		parent.actionHandler.click(this, "");
 		//workaround for click synchronization problems
 		sleep(OperaIntervals.EXEC_SLEEP.getValue());
 		parent.waitForLoadToComplete();
-		//TODO remove below once we get proper wm support
-		//debugger.executeJavascript("window.focus()");
-		//TODO this one must be tested throughly
-		//parent.gc();
 	}
 
 	/**
@@ -202,6 +200,7 @@ public class OperaWebElement implements RenderedWebElement, SearchContext, Locat
 	 * @param y The distance from the top to click
 	 */
 	public void click(int x, int y) {
+		parent.getScopeServices().captureOperaIdle();
 		parent.actionHandler.click(this, x, y);
 		parent.waitForLoadToComplete();
 	}
@@ -337,6 +336,8 @@ public class OperaWebElement implements RenderedWebElement, SearchContext, Locat
 		if(getTagName().equalsIgnoreCase("input") && (hasAttribute("type") && getAttribute("type").equals("file"))) {
 			click();
 		} else executeMethod("locator.focus()");
+
+		parent.getScopeServices().captureOperaIdle();
         for (CharSequence seq : keysToSend) {
         	if(seq instanceof Keys)
         		execService.key(OperaKeys.get(((Keys)seq).name()));
@@ -366,6 +367,7 @@ public class OperaWebElement implements RenderedWebElement, SearchContext, Locat
 			Integer id = debugger.executeScriptOnObject("return locator.parentNode", objectId);
 			OperaWebElement parentNode = new OperaWebElement(this.parent, id.intValue());
 
+			parent.getScopeServices().captureOperaIdle();
 			if (parentNode.getAttribute("multiple") == null) {
 				if (OperaFlags.ENABLE_CHECKS) {
 					if (!parentNode.isDisplayed())
@@ -400,6 +402,7 @@ public class OperaWebElement implements RenderedWebElement, SearchContext, Locat
 							"} return element;", this);
 		ScriptResult result = (ScriptResult) debugger.scriptExecutor("return arguments[0];", element);
 
+		parent.getScopeServices().captureOperaIdle();
 		if(result.getClassName().equals("HTMLFormElement")) {
 			debugger.callFunctionOnObject("if(locator.onsubmit == undefined || locator.onsubmit()) locator.submit()", element.getObjectId(), false);
 		}

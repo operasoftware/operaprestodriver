@@ -241,6 +241,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 
 		String oldUrl = getCurrentUrl();
 
+		services.captureOperaIdle();
 		actionHandler.get(url);
 
 		if (!url.replace(oldUrl, "").startsWith("#")) {
@@ -607,7 +608,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 	public void waitForLoadToComplete() {
 		if(useOperaIdle()){
 			//new opera wait for page
-			services.waitForOperaIdle(OperaIntervals.PAGE_LOAD_TIMEOUT.getValue());
+			services.waitForOperaIdle(OperaIntervals.OPERA_IDLE_TIMEOUT.getValue());
 		} else {
 			//old bad opera wait for page
 			long endTime = System.currentTimeMillis() + OperaIntervals.PAGE_LOAD_TIMEOUT.getValue();
@@ -630,11 +631,13 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 
 	private class OperaNavigation implements Navigation {
 		public void back() {
+		  services.captureOperaIdle();
 			exec.action("Back");
 			waitForLoadToComplete();
 		}
 
 		public void forward() {
+		  services.captureOperaIdle();
 			exec.action("Forward");
 			waitForLoadToComplete();
 		}
@@ -648,6 +651,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 		}
 
 		public void refresh() {
+		  services.captureOperaIdle();
 			exec.action("Reload");
 			waitForLoadToComplete();
 		}
@@ -923,6 +927,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 	}
 
 	public void executeActions(OperaAction action) {
+            services.captureOperaIdle();
             List<UserInteraction> actions = action.getActions();
             for (UserInteraction userInteraction : actions) {
                 userInteraction.execute(this);
@@ -942,6 +947,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById, Finds
 		keyUp(key);
 
 		if(key.equalsIgnoreCase("enter")) {
+			services.captureOperaIdle();
 			sleep(OperaIntervals.EXEC_SLEEP.getValue());
 			waitForLoadToComplete();
 		}
