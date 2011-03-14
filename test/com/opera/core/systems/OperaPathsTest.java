@@ -4,10 +4,13 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNotSame;
 
+import java.io.File;
 import java.lang.reflect.Field;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+
+import junit.framework.Assert;
 
 import org.junit.Test;
 
@@ -22,7 +25,51 @@ public class OperaPathsTest {
 
   @Test
   public void testLauncherPath() throws Exception {
-    assertNotNull(paths.operaPath());
+    assertNotNull(paths.launcherPath());
+  }
+
+  /**
+   * Test that the launcher is extracted correctly
+   */
+  @Test
+  public void testNoLauncher() throws Exception {
+    File launcher = new File(paths.launcherPath());
+    launcher.delete();
+
+    Assert.assertFalse(launcher.exists());
+
+    paths.launcherPath();
+
+    Assert.assertTrue(launcher.exists());
+  }
+
+  /**
+   * Test that the launcher is re-extracted when the hashes differ
+   */
+  @Test
+  public void testNoMatch() throws Exception {
+    File launcher = new File(paths.launcherPath());
+    launcher.delete();
+
+    Assert.assertFalse(launcher.exists());
+    launcher.createNewFile();
+    Assert.assertEquals(0, launcher.length());
+
+    paths.launcherPath();
+
+    Assert.assertNotSame(0, launcher.length());
+  }
+
+  /**
+   * Test that the launcher isn't extracted when it is the same
+   */
+  @Test
+  public void testExists() throws Exception {
+    File launcher = new File(paths.launcherPath());
+    long modified = launcher.lastModified();
+
+    paths.launcherPath();
+    Assert.assertEquals(modified, launcher.lastModified());
   }
 
   @Test

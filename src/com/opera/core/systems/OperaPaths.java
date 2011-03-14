@@ -31,6 +31,11 @@ import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.os.CommandLine;
 
+import java.io.*;
+import java.security.MessageDigest;
+import java.util.Arrays;
+import java.util.logging.Logger;
+
 /**
  * This class tries to find the paths to Opera and Opera Launcher on any
  * system. If it cannot find a launcher it will extract the appropriate one
@@ -40,6 +45,8 @@ import org.openqa.selenium.os.CommandLine;
  *
  */
 public class OperaPaths {
+
+  private final Logger logger = Logger.getLogger(this.getClass().getName());
 
   /**
    * This method will try and find Opera on any system. It takes the following
@@ -108,52 +115,49 @@ public class OperaPaths {
 
 		String executablePath = null;
 
+		// Get the launcher path
 		URL res = OperaDriver.class.getClassLoader().getResource("launcher/" + launcherName);
 		if (res != null) {
 			String url = res.toExternalForm();
+			// If the launcher is inside the jar we will need to copy it out
 			if ((url.startsWith("jar:")) || (url.startsWith("wsjar:"))) {
-				int idx = url.lastIndexOf('!');
-				String filePortion = url.substring(url.indexOf(':') + 1, idx);
+				executablePath = FileUtils.getUserDirectoryPath() + File.separatorChar + ".launcher" + File.separatorChar + launcherName;
+				File cur_launcher = new File(executablePath);
 
-				while (filePortion.startsWith("/")) {
-					filePortion = filePortion.substring(1);
-				}
-
-				if (filePortion.startsWith("file:/")) {
-					filePortion = filePortion.substring(6);
-
-					if (filePortion.startsWith("//"))
-						filePortion = filePortion.substring(2);
-
+				// Whether we need to copy a new launcher across, either because
+				// it doesn't currently exist, or because its hash differs from
+				// our launcher
+				boolean copy = false;
+				if (!cur_launcher.exists()) {
+				  copy = true;
+				} else {
 					try {
-						filePortion = URLDecoder.decode(filePortion, "UTF-8");
-					} catch (UnsupportedEncodingException ex) {
-						throw new WebDriverException("Can't decode path name, UTF-8 is not supported");
-					}
-
-					File jarFile = new File(filePortion);
-					executablePath = FileUtils.getUserDirectoryPath() + File.separatorChar + ".launcher" + File.separatorChar + launcherName;
-
-					File executable = new File(executablePath);
-
-					if ((!executable.exists()) || FileUtils.isFileNewer(jarFile, executable)) {
-						try {
-							if (!executable.exists()) FileUtils.touch(executable);
-
-							InputStream is = res.openStream();
-							OutputStream os = new FileOutputStream(executable);
-
-							IOUtils.copy(is, os);
-
-							is.close();
-							os.close();
-
-							executable.setLastModified(jarFile.lastModified());
-						} catch (IOException e) {
-							throw new WebDriverException("Cant write file to disk : " + e.getMessage());
-						}
+						// Copy if launchers don't match
+						copy = !Arrays.equals(md5(executablePath), md5(res.openStream()));
+					} catch (Exception e) {
+						copy = true;
 					}
 				}
+
+				if (copy == true) {
+					try {
+						if (!cur_launcher.exists()) FileUtils.touch(cur_launcher);
+
+						InputStream is = res.openStream();
+						OutputStream os = new FileOutputStream(cur_launcher);
+
+						IOUtils.copy(is, os);
+
+						is.close();
+						os.close();
+
+						cur_launcher.setLastModified(cur_launcher.lastModified());
+					} catch (IOException e) {
+						throw new WebDriverException("Cant write file to disk : " + e.getMessage());
+					}
+					logger.fine("New launcher copied");
+				}
+			// If launcher is not inside jar we can run it from it's current location
 			} else if (url.startsWith("file:")) {
 				File f;
 				try {
@@ -216,5 +220,28 @@ public class OperaPaths {
 
     File file = new File(path);
     return (file.exists());
+  }
+
+  /**
+   * Get the MD5 hash of the given stream.
+   * @param fis The input stream to use
+   * @return A byte array of the MD5 hash
+   * @throws Exception
+   */
+  private static byte[] md5(InputStream fis) throws Exception {
+    byte[] buffer = new byte[1024];
+    MessageDigest complete = MessageDigest.getInstance("MD5");
+    int numRead;
+    do {
+      numRead = fis.read(buffer);
+      if (numRead > 0) {
+        complete.update(buffer, 0, numRead);
+      }
+    } while (numRead != -1);
+    fis.close();
+    return complete.digest();
+  }
+  private static byte[] md5(String filename) throws Exception {
+    return md5(new FileInputStream(filename));
   }
 }
