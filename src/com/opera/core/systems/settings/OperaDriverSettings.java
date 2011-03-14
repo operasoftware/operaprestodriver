@@ -36,7 +36,7 @@ public class OperaDriverSettings {
 	private boolean noQuit = false;
 	private boolean guessOperaPath = true;
 
-	private boolean useOperaIdle = true;
+	private boolean useOperaIdle = false;
 
 	private boolean autostart = true;
 
