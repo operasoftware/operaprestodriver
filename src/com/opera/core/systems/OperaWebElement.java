@@ -587,6 +587,18 @@ public class OperaWebElement implements RenderedWebElement, SearchContext, Locat
 		return reply.getMd5();
 	}
 
+	 /**
+   * Take a screenshot of the area this element's bounding-box covers. Saves a
+   * copy of the image to the given filename, and returns an MD5 hash of the
+   * @param timeout The number of milliseconds to wait before taking the
+   * screenshot
+   * @param hashes A previous screenshot MD5 hash. If it matches the hash
+   * of this screenshot then no image data is returned.
+   */
+  public ScreenShotReply saveScreenshot(long timeout, String... hashes) {
+    Canvas canvas = buildCanvas();
+    return execService.screenWatcher(canvas, timeout, true, hashes);
+  }
 
 	public boolean containsColor(OperaColors... colors){
 		//List<String> keys = Arrays.asList(hashes);

@@ -1,8 +1,11 @@
 package com.opera.core.systems;
 
+import static org.junit.Assert.*;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.zip.Adler32;
 
 import org.junit.AfterClass;
@@ -127,6 +130,21 @@ public class ScreenshotTest extends TestBase {
        png[6] == (byte) 0x1A &&
        png[7] == (byte) 0x0A
     );
+  }
+
+  /**
+   * Tests the saveScreenshot method that returns a ScreenShotReply
+   */
+  @Test
+  public void testReply() throws Exception {
+    ScreenShotReply one = radioLittle.saveScreenshot(0);
+    ScreenShotReply two = radioSome.saveScreenshot(0);
+
+    Assert.assertEquals(one.getMd5(), two.getMd5());
+    Assert.assertTrue("PNG data is the same", Arrays.equals(one.getPng(), two.getPng()));
+
+    Assert.assertFalse(one.isBlank());
+    Assert.assertFalse(two.isBlank());
   }
 
   // Can cause problems on Windows, so moved to last
