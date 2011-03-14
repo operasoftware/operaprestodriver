@@ -162,7 +162,7 @@
       <zipfileset prefix="${release-zip.name}/lib" dir="pkg" />
       <!-- Add all the jar libs -->
       <zipfileset prefix="${release-zip.name}/lib" dir="lib" excludes="junit*.jar"/>
-      <zipfileset prefix="${release-zip.name}" dir="." includes="README.txt AUTHORS.txt LICENSE.txt VERSION"/>
+      <zipfileset prefix="${release-zip.name}" dir="." includes="README.txt CHANGES.txt AUTHORS.txt LICENSE.txt VERSION"/>
     </zip>
   </target>
 </project>
