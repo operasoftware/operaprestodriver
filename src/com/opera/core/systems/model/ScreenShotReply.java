@@ -19,73 +19,73 @@ package com.opera.core.systems.model;
 import java.util.List;
 
 /**
- * A wrapper object for screenshot reply, is used to
- * overcome the problem of 2 different protocols (xml/pb)
- *
+ * A wrapper object for screenshot reply, is used to overcome the problem of 2
+ * different protocols (xml/pb)
+ * 
  * @author Deniz Turkoglu <denizt@opera.com>
- *
+ * 
  */
 public class ScreenShotReply {
 
-	protected int windowId;
-	protected String md5;
-	protected byte[] png;
-	protected boolean blank;
+  protected int windowId;
+  protected String md5;
+  protected byte[] png;
+  protected boolean blank;
 
-	protected List<ColorResult> colorResult;
+  protected List<ColorResult> colorResult;
 
-	public List<ColorResult> getColorResult() {
-		return colorResult;
-	}
+  public List<ColorResult> getColorResult() {
+    return colorResult;
+  }
 
-	public void setColorResult(List<ColorResult> colorResult) {
-		this.colorResult = colorResult;
-	}
+  public void setColorResult(List<ColorResult> colorResult) {
+    this.colorResult = colorResult;
+  }
 
-	public ScreenShotReply(String md5) {
-		this.md5 = md5;
-		this.png = null;
-	}
+  public ScreenShotReply(String md5) {
+    this.md5 = md5;
+    this.png = null;
+  }
 
-	public ScreenShotReply(String md5, byte[] png) {
-		this.md5 = md5;
-		this.png = png;
-	}
+  public ScreenShotReply(String md5, byte[] png) {
+    this.md5 = md5;
+    this.png = png;
+  }
 
-	public ScreenShotReply(String md5, List<ColorResult> colorResult) {
-		this.md5 = md5;
-		this.colorResult = colorResult;
-	}
+  public ScreenShotReply(String md5, List<ColorResult> colorResult) {
+    this.md5 = md5;
+    this.colorResult = colorResult;
+  }
 
-	public int getWindowId() {
-		return windowId;
-	}
+  public int getWindowId() {
+    return windowId;
+  }
 
-	public void setWindowId(int windowId) {
-		this.windowId = windowId;
-	}
+  public void setWindowId(int windowId) {
+    this.windowId = windowId;
+  }
 
-	public String getMd5() {
-		return md5;
-	}
+  public String getMd5() {
+    return md5;
+  }
 
-	public void setMd5(String md5) {
-		this.md5 = md5;
-	}
+  public void setMd5(String md5) {
+    this.md5 = md5;
+  }
 
-	public byte[] getPng() {
-		return png;
-	}
+  public byte[] getPng() {
+    return png;
+  }
 
-	public void setPng(byte[] png) {
-		this.png = png;
-	}
+  public void setPng(byte[] png) {
+    this.png = png;
+  }
 
-	public boolean isBlank() {
-		return blank;
-	}
+  public boolean isBlank() {
+    return blank;
+  }
 
-	public void setBlank(boolean blank) {
-		this.blank = blank;
-	}
+  public void setBlank(boolean blank) {
+    this.blank = blank;
+  }
 }

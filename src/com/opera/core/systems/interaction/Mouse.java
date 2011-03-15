@@ -21,49 +21,49 @@ import org.openqa.selenium.WebDriver;
 import com.opera.core.systems.OperaWebElement;
 
 /**
- * Mouse user interactions, part of OperaUserInteraction
- * to support clicking and moving the mouse
- *
+ * Mouse user interactions, part of OperaUserInteraction to support clicking and
+ * moving the mouse
+ * 
  * @author Deniz Turkoglu <denizt@opera.com>
- *
+ * 
  */
 public abstract class Mouse implements UserInteraction {
 
-	public static Mouse moveOn(final RenderedWebElement element) {
-		return new Mouse() {
+  public static Mouse moveOn(final RenderedWebElement element) {
+    return new Mouse() {
 
-			public void execute(WebDriver driver) {
-				element.hover();
-			}
+      public void execute(WebDriver driver) {
+        element.hover();
+      }
 
-		};
-	}
+    };
+  }
 
-	public static Mouse clickOn(final RenderedWebElement element) {
-		return new Mouse() {
+  public static Mouse clickOn(final RenderedWebElement element) {
+    return new Mouse() {
 
-			public void execute(WebDriver driver) {
-				element.click();
-			}
-		};
-	}
+      public void execute(WebDriver driver) {
+        element.click();
+      }
+    };
+  }
 
-	public static Mouse buttonDownOn(final RenderedWebElement element) {
-		return new Mouse() {
+  public static Mouse buttonDownOn(final RenderedWebElement element) {
+    return new Mouse() {
 
-			public void execute(WebDriver driver) {
-				((OperaWebElement) element).mouseDown();
-			}
-		};
-	}
+      public void execute(WebDriver driver) {
+        ((OperaWebElement) element).mouseDown();
+      }
+    };
+  }
 
-	public static Mouse buttonUpFrom(final RenderedWebElement element) {
-		return new Mouse() {
+  public static Mouse buttonUpFrom(final RenderedWebElement element) {
+    return new Mouse() {
 
-			public void execute(WebDriver driver) {
-				((OperaWebElement) element).mouseUp();
-			}
-		};
-	}
+      public void execute(WebDriver driver) {
+        ((OperaWebElement) element).mouseUp();
+      }
+    };
+  }
 
 }

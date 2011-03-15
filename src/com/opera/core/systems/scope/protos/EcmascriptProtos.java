@@ -4,64 +4,79 @@
 package com.opera.core.systems.scope.protos;
 
 public final class EcmascriptProtos {
-  private EcmascriptProtos() {}
+  private EcmascriptProtos() {
+  }
+
   public static void registerAllExtensions(
       com.google.protobuf.ExtensionRegistry registry) {
   }
+
   public static final class ListRuntimesArg extends
       com.google.protobuf.GeneratedMessage {
     // Use ListRuntimesArg.newBuilder() to construct.
     private ListRuntimesArg() {
       initFields();
     }
-    private ListRuntimesArg(boolean noInit) {}
-    
+
+    private ListRuntimesArg(boolean noInit) {
+    }
+
     private static final ListRuntimesArg defaultInstance;
+
     public static ListRuntimesArg getDefaultInstance() {
       return defaultInstance;
     }
-    
+
     public ListRuntimesArg getDefaultInstanceForType() {
       return defaultInstance;
     }
-    
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
+
+    public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
       return com.opera.core.systems.scope.protos.EcmascriptProtos.internal_static_ListRuntimesArg_descriptor;
     }
-    
-    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-        internalGetFieldAccessorTable() {
+
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable internalGetFieldAccessorTable() {
       return com.opera.core.systems.scope.protos.EcmascriptProtos.internal_static_ListRuntimesArg_fieldAccessorTable;
     }
-    
+
     // repeated uint32 runtimeList = 1;
     public static final int RUNTIMELIST_FIELD_NUMBER = 1;
-    private java.util.List<java.lang.Integer> runtimeList_ =
-      java.util.Collections.emptyList();
+    private java.util.List<java.lang.Integer> runtimeList_ = java.util.Collections.emptyList();
+
     public java.util.List<java.lang.Integer> getRuntimeListList() {
       return runtimeList_;
     }
-    public int getRuntimeListCount() { return runtimeList_.size(); }
+
+    public int getRuntimeListCount() {
+      return runtimeList_.size();
+    }
+
     public int getRuntimeList(int index) {
       return runtimeList_.get(index);
     }
-    
+
     // optional bool create = 2;
     public static final int CREATE_FIELD_NUMBER = 2;
     private boolean hasCreate;
     private boolean create_ = false;
-    public boolean hasCreate() { return hasCreate; }
-    public boolean getCreate() { return create_; }
-    
+
+    public boolean hasCreate() {
+      return hasCreate;
+    }
+
+    public boolean getCreate() {
+      return create_;
+    }
+
     private void initFields() {
     }
+
     public final boolean isInitialized() {
       return true;
     }
-    
+
     public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
+        throws java.io.IOException {
       getSerializedSize();
       for (int element : getRuntimeListList()) {
         output.writeUInt32(1, element);
@@ -71,67 +86,69 @@ public final class EcmascriptProtos {
       }
       getUnknownFields().writeTo(output);
     }
-    
+
     private int memoizedSerializedSize = -1;
+
     public int getSerializedSize() {
       int size = memoizedSerializedSize;
       if (size != -1) return size;
-    
+
       size = 0;
       {
         int dataSize = 0;
         for (int element : getRuntimeListList()) {
-          dataSize += com.google.protobuf.CodedOutputStream
-            .computeUInt32SizeNoTag(element);
+          dataSize += com.google.protobuf.CodedOutputStream.computeUInt32SizeNoTag(element);
         }
         size += dataSize;
         size += 1 * getRuntimeListList().size();
       }
       if (hasCreate()) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBoolSize(2, getCreate());
+        size += com.google.protobuf.CodedOutputStream.computeBoolSize(2,
+            getCreate());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
       return size;
     }
-    
+
     public static com.opera.core.systems.scope.protos.EcmascriptProtos.ListRuntimesArg parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.EcmascriptProtos.ListRuntimesArg parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+      return newBuilder().mergeFrom(data, extensionRegistry).buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.EcmascriptProtos.ListRuntimesArg parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+
+    public static com.opera.core.systems.scope.protos.EcmascriptProtos.ListRuntimesArg parseFrom(
+        byte[] data) throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.EcmascriptProtos.ListRuntimesArg parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+      return newBuilder().mergeFrom(data, extensionRegistry).buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.EcmascriptProtos.ListRuntimesArg parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
+
+    public static com.opera.core.systems.scope.protos.EcmascriptProtos.ListRuntimesArg parseFrom(
+        java.io.InputStream input) throws java.io.IOException {
       return newBuilder().mergeFrom(input).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.EcmascriptProtos.ListRuntimesArg parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+      return newBuilder().mergeFrom(input, extensionRegistry).buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.EcmascriptProtos.ListRuntimesArg parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
+
+    public static com.opera.core.systems.scope.protos.EcmascriptProtos.ListRuntimesArg parseDelimitedFrom(
+        java.io.InputStream input) throws java.io.IOException {
       Builder builder = newBuilder();
       if (builder.mergeDelimitedFrom(input)) {
         return builder.buildParsed();
@@ -139,6 +156,7 @@ public final class EcmascriptProtos {
         return null;
       }
     }
+
     public static com.opera.core.systems.scope.protos.EcmascriptProtos.ListRuntimesArg parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -150,108 +168,118 @@ public final class EcmascriptProtos {
         return null;
       }
     }
+
     public static com.opera.core.systems.scope.protos.EcmascriptProtos.ListRuntimesArg parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
+        com.google.protobuf.CodedInputStream input) throws java.io.IOException {
       return newBuilder().mergeFrom(input).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.EcmascriptProtos.ListRuntimesArg parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+      return newBuilder().mergeFrom(input, extensionRegistry).buildParsed();
     }
-    
-    public static Builder newBuilder() { return Builder.create(); }
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(com.opera.core.systems.scope.protos.EcmascriptProtos.ListRuntimesArg prototype) {
+
+    public static Builder newBuilder() {
+      return Builder.create();
+    }
+
+    public Builder newBuilderForType() {
+      return newBuilder();
+    }
+
+    public static Builder newBuilder(
+        com.opera.core.systems.scope.protos.EcmascriptProtos.ListRuntimesArg prototype) {
       return newBuilder().mergeFrom(prototype);
     }
-    public Builder toBuilder() { return newBuilder(this); }
-    
+
+    public Builder toBuilder() {
+      return newBuilder(this);
+    }
+
     public static final class Builder extends
         com.google.protobuf.GeneratedMessage.Builder<Builder> {
       private com.opera.core.systems.scope.protos.EcmascriptProtos.ListRuntimesArg result;
-      
-      // Construct using com.opera.core.systems.scope.protos.EcmascriptProtos.ListRuntimesArg.newBuilder()
-      private Builder() {}
-      
+
+      // Construct using
+      // com.opera.core.systems.scope.protos.EcmascriptProtos.ListRuntimesArg.newBuilder()
+      private Builder() {
+      }
+
       private static Builder create() {
         Builder builder = new Builder();
         builder.result = new com.opera.core.systems.scope.protos.EcmascriptProtos.ListRuntimesArg();
         return builder;
       }
-      
+
       protected com.opera.core.systems.scope.protos.EcmascriptProtos.ListRuntimesArg internalGetResult() {
         return result;
       }
-      
+
       public Builder clear() {
         if (result == null) {
-          throw new IllegalStateException(
-            "Cannot call clear() after build().");
+          throw new IllegalStateException("Cannot call clear() after build().");
         }
         result = new com.opera.core.systems.scope.protos.EcmascriptProtos.ListRuntimesArg();
         return this;
       }
-      
+
       public Builder clone() {
         return create().mergeFrom(result);
       }
-      
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
+
+      public com.google.protobuf.Descriptors.Descriptor getDescriptorForType() {
         return com.opera.core.systems.scope.protos.EcmascriptProtos.ListRuntimesArg.getDescriptor();
       }
-      
+
       public com.opera.core.systems.scope.protos.EcmascriptProtos.ListRuntimesArg getDefaultInstanceForType() {
         return com.opera.core.systems.scope.protos.EcmascriptProtos.ListRuntimesArg.getDefaultInstance();
       }
-      
+
       public boolean isInitialized() {
         return result.isInitialized();
       }
+
       public com.opera.core.systems.scope.protos.EcmascriptProtos.ListRuntimesArg build() {
         if (result != null && !isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return buildPartial();
       }
-      
+
       private com.opera.core.systems.scope.protos.EcmascriptProtos.ListRuntimesArg buildParsed()
           throws com.google.protobuf.InvalidProtocolBufferException {
         if (!isInitialized()) {
-          throw newUninitializedMessageException(
-            result).asInvalidProtocolBufferException();
+          throw newUninitializedMessageException(result).asInvalidProtocolBufferException();
         }
         return buildPartial();
       }
-      
+
       public com.opera.core.systems.scope.protos.EcmascriptProtos.ListRuntimesArg buildPartial() {
         if (result == null) {
           throw new IllegalStateException(
-            "build() has already been called on this Builder.");
+              "build() has already been called on this Builder.");
         }
         if (result.runtimeList_ != java.util.Collections.EMPTY_LIST) {
-          result.runtimeList_ =
-            java.util.Collections.unmodifiableList(result.runtimeList_);
+          result.runtimeList_ = java.util.Collections.unmodifiableList(result.runtimeList_);
         }
         com.opera.core.systems.scope.protos.EcmascriptProtos.ListRuntimesArg returnMe = result;
         result = null;
         return returnMe;
       }
-      
+
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.opera.core.systems.scope.protos.EcmascriptProtos.ListRuntimesArg) {
-          return mergeFrom((com.opera.core.systems.scope.protos.EcmascriptProtos.ListRuntimesArg)other);
+          return mergeFrom((com.opera.core.systems.scope.protos.EcmascriptProtos.ListRuntimesArg) other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
-      
-      public Builder mergeFrom(com.opera.core.systems.scope.protos.EcmascriptProtos.ListRuntimesArg other) {
+
+      public Builder mergeFrom(
+          com.opera.core.systems.scope.protos.EcmascriptProtos.ListRuntimesArg other) {
         if (other == com.opera.core.systems.scope.protos.EcmascriptProtos.ListRuntimesArg.getDefaultInstance()) return this;
         if (!other.runtimeList_.isEmpty()) {
           if (result.runtimeList_.isEmpty()) {
@@ -265,64 +293,63 @@ public final class EcmascriptProtos {
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
-      
-      public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
+
+      public Builder mergeFrom(com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder(
-            this.getUnknownFields());
+        com.google.protobuf.UnknownFieldSet.Builder unknownFields = com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
         while (true) {
           int tag = input.readTag();
           switch (tag) {
-            case 0:
+          case 0:
+            this.setUnknownFields(unknownFields.build());
+            return this;
+          default: {
+            if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
               this.setUnknownFields(unknownFields.build());
               return this;
-            default: {
-              if (!parseUnknownField(input, unknownFields,
-                                     extensionRegistry, tag)) {
-                this.setUnknownFields(unknownFields.build());
-                return this;
-              }
-              break;
             }
-            case 8: {
+            break;
+          }
+          case 8: {
+            addRuntimeList(input.readUInt32());
+            break;
+          }
+          case 10: {
+            int length = input.readRawVarint32();
+            int limit = input.pushLimit(length);
+            while (input.getBytesUntilLimit() > 0) {
               addRuntimeList(input.readUInt32());
-              break;
             }
-            case 10: {
-              int length = input.readRawVarint32();
-              int limit = input.pushLimit(length);
-              while (input.getBytesUntilLimit() > 0) {
-                addRuntimeList(input.readUInt32());
-              }
-              input.popLimit(limit);
-              break;
-            }
-            case 16: {
-              setCreate(input.readBool());
-              break;
-            }
+            input.popLimit(limit);
+            break;
+          }
+          case 16: {
+            setCreate(input.readBool());
+            break;
+          }
           }
         }
       }
-      
-      
+
       // repeated uint32 runtimeList = 1;
       public java.util.List<java.lang.Integer> getRuntimeListList() {
         return java.util.Collections.unmodifiableList(result.runtimeList_);
       }
+
       public int getRuntimeListCount() {
         return result.getRuntimeListCount();
       }
+
       public int getRuntimeList(int index) {
         return result.getRuntimeList(index);
       }
+
       public Builder setRuntimeList(int index, int value) {
         result.runtimeList_.set(index, value);
         return this;
       }
+
       public Builder addRuntimeList(int value) {
         if (result.runtimeList_.isEmpty()) {
           result.runtimeList_ = new java.util.ArrayList<java.lang.Integer>();
@@ -330,6 +357,7 @@ public final class EcmascriptProtos {
         result.runtimeList_.add(value);
         return this;
       }
+
       public Builder addAllRuntimeList(
           java.lang.Iterable<? extends java.lang.Integer> values) {
         if (result.runtimeList_.isEmpty()) {
@@ -338,149 +366,163 @@ public final class EcmascriptProtos {
         super.addAll(values, result.runtimeList_);
         return this;
       }
+
       public Builder clearRuntimeList() {
         result.runtimeList_ = java.util.Collections.emptyList();
         return this;
       }
-      
+
       // optional bool create = 2;
       public boolean hasCreate() {
         return result.hasCreate();
       }
+
       public boolean getCreate() {
         return result.getCreate();
       }
+
       public Builder setCreate(boolean value) {
         result.hasCreate = true;
         result.create_ = value;
         return this;
       }
+
       public Builder clearCreate() {
         result.hasCreate = false;
         result.create_ = false;
         return this;
       }
-      
+
       // @@protoc_insertion_point(builder_scope:ListRuntimesArg)
     }
-    
+
     static {
       defaultInstance = new ListRuntimesArg(true);
       com.opera.core.systems.scope.protos.EcmascriptProtos.internalForceInit();
       defaultInstance.initFields();
     }
-    
+
     // @@protoc_insertion_point(class_scope:ListRuntimesArg)
   }
-  
+
   public static final class RuntimeList extends
       com.google.protobuf.GeneratedMessage {
     // Use RuntimeList.newBuilder() to construct.
     private RuntimeList() {
       initFields();
     }
-    private RuntimeList(boolean noInit) {}
-    
+
+    private RuntimeList(boolean noInit) {
+    }
+
     private static final RuntimeList defaultInstance;
+
     public static RuntimeList getDefaultInstance() {
       return defaultInstance;
     }
-    
+
     public RuntimeList getDefaultInstanceForType() {
       return defaultInstance;
     }
-    
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
+
+    public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
       return com.opera.core.systems.scope.protos.EcmascriptProtos.internal_static_RuntimeList_descriptor;
     }
-    
-    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-        internalGetFieldAccessorTable() {
+
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable internalGetFieldAccessorTable() {
       return com.opera.core.systems.scope.protos.EcmascriptProtos.internal_static_RuntimeList_fieldAccessorTable;
     }
-    
+
     // repeated .Runtime runtimeList = 1;
     public static final int RUNTIMELIST_FIELD_NUMBER = 1;
-    private java.util.List<com.opera.core.systems.scope.protos.EcmascriptProtos.Runtime> runtimeList_ =
-      java.util.Collections.emptyList();
+    private java.util.List<com.opera.core.systems.scope.protos.EcmascriptProtos.Runtime> runtimeList_ = java.util.Collections.emptyList();
+
     public java.util.List<com.opera.core.systems.scope.protos.EcmascriptProtos.Runtime> getRuntimeListList() {
       return runtimeList_;
     }
-    public int getRuntimeListCount() { return runtimeList_.size(); }
-    public com.opera.core.systems.scope.protos.EcmascriptProtos.Runtime getRuntimeList(int index) {
+
+    public int getRuntimeListCount() {
+      return runtimeList_.size();
+    }
+
+    public com.opera.core.systems.scope.protos.EcmascriptProtos.Runtime getRuntimeList(
+        int index) {
       return runtimeList_.get(index);
     }
-    
+
     private void initFields() {
     }
+
     public final boolean isInitialized() {
       for (com.opera.core.systems.scope.protos.EcmascriptProtos.Runtime element : getRuntimeListList()) {
         if (!element.isInitialized()) return false;
       }
       return true;
     }
-    
+
     public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
+        throws java.io.IOException {
       getSerializedSize();
       for (com.opera.core.systems.scope.protos.EcmascriptProtos.Runtime element : getRuntimeListList()) {
         output.writeMessage(1, element);
       }
       getUnknownFields().writeTo(output);
     }
-    
+
     private int memoizedSerializedSize = -1;
+
     public int getSerializedSize() {
       int size = memoizedSerializedSize;
       if (size != -1) return size;
-    
+
       size = 0;
       for (com.opera.core.systems.scope.protos.EcmascriptProtos.Runtime element : getRuntimeListList()) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(1, element);
+        size += com.google.protobuf.CodedOutputStream.computeMessageSize(1,
+            element);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
       return size;
     }
-    
+
     public static com.opera.core.systems.scope.protos.EcmascriptProtos.RuntimeList parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.EcmascriptProtos.RuntimeList parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+      return newBuilder().mergeFrom(data, extensionRegistry).buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.EcmascriptProtos.RuntimeList parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+
+    public static com.opera.core.systems.scope.protos.EcmascriptProtos.RuntimeList parseFrom(
+        byte[] data) throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.EcmascriptProtos.RuntimeList parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+      return newBuilder().mergeFrom(data, extensionRegistry).buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.EcmascriptProtos.RuntimeList parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
+
+    public static com.opera.core.systems.scope.protos.EcmascriptProtos.RuntimeList parseFrom(
+        java.io.InputStream input) throws java.io.IOException {
       return newBuilder().mergeFrom(input).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.EcmascriptProtos.RuntimeList parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+      return newBuilder().mergeFrom(input, extensionRegistry).buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.EcmascriptProtos.RuntimeList parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
+
+    public static com.opera.core.systems.scope.protos.EcmascriptProtos.RuntimeList parseDelimitedFrom(
+        java.io.InputStream input) throws java.io.IOException {
       Builder builder = newBuilder();
       if (builder.mergeDelimitedFrom(input)) {
         return builder.buildParsed();
@@ -488,6 +530,7 @@ public final class EcmascriptProtos {
         return null;
       }
     }
+
     public static com.opera.core.systems.scope.protos.EcmascriptProtos.RuntimeList parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -499,108 +542,118 @@ public final class EcmascriptProtos {
         return null;
       }
     }
+
     public static com.opera.core.systems.scope.protos.EcmascriptProtos.RuntimeList parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
+        com.google.protobuf.CodedInputStream input) throws java.io.IOException {
       return newBuilder().mergeFrom(input).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.EcmascriptProtos.RuntimeList parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+      return newBuilder().mergeFrom(input, extensionRegistry).buildParsed();
     }
-    
-    public static Builder newBuilder() { return Builder.create(); }
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(com.opera.core.systems.scope.protos.EcmascriptProtos.RuntimeList prototype) {
+
+    public static Builder newBuilder() {
+      return Builder.create();
+    }
+
+    public Builder newBuilderForType() {
+      return newBuilder();
+    }
+
+    public static Builder newBuilder(
+        com.opera.core.systems.scope.protos.EcmascriptProtos.RuntimeList prototype) {
       return newBuilder().mergeFrom(prototype);
     }
-    public Builder toBuilder() { return newBuilder(this); }
-    
+
+    public Builder toBuilder() {
+      return newBuilder(this);
+    }
+
     public static final class Builder extends
         com.google.protobuf.GeneratedMessage.Builder<Builder> {
       private com.opera.core.systems.scope.protos.EcmascriptProtos.RuntimeList result;
-      
-      // Construct using com.opera.core.systems.scope.protos.EcmascriptProtos.RuntimeList.newBuilder()
-      private Builder() {}
-      
+
+      // Construct using
+      // com.opera.core.systems.scope.protos.EcmascriptProtos.RuntimeList.newBuilder()
+      private Builder() {
+      }
+
       private static Builder create() {
         Builder builder = new Builder();
         builder.result = new com.opera.core.systems.scope.protos.EcmascriptProtos.RuntimeList();
         return builder;
       }
-      
+
       protected com.opera.core.systems.scope.protos.EcmascriptProtos.RuntimeList internalGetResult() {
         return result;
       }
-      
+
       public Builder clear() {
         if (result == null) {
-          throw new IllegalStateException(
-            "Cannot call clear() after build().");
+          throw new IllegalStateException("Cannot call clear() after build().");
         }
         result = new com.opera.core.systems.scope.protos.EcmascriptProtos.RuntimeList();
         return this;
       }
-      
+
       public Builder clone() {
         return create().mergeFrom(result);
       }
-      
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
+
+      public com.google.protobuf.Descriptors.Descriptor getDescriptorForType() {
         return com.opera.core.systems.scope.protos.EcmascriptProtos.RuntimeList.getDescriptor();
       }
-      
+
       public com.opera.core.systems.scope.protos.EcmascriptProtos.RuntimeList getDefaultInstanceForType() {
         return com.opera.core.systems.scope.protos.EcmascriptProtos.RuntimeList.getDefaultInstance();
       }
-      
+
       public boolean isInitialized() {
         return result.isInitialized();
       }
+
       public com.opera.core.systems.scope.protos.EcmascriptProtos.RuntimeList build() {
         if (result != null && !isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return buildPartial();
       }
-      
+
       private com.opera.core.systems.scope.protos.EcmascriptProtos.RuntimeList buildParsed()
           throws com.google.protobuf.InvalidProtocolBufferException {
         if (!isInitialized()) {
-          throw newUninitializedMessageException(
-            result).asInvalidProtocolBufferException();
+          throw newUninitializedMessageException(result).asInvalidProtocolBufferException();
         }
         return buildPartial();
       }
-      
+
       public com.opera.core.systems.scope.protos.EcmascriptProtos.RuntimeList buildPartial() {
         if (result == null) {
           throw new IllegalStateException(
-            "build() has already been called on this Builder.");
+              "build() has already been called on this Builder.");
         }
         if (result.runtimeList_ != java.util.Collections.EMPTY_LIST) {
-          result.runtimeList_ =
-            java.util.Collections.unmodifiableList(result.runtimeList_);
+          result.runtimeList_ = java.util.Collections.unmodifiableList(result.runtimeList_);
         }
         com.opera.core.systems.scope.protos.EcmascriptProtos.RuntimeList returnMe = result;
         result = null;
         return returnMe;
       }
-      
+
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.opera.core.systems.scope.protos.EcmascriptProtos.RuntimeList) {
-          return mergeFrom((com.opera.core.systems.scope.protos.EcmascriptProtos.RuntimeList)other);
+          return mergeFrom((com.opera.core.systems.scope.protos.EcmascriptProtos.RuntimeList) other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
-      
-      public Builder mergeFrom(com.opera.core.systems.scope.protos.EcmascriptProtos.RuntimeList other) {
+
+      public Builder mergeFrom(
+          com.opera.core.systems.scope.protos.EcmascriptProtos.RuntimeList other) {
         if (other == com.opera.core.systems.scope.protos.EcmascriptProtos.RuntimeList.getDefaultInstance()) return this;
         if (!other.runtimeList_.isEmpty()) {
           if (result.runtimeList_.isEmpty()) {
@@ -611,61 +664,66 @@ public final class EcmascriptProtos {
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
-      
-      public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
+
+      public Builder mergeFrom(com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder(
-            this.getUnknownFields());
+        com.google.protobuf.UnknownFieldSet.Builder unknownFields = com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
         while (true) {
           int tag = input.readTag();
           switch (tag) {
-            case 0:
+          case 0:
+            this.setUnknownFields(unknownFields.build());
+            return this;
+          default: {
+            if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
               this.setUnknownFields(unknownFields.build());
               return this;
-            default: {
-              if (!parseUnknownField(input, unknownFields,
-                                     extensionRegistry, tag)) {
-                this.setUnknownFields(unknownFields.build());
-                return this;
-              }
-              break;
             }
-            case 10: {
-              com.opera.core.systems.scope.protos.EcmascriptProtos.Runtime.Builder subBuilder = com.opera.core.systems.scope.protos.EcmascriptProtos.Runtime.newBuilder();
-              input.readMessage(subBuilder, extensionRegistry);
-              addRuntimeList(subBuilder.buildPartial());
-              break;
-            }
+            break;
+          }
+          case 10: {
+            com.opera.core.systems.scope.protos.EcmascriptProtos.Runtime.Builder subBuilder = com.opera.core.systems.scope.protos.EcmascriptProtos.Runtime.newBuilder();
+            input.readMessage(subBuilder, extensionRegistry);
+            addRuntimeList(subBuilder.buildPartial());
+            break;
+          }
           }
         }
       }
-      
-      
+
       // repeated .Runtime runtimeList = 1;
       public java.util.List<com.opera.core.systems.scope.protos.EcmascriptProtos.Runtime> getRuntimeListList() {
         return java.util.Collections.unmodifiableList(result.runtimeList_);
       }
+
       public int getRuntimeListCount() {
         return result.getRuntimeListCount();
       }
-      public com.opera.core.systems.scope.protos.EcmascriptProtos.Runtime getRuntimeList(int index) {
+
+      public com.opera.core.systems.scope.protos.EcmascriptProtos.Runtime getRuntimeList(
+          int index) {
         return result.getRuntimeList(index);
       }
-      public Builder setRuntimeList(int index, com.opera.core.systems.scope.protos.EcmascriptProtos.Runtime value) {
+
+      public Builder setRuntimeList(int index,
+          com.opera.core.systems.scope.protos.EcmascriptProtos.Runtime value) {
         if (value == null) {
           throw new NullPointerException();
         }
         result.runtimeList_.set(index, value);
         return this;
       }
-      public Builder setRuntimeList(int index, com.opera.core.systems.scope.protos.EcmascriptProtos.Runtime.Builder builderForValue) {
+
+      public Builder setRuntimeList(
+          int index,
+          com.opera.core.systems.scope.protos.EcmascriptProtos.Runtime.Builder builderForValue) {
         result.runtimeList_.set(index, builderForValue.build());
         return this;
       }
-      public Builder addRuntimeList(com.opera.core.systems.scope.protos.EcmascriptProtos.Runtime value) {
+
+      public Builder addRuntimeList(
+          com.opera.core.systems.scope.protos.EcmascriptProtos.Runtime value) {
         if (value == null) {
           throw new NullPointerException();
         }
@@ -675,13 +733,16 @@ public final class EcmascriptProtos {
         result.runtimeList_.add(value);
         return this;
       }
-      public Builder addRuntimeList(com.opera.core.systems.scope.protos.EcmascriptProtos.Runtime.Builder builderForValue) {
+
+      public Builder addRuntimeList(
+          com.opera.core.systems.scope.protos.EcmascriptProtos.Runtime.Builder builderForValue) {
         if (result.runtimeList_.isEmpty()) {
           result.runtimeList_ = new java.util.ArrayList<com.opera.core.systems.scope.protos.EcmascriptProtos.Runtime>();
         }
         result.runtimeList_.add(builderForValue.build());
         return this;
       }
+
       public Builder addAllRuntimeList(
           java.lang.Iterable<? extends com.opera.core.systems.scope.protos.EcmascriptProtos.Runtime> values) {
         if (result.runtimeList_.isEmpty()) {
@@ -690,87 +751,120 @@ public final class EcmascriptProtos {
         super.addAll(values, result.runtimeList_);
         return this;
       }
+
       public Builder clearRuntimeList() {
         result.runtimeList_ = java.util.Collections.emptyList();
         return this;
       }
-      
+
       // @@protoc_insertion_point(builder_scope:RuntimeList)
     }
-    
+
     static {
       defaultInstance = new RuntimeList(true);
       com.opera.core.systems.scope.protos.EcmascriptProtos.internalForceInit();
       defaultInstance.initFields();
     }
-    
+
     // @@protoc_insertion_point(class_scope:RuntimeList)
   }
-  
+
   public static final class Runtime extends
       com.google.protobuf.GeneratedMessage {
     // Use Runtime.newBuilder() to construct.
     private Runtime() {
       initFields();
     }
-    private Runtime(boolean noInit) {}
-    
+
+    private Runtime(boolean noInit) {
+    }
+
     private static final Runtime defaultInstance;
+
     public static Runtime getDefaultInstance() {
       return defaultInstance;
     }
-    
+
     public Runtime getDefaultInstanceForType() {
       return defaultInstance;
     }
-    
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
+
+    public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
       return com.opera.core.systems.scope.protos.EcmascriptProtos.internal_static_Runtime_descriptor;
     }
-    
-    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-        internalGetFieldAccessorTable() {
+
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable internalGetFieldAccessorTable() {
       return com.opera.core.systems.scope.protos.EcmascriptProtos.internal_static_Runtime_fieldAccessorTable;
     }
-    
+
     // required uint32 runtimeID = 1;
     public static final int RUNTIMEID_FIELD_NUMBER = 1;
     private boolean hasRuntimeID;
     private int runtimeID_ = 0;
-    public boolean hasRuntimeID() { return hasRuntimeID; }
-    public int getRuntimeID() { return runtimeID_; }
-    
+
+    public boolean hasRuntimeID() {
+      return hasRuntimeID;
+    }
+
+    public int getRuntimeID() {
+      return runtimeID_;
+    }
+
     // required string htmlFramePath = 2;
     public static final int HTMLFRAMEPATH_FIELD_NUMBER = 2;
     private boolean hasHtmlFramePath;
     private java.lang.String htmlFramePath_ = "";
-    public boolean hasHtmlFramePath() { return hasHtmlFramePath; }
-    public java.lang.String getHtmlFramePath() { return htmlFramePath_; }
-    
+
+    public boolean hasHtmlFramePath() {
+      return hasHtmlFramePath;
+    }
+
+    public java.lang.String getHtmlFramePath() {
+      return htmlFramePath_;
+    }
+
     // required uint32 windowID = 3;
     public static final int WINDOWID_FIELD_NUMBER = 3;
     private boolean hasWindowID;
     private int windowID_ = 0;
-    public boolean hasWindowID() { return hasWindowID; }
-    public int getWindowID() { return windowID_; }
-    
+
+    public boolean hasWindowID() {
+      return hasWindowID;
+    }
+
+    public int getWindowID() {
+      return windowID_;
+    }
+
     // required uint32 objectID = 4;
     public static final int OBJECTID_FIELD_NUMBER = 4;
     private boolean hasObjectID;
     private int objectID_ = 0;
-    public boolean hasObjectID() { return hasObjectID; }
-    public int getObjectID() { return objectID_; }
-    
+
+    public boolean hasObjectID() {
+      return hasObjectID;
+    }
+
+    public int getObjectID() {
+      return objectID_;
+    }
+
     // required string uri = 5;
     public static final int URI_FIELD_NUMBER = 5;
     private boolean hasUri;
     private java.lang.String uri_ = "";
-    public boolean hasUri() { return hasUri; }
-    public java.lang.String getUri() { return uri_; }
-    
+
+    public boolean hasUri() {
+      return hasUri;
+    }
+
+    public java.lang.String getUri() {
+      return uri_;
+    }
+
     private void initFields() {
     }
+
     public final boolean isInitialized() {
       if (!hasRuntimeID) return false;
       if (!hasHtmlFramePath) return false;
@@ -779,9 +873,9 @@ public final class EcmascriptProtos {
       if (!hasUri) return false;
       return true;
     }
-    
+
     public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
+        throws java.io.IOException {
       getSerializedSize();
       if (hasRuntimeID()) {
         output.writeUInt32(1, getRuntimeID());
@@ -800,74 +894,77 @@ public final class EcmascriptProtos {
       }
       getUnknownFields().writeTo(output);
     }
-    
+
     private int memoizedSerializedSize = -1;
+
     public int getSerializedSize() {
       int size = memoizedSerializedSize;
       if (size != -1) return size;
-    
+
       size = 0;
       if (hasRuntimeID()) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeUInt32Size(1, getRuntimeID());
+        size += com.google.protobuf.CodedOutputStream.computeUInt32Size(1,
+            getRuntimeID());
       }
       if (hasHtmlFramePath()) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeStringSize(2, getHtmlFramePath());
+        size += com.google.protobuf.CodedOutputStream.computeStringSize(2,
+            getHtmlFramePath());
       }
       if (hasWindowID()) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeUInt32Size(3, getWindowID());
+        size += com.google.protobuf.CodedOutputStream.computeUInt32Size(3,
+            getWindowID());
       }
       if (hasObjectID()) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeUInt32Size(4, getObjectID());
+        size += com.google.protobuf.CodedOutputStream.computeUInt32Size(4,
+            getObjectID());
       }
       if (hasUri()) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeStringSize(5, getUri());
+        size += com.google.protobuf.CodedOutputStream.computeStringSize(5,
+            getUri());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
       return size;
     }
-    
+
     public static com.opera.core.systems.scope.protos.EcmascriptProtos.Runtime parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.EcmascriptProtos.Runtime parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+      return newBuilder().mergeFrom(data, extensionRegistry).buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.EcmascriptProtos.Runtime parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+
+    public static com.opera.core.systems.scope.protos.EcmascriptProtos.Runtime parseFrom(
+        byte[] data) throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.EcmascriptProtos.Runtime parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+      return newBuilder().mergeFrom(data, extensionRegistry).buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.EcmascriptProtos.Runtime parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
+
+    public static com.opera.core.systems.scope.protos.EcmascriptProtos.Runtime parseFrom(
+        java.io.InputStream input) throws java.io.IOException {
       return newBuilder().mergeFrom(input).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.EcmascriptProtos.Runtime parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+      return newBuilder().mergeFrom(input, extensionRegistry).buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.EcmascriptProtos.Runtime parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
+
+    public static com.opera.core.systems.scope.protos.EcmascriptProtos.Runtime parseDelimitedFrom(
+        java.io.InputStream input) throws java.io.IOException {
       Builder builder = newBuilder();
       if (builder.mergeDelimitedFrom(input)) {
         return builder.buildParsed();
@@ -875,6 +972,7 @@ public final class EcmascriptProtos {
         return null;
       }
     }
+
     public static com.opera.core.systems.scope.protos.EcmascriptProtos.Runtime parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -886,104 +984,115 @@ public final class EcmascriptProtos {
         return null;
       }
     }
+
     public static com.opera.core.systems.scope.protos.EcmascriptProtos.Runtime parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
+        com.google.protobuf.CodedInputStream input) throws java.io.IOException {
       return newBuilder().mergeFrom(input).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.EcmascriptProtos.Runtime parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+      return newBuilder().mergeFrom(input, extensionRegistry).buildParsed();
     }
-    
-    public static Builder newBuilder() { return Builder.create(); }
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(com.opera.core.systems.scope.protos.EcmascriptProtos.Runtime prototype) {
+
+    public static Builder newBuilder() {
+      return Builder.create();
+    }
+
+    public Builder newBuilderForType() {
+      return newBuilder();
+    }
+
+    public static Builder newBuilder(
+        com.opera.core.systems.scope.protos.EcmascriptProtos.Runtime prototype) {
       return newBuilder().mergeFrom(prototype);
     }
-    public Builder toBuilder() { return newBuilder(this); }
-    
+
+    public Builder toBuilder() {
+      return newBuilder(this);
+    }
+
     public static final class Builder extends
         com.google.protobuf.GeneratedMessage.Builder<Builder> {
       private com.opera.core.systems.scope.protos.EcmascriptProtos.Runtime result;
-      
-      // Construct using com.opera.core.systems.scope.protos.EcmascriptProtos.Runtime.newBuilder()
-      private Builder() {}
-      
+
+      // Construct using
+      // com.opera.core.systems.scope.protos.EcmascriptProtos.Runtime.newBuilder()
+      private Builder() {
+      }
+
       private static Builder create() {
         Builder builder = new Builder();
         builder.result = new com.opera.core.systems.scope.protos.EcmascriptProtos.Runtime();
         return builder;
       }
-      
+
       protected com.opera.core.systems.scope.protos.EcmascriptProtos.Runtime internalGetResult() {
         return result;
       }
-      
+
       public Builder clear() {
         if (result == null) {
-          throw new IllegalStateException(
-            "Cannot call clear() after build().");
+          throw new IllegalStateException("Cannot call clear() after build().");
         }
         result = new com.opera.core.systems.scope.protos.EcmascriptProtos.Runtime();
         return this;
       }
-      
+
       public Builder clone() {
         return create().mergeFrom(result);
       }
-      
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
+
+      public com.google.protobuf.Descriptors.Descriptor getDescriptorForType() {
         return com.opera.core.systems.scope.protos.EcmascriptProtos.Runtime.getDescriptor();
       }
-      
+
       public com.opera.core.systems.scope.protos.EcmascriptProtos.Runtime getDefaultInstanceForType() {
         return com.opera.core.systems.scope.protos.EcmascriptProtos.Runtime.getDefaultInstance();
       }
-      
+
       public boolean isInitialized() {
         return result.isInitialized();
       }
+
       public com.opera.core.systems.scope.protos.EcmascriptProtos.Runtime build() {
         if (result != null && !isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return buildPartial();
       }
-      
+
       private com.opera.core.systems.scope.protos.EcmascriptProtos.Runtime buildParsed()
           throws com.google.protobuf.InvalidProtocolBufferException {
         if (!isInitialized()) {
-          throw newUninitializedMessageException(
-            result).asInvalidProtocolBufferException();
+          throw newUninitializedMessageException(result).asInvalidProtocolBufferException();
         }
         return buildPartial();
       }
-      
+
       public com.opera.core.systems.scope.protos.EcmascriptProtos.Runtime buildPartial() {
         if (result == null) {
           throw new IllegalStateException(
-            "build() has already been called on this Builder.");
+              "build() has already been called on this Builder.");
         }
         com.opera.core.systems.scope.protos.EcmascriptProtos.Runtime returnMe = result;
         result = null;
         return returnMe;
       }
-      
+
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.opera.core.systems.scope.protos.EcmascriptProtos.Runtime) {
-          return mergeFrom((com.opera.core.systems.scope.protos.EcmascriptProtos.Runtime)other);
+          return mergeFrom((com.opera.core.systems.scope.protos.EcmascriptProtos.Runtime) other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
-      
-      public Builder mergeFrom(com.opera.core.systems.scope.protos.EcmascriptProtos.Runtime other) {
+
+      public Builder mergeFrom(
+          com.opera.core.systems.scope.protos.EcmascriptProtos.Runtime other) {
         if (other == com.opera.core.systems.scope.protos.EcmascriptProtos.Runtime.getDefaultInstance()) return this;
         if (other.hasRuntimeID()) {
           setRuntimeID(other.getRuntimeID());
@@ -1003,239 +1112,264 @@ public final class EcmascriptProtos {
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
-      
-      public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
+
+      public Builder mergeFrom(com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder(
-            this.getUnknownFields());
+        com.google.protobuf.UnknownFieldSet.Builder unknownFields = com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
         while (true) {
           int tag = input.readTag();
           switch (tag) {
-            case 0:
+          case 0:
+            this.setUnknownFields(unknownFields.build());
+            return this;
+          default: {
+            if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
               this.setUnknownFields(unknownFields.build());
               return this;
-            default: {
-              if (!parseUnknownField(input, unknownFields,
-                                     extensionRegistry, tag)) {
-                this.setUnknownFields(unknownFields.build());
-                return this;
-              }
-              break;
             }
-            case 8: {
-              setRuntimeID(input.readUInt32());
-              break;
-            }
-            case 18: {
-              setHtmlFramePath(input.readString());
-              break;
-            }
-            case 24: {
-              setWindowID(input.readUInt32());
-              break;
-            }
-            case 32: {
-              setObjectID(input.readUInt32());
-              break;
-            }
-            case 42: {
-              setUri(input.readString());
-              break;
-            }
+            break;
+          }
+          case 8: {
+            setRuntimeID(input.readUInt32());
+            break;
+          }
+          case 18: {
+            setHtmlFramePath(input.readString());
+            break;
+          }
+          case 24: {
+            setWindowID(input.readUInt32());
+            break;
+          }
+          case 32: {
+            setObjectID(input.readUInt32());
+            break;
+          }
+          case 42: {
+            setUri(input.readString());
+            break;
+          }
           }
         }
       }
-      
-      
+
       // required uint32 runtimeID = 1;
       public boolean hasRuntimeID() {
         return result.hasRuntimeID();
       }
+
       public int getRuntimeID() {
         return result.getRuntimeID();
       }
+
       public Builder setRuntimeID(int value) {
         result.hasRuntimeID = true;
         result.runtimeID_ = value;
         return this;
       }
+
       public Builder clearRuntimeID() {
         result.hasRuntimeID = false;
         result.runtimeID_ = 0;
         return this;
       }
-      
+
       // required string htmlFramePath = 2;
       public boolean hasHtmlFramePath() {
         return result.hasHtmlFramePath();
       }
+
       public java.lang.String getHtmlFramePath() {
         return result.getHtmlFramePath();
       }
+
       public Builder setHtmlFramePath(java.lang.String value) {
         if (value == null) {
-    throw new NullPointerException();
-  }
-  result.hasHtmlFramePath = true;
+          throw new NullPointerException();
+        }
+        result.hasHtmlFramePath = true;
         result.htmlFramePath_ = value;
         return this;
       }
+
       public Builder clearHtmlFramePath() {
         result.hasHtmlFramePath = false;
         result.htmlFramePath_ = getDefaultInstance().getHtmlFramePath();
         return this;
       }
-      
+
       // required uint32 windowID = 3;
       public boolean hasWindowID() {
         return result.hasWindowID();
       }
+
       public int getWindowID() {
         return result.getWindowID();
       }
+
       public Builder setWindowID(int value) {
         result.hasWindowID = true;
         result.windowID_ = value;
         return this;
       }
+
       public Builder clearWindowID() {
         result.hasWindowID = false;
         result.windowID_ = 0;
         return this;
       }
-      
+
       // required uint32 objectID = 4;
       public boolean hasObjectID() {
         return result.hasObjectID();
       }
+
       public int getObjectID() {
         return result.getObjectID();
       }
+
       public Builder setObjectID(int value) {
         result.hasObjectID = true;
         result.objectID_ = value;
         return this;
       }
+
       public Builder clearObjectID() {
         result.hasObjectID = false;
         result.objectID_ = 0;
         return this;
       }
-      
+
       // required string uri = 5;
       public boolean hasUri() {
         return result.hasUri();
       }
+
       public java.lang.String getUri() {
         return result.getUri();
       }
+
       public Builder setUri(java.lang.String value) {
         if (value == null) {
-    throw new NullPointerException();
-  }
-  result.hasUri = true;
+          throw new NullPointerException();
+        }
+        result.hasUri = true;
         result.uri_ = value;
         return this;
       }
+
       public Builder clearUri() {
         result.hasUri = false;
         result.uri_ = getDefaultInstance().getUri();
         return this;
       }
-      
+
       // @@protoc_insertion_point(builder_scope:Runtime)
     }
-    
+
     static {
       defaultInstance = new Runtime(true);
       com.opera.core.systems.scope.protos.EcmascriptProtos.internalForceInit();
       defaultInstance.initFields();
     }
-    
+
     // @@protoc_insertion_point(class_scope:Runtime)
   }
-  
+
   public static final class EvalArg extends
       com.google.protobuf.GeneratedMessage {
     // Use EvalArg.newBuilder() to construct.
     private EvalArg() {
       initFields();
     }
-    private EvalArg(boolean noInit) {}
-    
+
+    private EvalArg(boolean noInit) {
+    }
+
     private static final EvalArg defaultInstance;
+
     public static EvalArg getDefaultInstance() {
       return defaultInstance;
     }
-    
+
     public EvalArg getDefaultInstanceForType() {
       return defaultInstance;
     }
-    
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
+
+    public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
       return com.opera.core.systems.scope.protos.EcmascriptProtos.internal_static_EvalArg_descriptor;
     }
-    
-    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-        internalGetFieldAccessorTable() {
+
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable internalGetFieldAccessorTable() {
       return com.opera.core.systems.scope.protos.EcmascriptProtos.internal_static_EvalArg_fieldAccessorTable;
     }
-    
+
     public static final class Variable extends
         com.google.protobuf.GeneratedMessage {
       // Use Variable.newBuilder() to construct.
       private Variable() {
         initFields();
       }
-      private Variable(boolean noInit) {}
-      
+
+      private Variable(boolean noInit) {
+      }
+
       private static final Variable defaultInstance;
+
       public static Variable getDefaultInstance() {
         return defaultInstance;
       }
-      
+
       public Variable getDefaultInstanceForType() {
         return defaultInstance;
       }
-      
-      public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
+
+      public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
         return com.opera.core.systems.scope.protos.EcmascriptProtos.internal_static_EvalArg_Variable_descriptor;
       }
-      
-      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-          internalGetFieldAccessorTable() {
+
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable internalGetFieldAccessorTable() {
         return com.opera.core.systems.scope.protos.EcmascriptProtos.internal_static_EvalArg_Variable_fieldAccessorTable;
       }
-      
+
       // required string name = 1;
       public static final int NAME_FIELD_NUMBER = 1;
       private boolean hasName;
       private java.lang.String name_ = "";
-      public boolean hasName() { return hasName; }
-      public java.lang.String getName() { return name_; }
-      
+
+      public boolean hasName() {
+        return hasName;
+      }
+
+      public java.lang.String getName() {
+        return name_;
+      }
+
       // required uint32 objectID = 2;
       public static final int OBJECTID_FIELD_NUMBER = 2;
       private boolean hasObjectID;
       private int objectID_ = 0;
-      public boolean hasObjectID() { return hasObjectID; }
-      public int getObjectID() { return objectID_; }
-      
+
+      public boolean hasObjectID() {
+        return hasObjectID;
+      }
+
+      public int getObjectID() {
+        return objectID_;
+      }
+
       private void initFields() {
       }
+
       public final boolean isInitialized() {
         if (!hasName) return false;
         if (!hasObjectID) return false;
         return true;
       }
-      
+
       public void writeTo(com.google.protobuf.CodedOutputStream output)
-                          throws java.io.IOException {
+          throws java.io.IOException {
         getSerializedSize();
         if (hasName()) {
           output.writeString(1, getName());
@@ -1245,62 +1379,67 @@ public final class EcmascriptProtos {
         }
         getUnknownFields().writeTo(output);
       }
-      
+
       private int memoizedSerializedSize = -1;
+
       public int getSerializedSize() {
         int size = memoizedSerializedSize;
         if (size != -1) return size;
-      
+
         size = 0;
         if (hasName()) {
-          size += com.google.protobuf.CodedOutputStream
-            .computeStringSize(1, getName());
+          size += com.google.protobuf.CodedOutputStream.computeStringSize(1,
+              getName());
         }
         if (hasObjectID()) {
-          size += com.google.protobuf.CodedOutputStream
-            .computeUInt32Size(2, getObjectID());
+          size += com.google.protobuf.CodedOutputStream.computeUInt32Size(2,
+              getObjectID());
         }
         size += getUnknownFields().getSerializedSize();
         memoizedSerializedSize = size;
         return size;
       }
-      
+
       public static com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg.Variable parseFrom(
           com.google.protobuf.ByteString data)
           throws com.google.protobuf.InvalidProtocolBufferException {
         return newBuilder().mergeFrom(data).buildParsed();
       }
+
       public static com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg.Variable parseFrom(
           com.google.protobuf.ByteString data,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        return newBuilder().mergeFrom(data, extensionRegistry)
-                 .buildParsed();
+        return newBuilder().mergeFrom(data, extensionRegistry).buildParsed();
       }
-      public static com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg.Variable parseFrom(byte[] data)
+
+      public static com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg.Variable parseFrom(
+          byte[] data)
           throws com.google.protobuf.InvalidProtocolBufferException {
         return newBuilder().mergeFrom(data).buildParsed();
       }
+
       public static com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg.Variable parseFrom(
           byte[] data,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        return newBuilder().mergeFrom(data, extensionRegistry)
-                 .buildParsed();
+        return newBuilder().mergeFrom(data, extensionRegistry).buildParsed();
       }
-      public static com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg.Variable parseFrom(java.io.InputStream input)
-          throws java.io.IOException {
+
+      public static com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg.Variable parseFrom(
+          java.io.InputStream input) throws java.io.IOException {
         return newBuilder().mergeFrom(input).buildParsed();
       }
+
       public static com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg.Variable parseFrom(
           java.io.InputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        return newBuilder().mergeFrom(input, extensionRegistry)
-                 .buildParsed();
+        return newBuilder().mergeFrom(input, extensionRegistry).buildParsed();
       }
-      public static com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg.Variable parseDelimitedFrom(java.io.InputStream input)
-          throws java.io.IOException {
+
+      public static com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg.Variable parseDelimitedFrom(
+          java.io.InputStream input) throws java.io.IOException {
         Builder builder = newBuilder();
         if (builder.mergeDelimitedFrom(input)) {
           return builder.buildParsed();
@@ -1308,6 +1447,7 @@ public final class EcmascriptProtos {
           return null;
         }
       }
+
       public static com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg.Variable parseDelimitedFrom(
           java.io.InputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -1319,104 +1459,117 @@ public final class EcmascriptProtos {
           return null;
         }
       }
+
       public static com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg.Variable parseFrom(
           com.google.protobuf.CodedInputStream input)
           throws java.io.IOException {
         return newBuilder().mergeFrom(input).buildParsed();
       }
+
       public static com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg.Variable parseFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        return newBuilder().mergeFrom(input, extensionRegistry)
-                 .buildParsed();
+        return newBuilder().mergeFrom(input, extensionRegistry).buildParsed();
       }
-      
-      public static Builder newBuilder() { return Builder.create(); }
-      public Builder newBuilderForType() { return newBuilder(); }
-      public static Builder newBuilder(com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg.Variable prototype) {
+
+      public static Builder newBuilder() {
+        return Builder.create();
+      }
+
+      public Builder newBuilderForType() {
+        return newBuilder();
+      }
+
+      public static Builder newBuilder(
+          com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg.Variable prototype) {
         return newBuilder().mergeFrom(prototype);
       }
-      public Builder toBuilder() { return newBuilder(this); }
-      
+
+      public Builder toBuilder() {
+        return newBuilder(this);
+      }
+
       public static final class Builder extends
           com.google.protobuf.GeneratedMessage.Builder<Builder> {
         private com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg.Variable result;
-        
-        // Construct using com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg.Variable.newBuilder()
-        private Builder() {}
-        
+
+        // Construct using
+        // com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg.Variable.newBuilder()
+        private Builder() {
+        }
+
         private static Builder create() {
           Builder builder = new Builder();
           builder.result = new com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg.Variable();
           return builder;
         }
-        
+
         protected com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg.Variable internalGetResult() {
           return result;
         }
-        
+
         public Builder clear() {
           if (result == null) {
             throw new IllegalStateException(
-              "Cannot call clear() after build().");
+                "Cannot call clear() after build().");
           }
           result = new com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg.Variable();
           return this;
         }
-        
+
         public Builder clone() {
           return create().mergeFrom(result);
         }
-        
-        public com.google.protobuf.Descriptors.Descriptor
-            getDescriptorForType() {
+
+        public com.google.protobuf.Descriptors.Descriptor getDescriptorForType() {
           return com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg.Variable.getDescriptor();
         }
-        
+
         public com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg.Variable getDefaultInstanceForType() {
           return com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg.Variable.getDefaultInstance();
         }
-        
+
         public boolean isInitialized() {
           return result.isInitialized();
         }
+
         public com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg.Variable build() {
           if (result != null && !isInitialized()) {
             throw newUninitializedMessageException(result);
           }
           return buildPartial();
         }
-        
+
         private com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg.Variable buildParsed()
             throws com.google.protobuf.InvalidProtocolBufferException {
           if (!isInitialized()) {
-            throw newUninitializedMessageException(
-              result).asInvalidProtocolBufferException();
+            throw newUninitializedMessageException(result).asInvalidProtocolBufferException();
           }
           return buildPartial();
         }
-        
+
         public com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg.Variable buildPartial() {
           if (result == null) {
             throw new IllegalStateException(
-              "build() has already been called on this Builder.");
+                "build() has already been called on this Builder.");
           }
           com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg.Variable returnMe = result;
           result = null;
           return returnMe;
         }
-        
+
         public Builder mergeFrom(com.google.protobuf.Message other) {
           if (other instanceof com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg.Variable) {
-            return mergeFrom((com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg.Variable)other);
+            return mergeFrom((com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg.Variable) other);
           } else {
             super.mergeFrom(other);
             return this;
           }
         }
-        
-        public Builder mergeFrom(com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg.Variable other) {
+
+        public Builder mergeFrom(
+            com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg.Variable other) {
           if (other == com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg.Variable.getDefaultInstance()) return this;
           if (other.hasName()) {
             setName(other.getName());
@@ -1427,120 +1580,140 @@ public final class EcmascriptProtos {
           this.mergeUnknownFields(other.getUnknownFields());
           return this;
         }
-        
-        public Builder mergeFrom(
-            com.google.protobuf.CodedInputStream input,
+
+        public Builder mergeFrom(com.google.protobuf.CodedInputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws java.io.IOException {
-          com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-            com.google.protobuf.UnknownFieldSet.newBuilder(
-              this.getUnknownFields());
+          com.google.protobuf.UnknownFieldSet.Builder unknownFields = com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
           while (true) {
             int tag = input.readTag();
             switch (tag) {
-              case 0:
+            case 0:
+              this.setUnknownFields(unknownFields.build());
+              return this;
+            default: {
+              if (!parseUnknownField(input, unknownFields, extensionRegistry,
+                  tag)) {
                 this.setUnknownFields(unknownFields.build());
                 return this;
-              default: {
-                if (!parseUnknownField(input, unknownFields,
-                                       extensionRegistry, tag)) {
-                  this.setUnknownFields(unknownFields.build());
-                  return this;
-                }
-                break;
               }
-              case 10: {
-                setName(input.readString());
-                break;
-              }
-              case 16: {
-                setObjectID(input.readUInt32());
-                break;
-              }
+              break;
+            }
+            case 10: {
+              setName(input.readString());
+              break;
+            }
+            case 16: {
+              setObjectID(input.readUInt32());
+              break;
+            }
             }
           }
         }
-        
-        
+
         // required string name = 1;
         public boolean hasName() {
           return result.hasName();
         }
+
         public java.lang.String getName() {
           return result.getName();
         }
+
         public Builder setName(java.lang.String value) {
           if (value == null) {
-    throw new NullPointerException();
-  }
-  result.hasName = true;
+            throw new NullPointerException();
+          }
+          result.hasName = true;
           result.name_ = value;
           return this;
         }
+
         public Builder clearName() {
           result.hasName = false;
           result.name_ = getDefaultInstance().getName();
           return this;
         }
-        
+
         // required uint32 objectID = 2;
         public boolean hasObjectID() {
           return result.hasObjectID();
         }
+
         public int getObjectID() {
           return result.getObjectID();
         }
+
         public Builder setObjectID(int value) {
           result.hasObjectID = true;
           result.objectID_ = value;
           return this;
         }
+
         public Builder clearObjectID() {
           result.hasObjectID = false;
           result.objectID_ = 0;
           return this;
         }
-        
+
         // @@protoc_insertion_point(builder_scope:EvalArg.Variable)
       }
-      
+
       static {
         defaultInstance = new Variable(true);
         com.opera.core.systems.scope.protos.EcmascriptProtos.internalForceInit();
         defaultInstance.initFields();
       }
-      
+
       // @@protoc_insertion_point(class_scope:EvalArg.Variable)
     }
-    
+
     // required uint32 runtimeID = 1;
     public static final int RUNTIMEID_FIELD_NUMBER = 1;
     private boolean hasRuntimeID;
     private int runtimeID_ = 0;
-    public boolean hasRuntimeID() { return hasRuntimeID; }
-    public int getRuntimeID() { return runtimeID_; }
-    
+
+    public boolean hasRuntimeID() {
+      return hasRuntimeID;
+    }
+
+    public int getRuntimeID() {
+      return runtimeID_;
+    }
+
     // required string scriptData = 2;
     public static final int SCRIPTDATA_FIELD_NUMBER = 2;
     private boolean hasScriptData;
     private java.lang.String scriptData_ = "";
-    public boolean hasScriptData() { return hasScriptData; }
-    public java.lang.String getScriptData() { return scriptData_; }
-    
+
+    public boolean hasScriptData() {
+      return hasScriptData;
+    }
+
+    public java.lang.String getScriptData() {
+      return scriptData_;
+    }
+
     // repeated .EvalArg.Variable variableList = 3;
     public static final int VARIABLELIST_FIELD_NUMBER = 3;
-    private java.util.List<com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg.Variable> variableList_ =
-      java.util.Collections.emptyList();
+    private java.util.List<com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg.Variable> variableList_ = java.util.Collections.emptyList();
+
     public java.util.List<com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg.Variable> getVariableListList() {
       return variableList_;
     }
-    public int getVariableListCount() { return variableList_.size(); }
-    public com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg.Variable getVariableList(int index) {
+
+    public int getVariableListCount() {
+      return variableList_.size();
+    }
+
+    public com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg.Variable getVariableList(
+        int index) {
       return variableList_.get(index);
     }
-    
+
     private void initFields() {
     }
+
     public final boolean isInitialized() {
       if (!hasRuntimeID) return false;
       if (!hasScriptData) return false;
@@ -1549,9 +1722,9 @@ public final class EcmascriptProtos {
       }
       return true;
     }
-    
+
     public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
+        throws java.io.IOException {
       getSerializedSize();
       if (hasRuntimeID()) {
         output.writeUInt32(1, getRuntimeID());
@@ -1564,66 +1737,69 @@ public final class EcmascriptProtos {
       }
       getUnknownFields().writeTo(output);
     }
-    
+
     private int memoizedSerializedSize = -1;
+
     public int getSerializedSize() {
       int size = memoizedSerializedSize;
       if (size != -1) return size;
-    
+
       size = 0;
       if (hasRuntimeID()) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeUInt32Size(1, getRuntimeID());
+        size += com.google.protobuf.CodedOutputStream.computeUInt32Size(1,
+            getRuntimeID());
       }
       if (hasScriptData()) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeStringSize(2, getScriptData());
+        size += com.google.protobuf.CodedOutputStream.computeStringSize(2,
+            getScriptData());
       }
       for (com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg.Variable element : getVariableListList()) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(3, element);
+        size += com.google.protobuf.CodedOutputStream.computeMessageSize(3,
+            element);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
       return size;
     }
-    
+
     public static com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+      return newBuilder().mergeFrom(data, extensionRegistry).buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+
+    public static com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg parseFrom(
+        byte[] data) throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+      return newBuilder().mergeFrom(data, extensionRegistry).buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
+
+    public static com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg parseFrom(
+        java.io.InputStream input) throws java.io.IOException {
       return newBuilder().mergeFrom(input).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+      return newBuilder().mergeFrom(input, extensionRegistry).buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
+
+    public static com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg parseDelimitedFrom(
+        java.io.InputStream input) throws java.io.IOException {
       Builder builder = newBuilder();
       if (builder.mergeDelimitedFrom(input)) {
         return builder.buildParsed();
@@ -1631,6 +1807,7 @@ public final class EcmascriptProtos {
         return null;
       }
     }
+
     public static com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -1642,108 +1819,118 @@ public final class EcmascriptProtos {
         return null;
       }
     }
+
     public static com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
+        com.google.protobuf.CodedInputStream input) throws java.io.IOException {
       return newBuilder().mergeFrom(input).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+      return newBuilder().mergeFrom(input, extensionRegistry).buildParsed();
     }
-    
-    public static Builder newBuilder() { return Builder.create(); }
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg prototype) {
+
+    public static Builder newBuilder() {
+      return Builder.create();
+    }
+
+    public Builder newBuilderForType() {
+      return newBuilder();
+    }
+
+    public static Builder newBuilder(
+        com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg prototype) {
       return newBuilder().mergeFrom(prototype);
     }
-    public Builder toBuilder() { return newBuilder(this); }
-    
+
+    public Builder toBuilder() {
+      return newBuilder(this);
+    }
+
     public static final class Builder extends
         com.google.protobuf.GeneratedMessage.Builder<Builder> {
       private com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg result;
-      
-      // Construct using com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg.newBuilder()
-      private Builder() {}
-      
+
+      // Construct using
+      // com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg.newBuilder()
+      private Builder() {
+      }
+
       private static Builder create() {
         Builder builder = new Builder();
         builder.result = new com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg();
         return builder;
       }
-      
+
       protected com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg internalGetResult() {
         return result;
       }
-      
+
       public Builder clear() {
         if (result == null) {
-          throw new IllegalStateException(
-            "Cannot call clear() after build().");
+          throw new IllegalStateException("Cannot call clear() after build().");
         }
         result = new com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg();
         return this;
       }
-      
+
       public Builder clone() {
         return create().mergeFrom(result);
       }
-      
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
+
+      public com.google.protobuf.Descriptors.Descriptor getDescriptorForType() {
         return com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg.getDescriptor();
       }
-      
+
       public com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg getDefaultInstanceForType() {
         return com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg.getDefaultInstance();
       }
-      
+
       public boolean isInitialized() {
         return result.isInitialized();
       }
+
       public com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg build() {
         if (result != null && !isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return buildPartial();
       }
-      
+
       private com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg buildParsed()
           throws com.google.protobuf.InvalidProtocolBufferException {
         if (!isInitialized()) {
-          throw newUninitializedMessageException(
-            result).asInvalidProtocolBufferException();
+          throw newUninitializedMessageException(result).asInvalidProtocolBufferException();
         }
         return buildPartial();
       }
-      
+
       public com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg buildPartial() {
         if (result == null) {
           throw new IllegalStateException(
-            "build() has already been called on this Builder.");
+              "build() has already been called on this Builder.");
         }
         if (result.variableList_ != java.util.Collections.EMPTY_LIST) {
-          result.variableList_ =
-            java.util.Collections.unmodifiableList(result.variableList_);
+          result.variableList_ = java.util.Collections.unmodifiableList(result.variableList_);
         }
         com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg returnMe = result;
         result = null;
         return returnMe;
       }
-      
+
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg) {
-          return mergeFrom((com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg)other);
+          return mergeFrom((com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg) other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
-      
-      public Builder mergeFrom(com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg other) {
+
+      public Builder mergeFrom(
+          com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg other) {
         if (other == com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg.getDefaultInstance()) return this;
         if (other.hasRuntimeID()) {
           setRuntimeID(other.getRuntimeID());
@@ -1760,108 +1947,120 @@ public final class EcmascriptProtos {
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
-      
-      public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
+
+      public Builder mergeFrom(com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder(
-            this.getUnknownFields());
+        com.google.protobuf.UnknownFieldSet.Builder unknownFields = com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
         while (true) {
           int tag = input.readTag();
           switch (tag) {
-            case 0:
+          case 0:
+            this.setUnknownFields(unknownFields.build());
+            return this;
+          default: {
+            if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
               this.setUnknownFields(unknownFields.build());
               return this;
-            default: {
-              if (!parseUnknownField(input, unknownFields,
-                                     extensionRegistry, tag)) {
-                this.setUnknownFields(unknownFields.build());
-                return this;
-              }
-              break;
             }
-            case 8: {
-              setRuntimeID(input.readUInt32());
-              break;
-            }
-            case 18: {
-              setScriptData(input.readString());
-              break;
-            }
-            case 26: {
-              com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg.Variable.Builder subBuilder = com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg.Variable.newBuilder();
-              input.readMessage(subBuilder, extensionRegistry);
-              addVariableList(subBuilder.buildPartial());
-              break;
-            }
+            break;
+          }
+          case 8: {
+            setRuntimeID(input.readUInt32());
+            break;
+          }
+          case 18: {
+            setScriptData(input.readString());
+            break;
+          }
+          case 26: {
+            com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg.Variable.Builder subBuilder = com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg.Variable.newBuilder();
+            input.readMessage(subBuilder, extensionRegistry);
+            addVariableList(subBuilder.buildPartial());
+            break;
+          }
           }
         }
       }
-      
-      
+
       // required uint32 runtimeID = 1;
       public boolean hasRuntimeID() {
         return result.hasRuntimeID();
       }
+
       public int getRuntimeID() {
         return result.getRuntimeID();
       }
+
       public Builder setRuntimeID(int value) {
         result.hasRuntimeID = true;
         result.runtimeID_ = value;
         return this;
       }
+
       public Builder clearRuntimeID() {
         result.hasRuntimeID = false;
         result.runtimeID_ = 0;
         return this;
       }
-      
+
       // required string scriptData = 2;
       public boolean hasScriptData() {
         return result.hasScriptData();
       }
+
       public java.lang.String getScriptData() {
         return result.getScriptData();
       }
+
       public Builder setScriptData(java.lang.String value) {
         if (value == null) {
-    throw new NullPointerException();
-  }
-  result.hasScriptData = true;
+          throw new NullPointerException();
+        }
+        result.hasScriptData = true;
         result.scriptData_ = value;
         return this;
       }
+
       public Builder clearScriptData() {
         result.hasScriptData = false;
         result.scriptData_ = getDefaultInstance().getScriptData();
         return this;
       }
-      
+
       // repeated .EvalArg.Variable variableList = 3;
       public java.util.List<com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg.Variable> getVariableListList() {
         return java.util.Collections.unmodifiableList(result.variableList_);
       }
+
       public int getVariableListCount() {
         return result.getVariableListCount();
       }
-      public com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg.Variable getVariableList(int index) {
+
+      public com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg.Variable getVariableList(
+          int index) {
         return result.getVariableList(index);
       }
-      public Builder setVariableList(int index, com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg.Variable value) {
+
+      public Builder setVariableList(
+          int index,
+          com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg.Variable value) {
         if (value == null) {
           throw new NullPointerException();
         }
         result.variableList_.set(index, value);
         return this;
       }
-      public Builder setVariableList(int index, com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg.Variable.Builder builderForValue) {
+
+      public Builder setVariableList(
+          int index,
+          com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg.Variable.Builder builderForValue) {
         result.variableList_.set(index, builderForValue.build());
         return this;
       }
-      public Builder addVariableList(com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg.Variable value) {
+
+      public Builder addVariableList(
+          com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg.Variable value) {
         if (value == null) {
           throw new NullPointerException();
         }
@@ -1871,13 +2070,16 @@ public final class EcmascriptProtos {
         result.variableList_.add(value);
         return this;
       }
-      public Builder addVariableList(com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg.Variable.Builder builderForValue) {
+
+      public Builder addVariableList(
+          com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg.Variable.Builder builderForValue) {
         if (result.variableList_.isEmpty()) {
           result.variableList_ = new java.util.ArrayList<com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg.Variable>();
         }
         result.variableList_.add(builderForValue.build());
         return this;
       }
+
       public Builder addAllVariableList(
           java.lang.Iterable<? extends com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg.Variable> values) {
         if (result.variableList_.isEmpty()) {
@@ -1886,150 +2088,167 @@ public final class EcmascriptProtos {
         super.addAll(values, result.variableList_);
         return this;
       }
+
       public Builder clearVariableList() {
         result.variableList_ = java.util.Collections.emptyList();
         return this;
       }
-      
+
       // @@protoc_insertion_point(builder_scope:EvalArg)
     }
-    
+
     static {
       defaultInstance = new EvalArg(true);
       com.opera.core.systems.scope.protos.EcmascriptProtos.internalForceInit();
       defaultInstance.initFields();
     }
-    
+
     // @@protoc_insertion_point(class_scope:EvalArg)
   }
-  
+
   public static final class EvalResult extends
       com.google.protobuf.GeneratedMessage {
     // Use EvalResult.newBuilder() to construct.
     private EvalResult() {
       initFields();
     }
-    private EvalResult(boolean noInit) {}
-    
+
+    private EvalResult(boolean noInit) {
+    }
+
     private static final EvalResult defaultInstance;
+
     public static EvalResult getDefaultInstance() {
       return defaultInstance;
     }
-    
+
     public EvalResult getDefaultInstanceForType() {
       return defaultInstance;
     }
-    
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
+
+    public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
       return com.opera.core.systems.scope.protos.EcmascriptProtos.internal_static_EvalResult_descriptor;
     }
-    
-    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-        internalGetFieldAccessorTable() {
+
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable internalGetFieldAccessorTable() {
       return com.opera.core.systems.scope.protos.EcmascriptProtos.internal_static_EvalResult_fieldAccessorTable;
     }
-    
-    public enum Status
-        implements com.google.protobuf.ProtocolMessageEnum {
-      SUCCESS(0, 1),
-      FAILURE(1, 2),
-      EXCEPTION(2, 3),
-      NO_MEMORY(3, 4),
-      CANCELLED(4, 5),
-      ;
-      
-      
-      public final int getNumber() { return value; }
-      
+
+    public enum Status implements com.google.protobuf.ProtocolMessageEnum {
+      SUCCESS(0, 1), FAILURE(1, 2), EXCEPTION(2, 3), NO_MEMORY(3, 4), CANCELLED(
+          4, 5), ;
+
+      public final int getNumber() {
+        return value;
+      }
+
       public static Status valueOf(int value) {
         switch (value) {
-          case 1: return SUCCESS;
-          case 2: return FAILURE;
-          case 3: return EXCEPTION;
-          case 4: return NO_MEMORY;
-          case 5: return CANCELLED;
-          default: return null;
+        case 1:
+          return SUCCESS;
+        case 2:
+          return FAILURE;
+        case 3:
+          return EXCEPTION;
+        case 4:
+          return NO_MEMORY;
+        case 5:
+          return CANCELLED;
+        default:
+          return null;
         }
       }
-      
-      public static com.google.protobuf.Internal.EnumLiteMap<Status>
-          internalGetValueMap() {
+
+      public static com.google.protobuf.Internal.EnumLiteMap<Status> internalGetValueMap() {
         return internalValueMap;
       }
-      private static com.google.protobuf.Internal.EnumLiteMap<Status>
-          internalValueMap =
-            new com.google.protobuf.Internal.EnumLiteMap<Status>() {
-              public Status findValueByNumber(int number) {
-                return Status.valueOf(number)
-      ;        }
-            };
-      
-      public final com.google.protobuf.Descriptors.EnumValueDescriptor
-          getValueDescriptor() {
+
+      private static com.google.protobuf.Internal.EnumLiteMap<Status> internalValueMap = new com.google.protobuf.Internal.EnumLiteMap<Status>() {
+        public Status findValueByNumber(int number) {
+          return Status.valueOf(number);
+        }
+      };
+
+      public final com.google.protobuf.Descriptors.EnumValueDescriptor getValueDescriptor() {
         return getDescriptor().getValues().get(index);
       }
-      public final com.google.protobuf.Descriptors.EnumDescriptor
-          getDescriptorForType() {
+
+      public final com.google.protobuf.Descriptors.EnumDescriptor getDescriptorForType() {
         return getDescriptor();
       }
-      public static final com.google.protobuf.Descriptors.EnumDescriptor
-          getDescriptor() {
-        return com.opera.core.systems.scope.protos.EcmascriptProtos.EvalResult.getDescriptor().getEnumTypes().get(0);
+
+      public static final com.google.protobuf.Descriptors.EnumDescriptor getDescriptor() {
+        return com.opera.core.systems.scope.protos.EcmascriptProtos.EvalResult.getDescriptor().getEnumTypes().get(
+            0);
       }
-      
-      private static final Status[] VALUES = {
-        SUCCESS, FAILURE, EXCEPTION, NO_MEMORY, CANCELLED, 
-      };
+
+      private static final Status[] VALUES = { SUCCESS, FAILURE, EXCEPTION,
+          NO_MEMORY, CANCELLED, };
+
       public static Status valueOf(
           com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
         if (desc.getType() != getDescriptor()) {
           throw new java.lang.IllegalArgumentException(
-            "EnumValueDescriptor is not for this type.");
+              "EnumValueDescriptor is not for this type.");
         }
         return VALUES[desc.getIndex()];
       }
+
       private final int index;
       private final int value;
+
       private Status(int index, int value) {
         this.index = index;
         this.value = value;
       }
-      
+
       static {
         com.opera.core.systems.scope.protos.EcmascriptProtos.getDescriptor();
       }
-      
+
       // @@protoc_insertion_point(enum_scope:EvalResult.Status)
     }
-    
+
     // required .EvalResult.Status status = 1;
     public static final int STATUS_FIELD_NUMBER = 1;
     private boolean hasStatus;
     private com.opera.core.systems.scope.protos.EcmascriptProtos.EvalResult.Status status_;
-    public boolean hasStatus() { return hasStatus; }
-    public com.opera.core.systems.scope.protos.EcmascriptProtos.EvalResult.Status getStatus() { return status_; }
-    
+
+    public boolean hasStatus() {
+      return hasStatus;
+    }
+
+    public com.opera.core.systems.scope.protos.EcmascriptProtos.EvalResult.Status getStatus() {
+      return status_;
+    }
+
     // required .Value value = 2;
     public static final int VALUE_FIELD_NUMBER = 2;
     private boolean hasValue;
     private com.opera.core.systems.scope.protos.EcmascriptProtos.Value value_;
-    public boolean hasValue() { return hasValue; }
-    public com.opera.core.systems.scope.protos.EcmascriptProtos.Value getValue() { return value_; }
-    
+
+    public boolean hasValue() {
+      return hasValue;
+    }
+
+    public com.opera.core.systems.scope.protos.EcmascriptProtos.Value getValue() {
+      return value_;
+    }
+
     private void initFields() {
       status_ = com.opera.core.systems.scope.protos.EcmascriptProtos.EvalResult.Status.SUCCESS;
       value_ = com.opera.core.systems.scope.protos.EcmascriptProtos.Value.getDefaultInstance();
     }
+
     public final boolean isInitialized() {
       if (!hasStatus) return false;
       if (!hasValue) return false;
       if (!getValue().isInitialized()) return false;
       return true;
     }
-    
+
     public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
+        throws java.io.IOException {
       getSerializedSize();
       if (hasStatus()) {
         output.writeEnum(1, getStatus().getNumber());
@@ -2039,62 +2258,65 @@ public final class EcmascriptProtos {
       }
       getUnknownFields().writeTo(output);
     }
-    
+
     private int memoizedSerializedSize = -1;
+
     public int getSerializedSize() {
       int size = memoizedSerializedSize;
       if (size != -1) return size;
-    
+
       size = 0;
       if (hasStatus()) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(1, getStatus().getNumber());
+        size += com.google.protobuf.CodedOutputStream.computeEnumSize(1,
+            getStatus().getNumber());
       }
       if (hasValue()) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(2, getValue());
+        size += com.google.protobuf.CodedOutputStream.computeMessageSize(2,
+            getValue());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
       return size;
     }
-    
+
     public static com.opera.core.systems.scope.protos.EcmascriptProtos.EvalResult parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.EcmascriptProtos.EvalResult parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+      return newBuilder().mergeFrom(data, extensionRegistry).buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.EcmascriptProtos.EvalResult parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+
+    public static com.opera.core.systems.scope.protos.EcmascriptProtos.EvalResult parseFrom(
+        byte[] data) throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.EcmascriptProtos.EvalResult parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+      return newBuilder().mergeFrom(data, extensionRegistry).buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.EcmascriptProtos.EvalResult parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
+
+    public static com.opera.core.systems.scope.protos.EcmascriptProtos.EvalResult parseFrom(
+        java.io.InputStream input) throws java.io.IOException {
       return newBuilder().mergeFrom(input).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.EcmascriptProtos.EvalResult parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+      return newBuilder().mergeFrom(input, extensionRegistry).buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.EcmascriptProtos.EvalResult parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
+
+    public static com.opera.core.systems.scope.protos.EcmascriptProtos.EvalResult parseDelimitedFrom(
+        java.io.InputStream input) throws java.io.IOException {
       Builder builder = newBuilder();
       if (builder.mergeDelimitedFrom(input)) {
         return builder.buildParsed();
@@ -2102,6 +2324,7 @@ public final class EcmascriptProtos {
         return null;
       }
     }
+
     public static com.opera.core.systems.scope.protos.EcmascriptProtos.EvalResult parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -2113,104 +2336,115 @@ public final class EcmascriptProtos {
         return null;
       }
     }
+
     public static com.opera.core.systems.scope.protos.EcmascriptProtos.EvalResult parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
+        com.google.protobuf.CodedInputStream input) throws java.io.IOException {
       return newBuilder().mergeFrom(input).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.EcmascriptProtos.EvalResult parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+      return newBuilder().mergeFrom(input, extensionRegistry).buildParsed();
     }
-    
-    public static Builder newBuilder() { return Builder.create(); }
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(com.opera.core.systems.scope.protos.EcmascriptProtos.EvalResult prototype) {
+
+    public static Builder newBuilder() {
+      return Builder.create();
+    }
+
+    public Builder newBuilderForType() {
+      return newBuilder();
+    }
+
+    public static Builder newBuilder(
+        com.opera.core.systems.scope.protos.EcmascriptProtos.EvalResult prototype) {
       return newBuilder().mergeFrom(prototype);
     }
-    public Builder toBuilder() { return newBuilder(this); }
-    
+
+    public Builder toBuilder() {
+      return newBuilder(this);
+    }
+
     public static final class Builder extends
         com.google.protobuf.GeneratedMessage.Builder<Builder> {
       private com.opera.core.systems.scope.protos.EcmascriptProtos.EvalResult result;
-      
-      // Construct using com.opera.core.systems.scope.protos.EcmascriptProtos.EvalResult.newBuilder()
-      private Builder() {}
-      
+
+      // Construct using
+      // com.opera.core.systems.scope.protos.EcmascriptProtos.EvalResult.newBuilder()
+      private Builder() {
+      }
+
       private static Builder create() {
         Builder builder = new Builder();
         builder.result = new com.opera.core.systems.scope.protos.EcmascriptProtos.EvalResult();
         return builder;
       }
-      
+
       protected com.opera.core.systems.scope.protos.EcmascriptProtos.EvalResult internalGetResult() {
         return result;
       }
-      
+
       public Builder clear() {
         if (result == null) {
-          throw new IllegalStateException(
-            "Cannot call clear() after build().");
+          throw new IllegalStateException("Cannot call clear() after build().");
         }
         result = new com.opera.core.systems.scope.protos.EcmascriptProtos.EvalResult();
         return this;
       }
-      
+
       public Builder clone() {
         return create().mergeFrom(result);
       }
-      
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
+
+      public com.google.protobuf.Descriptors.Descriptor getDescriptorForType() {
         return com.opera.core.systems.scope.protos.EcmascriptProtos.EvalResult.getDescriptor();
       }
-      
+
       public com.opera.core.systems.scope.protos.EcmascriptProtos.EvalResult getDefaultInstanceForType() {
         return com.opera.core.systems.scope.protos.EcmascriptProtos.EvalResult.getDefaultInstance();
       }
-      
+
       public boolean isInitialized() {
         return result.isInitialized();
       }
+
       public com.opera.core.systems.scope.protos.EcmascriptProtos.EvalResult build() {
         if (result != null && !isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return buildPartial();
       }
-      
+
       private com.opera.core.systems.scope.protos.EcmascriptProtos.EvalResult buildParsed()
           throws com.google.protobuf.InvalidProtocolBufferException {
         if (!isInitialized()) {
-          throw newUninitializedMessageException(
-            result).asInvalidProtocolBufferException();
+          throw newUninitializedMessageException(result).asInvalidProtocolBufferException();
         }
         return buildPartial();
       }
-      
+
       public com.opera.core.systems.scope.protos.EcmascriptProtos.EvalResult buildPartial() {
         if (result == null) {
           throw new IllegalStateException(
-            "build() has already been called on this Builder.");
+              "build() has already been called on this Builder.");
         }
         com.opera.core.systems.scope.protos.EcmascriptProtos.EvalResult returnMe = result;
         result = null;
         return returnMe;
       }
-      
+
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.opera.core.systems.scope.protos.EcmascriptProtos.EvalResult) {
-          return mergeFrom((com.opera.core.systems.scope.protos.EcmascriptProtos.EvalResult)other);
+          return mergeFrom((com.opera.core.systems.scope.protos.EcmascriptProtos.EvalResult) other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
-      
-      public Builder mergeFrom(com.opera.core.systems.scope.protos.EcmascriptProtos.EvalResult other) {
+
+      public Builder mergeFrom(
+          com.opera.core.systems.scope.protos.EcmascriptProtos.EvalResult other) {
         if (other == com.opera.core.systems.scope.protos.EcmascriptProtos.EvalResult.getDefaultInstance()) return this;
         if (other.hasStatus()) {
           setStatus(other.getStatus());
@@ -2221,60 +2455,58 @@ public final class EcmascriptProtos {
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
-      
-      public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
+
+      public Builder mergeFrom(com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder(
-            this.getUnknownFields());
+        com.google.protobuf.UnknownFieldSet.Builder unknownFields = com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
         while (true) {
           int tag = input.readTag();
           switch (tag) {
-            case 0:
+          case 0:
+            this.setUnknownFields(unknownFields.build());
+            return this;
+          default: {
+            if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
               this.setUnknownFields(unknownFields.build());
               return this;
-            default: {
-              if (!parseUnknownField(input, unknownFields,
-                                     extensionRegistry, tag)) {
-                this.setUnknownFields(unknownFields.build());
-                return this;
-              }
-              break;
             }
-            case 8: {
-              int rawValue = input.readEnum();
-              com.opera.core.systems.scope.protos.EcmascriptProtos.EvalResult.Status value = com.opera.core.systems.scope.protos.EcmascriptProtos.EvalResult.Status.valueOf(rawValue);
-              if (value == null) {
-                unknownFields.mergeVarintField(1, rawValue);
-              } else {
-                setStatus(value);
-              }
-              break;
+            break;
+          }
+          case 8: {
+            int rawValue = input.readEnum();
+            com.opera.core.systems.scope.protos.EcmascriptProtos.EvalResult.Status value = com.opera.core.systems.scope.protos.EcmascriptProtos.EvalResult.Status.valueOf(rawValue);
+            if (value == null) {
+              unknownFields.mergeVarintField(1, rawValue);
+            } else {
+              setStatus(value);
             }
-            case 18: {
-              com.opera.core.systems.scope.protos.EcmascriptProtos.Value.Builder subBuilder = com.opera.core.systems.scope.protos.EcmascriptProtos.Value.newBuilder();
-              if (hasValue()) {
-                subBuilder.mergeFrom(getValue());
-              }
-              input.readMessage(subBuilder, extensionRegistry);
-              setValue(subBuilder.buildPartial());
-              break;
+            break;
+          }
+          case 18: {
+            com.opera.core.systems.scope.protos.EcmascriptProtos.Value.Builder subBuilder = com.opera.core.systems.scope.protos.EcmascriptProtos.Value.newBuilder();
+            if (hasValue()) {
+              subBuilder.mergeFrom(getValue());
             }
+            input.readMessage(subBuilder, extensionRegistry);
+            setValue(subBuilder.buildPartial());
+            break;
+          }
           }
         }
       }
-      
-      
+
       // required .EvalResult.Status status = 1;
       public boolean hasStatus() {
         return result.hasStatus();
       }
+
       public com.opera.core.systems.scope.protos.EcmascriptProtos.EvalResult.Status getStatus() {
         return result.getStatus();
       }
-      public Builder setStatus(com.opera.core.systems.scope.protos.EcmascriptProtos.EvalResult.Status value) {
+
+      public Builder setStatus(
+          com.opera.core.systems.scope.protos.EcmascriptProtos.EvalResult.Status value) {
         if (value == null) {
           throw new NullPointerException();
         }
@@ -2282,20 +2514,24 @@ public final class EcmascriptProtos {
         result.status_ = value;
         return this;
       }
+
       public Builder clearStatus() {
         result.hasStatus = false;
         result.status_ = com.opera.core.systems.scope.protos.EcmascriptProtos.EvalResult.Status.SUCCESS;
         return this;
       }
-      
+
       // required .Value value = 2;
       public boolean hasValue() {
         return result.hasValue();
       }
+
       public com.opera.core.systems.scope.protos.EcmascriptProtos.Value getValue() {
         return result.getValue();
       }
-      public Builder setValue(com.opera.core.systems.scope.protos.EcmascriptProtos.Value value) {
+
+      public Builder setValue(
+          com.opera.core.systems.scope.protos.EcmascriptProtos.Value value) {
         if (value == null) {
           throw new NullPointerException();
         }
@@ -2303,102 +2539,125 @@ public final class EcmascriptProtos {
         result.value_ = value;
         return this;
       }
-      public Builder setValue(com.opera.core.systems.scope.protos.EcmascriptProtos.Value.Builder builderForValue) {
+
+      public Builder setValue(
+          com.opera.core.systems.scope.protos.EcmascriptProtos.Value.Builder builderForValue) {
         result.hasValue = true;
         result.value_ = builderForValue.build();
         return this;
       }
-      public Builder mergeValue(com.opera.core.systems.scope.protos.EcmascriptProtos.Value value) {
-        if (result.hasValue() &&
-            result.value_ != com.opera.core.systems.scope.protos.EcmascriptProtos.Value.getDefaultInstance()) {
-          result.value_ =
-            com.opera.core.systems.scope.protos.EcmascriptProtos.Value.newBuilder(result.value_).mergeFrom(value).buildPartial();
+
+      public Builder mergeValue(
+          com.opera.core.systems.scope.protos.EcmascriptProtos.Value value) {
+        if (result.hasValue()
+            && result.value_ != com.opera.core.systems.scope.protos.EcmascriptProtos.Value.getDefaultInstance()) {
+          result.value_ = com.opera.core.systems.scope.protos.EcmascriptProtos.Value.newBuilder(
+              result.value_).mergeFrom(value).buildPartial();
         } else {
           result.value_ = value;
         }
         result.hasValue = true;
         return this;
       }
+
       public Builder clearValue() {
         result.hasValue = false;
         result.value_ = com.opera.core.systems.scope.protos.EcmascriptProtos.Value.getDefaultInstance();
         return this;
       }
-      
+
       // @@protoc_insertion_point(builder_scope:EvalResult)
     }
-    
+
     static {
       defaultInstance = new EvalResult(true);
       com.opera.core.systems.scope.protos.EcmascriptProtos.internalForceInit();
       defaultInstance.initFields();
     }
-    
+
     // @@protoc_insertion_point(class_scope:EvalResult)
   }
-  
+
   public static final class ExamineObjectsArg extends
       com.google.protobuf.GeneratedMessage {
     // Use ExamineObjectsArg.newBuilder() to construct.
     private ExamineObjectsArg() {
       initFields();
     }
-    private ExamineObjectsArg(boolean noInit) {}
-    
+
+    private ExamineObjectsArg(boolean noInit) {
+    }
+
     private static final ExamineObjectsArg defaultInstance;
+
     public static ExamineObjectsArg getDefaultInstance() {
       return defaultInstance;
     }
-    
+
     public ExamineObjectsArg getDefaultInstanceForType() {
       return defaultInstance;
     }
-    
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
+
+    public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
       return com.opera.core.systems.scope.protos.EcmascriptProtos.internal_static_ExamineObjectsArg_descriptor;
     }
-    
-    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-        internalGetFieldAccessorTable() {
+
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable internalGetFieldAccessorTable() {
       return com.opera.core.systems.scope.protos.EcmascriptProtos.internal_static_ExamineObjectsArg_fieldAccessorTable;
     }
-    
+
     // required uint32 runtimeID = 1;
     public static final int RUNTIMEID_FIELD_NUMBER = 1;
     private boolean hasRuntimeID;
     private int runtimeID_ = 0;
-    public boolean hasRuntimeID() { return hasRuntimeID; }
-    public int getRuntimeID() { return runtimeID_; }
-    
+
+    public boolean hasRuntimeID() {
+      return hasRuntimeID;
+    }
+
+    public int getRuntimeID() {
+      return runtimeID_;
+    }
+
     // repeated uint32 objectList = 2;
     public static final int OBJECTLIST_FIELD_NUMBER = 2;
-    private java.util.List<java.lang.Integer> objectList_ =
-      java.util.Collections.emptyList();
+    private java.util.List<java.lang.Integer> objectList_ = java.util.Collections.emptyList();
+
     public java.util.List<java.lang.Integer> getObjectListList() {
       return objectList_;
     }
-    public int getObjectListCount() { return objectList_.size(); }
+
+    public int getObjectListCount() {
+      return objectList_.size();
+    }
+
     public int getObjectList(int index) {
       return objectList_.get(index);
     }
-    
+
     // optional bool examinePrototypes = 3 [default = false];
     public static final int EXAMINEPROTOTYPES_FIELD_NUMBER = 3;
     private boolean hasExaminePrototypes;
     private boolean examinePrototypes_ = false;
-    public boolean hasExaminePrototypes() { return hasExaminePrototypes; }
-    public boolean getExaminePrototypes() { return examinePrototypes_; }
-    
+
+    public boolean hasExaminePrototypes() {
+      return hasExaminePrototypes;
+    }
+
+    public boolean getExaminePrototypes() {
+      return examinePrototypes_;
+    }
+
     private void initFields() {
     }
+
     public final boolean isInitialized() {
       if (!hasRuntimeID) return false;
       return true;
     }
-    
+
     public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
+        throws java.io.IOException {
       getSerializedSize();
       if (hasRuntimeID()) {
         output.writeUInt32(1, getRuntimeID());
@@ -2411,71 +2670,73 @@ public final class EcmascriptProtos {
       }
       getUnknownFields().writeTo(output);
     }
-    
+
     private int memoizedSerializedSize = -1;
+
     public int getSerializedSize() {
       int size = memoizedSerializedSize;
       if (size != -1) return size;
-    
+
       size = 0;
       if (hasRuntimeID()) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeUInt32Size(1, getRuntimeID());
+        size += com.google.protobuf.CodedOutputStream.computeUInt32Size(1,
+            getRuntimeID());
       }
       {
         int dataSize = 0;
         for (int element : getObjectListList()) {
-          dataSize += com.google.protobuf.CodedOutputStream
-            .computeUInt32SizeNoTag(element);
+          dataSize += com.google.protobuf.CodedOutputStream.computeUInt32SizeNoTag(element);
         }
         size += dataSize;
         size += 1 * getObjectListList().size();
       }
       if (hasExaminePrototypes()) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBoolSize(3, getExaminePrototypes());
+        size += com.google.protobuf.CodedOutputStream.computeBoolSize(3,
+            getExaminePrototypes());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
       return size;
     }
-    
+
     public static com.opera.core.systems.scope.protos.EcmascriptProtos.ExamineObjectsArg parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.EcmascriptProtos.ExamineObjectsArg parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+      return newBuilder().mergeFrom(data, extensionRegistry).buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.EcmascriptProtos.ExamineObjectsArg parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+
+    public static com.opera.core.systems.scope.protos.EcmascriptProtos.ExamineObjectsArg parseFrom(
+        byte[] data) throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.EcmascriptProtos.ExamineObjectsArg parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+      return newBuilder().mergeFrom(data, extensionRegistry).buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.EcmascriptProtos.ExamineObjectsArg parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
+
+    public static com.opera.core.systems.scope.protos.EcmascriptProtos.ExamineObjectsArg parseFrom(
+        java.io.InputStream input) throws java.io.IOException {
       return newBuilder().mergeFrom(input).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.EcmascriptProtos.ExamineObjectsArg parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+      return newBuilder().mergeFrom(input, extensionRegistry).buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.EcmascriptProtos.ExamineObjectsArg parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
+
+    public static com.opera.core.systems.scope.protos.EcmascriptProtos.ExamineObjectsArg parseDelimitedFrom(
+        java.io.InputStream input) throws java.io.IOException {
       Builder builder = newBuilder();
       if (builder.mergeDelimitedFrom(input)) {
         return builder.buildParsed();
@@ -2483,6 +2744,7 @@ public final class EcmascriptProtos {
         return null;
       }
     }
+
     public static com.opera.core.systems.scope.protos.EcmascriptProtos.ExamineObjectsArg parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -2494,108 +2756,118 @@ public final class EcmascriptProtos {
         return null;
       }
     }
+
     public static com.opera.core.systems.scope.protos.EcmascriptProtos.ExamineObjectsArg parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
+        com.google.protobuf.CodedInputStream input) throws java.io.IOException {
       return newBuilder().mergeFrom(input).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.EcmascriptProtos.ExamineObjectsArg parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+      return newBuilder().mergeFrom(input, extensionRegistry).buildParsed();
     }
-    
-    public static Builder newBuilder() { return Builder.create(); }
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(com.opera.core.systems.scope.protos.EcmascriptProtos.ExamineObjectsArg prototype) {
+
+    public static Builder newBuilder() {
+      return Builder.create();
+    }
+
+    public Builder newBuilderForType() {
+      return newBuilder();
+    }
+
+    public static Builder newBuilder(
+        com.opera.core.systems.scope.protos.EcmascriptProtos.ExamineObjectsArg prototype) {
       return newBuilder().mergeFrom(prototype);
     }
-    public Builder toBuilder() { return newBuilder(this); }
-    
+
+    public Builder toBuilder() {
+      return newBuilder(this);
+    }
+
     public static final class Builder extends
         com.google.protobuf.GeneratedMessage.Builder<Builder> {
       private com.opera.core.systems.scope.protos.EcmascriptProtos.ExamineObjectsArg result;
-      
-      // Construct using com.opera.core.systems.scope.protos.EcmascriptProtos.ExamineObjectsArg.newBuilder()
-      private Builder() {}
-      
+
+      // Construct using
+      // com.opera.core.systems.scope.protos.EcmascriptProtos.ExamineObjectsArg.newBuilder()
+      private Builder() {
+      }
+
       private static Builder create() {
         Builder builder = new Builder();
         builder.result = new com.opera.core.systems.scope.protos.EcmascriptProtos.ExamineObjectsArg();
         return builder;
       }
-      
+
       protected com.opera.core.systems.scope.protos.EcmascriptProtos.ExamineObjectsArg internalGetResult() {
         return result;
       }
-      
+
       public Builder clear() {
         if (result == null) {
-          throw new IllegalStateException(
-            "Cannot call clear() after build().");
+          throw new IllegalStateException("Cannot call clear() after build().");
         }
         result = new com.opera.core.systems.scope.protos.EcmascriptProtos.ExamineObjectsArg();
         return this;
       }
-      
+
       public Builder clone() {
         return create().mergeFrom(result);
       }
-      
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
+
+      public com.google.protobuf.Descriptors.Descriptor getDescriptorForType() {
         return com.opera.core.systems.scope.protos.EcmascriptProtos.ExamineObjectsArg.getDescriptor();
       }
-      
+
       public com.opera.core.systems.scope.protos.EcmascriptProtos.ExamineObjectsArg getDefaultInstanceForType() {
         return com.opera.core.systems.scope.protos.EcmascriptProtos.ExamineObjectsArg.getDefaultInstance();
       }
-      
+
       public boolean isInitialized() {
         return result.isInitialized();
       }
+
       public com.opera.core.systems.scope.protos.EcmascriptProtos.ExamineObjectsArg build() {
         if (result != null && !isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return buildPartial();
       }
-      
+
       private com.opera.core.systems.scope.protos.EcmascriptProtos.ExamineObjectsArg buildParsed()
           throws com.google.protobuf.InvalidProtocolBufferException {
         if (!isInitialized()) {
-          throw newUninitializedMessageException(
-            result).asInvalidProtocolBufferException();
+          throw newUninitializedMessageException(result).asInvalidProtocolBufferException();
         }
         return buildPartial();
       }
-      
+
       public com.opera.core.systems.scope.protos.EcmascriptProtos.ExamineObjectsArg buildPartial() {
         if (result == null) {
           throw new IllegalStateException(
-            "build() has already been called on this Builder.");
+              "build() has already been called on this Builder.");
         }
         if (result.objectList_ != java.util.Collections.EMPTY_LIST) {
-          result.objectList_ =
-            java.util.Collections.unmodifiableList(result.objectList_);
+          result.objectList_ = java.util.Collections.unmodifiableList(result.objectList_);
         }
         com.opera.core.systems.scope.protos.EcmascriptProtos.ExamineObjectsArg returnMe = result;
         result = null;
         return returnMe;
       }
-      
+
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.opera.core.systems.scope.protos.EcmascriptProtos.ExamineObjectsArg) {
-          return mergeFrom((com.opera.core.systems.scope.protos.EcmascriptProtos.ExamineObjectsArg)other);
+          return mergeFrom((com.opera.core.systems.scope.protos.EcmascriptProtos.ExamineObjectsArg) other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
-      
-      public Builder mergeFrom(com.opera.core.systems.scope.protos.EcmascriptProtos.ExamineObjectsArg other) {
+
+      public Builder mergeFrom(
+          com.opera.core.systems.scope.protos.EcmascriptProtos.ExamineObjectsArg other) {
         if (other == com.opera.core.systems.scope.protos.EcmascriptProtos.ExamineObjectsArg.getDefaultInstance()) return this;
         if (other.hasRuntimeID()) {
           setRuntimeID(other.getRuntimeID());
@@ -2612,86 +2884,88 @@ public final class EcmascriptProtos {
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
-      
-      public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
+
+      public Builder mergeFrom(com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder(
-            this.getUnknownFields());
+        com.google.protobuf.UnknownFieldSet.Builder unknownFields = com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
         while (true) {
           int tag = input.readTag();
           switch (tag) {
-            case 0:
+          case 0:
+            this.setUnknownFields(unknownFields.build());
+            return this;
+          default: {
+            if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
               this.setUnknownFields(unknownFields.build());
               return this;
-            default: {
-              if (!parseUnknownField(input, unknownFields,
-                                     extensionRegistry, tag)) {
-                this.setUnknownFields(unknownFields.build());
-                return this;
-              }
-              break;
             }
-            case 8: {
-              setRuntimeID(input.readUInt32());
-              break;
-            }
-            case 16: {
+            break;
+          }
+          case 8: {
+            setRuntimeID(input.readUInt32());
+            break;
+          }
+          case 16: {
+            addObjectList(input.readUInt32());
+            break;
+          }
+          case 18: {
+            int length = input.readRawVarint32();
+            int limit = input.pushLimit(length);
+            while (input.getBytesUntilLimit() > 0) {
               addObjectList(input.readUInt32());
-              break;
             }
-            case 18: {
-              int length = input.readRawVarint32();
-              int limit = input.pushLimit(length);
-              while (input.getBytesUntilLimit() > 0) {
-                addObjectList(input.readUInt32());
-              }
-              input.popLimit(limit);
-              break;
-            }
-            case 24: {
-              setExaminePrototypes(input.readBool());
-              break;
-            }
+            input.popLimit(limit);
+            break;
+          }
+          case 24: {
+            setExaminePrototypes(input.readBool());
+            break;
+          }
           }
         }
       }
-      
-      
+
       // required uint32 runtimeID = 1;
       public boolean hasRuntimeID() {
         return result.hasRuntimeID();
       }
+
       public int getRuntimeID() {
         return result.getRuntimeID();
       }
+
       public Builder setRuntimeID(int value) {
         result.hasRuntimeID = true;
         result.runtimeID_ = value;
         return this;
       }
+
       public Builder clearRuntimeID() {
         result.hasRuntimeID = false;
         result.runtimeID_ = 0;
         return this;
       }
-      
+
       // repeated uint32 objectList = 2;
       public java.util.List<java.lang.Integer> getObjectListList() {
         return java.util.Collections.unmodifiableList(result.objectList_);
       }
+
       public int getObjectListCount() {
         return result.getObjectListCount();
       }
+
       public int getObjectList(int index) {
         return result.getObjectList(index);
       }
+
       public Builder setObjectList(int index, int value) {
         result.objectList_.set(index, value);
         return this;
       }
+
       public Builder addObjectList(int value) {
         if (result.objectList_.isEmpty()) {
           result.objectList_ = new java.util.ArrayList<java.lang.Integer>();
@@ -2699,6 +2973,7 @@ public final class EcmascriptProtos {
         result.objectList_.add(value);
         return this;
       }
+
       public Builder addAllObjectList(
           java.lang.Iterable<? extends java.lang.Integer> values) {
         if (result.objectList_.isEmpty()) {
@@ -2707,149 +2982,163 @@ public final class EcmascriptProtos {
         super.addAll(values, result.objectList_);
         return this;
       }
+
       public Builder clearObjectList() {
         result.objectList_ = java.util.Collections.emptyList();
         return this;
       }
-      
+
       // optional bool examinePrototypes = 3 [default = false];
       public boolean hasExaminePrototypes() {
         return result.hasExaminePrototypes();
       }
+
       public boolean getExaminePrototypes() {
         return result.getExaminePrototypes();
       }
+
       public Builder setExaminePrototypes(boolean value) {
         result.hasExaminePrototypes = true;
         result.examinePrototypes_ = value;
         return this;
       }
+
       public Builder clearExaminePrototypes() {
         result.hasExaminePrototypes = false;
         result.examinePrototypes_ = false;
         return this;
       }
-      
+
       // @@protoc_insertion_point(builder_scope:ExamineObjectsArg)
     }
-    
+
     static {
       defaultInstance = new ExamineObjectsArg(true);
       com.opera.core.systems.scope.protos.EcmascriptProtos.internalForceInit();
       defaultInstance.initFields();
     }
-    
+
     // @@protoc_insertion_point(class_scope:ExamineObjectsArg)
   }
-  
+
   public static final class ObjectList extends
       com.google.protobuf.GeneratedMessage {
     // Use ObjectList.newBuilder() to construct.
     private ObjectList() {
       initFields();
     }
-    private ObjectList(boolean noInit) {}
-    
+
+    private ObjectList(boolean noInit) {
+    }
+
     private static final ObjectList defaultInstance;
+
     public static ObjectList getDefaultInstance() {
       return defaultInstance;
     }
-    
+
     public ObjectList getDefaultInstanceForType() {
       return defaultInstance;
     }
-    
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
+
+    public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
       return com.opera.core.systems.scope.protos.EcmascriptProtos.internal_static_ObjectList_descriptor;
     }
-    
-    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-        internalGetFieldAccessorTable() {
+
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable internalGetFieldAccessorTable() {
       return com.opera.core.systems.scope.protos.EcmascriptProtos.internal_static_ObjectList_fieldAccessorTable;
     }
-    
+
     // repeated .PrototypeChain prototypeList = 1;
     public static final int PROTOTYPELIST_FIELD_NUMBER = 1;
-    private java.util.List<com.opera.core.systems.scope.protos.EcmascriptProtos.PrototypeChain> prototypeList_ =
-      java.util.Collections.emptyList();
+    private java.util.List<com.opera.core.systems.scope.protos.EcmascriptProtos.PrototypeChain> prototypeList_ = java.util.Collections.emptyList();
+
     public java.util.List<com.opera.core.systems.scope.protos.EcmascriptProtos.PrototypeChain> getPrototypeListList() {
       return prototypeList_;
     }
-    public int getPrototypeListCount() { return prototypeList_.size(); }
-    public com.opera.core.systems.scope.protos.EcmascriptProtos.PrototypeChain getPrototypeList(int index) {
+
+    public int getPrototypeListCount() {
+      return prototypeList_.size();
+    }
+
+    public com.opera.core.systems.scope.protos.EcmascriptProtos.PrototypeChain getPrototypeList(
+        int index) {
       return prototypeList_.get(index);
     }
-    
+
     private void initFields() {
     }
+
     public final boolean isInitialized() {
       for (com.opera.core.systems.scope.protos.EcmascriptProtos.PrototypeChain element : getPrototypeListList()) {
         if (!element.isInitialized()) return false;
       }
       return true;
     }
-    
+
     public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
+        throws java.io.IOException {
       getSerializedSize();
       for (com.opera.core.systems.scope.protos.EcmascriptProtos.PrototypeChain element : getPrototypeListList()) {
         output.writeMessage(1, element);
       }
       getUnknownFields().writeTo(output);
     }
-    
+
     private int memoizedSerializedSize = -1;
+
     public int getSerializedSize() {
       int size = memoizedSerializedSize;
       if (size != -1) return size;
-    
+
       size = 0;
       for (com.opera.core.systems.scope.protos.EcmascriptProtos.PrototypeChain element : getPrototypeListList()) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(1, element);
+        size += com.google.protobuf.CodedOutputStream.computeMessageSize(1,
+            element);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
       return size;
     }
-    
+
     public static com.opera.core.systems.scope.protos.EcmascriptProtos.ObjectList parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.EcmascriptProtos.ObjectList parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+      return newBuilder().mergeFrom(data, extensionRegistry).buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.EcmascriptProtos.ObjectList parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+
+    public static com.opera.core.systems.scope.protos.EcmascriptProtos.ObjectList parseFrom(
+        byte[] data) throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.EcmascriptProtos.ObjectList parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+      return newBuilder().mergeFrom(data, extensionRegistry).buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.EcmascriptProtos.ObjectList parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
+
+    public static com.opera.core.systems.scope.protos.EcmascriptProtos.ObjectList parseFrom(
+        java.io.InputStream input) throws java.io.IOException {
       return newBuilder().mergeFrom(input).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.EcmascriptProtos.ObjectList parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+      return newBuilder().mergeFrom(input, extensionRegistry).buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.EcmascriptProtos.ObjectList parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
+
+    public static com.opera.core.systems.scope.protos.EcmascriptProtos.ObjectList parseDelimitedFrom(
+        java.io.InputStream input) throws java.io.IOException {
       Builder builder = newBuilder();
       if (builder.mergeDelimitedFrom(input)) {
         return builder.buildParsed();
@@ -2857,6 +3146,7 @@ public final class EcmascriptProtos {
         return null;
       }
     }
+
     public static com.opera.core.systems.scope.protos.EcmascriptProtos.ObjectList parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -2868,108 +3158,118 @@ public final class EcmascriptProtos {
         return null;
       }
     }
+
     public static com.opera.core.systems.scope.protos.EcmascriptProtos.ObjectList parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
+        com.google.protobuf.CodedInputStream input) throws java.io.IOException {
       return newBuilder().mergeFrom(input).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.EcmascriptProtos.ObjectList parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+      return newBuilder().mergeFrom(input, extensionRegistry).buildParsed();
     }
-    
-    public static Builder newBuilder() { return Builder.create(); }
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(com.opera.core.systems.scope.protos.EcmascriptProtos.ObjectList prototype) {
+
+    public static Builder newBuilder() {
+      return Builder.create();
+    }
+
+    public Builder newBuilderForType() {
+      return newBuilder();
+    }
+
+    public static Builder newBuilder(
+        com.opera.core.systems.scope.protos.EcmascriptProtos.ObjectList prototype) {
       return newBuilder().mergeFrom(prototype);
     }
-    public Builder toBuilder() { return newBuilder(this); }
-    
+
+    public Builder toBuilder() {
+      return newBuilder(this);
+    }
+
     public static final class Builder extends
         com.google.protobuf.GeneratedMessage.Builder<Builder> {
       private com.opera.core.systems.scope.protos.EcmascriptProtos.ObjectList result;
-      
-      // Construct using com.opera.core.systems.scope.protos.EcmascriptProtos.ObjectList.newBuilder()
-      private Builder() {}
-      
+
+      // Construct using
+      // com.opera.core.systems.scope.protos.EcmascriptProtos.ObjectList.newBuilder()
+      private Builder() {
+      }
+
       private static Builder create() {
         Builder builder = new Builder();
         builder.result = new com.opera.core.systems.scope.protos.EcmascriptProtos.ObjectList();
         return builder;
       }
-      
+
       protected com.opera.core.systems.scope.protos.EcmascriptProtos.ObjectList internalGetResult() {
         return result;
       }
-      
+
       public Builder clear() {
         if (result == null) {
-          throw new IllegalStateException(
-            "Cannot call clear() after build().");
+          throw new IllegalStateException("Cannot call clear() after build().");
         }
         result = new com.opera.core.systems.scope.protos.EcmascriptProtos.ObjectList();
         return this;
       }
-      
+
       public Builder clone() {
         return create().mergeFrom(result);
       }
-      
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
+
+      public com.google.protobuf.Descriptors.Descriptor getDescriptorForType() {
         return com.opera.core.systems.scope.protos.EcmascriptProtos.ObjectList.getDescriptor();
       }
-      
+
       public com.opera.core.systems.scope.protos.EcmascriptProtos.ObjectList getDefaultInstanceForType() {
         return com.opera.core.systems.scope.protos.EcmascriptProtos.ObjectList.getDefaultInstance();
       }
-      
+
       public boolean isInitialized() {
         return result.isInitialized();
       }
+
       public com.opera.core.systems.scope.protos.EcmascriptProtos.ObjectList build() {
         if (result != null && !isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return buildPartial();
       }
-      
+
       private com.opera.core.systems.scope.protos.EcmascriptProtos.ObjectList buildParsed()
           throws com.google.protobuf.InvalidProtocolBufferException {
         if (!isInitialized()) {
-          throw newUninitializedMessageException(
-            result).asInvalidProtocolBufferException();
+          throw newUninitializedMessageException(result).asInvalidProtocolBufferException();
         }
         return buildPartial();
       }
-      
+
       public com.opera.core.systems.scope.protos.EcmascriptProtos.ObjectList buildPartial() {
         if (result == null) {
           throw new IllegalStateException(
-            "build() has already been called on this Builder.");
+              "build() has already been called on this Builder.");
         }
         if (result.prototypeList_ != java.util.Collections.EMPTY_LIST) {
-          result.prototypeList_ =
-            java.util.Collections.unmodifiableList(result.prototypeList_);
+          result.prototypeList_ = java.util.Collections.unmodifiableList(result.prototypeList_);
         }
         com.opera.core.systems.scope.protos.EcmascriptProtos.ObjectList returnMe = result;
         result = null;
         return returnMe;
       }
-      
+
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.opera.core.systems.scope.protos.EcmascriptProtos.ObjectList) {
-          return mergeFrom((com.opera.core.systems.scope.protos.EcmascriptProtos.ObjectList)other);
+          return mergeFrom((com.opera.core.systems.scope.protos.EcmascriptProtos.ObjectList) other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
-      
-      public Builder mergeFrom(com.opera.core.systems.scope.protos.EcmascriptProtos.ObjectList other) {
+
+      public Builder mergeFrom(
+          com.opera.core.systems.scope.protos.EcmascriptProtos.ObjectList other) {
         if (other == com.opera.core.systems.scope.protos.EcmascriptProtos.ObjectList.getDefaultInstance()) return this;
         if (!other.prototypeList_.isEmpty()) {
           if (result.prototypeList_.isEmpty()) {
@@ -2980,61 +3280,67 @@ public final class EcmascriptProtos {
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
-      
-      public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
+
+      public Builder mergeFrom(com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder(
-            this.getUnknownFields());
+        com.google.protobuf.UnknownFieldSet.Builder unknownFields = com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
         while (true) {
           int tag = input.readTag();
           switch (tag) {
-            case 0:
+          case 0:
+            this.setUnknownFields(unknownFields.build());
+            return this;
+          default: {
+            if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
               this.setUnknownFields(unknownFields.build());
               return this;
-            default: {
-              if (!parseUnknownField(input, unknownFields,
-                                     extensionRegistry, tag)) {
-                this.setUnknownFields(unknownFields.build());
-                return this;
-              }
-              break;
             }
-            case 10: {
-              com.opera.core.systems.scope.protos.EcmascriptProtos.PrototypeChain.Builder subBuilder = com.opera.core.systems.scope.protos.EcmascriptProtos.PrototypeChain.newBuilder();
-              input.readMessage(subBuilder, extensionRegistry);
-              addPrototypeList(subBuilder.buildPartial());
-              break;
-            }
+            break;
+          }
+          case 10: {
+            com.opera.core.systems.scope.protos.EcmascriptProtos.PrototypeChain.Builder subBuilder = com.opera.core.systems.scope.protos.EcmascriptProtos.PrototypeChain.newBuilder();
+            input.readMessage(subBuilder, extensionRegistry);
+            addPrototypeList(subBuilder.buildPartial());
+            break;
+          }
           }
         }
       }
-      
-      
+
       // repeated .PrototypeChain prototypeList = 1;
       public java.util.List<com.opera.core.systems.scope.protos.EcmascriptProtos.PrototypeChain> getPrototypeListList() {
         return java.util.Collections.unmodifiableList(result.prototypeList_);
       }
+
       public int getPrototypeListCount() {
         return result.getPrototypeListCount();
       }
-      public com.opera.core.systems.scope.protos.EcmascriptProtos.PrototypeChain getPrototypeList(int index) {
+
+      public com.opera.core.systems.scope.protos.EcmascriptProtos.PrototypeChain getPrototypeList(
+          int index) {
         return result.getPrototypeList(index);
       }
-      public Builder setPrototypeList(int index, com.opera.core.systems.scope.protos.EcmascriptProtos.PrototypeChain value) {
+
+      public Builder setPrototypeList(
+          int index,
+          com.opera.core.systems.scope.protos.EcmascriptProtos.PrototypeChain value) {
         if (value == null) {
           throw new NullPointerException();
         }
         result.prototypeList_.set(index, value);
         return this;
       }
-      public Builder setPrototypeList(int index, com.opera.core.systems.scope.protos.EcmascriptProtos.PrototypeChain.Builder builderForValue) {
+
+      public Builder setPrototypeList(
+          int index,
+          com.opera.core.systems.scope.protos.EcmascriptProtos.PrototypeChain.Builder builderForValue) {
         result.prototypeList_.set(index, builderForValue.build());
         return this;
       }
-      public Builder addPrototypeList(com.opera.core.systems.scope.protos.EcmascriptProtos.PrototypeChain value) {
+
+      public Builder addPrototypeList(
+          com.opera.core.systems.scope.protos.EcmascriptProtos.PrototypeChain value) {
         if (value == null) {
           throw new NullPointerException();
         }
@@ -3044,13 +3350,16 @@ public final class EcmascriptProtos {
         result.prototypeList_.add(value);
         return this;
       }
-      public Builder addPrototypeList(com.opera.core.systems.scope.protos.EcmascriptProtos.PrototypeChain.Builder builderForValue) {
+
+      public Builder addPrototypeList(
+          com.opera.core.systems.scope.protos.EcmascriptProtos.PrototypeChain.Builder builderForValue) {
         if (result.prototypeList_.isEmpty()) {
           result.prototypeList_ = new java.util.ArrayList<com.opera.core.systems.scope.protos.EcmascriptProtos.PrototypeChain>();
         }
         result.prototypeList_.add(builderForValue.build());
         return this;
       }
+
       public Builder addAllPrototypeList(
           java.lang.Iterable<? extends com.opera.core.systems.scope.protos.EcmascriptProtos.PrototypeChain> values) {
         if (result.prototypeList_.isEmpty()) {
@@ -3059,131 +3368,142 @@ public final class EcmascriptProtos {
         super.addAll(values, result.prototypeList_);
         return this;
       }
+
       public Builder clearPrototypeList() {
         result.prototypeList_ = java.util.Collections.emptyList();
         return this;
       }
-      
+
       // @@protoc_insertion_point(builder_scope:ObjectList)
     }
-    
+
     static {
       defaultInstance = new ObjectList(true);
       com.opera.core.systems.scope.protos.EcmascriptProtos.internalForceInit();
       defaultInstance.initFields();
     }
-    
+
     // @@protoc_insertion_point(class_scope:ObjectList)
   }
-  
+
   public static final class PrototypeChain extends
       com.google.protobuf.GeneratedMessage {
     // Use PrototypeChain.newBuilder() to construct.
     private PrototypeChain() {
       initFields();
     }
-    private PrototypeChain(boolean noInit) {}
-    
+
+    private PrototypeChain(boolean noInit) {
+    }
+
     private static final PrototypeChain defaultInstance;
+
     public static PrototypeChain getDefaultInstance() {
       return defaultInstance;
     }
-    
+
     public PrototypeChain getDefaultInstanceForType() {
       return defaultInstance;
     }
-    
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
+
+    public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
       return com.opera.core.systems.scope.protos.EcmascriptProtos.internal_static_PrototypeChain_descriptor;
     }
-    
-    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-        internalGetFieldAccessorTable() {
+
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable internalGetFieldAccessorTable() {
       return com.opera.core.systems.scope.protos.EcmascriptProtos.internal_static_PrototypeChain_fieldAccessorTable;
     }
-    
+
     // repeated .Object objectList = 1;
     public static final int OBJECTLIST_FIELD_NUMBER = 1;
-    private java.util.List<com.opera.core.systems.scope.protos.EcmascriptProtos.Object> objectList_ =
-      java.util.Collections.emptyList();
+    private java.util.List<com.opera.core.systems.scope.protos.EcmascriptProtos.Object> objectList_ = java.util.Collections.emptyList();
+
     public java.util.List<com.opera.core.systems.scope.protos.EcmascriptProtos.Object> getObjectListList() {
       return objectList_;
     }
-    public int getObjectListCount() { return objectList_.size(); }
-    public com.opera.core.systems.scope.protos.EcmascriptProtos.Object getObjectList(int index) {
+
+    public int getObjectListCount() {
+      return objectList_.size();
+    }
+
+    public com.opera.core.systems.scope.protos.EcmascriptProtos.Object getObjectList(
+        int index) {
       return objectList_.get(index);
     }
-    
+
     private void initFields() {
     }
+
     public final boolean isInitialized() {
       for (com.opera.core.systems.scope.protos.EcmascriptProtos.Object element : getObjectListList()) {
         if (!element.isInitialized()) return false;
       }
       return true;
     }
-    
+
     public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
+        throws java.io.IOException {
       getSerializedSize();
       for (com.opera.core.systems.scope.protos.EcmascriptProtos.Object element : getObjectListList()) {
         output.writeMessage(1, element);
       }
       getUnknownFields().writeTo(output);
     }
-    
+
     private int memoizedSerializedSize = -1;
+
     public int getSerializedSize() {
       int size = memoizedSerializedSize;
       if (size != -1) return size;
-    
+
       size = 0;
       for (com.opera.core.systems.scope.protos.EcmascriptProtos.Object element : getObjectListList()) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(1, element);
+        size += com.google.protobuf.CodedOutputStream.computeMessageSize(1,
+            element);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
       return size;
     }
-    
+
     public static com.opera.core.systems.scope.protos.EcmascriptProtos.PrototypeChain parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.EcmascriptProtos.PrototypeChain parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+      return newBuilder().mergeFrom(data, extensionRegistry).buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.EcmascriptProtos.PrototypeChain parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+
+    public static com.opera.core.systems.scope.protos.EcmascriptProtos.PrototypeChain parseFrom(
+        byte[] data) throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.EcmascriptProtos.PrototypeChain parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+      return newBuilder().mergeFrom(data, extensionRegistry).buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.EcmascriptProtos.PrototypeChain parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
+
+    public static com.opera.core.systems.scope.protos.EcmascriptProtos.PrototypeChain parseFrom(
+        java.io.InputStream input) throws java.io.IOException {
       return newBuilder().mergeFrom(input).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.EcmascriptProtos.PrototypeChain parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+      return newBuilder().mergeFrom(input, extensionRegistry).buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.EcmascriptProtos.PrototypeChain parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
+
+    public static com.opera.core.systems.scope.protos.EcmascriptProtos.PrototypeChain parseDelimitedFrom(
+        java.io.InputStream input) throws java.io.IOException {
       Builder builder = newBuilder();
       if (builder.mergeDelimitedFrom(input)) {
         return builder.buildParsed();
@@ -3191,6 +3511,7 @@ public final class EcmascriptProtos {
         return null;
       }
     }
+
     public static com.opera.core.systems.scope.protos.EcmascriptProtos.PrototypeChain parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -3202,108 +3523,118 @@ public final class EcmascriptProtos {
         return null;
       }
     }
+
     public static com.opera.core.systems.scope.protos.EcmascriptProtos.PrototypeChain parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
+        com.google.protobuf.CodedInputStream input) throws java.io.IOException {
       return newBuilder().mergeFrom(input).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.EcmascriptProtos.PrototypeChain parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+      return newBuilder().mergeFrom(input, extensionRegistry).buildParsed();
     }
-    
-    public static Builder newBuilder() { return Builder.create(); }
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(com.opera.core.systems.scope.protos.EcmascriptProtos.PrototypeChain prototype) {
+
+    public static Builder newBuilder() {
+      return Builder.create();
+    }
+
+    public Builder newBuilderForType() {
+      return newBuilder();
+    }
+
+    public static Builder newBuilder(
+        com.opera.core.systems.scope.protos.EcmascriptProtos.PrototypeChain prototype) {
       return newBuilder().mergeFrom(prototype);
     }
-    public Builder toBuilder() { return newBuilder(this); }
-    
+
+    public Builder toBuilder() {
+      return newBuilder(this);
+    }
+
     public static final class Builder extends
         com.google.protobuf.GeneratedMessage.Builder<Builder> {
       private com.opera.core.systems.scope.protos.EcmascriptProtos.PrototypeChain result;
-      
-      // Construct using com.opera.core.systems.scope.protos.EcmascriptProtos.PrototypeChain.newBuilder()
-      private Builder() {}
-      
+
+      // Construct using
+      // com.opera.core.systems.scope.protos.EcmascriptProtos.PrototypeChain.newBuilder()
+      private Builder() {
+      }
+
       private static Builder create() {
         Builder builder = new Builder();
         builder.result = new com.opera.core.systems.scope.protos.EcmascriptProtos.PrototypeChain();
         return builder;
       }
-      
+
       protected com.opera.core.systems.scope.protos.EcmascriptProtos.PrototypeChain internalGetResult() {
         return result;
       }
-      
+
       public Builder clear() {
         if (result == null) {
-          throw new IllegalStateException(
-            "Cannot call clear() after build().");
+          throw new IllegalStateException("Cannot call clear() after build().");
         }
         result = new com.opera.core.systems.scope.protos.EcmascriptProtos.PrototypeChain();
         return this;
       }
-      
+
       public Builder clone() {
         return create().mergeFrom(result);
       }
-      
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
+
+      public com.google.protobuf.Descriptors.Descriptor getDescriptorForType() {
         return com.opera.core.systems.scope.protos.EcmascriptProtos.PrototypeChain.getDescriptor();
       }
-      
+
       public com.opera.core.systems.scope.protos.EcmascriptProtos.PrototypeChain getDefaultInstanceForType() {
         return com.opera.core.systems.scope.protos.EcmascriptProtos.PrototypeChain.getDefaultInstance();
       }
-      
+
       public boolean isInitialized() {
         return result.isInitialized();
       }
+
       public com.opera.core.systems.scope.protos.EcmascriptProtos.PrototypeChain build() {
         if (result != null && !isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return buildPartial();
       }
-      
+
       private com.opera.core.systems.scope.protos.EcmascriptProtos.PrototypeChain buildParsed()
           throws com.google.protobuf.InvalidProtocolBufferException {
         if (!isInitialized()) {
-          throw newUninitializedMessageException(
-            result).asInvalidProtocolBufferException();
+          throw newUninitializedMessageException(result).asInvalidProtocolBufferException();
         }
         return buildPartial();
       }
-      
+
       public com.opera.core.systems.scope.protos.EcmascriptProtos.PrototypeChain buildPartial() {
         if (result == null) {
           throw new IllegalStateException(
-            "build() has already been called on this Builder.");
+              "build() has already been called on this Builder.");
         }
         if (result.objectList_ != java.util.Collections.EMPTY_LIST) {
-          result.objectList_ =
-            java.util.Collections.unmodifiableList(result.objectList_);
+          result.objectList_ = java.util.Collections.unmodifiableList(result.objectList_);
         }
         com.opera.core.systems.scope.protos.EcmascriptProtos.PrototypeChain returnMe = result;
         result = null;
         return returnMe;
       }
-      
+
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.opera.core.systems.scope.protos.EcmascriptProtos.PrototypeChain) {
-          return mergeFrom((com.opera.core.systems.scope.protos.EcmascriptProtos.PrototypeChain)other);
+          return mergeFrom((com.opera.core.systems.scope.protos.EcmascriptProtos.PrototypeChain) other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
-      
-      public Builder mergeFrom(com.opera.core.systems.scope.protos.EcmascriptProtos.PrototypeChain other) {
+
+      public Builder mergeFrom(
+          com.opera.core.systems.scope.protos.EcmascriptProtos.PrototypeChain other) {
         if (other == com.opera.core.systems.scope.protos.EcmascriptProtos.PrototypeChain.getDefaultInstance()) return this;
         if (!other.objectList_.isEmpty()) {
           if (result.objectList_.isEmpty()) {
@@ -3314,61 +3645,66 @@ public final class EcmascriptProtos {
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
-      
-      public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
+
+      public Builder mergeFrom(com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder(
-            this.getUnknownFields());
+        com.google.protobuf.UnknownFieldSet.Builder unknownFields = com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
         while (true) {
           int tag = input.readTag();
           switch (tag) {
-            case 0:
+          case 0:
+            this.setUnknownFields(unknownFields.build());
+            return this;
+          default: {
+            if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
               this.setUnknownFields(unknownFields.build());
               return this;
-            default: {
-              if (!parseUnknownField(input, unknownFields,
-                                     extensionRegistry, tag)) {
-                this.setUnknownFields(unknownFields.build());
-                return this;
-              }
-              break;
             }
-            case 10: {
-              com.opera.core.systems.scope.protos.EcmascriptProtos.Object.Builder subBuilder = com.opera.core.systems.scope.protos.EcmascriptProtos.Object.newBuilder();
-              input.readMessage(subBuilder, extensionRegistry);
-              addObjectList(subBuilder.buildPartial());
-              break;
-            }
+            break;
+          }
+          case 10: {
+            com.opera.core.systems.scope.protos.EcmascriptProtos.Object.Builder subBuilder = com.opera.core.systems.scope.protos.EcmascriptProtos.Object.newBuilder();
+            input.readMessage(subBuilder, extensionRegistry);
+            addObjectList(subBuilder.buildPartial());
+            break;
+          }
           }
         }
       }
-      
-      
+
       // repeated .Object objectList = 1;
       public java.util.List<com.opera.core.systems.scope.protos.EcmascriptProtos.Object> getObjectListList() {
         return java.util.Collections.unmodifiableList(result.objectList_);
       }
+
       public int getObjectListCount() {
         return result.getObjectListCount();
       }
-      public com.opera.core.systems.scope.protos.EcmascriptProtos.Object getObjectList(int index) {
+
+      public com.opera.core.systems.scope.protos.EcmascriptProtos.Object getObjectList(
+          int index) {
         return result.getObjectList(index);
       }
-      public Builder setObjectList(int index, com.opera.core.systems.scope.protos.EcmascriptProtos.Object value) {
+
+      public Builder setObjectList(int index,
+          com.opera.core.systems.scope.protos.EcmascriptProtos.Object value) {
         if (value == null) {
           throw new NullPointerException();
         }
         result.objectList_.set(index, value);
         return this;
       }
-      public Builder setObjectList(int index, com.opera.core.systems.scope.protos.EcmascriptProtos.Object.Builder builderForValue) {
+
+      public Builder setObjectList(
+          int index,
+          com.opera.core.systems.scope.protos.EcmascriptProtos.Object.Builder builderForValue) {
         result.objectList_.set(index, builderForValue.build());
         return this;
       }
-      public Builder addObjectList(com.opera.core.systems.scope.protos.EcmascriptProtos.Object value) {
+
+      public Builder addObjectList(
+          com.opera.core.systems.scope.protos.EcmascriptProtos.Object value) {
         if (value == null) {
           throw new NullPointerException();
         }
@@ -3378,13 +3714,16 @@ public final class EcmascriptProtos {
         result.objectList_.add(value);
         return this;
       }
-      public Builder addObjectList(com.opera.core.systems.scope.protos.EcmascriptProtos.Object.Builder builderForValue) {
+
+      public Builder addObjectList(
+          com.opera.core.systems.scope.protos.EcmascriptProtos.Object.Builder builderForValue) {
         if (result.objectList_.isEmpty()) {
           result.objectList_ = new java.util.ArrayList<com.opera.core.systems.scope.protos.EcmascriptProtos.Object>();
         }
         result.objectList_.add(builderForValue.build());
         return this;
       }
+
       public Builder addAllObjectList(
           java.lang.Iterable<? extends com.opera.core.systems.scope.protos.EcmascriptProtos.Object> values) {
         if (result.objectList_.isEmpty()) {
@@ -3393,170 +3732,185 @@ public final class EcmascriptProtos {
         super.addAll(values, result.objectList_);
         return this;
       }
+
       public Builder clearObjectList() {
         result.objectList_ = java.util.Collections.emptyList();
         return this;
       }
-      
+
       // @@protoc_insertion_point(builder_scope:PrototypeChain)
     }
-    
+
     static {
       defaultInstance = new PrototypeChain(true);
       com.opera.core.systems.scope.protos.EcmascriptProtos.internalForceInit();
       defaultInstance.initFields();
     }
-    
+
     // @@protoc_insertion_point(class_scope:PrototypeChain)
   }
-  
-  public static final class Object extends
-      com.google.protobuf.GeneratedMessage {
+
+  public static final class Object extends com.google.protobuf.GeneratedMessage {
     // Use Object.newBuilder() to construct.
     private Object() {
       initFields();
     }
-    private Object(boolean noInit) {}
-    
+
+    private Object(boolean noInit) {
+    }
+
     private static final Object defaultInstance;
+
     public static Object getDefaultInstance() {
       return defaultInstance;
     }
-    
+
     public Object getDefaultInstanceForType() {
       return defaultInstance;
     }
-    
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
+
+    public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
       return com.opera.core.systems.scope.protos.EcmascriptProtos.internal_static_Object_descriptor;
     }
-    
-    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-        internalGetFieldAccessorTable() {
+
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable internalGetFieldAccessorTable() {
       return com.opera.core.systems.scope.protos.EcmascriptProtos.internal_static_Object_fieldAccessorTable;
     }
-    
-    public enum ObjectType
-        implements com.google.protobuf.ProtocolMessageEnum {
-      OBJECT(0, 1),
-      FUNCTION(1, 2),
-      ;
-      
-      
-      public final int getNumber() { return value; }
-      
+
+    public enum ObjectType implements com.google.protobuf.ProtocolMessageEnum {
+      OBJECT(0, 1), FUNCTION(1, 2), ;
+
+      public final int getNumber() {
+        return value;
+      }
+
       public static ObjectType valueOf(int value) {
         switch (value) {
-          case 1: return OBJECT;
-          case 2: return FUNCTION;
-          default: return null;
+        case 1:
+          return OBJECT;
+        case 2:
+          return FUNCTION;
+        default:
+          return null;
         }
       }
-      
-      public static com.google.protobuf.Internal.EnumLiteMap<ObjectType>
-          internalGetValueMap() {
+
+      public static com.google.protobuf.Internal.EnumLiteMap<ObjectType> internalGetValueMap() {
         return internalValueMap;
       }
-      private static com.google.protobuf.Internal.EnumLiteMap<ObjectType>
-          internalValueMap =
-            new com.google.protobuf.Internal.EnumLiteMap<ObjectType>() {
-              public ObjectType findValueByNumber(int number) {
-                return ObjectType.valueOf(number)
-      ;        }
-            };
-      
-      public final com.google.protobuf.Descriptors.EnumValueDescriptor
-          getValueDescriptor() {
+
+      private static com.google.protobuf.Internal.EnumLiteMap<ObjectType> internalValueMap = new com.google.protobuf.Internal.EnumLiteMap<ObjectType>() {
+        public ObjectType findValueByNumber(int number) {
+          return ObjectType.valueOf(number);
+        }
+      };
+
+      public final com.google.protobuf.Descriptors.EnumValueDescriptor getValueDescriptor() {
         return getDescriptor().getValues().get(index);
       }
-      public final com.google.protobuf.Descriptors.EnumDescriptor
-          getDescriptorForType() {
+
+      public final com.google.protobuf.Descriptors.EnumDescriptor getDescriptorForType() {
         return getDescriptor();
       }
-      public static final com.google.protobuf.Descriptors.EnumDescriptor
-          getDescriptor() {
-        return com.opera.core.systems.scope.protos.EcmascriptProtos.Object.getDescriptor().getEnumTypes().get(0);
+
+      public static final com.google.protobuf.Descriptors.EnumDescriptor getDescriptor() {
+        return com.opera.core.systems.scope.protos.EcmascriptProtos.Object.getDescriptor().getEnumTypes().get(
+            0);
       }
-      
-      private static final ObjectType[] VALUES = {
-        OBJECT, FUNCTION, 
-      };
+
+      private static final ObjectType[] VALUES = { OBJECT, FUNCTION, };
+
       public static ObjectType valueOf(
           com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
         if (desc.getType() != getDescriptor()) {
           throw new java.lang.IllegalArgumentException(
-            "EnumValueDescriptor is not for this type.");
+              "EnumValueDescriptor is not for this type.");
         }
         return VALUES[desc.getIndex()];
       }
+
       private final int index;
       private final int value;
+
       private ObjectType(int index, int value) {
         this.index = index;
         this.value = value;
       }
-      
+
       static {
         com.opera.core.systems.scope.protos.EcmascriptProtos.getDescriptor();
       }
-      
+
       // @@protoc_insertion_point(enum_scope:Object.ObjectType)
     }
-    
+
     public static final class Property extends
         com.google.protobuf.GeneratedMessage {
       // Use Property.newBuilder() to construct.
       private Property() {
         initFields();
       }
-      private Property(boolean noInit) {}
-      
+
+      private Property(boolean noInit) {
+      }
+
       private static final Property defaultInstance;
+
       public static Property getDefaultInstance() {
         return defaultInstance;
       }
-      
+
       public Property getDefaultInstanceForType() {
         return defaultInstance;
       }
-      
-      public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
+
+      public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
         return com.opera.core.systems.scope.protos.EcmascriptProtos.internal_static_Object_Property_descriptor;
       }
-      
-      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-          internalGetFieldAccessorTable() {
+
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable internalGetFieldAccessorTable() {
         return com.opera.core.systems.scope.protos.EcmascriptProtos.internal_static_Object_Property_fieldAccessorTable;
       }
-      
+
       // required string name = 1;
       public static final int NAME_FIELD_NUMBER = 1;
       private boolean hasName;
       private java.lang.String name_ = "";
-      public boolean hasName() { return hasName; }
-      public java.lang.String getName() { return name_; }
-      
+
+      public boolean hasName() {
+        return hasName;
+      }
+
+      public java.lang.String getName() {
+        return name_;
+      }
+
       // required .Value value = 2;
       public static final int VALUE_FIELD_NUMBER = 2;
       private boolean hasValue;
       private com.opera.core.systems.scope.protos.EcmascriptProtos.Value value_;
-      public boolean hasValue() { return hasValue; }
-      public com.opera.core.systems.scope.protos.EcmascriptProtos.Value getValue() { return value_; }
-      
+
+      public boolean hasValue() {
+        return hasValue;
+      }
+
+      public com.opera.core.systems.scope.protos.EcmascriptProtos.Value getValue() {
+        return value_;
+      }
+
       private void initFields() {
         value_ = com.opera.core.systems.scope.protos.EcmascriptProtos.Value.getDefaultInstance();
       }
+
       public final boolean isInitialized() {
         if (!hasName) return false;
         if (!hasValue) return false;
         if (!getValue().isInitialized()) return false;
         return true;
       }
-      
+
       public void writeTo(com.google.protobuf.CodedOutputStream output)
-                          throws java.io.IOException {
+          throws java.io.IOException {
         getSerializedSize();
         if (hasName()) {
           output.writeString(1, getName());
@@ -3566,62 +3920,67 @@ public final class EcmascriptProtos {
         }
         getUnknownFields().writeTo(output);
       }
-      
+
       private int memoizedSerializedSize = -1;
+
       public int getSerializedSize() {
         int size = memoizedSerializedSize;
         if (size != -1) return size;
-      
+
         size = 0;
         if (hasName()) {
-          size += com.google.protobuf.CodedOutputStream
-            .computeStringSize(1, getName());
+          size += com.google.protobuf.CodedOutputStream.computeStringSize(1,
+              getName());
         }
         if (hasValue()) {
-          size += com.google.protobuf.CodedOutputStream
-            .computeMessageSize(2, getValue());
+          size += com.google.protobuf.CodedOutputStream.computeMessageSize(2,
+              getValue());
         }
         size += getUnknownFields().getSerializedSize();
         memoizedSerializedSize = size;
         return size;
       }
-      
+
       public static com.opera.core.systems.scope.protos.EcmascriptProtos.Object.Property parseFrom(
           com.google.protobuf.ByteString data)
           throws com.google.protobuf.InvalidProtocolBufferException {
         return newBuilder().mergeFrom(data).buildParsed();
       }
+
       public static com.opera.core.systems.scope.protos.EcmascriptProtos.Object.Property parseFrom(
           com.google.protobuf.ByteString data,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        return newBuilder().mergeFrom(data, extensionRegistry)
-                 .buildParsed();
+        return newBuilder().mergeFrom(data, extensionRegistry).buildParsed();
       }
-      public static com.opera.core.systems.scope.protos.EcmascriptProtos.Object.Property parseFrom(byte[] data)
+
+      public static com.opera.core.systems.scope.protos.EcmascriptProtos.Object.Property parseFrom(
+          byte[] data)
           throws com.google.protobuf.InvalidProtocolBufferException {
         return newBuilder().mergeFrom(data).buildParsed();
       }
+
       public static com.opera.core.systems.scope.protos.EcmascriptProtos.Object.Property parseFrom(
           byte[] data,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        return newBuilder().mergeFrom(data, extensionRegistry)
-                 .buildParsed();
+        return newBuilder().mergeFrom(data, extensionRegistry).buildParsed();
       }
-      public static com.opera.core.systems.scope.protos.EcmascriptProtos.Object.Property parseFrom(java.io.InputStream input)
-          throws java.io.IOException {
+
+      public static com.opera.core.systems.scope.protos.EcmascriptProtos.Object.Property parseFrom(
+          java.io.InputStream input) throws java.io.IOException {
         return newBuilder().mergeFrom(input).buildParsed();
       }
+
       public static com.opera.core.systems.scope.protos.EcmascriptProtos.Object.Property parseFrom(
           java.io.InputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        return newBuilder().mergeFrom(input, extensionRegistry)
-                 .buildParsed();
+        return newBuilder().mergeFrom(input, extensionRegistry).buildParsed();
       }
-      public static com.opera.core.systems.scope.protos.EcmascriptProtos.Object.Property parseDelimitedFrom(java.io.InputStream input)
-          throws java.io.IOException {
+
+      public static com.opera.core.systems.scope.protos.EcmascriptProtos.Object.Property parseDelimitedFrom(
+          java.io.InputStream input) throws java.io.IOException {
         Builder builder = newBuilder();
         if (builder.mergeDelimitedFrom(input)) {
           return builder.buildParsed();
@@ -3629,6 +3988,7 @@ public final class EcmascriptProtos {
           return null;
         }
       }
+
       public static com.opera.core.systems.scope.protos.EcmascriptProtos.Object.Property parseDelimitedFrom(
           java.io.InputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -3640,104 +4000,117 @@ public final class EcmascriptProtos {
           return null;
         }
       }
+
       public static com.opera.core.systems.scope.protos.EcmascriptProtos.Object.Property parseFrom(
           com.google.protobuf.CodedInputStream input)
           throws java.io.IOException {
         return newBuilder().mergeFrom(input).buildParsed();
       }
+
       public static com.opera.core.systems.scope.protos.EcmascriptProtos.Object.Property parseFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        return newBuilder().mergeFrom(input, extensionRegistry)
-                 .buildParsed();
+        return newBuilder().mergeFrom(input, extensionRegistry).buildParsed();
       }
-      
-      public static Builder newBuilder() { return Builder.create(); }
-      public Builder newBuilderForType() { return newBuilder(); }
-      public static Builder newBuilder(com.opera.core.systems.scope.protos.EcmascriptProtos.Object.Property prototype) {
+
+      public static Builder newBuilder() {
+        return Builder.create();
+      }
+
+      public Builder newBuilderForType() {
+        return newBuilder();
+      }
+
+      public static Builder newBuilder(
+          com.opera.core.systems.scope.protos.EcmascriptProtos.Object.Property prototype) {
         return newBuilder().mergeFrom(prototype);
       }
-      public Builder toBuilder() { return newBuilder(this); }
-      
+
+      public Builder toBuilder() {
+        return newBuilder(this);
+      }
+
       public static final class Builder extends
           com.google.protobuf.GeneratedMessage.Builder<Builder> {
         private com.opera.core.systems.scope.protos.EcmascriptProtos.Object.Property result;
-        
-        // Construct using com.opera.core.systems.scope.protos.EcmascriptProtos.Object.Property.newBuilder()
-        private Builder() {}
-        
+
+        // Construct using
+        // com.opera.core.systems.scope.protos.EcmascriptProtos.Object.Property.newBuilder()
+        private Builder() {
+        }
+
         private static Builder create() {
           Builder builder = new Builder();
           builder.result = new com.opera.core.systems.scope.protos.EcmascriptProtos.Object.Property();
           return builder;
         }
-        
+
         protected com.opera.core.systems.scope.protos.EcmascriptProtos.Object.Property internalGetResult() {
           return result;
         }
-        
+
         public Builder clear() {
           if (result == null) {
             throw new IllegalStateException(
-              "Cannot call clear() after build().");
+                "Cannot call clear() after build().");
           }
           result = new com.opera.core.systems.scope.protos.EcmascriptProtos.Object.Property();
           return this;
         }
-        
+
         public Builder clone() {
           return create().mergeFrom(result);
         }
-        
-        public com.google.protobuf.Descriptors.Descriptor
-            getDescriptorForType() {
+
+        public com.google.protobuf.Descriptors.Descriptor getDescriptorForType() {
           return com.opera.core.systems.scope.protos.EcmascriptProtos.Object.Property.getDescriptor();
         }
-        
+
         public com.opera.core.systems.scope.protos.EcmascriptProtos.Object.Property getDefaultInstanceForType() {
           return com.opera.core.systems.scope.protos.EcmascriptProtos.Object.Property.getDefaultInstance();
         }
-        
+
         public boolean isInitialized() {
           return result.isInitialized();
         }
+
         public com.opera.core.systems.scope.protos.EcmascriptProtos.Object.Property build() {
           if (result != null && !isInitialized()) {
             throw newUninitializedMessageException(result);
           }
           return buildPartial();
         }
-        
+
         private com.opera.core.systems.scope.protos.EcmascriptProtos.Object.Property buildParsed()
             throws com.google.protobuf.InvalidProtocolBufferException {
           if (!isInitialized()) {
-            throw newUninitializedMessageException(
-              result).asInvalidProtocolBufferException();
+            throw newUninitializedMessageException(result).asInvalidProtocolBufferException();
           }
           return buildPartial();
         }
-        
+
         public com.opera.core.systems.scope.protos.EcmascriptProtos.Object.Property buildPartial() {
           if (result == null) {
             throw new IllegalStateException(
-              "build() has already been called on this Builder.");
+                "build() has already been called on this Builder.");
           }
           com.opera.core.systems.scope.protos.EcmascriptProtos.Object.Property returnMe = result;
           result = null;
           return returnMe;
         }
-        
+
         public Builder mergeFrom(com.google.protobuf.Message other) {
           if (other instanceof com.opera.core.systems.scope.protos.EcmascriptProtos.Object.Property) {
-            return mergeFrom((com.opera.core.systems.scope.protos.EcmascriptProtos.Object.Property)other);
+            return mergeFrom((com.opera.core.systems.scope.protos.EcmascriptProtos.Object.Property) other);
           } else {
             super.mergeFrom(other);
             return this;
           }
         }
-        
-        public Builder mergeFrom(com.opera.core.systems.scope.protos.EcmascriptProtos.Object.Property other) {
+
+        public Builder mergeFrom(
+            com.opera.core.systems.scope.protos.EcmascriptProtos.Object.Property other) {
           if (other == com.opera.core.systems.scope.protos.EcmascriptProtos.Object.Property.getDefaultInstance()) return this;
           if (other.hasName()) {
             setName(other.getName());
@@ -3748,75 +4121,77 @@ public final class EcmascriptProtos {
           this.mergeUnknownFields(other.getUnknownFields());
           return this;
         }
-        
-        public Builder mergeFrom(
-            com.google.protobuf.CodedInputStream input,
+
+        public Builder mergeFrom(com.google.protobuf.CodedInputStream input,
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws java.io.IOException {
-          com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-            com.google.protobuf.UnknownFieldSet.newBuilder(
-              this.getUnknownFields());
+          com.google.protobuf.UnknownFieldSet.Builder unknownFields = com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
           while (true) {
             int tag = input.readTag();
             switch (tag) {
-              case 0:
+            case 0:
+              this.setUnknownFields(unknownFields.build());
+              return this;
+            default: {
+              if (!parseUnknownField(input, unknownFields, extensionRegistry,
+                  tag)) {
                 this.setUnknownFields(unknownFields.build());
                 return this;
-              default: {
-                if (!parseUnknownField(input, unknownFields,
-                                       extensionRegistry, tag)) {
-                  this.setUnknownFields(unknownFields.build());
-                  return this;
-                }
-                break;
               }
-              case 10: {
-                setName(input.readString());
-                break;
+              break;
+            }
+            case 10: {
+              setName(input.readString());
+              break;
+            }
+            case 18: {
+              com.opera.core.systems.scope.protos.EcmascriptProtos.Value.Builder subBuilder = com.opera.core.systems.scope.protos.EcmascriptProtos.Value.newBuilder();
+              if (hasValue()) {
+                subBuilder.mergeFrom(getValue());
               }
-              case 18: {
-                com.opera.core.systems.scope.protos.EcmascriptProtos.Value.Builder subBuilder = com.opera.core.systems.scope.protos.EcmascriptProtos.Value.newBuilder();
-                if (hasValue()) {
-                  subBuilder.mergeFrom(getValue());
-                }
-                input.readMessage(subBuilder, extensionRegistry);
-                setValue(subBuilder.buildPartial());
-                break;
-              }
+              input.readMessage(subBuilder, extensionRegistry);
+              setValue(subBuilder.buildPartial());
+              break;
+            }
             }
           }
         }
-        
-        
+
         // required string name = 1;
         public boolean hasName() {
           return result.hasName();
         }
+
         public java.lang.String getName() {
           return result.getName();
         }
+
         public Builder setName(java.lang.String value) {
           if (value == null) {
-    throw new NullPointerException();
-  }
-  result.hasName = true;
+            throw new NullPointerException();
+          }
+          result.hasName = true;
           result.name_ = value;
           return this;
         }
+
         public Builder clearName() {
           result.hasName = false;
           result.name_ = getDefaultInstance().getName();
           return this;
         }
-        
+
         // required .Value value = 2;
         public boolean hasValue() {
           return result.hasValue();
         }
+
         public com.opera.core.systems.scope.protos.EcmascriptProtos.Value getValue() {
           return result.getValue();
         }
-        public Builder setValue(com.opera.core.systems.scope.protos.EcmascriptProtos.Value value) {
+
+        public Builder setValue(
+            com.opera.core.systems.scope.protos.EcmascriptProtos.Value value) {
           if (value == null) {
             throw new NullPointerException();
           }
@@ -3824,97 +4199,144 @@ public final class EcmascriptProtos {
           result.value_ = value;
           return this;
         }
-        public Builder setValue(com.opera.core.systems.scope.protos.EcmascriptProtos.Value.Builder builderForValue) {
+
+        public Builder setValue(
+            com.opera.core.systems.scope.protos.EcmascriptProtos.Value.Builder builderForValue) {
           result.hasValue = true;
           result.value_ = builderForValue.build();
           return this;
         }
-        public Builder mergeValue(com.opera.core.systems.scope.protos.EcmascriptProtos.Value value) {
-          if (result.hasValue() &&
-              result.value_ != com.opera.core.systems.scope.protos.EcmascriptProtos.Value.getDefaultInstance()) {
-            result.value_ =
-              com.opera.core.systems.scope.protos.EcmascriptProtos.Value.newBuilder(result.value_).mergeFrom(value).buildPartial();
+
+        public Builder mergeValue(
+            com.opera.core.systems.scope.protos.EcmascriptProtos.Value value) {
+          if (result.hasValue()
+              && result.value_ != com.opera.core.systems.scope.protos.EcmascriptProtos.Value.getDefaultInstance()) {
+            result.value_ = com.opera.core.systems.scope.protos.EcmascriptProtos.Value.newBuilder(
+                result.value_).mergeFrom(value).buildPartial();
           } else {
             result.value_ = value;
           }
           result.hasValue = true;
           return this;
         }
+
         public Builder clearValue() {
           result.hasValue = false;
           result.value_ = com.opera.core.systems.scope.protos.EcmascriptProtos.Value.getDefaultInstance();
           return this;
         }
-        
+
         // @@protoc_insertion_point(builder_scope:Object.Property)
       }
-      
+
       static {
         defaultInstance = new Property(true);
         com.opera.core.systems.scope.protos.EcmascriptProtos.internalForceInit();
         defaultInstance.initFields();
       }
-      
+
       // @@protoc_insertion_point(class_scope:Object.Property)
     }
-    
+
     // required uint32 objectID = 1;
     public static final int OBJECTID_FIELD_NUMBER = 1;
     private boolean hasObjectID;
     private int objectID_ = 0;
-    public boolean hasObjectID() { return hasObjectID; }
-    public int getObjectID() { return objectID_; }
-    
+
+    public boolean hasObjectID() {
+      return hasObjectID;
+    }
+
+    public int getObjectID() {
+      return objectID_;
+    }
+
     // required bool isCallable = 2;
     public static final int ISCALLABLE_FIELD_NUMBER = 2;
     private boolean hasIsCallable;
     private boolean isCallable_ = false;
-    public boolean hasIsCallable() { return hasIsCallable; }
-    public boolean getIsCallable() { return isCallable_; }
-    
+
+    public boolean hasIsCallable() {
+      return hasIsCallable;
+    }
+
+    public boolean getIsCallable() {
+      return isCallable_;
+    }
+
     // required .Object.ObjectType type = 3;
     public static final int TYPE_FIELD_NUMBER = 3;
     private boolean hasType;
     private com.opera.core.systems.scope.protos.EcmascriptProtos.Object.ObjectType type_;
-    public boolean hasType() { return hasType; }
-    public com.opera.core.systems.scope.protos.EcmascriptProtos.Object.ObjectType getType() { return type_; }
-    
+
+    public boolean hasType() {
+      return hasType;
+    }
+
+    public com.opera.core.systems.scope.protos.EcmascriptProtos.Object.ObjectType getType() {
+      return type_;
+    }
+
     // optional uint32 prototypeID = 4;
     public static final int PROTOTYPEID_FIELD_NUMBER = 4;
     private boolean hasPrototypeID;
     private int prototypeID_ = 0;
-    public boolean hasPrototypeID() { return hasPrototypeID; }
-    public int getPrototypeID() { return prototypeID_; }
-    
+
+    public boolean hasPrototypeID() {
+      return hasPrototypeID;
+    }
+
+    public int getPrototypeID() {
+      return prototypeID_;
+    }
+
     // optional string className = 5;
     public static final int CLASSNAME_FIELD_NUMBER = 5;
     private boolean hasClassName;
     private java.lang.String className_ = "";
-    public boolean hasClassName() { return hasClassName; }
-    public java.lang.String getClassName() { return className_; }
-    
+
+    public boolean hasClassName() {
+      return hasClassName;
+    }
+
+    public java.lang.String getClassName() {
+      return className_;
+    }
+
     // optional string functionName = 6;
     public static final int FUNCTIONNAME_FIELD_NUMBER = 6;
     private boolean hasFunctionName;
     private java.lang.String functionName_ = "";
-    public boolean hasFunctionName() { return hasFunctionName; }
-    public java.lang.String getFunctionName() { return functionName_; }
-    
+
+    public boolean hasFunctionName() {
+      return hasFunctionName;
+    }
+
+    public java.lang.String getFunctionName() {
+      return functionName_;
+    }
+
     // repeated .Object.Property propertyList = 7;
     public static final int PROPERTYLIST_FIELD_NUMBER = 7;
-    private java.util.List<com.opera.core.systems.scope.protos.EcmascriptProtos.Object.Property> propertyList_ =
-      java.util.Collections.emptyList();
+    private java.util.List<com.opera.core.systems.scope.protos.EcmascriptProtos.Object.Property> propertyList_ = java.util.Collections.emptyList();
+
     public java.util.List<com.opera.core.systems.scope.protos.EcmascriptProtos.Object.Property> getPropertyListList() {
       return propertyList_;
     }
-    public int getPropertyListCount() { return propertyList_.size(); }
-    public com.opera.core.systems.scope.protos.EcmascriptProtos.Object.Property getPropertyList(int index) {
+
+    public int getPropertyListCount() {
+      return propertyList_.size();
+    }
+
+    public com.opera.core.systems.scope.protos.EcmascriptProtos.Object.Property getPropertyList(
+        int index) {
       return propertyList_.get(index);
     }
-    
+
     private void initFields() {
       type_ = com.opera.core.systems.scope.protos.EcmascriptProtos.Object.ObjectType.OBJECT;
     }
+
     public final boolean isInitialized() {
       if (!hasObjectID) return false;
       if (!hasIsCallable) return false;
@@ -3924,9 +4346,9 @@ public final class EcmascriptProtos {
       }
       return true;
     }
-    
+
     public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
+        throws java.io.IOException {
       getSerializedSize();
       if (hasObjectID()) {
         output.writeUInt32(1, getObjectID());
@@ -3951,82 +4373,85 @@ public final class EcmascriptProtos {
       }
       getUnknownFields().writeTo(output);
     }
-    
+
     private int memoizedSerializedSize = -1;
+
     public int getSerializedSize() {
       int size = memoizedSerializedSize;
       if (size != -1) return size;
-    
+
       size = 0;
       if (hasObjectID()) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeUInt32Size(1, getObjectID());
+        size += com.google.protobuf.CodedOutputStream.computeUInt32Size(1,
+            getObjectID());
       }
       if (hasIsCallable()) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBoolSize(2, getIsCallable());
+        size += com.google.protobuf.CodedOutputStream.computeBoolSize(2,
+            getIsCallable());
       }
       if (hasType()) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(3, getType().getNumber());
+        size += com.google.protobuf.CodedOutputStream.computeEnumSize(3,
+            getType().getNumber());
       }
       if (hasPrototypeID()) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeUInt32Size(4, getPrototypeID());
+        size += com.google.protobuf.CodedOutputStream.computeUInt32Size(4,
+            getPrototypeID());
       }
       if (hasClassName()) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeStringSize(5, getClassName());
+        size += com.google.protobuf.CodedOutputStream.computeStringSize(5,
+            getClassName());
       }
       if (hasFunctionName()) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeStringSize(6, getFunctionName());
+        size += com.google.protobuf.CodedOutputStream.computeStringSize(6,
+            getFunctionName());
       }
       for (com.opera.core.systems.scope.protos.EcmascriptProtos.Object.Property element : getPropertyListList()) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(7, element);
+        size += com.google.protobuf.CodedOutputStream.computeMessageSize(7,
+            element);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
       return size;
     }
-    
+
     public static com.opera.core.systems.scope.protos.EcmascriptProtos.Object parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.EcmascriptProtos.Object parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+      return newBuilder().mergeFrom(data, extensionRegistry).buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.EcmascriptProtos.Object parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+
+    public static com.opera.core.systems.scope.protos.EcmascriptProtos.Object parseFrom(
+        byte[] data) throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.EcmascriptProtos.Object parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+      return newBuilder().mergeFrom(data, extensionRegistry).buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.EcmascriptProtos.Object parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
+
+    public static com.opera.core.systems.scope.protos.EcmascriptProtos.Object parseFrom(
+        java.io.InputStream input) throws java.io.IOException {
       return newBuilder().mergeFrom(input).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.EcmascriptProtos.Object parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+      return newBuilder().mergeFrom(input, extensionRegistry).buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.EcmascriptProtos.Object parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
+
+    public static com.opera.core.systems.scope.protos.EcmascriptProtos.Object parseDelimitedFrom(
+        java.io.InputStream input) throws java.io.IOException {
       Builder builder = newBuilder();
       if (builder.mergeDelimitedFrom(input)) {
         return builder.buildParsed();
@@ -4034,6 +4459,7 @@ public final class EcmascriptProtos {
         return null;
       }
     }
+
     public static com.opera.core.systems.scope.protos.EcmascriptProtos.Object parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -4045,108 +4471,118 @@ public final class EcmascriptProtos {
         return null;
       }
     }
+
     public static com.opera.core.systems.scope.protos.EcmascriptProtos.Object parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
+        com.google.protobuf.CodedInputStream input) throws java.io.IOException {
       return newBuilder().mergeFrom(input).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.EcmascriptProtos.Object parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+      return newBuilder().mergeFrom(input, extensionRegistry).buildParsed();
     }
-    
-    public static Builder newBuilder() { return Builder.create(); }
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(com.opera.core.systems.scope.protos.EcmascriptProtos.Object prototype) {
+
+    public static Builder newBuilder() {
+      return Builder.create();
+    }
+
+    public Builder newBuilderForType() {
+      return newBuilder();
+    }
+
+    public static Builder newBuilder(
+        com.opera.core.systems.scope.protos.EcmascriptProtos.Object prototype) {
       return newBuilder().mergeFrom(prototype);
     }
-    public Builder toBuilder() { return newBuilder(this); }
-    
+
+    public Builder toBuilder() {
+      return newBuilder(this);
+    }
+
     public static final class Builder extends
         com.google.protobuf.GeneratedMessage.Builder<Builder> {
       private com.opera.core.systems.scope.protos.EcmascriptProtos.Object result;
-      
-      // Construct using com.opera.core.systems.scope.protos.EcmascriptProtos.Object.newBuilder()
-      private Builder() {}
-      
+
+      // Construct using
+      // com.opera.core.systems.scope.protos.EcmascriptProtos.Object.newBuilder()
+      private Builder() {
+      }
+
       private static Builder create() {
         Builder builder = new Builder();
         builder.result = new com.opera.core.systems.scope.protos.EcmascriptProtos.Object();
         return builder;
       }
-      
+
       protected com.opera.core.systems.scope.protos.EcmascriptProtos.Object internalGetResult() {
         return result;
       }
-      
+
       public Builder clear() {
         if (result == null) {
-          throw new IllegalStateException(
-            "Cannot call clear() after build().");
+          throw new IllegalStateException("Cannot call clear() after build().");
         }
         result = new com.opera.core.systems.scope.protos.EcmascriptProtos.Object();
         return this;
       }
-      
+
       public Builder clone() {
         return create().mergeFrom(result);
       }
-      
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
+
+      public com.google.protobuf.Descriptors.Descriptor getDescriptorForType() {
         return com.opera.core.systems.scope.protos.EcmascriptProtos.Object.getDescriptor();
       }
-      
+
       public com.opera.core.systems.scope.protos.EcmascriptProtos.Object getDefaultInstanceForType() {
         return com.opera.core.systems.scope.protos.EcmascriptProtos.Object.getDefaultInstance();
       }
-      
+
       public boolean isInitialized() {
         return result.isInitialized();
       }
+
       public com.opera.core.systems.scope.protos.EcmascriptProtos.Object build() {
         if (result != null && !isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return buildPartial();
       }
-      
+
       private com.opera.core.systems.scope.protos.EcmascriptProtos.Object buildParsed()
           throws com.google.protobuf.InvalidProtocolBufferException {
         if (!isInitialized()) {
-          throw newUninitializedMessageException(
-            result).asInvalidProtocolBufferException();
+          throw newUninitializedMessageException(result).asInvalidProtocolBufferException();
         }
         return buildPartial();
       }
-      
+
       public com.opera.core.systems.scope.protos.EcmascriptProtos.Object buildPartial() {
         if (result == null) {
           throw new IllegalStateException(
-            "build() has already been called on this Builder.");
+              "build() has already been called on this Builder.");
         }
         if (result.propertyList_ != java.util.Collections.EMPTY_LIST) {
-          result.propertyList_ =
-            java.util.Collections.unmodifiableList(result.propertyList_);
+          result.propertyList_ = java.util.Collections.unmodifiableList(result.propertyList_);
         }
         com.opera.core.systems.scope.protos.EcmascriptProtos.Object returnMe = result;
         result = null;
         return returnMe;
       }
-      
+
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.opera.core.systems.scope.protos.EcmascriptProtos.Object) {
-          return mergeFrom((com.opera.core.systems.scope.protos.EcmascriptProtos.Object)other);
+          return mergeFrom((com.opera.core.systems.scope.protos.EcmascriptProtos.Object) other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
-      
-      public Builder mergeFrom(com.opera.core.systems.scope.protos.EcmascriptProtos.Object other) {
+
+      public Builder mergeFrom(
+          com.opera.core.systems.scope.protos.EcmascriptProtos.Object other) {
         if (other == com.opera.core.systems.scope.protos.EcmascriptProtos.Object.getDefaultInstance()) return this;
         if (other.hasObjectID()) {
           setObjectID(other.getObjectID());
@@ -4175,113 +4611,117 @@ public final class EcmascriptProtos {
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
-      
-      public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
+
+      public Builder mergeFrom(com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder(
-            this.getUnknownFields());
+        com.google.protobuf.UnknownFieldSet.Builder unknownFields = com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
         while (true) {
           int tag = input.readTag();
           switch (tag) {
-            case 0:
+          case 0:
+            this.setUnknownFields(unknownFields.build());
+            return this;
+          default: {
+            if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
               this.setUnknownFields(unknownFields.build());
               return this;
-            default: {
-              if (!parseUnknownField(input, unknownFields,
-                                     extensionRegistry, tag)) {
-                this.setUnknownFields(unknownFields.build());
-                return this;
-              }
-              break;
             }
-            case 8: {
-              setObjectID(input.readUInt32());
-              break;
+            break;
+          }
+          case 8: {
+            setObjectID(input.readUInt32());
+            break;
+          }
+          case 16: {
+            setIsCallable(input.readBool());
+            break;
+          }
+          case 24: {
+            int rawValue = input.readEnum();
+            com.opera.core.systems.scope.protos.EcmascriptProtos.Object.ObjectType value = com.opera.core.systems.scope.protos.EcmascriptProtos.Object.ObjectType.valueOf(rawValue);
+            if (value == null) {
+              unknownFields.mergeVarintField(3, rawValue);
+            } else {
+              setType(value);
             }
-            case 16: {
-              setIsCallable(input.readBool());
-              break;
-            }
-            case 24: {
-              int rawValue = input.readEnum();
-              com.opera.core.systems.scope.protos.EcmascriptProtos.Object.ObjectType value = com.opera.core.systems.scope.protos.EcmascriptProtos.Object.ObjectType.valueOf(rawValue);
-              if (value == null) {
-                unknownFields.mergeVarintField(3, rawValue);
-              } else {
-                setType(value);
-              }
-              break;
-            }
-            case 32: {
-              setPrototypeID(input.readUInt32());
-              break;
-            }
-            case 42: {
-              setClassName(input.readString());
-              break;
-            }
-            case 50: {
-              setFunctionName(input.readString());
-              break;
-            }
-            case 58: {
-              com.opera.core.systems.scope.protos.EcmascriptProtos.Object.Property.Builder subBuilder = com.opera.core.systems.scope.protos.EcmascriptProtos.Object.Property.newBuilder();
-              input.readMessage(subBuilder, extensionRegistry);
-              addPropertyList(subBuilder.buildPartial());
-              break;
-            }
+            break;
+          }
+          case 32: {
+            setPrototypeID(input.readUInt32());
+            break;
+          }
+          case 42: {
+            setClassName(input.readString());
+            break;
+          }
+          case 50: {
+            setFunctionName(input.readString());
+            break;
+          }
+          case 58: {
+            com.opera.core.systems.scope.protos.EcmascriptProtos.Object.Property.Builder subBuilder = com.opera.core.systems.scope.protos.EcmascriptProtos.Object.Property.newBuilder();
+            input.readMessage(subBuilder, extensionRegistry);
+            addPropertyList(subBuilder.buildPartial());
+            break;
+          }
           }
         }
       }
-      
-      
+
       // required uint32 objectID = 1;
       public boolean hasObjectID() {
         return result.hasObjectID();
       }
+
       public int getObjectID() {
         return result.getObjectID();
       }
+
       public Builder setObjectID(int value) {
         result.hasObjectID = true;
         result.objectID_ = value;
         return this;
       }
+
       public Builder clearObjectID() {
         result.hasObjectID = false;
         result.objectID_ = 0;
         return this;
       }
-      
+
       // required bool isCallable = 2;
       public boolean hasIsCallable() {
         return result.hasIsCallable();
       }
+
       public boolean getIsCallable() {
         return result.getIsCallable();
       }
+
       public Builder setIsCallable(boolean value) {
         result.hasIsCallable = true;
         result.isCallable_ = value;
         return this;
       }
+
       public Builder clearIsCallable() {
         result.hasIsCallable = false;
         result.isCallable_ = false;
         return this;
       }
-      
+
       // required .Object.ObjectType type = 3;
       public boolean hasType() {
         return result.hasType();
       }
+
       public com.opera.core.systems.scope.protos.EcmascriptProtos.Object.ObjectType getType() {
         return result.getType();
       }
-      public Builder setType(com.opera.core.systems.scope.protos.EcmascriptProtos.Object.ObjectType value) {
+
+      public Builder setType(
+          com.opera.core.systems.scope.protos.EcmascriptProtos.Object.ObjectType value) {
         if (value == null) {
           throw new NullPointerException();
         }
@@ -4289,94 +4729,115 @@ public final class EcmascriptProtos {
         result.type_ = value;
         return this;
       }
+
       public Builder clearType() {
         result.hasType = false;
         result.type_ = com.opera.core.systems.scope.protos.EcmascriptProtos.Object.ObjectType.OBJECT;
         return this;
       }
-      
+
       // optional uint32 prototypeID = 4;
       public boolean hasPrototypeID() {
         return result.hasPrototypeID();
       }
+
       public int getPrototypeID() {
         return result.getPrototypeID();
       }
+
       public Builder setPrototypeID(int value) {
         result.hasPrototypeID = true;
         result.prototypeID_ = value;
         return this;
       }
+
       public Builder clearPrototypeID() {
         result.hasPrototypeID = false;
         result.prototypeID_ = 0;
         return this;
       }
-      
+
       // optional string className = 5;
       public boolean hasClassName() {
         return result.hasClassName();
       }
+
       public java.lang.String getClassName() {
         return result.getClassName();
       }
+
       public Builder setClassName(java.lang.String value) {
         if (value == null) {
-    throw new NullPointerException();
-  }
-  result.hasClassName = true;
+          throw new NullPointerException();
+        }
+        result.hasClassName = true;
         result.className_ = value;
         return this;
       }
+
       public Builder clearClassName() {
         result.hasClassName = false;
         result.className_ = getDefaultInstance().getClassName();
         return this;
       }
-      
+
       // optional string functionName = 6;
       public boolean hasFunctionName() {
         return result.hasFunctionName();
       }
+
       public java.lang.String getFunctionName() {
         return result.getFunctionName();
       }
+
       public Builder setFunctionName(java.lang.String value) {
         if (value == null) {
-    throw new NullPointerException();
-  }
-  result.hasFunctionName = true;
+          throw new NullPointerException();
+        }
+        result.hasFunctionName = true;
         result.functionName_ = value;
         return this;
       }
+
       public Builder clearFunctionName() {
         result.hasFunctionName = false;
         result.functionName_ = getDefaultInstance().getFunctionName();
         return this;
       }
-      
+
       // repeated .Object.Property propertyList = 7;
       public java.util.List<com.opera.core.systems.scope.protos.EcmascriptProtos.Object.Property> getPropertyListList() {
         return java.util.Collections.unmodifiableList(result.propertyList_);
       }
+
       public int getPropertyListCount() {
         return result.getPropertyListCount();
       }
-      public com.opera.core.systems.scope.protos.EcmascriptProtos.Object.Property getPropertyList(int index) {
+
+      public com.opera.core.systems.scope.protos.EcmascriptProtos.Object.Property getPropertyList(
+          int index) {
         return result.getPropertyList(index);
       }
-      public Builder setPropertyList(int index, com.opera.core.systems.scope.protos.EcmascriptProtos.Object.Property value) {
+
+      public Builder setPropertyList(
+          int index,
+          com.opera.core.systems.scope.protos.EcmascriptProtos.Object.Property value) {
         if (value == null) {
           throw new NullPointerException();
         }
         result.propertyList_.set(index, value);
         return this;
       }
-      public Builder setPropertyList(int index, com.opera.core.systems.scope.protos.EcmascriptProtos.Object.Property.Builder builderForValue) {
+
+      public Builder setPropertyList(
+          int index,
+          com.opera.core.systems.scope.protos.EcmascriptProtos.Object.Property.Builder builderForValue) {
         result.propertyList_.set(index, builderForValue.build());
         return this;
       }
-      public Builder addPropertyList(com.opera.core.systems.scope.protos.EcmascriptProtos.Object.Property value) {
+
+      public Builder addPropertyList(
+          com.opera.core.systems.scope.protos.EcmascriptProtos.Object.Property value) {
         if (value == null) {
           throw new NullPointerException();
         }
@@ -4386,13 +4847,16 @@ public final class EcmascriptProtos {
         result.propertyList_.add(value);
         return this;
       }
-      public Builder addPropertyList(com.opera.core.systems.scope.protos.EcmascriptProtos.Object.Property.Builder builderForValue) {
+
+      public Builder addPropertyList(
+          com.opera.core.systems.scope.protos.EcmascriptProtos.Object.Property.Builder builderForValue) {
         if (result.propertyList_.isEmpty()) {
           result.propertyList_ = new java.util.ArrayList<com.opera.core.systems.scope.protos.EcmascriptProtos.Object.Property>();
         }
         result.propertyList_.add(builderForValue.build());
         return this;
       }
+
       public Builder addAllPropertyList(
           java.lang.Iterable<? extends com.opera.core.systems.scope.protos.EcmascriptProtos.Object.Property> values) {
         if (result.propertyList_.isEmpty()) {
@@ -4401,174 +4865,202 @@ public final class EcmascriptProtos {
         super.addAll(values, result.propertyList_);
         return this;
       }
+
       public Builder clearPropertyList() {
         result.propertyList_ = java.util.Collections.emptyList();
         return this;
       }
-      
+
       // @@protoc_insertion_point(builder_scope:Object)
     }
-    
+
     static {
       defaultInstance = new Object(true);
       com.opera.core.systems.scope.protos.EcmascriptProtos.internalForceInit();
       defaultInstance.initFields();
     }
-    
+
     // @@protoc_insertion_point(class_scope:Object)
   }
-  
-  public static final class Value extends
-      com.google.protobuf.GeneratedMessage {
+
+  public static final class Value extends com.google.protobuf.GeneratedMessage {
     // Use Value.newBuilder() to construct.
     private Value() {
       initFields();
     }
-    private Value(boolean noInit) {}
-    
+
+    private Value(boolean noInit) {
+    }
+
     private static final Value defaultInstance;
+
     public static Value getDefaultInstance() {
       return defaultInstance;
     }
-    
+
     public Value getDefaultInstanceForType() {
       return defaultInstance;
     }
-    
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
+
+    public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
       return com.opera.core.systems.scope.protos.EcmascriptProtos.internal_static_Value_descriptor;
     }
-    
-    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-        internalGetFieldAccessorTable() {
+
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable internalGetFieldAccessorTable() {
       return com.opera.core.systems.scope.protos.EcmascriptProtos.internal_static_Value_fieldAccessorTable;
     }
-    
-    public enum Type
-        implements com.google.protobuf.ProtocolMessageEnum {
-      UNDEFINED(0, 0),
-      NULL(1, 1),
-      TRUE(2, 2),
-      FALSE(3, 3),
-      NAN(4, 4),
-      PLUS_INFINITY(5, 5),
-      MINUS_INFINITY(6, 6),
-      NUMBER(7, 7),
-      STRING(8, 8),
-      OBJECT(9, 9),
-      ;
-      
-      
-      public final int getNumber() { return value; }
-      
+
+    public enum Type implements com.google.protobuf.ProtocolMessageEnum {
+      UNDEFINED(0, 0), NULL(1, 1), TRUE(2, 2), FALSE(3, 3), NAN(4, 4), PLUS_INFINITY(
+          5, 5), MINUS_INFINITY(6, 6), NUMBER(7, 7), STRING(8, 8), OBJECT(9, 9), ;
+
+      public final int getNumber() {
+        return value;
+      }
+
       public static Type valueOf(int value) {
         switch (value) {
-          case 0: return UNDEFINED;
-          case 1: return NULL;
-          case 2: return TRUE;
-          case 3: return FALSE;
-          case 4: return NAN;
-          case 5: return PLUS_INFINITY;
-          case 6: return MINUS_INFINITY;
-          case 7: return NUMBER;
-          case 8: return STRING;
-          case 9: return OBJECT;
-          default: return null;
+        case 0:
+          return UNDEFINED;
+        case 1:
+          return NULL;
+        case 2:
+          return TRUE;
+        case 3:
+          return FALSE;
+        case 4:
+          return NAN;
+        case 5:
+          return PLUS_INFINITY;
+        case 6:
+          return MINUS_INFINITY;
+        case 7:
+          return NUMBER;
+        case 8:
+          return STRING;
+        case 9:
+          return OBJECT;
+        default:
+          return null;
         }
       }
-      
-      public static com.google.protobuf.Internal.EnumLiteMap<Type>
-          internalGetValueMap() {
+
+      public static com.google.protobuf.Internal.EnumLiteMap<Type> internalGetValueMap() {
         return internalValueMap;
       }
-      private static com.google.protobuf.Internal.EnumLiteMap<Type>
-          internalValueMap =
-            new com.google.protobuf.Internal.EnumLiteMap<Type>() {
-              public Type findValueByNumber(int number) {
-                return Type.valueOf(number)
-      ;        }
-            };
-      
-      public final com.google.protobuf.Descriptors.EnumValueDescriptor
-          getValueDescriptor() {
+
+      private static com.google.protobuf.Internal.EnumLiteMap<Type> internalValueMap = new com.google.protobuf.Internal.EnumLiteMap<Type>() {
+        public Type findValueByNumber(int number) {
+          return Type.valueOf(number);
+        }
+      };
+
+      public final com.google.protobuf.Descriptors.EnumValueDescriptor getValueDescriptor() {
         return getDescriptor().getValues().get(index);
       }
-      public final com.google.protobuf.Descriptors.EnumDescriptor
-          getDescriptorForType() {
+
+      public final com.google.protobuf.Descriptors.EnumDescriptor getDescriptorForType() {
         return getDescriptor();
       }
-      public static final com.google.protobuf.Descriptors.EnumDescriptor
-          getDescriptor() {
-        return com.opera.core.systems.scope.protos.EcmascriptProtos.Value.getDescriptor().getEnumTypes().get(0);
+
+      public static final com.google.protobuf.Descriptors.EnumDescriptor getDescriptor() {
+        return com.opera.core.systems.scope.protos.EcmascriptProtos.Value.getDescriptor().getEnumTypes().get(
+            0);
       }
-      
-      private static final Type[] VALUES = {
-        UNDEFINED, NULL, TRUE, FALSE, NAN, PLUS_INFINITY, MINUS_INFINITY, NUMBER, STRING, OBJECT, 
-      };
+
+      private static final Type[] VALUES = { UNDEFINED, NULL, TRUE, FALSE, NAN,
+          PLUS_INFINITY, MINUS_INFINITY, NUMBER, STRING, OBJECT, };
+
       public static Type valueOf(
           com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
         if (desc.getType() != getDescriptor()) {
           throw new java.lang.IllegalArgumentException(
-            "EnumValueDescriptor is not for this type.");
+              "EnumValueDescriptor is not for this type.");
         }
         return VALUES[desc.getIndex()];
       }
+
       private final int index;
       private final int value;
+
       private Type(int index, int value) {
         this.index = index;
         this.value = value;
       }
-      
+
       static {
         com.opera.core.systems.scope.protos.EcmascriptProtos.getDescriptor();
       }
-      
+
       // @@protoc_insertion_point(enum_scope:Value.Type)
     }
-    
+
     // optional .Value.Type type = 1;
     public static final int TYPE_FIELD_NUMBER = 1;
     private boolean hasType;
     private com.opera.core.systems.scope.protos.EcmascriptProtos.Value.Type type_;
-    public boolean hasType() { return hasType; }
-    public com.opera.core.systems.scope.protos.EcmascriptProtos.Value.Type getType() { return type_; }
-    
+
+    public boolean hasType() {
+      return hasType;
+    }
+
+    public com.opera.core.systems.scope.protos.EcmascriptProtos.Value.Type getType() {
+      return type_;
+    }
+
     // optional double number = 2;
     public static final int NUMBER_FIELD_NUMBER = 2;
     private boolean hasNumber;
     private double number_ = 0D;
-    public boolean hasNumber() { return hasNumber; }
-    public double getNumber() { return number_; }
-    
+
+    public boolean hasNumber() {
+      return hasNumber;
+    }
+
+    public double getNumber() {
+      return number_;
+    }
+
     // optional string str = 3;
     public static final int STR_FIELD_NUMBER = 3;
     private boolean hasStr;
     private java.lang.String str_ = "";
-    public boolean hasStr() { return hasStr; }
-    public java.lang.String getStr() { return str_; }
-    
+
+    public boolean hasStr() {
+      return hasStr;
+    }
+
+    public java.lang.String getStr() {
+      return str_;
+    }
+
     // optional .Object object = 4;
     public static final int OBJECT_FIELD_NUMBER = 4;
     private boolean hasObject;
     private com.opera.core.systems.scope.protos.EcmascriptProtos.Object object_;
-    public boolean hasObject() { return hasObject; }
-    public com.opera.core.systems.scope.protos.EcmascriptProtos.Object getObject() { return object_; }
-    
+
+    public boolean hasObject() {
+      return hasObject;
+    }
+
+    public com.opera.core.systems.scope.protos.EcmascriptProtos.Object getObject() {
+      return object_;
+    }
+
     private void initFields() {
       type_ = com.opera.core.systems.scope.protos.EcmascriptProtos.Value.Type.UNDEFINED;
       object_ = com.opera.core.systems.scope.protos.EcmascriptProtos.Object.getDefaultInstance();
     }
+
     public final boolean isInitialized() {
       if (hasObject()) {
         if (!getObject().isInitialized()) return false;
       }
       return true;
     }
-    
+
     public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
+        throws java.io.IOException {
       getSerializedSize();
       if (hasType()) {
         output.writeEnum(1, getType().getNumber());
@@ -4584,70 +5076,73 @@ public final class EcmascriptProtos {
       }
       getUnknownFields().writeTo(output);
     }
-    
+
     private int memoizedSerializedSize = -1;
+
     public int getSerializedSize() {
       int size = memoizedSerializedSize;
       if (size != -1) return size;
-    
+
       size = 0;
       if (hasType()) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(1, getType().getNumber());
+        size += com.google.protobuf.CodedOutputStream.computeEnumSize(1,
+            getType().getNumber());
       }
       if (hasNumber()) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeDoubleSize(2, getNumber());
+        size += com.google.protobuf.CodedOutputStream.computeDoubleSize(2,
+            getNumber());
       }
       if (hasStr()) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeStringSize(3, getStr());
+        size += com.google.protobuf.CodedOutputStream.computeStringSize(3,
+            getStr());
       }
       if (hasObject()) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(4, getObject());
+        size += com.google.protobuf.CodedOutputStream.computeMessageSize(4,
+            getObject());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
       return size;
     }
-    
+
     public static com.opera.core.systems.scope.protos.EcmascriptProtos.Value parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.EcmascriptProtos.Value parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+      return newBuilder().mergeFrom(data, extensionRegistry).buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.EcmascriptProtos.Value parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+
+    public static com.opera.core.systems.scope.protos.EcmascriptProtos.Value parseFrom(
+        byte[] data) throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.EcmascriptProtos.Value parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+      return newBuilder().mergeFrom(data, extensionRegistry).buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.EcmascriptProtos.Value parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
+
+    public static com.opera.core.systems.scope.protos.EcmascriptProtos.Value parseFrom(
+        java.io.InputStream input) throws java.io.IOException {
       return newBuilder().mergeFrom(input).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.EcmascriptProtos.Value parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+      return newBuilder().mergeFrom(input, extensionRegistry).buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.EcmascriptProtos.Value parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
+
+    public static com.opera.core.systems.scope.protos.EcmascriptProtos.Value parseDelimitedFrom(
+        java.io.InputStream input) throws java.io.IOException {
       Builder builder = newBuilder();
       if (builder.mergeDelimitedFrom(input)) {
         return builder.buildParsed();
@@ -4655,6 +5150,7 @@ public final class EcmascriptProtos {
         return null;
       }
     }
+
     public static com.opera.core.systems.scope.protos.EcmascriptProtos.Value parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -4666,104 +5162,115 @@ public final class EcmascriptProtos {
         return null;
       }
     }
+
     public static com.opera.core.systems.scope.protos.EcmascriptProtos.Value parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
+        com.google.protobuf.CodedInputStream input) throws java.io.IOException {
       return newBuilder().mergeFrom(input).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.EcmascriptProtos.Value parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+      return newBuilder().mergeFrom(input, extensionRegistry).buildParsed();
     }
-    
-    public static Builder newBuilder() { return Builder.create(); }
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(com.opera.core.systems.scope.protos.EcmascriptProtos.Value prototype) {
+
+    public static Builder newBuilder() {
+      return Builder.create();
+    }
+
+    public Builder newBuilderForType() {
+      return newBuilder();
+    }
+
+    public static Builder newBuilder(
+        com.opera.core.systems.scope.protos.EcmascriptProtos.Value prototype) {
       return newBuilder().mergeFrom(prototype);
     }
-    public Builder toBuilder() { return newBuilder(this); }
-    
+
+    public Builder toBuilder() {
+      return newBuilder(this);
+    }
+
     public static final class Builder extends
         com.google.protobuf.GeneratedMessage.Builder<Builder> {
       private com.opera.core.systems.scope.protos.EcmascriptProtos.Value result;
-      
-      // Construct using com.opera.core.systems.scope.protos.EcmascriptProtos.Value.newBuilder()
-      private Builder() {}
-      
+
+      // Construct using
+      // com.opera.core.systems.scope.protos.EcmascriptProtos.Value.newBuilder()
+      private Builder() {
+      }
+
       private static Builder create() {
         Builder builder = new Builder();
         builder.result = new com.opera.core.systems.scope.protos.EcmascriptProtos.Value();
         return builder;
       }
-      
+
       protected com.opera.core.systems.scope.protos.EcmascriptProtos.Value internalGetResult() {
         return result;
       }
-      
+
       public Builder clear() {
         if (result == null) {
-          throw new IllegalStateException(
-            "Cannot call clear() after build().");
+          throw new IllegalStateException("Cannot call clear() after build().");
         }
         result = new com.opera.core.systems.scope.protos.EcmascriptProtos.Value();
         return this;
       }
-      
+
       public Builder clone() {
         return create().mergeFrom(result);
       }
-      
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
+
+      public com.google.protobuf.Descriptors.Descriptor getDescriptorForType() {
         return com.opera.core.systems.scope.protos.EcmascriptProtos.Value.getDescriptor();
       }
-      
+
       public com.opera.core.systems.scope.protos.EcmascriptProtos.Value getDefaultInstanceForType() {
         return com.opera.core.systems.scope.protos.EcmascriptProtos.Value.getDefaultInstance();
       }
-      
+
       public boolean isInitialized() {
         return result.isInitialized();
       }
+
       public com.opera.core.systems.scope.protos.EcmascriptProtos.Value build() {
         if (result != null && !isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return buildPartial();
       }
-      
+
       private com.opera.core.systems.scope.protos.EcmascriptProtos.Value buildParsed()
           throws com.google.protobuf.InvalidProtocolBufferException {
         if (!isInitialized()) {
-          throw newUninitializedMessageException(
-            result).asInvalidProtocolBufferException();
+          throw newUninitializedMessageException(result).asInvalidProtocolBufferException();
         }
         return buildPartial();
       }
-      
+
       public com.opera.core.systems.scope.protos.EcmascriptProtos.Value buildPartial() {
         if (result == null) {
           throw new IllegalStateException(
-            "build() has already been called on this Builder.");
+              "build() has already been called on this Builder.");
         }
         com.opera.core.systems.scope.protos.EcmascriptProtos.Value returnMe = result;
         result = null;
         return returnMe;
       }
-      
+
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.opera.core.systems.scope.protos.EcmascriptProtos.Value) {
-          return mergeFrom((com.opera.core.systems.scope.protos.EcmascriptProtos.Value)other);
+          return mergeFrom((com.opera.core.systems.scope.protos.EcmascriptProtos.Value) other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
-      
-      public Builder mergeFrom(com.opera.core.systems.scope.protos.EcmascriptProtos.Value other) {
+
+      public Builder mergeFrom(
+          com.opera.core.systems.scope.protos.EcmascriptProtos.Value other) {
         if (other == com.opera.core.systems.scope.protos.EcmascriptProtos.Value.getDefaultInstance()) return this;
         if (other.hasType()) {
           setType(other.getType());
@@ -4780,68 +5287,66 @@ public final class EcmascriptProtos {
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
-      
-      public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
+
+      public Builder mergeFrom(com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder(
-            this.getUnknownFields());
+        com.google.protobuf.UnknownFieldSet.Builder unknownFields = com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
         while (true) {
           int tag = input.readTag();
           switch (tag) {
-            case 0:
+          case 0:
+            this.setUnknownFields(unknownFields.build());
+            return this;
+          default: {
+            if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
               this.setUnknownFields(unknownFields.build());
               return this;
-            default: {
-              if (!parseUnknownField(input, unknownFields,
-                                     extensionRegistry, tag)) {
-                this.setUnknownFields(unknownFields.build());
-                return this;
-              }
-              break;
             }
-            case 8: {
-              int rawValue = input.readEnum();
-              com.opera.core.systems.scope.protos.EcmascriptProtos.Value.Type value = com.opera.core.systems.scope.protos.EcmascriptProtos.Value.Type.valueOf(rawValue);
-              if (value == null) {
-                unknownFields.mergeVarintField(1, rawValue);
-              } else {
-                setType(value);
-              }
-              break;
+            break;
+          }
+          case 8: {
+            int rawValue = input.readEnum();
+            com.opera.core.systems.scope.protos.EcmascriptProtos.Value.Type value = com.opera.core.systems.scope.protos.EcmascriptProtos.Value.Type.valueOf(rawValue);
+            if (value == null) {
+              unknownFields.mergeVarintField(1, rawValue);
+            } else {
+              setType(value);
             }
-            case 17: {
-              setNumber(input.readDouble());
-              break;
+            break;
+          }
+          case 17: {
+            setNumber(input.readDouble());
+            break;
+          }
+          case 26: {
+            setStr(input.readString());
+            break;
+          }
+          case 34: {
+            com.opera.core.systems.scope.protos.EcmascriptProtos.Object.Builder subBuilder = com.opera.core.systems.scope.protos.EcmascriptProtos.Object.newBuilder();
+            if (hasObject()) {
+              subBuilder.mergeFrom(getObject());
             }
-            case 26: {
-              setStr(input.readString());
-              break;
-            }
-            case 34: {
-              com.opera.core.systems.scope.protos.EcmascriptProtos.Object.Builder subBuilder = com.opera.core.systems.scope.protos.EcmascriptProtos.Object.newBuilder();
-              if (hasObject()) {
-                subBuilder.mergeFrom(getObject());
-              }
-              input.readMessage(subBuilder, extensionRegistry);
-              setObject(subBuilder.buildPartial());
-              break;
-            }
+            input.readMessage(subBuilder, extensionRegistry);
+            setObject(subBuilder.buildPartial());
+            break;
+          }
           }
         }
       }
-      
-      
+
       // optional .Value.Type type = 1;
       public boolean hasType() {
         return result.hasType();
       }
+
       public com.opera.core.systems.scope.protos.EcmascriptProtos.Value.Type getType() {
         return result.getType();
       }
-      public Builder setType(com.opera.core.systems.scope.protos.EcmascriptProtos.Value.Type value) {
+
+      public Builder setType(
+          com.opera.core.systems.scope.protos.EcmascriptProtos.Value.Type value) {
         if (value == null) {
           throw new NullPointerException();
         }
@@ -4849,59 +5354,69 @@ public final class EcmascriptProtos {
         result.type_ = value;
         return this;
       }
+
       public Builder clearType() {
         result.hasType = false;
         result.type_ = com.opera.core.systems.scope.protos.EcmascriptProtos.Value.Type.UNDEFINED;
         return this;
       }
-      
+
       // optional double number = 2;
       public boolean hasNumber() {
         return result.hasNumber();
       }
+
       public double getNumber() {
         return result.getNumber();
       }
+
       public Builder setNumber(double value) {
         result.hasNumber = true;
         result.number_ = value;
         return this;
       }
+
       public Builder clearNumber() {
         result.hasNumber = false;
         result.number_ = 0D;
         return this;
       }
-      
+
       // optional string str = 3;
       public boolean hasStr() {
         return result.hasStr();
       }
+
       public java.lang.String getStr() {
         return result.getStr();
       }
+
       public Builder setStr(java.lang.String value) {
         if (value == null) {
-    throw new NullPointerException();
-  }
-  result.hasStr = true;
+          throw new NullPointerException();
+        }
+        result.hasStr = true;
         result.str_ = value;
         return this;
       }
+
       public Builder clearStr() {
         result.hasStr = false;
         result.str_ = getDefaultInstance().getStr();
         return this;
       }
-      
+
       // optional .Object object = 4;
       public boolean hasObject() {
         return result.hasObject();
       }
+
       public com.opera.core.systems.scope.protos.EcmascriptProtos.Object getObject() {
         return result.getObject();
       }
-      public Builder setObject(com.opera.core.systems.scope.protos.EcmascriptProtos.Object value) {
+
+      public Builder setObject(
+          com.opera.core.systems.scope.protos.EcmascriptProtos.Object value) {
         if (value == null) {
           throw new NullPointerException();
         }
@@ -4909,105 +5424,116 @@ public final class EcmascriptProtos {
         result.object_ = value;
         return this;
       }
-      public Builder setObject(com.opera.core.systems.scope.protos.EcmascriptProtos.Object.Builder builderForValue) {
+
+      public Builder setObject(
+          com.opera.core.systems.scope.protos.EcmascriptProtos.Object.Builder builderForValue) {
         result.hasObject = true;
         result.object_ = builderForValue.build();
         return this;
       }
-      public Builder mergeObject(com.opera.core.systems.scope.protos.EcmascriptProtos.Object value) {
-        if (result.hasObject() &&
-            result.object_ != com.opera.core.systems.scope.protos.EcmascriptProtos.Object.getDefaultInstance()) {
-          result.object_ =
-            com.opera.core.systems.scope.protos.EcmascriptProtos.Object.newBuilder(result.object_).mergeFrom(value).buildPartial();
+
+      public Builder mergeObject(
+          com.opera.core.systems.scope.protos.EcmascriptProtos.Object value) {
+        if (result.hasObject()
+            && result.object_ != com.opera.core.systems.scope.protos.EcmascriptProtos.Object.getDefaultInstance()) {
+          result.object_ = com.opera.core.systems.scope.protos.EcmascriptProtos.Object.newBuilder(
+              result.object_).mergeFrom(value).buildPartial();
         } else {
           result.object_ = value;
         }
         result.hasObject = true;
         return this;
       }
+
       public Builder clearObject() {
         result.hasObject = false;
         result.object_ = com.opera.core.systems.scope.protos.EcmascriptProtos.Object.getDefaultInstance();
         return this;
       }
-      
+
       // @@protoc_insertion_point(builder_scope:Value)
     }
-    
+
     static {
       defaultInstance = new Value(true);
       com.opera.core.systems.scope.protos.EcmascriptProtos.internalForceInit();
       defaultInstance.initFields();
     }
-    
+
     // @@protoc_insertion_point(class_scope:Value)
   }
-  
+
   public static final class ReleaseObjectsArg extends
       com.google.protobuf.GeneratedMessage {
     // Use ReleaseObjectsArg.newBuilder() to construct.
     private ReleaseObjectsArg() {
       initFields();
     }
-    private ReleaseObjectsArg(boolean noInit) {}
-    
+
+    private ReleaseObjectsArg(boolean noInit) {
+    }
+
     private static final ReleaseObjectsArg defaultInstance;
+
     public static ReleaseObjectsArg getDefaultInstance() {
       return defaultInstance;
     }
-    
+
     public ReleaseObjectsArg getDefaultInstanceForType() {
       return defaultInstance;
     }
-    
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
+
+    public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
       return com.opera.core.systems.scope.protos.EcmascriptProtos.internal_static_ReleaseObjectsArg_descriptor;
     }
-    
-    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-        internalGetFieldAccessorTable() {
+
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable internalGetFieldAccessorTable() {
       return com.opera.core.systems.scope.protos.EcmascriptProtos.internal_static_ReleaseObjectsArg_fieldAccessorTable;
     }
-    
+
     // repeated uint32 objectList = 1;
     public static final int OBJECTLIST_FIELD_NUMBER = 1;
-    private java.util.List<java.lang.Integer> objectList_ =
-      java.util.Collections.emptyList();
+    private java.util.List<java.lang.Integer> objectList_ = java.util.Collections.emptyList();
+
     public java.util.List<java.lang.Integer> getObjectListList() {
       return objectList_;
     }
-    public int getObjectListCount() { return objectList_.size(); }
+
+    public int getObjectListCount() {
+      return objectList_.size();
+    }
+
     public int getObjectList(int index) {
       return objectList_.get(index);
     }
-    
+
     private void initFields() {
     }
+
     public final boolean isInitialized() {
       return true;
     }
-    
+
     public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
+        throws java.io.IOException {
       getSerializedSize();
       for (int element : getObjectListList()) {
         output.writeUInt32(1, element);
       }
       getUnknownFields().writeTo(output);
     }
-    
+
     private int memoizedSerializedSize = -1;
+
     public int getSerializedSize() {
       int size = memoizedSerializedSize;
       if (size != -1) return size;
-    
+
       size = 0;
       {
         int dataSize = 0;
         for (int element : getObjectListList()) {
-          dataSize += com.google.protobuf.CodedOutputStream
-            .computeUInt32SizeNoTag(element);
+          dataSize += com.google.protobuf.CodedOutputStream.computeUInt32SizeNoTag(element);
         }
         size += dataSize;
         size += 1 * getObjectListList().size();
@@ -5016,43 +5542,45 @@ public final class EcmascriptProtos {
       memoizedSerializedSize = size;
       return size;
     }
-    
+
     public static com.opera.core.systems.scope.protos.EcmascriptProtos.ReleaseObjectsArg parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.EcmascriptProtos.ReleaseObjectsArg parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+      return newBuilder().mergeFrom(data, extensionRegistry).buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.EcmascriptProtos.ReleaseObjectsArg parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+
+    public static com.opera.core.systems.scope.protos.EcmascriptProtos.ReleaseObjectsArg parseFrom(
+        byte[] data) throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.EcmascriptProtos.ReleaseObjectsArg parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+      return newBuilder().mergeFrom(data, extensionRegistry).buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.EcmascriptProtos.ReleaseObjectsArg parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
+
+    public static com.opera.core.systems.scope.protos.EcmascriptProtos.ReleaseObjectsArg parseFrom(
+        java.io.InputStream input) throws java.io.IOException {
       return newBuilder().mergeFrom(input).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.EcmascriptProtos.ReleaseObjectsArg parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+      return newBuilder().mergeFrom(input, extensionRegistry).buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.EcmascriptProtos.ReleaseObjectsArg parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
+
+    public static com.opera.core.systems.scope.protos.EcmascriptProtos.ReleaseObjectsArg parseDelimitedFrom(
+        java.io.InputStream input) throws java.io.IOException {
       Builder builder = newBuilder();
       if (builder.mergeDelimitedFrom(input)) {
         return builder.buildParsed();
@@ -5060,6 +5588,7 @@ public final class EcmascriptProtos {
         return null;
       }
     }
+
     public static com.opera.core.systems.scope.protos.EcmascriptProtos.ReleaseObjectsArg parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -5071,108 +5600,118 @@ public final class EcmascriptProtos {
         return null;
       }
     }
+
     public static com.opera.core.systems.scope.protos.EcmascriptProtos.ReleaseObjectsArg parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
+        com.google.protobuf.CodedInputStream input) throws java.io.IOException {
       return newBuilder().mergeFrom(input).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.EcmascriptProtos.ReleaseObjectsArg parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+      return newBuilder().mergeFrom(input, extensionRegistry).buildParsed();
     }
-    
-    public static Builder newBuilder() { return Builder.create(); }
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(com.opera.core.systems.scope.protos.EcmascriptProtos.ReleaseObjectsArg prototype) {
+
+    public static Builder newBuilder() {
+      return Builder.create();
+    }
+
+    public Builder newBuilderForType() {
+      return newBuilder();
+    }
+
+    public static Builder newBuilder(
+        com.opera.core.systems.scope.protos.EcmascriptProtos.ReleaseObjectsArg prototype) {
       return newBuilder().mergeFrom(prototype);
     }
-    public Builder toBuilder() { return newBuilder(this); }
-    
+
+    public Builder toBuilder() {
+      return newBuilder(this);
+    }
+
     public static final class Builder extends
         com.google.protobuf.GeneratedMessage.Builder<Builder> {
       private com.opera.core.systems.scope.protos.EcmascriptProtos.ReleaseObjectsArg result;
-      
-      // Construct using com.opera.core.systems.scope.protos.EcmascriptProtos.ReleaseObjectsArg.newBuilder()
-      private Builder() {}
-      
+
+      // Construct using
+      // com.opera.core.systems.scope.protos.EcmascriptProtos.ReleaseObjectsArg.newBuilder()
+      private Builder() {
+      }
+
       private static Builder create() {
         Builder builder = new Builder();
         builder.result = new com.opera.core.systems.scope.protos.EcmascriptProtos.ReleaseObjectsArg();
         return builder;
       }
-      
+
       protected com.opera.core.systems.scope.protos.EcmascriptProtos.ReleaseObjectsArg internalGetResult() {
         return result;
       }
-      
+
       public Builder clear() {
         if (result == null) {
-          throw new IllegalStateException(
-            "Cannot call clear() after build().");
+          throw new IllegalStateException("Cannot call clear() after build().");
         }
         result = new com.opera.core.systems.scope.protos.EcmascriptProtos.ReleaseObjectsArg();
         return this;
       }
-      
+
       public Builder clone() {
         return create().mergeFrom(result);
       }
-      
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
+
+      public com.google.protobuf.Descriptors.Descriptor getDescriptorForType() {
         return com.opera.core.systems.scope.protos.EcmascriptProtos.ReleaseObjectsArg.getDescriptor();
       }
-      
+
       public com.opera.core.systems.scope.protos.EcmascriptProtos.ReleaseObjectsArg getDefaultInstanceForType() {
         return com.opera.core.systems.scope.protos.EcmascriptProtos.ReleaseObjectsArg.getDefaultInstance();
       }
-      
+
       public boolean isInitialized() {
         return result.isInitialized();
       }
+
       public com.opera.core.systems.scope.protos.EcmascriptProtos.ReleaseObjectsArg build() {
         if (result != null && !isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return buildPartial();
       }
-      
+
       private com.opera.core.systems.scope.protos.EcmascriptProtos.ReleaseObjectsArg buildParsed()
           throws com.google.protobuf.InvalidProtocolBufferException {
         if (!isInitialized()) {
-          throw newUninitializedMessageException(
-            result).asInvalidProtocolBufferException();
+          throw newUninitializedMessageException(result).asInvalidProtocolBufferException();
         }
         return buildPartial();
       }
-      
+
       public com.opera.core.systems.scope.protos.EcmascriptProtos.ReleaseObjectsArg buildPartial() {
         if (result == null) {
           throw new IllegalStateException(
-            "build() has already been called on this Builder.");
+              "build() has already been called on this Builder.");
         }
         if (result.objectList_ != java.util.Collections.EMPTY_LIST) {
-          result.objectList_ =
-            java.util.Collections.unmodifiableList(result.objectList_);
+          result.objectList_ = java.util.Collections.unmodifiableList(result.objectList_);
         }
         com.opera.core.systems.scope.protos.EcmascriptProtos.ReleaseObjectsArg returnMe = result;
         result = null;
         return returnMe;
       }
-      
+
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.opera.core.systems.scope.protos.EcmascriptProtos.ReleaseObjectsArg) {
-          return mergeFrom((com.opera.core.systems.scope.protos.EcmascriptProtos.ReleaseObjectsArg)other);
+          return mergeFrom((com.opera.core.systems.scope.protos.EcmascriptProtos.ReleaseObjectsArg) other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
-      
-      public Builder mergeFrom(com.opera.core.systems.scope.protos.EcmascriptProtos.ReleaseObjectsArg other) {
+
+      public Builder mergeFrom(
+          com.opera.core.systems.scope.protos.EcmascriptProtos.ReleaseObjectsArg other) {
         if (other == com.opera.core.systems.scope.protos.EcmascriptProtos.ReleaseObjectsArg.getDefaultInstance()) return this;
         if (!other.objectList_.isEmpty()) {
           if (result.objectList_.isEmpty()) {
@@ -5183,60 +5722,59 @@ public final class EcmascriptProtos {
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
-      
-      public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
+
+      public Builder mergeFrom(com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder(
-            this.getUnknownFields());
+        com.google.protobuf.UnknownFieldSet.Builder unknownFields = com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
         while (true) {
           int tag = input.readTag();
           switch (tag) {
-            case 0:
+          case 0:
+            this.setUnknownFields(unknownFields.build());
+            return this;
+          default: {
+            if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
               this.setUnknownFields(unknownFields.build());
               return this;
-            default: {
-              if (!parseUnknownField(input, unknownFields,
-                                     extensionRegistry, tag)) {
-                this.setUnknownFields(unknownFields.build());
-                return this;
-              }
-              break;
             }
-            case 8: {
+            break;
+          }
+          case 8: {
+            addObjectList(input.readUInt32());
+            break;
+          }
+          case 10: {
+            int length = input.readRawVarint32();
+            int limit = input.pushLimit(length);
+            while (input.getBytesUntilLimit() > 0) {
               addObjectList(input.readUInt32());
-              break;
             }
-            case 10: {
-              int length = input.readRawVarint32();
-              int limit = input.pushLimit(length);
-              while (input.getBytesUntilLimit() > 0) {
-                addObjectList(input.readUInt32());
-              }
-              input.popLimit(limit);
-              break;
-            }
+            input.popLimit(limit);
+            break;
+          }
           }
         }
       }
-      
-      
+
       // repeated uint32 objectList = 1;
       public java.util.List<java.lang.Integer> getObjectListList() {
         return java.util.Collections.unmodifiableList(result.objectList_);
       }
+
       public int getObjectListCount() {
         return result.getObjectListCount();
       }
+
       public int getObjectList(int index) {
         return result.getObjectList(index);
       }
+
       public Builder setObjectList(int index, int value) {
         result.objectList_.set(index, value);
         return this;
       }
+
       public Builder addObjectList(int value) {
         if (result.objectList_.isEmpty()) {
           result.objectList_ = new java.util.ArrayList<java.lang.Integer>();
@@ -5244,6 +5782,7 @@ public final class EcmascriptProtos {
         result.objectList_.add(value);
         return this;
       }
+
       public Builder addAllObjectList(
           java.lang.Iterable<? extends java.lang.Integer> values) {
         if (result.objectList_.isEmpty()) {
@@ -5252,144 +5791,161 @@ public final class EcmascriptProtos {
         super.addAll(values, result.objectList_);
         return this;
       }
+
       public Builder clearObjectList() {
         result.objectList_ = java.util.Collections.emptyList();
         return this;
       }
-      
+
       // @@protoc_insertion_point(builder_scope:ReleaseObjectsArg)
     }
-    
+
     static {
       defaultInstance = new ReleaseObjectsArg(true);
       com.opera.core.systems.scope.protos.EcmascriptProtos.internalForceInit();
       defaultInstance.initFields();
     }
-    
+
     // @@protoc_insertion_point(class_scope:ReleaseObjectsArg)
   }
-  
+
   public static final class ReadyStateChange extends
       com.google.protobuf.GeneratedMessage {
     // Use ReadyStateChange.newBuilder() to construct.
     private ReadyStateChange() {
       initFields();
     }
-    private ReadyStateChange(boolean noInit) {}
-    
+
+    private ReadyStateChange(boolean noInit) {
+    }
+
     private static final ReadyStateChange defaultInstance;
+
     public static ReadyStateChange getDefaultInstance() {
       return defaultInstance;
     }
-    
+
     public ReadyStateChange getDefaultInstanceForType() {
       return defaultInstance;
     }
-    
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
+
+    public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
       return com.opera.core.systems.scope.protos.EcmascriptProtos.internal_static_ReadyStateChange_descriptor;
     }
-    
-    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-        internalGetFieldAccessorTable() {
+
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable internalGetFieldAccessorTable() {
       return com.opera.core.systems.scope.protos.EcmascriptProtos.internal_static_ReadyStateChange_fieldAccessorTable;
     }
-    
-    public enum State
-        implements com.google.protobuf.ProtocolMessageEnum {
-      DOM_ENVIRONMENT_CREATED(0, 1),
-      DOM_CONTENT_LOADED(1, 2),
-      AFTER_ONLOAD(2, 3),
-      ;
-      
-      
-      public final int getNumber() { return value; }
-      
+
+    public enum State implements com.google.protobuf.ProtocolMessageEnum {
+      DOM_ENVIRONMENT_CREATED(0, 1), DOM_CONTENT_LOADED(1, 2), AFTER_ONLOAD(2,
+          3), ;
+
+      public final int getNumber() {
+        return value;
+      }
+
       public static State valueOf(int value) {
         switch (value) {
-          case 1: return DOM_ENVIRONMENT_CREATED;
-          case 2: return DOM_CONTENT_LOADED;
-          case 3: return AFTER_ONLOAD;
-          default: return null;
+        case 1:
+          return DOM_ENVIRONMENT_CREATED;
+        case 2:
+          return DOM_CONTENT_LOADED;
+        case 3:
+          return AFTER_ONLOAD;
+        default:
+          return null;
         }
       }
-      
-      public static com.google.protobuf.Internal.EnumLiteMap<State>
-          internalGetValueMap() {
+
+      public static com.google.protobuf.Internal.EnumLiteMap<State> internalGetValueMap() {
         return internalValueMap;
       }
-      private static com.google.protobuf.Internal.EnumLiteMap<State>
-          internalValueMap =
-            new com.google.protobuf.Internal.EnumLiteMap<State>() {
-              public State findValueByNumber(int number) {
-                return State.valueOf(number)
-      ;        }
-            };
-      
-      public final com.google.protobuf.Descriptors.EnumValueDescriptor
-          getValueDescriptor() {
+
+      private static com.google.protobuf.Internal.EnumLiteMap<State> internalValueMap = new com.google.protobuf.Internal.EnumLiteMap<State>() {
+        public State findValueByNumber(int number) {
+          return State.valueOf(number);
+        }
+      };
+
+      public final com.google.protobuf.Descriptors.EnumValueDescriptor getValueDescriptor() {
         return getDescriptor().getValues().get(index);
       }
-      public final com.google.protobuf.Descriptors.EnumDescriptor
-          getDescriptorForType() {
+
+      public final com.google.protobuf.Descriptors.EnumDescriptor getDescriptorForType() {
         return getDescriptor();
       }
-      public static final com.google.protobuf.Descriptors.EnumDescriptor
-          getDescriptor() {
-        return com.opera.core.systems.scope.protos.EcmascriptProtos.ReadyStateChange.getDescriptor().getEnumTypes().get(0);
+
+      public static final com.google.protobuf.Descriptors.EnumDescriptor getDescriptor() {
+        return com.opera.core.systems.scope.protos.EcmascriptProtos.ReadyStateChange.getDescriptor().getEnumTypes().get(
+            0);
       }
-      
-      private static final State[] VALUES = {
-        DOM_ENVIRONMENT_CREATED, DOM_CONTENT_LOADED, AFTER_ONLOAD, 
-      };
+
+      private static final State[] VALUES = { DOM_ENVIRONMENT_CREATED,
+          DOM_CONTENT_LOADED, AFTER_ONLOAD, };
+
       public static State valueOf(
           com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
         if (desc.getType() != getDescriptor()) {
           throw new java.lang.IllegalArgumentException(
-            "EnumValueDescriptor is not for this type.");
+              "EnumValueDescriptor is not for this type.");
         }
         return VALUES[desc.getIndex()];
       }
+
       private final int index;
       private final int value;
+
       private State(int index, int value) {
         this.index = index;
         this.value = value;
       }
-      
+
       static {
         com.opera.core.systems.scope.protos.EcmascriptProtos.getDescriptor();
       }
-      
+
       // @@protoc_insertion_point(enum_scope:ReadyStateChange.State)
     }
-    
+
     // required uint32 runtimeID = 1;
     public static final int RUNTIMEID_FIELD_NUMBER = 1;
     private boolean hasRuntimeID;
     private int runtimeID_ = 0;
-    public boolean hasRuntimeID() { return hasRuntimeID; }
-    public int getRuntimeID() { return runtimeID_; }
-    
+
+    public boolean hasRuntimeID() {
+      return hasRuntimeID;
+    }
+
+    public int getRuntimeID() {
+      return runtimeID_;
+    }
+
     // required .ReadyStateChange.State state = 2;
     public static final int STATE_FIELD_NUMBER = 2;
     private boolean hasState;
     private com.opera.core.systems.scope.protos.EcmascriptProtos.ReadyStateChange.State state_;
-    public boolean hasState() { return hasState; }
-    public com.opera.core.systems.scope.protos.EcmascriptProtos.ReadyStateChange.State getState() { return state_; }
-    
+
+    public boolean hasState() {
+      return hasState;
+    }
+
+    public com.opera.core.systems.scope.protos.EcmascriptProtos.ReadyStateChange.State getState() {
+      return state_;
+    }
+
     private void initFields() {
       state_ = com.opera.core.systems.scope.protos.EcmascriptProtos.ReadyStateChange.State.DOM_ENVIRONMENT_CREATED;
     }
+
     public final boolean isInitialized() {
       if (!hasRuntimeID) return false;
       if (!hasState) return false;
       return true;
     }
-    
+
     public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
+        throws java.io.IOException {
       getSerializedSize();
       if (hasRuntimeID()) {
         output.writeUInt32(1, getRuntimeID());
@@ -5399,62 +5955,65 @@ public final class EcmascriptProtos {
       }
       getUnknownFields().writeTo(output);
     }
-    
+
     private int memoizedSerializedSize = -1;
+
     public int getSerializedSize() {
       int size = memoizedSerializedSize;
       if (size != -1) return size;
-    
+
       size = 0;
       if (hasRuntimeID()) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeUInt32Size(1, getRuntimeID());
+        size += com.google.protobuf.CodedOutputStream.computeUInt32Size(1,
+            getRuntimeID());
       }
       if (hasState()) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(2, getState().getNumber());
+        size += com.google.protobuf.CodedOutputStream.computeEnumSize(2,
+            getState().getNumber());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
       return size;
     }
-    
+
     public static com.opera.core.systems.scope.protos.EcmascriptProtos.ReadyStateChange parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.EcmascriptProtos.ReadyStateChange parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+      return newBuilder().mergeFrom(data, extensionRegistry).buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.EcmascriptProtos.ReadyStateChange parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+
+    public static com.opera.core.systems.scope.protos.EcmascriptProtos.ReadyStateChange parseFrom(
+        byte[] data) throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.EcmascriptProtos.ReadyStateChange parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+      return newBuilder().mergeFrom(data, extensionRegistry).buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.EcmascriptProtos.ReadyStateChange parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
+
+    public static com.opera.core.systems.scope.protos.EcmascriptProtos.ReadyStateChange parseFrom(
+        java.io.InputStream input) throws java.io.IOException {
       return newBuilder().mergeFrom(input).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.EcmascriptProtos.ReadyStateChange parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+      return newBuilder().mergeFrom(input, extensionRegistry).buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.EcmascriptProtos.ReadyStateChange parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
+
+    public static com.opera.core.systems.scope.protos.EcmascriptProtos.ReadyStateChange parseDelimitedFrom(
+        java.io.InputStream input) throws java.io.IOException {
       Builder builder = newBuilder();
       if (builder.mergeDelimitedFrom(input)) {
         return builder.buildParsed();
@@ -5462,6 +6021,7 @@ public final class EcmascriptProtos {
         return null;
       }
     }
+
     public static com.opera.core.systems.scope.protos.EcmascriptProtos.ReadyStateChange parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -5473,104 +6033,115 @@ public final class EcmascriptProtos {
         return null;
       }
     }
+
     public static com.opera.core.systems.scope.protos.EcmascriptProtos.ReadyStateChange parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
+        com.google.protobuf.CodedInputStream input) throws java.io.IOException {
       return newBuilder().mergeFrom(input).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.EcmascriptProtos.ReadyStateChange parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+      return newBuilder().mergeFrom(input, extensionRegistry).buildParsed();
     }
-    
-    public static Builder newBuilder() { return Builder.create(); }
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(com.opera.core.systems.scope.protos.EcmascriptProtos.ReadyStateChange prototype) {
+
+    public static Builder newBuilder() {
+      return Builder.create();
+    }
+
+    public Builder newBuilderForType() {
+      return newBuilder();
+    }
+
+    public static Builder newBuilder(
+        com.opera.core.systems.scope.protos.EcmascriptProtos.ReadyStateChange prototype) {
       return newBuilder().mergeFrom(prototype);
     }
-    public Builder toBuilder() { return newBuilder(this); }
-    
+
+    public Builder toBuilder() {
+      return newBuilder(this);
+    }
+
     public static final class Builder extends
         com.google.protobuf.GeneratedMessage.Builder<Builder> {
       private com.opera.core.systems.scope.protos.EcmascriptProtos.ReadyStateChange result;
-      
-      // Construct using com.opera.core.systems.scope.protos.EcmascriptProtos.ReadyStateChange.newBuilder()
-      private Builder() {}
-      
+
+      // Construct using
+      // com.opera.core.systems.scope.protos.EcmascriptProtos.ReadyStateChange.newBuilder()
+      private Builder() {
+      }
+
       private static Builder create() {
         Builder builder = new Builder();
         builder.result = new com.opera.core.systems.scope.protos.EcmascriptProtos.ReadyStateChange();
         return builder;
       }
-      
+
       protected com.opera.core.systems.scope.protos.EcmascriptProtos.ReadyStateChange internalGetResult() {
         return result;
       }
-      
+
       public Builder clear() {
         if (result == null) {
-          throw new IllegalStateException(
-            "Cannot call clear() after build().");
+          throw new IllegalStateException("Cannot call clear() after build().");
         }
         result = new com.opera.core.systems.scope.protos.EcmascriptProtos.ReadyStateChange();
         return this;
       }
-      
+
       public Builder clone() {
         return create().mergeFrom(result);
       }
-      
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
+
+      public com.google.protobuf.Descriptors.Descriptor getDescriptorForType() {
         return com.opera.core.systems.scope.protos.EcmascriptProtos.ReadyStateChange.getDescriptor();
       }
-      
+
       public com.opera.core.systems.scope.protos.EcmascriptProtos.ReadyStateChange getDefaultInstanceForType() {
         return com.opera.core.systems.scope.protos.EcmascriptProtos.ReadyStateChange.getDefaultInstance();
       }
-      
+
       public boolean isInitialized() {
         return result.isInitialized();
       }
+
       public com.opera.core.systems.scope.protos.EcmascriptProtos.ReadyStateChange build() {
         if (result != null && !isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return buildPartial();
       }
-      
+
       private com.opera.core.systems.scope.protos.EcmascriptProtos.ReadyStateChange buildParsed()
           throws com.google.protobuf.InvalidProtocolBufferException {
         if (!isInitialized()) {
-          throw newUninitializedMessageException(
-            result).asInvalidProtocolBufferException();
+          throw newUninitializedMessageException(result).asInvalidProtocolBufferException();
         }
         return buildPartial();
       }
-      
+
       public com.opera.core.systems.scope.protos.EcmascriptProtos.ReadyStateChange buildPartial() {
         if (result == null) {
           throw new IllegalStateException(
-            "build() has already been called on this Builder.");
+              "build() has already been called on this Builder.");
         }
         com.opera.core.systems.scope.protos.EcmascriptProtos.ReadyStateChange returnMe = result;
         result = null;
         return returnMe;
       }
-      
+
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.opera.core.systems.scope.protos.EcmascriptProtos.ReadyStateChange) {
-          return mergeFrom((com.opera.core.systems.scope.protos.EcmascriptProtos.ReadyStateChange)other);
+          return mergeFrom((com.opera.core.systems.scope.protos.EcmascriptProtos.ReadyStateChange) other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
-      
-      public Builder mergeFrom(com.opera.core.systems.scope.protos.EcmascriptProtos.ReadyStateChange other) {
+
+      public Builder mergeFrom(
+          com.opera.core.systems.scope.protos.EcmascriptProtos.ReadyStateChange other) {
         if (other == com.opera.core.systems.scope.protos.EcmascriptProtos.ReadyStateChange.getDefaultInstance()) return this;
         if (other.hasRuntimeID()) {
           setRuntimeID(other.getRuntimeID());
@@ -5581,73 +6152,74 @@ public final class EcmascriptProtos {
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
-      
-      public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
+
+      public Builder mergeFrom(com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder(
-            this.getUnknownFields());
+        com.google.protobuf.UnknownFieldSet.Builder unknownFields = com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
         while (true) {
           int tag = input.readTag();
           switch (tag) {
-            case 0:
+          case 0:
+            this.setUnknownFields(unknownFields.build());
+            return this;
+          default: {
+            if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
               this.setUnknownFields(unknownFields.build());
               return this;
-            default: {
-              if (!parseUnknownField(input, unknownFields,
-                                     extensionRegistry, tag)) {
-                this.setUnknownFields(unknownFields.build());
-                return this;
-              }
-              break;
             }
-            case 8: {
-              setRuntimeID(input.readUInt32());
-              break;
+            break;
+          }
+          case 8: {
+            setRuntimeID(input.readUInt32());
+            break;
+          }
+          case 16: {
+            int rawValue = input.readEnum();
+            com.opera.core.systems.scope.protos.EcmascriptProtos.ReadyStateChange.State value = com.opera.core.systems.scope.protos.EcmascriptProtos.ReadyStateChange.State.valueOf(rawValue);
+            if (value == null) {
+              unknownFields.mergeVarintField(2, rawValue);
+            } else {
+              setState(value);
             }
-            case 16: {
-              int rawValue = input.readEnum();
-              com.opera.core.systems.scope.protos.EcmascriptProtos.ReadyStateChange.State value = com.opera.core.systems.scope.protos.EcmascriptProtos.ReadyStateChange.State.valueOf(rawValue);
-              if (value == null) {
-                unknownFields.mergeVarintField(2, rawValue);
-              } else {
-                setState(value);
-              }
-              break;
-            }
+            break;
+          }
           }
         }
       }
-      
-      
+
       // required uint32 runtimeID = 1;
       public boolean hasRuntimeID() {
         return result.hasRuntimeID();
       }
+
       public int getRuntimeID() {
         return result.getRuntimeID();
       }
+
       public Builder setRuntimeID(int value) {
         result.hasRuntimeID = true;
         result.runtimeID_ = value;
         return this;
       }
+
       public Builder clearRuntimeID() {
         result.hasRuntimeID = false;
         result.runtimeID_ = 0;
         return this;
       }
-      
+
       // required .ReadyStateChange.State state = 2;
       public boolean hasState() {
         return result.hasState();
       }
+
       public com.opera.core.systems.scope.protos.EcmascriptProtos.ReadyStateChange.State getState() {
         return result.getState();
       }
-      public Builder setState(com.opera.core.systems.scope.protos.EcmascriptProtos.ReadyStateChange.State value) {
+
+      public Builder setState(
+          com.opera.core.systems.scope.protos.EcmascriptProtos.ReadyStateChange.State value) {
         if (value == null) {
           throw new NullPointerException();
         }
@@ -5655,268 +6227,213 @@ public final class EcmascriptProtos {
         result.state_ = value;
         return this;
       }
+
       public Builder clearState() {
         result.hasState = false;
         result.state_ = com.opera.core.systems.scope.protos.EcmascriptProtos.ReadyStateChange.State.DOM_ENVIRONMENT_CREATED;
         return this;
       }
-      
+
       // @@protoc_insertion_point(builder_scope:ReadyStateChange)
     }
-    
+
     static {
       defaultInstance = new ReadyStateChange(true);
       com.opera.core.systems.scope.protos.EcmascriptProtos.internalForceInit();
       defaultInstance.initFields();
     }
-    
+
     // @@protoc_insertion_point(class_scope:ReadyStateChange)
   }
-  
-  private static com.google.protobuf.Descriptors.Descriptor
-    internal_static_ListRuntimesArg_descriptor;
-  private static
-    com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_ListRuntimesArg_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
-    internal_static_RuntimeList_descriptor;
-  private static
-    com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_RuntimeList_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
-    internal_static_Runtime_descriptor;
-  private static
-    com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_Runtime_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
-    internal_static_EvalArg_descriptor;
-  private static
-    com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_EvalArg_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
-    internal_static_EvalArg_Variable_descriptor;
-  private static
-    com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_EvalArg_Variable_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
-    internal_static_EvalResult_descriptor;
-  private static
-    com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_EvalResult_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
-    internal_static_ExamineObjectsArg_descriptor;
-  private static
-    com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_ExamineObjectsArg_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
-    internal_static_ObjectList_descriptor;
-  private static
-    com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_ObjectList_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
-    internal_static_PrototypeChain_descriptor;
-  private static
-    com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_PrototypeChain_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
-    internal_static_Object_descriptor;
-  private static
-    com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_Object_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
-    internal_static_Object_Property_descriptor;
-  private static
-    com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_Object_Property_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
-    internal_static_Value_descriptor;
-  private static
-    com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_Value_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
-    internal_static_ReleaseObjectsArg_descriptor;
-  private static
-    com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_ReleaseObjectsArg_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
-    internal_static_ReadyStateChange_descriptor;
-  private static
-    com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_ReadyStateChange_fieldAccessorTable;
-  
-  public static com.google.protobuf.Descriptors.FileDescriptor
-      getDescriptor() {
+
+  private static com.google.protobuf.Descriptors.Descriptor internal_static_ListRuntimesArg_descriptor;
+  private static com.google.protobuf.GeneratedMessage.FieldAccessorTable internal_static_ListRuntimesArg_fieldAccessorTable;
+  private static com.google.protobuf.Descriptors.Descriptor internal_static_RuntimeList_descriptor;
+  private static com.google.protobuf.GeneratedMessage.FieldAccessorTable internal_static_RuntimeList_fieldAccessorTable;
+  private static com.google.protobuf.Descriptors.Descriptor internal_static_Runtime_descriptor;
+  private static com.google.protobuf.GeneratedMessage.FieldAccessorTable internal_static_Runtime_fieldAccessorTable;
+  private static com.google.protobuf.Descriptors.Descriptor internal_static_EvalArg_descriptor;
+  private static com.google.protobuf.GeneratedMessage.FieldAccessorTable internal_static_EvalArg_fieldAccessorTable;
+  private static com.google.protobuf.Descriptors.Descriptor internal_static_EvalArg_Variable_descriptor;
+  private static com.google.protobuf.GeneratedMessage.FieldAccessorTable internal_static_EvalArg_Variable_fieldAccessorTable;
+  private static com.google.protobuf.Descriptors.Descriptor internal_static_EvalResult_descriptor;
+  private static com.google.protobuf.GeneratedMessage.FieldAccessorTable internal_static_EvalResult_fieldAccessorTable;
+  private static com.google.protobuf.Descriptors.Descriptor internal_static_ExamineObjectsArg_descriptor;
+  private static com.google.protobuf.GeneratedMessage.FieldAccessorTable internal_static_ExamineObjectsArg_fieldAccessorTable;
+  private static com.google.protobuf.Descriptors.Descriptor internal_static_ObjectList_descriptor;
+  private static com.google.protobuf.GeneratedMessage.FieldAccessorTable internal_static_ObjectList_fieldAccessorTable;
+  private static com.google.protobuf.Descriptors.Descriptor internal_static_PrototypeChain_descriptor;
+  private static com.google.protobuf.GeneratedMessage.FieldAccessorTable internal_static_PrototypeChain_fieldAccessorTable;
+  private static com.google.protobuf.Descriptors.Descriptor internal_static_Object_descriptor;
+  private static com.google.protobuf.GeneratedMessage.FieldAccessorTable internal_static_Object_fieldAccessorTable;
+  private static com.google.protobuf.Descriptors.Descriptor internal_static_Object_Property_descriptor;
+  private static com.google.protobuf.GeneratedMessage.FieldAccessorTable internal_static_Object_Property_fieldAccessorTable;
+  private static com.google.protobuf.Descriptors.Descriptor internal_static_Value_descriptor;
+  private static com.google.protobuf.GeneratedMessage.FieldAccessorTable internal_static_Value_fieldAccessorTable;
+  private static com.google.protobuf.Descriptors.Descriptor internal_static_ReleaseObjectsArg_descriptor;
+  private static com.google.protobuf.GeneratedMessage.FieldAccessorTable internal_static_ReleaseObjectsArg_fieldAccessorTable;
+  private static com.google.protobuf.Descriptors.Descriptor internal_static_ReadyStateChange_descriptor;
+  private static com.google.protobuf.GeneratedMessage.FieldAccessorTable internal_static_ReadyStateChange_fieldAccessorTable;
+
+  public static com.google.protobuf.Descriptors.FileDescriptor getDescriptor() {
     return descriptor;
   }
-  private static com.google.protobuf.Descriptors.FileDescriptor
-      descriptor;
+
+  private static com.google.protobuf.Descriptors.FileDescriptor descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\020ecmascript.proto\"6\n\017ListRuntimesArg\022\023\n" +
-      "\013runtimeList\030\001 \003(\r\022\016\n\006create\030\002 \001(\010\",\n\013Ru" +
-      "ntimeList\022\035\n\013runtimeList\030\001 \003(\0132\010.Runtime" +
-      "\"d\n\007Runtime\022\021\n\truntimeID\030\001 \002(\r\022\025\n\rhtmlFr" +
-      "amePath\030\002 \002(\t\022\020\n\010windowID\030\003 \002(\r\022\020\n\010objec" +
-      "tID\030\004 \002(\r\022\013\n\003uri\030\005 \002(\t\"\205\001\n\007EvalArg\022\021\n\tru" +
-      "ntimeID\030\001 \002(\r\022\022\n\nscriptData\030\002 \002(\t\022\'\n\014var" +
-      "iableList\030\003 \003(\0132\021.EvalArg.Variable\032*\n\010Va" +
-      "riable\022\014\n\004name\030\001 \002(\t\022\020\n\010objectID\030\002 \002(\r\"\230" +
-      "\001\n\nEvalResult\022\"\n\006status\030\001 \002(\0162\022.EvalResu",
-      "lt.Status\022\025\n\005value\030\002 \002(\0132\006.Value\"O\n\006Stat" +
-      "us\022\013\n\007SUCCESS\020\001\022\013\n\007FAILURE\020\002\022\r\n\tEXCEPTIO" +
-      "N\020\003\022\r\n\tNO_MEMORY\020\004\022\r\n\tCANCELLED\020\005\"\\\n\021Exa" +
-      "mineObjectsArg\022\021\n\truntimeID\030\001 \002(\r\022\022\n\nobj" +
-      "ectList\030\002 \003(\r\022 \n\021examinePrototypes\030\003 \001(\010" +
-      ":\005false\"4\n\nObjectList\022&\n\rprototypeList\030\001" +
-      " \003(\0132\017.PrototypeChain\"-\n\016PrototypeChain\022" +
-      "\033\n\nobjectList\030\001 \003(\0132\007.Object\"\217\002\n\006Object\022" +
-      "\020\n\010objectID\030\001 \002(\r\022\022\n\nisCallable\030\002 \002(\010\022 \n" +
-      "\004type\030\003 \002(\0162\022.Object.ObjectType\022\023\n\013proto",
-      "typeID\030\004 \001(\r\022\021\n\tclassName\030\005 \001(\t\022\024\n\014funct" +
-      "ionName\030\006 \001(\t\022&\n\014propertyList\030\007 \003(\0132\020.Ob" +
-      "ject.Property\032/\n\010Property\022\014\n\004name\030\001 \002(\t\022" +
-      "\025\n\005value\030\002 \002(\0132\006.Value\"&\n\nObjectType\022\n\n\006" +
-      "OBJECT\020\001\022\014\n\010FUNCTION\020\002\"\343\001\n\005Value\022\031\n\004type" +
-      "\030\001 \001(\0162\013.Value.Type\022\016\n\006number\030\002 \001(\001\022\013\n\003s" +
-      "tr\030\003 \001(\t\022\027\n\006object\030\004 \001(\0132\007.Object\"\210\001\n\004Ty" +
-      "pe\022\r\n\tUNDEFINED\020\000\022\010\n\004NULL\020\001\022\010\n\004TRUE\020\002\022\t\n" +
-      "\005FALSE\020\003\022\007\n\003NAN\020\004\022\021\n\rPLUS_INFINITY\020\005\022\022\n\016" +
-      "MINUS_INFINITY\020\006\022\n\n\006NUMBER\020\007\022\n\n\006STRING\020\010",
-      "\022\n\n\006OBJECT\020\t\"\'\n\021ReleaseObjectsArg\022\022\n\nobj" +
-      "ectList\030\001 \003(\r\"\235\001\n\020ReadyStateChange\022\021\n\tru" +
-      "ntimeID\030\001 \002(\r\022&\n\005state\030\002 \002(\0162\027.ReadyStat" +
-      "eChange.State\"N\n\005State\022\033\n\027DOM_ENVIRONMEN" +
-      "T_CREATED\020\001\022\026\n\022DOM_CONTENT_LOADED\020\002\022\020\n\014A" +
-      "FTER_ONLOAD\020\003B9\n#com.opera.core.systems." +
-      "scope.protosB\020EcmascriptProtosH\001"
+        "\n\020ecmascript.proto\"6\n\017ListRuntimesArg\022\023\n"
+            + "\013runtimeList\030\001 \003(\r\022\016\n\006create\030\002 \001(\010\",\n\013Ru"
+            + "ntimeList\022\035\n\013runtimeList\030\001 \003(\0132\010.Runtime"
+            + "\"d\n\007Runtime\022\021\n\truntimeID\030\001 \002(\r\022\025\n\rhtmlFr"
+            + "amePath\030\002 \002(\t\022\020\n\010windowID\030\003 \002(\r\022\020\n\010objec"
+            + "tID\030\004 \002(\r\022\013\n\003uri\030\005 \002(\t\"\205\001\n\007EvalArg\022\021\n\tru"
+            + "ntimeID\030\001 \002(\r\022\022\n\nscriptData\030\002 \002(\t\022\'\n\014var"
+            + "iableList\030\003 \003(\0132\021.EvalArg.Variable\032*\n\010Va"
+            + "riable\022\014\n\004name\030\001 \002(\t\022\020\n\010objectID\030\002 \002(\r\"\230"
+            + "\001\n\nEvalResult\022\"\n\006status\030\001 \002(\0162\022.EvalResu",
+        "lt.Status\022\025\n\005value\030\002 \002(\0132\006.Value\"O\n\006Stat"
+            + "us\022\013\n\007SUCCESS\020\001\022\013\n\007FAILURE\020\002\022\r\n\tEXCEPTIO"
+            + "N\020\003\022\r\n\tNO_MEMORY\020\004\022\r\n\tCANCELLED\020\005\"\\\n\021Exa"
+            + "mineObjectsArg\022\021\n\truntimeID\030\001 \002(\r\022\022\n\nobj"
+            + "ectList\030\002 \003(\r\022 \n\021examinePrototypes\030\003 \001(\010"
+            + ":\005false\"4\n\nObjectList\022&\n\rprototypeList\030\001"
+            + " \003(\0132\017.PrototypeChain\"-\n\016PrototypeChain\022"
+            + "\033\n\nobjectList\030\001 \003(\0132\007.Object\"\217\002\n\006Object\022"
+            + "\020\n\010objectID\030\001 \002(\r\022\022\n\nisCallable\030\002 \002(\010\022 \n"
+            + "\004type\030\003 \002(\0162\022.Object.ObjectType\022\023\n\013proto",
+        "typeID\030\004 \001(\r\022\021\n\tclassName\030\005 \001(\t\022\024\n\014funct"
+            + "ionName\030\006 \001(\t\022&\n\014propertyList\030\007 \003(\0132\020.Ob"
+            + "ject.Property\032/\n\010Property\022\014\n\004name\030\001 \002(\t\022"
+            + "\025\n\005value\030\002 \002(\0132\006.Value\"&\n\nObjectType\022\n\n\006"
+            + "OBJECT\020\001\022\014\n\010FUNCTION\020\002\"\343\001\n\005Value\022\031\n\004type"
+            + "\030\001 \001(\0162\013.Value.Type\022\016\n\006number\030\002 \001(\001\022\013\n\003s"
+            + "tr\030\003 \001(\t\022\027\n\006object\030\004 \001(\0132\007.Object\"\210\001\n\004Ty"
+            + "pe\022\r\n\tUNDEFINED\020\000\022\010\n\004NULL\020\001\022\010\n\004TRUE\020\002\022\t\n"
+            + "\005FALSE\020\003\022\007\n\003NAN\020\004\022\021\n\rPLUS_INFINITY\020\005\022\022\n\016"
+            + "MINUS_INFINITY\020\006\022\n\n\006NUMBER\020\007\022\n\n\006STRING\020\010",
+        "\022\n\n\006OBJECT\020\t\"\'\n\021ReleaseObjectsArg\022\022\n\nobj"
+            + "ectList\030\001 \003(\r\"\235\001\n\020ReadyStateChange\022\021\n\tru"
+            + "ntimeID\030\001 \002(\r\022&\n\005state\030\002 \002(\0162\027.ReadyStat"
+            + "eChange.State\"N\n\005State\022\033\n\027DOM_ENVIRONMEN"
+            + "T_CREATED\020\001\022\026\n\022DOM_CONTENT_LOADED\020\002\022\020\n\014A"
+            + "FTER_ONLOAD\020\003B9\n#com.opera.core.systems."
+            + "scope.protosB\020EcmascriptProtosH\001" };
+    com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner = new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
+      public com.google.protobuf.ExtensionRegistry assignDescriptors(
+          com.google.protobuf.Descriptors.FileDescriptor root) {
+        descriptor = root;
+        internal_static_ListRuntimesArg_descriptor = getDescriptor().getMessageTypes().get(
+            0);
+        internal_static_ListRuntimesArg_fieldAccessorTable = new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+            internal_static_ListRuntimesArg_descriptor,
+            new java.lang.String[] { "RuntimeList", "Create", },
+            com.opera.core.systems.scope.protos.EcmascriptProtos.ListRuntimesArg.class,
+            com.opera.core.systems.scope.protos.EcmascriptProtos.ListRuntimesArg.Builder.class);
+        internal_static_RuntimeList_descriptor = getDescriptor().getMessageTypes().get(
+            1);
+        internal_static_RuntimeList_fieldAccessorTable = new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+            internal_static_RuntimeList_descriptor,
+            new java.lang.String[] { "RuntimeList", },
+            com.opera.core.systems.scope.protos.EcmascriptProtos.RuntimeList.class,
+            com.opera.core.systems.scope.protos.EcmascriptProtos.RuntimeList.Builder.class);
+        internal_static_Runtime_descriptor = getDescriptor().getMessageTypes().get(
+            2);
+        internal_static_Runtime_fieldAccessorTable = new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+            internal_static_Runtime_descriptor,
+            new java.lang.String[] { "RuntimeID", "HtmlFramePath", "WindowID",
+                "ObjectID", "Uri", },
+            com.opera.core.systems.scope.protos.EcmascriptProtos.Runtime.class,
+            com.opera.core.systems.scope.protos.EcmascriptProtos.Runtime.Builder.class);
+        internal_static_EvalArg_descriptor = getDescriptor().getMessageTypes().get(
+            3);
+        internal_static_EvalArg_fieldAccessorTable = new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+            internal_static_EvalArg_descriptor,
+            new java.lang.String[] { "RuntimeID", "ScriptData", "VariableList", },
+            com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg.class,
+            com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg.Builder.class);
+        internal_static_EvalArg_Variable_descriptor = internal_static_EvalArg_descriptor.getNestedTypes().get(
+            0);
+        internal_static_EvalArg_Variable_fieldAccessorTable = new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+            internal_static_EvalArg_Variable_descriptor,
+            new java.lang.String[] { "Name", "ObjectID", },
+            com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg.Variable.class,
+            com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg.Variable.Builder.class);
+        internal_static_EvalResult_descriptor = getDescriptor().getMessageTypes().get(
+            4);
+        internal_static_EvalResult_fieldAccessorTable = new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+            internal_static_EvalResult_descriptor,
+            new java.lang.String[] { "Status", "Value", },
+            com.opera.core.systems.scope.protos.EcmascriptProtos.EvalResult.class,
+            com.opera.core.systems.scope.protos.EcmascriptProtos.EvalResult.Builder.class);
+        internal_static_ExamineObjectsArg_descriptor = getDescriptor().getMessageTypes().get(
+            5);
+        internal_static_ExamineObjectsArg_fieldAccessorTable = new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+            internal_static_ExamineObjectsArg_descriptor,
+            new java.lang.String[] { "RuntimeID", "ObjectList",
+                "ExaminePrototypes", },
+            com.opera.core.systems.scope.protos.EcmascriptProtos.ExamineObjectsArg.class,
+            com.opera.core.systems.scope.protos.EcmascriptProtos.ExamineObjectsArg.Builder.class);
+        internal_static_ObjectList_descriptor = getDescriptor().getMessageTypes().get(
+            6);
+        internal_static_ObjectList_fieldAccessorTable = new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+            internal_static_ObjectList_descriptor,
+            new java.lang.String[] { "PrototypeList", },
+            com.opera.core.systems.scope.protos.EcmascriptProtos.ObjectList.class,
+            com.opera.core.systems.scope.protos.EcmascriptProtos.ObjectList.Builder.class);
+        internal_static_PrototypeChain_descriptor = getDescriptor().getMessageTypes().get(
+            7);
+        internal_static_PrototypeChain_fieldAccessorTable = new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+            internal_static_PrototypeChain_descriptor,
+            new java.lang.String[] { "ObjectList", },
+            com.opera.core.systems.scope.protos.EcmascriptProtos.PrototypeChain.class,
+            com.opera.core.systems.scope.protos.EcmascriptProtos.PrototypeChain.Builder.class);
+        internal_static_Object_descriptor = getDescriptor().getMessageTypes().get(
+            8);
+        internal_static_Object_fieldAccessorTable = new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+            internal_static_Object_descriptor,
+            new java.lang.String[] { "ObjectID", "IsCallable", "Type",
+                "PrototypeID", "ClassName", "FunctionName", "PropertyList", },
+            com.opera.core.systems.scope.protos.EcmascriptProtos.Object.class,
+            com.opera.core.systems.scope.protos.EcmascriptProtos.Object.Builder.class);
+        internal_static_Object_Property_descriptor = internal_static_Object_descriptor.getNestedTypes().get(
+            0);
+        internal_static_Object_Property_fieldAccessorTable = new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+            internal_static_Object_Property_descriptor,
+            new java.lang.String[] { "Name", "Value", },
+            com.opera.core.systems.scope.protos.EcmascriptProtos.Object.Property.class,
+            com.opera.core.systems.scope.protos.EcmascriptProtos.Object.Property.Builder.class);
+        internal_static_Value_descriptor = getDescriptor().getMessageTypes().get(
+            9);
+        internal_static_Value_fieldAccessorTable = new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+            internal_static_Value_descriptor,
+            new java.lang.String[] { "Type", "Number", "Str", "Object", },
+            com.opera.core.systems.scope.protos.EcmascriptProtos.Value.class,
+            com.opera.core.systems.scope.protos.EcmascriptProtos.Value.Builder.class);
+        internal_static_ReleaseObjectsArg_descriptor = getDescriptor().getMessageTypes().get(
+            10);
+        internal_static_ReleaseObjectsArg_fieldAccessorTable = new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+            internal_static_ReleaseObjectsArg_descriptor,
+            new java.lang.String[] { "ObjectList", },
+            com.opera.core.systems.scope.protos.EcmascriptProtos.ReleaseObjectsArg.class,
+            com.opera.core.systems.scope.protos.EcmascriptProtos.ReleaseObjectsArg.Builder.class);
+        internal_static_ReadyStateChange_descriptor = getDescriptor().getMessageTypes().get(
+            11);
+        internal_static_ReadyStateChange_fieldAccessorTable = new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+            internal_static_ReadyStateChange_descriptor,
+            new java.lang.String[] { "RuntimeID", "State", },
+            com.opera.core.systems.scope.protos.EcmascriptProtos.ReadyStateChange.class,
+            com.opera.core.systems.scope.protos.EcmascriptProtos.ReadyStateChange.Builder.class);
+        return null;
+      }
     };
-    com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
-      new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
-        public com.google.protobuf.ExtensionRegistry assignDescriptors(
-            com.google.protobuf.Descriptors.FileDescriptor root) {
-          descriptor = root;
-          internal_static_ListRuntimesArg_descriptor =
-            getDescriptor().getMessageTypes().get(0);
-          internal_static_ListRuntimesArg_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_ListRuntimesArg_descriptor,
-              new java.lang.String[] { "RuntimeList", "Create", },
-              com.opera.core.systems.scope.protos.EcmascriptProtos.ListRuntimesArg.class,
-              com.opera.core.systems.scope.protos.EcmascriptProtos.ListRuntimesArg.Builder.class);
-          internal_static_RuntimeList_descriptor =
-            getDescriptor().getMessageTypes().get(1);
-          internal_static_RuntimeList_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_RuntimeList_descriptor,
-              new java.lang.String[] { "RuntimeList", },
-              com.opera.core.systems.scope.protos.EcmascriptProtos.RuntimeList.class,
-              com.opera.core.systems.scope.protos.EcmascriptProtos.RuntimeList.Builder.class);
-          internal_static_Runtime_descriptor =
-            getDescriptor().getMessageTypes().get(2);
-          internal_static_Runtime_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_Runtime_descriptor,
-              new java.lang.String[] { "RuntimeID", "HtmlFramePath", "WindowID", "ObjectID", "Uri", },
-              com.opera.core.systems.scope.protos.EcmascriptProtos.Runtime.class,
-              com.opera.core.systems.scope.protos.EcmascriptProtos.Runtime.Builder.class);
-          internal_static_EvalArg_descriptor =
-            getDescriptor().getMessageTypes().get(3);
-          internal_static_EvalArg_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_EvalArg_descriptor,
-              new java.lang.String[] { "RuntimeID", "ScriptData", "VariableList", },
-              com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg.class,
-              com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg.Builder.class);
-          internal_static_EvalArg_Variable_descriptor =
-            internal_static_EvalArg_descriptor.getNestedTypes().get(0);
-          internal_static_EvalArg_Variable_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_EvalArg_Variable_descriptor,
-              new java.lang.String[] { "Name", "ObjectID", },
-              com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg.Variable.class,
-              com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg.Variable.Builder.class);
-          internal_static_EvalResult_descriptor =
-            getDescriptor().getMessageTypes().get(4);
-          internal_static_EvalResult_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_EvalResult_descriptor,
-              new java.lang.String[] { "Status", "Value", },
-              com.opera.core.systems.scope.protos.EcmascriptProtos.EvalResult.class,
-              com.opera.core.systems.scope.protos.EcmascriptProtos.EvalResult.Builder.class);
-          internal_static_ExamineObjectsArg_descriptor =
-            getDescriptor().getMessageTypes().get(5);
-          internal_static_ExamineObjectsArg_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_ExamineObjectsArg_descriptor,
-              new java.lang.String[] { "RuntimeID", "ObjectList", "ExaminePrototypes", },
-              com.opera.core.systems.scope.protos.EcmascriptProtos.ExamineObjectsArg.class,
-              com.opera.core.systems.scope.protos.EcmascriptProtos.ExamineObjectsArg.Builder.class);
-          internal_static_ObjectList_descriptor =
-            getDescriptor().getMessageTypes().get(6);
-          internal_static_ObjectList_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_ObjectList_descriptor,
-              new java.lang.String[] { "PrototypeList", },
-              com.opera.core.systems.scope.protos.EcmascriptProtos.ObjectList.class,
-              com.opera.core.systems.scope.protos.EcmascriptProtos.ObjectList.Builder.class);
-          internal_static_PrototypeChain_descriptor =
-            getDescriptor().getMessageTypes().get(7);
-          internal_static_PrototypeChain_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_PrototypeChain_descriptor,
-              new java.lang.String[] { "ObjectList", },
-              com.opera.core.systems.scope.protos.EcmascriptProtos.PrototypeChain.class,
-              com.opera.core.systems.scope.protos.EcmascriptProtos.PrototypeChain.Builder.class);
-          internal_static_Object_descriptor =
-            getDescriptor().getMessageTypes().get(8);
-          internal_static_Object_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_Object_descriptor,
-              new java.lang.String[] { "ObjectID", "IsCallable", "Type", "PrototypeID", "ClassName", "FunctionName", "PropertyList", },
-              com.opera.core.systems.scope.protos.EcmascriptProtos.Object.class,
-              com.opera.core.systems.scope.protos.EcmascriptProtos.Object.Builder.class);
-          internal_static_Object_Property_descriptor =
-            internal_static_Object_descriptor.getNestedTypes().get(0);
-          internal_static_Object_Property_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_Object_Property_descriptor,
-              new java.lang.String[] { "Name", "Value", },
-              com.opera.core.systems.scope.protos.EcmascriptProtos.Object.Property.class,
-              com.opera.core.systems.scope.protos.EcmascriptProtos.Object.Property.Builder.class);
-          internal_static_Value_descriptor =
-            getDescriptor().getMessageTypes().get(9);
-          internal_static_Value_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_Value_descriptor,
-              new java.lang.String[] { "Type", "Number", "Str", "Object", },
-              com.opera.core.systems.scope.protos.EcmascriptProtos.Value.class,
-              com.opera.core.systems.scope.protos.EcmascriptProtos.Value.Builder.class);
-          internal_static_ReleaseObjectsArg_descriptor =
-            getDescriptor().getMessageTypes().get(10);
-          internal_static_ReleaseObjectsArg_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_ReleaseObjectsArg_descriptor,
-              new java.lang.String[] { "ObjectList", },
-              com.opera.core.systems.scope.protos.EcmascriptProtos.ReleaseObjectsArg.class,
-              com.opera.core.systems.scope.protos.EcmascriptProtos.ReleaseObjectsArg.Builder.class);
-          internal_static_ReadyStateChange_descriptor =
-            getDescriptor().getMessageTypes().get(11);
-          internal_static_ReadyStateChange_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_ReadyStateChange_descriptor,
-              new java.lang.String[] { "RuntimeID", "State", },
-              com.opera.core.systems.scope.protos.EcmascriptProtos.ReadyStateChange.class,
-              com.opera.core.systems.scope.protos.EcmascriptProtos.ReadyStateChange.Builder.class);
-          return null;
-        }
-      };
-    com.google.protobuf.Descriptors.FileDescriptor
-      .internalBuildGeneratedFileFrom(descriptorData,
-        new com.google.protobuf.Descriptors.FileDescriptor[] {
-        }, assigner);
+    com.google.protobuf.Descriptors.FileDescriptor.internalBuildGeneratedFileFrom(
+        descriptorData,
+        new com.google.protobuf.Descriptors.FileDescriptor[] {}, assigner);
   }
-  
-  public static void internalForceInit() {}
-  
+
+  public static void internalForceInit() {
+  }
+
   // @@protoc_insertion_point(outer_class_scope)
 }

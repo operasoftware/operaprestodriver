@@ -22,93 +22,93 @@ import com.opera.core.systems.OperaDriver;
 import com.opera.core.systems.scope.internal.OperaKeys;
 
 /**
- * Keyboard user interactions, part of OperaUserInteraction
- * to support typing and key strokes
- *
+ * Keyboard user interactions, part of OperaUserInteraction to support typing
+ * and key strokes
+ * 
  * @author Deniz Turkoglu <denizt@opera.com>
- *
+ * 
  */
 public abstract class Keyboard implements UserInteraction {
 
-	public static Keyboard keyDown(final Keys keys) {
-		return new Keyboard() {
+  public static Keyboard keyDown(final Keys keys) {
+    return new Keyboard() {
 
-			public void execute(WebDriver driver) {
-				String key = OperaKeys.get(keys.name());
-				keyUp(key);
-			}
+      public void execute(WebDriver driver) {
+        String key = OperaKeys.get(keys.name());
+        keyUp(key);
+      }
 
-		};
-	}
+    };
+  }
 
-	public static Keyboard keyUp(final Keys keys) {
-		return new Keyboard() {
+  public static Keyboard keyUp(final Keys keys) {
+    return new Keyboard() {
 
-			public void execute(WebDriver driver) {
-				String key = OperaKeys.get(keys.name());
-				keyDown(key);
-			}
+      public void execute(WebDriver driver) {
+        String key = OperaKeys.get(keys.name());
+        keyDown(key);
+      }
 
-		};
-	}
+    };
+  }
 
-	public static Keyboard keyDown(final String key) {
-		return new Keyboard() {
+  public static Keyboard keyDown(final String key) {
+    return new Keyboard() {
 
-			public void execute(WebDriver driver) {
-				((OperaDriver) driver).keyDown(key);
-			}
+      public void execute(WebDriver driver) {
+        ((OperaDriver) driver).keyDown(key);
+      }
 
-		};
-	}
+    };
+  }
 
-	public static Keyboard keyUp(final String key) {
-		return new Keyboard() {
+  public static Keyboard keyUp(final String key) {
+    return new Keyboard() {
 
-			public void execute(WebDriver driver) {
-				((OperaDriver) driver).keyUp(key);
-			}
+      public void execute(WebDriver driver) {
+        ((OperaDriver) driver).keyUp(key);
+      }
 
-		};
-	}
+    };
+  }
 
-	public static Keyboard key(final Keys keys) {
-		return new Keyboard() {
+  public static Keyboard key(final Keys keys) {
+    return new Keyboard() {
 
-			public void execute(WebDriver driver) {
-				String key = OperaKeys.get(keys.name());
-				key(key);
-			}
+      public void execute(WebDriver driver) {
+        String key = OperaKeys.get(keys.name());
+        key(key);
+      }
 
-		};
-	}
+    };
+  }
 
-	public static Keyboard key(final String key) {
-		return new Keyboard() {
+  public static Keyboard key(final String key) {
+    return new Keyboard() {
 
-			public void execute(WebDriver driver) {
-				((OperaDriver) driver).key(key);
-			}
+      public void execute(WebDriver driver) {
+        ((OperaDriver) driver).key(key);
+      }
 
-		};
-	}
+    };
+  }
 
-	public static Keyboard type(final String using) {
-		return new Keyboard() {
-			public void execute(WebDriver driver) {
-				((OperaDriver) driver).type(using);
-			}
+  public static Keyboard type(final String using) {
+    return new Keyboard() {
+      public void execute(WebDriver driver) {
+        ((OperaDriver) driver).type(using);
+      }
 
-		};
-	}
+    };
+  }
 
-	public static Keyboard releaseKeys() {
-		return new Keyboard() {
-			public void execute(WebDriver driver) {
-				((OperaDriver) driver).releaseKeys();
-			}
+  public static Keyboard releaseKeys() {
+    return new Keyboard() {
+      public void execute(WebDriver driver) {
+        ((OperaDriver) driver).releaseKeys();
+      }
 
-		};
-	}
+    };
+  }
 
 }

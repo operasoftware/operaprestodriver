@@ -21,38 +21,32 @@ import java.util.HashMap;
 import java.util.Map;
 
 public enum SystemInputCommand implements ICommand {
-	    CLICK(1),
-	    KEYPRESS(2),
-	    KEYUP(3),
-	    KEYDOWN(4),
-	    MOUSEDOWN(5),
-	    MOUSEUP(6),
-	    MOUSEMOVE(7),
-	    DEFAULT(-1);
+  CLICK(1), KEYPRESS(2), KEYUP(3), KEYDOWN(4), MOUSEDOWN(5), MOUSEUP(6), MOUSEMOVE(
+      7), DEFAULT(-1);
 
-	    private int code;
-	    private static final Map<Integer, SystemInputCommand> lookup = new HashMap<Integer, SystemInputCommand>();
+  private int code;
+  private static final Map<Integer, SystemInputCommand> lookup = new HashMap<Integer, SystemInputCommand>();
 
-	    static {
-	        for (SystemInputCommand command : EnumSet.allOf(SystemInputCommand.class))
-	            lookup.put(command.getCommandID(), command);
-	    }
+  static {
+    for (SystemInputCommand command : EnumSet.allOf(SystemInputCommand.class))
+      lookup.put(command.getCommandID(), command);
+  }
 
-	    private SystemInputCommand(int code) {
-	        this.code = code;
-	    }
+  private SystemInputCommand(int code) {
+    this.code = code;
+  }
 
-	    public int getCommandID() {
-	        return code;
-	    }
+  public int getCommandID() {
+    return code;
+  }
 
-	    public String getServiceName() {
-	        return "system-input";
-	    }
+  public String getServiceName() {
+    return "system-input";
+  }
 
-	    public static SystemInputCommand get(int code) {
-	        SystemInputCommand command = lookup.get(code);
-	        return (command != null) ? command : DEFAULT;
-	    }
+  public static SystemInputCommand get(int code) {
+    SystemInputCommand command = lookup.get(code);
+    return (command != null) ? command : DEFAULT;
+  }
 
 }

@@ -25,50 +25,51 @@ import com.opera.core.systems.scope.protos.WmProtos.WindowInfo;
 
 public interface IWindowManager {
 
-	/**
-	 * Sets the active window if the window is of type 'normal'
-	 * discards any other window such as 'dialog' or 'unknown'
-	 * @param windowId
-	 */
-	void setActiveWindowId(Integer windowId);
+  /**
+   * Sets the active window if the window is of type 'normal' discards any other
+   * window such as 'dialog' or 'unknown'
+   * 
+   * @param windowId
+   */
+  void setActiveWindowId(Integer windowId);
 
-	int getActiveWindowId();
+  int getActiveWindowId();
 
-	void addWindow(WindowInfo window);
+  void addWindow(WindowInfo window);
 
-	void removeWindow(Integer windowId);
+  void removeWindow(Integer windowId);
 
-	void filterActiveWindow();
+  void filterActiveWindow();
 
-	void closeWindow(Integer window);
+  void closeWindow(Integer window);
 
-	void closeAllWindows();
+  void closeAllWindows();
 
-	/**
-	 * Get the list of all windows, then find a driver window (which needs to be 'normal' window)
-	 * after that set the active window to that window
-	 */
-	void init();
+  /**
+   * Get the list of all windows, then find a driver window (which needs to be
+   * 'normal' window) after that set the active window to that window
+   */
+  void init();
 
-	/**
-	 * Find a window suitable for driving, find the active window,
-	 * if it is not a normal window, find the first normal window
-	 * via JXPath
-	 * @throws WebDriverException if no window is available for driving
-	 */
-	void findDriverWindow();
+  /**
+   * Find a window suitable for driving, find the active window, if it is not a
+   * normal window, find the first normal window via JXPath
+   * 
+   * @throws WebDriverException if no window is available for driving
+   */
+  void findDriverWindow();
 
-	void setActiveWindow(String title);
+  void setActiveWindow(String title);
 
-	List<Integer> getWindowHandles();
+  List<Integer> getWindowHandles();
 
-	int getOpenWindowCount();
+  int getOpenWindowCount();
 
-	AtomicInteger getLastHttpResponseCode();
+  AtomicInteger getLastHttpResponseCode();
 
-	void resetWindowsList();
+  void resetWindowsList();
 
-	void clearFilter();
+  void clearFilter();
 
-	void filterWindow(Integer windowId);
+  void filterWindow(Integer windowId);
 }

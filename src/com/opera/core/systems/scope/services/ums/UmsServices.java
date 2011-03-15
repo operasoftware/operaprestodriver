@@ -32,92 +32,94 @@ import com.opera.core.systems.util.VersionUtil;
 
 public class UmsServices {
 
-	protected final IEcmaScriptDebugger debugger;
-	protected final IWindowManager windowManager;
-	protected final IDesktopWindowManager desktopWindowManager;
-	protected final IDesktopUtils desktopUtils;
-	protected final SystemInputManager systemInputManager;
-	protected final IPrefs prefs;
-	protected final IOperaExec exec;
-	private final ICookieManager cookieManager;
+  protected final IEcmaScriptDebugger debugger;
+  protected final IWindowManager windowManager;
+  protected final IDesktopWindowManager desktopWindowManager;
+  protected final IDesktopUtils desktopUtils;
+  protected final SystemInputManager systemInputManager;
+  protected final IPrefs prefs;
+  protected final IOperaExec exec;
+  private final ICookieManager cookieManager;
 
-	public IEcmaScriptDebugger getDebugger() {
-		return debugger;
-	}
+  public IEcmaScriptDebugger getDebugger() {
+    return debugger;
+  }
 
-	public IWindowManager getWindowManager() {
-		return windowManager;
-	}
+  public IWindowManager getWindowManager() {
+    return windowManager;
+  }
 
-	public IOperaExec getExec() {
-		return exec;
-	}
+  public IOperaExec getExec() {
+    return exec;
+  }
 
-	public ICookieManager getCookieManager() {
-		return cookieManager;
-	}
+  public ICookieManager getCookieManager() {
+    return cookieManager;
+  }
 
-	public UmsServices(ScopeServices services, HostInfo info) {
-		List<Service> serviceList = info.getServiceListList();
-		windowManager = new WindowManager(services, getVersionForService( serviceList, "window-manager"));
+  public UmsServices(ScopeServices services, HostInfo info) {
+    List<Service> serviceList = info.getServiceListList();
+    windowManager = new WindowManager(services, getVersionForService(
+        serviceList, "window-manager"));
 
-		if (findServiceNamed(serviceList, "prefs") != null && services.getVersions().containsKey("prefs"))
-			prefs = new Prefs(services, getVersionForService( serviceList, "prefs"));
-		else
-			prefs = null;
+    if (findServiceNamed(serviceList, "prefs") != null
+        && services.getVersions().containsKey("prefs")) prefs = new Prefs(
+        services, getVersionForService(serviceList, "prefs"));
+    else prefs = null;
 
-		if (findServiceNamed(serviceList, "desktop-utils") != null && services.getVersions().containsKey("desktop-utils"))
-			desktopUtils = new DesktopUtils(services, getVersionForService( serviceList, "desktop-utils"));
-		else
-			desktopUtils = null;
+    if (findServiceNamed(serviceList, "desktop-utils") != null
+        && services.getVersions().containsKey("desktop-utils")) desktopUtils = new DesktopUtils(
+        services, getVersionForService(serviceList, "desktop-utils"));
+    else desktopUtils = null;
 
-		if (findServiceNamed(serviceList, "system-input") != null && services.getVersions().containsKey("system-input"))
-			systemInputManager = new SystemInputManager(services, getVersionForService( serviceList, "system-input"));
-		else
-			systemInputManager = null;
+    if (findServiceNamed(serviceList, "system-input") != null
+        && services.getVersions().containsKey("system-input")) systemInputManager = new SystemInputManager(
+        services, getVersionForService(serviceList, "system-input"));
+    else systemInputManager = null;
 
-		// Check both the client and the Driver being created support the desktop-window-manager
-		if (findServiceNamed(serviceList, "desktop-window-manager") != null && services.getVersions().containsKey("desktop-window-manager"))
-			desktopWindowManager = new DesktopWindowManager(desktopUtils, systemInputManager, services, getVersionForService( serviceList, "desktop-window-manager"));
-		else
-			desktopWindowManager = null;
+    // Check both the client and the Driver being created support the
+    // desktop-window-manager
+    if (findServiceNamed(serviceList, "desktop-window-manager") != null
+        && services.getVersions().containsKey("desktop-window-manager")) desktopWindowManager = new DesktopWindowManager(
+        desktopUtils, systemInputManager, services, getVersionForService(
+            serviceList, "desktop-window-manager"));
+    else desktopWindowManager = null;
 
-		/*
-		if (findServiceNamed(serviceList, "ecmascript") != null) {
+    /*
+    if (findServiceNamed(serviceList, "ecmascript") != null) {
 
-			String ecmascriptVersion = getVersionForService(serviceList, "ecmascript");
-			debugger = new EcmascriptService(services, ecmascriptVersion);
+      String ecmascriptVersion = getVersionForService(serviceList, "ecmascript");
+      debugger = new EcmascriptService(services, ecmascriptVersion);
 
-		} else {
-			*/
-			String esdbgVersion = getVersionForService(serviceList, "ecmascript-debugger");
-			if (VersionUtil.compare(esdbgVersion, "6.0") >= 0)
-				debugger = new EcmaScriptDebugger6(services, esdbgVersion);
-			else
-				debugger = new EcmaScriptDebugger(services, esdbgVersion);
+    } else {
+      */
+    String esdbgVersion = getVersionForService(serviceList,
+        "ecmascript-debugger");
+    if (VersionUtil.compare(esdbgVersion, "6.0") >= 0) debugger = new EcmaScriptDebugger6(
+        services, esdbgVersion);
+    else debugger = new EcmaScriptDebugger(services, esdbgVersion);
 
-		/* } */
-		exec = new OperaExec(services,
-				getVersionForService(serviceList, "exec"));
+    /* } */
+    exec = new OperaExec(services, getVersionForService(serviceList, "exec"));
 
-		if (findServiceNamed(serviceList, "cookie-manager") != null && services.getVersions().containsKey("cookie-manager"))
-			cookieManager = new CookieManager(services, getVersionForService(serviceList, "cookie-manager"));
-		else
-			cookieManager = null;
-	}
+    if (findServiceNamed(serviceList, "cookie-manager") != null
+        && services.getVersions().containsKey("cookie-manager")) cookieManager = new CookieManager(
+        services, getVersionForService(serviceList, "cookie-manager"));
+    else cookieManager = null;
+  }
 
-	private String getVersionForService(List<Service> serviceList, String name) {
-		return findServiceNamed(serviceList, name).getVersion();
-	}
+  private String getVersionForService(List<Service> serviceList, String name) {
+    return findServiceNamed(serviceList, name).getVersion();
+  }
 
-	private Service findServiceNamed(List<Service> services, String name) {
-		Service found = null;
-		for(Service service : services) {
-			if(service.getName().equals(name)) {
-				found = service;
-				break;
-			}
-		}
-		return found;
-	}
+  private Service findServiceNamed(List<Service> services, String name) {
+    Service found = null;
+    for (Service service : services) {
+      if (service.getName().equals(name)) {
+        found = service;
+        break;
+      }
+    }
+    return found;
+  }
 }

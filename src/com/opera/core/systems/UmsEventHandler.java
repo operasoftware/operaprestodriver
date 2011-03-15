@@ -21,29 +21,29 @@ import com.opera.core.systems.scope.protos.WmProtos.WindowInfo;
 
 /**
  * Provided support for an alternate protocol. To be removed.
- *
+ * 
  * @author Deniz Turkoglu
- *
+ * 
  */
 public class UmsEventHandler extends EventHandler {
 
-	public UmsEventHandler(ScopeServices services) {
-		super(services);
-	}
+  public UmsEventHandler(ScopeServices services) {
+    super(services);
+  }
 
-	@Override
-	public void onRuntimeStarted(RuntimeInfo info) {
-		services.getDebugger().addRuntime(info);
-	}
+  @Override
+  public void onRuntimeStarted(RuntimeInfo info) {
+    services.getDebugger().addRuntime(info);
+  }
 
-	@Override
-	public void onUpdatedWindow(WindowInfo info) {
-		services.getWindowManager().addWindow(info);
-	}
+  @Override
+  public void onUpdatedWindow(WindowInfo info) {
+    services.getWindowManager().addWindow(info);
+  }
 
-	@Override
-	public void onMessage(ConsoleMessage message) {
-		throw new UnsupportedOperationException();
-	}
+  @Override
+  public void onMessage(ConsoleMessage message) {
+    throw new UnsupportedOperationException();
+  }
 
 }

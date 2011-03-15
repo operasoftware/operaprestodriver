@@ -18,29 +18,28 @@ package com.opera.core.systems.scope.exceptions;
 import org.openqa.selenium.WebDriverException;
 
 /**
- * Thrown when window-loaded event is not received in
- * the given amount of time
- *
+ * Thrown when window-loaded event is not received in the given amount of time
+ * 
  * @author Deniz Turkoglu <denizt@opera.com>
- *
+ * 
  */
-public class WindowLoadedException extends WebDriverException{
+public class WindowLoadedException extends WebDriverException {
 
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	public WindowLoadedException() {
-		super();
-	}
+  public WindowLoadedException() {
+    super();
+  }
 
-	public WindowLoadedException(String message) {
-		super(message);
-	}
+  public WindowLoadedException(String message) {
+    super(message);
+  }
 
-	public WindowLoadedException(Throwable cause) {
-		super(cause);
-	}
+  public WindowLoadedException(Throwable cause) {
+    super(cause);
+  }
 
-	public WindowLoadedException(String message, Throwable cause) {
-		super(message, cause);
-	}
+  public WindowLoadedException(String message, Throwable cause) {
+    super(message, cause);
+  }
 }

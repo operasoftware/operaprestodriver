@@ -19,21 +19,21 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * OperaAction(s) are used to simulate continuous user events
- * such as pressing a button and clicking an element same time
- *
+ * OperaAction(s) are used to simulate continuous user events such as pressing a
+ * button and clicking an element same time
+ * 
  * @author Deniz Turkoglu <denizt@opera.com>
- *
+ * 
  */
 public class OperaAction {
 
-	private List<UserInteraction> actions;
+  private List<UserInteraction> actions;
 
-	public List<UserInteraction> getActions() {
-		return actions;
-	}
+  public List<UserInteraction> getActions() {
+    return actions;
+  }
 
-	public OperaAction(UserInteraction... userInteractions) {
-		this.actions = Arrays.asList(userInteractions);
-	}
+  public OperaAction(UserInteraction... userInteractions) {
+    this.actions = Arrays.asList(userInteractions);
+  }
 }

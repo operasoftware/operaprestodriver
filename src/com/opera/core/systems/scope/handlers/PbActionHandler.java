@@ -32,75 +32,79 @@ import com.opera.core.systems.scope.internal.OperaMouseKeys;
 
 /**
  * This library handles actions for Core 2.5+
- *
- * Core 2.5 uses a different (binary) protocol and
- * different serializers
- *
+ * 
+ * Core 2.5 uses a different (binary) protocol and different serializers
+ * 
  * @author Deniz Turkoglu <denizt@opera.com>
- *
+ * 
  */
 
 // TODO Support for < Core 2.5 is deprecated, merge
 
 public class PbActionHandler extends ScopeActions {
 
-    public PbActionHandler(ScopeServices services) {
-            super(services);
+  public PbActionHandler(ScopeServices services) {
+    super(services);
+  }
+
+  @Override
+  public void click(RenderedWebElement element, String locator) {
+    Point point = element.getLocation();
+    services.getExec().mouseAction(point.x + 1, point.y + 1,
+        OperaMouseKeys.LEFT);
+  }
+
+  @Override
+  public void click(RenderedWebElement element, int x, int y) {
+    Point point = element.getLocation();
+    services.getExec().mouseAction(point.x + x, point.y + y,
+        OperaMouseKeys.LEFT);
+  }
+
+  @Override
+  public void get(String url) {
+    services.getExec().action("Go", url);
+  }
+
+  @Override
+  public void rightClick(RenderedWebElement element) {
+    Point point = element.getLocation();
+    services.getExec().mouseAction(point.x, point.y, OperaMouseKeys.RIGHT);
+  }
+
+  @Override
+  public void saveScreenshot(File pngFile) {
+    if (pngFile == null) {
+      throw new IllegalArgumentException(
+          "Method parameter pngFile must not be null");
     }
 
-    @Override
-    public void click(RenderedWebElement element, String locator) {
-            Point point = element.getLocation();
-            services.getExec().mouseAction(point.x + 1, point.y + 1, OperaMouseKeys.LEFT);
+    File dir = pngFile.getParentFile();
+    if (!dir.exists() && !dir.mkdirs()) {
+      throw new WebDriverException("Could not create directory "
+          + dir.getAbsolutePath());
     }
 
-    @Override
-    public void click(RenderedWebElement element, int x, int y) {
-            Point point = element.getLocation();
-            services.getExec().mouseAction(point.x + x, point.y + y, OperaMouseKeys.LEFT);
+    Canvas canvas = new Canvas();
+    canvas.setX(0);
+    canvas.setY(0);
+
+    String[] dimensions = scriptDebugger.executeJavascript(
+        "return (window.innerWidth + \",\" + window.innerHeight);").split(",");
+    canvas.setHeight(Integer.valueOf(dimensions[1]));
+    canvas.setWidth(Integer.valueOf(dimensions[0]));
+    canvas.setViewPortRelative(true);
+
+    ScreenShotReply reply = services.getExec().screenWatcher(canvas, 1l, true);
+    FileOutputStream stream;
+    try {
+      stream = new FileOutputStream(pngFile.getAbsolutePath());
+      stream.write(reply.getPng());
+      stream.close();
+    } catch (FileNotFoundException e) {
+      // ignore
+    } catch (IOException e) {
+      // TODO log
     }
-
-    @Override
-    public void get(String url) {
-            services.getExec().action("Go", url);
-    }
-
-    @Override
-    public void rightClick(RenderedWebElement element) {
-            Point point = element.getLocation();
-            services.getExec().mouseAction(point.x, point.y, OperaMouseKeys.RIGHT);
-    }
-
-    @Override
-    public void saveScreenshot(File pngFile) {
-        if (pngFile == null) {
-            throw new IllegalArgumentException("Method parameter pngFile must not be null");
-        }
-
-        File dir = pngFile.getParentFile();
-        if (!dir.exists() && !dir.mkdirs()) {
-            throw new WebDriverException("Could not create directory " + dir.getAbsolutePath());
-        }
-
-        Canvas canvas = new Canvas();
-        canvas.setX(0);
-        canvas.setY(0);
-
-        String[] dimensions = scriptDebugger.executeJavascript("return (window.innerWidth + \",\" + window.innerHeight);").split(",");
-        canvas.setHeight(Integer.valueOf(dimensions[1]));
-        canvas.setWidth(Integer.valueOf(dimensions[0]));
-        canvas.setViewPortRelative(true);
-
-        ScreenShotReply reply = services.getExec().screenWatcher(canvas, 1l, true);
-        FileOutputStream stream;
-        try {
-            stream = new FileOutputStream(pngFile.getAbsolutePath());
-            stream.write(reply.getPng());
-            stream.close();
-        } catch (FileNotFoundException e) {
-            //ignore
-        } catch (IOException e) {
-            //TODO log
-        }
-    }
+  }
 }

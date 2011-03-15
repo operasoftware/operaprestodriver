@@ -36,222 +36,220 @@ import com.opera.core.systems.scope.protos.WmProtos.WindowList;
 import com.opera.core.systems.scope.services.IWindowManager;
 import com.opera.core.systems.util.StackHashMap;
 
-
 /**
- * window-manager service implementation, handles
- * events such as window-closed and updated and
- * tracks window being loaded
- *
+ * window-manager service implementation, handles events such as window-closed
+ * and updated and tracks window being loaded
+ * 
  * @author Deniz Turkoglu <denizt@opera.com>
- *
+ * 
  */
 public class WindowManager extends AbstractService implements IWindowManager {
 
-	private final Logger logger = Logger.getLogger(this.getClass().getName());
-	private final StackHashMap<Integer,WindowInfo> windows = new StackHashMap<Integer, WindowInfo>();
-	private final CompiledExpression windowFinder;
+  private final Logger logger = Logger.getLogger(this.getClass().getName());
+  private final StackHashMap<Integer, WindowInfo> windows = new StackHashMap<Integer, WindowInfo>();
+  private final CompiledExpression windowFinder;
 
-	private final AtomicInteger lastHttpResponseCode = new AtomicInteger();
+  private final AtomicInteger lastHttpResponseCode = new AtomicInteger();
 
-	public AtomicInteger getLastHttpResponseCode() {
-		return lastHttpResponseCode;
-	}
+  public AtomicInteger getLastHttpResponseCode() {
+    return lastHttpResponseCode;
+  }
 
-    public WindowManager(ScopeServices services, String version) {
-		super(services, version);
+  public WindowManager(ScopeServices services, String version) {
+    super(services, version);
 
-		String serviceName = "window-manager";
+    String serviceName = "window-manager";
 
-		if(!isVersionInRange(version, "3.0", serviceName))
-			throw new UnsupportedOperationException(serviceName + " version " + version + " is not supported");
+    if (!isVersionInRange(version, "3.0", serviceName)) throw new UnsupportedOperationException(
+        serviceName + " version " + version + " is not supported");
 
-		services.setWindowManager(this);
-		windowFinder = JXPathContext.compile("/.[windowType='normal']/windowID");
-	}
+    services.setWindowManager(this);
+    windowFinder = JXPathContext.compile("/.[windowType='normal']/windowID");
+  }
 
-    public int getOpenWindowCount() {
-		return windows.size();
-	}
+  public int getOpenWindowCount() {
+    return windows.size();
+  }
 
-	public void setActiveWindowId(Integer windowId) {
-		windows.putIfAbsent(windowId, null);
-	}
+  public void setActiveWindowId(Integer windowId) {
+    windows.putIfAbsent(windowId, null);
+  }
 
-	public int getActiveWindowId() {
-		Integer windowID = windows.peekKey();
-		if(windowID == null) {
-			//if we closed all windows, it is possible that event
-			//has not fired yet, in such cases resort to what Opera
-			//believes to be current active window
-			return findActiveWindow().getWindowID();
-		}
-		return windowID.intValue();
-	}
+  public int getActiveWindowId() {
+    Integer windowID = windows.peekKey();
+    if (windowID == null) {
+      // if we closed all windows, it is possible that event
+      // has not fired yet, in such cases resort to what Opera
+      // believes to be current active window
+      return findActiveWindow().getWindowID();
+    }
+    return windowID.intValue();
+  }
 
-	public void addWindow(WindowInfo info) {
-		windows.put(info.getWindowID(), info);
-	}
+  public void addWindow(WindowInfo info) {
+    windows.put(info.getWindowID(), info);
+  }
 
-	public void removeWindow(Integer windowId) {
-		windows.remove(windowId);
-	}
+  public void removeWindow(Integer windowId) {
+    windows.remove(windowId);
+  }
 
-	public void init() {
-		initializeWindows();
-		findDriverWindow();
-	}
+  public void init() {
+    initializeWindows();
+    findDriverWindow();
+  }
 
-	public void findDriverWindow() {
-		JXPathContext pathContext = JXPathContext.newContext(windows.values());
-		WindowInfo window = windows.peek();
+  public void findDriverWindow() {
+    JXPathContext pathContext = JXPathContext.newContext(windows.values());
+    WindowInfo window = windows.peek();
 
-		if (window == null || !window.getWindowType().equals("normal")) {
-			// we dont deal with anything else, at least for now
-			// select a window that is normal and return first
+    if (window == null || !window.getWindowType().equals("normal")) {
+      // we dont deal with anything else, at least for now
+      // select a window that is normal and return first
 
-			//Fix for Windows OS, we dont encounter this problem on linux at all
-			/*
-			if(windowsStack.isEmpty())
-				throw new WebDriverException("List of windows is empty");
-			*/
+      // Fix for Windows OS, we dont encounter this problem on linux at all
+      /*
+      if(windowsStack.isEmpty())
+        throw new WebDriverException("List of windows is empty");
+      */
 
-			Integer windowId = (Integer) windowFinder.getValue(pathContext);
+      Integer windowId = (Integer) windowFinder.getValue(pathContext);
 
-			if (windowId != null) {
-				setActiveWindowId(windowId);
-			} else {
-				throw new WindowNotFoundException("No window is available for driving");
-			}
-			filterActiveWindow();
-		}
+      if (windowId != null) {
+        setActiveWindowId(windowId);
+      } else {
+        throw new WindowNotFoundException("No window is available for driving");
+      }
+      filterActiveWindow();
+    }
 
-	}
+  }
 
-	// NOTE: This is proven to be not working on Opera side...
-	private WindowID findActiveWindow() {
-		Response response = executeCommand(WindowManagerCommand.GET_ACTIVE_WINDOW, null);
-		WindowID.Builder builder = WindowID.newBuilder();
-		buildPayload(response, builder);
-		return builder.build();
-	}
+  // NOTE: This is proven to be not working on Opera side...
+  private WindowID findActiveWindow() {
+    Response response = executeCommand(WindowManagerCommand.GET_ACTIVE_WINDOW,
+        null);
+    WindowID.Builder builder = WindowID.newBuilder();
+    buildPayload(response, builder);
+    return builder.build();
+  }
 
+  /**
+   * Filter only the active window so we don't get messages from other windows
+   * (like thread messages)
+   */
+  public void filterActiveWindow() {
+    WindowFilter.Builder filterBuilder = WindowFilter.newBuilder();
+    filterBuilder.setClearFilter(true);
+    filterBuilder.addIncludeIDList(getActiveWindowId());
 
-	/**
-	 * Filter only the active window so we don't get messages from
-	 * other windows (like thread messages)
-	 */
-	public void filterActiveWindow() {
-		WindowFilter.Builder filterBuilder = WindowFilter.newBuilder();
-		filterBuilder.setClearFilter(true);
-		filterBuilder.addIncludeIDList(getActiveWindowId());
+    executeCommand(WindowManagerCommand.MODIFY_FILTER, filterBuilder);
+  }
 
-		executeCommand(WindowManagerCommand.MODIFY_FILTER, filterBuilder);
-	}
+  /**
+   * Set the filter to include all windows so we can get a list and maintain a
+   * list of windows
+   */
+  private void initializeWindows() {
+    clearFilter();
 
+    Response response = executeCommand(WindowManagerCommand.LIST_WINDOWS, null);
+    WindowList.Builder builder = WindowList.newBuilder();
+    buildPayload(response, builder);
+    WindowList list = builder.build();
 
-	/**
-	 * Set the filter to include all windows so we can get a list
-	 * and maintain a list of windows
-	 */
-	private void initializeWindows() {
-		clearFilter();
+    List<WindowInfo> windowsList = list.getWindowListList();
 
-		Response response = executeCommand(WindowManagerCommand.LIST_WINDOWS, null);
-		WindowList.Builder builder = WindowList.newBuilder();
-		buildPayload(response, builder);
-		WindowList list = builder.build();
+    windows.clear();
+    for (WindowInfo window : windowsList) {
+      // FIXME workaround for CORE-25866
+      // if(window.getTitle().length() > 0)
+      windows.put(window.getWindowID(), window);
+    }
+    // initialize windowStack
+    windows.putIfAbsent(findActiveWindow().getWindowID(), null);
+  }
 
-		List<WindowInfo> windowsList = list.getWindowListList();
+  /* (non-Javadoc)
+   * @see com.opera.core.systems.scope.services.xml.IWindowManager#setActiveWindow(java.lang.String)
+   */
+  public void setActiveWindow(String title) {
+    Integer windowId = (Integer) xpathPointer(windows.values(),
+        "/.[title='" + title + "']/windowID").getValue();
+    if (windowId == null) throw new NoSuchWindowException("No such window : "
+        + title);
+    setActiveWindowId(windowId);
+  }
 
-		windows.clear();
-		for (WindowInfo window : windowsList) {
-			//FIXME workaround for CORE-25866
-			//if(window.getTitle().length() > 0)
-				windows.put(window.getWindowID(), window);
-		}
-		//initialize windowStack
-		windows.putIfAbsent(findActiveWindow().getWindowID(), null);
-	}
+  public void closeWindow(Integer windowId) {
+    // TODO: WindowManager 2.1 has a close window command
+    services.getExec().action("Close page", windowId);
+    removeWindow(windowId);
+  }
 
-	/* (non-Javadoc)
-	 * @see com.opera.core.systems.scope.services.xml.IWindowManager#setActiveWindow(java.lang.String)
-	 */
-	public void setActiveWindow(String title) {
-		Integer windowId = (Integer) xpathPointer(windows.values(), "/.[title='" + title + "']/windowID").getValue();
-		if (windowId == null)
-			throw new NoSuchWindowException("No such window : " + title);
-		setActiveWindowId(windowId);
-	}
+  public void closeAllWindows() {
+    logger.fine("closeAllWindows");
+    LinkedList<Integer> list = new LinkedList<Integer>(windows.asStack());
+    boolean canCloseAll = services.getExec().getActionList().contains(
+        "Close all pages");
 
-	public void closeWindow(Integer windowId) {
-		// TODO: WindowManager 2.1 has a close window command
-		services.getExec().action("Close page", windowId);
-		removeWindow(windowId);
-	}
+    if (canCloseAll) {
+      services.getExec().action("Close all pages");
+    } else {
+      while (!list.isEmpty()) {
+        closeWindow(list.removeFirst());
 
-	public void closeAllWindows() {
-		logger.fine("closeAllWindows");
-		LinkedList<Integer> list = new LinkedList<Integer>(windows.asStack());
-		boolean canCloseAll = services.getExec().getActionList().contains("Close all pages");
+        // BAD HACK! DELAYING CLOSE-WINDOW
+        try {
+          Thread.sleep(100);
+        } catch (InterruptedException e) {
+          e.printStackTrace();
+        }
+        logger.warning("Bad hack: sleeping 10ms between closing of windows, to prevent opera from crashing!");
+        // BAD HACK DONE!
+      }
+    }
+  }
 
-		if (canCloseAll) {
-			services.getExec().action("Close all pages");
-		} else {
-			while (!list.isEmpty()) {
-				closeWindow(list.removeFirst());
+  /* (non-Javadoc)
+   * @see com.opera.core.systems.scope.services.xml.IWindowManager#getWindowHandles()
+   */
+  public List<Integer> getWindowHandles() {
+    /*
+    Collection<WindowInfo> windowCollection = getWindows().values();
+    List<Integer> handles = new ArrayList<Integer>(windowCollection.size());
 
-				//BAD HACK! DELAYING CLOSE-WINDOW
-				try {
-					Thread.sleep(100);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-				logger.warning("Bad hack: sleeping 10ms between closing of windows, to prevent opera from crashing!");
-				//BAD HACK DONE!
-			}
-		}
-	}
+    for (WindowInfo window : windowCollection) {
+      handles.add(window.getWindowID());
+    }
+    return handles;
+    */
+    return new LinkedList<Integer>(windows.asStack());// handles;
+  }
 
-	/* (non-Javadoc)
-	 * @see com.opera.core.systems.scope.services.xml.IWindowManager#getWindowHandles()
-	 */
-	public List<Integer> getWindowHandles() {
-		/*
-		Collection<WindowInfo> windowCollection = getWindows().values();
-		List<Integer> handles = new ArrayList<Integer>(windowCollection.size());
+  public void resetWindowsList() {
+    initializeWindows();
+  }
 
-		for (WindowInfo window : windowCollection) {
-			handles.add(window.getWindowID());
-		}
-		return handles;
-		*/
-		return new LinkedList<Integer>(windows.asStack());//handles;
-	}
+  public void clearFilter() {
+    WindowFilter.Builder filterBuilder = WindowFilter.newBuilder();
+    filterBuilder.setClearFilter(true);
+    filterBuilder.addIncludePatternList("*");
 
-	public void resetWindowsList() {
-		initializeWindows();
-	}
+    executeCommand(WindowManagerCommand.MODIFY_FILTER, filterBuilder);
+  }
 
-	public void clearFilter() {
-		WindowFilter.Builder filterBuilder = WindowFilter.newBuilder();
-		filterBuilder.setClearFilter(true);
-		filterBuilder.addIncludePatternList("*");
+  public void filterWindow(Integer windowId) {
+    WindowFilter.Builder filterBuilder = WindowFilter.newBuilder();
+    filterBuilder.setClearFilter(true);
+    filterBuilder.addIncludeIDList(windowId);
 
-		executeCommand(WindowManagerCommand.MODIFY_FILTER, filterBuilder);
-	}
+    executeCommand(WindowManagerCommand.MODIFY_FILTER, filterBuilder);
 
-	public void filterWindow(Integer windowId) {
-		WindowFilter.Builder filterBuilder = WindowFilter.newBuilder();
-		filterBuilder.setClearFilter(true);
-		filterBuilder.addIncludeIDList(windowId);
+  }
 
-		executeCommand(WindowManagerCommand.MODIFY_FILTER, filterBuilder);
-
-	}
-
-	public String getActiveWindowTitle() {
-		return windows.peek().getTitle();
-	}
-
+  public String getActiveWindowTitle() {
+    return windows.peek().getTitle();
+  }
 
 }

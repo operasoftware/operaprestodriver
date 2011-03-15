@@ -29,85 +29,85 @@ import com.opera.core.systems.util.SocketListener;
 import com.opera.core.systems.util.SocketMonitor;
 
 /**
- * This class handles accepting STP connections.
- * STP connections are accepted in the canRead() metod, which then
- * spawns an StpConnection.
- *
+ * This class handles accepting STP connections. STP connections are accepted in
+ * the canRead() metod, which then spawns an StpConnection.
+ * 
  * @author Jan Vidar Krey <janv@opera.com>
  */
 public class StpConnectionListener implements SocketListener {
 
-    private int port;
-    private ServerSocketChannel server = null;
-    private IConnectionHandler handler;
-    private AbstractEventHandler eventHandler;
-    private boolean manualConnect = false;
-    private final Logger logger = Logger.getLogger(this.getClass().getName());
+  private int port;
+  private ServerSocketChannel server = null;
+  private IConnectionHandler handler;
+  private AbstractEventHandler eventHandler;
+  private boolean manualConnect = false;
+  private final Logger logger = Logger.getLogger(this.getClass().getName());
 
-    public StpConnectionListener(int port, IConnectionHandler handler, AbstractEventHandler eventHandler, boolean manualConnect) throws IOException {
-        this.port = port;
-        this.handler = handler;
-        this.eventHandler = eventHandler;
-        this.manualConnect = manualConnect;
-        start();
+  public StpConnectionListener(int port, IConnectionHandler handler,
+      AbstractEventHandler eventHandler, boolean manualConnect)
+      throws IOException {
+    this.port = port;
+    this.handler = handler;
+    this.eventHandler = eventHandler;
+    this.manualConnect = manualConnect;
+    start();
+  }
+
+  @Override
+  protected void finalize() throws Throwable {
+    stop();
+    super.finalize();
+  }
+
+  public void stop() {
+    if (server == null) return;
+
+    logger.fine("Shutting down STP connection listener...");
+    SocketMonitor.instance().remove(server);
+    try {
+      server.close();
+    } catch (Exception ignored) { // IOException or NullPointerException
+      // ignored
+    } finally {
+      server = null;
+    }
+  }
+
+  public void start() throws IOException {
+    server = ServerSocketChannel.open();
+    server.configureBlocking(false);
+    server.socket().setReuseAddress(true);
+    server.socket().bind(new InetSocketAddress(port));
+
+    SocketMonitor.instance().add(server, this, SelectionKey.OP_ACCEPT);
+
+    // logger.info("webdriver-opera " + "{VERSION}" +
+    // " is ready to accept connections on port " + port);
+
+    // Print a message when we are waiting to connect manually
+    if (manualConnect) {
+      System.out.println("Ready to accept connections on port " + port);
+    }
+  }
+
+  public boolean canRead(SelectableChannel channel) throws IOException {
+
+    if (!server.isOpen()) {
+      return false;
     }
 
-    @Override
-    protected void finalize() throws Throwable {
-        stop();
-        super.finalize();
+    SocketChannel socket = server.accept();
+    if (socket != null) {
+      logger.fine("Accepted STP connection from "
+          + socket.socket().getLocalAddress());
+      socket.socket().setTcpNoDelay(true);
+      new StpConnection(socket, handler, eventHandler);
     }
+    return true;
+  }
 
-    public void stop()
-    {
-        if (server == null)
-            return;
-
-        logger.fine("Shutting down STP connection listener...");
-        SocketMonitor.instance().remove(server);
-        try {
-            server.close();
-        } catch (Exception ignored) { // IOException or NullPointerException
-            // ignored
-        } finally {
-            server = null;
-        }
-    }
-
-    public void start() throws IOException
-    {
-        server = ServerSocketChannel.open();
-        server.configureBlocking(false);
-        server.socket().setReuseAddress(true);
-        server.socket().bind(new InetSocketAddress(port));
-
-        SocketMonitor.instance().add(server, this, SelectionKey.OP_ACCEPT);
-
-        //logger.info("webdriver-opera " + "{VERSION}" + " is ready to accept connections on port " + port);
-
-        // Print a message when we are waiting to connect manually
-        if (manualConnect) {
-        	System.out.println("Ready to accept connections on port " + port);
-        }
-    }
-
-    public boolean canRead(SelectableChannel channel) throws IOException {
-
-		if (!server.isOpen()) {
-			return false;
-		}
-
-        SocketChannel socket = server.accept();
-        if (socket != null) {
-            logger.fine("Accepted STP connection from " + socket.socket().getLocalAddress());
-            socket.socket().setTcpNoDelay(true);
-            new StpConnection(socket, handler, eventHandler);
-        }
-        return true;
-    }
-
-    //FIXME ?
-    public boolean canWrite(SelectableChannel ch) throws IOException {
-        return false;
-    }
+  // FIXME ?
+  public boolean canWrite(SelectableChannel ch) throws IOException {
+    return false;
+  }
 }

@@ -21,52 +21,39 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * This enum maps the commands for the <a href=
- * "http://dragonfly.opera.com/app/scope-interface/services/EcmascriptDebugger/EcmascriptDebugger_6_0.html"
+ * This enum maps the commands for the <a href="http://dragonfly.opera.com/app/scope-interface/services/EcmascriptDebugger/EcmascriptDebugger_6_0.html"
  * >EcmascriptDebugger 6.0</a>.
- *
+ * 
  */
 public enum ESDebuggerCommand implements ICommand {
-    LIST_RUNTIMES(1),
-    EVAL(3),
-    INSPECT_DOM(13),
-    EXAMINE_OBJECTS(4),
-    SET_CONFIGURATION(10),
-    RELEASE_OBJECTS(29),
-    RUNTIME_STARTED(14),
-    RUNTIME_STOPPED(15),
-    NEW_SCRIPT(16),
-    THREAD_STARTED(17),
-    THREAD_FINISHED(18),
-    THREAD_STOPPED_AT(19),
-    HANDLE_EVENT(20),
-    OBJECT_SELECTED(21),
-    PARSE_ERROR(28),
-    DEFAULT(-1);
+  LIST_RUNTIMES(1), EVAL(3), INSPECT_DOM(13), EXAMINE_OBJECTS(4), SET_CONFIGURATION(
+      10), RELEASE_OBJECTS(29), RUNTIME_STARTED(14), RUNTIME_STOPPED(15), NEW_SCRIPT(
+      16), THREAD_STARTED(17), THREAD_FINISHED(18), THREAD_STOPPED_AT(19), HANDLE_EVENT(
+      20), OBJECT_SELECTED(21), PARSE_ERROR(28), DEFAULT(-1);
 
-    private int code;
-    private static final Map<Integer, ESDebuggerCommand> lookup = new HashMap<Integer, ESDebuggerCommand>();
+  private int code;
+  private static final Map<Integer, ESDebuggerCommand> lookup = new HashMap<Integer, ESDebuggerCommand>();
 
-    static {
-        for (ESDebuggerCommand command : EnumSet.allOf(ESDebuggerCommand.class))
-            lookup.put(command.getCommandID(), command);
-    }
+  static {
+    for (ESDebuggerCommand command : EnumSet.allOf(ESDebuggerCommand.class))
+      lookup.put(command.getCommandID(), command);
+  }
 
-    private ESDebuggerCommand(int code) {
-        this.code = code;
-    }
+  private ESDebuggerCommand(int code) {
+    this.code = code;
+  }
 
-    public int getCommandID() {
-        return code;
-    }
+  public int getCommandID() {
+    return code;
+  }
 
-    public String getServiceName() {
-        return "ecmascript-debugger";
-    }
+  public String getServiceName() {
+    return "ecmascript-debugger";
+  }
 
-    public static ESDebuggerCommand get(int code) {
-        ESDebuggerCommand command = lookup.get(code);
-        return (command != null) ? command : DEFAULT;
-    }
+  public static ESDebuggerCommand get(int code) {
+    ESDebuggerCommand command = lookup.get(code);
+    return (command != null) ? command : DEFAULT;
+  }
 
 }

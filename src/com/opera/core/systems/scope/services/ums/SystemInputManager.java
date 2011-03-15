@@ -28,113 +28,119 @@ import com.opera.core.systems.scope.protos.SystemInputProtos.MouseInfo;
 import com.opera.core.systems.scope.services.ISystemInput;
 
 /**
- *
+ * 
  * @author Adam Minchinton, Karianne Ekern
- *
+ * 
  */
 public class SystemInputManager extends AbstractService implements ISystemInput {
 
-	 SystemInputManager(ScopeServices services, String version) {
-			super(services, version);
+  SystemInputManager(ScopeServices services, String version) {
+    super(services, version);
 
-			String serviceName = "system-input";
+    String serviceName = "system-input";
 
-			if (!isVersionInRange(version, "2.0", serviceName)) {
-				throw new UnsupportedOperationException(serviceName + " version " + version + " is not supported");
-			}
+    if (!isVersionInRange(version, "2.0", serviceName)) {
+      throw new UnsupportedOperationException(serviceName + " version "
+          + version + " is not supported");
+    }
 
-			services.setSystemInputManager(this);
-		}
+    services.setSystemInputManager(this);
+  }
 
-	 public void init() { }
+  public void init() {
+  }
 
-	 public void click(Point location, MouseButton button, int numClicks, List<ModifierPressed> modifiers) {
-		MouseInfo.Builder actionBuilder = MouseInfo.newBuilder();
-		actionBuilder.setX(location.x);
-		actionBuilder.setY(location.y);
-		actionBuilder.setButton(button);
-		actionBuilder.setNumClicks(numClicks);
-		int modifier = ModifierPressed.NONE.getNumber();
-		for (ModifierPressed mod : modifiers) {
-			modifier |= mod.getNumber();
-		}
-		actionBuilder.setModifier(modifier);
-		executeCommand(SystemInputCommand.CLICK, actionBuilder.clone());
-	}
+  public void click(Point location, MouseButton button, int numClicks,
+      List<ModifierPressed> modifiers) {
+    MouseInfo.Builder actionBuilder = MouseInfo.newBuilder();
+    actionBuilder.setX(location.x);
+    actionBuilder.setY(location.y);
+    actionBuilder.setButton(button);
+    actionBuilder.setNumClicks(numClicks);
+    int modifier = ModifierPressed.NONE.getNumber();
+    for (ModifierPressed mod : modifiers) {
+      modifier |= mod.getNumber();
+    }
+    actionBuilder.setModifier(modifier);
+    executeCommand(SystemInputCommand.CLICK, actionBuilder.clone());
+  }
 
-	public void mouseMove(Point location, MouseButton button, List<ModifierPressed> modifiers) {
-		MouseInfo.Builder actionBuilder = MouseInfo.newBuilder();
-		actionBuilder.setX(location.x);
-		actionBuilder.setY(location.y);
-		actionBuilder.setButton(button);
-		actionBuilder.setNumClicks(1);
-		int modifier = ModifierPressed.NONE.getNumber();
-		for (ModifierPressed mod : modifiers) {
-			modifier |= mod.getNumber();
-		}
-		actionBuilder.setModifier(modifier);
-		executeCommand(SystemInputCommand.MOUSEMOVE, actionBuilder.clone());
-	}
+  public void mouseMove(Point location, MouseButton button,
+      List<ModifierPressed> modifiers) {
+    MouseInfo.Builder actionBuilder = MouseInfo.newBuilder();
+    actionBuilder.setX(location.x);
+    actionBuilder.setY(location.y);
+    actionBuilder.setButton(button);
+    actionBuilder.setNumClicks(1);
+    int modifier = ModifierPressed.NONE.getNumber();
+    for (ModifierPressed mod : modifiers) {
+      modifier |= mod.getNumber();
+    }
+    actionBuilder.setModifier(modifier);
+    executeCommand(SystemInputCommand.MOUSEMOVE, actionBuilder.clone());
+  }
 
-	public void mouseUp(Point location, MouseButton button, List<ModifierPressed> modifiers) {
-		MouseInfo.Builder actionBuilder = MouseInfo.newBuilder();
-		actionBuilder.setX(location.x);
-		actionBuilder.setY(location.y);
-		actionBuilder.setButton(button);
-		actionBuilder.setNumClicks(1);
-		int modifier = ModifierPressed.NONE.getNumber();
-		for (ModifierPressed mod : modifiers) {
-			modifier |= mod.getNumber();
-		}
-		actionBuilder.setModifier(modifier);
-		executeCommand(SystemInputCommand.MOUSEUP, actionBuilder.clone());
-	}
+  public void mouseUp(Point location, MouseButton button,
+      List<ModifierPressed> modifiers) {
+    MouseInfo.Builder actionBuilder = MouseInfo.newBuilder();
+    actionBuilder.setX(location.x);
+    actionBuilder.setY(location.y);
+    actionBuilder.setButton(button);
+    actionBuilder.setNumClicks(1);
+    int modifier = ModifierPressed.NONE.getNumber();
+    for (ModifierPressed mod : modifiers) {
+      modifier |= mod.getNumber();
+    }
+    actionBuilder.setModifier(modifier);
+    executeCommand(SystemInputCommand.MOUSEUP, actionBuilder.clone());
+  }
 
-	public void mouseDown(Point location, MouseButton button, List<ModifierPressed> modifiers) {
-		MouseInfo.Builder actionBuilder = MouseInfo.newBuilder();
-		actionBuilder.setX(location.x);
-		actionBuilder.setY(location.y);
-		actionBuilder.setButton(button);
-		actionBuilder.setNumClicks(1);
-		int modifier = ModifierPressed.NONE.getNumber();
-		for (ModifierPressed mod : modifiers) {
-			modifier |= mod.getNumber();
-		}
-		actionBuilder.setModifier(modifier);
-		executeCommand(SystemInputCommand.MOUSEDOWN, actionBuilder.clone());
-	}
+  public void mouseDown(Point location, MouseButton button,
+      List<ModifierPressed> modifiers) {
+    MouseInfo.Builder actionBuilder = MouseInfo.newBuilder();
+    actionBuilder.setX(location.x);
+    actionBuilder.setY(location.y);
+    actionBuilder.setButton(button);
+    actionBuilder.setNumClicks(1);
+    int modifier = ModifierPressed.NONE.getNumber();
+    for (ModifierPressed mod : modifiers) {
+      modifier |= mod.getNumber();
+    }
+    actionBuilder.setModifier(modifier);
+    executeCommand(SystemInputCommand.MOUSEDOWN, actionBuilder.clone());
+  }
 
-	public void keyPress(String key, List<ModifierPressed> modifiers) {
-		KeyPressInfo.Builder actionBuilder = KeyPressInfo.newBuilder();
-		actionBuilder.setKey(key);
-		int modifier = ModifierPressed.NONE.getNumber();
-		for (ModifierPressed mod : modifiers) {
-			modifier |= mod.getNumber();
-		}
-		actionBuilder.setModifier(modifier);
-		executeCommand(SystemInputCommand.KEYPRESS, actionBuilder.clone());
-	}
+  public void keyPress(String key, List<ModifierPressed> modifiers) {
+    KeyPressInfo.Builder actionBuilder = KeyPressInfo.newBuilder();
+    actionBuilder.setKey(key);
+    int modifier = ModifierPressed.NONE.getNumber();
+    for (ModifierPressed mod : modifiers) {
+      modifier |= mod.getNumber();
+    }
+    actionBuilder.setModifier(modifier);
+    executeCommand(SystemInputCommand.KEYPRESS, actionBuilder.clone());
+  }
 
-	public void keyDown(String key, List<ModifierPressed> modifiers) {
-		KeyPressInfo.Builder actionBuilder = KeyPressInfo.newBuilder();
-		actionBuilder.setKey(key);
-		int modifier = ModifierPressed.NONE.getNumber();
-		for (ModifierPressed mod : modifiers) {
-			modifier |= mod.getNumber();
-		}
-		actionBuilder.setModifier(modifier);
-		executeCommand(SystemInputCommand.KEYDOWN, actionBuilder.clone());
-	}
+  public void keyDown(String key, List<ModifierPressed> modifiers) {
+    KeyPressInfo.Builder actionBuilder = KeyPressInfo.newBuilder();
+    actionBuilder.setKey(key);
+    int modifier = ModifierPressed.NONE.getNumber();
+    for (ModifierPressed mod : modifiers) {
+      modifier |= mod.getNumber();
+    }
+    actionBuilder.setModifier(modifier);
+    executeCommand(SystemInputCommand.KEYDOWN, actionBuilder.clone());
+  }
 
-	public void keyUp(String key, List<ModifierPressed> modifiers) {
-		KeyPressInfo.Builder actionBuilder = KeyPressInfo.newBuilder();
-		actionBuilder.setKey(key);
-		int modifier = ModifierPressed.NONE.getNumber();
-		for (ModifierPressed mod : modifiers) {
-			modifier |= mod.getNumber();
-		}
-		actionBuilder.setModifier(modifier);
-		executeCommand(SystemInputCommand.KEYUP, actionBuilder.clone());
-	}
+  public void keyUp(String key, List<ModifierPressed> modifiers) {
+    KeyPressInfo.Builder actionBuilder = KeyPressInfo.newBuilder();
+    actionBuilder.setKey(key);
+    int modifier = ModifierPressed.NONE.getNumber();
+    for (ModifierPressed mod : modifiers) {
+      modifier |= mod.getNumber();
+    }
+    actionBuilder.setModifier(modifier);
+    executeCommand(SystemInputCommand.KEYUP, actionBuilder.clone());
+  }
 
 }

@@ -22,24 +22,24 @@ import org.openqa.selenium.Cookie;
 
 /**
  * New cookie manager service (work in progress)
- *
+ * 
  * @author Deniz Turkoglu <denizt@opera.com>
- *
+ * 
  */
 public interface ICookieManager {
 
-	Set<Cookie> getCookie(String domain, String path);
+  Set<Cookie> getCookie(String domain, String path);
 
-	void removeCookie(String domain, String path, String name);
+  void removeCookie(String domain, String path, String name);
 
-	void removeAllCookies();
+  void removeAllCookies();
 
-	int getMaxCookies();
+  int getMaxCookies();
 
-	int getMaxCookiesPerDomain();
+  int getMaxCookiesPerDomain();
 
-	int getMaxCookieLength();
+  int getMaxCookieLength();
 
-	void init();
+  void init();
 
 }

@@ -26,124 +26,123 @@ import com.opera.core.systems.scope.protos.WmProtos.WindowInfo;
  * Provides an interface to the Scope protocol.
  * 
  * @author Deniz Turkoglu
- *
+ * 
  */
 public class EventHandler extends AbstractEventHandler {
 
-	protected ScopeServices services;
+  protected ScopeServices services;
 
-	public EventHandler(ScopeServices services) {
-		super(services);
-		this.services = services;
-	}
+  public EventHandler(ScopeServices services) {
+    super(services);
+    this.services = services;
+  }
 
-	/**
-	 * Changes the window-manager's active window on active window event
-	 */
-	@Override
-	public void onActiveWindow(Integer id) {
-		services.getWindowManager().setActiveWindowId(id);
-	}
+  /**
+   * Changes the window-manager's active window on active window event
+   */
+  @Override
+  public void onActiveWindow(Integer id) {
+    services.getWindowManager().setActiveWindowId(id);
+  }
 
-	/**
-	 * Remove any runtime that has been stopped. This call
-	 * can be quite late and hence is resolved by cleanup method
-	 * in onRuntimeStarted
-	 */
-	@Override
-	public void onRuntimeStopped(Integer id) {
-		services.getDebugger().removeRuntime(id);
-		//FIXME this event is quite buggy, ignore
-		/*
-		if(stopped.getRuntimeId() == services.getDebugger().getRuntimeId())
-			services.getDebugger().setRuntimeId(0);
-		*/
-	}
+  /**
+   * Remove any runtime that has been stopped. This call can be quite late and
+   * hence is resolved by cleanup method in onRuntimeStarted
+   */
+  @Override
+  public void onRuntimeStopped(Integer id) {
+    services.getDebugger().removeRuntime(id);
+    // FIXME this event is quite buggy, ignore
+    /*
+    if(stopped.getRuntimeId() == services.getDebugger().getRuntimeId())
+      services.getDebugger().setRuntimeId(0);
+    */
+  }
 
+  @Override
+  public void onRequest(int windowId) {
+    services.onRequest(windowId);
+  }
 
-	@Override
-	public void onRequest(int windowId) {
-		services.onRequest(windowId);
-	}
+  /**
+   * Handles windows that have been closed. Removes it from the list and removes
+   * the runtimes that are associated with it
+   */
+  @Override
+  public void onWindowClosed(Integer id) {
+    services.onWindowClosed(id);
+    services.getWindowManager().removeWindow(id);
+    services.getDebugger().cleanUpRuntimes(id);
+  }
 
-	/**
-	 * Handles windows that have been closed. Removes it from the
-	 * list and removes the runtimes that are associated with it
-	 */
-	@Override
-	public void onWindowClosed(Integer id) {
-		services.onWindowClosed(id);
-		services.getWindowManager().removeWindow(id);
-		services.getDebugger().cleanUpRuntimes(id);
-	}
+  /**
+   * Fired when a window is loaded
+   * 
+   * @param windowId ID of the window that fired the event
+   */
+  @Override
+  public void onWindowLoaded(int windowId) {
+    services.getDebugger().cleanUpRuntimes(windowId);
+    services.onWindowLoaded(windowId);
+  }
 
-	/**
-	 * Fired when a window is loaded
-	 *
-	 * @param windowId ID of the window that fired the event
-	 */
-	@Override
-	public void onWindowLoaded(int windowId) {
-		services.getDebugger().cleanUpRuntimes(windowId);
-		services.onWindowLoaded(windowId);
-	}
+  /**
+   * Fired when opera is idle
+   */
+  @Override
+  public void onOperaIdle() {
+    services.onOperaIdle();
+  }
 
-	/**
-	 * Fired when opera is idle
-	 */
-	@Override
-	public void onOperaIdle(){
-		services.onOperaIdle();
-	}
+  @Override
+  public void onRuntimeStarted(RuntimeInfo started) {
+    throw new UnsupportedOperationException("Not supported in STP/0");
+  }
 
-	@Override
-	public void onRuntimeStarted(RuntimeInfo started) {
-		throw new UnsupportedOperationException("Not supported in STP/0");
-	}
+  @Override
+  public void onUpdatedWindow(WindowInfo window) {
+    throw new UnsupportedOperationException("Not supported in STP/0");
+  }
 
-	@Override
-	public void onUpdatedWindow(WindowInfo window) {
-		throw new UnsupportedOperationException("Not supported in STP/0");
-	}
+  @Override
+  public void onMessage(ConsoleMessage message) {
+    throw new UnsupportedOperationException("Not supported in STP/0");
+  }
 
-	@Override
-	public void onMessage(ConsoleMessage message) {
-		throw new UnsupportedOperationException("Not supported in STP/0");
-	}
+  @Override
+  public void onHttpResponse(int responseCode) {
+    services.getWindowManager().getLastHttpResponseCode().compareAndSet(0,
+        responseCode);
+  }
 
-	@Override
-	public void onHttpResponse(int responseCode) {
-		services.getWindowManager().getLastHttpResponseCode().compareAndSet(0, responseCode);
-	}
+  @Override
+  public void onReadyStateChange(ReadyStateChange change) {
+    throw new UnsupportedOperationException("Not supported in STP/0");
+  }
 
-	@Override
-	public void onReadyStateChange(ReadyStateChange change) {
-		throw new UnsupportedOperationException("Not supported in STP/0");
-	}
+  @Override
+  public void onDesktopWindowShown(DesktopWindowInfo info) {
+    services.onDesktopWindowShown(info);
+  }
 
-	@Override
-	public void onDesktopWindowShown(DesktopWindowInfo info) {
-		services.onDesktopWindowShown(info);
-	}
+  @Override
+  public void onDesktopWindowUpdated(DesktopWindowInfo info) {
+    services.onDesktopWindowUpdated(info);
+  }
 
-	@Override
-	public void onDesktopWindowUpdated(DesktopWindowInfo info) {
-		services.onDesktopWindowUpdated(info);
-	}
+  @Override
+  public void onDesktopWindowActivated(DesktopWindowInfo info) {
+    services.onDesktopWindowActivated(info);
+  }
 
-	@Override
-	public void onDesktopWindowActivated(DesktopWindowInfo info) {
-		services.onDesktopWindowActivated(info);
-	}
+  @Override
+  public void onDesktopWindowClosed(DesktopWindowInfo info) {
+    services.onDesktopWindowClosed(info);
+  }
 
-	@Override
-	public void onDesktopWindowClosed(DesktopWindowInfo info) {
-		services.onDesktopWindowClosed(info);
-	}
-
-	@Override
-	public void onDesktopWindowLoaded(DesktopWindowInfo info) {
-		services.onDesktopWindowLoaded(info);
-	}
+  @Override
+  public void onDesktopWindowLoaded(DesktopWindowInfo info) {
+    services.onDesktopWindowLoaded(info);
+  }
 
 }

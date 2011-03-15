@@ -40,235 +40,249 @@ import com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStopRe
 import com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStatusResponse.StatusType;
 import com.opera.core.systems.settings.OperaDriverSettings;
 
-public class OperaLauncherRunner implements OperaRunner{
-	private static Logger logger = Logger.getLogger(OperaLauncherRunner.class.getName());
+public class OperaLauncherRunner implements OperaRunner {
+  private static Logger logger = Logger.getLogger(OperaLauncherRunner.class.getName());
 
-	private OperaLauncherBinary launcherRunner = null;
+  private OperaLauncherBinary launcherRunner = null;
 
-	private OperaDriverSettings settings;
-	private OperaLauncherProtocol launcherProtocol = null;
-	private String crashlog = null;
+  private OperaDriverSettings settings;
+  private OperaLauncherProtocol launcherProtocol = null;
+  private String crashlog = null;
 
-	public OperaLauncherRunner(OperaDriverSettings settings){
-		this.settings = settings;
+  public OperaLauncherRunner(OperaDriverSettings settings) {
+    this.settings = settings;
 
-		if(settings.getOperaLauncherBinary() == null)
-			throw new WebDriverException("Launcher not available, please set it in path or use the JAR file");
+    if (settings.getOperaLauncherBinary() == null) throw new WebDriverException(
+        "Launcher not available, please set it in path or use the JAR file");
 
-		if(settings.getOperaBinaryLocation() == null)
-			throw new WebDriverException("You need to set Opera's path to use opera-launcher");
+    if (settings.getOperaBinaryLocation() == null) throw new WebDriverException(
+        "You need to set Opera's path to use opera-launcher");
 
-		if(this.settings.doRunOperaLauncherFromOperaDriver()){
+    if (this.settings.doRunOperaLauncherFromOperaDriver()) {
 
-			List<String> stringArray = new ArrayList<String>();
-			stringArray.add("-host");
-			stringArray.add("127.0.0.1");
-			stringArray.add("-port");
-			stringArray.add(Integer.toString(this.settings.getOperaLauncherListeningPort()));
-			if(this.settings.getOperaLauncherXvfbDisplay() != null){
-				stringArray.add("-display");
-				stringArray.add(":" + Integer.toString(this.settings.getOperaLauncherXvfbDisplay()));
-			}
+      List<String> stringArray = new ArrayList<String>();
+      stringArray.add("-host");
+      stringArray.add("127.0.0.1");
+      stringArray.add("-port");
+      stringArray.add(Integer.toString(this.settings.getOperaLauncherListeningPort()));
+      if (this.settings.getOperaLauncherXvfbDisplay() != null) {
+        stringArray.add("-display");
+        stringArray.add(":"
+            + Integer.toString(this.settings.getOperaLauncherXvfbDisplay()));
+      }
 
-			if (this.settings.getNoQuit())
-				stringArray.add("-noquit");
-			stringArray.add("-bin");
-			stringArray.add(this.settings.getOperaBinaryLocation());
+      if (this.settings.getNoQuit()) stringArray.add("-noquit");
+      stringArray.add("-bin");
+      stringArray.add(this.settings.getOperaBinaryLocation());
 
-			StringTokenizer tokanizer = new StringTokenizer(this.settings.getOperaBinaryArguments(), " ");
-			while(tokanizer.hasMoreTokens()){
-				stringArray.add(tokanizer.nextToken());
-			}
+      StringTokenizer tokanizer = new StringTokenizer(
+          this.settings.getOperaBinaryArguments(), " ");
+      while (tokanizer.hasMoreTokens()) {
+        stringArray.add(tokanizer.nextToken());
+      }
 
-			// Enable auto test mode, always starts Opera on opera:debug and prevents
-			// interrupting dialogues appearing
-			if (!stringArray.contains("-autotestmode"))
-				stringArray.add("-autotestmode");
+      // Enable auto test mode, always starts Opera on opera:debug and prevents
+      // interrupting dialogues appearing
+      if (!stringArray.contains("-autotestmode")) stringArray.add("-autotestmode");
 
-			launcherRunner = new OperaLauncherBinary(this.settings.getOperaLauncherBinary(),stringArray.toArray(new String[stringArray.size()]));
-		}
-
-		logger.fine("Waiting for Opera Launcher connection on port " + this.settings.getOperaLauncherListeningPort());
-        try {
-        	//setup listener server
-        	ServerSocket listenerServer = new ServerSocket(settings.getOperaLauncherListeningPort());
-        	//try to connect
-        	launcherProtocol = new OperaLauncherProtocol(listenerServer.accept());
-        	//we did it!
-        	logger.fine("Connected with Opera Launcher on port " + settings.getOperaLauncherListeningPort());
-        	listenerServer.close();
-        	//Do the handshake!
-        	LauncherHandshakeRequest.Builder request = LauncherHandshakeRequest.newBuilder();
-            ResponseEncapsulation res = launcherProtocol.sendRequest(MessageType.MSG_HELLO, request.build().toByteArray());
-            //Are we happy?
-            if(res.IsSuccess()){
-            	logger.fine("Got opera launcher handshake: " + res.getResponse().toString());
-            } else {
-            	logger.fine("Did not get opera launcher handshake: " + res.getResponse().toString());
-            	throw new OperaRunnerException("Did not get opera launcher handshake");
-            }
-        } catch (IOException e) {
-        	throw new OperaRunnerException("Unable to listen to opera launcher port " + settings.getOperaLauncherListeningPort(), e);
-        }
-	}
-
-	public void startOpera() {
-		logger.fine("Launcher starting opera...");
-        try {
-            LauncherStartRequest.Builder request = LauncherStartRequest.newBuilder();
-            ResponseEncapsulation res = launcherProtocol.sendRequest(MessageType.MSG_START, request.build().toByteArray());
-            if(handleStatusMessage(res.getResponse()) != StatusType.RUNNING){
-            	throw new OperaRunnerException("Could not start opera");
-            }
-        } catch (IOException e){
-        	throw new OperaRunnerException("Could not start opera", e);
-        }
-	}
-
-	public void stopOpera() {
-		logger.fine("Launcher stopping opera...");
-        try {
-            LauncherStopRequest.Builder request = LauncherStopRequest.newBuilder();
-            ResponseEncapsulation res = launcherProtocol.sendRequest(MessageType.MSG_STOP, request.build().toByteArray());
-            if(handleStatusMessage(res.getResponse()) == StatusType.RUNNING){
-            	throw new OperaRunnerException("Could not stop opera");
-            }
-        } catch (IOException e){
-        	throw new OperaRunnerException("Could not stop opera", e);
-        }
-	}
-
-	public boolean isOperaRunning() {
-		return isOperaRunning(0);
-	}
-
-	public boolean isOperaRunning(int processId) {
-		logger.fine("Get opera status");
-        try {
-            LauncherStatusRequest.Builder request = LauncherStatusRequest.newBuilder();
-            if (processId > 0)
-            	request.setProcessid(processId);
-
-            ResponseEncapsulation res = launcherProtocol.sendRequest(MessageType.MSG_STATUS, request.build().toByteArray());
-            return handleStatusMessage(res.getResponse()) == StatusType.RUNNING;
-        } catch (IOException e){
-        	throw new OperaRunnerException("Could not get state of opera", e);
-        }
-	}
-
-	public boolean hasOperaCrashed() {
-		return crashlog != null;
-	}
-
-	public String getOperaCrashlog() {
-		return crashlog;
-	}
-
-	public void shutdown() {
-
-		try {
-			//Send a shutdown to the launcher!
-			if(this.settings.doRunOperaLauncherFromOperaDriver()){
-				try {
-					launcherProtocol.sendRequestWithoutResponse(MessageType.MSG_SHUTDOWN, null);
-				} catch (Exception e) {
-					//will give us read-response issues!
-					e.printStackTrace();
-				}
-			}
-			//Then shutdown the protocol-connection
-			launcherProtocol.shutdown();
-		} catch (IOException e) {
-			//dont care
-			throw new OperaRunnerException("Do we get a shutdown exception?", e);
-		}
-
-		if(launcherRunner != null){
-			launcherRunner.shutdown();
-			launcherRunner = null;
-		}
-	}
-
-	/**
-	 * Handle status message, and updates state
-	 *
-	 * @param msg
-	 */
-	private StatusType handleStatusMessage(GeneratedMessage msg)
-    {
-        LauncherStatusResponse response = (LauncherStatusResponse) msg;
-
-        //LOG RESULT!
-        logger.finest("[LAUNCHER] Status: " + response.getStatus().toString());
-        if (response.hasExitcode()){
-            logger.finest("[LAUNCHER] Status: exitCode=" + response.getExitcode());
-        }
-        if (response.hasCrashlog()){
-
-            logger.finest("[LAUNCHER] Status: crashLog=yes");
-        } else {
-        	logger.finest("[LAUNCHER] Status: crashLog=no");
-        }
-        if (response.getLogmessagesCount() > 0){
-        	for(String message : response.getLogmessagesList()){
-        		logger.finest("[LAUNCHER LOG] " + message);
-        	}
-        } else {
-        	logger.finest("[LAUNCHER LOG] No log...");
-        }
-
-        //Handle state
-        StatusType status = response.getStatus();
-        if(status == StatusType.CRASHED){
-        	if(response.hasCrashlog()){
-            crashlog = response.getCrashlog().toStringUtf8();
-        	} else {
-            crashlog = "";// != NULL :-|
-        	}
-        } else {
-          crashlog = null;
-        }
-
-        //TODO: send something to the operalistener....
-        //if(launcherLastKnowStatus == StatusType.RUNNING && status != StatusType.RUNNING){
-        //	if(operaListener != null)
-        //		operaListener.operaBinaryStopped(response.getExitcode());
-        //}
-
-        return status;
+      launcherRunner = new OperaLauncherBinary(
+          this.settings.getOperaLauncherBinary(),
+          stringArray.toArray(new String[stringArray.size()]));
     }
 
-	/**
-	 * Take screenshots!
-	 */
-	public ScreenShotReply saveScreenshot(long timeout, String... hashes){
-		String resultMd5 = null;
-		byte[] resultBytes = null;
-		boolean blank = false;
+    logger.fine("Waiting for Opera Launcher connection on port "
+        + this.settings.getOperaLauncherListeningPort());
+    try {
+      // setup listener server
+      ServerSocket listenerServer = new ServerSocket(
+          settings.getOperaLauncherListeningPort());
+      // try to connect
+      launcherProtocol = new OperaLauncherProtocol(listenerServer.accept());
+      // we did it!
+      logger.fine("Connected with Opera Launcher on port "
+          + settings.getOperaLauncherListeningPort());
+      listenerServer.close();
+      // Do the handshake!
+      LauncherHandshakeRequest.Builder request = LauncherHandshakeRequest.newBuilder();
+      ResponseEncapsulation res = launcherProtocol.sendRequest(
+          MessageType.MSG_HELLO, request.build().toByteArray());
+      // Are we happy?
+      if (res.IsSuccess()) {
+        logger.fine("Got opera launcher handshake: "
+            + res.getResponse().toString());
+      } else {
+        logger.fine("Did not get opera launcher handshake: "
+            + res.getResponse().toString());
+        throw new OperaRunnerException("Did not get opera launcher handshake");
+      }
+    } catch (IOException e) {
+      throw new OperaRunnerException("Unable to listen to opera launcher port "
+          + settings.getOperaLauncherListeningPort(), e);
+    }
+  }
 
-		logger.fine("Get opera screenshot");
+  public void startOpera() {
+    logger.fine("Launcher starting opera...");
+    try {
+      LauncherStartRequest.Builder request = LauncherStartRequest.newBuilder();
+      ResponseEncapsulation res = launcherProtocol.sendRequest(
+          MessageType.MSG_START, request.build().toByteArray());
+      if (handleStatusMessage(res.getResponse()) != StatusType.RUNNING) {
+        throw new OperaRunnerException("Could not start opera");
+      }
+    } catch (IOException e) {
+      throw new OperaRunnerException("Could not start opera", e);
+    }
+  }
+
+  public void stopOpera() {
+    logger.fine("Launcher stopping opera...");
+    try {
+      LauncherStopRequest.Builder request = LauncherStopRequest.newBuilder();
+      ResponseEncapsulation res = launcherProtocol.sendRequest(
+          MessageType.MSG_STOP, request.build().toByteArray());
+      if (handleStatusMessage(res.getResponse()) == StatusType.RUNNING) {
+        throw new OperaRunnerException("Could not stop opera");
+      }
+    } catch (IOException e) {
+      throw new OperaRunnerException("Could not stop opera", e);
+    }
+  }
+
+  public boolean isOperaRunning() {
+    return isOperaRunning(0);
+  }
+
+  public boolean isOperaRunning(int processId) {
+    logger.fine("Get opera status");
+    try {
+      LauncherStatusRequest.Builder request = LauncherStatusRequest.newBuilder();
+      if (processId > 0) request.setProcessid(processId);
+
+      ResponseEncapsulation res = launcherProtocol.sendRequest(
+          MessageType.MSG_STATUS, request.build().toByteArray());
+      return handleStatusMessage(res.getResponse()) == StatusType.RUNNING;
+    } catch (IOException e) {
+      throw new OperaRunnerException("Could not get state of opera", e);
+    }
+  }
+
+  public boolean hasOperaCrashed() {
+    return crashlog != null;
+  }
+
+  public String getOperaCrashlog() {
+    return crashlog;
+  }
+
+  public void shutdown() {
+
+    try {
+      // Send a shutdown to the launcher!
+      if (this.settings.doRunOperaLauncherFromOperaDriver()) {
         try {
-            LauncherScreenshotRequest.Builder request = LauncherScreenshotRequest.newBuilder();
-            for(int i=0;i<hashes.length;i++){
-            	request.addKnownMD5S(hashes[i]);
-            }
-            request.setKnownMD5STimeoutMs((int)timeout);
-
-            ResponseEncapsulation res = launcherProtocol.sendRequest(MessageType.MSG_SCREENSHOT, request.build().toByteArray());
-            LauncherScreenshotResponse response = (LauncherScreenshotResponse) res.getResponse();
-            resultMd5 = response.getMd5();
-            resultBytes = response.getImagedata().toByteArray();
-
-            if(response.hasBlank()){
-            	blank = response.getBlank();
-            }
-
-        } catch (IOException e){
-        	throw new OperaRunnerException("Could not get state of opera", e);
+          launcherProtocol.sendRequestWithoutResponse(MessageType.MSG_SHUTDOWN,
+              null);
+        } catch (Exception e) {
+          // will give us read-response issues!
+          e.printStackTrace();
         }
+      }
+      // Then shutdown the protocol-connection
+      launcherProtocol.shutdown();
+    } catch (IOException e) {
+      // dont care
+      throw new OperaRunnerException("Do we get a shutdown exception?", e);
+    }
 
-        ScreenShotReply screenshotreply = new ScreenShotReply(resultMd5, resultBytes);
-        screenshotreply.setBlank(blank);
-		return screenshotreply;
-	}
+    if (launcherRunner != null) {
+      launcherRunner.shutdown();
+      launcherRunner = null;
+    }
+  }
+
+  /**
+   * Handle status message, and updates state
+   * 
+   * @param msg
+   */
+  private StatusType handleStatusMessage(GeneratedMessage msg) {
+    LauncherStatusResponse response = (LauncherStatusResponse) msg;
+
+    // LOG RESULT!
+    logger.finest("[LAUNCHER] Status: " + response.getStatus().toString());
+    if (response.hasExitcode()) {
+      logger.finest("[LAUNCHER] Status: exitCode=" + response.getExitcode());
+    }
+    if (response.hasCrashlog()) {
+
+      logger.finest("[LAUNCHER] Status: crashLog=yes");
+    } else {
+      logger.finest("[LAUNCHER] Status: crashLog=no");
+    }
+    if (response.getLogmessagesCount() > 0) {
+      for (String message : response.getLogmessagesList()) {
+        logger.finest("[LAUNCHER LOG] " + message);
+      }
+    } else {
+      logger.finest("[LAUNCHER LOG] No log...");
+    }
+
+    // Handle state
+    StatusType status = response.getStatus();
+    if (status == StatusType.CRASHED) {
+      if (response.hasCrashlog()) {
+        crashlog = response.getCrashlog().toStringUtf8();
+      } else {
+        crashlog = "";// != NULL :-|
+      }
+    } else {
+      crashlog = null;
+    }
+
+    // TODO: send something to the operalistener....
+    // if(launcherLastKnowStatus == StatusType.RUNNING && status !=
+    // StatusType.RUNNING){
+    // if(operaListener != null)
+    // operaListener.operaBinaryStopped(response.getExitcode());
+    // }
+
+    return status;
+  }
+
+  /**
+   * Take screenshots!
+   */
+  public ScreenShotReply saveScreenshot(long timeout, String... hashes) {
+    String resultMd5 = null;
+    byte[] resultBytes = null;
+    boolean blank = false;
+
+    logger.fine("Get opera screenshot");
+    try {
+      LauncherScreenshotRequest.Builder request = LauncherScreenshotRequest.newBuilder();
+      for (int i = 0; i < hashes.length; i++) {
+        request.addKnownMD5S(hashes[i]);
+      }
+      request.setKnownMD5STimeoutMs((int) timeout);
+
+      ResponseEncapsulation res = launcherProtocol.sendRequest(
+          MessageType.MSG_SCREENSHOT, request.build().toByteArray());
+      LauncherScreenshotResponse response = (LauncherScreenshotResponse) res.getResponse();
+      resultMd5 = response.getMd5();
+      resultBytes = response.getImagedata().toByteArray();
+
+      if (response.hasBlank()) {
+        blank = response.getBlank();
+      }
+
+    } catch (IOException e) {
+      throw new OperaRunnerException("Could not get state of opera", e);
+    }
+
+    ScreenShotReply screenshotreply = new ScreenShotReply(resultMd5,
+        resultBytes);
+    screenshotreply.setBlank(blank);
+    return screenshotreply;
+  }
 }

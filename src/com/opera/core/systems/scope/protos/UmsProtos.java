@@ -4,81 +4,122 @@
 package com.opera.core.systems.scope.protos;
 
 public final class UmsProtos {
-  private UmsProtos() {}
+  private UmsProtos() {
+  }
+
   public static void registerAllExtensions(
       com.google.protobuf.ExtensionRegistry registry) {
   }
+
   public static final class TransportMessage extends
       com.google.protobuf.GeneratedMessage {
     // Use TransportMessage.newBuilder() to construct.
     private TransportMessage() {
       initFields();
     }
-    private TransportMessage(boolean noInit) {}
-    
+
+    private TransportMessage(boolean noInit) {
+    }
+
     private static final TransportMessage defaultInstance;
+
     public static TransportMessage getDefaultInstance() {
       return defaultInstance;
     }
-    
+
     public TransportMessage getDefaultInstanceForType() {
       return defaultInstance;
     }
-    
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
+
+    public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
       return com.opera.core.systems.scope.protos.UmsProtos.internal_static_scope_TransportMessage_descriptor;
     }
-    
-    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-        internalGetFieldAccessorTable() {
+
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable internalGetFieldAccessorTable() {
       return com.opera.core.systems.scope.protos.UmsProtos.internal_static_scope_TransportMessage_fieldAccessorTable;
     }
-    
+
     // required string service = 1;
     public static final int SERVICE_FIELD_NUMBER = 1;
     private boolean hasService;
     private java.lang.String service_ = "";
-    public boolean hasService() { return hasService; }
-    public java.lang.String getService() { return service_; }
-    
+
+    public boolean hasService() {
+      return hasService;
+    }
+
+    public java.lang.String getService() {
+      return service_;
+    }
+
     // required uint32 commandID = 2;
     public static final int COMMANDID_FIELD_NUMBER = 2;
     private boolean hasCommandID;
     private int commandID_ = 0;
-    public boolean hasCommandID() { return hasCommandID; }
-    public int getCommandID() { return commandID_; }
-    
+
+    public boolean hasCommandID() {
+      return hasCommandID;
+    }
+
+    public int getCommandID() {
+      return commandID_;
+    }
+
     // required uint32 format = 3;
     public static final int FORMAT_FIELD_NUMBER = 3;
     private boolean hasFormat;
     private int format_ = 0;
-    public boolean hasFormat() { return hasFormat; }
-    public int getFormat() { return format_; }
-    
+
+    public boolean hasFormat() {
+      return hasFormat;
+    }
+
+    public int getFormat() {
+      return format_;
+    }
+
     // optional uint32 status = 4;
     public static final int STATUS_FIELD_NUMBER = 4;
     private boolean hasStatus;
     private int status_ = 0;
-    public boolean hasStatus() { return hasStatus; }
-    public int getStatus() { return status_; }
-    
+
+    public boolean hasStatus() {
+      return hasStatus;
+    }
+
+    public int getStatus() {
+      return status_;
+    }
+
     // optional uint32 tag = 5;
     public static final int TAG_FIELD_NUMBER = 5;
     private boolean hasTag;
     private int tag_ = 0;
-    public boolean hasTag() { return hasTag; }
-    public int getTag() { return tag_; }
-    
+
+    public boolean hasTag() {
+      return hasTag;
+    }
+
+    public int getTag() {
+      return tag_;
+    }
+
     // required bytes payload = 8;
     public static final int PAYLOAD_FIELD_NUMBER = 8;
     private boolean hasPayload;
     private com.google.protobuf.ByteString payload_ = com.google.protobuf.ByteString.EMPTY;
-    public boolean hasPayload() { return hasPayload; }
-    public com.google.protobuf.ByteString getPayload() { return payload_; }
-    
+
+    public boolean hasPayload() {
+      return hasPayload;
+    }
+
+    public com.google.protobuf.ByteString getPayload() {
+      return payload_;
+    }
+
     private void initFields() {
     }
+
     public final boolean isInitialized() {
       if (!hasService) return false;
       if (!hasCommandID) return false;
@@ -86,9 +127,9 @@ public final class UmsProtos {
       if (!hasPayload) return false;
       return true;
     }
-    
+
     public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
+        throws java.io.IOException {
       getSerializedSize();
       if (hasService()) {
         output.writeString(1, getService());
@@ -110,78 +151,81 @@ public final class UmsProtos {
       }
       getUnknownFields().writeTo(output);
     }
-    
+
     private int memoizedSerializedSize = -1;
+
     public int getSerializedSize() {
       int size = memoizedSerializedSize;
       if (size != -1) return size;
-    
+
       size = 0;
       if (hasService()) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeStringSize(1, getService());
+        size += com.google.protobuf.CodedOutputStream.computeStringSize(1,
+            getService());
       }
       if (hasCommandID()) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeUInt32Size(2, getCommandID());
+        size += com.google.protobuf.CodedOutputStream.computeUInt32Size(2,
+            getCommandID());
       }
       if (hasFormat()) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeUInt32Size(3, getFormat());
+        size += com.google.protobuf.CodedOutputStream.computeUInt32Size(3,
+            getFormat());
       }
       if (hasStatus()) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeUInt32Size(4, getStatus());
+        size += com.google.protobuf.CodedOutputStream.computeUInt32Size(4,
+            getStatus());
       }
       if (hasTag()) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeUInt32Size(5, getTag());
+        size += com.google.protobuf.CodedOutputStream.computeUInt32Size(5,
+            getTag());
       }
       if (hasPayload()) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(8, getPayload());
+        size += com.google.protobuf.CodedOutputStream.computeBytesSize(8,
+            getPayload());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
       return size;
     }
-    
+
     public static com.opera.core.systems.scope.protos.UmsProtos.TransportMessage parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.UmsProtos.TransportMessage parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+      return newBuilder().mergeFrom(data, extensionRegistry).buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.UmsProtos.TransportMessage parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+
+    public static com.opera.core.systems.scope.protos.UmsProtos.TransportMessage parseFrom(
+        byte[] data) throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.UmsProtos.TransportMessage parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+      return newBuilder().mergeFrom(data, extensionRegistry).buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.UmsProtos.TransportMessage parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
+
+    public static com.opera.core.systems.scope.protos.UmsProtos.TransportMessage parseFrom(
+        java.io.InputStream input) throws java.io.IOException {
       return newBuilder().mergeFrom(input).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.UmsProtos.TransportMessage parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+      return newBuilder().mergeFrom(input, extensionRegistry).buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.UmsProtos.TransportMessage parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
+
+    public static com.opera.core.systems.scope.protos.UmsProtos.TransportMessage parseDelimitedFrom(
+        java.io.InputStream input) throws java.io.IOException {
       Builder builder = newBuilder();
       if (builder.mergeDelimitedFrom(input)) {
         return builder.buildParsed();
@@ -189,6 +233,7 @@ public final class UmsProtos {
         return null;
       }
     }
+
     public static com.opera.core.systems.scope.protos.UmsProtos.TransportMessage parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -200,104 +245,115 @@ public final class UmsProtos {
         return null;
       }
     }
+
     public static com.opera.core.systems.scope.protos.UmsProtos.TransportMessage parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
+        com.google.protobuf.CodedInputStream input) throws java.io.IOException {
       return newBuilder().mergeFrom(input).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.UmsProtos.TransportMessage parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+      return newBuilder().mergeFrom(input, extensionRegistry).buildParsed();
     }
-    
-    public static Builder newBuilder() { return Builder.create(); }
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(com.opera.core.systems.scope.protos.UmsProtos.TransportMessage prototype) {
+
+    public static Builder newBuilder() {
+      return Builder.create();
+    }
+
+    public Builder newBuilderForType() {
+      return newBuilder();
+    }
+
+    public static Builder newBuilder(
+        com.opera.core.systems.scope.protos.UmsProtos.TransportMessage prototype) {
       return newBuilder().mergeFrom(prototype);
     }
-    public Builder toBuilder() { return newBuilder(this); }
-    
+
+    public Builder toBuilder() {
+      return newBuilder(this);
+    }
+
     public static final class Builder extends
         com.google.protobuf.GeneratedMessage.Builder<Builder> {
       private com.opera.core.systems.scope.protos.UmsProtos.TransportMessage result;
-      
-      // Construct using com.opera.core.systems.scope.protos.UmsProtos.TransportMessage.newBuilder()
-      private Builder() {}
-      
+
+      // Construct using
+      // com.opera.core.systems.scope.protos.UmsProtos.TransportMessage.newBuilder()
+      private Builder() {
+      }
+
       private static Builder create() {
         Builder builder = new Builder();
         builder.result = new com.opera.core.systems.scope.protos.UmsProtos.TransportMessage();
         return builder;
       }
-      
+
       protected com.opera.core.systems.scope.protos.UmsProtos.TransportMessage internalGetResult() {
         return result;
       }
-      
+
       public Builder clear() {
         if (result == null) {
-          throw new IllegalStateException(
-            "Cannot call clear() after build().");
+          throw new IllegalStateException("Cannot call clear() after build().");
         }
         result = new com.opera.core.systems.scope.protos.UmsProtos.TransportMessage();
         return this;
       }
-      
+
       public Builder clone() {
         return create().mergeFrom(result);
       }
-      
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
+
+      public com.google.protobuf.Descriptors.Descriptor getDescriptorForType() {
         return com.opera.core.systems.scope.protos.UmsProtos.TransportMessage.getDescriptor();
       }
-      
+
       public com.opera.core.systems.scope.protos.UmsProtos.TransportMessage getDefaultInstanceForType() {
         return com.opera.core.systems.scope.protos.UmsProtos.TransportMessage.getDefaultInstance();
       }
-      
+
       public boolean isInitialized() {
         return result.isInitialized();
       }
+
       public com.opera.core.systems.scope.protos.UmsProtos.TransportMessage build() {
         if (result != null && !isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return buildPartial();
       }
-      
+
       private com.opera.core.systems.scope.protos.UmsProtos.TransportMessage buildParsed()
           throws com.google.protobuf.InvalidProtocolBufferException {
         if (!isInitialized()) {
-          throw newUninitializedMessageException(
-            result).asInvalidProtocolBufferException();
+          throw newUninitializedMessageException(result).asInvalidProtocolBufferException();
         }
         return buildPartial();
       }
-      
+
       public com.opera.core.systems.scope.protos.UmsProtos.TransportMessage buildPartial() {
         if (result == null) {
           throw new IllegalStateException(
-            "build() has already been called on this Builder.");
+              "build() has already been called on this Builder.");
         }
         com.opera.core.systems.scope.protos.UmsProtos.TransportMessage returnMe = result;
         result = null;
         return returnMe;
       }
-      
+
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.opera.core.systems.scope.protos.UmsProtos.TransportMessage) {
-          return mergeFrom((com.opera.core.systems.scope.protos.UmsProtos.TransportMessage)other);
+          return mergeFrom((com.opera.core.systems.scope.protos.UmsProtos.TransportMessage) other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
-      
-      public Builder mergeFrom(com.opera.core.systems.scope.protos.UmsProtos.TransportMessage other) {
+
+      public Builder mergeFrom(
+          com.opera.core.systems.scope.protos.UmsProtos.TransportMessage other) {
         if (other == com.opera.core.systems.scope.protos.UmsProtos.TransportMessage.getDefaultInstance()) return this;
         if (other.hasService()) {
           setService(other.getService());
@@ -320,247 +376,292 @@ public final class UmsProtos {
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
-      
-      public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
+
+      public Builder mergeFrom(com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder(
-            this.getUnknownFields());
+        com.google.protobuf.UnknownFieldSet.Builder unknownFields = com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
         while (true) {
           int tag = input.readTag();
           switch (tag) {
-            case 0:
+          case 0:
+            this.setUnknownFields(unknownFields.build());
+            return this;
+          default: {
+            if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
               this.setUnknownFields(unknownFields.build());
               return this;
-            default: {
-              if (!parseUnknownField(input, unknownFields,
-                                     extensionRegistry, tag)) {
-                this.setUnknownFields(unknownFields.build());
-                return this;
-              }
-              break;
             }
-            case 10: {
-              setService(input.readString());
-              break;
-            }
-            case 16: {
-              setCommandID(input.readUInt32());
-              break;
-            }
-            case 24: {
-              setFormat(input.readUInt32());
-              break;
-            }
-            case 32: {
-              setStatus(input.readUInt32());
-              break;
-            }
-            case 40: {
-              setTag(input.readUInt32());
-              break;
-            }
-            case 66: {
-              setPayload(input.readBytes());
-              break;
-            }
+            break;
+          }
+          case 10: {
+            setService(input.readString());
+            break;
+          }
+          case 16: {
+            setCommandID(input.readUInt32());
+            break;
+          }
+          case 24: {
+            setFormat(input.readUInt32());
+            break;
+          }
+          case 32: {
+            setStatus(input.readUInt32());
+            break;
+          }
+          case 40: {
+            setTag(input.readUInt32());
+            break;
+          }
+          case 66: {
+            setPayload(input.readBytes());
+            break;
+          }
           }
         }
       }
-      
-      
+
       // required string service = 1;
       public boolean hasService() {
         return result.hasService();
       }
+
       public java.lang.String getService() {
         return result.getService();
       }
+
       public Builder setService(java.lang.String value) {
         if (value == null) {
-    throw new NullPointerException();
-  }
-  result.hasService = true;
+          throw new NullPointerException();
+        }
+        result.hasService = true;
         result.service_ = value;
         return this;
       }
+
       public Builder clearService() {
         result.hasService = false;
         result.service_ = getDefaultInstance().getService();
         return this;
       }
-      
+
       // required uint32 commandID = 2;
       public boolean hasCommandID() {
         return result.hasCommandID();
       }
+
       public int getCommandID() {
         return result.getCommandID();
       }
+
       public Builder setCommandID(int value) {
         result.hasCommandID = true;
         result.commandID_ = value;
         return this;
       }
+
       public Builder clearCommandID() {
         result.hasCommandID = false;
         result.commandID_ = 0;
         return this;
       }
-      
+
       // required uint32 format = 3;
       public boolean hasFormat() {
         return result.hasFormat();
       }
+
       public int getFormat() {
         return result.getFormat();
       }
+
       public Builder setFormat(int value) {
         result.hasFormat = true;
         result.format_ = value;
         return this;
       }
+
       public Builder clearFormat() {
         result.hasFormat = false;
         result.format_ = 0;
         return this;
       }
-      
+
       // optional uint32 status = 4;
       public boolean hasStatus() {
         return result.hasStatus();
       }
+
       public int getStatus() {
         return result.getStatus();
       }
+
       public Builder setStatus(int value) {
         result.hasStatus = true;
         result.status_ = value;
         return this;
       }
+
       public Builder clearStatus() {
         result.hasStatus = false;
         result.status_ = 0;
         return this;
       }
-      
+
       // optional uint32 tag = 5;
       public boolean hasTag() {
         return result.hasTag();
       }
+
       public int getTag() {
         return result.getTag();
       }
+
       public Builder setTag(int value) {
         result.hasTag = true;
         result.tag_ = value;
         return this;
       }
+
       public Builder clearTag() {
         result.hasTag = false;
         result.tag_ = 0;
         return this;
       }
-      
+
       // required bytes payload = 8;
       public boolean hasPayload() {
         return result.hasPayload();
       }
+
       public com.google.protobuf.ByteString getPayload() {
         return result.getPayload();
       }
+
       public Builder setPayload(com.google.protobuf.ByteString value) {
         if (value == null) {
-    throw new NullPointerException();
-  }
-  result.hasPayload = true;
+          throw new NullPointerException();
+        }
+        result.hasPayload = true;
         result.payload_ = value;
         return this;
       }
+
       public Builder clearPayload() {
         result.hasPayload = false;
         result.payload_ = getDefaultInstance().getPayload();
         return this;
       }
-      
+
       // @@protoc_insertion_point(builder_scope:scope.TransportMessage)
     }
-    
+
     static {
       defaultInstance = new TransportMessage(true);
       com.opera.core.systems.scope.protos.UmsProtos.internalForceInit();
       defaultInstance.initFields();
     }
-    
+
     // @@protoc_insertion_point(class_scope:scope.TransportMessage)
   }
-  
+
   public static final class Command extends
       com.google.protobuf.GeneratedMessage {
     // Use Command.newBuilder() to construct.
     private Command() {
       initFields();
     }
-    private Command(boolean noInit) {}
-    
+
+    private Command(boolean noInit) {
+    }
+
     private static final Command defaultInstance;
+
     public static Command getDefaultInstance() {
       return defaultInstance;
     }
-    
+
     public Command getDefaultInstanceForType() {
       return defaultInstance;
     }
-    
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
+
+    public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
       return com.opera.core.systems.scope.protos.UmsProtos.internal_static_scope_Command_descriptor;
     }
-    
-    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-        internalGetFieldAccessorTable() {
+
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable internalGetFieldAccessorTable() {
       return com.opera.core.systems.scope.protos.UmsProtos.internal_static_scope_Command_fieldAccessorTable;
     }
-    
+
     // required string service = 1;
     public static final int SERVICE_FIELD_NUMBER = 1;
     private boolean hasService;
     private java.lang.String service_ = "";
-    public boolean hasService() { return hasService; }
-    public java.lang.String getService() { return service_; }
-    
+
+    public boolean hasService() {
+      return hasService;
+    }
+
+    public java.lang.String getService() {
+      return service_;
+    }
+
     // required uint32 commandID = 2;
     public static final int COMMANDID_FIELD_NUMBER = 2;
     private boolean hasCommandID;
     private int commandID_ = 0;
-    public boolean hasCommandID() { return hasCommandID; }
-    public int getCommandID() { return commandID_; }
-    
+
+    public boolean hasCommandID() {
+      return hasCommandID;
+    }
+
+    public int getCommandID() {
+      return commandID_;
+    }
+
     // required uint32 format = 3;
     public static final int FORMAT_FIELD_NUMBER = 3;
     private boolean hasFormat;
     private int format_ = 0;
-    public boolean hasFormat() { return hasFormat; }
-    public int getFormat() { return format_; }
-    
+
+    public boolean hasFormat() {
+      return hasFormat;
+    }
+
+    public int getFormat() {
+      return format_;
+    }
+
     // required uint32 tag = 5;
     public static final int TAG_FIELD_NUMBER = 5;
     private boolean hasTag;
     private int tag_ = 0;
-    public boolean hasTag() { return hasTag; }
-    public int getTag() { return tag_; }
-    
+
+    public boolean hasTag() {
+      return hasTag;
+    }
+
+    public int getTag() {
+      return tag_;
+    }
+
     // required bytes payload = 8;
     public static final int PAYLOAD_FIELD_NUMBER = 8;
     private boolean hasPayload;
     private com.google.protobuf.ByteString payload_ = com.google.protobuf.ByteString.EMPTY;
-    public boolean hasPayload() { return hasPayload; }
-    public com.google.protobuf.ByteString getPayload() { return payload_; }
-    
+
+    public boolean hasPayload() {
+      return hasPayload;
+    }
+
+    public com.google.protobuf.ByteString getPayload() {
+      return payload_;
+    }
+
     private void initFields() {
     }
+
     public final boolean isInitialized() {
       if (!hasService) return false;
       if (!hasCommandID) return false;
@@ -569,9 +670,9 @@ public final class UmsProtos {
       if (!hasPayload) return false;
       return true;
     }
-    
+
     public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
+        throws java.io.IOException {
       getSerializedSize();
       if (hasService()) {
         output.writeString(1, getService());
@@ -590,74 +691,77 @@ public final class UmsProtos {
       }
       getUnknownFields().writeTo(output);
     }
-    
+
     private int memoizedSerializedSize = -1;
+
     public int getSerializedSize() {
       int size = memoizedSerializedSize;
       if (size != -1) return size;
-    
+
       size = 0;
       if (hasService()) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeStringSize(1, getService());
+        size += com.google.protobuf.CodedOutputStream.computeStringSize(1,
+            getService());
       }
       if (hasCommandID()) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeUInt32Size(2, getCommandID());
+        size += com.google.protobuf.CodedOutputStream.computeUInt32Size(2,
+            getCommandID());
       }
       if (hasFormat()) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeUInt32Size(3, getFormat());
+        size += com.google.protobuf.CodedOutputStream.computeUInt32Size(3,
+            getFormat());
       }
       if (hasTag()) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeUInt32Size(5, getTag());
+        size += com.google.protobuf.CodedOutputStream.computeUInt32Size(5,
+            getTag());
       }
       if (hasPayload()) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(8, getPayload());
+        size += com.google.protobuf.CodedOutputStream.computeBytesSize(8,
+            getPayload());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
       return size;
     }
-    
+
     public static com.opera.core.systems.scope.protos.UmsProtos.Command parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.UmsProtos.Command parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+      return newBuilder().mergeFrom(data, extensionRegistry).buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.UmsProtos.Command parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+
+    public static com.opera.core.systems.scope.protos.UmsProtos.Command parseFrom(
+        byte[] data) throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.UmsProtos.Command parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+      return newBuilder().mergeFrom(data, extensionRegistry).buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.UmsProtos.Command parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
+
+    public static com.opera.core.systems.scope.protos.UmsProtos.Command parseFrom(
+        java.io.InputStream input) throws java.io.IOException {
       return newBuilder().mergeFrom(input).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.UmsProtos.Command parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+      return newBuilder().mergeFrom(input, extensionRegistry).buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.UmsProtos.Command parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
+
+    public static com.opera.core.systems.scope.protos.UmsProtos.Command parseDelimitedFrom(
+        java.io.InputStream input) throws java.io.IOException {
       Builder builder = newBuilder();
       if (builder.mergeDelimitedFrom(input)) {
         return builder.buildParsed();
@@ -665,6 +769,7 @@ public final class UmsProtos {
         return null;
       }
     }
+
     public static com.opera.core.systems.scope.protos.UmsProtos.Command parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -676,104 +781,115 @@ public final class UmsProtos {
         return null;
       }
     }
+
     public static com.opera.core.systems.scope.protos.UmsProtos.Command parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
+        com.google.protobuf.CodedInputStream input) throws java.io.IOException {
       return newBuilder().mergeFrom(input).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.UmsProtos.Command parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+      return newBuilder().mergeFrom(input, extensionRegistry).buildParsed();
     }
-    
-    public static Builder newBuilder() { return Builder.create(); }
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(com.opera.core.systems.scope.protos.UmsProtos.Command prototype) {
+
+    public static Builder newBuilder() {
+      return Builder.create();
+    }
+
+    public Builder newBuilderForType() {
+      return newBuilder();
+    }
+
+    public static Builder newBuilder(
+        com.opera.core.systems.scope.protos.UmsProtos.Command prototype) {
       return newBuilder().mergeFrom(prototype);
     }
-    public Builder toBuilder() { return newBuilder(this); }
-    
+
+    public Builder toBuilder() {
+      return newBuilder(this);
+    }
+
     public static final class Builder extends
         com.google.protobuf.GeneratedMessage.Builder<Builder> {
       private com.opera.core.systems.scope.protos.UmsProtos.Command result;
-      
-      // Construct using com.opera.core.systems.scope.protos.UmsProtos.Command.newBuilder()
-      private Builder() {}
-      
+
+      // Construct using
+      // com.opera.core.systems.scope.protos.UmsProtos.Command.newBuilder()
+      private Builder() {
+      }
+
       private static Builder create() {
         Builder builder = new Builder();
         builder.result = new com.opera.core.systems.scope.protos.UmsProtos.Command();
         return builder;
       }
-      
+
       protected com.opera.core.systems.scope.protos.UmsProtos.Command internalGetResult() {
         return result;
       }
-      
+
       public Builder clear() {
         if (result == null) {
-          throw new IllegalStateException(
-            "Cannot call clear() after build().");
+          throw new IllegalStateException("Cannot call clear() after build().");
         }
         result = new com.opera.core.systems.scope.protos.UmsProtos.Command();
         return this;
       }
-      
+
       public Builder clone() {
         return create().mergeFrom(result);
       }
-      
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
+
+      public com.google.protobuf.Descriptors.Descriptor getDescriptorForType() {
         return com.opera.core.systems.scope.protos.UmsProtos.Command.getDescriptor();
       }
-      
+
       public com.opera.core.systems.scope.protos.UmsProtos.Command getDefaultInstanceForType() {
         return com.opera.core.systems.scope.protos.UmsProtos.Command.getDefaultInstance();
       }
-      
+
       public boolean isInitialized() {
         return result.isInitialized();
       }
+
       public com.opera.core.systems.scope.protos.UmsProtos.Command build() {
         if (result != null && !isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return buildPartial();
       }
-      
+
       private com.opera.core.systems.scope.protos.UmsProtos.Command buildParsed()
           throws com.google.protobuf.InvalidProtocolBufferException {
         if (!isInitialized()) {
-          throw newUninitializedMessageException(
-            result).asInvalidProtocolBufferException();
+          throw newUninitializedMessageException(result).asInvalidProtocolBufferException();
         }
         return buildPartial();
       }
-      
+
       public com.opera.core.systems.scope.protos.UmsProtos.Command buildPartial() {
         if (result == null) {
           throw new IllegalStateException(
-            "build() has already been called on this Builder.");
+              "build() has already been called on this Builder.");
         }
         com.opera.core.systems.scope.protos.UmsProtos.Command returnMe = result;
         result = null;
         return returnMe;
       }
-      
+
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.opera.core.systems.scope.protos.UmsProtos.Command) {
-          return mergeFrom((com.opera.core.systems.scope.protos.UmsProtos.Command)other);
+          return mergeFrom((com.opera.core.systems.scope.protos.UmsProtos.Command) other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
-      
-      public Builder mergeFrom(com.opera.core.systems.scope.protos.UmsProtos.Command other) {
+
+      public Builder mergeFrom(
+          com.opera.core.systems.scope.protos.UmsProtos.Command other) {
         if (other == com.opera.core.systems.scope.protos.UmsProtos.Command.getDefaultInstance()) return this;
         if (other.hasService()) {
           setService(other.getService());
@@ -793,225 +909,267 @@ public final class UmsProtos {
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
-      
-      public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
+
+      public Builder mergeFrom(com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder(
-            this.getUnknownFields());
+        com.google.protobuf.UnknownFieldSet.Builder unknownFields = com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
         while (true) {
           int tag = input.readTag();
           switch (tag) {
-            case 0:
+          case 0:
+            this.setUnknownFields(unknownFields.build());
+            return this;
+          default: {
+            if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
               this.setUnknownFields(unknownFields.build());
               return this;
-            default: {
-              if (!parseUnknownField(input, unknownFields,
-                                     extensionRegistry, tag)) {
-                this.setUnknownFields(unknownFields.build());
-                return this;
-              }
-              break;
             }
-            case 10: {
-              setService(input.readString());
-              break;
-            }
-            case 16: {
-              setCommandID(input.readUInt32());
-              break;
-            }
-            case 24: {
-              setFormat(input.readUInt32());
-              break;
-            }
-            case 40: {
-              setTag(input.readUInt32());
-              break;
-            }
-            case 66: {
-              setPayload(input.readBytes());
-              break;
-            }
+            break;
+          }
+          case 10: {
+            setService(input.readString());
+            break;
+          }
+          case 16: {
+            setCommandID(input.readUInt32());
+            break;
+          }
+          case 24: {
+            setFormat(input.readUInt32());
+            break;
+          }
+          case 40: {
+            setTag(input.readUInt32());
+            break;
+          }
+          case 66: {
+            setPayload(input.readBytes());
+            break;
+          }
           }
         }
       }
-      
-      
+
       // required string service = 1;
       public boolean hasService() {
         return result.hasService();
       }
+
       public java.lang.String getService() {
         return result.getService();
       }
+
       public Builder setService(java.lang.String value) {
         if (value == null) {
-    throw new NullPointerException();
-  }
-  result.hasService = true;
+          throw new NullPointerException();
+        }
+        result.hasService = true;
         result.service_ = value;
         return this;
       }
+
       public Builder clearService() {
         result.hasService = false;
         result.service_ = getDefaultInstance().getService();
         return this;
       }
-      
+
       // required uint32 commandID = 2;
       public boolean hasCommandID() {
         return result.hasCommandID();
       }
+
       public int getCommandID() {
         return result.getCommandID();
       }
+
       public Builder setCommandID(int value) {
         result.hasCommandID = true;
         result.commandID_ = value;
         return this;
       }
+
       public Builder clearCommandID() {
         result.hasCommandID = false;
         result.commandID_ = 0;
         return this;
       }
-      
+
       // required uint32 format = 3;
       public boolean hasFormat() {
         return result.hasFormat();
       }
+
       public int getFormat() {
         return result.getFormat();
       }
+
       public Builder setFormat(int value) {
         result.hasFormat = true;
         result.format_ = value;
         return this;
       }
+
       public Builder clearFormat() {
         result.hasFormat = false;
         result.format_ = 0;
         return this;
       }
-      
+
       // required uint32 tag = 5;
       public boolean hasTag() {
         return result.hasTag();
       }
+
       public int getTag() {
         return result.getTag();
       }
+
       public Builder setTag(int value) {
         result.hasTag = true;
         result.tag_ = value;
         return this;
       }
+
       public Builder clearTag() {
         result.hasTag = false;
         result.tag_ = 0;
         return this;
       }
-      
+
       // required bytes payload = 8;
       public boolean hasPayload() {
         return result.hasPayload();
       }
+
       public com.google.protobuf.ByteString getPayload() {
         return result.getPayload();
       }
+
       public Builder setPayload(com.google.protobuf.ByteString value) {
         if (value == null) {
-    throw new NullPointerException();
-  }
-  result.hasPayload = true;
+          throw new NullPointerException();
+        }
+        result.hasPayload = true;
         result.payload_ = value;
         return this;
       }
+
       public Builder clearPayload() {
         result.hasPayload = false;
         result.payload_ = getDefaultInstance().getPayload();
         return this;
       }
-      
+
       // @@protoc_insertion_point(builder_scope:scope.Command)
     }
-    
+
     static {
       defaultInstance = new Command(true);
       com.opera.core.systems.scope.protos.UmsProtos.internalForceInit();
       defaultInstance.initFields();
     }
-    
+
     // @@protoc_insertion_point(class_scope:scope.Command)
   }
-  
+
   public static final class Response extends
       com.google.protobuf.GeneratedMessage {
     // Use Response.newBuilder() to construct.
     private Response() {
       initFields();
     }
-    private Response(boolean noInit) {}
-    
+
+    private Response(boolean noInit) {
+    }
+
     private static final Response defaultInstance;
+
     public static Response getDefaultInstance() {
       return defaultInstance;
     }
-    
+
     public Response getDefaultInstanceForType() {
       return defaultInstance;
     }
-    
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
+
+    public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
       return com.opera.core.systems.scope.protos.UmsProtos.internal_static_scope_Response_descriptor;
     }
-    
-    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-        internalGetFieldAccessorTable() {
+
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable internalGetFieldAccessorTable() {
       return com.opera.core.systems.scope.protos.UmsProtos.internal_static_scope_Response_fieldAccessorTable;
     }
-    
+
     // required string service = 1;
     public static final int SERVICE_FIELD_NUMBER = 1;
     private boolean hasService;
     private java.lang.String service_ = "";
-    public boolean hasService() { return hasService; }
-    public java.lang.String getService() { return service_; }
-    
+
+    public boolean hasService() {
+      return hasService;
+    }
+
+    public java.lang.String getService() {
+      return service_;
+    }
+
     // required uint32 commandID = 2;
     public static final int COMMANDID_FIELD_NUMBER = 2;
     private boolean hasCommandID;
     private int commandID_ = 0;
-    public boolean hasCommandID() { return hasCommandID; }
-    public int getCommandID() { return commandID_; }
-    
+
+    public boolean hasCommandID() {
+      return hasCommandID;
+    }
+
+    public int getCommandID() {
+      return commandID_;
+    }
+
     // required uint32 format = 3;
     public static final int FORMAT_FIELD_NUMBER = 3;
     private boolean hasFormat;
     private int format_ = 0;
-    public boolean hasFormat() { return hasFormat; }
-    public int getFormat() { return format_; }
-    
+
+    public boolean hasFormat() {
+      return hasFormat;
+    }
+
+    public int getFormat() {
+      return format_;
+    }
+
     // required uint32 tag = 5;
     public static final int TAG_FIELD_NUMBER = 5;
     private boolean hasTag;
     private int tag_ = 0;
-    public boolean hasTag() { return hasTag; }
-    public int getTag() { return tag_; }
-    
+
+    public boolean hasTag() {
+      return hasTag;
+    }
+
+    public int getTag() {
+      return tag_;
+    }
+
     // required bytes payload = 8;
     public static final int PAYLOAD_FIELD_NUMBER = 8;
     private boolean hasPayload;
     private com.google.protobuf.ByteString payload_ = com.google.protobuf.ByteString.EMPTY;
-    public boolean hasPayload() { return hasPayload; }
-    public com.google.protobuf.ByteString getPayload() { return payload_; }
-    
+
+    public boolean hasPayload() {
+      return hasPayload;
+    }
+
+    public com.google.protobuf.ByteString getPayload() {
+      return payload_;
+    }
+
     private void initFields() {
     }
+
     public final boolean isInitialized() {
       if (!hasService) return false;
       if (!hasCommandID) return false;
@@ -1020,9 +1178,9 @@ public final class UmsProtos {
       if (!hasPayload) return false;
       return true;
     }
-    
+
     public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
+        throws java.io.IOException {
       getSerializedSize();
       if (hasService()) {
         output.writeString(1, getService());
@@ -1041,74 +1199,77 @@ public final class UmsProtos {
       }
       getUnknownFields().writeTo(output);
     }
-    
+
     private int memoizedSerializedSize = -1;
+
     public int getSerializedSize() {
       int size = memoizedSerializedSize;
       if (size != -1) return size;
-    
+
       size = 0;
       if (hasService()) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeStringSize(1, getService());
+        size += com.google.protobuf.CodedOutputStream.computeStringSize(1,
+            getService());
       }
       if (hasCommandID()) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeUInt32Size(2, getCommandID());
+        size += com.google.protobuf.CodedOutputStream.computeUInt32Size(2,
+            getCommandID());
       }
       if (hasFormat()) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeUInt32Size(3, getFormat());
+        size += com.google.protobuf.CodedOutputStream.computeUInt32Size(3,
+            getFormat());
       }
       if (hasTag()) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeUInt32Size(5, getTag());
+        size += com.google.protobuf.CodedOutputStream.computeUInt32Size(5,
+            getTag());
       }
       if (hasPayload()) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(8, getPayload());
+        size += com.google.protobuf.CodedOutputStream.computeBytesSize(8,
+            getPayload());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
       return size;
     }
-    
+
     public static com.opera.core.systems.scope.protos.UmsProtos.Response parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.UmsProtos.Response parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+      return newBuilder().mergeFrom(data, extensionRegistry).buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.UmsProtos.Response parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+
+    public static com.opera.core.systems.scope.protos.UmsProtos.Response parseFrom(
+        byte[] data) throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.UmsProtos.Response parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+      return newBuilder().mergeFrom(data, extensionRegistry).buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.UmsProtos.Response parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
+
+    public static com.opera.core.systems.scope.protos.UmsProtos.Response parseFrom(
+        java.io.InputStream input) throws java.io.IOException {
       return newBuilder().mergeFrom(input).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.UmsProtos.Response parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+      return newBuilder().mergeFrom(input, extensionRegistry).buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.UmsProtos.Response parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
+
+    public static com.opera.core.systems.scope.protos.UmsProtos.Response parseDelimitedFrom(
+        java.io.InputStream input) throws java.io.IOException {
       Builder builder = newBuilder();
       if (builder.mergeDelimitedFrom(input)) {
         return builder.buildParsed();
@@ -1116,6 +1277,7 @@ public final class UmsProtos {
         return null;
       }
     }
+
     public static com.opera.core.systems.scope.protos.UmsProtos.Response parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -1127,104 +1289,115 @@ public final class UmsProtos {
         return null;
       }
     }
+
     public static com.opera.core.systems.scope.protos.UmsProtos.Response parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
+        com.google.protobuf.CodedInputStream input) throws java.io.IOException {
       return newBuilder().mergeFrom(input).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.UmsProtos.Response parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+      return newBuilder().mergeFrom(input, extensionRegistry).buildParsed();
     }
-    
-    public static Builder newBuilder() { return Builder.create(); }
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(com.opera.core.systems.scope.protos.UmsProtos.Response prototype) {
+
+    public static Builder newBuilder() {
+      return Builder.create();
+    }
+
+    public Builder newBuilderForType() {
+      return newBuilder();
+    }
+
+    public static Builder newBuilder(
+        com.opera.core.systems.scope.protos.UmsProtos.Response prototype) {
       return newBuilder().mergeFrom(prototype);
     }
-    public Builder toBuilder() { return newBuilder(this); }
-    
+
+    public Builder toBuilder() {
+      return newBuilder(this);
+    }
+
     public static final class Builder extends
         com.google.protobuf.GeneratedMessage.Builder<Builder> {
       private com.opera.core.systems.scope.protos.UmsProtos.Response result;
-      
-      // Construct using com.opera.core.systems.scope.protos.UmsProtos.Response.newBuilder()
-      private Builder() {}
-      
+
+      // Construct using
+      // com.opera.core.systems.scope.protos.UmsProtos.Response.newBuilder()
+      private Builder() {
+      }
+
       private static Builder create() {
         Builder builder = new Builder();
         builder.result = new com.opera.core.systems.scope.protos.UmsProtos.Response();
         return builder;
       }
-      
+
       protected com.opera.core.systems.scope.protos.UmsProtos.Response internalGetResult() {
         return result;
       }
-      
+
       public Builder clear() {
         if (result == null) {
-          throw new IllegalStateException(
-            "Cannot call clear() after build().");
+          throw new IllegalStateException("Cannot call clear() after build().");
         }
         result = new com.opera.core.systems.scope.protos.UmsProtos.Response();
         return this;
       }
-      
+
       public Builder clone() {
         return create().mergeFrom(result);
       }
-      
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
+
+      public com.google.protobuf.Descriptors.Descriptor getDescriptorForType() {
         return com.opera.core.systems.scope.protos.UmsProtos.Response.getDescriptor();
       }
-      
+
       public com.opera.core.systems.scope.protos.UmsProtos.Response getDefaultInstanceForType() {
         return com.opera.core.systems.scope.protos.UmsProtos.Response.getDefaultInstance();
       }
-      
+
       public boolean isInitialized() {
         return result.isInitialized();
       }
+
       public com.opera.core.systems.scope.protos.UmsProtos.Response build() {
         if (result != null && !isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return buildPartial();
       }
-      
+
       private com.opera.core.systems.scope.protos.UmsProtos.Response buildParsed()
           throws com.google.protobuf.InvalidProtocolBufferException {
         if (!isInitialized()) {
-          throw newUninitializedMessageException(
-            result).asInvalidProtocolBufferException();
+          throw newUninitializedMessageException(result).asInvalidProtocolBufferException();
         }
         return buildPartial();
       }
-      
+
       public com.opera.core.systems.scope.protos.UmsProtos.Response buildPartial() {
         if (result == null) {
           throw new IllegalStateException(
-            "build() has already been called on this Builder.");
+              "build() has already been called on this Builder.");
         }
         com.opera.core.systems.scope.protos.UmsProtos.Response returnMe = result;
         result = null;
         return returnMe;
       }
-      
+
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.opera.core.systems.scope.protos.UmsProtos.Response) {
-          return mergeFrom((com.opera.core.systems.scope.protos.UmsProtos.Response)other);
+          return mergeFrom((com.opera.core.systems.scope.protos.UmsProtos.Response) other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
-      
-      public Builder mergeFrom(com.opera.core.systems.scope.protos.UmsProtos.Response other) {
+
+      public Builder mergeFrom(
+          com.opera.core.systems.scope.protos.UmsProtos.Response other) {
         if (other == com.opera.core.systems.scope.protos.UmsProtos.Response.getDefaultInstance()) return this;
         if (other.hasService()) {
           setService(other.getService());
@@ -1244,225 +1417,266 @@ public final class UmsProtos {
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
-      
-      public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
+
+      public Builder mergeFrom(com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder(
-            this.getUnknownFields());
+        com.google.protobuf.UnknownFieldSet.Builder unknownFields = com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
         while (true) {
           int tag = input.readTag();
           switch (tag) {
-            case 0:
+          case 0:
+            this.setUnknownFields(unknownFields.build());
+            return this;
+          default: {
+            if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
               this.setUnknownFields(unknownFields.build());
               return this;
-            default: {
-              if (!parseUnknownField(input, unknownFields,
-                                     extensionRegistry, tag)) {
-                this.setUnknownFields(unknownFields.build());
-                return this;
-              }
-              break;
             }
-            case 10: {
-              setService(input.readString());
-              break;
-            }
-            case 16: {
-              setCommandID(input.readUInt32());
-              break;
-            }
-            case 24: {
-              setFormat(input.readUInt32());
-              break;
-            }
-            case 40: {
-              setTag(input.readUInt32());
-              break;
-            }
-            case 66: {
-              setPayload(input.readBytes());
-              break;
-            }
+            break;
+          }
+          case 10: {
+            setService(input.readString());
+            break;
+          }
+          case 16: {
+            setCommandID(input.readUInt32());
+            break;
+          }
+          case 24: {
+            setFormat(input.readUInt32());
+            break;
+          }
+          case 40: {
+            setTag(input.readUInt32());
+            break;
+          }
+          case 66: {
+            setPayload(input.readBytes());
+            break;
+          }
           }
         }
       }
-      
-      
+
       // required string service = 1;
       public boolean hasService() {
         return result.hasService();
       }
+
       public java.lang.String getService() {
         return result.getService();
       }
+
       public Builder setService(java.lang.String value) {
         if (value == null) {
-    throw new NullPointerException();
-  }
-  result.hasService = true;
+          throw new NullPointerException();
+        }
+        result.hasService = true;
         result.service_ = value;
         return this;
       }
+
       public Builder clearService() {
         result.hasService = false;
         result.service_ = getDefaultInstance().getService();
         return this;
       }
-      
+
       // required uint32 commandID = 2;
       public boolean hasCommandID() {
         return result.hasCommandID();
       }
+
       public int getCommandID() {
         return result.getCommandID();
       }
+
       public Builder setCommandID(int value) {
         result.hasCommandID = true;
         result.commandID_ = value;
         return this;
       }
+
       public Builder clearCommandID() {
         result.hasCommandID = false;
         result.commandID_ = 0;
         return this;
       }
-      
+
       // required uint32 format = 3;
       public boolean hasFormat() {
         return result.hasFormat();
       }
+
       public int getFormat() {
         return result.getFormat();
       }
+
       public Builder setFormat(int value) {
         result.hasFormat = true;
         result.format_ = value;
         return this;
       }
+
       public Builder clearFormat() {
         result.hasFormat = false;
         result.format_ = 0;
         return this;
       }
-      
+
       // required uint32 tag = 5;
       public boolean hasTag() {
         return result.hasTag();
       }
+
       public int getTag() {
         return result.getTag();
       }
+
       public Builder setTag(int value) {
         result.hasTag = true;
         result.tag_ = value;
         return this;
       }
+
       public Builder clearTag() {
         result.hasTag = false;
         result.tag_ = 0;
         return this;
       }
-      
+
       // required bytes payload = 8;
       public boolean hasPayload() {
         return result.hasPayload();
       }
+
       public com.google.protobuf.ByteString getPayload() {
         return result.getPayload();
       }
+
       public Builder setPayload(com.google.protobuf.ByteString value) {
         if (value == null) {
-    throw new NullPointerException();
-  }
-  result.hasPayload = true;
+          throw new NullPointerException();
+        }
+        result.hasPayload = true;
         result.payload_ = value;
         return this;
       }
+
       public Builder clearPayload() {
         result.hasPayload = false;
         result.payload_ = getDefaultInstance().getPayload();
         return this;
       }
-      
+
       // @@protoc_insertion_point(builder_scope:scope.Response)
     }
-    
+
     static {
       defaultInstance = new Response(true);
       com.opera.core.systems.scope.protos.UmsProtos.internalForceInit();
       defaultInstance.initFields();
     }
-    
+
     // @@protoc_insertion_point(class_scope:scope.Response)
   }
-  
-  public static final class Event extends
-      com.google.protobuf.GeneratedMessage {
+
+  public static final class Event extends com.google.protobuf.GeneratedMessage {
     // Use Event.newBuilder() to construct.
     private Event() {
       initFields();
     }
-    private Event(boolean noInit) {}
-    
+
+    private Event(boolean noInit) {
+    }
+
     private static final Event defaultInstance;
+
     public static Event getDefaultInstance() {
       return defaultInstance;
     }
-    
+
     public Event getDefaultInstanceForType() {
       return defaultInstance;
     }
-    
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
+
+    public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
       return com.opera.core.systems.scope.protos.UmsProtos.internal_static_scope_Event_descriptor;
     }
-    
-    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-        internalGetFieldAccessorTable() {
+
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable internalGetFieldAccessorTable() {
       return com.opera.core.systems.scope.protos.UmsProtos.internal_static_scope_Event_fieldAccessorTable;
     }
-    
+
     // required string service = 1;
     public static final int SERVICE_FIELD_NUMBER = 1;
     private boolean hasService;
     private java.lang.String service_ = "";
-    public boolean hasService() { return hasService; }
-    public java.lang.String getService() { return service_; }
-    
+
+    public boolean hasService() {
+      return hasService;
+    }
+
+    public java.lang.String getService() {
+      return service_;
+    }
+
     // required uint32 commandID = 2;
     public static final int COMMANDID_FIELD_NUMBER = 2;
     private boolean hasCommandID;
     private int commandID_ = 0;
-    public boolean hasCommandID() { return hasCommandID; }
-    public int getCommandID() { return commandID_; }
-    
+
+    public boolean hasCommandID() {
+      return hasCommandID;
+    }
+
+    public int getCommandID() {
+      return commandID_;
+    }
+
     // required uint32 format = 3;
     public static final int FORMAT_FIELD_NUMBER = 3;
     private boolean hasFormat;
     private int format_ = 0;
-    public boolean hasFormat() { return hasFormat; }
-    public int getFormat() { return format_; }
-    
+
+    public boolean hasFormat() {
+      return hasFormat;
+    }
+
+    public int getFormat() {
+      return format_;
+    }
+
     // required bytes payload = 8;
     public static final int PAYLOAD_FIELD_NUMBER = 8;
     private boolean hasPayload;
     private com.google.protobuf.ByteString payload_ = com.google.protobuf.ByteString.EMPTY;
-    public boolean hasPayload() { return hasPayload; }
-    public com.google.protobuf.ByteString getPayload() { return payload_; }
-    
+
+    public boolean hasPayload() {
+      return hasPayload;
+    }
+
+    public com.google.protobuf.ByteString getPayload() {
+      return payload_;
+    }
+
     // optional uint32 clientID = 6;
     public static final int CLIENTID_FIELD_NUMBER = 6;
     private boolean hasClientID;
     private int clientID_ = 0;
-    public boolean hasClientID() { return hasClientID; }
-    public int getClientID() { return clientID_; }
-    
+
+    public boolean hasClientID() {
+      return hasClientID;
+    }
+
+    public int getClientID() {
+      return clientID_;
+    }
+
     private void initFields() {
     }
+
     public final boolean isInitialized() {
       if (!hasService) return false;
       if (!hasCommandID) return false;
@@ -1470,9 +1684,9 @@ public final class UmsProtos {
       if (!hasPayload) return false;
       return true;
     }
-    
+
     public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
+        throws java.io.IOException {
       getSerializedSize();
       if (hasService()) {
         output.writeString(1, getService());
@@ -1491,74 +1705,77 @@ public final class UmsProtos {
       }
       getUnknownFields().writeTo(output);
     }
-    
+
     private int memoizedSerializedSize = -1;
+
     public int getSerializedSize() {
       int size = memoizedSerializedSize;
       if (size != -1) return size;
-    
+
       size = 0;
       if (hasService()) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeStringSize(1, getService());
+        size += com.google.protobuf.CodedOutputStream.computeStringSize(1,
+            getService());
       }
       if (hasCommandID()) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeUInt32Size(2, getCommandID());
+        size += com.google.protobuf.CodedOutputStream.computeUInt32Size(2,
+            getCommandID());
       }
       if (hasFormat()) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeUInt32Size(3, getFormat());
+        size += com.google.protobuf.CodedOutputStream.computeUInt32Size(3,
+            getFormat());
       }
       if (hasClientID()) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeUInt32Size(6, getClientID());
+        size += com.google.protobuf.CodedOutputStream.computeUInt32Size(6,
+            getClientID());
       }
       if (hasPayload()) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(8, getPayload());
+        size += com.google.protobuf.CodedOutputStream.computeBytesSize(8,
+            getPayload());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
       return size;
     }
-    
+
     public static com.opera.core.systems.scope.protos.UmsProtos.Event parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.UmsProtos.Event parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+      return newBuilder().mergeFrom(data, extensionRegistry).buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.UmsProtos.Event parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+
+    public static com.opera.core.systems.scope.protos.UmsProtos.Event parseFrom(
+        byte[] data) throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.UmsProtos.Event parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+      return newBuilder().mergeFrom(data, extensionRegistry).buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.UmsProtos.Event parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
+
+    public static com.opera.core.systems.scope.protos.UmsProtos.Event parseFrom(
+        java.io.InputStream input) throws java.io.IOException {
       return newBuilder().mergeFrom(input).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.UmsProtos.Event parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+      return newBuilder().mergeFrom(input, extensionRegistry).buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.UmsProtos.Event parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
+
+    public static com.opera.core.systems.scope.protos.UmsProtos.Event parseDelimitedFrom(
+        java.io.InputStream input) throws java.io.IOException {
       Builder builder = newBuilder();
       if (builder.mergeDelimitedFrom(input)) {
         return builder.buildParsed();
@@ -1566,6 +1783,7 @@ public final class UmsProtos {
         return null;
       }
     }
+
     public static com.opera.core.systems.scope.protos.UmsProtos.Event parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -1577,104 +1795,115 @@ public final class UmsProtos {
         return null;
       }
     }
+
     public static com.opera.core.systems.scope.protos.UmsProtos.Event parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
+        com.google.protobuf.CodedInputStream input) throws java.io.IOException {
       return newBuilder().mergeFrom(input).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.UmsProtos.Event parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+      return newBuilder().mergeFrom(input, extensionRegistry).buildParsed();
     }
-    
-    public static Builder newBuilder() { return Builder.create(); }
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(com.opera.core.systems.scope.protos.UmsProtos.Event prototype) {
+
+    public static Builder newBuilder() {
+      return Builder.create();
+    }
+
+    public Builder newBuilderForType() {
+      return newBuilder();
+    }
+
+    public static Builder newBuilder(
+        com.opera.core.systems.scope.protos.UmsProtos.Event prototype) {
       return newBuilder().mergeFrom(prototype);
     }
-    public Builder toBuilder() { return newBuilder(this); }
-    
+
+    public Builder toBuilder() {
+      return newBuilder(this);
+    }
+
     public static final class Builder extends
         com.google.protobuf.GeneratedMessage.Builder<Builder> {
       private com.opera.core.systems.scope.protos.UmsProtos.Event result;
-      
-      // Construct using com.opera.core.systems.scope.protos.UmsProtos.Event.newBuilder()
-      private Builder() {}
-      
+
+      // Construct using
+      // com.opera.core.systems.scope.protos.UmsProtos.Event.newBuilder()
+      private Builder() {
+      }
+
       private static Builder create() {
         Builder builder = new Builder();
         builder.result = new com.opera.core.systems.scope.protos.UmsProtos.Event();
         return builder;
       }
-      
+
       protected com.opera.core.systems.scope.protos.UmsProtos.Event internalGetResult() {
         return result;
       }
-      
+
       public Builder clear() {
         if (result == null) {
-          throw new IllegalStateException(
-            "Cannot call clear() after build().");
+          throw new IllegalStateException("Cannot call clear() after build().");
         }
         result = new com.opera.core.systems.scope.protos.UmsProtos.Event();
         return this;
       }
-      
+
       public Builder clone() {
         return create().mergeFrom(result);
       }
-      
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
+
+      public com.google.protobuf.Descriptors.Descriptor getDescriptorForType() {
         return com.opera.core.systems.scope.protos.UmsProtos.Event.getDescriptor();
       }
-      
+
       public com.opera.core.systems.scope.protos.UmsProtos.Event getDefaultInstanceForType() {
         return com.opera.core.systems.scope.protos.UmsProtos.Event.getDefaultInstance();
       }
-      
+
       public boolean isInitialized() {
         return result.isInitialized();
       }
+
       public com.opera.core.systems.scope.protos.UmsProtos.Event build() {
         if (result != null && !isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return buildPartial();
       }
-      
+
       private com.opera.core.systems.scope.protos.UmsProtos.Event buildParsed()
           throws com.google.protobuf.InvalidProtocolBufferException {
         if (!isInitialized()) {
-          throw newUninitializedMessageException(
-            result).asInvalidProtocolBufferException();
+          throw newUninitializedMessageException(result).asInvalidProtocolBufferException();
         }
         return buildPartial();
       }
-      
+
       public com.opera.core.systems.scope.protos.UmsProtos.Event buildPartial() {
         if (result == null) {
           throw new IllegalStateException(
-            "build() has already been called on this Builder.");
+              "build() has already been called on this Builder.");
         }
         com.opera.core.systems.scope.protos.UmsProtos.Event returnMe = result;
         result = null;
         return returnMe;
       }
-      
+
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.opera.core.systems.scope.protos.UmsProtos.Event) {
-          return mergeFrom((com.opera.core.systems.scope.protos.UmsProtos.Event)other);
+          return mergeFrom((com.opera.core.systems.scope.protos.UmsProtos.Event) other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
-      
-      public Builder mergeFrom(com.opera.core.systems.scope.protos.UmsProtos.Event other) {
+
+      public Builder mergeFrom(
+          com.opera.core.systems.scope.protos.UmsProtos.Event other) {
         if (other == com.opera.core.systems.scope.protos.UmsProtos.Event.getDefaultInstance()) return this;
         if (other.hasService()) {
           setService(other.getService());
@@ -1694,248 +1923,301 @@ public final class UmsProtos {
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
-      
-      public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
+
+      public Builder mergeFrom(com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder(
-            this.getUnknownFields());
+        com.google.protobuf.UnknownFieldSet.Builder unknownFields = com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
         while (true) {
           int tag = input.readTag();
           switch (tag) {
-            case 0:
+          case 0:
+            this.setUnknownFields(unknownFields.build());
+            return this;
+          default: {
+            if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
               this.setUnknownFields(unknownFields.build());
               return this;
-            default: {
-              if (!parseUnknownField(input, unknownFields,
-                                     extensionRegistry, tag)) {
-                this.setUnknownFields(unknownFields.build());
-                return this;
-              }
-              break;
             }
-            case 10: {
-              setService(input.readString());
-              break;
-            }
-            case 16: {
-              setCommandID(input.readUInt32());
-              break;
-            }
-            case 24: {
-              setFormat(input.readUInt32());
-              break;
-            }
-            case 48: {
-              setClientID(input.readUInt32());
-              break;
-            }
-            case 66: {
-              setPayload(input.readBytes());
-              break;
-            }
+            break;
+          }
+          case 10: {
+            setService(input.readString());
+            break;
+          }
+          case 16: {
+            setCommandID(input.readUInt32());
+            break;
+          }
+          case 24: {
+            setFormat(input.readUInt32());
+            break;
+          }
+          case 48: {
+            setClientID(input.readUInt32());
+            break;
+          }
+          case 66: {
+            setPayload(input.readBytes());
+            break;
+          }
           }
         }
       }
-      
-      
+
       // required string service = 1;
       public boolean hasService() {
         return result.hasService();
       }
+
       public java.lang.String getService() {
         return result.getService();
       }
+
       public Builder setService(java.lang.String value) {
         if (value == null) {
-    throw new NullPointerException();
-  }
-  result.hasService = true;
+          throw new NullPointerException();
+        }
+        result.hasService = true;
         result.service_ = value;
         return this;
       }
+
       public Builder clearService() {
         result.hasService = false;
         result.service_ = getDefaultInstance().getService();
         return this;
       }
-      
+
       // required uint32 commandID = 2;
       public boolean hasCommandID() {
         return result.hasCommandID();
       }
+
       public int getCommandID() {
         return result.getCommandID();
       }
+
       public Builder setCommandID(int value) {
         result.hasCommandID = true;
         result.commandID_ = value;
         return this;
       }
+
       public Builder clearCommandID() {
         result.hasCommandID = false;
         result.commandID_ = 0;
         return this;
       }
-      
+
       // required uint32 format = 3;
       public boolean hasFormat() {
         return result.hasFormat();
       }
+
       public int getFormat() {
         return result.getFormat();
       }
+
       public Builder setFormat(int value) {
         result.hasFormat = true;
         result.format_ = value;
         return this;
       }
+
       public Builder clearFormat() {
         result.hasFormat = false;
         result.format_ = 0;
         return this;
       }
-      
+
       // required bytes payload = 8;
       public boolean hasPayload() {
         return result.hasPayload();
       }
+
       public com.google.protobuf.ByteString getPayload() {
         return result.getPayload();
       }
+
       public Builder setPayload(com.google.protobuf.ByteString value) {
         if (value == null) {
-    throw new NullPointerException();
-  }
-  result.hasPayload = true;
+          throw new NullPointerException();
+        }
+        result.hasPayload = true;
         result.payload_ = value;
         return this;
       }
+
       public Builder clearPayload() {
         result.hasPayload = false;
         result.payload_ = getDefaultInstance().getPayload();
         return this;
       }
-      
+
       // optional uint32 clientID = 6;
       public boolean hasClientID() {
         return result.hasClientID();
       }
+
       public int getClientID() {
         return result.getClientID();
       }
+
       public Builder setClientID(int value) {
         result.hasClientID = true;
         result.clientID_ = value;
         return this;
       }
+
       public Builder clearClientID() {
         result.hasClientID = false;
         result.clientID_ = 0;
         return this;
       }
-      
+
       // @@protoc_insertion_point(builder_scope:scope.Event)
     }
-    
+
     static {
       defaultInstance = new Event(true);
       com.opera.core.systems.scope.protos.UmsProtos.internalForceInit();
       defaultInstance.initFields();
     }
-    
+
     // @@protoc_insertion_point(class_scope:scope.Event)
   }
-  
-  public static final class Error extends
-      com.google.protobuf.GeneratedMessage {
+
+  public static final class Error extends com.google.protobuf.GeneratedMessage {
     // Use Error.newBuilder() to construct.
     private Error() {
       initFields();
     }
-    private Error(boolean noInit) {}
-    
+
+    private Error(boolean noInit) {
+    }
+
     private static final Error defaultInstance;
+
     public static Error getDefaultInstance() {
       return defaultInstance;
     }
-    
+
     public Error getDefaultInstanceForType() {
       return defaultInstance;
     }
-    
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
+
+    public static final com.google.protobuf.Descriptors.Descriptor getDescriptor() {
       return com.opera.core.systems.scope.protos.UmsProtos.internal_static_scope_Error_descriptor;
     }
-    
-    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-        internalGetFieldAccessorTable() {
+
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable internalGetFieldAccessorTable() {
       return com.opera.core.systems.scope.protos.UmsProtos.internal_static_scope_Error_fieldAccessorTable;
     }
-    
+
     // required string service = 1;
     public static final int SERVICE_FIELD_NUMBER = 1;
     private boolean hasService;
     private java.lang.String service_ = "";
-    public boolean hasService() { return hasService; }
-    public java.lang.String getService() { return service_; }
-    
+
+    public boolean hasService() {
+      return hasService;
+    }
+
+    public java.lang.String getService() {
+      return service_;
+    }
+
     // required uint32 commandID = 2;
     public static final int COMMANDID_FIELD_NUMBER = 2;
     private boolean hasCommandID;
     private int commandID_ = 0;
-    public boolean hasCommandID() { return hasCommandID; }
-    public int getCommandID() { return commandID_; }
-    
+
+    public boolean hasCommandID() {
+      return hasCommandID;
+    }
+
+    public int getCommandID() {
+      return commandID_;
+    }
+
     // required uint32 format = 3;
     public static final int FORMAT_FIELD_NUMBER = 3;
     private boolean hasFormat;
     private int format_ = 0;
-    public boolean hasFormat() { return hasFormat; }
-    public int getFormat() { return format_; }
-    
+
+    public boolean hasFormat() {
+      return hasFormat;
+    }
+
+    public int getFormat() {
+      return format_;
+    }
+
     // optional uint32 status = 4;
     public static final int STATUS_FIELD_NUMBER = 4;
     private boolean hasStatus;
     private int status_ = 0;
-    public boolean hasStatus() { return hasStatus; }
-    public int getStatus() { return status_; }
-    
+
+    public boolean hasStatus() {
+      return hasStatus;
+    }
+
+    public int getStatus() {
+      return status_;
+    }
+
     // optional uint32 tag = 5;
     public static final int TAG_FIELD_NUMBER = 5;
     private boolean hasTag;
     private int tag_ = 0;
-    public boolean hasTag() { return hasTag; }
-    public int getTag() { return tag_; }
-    
+
+    public boolean hasTag() {
+      return hasTag;
+    }
+
+    public int getTag() {
+      return tag_;
+    }
+
     // optional uint32 clientID = 6;
     public static final int CLIENTID_FIELD_NUMBER = 6;
     private boolean hasClientID;
     private int clientID_ = 0;
-    public boolean hasClientID() { return hasClientID; }
-    public int getClientID() { return clientID_; }
-    
+
+    public boolean hasClientID() {
+      return hasClientID;
+    }
+
+    public int getClientID() {
+      return clientID_;
+    }
+
     // optional string uuid = 7;
     public static final int UUID_FIELD_NUMBER = 7;
     private boolean hasUuid;
     private java.lang.String uuid_ = "";
-    public boolean hasUuid() { return hasUuid; }
-    public java.lang.String getUuid() { return uuid_; }
-    
+
+    public boolean hasUuid() {
+      return hasUuid;
+    }
+
+    public java.lang.String getUuid() {
+      return uuid_;
+    }
+
     private void initFields() {
     }
+
     public final boolean isInitialized() {
       if (!hasService) return false;
       if (!hasCommandID) return false;
       if (!hasFormat) return false;
       return true;
     }
-    
+
     public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
+        throws java.io.IOException {
       getSerializedSize();
       if (hasService()) {
         output.writeString(1, getService());
@@ -1960,82 +2242,85 @@ public final class UmsProtos {
       }
       getUnknownFields().writeTo(output);
     }
-    
+
     private int memoizedSerializedSize = -1;
+
     public int getSerializedSize() {
       int size = memoizedSerializedSize;
       if (size != -1) return size;
-    
+
       size = 0;
       if (hasService()) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeStringSize(1, getService());
+        size += com.google.protobuf.CodedOutputStream.computeStringSize(1,
+            getService());
       }
       if (hasCommandID()) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeUInt32Size(2, getCommandID());
+        size += com.google.protobuf.CodedOutputStream.computeUInt32Size(2,
+            getCommandID());
       }
       if (hasFormat()) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeUInt32Size(3, getFormat());
+        size += com.google.protobuf.CodedOutputStream.computeUInt32Size(3,
+            getFormat());
       }
       if (hasStatus()) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeUInt32Size(4, getStatus());
+        size += com.google.protobuf.CodedOutputStream.computeUInt32Size(4,
+            getStatus());
       }
       if (hasTag()) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeUInt32Size(5, getTag());
+        size += com.google.protobuf.CodedOutputStream.computeUInt32Size(5,
+            getTag());
       }
       if (hasClientID()) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeUInt32Size(6, getClientID());
+        size += com.google.protobuf.CodedOutputStream.computeUInt32Size(6,
+            getClientID());
       }
       if (hasUuid()) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeStringSize(7, getUuid());
+        size += com.google.protobuf.CodedOutputStream.computeStringSize(7,
+            getUuid());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
       return size;
     }
-    
+
     public static com.opera.core.systems.scope.protos.UmsProtos.Error parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.UmsProtos.Error parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+      return newBuilder().mergeFrom(data, extensionRegistry).buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.UmsProtos.Error parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+
+    public static com.opera.core.systems.scope.protos.UmsProtos.Error parseFrom(
+        byte[] data) throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.UmsProtos.Error parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        byte[] data, com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+      return newBuilder().mergeFrom(data, extensionRegistry).buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.UmsProtos.Error parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
+
+    public static com.opera.core.systems.scope.protos.UmsProtos.Error parseFrom(
+        java.io.InputStream input) throws java.io.IOException {
       return newBuilder().mergeFrom(input).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.UmsProtos.Error parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+      return newBuilder().mergeFrom(input, extensionRegistry).buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.UmsProtos.Error parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
+
+    public static com.opera.core.systems.scope.protos.UmsProtos.Error parseDelimitedFrom(
+        java.io.InputStream input) throws java.io.IOException {
       Builder builder = newBuilder();
       if (builder.mergeDelimitedFrom(input)) {
         return builder.buildParsed();
@@ -2043,6 +2328,7 @@ public final class UmsProtos {
         return null;
       }
     }
+
     public static com.opera.core.systems.scope.protos.UmsProtos.Error parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -2054,104 +2340,115 @@ public final class UmsProtos {
         return null;
       }
     }
+
     public static com.opera.core.systems.scope.protos.UmsProtos.Error parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
+        com.google.protobuf.CodedInputStream input) throws java.io.IOException {
       return newBuilder().mergeFrom(input).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.UmsProtos.Error parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+      return newBuilder().mergeFrom(input, extensionRegistry).buildParsed();
     }
-    
-    public static Builder newBuilder() { return Builder.create(); }
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(com.opera.core.systems.scope.protos.UmsProtos.Error prototype) {
+
+    public static Builder newBuilder() {
+      return Builder.create();
+    }
+
+    public Builder newBuilderForType() {
+      return newBuilder();
+    }
+
+    public static Builder newBuilder(
+        com.opera.core.systems.scope.protos.UmsProtos.Error prototype) {
       return newBuilder().mergeFrom(prototype);
     }
-    public Builder toBuilder() { return newBuilder(this); }
-    
+
+    public Builder toBuilder() {
+      return newBuilder(this);
+    }
+
     public static final class Builder extends
         com.google.protobuf.GeneratedMessage.Builder<Builder> {
       private com.opera.core.systems.scope.protos.UmsProtos.Error result;
-      
-      // Construct using com.opera.core.systems.scope.protos.UmsProtos.Error.newBuilder()
-      private Builder() {}
-      
+
+      // Construct using
+      // com.opera.core.systems.scope.protos.UmsProtos.Error.newBuilder()
+      private Builder() {
+      }
+
       private static Builder create() {
         Builder builder = new Builder();
         builder.result = new com.opera.core.systems.scope.protos.UmsProtos.Error();
         return builder;
       }
-      
+
       protected com.opera.core.systems.scope.protos.UmsProtos.Error internalGetResult() {
         return result;
       }
-      
+
       public Builder clear() {
         if (result == null) {
-          throw new IllegalStateException(
-            "Cannot call clear() after build().");
+          throw new IllegalStateException("Cannot call clear() after build().");
         }
         result = new com.opera.core.systems.scope.protos.UmsProtos.Error();
         return this;
       }
-      
+
       public Builder clone() {
         return create().mergeFrom(result);
       }
-      
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
+
+      public com.google.protobuf.Descriptors.Descriptor getDescriptorForType() {
         return com.opera.core.systems.scope.protos.UmsProtos.Error.getDescriptor();
       }
-      
+
       public com.opera.core.systems.scope.protos.UmsProtos.Error getDefaultInstanceForType() {
         return com.opera.core.systems.scope.protos.UmsProtos.Error.getDefaultInstance();
       }
-      
+
       public boolean isInitialized() {
         return result.isInitialized();
       }
+
       public com.opera.core.systems.scope.protos.UmsProtos.Error build() {
         if (result != null && !isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return buildPartial();
       }
-      
+
       private com.opera.core.systems.scope.protos.UmsProtos.Error buildParsed()
           throws com.google.protobuf.InvalidProtocolBufferException {
         if (!isInitialized()) {
-          throw newUninitializedMessageException(
-            result).asInvalidProtocolBufferException();
+          throw newUninitializedMessageException(result).asInvalidProtocolBufferException();
         }
         return buildPartial();
       }
-      
+
       public com.opera.core.systems.scope.protos.UmsProtos.Error buildPartial() {
         if (result == null) {
           throw new IllegalStateException(
-            "build() has already been called on this Builder.");
+              "build() has already been called on this Builder.");
         }
         com.opera.core.systems.scope.protos.UmsProtos.Error returnMe = result;
         result = null;
         return returnMe;
       }
-      
+
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.opera.core.systems.scope.protos.UmsProtos.Error) {
-          return mergeFrom((com.opera.core.systems.scope.protos.UmsProtos.Error)other);
+          return mergeFrom((com.opera.core.systems.scope.protos.UmsProtos.Error) other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
-      
-      public Builder mergeFrom(com.opera.core.systems.scope.protos.UmsProtos.Error other) {
+
+      public Builder mergeFrom(
+          com.opera.core.systems.scope.protos.UmsProtos.Error other) {
         if (other == com.opera.core.systems.scope.protos.UmsProtos.Error.getDefaultInstance()) return this;
         if (other.hasService()) {
           setService(other.getService());
@@ -2177,310 +2474,306 @@ public final class UmsProtos {
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
-      
-      public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
+
+      public Builder mergeFrom(com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder(
-            this.getUnknownFields());
+        com.google.protobuf.UnknownFieldSet.Builder unknownFields = com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
         while (true) {
           int tag = input.readTag();
           switch (tag) {
-            case 0:
+          case 0:
+            this.setUnknownFields(unknownFields.build());
+            return this;
+          default: {
+            if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
               this.setUnknownFields(unknownFields.build());
               return this;
-            default: {
-              if (!parseUnknownField(input, unknownFields,
-                                     extensionRegistry, tag)) {
-                this.setUnknownFields(unknownFields.build());
-                return this;
-              }
-              break;
             }
-            case 10: {
-              setService(input.readString());
-              break;
-            }
-            case 16: {
-              setCommandID(input.readUInt32());
-              break;
-            }
-            case 24: {
-              setFormat(input.readUInt32());
-              break;
-            }
-            case 32: {
-              setStatus(input.readUInt32());
-              break;
-            }
-            case 40: {
-              setTag(input.readUInt32());
-              break;
-            }
-            case 48: {
-              setClientID(input.readUInt32());
-              break;
-            }
-            case 58: {
-              setUuid(input.readString());
-              break;
-            }
+            break;
+          }
+          case 10: {
+            setService(input.readString());
+            break;
+          }
+          case 16: {
+            setCommandID(input.readUInt32());
+            break;
+          }
+          case 24: {
+            setFormat(input.readUInt32());
+            break;
+          }
+          case 32: {
+            setStatus(input.readUInt32());
+            break;
+          }
+          case 40: {
+            setTag(input.readUInt32());
+            break;
+          }
+          case 48: {
+            setClientID(input.readUInt32());
+            break;
+          }
+          case 58: {
+            setUuid(input.readString());
+            break;
+          }
           }
         }
       }
-      
-      
+
       // required string service = 1;
       public boolean hasService() {
         return result.hasService();
       }
+
       public java.lang.String getService() {
         return result.getService();
       }
+
       public Builder setService(java.lang.String value) {
         if (value == null) {
-    throw new NullPointerException();
-  }
-  result.hasService = true;
+          throw new NullPointerException();
+        }
+        result.hasService = true;
         result.service_ = value;
         return this;
       }
+
       public Builder clearService() {
         result.hasService = false;
         result.service_ = getDefaultInstance().getService();
         return this;
       }
-      
+
       // required uint32 commandID = 2;
       public boolean hasCommandID() {
         return result.hasCommandID();
       }
+
       public int getCommandID() {
         return result.getCommandID();
       }
+
       public Builder setCommandID(int value) {
         result.hasCommandID = true;
         result.commandID_ = value;
         return this;
       }
+
       public Builder clearCommandID() {
         result.hasCommandID = false;
         result.commandID_ = 0;
         return this;
       }
-      
+
       // required uint32 format = 3;
       public boolean hasFormat() {
         return result.hasFormat();
       }
+
       public int getFormat() {
         return result.getFormat();
       }
+
       public Builder setFormat(int value) {
         result.hasFormat = true;
         result.format_ = value;
         return this;
       }
+
       public Builder clearFormat() {
         result.hasFormat = false;
         result.format_ = 0;
         return this;
       }
-      
+
       // optional uint32 status = 4;
       public boolean hasStatus() {
         return result.hasStatus();
       }
+
       public int getStatus() {
         return result.getStatus();
       }
+
       public Builder setStatus(int value) {
         result.hasStatus = true;
         result.status_ = value;
         return this;
       }
+
       public Builder clearStatus() {
         result.hasStatus = false;
         result.status_ = 0;
         return this;
       }
-      
+
       // optional uint32 tag = 5;
       public boolean hasTag() {
         return result.hasTag();
       }
+
       public int getTag() {
         return result.getTag();
       }
+
       public Builder setTag(int value) {
         result.hasTag = true;
         result.tag_ = value;
         return this;
       }
+
       public Builder clearTag() {
         result.hasTag = false;
         result.tag_ = 0;
         return this;
       }
-      
+
       // optional uint32 clientID = 6;
       public boolean hasClientID() {
         return result.hasClientID();
       }
+
       public int getClientID() {
         return result.getClientID();
       }
+
       public Builder setClientID(int value) {
         result.hasClientID = true;
         result.clientID_ = value;
         return this;
       }
+
       public Builder clearClientID() {
         result.hasClientID = false;
         result.clientID_ = 0;
         return this;
       }
-      
+
       // optional string uuid = 7;
       public boolean hasUuid() {
         return result.hasUuid();
       }
+
       public java.lang.String getUuid() {
         return result.getUuid();
       }
+
       public Builder setUuid(java.lang.String value) {
         if (value == null) {
-    throw new NullPointerException();
-  }
-  result.hasUuid = true;
+          throw new NullPointerException();
+        }
+        result.hasUuid = true;
         result.uuid_ = value;
         return this;
       }
+
       public Builder clearUuid() {
         result.hasUuid = false;
         result.uuid_ = getDefaultInstance().getUuid();
         return this;
       }
-      
+
       // @@protoc_insertion_point(builder_scope:scope.Error)
     }
-    
+
     static {
       defaultInstance = new Error(true);
       com.opera.core.systems.scope.protos.UmsProtos.internalForceInit();
       defaultInstance.initFields();
     }
-    
+
     // @@protoc_insertion_point(class_scope:scope.Error)
   }
-  
-  private static com.google.protobuf.Descriptors.Descriptor
-    internal_static_scope_TransportMessage_descriptor;
-  private static
-    com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_scope_TransportMessage_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
-    internal_static_scope_Command_descriptor;
-  private static
-    com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_scope_Command_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
-    internal_static_scope_Response_descriptor;
-  private static
-    com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_scope_Response_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
-    internal_static_scope_Event_descriptor;
-  private static
-    com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_scope_Event_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
-    internal_static_scope_Error_descriptor;
-  private static
-    com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_scope_Error_fieldAccessorTable;
-  
-  public static com.google.protobuf.Descriptors.FileDescriptor
-      getDescriptor() {
+
+  private static com.google.protobuf.Descriptors.Descriptor internal_static_scope_TransportMessage_descriptor;
+  private static com.google.protobuf.GeneratedMessage.FieldAccessorTable internal_static_scope_TransportMessage_fieldAccessorTable;
+  private static com.google.protobuf.Descriptors.Descriptor internal_static_scope_Command_descriptor;
+  private static com.google.protobuf.GeneratedMessage.FieldAccessorTable internal_static_scope_Command_fieldAccessorTable;
+  private static com.google.protobuf.Descriptors.Descriptor internal_static_scope_Response_descriptor;
+  private static com.google.protobuf.GeneratedMessage.FieldAccessorTable internal_static_scope_Response_fieldAccessorTable;
+  private static com.google.protobuf.Descriptors.Descriptor internal_static_scope_Event_descriptor;
+  private static com.google.protobuf.GeneratedMessage.FieldAccessorTable internal_static_scope_Event_fieldAccessorTable;
+  private static com.google.protobuf.Descriptors.Descriptor internal_static_scope_Error_descriptor;
+  private static com.google.protobuf.GeneratedMessage.FieldAccessorTable internal_static_scope_Error_fieldAccessorTable;
+
+  public static com.google.protobuf.Descriptors.FileDescriptor getDescriptor() {
     return descriptor;
   }
-  private static com.google.protobuf.Descriptors.FileDescriptor
-      descriptor;
+
+  private static com.google.protobuf.Descriptors.FileDescriptor descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\017UmsProtos.proto\022\005scope\"t\n\020TransportMes" +
-      "sage\022\017\n\007service\030\001 \002(\t\022\021\n\tcommandID\030\002 \002(\r" +
-      "\022\016\n\006format\030\003 \002(\r\022\016\n\006status\030\004 \001(\r\022\013\n\003tag\030" +
-      "\005 \001(\r\022\017\n\007payload\030\010 \002(\014\"[\n\007Command\022\017\n\007ser" +
-      "vice\030\001 \002(\t\022\021\n\tcommandID\030\002 \002(\r\022\016\n\006format\030" +
-      "\003 \002(\r\022\013\n\003tag\030\005 \002(\r\022\017\n\007payload\030\010 \002(\014\"\\\n\010R" +
-      "esponse\022\017\n\007service\030\001 \002(\t\022\021\n\tcommandID\030\002 " +
-      "\002(\r\022\016\n\006format\030\003 \002(\r\022\013\n\003tag\030\005 \002(\r\022\017\n\007payl" +
-      "oad\030\010 \002(\014\"^\n\005Event\022\017\n\007service\030\001 \002(\t\022\021\n\tc" +
-      "ommandID\030\002 \002(\r\022\016\n\006format\030\003 \002(\r\022\017\n\007payloa",
-      "d\030\010 \002(\014\022\020\n\010clientID\030\006 \001(\r\"x\n\005Error\022\017\n\007se" +
-      "rvice\030\001 \002(\t\022\021\n\tcommandID\030\002 \002(\r\022\016\n\006format" +
-      "\030\003 \002(\r\022\016\n\006status\030\004 \001(\r\022\013\n\003tag\030\005 \001(\r\022\020\n\010c" +
-      "lientID\030\006 \001(\r\022\014\n\004uuid\030\007 \001(\tB0\n#com.opera" +
-      ".core.systems.scope.protosB\tUmsProtos"
+        "\n\017UmsProtos.proto\022\005scope\"t\n\020TransportMes"
+            + "sage\022\017\n\007service\030\001 \002(\t\022\021\n\tcommandID\030\002 \002(\r"
+            + "\022\016\n\006format\030\003 \002(\r\022\016\n\006status\030\004 \001(\r\022\013\n\003tag\030"
+            + "\005 \001(\r\022\017\n\007payload\030\010 \002(\014\"[\n\007Command\022\017\n\007ser"
+            + "vice\030\001 \002(\t\022\021\n\tcommandID\030\002 \002(\r\022\016\n\006format\030"
+            + "\003 \002(\r\022\013\n\003tag\030\005 \002(\r\022\017\n\007payload\030\010 \002(\014\"\\\n\010R"
+            + "esponse\022\017\n\007service\030\001 \002(\t\022\021\n\tcommandID\030\002 "
+            + "\002(\r\022\016\n\006format\030\003 \002(\r\022\013\n\003tag\030\005 \002(\r\022\017\n\007payl"
+            + "oad\030\010 \002(\014\"^\n\005Event\022\017\n\007service\030\001 \002(\t\022\021\n\tc"
+            + "ommandID\030\002 \002(\r\022\016\n\006format\030\003 \002(\r\022\017\n\007payloa",
+        "d\030\010 \002(\014\022\020\n\010clientID\030\006 \001(\r\"x\n\005Error\022\017\n\007se"
+            + "rvice\030\001 \002(\t\022\021\n\tcommandID\030\002 \002(\r\022\016\n\006format"
+            + "\030\003 \002(\r\022\016\n\006status\030\004 \001(\r\022\013\n\003tag\030\005 \001(\r\022\020\n\010c"
+            + "lientID\030\006 \001(\r\022\014\n\004uuid\030\007 \001(\tB0\n#com.opera"
+            + ".core.systems.scope.protosB\tUmsProtos" };
+    com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner = new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
+      public com.google.protobuf.ExtensionRegistry assignDescriptors(
+          com.google.protobuf.Descriptors.FileDescriptor root) {
+        descriptor = root;
+        internal_static_scope_TransportMessage_descriptor = getDescriptor().getMessageTypes().get(
+            0);
+        internal_static_scope_TransportMessage_fieldAccessorTable = new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+            internal_static_scope_TransportMessage_descriptor,
+            new java.lang.String[] { "Service", "CommandID", "Format",
+                "Status", "Tag", "Payload", },
+            com.opera.core.systems.scope.protos.UmsProtos.TransportMessage.class,
+            com.opera.core.systems.scope.protos.UmsProtos.TransportMessage.Builder.class);
+        internal_static_scope_Command_descriptor = getDescriptor().getMessageTypes().get(
+            1);
+        internal_static_scope_Command_fieldAccessorTable = new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+            internal_static_scope_Command_descriptor, new java.lang.String[] {
+                "Service", "CommandID", "Format", "Tag", "Payload", },
+            com.opera.core.systems.scope.protos.UmsProtos.Command.class,
+            com.opera.core.systems.scope.protos.UmsProtos.Command.Builder.class);
+        internal_static_scope_Response_descriptor = getDescriptor().getMessageTypes().get(
+            2);
+        internal_static_scope_Response_fieldAccessorTable = new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+            internal_static_scope_Response_descriptor,
+            new java.lang.String[] { "Service", "CommandID", "Format", "Tag",
+                "Payload", },
+            com.opera.core.systems.scope.protos.UmsProtos.Response.class,
+            com.opera.core.systems.scope.protos.UmsProtos.Response.Builder.class);
+        internal_static_scope_Event_descriptor = getDescriptor().getMessageTypes().get(
+            3);
+        internal_static_scope_Event_fieldAccessorTable = new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+            internal_static_scope_Event_descriptor, new java.lang.String[] {
+                "Service", "CommandID", "Format", "Payload", "ClientID", },
+            com.opera.core.systems.scope.protos.UmsProtos.Event.class,
+            com.opera.core.systems.scope.protos.UmsProtos.Event.Builder.class);
+        internal_static_scope_Error_descriptor = getDescriptor().getMessageTypes().get(
+            4);
+        internal_static_scope_Error_fieldAccessorTable = new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+            internal_static_scope_Error_descriptor, new java.lang.String[] {
+                "Service", "CommandID", "Format", "Status", "Tag", "ClientID",
+                "Uuid", },
+            com.opera.core.systems.scope.protos.UmsProtos.Error.class,
+            com.opera.core.systems.scope.protos.UmsProtos.Error.Builder.class);
+        return null;
+      }
     };
-    com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
-      new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
-        public com.google.protobuf.ExtensionRegistry assignDescriptors(
-            com.google.protobuf.Descriptors.FileDescriptor root) {
-          descriptor = root;
-          internal_static_scope_TransportMessage_descriptor =
-            getDescriptor().getMessageTypes().get(0);
-          internal_static_scope_TransportMessage_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_scope_TransportMessage_descriptor,
-              new java.lang.String[] { "Service", "CommandID", "Format", "Status", "Tag", "Payload", },
-              com.opera.core.systems.scope.protos.UmsProtos.TransportMessage.class,
-              com.opera.core.systems.scope.protos.UmsProtos.TransportMessage.Builder.class);
-          internal_static_scope_Command_descriptor =
-            getDescriptor().getMessageTypes().get(1);
-          internal_static_scope_Command_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_scope_Command_descriptor,
-              new java.lang.String[] { "Service", "CommandID", "Format", "Tag", "Payload", },
-              com.opera.core.systems.scope.protos.UmsProtos.Command.class,
-              com.opera.core.systems.scope.protos.UmsProtos.Command.Builder.class);
-          internal_static_scope_Response_descriptor =
-            getDescriptor().getMessageTypes().get(2);
-          internal_static_scope_Response_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_scope_Response_descriptor,
-              new java.lang.String[] { "Service", "CommandID", "Format", "Tag", "Payload", },
-              com.opera.core.systems.scope.protos.UmsProtos.Response.class,
-              com.opera.core.systems.scope.protos.UmsProtos.Response.Builder.class);
-          internal_static_scope_Event_descriptor =
-            getDescriptor().getMessageTypes().get(3);
-          internal_static_scope_Event_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_scope_Event_descriptor,
-              new java.lang.String[] { "Service", "CommandID", "Format", "Payload", "ClientID", },
-              com.opera.core.systems.scope.protos.UmsProtos.Event.class,
-              com.opera.core.systems.scope.protos.UmsProtos.Event.Builder.class);
-          internal_static_scope_Error_descriptor =
-            getDescriptor().getMessageTypes().get(4);
-          internal_static_scope_Error_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_scope_Error_descriptor,
-              new java.lang.String[] { "Service", "CommandID", "Format", "Status", "Tag", "ClientID", "Uuid", },
-              com.opera.core.systems.scope.protos.UmsProtos.Error.class,
-              com.opera.core.systems.scope.protos.UmsProtos.Error.Builder.class);
-          return null;
-        }
-      };
-    com.google.protobuf.Descriptors.FileDescriptor
-      .internalBuildGeneratedFileFrom(descriptorData,
-        new com.google.protobuf.Descriptors.FileDescriptor[] {
-        }, assigner);
+    com.google.protobuf.Descriptors.FileDescriptor.internalBuildGeneratedFileFrom(
+        descriptorData,
+        new com.google.protobuf.Descriptors.FileDescriptor[] {}, assigner);
   }
-  
-  public static void internalForceInit() {}
-  
+
+  public static void internalForceInit() {
+  }
+
   // @@protoc_insertion_point(outer_class_scope)
 }

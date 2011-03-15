@@ -16,37 +16,36 @@ limitations under the License.
 package com.opera.core.systems.model;
 
 /**
- * Holds the result of a script execution, namely for
- * an object, scope protocol assigns an object id for
- * each object retrieved through the protocol, this id
+ * Holds the result of a script execution, namely for an object, scope protocol
+ * assigns an object id for each object retrieved through the protocol, this id
  * can also be used later on to release the object
- *
+ * 
  * @author Deniz Turkoglu <denizt@opera.com>
- *
+ * 
  */
 public class ScriptResult {
 
-	protected int objectId;
-	protected String className;
+  protected int objectId;
+  protected String className;
 
-	public ScriptResult(int objectId, String className) {
-		this.objectId = objectId;
-		this.className = className;
-	}
+  public ScriptResult(int objectId, String className) {
+    this.objectId = objectId;
+    this.className = className;
+  }
 
-	public int getObjectId() {
-		return objectId;
-	}
+  public int getObjectId() {
+    return objectId;
+  }
 
-	public void setObjectId(int objectId) {
-		this.objectId = objectId;
-	}
+  public void setObjectId(int objectId) {
+    this.objectId = objectId;
+  }
 
-	public String getClassName() {
-		return className;
-	}
+  public String getClassName() {
+    return className;
+  }
 
-	public void setClassName(String className) {
-		this.className = className;
-	}
+  public void setClassName(String className) {
+    this.className = className;
+  }
 }
