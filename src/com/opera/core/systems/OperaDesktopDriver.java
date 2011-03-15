@@ -44,7 +44,7 @@ public class OperaDesktopDriver extends OperaDriver {
 	private IDesktopUtils desktopUtils;
 	private ProfileUtils profileUtils;
 	private boolean	firstTestRun = true;
-	
+
 	private String largePreferencesPath;
 	private String smallPreferencesPath;
 	private String cachePreferencesPath;
@@ -162,7 +162,7 @@ public class OperaDesktopDriver extends OperaDriver {
 	public void quitOpera() {
 		// running opera under the launcher
 		if (operaRunner != null){
-			if (operaRunner.isOperaRunning()) {
+			if (operaRunner.isOperaRunning() || operaRunner.hasOperaCrashed()) {
 				// Cut off the services connection to free the port
 				services.shutdown();
 
@@ -620,7 +620,7 @@ public class OperaDesktopDriver extends OperaDriver {
 	 * Copies prefs in folder newPrefs to the profile for the connected Opera instance.
 	 * Will first quit Opera, then delete the old prefs, and copy the new prefs over, then
 	 * restart Opera with the new prefs.
-	 * 
+	 *
 	 * Does nothing if profile used is default main user profile
 	 *
 	 * @param newPrefs - path to where new prefs to be copied into the prefs folders are located
@@ -643,7 +643,7 @@ public class OperaDesktopDriver extends OperaDriver {
 				profileUtils.deleteProfile();
 				// Copy in the profile for the test (only if it exists)
 				profileUtils.copyProfile(newPrefs);
-				
+
 				// Relaunch Opera and the webdriver service connection
 				startOpera();
 			}
