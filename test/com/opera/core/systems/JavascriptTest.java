@@ -19,12 +19,12 @@ public class JavascriptTest extends TestBase
   @Test
   public void testTyping()
   {
-	  String text = "Hello, world!";
+    String text = "Hello, world!";
 
-	  driver.executeScript("document.getElementById('one').focus()");
-	  driver.type(text);
+    driver.executeScript("document.getElementById('one').focus()");
+    driver.type(text);
 
-	  Assert.assertEquals(text, driver.findElementById("one").getValue());
+    Assert.assertEquals(text, driver.findElementById("one").getValue());
   }
 
   // Make sure that typing actually happens. When the focus switches half way
@@ -32,7 +32,7 @@ public class JavascriptTest extends TestBase
   @Test
   public void testTypingKeyEvents()
   {
-	  driver.get(fixture("keys.html"));
+    driver.get(fixture("keys.html"));
 
     driver.type("hi");
 

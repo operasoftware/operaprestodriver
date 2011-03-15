@@ -8,12 +8,12 @@ public class NavigationTest extends TestBase
   @Test
   public void testBack()
   {
-	  getFixture("javascript.html");
-	  getFixture("test.html");
-	  getFixture("keys.html");
+    getFixture("javascript.html");
+    getFixture("test.html");
+    getFixture("keys.html");
 
-	  driver.navigate().back();
-	  Assert.assertTrue(driver.getCurrentUrl().indexOf("test.html") > 0);
+    driver.navigate().back();
+    Assert.assertTrue(driver.getCurrentUrl().indexOf("test.html") > 0);
   }
 
   @Test
@@ -26,9 +26,9 @@ public class NavigationTest extends TestBase
   @Test
   public void testBack2()
   {
-	  driver.navigate().back();
-	  driver.navigate().back();
-	  Assert.assertTrue(driver.getCurrentUrl().indexOf("javascript.html") > 0);
+    driver.navigate().back();
+    driver.navigate().back();
+    Assert.assertTrue(driver.getCurrentUrl().indexOf("javascript.html") > 0);
   }
 
   @Test
