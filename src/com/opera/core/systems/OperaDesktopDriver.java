@@ -643,13 +643,14 @@ public class OperaDesktopDriver extends OperaDriver {
 				// Cleanup old profile
 				profileUtils.deleteProfile();
 				// Copy in the profile for the test (only if it exists)
+				// returns true if copied, else false
 				profileUtils.copyProfile(newPrefs);
 				
 				// Relaunch Opera and the webdriver service connection
 				startOpera();
 			}
 			else {
-				logger.warning("\nWarning: Running tests in main user profile");
+				logger.warning("Running tests in main user profile");
 			}
 		}
 

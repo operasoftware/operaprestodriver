@@ -117,33 +117,53 @@ public class ProfileUtils {
 	 * Deletes prefs folders for
 	 * Does nothing if prefs folders are default main user profile
 	 */
-	public void deleteProfile() {
+	public boolean deleteProfile() {
 		// Assuming if any of those are main profile, skip the whole delete
 		if (isMainProfile(smallPrefsFolder) ||
 				isMainProfile(largePrefsFolder) ||
 				isMainProfile(cachePrefsFolder))
 		{
-			return;
+			return false;
 		}
 		
-		deleteFolder(smallPrefsFolder);
-		if (!smallPrefsFolder.equals(largePrefsFolder))
-			deleteFolder(largePrefsFolder);
-		if (!smallPrefsFolder.equals(cachePrefsFolder) && !largePrefsFolder.equals(cachePrefsFolder))
-			deleteFolder(cachePrefsFolder);
+		boolean deleted = deleteFolder(smallPrefsFolder);
+		if (deleted && !smallPrefsFolder.equals(largePrefsFolder)) {
+			deleted = deleteFolder(largePrefsFolder);
+		}
+		if (deleted && !smallPrefsFolder.equals(cachePrefsFolder) && !largePrefsFolder.equals(cachePrefsFolder)) {
+			deleted = deleteFolder(cachePrefsFolder);
+		}
+		return deleted;
+		// TODO: logger.warning("Could not delete profile");
 	}
 
-	public void copyProfile(String newPrefs) {
+	/**
+	 * 
+	 * @param newPrefs
+	 * @return true if profile was copied, else false
+	 */
+	public boolean copyProfile(String newPrefs) {
+		if (new File(newPrefs).exists() == false) {
+			return false;
+		}
+		
 		try {
 			FileUtils.copyDirectory(new File(newPrefs), new File(smallPrefsFolder));
 		} catch (IOException e) {
 			// Ignore
 			// e.printStackTrace();
+			return false;
 		}
-
+		return true;
 	}
 
+	/**
+	 * 
+	 * @param folderPath
+	 * @return true if folder was deleted, else false
+	 */
 	private boolean deleteFolder(String folderPath) {
+		//true if the file or directory was deleted, otherwise false
 		return FileUtils.deleteQuietly(new File(folderPath));
 	}
 }
