@@ -115,18 +115,16 @@ public class OperaDriverSettings {
 	}
 
 	/**
-	 * @deprecated
+   * If set then launcher will not close Opera when OperaDriver finishes, and
+   * it quits.
 	 * @param noQuit
 	 */
-	@Deprecated
 	public void setNoQuit(boolean noQuit) {
 		this.noQuit = noQuit;
 	}
 	/**
-	 * @deprecated
 	 * @return
 	 */
-	@Deprecated
 	public boolean getNoQuit() {
 		return noQuit;
 	}
