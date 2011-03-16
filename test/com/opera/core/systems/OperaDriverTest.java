@@ -5,6 +5,8 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import com.opera.core.systems.settings.OperaDriverSettings;
+
 public class OperaDriverTest extends TestBase
 {
   // Replace the TestBase setup and teardown so that we don't launch opera
@@ -76,6 +78,16 @@ public class OperaDriverTest extends TestBase
   {
     // leave with a fast loading page
     driver.get("about:blank");
+    driver.shutdown();
+  }
+
+  @Test
+  public void testNullOperaArguments() throws Exception {
+    OperaDriverSettings settings = new OperaDriverSettings();
+    settings.setOperaBinaryArguments(null);
+
+    driver = new TestOperaDriver(settings);
+    Assert.assertNotNull(driver);
     driver.shutdown();
   }
 }

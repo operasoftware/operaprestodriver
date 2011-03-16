@@ -17,9 +17,9 @@ package com.opera.core.systems.settings;
 
 /**
  * Stores settings for OperaDriver.
- * 
+ *
  * @author Deniz Turkoglu
- * 
+ *
  */
 public class OperaDriverSettings {
 
@@ -111,6 +111,7 @@ public class OperaDriverSettings {
    * @param operaBinaryArguments The arguments to pass, separated by spaces.
    */
   public void setOperaBinaryArguments(String operaBinaryArguments) {
+    if (operaBinaryArguments == null) operaBinaryArguments = "";
     this.operaBinaryArguments = operaBinaryArguments;
   }
 
