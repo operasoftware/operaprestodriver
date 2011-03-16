@@ -21,13 +21,7 @@ abstract public class TestBase {
     driver = new TestOperaDriver();
     Assert.assertNotNull(driver);
 
-    // Setup the fixture directory
-    String separator = System.getProperty("file.separator");
-    fixture_dir = System.getProperty("user.dir");
-    fixture_dir = separator + fixture_dir + separator + separator + "test" +
-      separator + "fixtures" + separator;
-
-    Assert.assertTrue(new File(fixture_dir).isDirectory());
+    initFixtures();
   }
 
   @AfterClass
@@ -36,6 +30,18 @@ abstract public class TestBase {
   }
 
   // Easy access to fixtures
+
+  /**
+   * Setup the fixture directory
+   */
+  protected static void initFixtures() {
+    String separator = System.getProperty("file.separator");
+    fixture_dir = System.getProperty("user.dir");
+    fixture_dir = separator + fixture_dir + separator + separator + "test" +
+      separator + "fixtures" + separator;
+
+    Assert.assertTrue(new File(fixture_dir).isDirectory());
+  }
 
   // / Get the URL of the given fixture file
   protected String fixture(String file) {

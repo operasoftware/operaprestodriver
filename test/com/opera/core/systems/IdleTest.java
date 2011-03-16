@@ -3,6 +3,7 @@ package com.opera.core.systems;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.MethodRule;
@@ -33,6 +34,15 @@ public class IdleTest extends TestBase {
     }
   };
 
+  @BeforeClass
+  public static void setUpBeforeClass() throws Exception {
+    OperaDriverSettings settings = new OperaDriverSettings();
+    settings.setUseOperaIdle(true);
+
+    driver = new TestOperaDriver(settings);
+    initFixtures();
+  };
+
   @Before
   public void setUp() {
     start = end = 0;
@@ -42,7 +52,7 @@ public class IdleTest extends TestBase {
   public void tearDown() {
     // Make sure the test hasn't passed because we hit the page load
     // timeout instead of using OperaIdle
-    Assert.assertTrue("Took longer than page timeout", end - start < timeout);
+    Assert.assertTrue("Took less than Idle timeout", end - start < timeout);
   }
 
   private void start() { start = System.currentTimeMillis(); }
@@ -219,7 +229,7 @@ public class IdleTest extends TestBase {
   public void testMetarefresh() throws Exception {
     getFixture("idle/metarefresh.html");
 
-    Assert.assertTrue(driver.getCurrentUrl().endsWith("test.html?"));
+    Assert.assertTrue(driver.getCurrentUrl().endsWith("test.html"));
   }
 
   @Test

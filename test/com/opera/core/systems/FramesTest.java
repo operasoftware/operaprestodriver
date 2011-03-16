@@ -6,7 +6,6 @@ import junit.framework.Assert;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.openqa.selenium.WebElement;
 
 public class FramesTest extends TestBase {
   List<String> frames;
