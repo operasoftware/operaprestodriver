@@ -26,10 +26,20 @@ public class OperaDriverTest extends TestBase
   }
 
   @Test
+  public void testNullOperaArguments() throws Exception {
+    OperaDriverSettings settings = new OperaDriverSettings();
+    settings.setOperaBinaryArguments(null);
+
+    OperaDriver driver = new TestOperaDriver(settings);
+    Assert.assertNotNull(driver);
+    driver.shutdown();
+  }
+
+  @Test
   public void testDefaultWindowCount()
   {
     driver = new TestOperaDriver();
-    Assert.assertTrue(driver.getWindowCount() == 1);
+    Assert.assertTrue(driver.getWindowCount() >= 1);
   }
 
   @Test
@@ -78,16 +88,6 @@ public class OperaDriverTest extends TestBase
   {
     // leave with a fast loading page
     driver.get("about:blank");
-    driver.shutdown();
-  }
-
-  @Test
-  public void testNullOperaArguments() throws Exception {
-    OperaDriverSettings settings = new OperaDriverSettings();
-    settings.setOperaBinaryArguments(null);
-
-    driver = new TestOperaDriver(settings);
-    Assert.assertNotNull(driver);
     driver.shutdown();
   }
 }
