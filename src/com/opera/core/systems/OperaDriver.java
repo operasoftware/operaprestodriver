@@ -74,7 +74,7 @@ import com.opera.core.systems.settings.OperaDriverSettings;
 
 /**
  * Opera's webdriver implementation. See AUTHORS and LICENSE for details
- * 
+ *
  */
 public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
     FindsByXPath, FindsByName, FindsByTagName, FindsByClassName,
@@ -148,7 +148,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
   /**
    * Make a new settings object, automatically finding the Opera and launcher
    * binaries.
-   * 
+   *
    * @return A new settings object that is correctly set up.
    */
   private static OperaDriverSettings makeSettings() {
@@ -348,7 +348,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
 
   /**
    * Get the source of the last loaded page.
-   * 
+   *
    * The source will be of the modified DOM, <em>not</em> the original HTML. The
    * page source returned is a representation of the underlying DOM: do not
    * expect it to be formatted or escaped in the same way as the response sent
@@ -761,7 +761,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
 
   /**
    * Performs a special action, such as setting an Opera preference.
-   * 
+   *
    * @param using The action to perform. For a list of actions call
    *          {@link #getOperaActionList()} at run time
    * @param params Parameters to pass to the action call
@@ -858,24 +858,24 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
   private final WebElement findSingleElement(String script, String type) {
     long start = System.currentTimeMillis();
     boolean isAvailable = false;
+    Integer id;
 
     do {
-      isAvailable = isElementAvailable(script);
+			id = debugger.getObject(script);
+			isAvailable = (id != null);
 
-      if (!isAvailable && hasTimeRemaining(start)) sleep(OperaIntervals.EXEC_SLEEP.getValue());
-      else break;
+			if (!isAvailable)
+				sleep(OperaIntervals.EXEC_SLEEP.getValue());
 
-    } while (true);
+		} while (!isAvailable && hasTimeRemaining(start));
 
     OperaIntervals.WAIT_FOR_ELEMENT.setValue(0L);
 
     if (isAvailable) {
-      Integer id = debugger.getObject(script);
-      Boolean isStale = Boolean.valueOf(debugger.callFunctionOnObject(
-          "locator.parentNode == undefined", id));
+			Boolean isStale = Boolean.valueOf(debugger.callFunctionOnObject("locator.parentNode == undefined", id));
 
-      if (isStale) throw new StaleElementReferenceException(
-          "This element is no longer part of DOM");
+			if(isStale)
+				throw new StaleElementReferenceException("This element is no longer part of DOM");
 
       return new OperaWebElement(this, id);
     } else {
@@ -887,14 +887,10 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
     return System.currentTimeMillis() - start < OperaIntervals.WAIT_FOR_ELEMENT.getValue();
   }
 
-  private final boolean isElementAvailable(String script) {
-    return debugger.getObject(script) != null;
-  }
-
   /**
    * Takes a screenshot of the whole screen, including areas outside of the
    * Opera browser window.
-   * 
+   *
    * @param timeout The number of milliseconds to wait before taking the
    *          screenshot
    * @param hashes A previous screenshot MD5 hash. If it matches the hash of
@@ -944,7 +940,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
   /**
    * Presses and releases the given key. If the key is "enter" then OperaDriver
    * waits for the page to finish loading.
-   * 
+   *
    * @param key A string containing the key to press. This can be a single
    *          character (e.g. "a") or a special key (e.g. "left"), and is
    *          matched case insensitively. For a list of keys see
@@ -963,7 +959,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
   /**
    * Presses and holds the given key. You cannot press a key that is already
    * down.
-   * 
+   *
    * @param key The key to press. See {@link #key(String)} for more information.
    */
   public void keyDown(String key) {
@@ -972,7 +968,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
 
   /**
    * Releases the given key.
-   * 
+   *
    * @param key The key to release. See {@link #key(String)} for more
    *          information.
    */
@@ -990,7 +986,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
   /**
    * Types the given string as-is in to the browser window. To press special
    * keys use {@link #key(String)}.
-   * 
+   *
    * @param using The string to type
    */
   public void type(String using) {
@@ -1037,7 +1033,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
 
   /**
    * Get the value of the requested preference.
-   * 
+   *
    * @param section The section the preference is in.
    * @param key The key name of the preference to get.
    * @return The value of the preference.
@@ -1048,7 +1044,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
 
   /**
    * Gets the default value of the requested preference.
-   * 
+   *
    * @param section The section the preference is in.
    * @param key The key name of the preference.
    * @return The default string value of the preference.
@@ -1059,7 +1055,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
 
   /**
    * Returns a list of preferences in the requested section.
-   * 
+   *
    * @param sort Whether to alphabetically sort the preference keys.
    * @param section The section to retreive the preferences from.
    * @return A list of preferences.
@@ -1071,7 +1067,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
   /**
    * Set the {@link value} of the preference, {@link key}, in section
    * {@link section}.
-   * 
+   *
    * @param section The section the preference is in.
    * @param key The key name of the preference to set.
    * @param value The value to set the preference to.
