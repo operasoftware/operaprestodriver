@@ -88,7 +88,7 @@ public class StpConnection implements SocketListener {
   /**
    * Initializes variables in object scope, sets 'count known' to false to read
    * byte count (STP/0).
-   * 
+   *
    * @param socket
    * @param handler
    * @param eventHandler
@@ -123,7 +123,7 @@ public class StpConnection implements SocketListener {
   /**
    * Queues up an STP/1 message sent from another thread and wakes up selector
    * to register it to the key
-   * 
+   *
    * @param command to add to the request queue
    * @throws IOException
    */
@@ -168,7 +168,7 @@ public class StpConnection implements SocketListener {
   /**
    * Queues up an STP/0 message sent from another thread and wakes up selector
    * to register it to the key
-   * 
+   *
    * @param message to add to the request queue
    */
   private void send(String message) {
@@ -321,7 +321,7 @@ public class StpConnection implements SocketListener {
    * Updated-Window: a window is updated OR created (opener-id=0) Active-Window:
    * window focus changed Window-Closed: self explanatory If message matches
    * none it is added to the response queue (probably response to command)
-   * 
+   *
    * @param message
    */
   public void parseServiceList(String message) {
@@ -360,7 +360,7 @@ public class StpConnection implements SocketListener {
 
   /**
    * reads a message from the buffer, and pops the used data out of the buffer!
-   * 
+   *
    * @param buffer the buffer containing messages
    * @return true if we got a message from the buffer!
    */
@@ -462,8 +462,8 @@ public class StpConnection implements SocketListener {
               "Error while processing the message: " + e.getMessage()));
         }
       } else {
-
-        logger.fine("tried to read a message, but expected " + 4 + messageSize
+        // 4 + messageSize because of the int at the beginning
+        logger.fine("tried to read a message, but expected " + (4 + messageSize)
             + " bytes, and only got " + buffer.limit());
 
         buffer.position(0);
@@ -548,6 +548,7 @@ public class StpConnection implements SocketListener {
   }
 
   // protobuf methods, taken from the protobuf library by Google
+  // explained: http://code.google.com/apis/protocolbuffers/docs/encoding.html#varints
   private int readRawVarint32(ByteBuffer bytes) {
     byte tmp = bytes.get();
     if (tmp >= 0) {
