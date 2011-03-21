@@ -54,9 +54,9 @@ import com.opera.core.systems.scope.services.IOperaExec;
 
 /**
  * Extends the default WebElement with Opera specific methods.
- * 
+ *
  * @author Deniz Turkoglu
- * 
+ *
  */
 public class OperaWebElement implements RenderedWebElement, SearchContext,
     Locatable, FindsByTagName, FindsByLinkText, FindsByClassName, FindsByXPath,
@@ -89,7 +89,7 @@ public class OperaWebElement implements RenderedWebElement, SearchContext,
 
   /**
    * Calls the method and parses the result, the result must be a string
-   * 
+   *
    * @param using
    * @return response of ecmascript in string presentation
    */
@@ -100,7 +100,7 @@ public class OperaWebElement implements RenderedWebElement, SearchContext,
   /**
    * Executes the given script with the element's object id doesn't parse the
    * response
-   * 
+   *
    * @param using
    */
   private final void executeMethod(String using) {
@@ -110,7 +110,7 @@ public class OperaWebElement implements RenderedWebElement, SearchContext,
   /**
    * Evals the given script with object id and parses the result and returns the
    * result object
-   * 
+   *
    * @param using
    * @return {@link ValueData}
    */
@@ -169,7 +169,7 @@ public class OperaWebElement implements RenderedWebElement, SearchContext,
 
   /**
    * Click this element many times.
-   * 
+   *
    * @param times The number of times to click
    */
   public void click(int times) {
@@ -203,7 +203,7 @@ public class OperaWebElement implements RenderedWebElement, SearchContext,
 
   /**
    * Click the element at the given x, y offset from the top left.
-   * 
+   *
    * @param x The distance from the left to click
    * @param y The distance from the top to click
    */
@@ -241,7 +241,7 @@ public class OperaWebElement implements RenderedWebElement, SearchContext,
 
   /**
    * Get the tag name of this element.
-   * 
+   *
    * @return The tag name in upper-case
    */
   public String getElementName() {
@@ -549,7 +549,7 @@ public class OperaWebElement implements RenderedWebElement, SearchContext,
   /**
    * Takes a screenshot of the area this element's bounding-box covers and
    * returns the MD5 hash.
-   * 
+   *
    * @return A MD5 hash as a string.
    */
   public String getImageHash() {
@@ -559,7 +559,7 @@ public class OperaWebElement implements RenderedWebElement, SearchContext,
   /**
    * Takes a screenshot after {@link timeout} milliseconds of the area this
    * element's bounding-box covers and returns the MD5 hash.
-   * 
+   *
    * @param timeout The number of milliseconds to wait before taking the
    *          screenshot.
    * @param hashes
@@ -573,7 +573,7 @@ public class OperaWebElement implements RenderedWebElement, SearchContext,
    * Take a screenshot of the area this element's bounding-box covers. Saves a
    * copy of the image to the given filename, and returns an MD5 hash of the
    * image.
-   * 
+   *
    * @param filename The location to save the screenshot
    * @return The MD5 hash of the screenshot
    */
@@ -584,7 +584,7 @@ public class OperaWebElement implements RenderedWebElement, SearchContext,
   /**
    * Take a screenshot of the area this element covers. Saves a copy of the
    * image to the given filename.
-   * 
+   *
    * @param filename The location to save the screenshot
    * @param timeout The number of milliseconds to wait before taking the
    *          screenshot
@@ -610,6 +610,18 @@ public class OperaWebElement implements RenderedWebElement, SearchContext,
       }
     }
     return reply.getMd5();
+  }
+
+  /**
+   * Take a screenshot of the area this element's bounding-box covers.
+   * @param timeout The number of milliseconds to wait before taking the
+   * screenshot
+   * @param hashes A previous screenshot MD5 hash. If it matches the hash
+   * of this screenshot then no image data is returned.
+   */
+  public ScreenShotReply saveScreenshot(long timeout, String... hashes) {
+    Canvas canvas = buildCanvas();
+    return execService.screenWatcher(canvas, timeout, true, hashes);
   }
 
   public boolean containsColor(OperaColors... colors) {
