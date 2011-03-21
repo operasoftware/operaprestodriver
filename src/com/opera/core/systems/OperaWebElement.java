@@ -588,8 +588,7 @@ public class OperaWebElement implements RenderedWebElement, SearchContext, Locat
 	}
 
 	 /**
-   * Take a screenshot of the area this element's bounding-box covers. Saves a
-   * copy of the image to the given filename, and returns an MD5 hash of the
+   * Take a screenshot of the area this element's bounding-box covers.
    * @param timeout The number of milliseconds to wait before taking the
    * screenshot
    * @param hashes A previous screenshot MD5 hash. If it matches the hash
