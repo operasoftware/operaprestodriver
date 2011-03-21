@@ -19,9 +19,9 @@ import com.opera.core.systems.model.OperaColor;
 
 /**
  * Enumerator for contains color API (RGB values for standard web colors)
- * 
+ *
  * @author Deniz Turkoglu <denizt@opera.com>
- * 
+ *
  */
 public enum OperaColors {
   AQUA(0, 255, 255), BLACK(0, 0, 0), BLUE(0, 0, 255), FUSCHIA(255, 0, 255), GRAY(

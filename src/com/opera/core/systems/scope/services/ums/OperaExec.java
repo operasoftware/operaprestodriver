@@ -54,9 +54,9 @@ import com.opera.core.systems.util.VersionUtil;
 /**
  * The exec service actions This service handles user interactions such as
  * keypresses, mouse clicks, screenshot grabber and executing actions on Opera
- * 
+ *
  * @author Deniz Turkoglu <denizt@opera.com>
- * 
+ *
  */
 public class OperaExec extends AbstractService implements IOperaExec {
 
@@ -149,7 +149,7 @@ public class OperaExec extends AbstractService implements IOperaExec {
 
   /**
    * Added as a quick workaround for watir API
-   * 
+   *
    * @param x an unsigned int
    * @param y an unsigned int
    * @param value
@@ -289,7 +289,7 @@ public class OperaExec extends AbstractService implements IOperaExec {
 
   /**
    * Executes a screenwatcher with the given timeout and returns the result
-   * 
+   *
    * @param builder
    * @param timeout
    * @return

@@ -56,9 +56,9 @@ import com.opera.core.systems.scope.stp.StpThread;
 
 /**
  * Implements the interface to the Scope protocol.
- * 
+ *
  * @author Deniz Turkoglu
- * 
+ *
  */
 public class ScopeServices implements IConnectionHandler {
 
@@ -160,7 +160,7 @@ public class ScopeServices implements IConnectionHandler {
   /**
    * Creates the scope server on specified address and port Enables the required
    * services for webdriver
-   * 
+   *
    * @param versions
    * @param manualConnect
    * @throws IOException
@@ -619,7 +619,7 @@ public class ScopeServices implements IConnectionHandler {
 
   /**
    * Sends a command and wait for the response.
-   * 
+   *
    * @param command
    * @param builder
    * @return

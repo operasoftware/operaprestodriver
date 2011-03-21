@@ -17,9 +17,9 @@ package com.opera.core.systems.model;
 
 /**
  * A simple pojo file to hold the color values
- * 
+ *
  * @author Deniz Turkoglu <denizt@opera.com>
- * 
+ *
  */
 public class OperaColor {
   protected int id;

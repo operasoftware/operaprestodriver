@@ -29,9 +29,9 @@ import com.opera.core.systems.scope.services.ums.SystemInputManager;
 
 /**
  * Represents a widget in the Opera desktop UI.
- * 
+ *
  * @author Adam Minchinton, Karianne Ekern.
- * 
+ *
  */
 public class QuickWidget {
   private final QuickWidgetInfo info;
@@ -54,7 +54,7 @@ public class QuickWidget {
 
   /**
    * Constructor.
-   * 
+   *
    * @param desktopUtils
    * @param inputManager
    * @param info QuickWidgetInfo of the widget
@@ -70,7 +70,7 @@ public class QuickWidget {
 
   /**
    * Gets window id of this widgets parent window.
-   * 
+   *
    * @return window id of parent window of this QuickWidget
    */
   public int getParentWindowId() {
@@ -79,7 +79,7 @@ public class QuickWidget {
 
   /**
    * Clicks this widget.
-   * 
+   *
    * @param button button to click
    * @param numClicks number of clicks
    * @param modifiers modifiers held during click
@@ -143,7 +143,7 @@ public class QuickWidget {
 
   /**
    * Drags this widget onto the specified widget at the given drop position
-   * 
+   *
    * @param widget the widget to drop this widget onto
    * @param dropPos the position to drop this widget into, CENTER, EDGE or
    *          BETWEEN
@@ -206,7 +206,7 @@ public class QuickWidget {
   }
 
   /**
-   * 
+   *
    * @return name of widget
    */
   public String getName() {
@@ -214,7 +214,7 @@ public class QuickWidget {
   }
 
   /**
-   * 
+   *
    * @return text of widget
    */
   public String getText() {
@@ -223,7 +223,7 @@ public class QuickWidget {
 
   /**
    * Gets the visible text of the widget.
-   * 
+   *
    * @return visible text of widget
    */
   public String getVisibleText() {
@@ -233,7 +233,7 @@ public class QuickWidget {
   /**
    * Gets additional text of this widget. Used for widgets that have more text
    * attributes, e.g. for highlighted text in the address field
-   * 
+   *
    * @return text of widget
    */
   public String getAdditionalText() {
@@ -242,7 +242,7 @@ public class QuickWidget {
 
   /**
    * Checks if widget text equals the text specified by the given string id
-   * 
+   *
    * @return true if text specified by stringId equals widget text
    */
   public boolean verifyText(String stringId) {
@@ -253,7 +253,7 @@ public class QuickWidget {
 
   /**
    * Checks if widget text contains the text specified by the given string id
-   * 
+   *
    * @param stringId String id of string
    * @return true if text specified by stringId is contained in widget text
    */
@@ -264,10 +264,10 @@ public class QuickWidget {
 
   /**
    * Checks if widget is default.
-   * 
+   *
    * Typically used to check if e.g. a button is the default pressed button
    * among buttons in a dialog, and such.
-   * 
+   *
    * @return true if widget is default, else false
    */
   public boolean isDefault() {
@@ -275,7 +275,7 @@ public class QuickWidget {
   }
 
   /**
-   * 
+   *
    * @return true if this widget has focused look
    */
   public boolean hasFocusedLook() {
@@ -284,7 +284,7 @@ public class QuickWidget {
 
   /**
    * Checks if widget is enabled.
-   * 
+   *
    * @return true if enabled, else false
    */
   public boolean isEnabled() {
@@ -292,7 +292,7 @@ public class QuickWidget {
   }
 
   /**
-   * 
+   *
    * @return true if widget is selected, else false
    */
   public boolean isSelected() {
@@ -300,7 +300,7 @@ public class QuickWidget {
   }
 
   /**
-   * 
+   *
    * @param stringId stringid of entry to check if is selected
    * @return true if the entry given by stringId is selected, else false
    */
@@ -317,7 +317,7 @@ public class QuickWidget {
   }
 
   /**
-   * 
+   *
    * @return QuickWidgetType type of this widget. See {@link QuickWidgetType}
    *         for the possible types
    */
@@ -351,7 +351,7 @@ public class QuickWidget {
   /**
    * Gets the row of the widget within its parent, e.g. of a treeviewitem in a
    * treeview. Returns 0 for all widgets that don't have a row within its parent
-   * 
+   *
    * @return row of widget\
    */
   public int getRow() {
@@ -362,7 +362,7 @@ public class QuickWidget {
    * Gets the column of the widget within its parent, e.g. for a tab within the
    * pagebar, or a treeviewitem in a treeview returns 0 for widgets that don't
    * have a column number within its parent
-   * 
+   *
    * @return column of widget
    */
   public int getColumn() {
@@ -378,7 +378,7 @@ public class QuickWidget {
 
   /**
    * Gets name of parent widget of this widget
-   * 
+   *
    * @return name of parent widget
    */
   public String getParentName() {

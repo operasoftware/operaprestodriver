@@ -31,7 +31,7 @@ import java.nio.ByteOrder;
 
 /**
  * Implements the Opera launcher protocol.
- * 
+ *
  * @author Jan Vidar Krey (janv@opera.com)
  */
 public class OperaLauncherProtocol {
@@ -95,7 +95,7 @@ public class OperaLauncherProtocol {
 
   /**
    * Send the 8 byte header before a Opera Launcher message body (payload).
-   * 
+   *
    * @param type The payload type to be sent after
    * @param size Size of the payload following the header
    * @throws java.io.IOException if sending failed.
@@ -116,7 +116,7 @@ public class OperaLauncherProtocol {
 
   /**
    * Send a request and receive a result.
-   * 
+   *
    * @param type The request type to be sent
    * @param body The serialized request payload
    * @return The response
@@ -132,7 +132,7 @@ public class OperaLauncherProtocol {
 
   /**
    * Send a request without a response. Used for shutdown.
-   * 
+   *
    * @param type The request type to be sent
    * @param body The serialized request payload
    * @throws java.io.IOException
@@ -146,7 +146,7 @@ public class OperaLauncherProtocol {
 
   /**
    * Receive and block until *all* length bytes are placed in buffer.
-   * 
+   *
    * @param buffer Target buffer to fill
    * @param length Desired length
    * @throws java.io.IOException if socket receive error
@@ -165,7 +165,7 @@ public class OperaLauncherProtocol {
 
   /**
    * Receive a message response.
-   * 
+   *
    * @return Response body and request status code
    * @throws java.io.IOException if socket read error or protocol parse error.
    */

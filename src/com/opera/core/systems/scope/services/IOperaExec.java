@@ -31,7 +31,7 @@ public interface IOperaExec {
   /**
    * Type a string, preserving space, sent to active window This command doesnt
    * return a response in STP/0 hence we sleep to be on the safe side
-   * 
+   *
    * @param using
    */
   void type(String using);
@@ -39,7 +39,7 @@ public interface IOperaExec {
   /**
    * Create a (native) mouse action on coordinate x,y with key(s) as specified
    * in {@link OperaMouseKeys}
-   * 
+   *
    * @param x
    * @param y
    * @param keys
@@ -50,14 +50,14 @@ public interface IOperaExec {
 
   /**
    * Returns the list of possible Opera Actions on host
-   * 
+   *
    * @return
    */
   Set<String> getActionList();
 
   /**
    * Execute an opera action with parameters (parameters are sent with commas)
-   * 
+   *
    * @param using
    * @param param
    */
@@ -69,7 +69,7 @@ public interface IOperaExec {
 
   /**
    * Execute a keypress (immediately send key down and up)
-   * 
+   *
    * @param key
    */
   void key(String key);
@@ -77,7 +77,7 @@ public interface IOperaExec {
   /**
    * Create a key event, this event controls if the key has been previously
    * pressed before allowing key up
-   * 
+   *
    * @param key
    * @param up down if false
    */
@@ -91,7 +91,7 @@ public interface IOperaExec {
   /**
    * Check if the page contains color(s) as specified in {@link OperaColors}
    * TODO needs abstraction layer
-   * 
+   *
    * @param timeout
    * @param colors
    * @return
@@ -102,7 +102,7 @@ public interface IOperaExec {
   /**
    * Take a screenshot of specifed {@link Area} and compare it with the given
    * hashes (keys)
-   * 
+   *
    * @param canvas
    * @param timeout
    * @param includeImage

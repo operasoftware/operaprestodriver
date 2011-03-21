@@ -29,7 +29,7 @@ import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo;
  * This class handles a queue of events to be handled from multiple threads. One
  * thread can wait for events to happen while other threads can post these
  * events by calling the on{Event} handlers.
- * 
+ *
  * @author Jan Vidar Krey (janv@opera.com)
  */
 public class WaitState {

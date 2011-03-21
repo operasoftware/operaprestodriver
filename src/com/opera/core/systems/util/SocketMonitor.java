@@ -31,7 +31,7 @@ import java.util.logging.Logger;
  * This will monitor any selectable channel, such as a SocketChannel or
  * ServerSocketChannel and fire canWrite() or canRead() events when such events
  * are detected by poll().
- * 
+ *
  * @author Jan Vidar Krey (janv@opera.com)
  */
 public class SocketMonitor {

@@ -38,9 +38,9 @@ import com.opera.core.systems.scope.services.IDesktopWindowManager;
 import com.opera.core.systems.scope.services.IDesktopUtils;
 
 /**
- * 
+ *
  * @author Adam Minchinton, Karianne Ekern
- * 
+ *
  */
 public class DesktopWindowManager extends AbstractService implements
     IDesktopWindowManager {

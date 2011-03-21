@@ -17,14 +17,14 @@ package com.opera.core.systems.util;
 
 /**
  * A replacement for a subset of com.sun.xml.ws.util.VersionUtil.
- * 
+ *
  * @author Jan Vidar Krey
  */
 public class VersionUtil {
 
   /**
    * Compares the versions given in string format
-   * 
+   *
    * @param a version1
    * @param b version2
    * @return -1, 0 or 1 based upon the comparison results -1 if version1 is less

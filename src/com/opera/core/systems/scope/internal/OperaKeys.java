@@ -21,9 +21,9 @@ import java.util.Map;
 
 /**
  * Maps OperaKeys to WebDriver keys
- * 
+ *
  * @author Deniz Turkoglu <denizt@opera.com>
- * 
+ *
  */
 public enum OperaKeys {
   NULL("null"), CANCEL("cancel"), // ^break

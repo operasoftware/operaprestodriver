@@ -40,9 +40,9 @@ import java.util.logging.Logger;
  * This class tries to find the paths to Opera and Opera Launcher on any system.
  * If it cannot find a launcher it will extract the appropriate one from the jar
  * it is in.
- * 
+ *
  * @author Stuart Knightley, Deniz Turkoglu
- * 
+ *
  */
 public class OperaPaths {
 
@@ -94,7 +94,7 @@ public class OperaPaths {
 
   /**
    * This method will try and find Opera Launcher on any system.
-   * 
+   *
    * @return The path to Opera Launcher, or null
    */
   public String launcherPath() {
@@ -108,7 +108,7 @@ public class OperaPaths {
    * Tries to load the launcher executable from the jar file A copy of the
    * launcher is put into user directory and on each call is compared to the
    * content in jar file
-   * 
+   *
    * @return path to launcher executable
    */
   public String getOperaLauncherPath() {
@@ -181,7 +181,7 @@ public class OperaPaths {
 
   /**
    * Chmods the file at given path (linux and mac only)
-   * 
+   *
    * @param executablePath
    */
   private void makeLauncherExecutable(String executablePath) {
@@ -214,7 +214,7 @@ public class OperaPaths {
 
   /**
    * Check that the given path is not null, and exists.
-   * 
+   *
    * @param path The path to check.
    * @return null if the path is null, or does not exist. Otherwise it returns
    *         the given path.
@@ -230,7 +230,7 @@ public class OperaPaths {
 
   /**
    * Get the MD5 hash of the given stream.
-   * 
+   *
    * @param fis The input stream to use
    * @return A byte array of the MD5 hash
    * @throws Exception

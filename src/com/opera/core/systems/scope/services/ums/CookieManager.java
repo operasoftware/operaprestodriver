@@ -34,9 +34,9 @@ import com.opera.core.systems.scope.services.ICookieManager;
 
 /**
  * Cookie manager to manage cookies via scope
- * 
+ *
  * @author Deniz Turkoglu
- * 
+ *
  */
 public class CookieManager extends AbstractService implements ICookieManager {
 

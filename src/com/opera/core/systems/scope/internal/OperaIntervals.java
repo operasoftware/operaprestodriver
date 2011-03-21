@@ -16,9 +16,9 @@ limitations under the License.
 package com.opera.core.systems.scope.internal;
 
 /**
- * 
+ *
  * Enumerator for delay values in miliseconds
- * 
+ *
  */
 public enum OperaIntervals {
   RESPONSE_TIMEOUT(5000), PAGE_LOAD_TIMEOUT(60000), WINDOW_EVENT_TIMEOUT(5000), OPERA_IDLE_TIMEOUT(

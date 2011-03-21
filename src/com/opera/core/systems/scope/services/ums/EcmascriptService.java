@@ -60,9 +60,9 @@ import com.opera.core.systems.scope.services.IWindowManager;
 /**
  * Ecmascript service is a lightweight service to enable javascript injection
  * (incomplete)
- * 
+ *
  * @author Deniz Turkoglu <denizt@opera.com>
- * 
+ *
  */
 // TODO extend ecmascript debugger? the signatures do vary a lot, might
 // be a better idea to keep this interface seperate, maybe create an abstract
@@ -86,9 +86,9 @@ public class EcmascriptService extends AbstractService implements
   /**
    * Evaluate a piece of ECMAScript in the global scope. For instance to fetch
    * information on the window object, one can do::
-   * 
+   *
    * Eval(runtimeID=1, scriptData="window")
-   * 
+   *
    * EvalResult.value.object will be set, note however that this will not
    * include properties on the return object to conserve the amount of data that
    * needs to be sent. To get properties use ExamineObjects().
@@ -98,11 +98,11 @@ public class EcmascriptService extends AbstractService implements
   /**
    * Request additional information about an object, such as its prototype or
    * its properties.
-   * 
+   *
    * For instance to get more information on the window object, one can do::
-   * 
+   *
    * ExamineObjects(runtimeID=1, objectList=[2], examinePrototypes=true)
-   * 
+   *
    * Here the object ID was the ID previously returned from an Eval() call.
    */
   // command ExamineObjects(ExamineObjectsArg) returns (ObjectList) = 3;
@@ -110,12 +110,12 @@ public class EcmascriptService extends AbstractService implements
   /**
    * Release protected ECMAScript objects. This will just make them garbage
    * collectible. Released objects are not necessarily freed immediately.
-   * 
+   *
    * Calling ReleaseObjects with an empty list causes all objects to be
    * released. Otherwise, only the specified objects will be released.
    * Attempting to release a non-existent object has no effect, and will fail
    * silently.
-   * 
+   *
    * Releasing objects invalidates associated object IDs immediately.
    */
   // command ReleaseObjects(ReleaseObjectsArg) returns (Default) = 4;
@@ -399,7 +399,7 @@ public class EcmascriptService extends AbstractService implements
 
   /**
    * Build the script to send with arguments
-   * 
+   *
    * @param elements The web elements to send with the script as argument
    * @param script The script to execute, can have references to argument(s)
    * @param params Params to send with the script, will be parsed in to
@@ -533,7 +533,7 @@ public class EcmascriptService extends AbstractService implements
 
   /**
    * Queries for the given runtime ID
-   * 
+   *
    * @param runtimeID The runtime id to query for
    * @return {@link Runtime} object if found, <code>null</code> otherwise
    */

@@ -30,9 +30,9 @@ import java.util.concurrent.ConcurrentMap;
  * {@link LinkedHashMap} that provides predictable iteration order. All the
  * operations that require thread safety are protected by the lock of
  * synchronized map.
- * 
+ *
  * @author Deniz Turkoglu <denizt@opera.com>
- * 
+ *
  * @param <K>
  * @param <V>
  */
@@ -118,7 +118,7 @@ public class StackHashMap<K, V> implements ConcurrentMap<K, V> {
 
   /**
    * Removes the first value from the map
-   * 
+   *
    * @return the value that was removed
    */
   public V pop() {
@@ -168,7 +168,7 @@ public class StackHashMap<K, V> implements ConcurrentMap<K, V> {
   /**
    * Puts a key to top of the map if absent if the key is present in stack it is
    * removed
-   * 
+   *
    * @param k
    * @param v
    * @return the value if it is not contained, null otherwise

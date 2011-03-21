@@ -31,7 +31,7 @@ public interface OperaRunner {
 
   /**
    * Is opera running?
-   * 
+   *
    * @return true if running, false if not running or crashed.
    */
   public boolean isOperaRunning();
@@ -41,14 +41,14 @@ public interface OperaRunner {
   /**
    * Did opera crash? This is reset on next call, so If you dont chech, you wont
    * know
-   * 
+   *
    * @return true if opera has crashed.
    */
   public boolean hasOperaCrashed();
 
   /**
    * If opera crashed there should be a crashlog.
-   * 
+   *
    * @return Returns the crashlog, or null if it does not exist.
    */
   public String getOperaCrashlog();
@@ -58,7 +58,7 @@ public interface OperaRunner {
 
   /**
    * Take a screenshot
-   * 
+   *
    * @param timeout
    * @param hashes
    * @return a screenshot with md5 and bytes.

@@ -23,7 +23,7 @@ import java.util.Map;
 /**
  * This enum maps the commands for the <a href="http://dragonfly.opera.com/app/scope-interface/services/WindowManager/WindowManager_2_0.html"
  * >Window Manager 2.0</a>.
- * 
+ *
  */
 public enum WindowManagerCommand implements ICommand {
   GET_ACTIVE_WINDOW(1), LIST_WINDOWS(2), MODIFY_FILTER(3), WINDOW_UPDATED(4), // event

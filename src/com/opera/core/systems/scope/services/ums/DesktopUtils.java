@@ -30,9 +30,9 @@ import com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopStringText;
 import com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopPath;
 
 /**
- * 
+ *
  * @author Adam Minchinton, Karianne Ekern
- * 
+ *
  */
 public class DesktopUtils extends AbstractService implements IDesktopUtils {
 

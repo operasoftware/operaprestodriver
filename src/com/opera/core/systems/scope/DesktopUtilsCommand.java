@@ -21,7 +21,7 @@ import java.util.Map;
 
 /**
  * This enum maps the commands
- * 
+ *
  */
 public enum DesktopUtilsCommand implements ICommand {
   GET_STRING(1), GET_OPERA_PATH(2), GET_LARGE_PREFERENCES_PATH(3), GET_SMALL_PREFERENCES_PATH(

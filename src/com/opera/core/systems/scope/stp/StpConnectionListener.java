@@ -31,7 +31,7 @@ import com.opera.core.systems.util.SocketMonitor;
 /**
  * This class handles accepting STP connections. STP connections are accepted in
  * the canRead() metod, which then spawns an StpConnection.
- * 
+ *
  * @author Jan Vidar Krey <janv@opera.com>
  */
 public class StpConnectionListener implements SocketListener {

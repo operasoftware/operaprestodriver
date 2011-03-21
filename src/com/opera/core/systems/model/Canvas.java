@@ -18,9 +18,9 @@ package com.opera.core.systems.model;
 /**
  * A canvas object to use in taking screenshots of Opera's viewport. The
  * screenshot can be relative to viewport or to the window
- * 
+ *
  * @author Deniz Turkoglu <denizt@opera.com>
- * 
+ *
  */
 public class Canvas {
   protected int x;
@@ -48,7 +48,7 @@ public class Canvas {
   /**
    * Sets the screenshots to be relative to screen or to window, default is
    * window.
-   * 
+   *
    * @param viewPortRelative true if relative to window
    */
   public void setViewPortRelative(boolean viewPortRelative) {

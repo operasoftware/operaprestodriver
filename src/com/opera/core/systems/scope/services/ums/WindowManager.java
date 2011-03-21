@@ -39,9 +39,9 @@ import com.opera.core.systems.util.StackHashMap;
 /**
  * window-manager service implementation, handles events such as window-closed
  * and updated and tracks window being loaded
- * 
+ *
  * @author Deniz Turkoglu <denizt@opera.com>
- * 
+ *
  */
 public class WindowManager extends AbstractService implements IWindowManager {
 

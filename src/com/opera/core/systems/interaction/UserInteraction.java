@@ -19,9 +19,9 @@ import org.openqa.selenium.WebDriver;
 
 /**
  * UserInteractions execute keypresses and clicks on the given driver
- * 
+ *
  * @author Deniz Turkoglu
- * 
+ *
  */
 public interface UserInteraction {
   void execute(WebDriver driver);

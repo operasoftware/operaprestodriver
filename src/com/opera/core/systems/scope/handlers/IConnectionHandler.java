@@ -24,7 +24,7 @@ public interface IConnectionHandler {
    * This event is emitted if the STP connection thread has accepted a
    * connection. If an STP connection has already been accepted the return value
    * can be used to close the newly accepted connection.
-   * 
+   *
    * @param connection The connection that has been accepted.
    * @return false if the connection should be closed immediately, or true to
    *         continue.
@@ -39,7 +39,7 @@ public interface IConnectionHandler {
 
   /**
    * This event is triggered when we have received a response to enableStp1().
-   * 
+   *
    * @param stp1 true if handshake was an STP/1 response.
    */
   void onHandshake(boolean stp1);
@@ -58,7 +58,7 @@ public interface IConnectionHandler {
 
   /**
    * This event is triggered whenever a command error response is received.
-   * 
+   *
    * @param tag the internal command tag corresponging to the request..
    * @param response null if the response was an error.
    */

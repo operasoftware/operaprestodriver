@@ -24,9 +24,9 @@ import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo;
 
 /**
  * Event handler for scope events and network exceptions
- * 
+ *
  * @author Deniz Turkoglu
- * 
+ *
  */
 public abstract class AbstractEventHandler {
 
@@ -36,7 +36,7 @@ public abstract class AbstractEventHandler {
   /**
    * Fired when a new runtime started is received Runtime-started is needed for
    * tracking ecmascript injections
-   * 
+   *
    * @param started
    */
 
@@ -44,7 +44,7 @@ public abstract class AbstractEventHandler {
 
   /**
    * Fired on new console messages
-   * 
+   *
    * @param message
    */
 
@@ -52,7 +52,7 @@ public abstract class AbstractEventHandler {
 
   /**
    * Fired when a runtime is stopped and no longer injectable
-   * 
+   *
    * @param id
    */
   public abstract void onRuntimeStopped(Integer id);
@@ -60,28 +60,28 @@ public abstract class AbstractEventHandler {
   /**
    * Fired when a new window is created or window has incoming changes (such as
    * title change)
-   * 
+   *
    * @param window
    */
   public abstract void onUpdatedWindow(WindowInfo window);
 
   /**
    * Fired when a window becomes active (steals focus)
-   * 
+   *
    * @param id
    */
   public abstract void onActiveWindow(Integer id);
 
   /**
    * Fired when a window instance is closed
-   * 
+   *
    * @param id
    */
   public abstract void onWindowClosed(Integer id);
 
   /**
    * Fired when a window load is complete
-   * 
+   *
    * @param windowId Id of the window that is loaded
    */
   public abstract void onWindowLoaded(int windowId);
@@ -89,7 +89,7 @@ public abstract class AbstractEventHandler {
   /**
    * Fired when a desktop window is shown at the last possible moment so the
    * window should be fully visible
-   * 
+   *
    * @param info
    */
   public abstract void onDesktopWindowShown(DesktopWindowInfo info);
@@ -102,28 +102,28 @@ public abstract class AbstractEventHandler {
   /**
    * Fired when a new window is created or window has incoming changes (such as
    * title change)
-   * 
+   *
    * @param info
    */
   public abstract void onDesktopWindowUpdated(DesktopWindowInfo info);
 
   /**
    * Fired when a window becomes active (steals focus)
-   * 
+   *
    * @param info
    */
   public abstract void onDesktopWindowActivated(DesktopWindowInfo info);
 
   /**
    * Fired when a window instance is closed
-   * 
+   *
    * @param info
    */
   public abstract void onDesktopWindowClosed(DesktopWindowInfo info);
 
   /**
    * Fired when loading Finished event
-   * 
+   *
    * @param info
    */
   public abstract void onDesktopWindowLoaded(DesktopWindowInfo info);

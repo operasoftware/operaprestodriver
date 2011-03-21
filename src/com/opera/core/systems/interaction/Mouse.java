@@ -23,9 +23,9 @@ import com.opera.core.systems.OperaWebElement;
 /**
  * Mouse user interactions, part of OperaUserInteraction to support clicking and
  * moving the mouse
- * 
+ *
  * @author Deniz Turkoglu <denizt@opera.com>
- * 
+ *
  */
 public abstract class Mouse implements UserInteraction {
 

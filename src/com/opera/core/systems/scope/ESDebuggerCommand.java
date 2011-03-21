@@ -23,7 +23,7 @@ import java.util.Map;
 /**
  * This enum maps the commands for the <a href="http://dragonfly.opera.com/app/scope-interface/services/EcmascriptDebugger/EcmascriptDebugger_6_0.html"
  * >EcmascriptDebugger 6.0</a>.
- * 
+ *
  */
 public enum ESDebuggerCommand implements ICommand {
   LIST_RUNTIMES(1), EVAL(3), INSPECT_DOM(13), EXAMINE_OBJECTS(4), SET_CONFIGURATION(

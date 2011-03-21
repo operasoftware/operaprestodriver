@@ -17,9 +17,9 @@ package com.opera.core.systems.scope.internal;
 
 /**
  * Enumerator for native mouse key events
- * 
+ *
  * @author Deniz Turkoglu
- * 
+ *
  */
 public enum OperaMouseKeys {
   LEFT_DOWN(1), LEFT_UP(2), LEFT(LEFT_DOWN.value | LEFT_UP.value), RIGHT_DOWN(4), RIGHT_UP(

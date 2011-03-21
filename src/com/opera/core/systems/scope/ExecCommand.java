@@ -24,7 +24,7 @@ import java.util.Map;
  * This enum maps the commands for the <a href=
  * "http://dragonfly.opera.com/app/scope-interface/services/Exec/Exec_2_0.html"
  * >Exec 2.0</a>.
- * 
+ *
  */
 public enum ExecCommand implements ICommand {
   EXEC(1), GET_ACTION_LIST(2), SETUP_SCREEN_WATCHER(3), SEND_MOUSE_ACTION(5), DEFAULT(

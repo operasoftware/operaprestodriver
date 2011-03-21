@@ -28,7 +28,7 @@ public interface IEcmaScriptDebugger {
   /**
    * Sets the runtime to be used in injection required for event handler (STP/1
    * only)
-   * 
+   *
    * @param runtime
    */
   void setRuntime(RuntimeInfo runtime);
@@ -36,7 +36,7 @@ public interface IEcmaScriptDebugger {
   /**
    * Removes a runtime from the list, doesnt get called often due to
    * runtime-stopped being sent late (runtimes get suspended)
-   * 
+   *
    * @param runtimeId
    */
   void removeRuntime(int runtimeId);
@@ -44,7 +44,7 @@ public interface IEcmaScriptDebugger {
   /**
    * Adds a runtime to the list of runtimes maintained in the service (STP/1
    * only)
-   * 
+   *
    * @param info
    */
   void addRuntime(RuntimeInfo info);
@@ -59,7 +59,7 @@ public interface IEcmaScriptDebugger {
 
   /**
    * Executes the given javascript via eval call
-   * 
+   *
    * @param script The script to be executed on host
    * @param params Array of params, can be string, long or web element(s)
    * @return
@@ -68,7 +68,7 @@ public interface IEcmaScriptDebugger {
 
   /**
    * Execute a script and wait for response
-   * 
+   *
    * @param using script to execute
    * @return
    */
@@ -77,7 +77,7 @@ public interface IEcmaScriptDebugger {
   /**
    * Execute a script, this method allows fine tuning of responses, we are not
    * interested in return value in some injections
-   * 
+   *
    * @param using script to execute
    * @param responseExpected if true parse the response
    * @return String representation of the response
@@ -86,7 +86,7 @@ public interface IEcmaScriptDebugger {
 
   /**
    * Executes a script and returns the response (based on responseExpected)
-   * 
+   *
    * @param using The script to be injected
    * @param responseExpected The flag to enable/disable parsing response
    * @return The raw result object if response is expected, <code>null</code>
@@ -96,7 +96,7 @@ public interface IEcmaScriptDebugger {
 
   /**
    * Gets the object id using a script
-   * 
+   *
    * @param using the script to find the object
    * @return object id with the result
    */
@@ -104,7 +104,7 @@ public interface IEcmaScriptDebugger {
 
   /**
    * The script to be executed on/using an object
-   * 
+   *
    * @param using Script with reference to the object "locator"
    * @param objectId The object to be used for injection
    * @return The string value returned by the executed Javascript
@@ -118,14 +118,14 @@ public interface IEcmaScriptDebugger {
 
   /**
    * Changes the frame by index
-   * 
+   *
    * @param index
    */
   void changeRuntime(int index);
 
   /**
    * Changes the frame by frame name address nested frames by dot (first.second)
-   * 
+   *
    * @param frameName
    */
   void changeRuntime(String frameName);
@@ -133,7 +133,7 @@ public interface IEcmaScriptDebugger {
   /**
    * Cleanup possible dead/suspended runtimes on runtime-started or
    * window-closed
-   * 
+   *
    * @param windowId
    */
   void cleanUpRuntimes(int windowId);
@@ -148,7 +148,7 @@ public interface IEcmaScriptDebugger {
 
   /**
    * Lists the frame paths of available runtimes
-   * 
+   *
    * @return a {@link List} of {@link String} framepaths
    */
   List<String> listFramePaths();
@@ -160,7 +160,7 @@ public interface IEcmaScriptDebugger {
 
   /**
    * Finds a valid runtime and updates the runtime reference (active runtime)
-   * 
+   *
    * @return true if a runtime is found and updated
    */
   boolean updateRuntime();
@@ -173,14 +173,14 @@ public interface IEcmaScriptDebugger {
 
   /**
    * Triggered on the ecmascript service when the state of a runtime changes
-   * 
+   *
    * @param change {@link ReadyStateChange} object with runtime info
    */
   void readyStateChanged(ReadyStateChange change);
 
   /**
    * Releases a specific object
-   * 
+   *
    * @param objectId Id of the object to be released
    */
   void releaseObject(int objectId);

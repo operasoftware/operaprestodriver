@@ -24,7 +24,7 @@ import com.opera.core.systems.settings.OperaDriverSettings;
 
 /**
  * Class to manage browser profile
- * 
+ *
  */
 public class ProfileUtils {
   private String largePrefsFolder;
@@ -57,8 +57,8 @@ public class ProfileUtils {
 
     if (isMac()) {
       /* Mac
-       * ~/Library/Application Support/Opera 
-       * ~/Library/Caches/Opera 
+       * ~/Library/Application Support/Opera
+       * ~/Library/Caches/Opera
        * ~/Library/Preferences/Opera Preferences
        */
       File appSupport = new File(path + "/Library/Application Support/Opera");

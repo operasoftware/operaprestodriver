@@ -18,7 +18,7 @@ package com.opera.core.systems.runner;
 /**
  * User whenever runner has problems. We are NOT supposed to fix launcher
  * problems. Just pass them upwards
- * 
+ *
  * @author Anders Oredsson <anderso@opera.com>
  */
 public class OperaRunnerException extends RuntimeException {

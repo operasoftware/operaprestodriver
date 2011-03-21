@@ -19,9 +19,9 @@ import org.openqa.selenium.WebDriverException;
 
 /**
  * Thrown when the response is not received in the given amount of time
- * 
+ *
  * @author Deniz Turkoglu <denizt@opera.com>
- * 
+ *
  */
 public class ResponseNotReceivedException extends WebDriverException {
 

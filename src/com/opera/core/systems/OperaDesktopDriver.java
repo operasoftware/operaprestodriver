@@ -34,9 +34,9 @@ import com.opera.core.systems.util.ProfileUtils;
 /**
  * An extension of OperaDriver for testing the interface of the Opera desktop
  * browser.
- * 
+ *
  * @author Adam Minchinton, Karianne Ekern
- * 
+ *
  */
 public class OperaDesktopDriver extends OperaDriver {
   private IDesktopWindowManager desktopWindowManager;
@@ -56,7 +56,7 @@ public class OperaDesktopDriver extends OperaDriver {
 
   /**
    * Constructor that starts Opera if it's not running.
-   * 
+   *
    * @param settings settings for binary path to Opera, prefs directory, and
    *          arguments
    */
@@ -92,12 +92,12 @@ public class OperaDesktopDriver extends OperaDriver {
 
   /**
    * Initializes services and starts Opera.
-   * 
+   *
    * If OperaBinaryLocation is not set, the binary location is retrieved from
    * the connected Opera instance, before shutting it down, waiting for it to
    * quit properly, and then restarting it under the control of the
    * {@link OperaLauncherRunner}.
-   * 
+   *
    */
   private void initDesktopDriver() {
     // super.init();
@@ -197,7 +197,7 @@ public class OperaDesktopDriver extends OperaDriver {
 
   /**
    * Gets the id of the active QuickWindow.
-   * 
+   *
    * @return id of active window
    */
   public int getActiveQuickWindowID() {
@@ -206,7 +206,7 @@ public class OperaDesktopDriver extends OperaDriver {
 
   /**
    * Gets a list of all widgets in the window with the given window name.
-   * 
+   *
    * @param windowName name of window to list widgets inside
    * @return list of widgets in the window with name windowName If windowName is
    *         empty, it gets the widgets in the active window
@@ -222,7 +222,7 @@ public class OperaDesktopDriver extends OperaDriver {
 
   /**
    * Gets a list of all widgets in the window with the given window id.
-   * 
+   *
    * @param windowId - windowId of window to get widgets in
    * @return list of widgets in the window with id windowId If windowId -1, gets
    *         the widgets in the active window
@@ -233,7 +233,7 @@ public class OperaDesktopDriver extends OperaDriver {
 
   /**
    * Gets a list of all open QuickWindows.
-   * 
+   *
    * @return list of windows
    */
   public List<QuickWindow> getQuickWindowList() {
@@ -241,7 +241,7 @@ public class OperaDesktopDriver extends OperaDriver {
   }
 
   /**
-   * 
+   *
    * @param windowName name of the window
    * @return window id of the QuickWindow with name windowName, or -1 if no such
    *         window exists
@@ -260,10 +260,10 @@ public class OperaDesktopDriver extends OperaDriver {
 
   /**
    * Finds widget by name in the window specified by windowId.
-   * 
+   *
    * @param windowId window id of parent window
    * @param widgetName name of widget to find
-   * 
+   *
    * @return QuickWidget with the given name in the window with id windowId, or
    *         null if no such widget exists.
    */
@@ -274,7 +274,7 @@ public class OperaDesktopDriver extends OperaDriver {
 
   /**
    * Finds widget by name and parent in the window with the specified window id.
-   * 
+   *
    * @param windowId id of parent window
    * @param widgetName name of widget
    * @param parentName name of parent widget
@@ -290,10 +290,10 @@ public class OperaDesktopDriver extends OperaDriver {
   /**
    * Finds widget with the text specified in the window with the given window
    * id.
-   * 
+   *
    * Note, if there are several widgets in this window with the same text, the
    * widget returned can be any one of those
-   * 
+   *
    * @param windowId - id of parent window
    * @param text - text of widget
    * @return QuickWidget with the given text in the specified window, or null if
@@ -306,7 +306,7 @@ public class OperaDesktopDriver extends OperaDriver {
 
   /**
    * Finds widget by text and parent widget name.
-   * 
+   *
    * @param windowId id of parent window
    * @param text text of widget
    * @param parentName name of parent widget
@@ -322,7 +322,7 @@ public class OperaDesktopDriver extends OperaDriver {
   /**
    * Finds widget with the text specified by string id in the window with the
    * given id.
-   * 
+   *
    * @param windowId id of parent window
    * @param stringId string id of the widget
    * @return QuickWidget or null if no matching widget found
@@ -335,7 +335,7 @@ public class OperaDesktopDriver extends OperaDriver {
   /**
    * Finds widget with the text specified by string id and parentName in the
    * specified window.
-   * 
+   *
    * @param windowId id of parent window
    * @param stringId stringid of the widget
    * @param parentName name of parent widget
@@ -350,7 +350,7 @@ public class OperaDesktopDriver extends OperaDriver {
   /**
    * Finds widget by specified position. Used for widgets that have a position
    * only, e.g. treeviewitems and tabs.
-   * 
+   *
    * @param windowId id of parent window
    * @param row row of widget within its parent
    * @param column column of widget within its parent
@@ -363,7 +363,7 @@ public class OperaDesktopDriver extends OperaDriver {
   /**
    * Finds widget by specified position. Used for widgets that have a position,
    * e.g. treeviewitems and tabs.
-   * 
+   *
    * @param windowId id of parent window
    * @param row row of widget within its parent
    * @param column column of widget within its parent
@@ -378,7 +378,7 @@ public class OperaDesktopDriver extends OperaDriver {
 
   /**
    * Finds a Window by its name.
-   * 
+   *
    * @param windowName name of window
    * @return QuickWindow or null if no window with windowName is found
    */
@@ -389,7 +389,7 @@ public class OperaDesktopDriver extends OperaDriver {
 
   /**
    * Find window by window id.
-   * 
+   *
    * @param windowId id of window
    * @return QuickWindow or null if no window with the id found
    */
@@ -399,7 +399,7 @@ public class OperaDesktopDriver extends OperaDriver {
 
   /**
    * Gets the name of the window from its window id.
-   * 
+   *
    * @param windowId window id of window
    * @return String: name of the window with id windowId
    */
@@ -408,7 +408,7 @@ public class OperaDesktopDriver extends OperaDriver {
   }
 
   /**
-   * 
+   *
    * @param enumText
    * @return the string specified by the id @param enum_text
    */
@@ -418,7 +418,7 @@ public class OperaDesktopDriver extends OperaDriver {
 
   /**
    * Gets the path to the connected Opera instance.
-   * 
+   *
    * @return the path to the connected Opera instance
    */
   public String getOperaPath() {
@@ -426,7 +426,7 @@ public class OperaDesktopDriver extends OperaDriver {
   }
 
   /**
-   * 
+   *
    * @return large preferences path
    */
   public String getLargePreferencesPath() {
@@ -435,7 +435,7 @@ public class OperaDesktopDriver extends OperaDriver {
   }
 
   /**
-   * 
+   *
    * @return small preferences path
    */
   public String getSmallPreferencesPath() {
@@ -444,7 +444,7 @@ public class OperaDesktopDriver extends OperaDriver {
   }
 
   /**
-   * 
+   *
    * @return cache preferences path
    */
   public String getCachePreferencesPath() {
@@ -454,7 +454,7 @@ public class OperaDesktopDriver extends OperaDriver {
 
   /**
    * Press Key with modifiers held down.
-   * 
+   *
    * @param key key to press
    * @param modifiers modifiers held
    */
@@ -464,7 +464,7 @@ public class OperaDesktopDriver extends OperaDriver {
 
   /**
    * Release key.
-   * 
+   *
    * @param key key to press
    * @param modifiers modifiers held
    */
@@ -474,7 +474,7 @@ public class OperaDesktopDriver extends OperaDriver {
 
   /**
    * Press Key.
-   * 
+   *
    * @param key key to press
    * @param modifiers modifiers held
    */
@@ -484,7 +484,7 @@ public class OperaDesktopDriver extends OperaDriver {
 
   /**
    * Gets number of open windows.
-   * 
+   *
    * @return number of open windows
    */
   public int getQuickWindowCount() {
@@ -493,7 +493,7 @@ public class OperaDesktopDriver extends OperaDriver {
 
   /**
    * Executes an opera action.
-   * 
+   *
    * @param using - action_name
    * @param data - data parameter
    * @param dataString - data string parameter
@@ -506,11 +506,11 @@ public class OperaDesktopDriver extends OperaDriver {
 
   /**
    * Starts a process of waiting for some event.
-   * 
+   *
    * After this call, messages to the driver about window events are not thrown
    * away, so that the notification about window shown is not lost because of
    * other events or messages
-   * 
+   *
    * @throws CommuncationException if no connection
    */
   public void waitStart() {
@@ -522,7 +522,7 @@ public class OperaDesktopDriver extends OperaDriver {
 
   /**
    * Waits for any window update event.
-   * 
+   *
    * @throws CommuncationException if no connection
    */
   public void waitForWindowUpdated() {
@@ -531,7 +531,7 @@ public class OperaDesktopDriver extends OperaDriver {
 
   /**
    * Waits for any window activated event.
-   * 
+   *
    * @throws CommuncationException if no connection
    */
   public void waitForWindowActivated() {
@@ -540,7 +540,7 @@ public class OperaDesktopDriver extends OperaDriver {
 
   /**
    * Waits for any window close event.
-   * 
+   *
    * @throws CommuncationException if no connection
    */
   public void waitForWindowClose() {
@@ -550,7 +550,7 @@ public class OperaDesktopDriver extends OperaDriver {
   /**
    * Waits until the window is shown, and then returns the window id of the
    * window
-   * 
+   *
    * @param windowName - window to wait for shown event on
    * @return id of window
    * @throws CommuncationException if no connection
@@ -566,7 +566,7 @@ public class OperaDesktopDriver extends OperaDriver {
   /**
    * Waits until the window is updated, and then returns the window id of the
    * window.
-   * 
+   *
    * @param windowName - window to wait for shown event on
    * @return id of window
    * @throws CommuncationException if no connection
@@ -582,7 +582,7 @@ public class OperaDesktopDriver extends OperaDriver {
   /**
    * Waits until the window is activated, and then returns the window id of the
    * window.
-   * 
+   *
    * @param windowName - window to wait for shown event on
    * @return id of window
    * @throws CommuncationException if no connection
@@ -599,7 +599,7 @@ public class OperaDesktopDriver extends OperaDriver {
   /**
    * Waits until the window is closed, and then returns the window id of the
    * window.
-   * 
+   *
    * @param windowName - window to wait for shown event on
    * @return id of window
    * @throws CommuncationException if no connection
@@ -615,7 +615,7 @@ public class OperaDesktopDriver extends OperaDriver {
   /**
    * Waits until the window is loaded and then returns the window id of the
    * window.
-   * 
+   *
    * @param windowName - window to wait for shown event on
    * @return id of window
    * @throws CommuncationException if no connection
@@ -629,16 +629,16 @@ public class OperaDesktopDriver extends OperaDriver {
   }
 
   /**
-   * 
+   *
    * resetOperaPrefs - restarts Opera after copying over newPrefs to profile, if
    * newPrefs folder exists.
-   * 
+   *
    * Copies prefs in folder newPrefs to the profile for the connected Opera
    * instance. Will first quit Opera, then delete the old prefs, and copy the
    * new prefs over, then restart Opera with the new prefs.
-   * 
+   *
    * Does nothing if profile used is default main user profile
-   * 
+   *
    * @param newPrefs - path to where new prefs to be copied into the prefs
    *          folders are located
    */
@@ -674,9 +674,9 @@ public class OperaDesktopDriver extends OperaDriver {
 
   /**
    * Deletes the profile for the connected Opera instance.
-   * 
+   *
    * Should only be called after the given Opera instance has quit
-   * 
+   *
    */
   public void deleteOperaPrefs() {
     // Only delete if Opera is currently not running

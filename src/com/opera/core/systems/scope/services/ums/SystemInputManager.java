@@ -28,9 +28,9 @@ import com.opera.core.systems.scope.protos.SystemInputProtos.MouseInfo;
 import com.opera.core.systems.scope.services.ISystemInput;
 
 /**
- * 
+ *
  * @author Adam Minchinton, Karianne Ekern
- * 
+ *
  */
 public class SystemInputManager extends AbstractService implements ISystemInput {
 

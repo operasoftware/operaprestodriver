@@ -24,9 +24,9 @@ import com.opera.core.systems.scope.protos.WmProtos.WindowInfo;
 
 /**
  * Provides an interface to the Scope protocol.
- * 
+ *
  * @author Deniz Turkoglu
- * 
+ *
  */
 public class EventHandler extends AbstractEventHandler {
 
@@ -77,7 +77,7 @@ public class EventHandler extends AbstractEventHandler {
 
   /**
    * Fired when a window is loaded
-   * 
+   *
    * @param windowId ID of the window that fired the event
    */
   @Override

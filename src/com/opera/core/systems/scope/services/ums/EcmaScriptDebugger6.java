@@ -41,9 +41,9 @@ import com.opera.core.systems.util.VersionUtil;
 /**
  * Ecmascript debugger 6.0 implementation handles injection and runtime
  * management to the new version of debugger
- * 
+ *
  * @author Deniz Turkoglu <denizt@opera.com>
- * 
+ *
  */
 public class EcmaScriptDebugger6 extends EcmaScriptDebugger {
 

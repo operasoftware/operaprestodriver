@@ -41,7 +41,7 @@ public interface IDesktopUtils {
 
   /**
    * Gets the string specified by the given string id.
-   * 
+   *
    * @param enumText
    * @return string corresponding to the enumText
    */
@@ -50,7 +50,7 @@ public interface IDesktopUtils {
   /**
    * Used to stop problems comparing strings that have just \n with those with
    * \r\n.
-   * 
+   *
    * @param text to remove the \r's from
    * @return string without \r's
    */
@@ -58,7 +58,7 @@ public interface IDesktopUtils {
 
   /**
    * Gets process id of connected Opera instance.
-   * 
+   *
    * @return pid
    */
   int getOperaPid();

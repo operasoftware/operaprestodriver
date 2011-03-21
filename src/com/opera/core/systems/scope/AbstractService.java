@@ -36,9 +36,9 @@ import com.opera.core.systems.util.VersionUtil;
 
 /**
  * All scope services derive from this base class for generic operations
- * 
+ *
  * @author Deniz Turkoglu
- * 
+ *
  */
 public abstract class AbstractService {
 
@@ -84,7 +84,7 @@ public abstract class AbstractService {
 
   /**
    * Query a collection with JXPath and return value of node
-   * 
+   *
    * @param collection
    * @param query a valid XPath query
    * @return result
@@ -103,7 +103,7 @@ public abstract class AbstractService {
   /**
    * Query a collection JXPath and return a pointer FIXME: This does not belong
    * here!
-   * 
+   *
    * @param collection
    * @param query
    * @return Pointer to node
@@ -122,7 +122,7 @@ public abstract class AbstractService {
   /**
    * Query a collection JXPath and return a pointer FIXME: This does not belong
    * here!
-   * 
+   *
    * @param collection
    * @param query
    * @return Pointer to node

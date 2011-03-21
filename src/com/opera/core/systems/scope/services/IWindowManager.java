@@ -28,7 +28,7 @@ public interface IWindowManager {
   /**
    * Sets the active window if the window is of type 'normal' discards any other
    * window such as 'dialog' or 'unknown'
-   * 
+   *
    * @param windowId
    */
   void setActiveWindowId(Integer windowId);
@@ -54,7 +54,7 @@ public interface IWindowManager {
   /**
    * Find a window suitable for driving, find the active window, if it is not a
    * normal window, find the first normal window via JXPath
-   * 
+   *
    * @throws WebDriverException if no window is available for driving
    */
   void findDriverWindow();

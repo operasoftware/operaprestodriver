@@ -24,9 +24,9 @@ import com.opera.core.systems.scope.internal.OperaKeys;
 /**
  * Keyboard user interactions, part of OperaUserInteraction to support typing
  * and key strokes
- * 
+ *
  * @author Deniz Turkoglu <denizt@opera.com>
- * 
+ *
  */
 public abstract class Keyboard implements UserInteraction {
 

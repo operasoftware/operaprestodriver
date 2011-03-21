@@ -21,9 +21,9 @@ import com.opera.core.systems.scope.protos.WmProtos.WindowInfo;
 
 /**
  * Provided support for an alternate protocol. To be removed.
- * 
+ *
  * @author Deniz Turkoglu
- * 
+ *
  */
 public class UmsEventHandler extends EventHandler {
 

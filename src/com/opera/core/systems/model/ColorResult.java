@@ -19,9 +19,9 @@ package com.opera.core.systems.model;
  * Represents a result from screenwathcer that identifies if a the color we were
  * looking for matched, and number of matches if any, matches are tagged with an
  * id
- * 
+ *
  * @author Deniz Turkoglu <denizt@opera.com>
- * 
+ *
  */
 public class ColorResult {
   protected int id;

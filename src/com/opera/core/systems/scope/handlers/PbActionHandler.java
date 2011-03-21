@@ -32,11 +32,11 @@ import com.opera.core.systems.scope.internal.OperaMouseKeys;
 
 /**
  * This library handles actions for Core 2.5+
- * 
+ *
  * Core 2.5 uses a different (binary) protocol and different serializers
- * 
+ *
  * @author Deniz Turkoglu <denizt@opera.com>
- * 
+ *
  */
 
 // TODO Support for < Core 2.5 is deprecated, merge

@@ -60,9 +60,9 @@ import com.opera.core.systems.scope.services.IWindowManager;
 /**
  * Manages the ecmascript-debugger service Handles runtime management and script
  * injection
- * 
+ *
  * @author Deniz Turkoglu <denizt@opera.com>
- * 
+ *
  */
 public class EcmaScriptDebugger extends AbstractService implements
     IEcmaScriptDebugger {
@@ -223,7 +223,7 @@ public class EcmaScriptDebugger extends AbstractService implements
 
   /**
    * Build the script to send with arguments
-   * 
+   *
    * @param elements The web elements to send with the script as argument
    * @param script The script to execute, can have references to argument(s)
    * @param params Params to send with the script, will be parsed in to
@@ -423,7 +423,7 @@ public class EcmaScriptDebugger extends AbstractService implements
   /**
    * Parses a reply and returns the following types String presentation of
    * number, boolean or string
-   * 
+   *
    * @param reply
    * @return
    */
@@ -479,7 +479,7 @@ public class EcmaScriptDebugger extends AbstractService implements
   /**
    * Find the runtime for injection (default) Typically this is _top runtime
    * with the active window that has focus
-   * 
+   *
    * @return
    */
   protected RuntimeInfo findRuntime() {

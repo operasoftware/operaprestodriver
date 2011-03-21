@@ -203,7 +203,7 @@ public class OperaLauncherRunner implements OperaRunner {
 
   /**
    * Handle status message, and updates state
-   * 
+   *
    * @param msg
    */
   private StatusType handleStatusMessage(GeneratedMessage msg) {
