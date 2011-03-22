@@ -116,7 +116,7 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 		if (windowId < 0) {
 			windowId = getActiveQuickWindowId();
 		}
-
+		
 		List<QuickWidget> widgets = getQuickWidgetList(windowId);
 		for (QuickWidget widget : widgets) {
 			if ((parentName.length() == 0 || widget.getParentName().equals(parentName))
@@ -124,7 +124,8 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 					// so only look for these
 					&& (widget.getType() == QuickWidgetType.TABBUTTON
 					|| widget.getType() == QuickWidgetType.TREEITEM
-					|| widget.getType() == QuickWidgetType.THUMBNAIL)
+					|| widget.getType() == QuickWidgetType.THUMBNAIL
+					|| widget.getType() == QuickWidgetType.BUTTON)
 					&& widget.getRow() == row && widget.getColumn() == column) {
 				return widget;
 			}
