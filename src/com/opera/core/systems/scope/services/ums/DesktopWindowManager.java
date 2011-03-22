@@ -42,205 +42,197 @@ import com.opera.core.systems.scope.services.IDesktopUtils;
  * @author Adam Minchinton, Karianne Ekern
  *
  */
-public class DesktopWindowManager extends AbstractService implements
-    IDesktopWindowManager {
 
-  private int activeWindowId = 0;
-  private final SystemInputManager systemInputManager;
-  private final IDesktopUtils desktopUtils;
+public class DesktopWindowManager extends AbstractService implements IDesktopWindowManager {
 
-  public DesktopWindowManager(IDesktopUtils desktopUtils,
-      SystemInputManager inputManager, ScopeServices services, String version) {
-    super(services, version);
+	private int activeWindowId = 0;
+	private final SystemInputManager systemInputManager;
+	private final IDesktopUtils desktopUtils;
 
-    this.systemInputManager = inputManager;
-    this.desktopUtils = desktopUtils;
-    String serviceName = "desktop-window-manager";
+	 public DesktopWindowManager(IDesktopUtils desktopUtils, SystemInputManager inputManager, ScopeServices services, String version) {
+			super(services, version);
 
-    if (!isVersionInRange(version, "3.0", serviceName)) {
-      throw new UnsupportedOperationException(serviceName + " version "
-          + version + " is not supported");
-    }
+			this.systemInputManager = inputManager;
+			this.desktopUtils = desktopUtils;
+			String serviceName = "desktop-window-manager";
 
-    services.setDesktopWindowManager(this);
-  }
+			if (!isVersionInRange(version, "3.0", serviceName)) {
+				throw new UnsupportedOperationException(serviceName + " version " + version + " is not supported");
+			}
 
-  public void init() {
-  }
+			services.setDesktopWindowManager(this);
+		}
 
-  public int getActiveQuickWindowId() {
-    Response response = executeCommand(
-        DesktopWindowManagerCommand.GET_ACTIVE_WINDOW, null);
-    DesktopWindowID.Builder builder = DesktopWindowID.newBuilder();
-    buildPayload(response, builder);
-    activeWindowId = builder.build().getWindowID();
-    return activeWindowId;
-  }
+	 public void init() { }
 
-  public int getOpenQuickWindowCount() {
-    List<DesktopWindowInfo> windows = getDesktopWindowInfoList();
-    return windows.size();
-  }
+	 public int getActiveQuickWindowId() {
+		Response response = executeCommand(DesktopWindowManagerCommand.GET_ACTIVE_WINDOW, null);
+		DesktopWindowID.Builder builder = DesktopWindowID.newBuilder();
+		buildPayload(response, builder);
+		activeWindowId = builder.build().getWindowID();
+		return activeWindowId;
+	}
 
-  public QuickWidget getQuickWidget(int windowId,
-      QuickWidgetSearchType property, String value) {
-    return getQuickWidget(windowId, property, value, "");
-  }
+	public int getOpenQuickWindowCount() {
+		List<DesktopWindowInfo> windows = getDesktopWindowInfoList();
+		return windows.size();
+	}
 
-  // parentName is set to name, pos or text depending on widget.getParentType
-  public QuickWidget getQuickWidget(int windowId,
-      QuickWidgetSearchType property, String value, String parentName) {
-    if (windowId < 0) {
-      windowId = getActiveQuickWindowId();
-    }
+	public QuickWidget getQuickWidget(int windowId, QuickWidgetSearchType property, String value)
+	{
+		return getQuickWidget(windowId, property, value, "");
+	}
 
-    List<QuickWidget> widgets = getQuickWidgetList(windowId);
-    for (QuickWidget widget : widgets) {
-      if (property.equals(QuickWidgetSearchType.NAME)) {
-        if ((parentName.length() == 0 || widget.getParentName().equals(
-            parentName))
-            && widget.getName().equals(value)) {
-          return widget;
-        }
-      } else if (property.equals(QuickWidgetSearchType.TEXT)) {
-        if ((parentName.length() == 0 || widget.getParentName().equals(
-            parentName))
-            && widget.getText().trim().equals(value)) {
-          return widget;
-        }
-      }
-    }
-    return null;
-  }
+	// parentName is set to name, pos or text depending on widget.getParentType
+	public QuickWidget getQuickWidget(int windowId, QuickWidgetSearchType property, String value, String parentName)
+	{
+		if (windowId < 0) {
+			windowId = getActiveQuickWindowId();
+		}
 
-  public QuickWidget getQuickWidgetByPos(int id, int row, int column) {
-    return getQuickWidgetByPos(id, row, column, "");
-  }
+		List<QuickWidget> widgets = getQuickWidgetList(windowId);
+		for (QuickWidget widget : widgets) {
+			if (property.equals(QuickWidgetSearchType.NAME)) {
+				if ((parentName.length() == 0 || widget.getParentName().equals(parentName))
+							&& widget.getName().equals(value)) {
+					return widget;
+				}
+			} else if (property.equals(QuickWidgetSearchType.TEXT)) {
+				if ((parentName.length() == 0 || widget.getParentName().equals(parentName))
+							&& widget.getText().trim().equals(value)) {
+					return widget;
+				}
+			}
+		}
+		return null;
+	}
 
-  public QuickWidget getQuickWidgetByPos(int windowId, int row, int column,
-      String parentName) {
-    if (windowId < 0) {
-      windowId = getActiveQuickWindowId();
-    }
+	public QuickWidget getQuickWidgetByPos(int id, int row, int column) {
+		return getQuickWidgetByPos(id, row, column, "");
+	}
 
-    List<QuickWidget> widgets = getQuickWidgetList(windowId);
-    for (QuickWidget widget : widgets) {
-      if ((parentName.length() == 0 || widget.getParentName().equals(parentName))
-          // Position is only set on tabbuttons and treeitems
-          // so only look for these
-          && (widget.getType() == QuickWidgetType.TABBUTTON
-              || widget.getType() == QuickWidgetType.TREEITEM || widget.getType() == QuickWidgetType.THUMBNAIL)
-          && widget.getRow() == row && widget.getColumn() == column) {
-        return widget;
-      }
-    }
-    return null;
-  }
+	public QuickWidget getQuickWidgetByPos(int windowId, int row, int column, String parentName)
+	{
+		if (windowId < 0) {
+			windowId = getActiveQuickWindowId();
+		}
+		
+		List<QuickWidget> widgets = getQuickWidgetList(windowId);
+		for (QuickWidget widget : widgets) {
+			if ((parentName.length() == 0 || widget.getParentName().equals(parentName))
+					// Position is only set on tabbuttons and treeitems
+					// so only look for these
+					&& (widget.getType() == QuickWidgetType.TABBUTTON
+					|| widget.getType() == QuickWidgetType.TREEITEM
+					|| widget.getType() == QuickWidgetType.THUMBNAIL
+					|| widget.getType() == QuickWidgetType.BUTTON)
+					&& widget.getRow() == row && widget.getColumn() == column) {
+				return widget;
+			}
+		}
+		return null;
+	}
 
-  // Note: This grabs the first window with a matching name, there might be more
-  public QuickWindow getQuickWindow(QuickWidgetSearchType property, String value) {
-    List<QuickWindow> windows = getQuickWindowList();
-    for (QuickWindow window : windows) {
-      if (property.equals(QuickWidgetSearchType.NAME)) {
-        if (window.getName().equals(value)) {
-          return window;
-        }
-      }
-    }
-    return null;
-  }
+	// Note: This grabs the first window with a matching name, there might be more
+	public QuickWindow getQuickWindow(QuickWidgetSearchType property, String value)
+	{
+		List<QuickWindow> windows = getQuickWindowList();
+		for (QuickWindow window : windows) {
+			if (property.equals(QuickWidgetSearchType.NAME)) {
+				if (window.getName().equals(value)) {
+					return window;
+				}
+			}
+		}
+		return null;
+	}
 
-  public List<QuickWidget> getQuickWidgetList(int windowId) {
-    if (windowId <= 0) {
-      windowId = getActiveQuickWindowId();
-    }
+	public List<QuickWidget> getQuickWidgetList(int windowId) {
+		if (windowId <= 0) {
+			windowId = getActiveQuickWindowId();
+		}
 
-    DesktopWindowID.Builder winBuilder = DesktopWindowID.newBuilder();
-    winBuilder.clearWindowID();
-    if (windowId >= 0) {
-      winBuilder.setWindowID(windowId);
-    } else {
-      winBuilder.setWindowID(activeWindowId);
-      windowId = activeWindowId;
-    }
+		DesktopWindowID.Builder winBuilder = DesktopWindowID.newBuilder();
+		winBuilder.clearWindowID();
+		if (windowId >= 0) {
+			winBuilder.setWindowID(windowId);
+		} else {
+			winBuilder.setWindowID(activeWindowId);
+			windowId = activeWindowId;
+		}
 
-    Response response = executeCommand(
-        DesktopWindowManagerCommand.LIST_QUICK_WIDGETS, winBuilder);
-    QuickWidgetInfoList.Builder builder = QuickWidgetInfoList.newBuilder();
-    builder.clear();
-    buildPayload(response, builder);
-    QuickWidgetInfoList list = builder.build();
+		Response response = executeCommand(DesktopWindowManagerCommand.LIST_QUICK_WIDGETS, winBuilder);
+		QuickWidgetInfoList.Builder builder = QuickWidgetInfoList.newBuilder();
+		builder.clear();
+		buildPayload(response, builder);
+		QuickWidgetInfoList list = builder.build();
 
-    List<QuickWidgetInfo> widgetList = list.getQuickwidgetListList();
-    List<QuickWidget> quickWidgetList = new LinkedList<QuickWidget>();
+		List<QuickWidgetInfo> widgetList = list.getQuickwidgetListList();
+		List<QuickWidget> quickWidgetList = new LinkedList<QuickWidget>();
 
-    for (QuickWidgetInfo widgetInfo : widgetList) {
-      quickWidgetList.add(new QuickWidget(desktopUtils, systemInputManager,
-          widgetInfo, windowId));
-    }
-    return quickWidgetList;
-  }
+		for (QuickWidgetInfo widgetInfo : widgetList) {
+			quickWidgetList.add(new QuickWidget(desktopUtils, systemInputManager, widgetInfo, windowId));
+		}
+		return quickWidgetList;
+	}
 
-  public List<QuickWindow> getQuickWindowList() {
-    Response response = executeCommand(
-        DesktopWindowManagerCommand.LIST_WINDOWS, null);
-    DesktopWindowList.Builder builder = DesktopWindowList.newBuilder();
-    builder.clear();
-    buildPayload(response, builder);
-    DesktopWindowList list = builder.build();
+	public List<QuickWindow> getQuickWindowList() {
+		Response response = executeCommand(DesktopWindowManagerCommand.LIST_WINDOWS, null);
+		DesktopWindowList.Builder builder = DesktopWindowList.newBuilder();
+		builder.clear();
+		buildPayload(response, builder);
+		DesktopWindowList list = builder.build();
 
-    List<DesktopWindowInfo> windowInfoList = list.getWindowListList();
-    List<QuickWindow> windowList = new LinkedList<QuickWindow>();
+		List<DesktopWindowInfo> windowInfoList = list.getWindowListList();
+		List<QuickWindow> windowList = new LinkedList<QuickWindow>();
 
-    for (DesktopWindowInfo windowInfo : windowInfoList) {
-      windowList.add(new QuickWindow(windowInfo));
-    }
-    return windowList;
-  }
+		for (DesktopWindowInfo windowInfo : windowInfoList) {
+			windowList.add(new QuickWindow(windowInfo));
+		}
+		return windowList;
+	}
 
-  public List<DesktopWindowInfo> getDesktopWindowInfoList() {
-    Response response = executeCommand(
-        DesktopWindowManagerCommand.LIST_WINDOWS, null);
-    DesktopWindowList.Builder builder = DesktopWindowList.newBuilder();
-    buildPayload(response, builder);
-    DesktopWindowList list = builder.build();
+	public List<DesktopWindowInfo> getDesktopWindowInfoList() {
+		Response response = executeCommand(DesktopWindowManagerCommand.LIST_WINDOWS, null);
+		DesktopWindowList.Builder builder = DesktopWindowList.newBuilder();
+		buildPayload(response, builder);
+		DesktopWindowList list = builder.build();
 
-    List<DesktopWindowInfo> windowList = list.getWindowListList();
-    return windowList;
-  }
+		List<DesktopWindowInfo> windowList = list.getWindowListList();
+		return windowList;
+	}
 
-  public int getQuickWindowID(String name) {
-    QuickWindow win = getQuickWindowByName(name);
-    if (win != null) {
-      return win.getWindowID();
-    } else {
-      return -1;
-    }
-  }
+	public int getQuickWindowID(String name) {
+		QuickWindow win = getQuickWindowByName(name);
+		if (win != null) {
+			return win.getWindowID();
+		} else {
+			return -1;
+		}
+	}
 
-  public QuickWindow getQuickWindowByName(String name) {
-    List<DesktopWindowInfo> windowList = getDesktopWindowInfoList();
-    for (DesktopWindowInfo window : windowList) {
-      if (window.getName().equals(name)) {
-        return new QuickWindow(window);
-      }
-    }
-    return null;
-  }
+	public QuickWindow getQuickWindowByName(String name) {
+		List<DesktopWindowInfo> windowList = getDesktopWindowInfoList();
+		for (DesktopWindowInfo window : windowList) {
+			if (window.getName().equals(name)) {
+				return new QuickWindow(window);
+			}
+		}
+		return null;
+	}
 
-  public QuickWindow getQuickWindowById(int windowId) {
-    List<DesktopWindowInfo> windowList = getDesktopWindowInfoList();
-    for (DesktopWindowInfo window : windowList) {
-      if (window.getWindowID() == windowId) {
-        return new QuickWindow(window);
-      }
-    }
-    return null;
-  }
+	public QuickWindow getQuickWindowById(int windowId) {
+		List<DesktopWindowInfo> windowList = getDesktopWindowInfoList();
+		for (DesktopWindowInfo window : windowList) {
+			if (window.getWindowID() == windowId) {
+				return new QuickWindow(window);
+			}
+		}
+		return null;
+	}
 
-  public String getQuickWindowName(int windowId) {
-    QuickWindow window = getQuickWindowById(windowId);
-    return (window == null ? "" : window.getName());
-  }
-
+	public String getQuickWindowName(int windowId) {
+		QuickWindow window = getQuickWindowById(windowId);
+		return (window == null ? "" : window.getName());
+	}
 }
