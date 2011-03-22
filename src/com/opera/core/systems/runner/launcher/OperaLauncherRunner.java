@@ -53,7 +53,7 @@ public class OperaLauncherRunner implements OperaRunner {
     this.settings = settings;
 
     if (settings.getOperaLauncherBinary() == null) throw new WebDriverException(
-        "Launcher not available, please set it in path or use the JAR file");
+        "Launcher path not set");
 
     if (settings.getOperaBinaryLocation() == null) throw new WebDriverException(
         "You need to set Opera's path to use opera-launcher");
