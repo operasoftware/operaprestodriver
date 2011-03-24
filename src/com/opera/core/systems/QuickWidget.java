@@ -235,9 +235,10 @@ public class QuickWidget {
 	     * @return true if text specified by stringId equals widget text
 	     */
 		public boolean verifyText(String stringId) {
-			String text = desktopUtils.getString(stringId);
+			String text = desktopUtils.getString(stringId, true /* skipAmpersand */);
 			// Remember to remove all CRLF
-			return getText().indexOf(text) >= 0;
+			return getText().equals(text);
+			//return getText().indexOf(text) >= 0;
 		}
 
 		/**
@@ -247,7 +248,7 @@ public class QuickWidget {
 	     * @return true if text specified by stringId is contained in widget text
 	     */
 		public boolean verifyContainsText(String stringId) {
-			String text = desktopUtils.getString(stringId);
+			String text = desktopUtils.getString(stringId, true);
 			return getText().indexOf(text) >= 0;
 		}
 
@@ -294,7 +295,7 @@ public class QuickWidget {
 		 * @return true if the entry given by stringId is selected, else false
 		 */
 		public boolean isSelected(String stringId) {
-			String text = desktopUtils.getString(stringId);
+			String text = desktopUtils.getString(stringId, true);
 			return text.equals(info.getText());
 		}
 
