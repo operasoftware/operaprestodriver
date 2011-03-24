@@ -49,7 +49,7 @@ public class DesktopUtils extends AbstractService implements IDesktopUtils {
 
 	public void init() {}
 
-	public String getString(String enumText) {
+	public String getString(String enumText, boolean stripAmpersand) {
 		DesktopStringID.Builder stringBuilder = DesktopStringID.newBuilder();
 		stringBuilder.setEnumText(enumText);
 
@@ -60,7 +60,13 @@ public class DesktopUtils extends AbstractService implements IDesktopUtils {
 		DesktopStringText stringText = stringTextBuilder.build();
 
 		// Remember to remove all CRLF
-		return removeCR(stringText.getText());
+		String str = removeCR(stringText.getText());
+		
+		if (stripAmpersand && str.contains("&")) {
+			return str.replace("&", "");
+		}
+		
+		return str;
 	}
 
 	public String removeCR(String text) {

@@ -46,7 +46,7 @@ public interface IDesktopUtils {
 	 * @param enumText
 	 * @return string corresponding to the enumText
 	 */
-	String getString(String enumText);
+	String getString(String enumText, boolean stripAmpersand);
 
 
 	/**
