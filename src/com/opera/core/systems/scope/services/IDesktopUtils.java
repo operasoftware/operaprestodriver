@@ -45,7 +45,7 @@ public interface IDesktopUtils {
    * @param enumText
    * @return string corresponding to the enumText
    */
-  String getString(String enumText);
+  String getString(String enumText, boolean stripAmpersand);
 
   /**
    * Used to stop problems comparing strings that have just \n with those with
