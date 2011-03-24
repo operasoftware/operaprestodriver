@@ -236,7 +236,7 @@ public class QuickWidget {
 	     */
 		public boolean verifyText(String stringId) {
 			String text = desktopUtils.getString(stringId, true /* skipAmpersand */);
-			// Remember to remove all CRLF
+			
 			return getText().equals(text);
 			//return getText().indexOf(text) >= 0;
 		}
