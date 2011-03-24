@@ -318,7 +318,7 @@ public class OperaDesktopDriver extends OperaDriver {
 	 * @return QuickWidget or null if no matching widget found
 	 */
 	public QuickWidget findWidgetByStringId(int windowId, String stringId) {
-		String text = desktopUtils.getString(stringId);
+		String text = desktopUtils.getString(stringId, true);
 		return findWidgetByText(windowId, text);
 	}
 
@@ -332,7 +332,7 @@ public class OperaDesktopDriver extends OperaDriver {
 	 * @return QuickWidget, or null if no matching widget found
 	 */
 	public QuickWidget findWidgetByStringId(int windowId, String stringId, String parentName) {
-		String text = desktopUtils.getString(stringId);
+		String text = desktopUtils.getString(stringId, true);
 		return findWidgetByText(windowId, text, parentName);
 	}
 
@@ -399,8 +399,8 @@ public class OperaDesktopDriver extends OperaDriver {
 	 * @param enumText
 	 * @return the string specified by the id @param enum_text
 	 */
-	public String getString(String enumText) {
-		return desktopUtils.getString(enumText);
+	public String getString(String enumText, boolean stripAmpersand) {
+		return desktopUtils.getString(enumText, stripAmpersand);
 	}
 
 	/**
