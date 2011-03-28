@@ -21,6 +21,7 @@ import java.util.List;
 
 import com.opera.core.systems.QuickWidget;
 import com.opera.core.systems.QuickWindow;
+import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo.QuickWidgetType;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearch.QuickWidgetSearchType;
 
 public interface IDesktopWindowManager {
@@ -83,7 +84,7 @@ public interface IDesktopWindowManager {
 	 * @param value value of property given
 	 * @return QuickWidget matching the property, or null if no such widget
 	 */
-	QuickWidget getQuickWidget(int windowId, QuickWidgetSearchType property, String value);
+	QuickWidget getQuickWidget(QuickWidgetType type, int windowId, QuickWidgetSearchType property, String value);
 
 	/**
 	 * Gets the quick widget in a specified window based on a specific
@@ -95,7 +96,7 @@ public interface IDesktopWindowManager {
 	 * @param parentName - Name of the widgets parent widget
 	 * @return QuickWidget matching the property, or null if no such widget
 	 */
-	QuickWidget getQuickWidget(int windowId, QuickWidgetSearchType property, String value, String parentName);
+	QuickWidget getQuickWidget(QuickWidgetType type, int windowId, QuickWidgetSearchType property, String value, String parentName);
 
 	/**
 	 * Gets the quick widget based on its position.
@@ -105,7 +106,7 @@ public interface IDesktopWindowManager {
 	 * @param column - column of the widget
 	 * @return QuickWidget matching the parameters, or null if no such widget
 	 */
-	QuickWidget getQuickWidgetByPos(int windowId, int row, int column);
+	QuickWidget getQuickWidgetByPos(QuickWidgetType type, int windowId, int row, int column);
 
 	/**
 	 * Gets the quick widget based on its position and
@@ -117,7 +118,7 @@ public interface IDesktopWindowManager {
 	 * @param parentName - Name of the widgets parent widget
 	 * @return QuickWidget matching the parameters, or null if no such widget
 	 */
-	QuickWidget getQuickWidgetByPos(int windowId, int row, int column, String parentName);
+	QuickWidget getQuickWidgetByPos(QuickWidgetType type, int windowId, int row, int column, String parentName);
 
 	/**
 	 * Gets the quick window based on a specific property.
