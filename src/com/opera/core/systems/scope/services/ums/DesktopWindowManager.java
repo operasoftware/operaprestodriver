@@ -78,40 +78,42 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 		return windows.size();
 	}
 
-	public QuickWidget getQuickWidget(int windowId, QuickWidgetSearchType property, String value)
+	public QuickWidget getQuickWidget(QuickWidgetType type, int windowId, QuickWidgetSearchType property, String value)
 	{
-		return getQuickWidget(windowId, property, value, "");
+		return getQuickWidget(type, windowId, property, value, "");
 	}
 
 	// parentName is set to name, pos or text depending on widget.getParentType
-	public QuickWidget getQuickWidget(int windowId, QuickWidgetSearchType property, String value, String parentName)
+	public QuickWidget getQuickWidget(QuickWidgetType type, int windowId, QuickWidgetSearchType property, String value, String parentName)
 	{
 		if (windowId < 0) {
 			windowId = getActiveQuickWindowId();
 		}
-
+		
 		List<QuickWidget> widgets = getQuickWidgetList(windowId);
 		for (QuickWidget widget : widgets) {
-			if (property.equals(QuickWidgetSearchType.NAME)) {
-				if ((parentName.length() == 0 || widget.getParentName().equals(parentName))
+			if (widget.getType() == type) {
+				if (property.equals(QuickWidgetSearchType.NAME)) {
+					if ((parentName.length() == 0 || widget.getParentName().equals(parentName))
 							&& widget.getName().equals(value)) {
-					return widget;
-				}
-			} else if (property.equals(QuickWidgetSearchType.TEXT)) {
-				if ((parentName.length() == 0 || widget.getParentName().equals(parentName))
+						return widget;
+					}
+				} else if (property.equals(QuickWidgetSearchType.TEXT)) {
+					if ((parentName.length() == 0 || widget.getParentName().equals(parentName))
 							&& widget.getText().trim().equals(value)) {
-					return widget;
+						return widget;
+					}
 				}
 			}
 		}
 		return null;
 	}
 
-	public QuickWidget getQuickWidgetByPos(int id, int row, int column) {
-		return getQuickWidgetByPos(id, row, column, "");
+	public QuickWidget getQuickWidgetByPos(QuickWidgetType type, int id, int row, int column) {
+		return getQuickWidgetByPos(type, id, row, column, "");
 	}
 
-	public QuickWidget getQuickWidgetByPos(int windowId, int row, int column, String parentName)
+	public QuickWidget getQuickWidgetByPos(QuickWidgetType type, int windowId, int row, int column, String parentName)
 	{
 		if (windowId < 0) {
 			windowId = getActiveQuickWindowId();
@@ -120,7 +122,9 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 		List<QuickWidget> widgets = getQuickWidgetList(windowId);
 		for (QuickWidget widget : widgets) {
 			if ((parentName.length() == 0 || widget.getParentName().equals(parentName))
+					&& widget.getType() == type
 					// Position is only set on tabbuttons and treeitems
+					// thumbnails and buttons (in e.g. bookmarks bar)
 					// so only look for these
 					&& (widget.getType() == QuickWidgetType.TABBUTTON
 					|| widget.getType() == QuickWidgetType.TREEITEM

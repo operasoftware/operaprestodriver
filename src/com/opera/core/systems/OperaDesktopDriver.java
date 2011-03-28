@@ -23,6 +23,7 @@ import java.util.Map;
 import com.opera.core.systems.runner.launcher.OperaLauncherRunner;
 import com.opera.core.systems.scope.exceptions.CommunicationException;
 import com.opera.core.systems.scope.internal.OperaIntervals;
+import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo.QuickWidgetType;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearch.QuickWidgetSearchType;
 import com.opera.core.systems.scope.protos.SystemInputProtos.ModifierPressed;
 import com.opera.core.systems.scope.services.IDesktopWindowManager;
@@ -264,8 +265,8 @@ public class OperaDesktopDriver extends OperaDriver {
 	 * @return QuickWidget with the given name in the window with id windowId, or null
 	 *   if no such widget exists.
 	 */
-	public QuickWidget findWidgetByName(int windowId, String widgetName) {
-		return desktopWindowManager.getQuickWidget(windowId, QuickWidgetSearchType.NAME, widgetName);
+	public QuickWidget findWidgetByName(QuickWidgetType type, int windowId, String widgetName) {
+		return desktopWindowManager.getQuickWidget(type, windowId, QuickWidgetSearchType.NAME, widgetName);
 	}
 
 	/**
@@ -278,8 +279,8 @@ public class OperaDesktopDriver extends OperaDriver {
 	 * @return QuickWidget with widgetName and parent in the window given by windowId,
 	 *   or null if no such widget exists
 	 */
-	public QuickWidget findWidgetByName(int windowId, String widgetName, String parentName) {
-		return desktopWindowManager.getQuickWidget(windowId, QuickWidgetSearchType.NAME, widgetName, parentName);
+	public QuickWidget findWidgetByName(QuickWidgetType type, int windowId, String widgetName, String parentName) {
+		return desktopWindowManager.getQuickWidget(type, windowId, QuickWidgetSearchType.NAME, widgetName, parentName);
 	}
 
 	/**
@@ -293,8 +294,8 @@ public class OperaDesktopDriver extends OperaDriver {
 	 * @return QuickWidget with the given text in the specified window, or null if no
 	 *   such widget exists.
 	 */
-	public QuickWidget findWidgetByText(int windowId, String text) {
-		return desktopWindowManager.getQuickWidget(windowId, QuickWidgetSearchType.TEXT, text);
+	public QuickWidget findWidgetByText(QuickWidgetType type, int windowId, String text) {
+		return desktopWindowManager.getQuickWidget(type, windowId, QuickWidgetSearchType.TEXT, text);
 	}
 
 	/**
@@ -306,8 +307,8 @@ public class OperaDesktopDriver extends OperaDriver {
 	 * @return QuickWidget with the given text and parent in the window with id windowId, or
 	 *  null if no such widget exists
 	 */
-	public QuickWidget findWidgetByText(int windowId, String text, String parentName) {
-		return desktopWindowManager.getQuickWidget(windowId, QuickWidgetSearchType.TEXT, text, parentName);
+	public QuickWidget findWidgetByText(QuickWidgetType type, int windowId, String text, String parentName) {
+		return desktopWindowManager.getQuickWidget(type, windowId, QuickWidgetSearchType.TEXT, text, parentName);
 	}
 
 	/**
@@ -317,9 +318,9 @@ public class OperaDesktopDriver extends OperaDriver {
 	 * @param stringId string id of the widget
 	 * @return QuickWidget or null if no matching widget found
 	 */
-	public QuickWidget findWidgetByStringId(int windowId, String stringId) {
+	public QuickWidget findWidgetByStringId(QuickWidgetType type, int windowId, String stringId) {
 		String text = desktopUtils.getString(stringId, true);
-		return findWidgetByText(windowId, text);
+		return findWidgetByText(type, windowId, text);
 	}
 
 	/**
@@ -331,9 +332,9 @@ public class OperaDesktopDriver extends OperaDriver {
 	 * @param parentName name of parent widget
 	 * @return QuickWidget, or null if no matching widget found
 	 */
-	public QuickWidget findWidgetByStringId(int windowId, String stringId, String parentName) {
+	public QuickWidget findWidgetByStringId(QuickWidgetType type, int windowId, String stringId, String parentName) {
 		String text = desktopUtils.getString(stringId, true);
-		return findWidgetByText(windowId, text, parentName);
+		return findWidgetByText(type, windowId, text, parentName);
 	}
 
 	/**
@@ -345,8 +346,8 @@ public class OperaDesktopDriver extends OperaDriver {
 	 * @param column column of widget within its parent
 	 * @return QuickWidget matching, or null if no matching widget is  found
 	 */
-	public QuickWidget findWidgetByPosition(int windowId, int row, int column) {
-		return desktopWindowManager.getQuickWidgetByPos(windowId, row, column);
+	public QuickWidget findWidgetByPosition(QuickWidgetType type, int windowId, int row, int column) {
+		return desktopWindowManager.getQuickWidgetByPos(type, windowId, row, column);
 	}
 
 	/**
@@ -359,8 +360,8 @@ public class OperaDesktopDriver extends OperaDriver {
 	 * @param parentName name of parent widget
 	 * @return QuickWidget, or null if no matching widget is found
 	 */
-	public QuickWidget findWidgetByPosition(int windowId, int row, int column, String parentName) {
-		return desktopWindowManager.getQuickWidgetByPos(windowId, row, column, parentName);
+	public QuickWidget findWidgetByPosition(QuickWidgetType type, int windowId, int row, int column, String parentName) {
+		return desktopWindowManager.getQuickWidgetByPos(type, windowId, row, column, parentName);
 	}
 
 	/**
