@@ -142,7 +142,14 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
       this.settings.setAutostart(false);
     }
 
-    init();
+    try { this.init(); }
+    catch (Exception e)
+    {
+      logger.log(Level.SEVERE, "Error initializing OperaDriver with exception ", e);
+      // Will make sure to kill any eventual launcher process that was started
+      this.quit();
+      throw new WebDriverException(e);
+    }
     logger.fine("init() done");
   }
 
@@ -171,6 +178,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
   }
 
   public void quit() {
+    logger.fine("Opera Driver shutting down");
     services.shutdown();
     if (operaRunner != null) operaRunner.shutdown();
   }
