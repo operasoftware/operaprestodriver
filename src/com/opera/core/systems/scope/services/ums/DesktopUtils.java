@@ -50,7 +50,7 @@ public class DesktopUtils extends AbstractService implements IDesktopUtils {
   public void init() {
   }
 
-  public String getString(String enumText, boolean stripAmpersand) {
+	public String getString(String enumText, boolean stripAmpersand) {
 		DesktopStringID.Builder stringBuilder = DesktopStringID.newBuilder();
 		stringBuilder.setEnumText(enumText);
 
