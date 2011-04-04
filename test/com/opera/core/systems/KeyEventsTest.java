@@ -123,4 +123,12 @@ public class KeyEventsTest extends TestBase {
 
     Assert.assertTrue("released", logEl.getValue().endsWith("down, 17, , ctrl\n"));
   }
+
+  // Pressing enter will wait for a page to load, check what happens when
+  // it doesn't
+  @Test
+  public void testEnter() throws Exception {
+    driver.key("Enter");
+    Assert.assertTrue("released", logContains("up, 13"));
+  }
 }
