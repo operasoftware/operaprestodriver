@@ -1,5 +1,44 @@
-OperaDriver 0.4.2
-=================
+OperaDriver 0.4.2 (pre 6)
+=========================
+
+API changes
+-----------
+
+ * Un-deprecate OperaDriverSettings.getNoQuit/setNoQuit and UmsEventHandler.
+
+New features
+------------
+
+ * Add ScopeServices.captureOperaIdle(). Enables the tracking of any Idle
+   events received between now and when you call waitForOperaIdle().
+ * Add OperaWebElement.saveScreenshot() to match behaviour of
+   OperaDriver.saveScreenshot() method.
+
+Enhancements
+------------
+
+ * Regenerated desktopwm protos from updated service with new griditem and
+   gridview types (Desktop).
+ * Make specifying or constructing buttons by position possible (Desktop).
+ * Add type checking to retrieval algorithm for widgets (Desktop).
+
+Bug fixes
+---------
+
+ * Setting operaBinaryArguments to null no longer causes a crash.
+ * Correctly shutdown when Opera crashes (Desktop).
+ * Updated launcher-linux-x86_64 to work with an older libc library.
+
+Tests
+-------
+
+ * Move test fixture setup into own function to allow use in tests that do
+   not start driver.
+ * Improved Idle tests.
+
+
+OperaDriver 0.4.2 (pre 5)
+=========================
 
 API changes
 -----------
@@ -41,7 +80,7 @@ Bug fixes
  * Fixes for some "No response in a timely fashion" exceptions.
    * Prevent buffer under-runs on slow connections
 
-Testing
+Tests
 -------
 
  * Added and updated unit tests for:
