@@ -952,11 +952,12 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
    *          {@link OperaKeys}.
    */
   public void key(String key) {
+    if (key.equalsIgnoreCase("enter")) services.captureOperaIdle();
+
     keyDown(key);
     keyUp(key);
 
     if (key.equalsIgnoreCase("enter")) {
-			services.captureOperaIdle();
       sleep(OperaIntervals.EXEC_SLEEP.getValue());
       waitForLoadToComplete();
     }
