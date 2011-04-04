@@ -934,6 +934,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
   }
 
   public void executeActions(OperaAction action) {
+            services.captureOperaIdle();
     List<UserInteraction> actions = action.getActions();
     for (UserInteraction userInteraction : actions) {
       userInteraction.execute(this);
@@ -955,6 +956,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
     keyUp(key);
 
     if (key.equalsIgnoreCase("enter")) {
+			services.captureOperaIdle();
       sleep(OperaIntervals.EXEC_SLEEP.getValue());
       waitForLoadToComplete();
     }

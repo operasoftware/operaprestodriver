@@ -335,7 +335,7 @@ public class WaitState {
       String stringMatch, final ResponseType type) {
     synchronized (lock) {
       while (true) {
-        ResultItem result = pollResultItem(timeout);
+        ResultItem result = pollResultItem(timeout, type == ResponseType.OPERA_IDLE);
         WaitResult waitResult = result.waitResult;
 
         switch (waitResult) {
