@@ -459,7 +459,6 @@ public class EcmascriptService extends AbstractService implements
   }
 
   public boolean updateRuntime() {
-    createAllRuntimes();
     Runtime activeRuntime = findRuntime();
     if (activeRuntime != null) {
       setRuntime(activeRuntime);
@@ -474,6 +473,7 @@ public class EcmascriptService extends AbstractService implements
   }
 
   protected Runtime findRuntime() {
+    createAllRuntimes();
     int windowId = windowManager.getActiveWindowId();
     Runtime runtime = (Runtime) xpathPointer(runtimesList.values(),
         "/.[htmlFramePath='_top' and windowID='" + windowId + "']").getValue();
