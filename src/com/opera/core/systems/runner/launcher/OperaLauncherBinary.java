@@ -97,12 +97,18 @@ public class OperaLauncherBinary extends Thread {
     }
 
     public void run() {
+      logger.info("Running launcher..." + running.get());
       InputStream stream = process.getInputStream();
+      String buffer = "";
       while (running.get()) {
         try {
-          if (stream.read() == -1) {
-            return;
+          int r = stream.read();
+          if(r == -1) return;
+          else if(r == '\n') {
+            logger.fine("LB: " + buffer);
+            buffer = "";
           }
+          else buffer += (char)r;
         } catch (IOException e) {
           /* ignored */
         }
