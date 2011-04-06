@@ -37,6 +37,7 @@ import org.openqa.selenium.WebElement;
 
 import com.opera.core.systems.OperaWebElement;
 import com.opera.core.systems.ScopeServices;
+import com.opera.core.systems.model.RuntimeNode;
 import com.opera.core.systems.model.ScriptResult;
 import com.opera.core.systems.scope.AbstractService;
 import com.opera.core.systems.scope.ESDebuggerCommand;
@@ -79,33 +80,6 @@ public class EcmaScriptDebugger extends AbstractService implements
   private ConcurrentMap<Integer, RuntimeInfo> runtimesList = new ConcurrentHashMap<Integer, RuntimeInfo>();
 
   private RuntimeNode root;
-
-  private static class RuntimeNode {
-    private String frameName;
-    private int runtimeID;
-
-    private Map<Integer, RuntimeNode> nodes = new HashMap<Integer, RuntimeNode>();
-
-    public String getFrameName() {
-      return frameName;
-    }
-
-    public void setFrameName(String frameName) {
-      this.frameName = frameName;
-    }
-
-    public int getRuntimeID() {
-      return runtimeID;
-    }
-
-    public void setRuntimeID(int runtimeID) {
-      this.runtimeID = runtimeID;
-    }
-
-    public Map<Integer, RuntimeNode> getNodes() {
-      return nodes;
-    }
-  }
 
   public int getRuntimeId() {
     return runtime.getStamp();
