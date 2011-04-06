@@ -50,6 +50,7 @@ import com.opera.core.systems.scope.services.IEcmaScriptDebugger;
 import com.opera.core.systems.scope.services.IOperaExec;
 import com.opera.core.systems.scope.services.IPrefs;
 import com.opera.core.systems.scope.services.IWindowManager;
+import com.opera.core.systems.scope.services.ums.EcmascriptService;
 import com.opera.core.systems.scope.services.ums.SystemInputManager;
 import com.opera.core.systems.scope.services.ums.UmsServices;
 import com.opera.core.systems.scope.stp.StpConnection;
@@ -187,7 +188,13 @@ public class ScopeServices implements IConnectionHandler {
 
     List<String> wantedServices = new ArrayList<String>();
 
-    if (enableDebugger) wantedServices.add("ecmascript-debugger");
+    if (enableDebugger) {
+      // FIXME: not particularly pretty
+      if (debugger instanceof EcmascriptService)
+        wantedServices.add("ecmascript");
+      else
+        wantedServices.add("ecmascript-debugger");
+    }
 
     wantedServices.add("exec");
     wantedServices.add("window-manager");

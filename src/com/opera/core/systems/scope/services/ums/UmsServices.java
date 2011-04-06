@@ -85,21 +85,20 @@ public class UmsServices {
             serviceList, "desktop-window-manager"));
     else desktopWindowManager = null;
 
-    /*
     if (findServiceNamed(serviceList, "ecmascript") != null) {
 
       String ecmascriptVersion = getVersionForService(serviceList, "ecmascript");
       debugger = new EcmascriptService(services, ecmascriptVersion);
 
     } else {
-      */
     String esdbgVersion = getVersionForService(serviceList,
         "ecmascript-debugger");
     if (VersionUtil.compare(esdbgVersion, "6.0") >= 0) debugger = new EcmaScriptDebugger6(
         services, esdbgVersion);
     else debugger = new EcmaScriptDebugger(services, esdbgVersion);
 
-    /* } */
+    }
+
     exec = new OperaExec(services, getVersionForService(serviceList, "exec"));
 
     if (findServiceNamed(serviceList, "cookie-manager") != null

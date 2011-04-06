@@ -117,7 +117,7 @@ public class EventHandler extends AbstractEventHandler {
 
   @Override
   public void onReadyStateChange(ReadyStateChange change) {
-    throw new UnsupportedOperationException("Not supported in STP/0");
+    services.getDebugger().readyStateChanged(change);
   }
 
   @Override
