@@ -39,6 +39,7 @@ import com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeInfo;
 import com.opera.core.systems.scope.protos.ScopeProtos;
 import com.opera.core.systems.scope.protos.ScopeProtos.ClientInfo;
 import com.opera.core.systems.scope.protos.ScopeProtos.HostInfo;
+import com.opera.core.systems.scope.protos.ScopeProtos.Service;
 import com.opera.core.systems.scope.protos.ScopeProtos.ServiceResult;
 import com.opera.core.systems.scope.protos.ScopeProtos.ServiceSelection;
 import com.opera.core.systems.scope.protos.UmsProtos.Command;
@@ -188,13 +189,17 @@ public class ScopeServices implements IConnectionHandler {
 
     List<String> wantedServices = new ArrayList<String>();
 
-    if (enableDebugger) {
-      // FIXME: not particularly pretty
-      if (debugger instanceof EcmascriptService)
-        wantedServices.add("ecmascript");
-      else
-        wantedServices.add("ecmascript-debugger");
+    boolean ecmascriptService = false;
+    for (Service service : info.getServiceListList()) {
+      if (service.getName().equals("ecmascript")) {
+        ecmascriptService = true;
+        break;
+      }
     }
+    if (ecmascriptService)
+      wantedServices.add("ecmascript");
+    else
+      wantedServices.add("ecmascript-debugger");
 
     wantedServices.add("exec");
     wantedServices.add("window-manager");
