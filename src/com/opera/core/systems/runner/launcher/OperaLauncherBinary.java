@@ -111,7 +111,6 @@ public class OperaLauncherBinary extends Thread {
       String buffer = "";
       while (running.get()) {
         try {
-          if(stream.read() == -1) return;
           int r = stream.read();
           if(r == -1) return;
           else if(r == '\n') {
