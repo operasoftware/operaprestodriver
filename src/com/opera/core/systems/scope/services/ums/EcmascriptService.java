@@ -24,9 +24,8 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Queue;
+import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicStampedReference;
@@ -35,27 +34,26 @@ import org.openqa.selenium.NoSuchFrameException;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 
-import com.google.protobuf.Descriptors.FieldDescriptor;
 import com.opera.core.systems.OperaWebElement;
 import com.opera.core.systems.ScopeServices;
+import com.opera.core.systems.model.RuntimeNode;
 import com.opera.core.systems.model.ScriptResult;
 import com.opera.core.systems.scope.AbstractService;
 import com.opera.core.systems.scope.ESCommand;
 import com.opera.core.systems.scope.internal.OperaIntervals;
 import com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg;
-import com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg.Variable;
 import com.opera.core.systems.scope.protos.EcmascriptProtos.EvalResult;
-import com.opera.core.systems.scope.protos.EcmascriptProtos.EvalResult.Status;
 import com.opera.core.systems.scope.protos.EcmascriptProtos.ExamineObjectsArg;
 import com.opera.core.systems.scope.protos.EcmascriptProtos.ListRuntimesArg;
-import com.opera.core.systems.scope.protos.EcmascriptProtos.Object.Property;
-import com.opera.core.systems.scope.protos.EcmascriptProtos.Runtime.Builder;
 import com.opera.core.systems.scope.protos.EcmascriptProtos.ObjectList;
 import com.opera.core.systems.scope.protos.EcmascriptProtos.ReadyStateChange;
 import com.opera.core.systems.scope.protos.EcmascriptProtos.ReleaseObjectsArg;
 import com.opera.core.systems.scope.protos.EcmascriptProtos.Runtime;
 import com.opera.core.systems.scope.protos.EcmascriptProtos.RuntimeList;
 import com.opera.core.systems.scope.protos.EcmascriptProtos.Value;
+import com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg.Variable;
+import com.opera.core.systems.scope.protos.EcmascriptProtos.EvalResult.Status;
+import com.opera.core.systems.scope.protos.EcmascriptProtos.Object.Property;
 import com.opera.core.systems.scope.protos.EcmascriptProtos.Value.Type;
 import com.opera.core.systems.scope.protos.EsdbgProtos.ObjectValue;
 import com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeInfo;
@@ -137,12 +135,16 @@ public class EcmascriptService extends AbstractService implements
 
   private ConcurrentMap<Integer, Runtime> runtimesList = new ConcurrentHashMap<Integer, Runtime>();
 
+  private RuntimeNode root;
+  private String currentFramePath;
+
   public EcmascriptService(ScopeServices services, String version) {
     super(services, version);
     services.setDebugger(this);
     this.windowManager = services.getWindowManager();
     this.services = services;
     resetCounters();
+    currentFramePath = "_top";
   }
 
   private void resetCounters() {
@@ -163,12 +165,15 @@ public class EcmascriptService extends AbstractService implements
   }
 
   private Response eval(String using, Variable... variables) {
-    // Always update the runtime
+    // Always recover
     recover();
+    return eval(using, getRuntimeId(), variables);
+  }
 
+  private Response eval(String using, int runtimeId, Variable... variables) {
     processQueues();
 
-    EvalArg.Builder builder = buildEval(using);
+    EvalArg.Builder builder = buildEval(using, runtimeId);
     builder.addAllVariableList(Arrays.asList(variables));
 
     Response response = executeCommand(ESCommand.EVAL, builder,
@@ -323,6 +328,11 @@ public class EcmascriptService extends AbstractService implements
     return responseExpected ? parseEvalReply(parseEvalData(reply)) : null;
   }
 
+  private Object executeScript(String using, boolean responseExpected, int runtimeId) {
+    Response reply = eval(using, runtimeId);
+    return responseExpected ? parseEvalReply(parseEvalData(reply)) : null;
+  }
+
   public Integer executeScriptOnObject(String using, int objectId) {
     Variable variable = buildVariable("locator", objectId);
 
@@ -373,14 +383,14 @@ public class EcmascriptService extends AbstractService implements
 
   // TODO merge with eval
   public Object scriptExecutor(String script, Object... params) {
-    if (windowManager.getActiveWindowId() != activeWindowId) recover();
+    recover();
 
     processQueues();
 
     List<WebElement> elements = new ArrayList<WebElement>();
 
     String toSend = buildEvalString(elements, script, params);
-    EvalArg.Builder evalBuilder = buildEval(toSend);
+    EvalArg.Builder evalBuilder = buildEval(toSend, getRuntimeId());
 
     for (WebElement webElement : elements) {
       Variable variable = buildVariable(webElement.toString(),
@@ -402,9 +412,9 @@ public class EcmascriptService extends AbstractService implements
     } else return parsed;
   }
 
-  private EvalArg.Builder buildEval(String toSend) {
+  private EvalArg.Builder buildEval(String toSend, int runtimeId) {
     EvalArg.Builder builder = EvalArg.newBuilder();
-    builder.setRuntimeID(getRuntimeId());
+    builder.setRuntimeID(runtimeId);
     builder.setScriptData(toSend);
     return builder;
   }
@@ -488,7 +498,8 @@ public class EcmascriptService extends AbstractService implements
     createAllRuntimes();
     int windowId = windowManager.getActiveWindowId();
     Runtime runtime = (Runtime) xpathPointer(runtimesList.values(),
-        "/.[htmlFramePath='_top' and windowID='" + windowId + "']").getValue();
+        "/.[htmlFramePath='" + currentFramePath + "' and windowID='" + windowId
+        + "']").getValue();
     return runtime;
   }
 
@@ -566,26 +577,129 @@ public class EcmascriptService extends AbstractService implements
   }
 
   public void resetFramePath() {
+    currentFramePath = "_top";
     setRuntime(findRuntime());
   }
 
-  public void changeRuntime(int index) {
-    // TODO Auto-generated method stub
+  /**
+   * Updates the runtimes list to most recent version
+   * TODO this has to be kept up to date with events and as failover we should
+   * update
+   * It builds a tree to find the frame we are looking for
+   * TODO tree also must be kept up to date
+   */
+  private void buildRuntimeTree() {
+    updateRuntime();
+    Runtime rootInfo = findRuntime();
+    root = new RuntimeNode();
+    root.setFrameName("_top");
+    root.setRuntimeID(rootInfo.getRuntimeID());
 
+    List<Runtime> runtimesInfos = new ArrayList<Runtime>(
+        runtimesList.values());
+    runtimesInfos.remove(rootInfo);
+
+    for (Runtime runtimeInfo : runtimesInfos) {
+      addNode(runtimeInfo, root);
+    }
+  }
+
+  private void addNode(Runtime info, RuntimeNode root) {
+    String[] values = info.getHtmlFramePath().split("/");
+    RuntimeNode curr = root;
+    // first frame is always _top, so we skip it
+    for (int i = 1; i < values.length; ++i) {
+      int index = framePathToIndex(values[i]);
+      if (curr.getNodes().get(index) == null) {
+        // add to this node
+        RuntimeNode node = new RuntimeNode();
+        int end = values[i].indexOf('[');
+        node.setFrameName(values[i].substring(0, end));
+        curr.getNodes().put(index, node);
+        curr = node;
+      } else {
+        curr = curr.getNodes().get(index);
+      }
+      // else we already know about this node, skip it
+    }
+    // last node gets the runtime id
+    curr.setRuntimeID(info.getRuntimeID());
+  }
+
+  private int framePathToIndex(String framePath) {
+    int begin = framePath.indexOf('[');
+    int end = framePath.indexOf(']');
+    return Integer.valueOf(framePath.substring(begin + 1, end));
+  }
+
+  private RuntimeNode findNodeByName(String name, RuntimeNode rootNode) {
+    for (Entry<Integer, RuntimeNode> entry : rootNode.getNodes().entrySet()) {
+      // check if the name is a number
+      if (isNumber(name) && entry.getKey().equals(Integer.valueOf(name) + 1)) return entry.getValue();
+      // check if it is really the name
+      else if (entry.getValue().getFrameName().equals(name)) return entry.getValue();
+      // last resort is id
+      else if (executeScript("frameElement ? frameElement.id : ''", true,
+          entry.getValue().getRuntimeID()).equals(name)) return entry.getValue();
+    }
+    return null;
+  }
+
+  // FIXME: See if we can move this (and similar functions) out to be shared
+  // by EcmaScriptDebugger
+  private boolean isNumber(String name) {
+    boolean canParse = true;
+    try {
+      Integer.valueOf(name);
+    } catch (NumberFormatException e) {
+      canParse = false;
+    }
+    return canParse;
+  }
+
+  public void changeRuntime(int index) {
+    buildRuntimeTree();
+
+    RuntimeNode node = root.getNodes().get(index + 1);
+
+    if (node == null) {
+      throw new NoSuchFrameException("Invalid frame index " + index);
+    }
+
+    Runtime info = runtimesList.get(node.getRuntimeID());
+    currentFramePath = info.getHtmlFramePath();
+    setRuntime(info);
   }
 
   public void changeRuntime(String frameName) {
-    // TODO Auto-generated method stub
+    buildRuntimeTree();
 
+    String[] values = frameName.split("\\.");
+    RuntimeNode curr = root;
+
+    for (int i = 0; i < values.length; i++) {
+      curr = findNodeByName(values[i], curr);
+      if (curr == null) break;
+    }
+
+    if (curr == null) {
+      throw new NoSuchFrameException("Invalid frame name " + frameName);
+    }
+
+    Runtime info = runtimesList.get(curr.getRuntimeID());
+    currentFramePath = info.getHtmlFramePath();
+    setRuntime(info);
   }
 
   public String executeJavascript(String using, Integer windowId) {
     // TODO Auto-generated method stub
+    System.out.println("TODO executeJavascript(String using, Integer windowId)");
     return null;
   }
 
   public Object examineScriptResult(Integer id) {
     // TODO Auto-generated method stub
+    System.out.println("TODO examineScriptResult(Integer id)");
     return null;
   }
 
