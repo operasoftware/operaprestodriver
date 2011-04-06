@@ -24,15 +24,18 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicStampedReference;
 
+import org.openqa.selenium.NoSuchFrameException;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 
+import com.google.protobuf.Descriptors.FieldDescriptor;
 import com.opera.core.systems.OperaWebElement;
 import com.opera.core.systems.ScopeServices;
 import com.opera.core.systems.model.ScriptResult;
@@ -46,6 +49,7 @@ import com.opera.core.systems.scope.protos.EcmascriptProtos.EvalResult.Status;
 import com.opera.core.systems.scope.protos.EcmascriptProtos.ExamineObjectsArg;
 import com.opera.core.systems.scope.protos.EcmascriptProtos.ListRuntimesArg;
 import com.opera.core.systems.scope.protos.EcmascriptProtos.Object.Property;
+import com.opera.core.systems.scope.protos.EcmascriptProtos.Runtime.Builder;
 import com.opera.core.systems.scope.protos.EcmascriptProtos.ObjectList;
 import com.opera.core.systems.scope.protos.EcmascriptProtos.ReadyStateChange;
 import com.opera.core.systems.scope.protos.EcmascriptProtos.ReleaseObjectsArg;
@@ -53,6 +57,8 @@ import com.opera.core.systems.scope.protos.EcmascriptProtos.Runtime;
 import com.opera.core.systems.scope.protos.EcmascriptProtos.RuntimeList;
 import com.opera.core.systems.scope.protos.EcmascriptProtos.Value;
 import com.opera.core.systems.scope.protos.EcmascriptProtos.Value.Type;
+import com.opera.core.systems.scope.protos.EsdbgProtos.ObjectValue;
+import com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeInfo;
 import com.opera.core.systems.scope.protos.UmsProtos.Response;
 import com.opera.core.systems.scope.services.IEcmaScriptDebugger;
 import com.opera.core.systems.scope.services.IWindowManager;
@@ -144,11 +150,16 @@ public class EcmascriptService extends AbstractService implements
     sleepDuration = OperaIntervals.SCRIPT_RETRY_INTERVAL.getValue();
   }
 
-  public void addRuntime(
-      com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeInfo info) {
-    throw new UnsupportedOperationException(
-        "Not suppported without ecmascript-debugger");
+  public void addRuntime(RuntimeInfo info) {
+    Runtime.Builder runtime = Runtime.newBuilder();
 
+    runtime.setRuntimeID(info.getRuntimeID());
+    runtime.setHtmlFramePath(info.getHtmlFramePath());
+    runtime.setWindowID(info.getWindowID());
+    runtime.setObjectID(info.getObjectID());
+    runtime.setUri(info.getUri());
+
+    runtimesList.put(info.getRuntimeID(), runtime.build());
   }
 
   private Response eval(String using, Variable... variables) {
@@ -160,7 +171,8 @@ public class EcmascriptService extends AbstractService implements
     EvalArg.Builder builder = buildEval(using);
     builder.addAllVariableList(Arrays.asList(variables));
 
-    Response response = executeCommand(ESCommand.EVAL, builder);
+    Response response = executeCommand(ESCommand.EVAL, builder,
+        OperaIntervals.SCRIPT_TIMEOUT.getValue());
 
     if (response == null && retries < OperaIntervals.SCRIPT_RETRY.getValue()) {
       retries++;
@@ -316,9 +328,8 @@ public class EcmascriptService extends AbstractService implements
 
     EvalResult reply = parseEvalData(eval(using, variable));
     Object object = parseEvalReply(reply);
-    if (object == null
-        || !(object instanceof com.opera.core.systems.scope.protos.EcmascriptProtos.Object)) return null;
-    return ((com.opera.core.systems.scope.protos.EcmascriptProtos.Object) object).getObjectID();
+    if (object == null || !(object instanceof ObjectValue)) return null;
+    return ((ObjectValue) object).getObjectID();
   }
 
   public Integer getObject(String using) {
@@ -348,7 +359,8 @@ public class EcmascriptService extends AbstractService implements
   }
 
   public void releaseObjects() {
-    releaseObject(0);
+    ReleaseObjectsArg.Builder builder = ReleaseObjectsArg.newBuilder();
+    executeCommand(ESCommand.RELEASE_OBJECTS, builder);
   }
 
   public void removeRuntime(int runtimeId) {
@@ -481,15 +493,15 @@ public class EcmascriptService extends AbstractService implements
   }
 
   protected void createAllRuntimes() {
-    ListRuntimesArg.Builder builder = ListRuntimesArg.newBuilder();
-    builder.setCreate(true);
-    Response response = executeCommand(ESCommand.LIST_RUNTIMES, builder);
+    ListRuntimesArg.Builder selection = ListRuntimesArg.newBuilder();
+    selection.setCreate(true);
+    Response response = executeCommand(ESCommand.LIST_RUNTIMES, selection);
     runtimesList.clear();
-    RuntimeList.Builder runtimeListBuilder = RuntimeList.newBuilder();
-    buildPayload(response, runtimeListBuilder);
-    List<Runtime> runtimes = runtimeListBuilder.build().getRuntimeListList();
-    for (Runtime runtime : runtimes) {
-      runtimesList.put(runtime.getRuntimeID(), runtime);
+    RuntimeList.Builder builder = RuntimeList.newBuilder();
+    buildPayload(response, builder);
+    List<Runtime> allRuntimes = builder.build().getRuntimeListList();
+    for (Runtime info : allRuntimes) {
+      runtimesList.put(info.getRuntimeID(), info);
     }
   }
 
@@ -550,18 +562,11 @@ public class EcmascriptService extends AbstractService implements
   }
 
   public void releaseObject(int objectId) {
-    ReleaseObjectsArg.Builder builder = ReleaseObjectsArg.newBuilder();
-
-    if (objectId != 0) {
-      garbageQueue.add(objectId);
-    } else {
-      executeCommand(ESCommand.RELEASE_OBJECTS, builder);
-    }
+    garbageQueue.add(objectId);
   }
 
   public void resetFramePath() {
-    // FIXME implement
-
+    setRuntime(findRuntime());
   }
 
   public void changeRuntime(int index) {
