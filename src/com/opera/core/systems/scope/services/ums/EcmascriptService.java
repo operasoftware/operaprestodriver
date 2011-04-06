@@ -163,8 +163,8 @@ public class EcmascriptService extends AbstractService implements
   }
 
   private Response eval(String using, Variable... variables) {
-
-    if (windowManager.getActiveWindowId() != activeWindowId) recover();
+    // Always update the runtime
+    recover();
 
     processQueues();
 
