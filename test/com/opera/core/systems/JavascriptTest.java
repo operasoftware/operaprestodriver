@@ -2,6 +2,7 @@ package com.opera.core.systems;
 
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.openqa.selenium.WebElement;
 
@@ -59,12 +60,14 @@ public class JavascriptTest extends TestBase
     Assert.assertEquals(numWindows + 1, driver.getWindowCount());
   }
 
+  @Ignore
   @Test
   public void testWindowCount2() throws Exception {
     int numWindows = driver.getWindowCount();
 
     driver.close();
 
+    Assert.assertTrue(driver.getCurrentUrl().endsWith("javascript.html"));
     Assert.assertEquals(numWindows - 1, driver.getWindowCount());
   }
 }

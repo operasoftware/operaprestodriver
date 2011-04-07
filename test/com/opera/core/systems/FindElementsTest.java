@@ -12,7 +12,7 @@ public class FindElementsTest extends TestBase
 {
   @Before
   public void setUp() {
-    driver.get(fixture("test.html"));
+    getFixture("test.html");
   }
 
   @Test
@@ -122,7 +122,7 @@ public class FindElementsTest extends TestBase
   {
     List<WebElement> els = driver.findElementsByName("radios");
 
-    Assert.assertEquals(els.size(), 3);
+    Assert.assertEquals(3, els.size());
     for (WebElement el : els)
     {
       Assert.assertEquals(el.getAttribute("name"), "radios");
@@ -142,7 +142,7 @@ public class FindElementsTest extends TestBase
   {
     List<WebElement> els = driver.findElementsByTagName("label");
 
-    Assert.assertEquals(els.size(), 4);
+    Assert.assertEquals(4, els.size());
     for (WebElement el : els)
     {
       Assert.assertEquals(el.getTagName(), "LABEL");
