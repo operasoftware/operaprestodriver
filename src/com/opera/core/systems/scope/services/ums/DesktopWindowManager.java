@@ -100,7 +100,7 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 					}
 				} else if (property.equals(QuickWidgetSearchType.TEXT)) {
 					if ((parentName.length() == 0 || widget.getParentName().equals(parentName))
-							&& widget.getText().trim().equals(value)) {
+							&& widget.getText().trim().equals(value.trim())) {
 						return widget;
 					}
 				}
