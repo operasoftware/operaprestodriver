@@ -150,6 +150,17 @@
     </javadoc>
   </target>
 
+  <target name="example" description="Run the simple example" depends="jar">
+    <javac>
+      <classpath refid="test.classpath.path" />
+      <src path="examples/simple" />
+    </javac>
+    <java classname="Example" fork="yes">
+      <classpath refid="test.classpath.path" />
+      <classpath location="examples/simple" />
+    </java>
+  </target>
+
   <target name="release" description="Generate a ZIP for release including the JAR, docs and examples" depends="clean,jar,doc">
     <mkdir dir="release" />
     <property name="release-zip.name" value="operadriver-${version}" />
