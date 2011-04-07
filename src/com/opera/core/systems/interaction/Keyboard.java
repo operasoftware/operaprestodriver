@@ -35,7 +35,7 @@ public abstract class Keyboard implements UserInteraction {
 
       public void execute(WebDriver driver) {
         String key = OperaKeys.get(keys.name());
-        keyUp(key);
+        keyDown(key);
       }
 
     };
@@ -46,7 +46,7 @@ public abstract class Keyboard implements UserInteraction {
 
       public void execute(WebDriver driver) {
         String key = OperaKeys.get(keys.name());
-        keyDown(key);
+        keyUp(key);
       }
 
     };
