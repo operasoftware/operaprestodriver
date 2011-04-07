@@ -17,6 +17,7 @@ limitations under the License.
 package com.opera.core.systems.scope.services.ums;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 import com.opera.core.systems.ScopeServices;
 import com.opera.core.systems.scope.protos.ScopeProtos.HostInfo;
@@ -31,6 +32,7 @@ import com.opera.core.systems.scope.services.IPrefs;
 import com.opera.core.systems.util.VersionUtil;
 
 public class UmsServices {
+  protected final Logger logger = Logger.getLogger(this.getClass().getName());
 
   protected final IEcmaScriptDebugger debugger;
   protected final IWindowManager windowManager;
@@ -86,7 +88,7 @@ public class UmsServices {
     else desktopWindowManager = null;
 
     if (findServiceNamed(serviceList, "ecmascript") != null) {
-
+      logger.info("Using Ecmascript Service");
       String ecmascriptVersion = getVersionForService(serviceList, "ecmascript");
       debugger = new EcmascriptService(services, ecmascriptVersion);
 
