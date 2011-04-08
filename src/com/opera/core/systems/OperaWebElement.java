@@ -654,8 +654,9 @@ public class OperaWebElement implements RenderedWebElement, SearchContext,
           */
     int x = point.x;
     int y = point.y;
-    int w = dimension.width;
-    int h = dimension.height;
+    // Avoid internal error by making sure we have some width and height
+    int w = Math.max(dimension.width, 1);
+    int h = Math.max(dimension.height, 1);
     canvas.setX(x);
     canvas.setY(y);
     canvas.setHeight(h);
