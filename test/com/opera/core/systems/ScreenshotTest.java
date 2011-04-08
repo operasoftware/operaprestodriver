@@ -145,6 +145,17 @@ public class ScreenshotTest extends TestBase {
     Assert.assertFalse(two.isBlank());
   }
 
+  @Test
+  public void testZeroHeight() throws Exception {
+    // Shouldn't throw exceptions
+
+    getFixture("zero-height-standards.html");
+    ((OperaWebElement) driver.findElementByTagName("html")).getImageHash();
+
+    getFixture("zero-height-quirks.html");
+    ((OperaWebElement) driver.findElementByTagName("html")).getImageHash();
+  }
+
   // Can cause problems on Windows, so moved to last
   @Test
   public void testFlash() throws Exception {
