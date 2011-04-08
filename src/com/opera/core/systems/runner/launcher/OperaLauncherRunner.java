@@ -124,12 +124,22 @@ public class OperaLauncherRunner implements OperaRunner {
   public void startOpera() {
     logger.fine("Launcher starting opera...");
     try {
-      LauncherStartRequest.Builder request = LauncherStartRequest.newBuilder();
-      ResponseEncapsulation res = launcherProtocol.sendRequest(
-          MessageType.MSG_START, request.build().toByteArray());
+      byte[] request = LauncherStartRequest.newBuilder().build().toByteArray();
+
+      ResponseEncapsulation res = launcherProtocol.sendRequest(MessageType.MSG_START, request);
+
       if (handleStatusMessage(res.getResponse()) != StatusType.RUNNING) {
-        throw new OperaRunnerException("Could not start opera");
+        throw new OperaRunnerException("Could not start Opera");
       }
+
+      // Check Opera hasn't immediately exited (e.g. due to unknown arguments)
+      try { Thread.sleep(100); } catch (InterruptedException e) {}
+      res = launcherProtocol.sendRequest(MessageType.MSG_STATUS, request);
+
+      if (handleStatusMessage(res.getResponse()) != StatusType.RUNNING) {
+        throw new OperaRunnerException("Opera exited immediately; possible incorrect arguments?");
+      }
+
     } catch (IOException e) {
       throw new OperaRunnerException("Could not start opera", e);
     }
