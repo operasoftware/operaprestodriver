@@ -2,8 +2,11 @@ package com.opera.core.systems;
 
 import static org.junit.Assert.fail;
 
+import java.io.File;
+
 import org.junit.Assert;
 import org.junit.Test;
+import org.openqa.selenium.Platform;
 
 import com.opera.core.systems.runner.OperaRunnerException;
 import com.opera.core.systems.runner.launcher.OperaLauncherRunner;
@@ -293,5 +296,27 @@ public class OperaLauncherRunnerTest
     runner.stopOpera();
     Assert.assertFalse(runner.isOperaRunning());
     runner.shutdown();
+  }
+
+  @Test
+  public void testBadLauncher() throws Exception {
+    File fakeLauncher;
+    // Programs that should be installed that have no side effects when run
+    if (Platform.getCurrent() == Platform.WINDOWS) {
+      fakeLauncher = new File("C:\\WINDOWS\\system32\\find.exe");
+    } else {
+      fakeLauncher = new File("/bin/echo");
+    }
+
+    Assert.assertTrue("Imposter launcher exists", fakeLauncher.exists());
+
+    settings.setOperaLauncherBinary(fakeLauncher.getCanonicalPath());
+
+    try {
+      runner = new OperaLauncherRunner(settings);
+      Assert.fail("Did not throw OperaRunnerException");
+    } catch (OperaRunnerException e) {
+      Assert.assertTrue("Throws timeout error", e.getMessage().toLowerCase().contains("timeout"));
+    }
   }
 }
