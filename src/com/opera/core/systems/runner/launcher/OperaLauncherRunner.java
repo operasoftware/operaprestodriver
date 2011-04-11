@@ -17,6 +17,7 @@ package com.opera.core.systems.runner.launcher;
 
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -38,6 +39,7 @@ import com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStatus
 import com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStatusResponse;
 import com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStopRequest;
 import com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStatusResponse.StatusType;
+import com.opera.core.systems.scope.internal.OperaIntervals;
 import com.opera.core.systems.settings.OperaDriverSettings;
 
 public class OperaLauncherRunner implements OperaRunner {
@@ -96,6 +98,7 @@ public class OperaLauncherRunner implements OperaRunner {
       // setup listener server
       ServerSocket listenerServer = new ServerSocket(
           settings.getOperaLauncherListeningPort());
+      listenerServer.setSoTimeout((int) OperaIntervals.LAUNCHER_TIMEOUT.getValue());
       // try to connect
       launcherProtocol = new OperaLauncherProtocol(listenerServer.accept());
       // we did it!
@@ -115,6 +118,9 @@ public class OperaLauncherRunner implements OperaRunner {
             + res.getResponse().toString());
         throw new OperaRunnerException("Did not get opera launcher handshake");
       }
+    } catch (SocketTimeoutException e) {
+      throw new OperaRunnerException("Timeout waiting for Opera Launcher to connect on port "
+          + settings.getOperaLauncherListeningPort(), e);
     } catch (IOException e) {
       throw new OperaRunnerException("Unable to listen to opera launcher port "
           + settings.getOperaLauncherListeningPort(), e);
