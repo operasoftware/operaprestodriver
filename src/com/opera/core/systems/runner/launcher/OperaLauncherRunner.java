@@ -278,7 +278,9 @@ public class OperaLauncherRunner implements OperaRunner {
       for (int i = 0; i < hashes.length; i++) {
         request.addKnownMD5S(hashes[i]);
       }
-      request.setKnownMD5STimeoutMs((int) timeout);
+      int launcher_timeout = (int) timeout/10;
+      logger.fine("Dividing original timeout by 10 for retries in the launcher: " + launcher_timeout + "ms");
+      request.setKnownMD5STimeoutMs(launcher_timeout);
 
       ResponseEncapsulation res = launcherProtocol.sendRequest(
           MessageType.MSG_SCREENSHOT, request.build().toByteArray());
