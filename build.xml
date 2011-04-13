@@ -42,12 +42,14 @@
     <delete dir="bin" />
     <delete>
       <fileset dir="." includes="**/*.class"/>
+      <fileset dir="." includes="**/test_apc.txt"/>
     </delete>
     <delete dir="pkg" />
     <delete dir="docs" />
     <delete dir="${test.output.path}" />
     <delete dir="${test.report.path}" />
     <delete dir="release" />
+    <delete file="VERSION" />
   </target>
 
   <!-- Compile all classes after cleaning-->
