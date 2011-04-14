@@ -364,6 +364,8 @@ public class OperaWebElement implements RenderedWebElement, SearchContext,
     if (OperaFlags.ENABLE_CHECKS) {
       if (!isEnabled()) throw new UnsupportedOperationException(
           "Can't selected disabled elements");
+      if (!isDisplayed()) throw new ElementNotVisibleException(
+      "You can't select an element that is not displayed");
     }
 
     if (getTagName().equalsIgnoreCase("option")) {
