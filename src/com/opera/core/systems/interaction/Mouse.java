@@ -33,7 +33,7 @@ public abstract class Mouse implements UserInteraction {
     return new Mouse() {
 
       public void execute(WebDriver driver) {
-        element.hover();
+        ((OperaWebElement) element).hover();
       }
 
     };

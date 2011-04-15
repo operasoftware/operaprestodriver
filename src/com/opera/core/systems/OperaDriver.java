@@ -39,7 +39,6 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.NoSuchFrameException;
 import org.openqa.selenium.NoSuchWindowException;
 import org.openqa.selenium.SearchContext;
-import org.openqa.selenium.Speed;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
@@ -715,14 +714,6 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
           debugger.executeJavascript("window.location.hostname"), null);
     }
 
-    public Speed getSpeed() {
-      throw new UnsupportedOperationException("getMouseSpeed");
-    }
-
-    public void setSpeed(Speed speed) {
-      throw new UnsupportedOperationException("setMouseSpeed");
-    }
-
     public Cookie getCookieNamed(String name) {
       Set<Cookie> allCookies = getCookies();
 
@@ -744,6 +735,11 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
 
     public Timeouts timeouts() {
       return new OperaTimeouts();
+    }
+
+    public ImeHandler ime() {
+      // TODO Auto-generated method stub
+      return null;
     }
   }
 
