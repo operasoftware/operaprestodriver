@@ -1,0 +1,129 @@
+syntax = scope;
+
+/**
+ * This service allows you to read, enumerate and write Opera's user prefs.
+ * Please note that when you set a pref, it is stored on disk, and its value
+ * will persist to the subsequent launches of the same profile.
+ */
+service Prefs
+{
+    option (version) = "1.0";
+
+    /**
+     * Get the value of a preference. If the preference could not be
+     * found, or it for some other reason is not readable, an error
+     * will occur.
+     *
+     * It is possible to get the current (actual) value of the pref,
+     * or the default value of the pref.
+     */
+    command GetPref(GetPrefArg) returns (PrefValue) = 1;
+
+    /**
+     * Enumerate all prefs.
+     */
+    command ListPrefs(ListPrefsArg) returns (PrefList) = 2;
+
+    /**
+     * Set the value of a single pref. If the preference could not be
+     * found, or it for some other reason is not readable, an error
+     * will occur.
+     */
+    command SetPref(SetPrefArg) returns (Default) = 3;
+}
+
+message Pref
+{
+    enum Type
+    {
+        STRING = 1;
+        INTEGER = 2;
+        BOOLEAN = 3;
+        FILE = 4;
+        REQUIRED_FILE = 5;
+        DIRECTORY = 6;
+        COLOR = 7;
+    }
+
+    required Type type = 1;
+
+    /**
+     * Preferences are divided into groups called *sections*. This
+     * field indicates which section this preference is a member of.
+     *
+     * Example: *Developer Tools*
+     */
+    optional string section = 2;
+
+    /**
+     * This is the key, or *name* of the preference.
+     *
+     * Example: *Developer Tools URL*
+     */
+    optional string key = 3;
+
+    /**
+     * The value of the preference. For instance, for the preference
+     * *Developer Tools URL* in the *Developer Tools* section, the
+     * default value is https://dragonfly.opera.com/app/.
+     */
+    optional string value = 4;
+
+    /**
+     * Whether setting is overriden by global ini. If this value is
+     * missing, it means global ini is not supported.
+     */
+    optional bool enabled = 5;
+}
+
+message PrefValue
+{
+    required string value = 1;
+}
+
+message PrefList
+{
+    repeated Pref prefList = 1;
+};
+
+message GetPrefArg
+{
+    enum Mode
+    {
+        /**
+         * Get the current value of the pref.
+         */
+        CURRENT = 1;
+
+        /**
+         * Get the default value of the pref (not necessarily the
+         * used value).
+         */
+        DEFAULT = 2;
+    }
+
+    required string section = 1;
+    required string key = 2;
+    optional Mode mode = 3 [default = 1];
+}
+
+message ListPrefsArg
+{
+    /**
+     * Whether to sort the preferences alphabetically or not.
+     */
+    optional bool sort = 1 [default = false];
+
+    /**
+     * List the keys in the specified section only. If not present,
+     * all keys in all sections will be listed.
+     */
+    optional string section = 2;
+}
+
+message SetPrefArg
+{
+    required string section = 1;
+    required string key = 2;
+    required string value = 3;
+}
