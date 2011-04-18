@@ -154,7 +154,7 @@ public class OperaDesktopDriver extends OperaDriver {
 	 * If settings.NoQuit is set, this will not quit Opera.
 	 */
 	public void quitDriver() {
-		super.shutdown();
+		super.quit();
 	}
 
 	/**

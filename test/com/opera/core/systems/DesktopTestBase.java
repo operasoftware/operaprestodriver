@@ -15,7 +15,7 @@ public class DesktopTestBase extends TestBase {
 
   @AfterClass
   public static void tearDownAfterClass() throws Exception {
-    driver.shutdown();
+    driver.quit();
   }
 
 }

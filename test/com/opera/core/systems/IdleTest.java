@@ -244,7 +244,7 @@ public class IdleTest extends TestBase {
 
   @Test
   public void testIdleOff() throws Exception {
-    driver.shutdown();
+    driver.quit();
     OperaDriverSettings settings = new OperaDriverSettings();
     settings.setUseOperaIdle(false);
     driver = new TestOperaDriver(settings);
