@@ -1,0 +1,470 @@
+syntax = scope;
+
+/**
+ * Provides access to functionality in the ECMAScript engine. 
+ * Basic usage is to query the runtime list first, all commands require
+ * a runtime ID to work with.
+ *
+ * All IDs in this service will be invalid once the service is disabled.
+ *
+ * Note: For debugging of ECMAScript see the EcmascriptDebugger service.
+ */
+service Ecmascript
+{
+    option (cpp_hfile) = "modules/scope/src/scope_ecmascript.h";
+    option (version) = "1.0";
+    option (cpp_class) = OpScopeEcmascript;
+
+    /**
+     * List all runtimes (in all Windows).
+     * For instance to fetch all runtimes of all windows one can do::
+     *
+     *   ListRuntimes(runtimeList=[], create=true)
+     *
+     * If you already have a runtime ID you can pass it in runtimeList
+     * to get get back information, e.g.::
+     *
+     *   ListRuntimes(runtimeList=[1])
+     */
+    command ListRuntimes(ListRuntimesArg) returns (RuntimeList) = 1;
+
+    /**
+     * Evaluate a piece of ECMAScript in the global scope.
+     * For instance to fetch information on the window object, one can do::
+     *
+     *   Eval(runtimeID=1, scriptData="window")
+     *
+     * EvalResult.value.object will be set, note however that this will not
+     * include properties on the return object to conserve the amount of data
+     * that needs to be sent. To get properties use ExamineObjects().
+     */
+    command Eval(EvalArg) returns (EvalResult) = 2;
+
+    /**
+     * Request additional information about an object, such as its prototype
+     * or its properties.
+     *
+     * For instance to get more information on the window object, one can do::
+     *
+     *   ExamineObjects(runtimeID=1, objectList=[2], examinePrototypes=true)
+     *
+     * Here the object ID was the ID previously returned from an Eval() call.
+     */
+    command ExamineObjects(ExamineObjectsArg) returns (ObjectList) = 3;
+
+    /**
+     * Release protected ECMAScript objects. This will just make them garbage
+     * collectible. Released objects are not necessarily freed immediately.
+     * 
+     * Calling ReleaseObjects with an empty list causes all objects to be
+     * released. Otherwise, only the specified objects will be released.
+     * Attempting to release a non-existent object has no effect, and will
+     * fail silently.
+     * 
+     * Releasing objects invalidates associated object IDs immediately.
+     */
+    command ReleaseObjects(ReleaseObjectsArg) returns (Default) = 4;
+
+    /**
+     * Occurs when certain 'milestones' of page-loading have been reached.
+     * See message 'ReadyStateChange' for details.
+     */
+    event OnReadyStateChanged returns (ReadyStateChange) = 5;
+}
+
+// command ListRuntimes(ListRuntimesArg) returns (RuntimeList) = 1;
+
+message ListRuntimesArg
+{
+    /**
+     * If non-empty, only information about the specified runtime(s) will
+     * be received.
+     */
+    repeated uint32 runtimeIDList = 1;
+
+    /**
+     * If true, runtimes will be created for documents which would otherwise
+     * not require them.
+     */
+    optional bool create = 2;
+}
+
+message RuntimeList
+{
+    repeated Runtime runtimeList = 1;
+}
+
+/**
+ * A runtime is an ECMAScript execution environment.
+ */
+message Runtime
+{
+    /**
+     * A unique ID for this runtime, persists through the entire session or
+     * until the runtime is destroyed.
+     *
+     * Is an integer from 1 and up.
+     */
+    required uint32 runtimeID = 1;
+
+    /**
+     * The frame path in the window, for instance "_top" means the top-most
+     * frame of a window.
+     *
+     * Other examples are::
+     *
+     *   "_top/[1]"
+     *   "_top/[1]/[1]"
+     */
+    required string htmlFramePath = 2;
+
+    /**
+     * The ID this window belongs to.
+     *
+     * Multiple frames in a window will be reported as multiple runtimes and
+     * they will all share the same windowID.
+     */
+    required uint32 windowID = 3;
+
+    /**
+     * The global object associated with this runtime.
+     */
+    required uint32 objectID = 4;
+
+    /**
+     * The URI of the resource loaded in the runtime. This can be a normal
+     * URI (HTTP etc.) or a special interal URI like *"opera:blank"* or
+     * "opera:debug".
+     */
+    required string uri = 5;
+}
+
+// command Eval(EvalArg) returns (EvalResult) = 2;
+
+message EvalArg
+{
+    /**
+     * A variable to assign in the execution environment before evaluating
+     * the script.
+     */
+    message Variable
+    {
+        /**
+         * Name of variable to create.
+         */
+        required string name = 1;
+
+        /**
+         * ID of object to retrieve, the object is assigned to the specified
+         * name.
+         */
+        required uint32 objectID = 2;
+    }
+
+    /**
+     * ID of runtime to execute script in.
+     */
+    required uint32 runtimeID = 1;
+
+    /**
+     * The script data to execute, this can either be an expression or a
+     * statement. The semi-colon can be omitted.
+     *
+     * Eval() will return the value of the last expression that is evaluated.
+     *
+     * Some examples::
+     *
+     *   "2 + 2"
+     *   "window" // returns the window object
+     *   "x = 5; x*x"
+     *   "my_function()"
+     */
+    required string scriptData = 2;
+
+    /**
+     * A list of objects to place in the execution environment when evaluating
+     * **scriptData**.
+     *
+     * Each object is assigned to variable specified in **Variable.name**.
+     */
+    repeated Variable variableList = 3;
+}
+
+/**
+ * Result of a script execution.
+ */
+message EvalResult
+{
+    enum Status
+    {
+        SUCCESS = 1;
+        FAILURE = 2;
+        EXCEPTION = 3;
+        NO_MEMORY = 4;
+        CANCELLED = 5;
+    }
+
+    /**
+     * Evaluation status, a successful evaluation returns SUCCESS.
+     */
+    required Status status = 1;
+
+    /**
+     * The result of the evaluated script.
+     *
+     * If execution failed (status != SUCCESS) then this will contain
+     * the undefined value.
+     */
+    required Value value = 2;
+}
+
+// command ExamineObjects(ExamineObjectsArg) returns (ObjectList) = 3;
+
+message ExamineObjectsArg
+{
+    /**
+     * ID of runtime to examine object in.
+     */
+    required uint32 runtimeID = 1;
+
+    /**
+     * List of object IDs to examine.
+     */
+    repeated uint32 objectIDList = 2;
+
+    /**
+     * If true then each examined object will also include the prototype
+     * chain.
+     */
+    optional bool examinePrototypes = 3 [default = false];
+}
+
+/**
+ * Contains a list of prototype chains from the ExamineObject() command.
+ */
+message ObjectList
+{
+    repeated PrototypeChain prototypeList = 1;
+}
+
+/**
+ * A list of prototypes for the examined object, the first entry [0] is the
+ * examined object while the rest are the object info for each prototype in the
+ * chain.
+ *
+ * If prototype were not examined the list contains only one entry.
+ */
+message PrototypeChain
+{
+    repeated Object objectList = 1;
+}
+
+// Common
+
+/**
+ * An Object is any non-primitive value in ECMAScript. Functions
+ * and arrays, for instance, are also Objects.
+ */
+message Object
+{
+    message Property
+    {
+        required string name = 1;
+        required Value value = 2;
+    }
+
+    enum ObjectType
+    {
+        OBJECT = 1;
+        FUNCTION = 2;
+    }
+
+    /**
+     * The unique ID of the object, valid until the object is garbage collected
+     * or the service is disabled.
+     *
+     * Is an integer from 1 and up.
+     */
+    required uint32 objectID = 1;
+
+    /**
+     * true if the object can be called, this is typically functions but
+     * other objects are also possible.
+     */
+    required bool isCallable = 2;
+
+    /**
+     * The type of object, either a plain object or a function.
+     */
+    required ObjectType type = 3;
+
+    /**
+     * The ID of the prototype for this object if it has a prototype.
+     * A prototype is just another object and can be examined with
+     * ExamineObjects().
+     */
+    optional uint32 prototypeID = 4;
+
+    /**
+     * The name of the class used to create this object. Examples::
+     *
+     *   "Object"
+     *   "Array"
+     *   "Function"
+     *   "HTMLHtmlElement"
+     */
+    optional string className = 5;
+
+    /**
+     * The name of the function, only set if type = FUNCTION. If the function
+     * is anonymous, then a suitable alias *may* be assigned based on context,
+     * if possible. For instance::
+     * 
+     *   foo.bar = function(){}
+     *
+     * Would get the functionName 'bar'.
+     */
+    optional string functionName = 6;
+
+    /**
+     * A list of properties available on the object.
+     *
+     * Is omitted in some cases when a full property list (can be huge) is not
+     * desirable.
+     */
+    repeated Property propertyList = 7;
+}
+
+/**
+ * Represents an ECMAScript value, a value is either one of the primitives
+ * like string or boolean or an object.
+ */
+message Value
+{
+    enum Type
+    {
+        /**
+         * The undefined type, returned when no value was found or "undefined"
+         * was referenced.
+         */
+        UNDEFINED = 0;
+        /**
+         * A null value.
+         */
+        NULL = 1;
+
+        // These two represents a boolean
+        /**
+         * Boolean value true.
+         */
+        TRUE = 2;
+        /**
+         * Boolean value false.
+         */
+        FALSE = 3;
+
+        // Special values for numbers which cannot be represented in JSON
+        /**
+         * NaN value which cannot be exported to JSON directly.
+         * Should be treated like a number.
+         *
+         * ECMAScript users should use this code to get the value natively::
+         *
+         *   parseFloat("NaN")
+         */
+        NAN = 4;
+        /**
+         * Plus infinity value which cannot be export to JSON directly.
+         * Should be treated like a number.
+         *
+         * ECMAScript users should use this code to get the value natively::
+         *
+         *   parseFloat("Infinity")
+         */
+        PLUS_INFINITY = 5;
+        /**
+         * Minus infinity value which cannot be export to JSON directly.
+         * Should be treated like a number.
+         *
+         * ECMAScript users should use this code to get the value natively::
+         *
+         *   parseFloat("-Infinity")
+         */
+        MINUS_INFINITY = 6;
+
+        // The values of these types are present in a separate field
+        /**
+         * A number, use the field 'number' for the actual value.
+         */
+        NUMBER = 7;
+        /**
+         * A string, use the field 'str' for the actual string data.
+         */
+        STRING = 8;
+        /**
+         * An object, the field 'object' contains object details.
+         */
+        OBJECT = 9;
+    }
+
+    /**
+     * The type of value.
+     *
+     * @note Booleans are encoded as either TRUE or FALSE to shorten the number
+     * fields in use.
+     */
+    optional Type type = 1;
+
+    /**
+     * The numeric value, set if type = NUMBER.
+     */
+    optional double number = 2;
+
+    /**
+     * The string, set if type = STRING.
+     */
+    optional string str = 3;
+
+    /**
+     * Object information, set if type = OBJECT.
+     */
+    optional Object object = 4;
+}
+
+// command ReleaseObjects(ReleaseObjectsArg) returns (Default) = 4;
+
+/**
+ * List of objects to release.
+ */
+message ReleaseObjectsArg
+{
+    repeated uint32 objectIDList = 1;
+}
+
+message ReadyStateChange
+{
+    enum State
+    {
+        /**
+         * Occurs immediately after the DOM environment is created
+         * for a document.
+         */
+        DOM_ENVIRONMENT_CREATED = 1;
+
+        /**
+         * This state indicates that the HTML tree is done (for now). The event
+         * happens immediately after the DOMContentLoaded event fires on the window 
+         * object. Useful for figuring out when we can inspect the DOM.
+         */
+        DOM_CONTENT_LOADED = 2;
+
+        /**
+         * Occurs after onload is finished, and after external resources are loaded. 
+         * When this event is observed, it should be safe to take a screenshot.
+         */
+        AFTER_ONLOAD = 3;
+    }
+
+    required uint32 runtimeID = 1;
+    required State state = 2;
+}
