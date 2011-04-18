@@ -104,7 +104,7 @@ message GetPrefArg
 
     required string section = 1;
     required string key = 2;
-    optional Mode mode = 3 [default = 1];
+    optional Mode mode = 3 [default = CURRENT];
 }
 
 message ListPrefsArg
