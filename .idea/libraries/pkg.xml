@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="pkg">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/pkg/webdriver-opera-v0.4.2.pre4-22-g2f8be97.jar!/" />
+      <root url="jar://$PROJECT_DIR$/pkg/webdriver-opera-v0.4.2.pre5-55-g3070673.jar!/" />
+      <root url="jar://$PROJECT_DIR$/pkg/webdriver-opera-v0.4.2.pre5-15-gf9e8949.jar!/" />
+      <root url="jar://$PROJECT_DIR$/pkg/webdriver-opera-v0.4.2.pre5-56-g358774a.jar!/" />
+      <root url="jar://$PROJECT_DIR$/pkg/webdriver-opera-v0.4.2.pre5.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
