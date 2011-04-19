@@ -89,9 +89,7 @@ public class OperaPathsTest {
   public void testOperaEnvVar() throws Exception {
     assertNotSame(knownDir, paths.operaPath());
 
-    Map<String, String> env = new HashMap<String, String>();
-    env.put("OPERA_PATH", knownDir);
-    setEnv(env);
+    setEnvVar("OPERA_PATH", knownDir);
 
     assertEquals(knownDir, paths.operaPath());
   }
@@ -100,9 +98,7 @@ public class OperaPathsTest {
   public void testLauncherEnvVar() throws Exception {
     assertNotSame(knownDir, paths.launcherPath());
 
-    Map<String, String> env = new HashMap<String, String>();
-    env.put("OPERA_LAUNCHER", knownDir);
-    setEnv(env);
+    setEnvVar("OPERA_LAUNCHER", knownDir);
 
     assertEquals(knownDir, paths.launcherPath());
   }
@@ -116,7 +112,7 @@ public class OperaPathsTest {
    * @param newenv The new environment to set
    */
   @SuppressWarnings("unchecked")
-  private static void setEnv(Map<String, String> newenv) throws Exception {
+  private static void setEnvVar(String key, String value) throws Exception {
     Class[] classes = Collections.class.getDeclaredClasses();
     Map<String, String> env = System.getenv();
     for (Class cl : classes) {
@@ -125,8 +121,7 @@ public class OperaPathsTest {
         field.setAccessible(true);
         Object obj = field.get(env);
         Map<String, String> map = (Map<String, String>) obj;
-        map.clear();
-        map.putAll(newenv);
+        map.put(key, value);
       }
     }
   }
