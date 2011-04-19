@@ -322,7 +322,12 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
 
   /**
    * Closes all open windows.
+   * @deprecated Use <code>for (String win : driver.getWindowHandles()) {
+   *   if (driver.getWindowCount() <= 1) break;
+   *   driver.switchTo().window(win).close();
+   * }</code> on Desktop.
    */
+  @Deprecated
   public void closeAll() {
     windowManager.closeAllWindows();
     windowManager.filterActiveWindow();
@@ -334,7 +339,9 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
 
   /**
    * Stops the loading of the current page.
+   * @deprecated Use {@link #navigate()}.stop()
    */
+  @Deprecated
   public void stop() {
     exec.action("Stop");
   }
@@ -926,6 +933,10 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
     return (OperaIntervals.ENABLE_DEBUGGER.getValue() == 1);
   }
 
+  /**
+   * @deprecated
+   */
+  @Deprecated
   public void executeActions(OperaAction action) {
             services.captureOperaIdle();
     List<UserInteraction> actions = action.getActions();

@@ -138,8 +138,15 @@ public class OperaWebElement implements RenderedWebElement, SearchContext,
     parent.actionHandler.rightClick(this);
   }
 
-  // FIXME these methods are not available in public builds
+  /**
+   * @deprecated Use {@link #mouseOver()}
+   */
+  @Deprecated
   public void hover() {
+    mouseOver();
+  }
+
+  public void mouseOver() {
     Point point = this.getLocation();
     execService.mouseAction(point.x, point.y);
   }

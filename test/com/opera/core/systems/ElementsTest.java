@@ -16,13 +16,13 @@ public class ElementsTest extends TestBase {
   }
 
   @Test
-  public void testHover() {
+  public void testMouseOver() {
     driver.get(fixture("mouse.html"));
     driver.mouseEvent(1, 1, 1);
 
     OperaWebElement test = ((OperaWebElement) driver.findElementById("test"));
     String hash = test.getImageHash();
-    test.hover();
+    test.mouseOver();
     Assert.assertNotSame(hash, test.getImageHash());
   }
 
