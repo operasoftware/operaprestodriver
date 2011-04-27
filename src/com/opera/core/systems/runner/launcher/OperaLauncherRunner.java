@@ -17,6 +17,7 @@ package com.opera.core.systems.runner.launcher;
 
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.List;
@@ -114,7 +115,9 @@ public class OperaLauncherRunner implements OperaRunner {
           settings.getOperaLauncherListeningPort());
       listenerServer.setSoTimeout((int) OperaIntervals.LAUNCHER_TIMEOUT.getValue());
       // try to connect
-      launcherProtocol = new OperaLauncherProtocol(listenerServer.accept());
+      Socket new_socket = listenerServer.accept();
+      new_socket.setSoTimeout((int) OperaIntervals.LAUNCHER_TIMEOUT.getValue());
+      launcherProtocol = new OperaLauncherProtocol(new_socket);
       // we did it!
       logger.fine("Connected with Opera Launcher on port "
           + settings.getOperaLauncherListeningPort());
