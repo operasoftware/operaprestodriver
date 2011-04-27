@@ -468,6 +468,7 @@ public class OperaWebElement implements RenderedWebElement, SearchContext,
     }
   }
 
+  @Deprecated
   public void dragAndDropBy(int x, int y) {
     Point point = this.getLocation();
     execService.mouseAction(point.x, point.y, OperaMouseKeys.LEFT_DOWN);
@@ -477,6 +478,7 @@ public class OperaWebElement implements RenderedWebElement, SearchContext,
     execService.mouseAction(x, y, OperaMouseKeys.LEFT_UP);
   }
 
+  @Deprecated
   public void dragAndDropOn(RenderedWebElement element) {
     Point currentLocation = this.getLocation();
     Point dragPoint = element.getLocation();
@@ -515,6 +517,10 @@ public class OperaWebElement implements RenderedWebElement, SearchContext,
         Integer.valueOf(dimension[1]));
   }
 
+  /**
+   * @deprecated Use {@link #getCssValue(String)}
+   */
+  @Deprecated
   public String getValueOfCssProperty(String property) {
     return getCssValue(property);
   }
