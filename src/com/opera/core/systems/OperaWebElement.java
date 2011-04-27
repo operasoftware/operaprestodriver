@@ -17,6 +17,7 @@ limitations under the License.
 package com.opera.core.systems;
 
 import java.io.FileOutputStream;
+import java.util.HashMap;
 import java.util.List;
 
 import org.openqa.selenium.By;
@@ -351,11 +352,28 @@ public class OperaWebElement implements RenderedWebElement, SearchContext,
       if (seq instanceof Keys) execService.key(OperaKeys.get(((Keys) seq).name()));
       else if (seq.toString().equals("\n")) execService.key("enter");
       else {
-        if (seq.toString().length() > 0) execService.type(seq.toString());
+        for (int i = 0; i < seq.length(); i++) {
+          Character c = seq.charAt(i);
+          String keyName = charToKeyName(c);
+
+          // TODO buffer normal keys for a single type() call
+          if (keyName == null) execService.type(c.toString());
+          else execService.key(OperaKeys.get(keyName));
+        }
       }
     }
     parent.waitForLoadToComplete();
     // executeMethod("locator.blur()");
+  }
+
+  private static final HashMap<Character, String> keysLookup = new HashMap<Character, String>();
+  private static String charToKeyName(char c) {
+    if (keysLookup.isEmpty()) {
+      for (Keys k : Keys.values()) {
+        keysLookup.put(k.charAt(0), k.name());
+      }
+    }
+    return keysLookup.get(c);
   }
 
   private boolean hasAttribute(String attr) {
