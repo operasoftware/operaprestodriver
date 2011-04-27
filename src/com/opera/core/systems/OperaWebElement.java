@@ -22,12 +22,14 @@ import java.util.List;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.ElementNotVisibleException;
+import org.openqa.selenium.InvalidElementStateException;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.Point;
 import org.openqa.selenium.RenderedWebElement;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.StaleElementReferenceException;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.internal.Coordinates;
@@ -39,6 +41,7 @@ import org.openqa.selenium.internal.FindsByName;
 import org.openqa.selenium.internal.FindsByTagName;
 import org.openqa.selenium.internal.FindsByXPath;
 import org.openqa.selenium.internal.Locatable;
+import org.openqa.selenium.internal.WrapsDriver;
 
 import com.opera.core.systems.model.Canvas;
 import com.opera.core.systems.model.ColorResult;
@@ -60,7 +63,7 @@ import com.opera.core.systems.scope.services.IOperaExec;
  */
 public class OperaWebElement implements RenderedWebElement, SearchContext,
     Locatable, FindsByTagName, FindsByLinkText, FindsByClassName, FindsByXPath,
-    FindsByName, FindsById, FindsByCssSelector {
+    FindsByName, FindsById, FindsByCssSelector, WrapsDriver {
 
   private final int objectId;
   private final IEcmaScriptDebugger debugger;
@@ -361,14 +364,20 @@ public class OperaWebElement implements RenderedWebElement, SearchContext,
 
   // FIXME isDisplayed is not working for select elements, revise
   public void setSelected() {
+    String tagName = getTagName();
+
     if (OperaFlags.ENABLE_CHECKS) {
-      if (!isEnabled()) throw new UnsupportedOperationException(
-          "Can't selected disabled elements");
-      if (!isDisplayed()) throw new ElementNotVisibleException(
-      "You can't select an element that is not displayed");
+      if (!isEnabled())
+        throw new InvalidElementStateException("Cannot select disabled element");
+
+      if (!isDisplayed())
+        throw new ElementNotVisibleException("Cannot select an element that is not displayed");
+
+      if (!tagName.equals("INPUT") && !tagName.equals("OPTION"))
+        throw new InvalidElementStateException("Cannot select a "+tagName+" element");
     }
 
-    if (getTagName().equalsIgnoreCase("option")) {
+    if (tagName.equalsIgnoreCase("option")) {
       Integer id = debugger.executeScriptOnObject("return locator.parentNode",
           objectId);
       OperaWebElement parentNode = new OperaWebElement(this.parent,
@@ -420,25 +429,29 @@ public class OperaWebElement implements RenderedWebElement, SearchContext,
 
   // FIXME revise with javascript guys
   public boolean toggle() {
-    if (getTagName().equalsIgnoreCase("input")
-        && getAttribute("type").equalsIgnoreCase("radio")) throw new UnsupportedOperationException(
-        "You can't toggle an radio element");
+    String tagName = getTagName();
+    if (!tagName.equals("INPUT") && !tagName.equals("OPTION"))
+      throw new InvalidElementStateException("Cannot toggle a "+tagName+" element");
+
+    if (tagName.equalsIgnoreCase("input") && getAttribute("type").equalsIgnoreCase("radio"))
+      throw new InvalidElementStateException("You can't toggle an radio element");
 
     Integer id = debugger.executeScriptOnObject("return locator.parentNode",
         objectId);
     OperaWebElement parentNode = new OperaWebElement(this.parent, id);
     if (parentNode.getTagName().equalsIgnoreCase("SELECT")
         && parentNode.getAttribute("multiple") == null) {
-      throw new UnsupportedOperationException(
-          "You can't toggle on a regular select");
+      throw new InvalidElementStateException("You can't toggle on a regular select");
     }
 
     if (OperaFlags.ENABLE_CHECKS) {
-      if (!isDisplayed()) throw new ElementNotVisibleException(
-          "You can't toggle an element that is not displayed");
+      if (!isEnabled())
+        throw new InvalidElementStateException("Cannot toggle disabled element");
+      if (!isDisplayed())
+        throw new ElementNotVisibleException("Cannot select an element that is not displayed");
     }
 
-    if (getTagName().equalsIgnoreCase("option")) return (Boolean) debugger.callFunctionOnObject(
+    if (tagName.equalsIgnoreCase("option")) return (Boolean) debugger.callFunctionOnObject(
         "locator.selected = !locator.selected; return locator.selected;",
         objectId, true);
 
@@ -503,8 +516,7 @@ public class OperaWebElement implements RenderedWebElement, SearchContext,
   }
 
   public String getValueOfCssProperty(String property) {
-    return callMethod("return getComputedStyle(locator,null).getPropertyValue('"
-        + property + "');");
+    return getCssValue(property);
   }
 
   public boolean isDisplayed() {
@@ -878,5 +890,14 @@ public class OperaWebElement implements RenderedWebElement, SearchContext,
   public Coordinates getCoordinates() {
     // TODO Auto-generated method stub
     return null;
+  }
+
+  public String getCssValue(String property) {
+    return callMethod("return getComputedStyle(locator,null).getPropertyValue('"
+        + property + "');");
+  }
+
+  public WebDriver getWrappedDriver() {
+    return parent;
   }
 }
