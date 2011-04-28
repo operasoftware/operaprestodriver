@@ -9,3 +9,4 @@ test-reports/
 doc/
 VERSION
 *.orig
+.idea/workspace.xml
