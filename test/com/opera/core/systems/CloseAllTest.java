@@ -18,7 +18,7 @@ public class CloseAllTest extends TestBase {
 
     // Open Opera again with a tab that has a Javascript context. This will let
     // future tests run
-    driver.shutdown();
+    driver.quit();
     OperaDriverSettings settings = new OperaDriverSettings();
     settings.setOperaBinaryArguments("opera:debug");
     driver = new TestOperaDriver(settings);

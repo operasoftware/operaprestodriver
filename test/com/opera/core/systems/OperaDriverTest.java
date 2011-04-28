@@ -22,7 +22,7 @@ public class OperaDriverTest extends TestBase
 
     Assert.assertNotNull(driver);
 
-    driver.shutdown();
+    driver.quit();
   }
 
   @Test
@@ -32,7 +32,7 @@ public class OperaDriverTest extends TestBase
 
     OperaDriver driver = new TestOperaDriver(settings);
     Assert.assertNotNull(driver);
-    driver.shutdown();
+    driver.quit();
   }
 
   @Test
@@ -88,6 +88,6 @@ public class OperaDriverTest extends TestBase
   {
     // leave with a fast loading page
     driver.get("about:blank");
-    driver.shutdown();
+    driver.quit();
   }
 }

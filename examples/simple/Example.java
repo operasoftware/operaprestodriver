@@ -44,7 +44,7 @@ class Example {
     /*
     When finished, shutdown Opera
     */
-    driver.shutdown();
+    driver.quit();
   }
 
 }

@@ -26,7 +26,7 @@ abstract public class TestBase {
 
   @AfterClass
   public static void tearDownAfterClass() throws Exception {
-    driver.shutdown();
+    driver.quit();
   }
 
   // Easy access to fixtures

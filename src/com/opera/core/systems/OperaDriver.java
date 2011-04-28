@@ -163,11 +163,12 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
     return settings;
   }
 
-  /**
-   * Shutdown webdriver, will kill opera and such if running.
-   */
-  // OperaDriver.quit() == services.quit()
+  @Deprecated
   public void shutdown() {
+    quit();
+  }
+
+  public void quit() {
     services.shutdown();
     if (operaRunner != null) operaRunner.shutdown();
   }
@@ -403,10 +404,6 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
 
   public Navigation navigate() {
     return new OperaNavigation();
-  }
-
-  public void quit() {
-    services.quit();
   }
 
   public TargetLocator switchTo() {

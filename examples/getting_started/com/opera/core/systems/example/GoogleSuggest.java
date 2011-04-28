@@ -42,6 +42,6 @@ public class GoogleSuggest {
             System.out.println(suggestion.getText());
         }
 
-        driver.shutdown();
+        driver.quit();
      }
 }

@@ -80,7 +80,7 @@ public class OperaPathsTest {
 
     assertEquals("http://t/core/README", driver.getCurrentUrl());
 
-    driver.shutdown();
+    driver.quit();
   }
 
   /* These tests mess with the environment variables. So they're at the end */
