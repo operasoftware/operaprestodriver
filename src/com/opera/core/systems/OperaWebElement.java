@@ -565,7 +565,8 @@ public class OperaWebElement implements RenderedWebElement, SearchContext,
         || callMethod("locator.parentNode") == null) throw new StaleElementReferenceException(
         "You cant interact with stale elements");
     try {
-      isDisplayed = (Boolean) evaluateMethod("var el = locator;\n"
+      isDisplayed = (Boolean) evaluateMethod("function d(locator) {"
+          + "var el = locator;\n"
           + "while (el.nodeType != 1 && !(el.nodeType >= 9 && el.nodeType <= 11)) {\n"
           + "el = el.parentNode;\n"
           + "}\n"
@@ -578,7 +579,8 @@ public class OperaWebElement implements RenderedWebElement, SearchContext,
           + " return false; \n"
           + " }\n"
           + "if(el.tagName.toLowerCase() == 'option') {\n"
-          + "return (el.parentNode == document.activeElement);\n"
+            // If this is a <option>, recurse up to its parent <select>
+            + "return d(el.parentNode);\n"
           + "}\n"
           + "\n"
           + "el.scrollIntoView();\n"
@@ -595,7 +597,9 @@ public class OperaWebElement implements RenderedWebElement, SearchContext,
           + " return _isDisplayed(e.parentNode);\n" + "}\n"
           + "return undefined;\n" + "};\n" + "\n"
           + "var displayed = _isDisplayed(el);\n" + "\n"
-          + "return displayed != 'none' && visibility != 'hidden';");
+          + "return displayed != 'none' && visibility != 'hidden';"
+          + "}"
+          + "return d(locator);");
     } catch (WebDriverException ex) {
       throw new StaleElementReferenceException("This element is stale");
     }
