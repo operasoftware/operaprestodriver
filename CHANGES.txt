@@ -1,10 +1,17 @@
-OperaDriver 0.4.2 (pre 6)
-=========================
+2011/04/29 OperaDriver 0.4.2 (pre 6)
+====================================
 
 API changes
 -----------
 
  * Un-deprecate OperaDriverSettings.getNoQuit/setNoQuit and UmsEventHandler.
+ * Deprecate OperaDriver.shutdown()
+ * OperaDriver.quit() replaces OperaDriver.shutdown()
+ * Deprecate OperaDriver.closeAll(), .executeActions(), .stop()
+ * Deprecate RenderedWebElement methods on OperaWebElement
+ * Deprecate OperaWebElement.hover(),
+ * Add OperaWebElement.mouseOver() (replace .hover())
+ * Update Selenium JAR to code from SVN revision 12071
 
 New features
 ------------
@@ -13,6 +20,9 @@ New features
    events received between now and when you call waitForOperaIdle().
  * Add OperaWebElement.saveScreenshot() to match behaviour of
    OperaDriver.saveScreenshot() method.
+ * Add timeout for Opera to connect to Driver. If exceeded an exception is thrown.
+ * Throw exception if Opera quits immediately after launch, for example if it
+   doesn't recognise arguments.
 
 Enhancements
 ------------
@@ -28,17 +38,27 @@ Bug fixes
  * Setting operaBinaryArguments to null no longer causes a crash.
  * Correctly shutdown when Opera crashes (Desktop).
  * Updated launcher-linux-x86_64 to work with an older libc library.
+ * Updated OperaWebElement to pass more Selenium tests
+   * OperaWebElement implements WrapsDriver
+   * OperaWebElement uses InvalidElementStateExceptions
+   * Add more checks for disabled or hidden elements
+   * OperaWebElement.sendKeys now sends 'special' keys when part of a string
 
 Tests
--------
+-----
 
  * Move test fixture setup into own function to allow use in tests that do
    not start driver.
  * Improved Idle tests.
 
+Other
+-----
 
-OperaDriver 0.4.2 (pre 5)
-=========================
+ * Add the Scope .proto files to the repository
+
+
+2011/03/14 OperaDriver 0.4.2 (pre 5)
+====================================
 
 API changes
 -----------
@@ -81,7 +101,7 @@ Bug fixes
    * Prevent buffer under-runs on slow connections
 
 Tests
--------
+-----
 
  * Added and updated unit tests for:
    * Frames
