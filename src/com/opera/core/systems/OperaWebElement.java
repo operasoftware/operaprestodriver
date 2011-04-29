@@ -345,7 +345,7 @@ public class OperaWebElement implements RenderedWebElement, SearchContext,
 
       if (!isDisplayed()) throw new ElementNotVisibleException(
           "You can't type on an element that is not displayed");
-      if (!isEnabled()) throw new UnsupportedOperationException(
+      if (!isEnabled()) throw new InvalidElementStateException(
           "You can't type on an element that is disabled");
     }
 
@@ -359,12 +359,14 @@ public class OperaWebElement implements RenderedWebElement, SearchContext,
       if (seq instanceof Keys) execService.key(OperaKeys.get(((Keys) seq).name()));
       else if (seq.toString().equals("\n")) execService.key("enter");
       else {
+        // We need to check each character to see if it is a "special" key
         for (int i = 0; i < seq.length(); i++) {
           Character c = seq.charAt(i);
           String keyName = charToKeyName(c);
 
           // TODO buffer normal keys for a single type() call
           if (keyName == null) execService.type(c.toString());
+          // TODO check for shift, and hold it down
           else execService.key(OperaKeys.get(keyName));
         }
       }
@@ -374,6 +376,13 @@ public class OperaWebElement implements RenderedWebElement, SearchContext,
   }
 
   private static final HashMap<Character, String> keysLookup = new HashMap<Character, String>();
+  /**
+   * Converts a character in the PUA to the name of the key, as given by
+   * {@link org.openqa.selenium.Keys}. If the character doesn't appear in that
+   * class then null is returned.
+   * @param c The character that may be a special key.
+   * @return A string containing the name of the "special" key or null.
+   */
   private static String charToKeyName(char c) {
     if (keysLookup.isEmpty()) {
       for (Keys k : Keys.values()) {
