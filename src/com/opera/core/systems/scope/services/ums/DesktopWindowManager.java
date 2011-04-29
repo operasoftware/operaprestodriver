@@ -20,6 +20,8 @@ import java.util.List;
 
 import com.opera.core.systems.scope.AbstractService;
 import com.opera.core.systems.scope.DesktopWindowManagerCommand;
+import com.opera.core.systems.QuickMenu;
+import com.opera.core.systems.QuickMenuItem;
 import com.opera.core.systems.QuickWidget;
 import com.opera.core.systems.QuickWindow;
 import com.opera.core.systems.ScopeServices;
@@ -27,6 +29,9 @@ import com.opera.core.systems.ScopeServices;
 //import org.openqa.selenium.WebDriverException;
 
 import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowList;
+import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID;
+import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo;
+import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuList;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo.QuickWidgetType;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfoList;
@@ -195,6 +200,23 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 		}
 		return windowList;
 	}
+	
+	// TODO: REMOVE
+	public List<QuickMenu> getQuickMenuList() {
+		Response response = executeCommand(DesktopWindowManagerCommand.LIST_QUICK_MENUS, null);
+		QuickMenuList.Builder builder = QuickMenuList.newBuilder();
+		builder.clear();
+		buildPayload(response, builder);
+		QuickMenuList list = builder.build();
+
+		List<QuickMenuInfo> menuInfoList = list.getMenuListList();
+		List<QuickMenu> menuList = new LinkedList<QuickMenu>();
+
+		for (QuickMenuInfo menuInfo : menuInfoList) {
+			menuList.add(new QuickMenu(systemInputManager, menuInfo));
+		}
+		return menuList;
+	}
 
 	public List<DesktopWindowInfo> getDesktopWindowInfoList() {
 		Response response = executeCommand(DesktopWindowManagerCommand.LIST_WINDOWS, null);
@@ -238,5 +260,112 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 	public String getQuickWindowName(int windowId) {
 		QuickWindow window = getQuickWindowById(windowId);
 		return (window == null ? "" : window.getName());
+	}
+	
+	public QuickMenu getQuickMenu(String menuName) {
+		
+		QuickMenuID.Builder idBuilder = QuickMenuID.newBuilder();
+		idBuilder.clearMenuName();
+		idBuilder.setMenuName(menuName);
+		
+		Response response = executeCommand(DesktopWindowManagerCommand.GET_QUICK_MENU, idBuilder);
+		QuickMenuInfo.Builder builder = QuickMenuInfo.newBuilder();
+		builder.clear();
+		buildPayload(response, builder);
+		QuickMenuInfo info = builder.build();
+		
+		return new QuickMenu(systemInputManager, info);
+	}
+	
+	// Should specify name of menu parent (location) as param
+	public QuickMenuItem getQuickMenuItemByAction(String action) {
+		List<QuickMenu> menus = getQuickMenuList();
+		for (QuickMenu menu : menus) {
+			List<QuickMenuItem> itemList = menu.getItemList();
+			for (QuickMenuItem item : itemList) {
+				if (item.getActionName().equals(action))
+					return item;
+			}
+		}
+		return null;
+	}
+	
+	public QuickMenuItem getQuickMenuItemBySubmenu(String submenu) {
+		List<QuickMenu> menus = getQuickMenuList();
+		for (QuickMenu menu : menus) {
+			List<QuickMenuItem> itemList = menu.getItemList();
+			for (QuickMenuItem item : itemList) {
+				if (item.getSubMenu().equals(submenu))
+					return item;
+			}
+		}
+		return null;
+	}
+	
+	public QuickMenuItem getQuickMenuItemByText(String text) {
+		System.out.println("Get item by text " + text);
+		List<QuickMenu> menus = getQuickMenuList();
+		for (QuickMenu menu : menus) {
+			List<QuickMenuItem> itemList = menu.getItemList();
+			for (QuickMenuItem item : itemList) {
+				System.out.println("item text = " + item.getText().replaceAll("&", ""));
+				if (item.getText().replaceAll("&", "").equals(text))
+					return item;
+			}
+		}
+		return null;
+	}
+	
+	public QuickMenuItem getQuickMenuItemByAccKey(String key, String menuName) {
+		System.out.println("key = " + key + " menuName = " + menuName);
+		List<QuickMenu> menus = getQuickMenuList();
+		for (QuickMenu menu : menus) {
+			List<QuickMenuItem> itemList = menu.getItemList();
+			for (QuickMenuItem item : itemList) {
+				System.out.println("item shortcutletter = " + item.getShortcutLetter());
+				System.out.println("menu = " + item.getMenu());
+				if (item.getShortcutLetter().equals(key) && item.getMenu().equals(menuName))
+					return item;
+			}
+		}
+		return null;
+	}
+	
+	public QuickMenuItem getQuickMenuItemByShortcut(String shortcut){
+		List<QuickMenu> menus = getQuickMenuList();
+		for (QuickMenu menu : menus) {
+			List<QuickMenuItem> itemList = menu.getItemList();
+			for (QuickMenuItem item : itemList) {
+				
+				if (item.getShortCut().equals(shortcut))
+					return item;
+			}
+		}
+		return null;
+	}
+
+	public QuickMenuItem getQuickMenuItemByPosition(int row, String menuName) {
+		List<QuickMenu> menus = getQuickMenuList();
+		for (QuickMenu menu : menus) {
+			List<QuickMenuItem> itemList = menu.getItemList();
+			for (QuickMenuItem item : itemList) {
+				if (item.getRow() == row && item.getMenu().equals(menuName))
+					return item;
+			}
+		}
+		System.out.println("return null ");
+		
+		return null;
+	}
+
+	
+	/**
+	 * 
+	 * @param name - name of action or submenu of item
+	 * @return
+	 */
+	public QuickMenuItem getQuickMenuItem(String name) {
+		
+		return null;
 	}
 }

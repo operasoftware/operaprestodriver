@@ -22,6 +22,7 @@ import org.openqa.selenium.WebDriverException;
 
 import com.opera.core.systems.scope.exceptions.CommunicationException;
 import com.opera.core.systems.scope.exceptions.ResponseNotReceivedException;
+import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo;
 import com.opera.core.systems.scope.protos.UmsProtos.Response;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo;
 
@@ -63,8 +64,10 @@ public class WaitState {
     EVENT_DESKTOP_WINDOW_CLOSED, /* desktop window closed */
     EVENT_DESKTOP_WINDOW_ACTIVATED, /* desktop window activated */
     EVENT_DESKTOP_WINDOW_UPDATED, /* desktop window updated*/
-    EVENT_DESKTOP_WINDOW_LOADED, EVENT_REQUEST_FIRED
+    EVENT_DESKTOP_WINDOW_LOADED, EVENT_REQUEST_FIRED,
     /* sent when a http request is fired */
+    EVENT_QUICK_MENU_SHOWN, /* Quick menu shown */
+    EVENT_QUICK_MENU_CLOSED /* Quick menu was closed */
   }
 
   private class ResultItem {
@@ -75,6 +78,7 @@ public class WaitState {
     boolean seen;
     long remaining_idle_timeout;
     DesktopWindowInfo desktopWindowInfo; // No idea if this is right but it will
+	private QuickMenuInfo quickMenuInfo;
 
     // store the data for now, but it seems
     // wasteful
@@ -106,6 +110,13 @@ public class WaitState {
       logger.fine("EVENT: " + result.toString() + ", desktop window="
           + info.getWindowID());
     }
+    
+    public ResultItem(WaitResult result, QuickMenuInfo info) {
+        this.waitResult = result;
+        this.quickMenuInfo = info; // Check if needed : TODO FIXME
+        logger.fine("EVENT: " + result.toString() + ", quick_menu="
+            + info.getMenuId().getMenuName());
+      }
 
     public ResultItem(Response response, int tag) {
       this.response = response;
@@ -121,6 +132,8 @@ public class WaitState {
       case EVENT_DESKTOP_WINDOW_UPDATED:
       case EVENT_DESKTOP_WINDOW_SHOWN:
       case EVENT_DESKTOP_WINDOW_LOADED:
+      case EVENT_QUICK_MENU_SHOWN:
+      case EVENT_QUICK_MENU_CLOSED:
         return true;
       }
       return false;
@@ -135,7 +148,8 @@ public class WaitState {
   LinkedList<ResultItem> events = new LinkedList<ResultItem>();
 
   enum ResponseType {
-    HANDSHAKE, RESPONSE, WINDOW_LOADED, REQUEST_FIRED, OPERA_IDLE, DESKTOP_WINDOW_SHOWN, DESKTOP_WINDOW_UPDATED, DESKTOP_WINDOW_ACTIVATED, DESKTOP_WINDOW_CLOSED, DESKTOP_WINDOW_LOADED;
+    HANDSHAKE, RESPONSE, WINDOW_LOADED, REQUEST_FIRED, OPERA_IDLE, DESKTOP_WINDOW_SHOWN, DESKTOP_WINDOW_UPDATED, DESKTOP_WINDOW_ACTIVATED, DESKTOP_WINDOW_CLOSED, DESKTOP_WINDOW_LOADED,
+    QUICK_MENU_SHOWN, QUICK_MENU_CLOSED;
   }
 
   public WaitState() {
@@ -273,6 +287,22 @@ public class WaitState {
       events.add(new ResultItem(WaitResult.EVENT_DESKTOP_WINDOW_LOADED, info));
       lock.notify();
     }
+  }
+  
+  void onQuickMenuShown(QuickMenuInfo info) {
+	  synchronized (lock) {
+		  logger.fine("Event: onQuickMenuShown");
+		  events.add(new ResultItem(WaitResult.EVENT_QUICK_MENU_SHOWN, info));
+		  lock.notify();
+	  }
+  }
+  
+  void onQuickMenuClosed(/*QuickMenuInfo info*/) {
+	  synchronized (lock) {
+		  logger.fine("Event: onQuickMenuClosed");
+		  events.add(new ResultItem(WaitResult.EVENT_QUICK_MENU_CLOSED/*, info*/));
+		  lock.notify();
+	  }
   }
 
   private ResultItem getResult() {
@@ -447,6 +477,37 @@ public class WaitState {
           }
           break;
 
+        case EVENT_QUICK_MENU_SHOWN:
+        	System.out.println("EVENT_QUICK_MENU_SHOWN. type = " + type);
+            if (type == ResponseType.QUICK_MENU_SHOWN) {
+              if (stringMatch.length() == 0) {
+            	  return result;
+              }
+              else {
+                logger.fine("EVENT_QUICK_MENU_SHOWN: Name: "
+                    + result.quickMenuInfo.getMenuId().getMenuName());
+
+                if (result.quickMenuInfo.getMenuId().getMenuName().equals(stringMatch)) {
+                	return result;
+                }
+              }
+            }
+            break;
+
+        case EVENT_QUICK_MENU_CLOSED:
+            if (type == ResponseType.QUICK_MENU_CLOSED) {
+              if (stringMatch.length() == 0) return result;
+              else {
+                logger.fine("EVENT_QUICK_MENU_CLOSED: Name: "
+                    + result.quickMenuInfo.getMenuId().getMenuName());
+
+                if (result.quickMenuInfo.getMenuId().getMenuName().equals(stringMatch)) return result;
+              }
+            }
+            break;
+
+          
+          
         case EVENT_REQUEST_FIRED:
           if (result.data == match && type == ResponseType.REQUEST_FIRED) return null;
 
@@ -567,5 +628,23 @@ public class WaitState {
       return item.desktopWindowInfo.getWindowID();
     }
     return 0;
+  }
+
+  public String waitForQuickMenuShown(String menuName, long timeout) {
+	  ResultItem item = waitAndParseResult(timeout, 0, menuName,
+			  ResponseType.QUICK_MENU_SHOWN);
+	  if (item != null) {
+		  return item.quickMenuInfo.getMenuId().getMenuName();
+	  }
+	  return "";
+  }
+  
+  public String waitForQuickMenuClosed(String menuName, long timeout) {
+	  ResultItem item = waitAndParseResult(timeout, 0, menuName,
+			  ResponseType.QUICK_MENU_CLOSED);
+	  if (item != null) {
+		  return item.quickMenuInfo.getMenuId().getMenuName();
+	  }
+	  return "";
   }
 }

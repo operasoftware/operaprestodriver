@@ -363,7 +363,71 @@ public class OperaDesktopDriver extends OperaDriver {
 	public QuickWidget findWidgetByPosition(QuickWidgetType type, int windowId, int row, int column, String parentName) {
 		return desktopWindowManager.getQuickWidgetByPos(type, windowId, row, column, parentName);
 	}
+	
+	
+	public QuickMenu getQuickMenu(String menuName) {
+		System.out.println("OperaDesktopDriver::getQuickMenu");
+		return desktopWindowManager.getQuickMenu(menuName);
+	}
+	
+	/**
+	 * 
+	 * @param name - name of action or submenu of item
+	 * @return
+	 */
+	public QuickMenuItem getQuickMenuItemByAction(String action) {
+		return desktopWindowManager.getQuickMenuItemByAction(action);
+	}
 
+	/**
+	 * 
+	 * @param name - name of action or submenu of item
+	 * @return
+	 */
+	public QuickMenuItem getQuickMenuItemBySubmenu(String submenu) {
+		return desktopWindowManager.getQuickMenuItemBySubmenu(submenu);
+	}
+	
+	/**
+	 * 
+	 * @param text - text of the item
+	 * @return
+	 */
+	public QuickMenuItem getQuickMenuItemByText(String text) {
+		return desktopWindowManager.getQuickMenuItemByText(text);
+	}
+
+	/**
+	 * 
+	 * @param name - Position (row) in menu of item
+	 * @param parent - name of menu item is in
+	 * @return
+	 */
+	public QuickMenuItem getQuickMenuItemByPosition(int row, String parentName) {
+		return desktopWindowManager.getQuickMenuItemByPosition(row, parentName);
+	}
+	
+	/**
+	 * 
+	 * @param name - Position (row) in menu of item
+	 * @param parent - name of menu item is in
+	 * @return
+	 */
+	public QuickMenuItem getQuickMenuItemByAccKey(String key, String menuName) {
+		return desktopWindowManager.getQuickMenuItemByAccKey(key, menuName);
+	}
+	
+	/**
+	 * 
+	 * @param name - Position (row) in menu of item
+	 * @param parent - name of menu item is in
+	 * @return
+	 */
+	public QuickMenuItem getQuickMenuItemByShortcut(String shortcut) {
+		return desktopWindowManager.getQuickMenuItemByShortcut(shortcut);
+	}
+	
+	
 	/**
 	 * Finds a Window by its name.
 	 *
@@ -374,6 +438,8 @@ public class OperaDesktopDriver extends OperaDriver {
 		return desktopWindowManager.getQuickWindow(QuickWidgetSearchType.NAME, windowName);
 	}
 
+	
+	
 	/**
 	 * Find window by window id.
 	 *
@@ -613,6 +679,39 @@ public class OperaDesktopDriver extends OperaDriver {
 
 		return services.waitForDesktopWindowLoaded(windowName, OperaIntervals.PAGE_LOAD_TIMEOUT.getValue());
 	}
+	
+	// TODO: FIXME: No need to wait ...
+	/**
+	 * Waits until the menu is shown, and then returns the
+	 * name of the window
+	 *
+	 * @param menu - window to wait for shown event on
+	 * @return id of window
+	 * @throws CommuncationException if no connection
+	 */
+	public String waitForMenuShown(String menuName) {
+		if (services.getConnection() == null)
+			throw new CommunicationException("waiting for a window failed because Opera is not connected.");
+
+		return services.waitForMenuShown(menuName, OperaIntervals.MENU_EVENT_TIMEOUT.getValue());
+	}
+	
+	// TODO, FIXME: Enought that it's not there, or wait for the event ..
+	/**
+	 * Waits until the menu is closed, and then returns the
+	 * name of the window
+	 *
+	 * @param menu - window to wait for shown event on
+	 * @return id of window
+	 * @throws CommuncationException if no connection
+	 */
+	public String waitForMenuClosed(String menuName) {
+		if (services.getConnection() == null)
+			throw new CommunicationException("waiting for a window failed because Opera is not connected.");
+
+		return services.waitForMenuClosed(menuName, OperaIntervals.MENU_EVENT_TIMEOUT.getValue());
+	}
+
 
 	/**
 	 *

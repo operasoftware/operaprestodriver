@@ -80,6 +80,9 @@ public class QuickWidget {
 			return parentWindowId;
 		}
 
+		// TODO: Move click, get location etc. to common super for menu and widget??
+		
+		
 		/**
 		 * Clicks this widget.
 		 *

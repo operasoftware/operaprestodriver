@@ -18,6 +18,8 @@ package com.opera.core.systems.scope.services;
 
 import java.util.List; //import java.util.concurrent.atomic.AtomicInteger;
 
+import com.opera.core.systems.QuickMenu;
+import com.opera.core.systems.QuickMenuItem;
 import com.opera.core.systems.QuickWidget;
 import com.opera.core.systems.QuickWindow;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo.QuickWidgetType;
@@ -143,4 +145,26 @@ public interface IDesktopWindowManager {
 	 * @return QuickWindow
 	 */
 	QuickWindow getQuickWindowByName(String name);
+
+	/**
+	 * Gets the menu with name name.
+	 *
+	 * @param name menu name
+	 * @return QuickMenu
+	 */
+	QuickMenu getQuickMenu(String menuName);
+
+	// TODO: DOCUMENT
+	QuickMenuItem getQuickMenuItemByAction(String action);
+
+	QuickMenuItem getQuickMenuItemByText(String text);
+
+	QuickMenuItem getQuickMenuItemByPosition(int row, String parentName);
+
+	QuickMenuItem getQuickMenuItemByAccKey(String key, String parentName);
+
+	QuickMenuItem getQuickMenuItemByShortcut(String shortcut);
+
+	QuickMenuItem getQuickMenuItemBySubmenu(String submenu);
+	
 }

@@ -1130,6 +1130,1992 @@ public final class DesktopWmProtos {
     // @@protoc_insertion_point(class_scope:scope.DesktopWindowRect)
   }
   
+  public static final class QuickMenuID extends
+      com.google.protobuf.GeneratedMessage {
+    // Use QuickMenuID.newBuilder() to construct.
+    private QuickMenuID() {
+      initFields();
+    }
+    private QuickMenuID(boolean noInit) {}
+    
+    private static final QuickMenuID defaultInstance;
+    public static QuickMenuID getDefaultInstance() {
+      return defaultInstance;
+    }
+    
+    public QuickMenuID getDefaultInstanceForType() {
+      return defaultInstance;
+    }
+    
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return com.opera.core.systems.scope.protos.DesktopWmProtos.internal_static_scope_QuickMenuID_descriptor;
+    }
+    
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return com.opera.core.systems.scope.protos.DesktopWmProtos.internal_static_scope_QuickMenuID_fieldAccessorTable;
+    }
+    
+    // required string menuName = 1;
+    public static final int MENUNAME_FIELD_NUMBER = 1;
+    private boolean hasMenuName;
+    private java.lang.String menuName_ = "";
+    public boolean hasMenuName() { return hasMenuName; }
+    public java.lang.String getMenuName() { return menuName_; }
+    
+    private void initFields() {
+    }
+    public final boolean isInitialized() {
+      if (!hasMenuName) return false;
+      return true;
+    }
+    
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      getSerializedSize();
+      if (hasMenuName()) {
+        output.writeString(1, getMenuName());
+      }
+      getUnknownFields().writeTo(output);
+    }
+    
+    private int memoizedSerializedSize = -1;
+    public int getSerializedSize() {
+      int size = memoizedSerializedSize;
+      if (size != -1) return size;
+    
+      size = 0;
+      if (hasMenuName()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeStringSize(1, getMenuName());
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSerializedSize = size;
+      return size;
+    }
+    
+    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data).buildParsed();
+    }
+    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data, extensionRegistry)
+               .buildParsed();
+    }
+    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data).buildParsed();
+    }
+    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data, extensionRegistry)
+               .buildParsed();
+    }
+    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input).buildParsed();
+    }
+    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input, extensionRegistry)
+               .buildParsed();
+    }
+    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      Builder builder = newBuilder();
+      if (builder.mergeDelimitedFrom(input)) {
+        return builder.buildParsed();
+      } else {
+        return null;
+      }
+    }
+    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      Builder builder = newBuilder();
+      if (builder.mergeDelimitedFrom(input, extensionRegistry)) {
+        return builder.buildParsed();
+      } else {
+        return null;
+      }
+    }
+    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input).buildParsed();
+    }
+    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input, extensionRegistry)
+               .buildParsed();
+    }
+    
+    public static Builder newBuilder() { return Builder.create(); }
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder(com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID prototype) {
+      return newBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() { return newBuilder(this); }
+    
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessage.Builder<Builder> {
+      private com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID result;
+      
+      // Construct using com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID.newBuilder()
+      private Builder() {}
+      
+      private static Builder create() {
+        Builder builder = new Builder();
+        builder.result = new com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID();
+        return builder;
+      }
+      
+      protected com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID internalGetResult() {
+        return result;
+      }
+      
+      public Builder clear() {
+        if (result == null) {
+          throw new IllegalStateException(
+            "Cannot call clear() after build().");
+        }
+        result = new com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID();
+        return this;
+      }
+      
+      public Builder clone() {
+        return create().mergeFrom(result);
+      }
+      
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID.getDescriptor();
+      }
+      
+      public com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID getDefaultInstanceForType() {
+        return com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID.getDefaultInstance();
+      }
+      
+      public boolean isInitialized() {
+        return result.isInitialized();
+      }
+      public com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID build() {
+        if (result != null && !isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return buildPartial();
+      }
+      
+      private com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID buildParsed()
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        if (!isInitialized()) {
+          throw newUninitializedMessageException(
+            result).asInvalidProtocolBufferException();
+        }
+        return buildPartial();
+      }
+      
+      public com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID buildPartial() {
+        if (result == null) {
+          throw new IllegalStateException(
+            "build() has already been called on this Builder.");
+        }
+        com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID returnMe = result;
+        result = null;
+        return returnMe;
+      }
+      
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID) {
+          return mergeFrom((com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+      
+      public Builder mergeFrom(com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID other) {
+        if (other == com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID.getDefaultInstance()) return this;
+        if (other.hasMenuName()) {
+          setMenuName(other.getMenuName());
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        return this;
+      }
+      
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder(
+            this.getUnknownFields());
+        while (true) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              this.setUnknownFields(unknownFields.build());
+              return this;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                this.setUnknownFields(unknownFields.build());
+                return this;
+              }
+              break;
+            }
+            case 10: {
+              setMenuName(input.readString());
+              break;
+            }
+          }
+        }
+      }
+      
+      
+      // required string menuName = 1;
+      public boolean hasMenuName() {
+        return result.hasMenuName();
+      }
+      public java.lang.String getMenuName() {
+        return result.getMenuName();
+      }
+      public Builder setMenuName(java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  result.hasMenuName = true;
+        result.menuName_ = value;
+        return this;
+      }
+      public Builder clearMenuName() {
+        result.hasMenuName = false;
+        result.menuName_ = getDefaultInstance().getMenuName();
+        return this;
+      }
+      
+      // @@protoc_insertion_point(builder_scope:scope.QuickMenuID)
+    }
+    
+    static {
+      defaultInstance = new QuickMenuID(true);
+      com.opera.core.systems.scope.protos.DesktopWmProtos.internalForceInit();
+      defaultInstance.initFields();
+    }
+    
+    // @@protoc_insertion_point(class_scope:scope.QuickMenuID)
+  }
+  
+  public static final class QuickMenuList extends
+      com.google.protobuf.GeneratedMessage {
+    // Use QuickMenuList.newBuilder() to construct.
+    private QuickMenuList() {
+      initFields();
+    }
+    private QuickMenuList(boolean noInit) {}
+    
+    private static final QuickMenuList defaultInstance;
+    public static QuickMenuList getDefaultInstance() {
+      return defaultInstance;
+    }
+    
+    public QuickMenuList getDefaultInstanceForType() {
+      return defaultInstance;
+    }
+    
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return com.opera.core.systems.scope.protos.DesktopWmProtos.internal_static_scope_QuickMenuList_descriptor;
+    }
+    
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return com.opera.core.systems.scope.protos.DesktopWmProtos.internal_static_scope_QuickMenuList_fieldAccessorTable;
+    }
+    
+    // repeated .scope.QuickMenuInfo menuList = 1;
+    public static final int MENULIST_FIELD_NUMBER = 1;
+    private java.util.List<com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo> menuList_ =
+      java.util.Collections.emptyList();
+    public java.util.List<com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo> getMenuListList() {
+      return menuList_;
+    }
+    public int getMenuListCount() { return menuList_.size(); }
+    public com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo getMenuList(int index) {
+      return menuList_.get(index);
+    }
+    
+    private void initFields() {
+    }
+    public final boolean isInitialized() {
+      for (com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo element : getMenuListList()) {
+        if (!element.isInitialized()) return false;
+      }
+      return true;
+    }
+    
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      getSerializedSize();
+      for (com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo element : getMenuListList()) {
+        output.writeMessage(1, element);
+      }
+      getUnknownFields().writeTo(output);
+    }
+    
+    private int memoizedSerializedSize = -1;
+    public int getSerializedSize() {
+      int size = memoizedSerializedSize;
+      if (size != -1) return size;
+    
+      size = 0;
+      for (com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo element : getMenuListList()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(1, element);
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSerializedSize = size;
+      return size;
+    }
+    
+    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuList parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data).buildParsed();
+    }
+    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuList parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data, extensionRegistry)
+               .buildParsed();
+    }
+    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuList parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data).buildParsed();
+    }
+    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuList parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data, extensionRegistry)
+               .buildParsed();
+    }
+    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuList parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input).buildParsed();
+    }
+    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuList parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input, extensionRegistry)
+               .buildParsed();
+    }
+    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuList parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      Builder builder = newBuilder();
+      if (builder.mergeDelimitedFrom(input)) {
+        return builder.buildParsed();
+      } else {
+        return null;
+      }
+    }
+    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuList parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      Builder builder = newBuilder();
+      if (builder.mergeDelimitedFrom(input, extensionRegistry)) {
+        return builder.buildParsed();
+      } else {
+        return null;
+      }
+    }
+    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuList parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input).buildParsed();
+    }
+    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuList parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input, extensionRegistry)
+               .buildParsed();
+    }
+    
+    public static Builder newBuilder() { return Builder.create(); }
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder(com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuList prototype) {
+      return newBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() { return newBuilder(this); }
+    
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessage.Builder<Builder> {
+      private com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuList result;
+      
+      // Construct using com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuList.newBuilder()
+      private Builder() {}
+      
+      private static Builder create() {
+        Builder builder = new Builder();
+        builder.result = new com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuList();
+        return builder;
+      }
+      
+      protected com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuList internalGetResult() {
+        return result;
+      }
+      
+      public Builder clear() {
+        if (result == null) {
+          throw new IllegalStateException(
+            "Cannot call clear() after build().");
+        }
+        result = new com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuList();
+        return this;
+      }
+      
+      public Builder clone() {
+        return create().mergeFrom(result);
+      }
+      
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuList.getDescriptor();
+      }
+      
+      public com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuList getDefaultInstanceForType() {
+        return com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuList.getDefaultInstance();
+      }
+      
+      public boolean isInitialized() {
+        return result.isInitialized();
+      }
+      public com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuList build() {
+        if (result != null && !isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return buildPartial();
+      }
+      
+      private com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuList buildParsed()
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        if (!isInitialized()) {
+          throw newUninitializedMessageException(
+            result).asInvalidProtocolBufferException();
+        }
+        return buildPartial();
+      }
+      
+      public com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuList buildPartial() {
+        if (result == null) {
+          throw new IllegalStateException(
+            "build() has already been called on this Builder.");
+        }
+        if (result.menuList_ != java.util.Collections.EMPTY_LIST) {
+          result.menuList_ =
+            java.util.Collections.unmodifiableList(result.menuList_);
+        }
+        com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuList returnMe = result;
+        result = null;
+        return returnMe;
+      }
+      
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuList) {
+          return mergeFrom((com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuList)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+      
+      public Builder mergeFrom(com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuList other) {
+        if (other == com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuList.getDefaultInstance()) return this;
+        if (!other.menuList_.isEmpty()) {
+          if (result.menuList_.isEmpty()) {
+            result.menuList_ = new java.util.ArrayList<com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo>();
+          }
+          result.menuList_.addAll(other.menuList_);
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        return this;
+      }
+      
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder(
+            this.getUnknownFields());
+        while (true) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              this.setUnknownFields(unknownFields.build());
+              return this;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                this.setUnknownFields(unknownFields.build());
+                return this;
+              }
+              break;
+            }
+            case 10: {
+              com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo.Builder subBuilder = com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo.newBuilder();
+              input.readMessage(subBuilder, extensionRegistry);
+              addMenuList(subBuilder.buildPartial());
+              break;
+            }
+          }
+        }
+      }
+      
+      
+      // repeated .scope.QuickMenuInfo menuList = 1;
+      public java.util.List<com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo> getMenuListList() {
+        return java.util.Collections.unmodifiableList(result.menuList_);
+      }
+      public int getMenuListCount() {
+        return result.getMenuListCount();
+      }
+      public com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo getMenuList(int index) {
+        return result.getMenuList(index);
+      }
+      public Builder setMenuList(int index, com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo value) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        result.menuList_.set(index, value);
+        return this;
+      }
+      public Builder setMenuList(int index, com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo.Builder builderForValue) {
+        result.menuList_.set(index, builderForValue.build());
+        return this;
+      }
+      public Builder addMenuList(com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo value) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        if (result.menuList_.isEmpty()) {
+          result.menuList_ = new java.util.ArrayList<com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo>();
+        }
+        result.menuList_.add(value);
+        return this;
+      }
+      public Builder addMenuList(com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo.Builder builderForValue) {
+        if (result.menuList_.isEmpty()) {
+          result.menuList_ = new java.util.ArrayList<com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo>();
+        }
+        result.menuList_.add(builderForValue.build());
+        return this;
+      }
+      public Builder addAllMenuList(
+          java.lang.Iterable<? extends com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo> values) {
+        if (result.menuList_.isEmpty()) {
+          result.menuList_ = new java.util.ArrayList<com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo>();
+        }
+        super.addAll(values, result.menuList_);
+        return this;
+      }
+      public Builder clearMenuList() {
+        result.menuList_ = java.util.Collections.emptyList();
+        return this;
+      }
+      
+      // @@protoc_insertion_point(builder_scope:scope.QuickMenuList)
+    }
+    
+    static {
+      defaultInstance = new QuickMenuList(true);
+      com.opera.core.systems.scope.protos.DesktopWmProtos.internalForceInit();
+      defaultInstance.initFields();
+    }
+    
+    // @@protoc_insertion_point(class_scope:scope.QuickMenuList)
+  }
+  
+  public static final class QuickMenuInfo extends
+      com.google.protobuf.GeneratedMessage {
+    // Use QuickMenuInfo.newBuilder() to construct.
+    private QuickMenuInfo() {
+      initFields();
+    }
+    private QuickMenuInfo(boolean noInit) {}
+    
+    private static final QuickMenuInfo defaultInstance;
+    public static QuickMenuInfo getDefaultInstance() {
+      return defaultInstance;
+    }
+    
+    public QuickMenuInfo getDefaultInstanceForType() {
+      return defaultInstance;
+    }
+    
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return com.opera.core.systems.scope.protos.DesktopWmProtos.internal_static_scope_QuickMenuInfo_descriptor;
+    }
+    
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return com.opera.core.systems.scope.protos.DesktopWmProtos.internal_static_scope_QuickMenuInfo_fieldAccessorTable;
+    }
+    
+    // required .scope.QuickMenuID menuId = 1;
+    public static final int MENUID_FIELD_NUMBER = 1;
+    private boolean hasMenuId;
+    private com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID menuId_;
+    public boolean hasMenuId() { return hasMenuId; }
+    public com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID getMenuId() { return menuId_; }
+    
+    // required .scope.DesktopWindowRect rect = 2;
+    public static final int RECT_FIELD_NUMBER = 2;
+    private boolean hasRect;
+    private com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect rect_;
+    public boolean hasRect() { return hasRect; }
+    public com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect getRect() { return rect_; }
+    
+    // required bool visible = 3;
+    public static final int VISIBLE_FIELD_NUMBER = 3;
+    private boolean hasVisible;
+    private boolean visible_ = false;
+    public boolean hasVisible() { return hasVisible; }
+    public boolean getVisible() { return visible_; }
+    
+    // repeated .scope.QuickMenuItemInfo menuItemList = 4;
+    public static final int MENUITEMLIST_FIELD_NUMBER = 4;
+    private java.util.List<com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo> menuItemList_ =
+      java.util.Collections.emptyList();
+    public java.util.List<com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo> getMenuItemListList() {
+      return menuItemList_;
+    }
+    public int getMenuItemListCount() { return menuItemList_.size(); }
+    public com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo getMenuItemList(int index) {
+      return menuItemList_.get(index);
+    }
+    
+    // required .scope.QuickMenuID parentMenu = 5;
+    public static final int PARENTMENU_FIELD_NUMBER = 5;
+    private boolean hasParentMenu;
+    private com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID parentMenu_;
+    public boolean hasParentMenu() { return hasParentMenu; }
+    public com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID getParentMenu() { return parentMenu_; }
+    
+    private void initFields() {
+      menuId_ = com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID.getDefaultInstance();
+      rect_ = com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect.getDefaultInstance();
+      parentMenu_ = com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID.getDefaultInstance();
+    }
+    public final boolean isInitialized() {
+      if (!hasMenuId) return false;
+      if (!hasRect) return false;
+      if (!hasVisible) return false;
+      if (!hasParentMenu) return false;
+      if (!getMenuId().isInitialized()) return false;
+      if (!getRect().isInitialized()) return false;
+      for (com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo element : getMenuItemListList()) {
+        if (!element.isInitialized()) return false;
+      }
+      if (!getParentMenu().isInitialized()) return false;
+      return true;
+    }
+    
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      getSerializedSize();
+      if (hasMenuId()) {
+        output.writeMessage(1, getMenuId());
+      }
+      if (hasRect()) {
+        output.writeMessage(2, getRect());
+      }
+      if (hasVisible()) {
+        output.writeBool(3, getVisible());
+      }
+      for (com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo element : getMenuItemListList()) {
+        output.writeMessage(4, element);
+      }
+      if (hasParentMenu()) {
+        output.writeMessage(5, getParentMenu());
+      }
+      getUnknownFields().writeTo(output);
+    }
+    
+    private int memoizedSerializedSize = -1;
+    public int getSerializedSize() {
+      int size = memoizedSerializedSize;
+      if (size != -1) return size;
+    
+      size = 0;
+      if (hasMenuId()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(1, getMenuId());
+      }
+      if (hasRect()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(2, getRect());
+      }
+      if (hasVisible()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBoolSize(3, getVisible());
+      }
+      for (com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo element : getMenuItemListList()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(4, element);
+      }
+      if (hasParentMenu()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(5, getParentMenu());
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSerializedSize = size;
+      return size;
+    }
+    
+    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data).buildParsed();
+    }
+    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data, extensionRegistry)
+               .buildParsed();
+    }
+    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data).buildParsed();
+    }
+    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data, extensionRegistry)
+               .buildParsed();
+    }
+    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input).buildParsed();
+    }
+    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input, extensionRegistry)
+               .buildParsed();
+    }
+    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      Builder builder = newBuilder();
+      if (builder.mergeDelimitedFrom(input)) {
+        return builder.buildParsed();
+      } else {
+        return null;
+      }
+    }
+    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      Builder builder = newBuilder();
+      if (builder.mergeDelimitedFrom(input, extensionRegistry)) {
+        return builder.buildParsed();
+      } else {
+        return null;
+      }
+    }
+    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input).buildParsed();
+    }
+    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input, extensionRegistry)
+               .buildParsed();
+    }
+    
+    public static Builder newBuilder() { return Builder.create(); }
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder(com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo prototype) {
+      return newBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() { return newBuilder(this); }
+    
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessage.Builder<Builder> {
+      private com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo result;
+      
+      // Construct using com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo.newBuilder()
+      private Builder() {}
+      
+      private static Builder create() {
+        Builder builder = new Builder();
+        builder.result = new com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo();
+        return builder;
+      }
+      
+      protected com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo internalGetResult() {
+        return result;
+      }
+      
+      public Builder clear() {
+        if (result == null) {
+          throw new IllegalStateException(
+            "Cannot call clear() after build().");
+        }
+        result = new com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo();
+        return this;
+      }
+      
+      public Builder clone() {
+        return create().mergeFrom(result);
+      }
+      
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo.getDescriptor();
+      }
+      
+      public com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo getDefaultInstanceForType() {
+        return com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo.getDefaultInstance();
+      }
+      
+      public boolean isInitialized() {
+        return result.isInitialized();
+      }
+      public com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo build() {
+        if (result != null && !isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return buildPartial();
+      }
+      
+      private com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo buildParsed()
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        if (!isInitialized()) {
+          throw newUninitializedMessageException(
+            result).asInvalidProtocolBufferException();
+        }
+        return buildPartial();
+      }
+      
+      public com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo buildPartial() {
+        if (result == null) {
+          throw new IllegalStateException(
+            "build() has already been called on this Builder.");
+        }
+        if (result.menuItemList_ != java.util.Collections.EMPTY_LIST) {
+          result.menuItemList_ =
+            java.util.Collections.unmodifiableList(result.menuItemList_);
+        }
+        com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo returnMe = result;
+        result = null;
+        return returnMe;
+      }
+      
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo) {
+          return mergeFrom((com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+      
+      public Builder mergeFrom(com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo other) {
+        if (other == com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo.getDefaultInstance()) return this;
+        if (other.hasMenuId()) {
+          mergeMenuId(other.getMenuId());
+        }
+        if (other.hasRect()) {
+          mergeRect(other.getRect());
+        }
+        if (other.hasVisible()) {
+          setVisible(other.getVisible());
+        }
+        if (!other.menuItemList_.isEmpty()) {
+          if (result.menuItemList_.isEmpty()) {
+            result.menuItemList_ = new java.util.ArrayList<com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo>();
+          }
+          result.menuItemList_.addAll(other.menuItemList_);
+        }
+        if (other.hasParentMenu()) {
+          mergeParentMenu(other.getParentMenu());
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        return this;
+      }
+      
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder(
+            this.getUnknownFields());
+        while (true) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              this.setUnknownFields(unknownFields.build());
+              return this;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                this.setUnknownFields(unknownFields.build());
+                return this;
+              }
+              break;
+            }
+            case 10: {
+              com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID.Builder subBuilder = com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID.newBuilder();
+              if (hasMenuId()) {
+                subBuilder.mergeFrom(getMenuId());
+              }
+              input.readMessage(subBuilder, extensionRegistry);
+              setMenuId(subBuilder.buildPartial());
+              break;
+            }
+            case 18: {
+              com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect.Builder subBuilder = com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect.newBuilder();
+              if (hasRect()) {
+                subBuilder.mergeFrom(getRect());
+              }
+              input.readMessage(subBuilder, extensionRegistry);
+              setRect(subBuilder.buildPartial());
+              break;
+            }
+            case 24: {
+              setVisible(input.readBool());
+              break;
+            }
+            case 34: {
+              com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo.Builder subBuilder = com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo.newBuilder();
+              input.readMessage(subBuilder, extensionRegistry);
+              addMenuItemList(subBuilder.buildPartial());
+              break;
+            }
+            case 42: {
+              com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID.Builder subBuilder = com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID.newBuilder();
+              if (hasParentMenu()) {
+                subBuilder.mergeFrom(getParentMenu());
+              }
+              input.readMessage(subBuilder, extensionRegistry);
+              setParentMenu(subBuilder.buildPartial());
+              break;
+            }
+          }
+        }
+      }
+      
+      
+      // required .scope.QuickMenuID menuId = 1;
+      public boolean hasMenuId() {
+        return result.hasMenuId();
+      }
+      public com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID getMenuId() {
+        return result.getMenuId();
+      }
+      public Builder setMenuId(com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID value) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        result.hasMenuId = true;
+        result.menuId_ = value;
+        return this;
+      }
+      public Builder setMenuId(com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID.Builder builderForValue) {
+        result.hasMenuId = true;
+        result.menuId_ = builderForValue.build();
+        return this;
+      }
+      public Builder mergeMenuId(com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID value) {
+        if (result.hasMenuId() &&
+            result.menuId_ != com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID.getDefaultInstance()) {
+          result.menuId_ =
+            com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID.newBuilder(result.menuId_).mergeFrom(value).buildPartial();
+        } else {
+          result.menuId_ = value;
+        }
+        result.hasMenuId = true;
+        return this;
+      }
+      public Builder clearMenuId() {
+        result.hasMenuId = false;
+        result.menuId_ = com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID.getDefaultInstance();
+        return this;
+      }
+      
+      // required .scope.DesktopWindowRect rect = 2;
+      public boolean hasRect() {
+        return result.hasRect();
+      }
+      public com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect getRect() {
+        return result.getRect();
+      }
+      public Builder setRect(com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect value) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        result.hasRect = true;
+        result.rect_ = value;
+        return this;
+      }
+      public Builder setRect(com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect.Builder builderForValue) {
+        result.hasRect = true;
+        result.rect_ = builderForValue.build();
+        return this;
+      }
+      public Builder mergeRect(com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect value) {
+        if (result.hasRect() &&
+            result.rect_ != com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect.getDefaultInstance()) {
+          result.rect_ =
+            com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect.newBuilder(result.rect_).mergeFrom(value).buildPartial();
+        } else {
+          result.rect_ = value;
+        }
+        result.hasRect = true;
+        return this;
+      }
+      public Builder clearRect() {
+        result.hasRect = false;
+        result.rect_ = com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect.getDefaultInstance();
+        return this;
+      }
+      
+      // required bool visible = 3;
+      public boolean hasVisible() {
+        return result.hasVisible();
+      }
+      public boolean getVisible() {
+        return result.getVisible();
+      }
+      public Builder setVisible(boolean value) {
+        result.hasVisible = true;
+        result.visible_ = value;
+        return this;
+      }
+      public Builder clearVisible() {
+        result.hasVisible = false;
+        result.visible_ = false;
+        return this;
+      }
+      
+      // repeated .scope.QuickMenuItemInfo menuItemList = 4;
+      public java.util.List<com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo> getMenuItemListList() {
+        return java.util.Collections.unmodifiableList(result.menuItemList_);
+      }
+      public int getMenuItemListCount() {
+        return result.getMenuItemListCount();
+      }
+      public com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo getMenuItemList(int index) {
+        return result.getMenuItemList(index);
+      }
+      public Builder setMenuItemList(int index, com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo value) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        result.menuItemList_.set(index, value);
+        return this;
+      }
+      public Builder setMenuItemList(int index, com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo.Builder builderForValue) {
+        result.menuItemList_.set(index, builderForValue.build());
+        return this;
+      }
+      public Builder addMenuItemList(com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo value) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        if (result.menuItemList_.isEmpty()) {
+          result.menuItemList_ = new java.util.ArrayList<com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo>();
+        }
+        result.menuItemList_.add(value);
+        return this;
+      }
+      public Builder addMenuItemList(com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo.Builder builderForValue) {
+        if (result.menuItemList_.isEmpty()) {
+          result.menuItemList_ = new java.util.ArrayList<com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo>();
+        }
+        result.menuItemList_.add(builderForValue.build());
+        return this;
+      }
+      public Builder addAllMenuItemList(
+          java.lang.Iterable<? extends com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo> values) {
+        if (result.menuItemList_.isEmpty()) {
+          result.menuItemList_ = new java.util.ArrayList<com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo>();
+        }
+        super.addAll(values, result.menuItemList_);
+        return this;
+      }
+      public Builder clearMenuItemList() {
+        result.menuItemList_ = java.util.Collections.emptyList();
+        return this;
+      }
+      
+      // required .scope.QuickMenuID parentMenu = 5;
+      public boolean hasParentMenu() {
+        return result.hasParentMenu();
+      }
+      public com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID getParentMenu() {
+        return result.getParentMenu();
+      }
+      public Builder setParentMenu(com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID value) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        result.hasParentMenu = true;
+        result.parentMenu_ = value;
+        return this;
+      }
+      public Builder setParentMenu(com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID.Builder builderForValue) {
+        result.hasParentMenu = true;
+        result.parentMenu_ = builderForValue.build();
+        return this;
+      }
+      public Builder mergeParentMenu(com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID value) {
+        if (result.hasParentMenu() &&
+            result.parentMenu_ != com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID.getDefaultInstance()) {
+          result.parentMenu_ =
+            com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID.newBuilder(result.parentMenu_).mergeFrom(value).buildPartial();
+        } else {
+          result.parentMenu_ = value;
+        }
+        result.hasParentMenu = true;
+        return this;
+      }
+      public Builder clearParentMenu() {
+        result.hasParentMenu = false;
+        result.parentMenu_ = com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID.getDefaultInstance();
+        return this;
+      }
+      
+      // @@protoc_insertion_point(builder_scope:scope.QuickMenuInfo)
+    }
+    
+    static {
+      defaultInstance = new QuickMenuInfo(true);
+      com.opera.core.systems.scope.protos.DesktopWmProtos.internalForceInit();
+      defaultInstance.initFields();
+    }
+    
+    // @@protoc_insertion_point(class_scope:scope.QuickMenuInfo)
+  }
+  
+  public static final class QuickMenuItemInfo extends
+      com.google.protobuf.GeneratedMessage {
+    // Use QuickMenuItemInfo.newBuilder() to construct.
+    private QuickMenuItemInfo() {
+      initFields();
+    }
+    private QuickMenuItemInfo(boolean noInit) {}
+    
+    private static final QuickMenuItemInfo defaultInstance;
+    public static QuickMenuItemInfo getDefaultInstance() {
+      return defaultInstance;
+    }
+    
+    public QuickMenuItemInfo getDefaultInstanceForType() {
+      return defaultInstance;
+    }
+    
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return com.opera.core.systems.scope.protos.DesktopWmProtos.internal_static_scope_QuickMenuItemInfo_descriptor;
+    }
+    
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return com.opera.core.systems.scope.protos.DesktopWmProtos.internal_static_scope_QuickMenuItemInfo_fieldAccessorTable;
+    }
+    
+    // required string text = 1;
+    public static final int TEXT_FIELD_NUMBER = 1;
+    private boolean hasText;
+    private java.lang.String text_ = "";
+    public boolean hasText() { return hasText; }
+    public java.lang.String getText() { return text_; }
+    
+    // required string string_id = 2;
+    public static final int STRING_ID_FIELD_NUMBER = 2;
+    private boolean hasStringId;
+    private java.lang.String stringId_ = "";
+    public boolean hasStringId() { return hasStringId; }
+    public java.lang.String getStringId() { return stringId_; }
+    
+    // required bool visible = 3;
+    public static final int VISIBLE_FIELD_NUMBER = 3;
+    private boolean hasVisible;
+    private boolean visible_ = false;
+    public boolean hasVisible() { return hasVisible; }
+    public boolean getVisible() { return visible_; }
+    
+    // required bool enabled = 4;
+    public static final int ENABLED_FIELD_NUMBER = 4;
+    private boolean hasEnabled;
+    private boolean enabled_ = false;
+    public boolean hasEnabled() { return hasEnabled; }
+    public boolean getEnabled() { return enabled_; }
+    
+    // required bool checked = 5;
+    public static final int CHECKED_FIELD_NUMBER = 5;
+    private boolean hasChecked;
+    private boolean checked_ = false;
+    public boolean hasChecked() { return hasChecked; }
+    public boolean getChecked() { return checked_; }
+    
+    // required bool selected = 6;
+    public static final int SELECTED_FIELD_NUMBER = 6;
+    private boolean hasSelected;
+    private boolean selected_ = false;
+    public boolean hasSelected() { return hasSelected; }
+    public boolean getSelected() { return selected_; }
+    
+    // required string shortcut = 7;
+    public static final int SHORTCUT_FIELD_NUMBER = 7;
+    private boolean hasShortcut;
+    private java.lang.String shortcut_ = "";
+    public boolean hasShortcut() { return hasShortcut; }
+    public java.lang.String getShortcut() { return shortcut_; }
+    
+    // required string shortcutletter = 8;
+    public static final int SHORTCUTLETTER_FIELD_NUMBER = 8;
+    private boolean hasShortcutletter;
+    private java.lang.String shortcutletter_ = "";
+    public boolean hasShortcutletter() { return hasShortcutletter; }
+    public java.lang.String getShortcutletter() { return shortcutletter_; }
+    
+    // required string action = 9;
+    public static final int ACTION_FIELD_NUMBER = 9;
+    private boolean hasAction;
+    private java.lang.String action_ = "";
+    public boolean hasAction() { return hasAction; }
+    public java.lang.String getAction() { return action_; }
+    
+    // required uint32 row = 10;
+    public static final int ROW_FIELD_NUMBER = 10;
+    private boolean hasRow;
+    private int row_ = 0;
+    public boolean hasRow() { return hasRow; }
+    public int getRow() { return row_; }
+    
+    // required .scope.DesktopWindowRect rect = 11;
+    public static final int RECT_FIELD_NUMBER = 11;
+    private boolean hasRect;
+    private com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect rect_;
+    public boolean hasRect() { return hasRect; }
+    public com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect getRect() { return rect_; }
+    
+    // required .scope.QuickMenuID submenu = 12;
+    public static final int SUBMENU_FIELD_NUMBER = 12;
+    private boolean hasSubmenu;
+    private com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID submenu_;
+    public boolean hasSubmenu() { return hasSubmenu; }
+    public com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID getSubmenu() { return submenu_; }
+    
+    private void initFields() {
+      rect_ = com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect.getDefaultInstance();
+      submenu_ = com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID.getDefaultInstance();
+    }
+    public final boolean isInitialized() {
+      if (!hasText) return false;
+      if (!hasStringId) return false;
+      if (!hasVisible) return false;
+      if (!hasEnabled) return false;
+      if (!hasChecked) return false;
+      if (!hasSelected) return false;
+      if (!hasShortcut) return false;
+      if (!hasShortcutletter) return false;
+      if (!hasAction) return false;
+      if (!hasRow) return false;
+      if (!hasRect) return false;
+      if (!hasSubmenu) return false;
+      if (!getRect().isInitialized()) return false;
+      if (!getSubmenu().isInitialized()) return false;
+      return true;
+    }
+    
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      getSerializedSize();
+      if (hasText()) {
+        output.writeString(1, getText());
+      }
+      if (hasStringId()) {
+        output.writeString(2, getStringId());
+      }
+      if (hasVisible()) {
+        output.writeBool(3, getVisible());
+      }
+      if (hasEnabled()) {
+        output.writeBool(4, getEnabled());
+      }
+      if (hasChecked()) {
+        output.writeBool(5, getChecked());
+      }
+      if (hasSelected()) {
+        output.writeBool(6, getSelected());
+      }
+      if (hasShortcut()) {
+        output.writeString(7, getShortcut());
+      }
+      if (hasShortcutletter()) {
+        output.writeString(8, getShortcutletter());
+      }
+      if (hasAction()) {
+        output.writeString(9, getAction());
+      }
+      if (hasRow()) {
+        output.writeUInt32(10, getRow());
+      }
+      if (hasRect()) {
+        output.writeMessage(11, getRect());
+      }
+      if (hasSubmenu()) {
+        output.writeMessage(12, getSubmenu());
+      }
+      getUnknownFields().writeTo(output);
+    }
+    
+    private int memoizedSerializedSize = -1;
+    public int getSerializedSize() {
+      int size = memoizedSerializedSize;
+      if (size != -1) return size;
+    
+      size = 0;
+      if (hasText()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeStringSize(1, getText());
+      }
+      if (hasStringId()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeStringSize(2, getStringId());
+      }
+      if (hasVisible()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBoolSize(3, getVisible());
+      }
+      if (hasEnabled()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBoolSize(4, getEnabled());
+      }
+      if (hasChecked()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBoolSize(5, getChecked());
+      }
+      if (hasSelected()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBoolSize(6, getSelected());
+      }
+      if (hasShortcut()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeStringSize(7, getShortcut());
+      }
+      if (hasShortcutletter()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeStringSize(8, getShortcutletter());
+      }
+      if (hasAction()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeStringSize(9, getAction());
+      }
+      if (hasRow()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeUInt32Size(10, getRow());
+      }
+      if (hasRect()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(11, getRect());
+      }
+      if (hasSubmenu()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(12, getSubmenu());
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSerializedSize = size;
+      return size;
+    }
+    
+    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data).buildParsed();
+    }
+    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data, extensionRegistry)
+               .buildParsed();
+    }
+    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data).buildParsed();
+    }
+    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data, extensionRegistry)
+               .buildParsed();
+    }
+    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input).buildParsed();
+    }
+    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input, extensionRegistry)
+               .buildParsed();
+    }
+    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      Builder builder = newBuilder();
+      if (builder.mergeDelimitedFrom(input)) {
+        return builder.buildParsed();
+      } else {
+        return null;
+      }
+    }
+    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      Builder builder = newBuilder();
+      if (builder.mergeDelimitedFrom(input, extensionRegistry)) {
+        return builder.buildParsed();
+      } else {
+        return null;
+      }
+    }
+    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input).buildParsed();
+    }
+    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input, extensionRegistry)
+               .buildParsed();
+    }
+    
+    public static Builder newBuilder() { return Builder.create(); }
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder(com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo prototype) {
+      return newBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() { return newBuilder(this); }
+    
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessage.Builder<Builder> {
+      private com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo result;
+      
+      // Construct using com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo.newBuilder()
+      private Builder() {}
+      
+      private static Builder create() {
+        Builder builder = new Builder();
+        builder.result = new com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo();
+        return builder;
+      }
+      
+      protected com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo internalGetResult() {
+        return result;
+      }
+      
+      public Builder clear() {
+        if (result == null) {
+          throw new IllegalStateException(
+            "Cannot call clear() after build().");
+        }
+        result = new com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo();
+        return this;
+      }
+      
+      public Builder clone() {
+        return create().mergeFrom(result);
+      }
+      
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo.getDescriptor();
+      }
+      
+      public com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo getDefaultInstanceForType() {
+        return com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo.getDefaultInstance();
+      }
+      
+      public boolean isInitialized() {
+        return result.isInitialized();
+      }
+      public com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo build() {
+        if (result != null && !isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return buildPartial();
+      }
+      
+      private com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo buildParsed()
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        if (!isInitialized()) {
+          throw newUninitializedMessageException(
+            result).asInvalidProtocolBufferException();
+        }
+        return buildPartial();
+      }
+      
+      public com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo buildPartial() {
+        if (result == null) {
+          throw new IllegalStateException(
+            "build() has already been called on this Builder.");
+        }
+        com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo returnMe = result;
+        result = null;
+        return returnMe;
+      }
+      
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo) {
+          return mergeFrom((com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+      
+      public Builder mergeFrom(com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo other) {
+        if (other == com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo.getDefaultInstance()) return this;
+        if (other.hasText()) {
+          setText(other.getText());
+        }
+        if (other.hasStringId()) {
+          setStringId(other.getStringId());
+        }
+        if (other.hasVisible()) {
+          setVisible(other.getVisible());
+        }
+        if (other.hasEnabled()) {
+          setEnabled(other.getEnabled());
+        }
+        if (other.hasChecked()) {
+          setChecked(other.getChecked());
+        }
+        if (other.hasSelected()) {
+          setSelected(other.getSelected());
+        }
+        if (other.hasShortcut()) {
+          setShortcut(other.getShortcut());
+        }
+        if (other.hasShortcutletter()) {
+          setShortcutletter(other.getShortcutletter());
+        }
+        if (other.hasAction()) {
+          setAction(other.getAction());
+        }
+        if (other.hasRow()) {
+          setRow(other.getRow());
+        }
+        if (other.hasRect()) {
+          mergeRect(other.getRect());
+        }
+        if (other.hasSubmenu()) {
+          mergeSubmenu(other.getSubmenu());
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        return this;
+      }
+      
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder(
+            this.getUnknownFields());
+        while (true) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              this.setUnknownFields(unknownFields.build());
+              return this;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                this.setUnknownFields(unknownFields.build());
+                return this;
+              }
+              break;
+            }
+            case 10: {
+              setText(input.readString());
+              break;
+            }
+            case 18: {
+              setStringId(input.readString());
+              break;
+            }
+            case 24: {
+              setVisible(input.readBool());
+              break;
+            }
+            case 32: {
+              setEnabled(input.readBool());
+              break;
+            }
+            case 40: {
+              setChecked(input.readBool());
+              break;
+            }
+            case 48: {
+              setSelected(input.readBool());
+              break;
+            }
+            case 58: {
+              setShortcut(input.readString());
+              break;
+            }
+            case 66: {
+              setShortcutletter(input.readString());
+              break;
+            }
+            case 74: {
+              setAction(input.readString());
+              break;
+            }
+            case 80: {
+              setRow(input.readUInt32());
+              break;
+            }
+            case 90: {
+              com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect.Builder subBuilder = com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect.newBuilder();
+              if (hasRect()) {
+                subBuilder.mergeFrom(getRect());
+              }
+              input.readMessage(subBuilder, extensionRegistry);
+              setRect(subBuilder.buildPartial());
+              break;
+            }
+            case 98: {
+              com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID.Builder subBuilder = com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID.newBuilder();
+              if (hasSubmenu()) {
+                subBuilder.mergeFrom(getSubmenu());
+              }
+              input.readMessage(subBuilder, extensionRegistry);
+              setSubmenu(subBuilder.buildPartial());
+              break;
+            }
+          }
+        }
+      }
+      
+      
+      // required string text = 1;
+      public boolean hasText() {
+        return result.hasText();
+      }
+      public java.lang.String getText() {
+        return result.getText();
+      }
+      public Builder setText(java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  result.hasText = true;
+        result.text_ = value;
+        return this;
+      }
+      public Builder clearText() {
+        result.hasText = false;
+        result.text_ = getDefaultInstance().getText();
+        return this;
+      }
+      
+      // required string string_id = 2;
+      public boolean hasStringId() {
+        return result.hasStringId();
+      }
+      public java.lang.String getStringId() {
+        return result.getStringId();
+      }
+      public Builder setStringId(java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  result.hasStringId = true;
+        result.stringId_ = value;
+        return this;
+      }
+      public Builder clearStringId() {
+        result.hasStringId = false;
+        result.stringId_ = getDefaultInstance().getStringId();
+        return this;
+      }
+      
+      // required bool visible = 3;
+      public boolean hasVisible() {
+        return result.hasVisible();
+      }
+      public boolean getVisible() {
+        return result.getVisible();
+      }
+      public Builder setVisible(boolean value) {
+        result.hasVisible = true;
+        result.visible_ = value;
+        return this;
+      }
+      public Builder clearVisible() {
+        result.hasVisible = false;
+        result.visible_ = false;
+        return this;
+      }
+      
+      // required bool enabled = 4;
+      public boolean hasEnabled() {
+        return result.hasEnabled();
+      }
+      public boolean getEnabled() {
+        return result.getEnabled();
+      }
+      public Builder setEnabled(boolean value) {
+        result.hasEnabled = true;
+        result.enabled_ = value;
+        return this;
+      }
+      public Builder clearEnabled() {
+        result.hasEnabled = false;
+        result.enabled_ = false;
+        return this;
+      }
+      
+      // required bool checked = 5;
+      public boolean hasChecked() {
+        return result.hasChecked();
+      }
+      public boolean getChecked() {
+        return result.getChecked();
+      }
+      public Builder setChecked(boolean value) {
+        result.hasChecked = true;
+        result.checked_ = value;
+        return this;
+      }
+      public Builder clearChecked() {
+        result.hasChecked = false;
+        result.checked_ = false;
+        return this;
+      }
+      
+      // required bool selected = 6;
+      public boolean hasSelected() {
+        return result.hasSelected();
+      }
+      public boolean getSelected() {
+        return result.getSelected();
+      }
+      public Builder setSelected(boolean value) {
+        result.hasSelected = true;
+        result.selected_ = value;
+        return this;
+      }
+      public Builder clearSelected() {
+        result.hasSelected = false;
+        result.selected_ = false;
+        return this;
+      }
+      
+      // required string shortcut = 7;
+      public boolean hasShortcut() {
+        return result.hasShortcut();
+      }
+      public java.lang.String getShortcut() {
+        return result.getShortcut();
+      }
+      public Builder setShortcut(java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  result.hasShortcut = true;
+        result.shortcut_ = value;
+        return this;
+      }
+      public Builder clearShortcut() {
+        result.hasShortcut = false;
+        result.shortcut_ = getDefaultInstance().getShortcut();
+        return this;
+      }
+      
+      // required string shortcutletter = 8;
+      public boolean hasShortcutletter() {
+        return result.hasShortcutletter();
+      }
+      public java.lang.String getShortcutletter() {
+        return result.getShortcutletter();
+      }
+      public Builder setShortcutletter(java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  result.hasShortcutletter = true;
+        result.shortcutletter_ = value;
+        return this;
+      }
+      public Builder clearShortcutletter() {
+        result.hasShortcutletter = false;
+        result.shortcutletter_ = getDefaultInstance().getShortcutletter();
+        return this;
+      }
+      
+      // required string action = 9;
+      public boolean hasAction() {
+        return result.hasAction();
+      }
+      public java.lang.String getAction() {
+        return result.getAction();
+      }
+      public Builder setAction(java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  result.hasAction = true;
+        result.action_ = value;
+        return this;
+      }
+      public Builder clearAction() {
+        result.hasAction = false;
+        result.action_ = getDefaultInstance().getAction();
+        return this;
+      }
+      
+      // required uint32 row = 10;
+      public boolean hasRow() {
+        return result.hasRow();
+      }
+      public int getRow() {
+        return result.getRow();
+      }
+      public Builder setRow(int value) {
+        result.hasRow = true;
+        result.row_ = value;
+        return this;
+      }
+      public Builder clearRow() {
+        result.hasRow = false;
+        result.row_ = 0;
+        return this;
+      }
+      
+      // required .scope.DesktopWindowRect rect = 11;
+      public boolean hasRect() {
+        return result.hasRect();
+      }
+      public com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect getRect() {
+        return result.getRect();
+      }
+      public Builder setRect(com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect value) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        result.hasRect = true;
+        result.rect_ = value;
+        return this;
+      }
+      public Builder setRect(com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect.Builder builderForValue) {
+        result.hasRect = true;
+        result.rect_ = builderForValue.build();
+        return this;
+      }
+      public Builder mergeRect(com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect value) {
+        if (result.hasRect() &&
+            result.rect_ != com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect.getDefaultInstance()) {
+          result.rect_ =
+            com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect.newBuilder(result.rect_).mergeFrom(value).buildPartial();
+        } else {
+          result.rect_ = value;
+        }
+        result.hasRect = true;
+        return this;
+      }
+      public Builder clearRect() {
+        result.hasRect = false;
+        result.rect_ = com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect.getDefaultInstance();
+        return this;
+      }
+      
+      // required .scope.QuickMenuID submenu = 12;
+      public boolean hasSubmenu() {
+        return result.hasSubmenu();
+      }
+      public com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID getSubmenu() {
+        return result.getSubmenu();
+      }
+      public Builder setSubmenu(com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID value) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        result.hasSubmenu = true;
+        result.submenu_ = value;
+        return this;
+      }
+      public Builder setSubmenu(com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID.Builder builderForValue) {
+        result.hasSubmenu = true;
+        result.submenu_ = builderForValue.build();
+        return this;
+      }
+      public Builder mergeSubmenu(com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID value) {
+        if (result.hasSubmenu() &&
+            result.submenu_ != com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID.getDefaultInstance()) {
+          result.submenu_ =
+            com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID.newBuilder(result.submenu_).mergeFrom(value).buildPartial();
+        } else {
+          result.submenu_ = value;
+        }
+        result.hasSubmenu = true;
+        return this;
+      }
+      public Builder clearSubmenu() {
+        result.hasSubmenu = false;
+        result.submenu_ = com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID.getDefaultInstance();
+        return this;
+      }
+      
+      // @@protoc_insertion_point(builder_scope:scope.QuickMenuItemInfo)
+    }
+    
+    static {
+      defaultInstance = new QuickMenuItemInfo(true);
+      com.opera.core.systems.scope.protos.DesktopWmProtos.internalForceInit();
+      defaultInstance.initFields();
+    }
+    
+    // @@protoc_insertion_point(class_scope:scope.QuickMenuItemInfo)
+  }
+  
   public static final class QuickWidgetInfo extends
       com.google.protobuf.GeneratedMessage {
     // Use QuickWidgetInfo.newBuilder() to construct.
@@ -3517,6 +5503,26 @@ public final class DesktopWmProtos {
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_scope_DesktopWindowRect_fieldAccessorTable;
   private static com.google.protobuf.Descriptors.Descriptor
+    internal_static_scope_QuickMenuID_descriptor;
+  private static
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_scope_QuickMenuID_fieldAccessorTable;
+  private static com.google.protobuf.Descriptors.Descriptor
+    internal_static_scope_QuickMenuList_descriptor;
+  private static
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_scope_QuickMenuList_fieldAccessorTable;
+  private static com.google.protobuf.Descriptors.Descriptor
+    internal_static_scope_QuickMenuInfo_descriptor;
+  private static
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_scope_QuickMenuInfo_fieldAccessorTable;
+  private static com.google.protobuf.Descriptors.Descriptor
+    internal_static_scope_QuickMenuItemInfo_descriptor;
+  private static
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_scope_QuickMenuItemInfo_fieldAccessorTable;
+  private static com.google.protobuf.Descriptors.Descriptor
     internal_static_scope_QuickWidgetInfo_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
@@ -3562,33 +5568,47 @@ public final class DesktopWmProtos {
       "dowState\022\014\n\010RESTORED\020\000\022\r\n\tMINIMIZED\020\001\022\r\n",
       "\tMAXIMIZED\020\002\022\016\n\nFULLSCREEN\020\003\"H\n\021DesktopW" +
       "indowRect\022\t\n\001x\030\001 \002(\r\022\t\n\001y\030\002 \002(\r\022\r\n\005width" +
-      "\030\003 \002(\r\022\016\n\006height\030\004 \002(\r\"\324\004\n\017QuickWidgetIn" +
-      "fo\022\014\n\004name\030\001 \002(\t\0224\n\004type\030\002 \002(\0162&.scope.Q" +
-      "uickWidgetInfo.QuickWidgetType\022\017\n\007visibl" +
-      "e\030\003 \002(\010\022\014\n\004text\030\004 \002(\t\022\r\n\005value\030\005 \002(\r\022\017\n\007" +
-      "enabled\030\006 \002(\010\022\023\n\013defaultLook\030\007 \002(\010\022\023\n\013fo" +
-      "cusedLook\030\010 \002(\010\022&\n\004rect\030\t \002(\0132\030.scope.De" +
-      "sktopWindowRect\022\016\n\006parent\030\n \001(\t\022\013\n\003row\030\013" +
-      " \001(\r\022\013\n\003col\030\014 \001(\r\022\024\n\014visible_text\030\r \001(\t\022",
-      "\027\n\017additional_text\030\016 \001(\t\"\222\002\n\017QuickWidget" +
-      "Type\022\013\n\007UNKNOWN\020\000\022\n\n\006BUTTON\020\001\022\014\n\010CHECKBO" +
-      "X\020\002\022\r\n\tDIALOGTAB\020\003\022\014\n\010DROPDOWN\020\004\022\r\n\tEDIT" +
-      "FIELD\020\005\022\t\n\005LABEL\020\006\022\017\n\013RADIOBUTTON\020\007\022\020\n\014A" +
-      "DDRESSFIELD\020\010\022\n\n\006SEARCH\020\t\022\013\n\007TOOLBAR\020\n\022\014" +
-      "\n\010TREEVIEW\020\013\022\014\n\010TREEITEM\020\014\022\r\n\tTABBUTTON\020" +
-      "\r\022\r\n\tTHUMBNAIL\020\016\022\016\n\nGRIDLAYOUT\020\017\022\014\n\010GRID" +
-      "ITEM\020\020\022\r\n\tQUICKFIND\020\021\"#\n\017DesktopWindowID" +
-      "\022\020\n\010windowID\030\001 \002(\r\"A\n\021DesktopWindowList\022" +
-      ",\n\nwindowList\030\001 \003(\0132\030.scope.DesktopWindo",
-      "wInfo\"F\n\023QuickWidgetInfoList\022/\n\017quickwid" +
-      "getList\030\001 \003(\0132\026.scope.QuickWidgetInfo\"\305\001" +
-      "\n\021QuickWidgetSearch\022(\n\010windowID\030\001 \002(\0132\026." +
-      "scope.DesktopWindowID\022B\n\nsearchType\030\002 \002(" +
-      "\0162..scope.QuickWidgetSearch.QuickWidgetS" +
-      "earchType\022\014\n\004data\030\003 \002(\t\"4\n\025QuickWidgetSe" +
-      "archType\022\010\n\004NAME\020\000\022\010\n\004TEXT\020\001\022\007\n\003POS\020\002B8\n" +
-      "#com.opera.core.systems.scope.protosB\017De" +
-      "sktopWmProtosH\001"
+      "\030\003 \002(\r\022\016\n\006height\030\004 \002(\r\"\037\n\013QuickMenuID\022\020\n" +
+      "\010menuName\030\001 \002(\t\"7\n\rQuickMenuList\022&\n\010menu" +
+      "List\030\001 \003(\0132\024.scope.QuickMenuInfo\"\304\001\n\rQui" +
+      "ckMenuInfo\022\"\n\006menuId\030\001 \002(\0132\022.scope.Quick" +
+      "MenuID\022&\n\004rect\030\002 \002(\0132\030.scope.DesktopWind" +
+      "owRect\022\017\n\007visible\030\003 \002(\010\022.\n\014menuItemList\030" +
+      "\004 \003(\0132\030.scope.QuickMenuItemInfo\022&\n\nparen" +
+      "tMenu\030\005 \002(\0132\022.scope.QuickMenuID\"\215\002\n\021Quic",
+      "kMenuItemInfo\022\014\n\004text\030\001 \002(\t\022\021\n\tstring_id" +
+      "\030\002 \002(\t\022\017\n\007visible\030\003 \002(\010\022\017\n\007enabled\030\004 \002(\010" +
+      "\022\017\n\007checked\030\005 \002(\010\022\020\n\010selected\030\006 \002(\010\022\020\n\010s" +
+      "hortcut\030\007 \002(\t\022\026\n\016shortcutletter\030\010 \002(\t\022\016\n" +
+      "\006action\030\t \002(\t\022\013\n\003row\030\n \002(\r\022&\n\004rect\030\013 \002(\013" +
+      "2\030.scope.DesktopWindowRect\022#\n\007submenu\030\014 " +
+      "\002(\0132\022.scope.QuickMenuID\"\324\004\n\017QuickWidgetI" +
+      "nfo\022\014\n\004name\030\001 \002(\t\0224\n\004type\030\002 \002(\0162&.scope." +
+      "QuickWidgetInfo.QuickWidgetType\022\017\n\007visib" +
+      "le\030\003 \002(\010\022\014\n\004text\030\004 \002(\t\022\r\n\005value\030\005 \002(\r\022\017\n",
+      "\007enabled\030\006 \002(\010\022\023\n\013defaultLook\030\007 \002(\010\022\023\n\013f" +
+      "ocusedLook\030\010 \002(\010\022&\n\004rect\030\t \002(\0132\030.scope.D" +
+      "esktopWindowRect\022\016\n\006parent\030\n \001(\t\022\013\n\003row\030" +
+      "\013 \001(\r\022\013\n\003col\030\014 \001(\r\022\024\n\014visible_text\030\r \001(\t" +
+      "\022\027\n\017additional_text\030\016 \001(\t\"\222\002\n\017QuickWidge" +
+      "tType\022\013\n\007UNKNOWN\020\000\022\n\n\006BUTTON\020\001\022\014\n\010CHECKB" +
+      "OX\020\002\022\r\n\tDIALOGTAB\020\003\022\014\n\010DROPDOWN\020\004\022\r\n\tEDI" +
+      "TFIELD\020\005\022\t\n\005LABEL\020\006\022\017\n\013RADIOBUTTON\020\007\022\020\n\014" +
+      "ADDRESSFIELD\020\010\022\n\n\006SEARCH\020\t\022\013\n\007TOOLBAR\020\n\022" +
+      "\014\n\010TREEVIEW\020\013\022\014\n\010TREEITEM\020\014\022\r\n\tTABBUTTON",
+      "\020\r\022\r\n\tTHUMBNAIL\020\016\022\016\n\nGRIDLAYOUT\020\017\022\014\n\010GRI" +
+      "DITEM\020\020\022\r\n\tQUICKFIND\020\021\"#\n\017DesktopWindowI" +
+      "D\022\020\n\010windowID\030\001 \002(\r\"A\n\021DesktopWindowList" +
+      "\022,\n\nwindowList\030\001 \003(\0132\030.scope.DesktopWind" +
+      "owInfo\"F\n\023QuickWidgetInfoList\022/\n\017quickwi" +
+      "dgetList\030\001 \003(\0132\026.scope.QuickWidgetInfo\"\305" +
+      "\001\n\021QuickWidgetSearch\022(\n\010windowID\030\001 \002(\0132\026" +
+      ".scope.DesktopWindowID\022B\n\nsearchType\030\002 \002" +
+      "(\0162..scope.QuickWidgetSearch.QuickWidget" +
+      "SearchType\022\014\n\004data\030\003 \002(\t\"4\n\025QuickWidgetS",
+      "earchType\022\010\n\004NAME\020\000\022\010\n\004TEXT\020\001\022\007\n\003POS\020\002B8" +
+      "\n#com.opera.core.systems.scope.protosB\017D" +
+      "esktopWmProtosH\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -3611,8 +5631,40 @@ public final class DesktopWmProtos {
               new java.lang.String[] { "X", "Y", "Width", "Height", },
               com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect.class,
               com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect.Builder.class);
-          internal_static_scope_QuickWidgetInfo_descriptor =
+          internal_static_scope_QuickMenuID_descriptor =
             getDescriptor().getMessageTypes().get(2);
+          internal_static_scope_QuickMenuID_fieldAccessorTable = new
+            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+              internal_static_scope_QuickMenuID_descriptor,
+              new java.lang.String[] { "MenuName", },
+              com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID.class,
+              com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID.Builder.class);
+          internal_static_scope_QuickMenuList_descriptor =
+            getDescriptor().getMessageTypes().get(3);
+          internal_static_scope_QuickMenuList_fieldAccessorTable = new
+            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+              internal_static_scope_QuickMenuList_descriptor,
+              new java.lang.String[] { "MenuList", },
+              com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuList.class,
+              com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuList.Builder.class);
+          internal_static_scope_QuickMenuInfo_descriptor =
+            getDescriptor().getMessageTypes().get(4);
+          internal_static_scope_QuickMenuInfo_fieldAccessorTable = new
+            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+              internal_static_scope_QuickMenuInfo_descriptor,
+              new java.lang.String[] { "MenuId", "Rect", "Visible", "MenuItemList", "ParentMenu", },
+              com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo.class,
+              com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo.Builder.class);
+          internal_static_scope_QuickMenuItemInfo_descriptor =
+            getDescriptor().getMessageTypes().get(5);
+          internal_static_scope_QuickMenuItemInfo_fieldAccessorTable = new
+            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+              internal_static_scope_QuickMenuItemInfo_descriptor,
+              new java.lang.String[] { "Text", "StringId", "Visible", "Enabled", "Checked", "Selected", "Shortcut", "Shortcutletter", "Action", "Row", "Rect", "Submenu", },
+              com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo.class,
+              com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo.Builder.class);
+          internal_static_scope_QuickWidgetInfo_descriptor =
+            getDescriptor().getMessageTypes().get(6);
           internal_static_scope_QuickWidgetInfo_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_scope_QuickWidgetInfo_descriptor,
@@ -3620,7 +5672,7 @@ public final class DesktopWmProtos {
               com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo.class,
               com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo.Builder.class);
           internal_static_scope_DesktopWindowID_descriptor =
-            getDescriptor().getMessageTypes().get(3);
+            getDescriptor().getMessageTypes().get(7);
           internal_static_scope_DesktopWindowID_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_scope_DesktopWindowID_descriptor,
@@ -3628,7 +5680,7 @@ public final class DesktopWmProtos {
               com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID.class,
               com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID.Builder.class);
           internal_static_scope_DesktopWindowList_descriptor =
-            getDescriptor().getMessageTypes().get(4);
+            getDescriptor().getMessageTypes().get(8);
           internal_static_scope_DesktopWindowList_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_scope_DesktopWindowList_descriptor,
@@ -3636,7 +5688,7 @@ public final class DesktopWmProtos {
               com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowList.class,
               com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowList.Builder.class);
           internal_static_scope_QuickWidgetInfoList_descriptor =
-            getDescriptor().getMessageTypes().get(5);
+            getDescriptor().getMessageTypes().get(9);
           internal_static_scope_QuickWidgetInfoList_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_scope_QuickWidgetInfoList_descriptor,
@@ -3644,7 +5696,7 @@ public final class DesktopWmProtos {
               com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfoList.class,
               com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfoList.Builder.class);
           internal_static_scope_QuickWidgetSearch_descriptor =
-            getDescriptor().getMessageTypes().get(6);
+            getDescriptor().getMessageTypes().get(10);
           internal_static_scope_QuickWidgetSearch_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_scope_QuickWidgetSearch_descriptor,
