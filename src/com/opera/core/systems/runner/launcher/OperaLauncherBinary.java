@@ -97,7 +97,7 @@ public class OperaLauncherBinary extends Thread {
     }
 
     public void run() {
-      logger.info("Running launcher..." + running.get());
+      logger.config("Running launcher: " + running.get());
       InputStream stream = process.getInputStream();
       String buffer = "";
       while (running.get()) {
