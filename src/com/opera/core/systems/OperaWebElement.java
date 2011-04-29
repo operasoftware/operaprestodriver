@@ -293,6 +293,8 @@ public class OperaWebElement implements RenderedWebElement, SearchContext,
                             "s += '\\n' + n_s + '\\n';\n"+
                         "else if (n.tagName == 'BR')\n"+
                             "s += '\\n';\n"+
+                        "else if (s.substr(-1) == ' ' && n_s.substr(0, 1) == ' ')\n"+
+                            "s += n_s.substr(1);\n"+
                         "else\n"+
                             "s += n_s;\n"+
                     "}\n"+
