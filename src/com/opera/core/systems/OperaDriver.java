@@ -439,10 +439,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
       // change to _top
       windowManager.filterActiveWindow();
       debugger.resetFramePath();
-      if (findElementsByTagName("frameset").size() > 0) {
-        switchTo().frame(0);
-      }
-      // waitForLoadToComplete();
+
       return OperaDriver.this;
     }
 
