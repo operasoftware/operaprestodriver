@@ -250,7 +250,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
 
     String oldUrl = getCurrentUrl();
 
-		services.captureOperaIdle();
+    services.captureOperaIdle();
     actionHandler.get(url);
 
     if (oldUrl == null || !url.replace(oldUrl, "").startsWith("#")) {

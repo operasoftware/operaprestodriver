@@ -131,9 +131,7 @@ public class OperaLauncherRunner implements OperaRunner {
       listenerServer.setSoTimeout((int) OperaIntervals.LAUNCHER_TIMEOUT.getValue());
 
       // try to connect
-      Socket new_socket = listenerServer.accept();
-      new_socket.setSoTimeout((int) OperaIntervals.LAUNCHER_TIMEOUT.getValue());
-      launcherProtocol = new OperaLauncherProtocol(new_socket);
+      launcherProtocol = new OperaLauncherProtocol(listenerServer.accept());
 
       // we did it!
       logger.fine("Connected with Opera Launcher on port " + this.settings.getOperaLauncherListeningPort());
@@ -325,8 +323,12 @@ public class OperaLauncherRunner implements OperaRunner {
         blank = response.getBlank();
       }
 
-    } catch (IOException e) {
-      throw new OperaRunnerException("Could not get state of opera", e);
+    }
+    catch (SocketTimeoutException e) {
+      throw new OperaRunnerException("Could not get screenshot from launcher (Socket Timeout)", e);
+    }
+    catch (IOException e) {
+      throw new OperaRunnerException("Could not get screenshot from launcher", e);
     }
 
     ScreenShotReply screenshotreply = new ScreenShotReply(resultMd5,
