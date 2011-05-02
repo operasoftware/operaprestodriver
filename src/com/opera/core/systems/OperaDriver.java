@@ -491,7 +491,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
       return OperaDriver.this;
     }
 
-    // TODO implement
+    // TODO implement need to find a way to link an element to a runtime
     public WebDriver frame(WebElement frameElement) {
       throw new UnsupportedOperationException();
     }

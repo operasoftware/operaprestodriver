@@ -200,6 +200,8 @@ public class EcmaScriptDebugger6 extends EcmaScriptDebugger {
 
     if (!status.equals("completed")) {
       if (status.equals("unhandled-exception")) {
+        // Would be great give the JS error here, but it appears that by the
+        // time we callFunctionOnObject the error object has gone...
         throw new WebDriverException("Ecmascript exception");
       }
       // FIXME what is the best approach here?

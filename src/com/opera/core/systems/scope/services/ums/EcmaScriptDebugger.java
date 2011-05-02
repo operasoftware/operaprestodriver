@@ -557,8 +557,16 @@ public class EcmaScriptDebugger extends AbstractService implements
       // check if it is really the name
       else if (entry.getValue().getFrameName().equals(name)) return entry.getValue();
       // last resort is id
-      else if (executeScript("frameElement ? frameElement.id : ''", true,
-          entry.getValue().getRuntimeID()).equals(name)) return entry.getValue();
+      else {
+        try {
+          if (executeScript("frameElement ? frameElement.id : ''", true,
+              entry.getValue().getRuntimeID()).equals(name)) {
+            return entry.getValue();
+          }
+        } catch (WebDriverException e) {
+          // ignore exception
+        }
+      }
     }
     return null;
   }
