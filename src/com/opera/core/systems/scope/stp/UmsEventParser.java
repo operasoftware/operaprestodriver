@@ -21,6 +21,7 @@ import com.google.protobuf.GeneratedMessage;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.opera.core.systems.scope.handlers.AbstractEventHandler;
 import com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessage;
+import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo;
 import com.opera.core.systems.scope.protos.EcmascriptProtos.ReadyStateChange;
 import com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeID;
@@ -131,10 +132,11 @@ public class UmsEventParser {
     	eventHandler.onQuickMenuShown(menuInfoShown);
     	break;
       case MENU_CLOSED:
-    	QuickMenuInfo.Builder closedQMBuilder = QuickMenuInfo.newBuilder(); 
+    	QuickMenuID.Builder closedQMBuilder = QuickMenuID.newBuilder(); 
       	buildPayload(event, closedQMBuilder);
-      	//QuickMenuInfo menuInfoClosed = closedQMBuilder.build();
-      	eventHandler.onQuickMenuClosed(/*menuInfoClosed*/);
+      	QuickMenuID menuId = closedQMBuilder.build();
+      	System.out.println("eventParser On Quick Menu Closed");
+      	eventHandler.onQuickMenuClosed(menuId);
       	break;
       default:
         break;

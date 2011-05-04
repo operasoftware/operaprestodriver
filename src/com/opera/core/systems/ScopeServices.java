@@ -34,6 +34,7 @@ import com.opera.core.systems.scope.exceptions.CommunicationException;
 import com.opera.core.systems.scope.handlers.IConnectionHandler;
 import com.opera.core.systems.scope.internal.OperaIntervals;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo;
+import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo;
 import com.opera.core.systems.scope.protos.EcmascriptProtos.ReadyStateChange;
 import com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeInfo;
@@ -483,9 +484,9 @@ public class ScopeServices implements IConnectionHandler {
   }
   
   // TODO ADD PARAM AGAIN, or just name?
-  public void onQuickMenuClosed() {
+  public void onQuickMenuClosed(QuickMenuID id) {
 	  logger.fine("QuickMenu closed");//: menuName=" + info.getMenuId().getMenuName());
-	  waitState.onQuickMenuClosed();
+	  waitState.onQuickMenuClosed(id);
   }
 
   public void onHandshake(boolean stp1) {

@@ -22,6 +22,7 @@ import org.openqa.selenium.WebDriverException;
 
 import com.opera.core.systems.scope.exceptions.CommunicationException;
 import com.opera.core.systems.scope.exceptions.ResponseNotReceivedException;
+import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo;
 import com.opera.core.systems.scope.protos.UmsProtos.Response;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo;
@@ -79,6 +80,7 @@ public class WaitState {
     long remaining_idle_timeout;
     DesktopWindowInfo desktopWindowInfo; // No idea if this is right but it will
 	private QuickMenuInfo quickMenuInfo;
+	private QuickMenuID quickMenuId;
 
     // store the data for now, but it seems
     // wasteful
@@ -117,6 +119,14 @@ public class WaitState {
         logger.fine("EVENT: " + result.toString() + ", quick_menu="
             + info.getMenuId().getMenuName());
       }
+    
+    public ResultItem(WaitResult result, QuickMenuID id) {
+        this.waitResult = result;
+        this.quickMenuId = id; // Check if needed : TODO FIXME
+        logger.fine("EVENT: " + result.toString() + ", quick_menu="
+            + id.getMenuName());
+      }
+
 
     public ResultItem(Response response, int tag) {
       this.response = response;
@@ -297,10 +307,10 @@ public class WaitState {
 	  }
   }
   
-  void onQuickMenuClosed(/*QuickMenuInfo info*/) {
+  void onQuickMenuClosed(QuickMenuID id) {
 	  synchronized (lock) {
 		  logger.fine("Event: onQuickMenuClosed");
-		  events.add(new ResultItem(WaitResult.EVENT_QUICK_MENU_CLOSED/*, info*/));
+		  events.add(new ResultItem(WaitResult.EVENT_QUICK_MENU_CLOSED, id));
 		  lock.notify();
 	  }
   }
@@ -478,7 +488,6 @@ public class WaitState {
           break;
 
         case EVENT_QUICK_MENU_SHOWN:
-        	System.out.println("EVENT_QUICK_MENU_SHOWN. type = " + type);
             if (type == ResponseType.QUICK_MENU_SHOWN) {
               if (stringMatch.length() == 0) {
             	  return result;
@@ -495,13 +504,19 @@ public class WaitState {
             break;
 
         case EVENT_QUICK_MENU_CLOSED:
-            if (type == ResponseType.QUICK_MENU_CLOSED) {
-              if (stringMatch.length() == 0) return result;
+            if (type == ResponseType.QUICK_MENU_CLOSED
+            			|| type == ResponseType.QUICK_MENU_SHOWN) {
+              if (stringMatch.length() == 0) {
+            	  return result;
+              }
               else {
                 logger.fine("EVENT_QUICK_MENU_CLOSED: Name: "
-                    + result.quickMenuInfo.getMenuId().getMenuName());
+                    + result.quickMenuId.getMenuName());
 
-                if (result.quickMenuInfo.getMenuId().getMenuName().equals(stringMatch)) return result;
+                if (result.quickMenuId.getMenuName().equals(stringMatch)) { 
+                	return result;
+                }
+                
               }
             }
             break;

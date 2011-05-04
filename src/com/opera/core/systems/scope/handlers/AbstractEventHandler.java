@@ -17,6 +17,7 @@ package com.opera.core.systems.scope.handlers;
 
 import com.opera.core.systems.ScopeServices;
 import com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessage;
+import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo;
 import com.opera.core.systems.scope.protos.EcmascriptProtos.ReadyStateChange;
 import com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeInfo;
@@ -141,7 +142,7 @@ public abstract class AbstractEventHandler {
    * 
    * @param menuInfoClosed
    */
-  public abstract void onQuickMenuClosed(/*QuickMenuInfo menuInfoClosed*/);
+  public abstract void onQuickMenuClosed(QuickMenuID menuId);
 
   public abstract void onHttpResponse(int responseCode);
 

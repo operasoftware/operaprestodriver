@@ -18,6 +18,7 @@ package com.opera.core.systems;
 import com.opera.core.systems.scope.handlers.AbstractEventHandler;
 import com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessage;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo;
+import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo;
 import com.opera.core.systems.scope.protos.EcmascriptProtos.ReadyStateChange;
 import com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeInfo;
@@ -152,8 +153,8 @@ public class EventHandler extends AbstractEventHandler {
   }
 
   @Override
-  public void onQuickMenuClosed(/*QuickMenuInfo menuInfoClosed*/) {
-	  services.onQuickMenuClosed(/*menuInfoClosed*/);
+  public void onQuickMenuClosed(QuickMenuID menuId) {
+	  services.onQuickMenuClosed(menuId);
 	
   }
 
