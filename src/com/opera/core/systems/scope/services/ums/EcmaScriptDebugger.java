@@ -16,11 +16,8 @@ limitations under the License.
 
 package com.opera.core.systems.scope.services.ums;
 
-import java.text.NumberFormat;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -39,24 +36,23 @@ import com.opera.core.systems.OperaWebElement;
 import com.opera.core.systems.ScopeServices;
 import com.opera.core.systems.model.RuntimeNode;
 import com.opera.core.systems.model.ScriptResult;
-import com.opera.core.systems.scope.AbstractService;
+import com.opera.core.systems.scope.AbstractEcmascriptService;
 import com.opera.core.systems.scope.ESDebuggerCommand;
 import com.opera.core.systems.scope.internal.OperaIntervals;
 import com.opera.core.systems.scope.protos.EcmascriptProtos.ReadyStateChange;
 import com.opera.core.systems.scope.protos.EsdbgProtos.Configuration;
 import com.opera.core.systems.scope.protos.EsdbgProtos.EvalData;
-import com.opera.core.systems.scope.protos.EsdbgProtos.EvalData.Variable;
 import com.opera.core.systems.scope.protos.EsdbgProtos.EvalResult;
 import com.opera.core.systems.scope.protos.EsdbgProtos.ExamineList;
-import com.opera.core.systems.scope.protos.EsdbgProtos.ObjectInfo.Property;
 import com.opera.core.systems.scope.protos.EsdbgProtos.ObjectList;
 import com.opera.core.systems.scope.protos.EsdbgProtos.ObjectValue;
 import com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeInfo;
 import com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeList;
 import com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeSelection;
+import com.opera.core.systems.scope.protos.EsdbgProtos.EvalData.Variable;
+import com.opera.core.systems.scope.protos.EsdbgProtos.ObjectInfo.Property;
 import com.opera.core.systems.scope.protos.UmsProtos.Response;
 import com.opera.core.systems.scope.services.IEcmaScriptDebugger;
-import com.opera.core.systems.scope.services.IWindowManager;
 
 /**
  * Manages the ecmascript-debugger service Handles runtime management and script
@@ -65,21 +61,18 @@ import com.opera.core.systems.scope.services.IWindowManager;
  * @author Deniz Turkoglu <denizt@opera.com>
  *
  */
-public class EcmaScriptDebugger extends AbstractService implements
+public class EcmaScriptDebugger extends AbstractEcmascriptService implements
     IEcmaScriptDebugger {
 
-  private int retries;
-  private long sleepDuration;
-  protected int activeWindowId;
-  protected final IWindowManager windowManager;
-  private String currentFramePath;
+  public EcmaScriptDebugger(ScopeServices services, String version) {
+    super(services, version);
+  }
+
 
   private AtomicStampedReference<RuntimeInfo> runtime = new AtomicStampedReference<RuntimeInfo>(
       null, 0);
 
   private ConcurrentMap<Integer, RuntimeInfo> runtimesList = new ConcurrentHashMap<Integer, RuntimeInfo>();
-
-  private RuntimeNode root;
 
   public int getRuntimeId() {
     return runtime.getStamp();
@@ -96,15 +89,6 @@ public class EcmaScriptDebugger extends AbstractService implements
 
   public void removeRuntime(int runtimeId) {
     runtimesList.remove(runtimeId);
-  }
-
-  public EcmaScriptDebugger(ScopeServices services, String version) {
-    super(services, version);
-    services.setDebugger(this);
-    this.windowManager = services.getWindowManager();
-    this.services = services;
-    resetCounters();
-    currentFramePath = "_top";
   }
 
   private List<RuntimeInfo> getRuntimesList() {
@@ -166,9 +150,6 @@ public class EcmaScriptDebugger extends AbstractService implements
 
   }
 
-  /* (non-Javadoc)
-   * @see com.opera.core.systems.scope.services.xml.IEcmaScriptDebugger#scriptExecutor(java.lang.String, java.lang.Object)
-   */
   public Object scriptExecutor(String script, Object... params) {
     List<WebElement> elements = new ArrayList<WebElement>();
 
@@ -195,80 +176,10 @@ public class EcmaScriptDebugger extends AbstractService implements
     } else return parsed;
   }
 
-  /**
-   * Build the script to send with arguments
-   *
-   * @param elements The web elements to send with the script as argument
-   * @param script The script to execute, can have references to argument(s)
-   * @param params Params to send with the script, will be parsed in to
-   *          arguments
-   * @return The script to be sent to Eval command for execution
-   */
-  private String buildEvalString(List<WebElement> elements, String script,
-      Object... params) {
-    String toSend;
-    if (params != null && params.length > 0) {
-      StringBuilder builder = new StringBuilder();
-      for (Object object : params) {
-        if (builder.toString().length() > 0) {
-          builder.append(",");
-        }
-
-        if (object instanceof Collection<?>) {
-          builder.append("[");
-          Collection<?> collection = (Collection<?>) object;
-          for (Object argument : collection) {
-            processArgument(argument, builder, elements);
-          }
-          builder.append("]");
-        } else {
-          processArgument(object, builder, elements);
-        }
-      }
-
-      String arguments = builder.toString();
-      toSend = "(function(){" + script + "})(" + arguments + ")";
-    } else {
-      toSend = script;
-    }
-    return toSend;
-  }
-
   private EvalResult parseEvalData(Response response) {
     EvalResult.Builder builder = EvalResult.newBuilder();
     buildPayload(response, builder);
     return builder.build();
-  }
-
-  protected void processArgument(Object object, StringBuilder builder,
-      List<WebElement> elements) {
-    if (object instanceof WebElement) {
-      elements.add((WebElement) object);
-      builder.append(String.valueOf(object));
-    } else if (object instanceof String) {
-      builder.append("'" + String.valueOf(object) + "'");
-    } else if (object instanceof Integer || object instanceof Long
-        || object instanceof Boolean || object instanceof Float
-        || object instanceof Double) {
-      builder.append(String.valueOf(object));
-    } else {
-      throw new IllegalArgumentException("The argument type is not supported");
-    }
-  }
-
-  /* (non-Javadoc)
-   * @see com.opera.core.systems.scope.services.xml.IEcmaScriptDebugger#executeJavascript(java.lang.String)
-   */
-  public String executeJavascript(String using) {
-    return executeJavascript(using, true);
-  }
-
-  /* (non-Javadoc)
-   * @see com.opera.core.systems.scope.services.xml.IEcmaScriptDebugger#executeJavascript(java.lang.String, boolean)
-   */
-  public String executeJavascript(String using, boolean responseExpected) {
-    Object result = executeScript(using, responseExpected);
-    return (result == null) ? null : String.valueOf(result);
   }
 
   protected final EvalData.Builder buildEval(String using, int runtimeId) {
@@ -285,12 +196,6 @@ public class EcmaScriptDebugger extends AbstractService implements
     variable.setName(name);
     variable.setObjectID(objectId);
     return variable.build();
-  }
-
-  private void recover() {
-    windowManager.findDriverWindow();
-    activeWindowId = windowManager.getActiveWindowId();
-    updateRuntime();
   }
 
   protected Response eval(String using, int runtimeId, Variable... variables) {
@@ -320,21 +225,13 @@ public class EcmaScriptDebugger extends AbstractService implements
     resetCounters();
 
     return response;
-
   }
 
   protected Response eval(String using, Variable... variables) {
     return eval(using, getRuntimeId(), variables);
   }
 
-  private void resetCounters() {
-    retries = 0;
-    sleepDuration = OperaIntervals.SCRIPT_RETRY_INTERVAL.getValue();
-  }
 
-  /* (non-Javadoc)
-   * @see com.opera.core.systems.scope.services.xml.IEcmaScriptDebugger#executeScript(java.lang.String, boolean)
-   */
   public Object executeScript(String using, boolean responseExpected) {
     return executeScript(using, responseExpected, getRuntimeId());
   }
@@ -345,9 +242,6 @@ public class EcmaScriptDebugger extends AbstractService implements
     return responseExpected ? parseEvalReply(parseEvalData(reply)) : null;
   }
 
-  /* (non-Javadoc)
-   * @see com.opera.core.systems.scope.services.xml.IEcmaScriptDebugger#getObject(java.lang.String)
-   */
   public Integer getObject(String using) {
     EvalResult reply = parseEvalData(eval(using));
     return (reply.getType().equals("object")) ? reply.getObjectValue().getObjectID()
@@ -360,9 +254,6 @@ public class EcmaScriptDebugger extends AbstractService implements
         : null;
   }
 
-  /* (non-Javadoc)
-   * @see com.opera.core.systems.scope.services.xml.IEcmaScriptDebugger#callFunctionOnObject(java.lang.String, int)
-   */
   public String callFunctionOnObject(String using, int objectId) {
     Variable variable = buildVariable("locator", objectId);
 
@@ -370,9 +261,6 @@ public class EcmaScriptDebugger extends AbstractService implements
     return reply.getType().equals("null") ? null : reply.getValue();
   }
 
-  /* (non-Javadoc)
-   * @see com.opera.core.systems.scope.services.xml.IEcmaScriptDebugger#callFunctionOnObject(java.lang.String, int, boolean)
-   */
   public Object callFunctionOnObject(String using, int objectId,
       boolean responseExpected) {
     Variable variable = buildVariable("locator", objectId);
@@ -380,10 +268,6 @@ public class EcmaScriptDebugger extends AbstractService implements
     Response response = eval(using, variable);
     return responseExpected ? parseEvalReply(parseEvalData(response)) : null;
   }
-
-  /* (non-Javadoc)
-   * @see com.opera.core.systems.scope.services.xml.IEcmaScriptDebugger#executeScriptOnObject(java.lang.String, int)
-   */
 
   public Integer executeScriptOnObject(String using, int objectId) {
     Variable variable = buildVariable("locator", objectId);
@@ -438,18 +322,6 @@ public class EcmaScriptDebugger extends AbstractService implements
     return null;
   }
 
-  protected Object parseNumber(String value) {
-    Number number;
-    try {
-      number = NumberFormat.getInstance().parse(value);
-      if (number instanceof Long) return number.longValue();
-      else return number.doubleValue();
-    } catch (ParseException e) {
-      throw new WebDriverException(
-          "The result from the script can not be parsed");
-    }
-  }
-
   /**
    * Find the runtime for injection (default) Typically this is _top runtime
    * with the active window that has focus
@@ -470,9 +342,11 @@ public class EcmaScriptDebugger extends AbstractService implements
   }
 
   /**
-   * Updates the runtimes list to most recent version TODO this has to be kept
-   * up to date with events and as failover we should update It builds a tree to
-   * find the frame we are looking for TODO tree also must be kept up to date
+   * Updates the runtimes list to most recent version
+   * TODO this has to be kept up to date with events and as failover we should
+   * update
+   * It builds a tree to find the frame we are looking for
+   * TODO tree also must be kept up to date
    */
   private void buildRuntimeTree() {
     updateRuntime();
@@ -545,16 +419,6 @@ public class EcmaScriptDebugger extends AbstractService implements
     return null;
   }
 
-  private boolean isNumber(String name) {
-    boolean canParse = true;
-    try {
-      Integer.valueOf(name);
-    } catch (NumberFormatException e) {
-      canParse = false;
-    }
-    return canParse;
-  }
-
   private void addNode(RuntimeInfo info, RuntimeNode root) {
     String[] values = info.getHtmlFramePath().split("/");
     RuntimeNode curr = root;
@@ -583,45 +447,17 @@ public class EcmaScriptDebugger extends AbstractService implements
     return Integer.valueOf(framePath.substring(begin + 1, end));
   }
 
-  /* (non-Javadoc)
-   * @see com.opera.core.systems.scope.services.xml.IEcmaScriptDebugger#cleanUpRuntimes(int)
-   */
   public void cleanUpRuntimes(int windowId) {
     // if we already have a runtime listed as _top with that window id,
     // clean all runtimes with that window id
-    // if (findRuntime() != null) {
     for (RuntimeInfo runtime : runtimesList.values()) {
       if (runtime.getWindowID() == windowId) {
         runtimesList.remove(runtime.getRuntimeID());
       }
     }
-    // }
-  }
-
-  /* (non-Javadoc)
-   * @see com.opera.core.systems.scope.services.xml.IEcmaScriptDebugger#cleanUpRuntimes()
-   */
-  public void cleanUpRuntimes() {
-    int windowId = services.getWindowManager().getActiveWindowId();
-    cleanUpRuntimes(windowId);
-  }
-
-  private ObjectList getObjectList(Integer id) {
-    ExamineList.Builder examine = ExamineList.newBuilder();
-    examine.setRuntimeID(getRuntimeId());
-    examine.addObjectList(id);
-    Response response = executeCommand(ESDebuggerCommand.EXAMINE_OBJECTS,
-        examine);
-
-    ObjectList.Builder builder = ObjectList.newBuilder();
-    buildPayload(response, builder);
-    return builder.build();
   }
 
   // TODO needs retry approach?
-  /* (non-Javadoc)
-   * @see com.opera.core.systems.scope.services.xml.IEcmaScriptDebugger#examineObjects(java.lang.Integer)
-   */
   public List<Integer> examineObjects(Integer id) {
     ObjectList list = getObjectList(id);
     List<Integer> ids = new ArrayList<Integer>();
@@ -631,12 +467,8 @@ public class EcmaScriptDebugger extends AbstractService implements
     }
 
     return ids;
-
   }
 
-  /* (non-Javadoc)
-   * @see com.opera.core.systems.scope.services.xml.IEcmaScriptDebugger#listFramePaths()
-   */
   public List<String> listFramePaths() {
     List<RuntimeInfo> runtimes = getRuntimesList();
     List<String> frameNames = new ArrayList<String>();
@@ -715,6 +547,18 @@ public class EcmaScriptDebugger extends AbstractService implements
       }
       return result;
     }
+  }
+
+  private ObjectList getObjectList(Integer id) {
+    ExamineList.Builder examine = ExamineList.newBuilder();
+    examine.setRuntimeID(getRuntimeId());
+    examine.addObjectList(id);
+    Response response = executeCommand(ESDebuggerCommand.EXAMINE_OBJECTS,
+        examine);
+
+    ObjectList.Builder builder = ObjectList.newBuilder();
+    buildPayload(response, builder);
+    return builder.build();
   }
 
 }

@@ -16,11 +16,8 @@ limitations under the License.
 
 package com.opera.core.systems.scope.services.ums;
 
-import java.text.NumberFormat;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -38,7 +35,7 @@ import com.opera.core.systems.OperaWebElement;
 import com.opera.core.systems.ScopeServices;
 import com.opera.core.systems.model.RuntimeNode;
 import com.opera.core.systems.model.ScriptResult;
-import com.opera.core.systems.scope.AbstractService;
+import com.opera.core.systems.scope.AbstractEcmascriptService;
 import com.opera.core.systems.scope.ESCommand;
 import com.opera.core.systems.scope.internal.OperaIntervals;
 import com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg;
@@ -59,7 +56,6 @@ import com.opera.core.systems.scope.protos.EsdbgProtos.ObjectValue;
 import com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeInfo;
 import com.opera.core.systems.scope.protos.UmsProtos.Response;
 import com.opera.core.systems.scope.services.IEcmaScriptDebugger;
-import com.opera.core.systems.scope.services.IWindowManager;
 
 /**
  * Ecmascript service is a lightweight service to enable javascript injection
@@ -68,75 +64,19 @@ import com.opera.core.systems.scope.services.IWindowManager;
  * @author Deniz Turkoglu <denizt@opera.com>
  *
  */
-// TODO extend ecmascript debugger? the signatures do vary a lot, might
-// be a better idea to keep this interface seperate, maybe create an abstract
-// ecmascript service?
-public class EcmascriptService extends AbstractService implements
+public class EcmascriptService extends AbstractEcmascriptService implements
     IEcmaScriptDebugger {
 
-  /*
-     * List all runtimes (in all Windows).
-     * For instance to fetch all runtimes of all windows one can do::
-     *
-     *   ListRuntimes(runtimeList=[], create=true)
-     *
-     * If you already have a runtime ID you can pass it in runtimeList
-     * to get get back information, e.g.::
-     *
-     *   ListRuntimes(runtimeList=[1])
-     */
-  // command ListRuntimes(ListRuntimesArg) returns (RuntimeList) = 1;
-
-  /**
-   * Evaluate a piece of ECMAScript in the global scope. For instance to fetch
-   * information on the window object, one can do::
-   *
-   * Eval(runtimeID=1, scriptData="window")
-   *
-   * EvalResult.value.object will be set, note however that this will not
-   * include properties on the return object to conserve the amount of data that
-   * needs to be sent. To get properties use ExamineObjects().
-   */
-  // command Eval(EvalArg) returns (EvalResult) = 2;
-
-  /**
-   * Request additional information about an object, such as its prototype or
-   * its properties.
-   *
-   * For instance to get more information on the window object, one can do::
-   *
-   * ExamineObjects(runtimeID=1, objectList=[2], examinePrototypes=true)
-   *
-   * Here the object ID was the ID previously returned from an Eval() call.
-   */
-  // command ExamineObjects(ExamineObjectsArg) returns (ObjectList) = 3;
-
-  /**
-   * Release protected ECMAScript objects. This will just make them garbage
-   * collectible. Released objects are not necessarily freed immediately.
-   *
-   * Calling ReleaseObjects with an empty list causes all objects to be
-   * released. Otherwise, only the specified objects will be released.
-   * Attempting to release a non-existent object has no effect, and will fail
-   * silently.
-   *
-   * Releasing objects invalidates associated object IDs immediately.
-   */
-  // command ReleaseObjects(ReleaseObjectsArg) returns (Default) = 4;
+  public EcmascriptService(ScopeServices services, String version) {
+    super(services, version);
+  }
 
   private AtomicStampedReference<Runtime> runtime = new AtomicStampedReference<Runtime>(
       null, 0);
-  private IWindowManager windowManager;
-  private int retries;
-  private long sleepDuration;
-  protected int activeWindowId;
   private Queue<Integer> runtimesQueue = new LinkedList<Integer>();
   private Queue<Integer> garbageQueue = new LinkedList<Integer>();
 
   private ConcurrentMap<Integer, Runtime> runtimesList = new ConcurrentHashMap<Integer, Runtime>();
-
-  private RuntimeNode root;
-  private String currentFramePath;
 
   public int getRuntimeId() {
     return runtime.getStamp();
@@ -169,15 +109,6 @@ public class EcmascriptService extends AbstractService implements
     runtimesList.remove(runtimeId);
   }
 
-  public EcmascriptService(ScopeServices services, String version) {
-    super(services, version);
-    services.setDebugger(this);
-    this.windowManager = services.getWindowManager();
-    this.services = services;
-    resetCounters();
-    currentFramePath = "_top";
-  }
-
   public void init() {
     // we no longer need the configuration
     if (!updateRuntime()) throw new WebDriverException(
@@ -207,7 +138,6 @@ public class EcmascriptService extends AbstractService implements
     }
   }
 
-  // TODO merge with eval
   public Object scriptExecutor(String script, Object... params) {
     recover();
 
@@ -238,74 +168,10 @@ public class EcmascriptService extends AbstractService implements
     } else return parsed;
   }
 
-  /**
-   * Build the script to send with arguments
-   *
-   * @param elements The web elements to send with the script as argument
-   * @param script The script to execute, can have references to argument(s)
-   * @param params Params to send with the script, will be parsed in to
-   *          arguments
-   * @return The script to be sent to Eval command for execution
-   */
-  private String buildEvalString(List<WebElement> elements, String script,
-      Object... params) {
-    String toSend;
-    if (params != null && params.length > 0) {
-      StringBuilder builder = new StringBuilder();
-      for (Object object : params) {
-        if (builder.toString().length() > 0) {
-          builder.append(",");
-        }
-
-        if (object instanceof Collection<?>) {
-          builder.append("[");
-          Collection<?> collection = (Collection<?>) object;
-          for (Object argument : collection) {
-            processArgument(argument, builder, elements);
-          }
-          builder.append("]");
-        } else {
-          processArgument(object, builder, elements);
-        }
-      }
-
-      String arguments = builder.toString();
-      toSend = "(function(){" + script + "})(" + arguments + ")";
-    } else {
-      toSend = script;
-    }
-    return toSend;
-  }
-
   private EvalResult parseEvalData(Response response) {
     EvalResult.Builder builder = EvalResult.newBuilder();
     buildPayload(response, builder);
     return builder.build();
-  }
-
-  protected void processArgument(Object object, StringBuilder builder,
-      List<WebElement> elements) {
-    if (object instanceof WebElement) {
-      elements.add((WebElement) object);
-      builder.append(String.valueOf(object));
-    } else if (object instanceof String) {
-      builder.append("'" + String.valueOf(object) + "'");
-    } else if (object instanceof Integer || object instanceof Long
-        || object instanceof Boolean || object instanceof Float
-        || object instanceof Double) {
-      builder.append(String.valueOf(object));
-    } else {
-      throw new IllegalArgumentException("The argument type is not supported");
-    }
-  }
-
-  public String executeJavascript(String using) {
-    return executeJavascript(using, true);
-  }
-
-  public String executeJavascript(String using, boolean responseExpected) {
-    Object result = executeScript(using, responseExpected);
-    return (result == null) ? null : String.valueOf(result);
   }
 
   private EvalArg.Builder buildEval(String toSend, int runtimeId) {
@@ -315,18 +181,11 @@ public class EcmascriptService extends AbstractService implements
     return builder;
   }
 
-
   protected final Variable buildVariable(String name, int objectId) {
     Variable.Builder variable = Variable.newBuilder();
     variable.setName(name);
     variable.setObjectID(objectId);
     return variable.build();
-  }
-
-  private void recover() {
-    windowManager.findDriverWindow();
-    activeWindowId = windowManager.getActiveWindowId();
-    updateRuntime();
   }
 
   private Response eval(String using, int runtimeId, Variable... variables) {
@@ -355,15 +214,11 @@ public class EcmascriptService extends AbstractService implements
   }
 
   private Response eval(String using, Variable... variables) {
-    // Always recover
+    // Always recover TODO: this slows things down lots
     recover();
     return eval(using, getRuntimeId(), variables);
   }
 
-  private void resetCounters() {
-    retries = 0;
-    sleepDuration = OperaIntervals.SCRIPT_RETRY_INTERVAL.getValue();
-  }
 
   public Object executeScript(String using, boolean responseExpected) {
     Response reply = eval(using);
@@ -446,19 +301,6 @@ public class EcmascriptService extends AbstractService implements
     }
   }
 
-  protected Object parseNumber(String value) {
-    Number number;
-    try {
-      number = NumberFormat.getInstance().parse(value);
-      if (number instanceof Long) return number.longValue();
-      else return number.doubleValue();
-    } catch (ParseException e) {
-      throw new WebDriverException(
-          "The result from the script can not be parsed");
-    }
-  }
-
-
   protected Runtime findRuntime() {
     createAllRuntimes();
     int windowId = windowManager.getActiveWindowId();
@@ -532,22 +374,18 @@ public class EcmascriptService extends AbstractService implements
       // check if it is really the name
       else if (entry.getValue().getFrameName().equals(name)) return entry.getValue();
       // last resort is id
-      else if (executeScript("frameElement ? frameElement.id : ''", true,
-          entry.getValue().getRuntimeID()).equals(name)) return entry.getValue();
+      else {
+        try {
+          if (executeScript("frameElement ? frameElement.id : ''", true,
+              entry.getValue().getRuntimeID()).equals(name)) {
+            return entry.getValue();
+          }
+        } catch (WebDriverException e) {
+          // ignore exception
+        }
+      }
     }
     return null;
-  }
-
-  // FIXME: See if we can move this (and similar functions) out to be shared
-  // by EcmaScriptDebugger
-  private boolean isNumber(String name) {
-    boolean canParse = true;
-    try {
-      Integer.valueOf(name);
-    } catch (NumberFormatException e) {
-      canParse = false;
-    }
-    return canParse;
   }
 
   private void addNode(Runtime info, RuntimeNode root) {
@@ -579,14 +417,13 @@ public class EcmascriptService extends AbstractService implements
   }
 
   public void cleanUpRuntimes(int windowId) {
+    // if we already have a runtime listed as _top with that window id,
+    // clean all runtimes with that window id
     for (Runtime runtime : runtimesList.values()) {
-      if (runtime.getWindowID() == windowId) runtimesList.remove(runtime.getRuntimeID());
+      if (runtime.getWindowID() == windowId) {
+        runtimesList.remove(runtime.getRuntimeID());
+      }
     }
-  }
-
-  public void cleanUpRuntimes() {
-    int windowId = windowManager.getActiveWindowId();
-    cleanUpRuntimes(windowId);
   }
 
   public List<Integer> examineObjects(Integer objectId) {
