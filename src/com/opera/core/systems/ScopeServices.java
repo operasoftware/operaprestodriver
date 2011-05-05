@@ -190,7 +190,7 @@ public class ScopeServices implements IConnectionHandler {
     List<String> wantedServices = new ArrayList<String>();
 
     boolean ecmascriptService = false;
-    for (Service service : info.getServiceListList()) {
+    for (Service service : hostInfo.getServiceListList()) {
       if (service.getName().equals("ecmascript")) {
         ecmascriptService = true;
         break;
