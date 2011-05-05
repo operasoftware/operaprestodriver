@@ -138,18 +138,19 @@ public class EcmascriptService extends AbstractService implements
   private RuntimeNode root;
   private String currentFramePath;
 
-  public EcmascriptService(ScopeServices services, String version) {
-    super(services, version);
-    services.setDebugger(this);
-    this.windowManager = services.getWindowManager();
-    this.services = services;
-    resetCounters();
-    currentFramePath = "_top";
+  public int getRuntimeId() {
+    return runtime.getStamp();
   }
 
-  private void resetCounters() {
-    retries = 0;
-    sleepDuration = OperaIntervals.SCRIPT_RETRY_INTERVAL.getValue();
+  public void setRuntime(Runtime runtime) {
+    this.runtime.set(runtime, runtime.getRuntimeID());
+    activeWindowId = runtime.getWindowID();
+  }
+
+  public void setRuntime(
+      com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeInfo runtime) {
+    throw new UnsupportedOperationException(
+        "Not suppported without ecmascript-debugger");
   }
 
   public void addRuntime(RuntimeInfo info) {
@@ -164,10 +165,168 @@ public class EcmascriptService extends AbstractService implements
     runtimesList.put(info.getRuntimeID(), runtime.build());
   }
 
-  private Response eval(String using, Variable... variables) {
-    // Always recover
+  public void removeRuntime(int runtimeId) {
+    runtimesList.remove(runtimeId);
+  }
+
+  public EcmascriptService(ScopeServices services, String version) {
+    super(services, version);
+    services.setDebugger(this);
+    this.windowManager = services.getWindowManager();
+    this.services = services;
+    resetCounters();
+    currentFramePath = "_top";
+  }
+
+  public void init() {
+    // we no longer need the configuration
+    if (!updateRuntime()) throw new WebDriverException(
+        "Could not find a runtime for script injection");
+    // nor the dialog hack
+  }
+
+  public boolean updateRuntime() {
+    Runtime activeRuntime = findRuntime();
+    if (activeRuntime != null) {
+      setRuntime(activeRuntime);
+      return true;
+    }
+    return false;
+  }
+
+  protected void createAllRuntimes() {
+    ListRuntimesArg.Builder selection = ListRuntimesArg.newBuilder();
+    selection.setCreate(true);
+    Response response = executeCommand(ESCommand.LIST_RUNTIMES, selection);
+    runtimesList.clear();
+    RuntimeList.Builder builder = RuntimeList.newBuilder();
+    buildPayload(response, builder);
+    List<Runtime> allRuntimes = builder.build().getRuntimeListList();
+    for (Runtime info : allRuntimes) {
+      runtimesList.put(info.getRuntimeID(), info);
+    }
+  }
+
+  // TODO merge with eval
+  public Object scriptExecutor(String script, Object... params) {
     recover();
-    return eval(using, getRuntimeId(), variables);
+
+    processQueues();
+
+    List<WebElement> elements = new ArrayList<WebElement>();
+
+    String toSend = buildEvalString(elements, script, params);
+    EvalArg.Builder evalBuilder = buildEval(toSend, getRuntimeId());
+
+    for (WebElement webElement : elements) {
+      Variable variable = buildVariable(webElement.toString(),
+          ((OperaWebElement) webElement).getObjectId());
+      evalBuilder.addVariableList(variable);
+    }
+
+    Response response = executeCommand(ESCommand.EVAL, evalBuilder);
+
+    if (response == null) throw new WebDriverException(
+        "Internal error while executing script");
+
+    EvalResult result = parseEvalData(response);
+
+    Object parsed = parseEvalReply(result);
+    if (parsed instanceof com.opera.core.systems.scope.protos.EcmascriptProtos.Object) {
+      com.opera.core.systems.scope.protos.EcmascriptProtos.Object data = (com.opera.core.systems.scope.protos.EcmascriptProtos.Object) parsed;
+      return new ScriptResult(data.getObjectID(), data.getClassName());
+    } else return parsed;
+  }
+
+  /**
+   * Build the script to send with arguments
+   *
+   * @param elements The web elements to send with the script as argument
+   * @param script The script to execute, can have references to argument(s)
+   * @param params Params to send with the script, will be parsed in to
+   *          arguments
+   * @return The script to be sent to Eval command for execution
+   */
+  private String buildEvalString(List<WebElement> elements, String script,
+      Object... params) {
+    String toSend;
+    if (params != null && params.length > 0) {
+      StringBuilder builder = new StringBuilder();
+      for (Object object : params) {
+        if (builder.toString().length() > 0) {
+          builder.append(",");
+        }
+
+        if (object instanceof Collection<?>) {
+          builder.append("[");
+          Collection<?> collection = (Collection<?>) object;
+          for (Object argument : collection) {
+            processArgument(argument, builder, elements);
+          }
+          builder.append("]");
+        } else {
+          processArgument(object, builder, elements);
+        }
+      }
+
+      String arguments = builder.toString();
+      toSend = "(function(){" + script + "})(" + arguments + ")";
+    } else {
+      toSend = script;
+    }
+    return toSend;
+  }
+
+  private EvalResult parseEvalData(Response response) {
+    EvalResult.Builder builder = EvalResult.newBuilder();
+    buildPayload(response, builder);
+    return builder.build();
+  }
+
+  protected void processArgument(Object object, StringBuilder builder,
+      List<WebElement> elements) {
+    if (object instanceof WebElement) {
+      elements.add((WebElement) object);
+      builder.append(String.valueOf(object));
+    } else if (object instanceof String) {
+      builder.append("'" + String.valueOf(object) + "'");
+    } else if (object instanceof Integer || object instanceof Long
+        || object instanceof Boolean || object instanceof Float
+        || object instanceof Double) {
+      builder.append(String.valueOf(object));
+    } else {
+      throw new IllegalArgumentException("The argument type is not supported");
+    }
+  }
+
+  public String executeJavascript(String using) {
+    return executeJavascript(using, true);
+  }
+
+  public String executeJavascript(String using, boolean responseExpected) {
+    Object result = executeScript(using, responseExpected);
+    return (result == null) ? null : String.valueOf(result);
+  }
+
+  private EvalArg.Builder buildEval(String toSend, int runtimeId) {
+    EvalArg.Builder builder = EvalArg.newBuilder();
+    builder.setRuntimeID(runtimeId);
+    builder.setScriptData(toSend);
+    return builder;
+  }
+
+
+  protected final Variable buildVariable(String name, int objectId) {
+    Variable.Builder variable = Variable.newBuilder();
+    variable.setName(name);
+    variable.setObjectID(objectId);
+    return variable.build();
+  }
+
+  private void recover() {
+    windowManager.findDriverWindow();
+    activeWindowId = windowManager.getActiveWindowId();
+    updateRuntime();
   }
 
   private Response eval(String using, int runtimeId, Variable... variables) {
@@ -195,11 +354,33 @@ public class EcmascriptService extends AbstractService implements
     return response;
   }
 
-  private void recover() {
-    windowManager.findDriverWindow();
-    activeWindowId = windowManager.getActiveWindowId();
-    updateRuntime();
+  private Response eval(String using, Variable... variables) {
+    // Always recover
+    recover();
+    return eval(using, getRuntimeId(), variables);
   }
+
+  private void resetCounters() {
+    retries = 0;
+    sleepDuration = OperaIntervals.SCRIPT_RETRY_INTERVAL.getValue();
+  }
+
+  public Object executeScript(String using, boolean responseExpected) {
+    Response reply = eval(using);
+    return responseExpected ? parseEvalReply(parseEvalData(reply)) : null;
+  }
+
+  private Object executeScript(String using, boolean responseExpected, int runtimeId) {
+    Response reply = eval(using, runtimeId);
+    return responseExpected ? parseEvalReply(parseEvalData(reply)) : null;
+  }
+
+  public Integer getObject(String using) {
+    EvalResult reply = parseEvalData(eval(using));
+    return (reply.getValue().getType().equals(Type.OBJECT)) ? reply.getValue().getObject().getObjectID()
+        : null;
+  }
+
 
   public String callFunctionOnObject(String using, int objectId) {
     Object result = callFunctionOnObject(using, objectId, true);
@@ -212,6 +393,15 @@ public class EcmascriptService extends AbstractService implements
 
     Response response = eval(using, variable);
     return responseExpected ? parseEvalReply(parseEvalData(response)) : null;
+  }
+
+  public Integer executeScriptOnObject(String using, int objectId) {
+    Variable variable = buildVariable("locator", objectId);
+
+    EvalResult reply = parseEvalData(eval(using, variable));
+    Object object = parseEvalReply(reply);
+    if (object == null || !(object instanceof ObjectValue)) return null;
+    return ((ObjectValue) object).getObjectID();
   }
 
   private Object parseEvalReply(EvalResult result) {
@@ -268,17 +458,124 @@ public class EcmascriptService extends AbstractService implements
     }
   }
 
-  protected final Variable buildVariable(String name, int objectId) {
-    Variable.Builder variable = Variable.newBuilder();
-    variable.setName(name);
-    variable.setObjectID(objectId);
-    return variable.build();
+
+  protected Runtime findRuntime() {
+    createAllRuntimes();
+    int windowId = windowManager.getActiveWindowId();
+    Runtime runtime = (Runtime) xpathPointer(runtimesList.values(),
+        "/.[htmlFramePath='" + currentFramePath + "' and windowID='" + windowId
+        + "']").getValue();
+    return runtime;
   }
 
-  private EvalResult parseEvalData(Response response) {
-    EvalResult.Builder builder = EvalResult.newBuilder();
-    buildPayload(response, builder);
-    return builder.build();
+  /**
+   * Updates the runtimes list to most recent version
+   * TODO this has to be kept up to date with events and as failover we should
+   * update
+   * It builds a tree to find the frame we are looking for
+   * TODO tree also must be kept up to date
+   */
+  private void buildRuntimeTree() {
+    updateRuntime();
+    Runtime rootInfo = findRuntime();
+    root = new RuntimeNode();
+    root.setFrameName("_top");
+    root.setRuntimeID(rootInfo.getRuntimeID());
+
+    List<Runtime> runtimesInfos = new ArrayList<Runtime>(
+        runtimesList.values());
+    runtimesInfos.remove(rootInfo);
+
+    for (Runtime runtimeInfo : runtimesInfos) {
+      addNode(runtimeInfo, root);
+    }
+  }
+
+  public void changeRuntime(int index) {
+    buildRuntimeTree();
+
+    RuntimeNode node = root.getNodes().get(index + 1);
+
+    if (node == null) {
+      throw new NoSuchFrameException("Invalid frame index " + index);
+    }
+
+    Runtime info = runtimesList.get(node.getRuntimeID());
+    currentFramePath = info.getHtmlFramePath();
+    setRuntime(info);
+  }
+
+  public void changeRuntime(String frameName) {
+    buildRuntimeTree();
+
+    String[] values = frameName.split("\\.");
+    RuntimeNode curr = root;
+
+    for (int i = 0; i < values.length; i++) {
+      curr = findNodeByName(values[i], curr);
+      if (curr == null) break;
+    }
+
+    if (curr == null) {
+      throw new NoSuchFrameException("Invalid frame name " + frameName);
+    }
+
+    Runtime info = runtimesList.get(curr.getRuntimeID());
+    currentFramePath = info.getHtmlFramePath();
+    setRuntime(info);
+  }
+
+  private RuntimeNode findNodeByName(String name, RuntimeNode rootNode) {
+    for (Entry<Integer, RuntimeNode> entry : rootNode.getNodes().entrySet()) {
+      // check if the name is a number
+      if (isNumber(name) && entry.getKey().equals(Integer.valueOf(name) + 1)) return entry.getValue();
+      // check if it is really the name
+      else if (entry.getValue().getFrameName().equals(name)) return entry.getValue();
+      // last resort is id
+      else if (executeScript("frameElement ? frameElement.id : ''", true,
+          entry.getValue().getRuntimeID()).equals(name)) return entry.getValue();
+    }
+    return null;
+  }
+
+  // FIXME: See if we can move this (and similar functions) out to be shared
+  // by EcmaScriptDebugger
+  private boolean isNumber(String name) {
+    boolean canParse = true;
+    try {
+      Integer.valueOf(name);
+    } catch (NumberFormatException e) {
+      canParse = false;
+    }
+    return canParse;
+  }
+
+  private void addNode(Runtime info, RuntimeNode root) {
+    String[] values = info.getHtmlFramePath().split("/");
+    RuntimeNode curr = root;
+    // first frame is always _top, so we skip it
+    for (int i = 1; i < values.length; ++i) {
+      int index = framePathToIndex(values[i]);
+      if (curr.getNodes().get(index) == null) {
+        // add to this node
+        RuntimeNode node = new RuntimeNode();
+        int end = values[i].indexOf('[');
+        node.setFrameName(values[i].substring(0, end));
+        curr.getNodes().put(index, node);
+        curr = node;
+      } else {
+        curr = curr.getNodes().get(index);
+      }
+      // else we already know about this node, skip it
+    }
+    // last node gets the runtime id
+    curr.setRuntimeID(info.getRuntimeID());
+  }
+
+  private int framePathToIndex(String framePath) {
+    int begin = framePath.indexOf('[');
+    int end = framePath.indexOf(']');
+    return Integer.valueOf(framePath.substring(begin + 1, end));
   }
 
   public void cleanUpRuntimes(int windowId) {
@@ -314,51 +611,6 @@ public class EcmascriptService extends AbstractService implements
     return ids;
   }
 
-  public String executeJavascript(String using) {
-    return executeJavascript(using, true);
-  }
-
-  public String executeJavascript(String using, boolean responseExpected) {
-    Object result = executeScript(using, responseExpected);
-    return (result == null) ? null : String.valueOf(result);
-  }
-
-  public Object executeScript(String using, boolean responseExpected) {
-    Response reply = eval(using);
-    return responseExpected ? parseEvalReply(parseEvalData(reply)) : null;
-  }
-
-  private Object executeScript(String using, boolean responseExpected, int runtimeId) {
-    Response reply = eval(using, runtimeId);
-    return responseExpected ? parseEvalReply(parseEvalData(reply)) : null;
-  }
-
-  public Integer executeScriptOnObject(String using, int objectId) {
-    Variable variable = buildVariable("locator", objectId);
-
-    EvalResult reply = parseEvalData(eval(using, variable));
-    Object object = parseEvalReply(reply);
-    if (object == null || !(object instanceof ObjectValue)) return null;
-    return ((ObjectValue) object).getObjectID();
-  }
-
-  public Integer getObject(String using) {
-    EvalResult reply = parseEvalData(eval(using));
-    return (reply.getValue().getType().equals(Type.OBJECT)) ? reply.getValue().getObject().getObjectID()
-        : null;
-  }
-
-  public int getRuntimeId() {
-    return runtime.getStamp();
-  }
-
-  public void init() {
-    // we no longer need the configuration
-    if (!updateRuntime()) throw new WebDriverException(
-        "Could not find a runtime for script injection");
-    // nor the dialog hack
-  }
-
   public List<String> listFramePaths() {
     List<String> framePaths = new LinkedList<String>();
     Iterator<Entry<Integer, Runtime>> itr = runtimesList.entrySet().iterator();
@@ -373,147 +625,8 @@ public class EcmascriptService extends AbstractService implements
     executeCommand(ESCommand.RELEASE_OBJECTS, builder);
   }
 
-  public void removeRuntime(int runtimeId) {
-    runtimesList.remove(runtimeId);
-  }
-
   public void resetRuntimesList() {
     runtimesList.clear();
-  }
-
-  // TODO merge with eval
-  public Object scriptExecutor(String script, Object... params) {
-    recover();
-
-    processQueues();
-
-    List<WebElement> elements = new ArrayList<WebElement>();
-
-    String toSend = buildEvalString(elements, script, params);
-    EvalArg.Builder evalBuilder = buildEval(toSend, getRuntimeId());
-
-    for (WebElement webElement : elements) {
-      Variable variable = buildVariable(webElement.toString(),
-          ((OperaWebElement) webElement).getObjectId());
-      evalBuilder.addVariableList(variable);
-    }
-
-    Response response = executeCommand(ESCommand.EVAL, evalBuilder);
-
-    if (response == null) throw new WebDriverException(
-        "Internal error while executing script");
-
-    EvalResult result = parseEvalData(response);
-
-    Object parsed = parseEvalReply(result);
-    if (parsed instanceof com.opera.core.systems.scope.protos.EcmascriptProtos.Object) {
-      com.opera.core.systems.scope.protos.EcmascriptProtos.Object data = (com.opera.core.systems.scope.protos.EcmascriptProtos.Object) parsed;
-      return new ScriptResult(data.getObjectID(), data.getClassName());
-    } else return parsed;
-  }
-
-  private EvalArg.Builder buildEval(String toSend, int runtimeId) {
-    EvalArg.Builder builder = EvalArg.newBuilder();
-    builder.setRuntimeID(runtimeId);
-    builder.setScriptData(toSend);
-    return builder;
-  }
-
-  /**
-   * Build the script to send with arguments
-   *
-   * @param elements The web elements to send with the script as argument
-   * @param script The script to execute, can have references to argument(s)
-   * @param params Params to send with the script, will be parsed in to
-   *          arguments
-   * @return The script to be sent to Eval command for execution
-   */
-  private String buildEvalString(List<WebElement> elements, String script,
-      Object... params) {
-    String toSend;
-    if (params != null && params.length > 0) {
-      StringBuilder builder = new StringBuilder();
-      for (Object object : params) {
-        if (builder.toString().length() > 0) {
-          builder.append(",");
-        }
-
-        if (object instanceof Collection<?>) {
-          builder.append("[");
-          Collection<?> collection = (Collection<?>) object;
-          for (Object argument : collection) {
-            processArgument(argument, builder, elements);
-          }
-          builder.append("]");
-        } else {
-          processArgument(object, builder, elements);
-        }
-      }
-
-      String arguments = builder.toString();
-      toSend = "(function(){" + script + "})(" + arguments + ")";
-    } else {
-      toSend = script;
-    }
-    return toSend;
-  }
-
-  protected void processArgument(Object object, StringBuilder builder,
-      List<WebElement> elements) {
-    if (object instanceof WebElement) {
-      elements.add((WebElement) object);
-      builder.append(String.valueOf(object));
-    } else if (object instanceof String) {
-      builder.append("'" + String.valueOf(object) + "'");
-    } else if (object instanceof Integer || object instanceof Long
-        || object instanceof Boolean || object instanceof Float
-        || object instanceof Double) {
-      builder.append(String.valueOf(object));
-    } else {
-      throw new IllegalArgumentException("The argument type is not supported");
-    }
-  }
-
-  public void setRuntime(
-      com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeInfo runtime) {
-    throw new UnsupportedOperationException(
-        "Not suppported without ecmascript-debugger");
-  }
-
-  public boolean updateRuntime() {
-    Runtime activeRuntime = findRuntime();
-    if (activeRuntime != null) {
-      setRuntime(activeRuntime);
-      return true;
-    }
-    return false;
-  }
-
-  public void setRuntime(Runtime runtime) {
-    this.runtime.set(runtime, runtime.getRuntimeID());
-    activeWindowId = runtime.getWindowID();
-  }
-
-  protected Runtime findRuntime() {
-    createAllRuntimes();
-    int windowId = windowManager.getActiveWindowId();
-    Runtime runtime = (Runtime) xpathPointer(runtimesList.values(),
-        "/.[htmlFramePath='" + currentFramePath + "' and windowID='" + windowId
-        + "']").getValue();
-    return runtime;
-  }
-
-  protected void createAllRuntimes() {
-    ListRuntimesArg.Builder selection = ListRuntimesArg.newBuilder();
-    selection.setCreate(true);
-    Response response = executeCommand(ESCommand.LIST_RUNTIMES, selection);
-    runtimesList.clear();
-    RuntimeList.Builder builder = RuntimeList.newBuilder();
-    buildPayload(response, builder);
-    List<Runtime> allRuntimes = builder.build().getRuntimeListList();
-    for (Runtime info : allRuntimes) {
-      runtimesList.put(info.getRuntimeID(), info);
-    }
   }
 
   public void readyStateChanged(ReadyStateChange change) {
@@ -524,6 +637,27 @@ public class EcmascriptService extends AbstractService implements
       // a new runtime that we dont know about has been loaded
       runtimesQueue.add(change.getRuntimeID());
     }
+  }
+
+  public void releaseObject(int objectId) {
+    garbageQueue.add(objectId);
+  }
+
+  public void resetFramePath() {
+    currentFramePath = "_top";
+    setRuntime(findRuntime());
+  }
+
+  public String executeJavascript(String using, Integer windowId) {
+    // TODO Auto-generated method stub
+    System.out.println("TODO executeJavascript(String using, Integer windowId)");
+    return null;
+  }
+
+  public Object examineScriptResult(Integer id) {
+    // TODO Auto-generated method stub
+    System.out.println("TODO examineScriptResult(Integer id)");
+    return null;
   }
 
   private void processQueues() {
@@ -572,135 +706,5 @@ public class EcmascriptService extends AbstractService implements
     return (runtimes.isEmpty()) ? null : runtimes.get(0);
   }
 
-  public void releaseObject(int objectId) {
-    garbageQueue.add(objectId);
-  }
-
-  public void resetFramePath() {
-    currentFramePath = "_top";
-    setRuntime(findRuntime());
-  }
-
-  /**
-   * Updates the runtimes list to most recent version
-   * TODO this has to be kept up to date with events and as failover we should
-   * update
-   * It builds a tree to find the frame we are looking for
-   * TODO tree also must be kept up to date
-   */
-  private void buildRuntimeTree() {
-    updateRuntime();
-    Runtime rootInfo = findRuntime();
-    root = new RuntimeNode();
-    root.setFrameName("_top");
-    root.setRuntimeID(rootInfo.getRuntimeID());
-
-    List<Runtime> runtimesInfos = new ArrayList<Runtime>(
-        runtimesList.values());
-    runtimesInfos.remove(rootInfo);
-
-    for (Runtime runtimeInfo : runtimesInfos) {
-      addNode(runtimeInfo, root);
-    }
-  }
-
-  private void addNode(Runtime info, RuntimeNode root) {
-    String[] values = info.getHtmlFramePath().split("/");
-    RuntimeNode curr = root;
-    // first frame is always _top, so we skip it
-    for (int i = 1; i < values.length; ++i) {
-      int index = framePathToIndex(values[i]);
-      if (curr.getNodes().get(index) == null) {
-        // add to this node
-        RuntimeNode node = new RuntimeNode();
-        int end = values[i].indexOf('[');
-        node.setFrameName(values[i].substring(0, end));
-        curr.getNodes().put(index, node);
-        curr = node;
-      } else {
-        curr = curr.getNodes().get(index);
-      }
-      // else we already know about this node, skip it
-    }
-    // last node gets the runtime id
-    curr.setRuntimeID(info.getRuntimeID());
-  }
-
-  private int framePathToIndex(String framePath) {
-    int begin = framePath.indexOf('[');
-    int end = framePath.indexOf(']');
-    return Integer.valueOf(framePath.substring(begin + 1, end));
-  }
-
-  private RuntimeNode findNodeByName(String name, RuntimeNode rootNode) {
-    for (Entry<Integer, RuntimeNode> entry : rootNode.getNodes().entrySet()) {
-      // check if the name is a number
-      if (isNumber(name) && entry.getKey().equals(Integer.valueOf(name) + 1)) return entry.getValue();
-      // check if it is really the name
-      else if (entry.getValue().getFrameName().equals(name)) return entry.getValue();
-      // last resort is id
-      else if (executeScript("frameElement ? frameElement.id : ''", true,
-          entry.getValue().getRuntimeID()).equals(name)) return entry.getValue();
-    }
-    return null;
-  }
-
-  // FIXME: See if we can move this (and similar functions) out to be shared
-  // by EcmaScriptDebugger
-  private boolean isNumber(String name) {
-    boolean canParse = true;
-    try {
-      Integer.valueOf(name);
-    } catch (NumberFormatException e) {
-      canParse = false;
-    }
-    return canParse;
-  }
-
-  public void changeRuntime(int index) {
-    buildRuntimeTree();
-
-    RuntimeNode node = root.getNodes().get(index + 1);
-
-    if (node == null) {
-      throw new NoSuchFrameException("Invalid frame index " + index);
-    }
-
-    Runtime info = runtimesList.get(node.getRuntimeID());
-    currentFramePath = info.getHtmlFramePath();
-    setRuntime(info);
-  }
-
-  public void changeRuntime(String frameName) {
-    buildRuntimeTree();
-
-    String[] values = frameName.split("\\.");
-    RuntimeNode curr = root;
-
-    for (int i = 0; i < values.length; i++) {
-      curr = findNodeByName(values[i], curr);
-      if (curr == null) break;
-    }
-
-    if (curr == null) {
-      throw new NoSuchFrameException("Invalid frame name " + frameName);
-    }
-
-    Runtime info = runtimesList.get(curr.getRuntimeID());
-    currentFramePath = info.getHtmlFramePath();
-    setRuntime(info);
-  }
-
-  public String executeJavascript(String using, Integer windowId) {
-    // TODO Auto-generated method stub
-    System.out.println("TODO executeJavascript(String using, Integer windowId)");
-    return null;
-  }
-
-  public Object examineScriptResult(Integer id) {
-    // TODO Auto-generated method stub
-    System.out.println("TODO examineScriptResult(Integer id)");
-    return null;
-  }
 
 }
