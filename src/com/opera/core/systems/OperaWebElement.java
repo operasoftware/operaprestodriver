@@ -205,8 +205,6 @@ public class OperaWebElement implements RenderedWebElement, SearchContext,
 
 		parent.getScopeServices().captureOperaIdle();
     parent.actionHandler.click(this, "");
-    // workaround for click synchronization problems
-    sleep(OperaIntervals.EXEC_SLEEP.getValue());
     parent.waitForLoadToComplete();
   }
 

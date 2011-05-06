@@ -238,7 +238,6 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
   }
 
   public int get(String url, long timeout) {
-
     if (url == null) throw new NullPointerException("Invalid url");
 
     if (services.getConnection() == null) throw new CommunicationException(
@@ -629,7 +628,14 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
       // new opera wait for page
       services.waitForOperaIdle(OperaIntervals.PAGE_LOAD_TIMEOUT.getValue());
     } else {
-      // old bad opera wait for page
+      // Sometimes we get here before the next page has even *started* loading,
+      // and so return too quickly. This sleep is enough to make sure
+      // readyState has been set to "loading"
+      try {
+        Thread.sleep(5);
+      } catch (InterruptedException e) {
+        Thread.currentThread().interrupt();
+      }
       long endTime = System.currentTimeMillis()
           + OperaIntervals.PAGE_LOAD_TIMEOUT.getValue();
       while (!"complete".equals(debugger.executeJavascript("return document.readyState"))) {
@@ -971,7 +977,6 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
     keyUp(key);
 
     if (key.equalsIgnoreCase("enter")) {
-      sleep(OperaIntervals.EXEC_SLEEP.getValue());
       waitForLoadToComplete();
     }
   }
