@@ -1,3 +1,24 @@
+2011/05/06 OperaDriver 0.4.2 (pre 7)
+====================================
+
+Enhancements
+------------
+
+ * Do not use idle detection unless the core version is >= 1.1
+ * Call quit if init fails in OperaDriver
+ * Show the output from launcher when using fine logging
+ * Set socket timeout also for new sockets
+
+Bug fixes
+---------
+
+ * OperaWebElement.isDisplayed() returns true for <option> elements whose
+   <select> parent is displayed.
+ * OperaWebElement.getText() collapses two spaces in two adjacent inline
+   elements.
+ * Don't switch to first frame on a page with a frameset
+ * Fix for communication with Opera being faster than Opera
+
 2011/04/29 OperaDriver 0.4.2 (pre 6)
 ====================================
 
