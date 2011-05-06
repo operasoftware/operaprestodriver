@@ -52,8 +52,6 @@ import com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg.Variable;
 import com.opera.core.systems.scope.protos.EcmascriptProtos.EvalResult.Status;
 import com.opera.core.systems.scope.protos.EcmascriptProtos.Object.Property;
 import com.opera.core.systems.scope.protos.EcmascriptProtos.Value.Type;
-import com.opera.core.systems.scope.protos.EsdbgProtos.ObjectValue;
-import com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeInfo;
 import com.opera.core.systems.scope.protos.UmsProtos.Response;
 import com.opera.core.systems.scope.services.IEcmaScriptDebugger;
 
@@ -93,7 +91,7 @@ public class EcmascriptService extends AbstractEcmascriptService implements
         "Not suppported without ecmascript-debugger");
   }
 
-  public void addRuntime(RuntimeInfo info) {
+  public void addRuntime(com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeInfo info) {
     Runtime.Builder runtime = Runtime.newBuilder();
 
     runtime.setRuntimeID(info.getRuntimeID());
@@ -255,8 +253,10 @@ public class EcmascriptService extends AbstractEcmascriptService implements
 
     EvalResult reply = parseEvalData(eval(using, variable));
     Object object = parseEvalReply(reply);
-    if (object == null || !(object instanceof ObjectValue)) return null;
-    return ((ObjectValue) object).getObjectID();
+    if (object == null || !(object instanceof com.opera.core.systems.scope.protos.EsdbgProtos.ObjectValue)) {
+      return null;
+    }
+    return ((com.opera.core.systems.scope.protos.EsdbgProtos.ObjectValue) object).getObjectID();
   }
 
   private Object parseEvalReply(EvalResult result) {
