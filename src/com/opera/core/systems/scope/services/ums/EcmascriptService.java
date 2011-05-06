@@ -65,16 +65,16 @@ import com.opera.core.systems.scope.services.IEcmaScriptDebugger;
 public class EcmascriptService extends AbstractEcmascriptService implements
     IEcmaScriptDebugger {
 
-  public EcmascriptService(ScopeServices services, String version) {
-    super(services, version);
-  }
-
   private AtomicStampedReference<Runtime> runtime = new AtomicStampedReference<Runtime>(
       null, 0);
+  private ConcurrentMap<Integer, Runtime> runtimesList = new ConcurrentHashMap<Integer, Runtime>();
+
   private Queue<Integer> runtimesQueue = new LinkedList<Integer>();
   private Queue<Integer> garbageQueue = new LinkedList<Integer>();
 
-  private ConcurrentMap<Integer, Runtime> runtimesList = new ConcurrentHashMap<Integer, Runtime>();
+  public EcmascriptService(ScopeServices services, String version) {
+    super(services, version);
+  }
 
   public int getRuntimeId() {
     return runtime.getStamp();

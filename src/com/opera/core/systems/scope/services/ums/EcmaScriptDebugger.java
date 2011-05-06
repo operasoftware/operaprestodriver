@@ -64,15 +64,13 @@ import com.opera.core.systems.scope.services.IEcmaScriptDebugger;
 public class EcmaScriptDebugger extends AbstractEcmascriptService implements
     IEcmaScriptDebugger {
 
+  private AtomicStampedReference<RuntimeInfo> runtime = new AtomicStampedReference<RuntimeInfo>(
+      null, 0);
+  private ConcurrentMap<Integer, RuntimeInfo> runtimesList = new ConcurrentHashMap<Integer, RuntimeInfo>();
+
   public EcmaScriptDebugger(ScopeServices services, String version) {
     super(services, version);
   }
-
-
-  private AtomicStampedReference<RuntimeInfo> runtime = new AtomicStampedReference<RuntimeInfo>(
-      null, 0);
-
-  private ConcurrentMap<Integer, RuntimeInfo> runtimesList = new ConcurrentHashMap<Integer, RuntimeInfo>();
 
   public int getRuntimeId() {
     return runtime.getStamp();
