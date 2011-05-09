@@ -123,6 +123,10 @@
       <test if="class" todir="${test.output.path}" name="${class}" />
     </junit>
 
+    <antcall target="test_report" />
+  </target>
+
+  <target name="test_report" description="Generate reports from test XML files">
     <junitreport todir="${test.output.path}">
       <fileset dir="${test.output.path}"/>
       <report todir="${test.report.path}"/>
