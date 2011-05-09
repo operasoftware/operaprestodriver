@@ -38,6 +38,7 @@ import com.opera.core.systems.model.ScriptResult;
 import com.opera.core.systems.scope.AbstractEcmascriptService;
 import com.opera.core.systems.scope.ESCommand;
 import com.opera.core.systems.scope.internal.OperaIntervals;
+import com.opera.core.systems.scope.protos.EcmascriptProtos;
 import com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg;
 import com.opera.core.systems.scope.protos.EcmascriptProtos.EvalResult;
 import com.opera.core.systems.scope.protos.EcmascriptProtos.ExamineObjectsArg;
@@ -52,6 +53,8 @@ import com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg.Variable;
 import com.opera.core.systems.scope.protos.EcmascriptProtos.EvalResult.Status;
 import com.opera.core.systems.scope.protos.EcmascriptProtos.Object.Property;
 import com.opera.core.systems.scope.protos.EcmascriptProtos.Value.Type;
+// Highlight when we're using EsdbgProtos, instead of importing them directly.
+import com.opera.core.systems.scope.protos.EsdbgProtos;
 import com.opera.core.systems.scope.protos.UmsProtos.Response;
 import com.opera.core.systems.scope.services.IEcmaScriptDebugger;
 
@@ -85,13 +88,12 @@ public class EcmascriptService extends AbstractEcmascriptService implements
     activeWindowId = runtime.getWindowID();
   }
 
-  public void setRuntime(
-      com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeInfo runtime) {
+  public void setRuntime(EsdbgProtos.RuntimeInfo runtime) {
     throw new UnsupportedOperationException(
         "Not suppported without ecmascript-debugger");
   }
 
-  public void addRuntime(com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeInfo info) {
+  public void addRuntime(EsdbgProtos.RuntimeInfo info) {
     Runtime.Builder runtime = Runtime.newBuilder();
 
     runtime.setRuntimeID(info.getRuntimeID());
@@ -123,14 +125,21 @@ public class EcmascriptService extends AbstractEcmascriptService implements
     return false;
   }
 
+  /**
+   * Gets a list of runtimes and keeps the list, create runtimes for all pages
+   * so even if the pages dont have script we can still inject to a 'fake'
+   * runtime
+   */
   protected void createAllRuntimes() {
     ListRuntimesArg.Builder selection = ListRuntimesArg.newBuilder();
     selection.setCreate(true);
     Response response = executeCommand(ESCommand.LIST_RUNTIMES, selection);
+
     runtimesList.clear();
     RuntimeList.Builder builder = RuntimeList.newBuilder();
     buildPayload(response, builder);
     List<Runtime> allRuntimes = builder.build().getRuntimeListList();
+
     for (Runtime info : allRuntimes) {
       runtimesList.put(info.getRuntimeID(), info);
     }
@@ -160,8 +169,8 @@ public class EcmascriptService extends AbstractEcmascriptService implements
     EvalResult result = parseEvalData(response);
 
     Object parsed = parseEvalReply(result);
-    if (parsed instanceof com.opera.core.systems.scope.protos.EcmascriptProtos.Object) {
-      com.opera.core.systems.scope.protos.EcmascriptProtos.Object data = (com.opera.core.systems.scope.protos.EcmascriptProtos.Object) parsed;
+    if (parsed instanceof EcmascriptProtos.Object) {
+      EcmascriptProtos.Object data = (EcmascriptProtos.Object) parsed;
       return new ScriptResult(data.getObjectID(), data.getClassName());
     } else return parsed;
   }
@@ -253,10 +262,10 @@ public class EcmascriptService extends AbstractEcmascriptService implements
 
     EvalResult reply = parseEvalData(eval(using, variable));
     Object object = parseEvalReply(reply);
-    if (object == null || !(object instanceof com.opera.core.systems.scope.protos.EsdbgProtos.ObjectValue)) {
+    if (object == null || !(object instanceof EsdbgProtos.ObjectValue)) {
       return null;
     }
-    return ((com.opera.core.systems.scope.protos.EsdbgProtos.ObjectValue) object).getObjectID();
+    return ((EsdbgProtos.ObjectValue) object).getObjectID();
   }
 
   private Object parseEvalReply(EvalResult result) {

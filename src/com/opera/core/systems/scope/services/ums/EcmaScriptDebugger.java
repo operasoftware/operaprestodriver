@@ -134,18 +134,19 @@ public class EcmaScriptDebugger extends AbstractEcmascriptService implements
    * runtime
    */
   protected void createAllRuntimes() {
-    RuntimeSelection.Builder selection = RuntimeSelection.newBuilder().setAllRuntimes(
-        true);
-    Response response = this.executeCommand(ESDebuggerCommand.LIST_RUNTIMES,
+    RuntimeSelection.Builder selection = RuntimeSelection.newBuilder();
+    selection.setAllRuntimes(true);
+    Response response = executeCommand(ESDebuggerCommand.LIST_RUNTIMES,
         selection);
+
     runtimesList.clear();
     RuntimeList.Builder builder = RuntimeList.newBuilder();
     buildPayload(response, builder);
     List<RuntimeInfo> allRuntimes = builder.build().getRuntimeListList();
+
     for (RuntimeInfo info : allRuntimes) {
       runtimesList.put(info.getRuntimeID(), info);
     }
-
   }
 
   public Object scriptExecutor(String script, Object... params) {
