@@ -152,6 +152,7 @@
 
       <!-- only generate docs for Opera stuff, not selenium as well -->
       <package name="com.opera.core.systems.*" />
+      <excludepackage name="com.opera.core.systems.scope.protos" />
 
       <!-- Link to online selenium documentation, and the Java docs -->
       <link href="http://webdriver.googlecode.com/svn/javadoc/"/>
