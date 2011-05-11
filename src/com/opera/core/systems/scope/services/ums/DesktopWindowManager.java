@@ -15,6 +15,7 @@ limitations under the License.
 */
 package com.opera.core.systems.scope.services.ums;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -31,6 +32,7 @@ import com.opera.core.systems.ScopeServices;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowList;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo;
+import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuList;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo.QuickWidgetType;
@@ -201,8 +203,16 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 		return windowList;
 	}
 	
-	// TODO: REMOVE
 	public List<QuickMenu> getQuickMenuList() {
+		/*List<QuickMenu> list = getInternalQuickMenuList();
+		for (QuickMenu menu : list) {
+			
+		}*/
+		return getInternalQuickMenuList();
+		
+	}
+	
+	private List<QuickMenu> getInternalQuickMenuList() {
 		Response response = executeCommand(DesktopWindowManagerCommand.LIST_QUICK_MENUS, null);
 		QuickMenuList.Builder builder = QuickMenuList.newBuilder();
 		builder.clear();
@@ -210,12 +220,39 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 		QuickMenuList list = builder.build();
 
 		List<QuickMenuInfo> menuInfoList = list.getMenuListList();
+		
+		System.out.println(".. getInternalQuickMenulist. Num menus = " + menuInfoList.size());
+		
 		List<QuickMenu> menuList = new LinkedList<QuickMenu>();
 
 		for (QuickMenuInfo menuInfo : menuInfoList) {
 			menuList.add(new QuickMenu(systemInputManager, menuInfo));
 		}
 		return menuList;
+	}
+	
+	// TODO: Call this from the above
+	private List<QuickMenuInfo> getQuickMenuInfoList() {
+		Response response = executeCommand(DesktopWindowManagerCommand.LIST_QUICK_MENUS, null);
+		QuickMenuList.Builder builder = QuickMenuList.newBuilder();
+		builder.clear();
+		buildPayload(response, builder);
+		QuickMenuList list = builder.build();
+
+		List<QuickMenuInfo> menuInfoList = list.getMenuListList();
+		return menuInfoList;
+	}
+	
+	public List<QuickMenuItem> getQuickMenuItemList() {
+		List<QuickMenuItem> list = new ArrayList<QuickMenuItem>();
+		List<QuickMenuInfo> menus = getQuickMenuInfoList();
+		for (QuickMenuInfo info : menus) {
+			for (QuickMenuItemInfo infoItem : info.getMenuItemListList()) {
+				QuickMenuItem item = new QuickMenuItem(infoItem, info.getMenuId().getMenuName(), systemInputManager);
+				list.add(item);
+			}
+		}
+		return list;
 	}
 
 	public List<DesktopWindowInfo> getDesktopWindowInfoList() {
@@ -277,12 +314,15 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 		return new QuickMenu(systemInputManager, info);
 	}
 	
+	
+ //FIXME:TODO: Slå sammen alle disse get metodene for menuitems
 	// Should specify name of menu parent (location) as param
 	public QuickMenuItem getQuickMenuItemByAction(String action) {
-		List<QuickMenu> menus = getQuickMenuList();
+		List<QuickMenu> menus = getInternalQuickMenuList();
 		for (QuickMenu menu : menus) {
 			List<QuickMenuItem> itemList = menu.getItemList();
 			for (QuickMenuItem item : itemList) {
+				System.out.println("item action = " + item.getActionName());
 				if (item.getActionName().equals(action))
 					return item;
 			}
@@ -291,7 +331,7 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 	}
 	
 	public QuickMenuItem getQuickMenuItemBySubmenu(String submenu) {
-		List<QuickMenu> menus = getQuickMenuList();
+		List<QuickMenu> menus = getInternalQuickMenuList();
 		for (QuickMenu menu : menus) {
 			List<QuickMenuItem> itemList = menu.getItemList();
 			for (QuickMenuItem item : itemList) {
@@ -303,9 +343,11 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 	}
 	
 	public QuickMenuItem getQuickMenuItemByText(String text) {
-		System.out.println("Get item by text " + text);
-		List<QuickMenu> menus = getQuickMenuList();
+		System.out.println("-------------------Get item by text " + text);
+		List<QuickMenu> menus = getInternalQuickMenuList();
+		System.out.println("Num menus " + menus.size());
 		for (QuickMenu menu : menus) {
+			System.out.println("Menu " + menu.getName());
 			List<QuickMenuItem> itemList = menu.getItemList();
 			for (QuickMenuItem item : itemList) {
 				System.out.println("item text = " + item.getText().replaceAll("&", ""));
@@ -318,7 +360,7 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 	
 	public QuickMenuItem getQuickMenuItemByAccKey(String key, String menuName) {
 		System.out.println("key = " + key + " menuName = " + menuName);
-		List<QuickMenu> menus = getQuickMenuList();
+		List<QuickMenu> menus = getInternalQuickMenuList();
 		for (QuickMenu menu : menus) {
 			List<QuickMenuItem> itemList = menu.getItemList();
 			for (QuickMenuItem item : itemList) {
@@ -332,7 +374,7 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 	}
 	
 	public QuickMenuItem getQuickMenuItemByShortcut(String shortcut){
-		List<QuickMenu> menus = getQuickMenuList();
+		List<QuickMenu> menus = getInternalQuickMenuList();
 		for (QuickMenu menu : menus) {
 			List<QuickMenuItem> itemList = menu.getItemList();
 			for (QuickMenuItem item : itemList) {
@@ -345,7 +387,7 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 	}
 
 	public QuickMenuItem getQuickMenuItemByPosition(int row, String menuName) {
-		List<QuickMenu> menus = getQuickMenuList();
+		List<QuickMenu> menus = getInternalQuickMenuList();
 		for (QuickMenu menu : menus) {
 			List<QuickMenuItem> itemList = menu.getItemList();
 			for (QuickMenuItem item : itemList) {
@@ -364,8 +406,29 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 	 * @param name - name of action or submenu of item
 	 * @return
 	 */
-	public QuickMenuItem getQuickMenuItem(String name) {
-		
+/*	public QuickMenuItem getQuickMenuItem(String name) {
+		List<QuickMenu> menus = getInternalQuickMenuList();
+		for (QuickMenu menu : menus) {
+			List<QuickMenuItem> itemList = menu.getItemList();
+			for (QuickMenuItem item : itemList) {
+				if (item.getActionName().equals(name) ||
+						item.getSubMenu().equals(name))
+					return item;
+			}
+		}
+		return null;
+	}
+*/
+	public QuickMenuItem getQuickMenuItemByName(String name) {
+		List<QuickMenu> menus = getInternalQuickMenuList();
+		for (QuickMenu menu : menus) {
+			List<QuickMenuItem> itemList = menu.getItemList();
+			for (QuickMenuItem item : itemList) {
+				if (item.getActionName().equals(name) ||
+						item.getSubMenu().equals(name))
+					return item;
+			}
+		}
 		return null;
 	}
 }

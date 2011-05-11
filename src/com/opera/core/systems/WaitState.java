@@ -115,14 +115,15 @@ public class WaitState {
     
     public ResultItem(WaitResult result, QuickMenuInfo info) {
         this.waitResult = result;
-        this.quickMenuInfo = info; // Check if needed : TODO FIXME
+        this.quickMenuInfo = info; // TODO FIXME
         logger.fine("EVENT: " + result.toString() + ", quick_menu="
             + info.getMenuId().getMenuName());
       }
     
     public ResultItem(WaitResult result, QuickMenuID id) {
         this.waitResult = result;
-        this.quickMenuId = id; // Check if needed : TODO FIXME
+        this.quickMenuId = id; 
+        
         logger.fine("EVENT: " + result.toString() + ", quick_menu="
             + id.getMenuName());
       }
@@ -384,6 +385,7 @@ public class WaitState {
       String stringMatch, final ResponseType type) {
     synchronized (lock) {
       while (true) {
+    	  
         ResultItem result = pollResultItem(timeout, type == ResponseType.OPERA_IDLE);
         timeout = result.remaining_idle_timeout;
         WaitResult waitResult = result.waitResult;
@@ -395,20 +397,24 @@ public class WaitState {
 
         case RESPONSE:
           if (result.data == match && type == ResponseType.RESPONSE) return result;
-          else if (type == ResponseType.HANDSHAKE) throw new CommunicationException(
-              "Expecting handshake");
+          else if (type == ResponseType.HANDSHAKE) {
+        	  throw new CommunicationException("Expecting handshake");
+          }
           break;
 
         case ERROR:
           if (result.data == match && type == ResponseType.RESPONSE) return null;
-          else if (type == ResponseType.HANDSHAKE) throw new CommunicationException(
-              "Expecting handshake");
+          else if (type == ResponseType.HANDSHAKE) {
+        	  throw new CommunicationException("Expecting handshake");
+          }
           break;
 
         case EXCEPTION:
+        	
           throw result.exception;
 
         case DISCONNECTED:
+        	
           throw new CommunicationException("Problem encountered : "
               + waitResult.toString());
 
@@ -417,12 +423,16 @@ public class WaitState {
           break;
 
         case EVENT_WINDOW_CLOSED:
-          if (result.data == match && type == ResponseType.WINDOW_LOADED) throw new CommunicationException(
-              "Window closed unexpectedly");
+          if (result.data == match && type == ResponseType.WINDOW_LOADED) 
+          {
+        	  throw new CommunicationException("Window closed unexpectedly");
+          }
           break;
 
         case EVENT_DESKTOP_WINDOW_SHOWN:
           if (type == ResponseType.DESKTOP_WINDOW_SHOWN) {
+        	  
+        	  
             if (stringMatch.length() == 0) return result;
             else {
               logger.fine("EVENT_DESKTOP_WINDOW_SHOWN: Name: "
@@ -504,20 +514,24 @@ public class WaitState {
             break;
 
         case EVENT_QUICK_MENU_CLOSED:
-            if (type == ResponseType.QUICK_MENU_CLOSED
-            			|| type == ResponseType.QUICK_MENU_SHOWN) {
-              if (stringMatch.length() == 0) {
-            	  return result;
-              }
-              else {
-                logger.fine("EVENT_QUICK_MENU_CLOSED: Name: "
-                    + result.quickMenuId.getMenuName());
+        	if (type == ResponseType.QUICK_MENU_CLOSED) {
+        		
+        		// empty stringMatch
+        		if (stringMatch != null && stringMatch.length() == 0) {
+        			return result;
+        		}
+        		else {
+            	  ;
+                //logger.fine("EVENT_QUICK_MENU_CLOSED: Name: "
+                    //+ result.quickMenuId.getMenuName());
 
-                if (result.quickMenuId.getMenuName().equals(stringMatch)) { 
-                	return result;
-                }
+            	  // match on name
+            	  if (result.quickMenuId.getMenuName().equals(stringMatch)) {
+            		  stringMatch = "";
+            		  return result;
+            	  }
                 
-              }
+        		}
             }
             break;
 
@@ -658,7 +672,7 @@ public class WaitState {
 	  ResultItem item = waitAndParseResult(timeout, 0, menuName,
 			  ResponseType.QUICK_MENU_CLOSED);
 	  if (item != null) {
-		  return item.quickMenuInfo.getMenuId().getMenuName();
+		  return item.quickMenuId.getMenuName();
 	  }
 	  return "";
   }

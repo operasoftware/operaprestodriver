@@ -166,5 +166,11 @@ public interface IDesktopWindowManager {
 	QuickMenuItem getQuickMenuItemByShortcut(String shortcut);
 
 	QuickMenuItem getQuickMenuItemBySubmenu(String submenu);
+
+	List<QuickMenu> getQuickMenuList();
+
+	List<QuickMenuItem> getQuickMenuItemList();
+
+	QuickMenuItem getQuickMenuItemByName(String name);
 	
 }

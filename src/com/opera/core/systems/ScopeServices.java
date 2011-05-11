@@ -629,6 +629,7 @@ public class ScopeServices implements IConnectionHandler {
 	  waitState.setWaitEvents(false);
 	  try {
 		  return waitState.waitForQuickMenuClosed(menuName, timeout);
+		  
 	  } catch (Exception e) {
 		  return "";
 	  }	
