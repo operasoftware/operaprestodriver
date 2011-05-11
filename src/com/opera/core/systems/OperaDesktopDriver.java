@@ -237,6 +237,15 @@ public class OperaDesktopDriver extends OperaDriver {
 	public List<QuickWindow> getQuickWindowList() {
 		return desktopWindowManager.getQuickWindowList();
 	}
+	
+	public List<QuickMenu> getQuickMenuList() {
+		return desktopWindowManager.getQuickMenuList();
+	}
+	
+	// TODO: Check consistency of this and the above
+	public List<QuickMenuItem> getQuickMenuItemList() {
+		return desktopWindowManager.getQuickMenuItemList();
+	}
 
 	/**
 	 *
@@ -366,7 +375,6 @@ public class OperaDesktopDriver extends OperaDriver {
 	
 	
 	public QuickMenu getQuickMenu(String menuName) {
-		System.out.println("OperaDesktopDriver::getQuickMenu");
 		return desktopWindowManager.getQuickMenu(menuName);
 	}
 	
@@ -386,6 +394,10 @@ public class OperaDesktopDriver extends OperaDriver {
 	 */
 	public QuickMenuItem getQuickMenuItemBySubmenu(String submenu) {
 		return desktopWindowManager.getQuickMenuItemBySubmenu(submenu);
+	}
+	
+	public QuickMenuItem getQuickMenuItemByName(String name) {
+		return desktopWindowManager.getQuickMenuItemByName(name);
 	}
 	
 	/**
