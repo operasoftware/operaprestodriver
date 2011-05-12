@@ -55,7 +55,7 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 	private int activeWindowId = 0;
 	private final SystemInputManager systemInputManager;
 	private final IDesktopUtils desktopUtils;
-
+	
 	 public DesktopWindowManager(IDesktopUtils desktopUtils, SystemInputManager inputManager, ScopeServices services, String version) {
 			super(services, version);
 
@@ -314,9 +314,12 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 		return new QuickMenu(info, desktopUtils, systemInputManager);
 	}
 	
+	// Functions to get a specific QuickMenuItem
+	// These should be unique given one of action, submenu, text(?), shortcut
+	// and unique within a single menu given either shortcutletter or pos
 	
- //FIXME:TODO: Slå sammen alle disse get metodene for menuitems
-	// Should specify name of menu parent (location) as param
+	// TODO: Add search by StringId?
+	
 	public QuickMenuItem getQuickMenuItemByAction(String action) {
 		List<QuickMenu> menus = getInternalQuickMenuList();
 		for (QuickMenu menu : menus) {
@@ -386,6 +389,20 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 		return null;
 	}
 
+	
+	public QuickMenuItem getQuickMenuItemByStringId(String stringId){
+		List<QuickMenu> menus = getInternalQuickMenuList();
+		for (QuickMenu menu : menus) {
+			List<QuickMenuItem> itemList = menu.getItemList();
+			for (QuickMenuItem item : itemList) {
+				
+				if (item.getStringId().equals(stringId))
+					return item;
+			}
+		}
+		return null;
+	}
+	
 	public QuickMenuItem getQuickMenuItemByPosition(int row, String menuName) {
 		List<QuickMenu> menus = getInternalQuickMenuList();
 		for (QuickMenu menu : menus) {
@@ -395,30 +412,9 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 					return item;
 			}
 		}
-		System.out.println("return null ");
-		
 		return null;
 	}
 
-	
-	/**
-	 * 
-	 * @param name - name of action or submenu of item
-	 * @return
-	 */
-/*	public QuickMenuItem getQuickMenuItem(String name) {
-		List<QuickMenu> menus = getInternalQuickMenuList();
-		for (QuickMenu menu : menus) {
-			List<QuickMenuItem> itemList = menu.getItemList();
-			for (QuickMenuItem item : itemList) {
-				if (item.getActionName().equals(name) ||
-						item.getSubMenu().equals(name))
-					return item;
-			}
-		}
-		return null;
-	}
-*/
 	public QuickMenuItem getQuickMenuItemByName(String name) {
 		List<QuickMenu> menus = getInternalQuickMenuList();
 		for (QuickMenu menu : menus) {
