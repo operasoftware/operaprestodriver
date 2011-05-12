@@ -41,8 +41,8 @@ public class QuickMenu {
 		private final SystemInputManager systemInputManager;
 		//private final int parentWindowId;
 		
-		// TODO: FIXME: Fill in!
-		private ArrayList<QuickMenuItem> menuItemList;
+		// The list of items is not initialized till the first call to get the list
+		// private ArrayList<QuickMenuItem> menuItemList;
 
 		/**
 		 * Constructor.
@@ -55,7 +55,7 @@ public class QuickMenu {
 	        this.info = info;
 	        this.desktopUtils = desktopUtils;
 	        this.systemInputManager = inputManager;
-	        this.menuItemList = new ArrayList<QuickMenuItem>();
+	        //this.menuItemList = new ArrayList<QuickMenuItem>();
 	    }
 
 		/**
@@ -67,7 +67,17 @@ public class QuickMenu {
 			return info.getMenuId().getMenuName();
 		}
 		
-		private List<QuickMenuItem> getMenuItemList() {
+		public List<QuickMenuItem> getItemList() {
+			List<QuickMenuItem> itemList = new ArrayList<QuickMenuItem>();
+			for (QuickMenuItemInfo itemInfo : info.getMenuItemListList()) {
+				QuickMenuItem item = new QuickMenuItem(itemInfo, getName(), desktopUtils, systemInputManager);
+				
+				itemList.add(item);
+			}
+			return itemList;
+		}
+		
+		/*private List<QuickMenuItem> getMenuItemList() {
 			List<QuickMenuItem> menuItemList = new ArrayList<QuickMenuItem>();
 			
 			for (QuickMenuItemInfo infoItem : info.getMenuItemListList()) {
@@ -75,7 +85,7 @@ public class QuickMenu {
 				menuItemList.add(item);
 			}
 			return menuItemList;
-		}
+		}*/
 
 		/**
 		 * @return true if the menu is visible, else false
@@ -91,6 +101,11 @@ public class QuickMenu {
 		public boolean hasSubmenu() {
 			// TODO FIXME Check items in menu for submenu, return true
 			// on first true else false if none.
+			List<QuickMenuItem> items = getItemList();
+			for (QuickMenuItem item : items) {
+				if (item.hasSubMenu())
+					return true;
+			}
 			return false;
 		}
 		
@@ -107,6 +122,8 @@ public class QuickMenu {
 		public DesktopWindowRect getRect() {
 			return info.getRect();
 		}
+		
+		/////////////////////////////////////////
 
 		// TODO: FIXME: Move to common to widget/menu
 		/**
@@ -134,22 +151,14 @@ public class QuickMenu {
 		public String toFullString() {
 			return "QuickMenu\n" +
 			  "       Menu name: " + getName() + "\n"
-			+ "    visible: " + isVisible() + "\n"
+			//+ "    visible: " + isVisible() + "\n"
 			+ "          x: " + getRect().getX() + "\n"
 			+ "          y: " + getRect().getY() + "\n"
 			+ "      width: " + getRect().getWidth() + "\n"
 			+ "     height: " + getRect().getHeight() + " \n";
 		}
 
-		public List<QuickMenuItem> getItemList() {
-			List<QuickMenuItem> itemList = new ArrayList<QuickMenuItem>();
-			for (QuickMenuItemInfo itemInfo : info.getMenuItemListList()) {
-				QuickMenuItem item = new QuickMenuItem(itemInfo, getName(), desktopUtils, systemInputManager);
-				
-				itemList.add(item);
-			}
-			return itemList;
-		}
+		
 		
 		// Needs cleaning up!!
 		public void click(MouseButton button, int numClicks, List<ModifierPressed> modifiers) {

@@ -84,7 +84,7 @@ public class QuickMenuItem {
 		
 		/**
 		 * 
-		 * @return 
+		 * @return name of submenu, if any 
 		 */
 		public String getSubMenu() {
 			return info.getSubmenu();
@@ -105,7 +105,6 @@ public class QuickMenuItem {
 	     */
 		public String getText() {
 			return desktopUtils.removeCR(info.getText());
-			//return info.getText();
 		}
 
 		// QuickWidget functions should be relevant here too, make common:
@@ -205,51 +204,11 @@ public class QuickMenuItem {
 
 		private Point getCenterLocation() {
 			DesktopWindowRect rect = getRect();
-			System.out.println("Item rect = " + rect.getX() + ", " + rect.getY() + ", " + rect.getWidth() + ", " + rect.getHeight());
 			Point topLeft = getLocation();
-			System.out.println("topLeft = " + topLeft.x + ", " + topLeft.y);
 			Point center = new Point(topLeft.x + rect.getWidth() / 2, topLeft.y + rect.getHeight() / 2);
-			System.out.println("Click at " + center.x + ", " + center.y);
 			return new Point(topLeft.x + rect.getWidth() / 2, topLeft.y + rect.getHeight() / 2);
 		}
 
-		// Intersect two lines
-		private Point intersection(int x1,int y1,int x2,int y2, int x3, int y3, int x4,int y4) {
-			double dem = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4);
-
-			// Solve the intersect point
-			double xi = ((x1 * y2 - y1 * x2) * (x3 - x4) - (x1 - x2) * (x3 * y4 - y3 * x4)) / dem;
-			double yi = ((x1 * y2 - y1 * x2) * (y3 - y4) - (y1 - y2) * (x3 * y4 - y3 * x4)) / dem;
-
-			// Check the point isn't off the ends of the lines
-			if ((x1 - xi) * (xi - x2) >= 0 && (x3 - xi) * (xi - x4) >= 0 && (y1 - yi) * (yi - y2) >= 0 && (y3 - yi) * (yi - y4) >= 0) {
-				return new Point((int) xi, (int) yi);
-			}
-			return null;
-		}
-
-		// Intersect a line and a DesktopWindowRect
-		private Point intersection(int x1,int y1,int x2,int y2, DesktopWindowRect rect) {
-			Point bottom = intersection(x1, y1, x2, y2, rect.getX(), rect.getY(), rect.getX() + rect.getHeight(), rect.getY());
-			if (bottom != null)
-				return bottom;
-
-			Point right = intersection(x1, y1, x2, y2, rect.getX() + rect.getWidth(), rect.getY(), rect.getX() + rect.getWidth(), rect.getY() + rect.getHeight());
-			if (right != null)
-				return right;
-
-			Point top = intersection(x1, y1, x2, y2, rect.getX(), rect.getY() + rect.getHeight(), rect.getX() + rect.getWidth(), rect.getY() + rect.getHeight());
-			if (top != null)
-				return top;
-
-			Point left = intersection(x1, y1, x2, y2, rect.getX(), rect.getY(), rect.getX(), rect.getY() + rect.getHeight());
-			if (left != null)
-				return left;
-
-			return null;
-		}
-
-		
 		/**
 		 * Hovers this menuItem
 		 */
@@ -273,7 +232,7 @@ public class QuickMenuItem {
 			+ "     height: " + getRect().getHeight() + " \n";
 		}
 
-		public Object getMenu() {
+		public String getMenu() {
 			return menu;
 		}
 }
