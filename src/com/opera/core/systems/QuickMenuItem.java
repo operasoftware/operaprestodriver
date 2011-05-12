@@ -92,14 +92,6 @@ public class QuickMenuItem {
 		
 		
 		/**
-		 * 
-		 * @return StringId of menu item
-		 */
-	    public String getStringId() {
-	    	 return info.getStringId();
-	     }
-	    
-		/**
 	     *
 	     * @return (language dependent) text of menuitem
 	     */
