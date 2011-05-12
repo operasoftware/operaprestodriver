@@ -264,9 +264,6 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 		QuickMenuList list = builder.build();*/
 
 		List<QuickMenuInfo> menuInfoList = getQuickMenuInfoList();//list.getMenuListList();
-		
-		System.out.println(".. getInternalQuickMenulist. Num menus = " + menuInfoList.size());
-		
 		List<QuickMenu> menuList = new LinkedList<QuickMenu>();
 
 		for (QuickMenuInfo menuInfo : menuInfoList) {
@@ -323,14 +320,10 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 	// and unique within a single menu given either shortcutletter or pos
 	
 	public QuickMenuItem getQuickMenuItemByAction(String action) {
-		List<QuickMenu> menus = getQuickMenuList();
-		for (QuickMenu menu : menus) {
-			List<QuickMenuItem> itemList = menu.getItemList();
-			for (QuickMenuItem item : itemList) {
-				System.out.println("item action = " + item.getActionName());
-				if (item.getActionName().equals(action))
-					return item;
-			}
+		List<QuickMenuItem> itemList = getQuickMenuItemList();
+		for (QuickMenuItem item : itemList) {
+			if (item.getActionName().equals(action))
+				return item;
 		}
 		return null;
 	}
@@ -348,14 +341,10 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 	}
 	
 	public QuickMenuItem getQuickMenuItemByText(String text) {
-		System.out.println("-------------------Get item by text " + text);
 		List<QuickMenu> menus = getQuickMenuList();
-		System.out.println("Num menus " + menus.size());
 		for (QuickMenu menu : menus) {
-			System.out.println("Menu " + menu.getName());
 			List<QuickMenuItem> itemList = menu.getItemList();
 			for (QuickMenuItem item : itemList) {
-				System.out.println("item text = " + item.getText().replaceAll("&", ""));
 				if (item.getText().replaceAll("&", "").equals(text))
 					return item;
 			}
@@ -364,13 +353,10 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 	}
 	
 	public QuickMenuItem getQuickMenuItemByAccKey(String key, String menuName) {
-		System.out.println("key = " + key + " menuName = " + menuName);
 		List<QuickMenu> menus = getQuickMenuList();
 		for (QuickMenu menu : menus) {
 			List<QuickMenuItem> itemList = menu.getItemList();
 			for (QuickMenuItem item : itemList) {
-				System.out.println("item shortcutletter = " + item.getShortcutLetter());
-				System.out.println("menu = " + item.getMenu());
 				if (item.getShortcutLetter().equals(key) && item.getMenu().equals(menuName))
 					return item;
 			}
@@ -383,7 +369,6 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 		for (QuickMenu menu : menus) {
 			List<QuickMenuItem> itemList = menu.getItemList();
 			for (QuickMenuItem item : itemList) {
-				
 				if (item.getShortcut().equals(shortcut))
 					return item;
 			}
