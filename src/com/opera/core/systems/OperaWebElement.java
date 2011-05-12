@@ -233,13 +233,14 @@ public class OperaWebElement implements RenderedWebElement, SearchContext,
     if (!parent.objectIds.contains(objectId)) throw new StaleElementReferenceException(
         "You cant interact with stale elements");
 
-    if (attribute.equals("disabled")) {
+    String lcAttribute = attribute.toLowerCase();
+    if (lcAttribute.equals("disabled")) {
       return String.valueOf(!isEnabled());
-    } else if (attribute.equals("checked") || attribute.equals("selected")) {
+    } else if (lcAttribute.equals("checked") || lcAttribute.equals("selected")) {
       boolean selected = isSelected();
       if (!selected) return null;
       return String.valueOf(selected);
-    } else if (attribute.equals("index")) {
+    } else if (lcAttribute.equals("index")) {
       return callMethod("locator.index");
     }
 
