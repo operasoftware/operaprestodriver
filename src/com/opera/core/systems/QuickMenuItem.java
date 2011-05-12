@@ -76,7 +76,7 @@ public class QuickMenuItem {
 		
 		/**
 		 * 
-		 * @return true if item is 'parent' of submenu
+		 * @return true if item opens a submenu
 		 */
 		public boolean hasSubMenu() {
 			return info.getSubmenu() != null;
@@ -106,9 +106,6 @@ public class QuickMenuItem {
 		public String getText() {
 			return desktopUtils.removeCR(info.getText());
 		}
-
-		// QuickWidget functions should be relevant here too, make common:
-		//public boolean verifyText(String stringId) 
 
 		/**
 		 * Checks if menuitem is enabled.
@@ -146,7 +143,24 @@ public class QuickMenuItem {
 		public boolean isBold() {
 			return info.getBold();
 		}
-
+		
+		/**
+		 * Gets the row of the widget within its parent,
+		 *
+		 * @return row of menuitem within menu
+		 */
+		public int getRow() {
+			return info.getRow();
+		}
+		
+		public String getShortcutLetter() {
+			return info.getShortcutletter();
+		}
+		
+		public String getShortcut() {
+			return info.getShortcut();
+		}
+		
 		/**
 		 * @return DesktopWindowRect of the menuitem
 		 */
@@ -173,23 +187,6 @@ public class QuickMenuItem {
 			return new Dimension(rect.getWidth(), rect.getHeight());
 		}
 
-		/**
-		 * Gets the row of the widget within its parent,
-		 *
-		 * @return row of menuitem within menu
-		 */
-		public int getRow() {
-			return info.getRow();
-		}
-		
-		public String getShortcutLetter() {
-			return info.getShortcutletter();
-		}
-		
-		public String getShortcut() {
-			return info.getShortcut();
-		}
-		
 		@Override
 		public String toString() {
 			//TODO: FIXME: What field to use if no action?
@@ -223,7 +220,7 @@ public class QuickMenuItem {
 			return "QuickWidget\n" +
 			  "       Widget name: " + (getActionName() != null ? getActionName() : getText()) + "\n"
 		//	+ "       type: " + getType()  + "\n" // TODO: FIXME
-			+ "    visible: " + isVisible() + "\n"
+		//	+ "    visible: " + isVisible() + "\n"
 			+ "       text: " + getText() + "\n"
 			+ "    enabled: " + isEnabled() + "\n"
 			+ "          x: " + getRect().getX() + "\n"
@@ -234,6 +231,18 @@ public class QuickMenuItem {
 
 		public String getMenu() {
 			return menu;
+		}
+
+		// Will be moved to common superclass
+		/**
+	     * Checks if widget text equals the text specified by the given string id
+	     *
+	     * @return true if text specified by stringId equals widget text
+	     */
+		public boolean verifyText(String stringId) {
+			String text = desktopUtils.getString(stringId, true /* skipAmpersand */);
+			
+			return getText().equals(text);
 		}
 }
 

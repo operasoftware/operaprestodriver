@@ -77,16 +77,6 @@ public class QuickMenu {
 			return itemList;
 		}
 		
-		/*private List<QuickMenuItem> getMenuItemList() {
-			List<QuickMenuItem> menuItemList = new ArrayList<QuickMenuItem>();
-			
-			for (QuickMenuItemInfo infoItem : info.getMenuItemListList()) {
-				QuickMenuItem item = new QuickMenuItem(infoItem, this.getName(), desktopUtils, systemInputManager);
-				menuItemList.add(item);
-			}
-			return menuItemList;
-		}*/
-
 		/**
 		 * @return true if the menu is visible, else false
 		 */
@@ -99,7 +89,7 @@ public class QuickMenu {
 		 * @return true if this menu has one or more submenus, else false
 		 */
 		public boolean hasSubmenu() {
-			// TODO FIXME Check items in menu for submenu, return true
+			// Checks items in menu for submenu, return true
 			// on first true else false if none.
 			List<QuickMenuItem> items = getItemList();
 			for (QuickMenuItem item : items) {
@@ -129,19 +119,18 @@ public class QuickMenu {
 		/**
 		 * @return Point describing location of widget
 		 */
-		public Point getLocation() {
+		/*public Point getLocation() {
 			DesktopWindowRect rect = getRect();
 			return new Point(rect.getX(), rect.getY());
-		}
+		}*/
 
-		// TODO: FIXME: Move to common to widget/menu
 		/**
 		 * @return size of widget
 		 */
-		public Dimension getSize() {
+		/*public Dimension getSize() {
 			DesktopWindowRect rect = getRect();
 			return new Dimension(rect.getWidth(), rect.getHeight());
-		}
+		}*/
 
 		@Override
 		public String toString() {
@@ -156,55 +145,6 @@ public class QuickMenu {
 			+ "          y: " + getRect().getY() + "\n"
 			+ "      width: " + getRect().getWidth() + "\n"
 			+ "     height: " + getRect().getHeight() + " \n";
-		}
-
-		
-		
-		// Needs cleaning up!!
-		public void click(MouseButton button, int numClicks, List<ModifierPressed> modifiers) {
-			systemInputManager.click(getCenterLocation(), button, numClicks, modifiers);
-		}
-
-		private Point getCenterLocation() {
-			DesktopWindowRect rect = getRect();
-			Point topLeft = getLocation();
-			return new Point(topLeft.x + rect.getWidth() / 2, topLeft.y + rect.getHeight() / 2);
-		}
-
-		// Intersect two lines
-		private Point intersection(int x1,int y1,int x2,int y2, int x3, int y3, int x4,int y4) {
-			double dem = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4);
-
-			// Solve the intersect point
-			double xi = ((x1 * y2 - y1 * x2) * (x3 - x4) - (x1 - x2) * (x3 * y4 - y3 * x4)) / dem;
-			double yi = ((x1 * y2 - y1 * x2) * (y3 - y4) - (y1 - y2) * (x3 * y4 - y3 * x4)) / dem;
-
-			// Check the point isn't off the ends of the lines
-			if ((x1 - xi) * (xi - x2) >= 0 && (x3 - xi) * (xi - x4) >= 0 && (y1 - yi) * (yi - y2) >= 0 && (y3 - yi) * (yi - y4) >= 0) {
-				return new Point((int) xi, (int) yi);
-			}
-			return null;
-		}
-
-		// Intersect a line and a DesktopWindowRect
-		private Point intersection(int x1,int y1,int x2,int y2, DesktopWindowRect rect) {
-			Point bottom = intersection(x1, y1, x2, y2, rect.getX(), rect.getY(), rect.getX() + rect.getHeight(), rect.getY());
-			if (bottom != null)
-				return bottom;
-
-			Point right = intersection(x1, y1, x2, y2, rect.getX() + rect.getWidth(), rect.getY(), rect.getX() + rect.getWidth(), rect.getY() + rect.getHeight());
-			if (right != null)
-				return right;
-
-			Point top = intersection(x1, y1, x2, y2, rect.getX(), rect.getY() + rect.getHeight(), rect.getX() + rect.getWidth(), rect.getY() + rect.getHeight());
-			if (top != null)
-				return top;
-
-			Point left = intersection(x1, y1, x2, y2, rect.getX(), rect.getY(), rect.getX(), rect.getY() + rect.getHeight());
-			if (left != null)
-				return left;
-
-			return null;
 		}
 
 }
