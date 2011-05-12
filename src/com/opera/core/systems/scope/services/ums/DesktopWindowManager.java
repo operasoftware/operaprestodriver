@@ -71,6 +71,8 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 		}
 
 	 public void init() { }
+	 
+	 // Window
 
 	 public int getActiveQuickWindowId() {
 		Response response = executeCommand(DesktopWindowManagerCommand.GET_ACTIVE_WINDOW, null);
@@ -84,7 +86,86 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 		List<DesktopWindowInfo> windows = getDesktopWindowInfoList();
 		return windows.size();
 	}
+	
+	// Note: This grabs the first window with a matching name, there might be more
+	public QuickWindow getQuickWindow(QuickWidgetSearchType property, String value)
+	{
+		List<QuickWindow> windows = getQuickWindowList();
+		for (QuickWindow window : windows) {
+			if (property.equals(QuickWidgetSearchType.NAME)) {
+				if (window.getName().equals(value)) {
+					return window;
+				}
+			}
+		}
+		return null;
+	}
+	
+	public List<QuickWindow> getQuickWindowList() {
+		Response response = executeCommand(DesktopWindowManagerCommand.LIST_WINDOWS, null);
+		DesktopWindowList.Builder builder = DesktopWindowList.newBuilder();
+		builder.clear();
+		buildPayload(response, builder);
+		DesktopWindowList list = builder.build();
 
+		List<DesktopWindowInfo> windowInfoList = list.getWindowListList();
+		List<QuickWindow> windowList = new LinkedList<QuickWindow>();
+
+		for (DesktopWindowInfo windowInfo : windowInfoList) {
+			windowList.add(new QuickWindow(windowInfo));
+		}
+		return windowList;
+	}
+	
+	// -- Window
+
+	public List<DesktopWindowInfo> getDesktopWindowInfoList() {
+		Response response = executeCommand(DesktopWindowManagerCommand.LIST_WINDOWS, null);
+		DesktopWindowList.Builder builder = DesktopWindowList.newBuilder();
+		buildPayload(response, builder);
+		DesktopWindowList list = builder.build();
+
+		List<DesktopWindowInfo> windowList = list.getWindowListList();
+		return windowList;
+	}
+
+	public int getQuickWindowID(String name) {
+		QuickWindow win = getQuickWindowByName(name);
+		if (win != null) {
+			return win.getWindowID();
+		} else {
+			return -1;
+		}
+	}
+
+	public QuickWindow getQuickWindowByName(String name) {
+		List<DesktopWindowInfo> windowList = getDesktopWindowInfoList();
+		for (DesktopWindowInfo window : windowList) {
+			if (window.getName().equals(name)) {
+				return new QuickWindow(window);
+			}
+		}
+		return null;
+	}
+
+	public QuickWindow getQuickWindowById(int windowId) {
+		List<DesktopWindowInfo> windowList = getDesktopWindowInfoList();
+		for (DesktopWindowInfo window : windowList) {
+			if (window.getWindowID() == windowId) {
+				return new QuickWindow(window);
+			}
+		}
+		return null;
+	}
+
+	public String getQuickWindowName(int windowId) {
+		QuickWindow window = getQuickWindowById(windowId);
+		return (window == null ? "" : window.getName());
+	}
+
+
+	// Widget
+	
 	public QuickWidget getQuickWidget(QuickWidgetType type, int windowId, QuickWidgetSearchType property, String value)
 	{
 		return getQuickWidget(type, windowId, property, value, "");
@@ -144,20 +225,6 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 		return null;
 	}
 
-	// Note: This grabs the first window with a matching name, there might be more
-	public QuickWindow getQuickWindow(QuickWidgetSearchType property, String value)
-	{
-		List<QuickWindow> windows = getQuickWindowList();
-		for (QuickWindow window : windows) {
-			if (property.equals(QuickWidgetSearchType.NAME)) {
-				if (window.getName().equals(value)) {
-					return window;
-				}
-			}
-		}
-		return null;
-	}
-
 	public List<QuickWidget> getQuickWidgetList(int windowId) {
 		if (windowId <= 0) {
 			windowId = getActiveQuickWindowId();
@@ -186,40 +253,17 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 		}
 		return quickWidgetList;
 	}
-
-	public List<QuickWindow> getQuickWindowList() {
-		Response response = executeCommand(DesktopWindowManagerCommand.LIST_WINDOWS, null);
-		DesktopWindowList.Builder builder = DesktopWindowList.newBuilder();
-		builder.clear();
-		buildPayload(response, builder);
-		DesktopWindowList list = builder.build();
-
-		List<DesktopWindowInfo> windowInfoList = list.getWindowListList();
-		List<QuickWindow> windowList = new LinkedList<QuickWindow>();
-
-		for (DesktopWindowInfo windowInfo : windowInfoList) {
-			windowList.add(new QuickWindow(windowInfo));
-		}
-		return windowList;
-	}
 	
+	//  Menu
+
 	public List<QuickMenu> getQuickMenuList() {
-		/*List<QuickMenu> list = getInternalQuickMenuList();
-		for (QuickMenu menu : list) {
-			
-		}*/
-		return getInternalQuickMenuList();
-		
-	}
-	
-	private List<QuickMenu> getInternalQuickMenuList() {
-		Response response = executeCommand(DesktopWindowManagerCommand.LIST_QUICK_MENUS, null);
+		/*Response response = executeCommand(DesktopWindowManagerCommand.LIST_QUICK_MENUS, null);
 		QuickMenuList.Builder builder = QuickMenuList.newBuilder();
 		builder.clear();
 		buildPayload(response, builder);
-		QuickMenuList list = builder.build();
+		QuickMenuList list = builder.build();*/
 
-		List<QuickMenuInfo> menuInfoList = list.getMenuListList();
+		List<QuickMenuInfo> menuInfoList = getQuickMenuInfoList();//list.getMenuListList();
 		
 		System.out.println(".. getInternalQuickMenulist. Num menus = " + menuInfoList.size());
 		
@@ -228,6 +272,7 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 		for (QuickMenuInfo menuInfo : menuInfoList) {
 			menuList.add(new QuickMenu(menuInfo, desktopUtils, systemInputManager));
 		}
+		
 		return menuList;
 	}
 	
@@ -254,50 +299,9 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 		}
 		return list;
 	}
-
-	public List<DesktopWindowInfo> getDesktopWindowInfoList() {
-		Response response = executeCommand(DesktopWindowManagerCommand.LIST_WINDOWS, null);
-		DesktopWindowList.Builder builder = DesktopWindowList.newBuilder();
-		buildPayload(response, builder);
-		DesktopWindowList list = builder.build();
-
-		List<DesktopWindowInfo> windowList = list.getWindowListList();
-		return windowList;
-	}
-
-	public int getQuickWindowID(String name) {
-		QuickWindow win = getQuickWindowByName(name);
-		if (win != null) {
-			return win.getWindowID();
-		} else {
-			return -1;
-		}
-	}
-
-	public QuickWindow getQuickWindowByName(String name) {
-		List<DesktopWindowInfo> windowList = getDesktopWindowInfoList();
-		for (DesktopWindowInfo window : windowList) {
-			if (window.getName().equals(name)) {
-				return new QuickWindow(window);
-			}
-		}
-		return null;
-	}
-
-	public QuickWindow getQuickWindowById(int windowId) {
-		List<DesktopWindowInfo> windowList = getDesktopWindowInfoList();
-		for (DesktopWindowInfo window : windowList) {
-			if (window.getWindowID() == windowId) {
-				return new QuickWindow(window);
-			}
-		}
-		return null;
-	}
-
-	public String getQuickWindowName(int windowId) {
-		QuickWindow window = getQuickWindowById(windowId);
-		return (window == null ? "" : window.getName());
-	}
+	
+	
+	// -- Menu
 	
 	public QuickMenu getQuickMenu(String menuName) {
 		
@@ -314,14 +318,12 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 		return new QuickMenu(info, desktopUtils, systemInputManager);
 	}
 	
-	// Functions to get a specific QuickMenuItem
+	// Functions to get a specific QuickMenuItem -----------
 	// These should be unique given one of action, submenu, text(?), shortcut
 	// and unique within a single menu given either shortcutletter or pos
 	
-	// TODO: Add search by StringId?
-	
 	public QuickMenuItem getQuickMenuItemByAction(String action) {
-		List<QuickMenu> menus = getInternalQuickMenuList();
+		List<QuickMenu> menus = getQuickMenuList();
 		for (QuickMenu menu : menus) {
 			List<QuickMenuItem> itemList = menu.getItemList();
 			for (QuickMenuItem item : itemList) {
@@ -334,7 +336,7 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 	}
 	
 	public QuickMenuItem getQuickMenuItemBySubmenu(String submenu) {
-		List<QuickMenu> menus = getInternalQuickMenuList();
+		List<QuickMenu> menus = getQuickMenuList();
 		for (QuickMenu menu : menus) {
 			List<QuickMenuItem> itemList = menu.getItemList();
 			for (QuickMenuItem item : itemList) {
@@ -347,7 +349,7 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 	
 	public QuickMenuItem getQuickMenuItemByText(String text) {
 		System.out.println("-------------------Get item by text " + text);
-		List<QuickMenu> menus = getInternalQuickMenuList();
+		List<QuickMenu> menus = getQuickMenuList();
 		System.out.println("Num menus " + menus.size());
 		for (QuickMenu menu : menus) {
 			System.out.println("Menu " + menu.getName());
@@ -363,7 +365,7 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 	
 	public QuickMenuItem getQuickMenuItemByAccKey(String key, String menuName) {
 		System.out.println("key = " + key + " menuName = " + menuName);
-		List<QuickMenu> menus = getInternalQuickMenuList();
+		List<QuickMenu> menus = getQuickMenuList();
 		for (QuickMenu menu : menus) {
 			List<QuickMenuItem> itemList = menu.getItemList();
 			for (QuickMenuItem item : itemList) {
@@ -377,7 +379,7 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 	}
 	
 	public QuickMenuItem getQuickMenuItemByShortcut(String shortcut){
-		List<QuickMenu> menus = getInternalQuickMenuList();
+		List<QuickMenu> menus = getQuickMenuList();
 		for (QuickMenu menu : menus) {
 			List<QuickMenuItem> itemList = menu.getItemList();
 			for (QuickMenuItem item : itemList) {
@@ -391,7 +393,7 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 
 	
 	public QuickMenuItem getQuickMenuItemByStringId(String stringId){
-		List<QuickMenu> menus = getInternalQuickMenuList();
+		List<QuickMenu> menus = getQuickMenuList();
 		for (QuickMenu menu : menus) {
 			List<QuickMenuItem> itemList = menu.getItemList();
 			for (QuickMenuItem item : itemList) {
@@ -404,7 +406,7 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 	}
 	
 	public QuickMenuItem getQuickMenuItemByPosition(int row, String menuName) {
-		List<QuickMenu> menus = getInternalQuickMenuList();
+		List<QuickMenu> menus = getQuickMenuList();
 		for (QuickMenu menu : menus) {
 			List<QuickMenuItem> itemList = menu.getItemList();
 			for (QuickMenuItem item : itemList) {
@@ -416,7 +418,7 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 	}
 
 	public QuickMenuItem getQuickMenuItemByName(String name) {
-		List<QuickMenu> menus = getInternalQuickMenuList();
+		List<QuickMenu> menus = getQuickMenuList();
 		for (QuickMenu menu : menus) {
 			List<QuickMenuItem> itemList = menu.getItemList();
 			for (QuickMenuItem item : itemList) {
