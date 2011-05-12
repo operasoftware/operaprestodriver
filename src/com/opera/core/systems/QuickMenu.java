@@ -69,6 +69,7 @@ public class QuickMenu {
 		
 		public List<QuickMenuItem> getItemList() {
 			List<QuickMenuItem> itemList = new ArrayList<QuickMenuItem>();
+			System.out.println("getMenuItemList from info. " + info.getMenuItemListList().size() + " items");
 			for (QuickMenuItemInfo itemInfo : info.getMenuItemListList()) {
 				QuickMenuItem item = new QuickMenuItem(itemInfo, getName(), desktopUtils, systemInputManager);
 				
@@ -140,7 +141,6 @@ public class QuickMenu {
 		public String toFullString() {
 			return "QuickMenu\n" +
 			  "       Menu name: " + getName() + "\n"
-			//+ "    visible: " + isVisible() + "\n"
 			+ "          x: " + getRect().getX() + "\n"
 			+ "          y: " + getRect().getY() + "\n"
 			+ "      width: " + getRect().getWidth() + "\n"

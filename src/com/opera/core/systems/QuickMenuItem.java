@@ -104,8 +104,10 @@ public class QuickMenuItem {
 	     * @return (language dependent) text of menuitem
 	     */
 		public String getText() {
+			// TODO: Should remove &?
 			return desktopUtils.removeCR(info.getText());
 		}
+		
 
 		/**
 		 * Checks if menuitem is enabled.
@@ -153,6 +155,10 @@ public class QuickMenuItem {
 			return info.getRow();
 		}
 		
+		/**
+		 * 
+		 * @return ShortcutLetter, or null if none
+		 */
 		public String getShortcutLetter() {
 			return info.getShortcutletter();
 		}
@@ -217,10 +223,8 @@ public class QuickMenuItem {
 
 
 		public String toFullString() {
-			return "QuickWidget\n" +
-			  "       Widget name: " + (getActionName() != null ? getActionName() : getText()) + "\n"
-		//	+ "       type: " + getType()  + "\n" // TODO: FIXME
-		//	+ "    visible: " + isVisible() + "\n"
+			return "QuickMenuItem\n" +
+			  "       Item name: " + getName() + "\n"
 			+ "       text: " + getText() + "\n"
 			+ "    enabled: " + isEnabled() + "\n"
 			+ "          x: " + getRect().getX() + "\n"

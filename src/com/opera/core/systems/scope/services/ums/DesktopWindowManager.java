@@ -357,7 +357,7 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 		for (QuickMenu menu : menus) {
 			List<QuickMenuItem> itemList = menu.getItemList();
 			for (QuickMenuItem item : itemList) {
-				if (item.getShortcutLetter().equals(key) && item.getMenu().equals(menuName))
+				if (item.getShortcutLetter().equalsIgnoreCase(key) && item.getMenu().equals(menuName))
 					return item;
 			}
 		}

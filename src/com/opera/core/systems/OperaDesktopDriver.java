@@ -440,6 +440,12 @@ public class OperaDesktopDriver extends OperaDriver {
 	}
 	
 	
+	public QuickMenuItem getQuickMenuItemByStringId(String stringId) {
+		String text = desktopUtils.getString(stringId, true);
+		return desktopWindowManager.getQuickMenuItemByText(text);
+	}
+
+	
 	/**
 	 * Finds a Window by its name.
 	 *
