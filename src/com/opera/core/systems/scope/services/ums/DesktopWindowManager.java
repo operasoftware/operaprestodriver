@@ -377,19 +377,6 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 	}
 
 	
-	public QuickMenuItem getQuickMenuItemByStringId(String stringId){
-		List<QuickMenu> menus = getQuickMenuList();
-		for (QuickMenu menu : menus) {
-			List<QuickMenuItem> itemList = menu.getItemList();
-			for (QuickMenuItem item : itemList) {
-				
-				if (item.getStringId().equals(stringId))
-					return item;
-			}
-		}
-		return null;
-	}
-	
 	public QuickMenuItem getQuickMenuItemByPosition(int row, String menuName) {
 		List<QuickMenu> menus = getQuickMenuList();
 		for (QuickMenu menu : menus) {
