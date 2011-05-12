@@ -1,0 +1,282 @@
+/*
+Copyright 2008-2011 Opera Software ASA
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/package com.opera.core.systems;
+
+import java.awt.Dimension;
+import java.awt.Point;
+import java.util.List;
+import java.util.ArrayList;
+
+import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo;
+import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo;
+import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect;
+import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo.QuickWidgetType;
+import com.opera.core.systems.scope.protos.SystemInputProtos.ModifierPressed;
+import com.opera.core.systems.scope.protos.SystemInputProtos.MouseInfo.MouseButton;
+import com.opera.core.systems.scope.services.IDesktopUtils;
+import com.opera.core.systems.scope.services.ums.SystemInputManager;
+
+/**
+ * Represents a menuitem in a menu in the Opera desktop UI.
+ *
+ * @author Karianne Ekern.
+ *
+ */
+public class QuickMenuItem {
+		private final QuickMenuItemInfo info;
+		private final String menu;
+		private SystemInputManager systemInputManager;
+		private final IDesktopUtils desktopUtils;
+		
+		
+		/**
+		 * Constructor.
+		 *
+		 * @param info QuickMenuItemInfo of the menu item
+		 */
+		public QuickMenuItem(QuickMenuItemInfo info, String menu,IDesktopUtils desktopUtils, SystemInputManager systemInputManager) {
+	        this.info = info;
+	        this.menu = menu;
+	        this.systemInputManager = systemInputManager;
+	        this.desktopUtils = desktopUtils;
+	    }
+
+		/**
+		 * 
+		 * @return actionName or SubmenuName of menuItem
+		 */
+		public String getName() {
+			if (getActionName().length() > 0)
+				return getActionName();
+			else
+				return this.getSubMenu();
+		}
+
+		/**
+		 * Get Action name for action associated with menu item, if any.
+		 * 
+		 * @return action name of action associated with the item,
+		 *         returns empty string for an item with no associated action
+		 */
+		public String getActionName() {
+			return info.getAction();
+		}
+		
+		/**
+		 * 
+		 * @return true if item is 'parent' of submenu
+		 */
+		public boolean hasSubMenu() {
+			return info.getSubmenu() != null;
+		}
+		
+		/**
+		 * 
+		 * @return 
+		 */
+		public String getSubMenu() {
+			return info.getSubmenu();
+		}
+		
+		
+		/**
+		 * 
+		 * @return StringId of menu item
+		 */
+	    public String getStringId() {
+	    	 return info.getStringId();
+	     }
+	    
+		/**
+	     *
+	     * @return (language dependent) text of menuitem
+	     */
+		public String getText() {
+			return desktopUtils.removeCR(info.getText());
+			//return info.getText();
+		}
+
+		// QuickWidget functions should be relevant here too, make common:
+		//public boolean verifyText(String stringId) 
+
+		/**
+		 * Checks if menuitem is enabled.
+		 *
+		 * @return true if enabled, else false
+		 */
+		public boolean isEnabled() {
+			return info.getEnabled();
+		}
+
+		/**
+		 *
+		 * @return true if the menuentry is selected, else false
+		 */
+		public boolean isSelected() {
+			return info.getSelected();
+		}
+
+		/**
+		 *
+		 * @return true if item is checked, else false
+		 */
+		public boolean isChecked() {
+			return info.getChecked();
+		}
+
+		
+		/**
+		 * @return true if menuentry is visible, else false
+		 */
+		public boolean isVisible(){
+			return true;//info.getVisible();
+		}
+		
+		public boolean isBold() {
+			return info.getBold();
+		}
+
+		/**
+		 * @return DesktopWindowRect of the menuitem
+		 */
+		public DesktopWindowRect getRect() {
+			return info.getRect();
+		}
+
+		// TODO: FIXME: ALl those functions just using the rect can be moved to common
+		// between menu, menuitem and widget
+		
+		/**
+		 * @return Point describing location of this menuitem
+		 */
+		public Point getLocation() {
+			DesktopWindowRect rect = getRect();
+			return new Point(rect.getX(), rect.getY());
+		}
+
+		/**
+		 * @return size of menuitem
+		 */
+		public Dimension getSize() {
+			DesktopWindowRect rect = getRect();
+			return new Dimension(rect.getWidth(), rect.getHeight());
+		}
+
+		/**
+		 * Gets the row of the widget within its parent,
+		 *
+		 * @return row of menuitem within menu
+		 */
+		public int getRow() {
+			return info.getRow();
+		}
+		
+		public String getShortcutLetter() {
+			return info.getShortcutletter();
+		}
+		
+		public String getShortcut() {
+			return info.getShortcut();
+		}
+		
+		@Override
+		public String toString() {
+			//TODO: FIXME: What field to use if no action?
+			String str = getActionName() != null ? getActionName() : getText();
+			return "QuickWidget " + getActionName();
+		}
+		
+		// Needs cleaning up!!
+		public void click(MouseButton button, int numClicks, List<ModifierPressed> modifiers) {
+			systemInputManager.click(getCenterLocation(), button, numClicks, modifiers);
+		}
+
+		private Point getCenterLocation() {
+			DesktopWindowRect rect = getRect();
+			System.out.println("Item rect = " + rect.getX() + ", " + rect.getY() + ", " + rect.getWidth() + ", " + rect.getHeight());
+			Point topLeft = getLocation();
+			System.out.println("topLeft = " + topLeft.x + ", " + topLeft.y);
+			Point center = new Point(topLeft.x + rect.getWidth() / 2, topLeft.y + rect.getHeight() / 2);
+			System.out.println("Click at " + center.x + ", " + center.y);
+			return new Point(topLeft.x + rect.getWidth() / 2, topLeft.y + rect.getHeight() / 2);
+		}
+
+		// Intersect two lines
+		private Point intersection(int x1,int y1,int x2,int y2, int x3, int y3, int x4,int y4) {
+			double dem = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4);
+
+			// Solve the intersect point
+			double xi = ((x1 * y2 - y1 * x2) * (x3 - x4) - (x1 - x2) * (x3 * y4 - y3 * x4)) / dem;
+			double yi = ((x1 * y2 - y1 * x2) * (y3 - y4) - (y1 - y2) * (x3 * y4 - y3 * x4)) / dem;
+
+			// Check the point isn't off the ends of the lines
+			if ((x1 - xi) * (xi - x2) >= 0 && (x3 - xi) * (xi - x4) >= 0 && (y1 - yi) * (yi - y2) >= 0 && (y3 - yi) * (yi - y4) >= 0) {
+				return new Point((int) xi, (int) yi);
+			}
+			return null;
+		}
+
+		// Intersect a line and a DesktopWindowRect
+		private Point intersection(int x1,int y1,int x2,int y2, DesktopWindowRect rect) {
+			Point bottom = intersection(x1, y1, x2, y2, rect.getX(), rect.getY(), rect.getX() + rect.getHeight(), rect.getY());
+			if (bottom != null)
+				return bottom;
+
+			Point right = intersection(x1, y1, x2, y2, rect.getX() + rect.getWidth(), rect.getY(), rect.getX() + rect.getWidth(), rect.getY() + rect.getHeight());
+			if (right != null)
+				return right;
+
+			Point top = intersection(x1, y1, x2, y2, rect.getX(), rect.getY() + rect.getHeight(), rect.getX() + rect.getWidth(), rect.getY() + rect.getHeight());
+			if (top != null)
+				return top;
+
+			Point left = intersection(x1, y1, x2, y2, rect.getX(), rect.getY(), rect.getX(), rect.getY() + rect.getHeight());
+			if (left != null)
+				return left;
+
+			return null;
+		}
+
+		
+		/**
+		 * Hovers this menuItem
+		 */
+		public void hover() {
+			List<ModifierPressed> alist = new ArrayList<ModifierPressed>();
+			alist.add(ModifierPressed.NONE);
+			systemInputManager.mouseMove(getCenterLocation(), MouseButton.LEFT, alist);
+		}
+
+
+		public String toFullString() {
+			return "QuickWidget\n" +
+			  "       Widget name: " + (getActionName() != null ? getActionName() : getText()) + "\n"
+		//	+ "       type: " + getType()  + "\n" // TODO: FIXME
+			+ "    visible: " + isVisible() + "\n"
+			+ "       text: " + getText() + "\n"
+			+ "    enabled: " + isEnabled() + "\n"
+			+ "          x: " + getRect().getX() + "\n"
+			+ "          y: " + getRect().getY() + "\n"
+			+ "      width: " + getRect().getWidth() + "\n"
+			+ "     height: " + getRect().getHeight() + " \n";
+		}
+
+		public Object getMenu() {
+			return menu;
+		}
+}
+
+
+

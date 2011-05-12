@@ -226,7 +226,7 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 		List<QuickMenu> menuList = new LinkedList<QuickMenu>();
 
 		for (QuickMenuInfo menuInfo : menuInfoList) {
-			menuList.add(new QuickMenu(systemInputManager, menuInfo));
+			menuList.add(new QuickMenu(menuInfo, desktopUtils, systemInputManager));
 		}
 		return menuList;
 	}
@@ -248,7 +248,7 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 		List<QuickMenuInfo> menus = getQuickMenuInfoList();
 		for (QuickMenuInfo info : menus) {
 			for (QuickMenuItemInfo infoItem : info.getMenuItemListList()) {
-				QuickMenuItem item = new QuickMenuItem(infoItem, info.getMenuId().getMenuName(), systemInputManager);
+				QuickMenuItem item = new QuickMenuItem(infoItem, info.getMenuId().getMenuName(), desktopUtils, systemInputManager);
 				list.add(item);
 			}
 		}
@@ -311,7 +311,7 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 		buildPayload(response, builder);
 		QuickMenuInfo info = builder.build();
 		
-		return new QuickMenu(systemInputManager, info);
+		return new QuickMenu(info, desktopUtils, systemInputManager);
 	}
 	
 	
@@ -379,7 +379,7 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 			List<QuickMenuItem> itemList = menu.getItemList();
 			for (QuickMenuItem item : itemList) {
 				
-				if (item.getShortCut().equals(shortcut))
+				if (item.getShortcut().equals(shortcut))
 					return item;
 			}
 		}
