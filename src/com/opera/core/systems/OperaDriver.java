@@ -456,7 +456,6 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
     }
 
     public WebDriver frame(String frameName) {
-      debugger.resetFramePath();
       debugger.changeRuntime(frameName);
       return OperaDriver.this;
     }
@@ -686,9 +685,12 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
 
   private class OperaOptions implements Options {
     public void addCookie(Cookie cookie) {
-      if (cookie.getExpiry() == null) cookie = new Cookie(cookie.getName(),
-          cookie.getValue(), cookie.getDomain(), cookie.getPath(), new Date(
-              new Date().getTime() + (10 * 365 * 24 * 60 * 60 * 1000)), false);
+      if (cookie.getExpiry() == null) {
+        cookie = new Cookie(cookie.getName(), cookie.getValue(),
+            cookie.getDomain(), cookie.getPath(), new Date(
+            new Date().getTime() + (10 * 365 * 24 * 60 * 60 * 1000)), false);
+      }
+
       debugger.executeJavascript("document.cookie='" + cookie.toString() + "'",
           false);
     }
