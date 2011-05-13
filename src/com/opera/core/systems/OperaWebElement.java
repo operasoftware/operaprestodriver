@@ -244,7 +244,11 @@ public class OperaWebElement implements RenderedWebElement, SearchContext,
       return callMethod("locator.index");
     }
 
-    return callMethod("locator.getAttribute('" + attribute + "')");
+    if (lcAttribute == "value") {
+      return callMethod("locator.value");
+    } else {
+      return callMethod("locator.getAttribute('" + attribute + "')");
+    }
   }
 
   /**
