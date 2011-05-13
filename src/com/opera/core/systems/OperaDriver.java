@@ -374,7 +374,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
    * from the web server.
    */
   public String getPageSource() {
-    return debugger.executeJavascript("return document.documentElement.outerHTML");
+    return debugger.executeJavascript("return document.documentElement.outerHTML || (typeof window.XMLSerializer != 'undefined') ? (new window.XMLSerializer()).serializeToString(document) : ''");
   }
 
   public String getTitle() {
