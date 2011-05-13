@@ -596,6 +596,14 @@ public class OperaWebElement implements RenderedWebElement, SearchContext,
           + "if(el.tagName.toLowerCase() == 'option') {\n"
             // If this is a <option>, recurse up to its parent <select>
             + "return d(el.parentNode);\n"
+            // Map is shown iff image that uses it is shown.
+          + "} else if (el.tagName.toLowerCase() == 'map') {\n"
+            + "if (!el.name) return false;\n"
+            + "var image = el.ownerDocument.evaluate('//*[@usemap = \"#'+ el.name +'\"]', el.ownerDocument, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;\n"
+            + "return true;"
+            + "return !!image && d(image);\n"
+          + "} else if (el.tagName.toLowerCase() == 'area') {\n"
+            + "return d(el.parentNode);\n"
           + "}\n"
           + "\n"
           + "el.scrollIntoView();\n"
