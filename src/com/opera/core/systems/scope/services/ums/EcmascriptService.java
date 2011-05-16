@@ -435,17 +435,8 @@ public class EcmascriptService extends AbstractEcmascriptService implements
     }
   }
 
-  public List<Integer> examineObjects(Integer objectId) {
-    ExamineObjectsArg.Builder builder = ExamineObjectsArg.newBuilder();
-    builder.setExaminePrototypes(false);
-    builder.setRuntimeID(getRuntimeId());
-    builder.addObjectList(objectId);
-    Response response = executeCommand(ESCommand.EXAMINE_OBJECTS, builder);
-
-    ObjectList.Builder objListBuilder = ObjectList.newBuilder();
-    buildPayload(response, objListBuilder);
-    ObjectList list = objListBuilder.build();
-
+  public List<Integer> examineObjects(Integer id) {
+    ObjectList list = getObjectList(id);
     List<Integer> ids = new ArrayList<Integer>();
     List<Property> objects = list.getPrototypeListList().get(0).getObjectListList().get(
         0).getPropertyListList();
@@ -552,5 +543,16 @@ public class EcmascriptService extends AbstractEcmascriptService implements
     return (runtimes.isEmpty()) ? null : runtimes.get(0);
   }
 
+  private ObjectList getObjectList(Integer id) {
+    ExamineObjectsArg.Builder builder = ExamineObjectsArg.newBuilder();
+    builder.setExaminePrototypes(false);
+    builder.setRuntimeID(getRuntimeId());
+    builder.addObjectList(id);
+    Response response = executeCommand(ESCommand.EXAMINE_OBJECTS, builder);
+
+    ObjectList.Builder objListBuilder = ObjectList.newBuilder();
+    buildPayload(response, objListBuilder);
+    return objListBuilder.build();
+  }
 
 }

@@ -460,9 +460,9 @@ public class EcmaScriptDebugger extends AbstractEcmascriptService implements
   public List<Integer> examineObjects(Integer id) {
     ObjectList list = getObjectList(id);
     List<Integer> ids = new ArrayList<Integer>();
-    List<Property> properties = list.getObjectList(0).getPropertyListList();
-    for (Property property : properties) {
-      if (property.getType().equals("object")) ids.add(property.getObjectValue().getObjectID());
+    List<Property> objects = list.getObjectList(0).getPropertyListList();
+    for (Property obj : objects) {
+      if (obj.getType().equals("object")) ids.add(obj.getObjectValue().getObjectID());
     }
 
     return ids;
@@ -549,15 +549,15 @@ public class EcmaScriptDebugger extends AbstractEcmascriptService implements
   }
 
   private ObjectList getObjectList(Integer id) {
-    ExamineList.Builder examine = ExamineList.newBuilder();
-    examine.setRuntimeID(getRuntimeId());
-    examine.addObjectList(id);
+    ExamineList.Builder builder = ExamineList.newBuilder();
+    builder.setRuntimeID(getRuntimeId());
+    builder.addObjectList(id);
     Response response = executeCommand(ESDebuggerCommand.EXAMINE_OBJECTS,
-        examine);
+        builder);
 
-    ObjectList.Builder builder = ObjectList.newBuilder();
-    buildPayload(response, builder);
-    return builder.build();
+    ObjectList.Builder objListBuilder = ObjectList.newBuilder();
+    buildPayload(response, objListBuilder);
+    return objListBuilder.build();
   }
 
 }
