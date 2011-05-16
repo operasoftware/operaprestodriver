@@ -146,7 +146,6 @@ public class EcmascriptService extends AbstractEcmascriptService implements
   }
 
   public Object scriptExecutor(String script, Object... params) {
-    recover();
 
     processQueues();
 
@@ -221,8 +220,6 @@ public class EcmascriptService extends AbstractEcmascriptService implements
   }
 
   private Response eval(String using, Variable... variables) {
-    // Always recover TODO: this slows things down lots
-    recover();
     return eval(using, getRuntimeId(), variables);
   }
 
