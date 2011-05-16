@@ -135,7 +135,6 @@ public class UmsEventParser {
     	QuickMenuID.Builder closedQMBuilder = QuickMenuID.newBuilder(); 
       	buildPayload(event, closedQMBuilder);
       	QuickMenuID menuId = closedQMBuilder.build();
-      	System.out.println("eventParser On Quick Menu Closed");
       	eventHandler.onQuickMenuClosed(menuId);
       	break;
       default:
