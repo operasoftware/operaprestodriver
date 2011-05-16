@@ -532,8 +532,14 @@ public class StpConnection implements SocketListener {
     case 4:// error
       Error error = Error.parseFrom(payload);
       logger.fine("RECV ERROR: " + error.toString());
-      if (error.getService().equals("ecmascript-debugger")
-          && error.getStatus() == Status.INTERNAL_ERROR.getCode()) {
+
+      String service = error.getService();
+      int status = error.getStatus();
+
+      // We get exceptions when, in the ecmascript services, we use a runtime
+      // that doesn't exist. We can ignore these exceptions and carry on.
+      if ((service.equals("ecmascript-debugger") && status == Status.INTERNAL_ERROR.getCode()) ||
+          (service.equals("ecmascript") && status == Status.BAD_REQUEST.getCode())) {
         signalResponse(error.getTag(), null);
       } else {
         logger.log(Level.SEVERE, "Error : {0}", error.toString());
