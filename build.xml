@@ -165,7 +165,7 @@
   </target>
 
   <target name="example" description="Run the simple example" depends="jar">
-    <javac>
+    <javac debug="true">
       <classpath refid="test.classpath.path" />
       <src path="examples/simple" />
     </javac>
