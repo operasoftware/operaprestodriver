@@ -231,17 +231,9 @@ public class OperaExec extends AbstractService implements IOperaExec {
 
   public void key(String key, boolean up) {
     if (up) {
-      if (!keys.contains(key)) {
-        throw new WebDriverException("Impossible to release key " + key
-            + " while it's not down");
-      }
       action("_keyup", key);
       keys.remove(key);
     } else {
-      if (keys.contains(key)) {
-        throw new WebDriverException("Impossible to push " + key
-            + " while it's down");
-      }
       action("_keydown", key);
       keys.add(key);
     }
