@@ -257,12 +257,6 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 	//  Menu
 
 	public List<QuickMenu> getQuickMenuList() {
-		/*Response response = executeCommand(DesktopWindowManagerCommand.LIST_QUICK_MENUS, null);
-		QuickMenuList.Builder builder = QuickMenuList.newBuilder();
-		builder.clear();
-		buildPayload(response, builder);
-		QuickMenuList list = builder.build();*/
-
 		List<QuickMenuInfo> menuInfoList = getQuickMenuInfoList();//list.getMenuListList();
 		List<QuickMenu> menuList = new LinkedList<QuickMenu>();
 
@@ -273,7 +267,6 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 		return menuList;
 	}
 	
-	// TODO: Call this from the above
 	private List<QuickMenuInfo> getQuickMenuInfoList() {
 		Response response = executeCommand(DesktopWindowManagerCommand.LIST_QUICK_MENUS, null);
 		QuickMenuList.Builder builder = QuickMenuList.newBuilder();
@@ -302,17 +295,25 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 	
 	public QuickMenu getQuickMenu(String menuName) {
 		
-		QuickMenuID.Builder idBuilder = QuickMenuID.newBuilder();
+		/*QuickMenuID.Builder idBuilder = QuickMenuID.newBuilder();
 		idBuilder.clearMenuName();
 		idBuilder.setMenuName(menuName);
-		
 		Response response = executeCommand(DesktopWindowManagerCommand.GET_QUICK_MENU, idBuilder);
 		QuickMenuInfo.Builder builder = QuickMenuInfo.newBuilder();
 		builder.clear();
 		buildPayload(response, builder);
 		QuickMenuInfo info = builder.build();
-		
 		return new QuickMenu(info, desktopUtils, systemInputManager);
+		*/
+
+		// Using ListMenus. GetMenu will raise error 
+		List<QuickMenuInfo> list = getQuickMenuInfoList();
+		for (QuickMenuInfo info : list) {
+			if (info.getMenuId().getMenuName().equals(menuName)) {
+				return new QuickMenu(info, desktopUtils, systemInputManager);		
+			}
+		}
+		return null;
 	}
 	
 	// Functions to get a specific QuickMenuItem -----------
