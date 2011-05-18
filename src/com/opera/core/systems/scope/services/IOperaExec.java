@@ -84,6 +84,13 @@ public interface IOperaExec {
   void key(String key, boolean up);
 
   /**
+   * Whether the given key is currently pressed down
+   * @param key
+   * @return true if the key is currently down, false if not.
+   */
+  boolean keyIsPressed(String key);
+
+  /**
    * Release all the pressed keys
    */
   void releaseKeys();

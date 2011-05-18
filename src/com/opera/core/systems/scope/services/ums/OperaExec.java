@@ -239,6 +239,10 @@ public class OperaExec extends AbstractService implements IOperaExec {
     }
   }
 
+  public boolean keyIsPressed(String key) {
+    return keys.contains(key);
+  }
+
   public void releaseKeys() {
     for (String key : keys) {
       this.key(key, true);
