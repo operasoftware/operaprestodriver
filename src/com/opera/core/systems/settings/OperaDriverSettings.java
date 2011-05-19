@@ -30,11 +30,6 @@ public class OperaDriverSettings {
   private int operaLauncherListeningPort = 9999;
 
   private String operaBinaryLocation;
-<<<<<<< HEAD
-  private String operaBinaryEnvironmentArguments = "";
-=======
-  private String operaBinaryEnvironmentArguments = System.getenv("OPERA_ARGS");
->>>>>>> 631ea1d92dd3b994de9652143610c7a6bf158953
   private String operaBinaryArguments = "";
 
   private Integer operaLauncherXvfbDisplay; // could be null
@@ -105,11 +100,7 @@ public class OperaDriverSettings {
   }
 
   public String getOperaBinaryArguments() {
-    if (operaBinaryEnvironmentArguments != null && operaBinaryEnvironmentArguments.length() > 0) {
-      return operaBinaryEnvironmentArguments + " " + operaBinaryArguments;
-    } else {
-      return operaBinaryArguments;
-    }
+    return operaBinaryArguments;
   }
 
   /**
