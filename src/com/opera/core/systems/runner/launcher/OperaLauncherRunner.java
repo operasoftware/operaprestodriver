@@ -92,7 +92,7 @@ public class OperaLauncherRunner implements OperaRunner {
 
       /*
        * We read in environmental variable OPERA_ARGS in addition to existing
-       * passe down arguments from OperaDriverSettings.  These are combined
+       * arguments passed down from OperaDriverSettings. These are combined
        * and sent to the browser.
        *
        * Note that this is a deviation from the principle of arguments normally
