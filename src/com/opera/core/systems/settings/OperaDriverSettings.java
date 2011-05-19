@@ -15,7 +15,6 @@ limitations under the License.
 */
 package com.opera.core.systems.settings;
 
-import com.opera.core.systems.OperaPaths;
 
 /**
  * Stores settings for OperaDriver.
