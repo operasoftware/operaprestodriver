@@ -21,6 +21,7 @@ import java.util.List;
 
 import com.opera.core.systems.scope.AbstractService;
 import com.opera.core.systems.scope.DesktopWindowManagerCommand;
+import com.opera.core.systems.OperaUIElement;
 import com.opera.core.systems.QuickMenu;
 import com.opera.core.systems.QuickMenuItem;
 import com.opera.core.systems.QuickWidget;
@@ -320,7 +321,7 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 	// These should be unique given one of action, submenu, text(?), shortcut
 	// and unique within a single menu given either shortcutletter or pos
 	
-	public QuickMenuItem getQuickMenuItemByAction(String action) {
+	public OperaUIElement getQuickMenuItemByAction(String action) {
 		List<QuickMenuItem> itemList = getQuickMenuItemList();
 		for (QuickMenuItem item : itemList) {
 			if (item.getActionName().equals(action))
@@ -329,7 +330,7 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 		return null;
 	}
 	
-	public QuickMenuItem getQuickMenuItemBySubmenu(String submenu) {
+	public OperaUIElement getQuickMenuItemBySubmenu(String submenu) {
 		List<QuickMenu> menus = getQuickMenuList();
 		for (QuickMenu menu : menus) {
 			List<QuickMenuItem> itemList = menu.getItemList();
@@ -341,7 +342,7 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 		return null;
 	}
 	
-	public QuickMenuItem getQuickMenuItemByText(String text) {
+	public OperaUIElement getQuickMenuItemByText(String text) {
 		List<QuickMenu> menus = getQuickMenuList();
 		for (QuickMenu menu : menus) {
 			List<QuickMenuItem> itemList = menu.getItemList();
@@ -353,7 +354,7 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 		return null;
 	}
 	
-	public QuickMenuItem getQuickMenuItemByAccKey(String key, String menuName) {
+	public OperaUIElement getQuickMenuItemByAccKey(String key, String menuName) {
 		List<QuickMenu> menus = getQuickMenuList();
 		for (QuickMenu menu : menus) {
 			List<QuickMenuItem> itemList = menu.getItemList();
@@ -365,7 +366,7 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 		return null;
 	}
 	
-	public QuickMenuItem getQuickMenuItemByShortcut(String shortcut){
+	public OperaUIElement getQuickMenuItemByShortcut(String shortcut){
 		List<QuickMenu> menus = getQuickMenuList();
 		for (QuickMenu menu : menus) {
 			List<QuickMenuItem> itemList = menu.getItemList();
@@ -378,7 +379,7 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 	}
 
 	
-	public QuickMenuItem getQuickMenuItemByPosition(int row, String menuName) {
+	public OperaUIElement getQuickMenuItemByPosition(int row, String menuName) {
 		List<QuickMenu> menus = getQuickMenuList();
 		for (QuickMenu menu : menus) {
 			List<QuickMenuItem> itemList = menu.getItemList();
@@ -390,7 +391,7 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 		return null;
 	}
 
-	public QuickMenuItem getQuickMenuItemByName(String name) {
+	public OperaUIElement getQuickMenuItemByName(String name) {
 		List<QuickMenu> menus = getQuickMenuList();
 		for (QuickMenu menu : menus) {
 			List<QuickMenuItem> itemList = menu.getItemList();

@@ -14,17 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */package com.opera.core.systems;
 
-import java.awt.Dimension;
-import java.awt.Point;
-import java.util.List;
-import java.util.ArrayList;
 
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo.QuickWidgetType;
-import com.opera.core.systems.scope.protos.SystemInputProtos.ModifierPressed;
-import com.opera.core.systems.scope.protos.SystemInputProtos.MouseInfo.MouseButton;
 import com.opera.core.systems.scope.services.IDesktopUtils;
 import com.opera.core.systems.scope.services.ums.SystemInputManager;
 
@@ -34,11 +28,11 @@ import com.opera.core.systems.scope.services.ums.SystemInputManager;
  * @author Karianne Ekern.
  *
  */
-public class QuickMenuItem {
+public class QuickMenuItem extends OperaUIElement {
 		private final QuickMenuItemInfo info;
 		private final String menu;
-		private SystemInputManager systemInputManager;
-		private final IDesktopUtils desktopUtils;
+		//SystemInputManager systemInputManager;
+		//private final IDesktopUtils desktopUtils;
 		
 		
 		/**
@@ -47,10 +41,11 @@ public class QuickMenuItem {
 		 * @param info QuickMenuItemInfo of the menu item
 		 */
 		public QuickMenuItem(QuickMenuItemInfo info, String menu,IDesktopUtils desktopUtils, SystemInputManager systemInputManager) {
+			super(systemInputManager, desktopUtils);
 	        this.info = info;
 	        this.menu = menu;
-	        this.systemInputManager = systemInputManager;
-	        this.desktopUtils = desktopUtils;
+	        //this.systemInputManager = systemInputManager;
+	        //this.desktopUtils = desktopUtils;
 	    }
 
 		/**
@@ -97,7 +92,7 @@ public class QuickMenuItem {
 	     */
 		public String getText() {
 			// TODO: Should remove &?
-			return desktopUtils.removeCR(info.getText());
+			return getDesktopUtils().removeCR(info.getText());
 		}
 		
 
@@ -169,22 +164,6 @@ public class QuickMenuItem {
 		// TODO: FIXME: ALl those functions just using the rect can be moved to common
 		// between menu, menuitem and widget
 		
-		/**
-		 * @return Point describing location of this menuitem
-		 */
-		public Point getLocation() {
-			DesktopWindowRect rect = getRect();
-			return new Point(rect.getX(), rect.getY());
-		}
-
-		/**
-		 * @return size of menuitem
-		 */
-		public Dimension getSize() {
-			DesktopWindowRect rect = getRect();
-			return new Dimension(rect.getWidth(), rect.getHeight());
-		}
-
 		@Override
 		public String toString() {
 			//TODO: FIXME: What field to use if no action?
@@ -192,28 +171,6 @@ public class QuickMenuItem {
 			return "QuickWidget " + getActionName();
 		}
 		
-		// Needs cleaning up!!
-		public void click(MouseButton button, int numClicks, List<ModifierPressed> modifiers) {
-			systemInputManager.click(getCenterLocation(), button, numClicks, modifiers);
-		}
-
-		private Point getCenterLocation() {
-			DesktopWindowRect rect = getRect();
-			Point topLeft = getLocation();
-			Point center = new Point(topLeft.x + rect.getWidth() / 2, topLeft.y + rect.getHeight() / 2);
-			return new Point(topLeft.x + rect.getWidth() / 2, topLeft.y + rect.getHeight() / 2);
-		}
-
-		/**
-		 * Hovers this menuItem
-		 */
-		public void hover() {
-			List<ModifierPressed> alist = new ArrayList<ModifierPressed>();
-			alist.add(ModifierPressed.NONE);
-			systemInputManager.mouseMove(getCenterLocation(), MouseButton.LEFT, alist);
-		}
-
-
 		public String toFullString() {
 			return "QuickMenuItem\n" +
 			  "       Item name: " + getName() + "\n"
@@ -229,17 +186,7 @@ public class QuickMenuItem {
 			return menu;
 		}
 
-		// Will be moved to common superclass
-		/**
-	     * Checks if widget text equals the text specified by the given string id
-	     *
-	     * @return true if text specified by stringId equals widget text
-	     */
-		public boolean verifyText(String stringId) {
-			String text = desktopUtils.getString(stringId, true /* skipAmpersand */);
-			
-			return getText().equals(text);
-		}
+		
 }
 
 

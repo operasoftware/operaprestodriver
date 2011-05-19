@@ -39,6 +39,7 @@ public class QuickMenu {
 		private final QuickMenuInfo info;
 		private final IDesktopUtils desktopUtils;
 		private final SystemInputManager systemInputManager;
+		// Would need id to be able to distinguish two main menus in different windows
 		//private final int parentWindowId;
 		
 		// The list of items is not initialized till the first call to get the list

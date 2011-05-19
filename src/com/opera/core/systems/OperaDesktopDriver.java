@@ -383,7 +383,7 @@ public class OperaDesktopDriver extends OperaDriver {
 	 * @param name - name of action or submenu of item
 	 * @return
 	 */
-	public QuickMenuItem getQuickMenuItemByAction(String action) {
+	public OperaUIElement getQuickMenuItemByAction(String action) {
 		return desktopWindowManager.getQuickMenuItemByAction(action);
 	}
 
@@ -392,11 +392,11 @@ public class OperaDesktopDriver extends OperaDriver {
 	 * @param name - name of action or submenu of item
 	 * @return
 	 */
-	public QuickMenuItem getQuickMenuItemBySubmenu(String submenu) {
+	public OperaUIElement getQuickMenuItemBySubmenu(String submenu) {
 		return desktopWindowManager.getQuickMenuItemBySubmenu(submenu);
 	}
 	
-	public QuickMenuItem getQuickMenuItemByName(String name) {
+	public OperaUIElement getQuickMenuItemByName(String name) {
 		return desktopWindowManager.getQuickMenuItemByName(name);
 	}
 	
@@ -405,7 +405,7 @@ public class OperaDesktopDriver extends OperaDriver {
 	 * @param text - text of the item
 	 * @return
 	 */
-	public QuickMenuItem getQuickMenuItemByText(String text) {
+	public OperaUIElement getQuickMenuItemByText(String text) {
 		return desktopWindowManager.getQuickMenuItemByText(text);
 	}
 
@@ -415,7 +415,7 @@ public class OperaDesktopDriver extends OperaDriver {
 	 * @param parent - name of menu item is in
 	 * @return
 	 */
-	public QuickMenuItem getQuickMenuItemByPosition(int row, String parentName) {
+	public OperaUIElement getQuickMenuItemByPosition(int row, String parentName) {
 		return desktopWindowManager.getQuickMenuItemByPosition(row, parentName);
 	}
 	
@@ -425,7 +425,7 @@ public class OperaDesktopDriver extends OperaDriver {
 	 * @param parent - name of menu item is in
 	 * @return
 	 */
-	public QuickMenuItem getQuickMenuItemByAccKey(String key, String menuName) {
+	public OperaUIElement getQuickMenuItemByAccKey(String key, String menuName) {
 		return desktopWindowManager.getQuickMenuItemByAccKey(key, menuName);
 	}
 	
@@ -435,12 +435,12 @@ public class OperaDesktopDriver extends OperaDriver {
 	 * @param parent - name of menu item is in
 	 * @return
 	 */
-	public QuickMenuItem getQuickMenuItemByShortcut(String shortcut) {
+	public OperaUIElement getQuickMenuItemByShortcut(String shortcut) {
 		return desktopWindowManager.getQuickMenuItemByShortcut(shortcut);
 	}
 	
 	
-	public QuickMenuItem getQuickMenuItemByStringId(String stringId) {
+	public OperaUIElement getQuickMenuItemByStringId(String stringId) {
 		String text = desktopUtils.getString(stringId, true);
 		return desktopWindowManager.getQuickMenuItemByText(text);
 	}

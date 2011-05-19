@@ -18,6 +18,7 @@ package com.opera.core.systems.scope.services;
 
 import java.util.List; //import java.util.concurrent.atomic.AtomicInteger;
 
+import com.opera.core.systems.OperaUIElement;
 import com.opera.core.systems.QuickMenu;
 import com.opera.core.systems.QuickMenuItem;
 import com.opera.core.systems.QuickWidget;
@@ -155,22 +156,22 @@ public interface IDesktopWindowManager {
 	QuickMenu getQuickMenu(String menuName);
 
 	// TODO: DOCUMENT
-	QuickMenuItem getQuickMenuItemByAction(String action);
+	OperaUIElement getQuickMenuItemByAction(String action);
 
-	QuickMenuItem getQuickMenuItemByText(String text);
+	OperaUIElement getQuickMenuItemByText(String text);
 
-	QuickMenuItem getQuickMenuItemByPosition(int row, String parentName);
+	OperaUIElement getQuickMenuItemByPosition(int row, String parentName);
 
-	QuickMenuItem getQuickMenuItemByAccKey(String key, String parentName);
+	OperaUIElement getQuickMenuItemByAccKey(String key, String parentName);
 
-	QuickMenuItem getQuickMenuItemByShortcut(String shortcut);
+	OperaUIElement getQuickMenuItemByShortcut(String shortcut);
 
-	QuickMenuItem getQuickMenuItemBySubmenu(String submenu);
+	OperaUIElement getQuickMenuItemBySubmenu(String submenu);
 
 	List<QuickMenu> getQuickMenuList();
 
 	List<QuickMenuItem> getQuickMenuItemList();
 
-	QuickMenuItem getQuickMenuItemByName(String name);
+	OperaUIElement getQuickMenuItemByName(String name);
 	
 }
