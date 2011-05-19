@@ -17,6 +17,7 @@ limitations under the License.
 package com.opera.core.systems;
 
 import java.io.FileOutputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -334,6 +335,13 @@ public class OperaWebElement implements RenderedWebElement, SearchContext,
   }
 
   public void sendKeys(CharSequence... keysToSend) {
+    // A list of keys that should be held down, instead of pressed
+    ArrayList<String> holdKeys = new ArrayList<String>();
+    holdKeys.add(OperaKeys.SHIFT.getValue());
+    holdKeys.add(OperaKeys.CONTROL.getValue());
+    // Keys that have been held down, and need to be released
+    ArrayList<String> heldKeys = new ArrayList<String>();
+
     if (OperaFlags.ENABLE_CHECKS) {
 
       long start = System.currentTimeMillis();
@@ -358,10 +366,32 @@ public class OperaWebElement implements RenderedWebElement, SearchContext,
       click();
     } else executeMethod("locator.focus()");
 
+    // This code is a bit ugly. Because "special" keys can be sent either as
+    // an individual argument, or in the middle of a string of "normal"
+    // characters, we have to loop through the string and check each against
+    // a list of special keys.
+
 		parent.getScopeServices().captureOperaIdle();
     for (CharSequence seq : keysToSend) {
-      if (seq instanceof Keys) execService.key(OperaKeys.get(((Keys) seq).name()));
-      else if (seq.toString().equals("\n")) execService.key("enter");
+      if (seq instanceof Keys) {
+        String key = OperaKeys.get(((Keys) seq).name());
+        // Check if this is a key we hold down, and haven't already pressed,
+        // and press, but don't release it. That's done at the end of this
+        // method.
+        if (holdKeys.contains(key) && !heldKeys.contains(key) && !execService.keyIsPressed(key)) {
+          execService.key(key, false);
+          heldKeys.add(key);
+        } else if (key == "null") {
+          for (String hkey : heldKeys) {
+            execService.key(hkey, true);
+          }
+        } else {
+          execService.key(key);
+        }
+      }
+      else if (seq.toString().equals("\n")) {
+        execService.key("enter");
+      }
       else {
         // We need to check each character to see if it is a "special" key
         StringBuffer buffer = new StringBuffer();
@@ -379,8 +409,19 @@ public class OperaWebElement implements RenderedWebElement, SearchContext,
               execService.type(buffer.toString());
               buffer.delete(0, buffer.length());
             }
-            // TODO check for shift, and hold it down
-            execService.key(OperaKeys.get(keyName));
+
+            String key = OperaKeys.get(keyName);
+            // FIXME: Code repeated from above.
+            if (holdKeys.contains(key) && !heldKeys.contains(key) && !execService.keyIsPressed(key)) {
+              execService.key(key, false);
+              heldKeys.add(key);
+            } else if (key == "null") {
+              for (String hkey : heldKeys) {
+                execService.key(hkey, true);
+              }
+            } else {
+              execService.key(key);
+            }
           }
         }
 
@@ -390,6 +431,13 @@ public class OperaWebElement implements RenderedWebElement, SearchContext,
         }
       }
     }
+
+    if (heldKeys.size() > 0) {
+      for (String key : heldKeys) {
+        execService.key(key, true);
+      }
+    }
+
     parent.waitForLoadToComplete();
     // executeMethod("locator.blur()");
   }
