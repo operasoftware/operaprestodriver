@@ -134,8 +134,9 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
           settings.setOperaLauncherBinary(paths.launcherPath());
         }
 
-        if (settings.getOperaBinaryLocation() != null) this.operaRunner = new OperaLauncherRunner(
-            this.settings);
+        if (settings.getOperaBinaryLocation() != null) {
+          this.operaRunner = new OperaLauncherRunner(this.settings);
+        }
       }
     } else {
       // Create a default settings object
