@@ -113,6 +113,10 @@ public class OperaDriverSettings {
    * @param operaBinaryArguments The arguments to pass, separated by spaces.
    */
   public void setOperaBinaryArguments(String operaBinaryArguments) {
+    if (operaBinaryArguments == null) {
+        operaBinaryArguments = "";
+    }
+
     this.operaBinaryArguments = operaBinaryArguments;
   }
 
