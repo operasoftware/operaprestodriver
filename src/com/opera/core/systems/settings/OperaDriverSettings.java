@@ -15,6 +15,8 @@ limitations under the License.
 */
 package com.opera.core.systems.settings;
 
+import com.opera.core.systems.OperaPaths;
+
 /**
  * Stores settings for OperaDriver.
  *
@@ -28,7 +30,7 @@ public class OperaDriverSettings {
   private int operaLauncherListeningPort = 9999;
 
   private String operaBinaryLocation;
-  private String operaBinaryArguments = "";
+  private String operaBinaryArguments = System.getenv("OPERA_ARGS");
 
   private Integer operaLauncherXvfbDisplay; // could be null
 
@@ -98,7 +100,11 @@ public class OperaDriverSettings {
   }
 
   public String getOperaBinaryArguments() {
-    return operaBinaryArguments;
+    if (operaBinaryArguments != null && operaBinaryArguments.length() > 0) {
+      return operaBinaryArguments;
+    } else {
+      return "";
+    }
   }
 
   /**
@@ -111,8 +117,7 @@ public class OperaDriverSettings {
    * @param operaBinaryArguments The arguments to pass, separated by spaces.
    */
   public void setOperaBinaryArguments(String operaBinaryArguments) {
-    if (operaBinaryArguments == null) operaBinaryArguments = "";
-    this.operaBinaryArguments = operaBinaryArguments;
+    this.operaBinaryArguments += " " + operaBinaryArguments;
   }
 
   public Integer getOperaLauncherXvfbDisplay() {
