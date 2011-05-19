@@ -90,10 +90,9 @@ public class OperaLauncherRunner implements OperaRunner {
       stringArray.add("-bin");
       stringArray.add(this.settings.getOperaBinaryLocation());
 
-      StringTokenizer tokanizer = new StringTokenizer(
-          this.settings.getOperaBinaryArguments(), " ");
-      while (tokanizer.hasMoreTokens()) {
-        stringArray.add(tokanizer.nextToken());
+      StringTokenizer tokenizer = new StringTokenizer(this.settings.getOperaBinaryArguments(), " ");
+      while (tokenizer.hasMoreTokens()) {
+        stringArray.add(tokenizer.nextToken());
       }
 
       logger.fine("Launcher arguments: " + stringArray);
@@ -103,36 +102,37 @@ public class OperaLauncherRunner implements OperaRunner {
       if (!stringArray.contains("-autotestmode")) stringArray.add("-autotestmode");
 
       launcherRunner = new OperaLauncherBinary(
-          this.settings.getOperaLauncherBinary(),
-          stringArray.toArray(new String[stringArray.size()]));
+        this.settings.getOperaLauncherBinary(),
+        stringArray.toArray(new String[stringArray.size()])
+      );
     }
 
-    logger.fine("Waiting for Opera Launcher connection on port "
-        + this.settings.getOperaLauncherListeningPort());
+    logger.fine("Waiting for Opera Launcher connection on port " + this.settings.getOperaLauncherListeningPort());
+
     try {
       // setup listener server
-      ServerSocket listenerServer = new ServerSocket(
-          settings.getOperaLauncherListeningPort());
+      ServerSocket listenerServer = new ServerSocket(settings.getOperaLauncherListeningPort());
       listenerServer.setSoTimeout((int) OperaIntervals.LAUNCHER_TIMEOUT.getValue());
+
       // try to connect
       Socket new_socket = listenerServer.accept();
       new_socket.setSoTimeout((int) OperaIntervals.LAUNCHER_TIMEOUT.getValue());
       launcherProtocol = new OperaLauncherProtocol(new_socket);
+
       // we did it!
-      logger.fine("Connected with Opera Launcher on port "
-          + settings.getOperaLauncherListeningPort());
+      logger.fine("Connected with Opera Launcher on port " + settings.getOperaLauncherListeningPort());
       listenerServer.close();
+
       // Do the handshake!
       LauncherHandshakeRequest.Builder request = LauncherHandshakeRequest.newBuilder();
       ResponseEncapsulation res = launcherProtocol.sendRequest(
-          MessageType.MSG_HELLO, request.build().toByteArray());
+      MessageType.MSG_HELLO, request.build().toByteArray());
+
       // Are we happy?
       if (res.IsSuccess()) {
-        logger.fine("Got opera launcher handshake: "
-            + res.getResponse().toString());
+        logger.fine("Got opera launcher handshake: " + res.getResponse().toString());
       } else {
-        logger.fine("Did not get opera launcher handshake: "
-            + res.getResponse().toString());
+        logger.fine("Did not get opera launcher handshake: " + res.getResponse().toString());
         throw new OperaRunnerException("Did not get opera launcher handshake");
       }
     } catch (SocketTimeoutException e) {
