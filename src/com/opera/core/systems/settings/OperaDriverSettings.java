@@ -30,7 +30,8 @@ public class OperaDriverSettings {
   private int operaLauncherListeningPort = 9999;
 
   private String operaBinaryLocation;
-  private String operaBinaryArguments = System.getenv("OPERA_ARGS");
+  private String operaBinaryEnvironmentArguments = System.getenv("OPERA_ARGS");
+  private String operaBinaryArguments = "";
 
   private Integer operaLauncherXvfbDisplay; // could be null
 
@@ -100,10 +101,10 @@ public class OperaDriverSettings {
   }
 
   public String getOperaBinaryArguments() {
-    if (operaBinaryArguments != null && operaBinaryArguments.length() > 0) {
-      return operaBinaryArguments;
+    if (operaBinaryEnvironmentArguments != null && operaBinaryEnvironmentArguments.length() > 0) {
+      return operaBinaryEnvironmentArguments + " " + operaBinaryArguments;
     } else {
-      return "";
+      return operaBinaryArguments;
     }
   }
 
@@ -117,7 +118,7 @@ public class OperaDriverSettings {
    * @param operaBinaryArguments The arguments to pass, separated by spaces.
    */
   public void setOperaBinaryArguments(String operaBinaryArguments) {
-    this.operaBinaryArguments += " " + operaBinaryArguments;
+    this.operaBinaryArguments = operaBinaryArguments;
   }
 
   public Integer getOperaLauncherXvfbDisplay() {
