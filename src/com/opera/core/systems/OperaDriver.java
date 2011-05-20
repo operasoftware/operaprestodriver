@@ -930,6 +930,11 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
     return (settings.getUseOperaIdle() && isOperaIdleAvailable());
   }
 
+  public void setUseOperaIdle(boolean useIdle)
+  {
+      settings.setUseOperaIdle(useIdle);
+  }
+
   public Object executeScript(String script, Object... args) {
     Object object = debugger.scriptExecutor(script, args);
 
