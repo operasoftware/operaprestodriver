@@ -1,0 +1,51 @@
+syntax = "scope";
+
+service Core
+{
+    option (version) = "1.1";
+
+    /// ...
+
+    /**
+     * Get some details about the browser instance, such as the path to the
+     * running binary and the user-agent.
+     */
+    command GetBrowserInformation(Default) returns (BrowserInformation) = 3;
+}
+
+message BrowserInformation
+{
+    /**
+     * Which Core version this instance is running, e.g. "2.8.119".
+     */
+    required string coreVersion = 1;
+
+    /**
+     * A string which describes the OS, e.g. "Windows NT 6.1".
+     */
+    required string operatingSystem = 2;
+
+    /**
+     * A string which describes the product. For regular desktop bulds
+     * this will be "desktop". Other examples are "mobile" and "gogi".
+     */
+    required string product = 3;
+
+    /**
+     * The full path the currently running binary.
+     */
+    required string binaryPath = 4;
+
+    /**
+     * The User-Agent string. Typically something like:
+     *
+     * Opera/9.80 (Windows NT 6.1; U; en) Presto/2.7.62 Version/11.01
+     */
+    required string userAgent = 5;
+
+    /**
+     * The ID of the process we're currently talking to. Might not be present
+     * if the build does not support retrieving process IDs.
+     */
+    optional uint32 processID = 6;
+}
