@@ -515,13 +515,11 @@ public class WaitState {
 
         case EVENT_QUICK_MENU_CLOSED:
         	if (type == ResponseType.QUICK_MENU_CLOSED) {
-        		
         		// empty stringMatch
         		if (stringMatch != null && stringMatch.length() == 0) {
         			return result;
         		}
         		else {
-            	  ;
                 //logger.fine("EVENT_QUICK_MENU_CLOSED: Name: "
                     //+ result.quickMenuId.getMenuName());
 

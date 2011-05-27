@@ -46,6 +46,8 @@ public abstract class OperaUIElement {
 		DesktopWindowRect rect = getRect();
 		return new Dimension(rect.getWidth(), rect.getHeight());
 	}
+	
+	public abstract String toFullString();
 
 	public void click(MouseButton button, int numClicks, List<ModifierPressed> modifiers) {
 		systemInputManager.click(getCenterLocation(), button, numClicks, modifiers);
