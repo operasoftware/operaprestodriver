@@ -798,4 +798,9 @@ public class OperaDesktopDriver extends OperaDriver {
 	public int getPid() {
 		return desktopUtils.getOperaPid();
 	}
+
+	// Note: Should only be used in launcher mode
+	public boolean isOperaRunning() {
+		return operaRunner != null && isOperaRunning();
+	}
 }
