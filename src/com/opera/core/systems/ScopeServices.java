@@ -36,6 +36,7 @@ import com.opera.core.systems.scope.internal.OperaIntervals;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo;
+import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemID;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo;
 import com.opera.core.systems.scope.protos.EcmascriptProtos.ReadyStateChange;
 import com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeInfo;
@@ -484,9 +485,9 @@ public class ScopeServices implements IConnectionHandler {
 	  waitState.onQuickMenuShown(info);
   }
 
-  public void onQuickMenuItemPressed(QuickMenuItemInfo info) {
-	  logger.fine("QuickMenu shown: menuItem=" + info.getText());
-	  waitState.onQuickMenuItemPressed(info);
+  public void onQuickMenuItemPressed(QuickMenuItemID menuItemID) {
+	  logger.fine("QuickMenu shown: menuItem=" + menuItemID.getMenuText());
+	  waitState.onQuickMenuItemPressed(menuItemID);
   }
 
   // TODO ADD PARAM AGAIN, or just name?

@@ -24,6 +24,7 @@ import com.opera.core.systems.scope.exceptions.CommunicationException;
 import com.opera.core.systems.scope.exceptions.ResponseNotReceivedException;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo;
+import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemID;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo;
 import com.opera.core.systems.scope.protos.UmsProtos.Response;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo;
@@ -83,7 +84,7 @@ public class WaitState {
     DesktopWindowInfo desktopWindowInfo; // No idea if this is right but it will
 	private QuickMenuInfo quickMenuInfo;
 	private QuickMenuID quickMenuId;
-	private QuickMenuItemInfo quickMenuItemInfo;
+	private QuickMenuItemID quickMenuItemID;
 
     // store the data for now, but it seems
     // wasteful
@@ -131,11 +132,11 @@ public class WaitState {
             + id.getMenuName());
       }
 
-    public ResultItem(WaitResult result, QuickMenuItemInfo info) {
+    public ResultItem(WaitResult result, QuickMenuItemID info) {
         this.waitResult = result;
-        this.quickMenuItemInfo = info; // TODO FIXME
+        this.quickMenuItemID = info; // TODO FIXME
         logger.fine("EVENT: " + result.toString() + ", quick_menu_item="
-            + info.getText());
+            + info.getMenuText());
       }
     
 
@@ -327,10 +328,10 @@ public class WaitState {
 	  }
   }
   
-  void onQuickMenuItemPressed(QuickMenuItemInfo info) {
+  void onQuickMenuItemPressed(QuickMenuItemID menuItemID) {
 	  synchronized (lock) {
 		  logger.fine("Event: onQuickMenuItemPressed");
-		  events.add(new ResultItem(WaitResult.EVENT_QUICK_MENU_ITEM_PRESSED, info));
+		  events.add(new ResultItem(WaitResult.EVENT_QUICK_MENU_ITEM_PRESSED, menuItemID));
 		  lock.notify();
 	  }
   }
@@ -559,9 +560,9 @@ public class WaitState {
               }
               else {
                 logger.fine("QUICK_MENU_ITEM_PRESSED: Text: "
-                    + result.quickMenuItemInfo.getText());
+                    + result.quickMenuItemID.getMenuText());
 
-                if (result.quickMenuItemInfo.getText().equals(stringMatch)) {
+                if (result.quickMenuItemID.getMenuText().equals(stringMatch)) {
                 	return result;
                 }
               }
@@ -712,7 +713,7 @@ public class WaitState {
 	  ResultItem item = waitAndParseResult(timeout, 0, menuItemText,
 			  ResponseType.QUICK_MENU_ITEM_PRESSED);
 	  if (item != null) {
-		  return item.quickMenuItemInfo.getText();
+		  return item.quickMenuItemID.getMenuText();
 	  }
 	  return "";
   }

@@ -373,6 +373,14 @@ public class OperaDesktopDriver extends OperaDriver {
 		return desktopWindowManager.getQuickWidgetByPos(type, windowId, row, column, parentName);
 	}
 	
+	/**
+	 * 
+	 * @param menuItemText - Menu item text
+	 * @return
+	 */
+	public void pressQuickMenuItem(String menuItemText) {
+		desktopWindowManager.pressQuickMenuItem(menuItemText);
+	}
 	
 	/**
 	 * 
