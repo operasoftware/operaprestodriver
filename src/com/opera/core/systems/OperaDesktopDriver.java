@@ -374,10 +374,6 @@ public class OperaDesktopDriver extends OperaDriver {
 	}
 	
 	
-	public QuickMenu getQuickMenu(String menuName) {
-		return desktopWindowManager.getQuickMenu(menuName);
-	}
-	
 	/**
 	 * 
 	 * @param name - name of action or submenu of item
@@ -730,6 +726,21 @@ public class OperaDesktopDriver extends OperaDriver {
 		return services.waitForMenuClosed(menuName, OperaIntervals.MENU_EVENT_TIMEOUT.getValue());
 	}
 
+
+	/**
+	 * Waits until the menu item is pressed and then
+	 * returns the text of the menu item pressed
+	 *
+	 * @param menuItemText - window to wait for shown event on
+	 * @return text of the menu item
+	 * @throws CommuncationException if no connection
+	 */
+	public String waitForMenuItemPressed(String menuItemText) {
+		if (services.getConnection() == null)
+			throw new CommunicationException("waiting for a menu item to be pressed failed because Opera is not connected.");
+
+		return services.waitForMenuItemPressed(menuItemText, OperaIntervals.MENU_EVENT_TIMEOUT.getValue());
+	}
 
 	/**
 	 *

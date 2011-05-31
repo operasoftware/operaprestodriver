@@ -23,6 +23,7 @@ import com.opera.core.systems.scope.handlers.AbstractEventHandler;
 import com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessage;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo;
+import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo;
 import com.opera.core.systems.scope.protos.EcmascriptProtos.ReadyStateChange;
 import com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeID;
 import com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeInfo;
@@ -136,6 +137,12 @@ public class UmsEventParser {
       	buildPayload(event, closedQMBuilder);
       	QuickMenuID menuId = closedQMBuilder.build();
       	eventHandler.onQuickMenuClosed(menuId);
+      	break;
+      case MENU_PRESSED:
+      	QuickMenuItemInfo.Builder pressedQMIBuilder = QuickMenuItemInfo.newBuilder(); 
+      	buildPayload(event, pressedQMIBuilder);
+      	QuickMenuItemInfo menuItemInfo = pressedQMIBuilder.build();
+      	eventHandler.onQuickMenuItemPressed(menuItemInfo);
       	break;
       default:
         break;

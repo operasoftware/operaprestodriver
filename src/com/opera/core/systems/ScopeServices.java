@@ -36,6 +36,7 @@ import com.opera.core.systems.scope.internal.OperaIntervals;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo;
+import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo;
 import com.opera.core.systems.scope.protos.EcmascriptProtos.ReadyStateChange;
 import com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeInfo;
 import com.opera.core.systems.scope.protos.ScopeProtos;
@@ -482,7 +483,12 @@ public class ScopeServices implements IConnectionHandler {
 	  logger.fine("QuickMenu shown: menuName=" + info.getMenuId().getMenuName());
 	  waitState.onQuickMenuShown(info);
   }
-  
+
+  public void onQuickMenuItemPressed(QuickMenuItemInfo info) {
+	  logger.fine("QuickMenu shown: menuItem=" + info.getText());
+	  waitState.onQuickMenuItemPressed(info);
+  }
+
   // TODO ADD PARAM AGAIN, or just name?
   public void onQuickMenuClosed(QuickMenuID id) {
 	  logger.fine("QuickMenu closed");//: menuName=" + info.getMenuId().getMenuName());
@@ -629,6 +635,16 @@ public class ScopeServices implements IConnectionHandler {
 	  waitState.setWaitEvents(false);
 	  try {
 		  return waitState.waitForQuickMenuClosed(menuName, timeout);
+		  
+	  } catch (Exception e) {
+		  return "";
+	  }	
+  }
+
+  public String waitForMenuItemPressed(String menuItemText, long timeout) {
+	  waitState.setWaitEvents(false);
+	  try {
+		  return waitState.waitForQuickMenuItemPressed(menuItemText, timeout);
 		  
 	  } catch (Exception e) {
 		  return "";

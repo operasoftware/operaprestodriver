@@ -147,13 +147,7 @@ public interface IDesktopWindowManager {
 	 */
 	QuickWindow getQuickWindowByName(String name);
 
-	/**
-	 * Gets the menu with name name.
-	 *
-	 * @param name menu name
-	 * @return QuickMenu
-	 */
-	QuickMenu getQuickMenu(String menuName);
+	void pressQuickMenuItem(String menuItemText);
 
 	// TODO: DOCUMENT
 	OperaUIElement getQuickMenuItemByAction(String action);

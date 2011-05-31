@@ -36,9 +36,10 @@ public enum DesktopWindowManagerCommand implements ICommand {
   WINDOW_ACTIVATED(8), // event
   WINDOW_LOADED(9), // event
   LIST_QUICK_MENUS(10),
-  GET_QUICK_MENU(11),
-  MENU_SHOWN(12),
-  MENU_CLOSED(13),
+  MENU_SHOWN(11), // event
+  MENU_CLOSED(12), // event
+  PRESS_QUICK_MENU(13),
+  MENU_PRESSED(14), // event
   DEFAULT(-1);
 
   private int code;

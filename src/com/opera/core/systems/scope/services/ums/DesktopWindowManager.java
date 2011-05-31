@@ -31,8 +31,10 @@ import com.opera.core.systems.ScopeServices;
 //import org.openqa.selenium.WebDriverException;
 
 import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowList;
+import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo;
+import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemID;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuList;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo;
@@ -293,30 +295,14 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 	
 	
 	// -- Menu
-	
-	public QuickMenu getQuickMenu(String menuName) {
-		
-		/*QuickMenuID.Builder idBuilder = QuickMenuID.newBuilder();
-		idBuilder.clearMenuName();
-		idBuilder.setMenuName(menuName);
-		Response response = executeCommand(DesktopWindowManagerCommand.GET_QUICK_MENU, idBuilder);
-		QuickMenuInfo.Builder builder = QuickMenuInfo.newBuilder();
-		builder.clear();
-		buildPayload(response, builder);
-		QuickMenuInfo info = builder.build();
-		return new QuickMenu(info, desktopUtils, systemInputManager);
-		*/
+	public void pressQuickMenuItem(String menuItemText) {
+		QuickMenuItemID.Builder builder = QuickMenuItemID.newBuilder();
+		builder.setMenuText(menuItemText);
 
-		// Using ListMenus. GetMenu will raise error 
-		List<QuickMenuInfo> list = getQuickMenuInfoList();
-		for (QuickMenuInfo info : list) {
-			if (info.getMenuId().getMenuName().equals(menuName)) {
-				return new QuickMenu(info, desktopUtils, systemInputManager);		
-			}
-		}
-		return null;
+		// Nothing to respond you need to listen to the OnMenuItemPressed event
+		executeCommand(DesktopWindowManagerCommand.PRESS_QUICK_MENU, builder);
 	}
-	
+
 	// Functions to get a specific QuickMenuItem -----------
 	// These should be unique given one of action, submenu, text(?), shortcut
 	// and unique within a single menu given either shortcutletter or pos
