@@ -18,6 +18,8 @@ package com.opera.core.systems.scope.services.ums;
 
 import java.util.List;
 
+import org.openqa.selenium.WebDriverException;
+
 import com.opera.core.systems.ScopeServices;
 import com.opera.core.systems.scope.protos.ScopeProtos.HostInfo;
 import com.opera.core.systems.scope.protos.ScopeProtos.Service;
@@ -109,7 +111,10 @@ public class UmsServices {
   }
 
   private String getVersionForService(List<Service> serviceList, String name) {
-    return findServiceNamed(serviceList, name).getVersion();
+      Service service = findServiceNamed(serviceList, name);
+      if( service == null )
+          throw new WebDriverException("No service named '" + name + "'");
+      return service.getVersion();
   }
 
   private Service findServiceNamed(List<Service> services, String name) {
