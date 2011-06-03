@@ -238,6 +238,10 @@ public class OperaDesktopDriver extends OperaDriver {
 		return desktopWindowManager.getQuickWindowList();
 	}
 	
+	public QuickMenu getQuickMenu(String menuName) {
+		return desktopWindowManager.getQuickMenu(menuName);
+	}
+	
 	public List<QuickMenu> getQuickMenuList() {
 		return desktopWindowManager.getQuickMenuList();
 	}

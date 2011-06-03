@@ -258,7 +258,19 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 	}
 	
 	//  Menu
-
+	
+	public QuickMenu getQuickMenu(String menuName) {
+		// Using ListMenus. GetMenu will raise error 
+		List<QuickMenuInfo> list = getQuickMenuInfoList();
+		for (QuickMenuInfo info : list) {
+			if (info.getMenuId().getMenuName().equals(menuName)) {
+				return new QuickMenu(info, desktopUtils, systemInputManager);		
+			}
+		}
+		return null;
+	}
+	
+	
 	public List<QuickMenu> getQuickMenuList() {
 		List<QuickMenuInfo> menuInfoList = getQuickMenuInfoList();//list.getMenuListList();
 		List<QuickMenu> menuList = new LinkedList<QuickMenu>();

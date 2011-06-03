@@ -150,6 +150,15 @@ public interface IDesktopWindowManager {
 	void pressQuickMenuItem(String menuItemText);
 
 	// TODO: DOCUMENT
+	
+	/**
+	 * Gets the menu with name name.
+	 *
+	 * @param name menu name
+	 * @return QuickMenu
+	 */
+	QuickMenu getQuickMenu(String menuName);
+	
 	OperaUIElement getQuickMenuItemByAction(String action);
 
 	OperaUIElement getQuickMenuItemByText(String text);
