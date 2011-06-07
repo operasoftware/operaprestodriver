@@ -22,6 +22,7 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Logger;
 
+import com.opera.core.systems.scope.services.*;
 import org.openqa.selenium.WebDriverException;
 
 import com.google.protobuf.AbstractMessage.Builder;
@@ -43,13 +44,6 @@ import com.opera.core.systems.scope.protos.ScopeProtos.ServiceResult;
 import com.opera.core.systems.scope.protos.ScopeProtos.ServiceSelection;
 import com.opera.core.systems.scope.protos.UmsProtos.Command;
 import com.opera.core.systems.scope.protos.UmsProtos.Response;
-import com.opera.core.systems.scope.services.ICookieManager;
-import com.opera.core.systems.scope.services.IDesktopUtils;
-import com.opera.core.systems.scope.services.IDesktopWindowManager;
-import com.opera.core.systems.scope.services.IEcmaScriptDebugger;
-import com.opera.core.systems.scope.services.IOperaExec;
-import com.opera.core.systems.scope.services.IPrefs;
-import com.opera.core.systems.scope.services.IWindowManager;
 import com.opera.core.systems.scope.services.ums.SystemInputManager;
 import com.opera.core.systems.scope.services.ums.UmsServices;
 import com.opera.core.systems.scope.stp.StpConnection;
@@ -59,13 +53,14 @@ import com.opera.core.systems.util.VersionUtil;
 /**
  * Implements the interface to the Scope protocol.
  *
- * @author Deniz Turkoglu
- *
+ * @author Deniz Turkoglu <dturkoglu@opera.com>,
+ *         Andreas Tolf Tolfsen <andreastt@opera.com>
  */
 public class ScopeServices implements IConnectionHandler {
 
   private final Logger logger = Logger.getLogger(this.getClass().getName());
 
+  private ICore core;
   private IEcmaScriptDebugger debugger;
   private IOperaExec exec;
   private IWindowManager windowManager;
@@ -88,20 +83,20 @@ public class ScopeServices implements IConnectionHandler {
 
   private AtomicInteger tagCounter;
 
-  public ICookieManager getCookieManager() {
-    return cookieManager;
-  }
-
-  public void setCookieManager(ICookieManager cookieManager) {
-    this.cookieManager = cookieManager;
-  }
-
   public Map<String, String> getVersions() {
     return versions;
   }
 
   public StpConnection getConnection() {
     return connection;
+  }
+
+  public ICore getCore() {
+    return core;
+  }
+
+  public void setCore(ICore core) {
+    this.core = core;
   }
 
   public IEcmaScriptDebugger getDebugger() {
@@ -128,7 +123,7 @@ public class ScopeServices implements IConnectionHandler {
     this.windowManager = windowManager;
   }
 
-  IPrefs getPrefs() {
+  public IPrefs getPrefs() {
     return prefs;
   }
 
@@ -136,7 +131,7 @@ public class ScopeServices implements IConnectionHandler {
     this.prefs = prefs;
   }
 
-  IDesktopWindowManager getDesktopWindowManager() {
+  public IDesktopWindowManager getDesktopWindowManager() {
     return desktopWindowManager;
   }
 
@@ -144,7 +139,7 @@ public class ScopeServices implements IConnectionHandler {
     this.desktopWindowManager = desktopWindowManager;
   }
 
-  IDesktopUtils getDesktopUtils() {
+  public IDesktopUtils getDesktopUtils() {
     return desktopUtils;
   }
 
@@ -152,12 +147,20 @@ public class ScopeServices implements IConnectionHandler {
     this.desktopUtils = desktopUtils;
   }
 
-  SystemInputManager getSystemInputManager() {
+  public SystemInputManager getSystemInputManager() {
     return systemInputManager;
   }
 
   public void setSystemInputManager(SystemInputManager manager) {
     this.systemInputManager = manager;
+  }
+
+  public ICookieManager getCookieManager() {
+    return cookieManager;
+  }
+
+  public void setCookieManager(ICookieManager cookieManager) {
+    this.cookieManager = cookieManager;
   }
 
   /**
