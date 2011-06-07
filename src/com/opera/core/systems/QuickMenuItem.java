@@ -120,6 +120,14 @@ public class QuickMenuItem extends OperaUIElement {
 		public boolean isChecked() {
 			return info.getChecked();
 		}
+		
+		/**
+		 *
+		 * @return true if item is a separator item, else false
+		 */
+		public boolean isSeparator() {
+			return info.getSeparator();
+		}
 
 		
 		/**
@@ -153,6 +161,7 @@ public class QuickMenuItem extends OperaUIElement {
 		public String getShortcut() {
 			return info.getShortcut();
 		}
+		
 		
 		/**
 		 * @return DesktopWindowRect of the menuitem
