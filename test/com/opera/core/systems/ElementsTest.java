@@ -9,7 +9,7 @@ import org.openqa.selenium.WebElement;
 public class ElementsTest extends TestBase {
   @Test
   public void testClear() {
-    driver.get(fixture("javascript.html"));
+    getFixture("javascript.html");
     driver.mouseEvent(1, 1, 1);
 
     driver.findElementById("input_email").clear();
@@ -19,7 +19,7 @@ public class ElementsTest extends TestBase {
 
   @Test
   public void testMouseOver() {
-    driver.get(fixture("mouse.html"));
+    getFixture("mouse.html");
     driver.mouseEvent(1, 1, 1);
 
     OperaWebElement test = ((OperaWebElement) driver.findElementById("test"));
@@ -31,11 +31,16 @@ public class ElementsTest extends TestBase {
   // This test sometimes causes problems. So put it last
   @Test
   public void testRightClick() {
-    driver.get(fixture("mouse.html"));
+    getFixture("mouse.html");
     driver.mouseEvent(1, 1, 1);
 
     // Cast as OperaWebElement to make rightClick available
     ((OperaWebElement) driver.findElementById("test")).rightClick();
+
+    // Sleep to allow menu to display, then close it by pressing the Escape key
+    try { Thread.sleep(10); } catch (Exception e) {}
+    driver.key("Esc");
+
     Assert.assertTrue(driver.findElementById("log").getValue().contains(
         "mousedown 2"));
     Assert.assertTrue(driver.findElementById("log").getValue().contains(
