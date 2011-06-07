@@ -53,6 +53,9 @@ import com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg.Variable;
 import com.opera.core.systems.scope.protos.EcmascriptProtos.EvalResult.Status;
 import com.opera.core.systems.scope.protos.EcmascriptProtos.Object.Property;
 import com.opera.core.systems.scope.protos.EcmascriptProtos.Value.Type;
+// We can't import this, because of the java "Object" class.
+// Leaving this commented out to help in the future!
+//import com.opera.core.systems.scope.protos.EcmascriptProtos.Object;
 // Highlight when we're using EsdbgProtos, instead of importing them directly.
 import com.opera.core.systems.scope.protos.EsdbgProtos;
 import com.opera.core.systems.scope.protos.UmsProtos.Response;
@@ -259,10 +262,10 @@ public class EcmascriptService extends AbstractEcmascriptService implements
 
     EvalResult reply = parseEvalData(eval(using, variable));
     Object object = parseEvalReply(reply);
-    if (object == null || !(object instanceof EsdbgProtos.ObjectValue)) {
+    if (object == null || !(object instanceof EcmascriptProtos.Object)) {
       return null;
     }
-    return ((EsdbgProtos.ObjectValue) object).getObjectID();
+    return ((EcmascriptProtos.Object) object).getObjectID();
   }
 
   private Object parseEvalReply(EvalResult result) {
