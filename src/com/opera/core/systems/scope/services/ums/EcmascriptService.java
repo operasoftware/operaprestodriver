@@ -27,6 +27,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicStampedReference;
 
+import org.apache.commons.jxpath.Pointer;
 import org.openqa.selenium.NoSuchFrameException;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
@@ -110,6 +111,17 @@ public class EcmascriptService extends AbstractEcmascriptService implements
 
   public void removeRuntime(int runtimeId) {
     runtimesList.remove(runtimeId);
+  }
+
+  private List<Runtime> getRuntimesList() {
+    int windowId = services.getWindowManager().getActiveWindowId();
+    Iterator<?> iterator = xpathIterator(runtimesList.values(), "/.[windowID='"
+        + windowId + "']");
+    List<Runtime> runtimes = new ArrayList<Runtime>();
+    while (iterator.hasNext()) {
+      runtimes.add((Runtime) ((Pointer) iterator.next()).getNode());
+    }
+    return runtimes;
   }
 
   public void init() {
@@ -449,12 +461,12 @@ public class EcmascriptService extends AbstractEcmascriptService implements
   }
 
   public List<String> listFramePaths() {
-    List<String> framePaths = new LinkedList<String>();
-    Iterator<Entry<Integer, Runtime>> itr = runtimesList.entrySet().iterator();
-    while (itr.hasNext()) {
-      framePaths.add(itr.next().getValue().getHtmlFramePath());
+    List<Runtime> runtimes = getRuntimesList();
+    List<String> frameNames = new ArrayList<String>();
+    for (Runtime runtime : runtimes) {
+      frameNames.add(runtime.getHtmlFramePath());
     }
-    return framePaths;
+    return frameNames;
   }
 
   public void releaseObjects() {
