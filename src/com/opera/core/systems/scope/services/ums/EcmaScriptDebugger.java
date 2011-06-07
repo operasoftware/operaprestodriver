@@ -393,6 +393,12 @@ public class EcmaScriptDebugger extends AbstractEcmascriptService implements
     }
 
     RuntimeInfo info = runtimesList.get(curr.getRuntimeID());
+
+    // We should only find frames underneath the current one.
+    if (!info.getHtmlFramePath().startsWith(currentFramePath)) {
+      throw new NoSuchFrameException("No such frame "+frameName+" in " + currentFramePath);
+    }
+
     currentFramePath = info.getHtmlFramePath();
     setRuntime(info);
   }

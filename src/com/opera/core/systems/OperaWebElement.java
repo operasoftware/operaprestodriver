@@ -17,6 +17,7 @@ limitations under the License.
 package com.opera.core.systems;
 
 import java.io.FileOutputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -205,8 +206,6 @@ public class OperaWebElement implements RenderedWebElement, SearchContext,
 
 		parent.getScopeServices().captureOperaIdle();
     parent.actionHandler.click(this, "");
-    // workaround for click synchronization problems
-    sleep(OperaIntervals.EXEC_SLEEP.getValue());
     parent.waitForLoadToComplete();
   }
 
@@ -230,23 +229,27 @@ public class OperaWebElement implements RenderedWebElement, SearchContext,
     return by.findElements(this);
   }
 
-  public String getAttribute(String name) {
+  public String getAttribute(String attribute) {
 
     if (!parent.objectIds.contains(objectId)) throw new StaleElementReferenceException(
         "You cant interact with stale elements");
 
-    String attribute = name.toLowerCase();
-    if (attribute.equals("disabled")) {
+    String lcAttribute = attribute.toLowerCase();
+    if (lcAttribute.equals("disabled")) {
       return String.valueOf(!isEnabled());
-    } else if (attribute.equals("checked") || attribute.equals("selected")) {
+    } else if (lcAttribute.equals("checked") || lcAttribute.equals("selected")) {
       boolean selected = isSelected();
       if (!selected) return null;
       return String.valueOf(selected);
-    } else if (attribute.equals("index")) {
+    } else if (lcAttribute.equals("index")) {
       return callMethod("locator.index");
     }
 
-    return callMethod("locator.getAttribute('" + attribute + "')");
+    if (lcAttribute == "value") {
+      return callMethod("locator.value");
+    } else {
+      return callMethod("locator.getAttribute('" + attribute + "')");
+    }
   }
 
   /**
@@ -332,6 +335,13 @@ public class OperaWebElement implements RenderedWebElement, SearchContext,
   }
 
   public void sendKeys(CharSequence... keysToSend) {
+    // A list of keys that should be held down, instead of pressed
+    ArrayList<String> holdKeys = new ArrayList<String>();
+    holdKeys.add(OperaKeys.SHIFT.getValue());
+    holdKeys.add(OperaKeys.CONTROL.getValue());
+    // Keys that have been held down, and need to be released
+    ArrayList<String> heldKeys = new ArrayList<String>();
+
     if (OperaFlags.ENABLE_CHECKS) {
 
       long start = System.currentTimeMillis();
@@ -356,23 +366,78 @@ public class OperaWebElement implements RenderedWebElement, SearchContext,
       click();
     } else executeMethod("locator.focus()");
 
+    // This code is a bit ugly. Because "special" keys can be sent either as
+    // an individual argument, or in the middle of a string of "normal"
+    // characters, we have to loop through the string and check each against
+    // a list of special keys.
+
 		parent.getScopeServices().captureOperaIdle();
     for (CharSequence seq : keysToSend) {
-      if (seq instanceof Keys) execService.key(OperaKeys.get(((Keys) seq).name()));
-      else if (seq.toString().equals("\n")) execService.key("enter");
+      if (seq instanceof Keys) {
+        String key = OperaKeys.get(((Keys) seq).name());
+        // Check if this is a key we hold down, and haven't already pressed,
+        // and press, but don't release it. That's done at the end of this
+        // method.
+        if (holdKeys.contains(key) && !heldKeys.contains(key) && !execService.keyIsPressed(key)) {
+          execService.key(key, false);
+          heldKeys.add(key);
+        } else if (key == "null") {
+          for (String hkey : heldKeys) {
+            execService.key(hkey, true);
+          }
+        } else {
+          execService.key(key);
+        }
+      }
+      else if (seq.toString().equals("\n")) {
+        execService.key("enter");
+      }
       else {
         // We need to check each character to see if it is a "special" key
+        StringBuffer buffer = new StringBuffer();
         for (int i = 0; i < seq.length(); i++) {
           Character c = seq.charAt(i);
           String keyName = charToKeyName(c);
 
-          // TODO buffer normal keys for a single type() call
-          if (keyName == null) execService.type(c.toString());
-          // TODO check for shift, and hold it down
-          else execService.key(OperaKeys.get(keyName));
+          // Buffer normal keys for a single type() call
+          if (keyName == null) {
+            buffer.append(c.toString());
+          }
+          else {
+            // This is a special key, so send all buffered normal keys
+            if (buffer.length() > 0) {
+              execService.type(buffer.toString());
+              buffer.delete(0, buffer.length());
+            }
+
+            String key = OperaKeys.get(keyName);
+            // FIXME: Code repeated from above.
+            if (holdKeys.contains(key) && !heldKeys.contains(key) && !execService.keyIsPressed(key)) {
+              execService.key(key, false);
+              heldKeys.add(key);
+            } else if (key == "null") {
+              for (String hkey : heldKeys) {
+                execService.key(hkey, true);
+              }
+            } else {
+              execService.key(key);
+            }
+          }
+        }
+
+        // send any remaining buffered keys
+        if (buffer.length() > 0) {
+          execService.type(buffer.toString());
         }
       }
     }
+
+    if (heldKeys.size() > 0) {
+      for (String key : heldKeys) {
+        execService.key(key, true);
+      }
+    }
+
     parent.waitForLoadToComplete();
     // executeMethod("locator.blur()");
   }
@@ -582,6 +647,14 @@ public class OperaWebElement implements RenderedWebElement, SearchContext,
           + " }\n"
           + "if(el.tagName.toLowerCase() == 'option') {\n"
             // If this is a <option>, recurse up to its parent <select>
+            + "return d(el.parentNode);\n"
+            // Map is shown iff image that uses it is shown.
+          + "} else if (el.tagName.toLowerCase() == 'map') {\n"
+            + "if (!el.name) return false;\n"
+            + "var image = el.ownerDocument.evaluate('//*[@usemap = \"#'+ el.name +'\"]', el.ownerDocument, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;\n"
+            + "return true;"
+            + "return !!image && d(image);\n"
+          + "} else if (el.tagName.toLowerCase() == 'area') {\n"
             + "return d(el.parentNode);\n"
           + "}\n"
           + "\n"

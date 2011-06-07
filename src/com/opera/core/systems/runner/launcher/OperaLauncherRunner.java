@@ -54,14 +54,16 @@ public class OperaLauncherRunner implements OperaRunner {
   private String crashlog = null;
 
   public OperaLauncherRunner(OperaDriverSettings settings) {
-	logger.fine("Creating OperaLauncherRunner");
+    logger.fine("Creating OperaLauncherRunner");
     this.settings = settings;
 
-    if (settings.getOperaLauncherBinary() == null) throw new WebDriverException(
-        "Launcher path not set");
+    if (this.settings.getOperaLauncherBinary() == null) {
+      throw new WebDriverException( "Launcher path not set");
+    }
 
-    if (settings.getOperaBinaryLocation() == null) throw new WebDriverException(
-        "You need to set Opera's path to use opera-launcher");
+    if (this.settings.getOperaBinaryLocation() == null) {
+      throw new WebDriverException("You need to set Opera's path to use opera-launcher");
+    }
 
     if (this.settings.doRunOperaLauncherFromOperaDriver()) {
       logger.fine("Running launcher from OperaDriver");
@@ -73,27 +75,40 @@ public class OperaLauncherRunner implements OperaRunner {
       stringArray.add(Integer.toString(this.settings.getOperaLauncherListeningPort()));
       if (this.settings.getOperaLauncherXvfbDisplay() != null) {
         stringArray.add("-display");
-        stringArray.add(":"
-            + Integer.toString(this.settings.getOperaLauncherXvfbDisplay()));
+        stringArray.add(":" + Integer.toString(this.settings.getOperaLauncherXvfbDisplay()));
       }
 
-      if( logger.isLoggable(Level.FINEST) )
-      {
+      if (logger.isLoggable(Level.FINEST)) {
         stringArray.add("-console");
         stringArray.add("-verbosity");
         stringArray.add("FINEST");
       }
 
-      //  == Note any launcher arguments must be before this line! ==
+      // Note any launcher arguments must be before this line!
 
       if (this.settings.getNoQuit()) stringArray.add("-noquit");
       stringArray.add("-bin");
       stringArray.add(this.settings.getOperaBinaryLocation());
 
-      StringTokenizer tokanizer = new StringTokenizer(
-          this.settings.getOperaBinaryArguments(), " ");
-      while (tokanizer.hasMoreTokens()) {
-        stringArray.add(tokanizer.nextToken());
+      /*
+       * We read in environmental variable OPERA_ARGS in addition to existing
+       * arguments passed down from OperaDriverSettings. These are combined
+       * and sent to the browser.
+       *
+       * Note that this is a deviation from the principle of arguments normally
+       * overwriting environmental variables.
+       */
+      String binaryArguments = this.settings.getOperaBinaryArguments();
+      String environmentArguments = System.getenv("OPERA_ARGS");
+
+      if (environmentArguments != null && environmentArguments.length() > 0) {
+        binaryArguments = environmentArguments + " " + binaryArguments;
+      }
+
+      // Arguments are split by single space.
+      StringTokenizer tokenizer = new StringTokenizer(binaryArguments, " ");
+      while (tokenizer.hasMoreTokens()) {
+        stringArray.add(tokenizer.nextToken());
       }
 
       logger.fine("Launcher arguments: " + stringArray);
@@ -103,44 +118,45 @@ public class OperaLauncherRunner implements OperaRunner {
       if (!stringArray.contains("-autotestmode")) stringArray.add("-autotestmode");
 
       launcherRunner = new OperaLauncherBinary(
-          this.settings.getOperaLauncherBinary(),
-          stringArray.toArray(new String[stringArray.size()]));
+        this.settings.getOperaLauncherBinary(),
+        stringArray.toArray(new String[stringArray.size()])
+      );
     }
 
-    logger.fine("Waiting for Opera Launcher connection on port "
-        + this.settings.getOperaLauncherListeningPort());
+    logger.fine("Waiting for Opera Launcher connection on port " + this.settings.getOperaLauncherListeningPort());
+
     try {
       // setup listener server
-      ServerSocket listenerServer = new ServerSocket(
-          settings.getOperaLauncherListeningPort());
+      ServerSocket listenerServer = new ServerSocket(this.settings.getOperaLauncherListeningPort());
       listenerServer.setSoTimeout((int) OperaIntervals.LAUNCHER_TIMEOUT.getValue());
+
       // try to connect
       Socket new_socket = listenerServer.accept();
       new_socket.setSoTimeout((int) OperaIntervals.LAUNCHER_TIMEOUT.getValue());
       launcherProtocol = new OperaLauncherProtocol(new_socket);
+
       // we did it!
-      logger.fine("Connected with Opera Launcher on port "
-          + settings.getOperaLauncherListeningPort());
+      logger.fine("Connected with Opera Launcher on port " + this.settings.getOperaLauncherListeningPort());
       listenerServer.close();
+
       // Do the handshake!
       LauncherHandshakeRequest.Builder request = LauncherHandshakeRequest.newBuilder();
       ResponseEncapsulation res = launcherProtocol.sendRequest(
-          MessageType.MSG_HELLO, request.build().toByteArray());
+      MessageType.MSG_HELLO, request.build().toByteArray());
+
       // Are we happy?
       if (res.IsSuccess()) {
-        logger.fine("Got opera launcher handshake: "
-            + res.getResponse().toString());
+        logger.fine("Got opera launcher handshake: " + res.getResponse().toString());
       } else {
-        logger.fine("Did not get opera launcher handshake: "
-            + res.getResponse().toString());
+        logger.fine("Did not get opera launcher handshake: " + res.getResponse().toString());
         throw new OperaRunnerException("Did not get opera launcher handshake");
       }
     } catch (SocketTimeoutException e) {
       throw new OperaRunnerException("Timeout waiting for Opera Launcher to connect on port "
-          + settings.getOperaLauncherListeningPort(), e);
+          + this.settings.getOperaLauncherListeningPort(), e);
     } catch (IOException e) {
       throw new OperaRunnerException("Unable to listen to opera launcher port "
-          + settings.getOperaLauncherListeningPort(), e);
+          + this.settings.getOperaLauncherListeningPort(), e);
     }
   }
 

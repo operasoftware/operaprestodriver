@@ -134,8 +134,9 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
           settings.setOperaLauncherBinary(paths.launcherPath());
         }
 
-        if (settings.getOperaBinaryLocation() != null) this.operaRunner = new OperaLauncherRunner(
-            this.settings);
+        if (settings.getOperaBinaryLocation() != null) {
+          this.operaRunner = new OperaLauncherRunner(this.settings);
+        }
       }
     } else {
       // Create a default settings object
@@ -238,7 +239,6 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
   }
 
   public int get(String url, long timeout) {
-
     if (url == null) throw new NullPointerException("Invalid url");
 
     if (services.getConnection() == null) throw new CommunicationException(
@@ -375,7 +375,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
    * from the web server.
    */
   public String getPageSource() {
-    return debugger.executeJavascript("return document.documentElement.outerHTML");
+    return debugger.executeJavascript("return document.documentElement.outerHTML || (typeof window.XMLSerializer != 'undefined') ? (new window.XMLSerializer()).serializeToString(document) : ''");
   }
 
   public String getTitle() {
@@ -457,7 +457,6 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
     }
 
     public WebDriver frame(String frameName) {
-      debugger.resetFramePath();
       debugger.changeRuntime(frameName);
       return OperaDriver.this;
     }
@@ -629,7 +628,14 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
       // new opera wait for page
       services.waitForOperaIdle(OperaIntervals.PAGE_LOAD_TIMEOUT.getValue());
     } else {
-      // old bad opera wait for page
+      // Sometimes we get here before the next page has even *started* loading,
+      // and so return too quickly. This sleep is enough to make sure
+      // readyState has been set to "loading"
+      try {
+        Thread.sleep(5);
+      } catch (InterruptedException e) {
+        Thread.currentThread().interrupt();
+      }
       long endTime = System.currentTimeMillis()
           + OperaIntervals.PAGE_LOAD_TIMEOUT.getValue();
       while (!"complete".equals(debugger.executeJavascript("return document.readyState"))) {
@@ -680,9 +686,12 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
 
   private class OperaOptions implements Options {
     public void addCookie(Cookie cookie) {
-      if (cookie.getExpiry() == null) cookie = new Cookie(cookie.getName(),
-          cookie.getValue(), cookie.getDomain(), cookie.getPath(), new Date(
-              new Date().getTime() + (10 * 365 * 24 * 60 * 60 * 1000)), false);
+      if (cookie.getExpiry() == null) {
+        cookie = new Cookie(cookie.getName(), cookie.getValue(),
+            cookie.getDomain(), cookie.getPath(), new Date(
+            new Date().getTime() + (10 * 365 * 24 * 60 * 60 * 1000)), false);
+      }
+
       debugger.executeJavascript("document.cookie='" + cookie.toString() + "'",
           false);
     }
@@ -971,7 +980,6 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
     keyUp(key);
 
     if (key.equalsIgnoreCase("enter")) {
-      sleep(OperaIntervals.EXEC_SLEEP.getValue());
       waitForLoadToComplete();
     }
   }

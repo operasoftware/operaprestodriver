@@ -1,8 +1,10 @@
 package com.opera.core.systems;
 
+import static org.junit.Assert.*;
 import junit.framework.Assert;
 
 import org.junit.Test;
+import org.openqa.selenium.WebElement;
 
 public class ElementsTest extends TestBase {
   @Test
@@ -38,5 +40,13 @@ public class ElementsTest extends TestBase {
         "mousedown 2"));
     Assert.assertTrue(driver.findElementById("log").getValue().contains(
         "mouseup 2"));
+  }
+
+  @Test
+  public void testSelect() throws Exception {
+    getFixture("select.html");
+    WebElement el = driver.findElementById("dog");
+    el.setSelected();
+    Assert.assertTrue(el.isSelected());
   }
 }

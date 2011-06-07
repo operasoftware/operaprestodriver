@@ -155,13 +155,4 @@ public class DriverKeysTest extends TestBase {
     Assert.assertEquals("abc ", fieldOne.getValue());
   }
 
-  @Test
-  public void testLongHold() throws Exception {
-    driver.keyDown("a");
-    Thread.sleep(1000);
-    driver.keyUp("a");
-
-    Assert.assertTrue("multiple 'a's", fieldOne.getValue().contains("aa"));
-  }
-
 }

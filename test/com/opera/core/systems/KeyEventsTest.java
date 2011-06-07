@@ -49,16 +49,6 @@ public class KeyEventsTest extends TestBase {
   }
 
   @Test
-  public void testRepeatedKeys() throws Exception {
-    driver.keyDown("a");
-    Thread.sleep(1000);
-    driver.keyUp("a");
-
-    Assert.assertTrue("repeated press events",
-        logContains("down, 65, A, \npress, 0, , \npress, 0, ,"));
-  }
-
-  @Test
   public void testMultipleKeys() throws Exception {
     driver.keyDown("control");
     driver.keyDown("shift");

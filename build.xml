@@ -123,6 +123,10 @@
       <test if="class" todir="${test.output.path}" name="${class}" />
     </junit>
 
+    <antcall target="test_report" />
+  </target>
+
+  <target name="test_report" description="Generate reports from test XML files">
     <junitreport todir="${test.output.path}">
       <fileset dir="${test.output.path}"/>
       <report todir="${test.report.path}"/>
@@ -152,6 +156,7 @@
 
       <!-- only generate docs for Opera stuff, not selenium as well -->
       <package name="com.opera.core.systems.*" />
+      <excludepackage name="com.opera.core.systems.scope.protos" />
 
       <!-- Link to online selenium documentation, and the Java docs -->
       <link href="http://webdriver.googlecode.com/svn/javadoc/"/>
@@ -160,7 +165,7 @@
   </target>
 
   <target name="example" description="Run the simple example" depends="jar">
-    <javac>
+    <javac debug="true">
       <classpath refid="test.classpath.path" />
       <src path="examples/simple" />
     </javac>
