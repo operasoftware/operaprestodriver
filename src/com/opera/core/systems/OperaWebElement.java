@@ -244,8 +244,11 @@ public class OperaWebElement implements WebElement, SearchContext,
       return callMethod("locator.index");
     }
 
-    if (lcAttribute == "value") {
-      return callMethod("locator.value");
+    if (lcAttribute.equals("value")) {
+      return callMethod("if(/^input|select|textarea$/i.test(locator.nodeName)){"+
+          "return locator.value;"+
+           "}"+
+           "return locator.textContent;");
     } else {
       return callMethod("locator.getAttribute('" + attribute + "')");
     }
