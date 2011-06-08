@@ -38,10 +38,11 @@ public class CoreUtils extends AbstractService implements ICoreUtils {
     public CoreUtils(ScopeServices services, String version) {
         super(services, version);
 
-        String serviceName = "core-utils";
+        String serviceName = "core";
 
         /*
-        if (!isVersionInRange(version, "1.3", serviceName)) {
+        // Version 1.2 is required for browser meta information
+        if (!isVersionInRange(version, "1.2", serviceName)) {
             throw new UnsupportedOperationException(serviceName + " version " + version + " is not supported");
         }
         */
