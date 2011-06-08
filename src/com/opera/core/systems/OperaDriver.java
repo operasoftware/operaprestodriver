@@ -31,6 +31,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.opera.core.systems.scope.services.*;
 import org.apache.commons.io.IOUtils;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
@@ -65,11 +66,6 @@ import com.opera.core.systems.scope.internal.OperaIntervals;
 import com.opera.core.systems.scope.internal.OperaKeys;
 import com.opera.core.systems.scope.protos.PrefsProtos.Pref;
 import com.opera.core.systems.scope.protos.PrefsProtos.GetPrefArg.Mode;
-import com.opera.core.systems.scope.services.ICookieManager;
-import com.opera.core.systems.scope.services.IEcmaScriptDebugger;
-import com.opera.core.systems.scope.services.IOperaExec;
-import com.opera.core.systems.scope.services.IPrefs;
-import com.opera.core.systems.scope.services.IWindowManager;
 import com.opera.core.systems.settings.OperaDriverSettings;
 
 /**
@@ -92,8 +88,9 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
 
   protected IEcmaScriptDebugger debugger;
   protected IOperaExec exec;
-  protected IPrefs prefs;
   protected IWindowManager windowManager;
+  protected ICoreUtils coreUtils;
+  protected IPrefs prefs;
   protected ICookieManager cookieManager;
   protected ScopeServices services;
   protected ScopeActions actionHandler;
@@ -201,6 +198,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
     debugger = services.getDebugger();
     windowManager = services.getWindowManager();
     exec = services.getExec();
+    coreUtils = services.getCoreUtils();
     actionHandler = new PbActionHandler(services);
     cookieManager = services.getCookieManager();
     // cookieManager.updateCookieSettings();
@@ -212,7 +210,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
     versions.put("ecmascript-debugger", "5.0");
     versions.put("window-manager", "2.0");
     versions.put("exec", "2.0");
-    versions.put("core", "1.0");
+    versions.put("core-utils", "1.0");
     versions.put("cookie-manager", "1.0");
     versions.put("prefs", "1.0");
     return versions;
@@ -1106,6 +1104,30 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
 
   public Object executeAsyncScript(String script, Object... args) {
     throw new UnsupportedOperationException();
+  }
+
+  public String getCoreVersion() {
+    return coreUtils.getCoreVersion();
+  }
+
+  public String getOS() {
+    return coreUtils.getOperatingSystem();
+  }
+
+  public String getProduct() {
+    return coreUtils.getProduct();
+  }
+
+  public String getBinaryPath() {
+    return coreUtils.getBinaryPath();
+  }
+
+  public String getUserAgent() {
+    return coreUtils.getUserAgent();
+  }
+
+  public int getPID() {
+    return coreUtils.getProcessID();
   }
 
 }

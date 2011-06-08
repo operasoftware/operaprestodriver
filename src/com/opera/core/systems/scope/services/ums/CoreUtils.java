@@ -18,35 +18,35 @@ package com.opera.core.systems.scope.services.ums;
 
 import com.opera.core.systems.ScopeServices;
 import com.opera.core.systems.scope.AbstractService;
-import com.opera.core.systems.scope.CoreCommand;
+import com.opera.core.systems.scope.CoreUtilsCommand;
 import com.opera.core.systems.scope.protos.UmsProtos.Response;
-import com.opera.core.systems.scope.protos.CoreProtos;
 import com.opera.core.systems.scope.protos.CoreProtos.BrowserInformation;
-import com.opera.core.systems.scope.protos.UmsProtos.Response;
-import com.opera.core.systems.scope.services.ICore;
+import com.opera.core.systems.scope.services.ICoreUtils;
 
 /**
  * @author Andreas Tolf Tolfsen <andreastt@opera.com>
  */
-public class Core extends AbstractService implements ICore {
+public class CoreUtils extends AbstractService implements ICoreUtils {
 
-    private String  coreVersion;
-    private String  operatingSystem;
-    private String  product;
-    private String  binaryPath;
-    private String  userAgent;
-    private Integer pid;
+    private String coreVersion;
+    private String operatingSystem;
+    private String product;
+    private String binaryPath;
+    private String userAgent;
+    private int    processID;
 
-    public Core(ScopeServices services, String version) {
+    public CoreUtils(ScopeServices services, String version) {
         super(services, version);
 
-        String serviceName = "core";
+        String serviceName = "core-utils";
 
+        /*
         if (!isVersionInRange(version, "1.3", serviceName)) {
             throw new UnsupportedOperationException(serviceName + " version " + version + " is not supported");
         }
+        */
 
-        services.setCore(this);
+        services.setCoreUtils(this);
     }
 
     public void init() {
@@ -57,7 +57,7 @@ public class Core extends AbstractService implements ICore {
         product         = browserInformation.getProduct();
         binaryPath      = browserInformation.getBinaryPath();
         userAgent       = browserInformation.getUserAgent();
-        pid             = browserInformation.getProcessID();
+        processID       = browserInformation.getProcessID();
     }
 
     public String getCoreVersion() {
@@ -80,15 +80,15 @@ public class Core extends AbstractService implements ICore {
         return userAgent;
     }
 
-    public Integer getPid() {
-        return pid;
+    public int getProcessID() {
+        return processID;
     }
 
 
     // Private methods follow
 
     private BrowserInformation getBrowserInformation() {
-        Response response = executeCommand(CoreCommand.GET_BROWSER_INFORMATION, null);
+        Response response = executeCommand(CoreUtilsCommand.GET_BROWSER_INFORMATION, null);
         BrowserInformation.Builder builder = BrowserInformation.newBuilder();
         buildPayload(response, builder);
         return builder.build();

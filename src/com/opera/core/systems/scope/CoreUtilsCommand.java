@@ -25,18 +25,18 @@ import com.opera.core.systems.model.ICommand;
 /**
  * @author Andreas Tolf Tolfsen <andreastt@opera.com>
  */
-public enum CoreCommand implements ICommand {
+public enum CoreUtilsCommand implements ICommand {
     ONACTIVE(1), ONIDLE(2), GET_BROWSER_INFORMATION(3), DEFAULT(-1);
 
     private int code;
-    private static final Map<Integer, CoreCommand> lookup = new HashMap<Integer, CoreCommand>();
+    private static final Map<Integer, CoreUtilsCommand> lookup = new HashMap<Integer, CoreUtilsCommand>();
 
     static {
-        for (CoreCommand command : EnumSet.allOf(CoreCommand.class))
+        for (CoreUtilsCommand command : EnumSet.allOf(CoreUtilsCommand.class))
             lookup.put(command.getCommandID(), command);
     }
 
-    private CoreCommand(int code) {
+    private CoreUtilsCommand(int code) {
         this.code = code;
     }
 
@@ -45,11 +45,11 @@ public enum CoreCommand implements ICommand {
     }
 
     public String getServiceName() {
-        return "core";
+        return "core"; //"core-utils";
     }
 
-    public static CoreCommand get(int code) {
-        CoreCommand command = lookup.get(code);
+    public static CoreUtilsCommand get(int code) {
+        CoreUtilsCommand command = lookup.get(code);
         return (command != null) ? command : DEFAULT;
     }
 }
