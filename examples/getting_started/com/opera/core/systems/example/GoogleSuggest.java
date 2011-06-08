@@ -5,7 +5,6 @@ import com.opera.core.systems.OperaDriver;
 import java.util.List;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.RenderedWebElement;
 import org.openqa.selenium.WebElement;
 
 /**
@@ -27,7 +26,7 @@ public class GoogleSuggest {
         long end = System.currentTimeMillis() + 5000;
         while (System.currentTimeMillis() < end) {
             // Browsers which render content (such as Firefox and IE) return "RenderedWebElements"
-            RenderedWebElement resultsDiv = (RenderedWebElement) driver.findElement(By.className("gac_m"));
+            WebElement resultsDiv = driver.findElement(By.className("gac_m"));
 
             // If results have been returned, the results are displayed in a drop down.
             if (resultsDiv.isDisplayed()) {

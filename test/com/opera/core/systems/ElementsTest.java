@@ -1,6 +1,5 @@
 package com.opera.core.systems;
 
-import static org.junit.Assert.*;
 import junit.framework.Assert;
 
 import org.junit.Test;
@@ -13,7 +12,7 @@ public class ElementsTest extends TestBase {
     driver.mouseEvent(1, 1, 1);
 
     driver.findElementById("input_email").clear();
-    Assert.assertTrue(driver.findElementById("log").getValue().contains(
+    Assert.assertTrue(driver.findElementById("log").getAttribute("value").contains(
         "email changed"));
   }
 
@@ -36,9 +35,9 @@ public class ElementsTest extends TestBase {
 
     // Cast as OperaWebElement to make rightClick available
     ((OperaWebElement) driver.findElementById("test")).rightClick();
-    Assert.assertTrue(driver.findElementById("log").getValue().contains(
+    Assert.assertTrue(driver.findElementById("log").getAttribute("value").contains(
         "mousedown 2"));
-    Assert.assertTrue(driver.findElementById("log").getValue().contains(
+    Assert.assertTrue(driver.findElementById("log").getAttribute("value").contains(
         "mouseup 2"));
   }
 
