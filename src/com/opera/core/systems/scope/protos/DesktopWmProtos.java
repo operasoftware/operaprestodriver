@@ -1793,8 +1793,15 @@ public final class DesktopWmProtos {
     public boolean hasRect() { return hasRect; }
     public com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect getRect() { return rect_; }
     
-    // repeated .scope.QuickMenuItemInfo menuItemList = 3;
-    public static final int MENUITEMLIST_FIELD_NUMBER = 3;
+    // required .scope.DesktopWindowID windowId = 3;
+    public static final int WINDOWID_FIELD_NUMBER = 3;
+    private boolean hasWindowId;
+    private com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID windowId_;
+    public boolean hasWindowId() { return hasWindowId; }
+    public com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID getWindowId() { return windowId_; }
+    
+    // repeated .scope.QuickMenuItemInfo menuItemList = 4;
+    public static final int MENUITEMLIST_FIELD_NUMBER = 4;
     private java.util.List<com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo> menuItemList_ =
       java.util.Collections.emptyList();
     public java.util.List<com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo> getMenuItemListList() {
@@ -1808,12 +1815,15 @@ public final class DesktopWmProtos {
     private void initFields() {
       menuId_ = com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID.getDefaultInstance();
       rect_ = com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect.getDefaultInstance();
+      windowId_ = com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID.getDefaultInstance();
     }
     public final boolean isInitialized() {
       if (!hasMenuId) return false;
       if (!hasRect) return false;
+      if (!hasWindowId) return false;
       if (!getMenuId().isInitialized()) return false;
       if (!getRect().isInitialized()) return false;
+      if (!getWindowId().isInitialized()) return false;
       for (com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo element : getMenuItemListList()) {
         if (!element.isInitialized()) return false;
       }
@@ -1829,8 +1839,11 @@ public final class DesktopWmProtos {
       if (hasRect()) {
         output.writeMessage(2, getRect());
       }
+      if (hasWindowId()) {
+        output.writeMessage(3, getWindowId());
+      }
       for (com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo element : getMenuItemListList()) {
-        output.writeMessage(3, element);
+        output.writeMessage(4, element);
       }
       getUnknownFields().writeTo(output);
     }
@@ -1849,9 +1862,13 @@ public final class DesktopWmProtos {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(2, getRect());
       }
+      if (hasWindowId()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(3, getWindowId());
+      }
       for (com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo element : getMenuItemListList()) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(3, element);
+          .computeMessageSize(4, element);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -2021,6 +2038,9 @@ public final class DesktopWmProtos {
         if (other.hasRect()) {
           mergeRect(other.getRect());
         }
+        if (other.hasWindowId()) {
+          mergeWindowId(other.getWindowId());
+        }
         if (!other.menuItemList_.isEmpty()) {
           if (result.menuItemList_.isEmpty()) {
             result.menuItemList_ = new java.util.ArrayList<com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo>();
@@ -2071,6 +2091,15 @@ public final class DesktopWmProtos {
               break;
             }
             case 26: {
+              com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID.Builder subBuilder = com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID.newBuilder();
+              if (hasWindowId()) {
+                subBuilder.mergeFrom(getWindowId());
+              }
+              input.readMessage(subBuilder, extensionRegistry);
+              setWindowId(subBuilder.buildPartial());
+              break;
+            }
+            case 34: {
               com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo.Builder subBuilder = com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo.newBuilder();
               input.readMessage(subBuilder, extensionRegistry);
               addMenuItemList(subBuilder.buildPartial());
@@ -2155,7 +2184,44 @@ public final class DesktopWmProtos {
         return this;
       }
       
-      // repeated .scope.QuickMenuItemInfo menuItemList = 3;
+      // required .scope.DesktopWindowID windowId = 3;
+      public boolean hasWindowId() {
+        return result.hasWindowId();
+      }
+      public com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID getWindowId() {
+        return result.getWindowId();
+      }
+      public Builder setWindowId(com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID value) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        result.hasWindowId = true;
+        result.windowId_ = value;
+        return this;
+      }
+      public Builder setWindowId(com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID.Builder builderForValue) {
+        result.hasWindowId = true;
+        result.windowId_ = builderForValue.build();
+        return this;
+      }
+      public Builder mergeWindowId(com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID value) {
+        if (result.hasWindowId() &&
+            result.windowId_ != com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID.getDefaultInstance()) {
+          result.windowId_ =
+            com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID.newBuilder(result.windowId_).mergeFrom(value).buildPartial();
+        } else {
+          result.windowId_ = value;
+        }
+        result.hasWindowId = true;
+        return this;
+      }
+      public Builder clearWindowId() {
+        result.hasWindowId = false;
+        result.windowId_ = com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID.getDefaultInstance();
+        return this;
+      }
+      
+      // repeated .scope.QuickMenuItemInfo menuItemList = 4;
       public java.util.List<com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo> getMenuItemListList() {
         return java.util.Collections.unmodifiableList(result.menuItemList_);
       }
@@ -5728,44 +5794,45 @@ public final class DesktopWmProtos {
       "indowRect\022\t\n\001x\030\001 \002(\r\022\t\n\001y\030\002 \002(\r\022\r\n\005width" +
       "\030\003 \002(\r\022\016\n\006height\030\004 \002(\r\"\037\n\013QuickMenuID\022\020\n" +
       "\010menuName\030\001 \002(\t\"7\n\rQuickMenuList\022&\n\010menu" +
-      "List\030\001 \003(\0132\024.scope.QuickMenuInfo\"\213\001\n\rQui" +
+      "List\030\001 \003(\0132\024.scope.QuickMenuInfo\"\265\001\n\rQui" +
       "ckMenuInfo\022\"\n\006menuId\030\001 \002(\0132\022.scope.Quick" +
       "MenuID\022&\n\004rect\030\002 \002(\0132\030.scope.DesktopWind" +
-      "owRect\022.\n\014menuItemList\030\003 \003(\0132\030.scope.Qui" +
-      "ckMenuItemInfo\"#\n\017QuickMenuItemID\022\020\n\010men" +
-      "uText\030\001 \002(\t\"\366\001\n\021QuickMenuItemInfo\022\014\n\004tex",
-      "t\030\001 \002(\t\022\016\n\006action\030\002 \001(\t\022\017\n\007submenu\030\003 \001(\t" +
-      "\022\013\n\003row\030\004 \002(\r\022\026\n\016shortcutletter\030\005 \002(\t\022\020\n" +
-      "\010shortcut\030\006 \001(\t\022&\n\004rect\030\007 \002(\0132\030.scope.De" +
-      "sktopWindowRect\022\017\n\007enabled\030\010 \002(\010\022\017\n\007chec" +
-      "ked\030\t \002(\010\022\020\n\010selected\030\n \002(\010\022\014\n\004bold\030\013 \002(" +
-      "\010\022\021\n\tseparator\030\014 \002(\010\"\324\004\n\017QuickWidgetInfo" +
-      "\022\014\n\004name\030\001 \002(\t\0224\n\004type\030\002 \002(\0162&.scope.Qui" +
-      "ckWidgetInfo.QuickWidgetType\022\017\n\007visible\030" +
-      "\003 \002(\010\022\014\n\004text\030\004 \002(\t\022\r\n\005value\030\005 \002(\r\022\017\n\007en" +
-      "abled\030\006 \002(\010\022\023\n\013defaultLook\030\007 \002(\010\022\023\n\013focu",
-      "sedLook\030\010 \002(\010\022&\n\004rect\030\t \002(\0132\030.scope.Desk" +
-      "topWindowRect\022\016\n\006parent\030\n \001(\t\022\013\n\003row\030\013 \001" +
-      "(\r\022\013\n\003col\030\014 \001(\r\022\024\n\014visible_text\030\r \001(\t\022\027\n" +
-      "\017additional_text\030\016 \001(\t\"\222\002\n\017QuickWidgetTy" +
-      "pe\022\013\n\007UNKNOWN\020\000\022\n\n\006BUTTON\020\001\022\014\n\010CHECKBOX\020" +
-      "\002\022\r\n\tDIALOGTAB\020\003\022\014\n\010DROPDOWN\020\004\022\r\n\tEDITFI" +
-      "ELD\020\005\022\t\n\005LABEL\020\006\022\017\n\013RADIOBUTTON\020\007\022\020\n\014ADD" +
-      "RESSFIELD\020\010\022\n\n\006SEARCH\020\t\022\013\n\007TOOLBAR\020\n\022\014\n\010" +
-      "TREEVIEW\020\013\022\014\n\010TREEITEM\020\014\022\r\n\tTABBUTTON\020\r\022" +
-      "\r\n\tTHUMBNAIL\020\016\022\016\n\nGRIDLAYOUT\020\017\022\014\n\010GRIDIT",
-      "EM\020\020\022\r\n\tQUICKFIND\020\021\"#\n\017DesktopWindowID\022\020" +
-      "\n\010windowID\030\001 \002(\r\"A\n\021DesktopWindowList\022,\n" +
-      "\nwindowList\030\001 \003(\0132\030.scope.DesktopWindowI" +
-      "nfo\"F\n\023QuickWidgetInfoList\022/\n\017quickwidge" +
-      "tList\030\001 \003(\0132\026.scope.QuickWidgetInfo\"\305\001\n\021" +
-      "QuickWidgetSearch\022(\n\010windowID\030\001 \002(\0132\026.sc" +
-      "ope.DesktopWindowID\022B\n\nsearchType\030\002 \002(\0162" +
-      "..scope.QuickWidgetSearch.QuickWidgetSea" +
-      "rchType\022\014\n\004data\030\003 \002(\t\"4\n\025QuickWidgetSear" +
-      "chType\022\010\n\004NAME\020\000\022\010\n\004TEXT\020\001\022\007\n\003POS\020\002B8\n#c",
-      "om.opera.core.systems.scope.protosB\017Desk" +
-      "topWmProtosH\001"
+      "owRect\022(\n\010windowId\030\003 \002(\0132\026.scope.Desktop" +
+      "WindowID\022.\n\014menuItemList\030\004 \003(\0132\030.scope.Q" +
+      "uickMenuItemInfo\"#\n\017QuickMenuItemID\022\020\n\010m",
+      "enuText\030\001 \002(\t\"\366\001\n\021QuickMenuItemInfo\022\014\n\004t" +
+      "ext\030\001 \002(\t\022\016\n\006action\030\002 \001(\t\022\017\n\007submenu\030\003 \001" +
+      "(\t\022\013\n\003row\030\004 \002(\r\022\026\n\016shortcutletter\030\005 \002(\t\022" +
+      "\020\n\010shortcut\030\006 \001(\t\022&\n\004rect\030\007 \002(\0132\030.scope." +
+      "DesktopWindowRect\022\017\n\007enabled\030\010 \002(\010\022\017\n\007ch" +
+      "ecked\030\t \002(\010\022\020\n\010selected\030\n \002(\010\022\014\n\004bold\030\013 " +
+      "\002(\010\022\021\n\tseparator\030\014 \002(\010\"\324\004\n\017QuickWidgetIn" +
+      "fo\022\014\n\004name\030\001 \002(\t\0224\n\004type\030\002 \002(\0162&.scope.Q" +
+      "uickWidgetInfo.QuickWidgetType\022\017\n\007visibl" +
+      "e\030\003 \002(\010\022\014\n\004text\030\004 \002(\t\022\r\n\005value\030\005 \002(\r\022\017\n\007",
+      "enabled\030\006 \002(\010\022\023\n\013defaultLook\030\007 \002(\010\022\023\n\013fo" +
+      "cusedLook\030\010 \002(\010\022&\n\004rect\030\t \002(\0132\030.scope.De" +
+      "sktopWindowRect\022\016\n\006parent\030\n \001(\t\022\013\n\003row\030\013" +
+      " \001(\r\022\013\n\003col\030\014 \001(\r\022\024\n\014visible_text\030\r \001(\t\022" +
+      "\027\n\017additional_text\030\016 \001(\t\"\222\002\n\017QuickWidget" +
+      "Type\022\013\n\007UNKNOWN\020\000\022\n\n\006BUTTON\020\001\022\014\n\010CHECKBO" +
+      "X\020\002\022\r\n\tDIALOGTAB\020\003\022\014\n\010DROPDOWN\020\004\022\r\n\tEDIT" +
+      "FIELD\020\005\022\t\n\005LABEL\020\006\022\017\n\013RADIOBUTTON\020\007\022\020\n\014A" +
+      "DDRESSFIELD\020\010\022\n\n\006SEARCH\020\t\022\013\n\007TOOLBAR\020\n\022\014" +
+      "\n\010TREEVIEW\020\013\022\014\n\010TREEITEM\020\014\022\r\n\tTABBUTTON\020",
+      "\r\022\r\n\tTHUMBNAIL\020\016\022\016\n\nGRIDLAYOUT\020\017\022\014\n\010GRID" +
+      "ITEM\020\020\022\r\n\tQUICKFIND\020\021\"#\n\017DesktopWindowID" +
+      "\022\020\n\010windowID\030\001 \002(\r\"A\n\021DesktopWindowList\022" +
+      ",\n\nwindowList\030\001 \003(\0132\030.scope.DesktopWindo" +
+      "wInfo\"F\n\023QuickWidgetInfoList\022/\n\017quickwid" +
+      "getList\030\001 \003(\0132\026.scope.QuickWidgetInfo\"\305\001" +
+      "\n\021QuickWidgetSearch\022(\n\010windowID\030\001 \002(\0132\026." +
+      "scope.DesktopWindowID\022B\n\nsearchType\030\002 \002(" +
+      "\0162..scope.QuickWidgetSearch.QuickWidgetS" +
+      "earchType\022\014\n\004data\030\003 \002(\t\"4\n\025QuickWidgetSe",
+      "archType\022\010\n\004NAME\020\000\022\010\n\004TEXT\020\001\022\007\n\003POS\020\002B8\n" +
+      "#com.opera.core.systems.scope.protosB\017De" +
+      "sktopWmProtosH\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -5809,7 +5876,7 @@ public final class DesktopWmProtos {
           internal_static_scope_QuickMenuInfo_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_scope_QuickMenuInfo_descriptor,
-              new java.lang.String[] { "MenuId", "Rect", "MenuItemList", },
+              new java.lang.String[] { "MenuId", "Rect", "WindowId", "MenuItemList", },
               com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo.class,
               com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo.Builder.class);
           internal_static_scope_QuickMenuItemID_descriptor =
