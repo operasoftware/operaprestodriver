@@ -192,7 +192,7 @@ public class ScopeServices implements IConnectionHandler {
 
     wantedServices.add("exec");
     wantedServices.add("window-manager");
-    wantedServices.add("core-utils");
+    wantedServices.add("core");
 
     if (versions.containsKey("prefs"))
       wantedServices.add("prefs");
@@ -221,27 +221,28 @@ public class ScopeServices implements IConnectionHandler {
     coreUtils.init();
 
     if (versions.containsKey("prefs") && prefs != null) prefs.init();
-
-    if (versions.containsKey("desktop-window-manager")
-        && desktopWindowManager != null) desktopWindowManager.init();
-
+    if (versions.containsKey("desktop-window-manager") && desktopWindowManager != null) desktopWindowManager.init();
     if (versions.containsKey("system-input") && systemInputManager != null) systemInputManager.init();
-
     if (versions.containsKey("desktop-utils") && desktopUtils != null) desktopUtils.init();
 
     if (enableDebugger) debugger.init();
   }
 
   public void shutdown() {
-    // This can get called twice if we get a DISCONNECTED exception when
-    // closing down Opera. Check if we're already shutting down and bail.
+    /*
+     * This can get called twice if we get a DISCONNECTED exception when
+     * closing down Opera. Check if we're already shutting down and bail.
+     */
     if (shuttingDown) return;
 
     shuttingDown = true;
+
     if (connection != null) {
       connection.close();
     }
+
     stpThread.shutdown();
+
     try {
       stpThread.join();
     } catch (InterruptedException ex) {
@@ -505,14 +506,14 @@ public class ScopeServices implements IConnectionHandler {
 
   public boolean isOperaIdleAvailable() {
     for (ScopeProtos.Service service : hostInfo.getServiceListList()) {
-      if (service.getName().equals("core-utils")) {
+      if (service.getName().equals("core")) {
         String version = service.getVersion();
 
         /*
          * Version 1.1 introduced some important fixes
          * we don't want to use idle detection without this.
          */
-        boolean ok = VersionUtil.compare(version,"1.1") >= 0;
+        boolean ok = VersionUtil.compare(version, "1.1") >= 0;
         logger.fine("Core service version check: " + ok + " (" + version + ")");
         return ok;
       }
