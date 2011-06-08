@@ -10,7 +10,7 @@ public class KeyEventsTest extends TestBase {
   private WebElement logEl;
 
   private boolean logContains(CharSequence s) {
-    return logEl.getValue().contains(s);
+    return logEl.getAttribute("value").contains(s);
   }
 
   @Before
@@ -87,7 +87,7 @@ public class KeyEventsTest extends TestBase {
 
     driver.key("f5");
     //driver.waitForLoadToComplete();
-    Assert.assertEquals("", driver.findElementById("input_email").getValue());
+    Assert.assertEquals("", driver.findElementById("input_email").getAttribute("value"));
   }
 
   @Test
@@ -111,7 +111,7 @@ public class KeyEventsTest extends TestBase {
 
     driver.keyDown("control");
 
-    Assert.assertTrue("released", logEl.getValue().endsWith("down, 17, , ctrl\n"));
+    Assert.assertTrue("released", logEl.getAttribute("value").endsWith("down, 17, , ctrl\n"));
   }
 
   // Pressing enter will wait for a page to load, check what happens when

@@ -28,7 +28,6 @@ import org.openqa.selenium.InvalidElementStateException;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.Point;
-import org.openqa.selenium.RenderedWebElement;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
@@ -63,8 +62,8 @@ import com.opera.core.systems.scope.services.IOperaExec;
  * @author Deniz Turkoglu
  *
  */
-public class OperaWebElement implements RenderedWebElement, SearchContext,
-    Locatable, FindsByTagName, FindsByLinkText, FindsByClassName, FindsByXPath,
+public class OperaWebElement implements WebElement, SearchContext, Locatable,
+    FindsByTagName, FindsByLinkText, FindsByClassName, FindsByXPath,
     FindsByName, FindsById, FindsByCssSelector, WrapsDriver {
 
   private final int objectId;
@@ -245,8 +244,11 @@ public class OperaWebElement implements RenderedWebElement, SearchContext,
       return callMethod("locator.index");
     }
 
-    if (lcAttribute == "value") {
-      return callMethod("locator.value");
+    if (lcAttribute.equals("value")) {
+      return callMethod("if(/^input|select|textarea$/i.test(locator.nodeName)){"+
+          "return locator.value;"+
+           "}"+
+           "return locator.textContent;");
     } else {
       return callMethod("locator.getAttribute('" + attribute + "')");
     }
@@ -569,6 +571,10 @@ public class OperaWebElement implements RenderedWebElement, SearchContext,
     }
   }
 
+  /**
+   * To be replaced by the advanced interactions API.
+   * @deprecated
+   */
   @Deprecated
   public void dragAndDropBy(int x, int y) {
     Point point = this.getLocation();
@@ -579,8 +585,12 @@ public class OperaWebElement implements RenderedWebElement, SearchContext,
     execService.mouseAction(x, y, OperaMouseKeys.LEFT_UP);
   }
 
+  /**
+   * To be replaced by the advanced interactions API.
+   * @deprecated
+   */
   @Deprecated
-  public void dragAndDropOn(RenderedWebElement element) {
+  public void dragAndDropOn(WebElement element) {
     Point currentLocation = this.getLocation();
     Point dragPoint = element.getLocation();
     execService.mouseAction(currentLocation.x, currentLocation.y,
@@ -616,14 +626,6 @@ public class OperaWebElement implements RenderedWebElement, SearchContext,
     String[] dimension = widthAndHeight.split(",");
     return new Dimension(Integer.valueOf(dimension[0]),
         Integer.valueOf(dimension[1]));
-  }
-
-  /**
-   * @deprecated Use {@link #getCssValue(String)}
-   */
-  @Deprecated
-  public String getValueOfCssProperty(String property) {
-    return getCssValue(property);
   }
 
   public boolean isDisplayed() {

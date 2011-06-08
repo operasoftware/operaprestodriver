@@ -105,7 +105,7 @@ public class IdleTest extends TestBase {
     driver.navigate().refresh();
     stop();
 
-    Assert.assertEquals("", driver.findElementById("input_email").getValue());
+    Assert.assertEquals("", driver.findElementById("input_email").getAttribute("value"));
   }
 
   @Test
@@ -251,6 +251,6 @@ public class IdleTest extends TestBase {
 
     getFixture("timer.html");
     // Idle will wait for timeout before firing
-    Assert.assertEquals("default", driver.findElementById("one").getValue());
+    Assert.assertEquals("default", driver.findElementById("one").getAttribute("value"));
   }
 }
