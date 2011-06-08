@@ -28,7 +28,6 @@ import org.openqa.selenium.InvalidElementStateException;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.Point;
-import org.openqa.selenium.RenderedWebElement;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
@@ -63,7 +62,7 @@ import com.opera.core.systems.scope.services.IOperaExec;
  * @author Deniz Turkoglu
  *
  */
-public class OperaWebElement implements RenderedWebElement, SearchContext,
+public class OperaWebElement implements WebElement, SearchContext,
     Locatable, FindsByTagName, FindsByLinkText, FindsByClassName, FindsByXPath,
     FindsByName, FindsById, FindsByCssSelector, WrapsDriver {
 
@@ -569,26 +568,6 @@ public class OperaWebElement implements RenderedWebElement, SearchContext,
     }
   }
 
-  @Deprecated
-  public void dragAndDropBy(int x, int y) {
-    Point point = this.getLocation();
-    execService.mouseAction(point.x, point.y, OperaMouseKeys.LEFT_DOWN);
-    x = (x + point.x < 0) ? 0 : x + point.x;
-    y = (y + point.y < 0) ? 0 : y + point.y;
-    execService.mouseAction(x, y);
-    execService.mouseAction(x, y, OperaMouseKeys.LEFT_UP);
-  }
-
-  @Deprecated
-  public void dragAndDropOn(RenderedWebElement element) {
-    Point currentLocation = this.getLocation();
-    Point dragPoint = element.getLocation();
-    execService.mouseAction(currentLocation.x, currentLocation.y,
-        OperaMouseKeys.LEFT_DOWN);
-    execService.mouseAction(dragPoint.x, dragPoint.y);
-    execService.mouseAction(dragPoint.x, dragPoint.y, OperaMouseKeys.LEFT_UP);
-  }
-
   /**
    * Click top left, can be modified to click in the middle
    */
@@ -616,14 +595,6 @@ public class OperaWebElement implements RenderedWebElement, SearchContext,
     String[] dimension = widthAndHeight.split(",");
     return new Dimension(Integer.valueOf(dimension[0]),
         Integer.valueOf(dimension[1]));
-  }
-
-  /**
-   * @deprecated Use {@link #getCssValue(String)}
-   */
-  @Deprecated
-  public String getValueOfCssProperty(String property) {
-    return getCssValue(property);
   }
 
   public boolean isDisplayed() {
