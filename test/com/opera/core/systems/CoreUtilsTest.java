@@ -49,7 +49,7 @@ public class CoreUtilsTest extends TestBase {
 
     @Test
     public void testOS() {
-        Assert.assertTrue(os.length() > 0);
+        Assert.assertNotNull(os);
     }
 
     @Test
@@ -64,7 +64,7 @@ public class CoreUtilsTest extends TestBase {
 
     @Test
     public void testBinaryPath() {
-        Assert.assertTrue(binaryPath.length() > 0);
+        Assert.assertNotNull(binaryPath);
     }
 
     @Test
