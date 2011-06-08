@@ -25,7 +25,7 @@ public class JavascriptTest extends TestBase
     driver.executeScript("document.getElementById('one').focus()");
     driver.type(text);
 
-    Assert.assertEquals(text, driver.findElementById("one").getValue());
+    Assert.assertEquals(text, driver.findElementById("one").getAttribute("value"));
   }
 
   // Make sure that typing actually happens. When the focus switches half way
@@ -37,7 +37,7 @@ public class JavascriptTest extends TestBase
 
     driver.type("hi");
 
-    String log = driver.findElementById("log").getValue();
+    String log = driver.findElementById("log").getAttribute("value");
     Assert.assertTrue(log.contains("press, 104, h,"));
     Assert.assertTrue(log.contains("up, 73, I,"));
   }
@@ -48,7 +48,7 @@ public class JavascriptTest extends TestBase
     WebElement one = driver.findElementById("one");
     one.click();
     one.click();
-    Assert.assertEquals(driver.findElementById("two").getValue(), "double");
+    Assert.assertEquals(driver.findElementById("two").getAttribute("value"), "double");
   }
 
   @Test

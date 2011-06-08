@@ -15,8 +15,8 @@ limitations under the License.
 */
 package com.opera.core.systems.interaction;
 
-import org.openqa.selenium.RenderedWebElement;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 
 import com.opera.core.systems.OperaWebElement;
 
@@ -29,7 +29,7 @@ import com.opera.core.systems.OperaWebElement;
  */
 public abstract class Mouse implements UserInteraction {
 
-  public static Mouse moveOn(final RenderedWebElement element) {
+  public static Mouse moveOn(final WebElement element) {
     return new Mouse() {
 
       public void execute(WebDriver driver) {
@@ -39,7 +39,7 @@ public abstract class Mouse implements UserInteraction {
     };
   }
 
-  public static Mouse clickOn(final RenderedWebElement element) {
+  public static Mouse clickOn(final WebElement element) {
     return new Mouse() {
 
       public void execute(WebDriver driver) {
@@ -48,7 +48,7 @@ public abstract class Mouse implements UserInteraction {
     };
   }
 
-  public static Mouse buttonDownOn(final RenderedWebElement element) {
+  public static Mouse buttonDownOn(final WebElement element) {
     return new Mouse() {
 
       public void execute(WebDriver driver) {
@@ -57,7 +57,7 @@ public abstract class Mouse implements UserInteraction {
     };
   }
 
-  public static Mouse buttonUpFrom(final RenderedWebElement element) {
+  public static Mouse buttonUpFrom(final WebElement element) {
     return new Mouse() {
 
       public void execute(WebDriver driver) {
