@@ -68,6 +68,16 @@ public class QuickMenu {
 			return info.getMenuId().getMenuName();
 		}
 		
+		/**
+		 * 
+		 * @return window id 
+		 */
+		public int getParentWindowId() {
+			return info.getWindowId().getWindowID();
+		}
+		
+		
+		
 		public List<QuickMenuItem> getItemList() {
 			List<QuickMenuItem> itemList = new ArrayList<QuickMenuItem>();
 			for (QuickMenuItemInfo itemInfo : info.getMenuItemListList()) {
