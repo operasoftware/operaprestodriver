@@ -53,7 +53,12 @@ public class CoreUtilsTest extends TestBase {
     }
 
     @Test
-    public void testProduct() {
+    public void testProductIsNotUnknown() {
+        Assert.assertFalse(product.contains("unknown"));
+    }
+
+    @Test
+    public void testProductIsKnown() {
         Assert.assertTrue(product.matches("core-gogi|desktop"));
     }
 
