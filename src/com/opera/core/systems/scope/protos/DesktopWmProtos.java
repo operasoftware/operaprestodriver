@@ -3369,19 +3369,20 @@ public final class DesktopWmProtos {
       CHECKBOX(2, 2),
       DIALOGTAB(3, 3),
       DROPDOWN(4, 4),
-      EDITFIELD(5, 5),
-      LABEL(6, 6),
-      RADIOBUTTON(7, 7),
-      ADDRESSFIELD(8, 8),
-      SEARCH(9, 9),
-      TOOLBAR(10, 10),
-      TREEVIEW(11, 11),
-      TREEITEM(12, 12),
-      TABBUTTON(13, 13),
-      THUMBNAIL(14, 14),
-      GRIDLAYOUT(15, 15),
-      GRIDITEM(16, 16),
-      QUICKFIND(17, 17),
+      DROPDOWNITEM(5, 5),
+      EDITFIELD(6, 6),
+      LABEL(7, 7),
+      RADIOBUTTON(8, 8),
+      ADDRESSFIELD(9, 9),
+      SEARCH(10, 10),
+      TOOLBAR(11, 11),
+      TREEVIEW(12, 12),
+      TREEITEM(13, 13),
+      TABBUTTON(14, 14),
+      THUMBNAIL(15, 15),
+      GRIDLAYOUT(16, 16),
+      GRIDITEM(17, 17),
+      QUICKFIND(18, 18),
       ;
       
       
@@ -3394,19 +3395,20 @@ public final class DesktopWmProtos {
           case 2: return CHECKBOX;
           case 3: return DIALOGTAB;
           case 4: return DROPDOWN;
-          case 5: return EDITFIELD;
-          case 6: return LABEL;
-          case 7: return RADIOBUTTON;
-          case 8: return ADDRESSFIELD;
-          case 9: return SEARCH;
-          case 10: return TOOLBAR;
-          case 11: return TREEVIEW;
-          case 12: return TREEITEM;
-          case 13: return TABBUTTON;
-          case 14: return THUMBNAIL;
-          case 15: return GRIDLAYOUT;
-          case 16: return GRIDITEM;
-          case 17: return QUICKFIND;
+          case 5: return DROPDOWNITEM;
+          case 6: return EDITFIELD;
+          case 7: return LABEL;
+          case 8: return RADIOBUTTON;
+          case 9: return ADDRESSFIELD;
+          case 10: return SEARCH;
+          case 11: return TOOLBAR;
+          case 12: return TREEVIEW;
+          case 13: return TREEITEM;
+          case 14: return TABBUTTON;
+          case 15: return THUMBNAIL;
+          case 16: return GRIDLAYOUT;
+          case 17: return GRIDITEM;
+          case 18: return QUICKFIND;
           default: return null;
         }
       }
@@ -3437,7 +3439,7 @@ public final class DesktopWmProtos {
       }
       
       private static final QuickWidgetType[] VALUES = {
-        UNKNOWN, BUTTON, CHECKBOX, DIALOGTAB, DROPDOWN, EDITFIELD, LABEL, RADIOBUTTON, ADDRESSFIELD, SEARCH, TOOLBAR, TREEVIEW, TREEITEM, TABBUTTON, THUMBNAIL, GRIDLAYOUT, GRIDITEM, QUICKFIND, 
+        UNKNOWN, BUTTON, CHECKBOX, DIALOGTAB, DROPDOWN, DROPDOWNITEM, EDITFIELD, LABEL, RADIOBUTTON, ADDRESSFIELD, SEARCH, TOOLBAR, TREEVIEW, TREEITEM, TABBUTTON, THUMBNAIL, GRIDLAYOUT, GRIDITEM, QUICKFIND, 
       };
       public static QuickWidgetType valueOf(
           com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
@@ -5806,7 +5808,7 @@ public final class DesktopWmProtos {
       "\020\n\010shortcut\030\006 \001(\t\022&\n\004rect\030\007 \002(\0132\030.scope." +
       "DesktopWindowRect\022\017\n\007enabled\030\010 \002(\010\022\017\n\007ch" +
       "ecked\030\t \002(\010\022\020\n\010selected\030\n \002(\010\022\014\n\004bold\030\013 " +
-      "\002(\010\022\021\n\tseparator\030\014 \002(\010\"\324\004\n\017QuickWidgetIn" +
+      "\002(\010\022\021\n\tseparator\030\014 \002(\010\"\346\004\n\017QuickWidgetIn" +
       "fo\022\014\n\004name\030\001 \002(\t\0224\n\004type\030\002 \002(\0162&.scope.Q" +
       "uickWidgetInfo.QuickWidgetType\022\017\n\007visibl" +
       "e\030\003 \002(\010\022\014\n\004text\030\004 \002(\t\022\r\n\005value\030\005 \002(\r\022\017\n\007",
@@ -5814,25 +5816,25 @@ public final class DesktopWmProtos {
       "cusedLook\030\010 \002(\010\022&\n\004rect\030\t \002(\0132\030.scope.De" +
       "sktopWindowRect\022\016\n\006parent\030\n \001(\t\022\013\n\003row\030\013" +
       " \001(\r\022\013\n\003col\030\014 \001(\r\022\024\n\014visible_text\030\r \001(\t\022" +
-      "\027\n\017additional_text\030\016 \001(\t\"\222\002\n\017QuickWidget" +
+      "\027\n\017additional_text\030\016 \001(\t\"\244\002\n\017QuickWidget" +
       "Type\022\013\n\007UNKNOWN\020\000\022\n\n\006BUTTON\020\001\022\014\n\010CHECKBO" +
-      "X\020\002\022\r\n\tDIALOGTAB\020\003\022\014\n\010DROPDOWN\020\004\022\r\n\tEDIT" +
-      "FIELD\020\005\022\t\n\005LABEL\020\006\022\017\n\013RADIOBUTTON\020\007\022\020\n\014A" +
-      "DDRESSFIELD\020\010\022\n\n\006SEARCH\020\t\022\013\n\007TOOLBAR\020\n\022\014" +
-      "\n\010TREEVIEW\020\013\022\014\n\010TREEITEM\020\014\022\r\n\tTABBUTTON\020",
-      "\r\022\r\n\tTHUMBNAIL\020\016\022\016\n\nGRIDLAYOUT\020\017\022\014\n\010GRID" +
-      "ITEM\020\020\022\r\n\tQUICKFIND\020\021\"#\n\017DesktopWindowID" +
-      "\022\020\n\010windowID\030\001 \002(\r\"A\n\021DesktopWindowList\022" +
-      ",\n\nwindowList\030\001 \003(\0132\030.scope.DesktopWindo" +
-      "wInfo\"F\n\023QuickWidgetInfoList\022/\n\017quickwid" +
-      "getList\030\001 \003(\0132\026.scope.QuickWidgetInfo\"\305\001" +
-      "\n\021QuickWidgetSearch\022(\n\010windowID\030\001 \002(\0132\026." +
-      "scope.DesktopWindowID\022B\n\nsearchType\030\002 \002(" +
-      "\0162..scope.QuickWidgetSearch.QuickWidgetS" +
-      "earchType\022\014\n\004data\030\003 \002(\t\"4\n\025QuickWidgetSe",
-      "archType\022\010\n\004NAME\020\000\022\010\n\004TEXT\020\001\022\007\n\003POS\020\002B8\n" +
-      "#com.opera.core.systems.scope.protosB\017De" +
-      "sktopWmProtosH\001"
+      "X\020\002\022\r\n\tDIALOGTAB\020\003\022\014\n\010DROPDOWN\020\004\022\020\n\014DROP" +
+      "DOWNITEM\020\005\022\r\n\tEDITFIELD\020\006\022\t\n\005LABEL\020\007\022\017\n\013" +
+      "RADIOBUTTON\020\010\022\020\n\014ADDRESSFIELD\020\t\022\n\n\006SEARC" +
+      "H\020\n\022\013\n\007TOOLBAR\020\013\022\014\n\010TREEVIEW\020\014\022\014\n\010TREEIT",
+      "EM\020\r\022\r\n\tTABBUTTON\020\016\022\r\n\tTHUMBNAIL\020\017\022\016\n\nGR" +
+      "IDLAYOUT\020\020\022\014\n\010GRIDITEM\020\021\022\r\n\tQUICKFIND\020\022\"" +
+      "#\n\017DesktopWindowID\022\020\n\010windowID\030\001 \002(\r\"A\n\021" +
+      "DesktopWindowList\022,\n\nwindowList\030\001 \003(\0132\030." +
+      "scope.DesktopWindowInfo\"F\n\023QuickWidgetIn" +
+      "foList\022/\n\017quickwidgetList\030\001 \003(\0132\026.scope." +
+      "QuickWidgetInfo\"\305\001\n\021QuickWidgetSearch\022(\n" +
+      "\010windowID\030\001 \002(\0132\026.scope.DesktopWindowID\022" +
+      "B\n\nsearchType\030\002 \002(\0162..scope.QuickWidgetS" +
+      "earch.QuickWidgetSearchType\022\014\n\004data\030\003 \002(",
+      "\t\"4\n\025QuickWidgetSearchType\022\010\n\004NAME\020\000\022\010\n\004" +
+      "TEXT\020\001\022\007\n\003POS\020\002B8\n#com.opera.core.system" +
+      "s.scope.protosB\017DesktopWmProtosH\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
