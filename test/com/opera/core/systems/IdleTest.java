@@ -215,17 +215,6 @@ public class IdleTest extends TestBase {
   }
 
   @Test
-  public void testReflow() throws Exception {
-    // Need #box to activate the :target pseudo class
-    start();
-    getFixture("idle/reflow.html#box");
-    stop();
-
-    OperaWebElement box = (OperaWebElement) driver.findElementById("box");
-    Assert.assertEquals(200, box.getSize().width);
-  }
-
-  @Test
   public void testMetarefresh() throws Exception {
     getFixture("idle/metarefresh.html");
 

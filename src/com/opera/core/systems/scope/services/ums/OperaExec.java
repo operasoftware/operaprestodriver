@@ -17,7 +17,6 @@ package com.opera.core.systems.scope.services.ums;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -38,17 +37,18 @@ import com.opera.core.systems.scope.internal.OperaIntervals;
 import com.opera.core.systems.scope.internal.OperaKeys;
 import com.opera.core.systems.scope.internal.OperaMouseKeys;
 import com.opera.core.systems.scope.protos.ExecProtos.ActionInfoList;
-import com.opera.core.systems.scope.protos.ExecProtos.ActionInfoList.ActionInfo;
 import com.opera.core.systems.scope.protos.ExecProtos.ActionList;
-import com.opera.core.systems.scope.protos.ExecProtos.ActionList.Action;
 import com.opera.core.systems.scope.protos.ExecProtos.Area;
 import com.opera.core.systems.scope.protos.ExecProtos.MouseAction;
 import com.opera.core.systems.scope.protos.ExecProtos.ScreenWatcher;
-import com.opera.core.systems.scope.protos.ExecProtos.ScreenWatcher.ColorSpec;
 import com.opera.core.systems.scope.protos.ExecProtos.ScreenWatcherResult;
+import com.opera.core.systems.scope.protos.ExecProtos.ActionInfoList.ActionInfo;
+import com.opera.core.systems.scope.protos.ExecProtos.ActionList.Action;
+import com.opera.core.systems.scope.protos.ExecProtos.ScreenWatcher.ColorSpec;
 import com.opera.core.systems.scope.protos.ExecProtos.ScreenWatcherResult.ColorMatch;
 import com.opera.core.systems.scope.protos.UmsProtos.Response;
 import com.opera.core.systems.scope.services.IOperaExec;
+import com.opera.core.systems.util.CaseInsensitiveStringSet;
 import com.opera.core.systems.util.VersionUtil;
 
 /**
@@ -107,7 +107,7 @@ public class OperaExec extends AbstractService implements IOperaExec {
     buildPayload(response, builder);
     ActionInfoList infoList = builder.build();
 
-    Set<String> actions = new HashSet<String>();
+    Set<String> actions = new CaseInsensitiveStringSet();
 
     for (ActionInfo info : infoList.getActionInfoListList()) {
       actions.add(info.getName());
