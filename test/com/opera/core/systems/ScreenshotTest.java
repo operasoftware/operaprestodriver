@@ -9,6 +9,7 @@ import java.util.zip.Adler32;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.opera.core.systems.model.ScreenShotReply;
@@ -157,6 +158,7 @@ public class ScreenshotTest extends TestBase {
   }
 
   // Can cause problems on Windows, so moved to last
+  @Ignore(value="We don't support taking single element screenshots of plugins")
   @Test
   public void testFlash() throws Exception {
     getFixture("flash.html");
