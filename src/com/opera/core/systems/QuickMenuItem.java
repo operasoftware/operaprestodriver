@@ -53,8 +53,12 @@ public class QuickMenuItem extends OperaUIElement {
 		 * @return actionName or SubmenuName of menuItem
 		 */
 		public String getName() {
-			if (getActionName().length() > 0)
-				return getActionName();
+			if (getActionName().length() > 0) {
+				if (getActionParameter() != null)
+					return getActionName() + ", " + getActionParameter();
+				else
+					return getActionName();
+			}
 			else
 				return this.getSubMenu();
 		}
@@ -75,6 +79,10 @@ public class QuickMenuItem extends OperaUIElement {
 		 */
 		public boolean hasSubMenu() {
 			return info.getSubmenu() != null;
+		}
+		
+		public String getActionParameter() {
+			return info.getActionParam();
 		}
 		
 		/**
