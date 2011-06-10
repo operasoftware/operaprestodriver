@@ -549,7 +549,7 @@ public class ScopeServices implements IConnectionHandler {
    * @param timeout Time in milliseconds to wait before aborting
    */
   public void waitForOperaIdle(long timeout) {
-    logger.fine("OperaIdle: Waiting for");
+    logger.fine("OperaIdle: Waiting for (timeout = " + timeout + ")");
     waitState.waitForOperaIdle(timeout);
     logger.fine("OperaIdle: Finished waiting");
   }
