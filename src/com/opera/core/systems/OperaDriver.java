@@ -264,8 +264,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
           // This could for example be a gif animation, preventing
           // idle from being passed.
           // Common case, and should not result in test error.
-          System.out.println("Opera Idle timed out, continue test... exception: "
-              + e);
+          logger.warning("Opera Idle timed out, continue test... exception: " + e);
         }
       } else {
         // Wait for window is loaded
