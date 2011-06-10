@@ -1,11 +1,14 @@
 package com.opera.core.systems;
 
+import static org.junit.Assert.*;
+
 import java.util.List;
 
 import junit.framework.Assert;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
 public class FindElementsTest extends TestBase
@@ -166,6 +169,18 @@ public class FindElementsTest extends TestBase
     for (WebElement el : els)
     {
       Assert.assertEquals(el.getAttribute("name"), "radios");
+    }
+  }
+
+  @Test
+  public void testMultipleElements() throws Exception {
+    OperaWebElement form = (OperaWebElement) driver.findElementByTagName("form");
+    List<WebElement> els = form.findElements(By.tagName("input"));
+
+    Assert.assertEquals(5, els.size());
+    for (WebElement el : els)
+    {
+      Assert.assertEquals(el.getTagName(), "INPUT");
     }
   }
 }
