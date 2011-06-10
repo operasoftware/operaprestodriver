@@ -53,6 +53,8 @@ public class QuickMenuItem extends OperaUIElement {
 		 * @return actionName or SubmenuName of menuItem
 		 */
 		public String getName() {
+			if (isSeparator())
+				return "Separator";
 			if (getActionName().length() > 0) {
 				if (getActionParameter() != null)
 					return getActionName() + ", " + getActionParameter();
