@@ -9,6 +9,7 @@
        This file is later copied to other locations. -->
   <exec executable="git" outputproperty="version" failifexecutionfails="false">
     <arg value="describe" />
+    <arg value="--dirty" />
   </exec>
   <!-- If we can't get the version from git, set a default  -->
   <property name="version" value="UNKNOWN-VERSION" />
