@@ -316,6 +316,7 @@ public class OperaLauncherRunner implements OperaRunner {
       ResponseEncapsulation res = launcherProtocol.sendRequest(
           MessageType.MSG_SCREENSHOT, request.build().toByteArray());
       LauncherScreenshotResponse response = (LauncherScreenshotResponse) res.getResponse();
+
       resultMd5 = response.getMd5();
       resultBytes = response.getImagedata().toByteArray();
 
@@ -328,12 +329,16 @@ public class OperaLauncherRunner implements OperaRunner {
       throw new OperaRunnerException("Could not get screenshot from launcher (Socket Timeout)", e);
     }
     catch (IOException e) {
-      throw new OperaRunnerException("Could not get screenshot from launcher", e);
+      throw new OperaRunnerException("Could not get screenshot from launcher with exception:" + e, e);
     }
 
-    ScreenShotReply screenshotreply = new ScreenShotReply(resultMd5,
-        resultBytes);
+    // This will make sure to check the status of Opera
+    isOperaRunning();
+
+    ScreenShotReply screenshotreply = new ScreenShotReply(resultMd5, resultBytes);
     screenshotreply.setBlank(blank);
+    screenshotreply.setCrashed(this.hasOperaCrashed());
+
     return screenshotreply;
   }
 }
