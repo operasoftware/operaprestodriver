@@ -1,3 +1,34 @@
+2011/06/14 OperaDriver 0.4.3
+============================
+
+API changes
+-----------
+
+ * Update to a snapshot of selenium post 2.0rc2. This removes RenderedWebElement,
+   and OperaWebElement.getvalue(). Use getAttribute("value") instead.
+
+New features
+------------
+
+ * Add OperaDriver.setUseOperaIdle(boolean).
+
+Enhancements
+------------
+
+ * Check Opera Actions case-insensitively.
+
+Bug fixes
+---------
+
+ * Keep closer track of the Opera Idle timeout for cases where we don't
+   receive the idle message.
+ * Fix socket timeout.
+
+Tests
+-----
+
+ * Remove consistently failing tests `testFlash` and `testReflow`
+
 2011/05/19 OperaDriver 0.4.2
 ============================
 
