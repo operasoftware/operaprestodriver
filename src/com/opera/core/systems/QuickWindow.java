@@ -62,6 +62,13 @@ public class QuickWindow {
   }
 
   /**
+   * @return true if window is active
+   */
+  public boolean isActive() {
+	  return info.getActive();
+  }
+  
+  /**
    * @return true if the window is on screen, otherwise false
    */
   public boolean isOnScreen() {
