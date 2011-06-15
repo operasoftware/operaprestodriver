@@ -56,7 +56,7 @@ public abstract class OperaUIElement {
 	protected Point getCenterLocation() {
 		DesktopWindowRect rect = getRect();
 		Point topLeft = getLocation();
-		Point center = new Point(topLeft.x + rect.getWidth() / 2, topLeft.y + rect.getHeight() / 2);
+		//Point center = new Point(topLeft.x + rect.getWidth() / 2, topLeft.y + rect.getHeight() / 2);
 		return new Point(topLeft.x + rect.getWidth() / 2, topLeft.y + rect.getHeight() / 2);
 	}
 

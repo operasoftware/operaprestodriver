@@ -16,9 +16,7 @@ limitations under the License.
 
 
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo;
-import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect;
-import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo.QuickWidgetType;
 import com.opera.core.systems.scope.services.IDesktopUtils;
 import com.opera.core.systems.scope.services.ums.SystemInputManager;
 
@@ -186,8 +184,8 @@ public class QuickMenuItem extends OperaUIElement {
 		@Override
 		public String toString() {
 			//TODO: FIXME: What field to use if no action?
-			String str = getActionName() != null ? getActionName() : getText();
-			return "QuickWidget " + getActionName();
+			String str = getActionName() != null ? getActionName() : getSubMenu();
+			return "QuickWidget " + str;//getActionName();
 		}
 		
 		public String toFullString() {

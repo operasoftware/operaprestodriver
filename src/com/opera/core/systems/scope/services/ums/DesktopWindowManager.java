@@ -31,8 +31,6 @@ import com.opera.core.systems.ScopeServices;
 //import org.openqa.selenium.WebDriverException;
 
 import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowList;
-import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect;
-import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemID;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo;
