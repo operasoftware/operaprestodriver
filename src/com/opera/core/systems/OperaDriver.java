@@ -39,11 +39,14 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.NoSuchFrameException;
 import org.openqa.selenium.NoSuchWindowException;
+import org.openqa.selenium.OutputType;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.StaleElementReferenceException;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.internal.Base64Encoder;
 import org.openqa.selenium.internal.FindsByClassName;
 import org.openqa.selenium.internal.FindsByCssSelector;
 import org.openqa.selenium.internal.FindsById;
@@ -78,7 +81,7 @@ import com.opera.core.systems.settings.OperaDriverSettings;
  */
 public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
     FindsByXPath, FindsByName, FindsByTagName, FindsByClassName,
-    FindsByCssSelector, SearchContext, JavascriptExecutor {
+    FindsByCssSelector, SearchContext, JavascriptExecutor, TakesScreenshot {
 
   // These are "protected" and not "private" so that we can extend this class
   // and add methods to access these variable in tests
@@ -919,6 +922,13 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
    */
   public ScreenShotReply saveScreenshot(long timeout, String... hashes) {
     return operaRunner.saveScreenshot(timeout, hashes);
+  }
+
+  public <X> X getScreenshotAs(OutputType<X> target) throws WebDriverException {
+    OperaWebElement body = (OperaWebElement) findElementByTagName("body");
+    ScreenShotReply ssr = body.saveScreenshot(0);
+
+    return target.convertFromBase64Png(new Base64Encoder().encode(ssr.getPng()));
   }
 
   public boolean isOperaIdleAvailable() {
