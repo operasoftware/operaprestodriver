@@ -4,8 +4,9 @@
 API changes
 -----------
 
- * Update to a snapshot of selenium post 2.0rc2. This removes RenderedWebElement,
-   and OperaWebElement.getvalue(). Use getAttribute("value") instead.
+ * Update to a snapshot of selenium post 2.0rc2. This removes
+   RenderedWebElement, and OperaWebElement.getvalue(). Use
+   getAttribute("value") instead.
 
 New features
 ------------
@@ -36,8 +37,9 @@ New features
 ------------
 
  * Add ability to get source of XML page
- * Read value of the OPERA_ARGS environment variable.
-   This is concatenated with any arguments set in OperaDriverSettings.setOperaBinaryArguments()
+ * Read value of the OPERA_ARGS environment variable.  This is
+   concatenated with any arguments set in
+   OperaDriverSettings.setOperaBinaryArguments()
 
 Enhancements
 ------------
