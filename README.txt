@@ -12,6 +12,24 @@ OperaDriver's end-user emulation ensures that your entire stack (HTML, scripts,
 styling, embedded resources and backend setup) is functioning correctly, and
 this without tedious manual testing routines.
 
+**Test profile**
+
+To prevent testing changing your usual Opera profile, an "autotest" profile is
+created. You can browse with this profile by running Opera with the
+`-autotestmode` flag
+
+    Linux:   opera -autotestmode
+    Windows: "C:\Program Files\Opera\opera.exe" -autotestmode
+    Mac:     /Applications/Opera.app/Contents/MacOS/Opera -autotestmode
+
+The profile data is stored in the following locations:
+
+    Linux:   ~/.opera-autotest
+    Windows: C:\Program Files\Opera\profile-autotest
+            (or under the Opera install directory)
+    Mac:     ~/.operaprofile-autotest
+
+
 Remote web driver
 -----------------
 
