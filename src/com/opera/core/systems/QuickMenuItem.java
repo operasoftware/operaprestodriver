@@ -183,9 +183,11 @@ public class QuickMenuItem extends OperaUIElement {
 		
 		@Override
 		public String toString() {
+			System.out.println("getSubMenu() = " + getSubMenu());
 			//TODO: FIXME: What field to use if no action?
-			String str = getActionName() != null ? getActionName() : getSubMenu();
-			return "QuickWidget " + str;//getActionName();
+			String str = isSeparator()? "Separator" : 
+				((getActionName() != null && getActionName().length() > 0) ? getActionName() : getSubMenu());
+			return "QuickMenuItem " + str;//getActionName();
 		}
 		
 		public String toFullString() {
