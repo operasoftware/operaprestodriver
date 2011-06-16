@@ -78,7 +78,8 @@ public class QuickMenuItem extends OperaUIElement {
 		 * @return true if item opens a submenu
 		 */
 		public boolean hasSubMenu() {
-			return info.getSubmenu() != null;
+			return info.getSubmenu() != null 
+			&& info.getSubmenu().length() > 0;
 		}
 		
 		public String getActionParameter() {
