@@ -395,6 +395,13 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 				if (item.getActionName().equals(name) ||
 						item.getSubMenu().equals(name))
 					return item;
+				if (name.indexOf(",") != 0) {
+					String[] parts = name.split(",");
+					if(parts.length >= 2 && parts[0].trim().equals(item.getActionName())
+							&& parts[1].trim().equals(item.getActionParameter()))
+						return item;
+				}
+					
 			}
 		}
 		return null;
