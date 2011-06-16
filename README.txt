@@ -12,8 +12,15 @@ OperaDriver's end-user emulation ensures that your entire stack (HTML, scripts,
 styling, embedded resources and backend setup) is functioning correctly, and
 this without tedious manual testing routines.
 
-Installation
-------------
+Remote web driver
+-----------------
+
+See examples/RemoteWebDriver/ for an example on how to use OperaDriver as a
+RemoteWebDriver. OperaDriver is included in the standalone jar so you do not
+need to download it separately.
+
+Standalone
+----------
 
  * Download OperaDriver from https://github.com/operasoftware/operadriver
  * Extract the operadriver directory to a location of your choice.
