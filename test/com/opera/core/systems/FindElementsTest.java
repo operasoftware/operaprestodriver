@@ -45,14 +45,13 @@ public class FindElementsTest extends TestBase
   }
 
   @Test
-  public void testElementsPartialLinkText()
+  public void testFindMultipleElements()
   {
-    List<WebElement> els = driver.findElementsByPartialLinkText("te");
+    List<WebElement> els = driver.findElementsByTagName("input");
 
     for (WebElement el : els)
     {
-      Assert.assertTrue(el.getText().contains("te"));
-      Assert.assertEquals(el.getTagName().toLowerCase(), "a");
+      Assert.assertEquals("INPUT", el.getTagName());
     }
   }
 
