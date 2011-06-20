@@ -34,6 +34,7 @@ import java.util.logging.Logger;
 import org.apache.commons.io.IOUtils;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.Cookie;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
@@ -54,6 +55,8 @@ import org.openqa.selenium.internal.FindsByLinkText;
 import org.openqa.selenium.internal.FindsByName;
 import org.openqa.selenium.internal.FindsByTagName;
 import org.openqa.selenium.internal.FindsByXPath;
+import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.RemoteWebDriver;
 
 import com.opera.core.systems.interaction.OperaAction;
 import com.opera.core.systems.interaction.UserInteraction;
@@ -79,9 +82,10 @@ import com.opera.core.systems.settings.OperaDriverSettings;
  * Opera's webdriver implementation. See AUTHORS and LICENSE for details
  *
  */
-public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
-    FindsByXPath, FindsByName, FindsByTagName, FindsByClassName,
-    FindsByCssSelector, SearchContext, JavascriptExecutor, TakesScreenshot {
+public class OperaDriver extends RemoteWebDriver implements WebDriver,
+    FindsByLinkText, FindsById, FindsByXPath, FindsByName, FindsByTagName,
+    FindsByClassName, FindsByCssSelector, SearchContext, JavascriptExecutor,
+    TakesScreenshot {
 
   // These are "protected" and not "private" so that we can extend this class
   // and add methods to access these variable in tests
@@ -235,6 +239,12 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
     } catch (IOException e) {
       throw new WebDriverException(e);
     }
+  }
+
+  public Capabilities getCapabilities() {
+    DesiredCapabilities capabilities = DesiredCapabilities.opera();
+    capabilities.setJavascriptEnabled(true);
+    return capabilities;
   }
 
   public void get(String url) {
