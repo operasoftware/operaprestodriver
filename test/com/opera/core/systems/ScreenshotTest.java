@@ -1,16 +1,23 @@
 package com.opera.core.systems;
 
+import static org.junit.Assert.*;
+
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.zip.Adler32;
 
+import javax.imageio.ImageIO;
+
+import org.apache.commons.io.FileUtils;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.openqa.selenium.OutputType;
 
 import com.opera.core.systems.model.ScreenShotReply;
 
@@ -169,5 +176,21 @@ public class ScreenshotTest extends TestBase {
     String flashMD5 = flash.saveScreenshot("two.png");
 
     Assert.assertEquals(imgMD5, flashMD5);
+  }
+
+  @Test
+  @Ignore(value="Opera problem. Areas outside current viewport are black.")
+  public void testFullScreenshot() throws Exception {
+    getFixture("tall.html");
+    File file = driver.getScreenshotAs(OutputType.FILE);
+    FileUtils.copyFile(file, new File("/home/stuartk/box/tmp/out.png"));
+
+    BufferedImage img = ImageIO.read(file);
+    Assert.assertEquals(5100, img.getHeight());
+
+    // Make sure the bottom colour is green, not black.
+    int botcol = img.getRGB(0, 5050);
+    Assert.assertEquals(0xFF00, botcol & 0xFF00);
+
   }
 }
