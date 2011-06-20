@@ -179,6 +179,7 @@ public class ScreenshotTest extends TestBase {
   }
 
   @Test
+  @Ignore(value="Opera problem. Areas outside current viewport are black.")
   public void testFullScreenshot() throws Exception {
     getFixture("tall.html");
     File file = driver.getScreenshotAs(OutputType.FILE);
@@ -187,6 +188,7 @@ public class ScreenshotTest extends TestBase {
     BufferedImage img = ImageIO.read(file);
     Assert.assertEquals(5100, img.getHeight());
 
+    // Make sure the bottom colour is green, not black.
     int botcol = img.getRGB(0, 5050);
     Assert.assertEquals(0xFF00, botcol & 0xFF00);
 
