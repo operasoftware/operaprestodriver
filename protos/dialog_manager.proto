@@ -1,0 +1,289 @@
+syntax = "scope";
+
+/**
+ * **DialogManager** is a service which fire events when dialogs appear (and
+ * disappear), and allows the client to interact with those dialogs.
+ *
+ * Dialogs
+ * -------
+ *
+ * `Dialogs` are identified by their type (`DialogType`), and the window that
+ * owns them. The window IDs found in this service are the same as in all other
+ * services, and can be used interchangeably everywhere.
+ *
+ * In addition to their ID, `Dialogs` consist of:
+ *
+ * - A title
+ * - `Buttons`
+ * - `TextFields`
+ * - `Selections`
+ *
+ * There are commands for interacting with these elements, for instance clicking
+ * a certain button.
+ *
+ * When clicking `Buttons`, typing text into `TextFields` and selecting options
+ * from `Selections`, use their IDs to indicate which element to interact with.
+ *
+ * A `Button`ID, `TextField`ID, or `Selection`ID globally identifies an item in
+ * a `Dialog`. An ID is not valid after the owner `Dialog` has been closed,
+ * however. Using an ID after the parent `Dialog` has been closed will cause
+ * the command to fail. The invalidated IDs will not be reused at a later time.
+ */
+service DialogManager
+{
+    option (version) = "1.0";
+
+    /**
+     * List the dialogs for a specified window, or if no window is specified,
+     * list *all* window.
+     */
+    command ListDialogs(ListDialogsArg) returns (DialogList) = 1;
+
+    /**
+     * Type some text into a `TextField`.
+     */
+    command Type(TypeArg) returns (Default) = 2;
+
+    /**
+     * Click a `Button` with the specified type.
+     */
+    command Click(ClickArg) returns (Default) = 3;
+
+    /**
+     * Select an option in a `Selection`.
+     */
+    command Select(SelectArg) returns (Default) = 4;
+
+    /**
+     * Fired when a `Dialog` has been created and is ready for user interaction.
+     */
+    event OnDialogCreated returns (Dialog) = 5;
+
+    /**
+     * Fired when a `Dialog` has closed, for instance because the user clicked a
+     * `Button`, or because the parent window was closed.
+     */
+    event OnDialogClosed returns (DialogID) = 6;
+}
+
+message ListDialogsArg
+{
+    /**
+     * When present, only `Dialogs` for that window will be listed. Otherwise,
+     * all `Dialogs` across all window will be listed.
+     */
+    optional uint32 windowID = 1;
+}
+
+enum ButtonType
+{
+    UNKNOWN = 0;
+    OK = 1;
+    CANCEL = 2;
+    OPEN = 3;
+    SAVE = 4;
+    YES = 5;
+    NO = 6;
+    INSTALL = 7;
+    DELETE = 8;
+}
+
+message Button
+{
+    required uint32 buttonID = 1;
+    required ButtonType type = 2;
+}
+
+enum TextFieldType
+{
+    UNKNOWN = 0;
+    PROMPT = 1;
+    MESSAGE = 2;
+    USERNAME = 3;
+    PASSWORD = 4;
+}
+
+message TextField
+{
+    required uint32 textFieldID = 1;
+    required TextFieldType type = 2;
+
+    /**
+     * For read-only `TextFields` (such as `TextFieldType::MESSAGE`), this field
+     * will be set to ``true``. Note that read-only `TextFields` are not
+     * necessarily displayed as "boxed text" by the browser. It may very well
+     * appear as inline "label-style" text.
+     */
+    required bool editable = 3;
+
+    /**
+     * The current text of the `TextField`.
+     */
+    optional string text = 4;
+}
+
+/**
+ * There are currently no `SelectionTypes`, but this enum is still present to
+ * allow for new types in the future.
+ */
+enum SelectionType
+{
+    UNKNOWN = 0;
+}
+
+/**
+ * A Selection is a set of many options, where zero, one, or more options can be
+ * selected. A drop-down menu is an example of a graphical representation of a
+ * Selection.
+ */
+message Selection
+{
+    required uint32 selectionID = 1;
+    required SelectionType type = 2;
+
+    /**
+     * Set to ``true`` for read-only selections.
+     */
+    required bool editable = 3;
+
+    /**
+     * A list of selectable options in the `Selection`.
+     */
+    repeated string optionList = 4;
+
+    /**
+     * Indices (referring back to `optionList`) to the set of the currently
+     * selected options.
+     */
+    repeated uint32 selectedList = 5;
+
+    /**
+     * The indicies of the default options (if any).
+     */
+    repeated uint32 defaultSelectedList = 6;
+}
+
+message TypeArg
+{
+    /**
+     * Which `Dialog` that contains the `TextField` we wish to type in.
+     */
+    required DialogID dialogID = 1;
+
+    /**
+     * Which `TextField` to type this text in.
+     */
+    required uint32 textFieldID = 2;
+
+    /**
+     * The text to type into the field.
+     */
+    required string text = 3;
+}
+
+message ClickArg
+{
+    /**
+     * Which `Dialog` that contains the `Button` we wish to click.
+     */
+    required DialogID dialogID = 1;
+
+    /**
+     * Which `Button` to click.
+     */
+    required uint32 buttonID = 2;
+}
+
+message SelectArg
+{
+    /**
+     * Which `Dialog` that contains the `Selection` we want to interact with.
+     */
+    required DialogID dialogID = 1;
+
+    /**
+     * Which Selection we would like to interact with.
+     */
+    required uint32 selectionID = 2;
+
+    /**
+     * Indices for the new set of options to be selected.
+     */
+    repeated uint32 indexList = 3;
+}
+
+enum DialogType
+{
+    UNKNOWN = 0;
+    JS_ALERT = 1;
+    JS_PROMPT = 2;
+    JS_CONFIRM = 3;
+    SYNC_ERROR = 4;
+    MESSAGE = 5;
+    WARN_COOKIE = 6;
+    ASK_COOKIE = 7;
+    CERT_BROWSE = 8;
+    CERT_PASSWD = 9;
+    FILE_CHOOSER = 10;
+    URL_WITH_USERNAME = 11;
+    FORM_REDIRECT = 12;
+    ASK_CONFIRMATION = 13;
+    FOLDER_CHOOSER = 14;
+    SYNC_LOGIN = 15;
+    INSECURE_FORM_SUBMIT = 16;
+    PLUGIN_POST = 17;
+    USERJS_ON_HTTPS = 18;
+    CLIENT_CERT_SELECT = 19;
+    DB_QUOTA_EXCEEDED = 20;
+    SAVE_IMAGE = 21;
+    ASK_CONFIRMATION_GOING_ONLINE = 22;
+    AUTHENTICATION = 23;
+}
+
+/**
+ * A `Dialog` is identified by its type, and the Window that owns the `Dialog`.
+ */
+message DialogID
+{
+    /**
+     * The window that owns the `Dialog`.
+     */
+    required uint32 windowID = 1;
+
+    /**
+     * The type of the `Dialog` gives the client a hint as to why it appeared
+     * in the first place.
+     */
+    required DialogType type = 2;
+}
+
+message Dialog
+{
+    required DialogID dialogID = 1;
+
+    /**
+     * The title of the `Dialog`. The exact nature of this text is dependent on
+     * platform, but it's usually displayed in the top of the UI frame.
+     */
+    optional string title = 2;
+
+    /**
+     * A list of all the `Buttons` present in this `Dialog`.
+     */
+    repeated Button buttonList = 3;
+
+    /**
+     * A list of all the `TextFields` present in this `Dialog`.
+     */
+    repeated TextField textFieldList = 4;
+
+    /**
+     * A list of all the `Selections` present in this `Dialog`.
+     */
+    repeated Selection selectionList = 5;
+}
+
+message DialogList
+{
+    repeated Dialog dialogList = 1;
+}
