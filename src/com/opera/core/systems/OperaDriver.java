@@ -924,6 +924,8 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
     return operaRunner.saveScreenshot(timeout, hashes);
   }
 
+  // FIXME: CORE-39436 areas outside of the current viewport are black. This is
+  // a problem with Opera, not OperaDriver.
   public <X> X getScreenshotAs(OutputType<X> target) throws WebDriverException {
     OperaWebElement body = (OperaWebElement) findElementByTagName("body");
     ScreenShotReply ssr = body.saveScreenshot(0);
