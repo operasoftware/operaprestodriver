@@ -1,4 +1,9 @@
-syntax = "scope";
+// syntax = "scope";
+package scope;
+
+option java_package = "com.opera.core.systems.scope.protos";
+option java_outer_classname = "DialogManagerProtos";
+option optimize_for = SPEED;
 
 /**
  * **DialogManager** is a service which fire events when dialogs appear (and
@@ -29,42 +34,44 @@ syntax = "scope";
  * however. Using an ID after the parent `Dialog` has been closed will cause
  * the command to fail. The invalidated IDs will not be reused at a later time.
  */
-service DialogManager
-{
-    option (version) = "1.0";
 
-    /**
-     * List the dialogs for a specified window, or if no window is specified,
-     * list *all* window.
-     */
-    command ListDialogs(ListDialogsArg) returns (DialogList) = 1;
-
-    /**
-     * Type some text into a `TextField`.
-     */
-    command Type(TypeArg) returns (Default) = 2;
-
-    /**
-     * Click a `Button` with the specified type.
-     */
-    command Click(ClickArg) returns (Default) = 3;
-
-    /**
-     * Select an option in a `Selection`.
-     */
-    command Select(SelectArg) returns (Default) = 4;
-
-    /**
-     * Fired when a `Dialog` has been created and is ready for user interaction.
-     */
-    event OnDialogCreated returns (Dialog) = 5;
-
-    /**
-     * Fired when a `Dialog` has closed, for instance because the user clicked a
-     * `Button`, or because the parent window was closed.
-     */
-    event OnDialogClosed returns (DialogID) = 6;
-}
+//// NOT VALID IN REGULAR PROTOBUF ////
+// service DialogManager
+// {
+//     option (version) = "1.0";
+//
+//     /**
+//      * List the dialogs for a specified window, or if no window is specified,
+//      * list *all* window.
+//      */
+//     command ListDialogs(ListDialogsArg) returns (DialogList) = 1;
+//
+//     /**
+//      * Type some text into a `TextField`.
+//      */
+//     command Type(TypeArg) returns (Default) = 2;
+//
+//     /**
+//      * Click a `Button` with the specified type.
+//      */
+//     command Click(ClickArg) returns (Default) = 3;
+//
+//     /**
+//      * Select an option in a `Selection`.
+//      */
+//     command Select(SelectArg) returns (Default) = 4;
+//
+//     /**
+//      * Fired when a `Dialog` has been created and is ready for user interaction.
+//      */
+//     event OnDialogCreated returns (Dialog) = 5;
+//
+//     /**
+//      * Fired when a `Dialog` has closed, for instance because the user clicked a
+//      * `Button`, or because the parent window was closed.
+//      */
+//     event OnDialogClosed returns (DialogID) = 6;
+// }
 
 message ListDialogsArg
 {
@@ -75,36 +82,36 @@ message ListDialogsArg
     optional uint32 windowID = 1;
 }
 
-enum ButtonType
-{
-    UNKNOWN = 0;
-    OK = 1;
-    CANCEL = 2;
-    OPEN = 3;
-    SAVE = 4;
-    YES = 5;
-    NO = 6;
-    INSTALL = 7;
-    DELETE = 8;
-}
-
 message Button
 {
+    enum ButtonType
+    {
+        UNKNOWN = 0;
+        OK = 1;
+        CANCEL = 2;
+        OPEN = 3;
+        SAVE = 4;
+        YES = 5;
+        NO = 6;
+        INSTALL = 7;
+        DELETE = 8;
+    }
+
     required uint32 buttonID = 1;
     required ButtonType type = 2;
 }
 
-enum TextFieldType
-{
-    UNKNOWN = 0;
-    PROMPT = 1;
-    MESSAGE = 2;
-    USERNAME = 3;
-    PASSWORD = 4;
-}
-
 message TextField
 {
+    enum TextFieldType
+    {
+        UNKNOWN = 0;
+        PROMPT = 1;
+        MESSAGE = 2;
+        USERNAME = 3;
+        PASSWORD = 4;
+    }
+
     required uint32 textFieldID = 1;
     required TextFieldType type = 2;
 
@@ -123,21 +130,21 @@ message TextField
 }
 
 /**
- * There are currently no `SelectionTypes`, but this enum is still present to
- * allow for new types in the future.
- */
-enum SelectionType
-{
-    UNKNOWN = 0;
-}
-
-/**
  * A Selection is a set of many options, where zero, one, or more options can be
  * selected. A drop-down menu is an example of a graphical representation of a
  * Selection.
  */
 message Selection
 {
+    /**
+     * There are currently no `SelectionTypes`, but this enum is still present to
+     * allow for new types in the future.
+     */
+    enum SelectionType
+    {
+        UNKNOWN = 0;
+    }
+
     required uint32 selectionID = 1;
     required SelectionType type = 2;
 
@@ -212,39 +219,39 @@ message SelectArg
     repeated uint32 indexList = 3;
 }
 
-enum DialogType
-{
-    UNKNOWN = 0;
-    JS_ALERT = 1;
-    JS_PROMPT = 2;
-    JS_CONFIRM = 3;
-    SYNC_ERROR = 4;
-    MESSAGE = 5;
-    WARN_COOKIE = 6;
-    ASK_COOKIE = 7;
-    CERT_BROWSE = 8;
-    CERT_PASSWD = 9;
-    FILE_CHOOSER = 10;
-    URL_WITH_USERNAME = 11;
-    FORM_REDIRECT = 12;
-    ASK_CONFIRMATION = 13;
-    FOLDER_CHOOSER = 14;
-    SYNC_LOGIN = 15;
-    INSECURE_FORM_SUBMIT = 16;
-    PLUGIN_POST = 17;
-    USERJS_ON_HTTPS = 18;
-    CLIENT_CERT_SELECT = 19;
-    DB_QUOTA_EXCEEDED = 20;
-    SAVE_IMAGE = 21;
-    ASK_CONFIRMATION_GOING_ONLINE = 22;
-    AUTHENTICATION = 23;
-}
-
 /**
  * A `Dialog` is identified by its type, and the Window that owns the `Dialog`.
  */
 message DialogID
 {
+    enum DialogType
+    {
+        UNKNOWN = 0;
+        JS_ALERT = 1;
+        JS_PROMPT = 2;
+        JS_CONFIRM = 3;
+        SYNC_ERROR = 4;
+        MESSAGE = 5;
+        WARN_COOKIE = 6;
+        ASK_COOKIE = 7;
+        CERT_BROWSE = 8;
+        CERT_PASSWD = 9;
+        FILE_CHOOSER = 10;
+        URL_WITH_USERNAME = 11;
+        FORM_REDIRECT = 12;
+        ASK_CONFIRMATION = 13;
+        FOLDER_CHOOSER = 14;
+        SYNC_LOGIN = 15;
+        INSECURE_FORM_SUBMIT = 16;
+        PLUGIN_POST = 17;
+        USERJS_ON_HTTPS = 18;
+        CLIENT_CERT_SELECT = 19;
+        DB_QUOTA_EXCEEDED = 20;
+        SAVE_IMAGE = 21;
+        ASK_CONFIRMATION_GOING_ONLINE = 22;
+        AUTHENTICATION = 23;
+    }
+
     /**
      * The window that owns the `Dialog`.
      */
