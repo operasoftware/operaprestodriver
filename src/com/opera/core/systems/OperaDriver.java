@@ -928,9 +928,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
   // a problem with Opera, not OperaDriver.
   public <X> X getScreenshotAs(OutputType<X> target) throws WebDriverException {
     OperaWebElement body = (OperaWebElement) findElementByTagName("body");
-    ScreenShotReply ssr = body.saveScreenshot(0);
-
-    return target.convertFromBase64Png(new Base64Encoder().encode(ssr.getPng()));
+    return target.convertFromPngBytes(body.saveScreenshot(0).getPng());
   }
 
   public boolean isOperaIdleAvailable() {

@@ -179,11 +179,23 @@ public class ScreenshotTest extends TestBase {
   }
 
   @Test
+  public void testTakesScreenshot() throws Exception {
+    getFixture("tall.html");
+    File file = driver.getScreenshotAs(OutputType.FILE);
+
+    BufferedImage img = ImageIO.read(file);
+    Assert.assertEquals(5100, img.getHeight());
+
+    // Check the top pixel
+    int botcol = img.getRGB(0, 0);
+    Assert.assertEquals(0xFF0000, botcol & 0xFFFFFF);
+  }
+
+  @Test
   @Ignore(value="Opera problem. Areas outside current viewport are black.")
   public void testFullScreenshot() throws Exception {
     getFixture("tall.html");
     File file = driver.getScreenshotAs(OutputType.FILE);
-    FileUtils.copyFile(file, new File("/home/stuartk/box/tmp/out.png"));
 
     BufferedImage img = ImageIO.read(file);
     Assert.assertEquals(5100, img.getHeight());
