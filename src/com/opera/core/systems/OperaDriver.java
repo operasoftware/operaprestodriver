@@ -1109,6 +1109,30 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
   }
 
   /**
+   * Returns a Map of sections names mapping to a Map of preference names
+   * mapping to Pref objects.
+   * @return
+   */
+  public Map<String, Map<String, Pref>> listAllPrefs() {
+    List<Pref> allPrefs = prefs.listPrefs(true, null);
+
+    HashMap<String, Map<String, Pref>> result = new HashMap<String, Map<String, Pref>>();
+
+    for (Pref pref : allPrefs) {
+      String section = pref.getSection();
+      String key = pref.getKey();
+
+      if (!result.containsKey(section)) {
+        result.put(section, new HashMap<String, Pref>());
+      }
+
+      result.get(section).put(key, pref);
+    }
+
+    return result;
+  }
+
+  /**
    * Set the {@link value} of the preference, {@link key}, in section
    * {@link section}.
    *

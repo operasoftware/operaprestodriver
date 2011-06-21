@@ -41,7 +41,7 @@ public interface IPrefs {
    * @param sort if true returned list is sorted
    * @param section list prefs in this section
    */
-  List<Pref> listPrefs(boolean sort, String section);
+  List<Pref> listPrefs(Boolean sort, String section);
 
   /**
    * Sets a preference in operaprefs.ini in a specific section.

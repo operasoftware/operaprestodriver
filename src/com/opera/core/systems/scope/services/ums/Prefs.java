@@ -68,10 +68,14 @@ public class Prefs extends AbstractService implements IPrefs {
     return prefsString.getValue();
   }
 
-  public List<Pref> listPrefs(boolean sort, String section) {
+  public List<Pref> listPrefs(Boolean sort, String section) {
     ListPrefsArg.Builder listPrefBuilder = ListPrefsArg.newBuilder();
-    listPrefBuilder.setSort(sort);
-    listPrefBuilder.setSection(section);
+    if (sort != null) {
+      listPrefBuilder.setSort(sort);
+    }
+    if (section != null && !"".equals(section)) {
+      listPrefBuilder.setSection(section);
+    }
 
     Response response = executeCommand(PrefsCommand.LIST_PREFS, listPrefBuilder);
 
