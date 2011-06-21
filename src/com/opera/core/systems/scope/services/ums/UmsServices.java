@@ -26,6 +26,7 @@ import com.opera.core.systems.scope.protos.ScopeProtos.Service;
 import com.opera.core.systems.scope.services.ICookieManager;
 import com.opera.core.systems.scope.services.IDesktopUtils;
 import com.opera.core.systems.scope.services.IDesktopWindowManager;
+import com.opera.core.systems.scope.services.IDialogManager;
 import com.opera.core.systems.scope.services.IEcmaScriptDebugger;
 import com.opera.core.systems.scope.services.IOperaExec;
 import com.opera.core.systems.scope.services.IWindowManager;
@@ -38,6 +39,7 @@ public class UmsServices {
   protected final IWindowManager windowManager;
   protected final IDesktopWindowManager desktopWindowManager;
   protected final IDesktopUtils desktopUtils;
+  protected final IDialogManager dialogManager;
   protected final SystemInputManager systemInputManager;
   protected final IPrefs prefs;
   protected final IOperaExec exec;
@@ -68,6 +70,11 @@ public class UmsServices {
         && services.getVersions().containsKey("prefs")) prefs = new Prefs(
         services, getVersionForService(serviceList, "prefs"));
     else prefs = null;
+
+    if (findServiceNamed(serviceList, "dialog-manager") != null
+        && services.getVersions().containsKey("dialog-manager"))
+        dialogManager = new DialogManager(services, getVersionForService(serviceList, "dialog-manager"));
+    else dialogManager = null;
 
     if (findServiceNamed(serviceList, "desktop-utils") != null
         && services.getVersions().containsKey("desktop-utils")) desktopUtils = new DesktopUtils(

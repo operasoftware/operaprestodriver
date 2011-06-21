@@ -24,6 +24,8 @@ public class DialogManager extends AbstractService implements IDialogManager {
       throw new UnsupportedOperationException(serviceName + " version " +
           version + " is not supported");
     }
+
+    services.setDialogManager(this);
   }
 
 

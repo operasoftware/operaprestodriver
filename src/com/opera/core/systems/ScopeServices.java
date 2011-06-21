@@ -46,6 +46,7 @@ import com.opera.core.systems.scope.protos.UmsProtos.Response;
 import com.opera.core.systems.scope.services.ICookieManager;
 import com.opera.core.systems.scope.services.IDesktopUtils;
 import com.opera.core.systems.scope.services.IDesktopWindowManager;
+import com.opera.core.systems.scope.services.IDialogManager;
 import com.opera.core.systems.scope.services.IEcmaScriptDebugger;
 import com.opera.core.systems.scope.services.IOperaExec;
 import com.opera.core.systems.scope.services.IPrefs;
@@ -71,6 +72,7 @@ public class ScopeServices implements IConnectionHandler {
   private IWindowManager windowManager;
   private IDesktopWindowManager desktopWindowManager;
   private IDesktopUtils desktopUtils;
+  private IDialogManager dialogManager;
   private IPrefs prefs;
   private SystemInputManager systemInputManager;
   private HostInfo hostInfo;
@@ -110,6 +112,14 @@ public class ScopeServices implements IConnectionHandler {
 
   public void setDebugger(IEcmaScriptDebugger debugger) {
     this.debugger = debugger;
+  }
+
+  public IDialogManager getDialogManager() {
+    return dialogManager;
+  }
+
+  public void setDialogManager(IDialogManager dialogManager) {
+    this.dialogManager = dialogManager;
   }
 
   public IOperaExec getExec() {
@@ -194,6 +204,9 @@ public class ScopeServices implements IConnectionHandler {
 
     if (versions.containsKey("prefs"))
       wantedServices.add("prefs");
+
+    if (versions.containsKey("dialog-manager"))
+      wantedServices.add("dialog-manager");
 
     if (versions.containsKey("desktop-window-manager"))
       wantedServices.add("desktop-window-manager");

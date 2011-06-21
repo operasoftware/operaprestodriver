@@ -218,6 +218,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
     versions.put("core", "1.0");
     versions.put("cookie-manager", "1.0");
     versions.put("prefs", "1.0");
+    versions.put("dialog-manager", "1.0");
     return versions;
   }
 
