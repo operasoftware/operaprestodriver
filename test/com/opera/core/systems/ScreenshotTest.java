@@ -1,7 +1,5 @@
 package com.opera.core.systems;
 
-import static org.junit.Assert.*;
-
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
@@ -11,7 +9,6 @@ import java.util.zip.Adler32;
 
 import javax.imageio.ImageIO;
 
-import org.apache.commons.io.FileUtils;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;

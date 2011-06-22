@@ -46,7 +46,6 @@ import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.internal.Base64Encoder;
 import org.openqa.selenium.internal.FindsByClassName;
 import org.openqa.selenium.internal.FindsByCssSelector;
 import org.openqa.selenium.internal.FindsById;
@@ -88,9 +87,6 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
   protected OperaDriverSettings settings;
   protected OperaRunner operaRunner;
 
-  // Does this driver have a started opera? Makes it possible to restart opera
-  // without throwing out the driver.
-  private boolean isDriverStarted = false;
   protected final Logger logger = Logger.getLogger(this.getClass().getName());
 
   protected IEcmaScriptDebugger debugger;

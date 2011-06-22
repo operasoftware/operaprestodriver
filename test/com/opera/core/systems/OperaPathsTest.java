@@ -7,7 +7,6 @@ import static org.junit.Assert.assertNotSame;
 import java.io.File;
 import java.lang.reflect.Field;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
 
 import junit.framework.Assert;

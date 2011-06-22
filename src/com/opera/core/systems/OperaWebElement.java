@@ -466,6 +466,10 @@ public class OperaWebElement implements WebElement, SearchContext, Locatable,
   }
 
   // FIXME isDisplayed is not working for select elements, revise
+  /**
+   * @deprecated Please use "click" instead
+   */
+  @Deprecated
   public void setSelected() {
     String tagName = getTagName();
 
@@ -531,6 +535,10 @@ public class OperaWebElement implements WebElement, SearchContext, Locatable,
   }
 
   // FIXME revise with javascript guys
+  /**
+   * @deprecated To be removed. Determine the current state using {@link #isSelected()}
+   */
+  @Deprecated
   public boolean toggle() {
     String tagName = getTagName();
     if (!tagName.equals("INPUT") && !tagName.equals("OPTION"))

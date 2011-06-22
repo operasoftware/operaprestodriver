@@ -165,7 +165,7 @@ public class IdleTest extends TestBase {
 
     // Check checkbox, fires a submit even on the form
     start();
-    ((OperaWebElement) driver.findElementById("check")).setSelected();
+    ((OperaWebElement) driver.findElementById("check")).click();
     stop();
 
     // +"?" for submitted query string
