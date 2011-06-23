@@ -2674,7 +2674,7 @@ public final class DesktopWmProtos {
     public boolean hasRow() { return hasRow; }
     public int getRow() { return row_; }
     
-    // required string shortcutletter = 6;
+    // optional string shortcutletter = 6;
     public static final int SHORTCUTLETTER_FIELD_NUMBER = 6;
     private boolean hasShortcutletter;
     private java.lang.String shortcutletter_ = "";
@@ -2736,7 +2736,6 @@ public final class DesktopWmProtos {
     public final boolean isInitialized() {
       if (!hasText) return false;
       if (!hasRow) return false;
-      if (!hasShortcutletter) return false;
       if (!hasRect) return false;
       if (!hasEnabled) return false;
       if (!hasChecked) return false;
@@ -3236,7 +3235,7 @@ public final class DesktopWmProtos {
         return this;
       }
       
-      // required string shortcutletter = 6;
+      // optional string shortcutletter = 6;
       public boolean hasShortcutletter() {
         return result.hasShortcutletter();
       }
@@ -5887,7 +5886,7 @@ public final class DesktopWmProtos {
       "kMenuItemID\022\020\n\010menuText\030\001 \002(\t\"\214\002\n\021QuickM" +
       "enuItemInfo\022\014\n\004text\030\001 \002(\t\022\016\n\006action\030\002 \001(" +
       "\t\022\017\n\007submenu\030\003 \001(\t\022\024\n\014action_param\030\004 \001(\t" +
-      "\022\013\n\003row\030\005 \002(\r\022\026\n\016shortcutletter\030\006 \002(\t\022\020\n" +
+      "\022\013\n\003row\030\005 \002(\r\022\026\n\016shortcutletter\030\006 \001(\t\022\020\n" +
       "\010shortcut\030\007 \001(\t\022&\n\004rect\030\010 \002(\0132\030.scope.De" +
       "sktopWindowRect\022\017\n\007enabled\030\t \002(\010\022\017\n\007chec" +
       "ked\030\n \002(\010\022\020\n\010selected\030\013 \002(\010\022\014\n\004bold\030\014 \002(" +
