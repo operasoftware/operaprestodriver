@@ -99,8 +99,7 @@ public class QuickMenuItem extends OperaUIElement {
 	     * @return (language dependent) text of menuitem
 	     */
 		public String getText() {
-			// TODO: Should remove &?
-			return getDesktopUtils().removeCR(info.getText());
+			return getDesktopUtils().removeCR(info.getText().replaceAll("&", ""));
 		}
 		
 
