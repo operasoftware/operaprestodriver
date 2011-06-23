@@ -133,10 +133,10 @@ public class DriverKeysTest extends TestBase {
   @Test
   public void testShiftCapitals() throws Exception {
     driver.type("a");
-    driver.keyDown(OperaKeys.SHIFT.getValue());
+    driver.keyDown("shift");
     driver.type("b");
     driver.type("c");
-    driver.keyUp(OperaKeys.SHIFT.getValue());
+    driver.keyUp("shift");
     driver.type("d");
 
     Assert.assertEquals("aBCd", fieldOne.getAttribute("value"));
