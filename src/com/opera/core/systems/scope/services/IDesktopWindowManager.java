@@ -18,7 +18,6 @@ package com.opera.core.systems.scope.services;
 
 import java.util.List; //import java.util.concurrent.atomic.AtomicInteger;
 
-import com.opera.core.systems.OperaUIElement;
 import com.opera.core.systems.QuickMenu;
 import com.opera.core.systems.QuickMenuItem;
 import com.opera.core.systems.QuickWidget;
@@ -163,7 +162,7 @@ public interface IDesktopWindowManager {
 	 * @param action of the menuitem to search for
 	 * @return
 	 */
-	OperaUIElement getQuickMenuItemByAction(String action);
+	QuickMenuItem getQuickMenuItemByAction(String action);
 
 	/**
 	 * Get the menu with the text specified, if any
@@ -171,7 +170,7 @@ public interface IDesktopWindowManager {
 	 * @param text of the menuitem to search for
 	 * @return
 	 */
-	OperaUIElement getQuickMenuItemByText(String text);
+	QuickMenuItem getQuickMenuItemByText(String text);
 
 	/**
 	 * 
@@ -179,7 +178,7 @@ public interface IDesktopWindowManager {
 	 *                items and menu separators
 	 * @param parentName name of the menu to lookup the menuitem in
 	 */
-	OperaUIElement getQuickMenuItemByPosition(int row, String parentName);
+	QuickMenuItem getQuickMenuItemByPosition(int row, String parentName);
 
 	/**
 	 * 
@@ -188,21 +187,21 @@ public interface IDesktopWindowManager {
 	 * @param parentName name of the menu of the menuitem 
 	 * @return
 	 */
-	OperaUIElement getQuickMenuItemByAccKey(String key, String parentName);
+	QuickMenuItem getQuickMenuItemByAccKey(String key, String parentName);
 
 	/**
 	 * 
 	 * @param shortcut string representation of the shortcut of the menuitem (i.e. "Ctrl+O")
 	 * @return
 	 */
-	OperaUIElement getQuickMenuItemByShortcut(String shortcut);
+	QuickMenuItem getQuickMenuItemByShortcut(String shortcut);
 
 	/**
 	 * 
 	 * @param submenu the name of the submenu the menuitem opens when its selected/clicked
 	 * @return
 	 */
-	OperaUIElement getQuickMenuItemBySubmenu(String submenu);
+	QuickMenuItem getQuickMenuItemBySubmenu(String submenu);
 
 	/**
 	 * 
@@ -224,6 +223,6 @@ public interface IDesktopWindowManager {
 	 *         "Separator" for items that are separators
 	 * @return
 	 */
-	OperaUIElement getQuickMenuItemByName(String name);
+	QuickMenuItem getQuickMenuItemByName(String name);
 	
 }
