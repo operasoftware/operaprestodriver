@@ -39,8 +39,10 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.NoSuchFrameException;
 import org.openqa.selenium.NoSuchWindowException;
+import org.openqa.selenium.OutputType;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.StaleElementReferenceException;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
@@ -78,16 +80,13 @@ import com.opera.core.systems.settings.OperaDriverSettings;
  */
 public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
     FindsByXPath, FindsByName, FindsByTagName, FindsByClassName,
-    FindsByCssSelector, SearchContext, JavascriptExecutor {
+    FindsByCssSelector, SearchContext, JavascriptExecutor, TakesScreenshot {
 
   // These are "protected" and not "private" so that we can extend this class
   // and add methods to access these variable in tests
   protected OperaDriverSettings settings;
   protected OperaRunner operaRunner;
 
-  // Does this driver have a started opera? Makes it possible to restart opera
-  // without throwing out the driver.
-  private boolean isDriverStarted = false;
   protected final Logger logger = Logger.getLogger(this.getClass().getName());
 
   protected IEcmaScriptDebugger debugger;
@@ -250,7 +249,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
 
     String oldUrl = getCurrentUrl();
 
-		services.captureOperaIdle();
+    services.captureOperaIdle();
     actionHandler.get(url);
 
     if (oldUrl == null || !url.replace(oldUrl, "").startsWith("#")) {
@@ -264,8 +263,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
           // This could for example be a gif animation, preventing
           // idle from being passed.
           // Common case, and should not result in test error.
-          System.out.println("Opera Idle timed out, continue test... exception: "
-              + e);
+          logger.warning("Opera Idle timed out, continue test... exception: " + e);
         }
       } else {
         // Wait for window is loaded
@@ -922,12 +920,24 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
     return operaRunner.saveScreenshot(timeout, hashes);
   }
 
+  // FIXME: CORE-39436 areas outside of the current viewport are black. This is
+  // a problem with Opera, not OperaDriver.
+  public <X> X getScreenshotAs(OutputType<X> target) throws WebDriverException {
+    OperaWebElement body = (OperaWebElement) findElementByTagName("body");
+    return target.convertFromPngBytes(body.saveScreenshot(0).getPng());
+  }
+
   public boolean isOperaIdleAvailable() {
     return services.isOperaIdleAvailable();
   }
 
   private boolean useOperaIdle() {
     return (settings.getUseOperaIdle() && isOperaIdleAvailable());
+  }
+
+  public void setUseOperaIdle(boolean useIdle)
+  {
+      settings.setUseOperaIdle(useIdle);
   }
 
   public Object executeScript(String script, Object... args) {

@@ -4,5 +4,6 @@ Jan Vidar Krey <janv@opera.com>
 James Livermont <jamesl@opera.com>
 Adam Minchinton <adamm@opera.com>
 Anders Oredsson <anderso@opera.com>
+Simon Stewart <simon.m.stewart@gmail.com>
 Andreas Tolf Tolfsen <andreastt@opera.com>
 Deniz Turkoglu <denizt@opera.com>

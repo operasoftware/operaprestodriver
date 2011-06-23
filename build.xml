@@ -9,6 +9,7 @@
        This file is later copied to other locations. -->
   <exec executable="git" outputproperty="version" failifexecutionfails="false">
     <arg value="describe" />
+    <arg value="--dirty" />
   </exec>
   <!-- If we can't get the version from git, set a default  -->
   <property name="version" value="UNKNOWN-VERSION" />
@@ -189,5 +190,6 @@
       <zipfileset prefix="${release-zip.name}/lib" dir="lib" excludes="junit*.jar"/>
       <zipfileset prefix="${release-zip.name}" dir="." includes="README.txt CHANGES.txt AUTHORS.txt LICENSE.txt VERSION"/>
     </zip>
+    <jar destfile="release/${release-zip.name}-source.jar" basedir="src" />
   </target>
 </project>

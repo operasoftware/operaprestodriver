@@ -105,7 +105,7 @@ public class IdleTest extends TestBase {
     driver.navigate().refresh();
     stop();
 
-    Assert.assertEquals("", driver.findElementById("input_email").getValue());
+    Assert.assertEquals("", driver.findElementById("input_email").getAttribute("value"));
   }
 
   @Test
@@ -165,7 +165,7 @@ public class IdleTest extends TestBase {
 
     // Check checkbox, fires a submit even on the form
     start();
-    ((OperaWebElement) driver.findElementById("check")).setSelected();
+    ((OperaWebElement) driver.findElementById("check")).click();
     stop();
 
     // +"?" for submitted query string
@@ -215,17 +215,6 @@ public class IdleTest extends TestBase {
   }
 
   @Test
-  public void testReflow() throws Exception {
-    // Need #box to activate the :target pseudo class
-    start();
-    getFixture("idle/reflow.html#box");
-    stop();
-
-    OperaWebElement box = (OperaWebElement) driver.findElementById("box");
-    Assert.assertEquals(200, box.getSize().width);
-  }
-
-  @Test
   public void testMetarefresh() throws Exception {
     getFixture("idle/metarefresh.html");
 
@@ -251,6 +240,6 @@ public class IdleTest extends TestBase {
 
     getFixture("timer.html");
     // Idle will wait for timeout before firing
-    Assert.assertEquals("default", driver.findElementById("one").getValue());
+    Assert.assertEquals("default", driver.findElementById("one").getAttribute("value"));
   }
 }

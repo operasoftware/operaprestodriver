@@ -3,6 +3,8 @@
 bin/*
 pkg/*
 out/*
+probedata/
+release/
 src/com/opera/core/systems/test/**/*
 test_apc.txt
 test-output/

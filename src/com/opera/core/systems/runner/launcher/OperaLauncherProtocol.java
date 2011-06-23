@@ -22,6 +22,7 @@ import com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherScreen
 import com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStatusResponse;
 import java.io.IOException;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.EnumSet;
@@ -83,8 +84,11 @@ public class OperaLauncherProtocol {
     }
   }
 
-  public OperaLauncherProtocol(Socket socket) {
+  public OperaLauncherProtocol(Socket socket) throws SocketException {
     this.socket = socket;
+    // Just to make sure we don't block forever if something goes wrong
+    this.socket.setSoTimeout(180000);
+    logger.fine("TIMEOUT=" + this.socket.getSoTimeout());
     logger.fine("Got Opera launcher connection from "
         + socket.getRemoteSocketAddress().toString());
   }

@@ -84,6 +84,26 @@ public class OperaDriverTest extends TestBase
   }
 
   @Test
+  public void testOperaAction() throws Exception {
+    getFixture("javascript.html");
+    getFixture("test.html");
+    getFixture("keys.html");
+
+    driver.operaAction("Back");
+    Assert.assertTrue(driver.getCurrentUrl().indexOf("test.html") > 0);
+  }
+
+  @Test
+  public void testOperaActionCaseInsensitive() throws Exception {
+    getFixture("javascript.html");
+    getFixture("test.html");
+    getFixture("keys.html");
+
+    driver.operaAction("bACk");
+    Assert.assertTrue(driver.getCurrentUrl().indexOf("test.html") > 0);
+  }
+
+  @Test
   public void testOperaDriverShutdown()
   {
     // leave with a fast loading page

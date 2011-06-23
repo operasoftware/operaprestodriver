@@ -36,7 +36,7 @@ public class WaitState {
   private final Logger logger = Logger.getLogger(this.getClass().getName());
   private boolean connected;
   private boolean wait_events;
-	/// Whether we should keep a note of any idle events recieved.
+	/// Whether we should keep a note of any idle events received.
 	///
 	/// This is used when we perform an action where we want to wait for an Idle
 	/// event, such as clicking. First one has to wait for the "click" response,
@@ -53,7 +53,7 @@ public class WaitState {
   enum WaitResult {
     RESPONSE, /* Got a response */
     ERROR, /* Got an error response */
-    EXCEPTION, /* An exception occured (STP connection is not alive) */
+    EXCEPTION, /* An exception occurred (STP connection is not alive) */
     DISCONNECTED, /* STP connection is disconnected */
     HANDSHAKE, /* STP Handshake */
     EVENT_WINDOW_LOADED, /* finished loaded */
@@ -73,6 +73,7 @@ public class WaitState {
     WebDriverException exception;
     Response response;
     boolean seen;
+    long remaining_idle_timeout;
     DesktopWindowInfo desktopWindowInfo; // No idea if this is right but it will
 
     // store the data for now, but it seems
@@ -316,10 +317,18 @@ public class WaitState {
      */
     private final ResultItem pollResultItem(long timeout, boolean idle) {
     ResultItem result = getResult();
+    if(result != null)
+      result.remaining_idle_timeout = timeout;
 
-    if (result == null) {
+    if (result == null && timeout > 0) {
+      long start = System.currentTimeMillis();
       internalWait(timeout);
+      long end = System.currentTimeMillis();
       result = getResult();
+      if(result != null) {
+        result.remaining_idle_timeout = timeout - (end-start);
+        logger.fine("Remaining timeout:" + result.remaining_idle_timeout);
+      }
     }
 
     if (result == null)
@@ -336,6 +345,7 @@ public class WaitState {
     synchronized (lock) {
       while (true) {
         ResultItem result = pollResultItem(timeout, type == ResponseType.OPERA_IDLE);
+        timeout = result.remaining_idle_timeout;
         WaitResult waitResult = result.waitResult;
 
         switch (waitResult) {
@@ -497,7 +507,7 @@ public class WaitState {
       // them anymore. If we've reached this far then captured_idle_events is
       // already 0
       capture_idle_events = false;
-    	waitAndParseResult(timeout, 0/*0 = no window id!*/, null, ResponseType.OPERA_IDLE);
+      waitAndParseResult(timeout, 0/*0 = no window id!*/, null, ResponseType.OPERA_IDLE);
   }
 
   public Response waitFor(int tag, long timeout) {
