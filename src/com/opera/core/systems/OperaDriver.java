@@ -254,6 +254,9 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
         "Unable to open URL because Opera is not connected.");
 
     gc();
+    // As this is an artificial page load we release all the held keys.
+    // Is the user click()s a link, any keys remain held.
+    exec.releaseKeys();
 
     int activeWindowId = windowManager.getActiveWindowId();
 
