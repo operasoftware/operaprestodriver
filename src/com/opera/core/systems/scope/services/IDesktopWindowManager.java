@@ -149,8 +149,6 @@ public interface IDesktopWindowManager {
 
 	void pressQuickMenuItem(String menuItemText);
 
-	// TODO: DOCUMENT
-	
 	/**
 	 * Gets the menu with name name.
 	 *
@@ -158,23 +156,74 @@ public interface IDesktopWindowManager {
 	 * @return QuickMenu
 	 */
 	QuickMenu getQuickMenu(String menuName);
-	
+
+	/**
+	 * Gets the menu with the action specified, if any
+	 * 
+	 * @param action of the menuitem to search for
+	 * @return
+	 */
 	OperaUIElement getQuickMenuItemByAction(String action);
 
+	/**
+	 * Get the menu with the text specified, if any
+	 * 
+	 * @param text of the menuitem to search for
+	 * @return
+	 */
 	OperaUIElement getQuickMenuItemByText(String text);
 
+	/**
+	 * 
+	 * @param row the row of the item, counting from zero, and including both normal
+	 *                items and menu separators
+	 * @param parentName name of the menu to lookup the menuitem in
+	 */
 	OperaUIElement getQuickMenuItemByPosition(int row, String parentName);
 
+	/**
+	 * 
+	 * @param key the shortcut key of the menuitem to search for (the character that's underlined/marked
+	 *            in the menuitem text)
+	 * @param parentName name of the menu of the menuitem 
+	 * @return
+	 */
 	OperaUIElement getQuickMenuItemByAccKey(String key, String parentName);
 
+	/**
+	 * 
+	 * @param shortcut string representation of the shortcut of the menuitem (i.e. "Ctrl+O")
+	 * @return
+	 */
 	OperaUIElement getQuickMenuItemByShortcut(String shortcut);
 
+	/**
+	 * 
+	 * @param submenu the name of the submenu the menuitem opens when its selected/clicked
+	 * @return
+	 */
 	OperaUIElement getQuickMenuItemBySubmenu(String submenu);
 
+	/**
+	 * 
+	 * @return list of all menus that are open (including menubar(s))
+	 */
 	List<QuickMenu> getQuickMenuList();
 
+	/**
+	 * 
+	 * @return list containing all menuitems in open menus (including menubar(s))
+	 */
 	List<QuickMenuItem> getQuickMenuItemList();
 
+	/**
+	 * 
+	 * @param name name of the item. 
+	 *         This is either the name of the action the item executes when selected
+	 *         The name of the submenu the item opens when selected
+	 *         "Separator" for items that are separators
+	 * @return
+	 */
 	OperaUIElement getQuickMenuItemByName(String name);
 	
 }

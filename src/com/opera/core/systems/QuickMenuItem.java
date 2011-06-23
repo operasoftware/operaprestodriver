@@ -29,9 +29,6 @@ import com.opera.core.systems.scope.services.ums.SystemInputManager;
 public class QuickMenuItem extends OperaUIElement {
 		private final QuickMenuItemInfo info;
 		private final String menu;
-		//SystemInputManager systemInputManager;
-		//private final IDesktopUtils desktopUtils;
-		
 		
 		/**
 		 * Constructor.
@@ -42,8 +39,6 @@ public class QuickMenuItem extends OperaUIElement {
 			super(systemInputManager, desktopUtils);
 	        this.info = info;
 	        this.menu = menu;
-	        //this.systemInputManager = systemInputManager;
-	        //this.desktopUtils = desktopUtils;
 	    }
 
 		/**
@@ -81,6 +76,10 @@ public class QuickMenuItem extends OperaUIElement {
 			return info.getSubmenu() != null && info.getSubmenu().length() > 0;
 		}
 		
+		/**
+		 * 
+		 * @return String action parameter to the action of the menuitem, if any
+		 */
 		public String getActionParameter() {
 			return info.getActionParam();
 		}
@@ -138,12 +137,9 @@ public class QuickMenuItem extends OperaUIElement {
 
 		
 		/**
-		 * @return true if menuentry is visible, else false
+		 * 
+		 * @return true if the item text is bold, else false
 		 */
-		public boolean isVisible(){
-			return true;//info.getVisible();
-		}
-		
 		public boolean isBold() {
 			return info.getBold();
 		}
