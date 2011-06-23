@@ -204,7 +204,13 @@ public class OperaWebElement implements WebElement, SearchContext, Locatable,
     }
 
 		parent.getScopeServices().captureOperaIdle();
-    parent.actionHandler.click(this, "");
+
+		// FIXME: temporary fix for setSelected deprecation
+		if (this.getTagName().equals("OPTION")) {
+		  setSelected();
+		} else {
+		  parent.actionHandler.click(this, "");
+		}
     parent.waitForLoadToComplete();
   }
 
