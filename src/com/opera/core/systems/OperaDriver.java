@@ -952,7 +952,9 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
           this, objectId);
       if (result.getClassName().equals("NodeList")) return processElements(objectId);
       if (result.getClassName().equals("Array")
-          || result.getClassName().equals("Object")) return debugger.examineScriptResult(objectId);
+          || result.getClassName().equals("Object")) {
+        return debugger.examineScriptResult(objectId);
+      }
     }
     return object;
   }

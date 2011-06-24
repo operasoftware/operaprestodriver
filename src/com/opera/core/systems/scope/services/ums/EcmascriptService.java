@@ -18,9 +18,12 @@ package com.opera.core.systems.scope.services.ums;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Queue;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
@@ -45,6 +48,7 @@ import com.opera.core.systems.scope.protos.EcmascriptProtos.EvalResult;
 import com.opera.core.systems.scope.protos.EcmascriptProtos.ExamineObjectsArg;
 import com.opera.core.systems.scope.protos.EcmascriptProtos.ListRuntimesArg;
 import com.opera.core.systems.scope.protos.EcmascriptProtos.ObjectList;
+import com.opera.core.systems.scope.protos.EcmascriptProtos.PrototypeChain;
 import com.opera.core.systems.scope.protos.EcmascriptProtos.ReadyStateChange;
 import com.opera.core.systems.scope.protos.EcmascriptProtos.ReleaseObjectsArg;
 import com.opera.core.systems.scope.protos.EcmascriptProtos.Runtime;
@@ -161,7 +165,6 @@ public class EcmascriptService extends AbstractEcmascriptService implements
   }
 
   public Object scriptExecutor(String script, Object... params) {
-
     processQueues();
 
     List<WebElement> elements = new ArrayList<WebElement>();
@@ -504,9 +507,65 @@ public class EcmascriptService extends AbstractEcmascriptService implements
   }
 
   public Object examineScriptResult(Integer id) {
-    // TODO Auto-generated method stub
-    System.out.println("TODO examineScriptResult(Integer id)");
-    return null;
+    ObjectList list = getObjectList(id);
+    PrototypeChain chain = list.getPrototypeList(0);
+    EcmascriptProtos.Object obj = chain.getObjectList(0);
+    String className = obj.getClassName();
+
+    List<Property> properties = obj.getPropertyListList();
+
+    if (className.equals("Array")) {
+      List<Object> result = new ArrayList<Object>();
+      for (Property property : properties) {
+        Type type = property.getValue().getType();
+        if (type == Type.NUMBER && property.getName().equals("length")) {
+          // ignore ?!?
+        } else {
+          result.add(parseValue(type, property.getValue()));
+        }
+      }
+      return result;
+    } else {
+      System.out.println("map");
+      // we have a map
+      Map<String, Object> result = new HashMap<String, Object>();
+
+      for (Property property : properties) {
+        Type type = property.getValue().getType();
+        if (type == Type.NUMBER && property.getName().equals("length")) {
+          // ignore ?!?
+        } else {
+          result.put(property.getName(), parseValue(type,
+              property.getValue()));
+        }
+      }
+      return result;
+    }
+  }
+
+  private Object parseValue(Type type, Value value) {
+    switch (type) {
+    case TRUE:
+      return new Boolean(true);
+    case FALSE:
+      return new Boolean(false);
+    case PLUS_INFINITY:
+      return Double.POSITIVE_INFINITY;
+    case MINUS_INFINITY:
+      return Double.NEGATIVE_INFINITY;
+    case NUMBER:
+      return value.getNumber();
+    case STRING:
+      return value.getStr();
+    case OBJECT:
+      return examineScriptResult(value.getObject().getObjectID());
+
+    case UNDEFINED:
+    case NULL:
+    case NAN:
+    default:
+      return null;
+    }
   }
 
   private void processQueues() {

@@ -67,36 +67,7 @@ public class EcmaScriptDebugger6 extends EcmaScriptDebugger {
   @Override
   public Object scriptExecutor(String script, Object... params) {
     List<WebElement> elements = new ArrayList<WebElement>();
-    String toSend;
-    if (params != null && params.length > 0) {
-      StringBuilder builder = new StringBuilder();
-      for (Object object : params) {
-        if (builder.toString().length() > 0) {
-          builder.append(",");
-        }
-
-        if (object instanceof Collection<?>) {
-          builder.append("[");
-          Collection<?> collection = (Collection<?>) object;
-          for (Object argument : collection) {
-            processArgument(argument, builder, elements);
-            builder.append(",");
-          }
-          int lastCharIndex = builder.length() - 1;
-          if (builder.charAt(lastCharIndex) != '[') builder.deleteCharAt(lastCharIndex);
-
-          builder.append("]");
-        } else {
-          processArgument(object, builder, elements);
-        }
-      }
-
-      String arguments = builder.toString();
-      toSend = "(function(){" + script + "})(" + arguments + ")";
-    } else {
-      toSend = script;
-    }
-
+    String toSend = buildEvalString(elements, script, params);
     EvalData.Builder evalBuilder = buildEval(toSend, getRuntimeId());
 
     for (WebElement webElement : elements) {

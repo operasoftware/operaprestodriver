@@ -72,7 +72,11 @@ public abstract class AbstractEcmascriptService extends AbstractService
           Collection<?> collection = (Collection<?>) object;
           for (Object argument : collection) {
             processArgument(argument, builder, elements);
+            builder.append(",");
           }
+          int lastCharIndex = builder.length() - 1;
+          if (builder.charAt(lastCharIndex) != '[') builder.deleteCharAt(lastCharIndex);
+
           builder.append("]");
         } else {
           processArgument(object, builder, elements);
