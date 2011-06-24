@@ -38,6 +38,13 @@ public abstract class OperaUIElement {
 		DesktopWindowRect rect = getRect();
 		return new Point(rect.getX(), rect.getY());
 	}
+	
+	/**
+	 * @return true if widget is visible, else false
+	 */
+	public boolean isVisible(){
+		return true; // default
+	}
 
 	/**
 	 * @return size of Element
