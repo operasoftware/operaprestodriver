@@ -292,6 +292,8 @@ public class EcmaScriptDebugger extends AbstractEcmascriptService implements
 
     if (!status.equals("completed")) {
       if (status.equals("unhandled-exception")) {
+        // Would be great give the JS error here, but it appears that by the
+        // time we callFunctionOnObject the error object has gone...
         throw new WebDriverException("Ecmascript exception");
       }
       // FIXME what is the best approach here?
@@ -468,6 +470,7 @@ public class EcmaScriptDebugger extends AbstractEcmascriptService implements
   public List<Integer> examineObjects(Integer id) {
     ObjectList list = getObjectList(id);
     List<Integer> ids = new ArrayList<Integer>();
+
     List<Property> objects = list.getObjectList(0).getPropertyListList();
     for (Property obj : objects) {
       if (obj.getType().equals("object")) ids.add(obj.getObjectValue().getObjectID());

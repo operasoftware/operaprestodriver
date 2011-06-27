@@ -55,18 +55,9 @@ public class EcmaScriptDebugger6 extends EcmaScriptDebugger {
   }
 
   @Override
-  public Integer executeScriptOnObject(String using, int objectId) {
-    Variable variable = buildVariable("locator", objectId);
-
-    EvalResult reply = parseEvalData(eval(using, variable));
-    Object object = parseEvalReply(reply);
-    if (object == null || !(object instanceof ObjectValue)) return null;
-    return ((ObjectValue) object).getObjectID();
-  }
-
-  @Override
   public Object scriptExecutor(String script, Object... params) {
     List<WebElement> elements = new ArrayList<WebElement>();
+
     String toSend = buildEvalString(elements, script, params);
     EvalData.Builder evalBuilder = buildEval(toSend, getRuntimeId());
 
@@ -90,79 +81,65 @@ public class EcmaScriptDebugger6 extends EcmaScriptDebugger {
     } else return parsed;
   }
 
-  @Override
-  public List<Integer> examineObjects(Integer id) {
-    List<Integer> ids = new ArrayList<Integer>();
-
-    ObjectChainList list = getChainList(id);
-    List<Property> properties = list.getObjectChainList(0).getObjectListList().get(
-        0).getPropertyListList();
-    for (Property property : properties) {
-      if (property.getType().equals("object")) ids.add(property.getObjectValue().getObjectID());
-    }
-
-    return ids;
-
-  }
-
-  private ObjectChainList getChainList(Integer id) {
-    ExamineList.Builder examine = ExamineList.newBuilder();
-    examine.setExaminePrototypes(false);
-    examine.setRuntimeID(getRuntimeId());
-    examine.addObjectList(id);
-    Response response = executeCommand(ESDebuggerCommand.EXAMINE_OBJECTS,
-        examine);
-
-    ObjectChainList.Builder builder = ObjectChainList.newBuilder();
-    buildPayload(response, builder);
-    return builder.build();
-
-  }
-
-  @Override
-  public Object examineScriptResult(Integer id) {
-    ObjectChainList list = getChainList(id);
-    List<Property> properties = list.getObjectChainList(0).getObjectListList().get(
-        0).getPropertyListList();
-    String className = list.getObjectChainListList().get(0).getObjectList(0).getValue().getClassName();
-    if (className.equals("Array")) {
-      List<Object> result = new ArrayList<Object>();
-
-      for (Property property : properties) {
-        if (property.getType().equals("number")
-            && property.getName().equals("length")) {
-          // ignore ?!?
-        } else if (property.getType().equals("object")) {
-          result.add(examineScriptResult(property.getObjectValue().getObjectID()));
-        } else {
-          result.add(parseValue(property.getType(), property.getValue()));
-        }
-      }
-      return result;
-    } else {
-      // we have a map
-      Map<String, Object> result = new HashMap<String, Object>();
-
-      for (Property property : properties) {
-        if (property.getType().equals("number")
-            && property.getName().equals("length")) {
-          // ignore ?!?
-        } else if (property.getType().equals("object")) {
-          result.put(property.getName(),
-              examineScriptResult(property.getObjectValue().getObjectID()));
-        } else {
-          result.put(property.getName(), parseValue(property.getType(),
-              property.getValue()));
-        }
-      }
-      return result;
-    }
-  }
-
   private EvalResult parseEvalData(Response response) {
     EvalResult.Builder builder = EvalResult.newBuilder();
     buildPayload(response, builder);
     return builder.build();
+  }
+
+  @Override
+  public Object executeScript(String using, boolean responseExpected) {
+    return executeScript(using, responseExpected, getRuntimeId());
+  }
+
+  @Override
+  public Object executeScript(String using, boolean responseExpected,
+      int runtimeId) {
+    Response reply = eval(using, runtimeId);
+    return responseExpected ? parseEvalReply(parseEvalData(reply)) : null;
+  }
+
+  @Override
+  public Integer getObject(String using) {
+    EvalResult reply = parseEvalData(eval(using));
+    return (reply.getType().equals("object")) ? reply.getObjectValue().getObjectID()
+        : null;
+  }
+
+  @Override
+  protected Integer getObject(String using, int runtimeId) {
+    EvalResult reply = parseEvalData(eval(using, runtimeId));
+    return (reply.getType().equals("object")) ? reply.getObjectValue().getObjectID()
+        : null;
+  }
+
+  @Override
+  public String callFunctionOnObject(String using, int objectId) {
+    Variable variable = buildVariable("locator", objectId);
+
+    EvalResult reply = parseEvalData(eval(using, variable));
+    return reply.getType().equals("null") ? null : reply.getValue();
+  }
+
+  @Override
+  public Object callFunctionOnObject(String using, int objectId,
+      boolean responseExpected) {
+    Variable variable = buildVariable("locator", objectId);
+
+    Response response = eval(using, variable);
+    return responseExpected ? parseEvalReply(parseEvalData(response)) : null;
+  }
+
+  @Override
+  public Integer executeScriptOnObject(String using, int objectId) {
+    Variable variable = buildVariable("locator", objectId);
+
+    EvalResult reply = parseEvalData(eval(using, variable));
+    Object object = parseEvalReply(reply);
+    if (object == null || !(object instanceof ObjectValue)) {
+      return null;
+    }
+    return ((ObjectValue) object).getObjectID();
   }
 
   protected Object parseEvalReply(EvalResult result) {
@@ -202,46 +179,69 @@ public class EcmaScriptDebugger6 extends EcmaScriptDebugger {
   }
 
   @Override
-  public Object callFunctionOnObject(String using, int objectId,
-      boolean responseExpected) {
-    Variable variable = buildVariable("locator", objectId);
+  public List<Integer> examineObjects(Integer id) {
+    List<Integer> ids = new ArrayList<Integer>();
 
-    Response response = eval(using, variable);
-    return responseExpected ? parseEvalReply(parseEvalData(response)) : null;
+    ObjectChainList list = getChainList(id);
+    List<Property> objects = list.getObjectChainList(0).getObjectListList().get(0).getPropertyListList();
+    for (Property obj : objects) {
+      if (obj.getType().equals("object")) ids.add(obj.getObjectValue().getObjectID());
+    }
+
+    return ids;
+
   }
 
   @Override
-  public String callFunctionOnObject(String using, int objectId) {
-    Variable variable = buildVariable("locator", objectId);
+  public Object examineScriptResult(Integer id) {
+    ObjectChainList list = getChainList(id);
+    String className = list.getObjectChainListList().get(0).getObjectList(0).getValue().getClassName();
+    List<Property> properties = list.getObjectChainList(0).getObjectListList().get(0).getPropertyListList();
+    if (className.equals("Array")) {
+      List<Object> result = new ArrayList<Object>();
 
-    EvalResult reply = parseEvalData(eval(using, variable));
-    return reply.getType().equals("null") ? null : reply.getValue();
+      for (Property property : properties) {
+        if (property.getType().equals("number")
+            && property.getName().equals("length")) {
+          // ignore ?!?
+        } else if (property.getType().equals("object")) {
+          result.add(examineScriptResult(property.getObjectValue().getObjectID()));
+        } else {
+          result.add(parseValue(property.getType(), property.getValue()));
+        }
+      }
+      return result;
+    } else {
+      // we have a map
+      Map<String, Object> result = new HashMap<String, Object>();
+
+      for (Property property : properties) {
+        if (property.getType().equals("number")
+            && property.getName().equals("length")) {
+          // ignore ?!?
+        } else if (property.getType().equals("object")) {
+          result.put(property.getName(),
+              examineScriptResult(property.getObjectValue().getObjectID()));
+        } else {
+          result.put(property.getName(), parseValue(property.getType(),
+              property.getValue()));
+        }
+      }
+      return result;
+    }
   }
 
-  @Override
-  public Object executeScript(String using, boolean responseExpected) {
-    return executeScript(using, responseExpected, getRuntimeId());
-  }
+  private ObjectChainList getChainList(Integer id) {
+    ExamineList.Builder builder = ExamineList.newBuilder();
+    builder.setExaminePrototypes(false);
+    builder.setRuntimeID(getRuntimeId());
+    builder.addObjectList(id);
+    Response response = executeCommand(ESDebuggerCommand.EXAMINE_OBJECTS,
+        builder);
 
-  @Override
-  public Object executeScript(String using, boolean responseExpected,
-      int runtimeId) {
-    Response reply = eval(using, runtimeId);
-    return responseExpected ? parseEvalReply(parseEvalData(reply)) : null;
-  }
-
-  @Override
-  public Integer getObject(String using) {
-    EvalResult reply = parseEvalData(eval(using));
-    return (reply.getType().equals("object")) ? reply.getObjectValue().getObjectID()
-        : null;
-  }
-
-  @Override
-  public Integer getObject(String using, int runtimeId) {
-    EvalResult reply = parseEvalData(eval(using, runtimeId));
-    return (reply.getType().equals("object")) ? reply.getObjectValue().getObjectID()
-        : null;
+    ObjectChainList.Builder objListBuilder = ObjectChainList.newBuilder();
+    buildPayload(response, objListBuilder);
+    return objListBuilder.build();
   }
 
 }
