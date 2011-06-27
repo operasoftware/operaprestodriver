@@ -382,8 +382,8 @@ public class OperaDesktopDriver extends OperaDriver {
 	 * @param menuItemText - Menu item text
 	 * @return
 	 */
-	public void pressQuickMenuItem(String menuItemText) {
-		desktopWindowManager.pressQuickMenuItem(menuItemText);
+	public void pressQuickMenuItem(String menuItemText, boolean popMenu) {
+		desktopWindowManager.pressQuickMenuItem(menuItemText, popMenu);
 	}
 	
 	/**

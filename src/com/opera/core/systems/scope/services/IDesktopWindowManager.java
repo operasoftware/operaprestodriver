@@ -147,7 +147,7 @@ public interface IDesktopWindowManager {
 	 */
 	QuickWindow getQuickWindowByName(String name);
 
-	void pressQuickMenuItem(String menuItemText);
+	void pressQuickMenuItem(String menuItemText, boolean popMenu);
 
 	// TODO: DOCUMENT
 	

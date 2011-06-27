@@ -305,9 +305,10 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 	
 	
 	// -- Menu
-	public void pressQuickMenuItem(String menuItemText) {
+	public void pressQuickMenuItem(String menuItemText, boolean popMenu) {
 		QuickMenuItemID.Builder builder = QuickMenuItemID.newBuilder();
 		builder.setMenuText(menuItemText);
+		builder.setPopmenu(popMenu);
 
 		// Nothing to respond you need to listen to the OnMenuItemPressed event
 		executeCommand(DesktopWindowManagerCommand.PRESS_QUICK_MENU, builder);
