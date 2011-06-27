@@ -284,7 +284,9 @@ public class EcmascriptService extends AbstractEcmascriptService implements
   }
 
   private Object parseEvalReply(EvalResult result) {
+
     Status status = result.getStatus();
+
     switch (status) {
     case CANCELLED:
       return null;
@@ -387,6 +389,12 @@ public class EcmascriptService extends AbstractEcmascriptService implements
     }
 
     Runtime info = runtimesList.get(curr.getRuntimeID());
+
+    // We should only find frames underneath the current one.
+    if (!info.getHtmlFramePath().startsWith(currentFramePath)) {
+      throw new NoSuchFrameException("No such frame "+frameName+" in " + currentFramePath);
+    }
+
     currentFramePath = info.getHtmlFramePath();
     setRuntime(info);
   }

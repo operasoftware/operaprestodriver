@@ -273,7 +273,9 @@ public class EcmaScriptDebugger extends AbstractEcmascriptService implements
 
     EvalResult reply = parseEvalData(eval(using, variable));
     Object object = parseEvalReply(reply);
-    if (object == null || !(object instanceof ObjectValue)) return null;
+    if (object == null || !(object instanceof ObjectValue)) {
+      return null;
+    }
     return ((ObjectValue) object).getObjectID();
   }
 
