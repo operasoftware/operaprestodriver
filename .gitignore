@@ -13,3 +13,5 @@ doc/
 VERSION
 *.orig
 .idea/workspace.xml
+maven/src
+maven/target

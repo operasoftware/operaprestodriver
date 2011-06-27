@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.opera</groupId>
+    <artifactId>selenium-opera-driver</artifactId>
+    <version>0.4.3</version>
+	<name>selenium-opera-driver</name>
+
+	<dependencies>
+        <dependency>
+            <groupId>com.google.protobuf</groupId>
+            <artifactId>protobuf-java</artifactId>
+            <version>2.3.0</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-jxpath</groupId>
+            <artifactId>commons-jxpath</artifactId>
+            <version>1.3</version>
+        </dependency>
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-remote-driver</artifactId>
+			<version>2.0rc3</version>
+		</dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <!-- See http://maven.apache.org/plugins/maven-antrun-plugin -->
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy_java_files</id>
+                        <phase>generate-sources</phase>
+                        <configuration>
+                            <tasks>
+                                <delete dir="src/main/java" />
+                                <copy todir="src/main/java" includeEmptyDirs="false">
+                                    <fileset dir="../src" />
+                                </copy>
+                            </tasks>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>generate_version_file</id>
+                        <phase>generate-resources</phase>
+                        <configuration>
+                            <tasks>
+                                <mkdir dir="target/classes" />
+                                <echo message="${version}" file="target/classes/VERSION" />
+                            </tasks>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>copy_resource_files</id>
+                        <phase>generate-resources</phase>
+                        <configuration>
+                            <tasks>
+                                <copy todir="target/classes">
+                                    <fileset dir="../src" includes="**/*.properties" />
+                                    <fileset dir=".." includes="launcher/*" />
+                                </copy>
+                            </tasks>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
