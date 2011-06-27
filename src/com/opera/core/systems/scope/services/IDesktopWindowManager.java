@@ -18,7 +18,6 @@ package com.opera.core.systems.scope.services;
 
 import java.util.List; //import java.util.concurrent.atomic.AtomicInteger;
 
-import com.opera.core.systems.OperaUIElement;
 import com.opera.core.systems.QuickMenu;
 import com.opera.core.systems.QuickMenuItem;
 import com.opera.core.systems.QuickWidget;
@@ -149,8 +148,6 @@ public interface IDesktopWindowManager {
 
 	void pressQuickMenuItem(String menuItemText, boolean popMenu);
 
-	// TODO: DOCUMENT
-	
 	/**
 	 * Gets the menu with name name.
 	 *
@@ -158,23 +155,74 @@ public interface IDesktopWindowManager {
 	 * @return QuickMenu
 	 */
 	QuickMenu getQuickMenu(String menuName);
-	
-	OperaUIElement getQuickMenuItemByAction(String action);
 
-	OperaUIElement getQuickMenuItemByText(String text);
+	/**
+	 * Gets the menu with the action specified, if any
+	 * 
+	 * @param action of the menuitem to search for
+	 * @return
+	 */
+	QuickMenuItem getQuickMenuItemByAction(String action);
 
-	OperaUIElement getQuickMenuItemByPosition(int row, String parentName);
+	/**
+	 * Get the menu with the text specified, if any
+	 * 
+	 * @param text of the menuitem to search for
+	 * @return
+	 */
+	QuickMenuItem getQuickMenuItemByText(String text);
 
-	OperaUIElement getQuickMenuItemByAccKey(String key, String parentName);
+	/**
+	 * 
+	 * @param row the row of the item, counting from zero, and including both normal
+	 *                items and menu separators
+	 * @param parentName name of the menu to lookup the menuitem in
+	 */
+	QuickMenuItem getQuickMenuItemByPosition(int row, String parentName);
 
-	OperaUIElement getQuickMenuItemByShortcut(String shortcut);
+	/**
+	 * 
+	 * @param key the shortcut key of the menuitem to search for (the character that's underlined/marked
+	 *            in the menuitem text)
+	 * @param parentName name of the menu of the menuitem 
+	 * @return
+	 */
+	QuickMenuItem getQuickMenuItemByAccKey(String key, String parentName);
 
-	OperaUIElement getQuickMenuItemBySubmenu(String submenu);
+	/**
+	 * 
+	 * @param shortcut string representation of the shortcut of the menuitem (i.e. "Ctrl+O")
+	 * @return
+	 */
+	QuickMenuItem getQuickMenuItemByShortcut(String shortcut);
 
+	/**
+	 * 
+	 * @param submenu the name of the submenu the menuitem opens when its selected/clicked
+	 * @return
+	 */
+	QuickMenuItem getQuickMenuItemBySubmenu(String submenu);
+
+	/**
+	 * 
+	 * @return list of all menus that are open (including menubar(s))
+	 */
 	List<QuickMenu> getQuickMenuList();
 
+	/**
+	 * 
+	 * @return list containing all menuitems in open menus (including menubar(s))
+	 */
 	List<QuickMenuItem> getQuickMenuItemList();
 
-	OperaUIElement getQuickMenuItemByName(String name);
+	/**
+	 * 
+	 * @param name name of the item. 
+	 *         This is either the name of the action the item executes when selected
+	 *         The name of the submenu the item opens when selected
+	 *         "Separator" for items that are separators
+	 * @return
+	 */
+	QuickMenuItem getQuickMenuItemByName(String name);
 	
 }

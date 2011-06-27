@@ -33,8 +33,6 @@ public class QuickMenu {
 		private final QuickMenuInfo info;
 		private final IDesktopUtils desktopUtils;
 		private final SystemInputManager systemInputManager;
-		// Would need id to be able to distinguish two main menus in different windows
-		//private final int parentWindowId;
 		
 		// The list of items is not initialized till the first call to get the list
 		// private ArrayList<QuickMenuItem> menuItemList;
@@ -50,7 +48,6 @@ public class QuickMenu {
 	        this.info = info;
 	        this.desktopUtils = desktopUtils;
 	        this.systemInputManager = inputManager;
-	        //this.menuItemList = new ArrayList<QuickMenuItem>();
 	    }
 
 		/**
@@ -70,8 +67,10 @@ public class QuickMenu {
 			return info.getWindowId().getWindowID();
 		}
 		
-		
-		
+		/**
+		 * 
+		 * @return List of QuickMenuItems in this menu
+		 */
 		public List<QuickMenuItem> getItemList() {
 			List<QuickMenuItem> itemList = new ArrayList<QuickMenuItem>();
 			for (QuickMenuItemInfo itemInfo : info.getMenuItemListList()) {
@@ -80,13 +79,6 @@ public class QuickMenu {
 				itemList.add(item);
 			}
 			return itemList;
-		}
-		
-		/**
-		 * @return true if the menu is visible, else false
-		 */
-		public boolean isVisible(){
-			return true; //info.getVisible();
 		}
 		
 		/**
@@ -104,12 +96,6 @@ public class QuickMenu {
 			return false;
 		}
 		
-		/**
-		 * @return true if this is a submenu, else false
-		 *
-		public boolean isSubmenu() {
-			return info.getParentMenu() != null;
-		}*/
 
 		/**
 		 * @return DesktopWindowRect of the menu
@@ -118,25 +104,6 @@ public class QuickMenu {
 			return info.getRect();
 		}
 		
-		/////////////////////////////////////////
-
-		// TODO: FIXME: Move to common to widget/menu
-		/**
-		 * @return Point describing location of widget
-		 */
-		/*public Point getLocation() {
-			DesktopWindowRect rect = getRect();
-			return new Point(rect.getX(), rect.getY());
-		}*/
-
-		/**
-		 * @return size of widget
-		 */
-		/*public Dimension getSize() {
-			DesktopWindowRect rect = getRect();
-			return new Dimension(rect.getWidth(), rect.getHeight());
-		}*/
-
 		@Override
 		public String toString() {
 			return "QuickMenu " + getName();

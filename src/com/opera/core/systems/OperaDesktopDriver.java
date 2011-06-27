@@ -246,7 +246,6 @@ public class OperaDesktopDriver extends OperaDriver {
 		return desktopWindowManager.getQuickMenuList();
 	}
 	
-	// TODO: Check consistency of this and the above
 	public List<QuickMenuItem> getQuickMenuItemList() {
 		return desktopWindowManager.getQuickMenuItemList();
 	}
@@ -706,7 +705,6 @@ public class OperaDesktopDriver extends OperaDriver {
 		return services.waitForDesktopWindowLoaded(windowName, OperaIntervals.PAGE_LOAD_TIMEOUT.getValue());
 	}
 	
-	// TODO: FIXME: No need to wait ...
 	/**
 	 * Waits until the menu is shown, and then returns the
 	 * name of the window
@@ -722,7 +720,6 @@ public class OperaDesktopDriver extends OperaDriver {
 		return services.waitForMenuShown(menuName, OperaIntervals.MENU_EVENT_TIMEOUT.getValue());
 	}
 	
-	// TODO, FIXME: Enought that it's not there, or wait for the event ..
 	/**
 	 * Waits until the menu is closed, and then returns the
 	 * name of the window
