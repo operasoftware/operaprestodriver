@@ -201,13 +201,13 @@ public class EcmaScriptDebugger6 extends EcmaScriptDebugger {
       List<Object> result = new ArrayList<Object>();
 
       for (Property property : properties) {
-        if (property.getType().equals("number")
-            && property.getName().equals("length")) {
+        String type = property.getType();
+        if (type.equals("number") && property.getName().equals("length")) {
           // ignore ?!?
-        } else if (property.getType().equals("object")) {
+        } else if (type.equals("object")) {
           result.add(examineScriptResult(property.getObjectValue().getObjectID()));
         } else {
-          result.add(parseValue(property.getType(), property.getValue()));
+          result.add(parseValue(type, property.getValue()));
         }
       }
       return result;
@@ -216,14 +216,14 @@ public class EcmaScriptDebugger6 extends EcmaScriptDebugger {
       Map<String, Object> result = new HashMap<String, Object>();
 
       for (Property property : properties) {
-        if (property.getType().equals("number")
-            && property.getName().equals("length")) {
+        String type = property.getType();
+        if (type.equals("number") && property.getName().equals("length")) {
           // ignore ?!?
-        } else if (property.getType().equals("object")) {
+        } else if (type.equals("object")) {
           result.put(property.getName(),
               examineScriptResult(property.getObjectValue().getObjectID()));
         } else {
-          result.put(property.getName(), parseValue(property.getType(),
+          result.put(property.getName(), parseValue(type,
               property.getValue()));
         }
       }

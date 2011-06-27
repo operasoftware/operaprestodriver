@@ -243,8 +243,7 @@ public class EcmascriptService extends AbstractEcmascriptService implements
 
 
   public Object executeScript(String using, boolean responseExpected) {
-    Response reply = eval(using);
-    return responseExpected ? parseEvalReply(parseEvalData(reply)) : null;
+    return executeScript(using, responseExpected, getRuntimeId());
   }
 
   private Object executeScript(String using, boolean responseExpected, int runtimeId) {
@@ -459,11 +458,10 @@ public class EcmascriptService extends AbstractEcmascriptService implements
   }
 
   public List<Integer> examineObjects(Integer id) {
-    ObjectList list = getObjectList(id);
     List<Integer> ids = new ArrayList<Integer>();
-    List<Property> objects = list.getPrototypeListList().get(0).getObjectListList().get(
-        0).getPropertyListList();
 
+    ObjectList list = getObjectList(id);
+    List<Property> objects = list.getPrototypeListList().get(0).getObjectListList().get(0).getPropertyListList();
     for (Property obj : objects) {
       if (obj.getValue().getType().equals(Value.Type.OBJECT)) ids.add(obj.getValue().getObject().getObjectID());
     }
@@ -516,14 +514,13 @@ public class EcmascriptService extends AbstractEcmascriptService implements
 
   public Object examineScriptResult(Integer id) {
     ObjectList list = getObjectList(id);
-    PrototypeChain chain = list.getPrototypeList(0);
-    EcmascriptProtos.Object obj = chain.getObjectList(0);
+    EcmascriptProtos.Object obj = list.getPrototypeList(0).getObjectList(0);
     String className = obj.getClassName();
 
     List<Property> properties = obj.getPropertyListList();
-
     if (className.equals("Array")) {
       List<Object> result = new ArrayList<Object>();
+
       for (Property property : properties) {
         Type type = property.getValue().getType();
         if (type == Type.NUMBER && property.getName().equals("length")) {
@@ -534,7 +531,6 @@ public class EcmascriptService extends AbstractEcmascriptService implements
       }
       return result;
     } else {
-      System.out.println("map");
       // we have a map
       Map<String, Object> result = new HashMap<String, Object>();
 
