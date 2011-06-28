@@ -30,6 +30,8 @@ import java.util.TreeSet;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.io.IOUtils;
 import org.openqa.selenium.Alert;
@@ -508,6 +510,41 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
     return debugger.listFramePaths();
   }
 
+  /**
+   * Escape characters for safe insertion in a Javascript string contained by
+   * double quotes (")
+   * @param string The string to escape
+   * @return
+   */
+  private String escapeJsString(String string) {
+    return escapeJsString(string, "\"");
+  }
+
+  /**
+   * Escape characters for safe insertion in a Javascript string
+   * @param string The string to escape
+   * @param quote The type of quote to escape. Either " or '
+   * @return  The escaped string
+   */
+  private String escapeJsString(String string, String quote) {
+    // This should be expanded to match all invalid characters (e.g. newlines)
+    // but for the moment we'll trust we'll only get quotes.
+    Pattern escapePattern = Pattern.compile("([^\\\\])"+quote);
+    // Prepend a space so that the regex can match quotes at the beginning of
+    // the string
+    Matcher m = escapePattern.matcher(" "+string);
+    StringBuffer sb = new StringBuffer();
+    while (m.find()) {
+      // $1 -> inserts the character before the quote
+      // \\\\\" -> \\", apparently just \" isn't treated literally
+      m.appendReplacement(sb, "$1\\\\\"");
+    }
+    m.appendTail(sb);
+
+    // Remove the prepended space.
+    return sb.substring(1).toString();
+  }
+
   private WebElement findActiveElement() {
     return findSingleElement("document.activeElement;", "active element");
   }
@@ -516,7 +553,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
     return findSingleElement("(function(){\n"+
           "var links = document.getElementsByTagName('a'), element = null;\n"+
           "for (var i = 0; i < links.length && !element; ++i) {\n"+
-          "if(links[i].textContent.replace(/\\s+/g, ' ').trim() == \"" + using +"\".replace(/\\s+/g, ' ')) {\n"+
+          "if(links[i].textContent.replace(/\\s+/g, ' ').trim() == \"" + escapeJsString(using) +"\".replace(/\\s+/g, ' ')) {\n"+
           "element = links[i];\n"+
           "}\n"+
           "}\n"+
@@ -527,7 +564,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
     return findSingleElement("(function(){\n"+
             "var links = document.getElementsByTagName('a'), element = null;\n"+
             "for (var i = 0; i < links.length && !element; ++i) {\n"+
-            "if(links[i].textContent.replace(/\\s+/g, ' ').indexOf('" + using +"') > -1){\n"+
+            "if(links[i].textContent.replace(/\\s+/g, ' ').indexOf('" + escapeJsString(using, "'") +"') > -1){\n"+
             "element = links[i];\n"+
             "}\n"+
             "}\n"+
@@ -539,7 +576,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
         "var links = document.links, link = null, i = 0, elements = [];\n"+
         "for( ; link = links[i]; i++)\n"+
         "{\n"+
-        "if(link.textContent.replace(/\\s+/g, ' ').trim() == \"" + using +"\".replace(/\\s+/g, ' '))\n"+
+        "if(link.textContent.replace(/\\s+/g, ' ').trim() == \"" + escapeJsString(using) +"\".replace(/\\s+/g, ' '))\n"+
         "{\n"+
         "elements.push(link);\n"+
           "}\n"+
@@ -561,7 +598,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
         "var links = document.links, link = null, i = 0, elements = [];\n"+
         "for( ; link = links[i]; i++)\n"+
         "{\n"+
-        "if(link.textContent.replace(/\\s+/g, ' ').indexOf('" + using +"') > -1)\n"+
+        "if(link.textContent.replace(/\\s+/g, ' ').indexOf('" + escapeJsString(using, "'") +"') > -1)\n"+
         "{\n"+
         "elements.push(link);\n"+
           "}\n"+
@@ -570,8 +607,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
   }
 
   public WebElement findElementById(String using) {
-    //return findSingleElement("document.querySelector(\"#\" + " + using + ")", "id");
-    return findSingleElement("document.getElementById('" + using + "');", "id");
+    return findSingleElement("document.getElementById('" + escapeJsString(using, "'") + "');", "id");
   }
 
   /**
@@ -581,7 +617,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
     return findMultipleElements("var alls = document.all, element = null, i = 0, elements = [];\n" +
         "for( ; element = alls[i]; i++)\n"+
         "{\n"+
-            "if(element.getAttribute('id') == '" + using +"')\n"+
+            "if(element.getAttribute('id') == '" + escapeJsString(using, "'") +"')\n"+
             "{\n"+
               "elements.push(element);\n"+
             "}\n"+
@@ -599,19 +635,19 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
   }
 
   public WebElement findElementByClassName(String using) {
-    return findSingleElement("document.getElementsByClassName('" + using
+    return findSingleElement("document.getElementsByClassName('" + escapeJsString(using, "'")
         + "')[0];", "class name");
   }
 
   public List<WebElement> findElementsByClassName(String using) {
-    return findMultipleElements("document.getElementsByClassName('" + using
+    return findMultipleElements("document.getElementsByClassName('" + escapeJsString(using, "'")
         + "');\n", "class name");
   }
 
   public List<WebElement> findElementsByXPath(String using) {
     return findMultipleElements(
         "var result = document.evaluate(\""
-            + using
+            + escapeJsString(using)
             + "\", document, null, XPathResult.ORDERED_NODE_ITERATOR_TYPE,  null);\n"
             + "var elements = new Array();\n"
             + "var element = result.iterateNext();\n"
@@ -644,13 +680,56 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
   }
 
   public WebElement findElementByName(String using) {
-    return findSingleElement("document.getElementsByName('" + using + "')[0];",
+    return findSingleElement("document.getElementsByName('" + escapeJsString(using, "'") + "')[0];",
         "name");
   }
 
   public List<WebElement> findElementsByName(String using) {
-    return findMultipleElements("document.getElementsByName('" + using + "');",
+    return findMultipleElements("document.getElementsByName('" + escapeJsString(using, "'") + "');",
         "name");
+  }
+
+  public WebElement findElementByTagName(String using) {
+    if (using.contains(":")) {// has prefix
+      String[] tagInfo = using.split(":");
+      return findSingleElement("(function() { var elements = document.getElementsByTagName('" + tagInfo[1] + "'), element = null;" +
+          "for( var i = 0; i < elements.length; i++ ) {" +
+          "if( elements[i].prefix == '" + tagInfo[0] + "' ) {" +
+          "element = elements[i];" +
+          "break;"+
+          "}" +
+          "}" +
+          "return element; })()", "tag name");
+    }
+    return findSingleElement("document.getElementsByTagName('" + escapeJsString(using, "'") +"')[0];", "tag name");
+  }
+
+
+  public List<WebElement> findElementsByTagName(String using) {
+    if (using.contains(":")) {// has prefix
+      String[] tagInfo = using.split(":");
+      return findMultipleElements("(function() { var elements = document.getElementsByTagName('" + tagInfo[1] + "'), output = [];" +
+          "for( var i = 0; i < elements.length; i++ ) {" +
+          "if( elements[i].prefix == '" + tagInfo[0] + "' ) {" +
+          "output.push(elements[i]);" +
+          "}" +
+          "}" +
+          "return output; })()", "tag name");
+    }
+    return findMultipleElements("document.getElementsByTagName('"+ escapeJsString(using, "'") + "');\n", "tag name");
+  }
+
+  public WebElement findElementByCssSelector(String using) {
+    return findSingleElement("document.querySelector('" + escapeJsString(using, "'") + "');",
+        "selector");
+  }
+
+  public List<WebElement> findElementsByCssSelector(String using) {
+    return findMultipleElements(
+        "(function(){ var results = document.querySelectorAll('"
+            + escapeJsString(using, "'")
+            + "'), returnValue = [], i=0;for(;returnValue[i]=results[i];i++); return returnValue;})()",
+        "selector");
   }
 
   private class OperaNavigation implements Navigation {
@@ -802,49 +881,6 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
     } catch (InterruptedException e) {
       Thread.currentThread().interrupt();
     }
-  }
-
-  public WebElement findElementByTagName(String using) {
-    if (using.contains(":")) {// has prefix
-      String[] tagInfo = using.split(":");
-      return findSingleElement("(function() { var elements = document.getElementsByTagName('" + tagInfo[1] + "'), element = null;" +
-          "for( var i = 0; i < elements.length; i++ ) {" +
-          "if( elements[i].prefix == '" + tagInfo[0] + "' ) {" +
-          "element = elements[i];" +
-          "break;"+
-          "}" +
-          "}" +
-          "return element; })()", "tag name");
-    }
-    return findSingleElement("document.getElementsByTagName('" + using +"')[0];", "tag name");
-  }
-
-
-  public List<WebElement> findElementsByTagName(String using) {
-    if (using.contains(":")) {// has prefix
-      String[] tagInfo = using.split(":");
-      return findMultipleElements("(function() { var elements = document.getElementsByTagName('" + tagInfo[1] + "'), output = [];" +
-          "for( var i = 0; i < elements.length; i++ ) {" +
-          "if( elements[i].prefix == '" + tagInfo[0] + "' ) {" +
-          "output.push(elements[i]);" +
-          "}" +
-          "}" +
-          "return output; })()", "tag name");
-    }
-    return findMultipleElements("document.getElementsByTagName('"+ using + "');\n", "tag name");
-  }
-
-  public WebElement findElementByCssSelector(String using) {
-    return findSingleElement("document.querySelector('" + using + "');",
-        "selector");
-  }
-
-  public List<WebElement> findElementsByCssSelector(String using) {
-    return findMultipleElements(
-        "(function(){ var results = document.querySelectorAll('"
-            + using
-            + "'), returnValue = [], i=0;for(;returnValue[i]=results[i];i++); return returnValue;})()",
-        "selector");
   }
 
   private final List<WebElement> findMultipleElements(String script, String type) {
