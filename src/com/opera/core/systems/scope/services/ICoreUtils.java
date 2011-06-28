@@ -33,6 +33,8 @@ package com.opera.core.systems.scope.services;
 public interface ICoreUtils {
 
     void init();
+    /// Whether this version of core supports getting metadata
+    boolean supportsMetaData();
 
     /**
      * Which Core version this instance is running, e.g. "2.8.119".

@@ -33,7 +33,6 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.opera.core.systems.scope.services.*;
 import org.apache.commons.io.IOUtils;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
@@ -70,6 +69,12 @@ import com.opera.core.systems.scope.internal.OperaIntervals;
 import com.opera.core.systems.scope.internal.OperaKeys;
 import com.opera.core.systems.scope.protos.PrefsProtos.Pref;
 import com.opera.core.systems.scope.protos.PrefsProtos.GetPrefArg.Mode;
+import com.opera.core.systems.scope.services.ICookieManager;
+import com.opera.core.systems.scope.services.ICoreUtils;
+import com.opera.core.systems.scope.services.IEcmaScriptDebugger;
+import com.opera.core.systems.scope.services.IOperaExec;
+import com.opera.core.systems.scope.services.IPrefs;
+import com.opera.core.systems.scope.services.IWindowManager;
 import com.opera.core.systems.settings.OperaDriverSettings;
 
 /**
@@ -89,9 +94,9 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
 
   protected IEcmaScriptDebugger debugger;
   protected IOperaExec exec;
+  protected IPrefs prefs;
   protected IWindowManager windowManager;
   protected ICoreUtils coreUtils;
-  protected IPrefs prefs;
   protected ICookieManager cookieManager;
   protected ScopeServices services;
   protected ScopeActions actionHandler;
@@ -211,7 +216,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
     versions.put("ecmascript-debugger", "5.0");
     versions.put("window-manager", "2.0");
     versions.put("exec", "2.0");
-    versions.put("core-utils", "1.0");
+    versions.put("core", "1.0");
     versions.put("cookie-manager", "1.0");
     versions.put("prefs", "1.0");
     return versions;
@@ -1179,6 +1184,10 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
 
   public Object executeAsyncScript(String script, Object... args) {
     throw new UnsupportedOperationException();
+  }
+
+  public boolean isMetaDataAvailable() {
+    return coreUtils.supportsMetaData();
   }
 
   public String getCoreVersion() {

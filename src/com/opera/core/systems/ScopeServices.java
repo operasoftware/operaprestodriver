@@ -22,7 +22,6 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Logger;
 
-import com.opera.core.systems.scope.services.*;
 import org.openqa.selenium.WebDriverException;
 
 import com.google.protobuf.AbstractMessage.Builder;
@@ -44,6 +43,14 @@ import com.opera.core.systems.scope.protos.ScopeProtos.ServiceResult;
 import com.opera.core.systems.scope.protos.ScopeProtos.ServiceSelection;
 import com.opera.core.systems.scope.protos.UmsProtos.Command;
 import com.opera.core.systems.scope.protos.UmsProtos.Response;
+import com.opera.core.systems.scope.services.ICookieManager;
+import com.opera.core.systems.scope.services.ICoreUtils;
+import com.opera.core.systems.scope.services.IDesktopUtils;
+import com.opera.core.systems.scope.services.IDesktopWindowManager;
+import com.opera.core.systems.scope.services.IEcmaScriptDebugger;
+import com.opera.core.systems.scope.services.IOperaExec;
+import com.opera.core.systems.scope.services.IPrefs;
+import com.opera.core.systems.scope.services.IWindowManager;
 import com.opera.core.systems.scope.services.ums.SystemInputManager;
 import com.opera.core.systems.scope.services.ums.UmsServices;
 import com.opera.core.systems.scope.stp.StpConnection;

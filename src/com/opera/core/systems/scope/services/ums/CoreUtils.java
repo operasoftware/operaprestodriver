@@ -35,30 +35,37 @@ public class CoreUtils extends AbstractService implements ICoreUtils {
     private String userAgent;
     private int    processID;
 
+    /// Whether this core supports getting metadata
+    private boolean supports_meta = false;
+
     public CoreUtils(ScopeServices services, String version) {
         super(services, version);
 
         String serviceName = "core";
 
-        /*
         // Version 1.2 is required for browser meta information
         if (!isVersionInRange(version, "1.2", serviceName)) {
-            throw new UnsupportedOperationException(serviceName + " version " + version + " is not supported");
+            supports_meta = true;
         }
-        */
 
         services.setCoreUtils(this);
     }
 
     public void init() {
-        // TODO Use factory?
-        BrowserInformation browserInformation = getBrowserInformation();
-        coreVersion     = browserInformation.getCoreVersion();
-        operatingSystem = browserInformation.getOperatingSystem();
-        product         = browserInformation.getProduct();
-        binaryPath      = browserInformation.getBinaryPath();
-        userAgent       = browserInformation.getUserAgent();
-        processID       = browserInformation.getProcessID();
+        if (supports_meta) {
+            // TODO Use factory?
+            BrowserInformation browserInformation = getBrowserInformation();
+            coreVersion     = browserInformation.getCoreVersion();
+            operatingSystem = browserInformation.getOperatingSystem();
+            product         = browserInformation.getProduct();
+            binaryPath      = browserInformation.getBinaryPath();
+            userAgent       = browserInformation.getUserAgent();
+            processID       = browserInformation.getProcessID();
+        }
+    }
+
+    public boolean supportsMetaData() {
+        return supports_meta;
     }
 
     public String getCoreVersion() {
