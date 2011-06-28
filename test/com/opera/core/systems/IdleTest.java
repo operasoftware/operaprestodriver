@@ -165,7 +165,7 @@ public class IdleTest extends TestBase {
 
     // Check checkbox, fires a submit even on the form
     start();
-    ((OperaWebElement) driver.findElementById("check")).setSelected();
+    ((OperaWebElement) driver.findElementById("check")).click();
     stop();
 
     // +"?" for submitted query string
@@ -212,17 +212,6 @@ public class IdleTest extends TestBase {
     stop();
 
     Assert.assertEquals("done", driver.findElementById("out").getText());
-  }
-
-  @Test
-  public void testReflow() throws Exception {
-    // Need #box to activate the :target pseudo class
-    start();
-    getFixture("idle/reflow.html#box");
-    stop();
-
-    OperaWebElement box = (OperaWebElement) driver.findElementById("box");
-    Assert.assertEquals(200, box.getSize().width);
   }
 
   @Test

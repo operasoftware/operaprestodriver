@@ -62,11 +62,10 @@ public class OperaLauncherBinary extends Thread {
 
       watcher = new OutputWatcher(process);
 
-      outputWatcherThread = new Thread(getThreadGroup(), watcher,
-          "output-watcher");
+      outputWatcherThread = new Thread(getThreadGroup(), watcher, "output-watcher");
+      running.set(true);
       outputWatcherThread.start();
 
-      running.set(true);
     } catch (IOException e) {
       throw new WebDriverException("Could not start the process : "
           + e.getMessage());

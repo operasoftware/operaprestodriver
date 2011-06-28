@@ -45,7 +45,7 @@ public class ElementsTest extends TestBase {
   public void testSelect() throws Exception {
     getFixture("select.html");
     WebElement el = driver.findElementById("dog");
-    el.setSelected();
+    el.click();
     Assert.assertTrue(el.isSelected());
   }
 }
