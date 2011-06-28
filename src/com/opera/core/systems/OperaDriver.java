@@ -1128,14 +1128,43 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
   }
 
   /**
-   * Returns a list of preferences in the requested section.
+   * Returns a Map of preference names to preferences in the requested section.
    *
    * @param sort Whether to alphabetically sort the preference keys.
    * @param section The section to retreive the preferences from.
-   * @return A list of preferences.
+   * @return A Map of preference names to preferences.
    */
-  public List<Pref> listPrefs(boolean sort, String section) {
-    return services.getPrefs().listPrefs(sort, section);
+  public Map<String, Pref> listPrefs(boolean sort, String section) {
+    Map<String, Pref> map = new HashMap<String, Pref>();
+
+    for (Pref p : prefs.listPrefs(sort, section)) {
+      map.put(p.getKey(), p);
+    }
+    return map;
+  }
+
+  /**
+   * Returns a Map of sections names mapping to a Map of preference names
+   * mapping to Pref objects.
+   * @return
+   */
+  public Map<String, Map<String, Pref>> listAllPrefs() {
+    List<Pref> allPrefs = prefs.listPrefs(true, null);
+
+    HashMap<String, Map<String, Pref>> result = new HashMap<String, Map<String, Pref>>();
+
+    for (Pref pref : allPrefs) {
+      String section = pref.getSection();
+      String key = pref.getKey();
+
+      if (!result.containsKey(section)) {
+        result.put(section, new HashMap<String, Pref>());
+      }
+
+      result.get(section).put(key, pref);
+    }
+
+    return result;
   }
 
   /**

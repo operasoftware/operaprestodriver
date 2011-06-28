@@ -1,10 +1,16 @@
 package com.opera.core.systems;
 
+import static org.junit.Assert.*;
+
+import java.util.Map;
+
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import com.opera.core.systems.scope.protos.PrefsProtos.Pref;
+import com.opera.core.systems.scope.protos.PrefsProtos.Pref.Type;
 import com.opera.core.systems.settings.OperaDriverSettings;
 
 public class OperaDriverTest extends TestBase
@@ -101,6 +107,16 @@ public class OperaDriverTest extends TestBase
 
     driver.operaAction("bACk");
     Assert.assertTrue(driver.getCurrentUrl().indexOf("test.html") > 0);
+  }
+
+  @Test
+  public void testNicePrefs() throws Exception {
+    Map<String, Map<String, Pref>> prefs = driver.listAllPrefs();
+
+    Assert.assertTrue("Prefs contains User Prefs", prefs.containsKey("User Prefs"));
+    Map<String, Pref> userPrefs = prefs.get("User Prefs");
+    Assert.assertTrue("User Prefs contains Opera Directory", userPrefs.containsKey("Opera Directory"));
+    Assert.assertTrue("Opera Directory", userPrefs.get("Opera Directory").getType() == Type.DIRECTORY);
   }
 
   @Test
