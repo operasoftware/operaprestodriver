@@ -44,6 +44,7 @@ import com.opera.core.systems.scope.protos.ScopeProtos.ServiceSelection;
 import com.opera.core.systems.scope.protos.UmsProtos.Command;
 import com.opera.core.systems.scope.protos.UmsProtos.Response;
 import com.opera.core.systems.scope.services.ICookieManager;
+import com.opera.core.systems.scope.services.ICoreUtils;
 import com.opera.core.systems.scope.services.IDesktopUtils;
 import com.opera.core.systems.scope.services.IDesktopWindowManager;
 import com.opera.core.systems.scope.services.IEcmaScriptDebugger;
@@ -59,13 +60,14 @@ import com.opera.core.systems.util.VersionUtil;
 /**
  * Implements the interface to the Scope protocol.
  *
- * @author Deniz Turkoglu
- *
+ * @author Deniz Turkoglu <dturkoglu@opera.com>,
+ *         Andreas Tolf Tolfsen <andreastt@opera.com>
  */
 public class ScopeServices implements IConnectionHandler {
 
   private final Logger logger = Logger.getLogger(this.getClass().getName());
 
+  private ICoreUtils coreUtils;
   private IEcmaScriptDebugger debugger;
   private IOperaExec exec;
   private IWindowManager windowManager;
@@ -87,14 +89,6 @@ public class ScopeServices implements IConnectionHandler {
   private List<String> listedServices;
 
   private AtomicInteger tagCounter;
-
-  public ICookieManager getCookieManager() {
-    return cookieManager;
-  }
-
-  public void setCookieManager(ICookieManager cookieManager) {
-    this.cookieManager = cookieManager;
-  }
 
   public Map<String, String> getVersions() {
     return versions;
@@ -128,7 +122,15 @@ public class ScopeServices implements IConnectionHandler {
     this.windowManager = windowManager;
   }
 
-  IPrefs getPrefs() {
+  public ICoreUtils getCoreUtils() {
+    return coreUtils;
+  }
+
+  public void setCoreUtils(ICoreUtils coreUtils) {
+    this.coreUtils = coreUtils;
+  }
+
+  public IPrefs getPrefs() {
     return prefs;
   }
 
@@ -136,7 +138,7 @@ public class ScopeServices implements IConnectionHandler {
     this.prefs = prefs;
   }
 
-  IDesktopWindowManager getDesktopWindowManager() {
+  public IDesktopWindowManager getDesktopWindowManager() {
     return desktopWindowManager;
   }
 
@@ -144,7 +146,7 @@ public class ScopeServices implements IConnectionHandler {
     this.desktopWindowManager = desktopWindowManager;
   }
 
-  IDesktopUtils getDesktopUtils() {
+  public IDesktopUtils getDesktopUtils() {
     return desktopUtils;
   }
 
@@ -152,12 +154,20 @@ public class ScopeServices implements IConnectionHandler {
     this.desktopUtils = desktopUtils;
   }
 
-  SystemInputManager getSystemInputManager() {
+  public SystemInputManager getSystemInputManager() {
     return systemInputManager;
   }
 
   public void setSystemInputManager(SystemInputManager manager) {
     this.systemInputManager = manager;
+  }
+
+  public ICookieManager getCookieManager() {
+    return cookieManager;
+  }
+
+  public void setCookieManager(ICookieManager cookieManager) {
+    this.cookieManager = cookieManager;
   }
 
   /**
@@ -168,12 +178,10 @@ public class ScopeServices implements IConnectionHandler {
    * @param manualConnect
    * @throws IOException
    */
-  public ScopeServices(Map<String, String> versions, boolean manualConnect)
-      throws IOException {
+  public ScopeServices(Map<String, String> versions, boolean manualConnect) throws IOException {
     this.versions = versions;
     tagCounter = new AtomicInteger();
-    stpThread = new StpThread((int) OperaIntervals.SERVER_PORT.getValue(),
-        this, new UmsEventHandler(this), manualConnect);
+    stpThread = new StpThread((int) OperaIntervals.SERVER_PORT.getValue(), this, new UmsEventHandler(this), manualConnect);
   }
 
   public void init() {
@@ -191,6 +199,7 @@ public class ScopeServices implements IConnectionHandler {
 
     wantedServices.add("exec");
     wantedServices.add("window-manager");
+    wantedServices.add("core");
 
     if (versions.containsKey("prefs"))
       wantedServices.add("prefs");
@@ -204,9 +213,8 @@ public class ScopeServices implements IConnectionHandler {
     if (versions.containsKey("desktop-utils"))
       wantedServices.add("desktop-utils");
 
-//    wantedServices.add("console-logger");
-//    wantedServices.add("http-logger");
-    wantedServices.add("core");
+    //wantedServices.add("console-logger");
+    //wantedServices.add("http-logger");
     wantedServices.add("cookie-manager");
 
     enableServices(wantedServices);
@@ -217,29 +225,31 @@ public class ScopeServices implements IConnectionHandler {
   private void initializeServices(boolean enableDebugger) {
     exec.init();
     windowManager.init();
+    coreUtils.init();
 
     if (versions.containsKey("prefs") && prefs != null) prefs.init();
-
-    if (versions.containsKey("desktop-window-manager")
-        && desktopWindowManager != null) desktopWindowManager.init();
-
+    if (versions.containsKey("desktop-window-manager") && desktopWindowManager != null) desktopWindowManager.init();
     if (versions.containsKey("system-input") && systemInputManager != null) systemInputManager.init();
-
     if (versions.containsKey("desktop-utils") && desktopUtils != null) desktopUtils.init();
 
     if (enableDebugger) debugger.init();
   }
 
   public void shutdown() {
-    // This can get called twice if we get a DISCONNECTED exception when
-    // closing down Opera. Check if we're already shutting down and bail.
+    /*
+     * This can get called twice if we get a DISCONNECTED exception when
+     * closing down Opera. Check if we're already shutting down and bail.
+     */
     if (shuttingDown) return;
 
     shuttingDown = true;
+
     if (connection != null) {
       connection.close();
     }
+
     stpThread.shutdown();
+
     try {
       stpThread.join();
     } catch (InterruptedException ex) {
@@ -502,15 +512,15 @@ public class ScopeServices implements IConnectionHandler {
   }
 
   public boolean isOperaIdleAvailable() {
-    for( ScopeProtos.Service service : hostInfo.getServiceListList() )
-    {
-      if( service.getName().equals("core") )
-      {
+    for (ScopeProtos.Service service : hostInfo.getServiceListList()) {
+      if (service.getName().equals("core")) {
         String version = service.getVersion();
 
-        // Version 1.1 introduced some important fixes
-        // we don't want to use idle detection without this.
-        boolean ok = VersionUtil.compare(version,"1.1") >= 0;
+        /*
+         * Version 1.1 introduced some important fixes
+         * we don't want to use idle detection without this.
+         */
+        boolean ok = VersionUtil.compare(version, "1.1") >= 0;
         logger.fine("Core service version check: " + ok + " (" + version + ")");
         return ok;
       }

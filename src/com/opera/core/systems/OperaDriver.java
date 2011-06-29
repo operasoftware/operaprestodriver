@@ -82,6 +82,7 @@ import com.opera.core.systems.scope.internal.OperaMouseKeys;
 import com.opera.core.systems.scope.protos.PrefsProtos.Pref;
 import com.opera.core.systems.scope.protos.PrefsProtos.GetPrefArg.Mode;
 import com.opera.core.systems.scope.services.ICookieManager;
+import com.opera.core.systems.scope.services.ICoreUtils;
 import com.opera.core.systems.scope.services.IEcmaScriptDebugger;
 import com.opera.core.systems.scope.services.IOperaExec;
 import com.opera.core.systems.scope.services.IPrefs;
@@ -106,6 +107,7 @@ public class OperaDriver extends RemoteWebDriver implements WebDriver,
   protected IOperaExec exec;
   protected IPrefs prefs;
   protected IWindowManager windowManager;
+  protected ICoreUtils coreUtils;
   protected ICookieManager cookieManager;
   protected ScopeServices services;
   protected ScopeActions actionHandler;
@@ -220,6 +222,7 @@ public class OperaDriver extends RemoteWebDriver implements WebDriver,
     debugger = services.getDebugger();
     windowManager = services.getWindowManager();
     exec = services.getExec();
+    coreUtils = services.getCoreUtils();
     actionHandler = new PbActionHandler(services);
     cookieManager = services.getCookieManager();
     //cookieManager.updateCookieSettings();
@@ -1370,6 +1373,34 @@ public class OperaDriver extends RemoteWebDriver implements WebDriver,
 
   public Mouse getMouse() {
     return new OperaMouse();
+  }
+
+
+  /**
+   * Methods to access Core service 1.2 metadata
+   */
+  public String getCoreVersion() {
+    return coreUtils.getCoreVersion();
+  }
+
+  public String getOS() {
+    return coreUtils.getOperatingSystem();
+  }
+
+  public String getProduct() {
+    return coreUtils.getProduct();
+  }
+
+  public String getBinaryPath() {
+    return coreUtils.getBinaryPath();
+  }
+
+  public String getUserAgent() {
+    return coreUtils.getUserAgent();
+  }
+
+  public int getPID() {
+    return coreUtils.getProcessID();
   }
 
 }
