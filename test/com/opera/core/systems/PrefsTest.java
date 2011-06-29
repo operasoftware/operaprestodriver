@@ -16,6 +16,8 @@
 
 package com.opera.core.systems;
 
+import java.util.Map;
+
 import junit.framework.Assert;
 
 import org.junit.After;
@@ -23,6 +25,9 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.openqa.selenium.WebDriverException;
+
+import com.opera.core.systems.scope.protos.PrefsProtos.Pref;
+import com.opera.core.systems.scope.protos.PrefsProtos.Pref.Type;
 
 /**
  * @author Andreas Tolf Tolfsen <andreastt@opera.com>
@@ -171,8 +176,14 @@ public class PrefsTest extends TestBase {
     public void testListPreferencesWithInvalidSection() {}
 
     @Test
-    @Ignore
-    public void testListAllPreferences() {}
+    public void testListAllPreferences() {
+      Map<String, Map<String, Pref>> prefs = driver.listAllPrefs();
+
+      Assert.assertTrue("Prefs contains User Prefs", prefs.containsKey("User Prefs"));
+      Map<String, Pref> userPrefs = prefs.get("User Prefs");
+      Assert.assertTrue("User Prefs contains Opera Directory", userPrefs.containsKey("Opera Directory"));
+      Assert.assertTrue("Opera Directory", userPrefs.get("Opera Directory").getType() == Type.DIRECTORY);
+    }
 
     @Test
     public void testSetValidPreference() {
@@ -249,7 +260,5 @@ public class PrefsTest extends TestBase {
 
         Assert.assertNotNull(invalidSectionAndKeyException);
     }
-
-    // TODO (andreastt): Missing tests for listAllPrefs() and listAllPrefs().keySet()
 
 }

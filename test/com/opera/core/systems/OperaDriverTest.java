@@ -110,16 +110,6 @@ public class OperaDriverTest extends TestBase
   }
 
   @Test
-  public void testNicePrefs() throws Exception {
-    Map<String, Map<String, Pref>> prefs = driver.listAllPrefs();
-
-    Assert.assertTrue("Prefs contains User Prefs", prefs.containsKey("User Prefs"));
-    Map<String, Pref> userPrefs = prefs.get("User Prefs");
-    Assert.assertTrue("User Prefs contains Opera Directory", userPrefs.containsKey("Opera Directory"));
-    Assert.assertTrue("Opera Directory", userPrefs.get("Opera Directory").getType() == Type.DIRECTORY);
-  }
-
-  @Test
   public void testOperaDriverShutdown()
   {
     // leave with a fast loading page
