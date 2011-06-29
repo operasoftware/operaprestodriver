@@ -49,7 +49,7 @@ public class QuickMenuItem extends OperaUIElement {
 			if (isSeparator())
 				return "Separator";
 			if (getActionName().length() > 0) {
-				if (getActionParameter() != null)
+				if (getActionParameter() != null && getActionParameter().length() > 0)
 					return getActionName() + ", " + getActionParameter();
 				else
 					return getActionName();
