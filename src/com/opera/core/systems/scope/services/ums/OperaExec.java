@@ -134,7 +134,7 @@ public class OperaExec extends AbstractService implements IOperaExec {
         // if the user has pressed shift and then types lower-case presumably
         // they want to type upper-case characters.
         boolean releaseShift = false;
-        if (!keys.contains(OperaKeys.SHIFT.getValue())) {
+        if (!keyIsPressed(OperaKeys.SHIFT.getValue())) {
           key(OperaKeys.SHIFT.getValue(), false);
           releaseShift = true;
         }
