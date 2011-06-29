@@ -1186,10 +1186,6 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
     throw new UnsupportedOperationException();
   }
 
-  public boolean isMetaDataAvailable() {
-    return coreUtils.supportsMetaData();
-  }
-
   public String getCoreVersion() {
     return coreUtils.getCoreVersion();
   }

@@ -22,21 +22,15 @@ import com.opera.core.systems.scope.CoreUtilsCommand;
 import com.opera.core.systems.scope.protos.UmsProtos.Response;
 import com.opera.core.systems.scope.protos.CoreProtos.BrowserInformation;
 import com.opera.core.systems.scope.services.ICoreUtils;
+import org.openqa.selenium.UnsupportedCommandException;
 
 /**
  * @author Andreas Tolf Tolfsen <andreastt@opera.com>
  */
 public class CoreUtils extends AbstractService implements ICoreUtils {
 
-    private String coreVersion;
-    private String operatingSystem;
-    private String product;
-    private String binaryPath;
-    private String userAgent;
-    private int    processID;
-
-    /// Whether this core supports getting metadata
-    private boolean supports_meta = false;
+    private boolean supportsMeta = false;
+    private BrowserInformation browserInformation;
 
     public CoreUtils(ScopeServices services, String version) {
         super(services, version);
@@ -45,51 +39,62 @@ public class CoreUtils extends AbstractService implements ICoreUtils {
 
         // Version 1.2 is required for browser meta information
         if (!isVersionInRange(version, "1.2", serviceName)) {
-            supports_meta = true;
+            supportsMeta = true;
         }
 
         services.setCoreUtils(this);
     }
 
     public void init() {
-        if (supports_meta) {
-            // TODO Use factory?
-            BrowserInformation browserInformation = getBrowserInformation();
-            coreVersion     = browserInformation.getCoreVersion();
-            operatingSystem = browserInformation.getOperatingSystem();
-            product         = browserInformation.getProduct();
-            binaryPath      = browserInformation.getBinaryPath();
-            userAgent       = browserInformation.getUserAgent();
-            processID       = browserInformation.getProcessID();
+        if (supportsMeta) {
+            browserInformation = getBrowserInformation();
         }
     }
 
-    public boolean supportsMetaData() {
-        return supports_meta;
+    public boolean hasMetaInformation() {
+        return supportsMeta;
     }
 
     public String getCoreVersion() {
-        return coreVersion;
+        if (!browserInformation.hasCoreVersion()) {
+            throw new UnsupportedCommandException("not available in this product");
+        }
+        return browserInformation.getCoreVersion();
     }
 
     public String getOperatingSystem() {
-        return operatingSystem;
+        if (!browserInformation.hasOperatingSystem()) {
+            throw new UnsupportedCommandException("not available in this product");
+        }
+        return browserInformation.getOperatingSystem();
     }
 
     public String getProduct() {
-        return product;
+        if (!browserInformation.hasProduct()) {
+            throw new UnsupportedCommandException("not available in this product");
+        }
+        return browserInformation.getProduct();
     }
 
     public String getBinaryPath() {
-        return binaryPath;
+        if (!browserInformation.hasBinaryPath()) {
+            throw new UnsupportedCommandException("not available in this product");
+        }
+        return browserInformation.getBinaryPath();
     }
 
     public String getUserAgent() {
-        return userAgent;
+        if (!browserInformation.hasUserAgent()) {
+            throw new UnsupportedCommandException("not available in this product");
+        }
+        return browserInformation.getUserAgent();
     }
 
-    public int getProcessID() {
-        return processID;
+    public Integer getProcessID() {
+        if (!browserInformation.hasProcessID()) {
+            throw new UnsupportedCommandException("not available in this product");
+        }
+        return browserInformation.getProcessID();
     }
 
 

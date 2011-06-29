@@ -33,8 +33,13 @@ package com.opera.core.systems.scope.services;
 public interface ICoreUtils {
 
     void init();
-    /// Whether this version of core supports getting metadata
-    boolean supportsMetaData();
+
+    /**
+     * Whether this version of the CoreUtils service supports getting metadata.
+     *
+     * @return true if meta information is available
+     */
+    boolean hasMetaInformation();
 
     /**
      * Which Core version this instance is running, e.g. "2.8.119".
@@ -83,6 +88,6 @@ public interface ICoreUtils {
      *
      * @return pid
      */
-    int getProcessID();
+    Integer getProcessID();
 
 }

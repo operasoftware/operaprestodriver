@@ -29,19 +29,20 @@ import org.junit.runners.model.Statement;
  */
 public class CoreUtilsTest extends TestBase {
 
-  // Make sure these tests only run if meta data is available
-  @Rule
-  public MethodRule random = new MethodRule() {
-    public Statement apply(Statement base, FrameworkMethod method, Object target) {
-      // If Idle available return the test
-      if (driver.isMetaDataAvailable()) return base;
-      // otherwise return an empty statement -> test doesn't run
-      else return new Statement() {
-          @Override
-          public void evaluate() throws Throwable {}
-        };
-    }
-  };
+    // Make sure these tests only run if meta data is available.
+    @Rule
+    public MethodRule random = new MethodRule() {
+        public Statement apply(Statement base, FrameworkMethod method, Object target) {
+            if (driver.services.getCoreUtils().hasMetaInformation()) {  // If meta info is exposed, return tests
+                return base;
+            } else {
+                return new Statement() {  // otherwise return an empty statement -> test doesn't run
+                    @Override
+                    public void evaluate() throws Throwable {}
+                };
+            }
+        }
+    };
 
     private String coreVersion;
     private String os;
