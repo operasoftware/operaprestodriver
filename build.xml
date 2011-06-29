@@ -17,7 +17,7 @@
 
   <!-- Variables  -->
 
-  <property name="jar.filename" value="webdriver-opera-${version}.jar" />
+  <property name="jar.filename" value="operadriver-${version}.jar" />
   <property name="jar.path" value="pkg/${jar.filename}" />
 
   <path id="classpath.path">
@@ -179,17 +179,18 @@
   <target name="release" description="Generate a ZIP for release including the JAR, docs and examples" depends="clean,jar,doc">
     <mkdir dir="release" />
     <property name="release-zip.name" value="operadriver-${version}" />
+    <jar destfile="release/${release-zip.name}-source.jar" basedir="src" />
     <zip destfile="release/${release-zip.name}.zip">
       <!-- Add the docs -->
       <zipfileset prefix="${release-zip.name}/docs" dir="docs/" />
       <!-- Add the examples -->
       <zipfileset prefix="${release-zip.name}/examples" dir="examples/" />
-      <!-- add OperaDriver jar to the lib directory -->
-      <zipfileset prefix="${release-zip.name}/lib" dir="pkg" />
+      <!-- add OperaDriver (source) jar to the zip -->
+      <zipfileset prefix="${release-zip.name}" dir="pkg" />
+      <zipfileset prefix="${release-zip.name}" dir="release" includes="${release-zip.name}-source.jar" />
       <!-- Add all the jar libs -->
       <zipfileset prefix="${release-zip.name}/lib" dir="lib" excludes="junit*.jar"/>
       <zipfileset prefix="${release-zip.name}" dir="." includes="README.txt CHANGES.txt AUTHORS.txt LICENSE.txt VERSION"/>
     </zip>
-    <jar destfile="release/${release-zip.name}-source.jar" basedir="src" />
   </target>
 </project>

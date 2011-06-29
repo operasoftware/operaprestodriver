@@ -1,3 +1,66 @@
+2011/06/26 OperaDriver 0.5
+==========================
+
+Known issues
+------------
+
+ * Requires Administrator privileges on Windows Vista and 7 when Opera is
+   installed in the default location (Program Files). See README.txt for
+   workarounds.
+ * getScreenshotAs() only returns image data of the current viewport, other
+   parts of the image will be black.
+
+API changes
+-----------
+
+ * Add getOS(), getProduct(), getBinaryPath(), getUserAgent(), getPID() to
+   OperaDriver. (andreastt)
+ * Implement TakesScreenshot. (stuartk)
+ * Extend RemoteWebDriver. (stuartk)
+ * Implement HasDevices (Advanced interaction API). Not fully tested, use
+   with caution! (stuartk)
+ * Add listAllPrefs() method on OperaDriver. (stuartk)
+ * Change listPrefs() to return a map of preference name to Pref object,
+   instead of a list of Pref objects.
+ * Update to selenium-java-2.0rc3
+
+New features
+------------
+
+ * Add ability to get meta-information about Opera when using Opera 11.50 or
+   greater (see API changes). (andreastt)
+ * Selenium APIs implemented: RemoteWebDriver, TakesScreenshot, HasDevices
+   (stuartk)
+ * Added maven/pom.xml. (michael tamm)
+
+Enhancements
+------------
+
+ * Forward crash status along with the screenshot reply (danielb)
+ * Capture more logging (danielb)
+ * Add RemoteWebDriver example. (stuartk)
+
+Bug fixes
+---------
+
+ * Fix click() method in OperaWebElement for <option> elements. (stuartk)
+ * Escape quotes for strings passed to find*By* methods. (stuartk, andreastt)
+
+Tests
+-----
+
+ * Ignore failing screenshot test. (stuartk)
+ * Add test for quote escaping. (andreastt)
+ * Added tests for getting preferences. (andreastt)
+
+
+Other
+-----
+
+ * Rename released jar from webdriver-opera-${version}.jar to
+   operadriver-${version}.jar (stuartk)
+ * Include source jar in release zip file (stuartk)
+
 2011/06/14 OperaDriver 0.4.3
 ============================
 
