@@ -752,13 +752,13 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
 
   private class OperaNavigation implements Navigation {
     public void back() {
-		  services.captureOperaIdle();
+      services.captureOperaIdle();
       exec.action("Back");
       waitForLoadToComplete();
     }
 
     public void forward() {
-		  services.captureOperaIdle();
+      services.captureOperaIdle();
       exec.action("Forward");
       waitForLoadToComplete();
     }
@@ -772,7 +772,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
     }
 
     public void refresh() {
-		  services.captureOperaIdle();
+      services.captureOperaIdle();
       exec.action("Reload");
       waitForLoadToComplete();
     }
@@ -937,21 +937,22 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
     Integer id;
 
     do {
-			id = debugger.getObject(script);
-			isAvailable = (id != null);
+      id = debugger.getObject(script);
+      isAvailable = (id != null);
 
-			if (!isAvailable)
-				sleep(OperaIntervals.EXEC_SLEEP.getValue());
-
-		} while (!isAvailable && hasTimeRemaining(start));
+      if (!isAvailable) {
+        sleep(OperaIntervals.EXEC_SLEEP.getValue());
+      }
+    } while (!isAvailable && hasTimeRemaining(start));
 
     OperaIntervals.WAIT_FOR_ELEMENT.setValue(0L);
 
     if (isAvailable) {
-			Boolean isStale = Boolean.valueOf(debugger.callFunctionOnObject("locator.parentNode == undefined", id));
+      Boolean isStale = Boolean.valueOf(debugger.callFunctionOnObject("locator.parentNode == undefined", id));
 
-			if(isStale)
-				throw new StaleElementReferenceException("This element is no longer part of DOM");
+      if (isStale) {
+        throw new StaleElementReferenceException("This element is no longer part of DOM");
+      }
 
       return new OperaWebElement(this, id);
     } else {
