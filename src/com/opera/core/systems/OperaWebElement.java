@@ -1023,8 +1023,24 @@ public class OperaWebElement implements WebElement, SearchContext, Locatable,
   }
 
   public Coordinates getCoordinates() {
-    // TODO Auto-generated method stub
-    return null;
+    return new Coordinates() {
+
+      public Point getLocationOnScreen() {
+        return getLocationOnScreenOnceScrolledIntoView();
+      }
+
+      public Point getLocationInViewPort() {
+        return getLocation();
+      }
+
+      public Point getLocationInDOM() {
+        throw new UnsupportedOperationException("Not supported yet.");
+      }
+
+      public Object getAuxiliry() {
+        throw new UnsupportedOperationException("Not supported yet.");
+      }
+    };
   }
 
   public String getCssValue(String property) {

@@ -122,6 +122,10 @@ public class OperaExec extends AbstractService implements IOperaExec {
     if (using.length() == 0) throw new IllegalArgumentException(
         "Can't type empty string");
 
+    if (keyIsPressed(OperaKeys.SHIFT.getValue())) {
+      using = using.toUpperCase();
+    }
+
     for (int i = 0; i < using.length(); ++i) {
       char ch = using.charAt(i);
       if (Character.isUpperCase(ch)) {
@@ -130,7 +134,7 @@ public class OperaExec extends AbstractService implements IOperaExec {
         // if the user has pressed shift and then types lower-case presumably
         // they want to type upper-case characters.
         boolean releaseShift = false;
-        if (!keys.contains(OperaKeys.SHIFT.getValue())) {
+        if (!keyIsPressed(OperaKeys.SHIFT.getValue())) {
           key(OperaKeys.SHIFT.getValue(), false);
           releaseShift = true;
         }
@@ -243,15 +247,15 @@ public class OperaExec extends AbstractService implements IOperaExec {
   public void key(String key, boolean up) {
     if (up) {
       action("_keyup", key);
-      keys.remove(key);
+      keys.remove(key.toLowerCase());
     } else {
       action("_keydown", key);
-      keys.add(key);
+      keys.add(key.toLowerCase());
     }
   }
 
   public boolean keyIsPressed(String key) {
-    return keys.contains(key);
+    return keys.contains(key.toLowerCase());
   }
 
   public void releaseKeys() {

@@ -38,17 +38,25 @@ import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.Cookie;
+import org.openqa.selenium.HasInputDevices;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keyboard;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.Mouse;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.NoSuchFrameException;
 import org.openqa.selenium.NoSuchWindowException;
 import org.openqa.selenium.OutputType;
+import org.openqa.selenium.Point;
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.internal.Coordinates;
+import org.openqa.selenium.interactions.CompositeAction;
+import org.openqa.selenium.interactions.InvalidCoordinatesException;
 import org.openqa.selenium.internal.FindsByClassName;
 import org.openqa.selenium.internal.FindsByCssSelector;
 import org.openqa.selenium.internal.FindsById;
@@ -70,6 +78,7 @@ import com.opera.core.systems.scope.exceptions.CommunicationException;
 import com.opera.core.systems.scope.handlers.PbActionHandler;
 import com.opera.core.systems.scope.internal.OperaIntervals;
 import com.opera.core.systems.scope.internal.OperaKeys;
+import com.opera.core.systems.scope.internal.OperaMouseKeys;
 import com.opera.core.systems.scope.protos.PrefsProtos.Pref;
 import com.opera.core.systems.scope.protos.PrefsProtos.GetPrefArg.Mode;
 import com.opera.core.systems.scope.services.ICookieManager;
@@ -82,7 +91,7 @@ import com.opera.core.systems.settings.OperaDriverSettings;
 public class OperaDriver extends RemoteWebDriver implements WebDriver,
     FindsByLinkText, FindsById, FindsByXPath, FindsByName, FindsByTagName,
     FindsByClassName, FindsByCssSelector, SearchContext, JavascriptExecutor,
-    TakesScreenshot {
+    TakesScreenshot, HasInputDevices {
 
   /*
    * These are "protected" and not "private" so that we can extend this class
@@ -260,6 +269,9 @@ public class OperaDriver extends RemoteWebDriver implements WebDriver,
     if (services.getConnection() == null) throw new CommunicationException("Unable to open URL because Opera is not connected.");
 
     gc();
+    // As this is an artificial page load we release all the held keys.
+    // Is the user click()s a link, any keys remain held.
+    exec.releaseKeys();
 
     int activeWindowId = windowManager.getActiveWindowId();
 
@@ -1269,6 +1281,95 @@ public class OperaDriver extends RemoteWebDriver implements WebDriver,
 
   public Object executeAsyncScript(String script, Object... args) {
     throw new UnsupportedOperationException();
+  }
+
+  private class OperaKeyboard implements Keyboard {
+    public void sendKeys(CharSequence... keysToSend) {
+      switchTo().activeElement().sendKeys(keysToSend);
+    }
+
+    public void pressKey(Keys keyToPress) {
+      keyDown(OperaKeys.get(((Keys) keyToPress).name()));
+    }
+
+    public void releaseKey(Keys keyToRelease) {
+      keyUp(OperaKeys.get(((Keys) keyToRelease).name()));
+
+    }
+  }
+
+  public Keyboard getKeyboard() {
+    return new OperaKeyboard();
+  }
+
+  public class OperaMouse implements Mouse {
+    public void click(Coordinates where) {
+      if (where == null) {
+        throw new InvalidCoordinatesException("Invalid coordinates to click on.");
+      }
+      Point p = where.getLocationInViewPort();
+      exec.mouseAction(p.x, p.y, OperaMouseKeys.LEFT);
+    }
+
+    public void contextClick(Coordinates where) {
+      if (where == null) {
+        throw new InvalidCoordinatesException("Invalid coordinates to context click on.");
+      }
+      Point p = where.getLocationInViewPort();
+      exec.mouseAction(p.x, p.y, OperaMouseKeys.RIGHT);
+    }
+
+    public void doubleClick(Coordinates where) {
+      if (where == null) {
+        throw new InvalidCoordinatesException("Invalid coordinates to double click on.");
+      }
+      Point p = where.getLocationInViewPort();
+      exec.mouseAction(p.x, p.y, OperaMouseKeys.LEFT.getValue(), 2);
+    }
+
+    public void mouseDown(Coordinates where) {
+      if (where == null) {
+        throw new InvalidCoordinatesException("Invalid coordinates to mouse down on.");
+      }
+      Point p = where.getLocationInViewPort();
+      exec.mouseAction(p.x, p.y, OperaMouseKeys.LEFT_DOWN);
+    }
+
+    public void mouseUp(Coordinates where) {
+      if (where == null) {
+        throw new InvalidCoordinatesException("Invalid coordinates to mouse up on.");
+      }
+      Point p = where.getLocationInViewPort();
+      exec.mouseAction(p.x, p.y, OperaMouseKeys.LEFT_DOWN);
+    }
+
+    public void mouseMove(Coordinates where) {
+      if (where == null) {
+        throw new InvalidCoordinatesException("Invalid coordinates to mouse move to.");
+      }
+      Point p = where.getLocationInViewPort();
+      exec.mouseAction(p.x, p.y);
+    }
+
+    public void mouseMove(Coordinates where, long xOffset, long yOffset){
+      if (where == null) {
+        throw new InvalidCoordinatesException("Invalid coordinates to mouse move to.");
+      }
+
+      Point p = where.getLocationInViewPort();
+
+      // We can't compare against Integer.MAX_VALUE and throw, because this
+      // method isn't defined as able to throw an Exception. Weird things will
+      // just happen here...
+      int xO = (int)xOffset;
+      int yO = (int)yOffset;
+      exec.mouseAction(p.x + xO, p.y + yO);
+    }
+
+  }
+
+  public Mouse getMouse() {
+    return new OperaMouse();
   }
 
 }
