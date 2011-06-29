@@ -123,13 +123,15 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
       if (settings.getAutostart()) {
         OperaPaths paths = new OperaPaths();
 
-        if (settings.guessOperaPath()
-            && settings.getOperaBinaryLocation() == null) {
+        if (settings.guessOperaPath() && settings.getOperaBinaryLocation() == null) {
           settings.setOperaBinaryLocation(paths.operaPath());
         } else if (settings.getOperaBinaryLocation() == null) {
           // Don't guess, only check environment variable
           String path = System.getenv("OPERA_PATH");
-          if (path != null && path.length() > 0) settings.setOperaBinaryLocation(path);
+
+          if (path != null && path.length() > 0) {
+            settings.setOperaBinaryLocation(path);
+          }
         }
 
         if (settings.getOperaLauncherBinary() == null) {
@@ -150,7 +152,8 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
       this.init();
     } catch (Exception e) {
       logger.log(Level.SEVERE, "Error initializing OperaDriver with exception ", e);
-      // Will make sure to kill any eventual launcher process that was started
+
+      // Will make sure to kill any eventual launcher process that was started.
       this.quit();
       throw new WebDriverException(e);
     }
@@ -292,41 +295,41 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
 
   @SuppressWarnings("unused")
   private String getText(){
-        return debugger.executeJavascript("var visibleText = \"\";\n"+
-                "    var travers = function(ele)\n"+
-                "    {\n"+
-                "      var children = ele.childNodes, child = null, i = 0, computedStyle = null;\n"+
-                "      for( ; child = children[i]; i++)\n"+
-                "      {\n"+
-                "        switch (child.nodeType)\n"+
-                "        {\n"+
-                "          case document.ELEMENT_NODE:\n"+
-                "          {\n"+
-                "            computedStyle = getComputedStyle(child, null);\n"+
-                "            if( computedStyle.getPropertyValue('display') != \"none\" &&\n"+
-                "                computedStyle.getPropertyValue('visibility') != \"hidden\" &&\n"+
-                "                !/^select$/i.test(child.nodeName) )\n"+
-                "            {\n"+
-                "              travers(child);\n"+
-                "            }\n"+
-                "            break;\n"+
-                "          }\n"+
-                "          case document.CDATA_SECTION_NODE:\n"+
-                "          case document.TEXT_NODE:\n"+
-                "          {\n"+
-                "            visibleText += child.nodeValue;\n"+
-                "          }\n"+
-                "        }\n"+
-                "\n"+
-                "      }\n"+
-                "      if( /^select|input$/i.test(ele.nodeName) &&\n"+
-                "                /^text|button|file|$/i.test(ele.type) )\n"+
-                "      {\n"+
-                "        visibleText += ele.value\n"+
-                "      }\n"+
-                "    };\n"+
-                "    travers(document);\n"+
-                "    return visibleText;");
+    return debugger.executeJavascript("var visibleText = \"\";\n" +
+      "    var travers = function(ele)\n" +
+      "    {\n" +
+      "      var children = ele.childNodes, child = null, i = 0, computedStyle = null;\n" +
+      "      for( ; child = children[i]; i++)\n" +
+      "      {\n" +
+      "        switch (child.nodeType)\n" +
+      "        {\n" +
+      "          case document.ELEMENT_NODE:\n" +
+      "          {\n" +
+      "            computedStyle = getComputedStyle(child, null);\n" +
+      "            if( computedStyle.getPropertyValue('display') != \"none\" &&\n" +
+      "                computedStyle.getPropertyValue('visibility') != \"hidden\" &&\n" +
+      "                !/^select$/i.test(child.nodeName) )\n" +
+      "            {\n" +
+      "              travers(child);\n" +
+      "            }\n" +
+      "            break;\n" +
+      "          }\n" +
+      "          case document.CDATA_SECTION_NODE:\n" +
+      "          case document.TEXT_NODE:\n" +
+      "          {\n" +
+      "            visibleText += child.nodeValue;\n" +
+      "          }\n" +
+      "        }\n" +
+      "\n" +
+      "      }\n" +
+      "      if( /^select|input$/i.test(ele.nodeName) &&\n" +
+      "                /^text|button|file|$/i.test(ele.type) )\n" +
+      "      {\n" +
+      "        visibleText += ele.value\n" +
+      "      }\n" +
+      "    };\n" +
+      "    travers(document);\n" +
+      "    return visibleText;");
   }
 
   public void close() {
@@ -379,7 +382,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
    */
   public String getPageSource() {
     return debugger.executeJavascript(
-        "return document.documentElement.outerHTML || (typeof window.XMLSerializer != 'undefined') ? (new window.XMLSerializer()).serializeToString(document) : ''"
+      "return document.documentElement.outerHTML || (typeof window.XMLSerializer != 'undefined') ? (new window.XMLSerializer()).serializeToString(document) : ''"
     );
   }
 
@@ -408,8 +411,8 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
     for (Integer windowId : windowIds) {
       // windowManager.filterWindow(windowId);
       String handleName = debugger.executeJavascript(
-          "return top.window.name ? top.window.name : (top.document.title ? top.document.title : 'undefined');",
-          windowId
+        "return top.window.name ? top.window.name : (top.document.title ? top.document.title : 'undefined');",
+        windowId
       );
       handles.add(handleName);
     }
@@ -474,21 +477,29 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
       Integer id = 0;
 
       for (Integer windowId : windowIds) {
-        String name = debugger.executeJavascript("return top.window.name ? top.window.name : top.document.title;", windowId);
+        String name = debugger.executeJavascript(
+          "return top.window.name ? top.window.name : top.document.title;",
+          windowId
+        );
+
         if (name.equals(windowName)) {
           id = windowId;
           break;
         }
       }
 
-      if (id == 0) throw new NoSuchWindowException("Window with name " + windowName + " not found");
+      if (id == 0) {
+        throw new NoSuchWindowException("Window with name " + windowName + " not found");
+      }
+
       windowManager.setActiveWindowId(id);
 
       windowManager.filterActiveWindow();
       debugger.resetRuntimesList();
 
       defaultContent();  // set runtime to _top
-      debugger.executeJavascript("window.focus()", false); // steal focus
+      debugger.executeJavascript("window.focus()", false);  // steal focus
+
       return OperaDriver.this;
     }
 
@@ -568,38 +579,44 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
   }
 
   public WebElement findElementByLinkText(String using) {
-    return findSingleElement("(function(){\n"+
-          "var links = document.getElementsByTagName('a'), element = null;\n"+
-          "for (var i = 0; i < links.length && !element; ++i) {\n"+
-          "if(links[i].textContent.replace(/\\s+/g, ' ').trim() == \"" + escapeJsString(using) +"\".replace(/\\s+/g, ' ')) {\n"+
-          "element = links[i];\n"+
-          "}\n"+
-          "}\n"+
-          "return element;\n})()", "link text");
+    return findSingleElement(
+      "(function(){\n" +
+      "var links = document.getElementsByTagName('a'), element = null;\n" +
+      "for (var i = 0; i < links.length && !element; ++i) {\n" +
+      "if(links[i].textContent.replace(/\\s+/g, ' ').trim() == \"" + escapeJsString(using) + "\".replace(/\\s+/g, ' ')) {\n" +
+      "element = links[i];\n" +
+      "}\n" +
+      "}\n" +
+      "return element;\n})()", "link text"
+    );
   }
 
   public WebElement findElementByPartialLinkText(String using) {
-    return findSingleElement("(function(){\n"+
-            "var links = document.getElementsByTagName('a'), element = null;\n"+
-            "for (var i = 0; i < links.length && !element; ++i) {\n"+
-            "if(links[i].textContent.replace(/\\s+/g, ' ').indexOf('" + escapeJsString(using, "'") +"') > -1){\n"+
-            "element = links[i];\n"+
-            "}\n"+
-            "}\n"+
-            "return element;\n})()", "link text");
+    return findSingleElement(
+      "(function(){\n" +
+      "var links = document.getElementsByTagName('a'), element = null;\n" +
+      "for (var i = 0; i < links.length && !element; ++i) {\n" +
+      "if(links[i].textContent.replace(/\\s+/g, ' ').indexOf('" + escapeJsString(using, "'") + "') > -1){\n" +
+      "element = links[i];\n" +
+      "}\n" +
+      "}\n" +
+      "return element;\n})()", "link text"
+    );
   }
 
   public List<WebElement> findElementsByLinkText(String using) {
-    return findMultipleElements("(function(){\n"+
-        "var links = document.links, link = null, i = 0, elements = [];\n"+
-        "for( ; link = links[i]; i++)\n"+
-        "{\n"+
-        "if(link.textContent.replace(/\\s+/g, ' ').trim() == \"" + escapeJsString(using) +"\".replace(/\\s+/g, ' '))\n"+
-        "{\n"+
-        "elements.push(link);\n"+
-          "}\n"+
-        "}\n" +
-        "return elements; })()", "link text");
+    return findMultipleElements(
+      "(function(){\n"+
+      "var links = document.links, link = null, i = 0, elements = [];\n" +
+      "for( ; link = links[i]; i++)\n" +
+      "{\n" +
+      "if(link.textContent.replace(/\\s+/g, ' ').trim() == \"" + escapeJsString(using) +"\".replace(/\\s+/g, ' '))\n" +
+      "{\n" +
+      "elements.push(link);\n" +
+      "}\n" +
+      "}\n" +
+      "return elements; })()", "link text"
+    );
   }
 
   protected List<WebElement> processElements(Integer id) {
@@ -612,16 +629,18 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
 
   public List<WebElement> findElementsByPartialLinkText(String using) {
 
-    return findMultipleElements("(function(){\n"+
-        "var links = document.links, link = null, i = 0, elements = [];\n"+
-        "for( ; link = links[i]; i++)\n"+
-        "{\n"+
-        "if(link.textContent.replace(/\\s+/g, ' ').indexOf('" + escapeJsString(using, "'") +"') > -1)\n"+
-        "{\n"+
-        "elements.push(link);\n"+
-          "}\n"+
-        "}\n" +
-        "return elements; })()", "partial link text");
+    return findMultipleElements(
+      "(function(){\n" +
+      "var links = document.links, link = null, i = 0, elements = [];\n" +
+      "for( ; link = links[i]; i++)\n" +
+      "{\n" +
+      "if(link.textContent.replace(/\\s+/g, ' ').indexOf('" + escapeJsString(using, "'") +"') > -1)\n" +
+      "{\n" +
+      "elements.push(link);\n" +
+      "}\n" +
+      "}\n" +
+      "return elements; })()", "partial link text"
+    );
   }
 
   public WebElement findElementById(String using) {
@@ -632,46 +651,50 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
    * This method breaks web standards
    */
   public List<WebElement> findElementsById(String using) {
-    return findMultipleElements("var alls = document.all, element = null, i = 0, elements = [];\n" +
-        "for( ; element = alls[i]; i++)\n"+
-        "{\n"+
-            "if(element.getAttribute('id') == '" + escapeJsString(using, "'") +"')\n"+
-            "{\n"+
-              "elements.push(element);\n"+
-            "}\n"+
-          "}\n"+
-          "return elements;", "by id");
-
+    return findMultipleElements(
+      "var alls = document.all, element = null, i = 0, elements = [];\n" +
+      "for( ; element = alls[i]; i++)\n" +
+      "{\n" +
+      "if(element.getAttribute('id') == '" + escapeJsString(using, "'") +"')\n" +
+      "{\n" +
+      "elements.push(element);\n" +
+      "}\n" +
+      "}\n" +
+      "return elements;", "by id"
+    );
   }
 
   public WebElement findElementByXPath(String using) {
     return findSingleElement(
-        "document.evaluate(\""
-            + using
-            + "\", document, null, XPathResult.FIRST_ORDERED_NODE_TYPE,  null).singleNodeValue;\n",
-        "xpath");
+      "document.evaluate(\"" +
+      using +
+      "\", document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;\n", "xpath"
+    );
   }
 
   public WebElement findElementByClassName(String using) {
-    return findSingleElement("document.getElementsByClassName('" + escapeJsString(using, "'")
-        + "')[0];", "class name");
+    return findSingleElement(
+      "document.getElementsByClassName('" + escapeJsString(using, "'") + "')[0];", "class name"
+    );
   }
 
   public List<WebElement> findElementsByClassName(String using) {
-    return findMultipleElements("document.getElementsByClassName('" + escapeJsString(using, "'")
-        + "');\n", "class name");
+    return findMultipleElements(
+      "document.getElementsByClassName('" + escapeJsString(using, "'") + "');\n", "class name"
+    );
   }
 
   public List<WebElement> findElementsByXPath(String using) {
     return findMultipleElements(
-        "var result = document.evaluate(\""
-            + escapeJsString(using)
-            + "\", document, null, XPathResult.ORDERED_NODE_ITERATOR_TYPE,  null);\n"
-            + "var elements = new Array();\n"
-            + "var element = result.iterateNext();\n"
-            + "while (element) {\n" + "  elements.push(element);\n"
-            + "  element = result.iterateNext();\n" + "}\n"
-            + "return elements", "XPath");
+      "var result = document.evaluate(\"" +
+      escapeJsString(using) +
+      "\", document, null, XPathResult.ORDERED_NODE_ITERATOR_TYPE,  null);\n" +
+      "var elements = new Array();\n" +
+      "var element = result.iterateNext();\n" +
+      "while (element) {\n" + "  elements.push(element);\n" +
+      " element = result.iterateNext();\n" + "}\n" +
+      "return elements", "XPath"
+    );
   }
 
   // FIXME when timeout has completed, send 'stop' command?
@@ -680,74 +703,91 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
       // new opera wait for page
       services.waitForOperaIdle(OperaIntervals.PAGE_LOAD_TIMEOUT.getValue());
     } else {
-      // Sometimes we get here before the next page has even *started* loading,
-      // and so return too quickly. This sleep is enough to make sure
-      // readyState has been set to "loading"
+
+      /*
+       * Sometimes we get here before the next page has even *started*
+       * loading, and so return too quickly. This sleep is enough to make
+       * sure readyState has been set to "loading".
+       */
       try {
         Thread.sleep(5);
       } catch (InterruptedException e) {
         Thread.currentThread().interrupt();
       }
-      long endTime = System.currentTimeMillis()
-          + OperaIntervals.PAGE_LOAD_TIMEOUT.getValue();
+
+      long endTime = System.currentTimeMillis() + OperaIntervals.PAGE_LOAD_TIMEOUT.getValue();
+
       while (!"complete".equals(debugger.executeJavascript("return document.readyState"))) {
-        if (System.currentTimeMillis() < endTime) sleep(OperaIntervals.POLL_INVERVAL.getValue());
-        else throw new WebDriverException("Timeout while loading page");
+        if (System.currentTimeMillis() < endTime) {
+          sleep(OperaIntervals.POLL_INVERVAL.getValue());
+        } else {
+          throw new WebDriverException("Timeout while loading page");
+        }
       }
     }
   }
 
   public WebElement findElementByName(String using) {
-    return findSingleElement("document.getElementsByName('" + escapeJsString(using, "'") + "')[0];",
-        "name");
+    return findSingleElement(
+      "document.getElementsByName('" + escapeJsString(using, "'") + "')[0];", "name"
+    );
   }
 
   public List<WebElement> findElementsByName(String using) {
-    return findMultipleElements("document.getElementsByName('" + escapeJsString(using, "'") + "');",
-        "name");
+    return findMultipleElements(
+      "document.getElementsByName('" + escapeJsString(using, "'") + "');", "name"
+    );
   }
 
   public WebElement findElementByTagName(String using) {
-    if (using.contains(":")) {// has prefix
+    if (using.contains(":")) {  // has prefix
       String[] tagInfo = using.split(":");
-      return findSingleElement("(function() { var elements = document.getElementsByTagName('" + tagInfo[1] + "'), element = null;" +
-          "for( var i = 0; i < elements.length; i++ ) {" +
-          "if( elements[i].prefix == '" + tagInfo[0] + "' ) {" +
-          "element = elements[i];" +
-          "break;"+
-          "}" +
-          "}" +
-          "return element; })()", "tag name");
+
+      return findSingleElement(
+        "(function() { var elements = document.getElementsByTagName('" + tagInfo[1] + "'), element = null;" +
+        "for( var i = 0; i < elements.length; i++ ) {" +
+        "if( elements[i].prefix == '" + tagInfo[0] + "' ) {" +
+        "element = elements[i];" +
+        "break;" +
+        "}" +
+        "}" +
+        "return element; })()", "tag name"
+      );
     }
+
     return findSingleElement("document.getElementsByTagName('" + escapeJsString(using, "'") +"')[0];", "tag name");
   }
 
 
   public List<WebElement> findElementsByTagName(String using) {
-    if (using.contains(":")) {// has prefix
+    if (using.contains(":")) {  // has prefix
       String[] tagInfo = using.split(":");
-      return findMultipleElements("(function() { var elements = document.getElementsByTagName('" + tagInfo[1] + "'), output = [];" +
-          "for( var i = 0; i < elements.length; i++ ) {" +
-          "if( elements[i].prefix == '" + tagInfo[0] + "' ) {" +
-          "output.push(elements[i]);" +
-          "}" +
-          "}" +
-          "return output; })()", "tag name");
+
+      return findMultipleElements(
+        "(function() { var elements = document.getElementsByTagName('" + tagInfo[1] + "'), output = [];" +
+        "for( var i = 0; i < elements.length; i++ ) {" +
+        "if( elements[i].prefix == '" + tagInfo[0] + "' ) {" +
+        "output.push(elements[i]);" +
+        "}" +
+        "}" +
+        "return output; })()", "tag name"
+      );
     }
+
     return findMultipleElements("document.getElementsByTagName('"+ escapeJsString(using, "'") + "');\n", "tag name");
   }
 
   public WebElement findElementByCssSelector(String using) {
-    return findSingleElement("document.querySelector('" + escapeJsString(using, "'") + "');",
-        "selector");
+    return findSingleElement("document.querySelector('" + escapeJsString(using, "'") + "');", "selector");
   }
 
   public List<WebElement> findElementsByCssSelector(String using) {
     return findMultipleElements(
-        "(function(){ var results = document.querySelectorAll('"
-            + escapeJsString(using, "'")
-            + "'), returnValue = [], i=0;for(;returnValue[i]=results[i];i++); return returnValue;})()",
-        "selector");
+      "(function(){ var results = document.querySelectorAll('" +
+      escapeJsString(using, "'") +
+      "'), returnValue = [], i=0;for(;returnValue[i]=results[i];i++); return returnValue;})()",
+      "selector"
+    );
   }
 
   private class OperaNavigation implements Navigation {
@@ -789,8 +829,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
         );
       }
 
-      debugger.executeJavascript("document.cookie='" + cookie.toString() + "'",
-          false);
+      debugger.executeJavascript("document.cookie='" + cookie.toString() + "'", false);
     }
 
     public void deleteCookieNamed(String name) {
@@ -799,12 +838,15 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
     }
 
     public void deleteCookie(Cookie cookie) {
-      if (cookieManager == null) throw new UnsupportedOperationException(
-          "Deleting cookies are not supported without the cookie-manager service");
+      if (cookieManager == null) {
+        throw new UnsupportedOperationException("Deleting cookies are not supported without the cookie-manager service");
+      }
 
       cookieManager.removeCookie(cookie.getDomain(), cookie.getPath(),
           cookie.getName());
+
       gc();
+
       /*
       Date dateInPast = new Date(0);
       Cookie toDelete = new Cookie(cookie.getName(), cookie.getValue(), cookie.getDomain(), cookie.getPath(), dateInPast, false);
@@ -813,10 +855,12 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
     }
 
     public void deleteAllCookies() {
-      if (cookieManager == null) throw new UnsupportedOperationException(
-          "Deleting cookies are not supported without the cookie-manager service");
+      if (cookieManager == null) {
+        throw new UnsupportedOperationException("Deleting cookies are not supported without the cookie-manager service");
+      }
 
       cookieManager.removeAllCookies();
+
       /*
       Set<Cookie> cookies = getCookies();
       for (Cookie cookie : cookies) {
@@ -826,11 +870,11 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
     }
 
     public Set<Cookie> getCookies() {
-      if (cookieManager == null) throw new UnsupportedOperationException(
-          "Setting cookies are not supported without the cookie-manager service");
+      if (cookieManager == null) {
+        throw new UnsupportedOperationException("Setting cookies are not supported without the cookie-manager service");
+      }
 
-      return cookieManager.getCookie(
-          debugger.executeJavascript("window.location.hostname"), null);
+      return cookieManager.getCookie(debugger.executeJavascript("window.location.hostname"), null);
     }
 
     public Cookie getCookieNamed(String name) {
@@ -841,6 +885,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
       }
 
       return null;
+
       /*
       String value = debugger.executeJavascript("var getCookieNamed = function(key)\n"+
                               "{"+
@@ -865,14 +910,12 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
   private class OperaTimeouts implements Timeouts {
 
     public Timeouts implicitlyWait(long time, TimeUnit unit) {
-      OperaIntervals.WAIT_FOR_ELEMENT.setValue(TimeUnit.MILLISECONDS.convert(
-          time, unit));
+      OperaIntervals.WAIT_FOR_ELEMENT.setValue(TimeUnit.MILLISECONDS.convert(time, unit));
       return this;
     }
 
     public Timeouts setScriptTimeout(long time, TimeUnit unit) {
-      OperaIntervals.SCRIPT_TIMEOUT.setValue(TimeUnit.MILLISECONDS.convert(
-          time, unit));
+      OperaIntervals.SCRIPT_TIMEOUT.setValue(TimeUnit.MILLISECONDS.convert(time, unit));
       return this;
     }
 
@@ -886,7 +929,6 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
    * @param params Parameters to pass to the action call
    */
   public void operaAction(String using, String... params) {
-
     exec.action(using, params);
   }
 
