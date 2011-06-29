@@ -250,4 +250,6 @@ public class PrefsTest extends TestBase {
         Assert.assertNotNull(invalidSectionAndKeyException);
     }
 
+    // TODO (andreastt): Missing tests for listAllPrefs() and listAllPrefs().keySet()
+
 }
