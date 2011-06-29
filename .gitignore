@@ -13,3 +13,4 @@ doc/
 VERSION
 *.orig
 .idea/workspace.xml
+.idea/dictionaries/
