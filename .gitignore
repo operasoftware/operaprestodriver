@@ -14,3 +14,5 @@ VERSION
 *.orig
 .idea/workspace.xml
 .idea/dictionaries/
+maven/src
+maven/target
