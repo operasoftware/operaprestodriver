@@ -224,5 +224,21 @@ public interface IDesktopWindowManager {
 	 * @return
 	 */
 	QuickMenuItem getQuickMenuItemByName(String name);
+
+	/**
+	 * 
+	 * @param menuName
+	 * @param windowId
+	 * @return QuickMenu with name menuName in windowId if it exists, else null
+	 */
+	QuickMenu getQuickMenu(String menuName, int windowId);
+
+	/**
+	 * 
+	 * @param name
+	 * @param window_id
+	 * @return
+	 */
+	QuickMenuItem getQuickMenuItemByName(String name, int window_id);
 	
 }

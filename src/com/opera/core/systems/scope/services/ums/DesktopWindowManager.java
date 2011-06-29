@@ -393,7 +393,44 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 			List<QuickMenuItem> itemList = menu.getItemList();
 			for (QuickMenuItem item : itemList) {
 				if (item.getActionName().equals(name) ||
-						item.getSubMenu().equals(name))
+						item.getSubMenu().equals(name) ||
+						item.isSeparator() == true && name.equals("Separator"))
+					return item;
+				if (name.indexOf(",") != 0) {
+					String[] parts = name.split(",");
+					if(parts.length >= 2 && parts[0].trim().equals(item.getActionName())
+							&& parts[1].trim().equals(item.getActionParameter()))
+						return item;
+				}
+					
+			}
+		}
+		return null;
+	}
+
+	public QuickMenu getQuickMenu(String menuName, int windowId) {
+		// Using ListMenus. GetMenu will raise error 
+		List<QuickMenuInfo> list = getQuickMenuInfoList();
+		for (QuickMenuInfo info : list) {
+			if (info.getMenuId().getMenuName().equals(menuName) 
+					&& info.getWindowId().getWindowID() == windowId) {
+				return new QuickMenu(info, desktopUtils, systemInputManager);		
+			}
+		}
+		return null;
+	}
+
+	// TODO: Merge with one param version
+	public QuickMenuItem getQuickMenuItemByName(String name, int window_id) {
+		List<QuickMenu> menus = getQuickMenuList();
+		for (QuickMenu menu : menus) {
+			if (menu.getParentWindowId() != window_id)
+				continue;
+			List<QuickMenuItem> itemList = menu.getItemList();
+			for (QuickMenuItem item : itemList) {
+				if (item.getActionName().equals(name) ||
+						item.getSubMenu().equals(name) ||
+						item.isSeparator() == true && name.equals("Separator"))
 					return item;
 				if (name.indexOf(",") != 0) {
 					String[] parts = name.split(",");
