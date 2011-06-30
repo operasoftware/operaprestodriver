@@ -25,6 +25,12 @@ import com.opera.core.systems.QuickWindow;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo.QuickWidgetType;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearch.QuickWidgetSearchType;
 
+/**
+*
+* @author Adam Minchinton, Karianne Ekern
+*
+*/
+
 public interface IDesktopWindowManager {
 
 	/**

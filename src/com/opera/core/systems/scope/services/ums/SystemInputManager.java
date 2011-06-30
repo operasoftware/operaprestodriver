@@ -28,6 +28,7 @@ import com.opera.core.systems.scope.protos.SystemInputProtos.MouseInfo;
 import com.opera.core.systems.scope.services.ISystemInput;
 
 /**
+ * SystemInputManager handles systemInput simulating real clicks, and key presses.
  *
  * @author Adam Minchinton, Karianne Ekern
  *
