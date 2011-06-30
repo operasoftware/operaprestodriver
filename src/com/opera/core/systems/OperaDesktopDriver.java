@@ -238,18 +238,41 @@ public class OperaDesktopDriver extends OperaDriver {
 		return desktopWindowManager.getQuickWindowList();
 	}
 	
+	/**
+	 * Get a menu based on its name (Note; the menubar is also seen as a menu)
+	 *   
+	 * @param menuName (as found in standard_menu.ini)
+	 * @return QuickMenu with the given name, or null if no such menu is found
+	 */
 	public QuickMenu getQuickMenu(String menuName) {
 		return desktopWindowManager.getQuickMenu(menuName);
 	}
 	
+	/**
+	 * Get a menu based on its name and windowid 
+	 * - makes it possible to get the menubar of a specific main window
+	 * 
+	 * @param menuName Name of the menu
+	 * @param windowId WindowId of the menu (the window it is attached to)
+	 * @return QuickMenu with given menuName and windowId, or null if no such
+	 *             menu can be found.
+	 */
 	public QuickMenu getQuickMenu(String menuName, int windowId) {
 		return desktopWindowManager.getQuickMenu(menuName, windowId);
 	}
 	
+	/**
+	 * 
+	 * @return list of all open menus, as QuickMenus
+	 */
 	public List<QuickMenu> getQuickMenuList() {
 		return desktopWindowManager.getQuickMenuList();
 	}
 	
+	/**
+	 * 
+	 * @return list of all QuickMenuItems in open menus
+	 */
 	public List<QuickMenuItem> getQuickMenuItemList() {
 		return desktopWindowManager.getQuickMenuItemList();
 	}
@@ -382,42 +405,65 @@ public class OperaDesktopDriver extends OperaDriver {
 	
 	/**
 	 * 
-	 * @param menuItemText - Menu item text
-	 * @return
+	 * @param menuItemText Menu item text
 	 */
-	public void pressQuickMenuItem(String menuItemText, boolean popMenu) {
+	public void pressQuickMenuItem(String menuItemText, boolean popMenu) { // Note: Used for mac
 		desktopWindowManager.pressQuickMenuItem(menuItemText, popMenu);
 	}
 	
 	/**
+	 * Get a QuickMenuItem by its action
 	 * 
-	 * @param name - name of action or submenu of item
-	 * @return
+	 * @param name - name of action of item (as specified in standard_menu.ini)
+	 * @return QuickMenuItem
 	 */
 	public QuickMenuItem getQuickMenuItemByAction(String action) {
 		return desktopWindowManager.getQuickMenuItemByAction(action);
 	}
 
 	/**
+	 * Get a quickmenuitem by its submenuname
 	 * 
-	 * @param name - name of action or submenu of item
+	 * @param name - name of submenu of item (as specified in standard_menu.ini)
 	 * @return
 	 */
 	public QuickMenuItem getQuickMenuItemBySubmenu(String submenu) {
 		return desktopWindowManager.getQuickMenuItemBySubmenu(submenu);
 	}
 	
+	/**
+	 * 
+	 * @param name Name of menuitem 
+	 *        For a command/action item, this is its action name
+	 *        For a command/action item, with a parameter to its action, this is
+	 *                        "action, parameter" (e.g. "Open link, www.elg.no")
+	 *        For an item that opens a submenu, this is the submenuname
+	 *        (all as found in standard_menu.ini)
+	 * 
+	 * @return
+	 */
 	public QuickMenuItem getQuickMenuItemByName(String name) {
 		return desktopWindowManager.getQuickMenuItemByName(name);
 	}
 	
+	/**
+	 * Get a menuitem by its name and the windowid of the window the menu it is in
+	 *   is in. This is only relevant for the menubar. Makes it possible to distinguish
+	 *   between menubar items in different main windows.
+	 * 
+	 * @param name
+	 * @param window_id
+	 * @return
+	 */
 	public QuickMenuItem getQuickMenuItemByName(String name, int window_id) {
 		return desktopWindowManager.getQuickMenuItemByName(name, window_id);
 	}
 	
 	/**
+	 * Get an item by its text. Not language independant, and therefore
+	 * not a recommended way to get an item.
 	 * 
-	 * @param text - text of the item
+	 * @param text - text of the item (as shown in UI). 
 	 * @return
 	 */
 	public QuickMenuItem getQuickMenuItemByText(String text) {
@@ -425,19 +471,26 @@ public class OperaDesktopDriver extends OperaDriver {
 	}
 
 	/**
+	 * Get an item by its position (row). Rows starts counting at 0, and note
+	 * that also menu separators are counted.
+	 * Note that this is only unique within a single menu (specified by parentName),
+	 * if parentName is null, this retrieves the first match.
 	 * 
 	 * @param name - Position (row) in menu of item
-	 * @param parent - name of menu item is in
+	 * @param menuName - name of menu item is in
 	 * @return
 	 */
-	public QuickMenuItem getQuickMenuItemByPosition(int row, String parentName) {
-		return desktopWindowManager.getQuickMenuItemByPosition(row, parentName);
+	public QuickMenuItem getQuickMenuItemByPosition(int row, String menuName) {
+		return desktopWindowManager.getQuickMenuItemByPosition(row, menuName);
 	}
 	
 	/**
 	 * 
-	 * @param name - Position (row) in menu of item
-	 * @param parent - name of menu item is in
+	 * @param name - Accelerator key in menu of item (the letter that's underlined in the menu
+	 *               item text)
+	 *               Note: not platform independant, as it cannot be used on mac.
+	 *               
+	 * @param menuName - name of menu item is in
 	 * @return
 	 */
 	public QuickMenuItem getQuickMenuItemByAccKey(String key, String menuName) {
@@ -446,15 +499,19 @@ public class OperaDesktopDriver extends OperaDriver {
 	
 	/**
 	 * 
-	 * @param name - Position (row) in menu of item
-	 * @param parent - name of menu item is in
+	 * @param name - Shortcut of item
 	 * @return
 	 */
 	public QuickMenuItem getQuickMenuItemByShortcut(String shortcut) {
 		return desktopWindowManager.getQuickMenuItemByShortcut(shortcut);
 	}
 	
-	
+	/**
+	 * Get an item in a language independant way from its stringId.
+	 * 
+	 * @param stringId StringId as found in standard_menu.ini
+	 * @return
+	 */
 	public QuickMenuItem getQuickMenuItemByStringId(String stringId) {
 		String text = desktopUtils.getString(stringId, true);
 		return desktopWindowManager.getQuickMenuItemByText(text);
@@ -462,7 +519,7 @@ public class OperaDesktopDriver extends OperaDriver {
 
 	
 	/**
-	 * Finds a Window by its name.
+	 * Find a Window by its name.
 	 *
 	 * @param windowName name of window
 	 * @return QuickWindow or null if no window with windowName is found
@@ -822,12 +879,19 @@ public class OperaDesktopDriver extends OperaDriver {
 			logger.warning("Cannot delete profile while Opera is running");
 		}
 	}
-
+	
+	/**
+	 * 
+	 * @return Process id of Opera browser that is connected to this driver.
+	 */
 	public int getPid() {
 		return desktopUtils.getOperaPid();
 	}
 
 	// Note: Should only be used in launcher mode
+	/**
+	 * @return true if Opera is running, and running under the launcher
+	 */
 	public boolean isOperaRunning() {
 		return operaRunner != null && isOperaRunning();
 	}
