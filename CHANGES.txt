@@ -1,3 +1,15 @@
+2011/06/27 OperaDriver 0.5.1
+============================
+
+Bug fixes
+---------
+
+ * Core Scope service no longer required, to support earlier Opera versions.
+   (stuartk)
+ * Shutdown Scope services in alternate way to support earlier Opera versions.
+   (stuartk)
+
+
 2011/06/26 OperaDriver 0.5
 ==========================
 
