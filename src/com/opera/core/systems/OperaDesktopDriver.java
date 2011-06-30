@@ -28,6 +28,7 @@ import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearch.Qui
 import com.opera.core.systems.scope.protos.SystemInputProtos.ModifierPressed;
 import com.opera.core.systems.scope.services.IDesktopWindowManager;
 import com.opera.core.systems.scope.services.IDesktopUtils;
+import com.opera.core.systems.scope.services.ISystemInput;
 import com.opera.core.systems.scope.services.ums.SystemInputManager;
 import com.opera.core.systems.settings.OperaDriverSettings;
 import com.opera.core.systems.util.ProfileUtils;
@@ -41,7 +42,7 @@ import com.opera.core.systems.util.ProfileUtils;
  */
 public class OperaDesktopDriver extends OperaDriver {
   private IDesktopWindowManager desktopWindowManager;
-  private SystemInputManager systemInputManager;
+  private ISystemInput systemInputManager;
   private IDesktopUtils desktopUtils;
   private ProfileUtils profileUtils;
   private boolean firstTestRun = true;
