@@ -160,46 +160,51 @@ public interface IDesktopWindowManager {
 	 * Gets the menu with the action specified, if any
 	 * 
 	 * @param action of the menuitem to search for
-	 * @return
+	 * @return QuickMenuItem with action, or null if the item doesn't exist
 	 */
 	QuickMenuItem getQuickMenuItemByAction(String action);
 
 	/**
-	 * Get the menu with the text specified, if any
+	 * Gets the menu with the text specified, if any
 	 * 
 	 * @param text of the menuitem to search for
-	 * @return
+	 * @return QuickMenuItem with the given text, or null if no such item exists
 	 */
 	QuickMenuItem getQuickMenuItemByText(String text);
 
 	/**
+	 * Gets the menu item with the given position in the menu with name menuName
 	 * 
 	 * @param row the row of the item, counting from zero, and including both normal
 	 *                items and menu separators
 	 * @param parentName name of the menu to lookup the menuitem in
+	 * @return QuickMenuItem, or null if the item doesn't exist
 	 */
-	QuickMenuItem getQuickMenuItemByPosition(int row, String parentName);
+	QuickMenuItem getQuickMenuItemByPosition(int row, String menuName);
 
 	/**
+	 * Gets the menu item with the given accelerator key in the menu with name menuName
 	 * 
 	 * @param key the shortcut key of the menuitem to search for (the character that's underlined/marked
 	 *            in the menuitem text)
 	 * @param parentName name of the menu of the menuitem 
-	 * @return
+	 * @return QuickMenuItem or null if the item doesnt exist
 	 */
-	QuickMenuItem getQuickMenuItemByAccKey(String key, String parentName);
+	QuickMenuItem getQuickMenuItemByAccKey(String key, String menuName);
 
 	/**
+	 * Gets the Menu item with the given shortcut
 	 * 
 	 * @param shortcut string representation of the shortcut of the menuitem (i.e. "Ctrl+O")
-	 * @return
+	 * @return QuickMenuItem, or null if the item doesnt exist
 	 */
 	QuickMenuItem getQuickMenuItemByShortcut(String shortcut);
 
 	/**
+	 * Gets the menu item that opens the submenu
 	 * 
 	 * @param submenu the name of the submenu the menuitem opens when its selected/clicked
-	 * @return
+	 * @return QuickMenuItem or null if the item doesn't exist
 	 */
 	QuickMenuItem getQuickMenuItemBySubmenu(String submenu);
 
@@ -227,16 +232,18 @@ public interface IDesktopWindowManager {
 
 	/**
 	 * 
-	 * @param menuName
-	 * @param windowId
+	 * @param menuName name of the menu (as specified in standard_menu.ini)
+	 * @param windowId id of the window the menu is attaced to
+	 *      (Note. Only makes sense for menubar)
 	 * @return QuickMenu with name menuName in windowId if it exists, else null
 	 */
 	QuickMenu getQuickMenu(String menuName, int windowId);
 
 	/**
 	 * 
-	 * @param name
-	 * @param window_id
+	 * @param name Name of the menuItem
+	 * @param window_id windowId of the window the menu of the item is in
+	 *  (note: only makes sense for menubar items)
 	 * @return
 	 */
 	QuickMenuItem getQuickMenuItemByName(String name, int window_id);
