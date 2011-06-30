@@ -225,7 +225,7 @@ public class ScopeServices implements IConnectionHandler {
   private void initializeServices(boolean enableDebugger) {
     exec.init();
     windowManager.init();
-    coreUtils.init();
+    if (versions.containsKey("core") && coreUtils!= null) coreUtils.init();
 
     if (versions.containsKey("prefs") && prefs != null) prefs.init();
     if (versions.containsKey("desktop-window-manager") && desktopWindowManager != null) desktopWindowManager.init();

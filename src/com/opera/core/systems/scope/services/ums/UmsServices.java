@@ -77,11 +77,11 @@ public class UmsServices {
           prefs = null;
       }
 
-      //if (findServiceNamed(serviceList, "core-utils") != null && services.getVersions().containsKey("core-utils")) {
+      if (findServiceNamed(serviceList, "core") != null && services.getVersions().containsKey("core")) {
           coreUtils = new CoreUtils(services, getVersionForService(serviceList, "core")); //"core-utils"));
-      //} else {
-      //    coreUtils = null;
-      //}
+      } else {
+          coreUtils = null;
+      }
 
       if (findServiceNamed(serviceList, "desktop-utils") != null
               && services.getVersions().containsKey("desktop-utils")) {
@@ -134,7 +134,12 @@ public class UmsServices {
   }
 
   private String getVersionForService(List<Service> serviceList, String name) {
-      return findServiceNamed(serviceList, name).getVersion();
+      Service service = findServiceNamed(serviceList, name);
+      if (service != null) {
+        return service.getVersion();
+      } else {
+        return "0.0";
+      }
   }
 
   private Service findServiceNamed(List<Service> services, String name) {

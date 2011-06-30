@@ -202,7 +202,7 @@ public class OperaDriver extends RemoteWebDriver implements WebDriver,
 
   public void quit() {
     logger.fine("Opera Driver shutting down");
-    services.shutdown();
+    services.quit();
     if (operaRunner != null) operaRunner.shutdown();
   }
 
