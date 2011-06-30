@@ -34,9 +34,6 @@ public class QuickMenu {
 		private final IDesktopUtils desktopUtils;
 		private final SystemInputManager systemInputManager;
 		
-		// The list of items is not initialized till the first call to get the list
-		// private ArrayList<QuickMenuItem> menuItemList;
-
 		/**
 		 * Constructor.
 		 *
@@ -60,6 +57,8 @@ public class QuickMenu {
 		}
 		
 		/**
+		 * Get the windowId of the window the Menu is attached to.
+		 * Note: Only set for menubars, and only on windows and *nix.
 		 * 
 		 * @return window id 
 		 */

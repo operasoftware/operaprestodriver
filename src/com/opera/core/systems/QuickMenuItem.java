@@ -42,8 +42,15 @@ public class QuickMenuItem extends OperaUIElement {
 	    }
 
 		/**
+		 * Get name of the menu. 
+		 * This is a constructed name, it is either
+		 *   - for items with an action, its action
+		 *   - for items with an action that has a parameter (such as Open link, 'bookmarkurl')
+		 *                           "action, parameter"
+		 *   - for items that opens a submenu, its submenuname
+		 *   - for separators, 'Separator'                       
 		 * 
-		 * @return actionName or SubmenuName of menuItem
+		 * @return name of menuItem
 		 */
 		public String getName() {
 			if (isSeparator())
@@ -95,7 +102,7 @@ public class QuickMenuItem extends OperaUIElement {
 		
 		/**
 	     *
-	     * @return (language dependent) text of menuitem
+	     * @return text of menuitem
 	     */
 		public String getText() {
 			return getDesktopUtils().removeCR(info.getText().replaceAll("&", ""));
@@ -161,6 +168,10 @@ public class QuickMenuItem extends OperaUIElement {
 			return info.getShortcutletter();
 		}
 		
+		/**
+		 * 
+		 * @return shortcut of item
+		 */
 		public String getShortcut() {
 			return info.getShortcut();
 		}
@@ -173,9 +184,6 @@ public class QuickMenuItem extends OperaUIElement {
 			return info.getRect();
 		}
 
-		// TODO: FIXME: ALl those functions just using the rect can be moved to common
-		// between menu, menuitem and widget
-		
 		@Override
 		public String toString() {
 			System.out.println("getSubMenu() = " + getSubMenu());
@@ -196,6 +204,11 @@ public class QuickMenuItem extends OperaUIElement {
 			+ "     height: " + getRect().getHeight() + " \n";
 		}
 
+		/**
+		 * Get name of containing menu
+		 * 
+		 * @return name of the menu the menuItem is in
+		 */
 		public String getMenu() {
 			return menu;
 		}
