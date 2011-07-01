@@ -57,8 +57,8 @@ public class OperaLauncherBinary extends Thread {
     ProcessBuilder builder = new ProcessBuilder(commands);
     try {
 
-      process = builder.start();
       builder.redirectErrorStream(true);
+      process = builder.start();
 
       watcher = new OutputWatcher(process);
 
