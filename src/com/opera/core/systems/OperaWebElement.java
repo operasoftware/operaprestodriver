@@ -869,7 +869,7 @@ public class OperaWebElement implements WebElement, SearchContext, Locatable,
   public WebElement findElementByLinkText(String using) {
     return findSingleElement("var elements = locator.getElementsByTagName('a'), element = null, i = 0;\n" +
         "for(;element = elements[i]; i++) {\n" +
-        " if(element.textContent == '"+ using + "'){\n"+
+        " if(element.textContent == '"+ parent.escapeJsString(using, "'") + "'){\n"+
         " return element; }\n"+
         "}", "link text");
   }
@@ -877,7 +877,7 @@ public class OperaWebElement implements WebElement, SearchContext, Locatable,
   public WebElement findElementByPartialLinkText(String using) {
     return findSingleElement("var elements = locator.getElementsByTagName('a'), element = null, i = 0;\n" +
         "for(;element = elements[i]; i++) {\n" +
-        " if(element.textContent.indexOf('" + using + "') > -1){\n"+
+        " if(element.textContent.indexOf('" + parent.escapeJsString(using, "'") + "') > -1){\n"+
         " return element; }\n"+
         "}", "partial link text");
   }
@@ -886,7 +886,7 @@ public class OperaWebElement implements WebElement, SearchContext, Locatable,
     return findMultipleElements("var links = locator.getElementsByTagName('a'), link = null, i = 0, ret = [];"+
           "for( ; link = links[i]; i++)"+
           "{"+
-            "if(link.textContent == '" + using + "')"+
+            "if(link.textContent == '" + parent.escapeJsString(using, "'") + "')"+
             "{"+
               "ret.push(link);"+
             "}"+
@@ -898,7 +898,7 @@ public class OperaWebElement implements WebElement, SearchContext, Locatable,
     return findMultipleElements("var links = locator.getElementsByTagName('a'), link = null, i = 0, ret = [];"+
           "for( ; link = links[i]; i++)"+
           "{"+
-            "if(link.textContent.indexOf('" + using + "') > -1 )"+
+            "if(link.textContent.indexOf('" + parent.escapeJsString(using, "'") + "') > -1 )"+
             "{"+
               "ret.push(link);"+
             "}"+
@@ -919,7 +919,7 @@ public class OperaWebElement implements WebElement, SearchContext, Locatable,
           "}" +
           "return element; })(locator)", "tag name");
     }
-    return findSingleElement("locator.getElementsByTagName('" + using +"')[0]", "tag name");
+    return findSingleElement("locator.getElementsByTagName('" + parent.escapeJsString(using, "'") + "')[0]", "tag name");
   }
 
   public List<WebElement> findElementsByTagName(String using) {
@@ -933,24 +933,22 @@ public class OperaWebElement implements WebElement, SearchContext, Locatable,
           "}" +
           "return output; })(locator)", "tag name");
     }
-    return findMultipleElements("locator.getElementsByTagName('" + using +"')", "tag name");
+    return findMultipleElements("locator.getElementsByTagName('" + parent.escapeJsString(using, "'") + "')", "tag name");
   }
 
 
   public WebElement findElementByClassName(String using) {
-    return findSingleElement("locator.getElementsByClassName('" + using
-        + "')[0]", "class name");
+    return findSingleElement("locator.getElementsByClassName('" + parent.escapeJsString(using, "'") + "')[0]", "class name");
   }
 
   public List<WebElement> findElementsByClassName(String using) {
-    return findMultipleElements("locator.getElementsByClassName('" + using
-        + "')", "class name");
+    return findMultipleElements("locator.getElementsByClassName('" + parent.escapeJsString(using, "'") + "')", "class name");
   }
 
   public WebElement findElementByXPath(String using) {
     return findSingleElement(
         "document.evaluate('"
-            + using
+            + parent.escapeJsString(using, "'")
             + "', locator, null, XPathResult.FIRST_ORDERED_NODE_TYPE,  null).singleNodeValue;\n",
         "XPath");
   }
@@ -958,7 +956,7 @@ public class OperaWebElement implements WebElement, SearchContext, Locatable,
   public List<WebElement> findElementsByXPath(String using) {
     return findMultipleElements(
         "var result = document.evaluate(\""
-            + using
+            + parent.escapeJsString(using)
             + "\", locator, null, XPathResult.ORDERED_NODE_ITERATOR_TYPE,  null);\n"
             + "var elements = new Array();\n"
             + "var element = result.iterateNext();\n" + "while (element) {\n"
@@ -1004,14 +1002,13 @@ public class OperaWebElement implements WebElement, SearchContext, Locatable,
   }
 
   public WebElement findElementByCssSelector(String using) {
-    return findSingleElement("locator.querySelector('" + using + "');",
-        "selector");
+    return findSingleElement("locator.querySelector('" + using + "');", "selector");
   }
 
   public List<WebElement> findElementsByCssSelector(String using) {
     return findMultipleElements(
         "var results = locator.querySelectorAll('"
-            + using
+            + parent.escapeJsString(using, "'")
             + "'), returnValue = [], i=0;for(;returnValue[i]=results[i];i++); return returnValue;",
         "selector");
   }

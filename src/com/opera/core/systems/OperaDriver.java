@@ -557,7 +557,7 @@ public class OperaDriver extends RemoteWebDriver implements WebDriver,
    *
    * @return        an escaped string
    */
-  private String escapeJsString(String string) {
+  protected String escapeJsString(String string) {
     return escapeJsString(string, "\"");
   }
 
@@ -569,7 +569,7 @@ public class OperaDriver extends RemoteWebDriver implements WebDriver,
    *
    * @return        the escaped string
    */
-  private String escapeJsString(String string, String quote) {
+  protected String escapeJsString(String string, String quote) {
 
     /*
      * This should be expanded to match all invalid characters (e.g. newlines)
@@ -691,7 +691,7 @@ public class OperaDriver extends RemoteWebDriver implements WebDriver,
   public WebElement findElementByXPath(String using) {
     return findSingleElement(
       "document.evaluate(\"" +
-      using +
+      escapeJsString(using) +
       "\", document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;\n", "xpath"
     );
   }
