@@ -1,3 +1,14 @@
+2011/07/01 OperaDriver 0.5.2
+============================
+
+Bug fixes
+---------
+
+ * Escape quotes for strings passed to find*By* methods on OperaWebElement
+   (andreastt)
+ * Fix for click()ing/toggling multiple-select <option> elements (stuartk)
+
+
 2011/06/27 OperaDriver 0.5.1
 ============================
 
@@ -65,13 +76,13 @@ Tests
  * Add test for quote escaping. (andreastt)
  * Added tests for getting preferences. (andreastt)
 
-
 Other
 -----
 
  * Rename released jar from webdriver-opera-${version}.jar to
    operadriver-${version}.jar (stuartk)
  * Include source jar in release zip file (stuartk)
+
 
 2011/06/14 OperaDriver 0.4.3
 ============================
