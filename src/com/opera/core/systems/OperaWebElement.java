@@ -205,8 +205,14 @@ public class OperaWebElement implements WebElement, SearchContext, Locatable,
 
 		parent.getScopeServices().captureOperaIdle();
 
-		// FIXME: temporary fix for setSelected deprecation
-		if (this.getTagName().equals("OPTION")) {
+		// FIXME: temporary fix for toggle and setSelected deprecation
+		Integer id = debugger.executeScriptOnObject("return locator.parentNode", objectId);
+		OperaWebElement parentNode = new OperaWebElement(this.parent, id);
+
+		if (parentNode.getTagName().equalsIgnoreCase("SELECT") &&
+		    parentNode.getAttribute("multiple") != null) {
+		  toggle();
+		} else if (this.getTagName().equals("OPTION")) {
 		  setSelected();
 		} else {
 		  parent.actionHandler.click(this, "");
