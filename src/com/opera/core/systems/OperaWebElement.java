@@ -947,10 +947,10 @@ public class OperaWebElement implements WebElement, SearchContext, Locatable,
 
   public WebElement findElementByXPath(String using) {
     return findSingleElement(
-        "document.evaluate('"
-            + parent.escapeJsString(using, "'")
-            + "', locator, null, XPathResult.FIRST_ORDERED_NODE_TYPE,  null).singleNodeValue;\n",
-        "XPath");
+      "document.evaluate(\"" +
+      parent.escapeJsString(using) +
+      "\", locator, null, XPathResult.FIRST_ORDERED_NODE_TYPE,  null).singleNodeValue;\n",
+      "XPath");
   }
 
   public List<WebElement> findElementsByXPath(String using) {
