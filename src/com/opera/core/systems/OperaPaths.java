@@ -205,7 +205,7 @@ public class OperaPaths {
       return "launcher-win32-i86pc.exe";
     default:
       throw new WebDriverException(
-          "Could not find a platfom that supports bundled launchers, please set it manually");
+          "Could not find a platform that supports bundled launchers, please set it manually");
     }
   }
 
