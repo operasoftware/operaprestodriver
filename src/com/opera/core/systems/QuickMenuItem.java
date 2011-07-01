@@ -120,14 +120,6 @@ public class QuickMenuItem extends OperaUIElement {
 
 		/**
 		 *
-		 * @return true if the menuentry is selected, else false
-		 */
-		public boolean isSelected() {
-			return info.getSelected();
-		}
-
-		/**
-		 *
 		 * @return true if item is checked, else false
 		 */
 		public boolean isChecked() {
