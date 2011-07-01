@@ -15,14 +15,17 @@ limitations under the License.
 */
 package com.opera.core.systems.scope.stp;
 
-import com.opera.core.systems.ScopeServices;
-import com.opera.core.systems.scope.services.ums.CoreUtils;
 import org.openqa.selenium.WebDriverException;
 
 import com.google.protobuf.GeneratedMessage;
 import com.google.protobuf.InvalidProtocolBufferException;
+import com.opera.core.systems.scope.CoreUtilsCommand;
+import com.opera.core.systems.scope.DesktopWindowManagerCommand;
+import com.opera.core.systems.scope.ESDebuggerCommand;
+import com.opera.core.systems.scope.WindowManagerCommand;
 import com.opera.core.systems.scope.handlers.AbstractEventHandler;
 import com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessage;
+import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo;
 import com.opera.core.systems.scope.protos.EcmascriptProtos.ReadyStateChange;
 import com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeID;
 import com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeInfo;
@@ -30,11 +33,6 @@ import com.opera.core.systems.scope.protos.HttpLoggerProtos.Header;
 import com.opera.core.systems.scope.protos.UmsProtos.Event;
 import com.opera.core.systems.scope.protos.WmProtos.WindowID;
 import com.opera.core.systems.scope.protos.WmProtos.WindowInfo;
-import com.opera.core.systems.scope.CoreUtilsCommand;
-import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo;
-import com.opera.core.systems.scope.ESDebuggerCommand;
-import com.opera.core.systems.scope.WindowManagerCommand;
-import com.opera.core.systems.scope.DesktopWindowManagerCommand;
 
 public class UmsEventParser {
 
