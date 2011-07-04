@@ -66,7 +66,7 @@ class RunDriver {
 			address_bar.click(MouseButton.RIGHT, 1, mods);
 
 	        
-	        driver.pressQuickMenuItem("Paste and Go");
+	       //driver.pressQuickMenuItem("Paste and Go");
 	        String menu_text = driver.waitForMenuItemPressed("Paste and Go");
 	        System.out.println("Menu Found: "+menu_text);
 
