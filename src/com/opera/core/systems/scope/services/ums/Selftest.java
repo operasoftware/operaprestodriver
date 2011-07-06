@@ -17,7 +17,7 @@ public class Selftest extends AbstractService implements ISelftest {
 		super(services, version);
 		String serviceName = "selftest";
 
-		if(!isVersionInRange(version, "1.0", serviceName)) {
+		if(!isVersionInRange(version, "2.0", serviceName)) {
 			throw new UnsupportedOperationException(serviceName + " version " +
 				version + " is not supported");
 		}

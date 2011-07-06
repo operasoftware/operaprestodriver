@@ -27,6 +27,7 @@ import com.opera.core.systems.scope.services.IDesktopUtils;
 import com.opera.core.systems.scope.services.IDesktopWindowManager;
 import com.opera.core.systems.scope.services.IEcmaScriptDebugger;
 import com.opera.core.systems.scope.services.IOperaExec;
+import com.opera.core.systems.scope.services.ISelftest;
 import com.opera.core.systems.scope.services.IWindowManager;
 import com.opera.core.systems.scope.services.IPrefs;
 import com.opera.core.systems.util.VersionUtil;
@@ -43,6 +44,7 @@ public class UmsServices {
   protected final ICoreUtils coreUtils;
   protected final IDesktopWindowManager desktopWindowManager;
   protected final IDesktopUtils desktopUtils;
+  protected final ISelftest selftest;
   protected final SystemInputManager systemInputManager;
   protected final IPrefs prefs;
   private final ICookieManager cookieManager;
@@ -95,6 +97,13 @@ public class UmsServices {
           systemInputManager = new SystemInputManager(services, getVersionForService(serviceList, "system-input"));
       } else {
           systemInputManager = null;
+      }
+
+      if (findServiceNamed(serviceList, "selftest") != null
+              && services.getVersions().containsKey("selftest")) {
+          selftest = new Selftest(services, getVersionForService(serviceList, "selftest"));
+      } else {
+          selftest = null;
       }
 
       /*

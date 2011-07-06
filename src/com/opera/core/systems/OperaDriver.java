@@ -236,6 +236,7 @@ public class OperaDriver extends RemoteWebDriver implements WebDriver,
     versions.put("core", "1.0");
     versions.put("cookie-manager", "1.0");
     versions.put("prefs", "1.0");
+    versions.put("selftest", "1.0");
     return versions;
   }
 
