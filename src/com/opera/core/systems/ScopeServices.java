@@ -173,9 +173,14 @@ public class ScopeServices implements IConnectionHandler {
     this.cookieManager = cookieManager;
   }
 
-  public void setSelftest(ISelftest selftest) {
-      this.selftest = selftest;
+  public ISelftest getSelftest() {
+    return selftest;
   }
+
+  public void setSelftest(ISelftest selftest) {
+    this.selftest = selftest;
+  }
+
 
   /**
    * Creates the scope server on specified address and port Enables the required
@@ -219,6 +224,9 @@ public class ScopeServices implements IConnectionHandler {
 
     if (versions.containsKey("desktop-utils"))
       wantedServices.add("desktop-utils");
+
+    if (versions.containsKey("selftest"))
+      wantedServices.add("selftest");
 
     //wantedServices.add("console-logger");
     //wantedServices.add("http-logger");

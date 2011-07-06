@@ -1287,7 +1287,8 @@ public class OperaDriver extends RemoteWebDriver implements WebDriver,
   }
 
   public void selftest(String... modules) {
-    throw new UnsupportedOperationException();
+    services.getSelftest().runSelftests(modules);
+    services.waitForOperaIdle(30*1000); // XXX: Should probably expose the timeout as part of the API.
   }
 
   private class OperaKeyboard implements Keyboard {
