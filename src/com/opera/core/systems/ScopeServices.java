@@ -93,6 +93,8 @@ public class ScopeServices implements IConnectionHandler {
 
   private AtomicInteger tagCounter;
 
+  private String selftestOutput = "";
+
   public Map<String, String> getVersions() {
     return versions;
   }
@@ -523,11 +525,11 @@ public class ScopeServices implements IConnectionHandler {
   }
 
   public void onSelftestOutput(SelftestOutput output) {
-    throw new UnsupportedOperationException();
+    selftestOutput = selftestOutput + output.getOutput();
   }
 
   public void onSelftestDone() {
-    throw new UnsupportedOperationException();
+    selftestOutput = "";
   }
 
   public void waitForWindowLoaded(int activeWindowId, long timeout) {
