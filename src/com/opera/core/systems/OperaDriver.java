@@ -1285,6 +1285,10 @@ public class OperaDriver extends RemoteWebDriver implements WebDriver,
     throw new UnsupportedOperationException();
   }
 
+  public void selftest(String... modules) {
+    throw new UnsupportedOperationException();
+  }
+
   private class OperaKeyboard implements Keyboard {
     public void sendKeys(CharSequence... keysToSend) {
       switchTo().activeElement().sendKeys(keysToSend);
