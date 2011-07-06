@@ -16,12 +16,12 @@ public class Selftest extends AbstractService implements ISelftest {
 	public Selftest(ScopeServices services, String version) {
 		super(services, version);
 		String serviceName = "selftest";
-		
+
 		if(!isVersionInRange(version, "1.0", serviceName)) {
 			throw new UnsupportedOperationException(serviceName + " version " +
 				version + " is not supported");
 		}
-		
+
 		services.setSelftest(this);
 	}
 
