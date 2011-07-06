@@ -51,6 +51,7 @@ import com.opera.core.systems.scope.services.IEcmaScriptDebugger;
 import com.opera.core.systems.scope.services.IOperaExec;
 import com.opera.core.systems.scope.services.IPrefs;
 import com.opera.core.systems.scope.services.IWindowManager;
+import com.opera.core.systems.scope.services.ISelftest;
 import com.opera.core.systems.scope.services.ums.SystemInputManager;
 import com.opera.core.systems.scope.services.ums.UmsServices;
 import com.opera.core.systems.scope.stp.StpConnection;
@@ -77,6 +78,7 @@ public class ScopeServices implements IConnectionHandler {
   private SystemInputManager systemInputManager;
   private HostInfo hostInfo;
   private ICookieManager cookieManager;
+  private ISelftest selftest;
 
   private Map<String, String> versions;
 
@@ -168,6 +170,10 @@ public class ScopeServices implements IConnectionHandler {
 
   public void setCookieManager(ICookieManager cookieManager) {
     this.cookieManager = cookieManager;
+  }
+
+  public void setSelftest(ISelftest selftest) {
+      this.selftest = selftest;
   }
 
   /**
