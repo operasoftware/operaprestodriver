@@ -1,0 +1,21 @@
+syntax = scope;
+
+service Selftest
+{
+    option (version) = "1.0";
+    option (cpp_class) = OpScopeSelftest;
+
+    command RunModules(RunModulesArg) returns (Default) = 1;
+    event OnSelftestOutput returns (SelftestOutput) = 2;
+    event OnSelftestFinished returns (Default) = 3;
+}
+
+message RunModulesArg
+{
+    repeated string moduleList = 1;
+}
+
+message SelftestOutput
+{
+    required string output = 2;
+}
