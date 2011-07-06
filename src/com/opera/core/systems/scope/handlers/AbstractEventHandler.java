@@ -19,6 +19,7 @@ import com.opera.core.systems.ScopeServices;
 import com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessage;
 import com.opera.core.systems.scope.protos.EcmascriptProtos.ReadyStateChange;
 import com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeInfo;
+import com.opera.core.systems.scope.protos.SelftestProtos.SelftestOutput;
 import com.opera.core.systems.scope.protos.WmProtos.WindowInfo;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo;
 
@@ -127,6 +128,10 @@ public abstract class AbstractEventHandler {
    * @param info
    */
   public abstract void onDesktopWindowLoaded(DesktopWindowInfo info);
+
+  public abstract void onSelftestOutput(SelftestOutput output);
+
+  public abstract void onSelftestDone();
 
   public abstract void onHttpResponse(int responseCode);
 

@@ -41,6 +41,7 @@ import com.opera.core.systems.scope.protos.ScopeProtos.ClientInfo;
 import com.opera.core.systems.scope.protos.ScopeProtos.HostInfo;
 import com.opera.core.systems.scope.protos.ScopeProtos.ServiceResult;
 import com.opera.core.systems.scope.protos.ScopeProtos.ServiceSelection;
+import com.opera.core.systems.scope.protos.SelftestProtos.SelftestOutput;
 import com.opera.core.systems.scope.protos.UmsProtos.Command;
 import com.opera.core.systems.scope.protos.UmsProtos.Response;
 import com.opera.core.systems.scope.services.ICookieManager;
@@ -511,6 +512,14 @@ public class ScopeServices implements IConnectionHandler {
   public void onOperaIdle() {
     logger.fine("Got Opera Idle event!");
     waitState.onOperaIdle();
+  }
+
+  public void onSelftestOutput(SelftestOutput output) {
+    throw new UnsupportedOperationException();
+  }
+
+  public void onSelftestDone() {
+    throw new UnsupportedOperationException();
   }
 
   public void waitForWindowLoaded(int activeWindowId, long timeout) {

@@ -10,7 +10,7 @@ public enum SelftestCommand implements ICommand {
 	RUN_MODULES(1), OUTPUT(2), FINISHED(3);
 	
 	private int command;
-	private static HashMap<Integer, SelftestCommand> lookup;
+	private static HashMap<Integer, SelftestCommand> lookup = new HashMap<Integer, SelftestCommand>();
 	
 	static {
 		for(SelftestCommand command: EnumSet.allOf(SelftestCommand.class)) {
