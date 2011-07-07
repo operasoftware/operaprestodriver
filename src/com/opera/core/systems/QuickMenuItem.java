@@ -157,7 +157,7 @@ public class QuickMenuItem extends OperaUIElement {
 		 * @return ShortcutLetter, or null if none
 		 */
 		public String getShortcutLetter() {
-			return info.getShortcutletter();
+			return info.getShortcutLetter();
 		}
 		
 		/**

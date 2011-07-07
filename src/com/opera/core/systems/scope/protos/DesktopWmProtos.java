@@ -2358,12 +2358,12 @@ public final class DesktopWmProtos {
     public boolean hasMenuText() { return hasMenuText; }
     public java.lang.String getMenuText() { return menuText_; }
     
-    // optional bool popmenu = 2;
-    public static final int POPMENU_FIELD_NUMBER = 2;
-    private boolean hasPopmenu;
-    private boolean popmenu_ = false;
-    public boolean hasPopmenu() { return hasPopmenu; }
-    public boolean getPopmenu() { return popmenu_; }
+    // optional bool popupMenu = 2;
+    public static final int POPUPMENU_FIELD_NUMBER = 2;
+    private boolean hasPopupMenu;
+    private boolean popupMenu_ = false;
+    public boolean hasPopupMenu() { return hasPopupMenu; }
+    public boolean getPopupMenu() { return popupMenu_; }
     
     private void initFields() {
     }
@@ -2378,8 +2378,8 @@ public final class DesktopWmProtos {
       if (hasMenuText()) {
         output.writeString(1, getMenuText());
       }
-      if (hasPopmenu()) {
-        output.writeBool(2, getPopmenu());
+      if (hasPopupMenu()) {
+        output.writeBool(2, getPopupMenu());
       }
       getUnknownFields().writeTo(output);
     }
@@ -2394,9 +2394,9 @@ public final class DesktopWmProtos {
         size += com.google.protobuf.CodedOutputStream
           .computeStringSize(1, getMenuText());
       }
-      if (hasPopmenu()) {
+      if (hasPopupMenu()) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBoolSize(2, getPopmenu());
+          .computeBoolSize(2, getPopupMenu());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -2559,8 +2559,8 @@ public final class DesktopWmProtos {
         if (other.hasMenuText()) {
           setMenuText(other.getMenuText());
         }
-        if (other.hasPopmenu()) {
-          setPopmenu(other.getPopmenu());
+        if (other.hasPopupMenu()) {
+          setPopupMenu(other.getPopupMenu());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -2592,7 +2592,7 @@ public final class DesktopWmProtos {
               break;
             }
             case 16: {
-              setPopmenu(input.readBool());
+              setPopupMenu(input.readBool());
               break;
             }
           }
@@ -2621,21 +2621,21 @@ public final class DesktopWmProtos {
         return this;
       }
       
-      // optional bool popmenu = 2;
-      public boolean hasPopmenu() {
-        return result.hasPopmenu();
+      // optional bool popupMenu = 2;
+      public boolean hasPopupMenu() {
+        return result.hasPopupMenu();
       }
-      public boolean getPopmenu() {
-        return result.getPopmenu();
+      public boolean getPopupMenu() {
+        return result.getPopupMenu();
       }
-      public Builder setPopmenu(boolean value) {
-        result.hasPopmenu = true;
-        result.popmenu_ = value;
+      public Builder setPopupMenu(boolean value) {
+        result.hasPopupMenu = true;
+        result.popupMenu_ = value;
         return this;
       }
-      public Builder clearPopmenu() {
-        result.hasPopmenu = false;
-        result.popmenu_ = false;
+      public Builder clearPopupMenu() {
+        result.hasPopupMenu = false;
+        result.popupMenu_ = false;
         return this;
       }
       
@@ -2699,8 +2699,8 @@ public final class DesktopWmProtos {
     public boolean hasSubmenu() { return hasSubmenu; }
     public java.lang.String getSubmenu() { return submenu_; }
     
-    // optional string action_param = 4;
-    public static final int ACTION_PARAM_FIELD_NUMBER = 4;
+    // optional string actionParam = 4;
+    public static final int ACTIONPARAM_FIELD_NUMBER = 4;
     private boolean hasActionParam;
     private java.lang.String actionParam_ = "";
     public boolean hasActionParam() { return hasActionParam; }
@@ -2713,12 +2713,12 @@ public final class DesktopWmProtos {
     public boolean hasRow() { return hasRow; }
     public int getRow() { return row_; }
     
-    // optional string shortcutletter = 6;
+    // optional string shortcutLetter = 6;
     public static final int SHORTCUTLETTER_FIELD_NUMBER = 6;
-    private boolean hasShortcutletter;
-    private java.lang.String shortcutletter_ = "";
-    public boolean hasShortcutletter() { return hasShortcutletter; }
-    public java.lang.String getShortcutletter() { return shortcutletter_; }
+    private boolean hasShortcutLetter;
+    private java.lang.String shortcutLetter_ = "";
+    public boolean hasShortcutLetter() { return hasShortcutLetter; }
+    public java.lang.String getShortcutLetter() { return shortcutLetter_; }
     
     // optional string shortcut = 7;
     public static final int SHORTCUT_FIELD_NUMBER = 7;
@@ -2795,8 +2795,8 @@ public final class DesktopWmProtos {
       if (hasRow()) {
         output.writeUInt32(5, getRow());
       }
-      if (hasShortcutletter()) {
-        output.writeString(6, getShortcutletter());
+      if (hasShortcutLetter()) {
+        output.writeString(6, getShortcutLetter());
       }
       if (hasShortcut()) {
         output.writeString(7, getShortcut());
@@ -2845,9 +2845,9 @@ public final class DesktopWmProtos {
         size += com.google.protobuf.CodedOutputStream
           .computeUInt32Size(5, getRow());
       }
-      if (hasShortcutletter()) {
+      if (hasShortcutLetter()) {
         size += com.google.protobuf.CodedOutputStream
-          .computeStringSize(6, getShortcutletter());
+          .computeStringSize(6, getShortcutLetter());
       }
       if (hasShortcut()) {
         size += com.google.protobuf.CodedOutputStream
@@ -3046,8 +3046,8 @@ public final class DesktopWmProtos {
         if (other.hasRow()) {
           setRow(other.getRow());
         }
-        if (other.hasShortcutletter()) {
-          setShortcutletter(other.getShortcutletter());
+        if (other.hasShortcutLetter()) {
+          setShortcutLetter(other.getShortcutLetter());
         }
         if (other.hasShortcut()) {
           setShortcut(other.getShortcut());
@@ -3113,7 +3113,7 @@ public final class DesktopWmProtos {
               break;
             }
             case 50: {
-              setShortcutletter(input.readString());
+              setShortcutLetter(input.readString());
               break;
             }
             case 58: {
@@ -3213,7 +3213,7 @@ public final class DesktopWmProtos {
         return this;
       }
       
-      // optional string action_param = 4;
+      // optional string actionParam = 4;
       public boolean hasActionParam() {
         return result.hasActionParam();
       }
@@ -3252,24 +3252,24 @@ public final class DesktopWmProtos {
         return this;
       }
       
-      // optional string shortcutletter = 6;
-      public boolean hasShortcutletter() {
-        return result.hasShortcutletter();
+      // optional string shortcutLetter = 6;
+      public boolean hasShortcutLetter() {
+        return result.hasShortcutLetter();
       }
-      public java.lang.String getShortcutletter() {
-        return result.getShortcutletter();
+      public java.lang.String getShortcutLetter() {
+        return result.getShortcutLetter();
       }
-      public Builder setShortcutletter(java.lang.String value) {
+      public Builder setShortcutLetter(java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  result.hasShortcutletter = true;
-        result.shortcutletter_ = value;
+  result.hasShortcutLetter = true;
+        result.shortcutLetter_ = value;
         return this;
       }
-      public Builder clearShortcutletter() {
-        result.hasShortcutletter = false;
-        result.shortcutletter_ = getDefaultInstance().getShortcutletter();
+      public Builder clearShortcutLetter() {
+        result.hasShortcutLetter = false;
+        result.shortcutLetter_ = getDefaultInstance().getShortcutLetter();
         return this;
       }
       
@@ -5881,41 +5881,41 @@ public final class DesktopWmProtos {
       "(\0132\022.scope.QuickMenuID\022&\n\004rect\030\002 \002(\0132\030.s" +
       "cope.DesktopWindowRect\022(\n\010windowId\030\003 \002(\013" +
       "2\026.scope.DesktopWindowID\022.\n\014menuItemList" +
-      "\030\004 \003(\0132\030.scope.QuickMenuItemInfo\"4\n\017Quic",
-      "kMenuItemID\022\020\n\010menuText\030\001 \002(\t\022\017\n\007popmenu" +
-      "\030\002 \001(\010\"\372\001\n\021QuickMenuItemInfo\022\014\n\004text\030\001 \002" +
-      "(\t\022\016\n\006action\030\002 \001(\t\022\017\n\007submenu\030\003 \001(\t\022\024\n\014a" +
-      "ction_param\030\004 \001(\t\022\013\n\003row\030\005 \002(\r\022\026\n\016shortc" +
-      "utletter\030\006 \001(\t\022\020\n\010shortcut\030\007 \001(\t\022&\n\004rect" +
-      "\030\010 \002(\0132\030.scope.DesktopWindowRect\022\017\n\007enab" +
-      "led\030\t \002(\010\022\017\n\007checked\030\n \002(\010\022\014\n\004bold\030\013 \002(\010" +
-      "\022\021\n\tseparator\030\014 \002(\010\"\346\004\n\017QuickWidgetInfo\022" +
-      "\014\n\004name\030\001 \002(\t\0224\n\004type\030\002 \002(\0162&.scope.Quic" +
-      "kWidgetInfo.QuickWidgetType\022\017\n\007visible\030\003",
-      " \002(\010\022\014\n\004text\030\004 \002(\t\022\r\n\005value\030\005 \002(\r\022\017\n\007ena" +
-      "bled\030\006 \002(\010\022\023\n\013defaultLook\030\007 \002(\010\022\023\n\013focus" +
-      "edLook\030\010 \002(\010\022&\n\004rect\030\t \002(\0132\030.scope.Deskt" +
-      "opWindowRect\022\016\n\006parent\030\n \001(\t\022\013\n\003row\030\013 \001(" +
-      "\r\022\013\n\003col\030\014 \001(\r\022\024\n\014visible_text\030\r \001(\t\022\027\n\017" +
-      "additional_text\030\016 \001(\t\"\244\002\n\017QuickWidgetTyp" +
-      "e\022\013\n\007UNKNOWN\020\000\022\n\n\006BUTTON\020\001\022\014\n\010CHECKBOX\020\002" +
-      "\022\r\n\tDIALOGTAB\020\003\022\014\n\010DROPDOWN\020\004\022\020\n\014DROPDOW" +
-      "NITEM\020\005\022\r\n\tEDITFIELD\020\006\022\t\n\005LABEL\020\007\022\017\n\013RAD" +
-      "IOBUTTON\020\010\022\020\n\014ADDRESSFIELD\020\t\022\n\n\006SEARCH\020\n",
-      "\022\013\n\007TOOLBAR\020\013\022\014\n\010TREEVIEW\020\014\022\014\n\010TREEITEM\020" +
-      "\r\022\r\n\tTABBUTTON\020\016\022\r\n\tTHUMBNAIL\020\017\022\016\n\nGRIDL" +
-      "AYOUT\020\020\022\014\n\010GRIDITEM\020\021\022\r\n\tQUICKFIND\020\022\"#\n\017" +
-      "DesktopWindowID\022\020\n\010windowID\030\001 \002(\r\"A\n\021Des" +
-      "ktopWindowList\022,\n\nwindowList\030\001 \003(\0132\030.sco" +
-      "pe.DesktopWindowInfo\"F\n\023QuickWidgetInfoL" +
-      "ist\022/\n\017quickwidgetList\030\001 \003(\0132\026.scope.Qui" +
-      "ckWidgetInfo\"\305\001\n\021QuickWidgetSearch\022(\n\010wi" +
-      "ndowID\030\001 \002(\0132\026.scope.DesktopWindowID\022B\n\n" +
-      "searchType\030\002 \002(\0162..scope.QuickWidgetSear",
-      "ch.QuickWidgetSearchType\022\014\n\004data\030\003 \002(\t\"4" +
-      "\n\025QuickWidgetSearchType\022\010\n\004NAME\020\000\022\010\n\004TEX" +
-      "T\020\001\022\007\n\003POS\020\002B8\n#com.opera.core.systems.s" +
-      "cope.protosB\017DesktopWmProtosH\001"
+      "\030\004 \003(\0132\030.scope.QuickMenuItemInfo\"6\n\017Quic",
+      "kMenuItemID\022\020\n\010menuText\030\001 \002(\t\022\021\n\tpopupMe" +
+      "nu\030\002 \001(\010\"\371\001\n\021QuickMenuItemInfo\022\014\n\004text\030\001" +
+      " \002(\t\022\016\n\006action\030\002 \001(\t\022\017\n\007submenu\030\003 \001(\t\022\023\n" +
+      "\013actionParam\030\004 \001(\t\022\013\n\003row\030\005 \002(\r\022\026\n\016short" +
+      "cutLetter\030\006 \001(\t\022\020\n\010shortcut\030\007 \001(\t\022&\n\004rec" +
+      "t\030\010 \002(\0132\030.scope.DesktopWindowRect\022\017\n\007ena" +
+      "bled\030\t \002(\010\022\017\n\007checked\030\n \002(\010\022\014\n\004bold\030\013 \002(" +
+      "\010\022\021\n\tseparator\030\014 \002(\010\"\346\004\n\017QuickWidgetInfo" +
+      "\022\014\n\004name\030\001 \002(\t\0224\n\004type\030\002 \002(\0162&.scope.Qui" +
+      "ckWidgetInfo.QuickWidgetType\022\017\n\007visible\030",
+      "\003 \002(\010\022\014\n\004text\030\004 \002(\t\022\r\n\005value\030\005 \002(\r\022\017\n\007en" +
+      "abled\030\006 \002(\010\022\023\n\013defaultLook\030\007 \002(\010\022\023\n\013focu" +
+      "sedLook\030\010 \002(\010\022&\n\004rect\030\t \002(\0132\030.scope.Desk" +
+      "topWindowRect\022\016\n\006parent\030\n \001(\t\022\013\n\003row\030\013 \001" +
+      "(\r\022\013\n\003col\030\014 \001(\r\022\024\n\014visible_text\030\r \001(\t\022\027\n" +
+      "\017additional_text\030\016 \001(\t\"\244\002\n\017QuickWidgetTy" +
+      "pe\022\013\n\007UNKNOWN\020\000\022\n\n\006BUTTON\020\001\022\014\n\010CHECKBOX\020" +
+      "\002\022\r\n\tDIALOGTAB\020\003\022\014\n\010DROPDOWN\020\004\022\020\n\014DROPDO" +
+      "WNITEM\020\005\022\r\n\tEDITFIELD\020\006\022\t\n\005LABEL\020\007\022\017\n\013RA" +
+      "DIOBUTTON\020\010\022\020\n\014ADDRESSFIELD\020\t\022\n\n\006SEARCH\020",
+      "\n\022\013\n\007TOOLBAR\020\013\022\014\n\010TREEVIEW\020\014\022\014\n\010TREEITEM" +
+      "\020\r\022\r\n\tTABBUTTON\020\016\022\r\n\tTHUMBNAIL\020\017\022\016\n\nGRID" +
+      "LAYOUT\020\020\022\014\n\010GRIDITEM\020\021\022\r\n\tQUICKFIND\020\022\"#\n" +
+      "\017DesktopWindowID\022\020\n\010windowID\030\001 \002(\r\"A\n\021De" +
+      "sktopWindowList\022,\n\nwindowList\030\001 \003(\0132\030.sc" +
+      "ope.DesktopWindowInfo\"F\n\023QuickWidgetInfo" +
+      "List\022/\n\017quickwidgetList\030\001 \003(\0132\026.scope.Qu" +
+      "ickWidgetInfo\"\305\001\n\021QuickWidgetSearch\022(\n\010w" +
+      "indowID\030\001 \002(\0132\026.scope.DesktopWindowID\022B\n" +
+      "\nsearchType\030\002 \002(\0162..scope.QuickWidgetSea",
+      "rch.QuickWidgetSearchType\022\014\n\004data\030\003 \002(\t\"" +
+      "4\n\025QuickWidgetSearchType\022\010\n\004NAME\020\000\022\010\n\004TE" +
+      "XT\020\001\022\007\n\003POS\020\002B8\n#com.opera.core.systems." +
+      "scope.protosB\017DesktopWmProtosH\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -5967,7 +5967,7 @@ public final class DesktopWmProtos {
           internal_static_scope_QuickMenuItemID_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_scope_QuickMenuItemID_descriptor,
-              new java.lang.String[] { "MenuText", "Popmenu", },
+              new java.lang.String[] { "MenuText", "PopupMenu", },
               com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemID.class,
               com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemID.Builder.class);
           internal_static_scope_QuickMenuItemInfo_descriptor =
@@ -5975,7 +5975,7 @@ public final class DesktopWmProtos {
           internal_static_scope_QuickMenuItemInfo_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_scope_QuickMenuItemInfo_descriptor,
-              new java.lang.String[] { "Text", "Action", "Submenu", "ActionParam", "Row", "Shortcutletter", "Shortcut", "Rect", "Enabled", "Checked", "Bold", "Separator", },
+              new java.lang.String[] { "Text", "Action", "Submenu", "ActionParam", "Row", "ShortcutLetter", "Shortcut", "Rect", "Enabled", "Checked", "Bold", "Separator", },
               com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo.class,
               com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo.Builder.class);
           internal_static_scope_QuickWidgetInfo_descriptor =
