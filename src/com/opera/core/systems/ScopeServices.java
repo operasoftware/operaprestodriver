@@ -575,14 +575,14 @@ public class ScopeServices implements IConnectionHandler {
        * result is PASS, FAIL, or SKIP. skipWhy is present only for skipped
        * tests.
        */
-      String[] pieces = line.split("\\t");
+      String[] pieces          = line.split("\\t");
       String tagAndDescription = pieces[0];
       String resultString      = pieces[1];
       String reason            = pieces.length > 2? pieces[2] : null;
 
       String[] otherPieces = tagAndDescription.split(":", 2);
-      String tag         = otherPieces[0];
-      String description = otherPieces[1];
+      String tag           = otherPieces[0];
+      String description   = otherPieces[1];
 
       ResultType result;
       if(resultString.equals("PASS")) {
