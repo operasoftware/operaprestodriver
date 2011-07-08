@@ -2,7 +2,7 @@ syntax = scope;
 
 service Selftest
 {
-    option (version) = "1.0";
+    option (version) = "1.1";
     option (cpp_class) = OpScopeSelftest;
 
     command RunModules(RunModulesArg) returns (Default) = 1;
@@ -13,6 +13,30 @@ service Selftest
 message RunModulesArg
 {
     repeated string moduleList = 1;
+
+    /**
+     * @since 1.1
+     */
+    enum OutputType
+    {
+        /**
+         * Output from selftest run should be human readable.
+         */
+        HUMAN_READABLE = 1;
+
+        /**
+         * Output from selftest run should be machine readable. The output will
+         * still be plain text, but in a form which is easy to process further.
+         */
+        MACHINE_READABLE = 2;
+    }
+
+    /**
+     * Specifies the output type for this selftest run.
+     *
+     * @since 1.1
+     */
+    optional OutputType outputType = 2 [default = HUMAN_READABLE];
 }
 
 message SelftestOutput

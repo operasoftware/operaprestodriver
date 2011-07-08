@@ -29,6 +29,7 @@ public class Selftest extends AbstractService implements ISelftest {
 		logger.fine(String.format("runSelftests(%s)", Arrays.toString(modules)));
 		RunModulesArg.Builder builder = RunModulesArg.newBuilder();
 		builder.addAllModuleList(Arrays.asList(modules));
+		builder.setOutputType(RunModulesArg.OutputType.MACHINE_READABLE);
 
 		Response response = executeCommand(SelftestCommand.RUN_MODULES, builder);
 		logger.fine(String.format("Selftest response: %s", response));
