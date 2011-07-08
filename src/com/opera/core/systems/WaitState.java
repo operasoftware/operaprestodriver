@@ -16,6 +16,7 @@ limitations under the License.
 package com.opera.core.systems;
 
 import java.util.LinkedList;
+import java.util.List;
 import java.util.logging.Logger;
 
 import org.openqa.selenium.WebDriverException;
@@ -24,6 +25,7 @@ import com.opera.core.systems.scope.exceptions.CommunicationException;
 import com.opera.core.systems.scope.exceptions.ResponseNotReceivedException;
 import com.opera.core.systems.scope.protos.UmsProtos.Response;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo;
+import com.opera.core.systems.scope.services.ISelftest.SelftestResult;
 
 /**
  * This class handles a queue of events to be handled from multiple threads. One
@@ -63,8 +65,9 @@ public class WaitState {
     EVENT_DESKTOP_WINDOW_CLOSED, /* desktop window closed */
     EVENT_DESKTOP_WINDOW_ACTIVATED, /* desktop window activated */
     EVENT_DESKTOP_WINDOW_UPDATED, /* desktop window updated*/
-    EVENT_DESKTOP_WINDOW_LOADED, EVENT_REQUEST_FIRED
+    EVENT_DESKTOP_WINDOW_LOADED, EVENT_REQUEST_FIRED,
     /* sent when a http request is fired */
+    EVENT_SELFTEST_DONE
   }
 
   private class ResultItem {
@@ -78,6 +81,7 @@ public class WaitState {
 
     // store the data for now, but it seems
     // wasteful
+    List<SelftestResult> selftestResults;
 
     public ResultItem(WebDriverException ex) {
       waitResult = WaitResult.EXCEPTION;
@@ -114,6 +118,11 @@ public class WaitState {
       logger.fine("EVENT: " + waitResult.toString() + ", data=" + data);
     }
 
+    public ResultItem(List<SelftestResult> results) {
+      waitResult = WaitResult.EVENT_SELFTEST_DONE;
+      selftestResults = results;
+    }
+
     public boolean isEventToWaitFor() {
       switch (waitResult) {
       case EVENT_DESKTOP_WINDOW_ACTIVATED:
@@ -121,6 +130,7 @@ public class WaitState {
       case EVENT_DESKTOP_WINDOW_UPDATED:
       case EVENT_DESKTOP_WINDOW_SHOWN:
       case EVENT_DESKTOP_WINDOW_LOADED:
+      case EVENT_SELFTEST_DONE:
         return true;
       }
       return false;
@@ -135,7 +145,7 @@ public class WaitState {
   LinkedList<ResultItem> events = new LinkedList<ResultItem>();
 
   enum ResponseType {
-    HANDSHAKE, RESPONSE, WINDOW_LOADED, REQUEST_FIRED, OPERA_IDLE, DESKTOP_WINDOW_SHOWN, DESKTOP_WINDOW_UPDATED, DESKTOP_WINDOW_ACTIVATED, DESKTOP_WINDOW_CLOSED, DESKTOP_WINDOW_LOADED;
+    HANDSHAKE, RESPONSE, WINDOW_LOADED, REQUEST_FIRED, OPERA_IDLE, DESKTOP_WINDOW_SHOWN, DESKTOP_WINDOW_UPDATED, DESKTOP_WINDOW_ACTIVATED, DESKTOP_WINDOW_CLOSED, DESKTOP_WINDOW_LOADED, SELFTEST_DONE;
   }
 
   public WaitState() {
@@ -273,6 +283,14 @@ public class WaitState {
       events.add(new ResultItem(WaitResult.EVENT_DESKTOP_WINDOW_LOADED, info));
       lock.notify();
     }
+  }
+
+  void onSelftestDone(List<SelftestResult> results) {
+    synchronized (lock) {
+       logger.fine("Event: onSelftestDone");
+       events.add(new ResultItem(results));
+       lock.notify();
+     }
   }
 
   private ResultItem getResult() {
@@ -454,6 +472,11 @@ public class WaitState {
           logger.finest("RECV EVENT_OPERA_IDLE!");
           if (result.data == match && type == ResponseType.OPERA_IDLE) return null;
           break;
+        case EVENT_SELFTEST_DONE:
+          // TODO:
+          logger.finest("RECV EVENT_SELFTEST_DONE");
+          if(type == ResponseType.SELFTEST_DONE) return result;
+          break;
         }
       }
     }
@@ -567,5 +590,13 @@ public class WaitState {
       return item.desktopWindowInfo.getWindowID();
     }
     return 0;
+  }
+
+  public List<SelftestResult> waitForSelftestDone(long timeout) {
+    ResultItem item = waitAndParseResult(timeout, 0, null, ResponseType.SELFTEST_DONE);
+    if (item != null) {
+      return item.selftestResults;
+    }
+    return null;
   }
 }

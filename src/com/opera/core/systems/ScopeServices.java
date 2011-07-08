@@ -530,38 +530,15 @@ public class ScopeServices implements IConnectionHandler {
     selftestOutput = selftestOutput + output.getOutput();
   }
 
-  private SelftestCallback selftestCb;
   public void onSelftestDone() {
-    if(selftestCb != null) selftestCb.onSelftestDone(selftestOutput);
+    List<SelftestResult> results = parseSelftests(selftestOutput);
     selftestOutput = "";
-  }
-
-  /*
-   * Did I mention that I hate Java a bit? This would be so much easier if Java
-   * supported closures. The callback interface has to save the result for the
-   * caller to get later as well, because function-local variables cannot be
-   * closed over. Fucking Java...
-   */
-  private interface SelftestCallback {
-    public void onSelftestDone(String output);
-    public List<SelftestResult> getResults();
+    waitState.onSelftestDone(results);
   }
 
   public List<SelftestResult> selftest(List<String> modules, long timeout) {
-    selftestCb = new SelftestCallback() {
-        public List<SelftestResult> results;
-        public void onSelftestDone(String output) {
-            this.results = parseSelftests(output);
-        }
-
-        public List<SelftestResult> getResults() { return results; }
-    };
     selftest.runSelftests(modules);
-    waitState.waitForOperaIdle(timeout);
-
-    List<SelftestResult> results = selftestCb.getResults();
-    selftestCb = null;
-    return results;
+    return waitState.waitForSelftestDone(timeout);
   }
 
   private List<SelftestResult> parseSelftests(String output) {
