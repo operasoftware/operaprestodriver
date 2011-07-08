@@ -86,6 +86,7 @@ import com.opera.core.systems.scope.services.IEcmaScriptDebugger;
 import com.opera.core.systems.scope.services.IOperaExec;
 import com.opera.core.systems.scope.services.IPrefs;
 import com.opera.core.systems.scope.services.IWindowManager;
+import com.opera.core.systems.scope.services.ISelftest.SelftestResult;
 import com.opera.core.systems.settings.OperaDriverSettings;
 
 public class OperaDriver extends RemoteWebDriver implements WebDriver,
@@ -1286,9 +1287,8 @@ public class OperaDriver extends RemoteWebDriver implements WebDriver,
     throw new UnsupportedOperationException();
   }
 
-  public void selftest(String... modules) {
-    services.getSelftest().runSelftests(modules);
-    services.waitForOperaIdle(30*1000); // XXX: Should probably expose the timeout as part of the API.
+  public List<SelftestResult> selftest(List<String> modules, long timeout) {
+    return services.selftest(modules, timeout);
   }
 
   private class OperaKeyboard implements Keyboard {

@@ -1,6 +1,6 @@
 package com.opera.core.systems.scope.services.ums;
 
-import java.util.Arrays;
+import java.util.List;
 import java.util.logging.Logger;
 
 import com.opera.core.systems.ScopeServices;
@@ -25,10 +25,10 @@ public class Selftest extends AbstractService implements ISelftest {
 		services.setSelftest(this);
 	}
 
-	public void runSelftests(String... modules) {
-		logger.fine(String.format("runSelftests(%s)", Arrays.toString(modules)));
+	public void runSelftests(List<String> modules) {
+		logger.fine(String.format("runSelftests(%s)", modules.toString()));
 		RunModulesArg.Builder builder = RunModulesArg.newBuilder();
-		builder.addAllModuleList(Arrays.asList(modules));
+		builder.addAllModuleList(modules);
 		builder.setOutputType(RunModulesArg.OutputType.MACHINE_READABLE);
 
 		Response response = executeCommand(SelftestCommand.RUN_MODULES, builder);

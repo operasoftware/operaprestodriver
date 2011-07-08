@@ -53,6 +53,8 @@ import com.opera.core.systems.scope.services.IOperaExec;
 import com.opera.core.systems.scope.services.IPrefs;
 import com.opera.core.systems.scope.services.IWindowManager;
 import com.opera.core.systems.scope.services.ISelftest;
+import com.opera.core.systems.scope.services.ISelftest.ResultType;
+import com.opera.core.systems.scope.services.ISelftest.SelftestResult;
 import com.opera.core.systems.scope.services.ums.SystemInputManager;
 import com.opera.core.systems.scope.services.ums.UmsServices;
 import com.opera.core.systems.scope.stp.StpConnection;
@@ -528,8 +530,78 @@ public class ScopeServices implements IConnectionHandler {
     selftestOutput = selftestOutput + output.getOutput();
   }
 
+  private SelftestCallback selftestCb;
   public void onSelftestDone() {
+    if(selftestCb != null) selftestCb.onSelftestDone(selftestOutput);
     selftestOutput = "";
+  }
+
+  /*
+   * Did I mention that I hate Java a bit? This would be so much easier if Java
+   * supported closures. The callback interface has to save the result for the
+   * caller to get later as well, because function-local variables cannot be
+   * closed over. Fucking Java...
+   */
+  private interface SelftestCallback {
+    public void onSelftestDone(String output);
+    public List<SelftestResult> getResults();
+  }
+
+  public List<SelftestResult> selftest(List<String> modules, long timeout) {
+    selftestCb = new SelftestCallback() {
+        public List<SelftestResult> results;
+        public void onSelftestDone(String output) {
+            this.results = parseSelftests(output);
+        }
+
+        public List<SelftestResult> getResults() { return results; }
+    };
+    selftest.runSelftests(modules);
+    waitState.waitForOperaIdle(timeout);
+
+    List<SelftestResult> results = selftestCb.getResults();
+    selftestCb = null;
+    return results;
+  }
+
+  private List<SelftestResult> parseSelftests(String output) {
+    List<SelftestResult> results = new ArrayList<SelftestResult>();
+
+    String[] lines = output.split("\\n");
+    for(String line: lines) {
+      /* Each line has the following format:
+       * tag:description result skipWhy
+       *
+       * result is PASS, FAIL, or SKIP. skipWhy is present only for skipped
+       * tests.
+       */
+      String[] pieces = line.split("\\t");
+      String tagAndDescription = pieces[0];
+      String resultString      = pieces[1];
+      String reason            = pieces.length > 2? pieces[2] : null;
+
+      String[] otherPieces = tagAndDescription.split(":", 2);
+      String tag         = otherPieces[0];
+      String description = otherPieces[1];
+
+      ResultType result;
+      if(resultString.equals("PASS")) {
+        result = ResultType.PASS;
+      }
+      else if(resultString.equals("FAIL")) {
+        result = ResultType.FAIL;
+      }
+      else if(resultString.equals("SKIP")) {
+        result = ResultType.SKIP;
+      }
+      else {
+        throw new RuntimeException(String.format("Unknown test result %s", resultString));
+      }
+
+      results.add(new SelftestResult(tag, description, result, reason));
+    }
+
+    return results;
   }
 
   public void waitForWindowLoaded(int activeWindowId, long timeout) {
