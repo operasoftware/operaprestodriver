@@ -35,6 +35,21 @@ public interface ISelftest {
 		public String getDescription() { return description; }
 		public ResultType getResult()  { return result; }
 		public String getSkipWhy()     { return skipWhy; }
+
+		public String toString() {
+			String format;
+			Object[] args;
+			if(skipWhy != null) {
+				format = "%s:%s\t%s\t%s";
+				args = new Object[]{tag, description, result, skipWhy};
+			}
+			else {
+				format = "%s:%s\t%s";
+				args = new Object[]{tag, description, result};
+			}
+
+			return String.format(format, args);
+		}
 	}
 
 	public enum ResultType {
