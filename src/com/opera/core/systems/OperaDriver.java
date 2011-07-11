@@ -89,9 +89,9 @@ import com.opera.core.systems.scope.services.IWindowManager;
 import com.opera.core.systems.settings.OperaDriverSettings;
 
 public class OperaDriver extends RemoteWebDriver implements WebDriver,
-    FindsByLinkText, FindsById, FindsByXPath, FindsByName, FindsByTagName,
-    FindsByClassName, FindsByCssSelector, SearchContext, JavascriptExecutor,
-    TakesScreenshot, HasInputDevices {
+  FindsByLinkText, FindsById, FindsByXPath, FindsByName, FindsByTagName,
+  FindsByClassName, FindsByCssSelector, SearchContext, JavascriptExecutor,
+  TakesScreenshot, HasInputDevices {
 
   /*
    * These are "protected" and not "private" so that we can extend this class
@@ -482,7 +482,7 @@ public class OperaDriver extends RemoteWebDriver implements WebDriver,
       int framesLength = Integer.valueOf(debugger.executeJavascript("return document.frames.length"));
 
       if (frameIndex < 0 || frameIndex >= framesLength) throw new NoSuchFrameException(
-          "Invalid frame index : " + frameIndex);
+        "Invalid frame index : " + frameIndex);
 
       debugger.changeRuntime(frameIndex);
 
@@ -605,41 +605,41 @@ public class OperaDriver extends RemoteWebDriver implements WebDriver,
   public WebElement findElementByLinkText(String using) {
     return findSingleElement(
       "(function(){\n" +
-      "var links = document.getElementsByTagName('a'), element = null;\n" +
-      "for (var i = 0; i < links.length && !element; ++i) {\n" +
-      "if(links[i].textContent.replace(/\\s+/g, ' ').trim() == \"" + escapeJsString(using) + "\".replace(/\\s+/g, ' ')) {\n" +
-      "element = links[i];\n" +
-      "}\n" +
-      "}\n" +
-      "return element;\n})()", "link text"
+        "var links = document.getElementsByTagName('a'), element = null;\n" +
+        "for (var i = 0; i < links.length && !element; ++i) {\n" +
+        "if(links[i].textContent.replace(/\\s+/g, ' ').trim() == \"" + escapeJsString(using) + "\".replace(/\\s+/g, ' ')) {\n" +
+        "element = links[i];\n" +
+        "}\n" +
+        "}\n" +
+        "return element;\n})()", "link text"
     );
   }
 
   public WebElement findElementByPartialLinkText(String using) {
     return findSingleElement(
       "(function(){\n" +
-      "var links = document.getElementsByTagName('a'), element = null;\n" +
-      "for (var i = 0; i < links.length && !element; ++i) {\n" +
-      "if(links[i].textContent.replace(/\\s+/g, ' ').indexOf('" + escapeJsString(using, "'") + "') > -1){\n" +
-      "element = links[i];\n" +
-      "}\n" +
-      "}\n" +
-      "return element;\n})()", "link text"
+        "var links = document.getElementsByTagName('a'), element = null;\n" +
+        "for (var i = 0; i < links.length && !element; ++i) {\n" +
+        "if(links[i].textContent.replace(/\\s+/g, ' ').indexOf('" + escapeJsString(using, "'") + "') > -1){\n" +
+        "element = links[i];\n" +
+        "}\n" +
+        "}\n" +
+        "return element;\n})()", "link text"
     );
   }
 
   public List<WebElement> findElementsByLinkText(String using) {
     return findMultipleElements(
       "(function(){\n"+
-      "var links = document.links, link = null, i = 0, elements = [];\n" +
-      "for( ; link = links[i]; i++)\n" +
-      "{\n" +
-      "if(link.textContent.replace(/\\s+/g, ' ').trim() == \"" + escapeJsString(using) +"\".replace(/\\s+/g, ' '))\n" +
-      "{\n" +
-      "elements.push(link);\n" +
-      "}\n" +
-      "}\n" +
-      "return elements; })()", "link text"
+        "var links = document.links, link = null, i = 0, elements = [];\n" +
+        "for( ; link = links[i]; i++)\n" +
+        "{\n" +
+        "if(link.textContent.replace(/\\s+/g, ' ').trim() == \"" + escapeJsString(using) +"\".replace(/\\s+/g, ' '))\n" +
+        "{\n" +
+        "elements.push(link);\n" +
+        "}\n" +
+        "}\n" +
+        "return elements; })()", "link text"
     );
   }
 
@@ -655,15 +655,15 @@ public class OperaDriver extends RemoteWebDriver implements WebDriver,
 
     return findMultipleElements(
       "(function(){\n" +
-      "var links = document.links, link = null, i = 0, elements = [];\n" +
-      "for( ; link = links[i]; i++)\n" +
-      "{\n" +
-      "if(link.textContent.replace(/\\s+/g, ' ').indexOf('" + escapeJsString(using, "'") +"') > -1)\n" +
-      "{\n" +
-      "elements.push(link);\n" +
-      "}\n" +
-      "}\n" +
-      "return elements; })()", "partial link text"
+        "var links = document.links, link = null, i = 0, elements = [];\n" +
+        "for( ; link = links[i]; i++)\n" +
+        "{\n" +
+        "if(link.textContent.replace(/\\s+/g, ' ').indexOf('" + escapeJsString(using, "'") +"') > -1)\n" +
+        "{\n" +
+        "elements.push(link);\n" +
+        "}\n" +
+        "}\n" +
+        "return elements; })()", "partial link text"
     );
   }
 
@@ -677,22 +677,22 @@ public class OperaDriver extends RemoteWebDriver implements WebDriver,
   public List<WebElement> findElementsById(String using) {
     return findMultipleElements(
       "var alls = document.all, element = null, i = 0, elements = [];\n" +
-      "for( ; element = alls[i]; i++)\n" +
-      "{\n" +
-      "if(element.getAttribute('id') == '" + escapeJsString(using, "'") +"')\n" +
-      "{\n" +
-      "elements.push(element);\n" +
-      "}\n" +
-      "}\n" +
-      "return elements;", "by id"
+        "for( ; element = alls[i]; i++)\n" +
+        "{\n" +
+        "if(element.getAttribute('id') == '" + escapeJsString(using, "'") +"')\n" +
+        "{\n" +
+        "elements.push(element);\n" +
+        "}\n" +
+        "}\n" +
+        "return elements;", "by id"
     );
   }
 
   public WebElement findElementByXPath(String using) {
     return findSingleElement(
       "document.evaluate(\"" +
-      escapeJsString(using) +
-      "\", document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;\n", "xpath"
+        escapeJsString(using) +
+        "\", document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;\n", "xpath"
     );
   }
 
@@ -711,13 +711,13 @@ public class OperaDriver extends RemoteWebDriver implements WebDriver,
   public List<WebElement> findElementsByXPath(String using) {
     return findMultipleElements(
       "var result = document.evaluate(\"" +
-      escapeJsString(using) +
-      "\", document, null, XPathResult.ORDERED_NODE_ITERATOR_TYPE,  null);\n" +
-      "var elements = new Array();\n" +
-      "var element = result.iterateNext();\n" +
-      "while (element) {\n" + "  elements.push(element);\n" +
-      " element = result.iterateNext();\n" + "}\n" +
-      "return elements", "XPath"
+        escapeJsString(using) +
+        "\", document, null, XPathResult.ORDERED_NODE_ITERATOR_TYPE,  null);\n" +
+        "var elements = new Array();\n" +
+        "var element = result.iterateNext();\n" +
+        "while (element) {\n" + "  elements.push(element);\n" +
+        " element = result.iterateNext();\n" + "}\n" +
+        "return elements", "XPath"
     );
   }
 
@@ -769,13 +769,13 @@ public class OperaDriver extends RemoteWebDriver implements WebDriver,
 
       return findSingleElement(
         "(function() { var elements = document.getElementsByTagName('" + tagInfo[1] + "'), element = null;" +
-        "for( var i = 0; i < elements.length; i++ ) {" +
-        "if( elements[i].prefix == '" + tagInfo[0] + "' ) {" +
-        "element = elements[i];" +
-        "break;" +
-        "}" +
-        "}" +
-        "return element; })()", "tag name"
+          "for( var i = 0; i < elements.length; i++ ) {" +
+          "if( elements[i].prefix == '" + tagInfo[0] + "' ) {" +
+          "element = elements[i];" +
+          "break;" +
+          "}" +
+          "}" +
+          "return element; })()", "tag name"
       );
     }
 
@@ -789,12 +789,12 @@ public class OperaDriver extends RemoteWebDriver implements WebDriver,
 
       return findMultipleElements(
         "(function() { var elements = document.getElementsByTagName('" + tagInfo[1] + "'), output = [];" +
-        "for( var i = 0; i < elements.length; i++ ) {" +
-        "if( elements[i].prefix == '" + tagInfo[0] + "' ) {" +
-        "output.push(elements[i]);" +
-        "}" +
-        "}" +
-        "return output; })()", "tag name"
+          "for( var i = 0; i < elements.length; i++ ) {" +
+          "if( elements[i].prefix == '" + tagInfo[0] + "' ) {" +
+          "output.push(elements[i]);" +
+          "}" +
+          "}" +
+          "return output; })()", "tag name"
       );
     }
 
@@ -808,8 +808,8 @@ public class OperaDriver extends RemoteWebDriver implements WebDriver,
   public List<WebElement> findElementsByCssSelector(String using) {
     return findMultipleElements(
       "(function(){ var results = document.querySelectorAll('" +
-      escapeJsString(using, "'") +
-      "'), returnValue = [], i=0;for(;returnValue[i]=results[i];i++); return returnValue;})()",
+        escapeJsString(using, "'") +
+        "'), returnValue = [], i=0;for(;returnValue[i]=results[i];i++); return returnValue;})()",
       "selector"
     );
   }
@@ -848,8 +848,8 @@ public class OperaDriver extends RemoteWebDriver implements WebDriver,
     public void addCookie(Cookie cookie) {
       if (cookie.getExpiry() == null) {
         cookie = new Cookie(
-            cookie.getName(), cookie.getValue(), cookie.getDomain(), cookie.getPath(),
-            new Date(new Date().getTime() + (10 * 365 * 24 * 60 * 60 * 1000)), false
+          cookie.getName(), cookie.getValue(), cookie.getDomain(), cookie.getPath(),
+          new Date(new Date().getTime() + (10 * 365 * 24 * 60 * 60 * 1000)), false
         );
       }
 
@@ -867,7 +867,7 @@ public class OperaDriver extends RemoteWebDriver implements WebDriver,
       }
 
       cookieManager.removeCookie(cookie.getDomain(), cookie.getPath(),
-          cookie.getName());
+        cookie.getName());
 
       gc();
 
@@ -1076,7 +1076,7 @@ public class OperaDriver extends RemoteWebDriver implements WebDriver,
       if (result.getClassName().endsWith("Element")) return new OperaWebElement(this, objectId);
       if (result.getClassName().equals("NodeList")) return processElements(objectId);
       if (result.getClassName().equals("Array")
-          || result.getClassName().equals("Object")) return debugger.examineScriptResult(objectId);
+        || result.getClassName().equals("Object")) return debugger.examineScriptResult(objectId);
     }
 
     return object;
@@ -1098,7 +1098,7 @@ public class OperaDriver extends RemoteWebDriver implements WebDriver,
    */
   @Deprecated
   public void executeActions(OperaAction action) {
-            services.captureOperaIdle();
+    services.captureOperaIdle();
     List<UserInteraction> actions = action.getActions();
     for (UserInteraction userInteraction : actions) {
       userInteraction.execute(this);
