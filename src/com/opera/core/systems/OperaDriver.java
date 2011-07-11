@@ -100,16 +100,19 @@ public class OperaDriver extends RemoteWebDriver implements WebDriver,
   protected OperaDriverSettings settings;
   protected OperaRunner operaRunner;
 
-  protected final Logger logger = Logger.getLogger(this.getClass().getName());
-
   protected IEcmaScriptDebugger debugger;
   protected IOperaExec exec;
   protected IPrefs prefs;
   protected IWindowManager windowManager;
   protected ICoreUtils coreUtils;
   protected ICookieManager cookieManager;
-  protected ScopeServices services;
-  protected ScopeActions actionHandler;
+
+  private ScopeServices services;
+  private ScopeActions actionHandler;
+  private OperaMouse mouse;
+  private OperaKeyboard keyboard;
+
+  protected final Logger logger = Logger.getLogger(this.getClass().getName());
 
   protected Set<Integer> objectIds = new HashSet<Integer>();
   private String version;
@@ -221,6 +224,8 @@ public class OperaDriver extends RemoteWebDriver implements WebDriver,
     debugger = services.getDebugger();
     windowManager = services.getWindowManager();
     exec = services.getExec();
+    mouse = new OperaMouse(this);
+    keyboard = new OperaKeyboard(this);
     coreUtils = services.getCoreUtils();
     actionHandler = new PbActionHandler(services);
     cookieManager = services.getCookieManager();
@@ -1285,95 +1290,13 @@ public class OperaDriver extends RemoteWebDriver implements WebDriver,
     throw new UnsupportedOperationException();
   }
 
-  private class OperaKeyboard implements Keyboard {
-    public void sendKeys(CharSequence... keysToSend) {
-      switchTo().activeElement().sendKeys(keysToSend);
-    }
-
-    public void pressKey(Keys keyToPress) {
-      keyDown(OperaKeys.get(((Keys) keyToPress).name()));
-    }
-
-    public void releaseKey(Keys keyToRelease) {
-      keyUp(OperaKeys.get(((Keys) keyToRelease).name()));
-
-    }
-  }
-
   public Keyboard getKeyboard() {
-    return new OperaKeyboard();
-  }
-
-  public class OperaMouse implements Mouse {
-    public void click(Coordinates where) {
-      if (where == null) {
-        throw new InvalidCoordinatesException("Invalid coordinates to click on.");
-      }
-      Point p = where.getLocationInViewPort();
-      exec.mouseAction(p.x, p.y, OperaMouseKeys.LEFT);
-    }
-
-    public void contextClick(Coordinates where) {
-      if (where == null) {
-        throw new InvalidCoordinatesException("Invalid coordinates to context click on.");
-      }
-      Point p = where.getLocationInViewPort();
-      exec.mouseAction(p.x, p.y, OperaMouseKeys.RIGHT);
-    }
-
-    public void doubleClick(Coordinates where) {
-      if (where == null) {
-        throw new InvalidCoordinatesException("Invalid coordinates to double click on.");
-      }
-      Point p = where.getLocationInViewPort();
-      exec.mouseAction(p.x, p.y, OperaMouseKeys.LEFT.getValue(), 2);
-    }
-
-    public void mouseDown(Coordinates where) {
-      if (where == null) {
-        throw new InvalidCoordinatesException("Invalid coordinates to mouse down on.");
-      }
-      Point p = where.getLocationInViewPort();
-      exec.mouseAction(p.x, p.y, OperaMouseKeys.LEFT_DOWN);
-    }
-
-    public void mouseUp(Coordinates where) {
-      if (where == null) {
-        throw new InvalidCoordinatesException("Invalid coordinates to mouse up on.");
-      }
-      Point p = where.getLocationInViewPort();
-      exec.mouseAction(p.x, p.y, OperaMouseKeys.LEFT_DOWN);
-    }
-
-    public void mouseMove(Coordinates where) {
-      if (where == null) {
-        throw new InvalidCoordinatesException("Invalid coordinates to mouse move to.");
-      }
-      Point p = where.getLocationInViewPort();
-      exec.mouseAction(p.x, p.y);
-    }
-
-    public void mouseMove(Coordinates where, long xOffset, long yOffset){
-      if (where == null) {
-        throw new InvalidCoordinatesException("Invalid coordinates to mouse move to.");
-      }
-
-      Point p = where.getLocationInViewPort();
-
-      // We can't compare against Integer.MAX_VALUE and throw, because this
-      // method isn't defined as able to throw an Exception. Weird things will
-      // just happen here...
-      int xO = (int)xOffset;
-      int yO = (int)yOffset;
-      exec.mouseAction(p.x + xO, p.y + yO);
-    }
-
+    return keyboard;
   }
 
   public Mouse getMouse() {
-    return new OperaMouse();
+    return mouse;
   }
-
 
   /**
    * Methods to access Core service 1.2 metadata
