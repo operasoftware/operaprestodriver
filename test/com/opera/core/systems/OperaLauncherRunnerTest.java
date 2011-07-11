@@ -1,88 +1,76 @@
 package com.opera.core.systems;
 
-import static org.junit.Assert.fail;
-
-import java.io.File;
-
+import com.opera.core.systems.runner.OperaRunnerException;
+import com.opera.core.systems.runner.launcher.OperaLauncherRunner;
+import com.opera.core.systems.settings.OperaDriverSettings;
 import org.junit.Assert;
 import org.junit.Test;
 import org.openqa.selenium.Platform;
 
-import com.opera.core.systems.runner.OperaRunnerException;
-import com.opera.core.systems.runner.launcher.OperaLauncherRunner;
-import com.opera.core.systems.settings.OperaDriverSettings;
+import java.io.File;
 
-public class OperaLauncherRunnerTest
-{
+import static org.junit.Assert.fail;
+
+public class OperaLauncherRunnerTest {
   private static OperaDriverSettings settings;
   private static OperaLauncherRunner runner;
 
   @Test
-  public void testOperaDriverSettings()
-  {
+  public void testOperaDriverSettings() {
     settings = new OperaDriverSettings();
     Assert.assertNotNull(settings);
   }
 
   @Test
-  public void testDefaultDoRunOperaLauncherFromOperaDriver()
-  {
+  public void testDefaultDoRunOperaLauncherFromOperaDriver() {
     // default is to run launcher from the driver, so this should always be true
     Assert.assertTrue(settings.doRunOperaLauncherFromOperaDriver());
   }
 
   @Test
-  public void testSetRunOperaLauncherFromOperaDriver()
-  {
+  public void testSetRunOperaLauncherFromOperaDriver() {
     settings.setRunOperaLauncherFromOperaDriver(false);
     Assert.assertFalse(settings.doRunOperaLauncherFromOperaDriver());
   }
 
   @Test
-  public void testDefaultLauncherListeningPort()
-  {
+  public void testDefaultLauncherListeningPort() {
     // the listening port should default to 9999
     Assert.assertEquals(9999, settings.getOperaLauncherListeningPort());
   }
 
   @Test
-  public void testSetLauncherListeningPort()
-  {
+  public void testSetLauncherListeningPort() {
     settings.setOperaLauncherListeningPort(5555);
     Assert.assertEquals(5555, settings.getOperaLauncherListeningPort());
   }
 
   @Test
-  public void testDefaultOperaBinaryLocation()
-  {
+  public void testDefaultOperaBinaryLocation() {
     // the opera binary location should default to null
     Assert.assertNull(settings.getOperaBinaryLocation());
   }
 
   @Test
-  public void testSetOperaBinaryLocation()
-  {
+  public void testSetOperaBinaryLocation() {
     settings.setOperaBinaryLocation("/spartan/ramdisk/launcher");
     Assert.assertEquals("/spartan/ramdisk/launcher", settings.getOperaBinaryLocation());
   }
 
   @Test
-  public void testDefaultOperaBinaryArguments()
-  {
+  public void testDefaultOperaBinaryArguments() {
     // the opera binary arguments should default to null
     Assert.assertEquals(settings.getOperaBinaryArguments(), "");
   }
 
   @Test
-  public void testSetOperaBinaryArguments()
-  {
+  public void testSetOperaBinaryArguments() {
     settings.setOperaBinaryArguments("-host 127.0.0.1 -port 12199 -bin /spartan/ramdisk/install/launcher");
     Assert.assertEquals("-host 127.0.0.1 -port 12199 -bin /spartan/ramdisk/install/launcher", settings.getOperaBinaryArguments());
   }
 
   @Test
-  public void testOperaLauncherRunnerConstructorWithSettings()
-  {
+  public void testOperaLauncherRunnerConstructorWithSettings() {
     OperaPaths paths = new OperaPaths();
     settings.setRunOperaLauncherFromOperaDriver(true);
     settings.setOperaBinaryArguments("");
@@ -94,50 +82,41 @@ public class OperaLauncherRunnerTest
   }
 
   @Test
-  public void testDefaultCrashedState()
-  {
+  public void testDefaultCrashedState() {
     Assert.assertFalse(runner.hasOperaCrashed());
   }
 
   @Test
-  public void testDefaultIsOperaRunning()
-  {
+  public void testDefaultIsOperaRunning() {
     Assert.assertFalse(runner.isOperaRunning());
   }
 
   @Test
-  public void testStartOpera()
-  {
+  public void testStartOpera() {
     Assert.assertNotNull(runner);
     runner.startOpera();
     Assert.assertTrue(runner.isOperaRunning());
   }
 
   @Test
-  public void testShutdownOpera()
-  {
+  public void testShutdownOpera() {
     runner.stopOpera();
     Assert.assertFalse(runner.isOperaRunning());
   }
 
   @Test
-  public void testShutdownLauncher()
-  {
+  public void testShutdownLauncher() {
     runner.shutdown();
 
-    try
-    {
+    try {
       runner.startOpera();
       fail("This test should have generated a OperaRunnerException as we tried to start Opera when the Launcher isn't running...");
-    }
-    catch (OperaRunnerException e)
-    {
+    } catch (OperaRunnerException e) {
     }
   }
 
   @Test
-  public void testOperaLauncherRunnerConstructorWithSettings2()
-  {
+  public void testOperaLauncherRunnerConstructorWithSettings2() {
     settings.setRunOperaLauncherFromOperaDriver(true);
     settings.setOperaBinaryArguments("-geometry 1024x768");
     runner = new OperaLauncherRunner(settings);
@@ -146,8 +125,7 @@ public class OperaLauncherRunnerTest
   }
 
   @Test
-  public void testShutdown2()
-  {
+  public void testShutdown2() {
     runner.stopOpera();
     runner.shutdown();
 
@@ -156,8 +134,7 @@ public class OperaLauncherRunnerTest
   }
 
   @Test
-  public void testStartAndStopOperaTenTimesRoundOneStart()
-  {
+  public void testStartAndStopOperaTenTimesRoundOneStart() {
     settings.setOperaBinaryArguments("-geometry 640x480");
     runner = new OperaLauncherRunner(settings);
     runner.startOpera();
@@ -165,134 +142,115 @@ public class OperaLauncherRunnerTest
   }
 
   @Test
-  public void testStartAndStopOperaTenTimesRoundOneStop()
-  {
+  public void testStartAndStopOperaTenTimesRoundOneStop() {
     runner.stopOpera();
     Assert.assertFalse(runner.isOperaRunning());
   }
 
   @Test
-  public void testStartAndStopOperaTenTimesRoundTwoStart()
-  {
+  public void testStartAndStopOperaTenTimesRoundTwoStart() {
     runner.startOpera();
     Assert.assertTrue(runner.isOperaRunning());
   }
 
   @Test
-  public void testStartAndStopOperaTenTimesRoundTwoStop()
-  {
+  public void testStartAndStopOperaTenTimesRoundTwoStop() {
     runner.stopOpera();
     Assert.assertFalse(runner.isOperaRunning());
   }
 
   @Test
-  public void testStartAndStopOperaTenTimesRoundThreeStart()
-  {
+  public void testStartAndStopOperaTenTimesRoundThreeStart() {
     runner.startOpera();
     Assert.assertTrue(runner.isOperaRunning());
   }
 
   @Test
-  public void testStartAndStopOperaTenTimesRoundThreeStop()
-  {
+  public void testStartAndStopOperaTenTimesRoundThreeStop() {
     runner.stopOpera();
     Assert.assertFalse(runner.isOperaRunning());
   }
 
   @Test
-  public void testStartAndStopOperaTenTimesRoundFourStart()
-  {
+  public void testStartAndStopOperaTenTimesRoundFourStart() {
     runner.startOpera();
     Assert.assertTrue(runner.isOperaRunning());
   }
 
   @Test
-  public void testStartAndStopOperaTenTimesRoundFourStop()
-  {
+  public void testStartAndStopOperaTenTimesRoundFourStop() {
     runner.stopOpera();
     Assert.assertFalse(runner.isOperaRunning());
   }
 
   @Test
-  public void testStartAndStopOperaTenTimesRoundFiveStart()
-  {
+  public void testStartAndStopOperaTenTimesRoundFiveStart() {
     runner.startOpera();
     Assert.assertTrue(runner.isOperaRunning());
   }
 
   @Test
-  public void testStartAndStopOperaTenTimesRoundFiveStop()
-  {
+  public void testStartAndStopOperaTenTimesRoundFiveStop() {
     runner.stopOpera();
     Assert.assertFalse(runner.isOperaRunning());
   }
 
   @Test
-  public void testStartAndStopOperaTenTimesRoundSixStart()
-  {
+  public void testStartAndStopOperaTenTimesRoundSixStart() {
     runner.startOpera();
     Assert.assertTrue(runner.isOperaRunning());
   }
 
   @Test
-  public void testStartAndStopOperaTenTimesRoundSixStop()
-  {
+  public void testStartAndStopOperaTenTimesRoundSixStop() {
     runner.stopOpera();
     Assert.assertFalse(runner.isOperaRunning());
   }
 
   @Test
-  public void testStartAndStopOperaTenTimesRoundSevenStart()
-  {
+  public void testStartAndStopOperaTenTimesRoundSevenStart() {
     runner.startOpera();
     Assert.assertTrue(runner.isOperaRunning());
   }
 
   @Test
-  public void testStartAndStopOperaTenTimesRoundSevenStop()
-  {
+  public void testStartAndStopOperaTenTimesRoundSevenStop() {
     runner.stopOpera();
     Assert.assertFalse(runner.isOperaRunning());
   }
 
   @Test
-  public void testStartAndStopOperaTenTimesRoundEightStart()
-  {
+  public void testStartAndStopOperaTenTimesRoundEightStart() {
     runner.startOpera();
     Assert.assertTrue(runner.isOperaRunning());
   }
 
   @Test
-  public void testStartAndStopOperaTenTimesRoundEightStop()
-  {
+  public void testStartAndStopOperaTenTimesRoundEightStop() {
     runner.stopOpera();
     Assert.assertFalse(runner.isOperaRunning());
   }
 
   @Test
-  public void testStartAndStopOperaTenTimesRoundNineStart()
-  {
+  public void testStartAndStopOperaTenTimesRoundNineStart() {
     runner.startOpera();
     Assert.assertTrue(runner.isOperaRunning());
   }
 
   @Test
-  public void testStartAndStopOperaTenTimesRoundNineStop()
-  {
+  public void testStartAndStopOperaTenTimesRoundNineStop() {
     runner.stopOpera();
     Assert.assertFalse(runner.isOperaRunning());
   }
 
   @Test
-  public void testStartAndStopOperaTenTimesRoundTenStart()
-  {
+  public void testStartAndStopOperaTenTimesRoundTenStart() {
     runner.startOpera();
     Assert.assertTrue(runner.isOperaRunning());
   }
 
   @Test
-  public void testStartAndStopOperaTenTimesRoundTenStop()
-  {
+  public void testStartAndStopOperaTenTimesRoundTenStop() {
     runner.stopOpera();
     Assert.assertFalse(runner.isOperaRunning());
     runner.shutdown();

@@ -1,17 +1,14 @@
 package com.opera.core.systems;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNotSame;
+import junit.framework.Assert;
+import org.junit.Test;
 
 import java.io.File;
 import java.lang.reflect.Field;
 import java.util.Collections;
 import java.util.Map;
 
-import junit.framework.Assert;
-
-import org.junit.Test;
+import static org.junit.Assert.*;
 
 public class OperaPathsTest {
   private static OperaPaths paths = new OperaPaths();
@@ -105,7 +102,7 @@ public class OperaPathsTest {
   /**
    * Massive hack to set the environment variables inside this JVM. Used to
    * test if OperaPaths is checking the env vars.
-   *
+   * <p/>
    * http://stackoverflow.com/questions/318239/how-do-i-set-environment-variables-from-java/496849#496849
    *
    * @param newenv The new environment to set

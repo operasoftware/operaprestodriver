@@ -17,44 +17,43 @@
 package com.opera.core.systems;
 
 import junit.framework.Assert;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.WebDriverException;
 
 public class EcmaScriptTest extends TestBase {
 
-    String xpath =
-        ".//input[(not(@type) or (@type!=\"file\" and @type!=\"radio\" and @typ" +
-        "e!=\"checkbox\" and @type!=\"submit\" and @type!=\"reset\" and @type!=\"" +
-        "image\" and @type!=\"button\" and @type!=\"hidden\" and @type!=\"url\" " +
-        "and @type!=\"datetime\" and @type!=\"date\" and @type!=\"month\" and @" +
-        "type!=\"week\" and @type!=\"time\" and @type!=\"datetime-local\" and @" +
-        "type!=\"range\" and @type!=\"color\")) and @class='foo'] | .//textarea" +
-        "[@class='foo']";
+  String xpath =
+    ".//input[(not(@type) or (@type!=\"file\" and @type!=\"radio\" and @typ" +
+      "e!=\"checkbox\" and @type!=\"submit\" and @type!=\"reset\" and @type!=\"" +
+      "image\" and @type!=\"button\" and @type!=\"hidden\" and @type!=\"url\" " +
+      "and @type!=\"datetime\" and @type!=\"date\" and @type!=\"month\" and @" +
+      "type!=\"week\" and @type!=\"time\" and @type!=\"datetime-local\" and @" +
+      "type!=\"range\" and @type!=\"color\")) and @class='foo'] | .//textarea" +
+      "[@class='foo']";
 
-    @Before
-    public void setUp() {
-        driver.navigate().to(
-            "data:text/html;charset=utf-8,%3Cinput%20id%3D%22wrong%22%20class%3" +
-            "D%22foo%22%20%2F%3E%3Cinput%20id%3D%22correct%22%20class%3D%22foo%" +
-            "22%20%2F%3E"
-        );
+  @Before
+  public void setUp() {
+    driver.navigate().to(
+      "data:text/html;charset=utf-8,%3Cinput%20id%3D%22wrong%22%20class%3" +
+        "D%22foo%22%20%2F%3E%3Cinput%20id%3D%22correct%22%20class%3D%22foo%" +
+        "22%20%2F%3E"
+    );
+  }
+
+  @Test
+  public void testXPath() {
+    Exception exception = null;
+
+    try {
+      driver.findElementsByXPath(xpath);
+    } catch (WebDriverException e) {
+      exception = e;
     }
 
-    @Test
-    public void testXPath() {
-        Exception exception = null;
+    Assert.assertNull(exception);
+  }
 
-        try {
-            driver.findElementsByXPath(xpath);
-        } catch (WebDriverException e) {
-            exception = e;
-        }
-
-        Assert.assertNull(exception);
-    }
-
-    // TODO: Add more tests for actually checking that it returns a list of elements.
+  // TODO: Add more tests for actually checking that it returns a list of elements.
 
 }

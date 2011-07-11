@@ -1,17 +1,11 @@
 package com.opera.core.systems;
 
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Rule;
-import org.junit.Test;
+import com.opera.core.systems.scope.internal.OperaIntervals;
+import com.opera.core.systems.settings.OperaDriverSettings;
+import org.junit.*;
 import org.junit.rules.MethodRule;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.Statement;
-
-import com.opera.core.systems.scope.internal.OperaIntervals;
-import com.opera.core.systems.settings.OperaDriverSettings;
 
 public class IdleTest extends TestBase {
   // Timeout vars for every test
@@ -26,11 +20,12 @@ public class IdleTest extends TestBase {
     public Statement apply(Statement base, FrameworkMethod method, Object target) {
       // If Idle available return the test
       if (driver.isOperaIdleAvailable()) return base;
-      // otherwise return an empty statement -> test doesn't run
+        // otherwise return an empty statement -> test doesn't run
       else return new Statement() {
-          @Override
-          public void evaluate() throws Throwable {}
-        };
+        @Override
+        public void evaluate() throws Throwable {
+        }
+      };
     }
   };
 
@@ -41,7 +36,9 @@ public class IdleTest extends TestBase {
 
     driver = new TestOperaDriver(settings);
     initFixtures();
-  };
+  }
+
+  ;
 
   @Before
   public void setUp() {
@@ -55,8 +52,13 @@ public class IdleTest extends TestBase {
     Assert.assertTrue("Took less than Idle timeout", end - start < timeout);
   }
 
-  private void start() { start = System.currentTimeMillis(); }
-  private void stop() { end = System.currentTimeMillis(); }
+  private void start() {
+    start = System.currentTimeMillis();
+  }
+
+  private void stop() {
+    end = System.currentTimeMillis();
+  }
 
   @Test
   public void testGet() throws Exception {

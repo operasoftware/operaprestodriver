@@ -1,14 +1,12 @@
 package com.opera.core.systems;
 
-import java.io.File;
-
+import com.opera.core.systems.runner.OperaRunner;
+import com.opera.core.systems.settings.OperaDriverSettings;
 import junit.framework.Assert;
-
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 
-import com.opera.core.systems.runner.OperaRunner;
-import com.opera.core.systems.settings.OperaDriverSettings;
+import java.io.File;
 
 abstract public class TestBase {
   protected static TestOperaDriver driver;
@@ -45,7 +43,7 @@ abstract public class TestBase {
 
   // / Get the URL of the given fixture file
   protected String fixture(String file) {
-    return "file://localhost"+fixture_dir + file;
+    return "file://localhost" + fixture_dir + file;
   }
 
   // / Navigate to the given fixture file

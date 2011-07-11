@@ -1,23 +1,23 @@
 package com.opera.core.systems;
 
+import com.opera.core.systems.settings.OperaDriverSettings;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.opera.core.systems.settings.OperaDriverSettings;
-
-public class OperaDriverTest extends TestBase
-{
+public class OperaDriverTest extends TestBase {
   // Replace the TestBase setup and teardown so that we don't launch opera
   @BeforeClass
-  public static void setUpBeforeClass() throws Exception {}
+  public static void setUpBeforeClass() throws Exception {
+  }
+
   @AfterClass
-  public static void tearDownAfterClass() throws Exception {}
+  public static void tearDownAfterClass() throws Exception {
+  }
 
   @Test
-  public void testWithoutSettingsObject()
-  {
+  public void testWithoutSettingsObject() {
     driver = new TestOperaDriver();
 
     Assert.assertNotNull(driver);
@@ -36,42 +36,36 @@ public class OperaDriverTest extends TestBase
   }
 
   @Test
-  public void testDefaultWindowCount()
-  {
+  public void testDefaultWindowCount() {
     driver = new TestOperaDriver();
     Assert.assertTrue(driver.getWindowCount() >= 1);
   }
 
   @Test
-  public void testGetWindowHandle()
-  {
+  public void testGetWindowHandle() {
     driver.get("http://t/core/standards/dom0/link/pathname/002.html");
     Assert.assertEquals("URL with explicit pathname and hash", driver.getWindowHandle());
   }
 
   @Test
-  public void testGetTitle()
-  {
+  public void testGetTitle() {
     Assert.assertEquals("URL with explicit pathname and hash", driver.getTitle());
   }
 
   @Test
-  public void testGetText()
-  {
+  public void testGetText() {
     driver.get("http://t/core/standards/quotes/none.html");
     Assert.assertEquals("you should see nothing below", driver.findElementByTagName("body").getText().trim());
   }
 
   @Test
-  public void testGetURL()
-  {
+  public void testGetURL() {
     driver.get("www.ebay.co.uk");
     Assert.assertTrue(driver.getCurrentUrl().indexOf("www.ebay.co.uk") > 0);
   }
 
   @Test
-  public void testGetURL2()
-  {
+  public void testGetURL2() {
     driver.get("www.nyt.com", 15000);
     Assert.assertTrue(driver.getCurrentUrl().indexOf("www.nytimes.com") > 0);
   }
@@ -104,8 +98,7 @@ public class OperaDriverTest extends TestBase
   }
 
   @Test
-  public void testOperaDriverShutdown()
-  {
+  public void testOperaDriverShutdown() {
     // leave with a fast loading page
     driver.get("about:blank");
     driver.quit();

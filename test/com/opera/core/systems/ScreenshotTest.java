@@ -1,22 +1,16 @@
 package com.opera.core.systems;
 
+import com.opera.core.systems.model.ScreenShotReply;
+import org.junit.*;
+import org.openqa.selenium.OutputType;
+
+import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.zip.Adler32;
-
-import javax.imageio.ImageIO;
-
-import org.junit.AfterClass;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.openqa.selenium.OutputType;
-
-import com.opera.core.systems.model.ScreenShotReply;
 
 public class ScreenshotTest extends TestBase {
 
@@ -42,7 +36,7 @@ public class ScreenshotTest extends TestBase {
   }
 
   private static int digest(String filename) throws IOException {
-    FileInputStream fis= new FileInputStream(filename);
+    FileInputStream fis = new FileInputStream(filename);
     byte[] data = new byte[fis.available()];
 
     int i = 0;
@@ -124,14 +118,14 @@ public class ScreenshotTest extends TestBase {
     byte[] png = reply.getPng();
 
     Assert.assertTrue("PNG magic bytes match",
-       png[0] == (byte) 0x89 &&
-       png[1] == (byte) 0x50 &&
-       png[2] == (byte) 0x4E &&
-       png[3] == (byte) 0x47 &&
-       png[4] == (byte) 0x0D &&
-       png[5] == (byte) 0x0A &&
-       png[6] == (byte) 0x1A &&
-       png[7] == (byte) 0x0A
+      png[0] == (byte) 0x89 &&
+        png[1] == (byte) 0x50 &&
+        png[2] == (byte) 0x4E &&
+        png[3] == (byte) 0x47 &&
+        png[4] == (byte) 0x0D &&
+        png[5] == (byte) 0x0A &&
+        png[6] == (byte) 0x1A &&
+        png[7] == (byte) 0x0A
     );
   }
 
@@ -162,7 +156,7 @@ public class ScreenshotTest extends TestBase {
   }
 
   // Can cause problems on Windows, so moved to last
-  @Ignore(value="We don't support taking single element screenshots of plugins")
+  @Ignore(value = "We don't support taking single element screenshots of plugins")
   @Test
   public void testFlash() throws Exception {
     getFixture("flash.html");
@@ -189,7 +183,7 @@ public class ScreenshotTest extends TestBase {
   }
 
   @Test
-  @Ignore(value="Opera problem. Areas outside current viewport are black.")
+  @Ignore(value = "Opera problem. Areas outside current viewport are black.")
   public void testFullScreenshot() throws Exception {
     getFixture("tall.html");
     File file = driver.getScreenshotAs(OutputType.FILE);
