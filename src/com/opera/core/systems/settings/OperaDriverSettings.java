@@ -13,14 +13,13 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-package com.opera.core.systems.settings;
 
+package com.opera.core.systems.settings;
 
 /**
  * Stores settings for OperaDriver.
  *
  * @author Deniz Turkoglu
- *
  */
 public class OperaDriverSettings {
 
@@ -41,7 +40,6 @@ public class OperaDriverSettings {
 
   private boolean autostart = true;
 
-  // Generated getters and setters:
   public boolean doRunOperaLauncherFromOperaDriver() {
     return runOperaLauncherFromOperaDriver;
   }
@@ -51,11 +49,11 @@ public class OperaDriverSettings {
    * <code>true</code>. Set to <code>false</code> if you will start Opera
    * launcher manually.
    *
-   * @param runOperaLauncherFromOperaDriver <code>true</code> to start Opera
-   *          launcher, <code>false</code> to not.
+   * @param runOperaLauncherFromOperaDriver
+   *         <code>true</code> to start Opera
+   *         launcher, <code>false</code> to not.
    */
-  public void setRunOperaLauncherFromOperaDriver(
-      boolean runOperaLauncherFromOperaDriver) {
+  public void setRunOperaLauncherFromOperaDriver(boolean runOperaLauncherFromOperaDriver) {
     this.runOperaLauncherFromOperaDriver = runOperaLauncherFromOperaDriver;
   }
 
@@ -66,7 +64,7 @@ public class OperaDriverSettings {
   /**
    * Set the port for Opera launcher to listen on. Defaults to port 9999.
    *
-   * @param operaLauncherPort Port number to listen on
+   * @param operaLauncherPort port number to listen on
    */
   public void setOperaLauncherListeningPort(int operaLauncherPort) {
     this.operaLauncherListeningPort = operaLauncherPort;
@@ -79,7 +77,7 @@ public class OperaDriverSettings {
   /**
    * Set the location of the Opera launcher binary.
    *
-   * @param operaLauncherBinary The absolute path to the Opera launcher.
+   * @param operaLauncherBinary the absolute path to the Opera launcher.
    */
   public void setOperaLauncherBinary(String operaLauncherBinary) {
     this.operaLauncherBinary = operaLauncherBinary;
@@ -92,7 +90,7 @@ public class OperaDriverSettings {
   /**
    * Set the path to the of Opera.
    *
-   * @param operaBinaryLocation The absolute path to Opera.
+   * @param operaBinaryLocation the absolute path to Opera.
    */
   public void setOperaBinaryLocation(String operaBinaryLocation) {
     this.operaBinaryLocation = operaBinaryLocation;
@@ -104,16 +102,16 @@ public class OperaDriverSettings {
 
   /**
    * Set the arguments that will be passed to Opera.
-   *
+   * <p/>
    * For example: <code>opera -nosession opera:debug</code> to start without
    * restoring a session (on *nix systems), and load the
    * <code>opera:debug</code> page in a tab.
    *
-   * @param operaBinaryArguments The arguments to pass, separated by spaces.
+   * @param operaBinaryArguments the arguments to pass, separated by spaces.
    */
   public void setOperaBinaryArguments(String operaBinaryArguments) {
     if (operaBinaryArguments == null) {
-        operaBinaryArguments = "";
+      operaBinaryArguments = "";
     }
 
     this.operaBinaryArguments = operaBinaryArguments;
@@ -128,7 +126,7 @@ public class OperaDriverSettings {
    * e.g. passing <code>1</code> will result in the command line option
    * <code>-display :1</code> being passed.
    *
-   * @param operaLauncherXvfbDisplay The X screen number to start Opera on.
+   * @param operaLauncherXvfbDisplay the X screen number to start Opera on.
    */
   public void setOperaLauncherXvfbDisplay(Integer operaLauncherXvfbDisplay) {
     this.operaLauncherXvfbDisplay = operaLauncherXvfbDisplay;
@@ -152,8 +150,8 @@ public class OperaDriverSettings {
   }
 
   /**
-   * @deprecated
    * @param noRestart
+   * @deprecated
    */
   @Deprecated
   public void setNoRestart(boolean noRestart) {
@@ -161,8 +159,8 @@ public class OperaDriverSettings {
   }
 
   /**
-   * @deprecated
    * @return
+   * @deprecated
    */
   @Deprecated
   public boolean getNoRestart() {
