@@ -107,8 +107,9 @@ public class OperaDriver extends RemoteWebDriver implements WebDriver,
   protected ICoreUtils coreUtils;
   protected ICookieManager cookieManager;
 
-  private ScopeServices services;
-  private ScopeActions actionHandler;
+  protected ScopeServices services;
+  protected ScopeActions actionHandler;
+
   private OperaMouse mouse;
   private OperaKeyboard keyboard;
 
