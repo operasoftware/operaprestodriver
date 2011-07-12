@@ -88,10 +88,7 @@ import com.opera.core.systems.scope.services.IPrefs;
 import com.opera.core.systems.scope.services.IWindowManager;
 import com.opera.core.systems.settings.OperaDriverSettings;
 
-public class OperaDriver extends RemoteWebDriver implements WebDriver,
-  FindsByLinkText, FindsById, FindsByXPath, FindsByName, FindsByTagName,
-  FindsByClassName, FindsByCssSelector, SearchContext, JavascriptExecutor,
-  TakesScreenshot, HasInputDevices {
+public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
   /*
    * These are "protected" and not "private" so that we can extend this class
