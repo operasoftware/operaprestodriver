@@ -95,7 +95,7 @@ public class ScopeServices implements IConnectionHandler {
 
   private AtomicInteger tagCounter;
 
-  private String selftestOutput = "";
+  private StringBuilder selftestOutput;
 
   public Map<String, String> getVersions() {
     return versions;
@@ -198,6 +198,7 @@ public class ScopeServices implements IConnectionHandler {
     this.versions = versions;
     tagCounter = new AtomicInteger();
     stpThread = new StpThread((int) OperaIntervals.SERVER_PORT.getValue(), this, new UmsEventHandler(this), manualConnect);
+    selftestOutput = new StringBuilder();
   }
 
   public void init() {
@@ -527,12 +528,12 @@ public class ScopeServices implements IConnectionHandler {
   }
 
   public void onSelftestOutput(SelftestOutput output) {
-    selftestOutput = selftestOutput + output.getOutput();
+    selftestOutput = selftestOutput.append(output.getOutput());
   }
 
   public void onSelftestDone() {
-    List<SelftestResult> results = parseSelftests(selftestOutput);
-    selftestOutput = "";
+    List<SelftestResult> results = parseSelftests(selftestOutput.toString());
+    selftestOutput = new StringBuilder();
     waitState.onSelftestDone(results);
   }
 
