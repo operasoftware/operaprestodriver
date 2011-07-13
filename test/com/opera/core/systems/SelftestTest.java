@@ -18,7 +18,10 @@ public class SelftestTest extends TestBase {
       List<SelftestResult> results = driver.selftest(Arrays.asList("about"), 30000);
       Assert.assertNotNull("Running selftests doesn't blow up, returns non-null result.", results);
     }
+  }
 
+  @Test
+  public void stringification() {
     SelftestResult pass = new SelftestResult("tag", "description", ResultType.PASS);
     SelftestResult fail = new SelftestResult("tag", "description", ResultType.FAIL);
     SelftestResult skip = new SelftestResult("tag", "description", ResultType.SKIP);
