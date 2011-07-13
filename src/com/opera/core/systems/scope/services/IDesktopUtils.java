@@ -16,6 +16,12 @@ limitations under the License.
 
 package com.opera.core.systems.scope.services;
 
+/**
+*
+* @author Adam Minchinton, Karianne Ekern
+*
+*/
+
 public interface IDesktopUtils {
   void init();
 

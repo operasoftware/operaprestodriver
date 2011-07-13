@@ -26,12 +26,20 @@ import java.util.Map;
  *
  */
 public enum DesktopWindowManagerCommand implements ICommand {
-  GET_ACTIVE_WINDOW(1), LIST_WINDOWS(2), LIST_QUICK_WIDGETS(3), GET_QUICK_WIDGET(
-      4), WINDOW_SHOWN(5), // event
+  GET_ACTIVE_WINDOW(1), 
+  LIST_WINDOWS(2), 
+  LIST_QUICK_WIDGETS(3), 
+  GET_QUICK_WIDGET(4), 
+  WINDOW_SHOWN(5), // event
   WINDOW_UPDATED(6), // event
   WINDOW_CLOSED(7), // event
   WINDOW_ACTIVATED(8), // event
   WINDOW_LOADED(9), // event
+  LIST_QUICK_MENUS(10),
+  MENU_SHOWN(11), // event
+  MENU_CLOSED(12), // event
+  PRESS_QUICK_MENU(13),
+  MENU_PRESSED(14), // event
   DEFAULT(-1);
 
   private int code;

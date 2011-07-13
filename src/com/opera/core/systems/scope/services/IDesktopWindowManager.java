@@ -18,10 +18,18 @@ package com.opera.core.systems.scope.services;
 
 import java.util.List; //import java.util.concurrent.atomic.AtomicInteger;
 
+import com.opera.core.systems.QuickMenu;
+import com.opera.core.systems.QuickMenuItem;
 import com.opera.core.systems.QuickWidget;
 import com.opera.core.systems.QuickWindow;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo.QuickWidgetType;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearch.QuickWidgetSearchType;
+
+/**
+*
+* @author Adam Minchinton, Karianne Ekern
+*
+*/
 
 public interface IDesktopWindowManager {
 
@@ -143,4 +151,107 @@ public interface IDesktopWindowManager {
 	 * @return QuickWindow
 	 */
 	QuickWindow getQuickWindowByName(String name);
+
+	void pressQuickMenuItem(String menuItemText, boolean popMenu);
+
+	/**
+	 * Gets the menu with name name.
+	 *
+	 * @param name menu name
+	 * @return QuickMenu
+	 */
+	QuickMenu getQuickMenu(String menuName);
+
+	/**
+	 * Gets the menu with the action specified, if any
+	 * 
+	 * @param action of the menuitem to search for
+	 * @return QuickMenuItem with action, or null if the item doesn't exist
+	 */
+	QuickMenuItem getQuickMenuItemByAction(String action);
+
+	/**
+	 * Gets the menu with the text specified, if any
+	 * 
+	 * @param text of the menuitem to search for
+	 * @return QuickMenuItem with the given text, or null if no such item exists
+	 */
+	QuickMenuItem getQuickMenuItemByText(String text);
+
+	/**
+	 * Gets the menu item with the given position in the menu with name menuName
+	 * 
+	 * @param row the row of the item, counting from zero, and including both normal
+	 *                items and menu separators
+	 * @param parentName name of the menu to lookup the menuitem in
+	 * @return QuickMenuItem, or null if the item doesn't exist
+	 */
+	QuickMenuItem getQuickMenuItemByPosition(int row, String menuName);
+
+	/**
+	 * Gets the menu item with the given accelerator key in the menu with name menuName
+	 * 
+	 * @param key the shortcut key of the menuitem to search for (the character that's underlined/marked
+	 *            in the menuitem text)
+	 * @param parentName name of the menu of the menuitem 
+	 * @return QuickMenuItem or null if the item doesnt exist
+	 */
+	QuickMenuItem getQuickMenuItemByAccKey(String key, String menuName);
+
+	/**
+	 * Gets the Menu item with the given shortcut
+	 * 
+	 * @param shortcut string representation of the shortcut of the menuitem (i.e. "Ctrl+O")
+	 * @return QuickMenuItem, or null if the item doesnt exist
+	 */
+	QuickMenuItem getQuickMenuItemByShortcut(String shortcut);
+
+	/**
+	 * Gets the menu item that opens the submenu
+	 * 
+	 * @param submenu the name of the submenu the menuitem opens when its selected/clicked
+	 * @return QuickMenuItem or null if the item doesn't exist
+	 */
+	QuickMenuItem getQuickMenuItemBySubmenu(String submenu);
+
+	/**
+	 * 
+	 * @return list of all menus that are open (including menubar(s))
+	 */
+	List<QuickMenu> getQuickMenuList();
+
+	/**
+	 * 
+	 * @return list containing all menuitems in open menus (including menubar(s))
+	 */
+	List<QuickMenuItem> getQuickMenuItemList();
+
+	/**
+	 * 
+	 * @param name name of the item. 
+	 *         This is either the name of the action the item executes when selected
+	 *         The name of the submenu the item opens when selected
+	 *         "Separator" for items that are separators
+	 * @return
+	 */
+	QuickMenuItem getQuickMenuItemByName(String name);
+
+	/**
+	 * 
+	 * @param menuName name of the menu (as specified in standard_menu.ini)
+	 * @param windowId id of the window the menu is attaced to
+	 *      (Note. Only makes sense for menubar)
+	 * @return QuickMenu with name menuName in windowId if it exists, else null
+	 */
+	QuickMenu getQuickMenu(String menuName, int windowId);
+
+	/**
+	 * 
+	 * @param name Name of the menuItem
+	 * @param window_id windowId of the window the menu of the item is in
+	 *  (note: only makes sense for menubar items)
+	 * @return
+	 */
+	QuickMenuItem getQuickMenuItemByName(String name, int window_id);
+	
 }

@@ -26,6 +26,10 @@ import com.opera.core.systems.scope.WindowManagerCommand;
 import com.opera.core.systems.scope.handlers.AbstractEventHandler;
 import com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessage;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo;
+import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID;
+import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo;
+import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemID;
+import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo;
 import com.opera.core.systems.scope.protos.EcmascriptProtos.ReadyStateChange;
 import com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeID;
 import com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeInfo;
@@ -123,6 +127,24 @@ public class UmsEventParser {
         DesktopWindowInfo info_loaded = loadedDWBuilder.build();
         eventHandler.onDesktopWindowLoaded(info_loaded);
         break;
+      case MENU_SHOWN:
+    	QuickMenuInfo.Builder shownQMBuilder = QuickMenuInfo.newBuilder();
+    	buildPayload(event, shownQMBuilder);
+    	QuickMenuInfo menuInfoShown = shownQMBuilder.build();
+    	eventHandler.onQuickMenuShown(menuInfoShown);
+    	break;
+      case MENU_CLOSED:
+    	QuickMenuID.Builder closedQMBuilder = QuickMenuID.newBuilder();
+      	buildPayload(event, closedQMBuilder);
+      	QuickMenuID menuId = closedQMBuilder.build();
+      	eventHandler.onQuickMenuClosed(menuId);
+      	break;
+      case MENU_PRESSED:
+    	QuickMenuItemID.Builder pressedQMIBuilder = QuickMenuItemID.newBuilder();
+      	buildPayload(event, pressedQMIBuilder);
+      	QuickMenuItemID menuItemID = pressedQMIBuilder.build();
+      	eventHandler.onQuickMenuItemPressed(menuItemID);
+      	break;
       default:
         break;
       }
