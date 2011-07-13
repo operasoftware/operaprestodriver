@@ -1,16 +1,7 @@
 package com.opera.core.systems;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Iterator;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.NotFoundException;
-import org.openqa.selenium.WebDriverException;
-import org.openqa.selenium.WebElement;
-
-import com.opera.core.systems.OperaDriver;
-import com.opera.core.systems.OperaWebElement;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo.QuickWidgetType;
 import com.opera.core.systems.scope.protos.SystemInputProtos.ModifierPressed;
 import com.opera.core.systems.scope.protos.SystemInputProtos.MouseInfo.MouseButton;
@@ -60,7 +51,7 @@ class RunDriver {
 	        QuickWindow qw = driver.findWindowByName("Document Window");
 	        QuickWidget address_bar = driver.findWidgetByName(QuickWidgetType.ADDRESSFIELD, qw.getWindowID(), "tba_address_field");
 
-			ArrayList mods = new ArrayList();
+			ArrayList<ModifierPressed> mods = new ArrayList<ModifierPressed>();
 			mods.add(ModifierPressed.NONE);
 
 			address_bar.click(MouseButton.RIGHT, 1, mods);
