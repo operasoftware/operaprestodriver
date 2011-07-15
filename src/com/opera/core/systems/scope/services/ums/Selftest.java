@@ -3,6 +3,8 @@ package com.opera.core.systems.scope.services.ums;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import com.opera.core.systems.ScopeServices;
 import com.opera.core.systems.scope.AbstractService;
@@ -36,8 +38,16 @@ public class Selftest extends AbstractService implements ISelftest {
 		logger.fine(String.format("Selftest response: %s", response));
 	}
 
+	static private Pattern errorPattern = Pattern.compile("Warning: Pattern '([^']+)' did not match any tests\n" +
+			                                              "Warning: There is no module named '([^']+)'\n");
 	static public List<SelftestResult> parseSelftests(String output) {
 		List<SelftestResult> results = new ArrayList<SelftestResult>();
+
+		// Check for non-existent module.
+		Matcher matcher = errorPattern.matcher(output);
+		if(matcher.matches()) {
+			return null;
+		}
 
 		String[] lines = output.split("\\n");
 		for(String line: lines) {

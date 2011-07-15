@@ -15,8 +15,11 @@ public class SelftestTest extends TestBase {
   public void testSelftests() {
     String product = driver.getProduct();
     if(product.equals("core-gogi")) {
-      List<SelftestResult> results = driver.selftest(Arrays.asList("about"), 30000);
+      List<SelftestResult> results;
+      results = driver.selftest(Arrays.asList("about"), 30000);
       Assert.assertNotNull("Running selftests doesn't blow up, returns non-null result.", results);
+      results = driver.selftest(Arrays.asList("nosuchmodule"), 30000);
+      Assert.assertNull("Running selftests for non-existent module returns null", results);
     }
   }
 
