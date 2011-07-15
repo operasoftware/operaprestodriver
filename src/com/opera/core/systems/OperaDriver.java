@@ -76,6 +76,7 @@ import com.opera.core.systems.scope.services.IEcmaScriptDebugger;
 import com.opera.core.systems.scope.services.IOperaExec;
 import com.opera.core.systems.scope.services.IPrefs;
 import com.opera.core.systems.scope.services.IWindowManager;
+import com.opera.core.systems.scope.services.ISelftest.SelftestResult;
 import com.opera.core.systems.settings.OperaDriverSettings;
 
 public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
@@ -223,6 +224,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     versions.put("core", "1.0");
     versions.put("cookie-manager", "1.0");
     versions.put("prefs", "1.0");
+    versions.put("selftest", "1.1");
     return versions;
   }
 
@@ -1266,6 +1268,10 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
   public Object executeAsyncScript(String script, Object... args) {
     throw new UnsupportedOperationException();
+  }
+
+  public List<SelftestResult> selftest(List<String> modules, long timeout) {
+    return services.selftest(modules, timeout);
   }
 
   private class OperaKeyboard implements Keyboard {

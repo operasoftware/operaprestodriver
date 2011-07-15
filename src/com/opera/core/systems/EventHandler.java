@@ -23,6 +23,7 @@ import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemID;
 import com.opera.core.systems.scope.protos.EcmascriptProtos.ReadyStateChange;
 import com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeInfo;
+import com.opera.core.systems.scope.protos.SelftestProtos.SelftestOutput;
 import com.opera.core.systems.scope.protos.WmProtos.WindowInfo;
 
 /**
@@ -165,4 +166,12 @@ public class EventHandler extends AbstractEventHandler {
 	
   }
  
+  public void onSelftestOutput(SelftestOutput output) {
+    services.onSelftestOutput(output);
+  }
+
+  @Override
+  public void onSelftestDone() {
+    services.onSelftestDone();
+  }
 }

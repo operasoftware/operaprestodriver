@@ -23,6 +23,7 @@ import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemID;
 import com.opera.core.systems.scope.protos.EcmascriptProtos.ReadyStateChange;
 import com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeInfo;
+import com.opera.core.systems.scope.protos.SelftestProtos.SelftestOutput;
 import com.opera.core.systems.scope.protos.WmProtos.WindowInfo;
 
 /**
@@ -151,6 +152,10 @@ public abstract class AbstractEventHandler {
    * @param menuInfoShown
    */
   public abstract void onQuickMenuItemPressed(QuickMenuItemID menuItemID);
+
+  public abstract void onSelftestOutput(SelftestOutput output);
+
+  public abstract void onSelftestDone();
 
   public abstract void onHttpResponse(int responseCode);
 

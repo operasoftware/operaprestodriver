@@ -44,6 +44,7 @@ import com.opera.core.systems.scope.protos.ScopeProtos.ClientInfo;
 import com.opera.core.systems.scope.protos.ScopeProtos.HostInfo;
 import com.opera.core.systems.scope.protos.ScopeProtos.ServiceResult;
 import com.opera.core.systems.scope.protos.ScopeProtos.ServiceSelection;
+import com.opera.core.systems.scope.protos.SelftestProtos.SelftestOutput;
 import com.opera.core.systems.scope.protos.UmsProtos.Command;
 import com.opera.core.systems.scope.protos.UmsProtos.Response;
 import com.opera.core.systems.scope.services.ICookieManager;
@@ -54,6 +55,9 @@ import com.opera.core.systems.scope.services.IEcmaScriptDebugger;
 import com.opera.core.systems.scope.services.IOperaExec;
 import com.opera.core.systems.scope.services.IPrefs;
 import com.opera.core.systems.scope.services.IWindowManager;
+import com.opera.core.systems.scope.services.ISelftest;
+import com.opera.core.systems.scope.services.ISelftest.SelftestResult;
+import com.opera.core.systems.scope.services.ums.Selftest;
 import com.opera.core.systems.scope.services.ums.SystemInputManager;
 import com.opera.core.systems.scope.services.ums.UmsServices;
 import com.opera.core.systems.scope.stp.StpConnection;
@@ -80,6 +84,7 @@ public class ScopeServices implements IConnectionHandler {
   private SystemInputManager systemInputManager;
   private HostInfo hostInfo;
   private ICookieManager cookieManager;
+  private ISelftest selftest;
 
   private Map<String, String> versions;
 
@@ -92,6 +97,8 @@ public class ScopeServices implements IConnectionHandler {
   private List<String> listedServices;
 
   private AtomicInteger tagCounter;
+
+  private StringBuilder selftestOutput;
 
   public Map<String, String> getVersions() {
     return versions;
@@ -173,6 +180,15 @@ public class ScopeServices implements IConnectionHandler {
     this.cookieManager = cookieManager;
   }
 
+  public ISelftest getSelftest() {
+    return selftest;
+  }
+
+  public void setSelftest(ISelftest selftest) {
+    this.selftest = selftest;
+  }
+
+
   /**
    * Creates the scope server on specified address and port Enables the required
    * services for webdriver
@@ -185,6 +201,7 @@ public class ScopeServices implements IConnectionHandler {
     this.versions = versions;
     tagCounter = new AtomicInteger();
     stpThread = new StpThread((int) OperaIntervals.SERVER_PORT.getValue(), this, new UmsEventHandler(this), manualConnect);
+    selftestOutput = new StringBuilder();
   }
 
   public void init() {
@@ -215,6 +232,9 @@ public class ScopeServices implements IConnectionHandler {
 
     if (versions.containsKey("desktop-utils"))
       wantedServices.add("desktop-utils");
+
+    if (versions.containsKey("selftest"))
+      wantedServices.add("selftest");
 
     //wantedServices.add("console-logger");
     //wantedServices.add("http-logger");
@@ -524,6 +544,21 @@ public class ScopeServices implements IConnectionHandler {
   public void onOperaIdle() {
     logger.fine("Got Opera Idle event!");
     waitState.onOperaIdle();
+  }
+
+  public void onSelftestOutput(SelftestOutput output) {
+    selftestOutput = selftestOutput.append(output.getOutput());
+  }
+
+  public void onSelftestDone() {
+    String results = selftestOutput.toString();
+    selftestOutput = new StringBuilder();
+    waitState.onSelftestDone(results);
+  }
+
+  public List<SelftestResult> selftest(List<String> modules, long timeout) {
+    selftest.runSelftests(modules);
+    return Selftest.parseSelftests(waitState.waitForSelftestDone(timeout));
   }
 
   public void waitForWindowLoaded(int activeWindowId, long timeout) {

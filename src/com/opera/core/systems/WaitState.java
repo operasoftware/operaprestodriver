@@ -70,7 +70,8 @@ public class WaitState {
     /* sent when a http request is fired */
     EVENT_QUICK_MENU_SHOWN, /* Quick menu shown */
     EVENT_QUICK_MENU_CLOSED, /* Quick menu was closed */
-    EVENT_QUICK_MENU_ITEM_PRESSED /* Quick menu item was pressed */
+    EVENT_QUICK_MENU_ITEM_PRESSED, /* Quick menu item was pressed */
+    EVENT_SELFTEST_DONE
   }
 
   private class ResultItem {
@@ -87,6 +88,7 @@ public class WaitState {
 
     // store the data for now, but it seems
     // wasteful
+    String selftestResults;
 
     public ResultItem(WebDriverException ex) {
       waitResult = WaitResult.EXCEPTION;
@@ -146,6 +148,11 @@ public class WaitState {
       logger.fine("EVENT: " + waitResult.toString() + ", data=" + data);
     }
 
+    public ResultItem(String results) {
+      waitResult = WaitResult.EVENT_SELFTEST_DONE;
+      selftestResults = results;
+    }
+
     public boolean isEventToWaitFor() {
       switch (waitResult) {
       case EVENT_DESKTOP_WINDOW_ACTIVATED:
@@ -156,6 +163,7 @@ public class WaitState {
       case EVENT_QUICK_MENU_SHOWN:
       case EVENT_QUICK_MENU_CLOSED:
       case EVENT_QUICK_MENU_ITEM_PRESSED:
+      case EVENT_SELFTEST_DONE:
         return true;
       }
       return false;
@@ -171,7 +179,7 @@ public class WaitState {
 
   enum ResponseType {
     HANDSHAKE, RESPONSE, WINDOW_LOADED, REQUEST_FIRED, OPERA_IDLE, DESKTOP_WINDOW_SHOWN, DESKTOP_WINDOW_UPDATED, DESKTOP_WINDOW_ACTIVATED, DESKTOP_WINDOW_CLOSED, DESKTOP_WINDOW_LOADED,
-    QUICK_MENU_SHOWN, QUICK_MENU_CLOSED, QUICK_MENU_ITEM_PRESSED;
+    QUICK_MENU_SHOWN, QUICK_MENU_CLOSED, QUICK_MENU_ITEM_PRESSED, SELFTEST_DONE;
   }
 
   public WaitState() {
@@ -333,6 +341,14 @@ public class WaitState {
 		  events.add(new ResultItem(WaitResult.EVENT_QUICK_MENU_ITEM_PRESSED, menuItemID));
 		  lock.notify();
 	  }
+  }
+
+  void onSelftestDone(String results) {
+    synchronized (lock) {
+       logger.fine("Event: onSelftestDone");
+       events.add(new ResultItem(results));
+       lock.notify();
+     }
   }
 
   private ResultItem getResult() {
@@ -575,6 +591,11 @@ public class WaitState {
           logger.finest("RECV EVENT_OPERA_IDLE!");
           if (result.data == match && type == ResponseType.OPERA_IDLE) return null;
           break;
+        case EVENT_SELFTEST_DONE:
+          // TODO:
+          logger.finest("RECV EVENT_SELFTEST_DONE");
+          if(type == ResponseType.SELFTEST_DONE) return result;
+          break;
         }
       }
     }
@@ -717,5 +738,11 @@ public class WaitState {
 	  return "";
   }
   
-  
+  public String waitForSelftestDone(long timeout) {
+    ResultItem item = waitAndParseResult(timeout, 0, null, ResponseType.SELFTEST_DONE);
+    if (item != null) {
+      return item.selftestResults;
+    }
+    return null;
+  }
 }
