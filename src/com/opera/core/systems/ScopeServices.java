@@ -53,8 +53,8 @@ import com.opera.core.systems.scope.services.IOperaExec;
 import com.opera.core.systems.scope.services.IPrefs;
 import com.opera.core.systems.scope.services.IWindowManager;
 import com.opera.core.systems.scope.services.ISelftest;
-import com.opera.core.systems.scope.services.ISelftest.ResultType;
 import com.opera.core.systems.scope.services.ISelftest.SelftestResult;
+import com.opera.core.systems.scope.services.ums.Selftest;
 import com.opera.core.systems.scope.services.ums.SystemInputManager;
 import com.opera.core.systems.scope.services.ums.UmsServices;
 import com.opera.core.systems.scope.stp.StpConnection;
@@ -532,54 +532,14 @@ public class ScopeServices implements IConnectionHandler {
   }
 
   public void onSelftestDone() {
-    List<SelftestResult> results = parseSelftests(selftestOutput.toString());
+    String results = selftestOutput.toString();
     selftestOutput = new StringBuilder();
     waitState.onSelftestDone(results);
   }
 
   public List<SelftestResult> selftest(List<String> modules, long timeout) {
     selftest.runSelftests(modules);
-    return waitState.waitForSelftestDone(timeout);
-  }
-
-  private List<SelftestResult> parseSelftests(String output) {
-    List<SelftestResult> results = new ArrayList<SelftestResult>();
-
-    String[] lines = output.split("\\n");
-    for(String line: lines) {
-      /* Each line has the following format:
-       * tag:description result skipWhy
-       *
-       * result is PASS, FAIL, or SKIP. skipWhy is present only for skipped
-       * tests.
-       */
-      String[] pieces          = line.split("\\t");
-      String tagAndDescription = pieces[0];
-      String resultString      = pieces[1];
-      String reason            = pieces.length > 2? pieces[2] : null;
-
-      String[] otherPieces = tagAndDescription.split(":", 2);
-      String tag           = otherPieces[0];
-      String description   = otherPieces[1];
-
-      ResultType result;
-      if(resultString.equals("PASS")) {
-        result = ResultType.PASS;
-      }
-      else if(resultString.equals("FAIL")) {
-        result = ResultType.FAIL;
-      }
-      else if(resultString.equals("SKIP")) {
-        result = ResultType.SKIP;
-      }
-      else {
-        throw new RuntimeException(String.format("Unknown test result %s", resultString));
-      }
-
-      results.add(new SelftestResult(tag, description, result, reason));
-    }
-
-    return results;
+    return Selftest.parseSelftests(waitState.waitForSelftestDone(timeout));
   }
 
   public void waitForWindowLoaded(int activeWindowId, long timeout) {

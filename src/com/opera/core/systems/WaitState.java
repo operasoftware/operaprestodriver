@@ -16,7 +16,6 @@ limitations under the License.
 package com.opera.core.systems;
 
 import java.util.LinkedList;
-import java.util.List;
 import java.util.logging.Logger;
 
 import org.openqa.selenium.WebDriverException;
@@ -25,7 +24,6 @@ import com.opera.core.systems.scope.exceptions.CommunicationException;
 import com.opera.core.systems.scope.exceptions.ResponseNotReceivedException;
 import com.opera.core.systems.scope.protos.UmsProtos.Response;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo;
-import com.opera.core.systems.scope.services.ISelftest.SelftestResult;
 
 /**
  * This class handles a queue of events to be handled from multiple threads. One
@@ -81,7 +79,7 @@ public class WaitState {
 
     // store the data for now, but it seems
     // wasteful
-    List<SelftestResult> selftestResults;
+    String selftestResults;
 
     public ResultItem(WebDriverException ex) {
       waitResult = WaitResult.EXCEPTION;
@@ -118,7 +116,7 @@ public class WaitState {
       logger.fine("EVENT: " + waitResult.toString() + ", data=" + data);
     }
 
-    public ResultItem(List<SelftestResult> results) {
+    public ResultItem(String results) {
       waitResult = WaitResult.EVENT_SELFTEST_DONE;
       selftestResults = results;
     }
@@ -285,7 +283,7 @@ public class WaitState {
     }
   }
 
-  void onSelftestDone(List<SelftestResult> results) {
+  void onSelftestDone(String results) {
     synchronized (lock) {
        logger.fine("Event: onSelftestDone");
        events.add(new ResultItem(results));
@@ -592,7 +590,7 @@ public class WaitState {
     return 0;
   }
 
-  public List<SelftestResult> waitForSelftestDone(long timeout) {
+  public String waitForSelftestDone(long timeout) {
     ResultItem item = waitAndParseResult(timeout, 0, null, ResponseType.SELFTEST_DONE);
     if (item != null) {
       return item.selftestResults;

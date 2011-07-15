@@ -1,5 +1,6 @@
 package com.opera.core.systems.scope.services.ums;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -33,5 +34,44 @@ public class Selftest extends AbstractService implements ISelftest {
 
 		Response response = executeCommand(SelftestCommand.RUN_MODULES, builder);
 		logger.fine(String.format("Selftest response: %s", response));
+	}
+
+	static public List<SelftestResult> parseSelftests(String output) {
+		List<SelftestResult> results = new ArrayList<SelftestResult>();
+
+		String[] lines = output.split("\\n");
+		for(String line: lines) {
+			/* Each line has the following format:
+			 * tag:description result more
+			 *
+			 * result is PASS, FAIL, or SKIP.
+			 */
+			String[] pieces          = line.split("\\t");
+			String tagAndDescription = pieces[0];
+			String resultString      = pieces[1];
+			String more              = pieces.length > 2? pieces[2] : null;
+
+			String[] otherPieces = tagAndDescription.split(":", 2);
+			String tag           = otherPieces[0];
+			String description   = otherPieces[1];
+
+			ResultType result;
+			if(resultString.equals("PASS")) {
+				result = ResultType.PASS;
+			}
+			else if(resultString.equals("FAIL")) {
+				result = ResultType.FAIL;
+			}
+			else if(resultString.equals("SKIP")) {
+				result = ResultType.SKIP;
+			}
+			else {
+				throw new RuntimeException(String.format("Unknown test result %s", resultString));
+			}
+
+			results.add(new SelftestResult(tag, description, result, more));
+		}
+
+		return results;
 	}
 }
