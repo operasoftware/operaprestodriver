@@ -15,33 +15,30 @@ public interface ISelftest {
 		private String tag;
 		private String description;
 		private ResultType result;
-		private String skipWhy;
+		private String more;
 
 		public SelftestResult(String tag, String description, ResultType result) {
 			this(tag, description, result, null);
 		}
 
-		public SelftestResult(String tag, String description, ResultType result, String reason) {
-			if(reason != null && result != ResultType.SKIP)
-				throw new IllegalArgumentException("SKIP reason not allowed with non-SKIP result.");
-
+		public SelftestResult(String tag, String description, ResultType result, String more) {
 			this.tag = tag;
 			this.description = description;
 			this.result = result;
-			skipWhy = reason;
+			this.more = more;
 		}
 
 		public String getTag()         { return tag; }
 		public String getDescription() { return description; }
 		public ResultType getResult()  { return result; }
-		public String getSkipWhy()     { return skipWhy; }
+		public String getMore()        { return more; }
 
 		public String toString() {
 			String format;
 			Object[] args;
-			if(skipWhy != null) {
+			if(more != null) {
 				format = "%s:%s\t%s\t%s";
-				args = new Object[]{tag, description, result, skipWhy};
+				args = new Object[]{tag, description, result, more};
 			}
 			else {
 				format = "%s:%s\t%s";
