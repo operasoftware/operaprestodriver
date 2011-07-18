@@ -86,7 +86,6 @@ import com.opera.core.systems.scope.services.IEcmaScriptDebugger;
 import com.opera.core.systems.scope.services.IOperaExec;
 import com.opera.core.systems.scope.services.IPrefs;
 import com.opera.core.systems.scope.services.IWindowManager;
-import com.opera.core.systems.scope.services.ISelftest.SelftestResult;
 import com.opera.core.systems.settings.OperaDriverSettings;
 
 public class OperaDriver extends RemoteWebDriver implements WebDriver,
@@ -1287,7 +1286,7 @@ public class OperaDriver extends RemoteWebDriver implements WebDriver,
     throw new UnsupportedOperationException();
   }
 
-  public List<SelftestResult> selftest(List<String> modules, long timeout) {
+  public String selftest(List<String> modules, long timeout) {
     return services.selftest(modules, timeout);
   }
 

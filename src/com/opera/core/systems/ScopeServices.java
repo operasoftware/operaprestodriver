@@ -53,8 +53,6 @@ import com.opera.core.systems.scope.services.IOperaExec;
 import com.opera.core.systems.scope.services.IPrefs;
 import com.opera.core.systems.scope.services.IWindowManager;
 import com.opera.core.systems.scope.services.ISelftest;
-import com.opera.core.systems.scope.services.ISelftest.SelftestResult;
-import com.opera.core.systems.scope.services.ums.Selftest;
 import com.opera.core.systems.scope.services.ums.SystemInputManager;
 import com.opera.core.systems.scope.services.ums.UmsServices;
 import com.opera.core.systems.scope.stp.StpConnection;
@@ -537,9 +535,9 @@ public class ScopeServices implements IConnectionHandler {
     waitState.onSelftestDone(results);
   }
 
-  public List<SelftestResult> selftest(List<String> modules, long timeout) {
+  public String selftest(List<String> modules, long timeout) {
     selftest.runSelftests(modules);
-    return Selftest.parseSelftests(waitState.waitForSelftestDone(timeout));
+    return waitState.waitForSelftestDone(timeout);
   }
 
   public void waitForWindowLoaded(int activeWindowId, long timeout) {

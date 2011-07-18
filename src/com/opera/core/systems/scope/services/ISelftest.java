@@ -47,6 +47,18 @@ public interface ISelftest {
 
 			return String.format(format, args);
 		}
+
+		public boolean equals(Object other) {
+			if(!(other instanceof SelftestResult)) {
+				return false;
+			}
+
+			SelftestResult result = (SelftestResult) other;
+			return result.tag.equals(this.tag) &&
+			       result.description.equals(this.description) &&
+			       result.result == this.result &&
+			       (result.more != null? result.more.equals(this.more): true);
+		}
 	}
 
 	public enum ResultType {
