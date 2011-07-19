@@ -554,7 +554,7 @@ public class ScopeServices implements IConnectionHandler {
     waitState.onSelftestDone(results);
   }
 
-  public List<SelftestResult> selftest(List<String> modules, long timeout) {
+  public String selftest(List<String> modules, long timeout) {
     if (selftest == null) {
       throw new UnsupportedOperationException("selftest is not supported");
     }
