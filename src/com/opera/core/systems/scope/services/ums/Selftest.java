@@ -16,17 +16,16 @@ import com.opera.core.systems.scope.services.ISelftest;
 public class Selftest extends AbstractService implements ISelftest {
 	private final Logger logger = Logger.getLogger(this.getClass().getName());
 
-	public Selftest(ScopeServices services, String version) {
-		super(services, version);
-		String serviceName = "selftest";
+  public Selftest(ScopeServices services, String version) {
+    super(services, version);
+    String serviceName = "selftest";
 
-		if(!isVersionInRange(version, "2.0", serviceName)) {
-			throw new UnsupportedOperationException(serviceName + " version " +
-				version + " is not supported");
-		}
-
-		services.setSelftest(this);
-	}
+    if (!isVersionInRange(version, "2.0", serviceName)) {
+      logger.info(serviceName + " version " + version + " is not supported");
+    } else {
+      services.setSelftest(this);
+    }
+  }
 
 	public void runSelftests(List<String> modules) {
 		logger.fine(String.format("runSelftests(%s)", modules.toString()));
