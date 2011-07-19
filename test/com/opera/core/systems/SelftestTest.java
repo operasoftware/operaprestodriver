@@ -9,17 +9,16 @@ import org.junit.Test;
 
 import com.opera.core.systems.scope.services.ISelftest.ResultType;
 import com.opera.core.systems.scope.services.ISelftest.SelftestResult;
+import com.opera.core.systems.scope.services.ums.Selftest;
 
 public class SelftestTest extends TestBase {
   @Test
   public void testSelftests() {
     String product = driver.getProduct();
     if(product.equals("core-gogi")) {
-      List<SelftestResult> results;
+      String results;
       results = driver.selftest(Arrays.asList("about"), 30000);
       Assert.assertNotNull("Running selftests doesn't blow up, returns non-null result.", results);
-      results = driver.selftest(Arrays.asList("nosuchmodule"), 30000);
-      Assert.assertNull("Running selftests for non-existent module returns null", results);
     }
   }
 
@@ -34,5 +33,22 @@ public class SelftestTest extends TestBase {
     Assert.assertEquals("FAIL stringification",          fail.toString(),    "tag:description\tFAIL");
     Assert.assertEquals("SKIP stringification",          skip.toString(),    "tag:description\tSKIP");
     Assert.assertEquals("SKIP stringification w/reason", skipWhy.toString(), "tag:description\tSKIP\twhy");
+  }
+
+  @Test
+  public void parsing() {
+    String data = "foo:bar\tPASS\nlorem:ipsum dolor sit amet\tFAIL\tmore\nmore:tests here\tSKIP\treason\n";
+    List<SelftestResult> results;
+
+    if(driver.getProduct().equals("core-gogi")) {
+      results = Selftest.parseSelftests(driver.selftest(Arrays.asList("nosuchmodule"), 30000));
+      Assert.assertNull("Running selftests for non-existent module parsed as null", results);
+    }
+
+    List<SelftestResult> expected = Arrays.asList(new SelftestResult("foo", "bar", ResultType.PASS),
+                                                  new SelftestResult("lorem", "ipsum dolor sit amet", ResultType.FAIL, "more"),
+                                                  new SelftestResult("more", "tests here", ResultType.SKIP, "reason"));
+    results = Selftest.parseSelftests(data);
+    Assert.assertEquals("Sample output parsed correctly", expected, results);
   }
 }
