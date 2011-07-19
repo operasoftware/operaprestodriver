@@ -1401,5 +1401,9 @@ public class OperaDriver extends RemoteWebDriver implements WebDriver,
   public int getPID() {
     return coreUtils.getProcessID();
   }
+  
+  public OperaRunner getOperaRunner() {
+	  return operaRunner;
+  }
 
 }
