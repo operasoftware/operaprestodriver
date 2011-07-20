@@ -379,12 +379,107 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     exec.action("Stop");
   }
 
+  /**
+   * The by string passed by remote web driver is different to the one used
+   * in the atoms. This converts from the "nice" string to the atom string.
+   * @param by The "nice" by string for remote web driver.
+   * @return The by string used in the atoms.
+   */
+  private String convertByToAtom(String by) {
+    if ("class name".equals(by)) by = "className";
+    else if ("css selector".equals(by)) by = "css";
+    else if ("id".equals(by));
+    else if ("link text".equals(by)) by = "linkText";
+    else if ("partial link text".equals(by)) by = "partialLinkText";
+    else if ("tag name".equals(by)) by = "tagName";
+    else if ("xpath".equals(by)) by = "xpath";
+    else {
+      throw new WebDriverException("Cannot find matching element locator to: " + by);
+    }
+
+    return by;
+  }
+
   public WebElement findElement(By by) {
     return by.findElement(this);
   }
 
+  protected WebElement findElement(String by, String using) {
+    if (using == null) {
+      throw new IllegalArgumentException("Cannot find elements when the selector is null.");
+    }
+    String niceBy = by;
+    by = convertByToAtom(by);
+
+    long start = System.currentTimeMillis();
+    boolean isAvailable;
+    Integer id;
+
+    String script = "return " + OperaAtoms.FIND_ELEMENT.getValue()+"({"+by+": '" + escapeJsString(using, "'") + "'})";
+
+    do {
+      id = debugger.getObject(script);
+      isAvailable = (id != null);
+
+      if (!isAvailable) {
+        sleep(OperaIntervals.EXEC_SLEEP.getValue());
+      }
+    } while (!isAvailable && hasTimeRemaining(start));
+
+    OperaIntervals.WAIT_FOR_ELEMENT.setValue(0L);
+
+    if (isAvailable) {
+      Boolean isStale = Boolean.valueOf(debugger.callFunctionOnObject("locator.parentNode == undefined", id));
+
+      if (isStale) {
+        throw new StaleElementReferenceException("This element is no longer part of DOM");
+      }
+
+      return new OperaWebElement(this, id);
+    } else {
+      throw new NoSuchElementException("Cannot find element(s) with " + niceBy);
+    }
+  }
+
   public List<WebElement> findElements(By by) {
     return by.findElements(this);
+  }
+
+  protected List<WebElement> findElements(String by, String using) {
+    if (using == null) {
+      throw new IllegalArgumentException("Cannot find elements when the selector is null.");
+    }
+    String niceBy = by;
+    by = convertByToAtom(by);
+
+    Integer id;
+
+    long start = System.currentTimeMillis();
+    int count = 0;
+
+    List<WebElement> elements;
+
+    String script = "return " + OperaAtoms.FIND_ELEMENTS.getValue()+"({"+by+": '" + escapeJsString(using, "'") + "'})";
+
+    do {
+      id = debugger.getObject(script);
+      elements = processElements(id);
+
+      if (elements != null) count = elements.size();
+
+      if (count == 0 && hasTimeRemaining(start)) sleep(OperaIntervals.EXEC_SLEEP.getValue());
+      else break;
+
+    } while (true);
+
+    OperaIntervals.WAIT_FOR_ELEMENT.setValue(0L);
+
+    if (id != null) {
+      return elements;
+    } else {
+      throw new NoSuchElementException("Cannot find element(s) with " + by);
+    }
+
   }
 
   /**
@@ -591,123 +686,12 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     return findSingleElement("document.activeElement;", "active element");
   }
 
-  public WebElement findElementByLinkText(String using) {
-    return findSingleElement(
-      "(function(){\n" +
-        "var links = document.getElementsByTagName('a'), element = null;\n" +
-        "for (var i = 0; i < links.length && !element; ++i) {\n" +
-        "if(links[i].textContent.replace(/\\s+/g, ' ').trim() == \"" + escapeJsString(using) + "\".replace(/\\s+/g, ' ')) {\n" +
-        "element = links[i];\n" +
-        "}\n" +
-        "}\n" +
-        "return element;\n})()", "link text"
-    );
-  }
-
-  public WebElement findElementByPartialLinkText(String using) {
-    return findSingleElement(
-      "(function(){\n" +
-        "var links = document.getElementsByTagName('a'), element = null;\n" +
-        "for (var i = 0; i < links.length && !element; ++i) {\n" +
-        "if(links[i].textContent.replace(/\\s+/g, ' ').indexOf('" + escapeJsString(using, "'") + "') > -1){\n" +
-        "element = links[i];\n" +
-        "}\n" +
-        "}\n" +
-        "return element;\n})()", "link text"
-    );
-  }
-
-  public List<WebElement> findElementsByLinkText(String using) {
-    return findMultipleElements(
-      "(function(){\n" +
-        "var links = document.links, link = null, i = 0, elements = [];\n" +
-        "for( ; link = links[i]; i++)\n" +
-        "{\n" +
-        "if(link.textContent.replace(/\\s+/g, ' ').trim() == \"" + escapeJsString(using) + "\".replace(/\\s+/g, ' '))\n" +
-        "{\n" +
-        "elements.push(link);\n" +
-        "}\n" +
-        "}\n" +
-        "return elements; })()", "link text"
-    );
-  }
-
   protected List<WebElement> processElements(Integer id) {
     List<Integer> ids = debugger.examineObjects(id);
     List<WebElement> toReturn = new ArrayList<WebElement>();
     for (Integer objectId : ids)
       toReturn.add(new OperaWebElement(this, objectId));
     return toReturn;
-  }
-
-  public List<WebElement> findElementsByPartialLinkText(String using) {
-
-    return findMultipleElements(
-      "(function(){\n" +
-        "var links = document.links, link = null, i = 0, elements = [];\n" +
-        "for( ; link = links[i]; i++)\n" +
-        "{\n" +
-        "if(link.textContent.replace(/\\s+/g, ' ').indexOf('" + escapeJsString(using, "'") + "') > -1)\n" +
-        "{\n" +
-        "elements.push(link);\n" +
-        "}\n" +
-        "}\n" +
-        "return elements; })()", "partial link text"
-    );
-  }
-
-  public WebElement findElementById(String using) {
-    return findSingleElement("document.getElementById('" + escapeJsString(using, "'") + "');", "id");
-  }
-
-  /**
-   * This method breaks web standards
-   */
-  public List<WebElement> findElementsById(String using) {
-    return findMultipleElements(
-      "var alls = document.all, element = null, i = 0, elements = [];\n" +
-        "for( ; element = alls[i]; i++)\n" +
-        "{\n" +
-        "if(element.getAttribute('id') == '" + escapeJsString(using, "'") + "')\n" +
-        "{\n" +
-        "elements.push(element);\n" +
-        "}\n" +
-        "}\n" +
-        "return elements;", "by id"
-    );
-  }
-
-  public WebElement findElementByXPath(String using) {
-    return findSingleElement(
-      "document.evaluate(\"" +
-        escapeJsString(using) +
-        "\", document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;\n", "xpath"
-    );
-  }
-
-  public WebElement findElementByClassName(String using) {
-    return findSingleElement(
-      "document.getElementsByClassName('" + escapeJsString(using, "'") + "')[0];", "class name"
-    );
-  }
-
-  public List<WebElement> findElementsByClassName(String using) {
-    return findMultipleElements(
-      "document.getElementsByClassName('" + escapeJsString(using, "'") + "');\n", "class name"
-    );
-  }
-
-  public List<WebElement> findElementsByXPath(String using) {
-    return findMultipleElements(
-      "var result = document.evaluate(\"" +
-        escapeJsString(using) +
-        "\", document, null, XPathResult.ORDERED_NODE_ITERATOR_TYPE,  null);\n" +
-        "var elements = new Array();\n" +
-        "var element = result.iterateNext();\n" +
-        "while (element) {\n" + "  elements.push(element);\n" +
-        " element = result.iterateNext();\n" + "}\n" +
-        "return elements", "XPath"
-    );
   }
 
   // FIXME when timeout has completed, send 'stop' command?
@@ -749,57 +733,6 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
   public List<WebElement> findElementsByName(String using) {
     return findMultipleElements(
       "document.getElementsByName('" + escapeJsString(using, "'") + "');", "name"
-    );
-  }
-
-  public WebElement findElementByTagName(String using) {
-    if (using.contains(":")) {  // has prefix
-      String[] tagInfo = using.split(":");
-
-      return findSingleElement(
-        "(function() { var elements = document.getElementsByTagName('" + tagInfo[1] + "'), element = null;" +
-          "for( var i = 0; i < elements.length; i++ ) {" +
-          "if( elements[i].prefix == '" + tagInfo[0] + "' ) {" +
-          "element = elements[i];" +
-          "break;" +
-          "}" +
-          "}" +
-          "return element; })()", "tag name"
-      );
-    }
-
-    return findSingleElement("document.getElementsByTagName('" + escapeJsString(using, "'") + "')[0];", "tag name");
-  }
-
-
-  public List<WebElement> findElementsByTagName(String using) {
-    if (using.contains(":")) {  // has prefix
-      String[] tagInfo = using.split(":");
-
-      return findMultipleElements(
-        "(function() { var elements = document.getElementsByTagName('" + tagInfo[1] + "'), output = [];" +
-          "for( var i = 0; i < elements.length; i++ ) {" +
-          "if( elements[i].prefix == '" + tagInfo[0] + "' ) {" +
-          "output.push(elements[i]);" +
-          "}" +
-          "}" +
-          "return output; })()", "tag name"
-      );
-    }
-
-    return findMultipleElements("document.getElementsByTagName('" + escapeJsString(using, "'") + "');\n", "tag name");
-  }
-
-  public WebElement findElementByCssSelector(String using) {
-    return findSingleElement("document.querySelector('" + escapeJsString(using, "'") + "');", "selector");
-  }
-
-  public List<WebElement> findElementsByCssSelector(String using) {
-    return findMultipleElements(
-      "(function(){ var results = document.querySelectorAll('" +
-        escapeJsString(using, "'") +
-        "'), returnValue = [], i=0;for(;returnValue[i]=results[i];i++); return returnValue;})()",
-      "selector"
     );
   }
 
@@ -1389,7 +1322,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
   public int getPID() {
     return coreUtils.getProcessID();
   }
-  
+
   public OperaRunner getOperaRunner() {
 	  return operaRunner;
   }
