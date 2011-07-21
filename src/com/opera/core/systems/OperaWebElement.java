@@ -241,28 +241,16 @@ public class OperaWebElement implements WebElement, SearchContext, Locatable,
   }
 
   public String getAttribute(String attribute) {
-
     if (!parent.objectIds.contains(objectId)) throw new StaleElementReferenceException(
         "You cant interact with stale elements");
 
-    String lcAttribute = attribute.toLowerCase();
-    if (lcAttribute.equals("disabled")) {
-      return String.valueOf(!isEnabled());
-    } else if (lcAttribute.equals("checked") || lcAttribute.equals("selected")) {
-      boolean selected = isSelected();
-      if (!selected) return null;
-      return String.valueOf(selected);
-    } else if (lcAttribute.equals("index")) {
-      return callMethod("locator.index");
-    }
-
-    if (lcAttribute.equals("value")) {
+    if (attribute.toLowerCase().equals("value")) {
       return callMethod("if(/^input|select|textarea$/i.test(locator.nodeName)){"+
           "return locator.value;"+
            "}"+
            "return locator.textContent;");
     } else {
-      return callMethod("locator.getAttribute('" + attribute + "')");
+      return callMethod("return " + OperaAtoms.GET_ATTRIBUTE.getValue() + "(locator, '"+attribute+"')");
     }
   }
 
