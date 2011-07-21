@@ -232,8 +232,7 @@ public class OperaWebElement implements WebElement, SearchContext, Locatable,
   }
 
   public String getAttribute(String attribute) {
-    if (!parent.objectIds.contains(objectId)) throw new StaleElementReferenceException(
-        "You cant interact with stale elements");
+    throwIfStale();
 
     if (attribute.toLowerCase().equals("value")) {
       return callMethod("if(/^input|select|textarea$/i.test(locator.nodeName)){"+
@@ -270,14 +269,17 @@ public class OperaWebElement implements WebElement, SearchContext, Locatable,
   }
 
   public boolean isDisplayed() {
+    throwIfStale();
     return (Boolean) evaluateMethod("return " + OperaAtoms.IS_DISPLAYED.getValue() + "(locator)");
   }
 
   public boolean isEnabled() {
+    throwIfStale();
     return (Boolean) evaluateMethod("return " + OperaAtoms.IS_ENABLED.getValue() + "(locator)");
   }
 
   public boolean isSelected() {
+    throwIfStale();
     return (Boolean) evaluateMethod("return " + OperaAtoms.IS_SELECTED.getValue() + "(locator)");
   }
 
@@ -440,37 +442,7 @@ public class OperaWebElement implements WebElement, SearchContext, Locatable,
         throw new InvalidElementStateException("Cannot select a "+tagName+" element");
     }
 
-    if (tagName.equalsIgnoreCase("option")) {
-      Integer id = debugger.executeScriptOnObject("return locator.parentNode",
-          objectId);
-      OperaWebElement parentNode = new OperaWebElement(this.parent,
-          id.intValue());
-
-			parent.getScopeServices().captureOperaIdle();
-      if (parentNode.getAttribute("multiple") == null) {
-        if (OperaFlags.ENABLE_CHECKS) {
-          if (!parentNode.isDisplayed()) throw new UnsupportedOperationException(
-              "You can't select an element that is not displayed");
-        }
-
-        // find all nodes
-        Integer index = Integer.valueOf(getAttribute("index"));
-        // reset prior to sending
-        parentNode.sendKeys(Keys.HOME);
-        List<WebElement> elements = parentNode.findElementsByTagName("option");
-        for (int i = 0; i < index; i++) {
-          // down only if enabled or target element
-          if (elements.get(i).isEnabled() || elements.get(i).equals(this)) parentNode.sendKeys(Keys.DOWN);
-        }
-      } else {
-        debugger.callFunctionOnObject("locator.selected = true;", objectId,
-            false);
-      }
-
-      parent.waitForLoadToComplete();
-    } else {// if(getTagName().equalsIgnoreCase("input")) {
-      if (!isSelected()) click();
-    }
+    evaluateMethod("return " + OperaAtoms.SET_SELECTED.getValue() + "(locator)");
   }
 
   public void submit() {
@@ -931,5 +903,12 @@ public class OperaWebElement implements WebElement, SearchContext, Locatable,
 
   public WebDriver getWrappedDriver() {
     return parent;
+  }
+
+  private void throwIfStale() {
+    if (!parent.objectIds.contains(objectId)) {
+      throw new StaleElementReferenceException("You cant interact with stale elements");
+    }
+
   }
 }
