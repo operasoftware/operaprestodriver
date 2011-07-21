@@ -309,41 +309,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
   @SuppressWarnings("unused")
   private String getText() {
-    return debugger.executeJavascript("var visibleText = \"\";\n" +
-      "    var travers = function(ele)\n" +
-      "    {\n" +
-      "      var children = ele.childNodes, child = null, i = 0, computedStyle = null;\n" +
-      "      for( ; child = children[i]; i++)\n" +
-      "      {\n" +
-      "        switch (child.nodeType)\n" +
-      "        {\n" +
-      "          case document.ELEMENT_NODE:\n" +
-      "          {\n" +
-      "            computedStyle = getComputedStyle(child, null);\n" +
-      "            if( computedStyle.getPropertyValue('display') != \"none\" &&\n" +
-      "                computedStyle.getPropertyValue('visibility') != \"hidden\" &&\n" +
-      "                !/^select$/i.test(child.nodeName) )\n" +
-      "            {\n" +
-      "              travers(child);\n" +
-      "            }\n" +
-      "            break;\n" +
-      "          }\n" +
-      "          case document.CDATA_SECTION_NODE:\n" +
-      "          case document.TEXT_NODE:\n" +
-      "          {\n" +
-      "            visibleText += child.nodeValue;\n" +
-      "          }\n" +
-      "        }\n" +
-      "\n" +
-      "      }\n" +
-      "      if( /^select|input$/i.test(ele.nodeName) &&\n" +
-      "                /^text|button|file|$/i.test(ele.type) )\n" +
-      "      {\n" +
-      "        visibleText += ele.value\n" +
-      "      }\n" +
-      "    };\n" +
-      "    travers(document);\n" +
-      "    return visibleText;");
+    return debugger.executeJavascript("return "+OperaAtoms.GET_TEXT.getValue()+"()");
   }
 
   public void close() {
