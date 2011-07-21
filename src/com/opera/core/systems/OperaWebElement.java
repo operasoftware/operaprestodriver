@@ -122,10 +122,6 @@ public class OperaWebElement implements WebElement, SearchContext, Locatable,
     return debugger.callFunctionOnObject(using, objectId, true);
   }
 
-  public void clear() {
-    executeMethod(OperaAtoms.CLEAR.getValue()+"(locator)");
-  }
-
   /**
    * Right clicks on the element.
    */
@@ -292,6 +288,10 @@ public class OperaWebElement implements WebElement, SearchContext, Locatable,
   public boolean isVisible() {
     return isDisplayed();// (Boolean)
     // evaluateMethod("return (locator.offsetWidth > 0)");
+  }
+
+  public void clear() {
+    executeMethod("return " + OperaAtoms.CLEAR.getValue() + "(locator)");
   }
 
   public void sendKeys(CharSequence... keysToSend) {
