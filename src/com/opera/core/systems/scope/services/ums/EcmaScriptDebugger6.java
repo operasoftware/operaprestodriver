@@ -200,9 +200,16 @@ public class EcmaScriptDebugger6 extends EcmaScriptDebugger {
 
     if (!status.equals("completed")) {
       if (status.equals("unhandled-exception")) {
-        // Would be great give the JS error here, but it appears that by the
-        // time we callFunctionOnObject the error object has gone...
-        throw new WebDriverException("Ecmascript exception");
+        String message;
+        try {
+          message = (String) callFunctionOnObject("return locator.name+': '+locator.message;", result.getObjectValue().getObjectID(), true);
+        } catch (Exception e) {
+          // If we get an exception while trying to get the message just throw
+          // a generic Ecmascript exception.
+          throw new WebDriverException("Ecmascript exception");
+        }
+        // Throw the ecmascript exception
+        throw new WebDriverException("Ecmascript exception:\n  " +message);
       }
       // FIXME what is the best approach here?
       else if (status.equals("cancelled-by-scheduler")) {
