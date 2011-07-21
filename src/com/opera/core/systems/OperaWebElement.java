@@ -123,12 +123,7 @@ public class OperaWebElement implements WebElement, SearchContext, Locatable,
   }
 
   public void clear() {
-    executeMethod("locator.focus()");
-    // FIXME testClearingAnElementShouldCauseTheOnChangeHandlerToFire
-    // execService.action("Clear");
-    execService.action("Select all");
-    execService.action("Delete");
-    executeMethod("locator.blur()");
+    executeMethod(OperaAtoms.CLEAR.getValue()+"(locator)");
   }
 
   /**
@@ -264,54 +259,13 @@ public class OperaWebElement implements WebElement, SearchContext, Locatable,
   }
 
   public String getText() {
-        return callMethod("function getVisibleContents(node, checkDisplay, trimmed, preformatted_parent) {\n"+
-                "var s = '';\n"+
-                "var trim = /^\\s+|\\s+$/g;\n"+
-                "var forbidden = /^(head|script|title|style|select|textarea)$/ig;\n"+
-                "\n"+
-                "preformatted_parent = preformatted_parent || false;\n"+
-                "\n"+
-                "if (node.nodeType == Node.TEXT_NODE || node.nodeType == Node.CDATA_SECTION_NODE)\n"+
-                    "return trimmed ? node.nodeValue.replace(trim, '') : node.nodeValue;\n"+
-                    "\n"+
-                "if (node.nodeType == Node.DOCUMENT_POSITION_DISCONNECTED)\n"+
-                    "if (node.nodeName.match(forbidden) || (checkDisplay && getComputedStyle(node).display == 'none'))\n"+
-                        "return s;\n"+
-                        "\n"+
-                "if (node.nodeType == Node.DOCUMENT_POSITION_DISCONNECTED\n"+
-                    "|| node.nodeType == Node.DOCUMENT_NODE\n"+
-                    "|| node.nodeType == Node.DOCUMENT_FRAGMENT_NODE)\n"+
-                "{\n"+
-                    "if (getComputedStyle(node).whiteSpace != 'normal')\n"+
-                        "preformatted_parent = true;\n"+
-                        "\n"+
-                    "for (var i = 0, n; n = node.childNodes[i]; i++)\n"+
-                    "{\n"+
-                        "var n_s = getVisibleContents(n, checkDisplay, false, preformatted_parent);\n"+
-                        "\n"+
-                        // Parent element with non pre formatting. Remove all duplicated white-spaces
-                        "if (n.nodeType == Node.TEXT_NODE && !preformatted_parent)\n"+
-                            "n_s = n_s.replace(/\\s+/g, ' ');\n"+
-                            "\n"+
-        // Wrap with newlines if this is block element.
-                        "if (n.nodeType == Node.ELEMENT_NODE && getComputedStyle(n).display == 'block')\n"+
-                            "s += '\\n' + n_s + '\\n';\n"+
-                        "else if (n.tagName == 'BR')\n"+
-                            "s += '\\n';\n"+
-                        "else if (s.substr(-1) == ' ' && n_s.substr(0, 1) == ' ')\n"+
-                            "s += n_s.substr(1);\n"+
-                        "else\n"+
-                            "s += n_s;\n"+
-                    "}\n"+
-                "}\n"+
-                "\n"+
-                "return trimmed ? s.replace(trim, '') : s;\n"+
-            "}\n"+
-            "if(locator.tagName.toLowerCase() == 'title') document.title;\n"+
-            "else getVisibleContents(locator, true, true).replace(/(\\r*\\n)+/g, '\\n');\n");
+    return callMethod("return " + OperaAtoms.GET_TEXT.getValue() + "(locator)");
   }
 
-
+  @Deprecated
+  /**
+   * @deprecated Use {@link #getAttribute('value')} instead
+   */
   public String getValue(){
     return callMethod("if(/^input|select|textarea$/i.test(locator.nodeName)){"+
                         "return locator.value;"+
@@ -319,12 +273,16 @@ public class OperaWebElement implements WebElement, SearchContext, Locatable,
                          "return locator.textContent;");
   }
 
+  public boolean isDisplayed() {
+    return (Boolean) evaluateMethod("return " + OperaAtoms.IS_DISPLAYED.getValue() + "(locator)");
+  }
+
   public boolean isEnabled() {
-    return (Boolean) evaluateMethod("return !locator.disabled");
+    return (Boolean) evaluateMethod("return " + OperaAtoms.IS_ENABLED.getValue() + "(locator)");
   }
 
   public boolean isSelected() {
-    return (Boolean) evaluateMethod("return locator.checked != null ? locator.checked : locator.selected != null ? locator.selected : false;");
+    return (Boolean) evaluateMethod("return " + OperaAtoms.IS_SELECTED.getValue() + "(locator)");
   }
 
   /**
@@ -634,62 +592,6 @@ public class OperaWebElement implements WebElement, SearchContext, Locatable,
     String[] dimension = widthAndHeight.split(",");
     return new Dimension(Integer.valueOf(dimension[0]),
         Integer.valueOf(dimension[1]));
-  }
-
-  public boolean isDisplayed() {
-    boolean isDisplayed = false;
-    if (!parent.objectIds.contains(objectId)
-        || callMethod("locator.parentNode") == null) throw new StaleElementReferenceException(
-        "You cant interact with stale elements");
-    try {
-      isDisplayed = (Boolean) evaluateMethod("function d(locator) {"
-          + "var el = locator;\n"
-          + "while (el.nodeType != 1 && !(el.nodeType >= 9 && el.nodeType <= 11)) {\n"
-          + "el = el.parentNode;\n"
-          + "}\n"
-          + "\n"
-          + "if (!el) {\n"
-          + "return false;\n"
-          + "}\n"
-          + "\n"
-          + "if (el.tagName.toLowerCase() == 'input' && el.type == 'hidden') {\n"
-          + " return false; \n"
-          + " }\n"
-          + "if(el.tagName.toLowerCase() == 'option') {\n"
-            // If this is a <option>, recurse up to its parent <select>
-            + "return d(el.parentNode);\n"
-            // Map is shown iff image that uses it is shown.
-          + "} else if (el.tagName.toLowerCase() == 'map') {\n"
-            + "if (!el.name) return false;\n"
-            + "var image = el.ownerDocument.evaluate('//*[@usemap = \"#'+ el.name +'\"]', el.ownerDocument, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;\n"
-            + "return true;"
-            + "return !!image && d(image);\n"
-          + "} else if (el.tagName.toLowerCase() == 'area') {\n"
-            + "return d(el.parentNode);\n"
-          + "}\n"
-          + "\n"
-          + "el.scrollIntoView();\n"
-          + "var box = el.getBoundingClientRect();\n"
-          + "if (box.width == 0 || box.height == 0) {\n"
-          + "return false;\n"
-          + "}\n"
-          + "var visibility = el.ownerDocument.defaultView.getComputedStyle(el, null).getPropertyValue('visibility');\n"
-          + "\n"
-          + "var _isDisplayed = function(e) {\n"
-          + " var display = e.ownerDocument.defaultView.getComputedStyle(e, null).getPropertyValue('display');\n"
-          + "if (display == 'none') return display;\n"
-          + " if (e && e.parentNode && e.parentNode.style) {\n"
-          + " return _isDisplayed(e.parentNode);\n" + "}\n"
-          + "return undefined;\n" + "};\n" + "\n"
-          + "var displayed = _isDisplayed(el);\n" + "\n"
-          + "return displayed != 'none' && visibility != 'hidden';"
-          + "}"
-          + "return d(locator);");
-    } catch (WebDriverException ex) {
-      throw new StaleElementReferenceException("This element is stale");
-    }
-
-    return isDisplayed;
   }
 
   /**
@@ -1035,8 +937,7 @@ public class OperaWebElement implements WebElement, SearchContext, Locatable,
   }
 
   public String getCssValue(String property) {
-    return callMethod("return getComputedStyle(locator,null).getPropertyValue('"
-        + property + "');");
+    return callMethod("return "+OperaAtoms.GET_EFFECTIVE_STYLE.getValue()+"(locator, '"+property+"')");
   }
 
   public WebDriver getWrappedDriver() {
