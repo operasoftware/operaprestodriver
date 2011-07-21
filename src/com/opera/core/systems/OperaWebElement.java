@@ -286,8 +286,7 @@ public class OperaWebElement implements WebElement, SearchContext, Locatable,
    */
   @Deprecated
   public boolean isVisible() {
-    return isDisplayed();// (Boolean)
-    // evaluateMethod("return (locator.offsetWidth > 0)");
+    return isDisplayed();
   }
 
   public void clear() {
@@ -423,7 +422,6 @@ public class OperaWebElement implements WebElement, SearchContext, Locatable,
     return getAttribute(attr) != null;
   }
 
-  // FIXME isDisplayed is not working for select elements, revise
   /**
    * @deprecated Please use "click" instead
    */
@@ -476,20 +474,11 @@ public class OperaWebElement implements WebElement, SearchContext, Locatable,
   }
 
   public void submit() {
-    OperaWebElement element = (OperaWebElement) parent.executeScript("element = arguments[0];" +
-              "while (element.parentNode != null && element.tagName.toLowerCase() != \"form\") {" +
-              "element = element.parentNode;" +
-              "} return element;", this);
-    ScriptResult result = (ScriptResult) debugger.scriptExecutor("return arguments[0];", element);
+    parent.getScopeServices().captureOperaIdle();
 
-		parent.getScopeServices().captureOperaIdle();
-    if(result.getClassName().equals("HTMLFormElement")) {
-      debugger.callFunctionOnObject("if(locator.onsubmit == undefined || locator.onsubmit()) locator.submit()", element.getObjectId(), false);
-    }
-    else throw new WebDriverException("Element is not in a form, can't submit");
+    evaluateMethod("return " + OperaAtoms.SUBMIT.getValue() + "(locator)");
 
     parent.waitForLoadToComplete();
-
   }
 
   // FIXME revise with javascript guys
