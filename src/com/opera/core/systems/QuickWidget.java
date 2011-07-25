@@ -14,7 +14,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */package com.opera.core.systems;
 
-import java.awt.Dimension;
 import java.awt.Point;
 import java.util.List;
 import java.util.ArrayList;
@@ -33,10 +32,8 @@ import com.opera.core.systems.scope.services.ums.SystemInputManager;
  * @author Adam Minchinton, Karianne Ekern.
  *
  */
-public class QuickWidget {
+public class QuickWidget extends OperaUIElement {
 		private final QuickWidgetInfo info;
-		private final IDesktopUtils desktopUtils;
-		private final SystemInputManager systemInputManager;
 		private final int parentWindowId;
 
 		public enum DropPosition {
@@ -65,9 +62,8 @@ public class QuickWidget {
 		 */
 		public QuickWidget(IDesktopUtils desktopUtils, SystemInputManager inputManager,
 				QuickWidgetInfo info, int parentWindowId) {
+			super(inputManager, desktopUtils);
 	        this.info = info;
-	        this.desktopUtils = desktopUtils;
-	        this.systemInputManager = inputManager;
 	        this.parentWindowId = parentWindowId;
 	    }
 
@@ -78,23 +74,6 @@ public class QuickWidget {
 		 */
 		public int getParentWindowId() {
 			return parentWindowId;
-		}
-
-		/**
-		 * Clicks this widget.
-		 *
-		 * @param button button to click
-		 * @param numClicks number of clicks
-		 * @param modifiers modifiers held during click
-		 */
-		public void click(MouseButton button, int numClicks, List<ModifierPressed> modifiers) {
-			systemInputManager.click(getCenterLocation(), button, numClicks, modifiers);
-		}
-
-		private Point getCenterLocation() {
-			DesktopWindowRect rect = getRect();
-			Point topLeft = getLocation();
-			return new Point(topLeft.x + rect.getWidth() / 2, topLeft.y + rect.getHeight() / 2);
 		}
 
 		// Intersect two lines
@@ -143,15 +122,15 @@ public class QuickWidget {
 			/*
 			 * FIXME: Handle MousePosition
 			 */
-			Point currentLocation = this.getCenterLocation();
+			Point currentLocation = getCenterLocation();
 			Point dropPoint = getDropPoint(widget, dropPos);
 
 			List<ModifierPressed> alist = new ArrayList<ModifierPressed>();
 			alist.add(ModifierPressed.NONE);
 
-			systemInputManager.mouseDown(currentLocation, MouseButton.LEFT, alist);
-			systemInputManager.mouseMove(dropPoint, MouseButton.LEFT, alist);
-			systemInputManager.mouseUp(dropPoint, MouseButton.LEFT, alist);
+			getSystemInputManager().mouseDown(currentLocation, MouseButton.LEFT, alist);
+			getSystemInputManager().mouseMove(dropPoint, MouseButton.LEFT, alist);
+			getSystemInputManager().mouseUp(dropPoint, MouseButton.LEFT, alist);
 		}
 
 		// Gets the coordinates of the drop point between the two quick widgets
@@ -184,15 +163,6 @@ public class QuickWidget {
 		}
 
 		/**
-		 * Hovers this widget.
-		 */
-		public void hover() {
-			List<ModifierPressed> alist = new ArrayList<ModifierPressed>();
-			alist.add(ModifierPressed.NONE);
-			systemInputManager.mouseMove(getCenterLocation(), MouseButton.LEFT, alist);
-		}
-
-		/**
 	     *
 	     * @return name of widget
 	     */
@@ -205,7 +175,7 @@ public class QuickWidget {
 	     * @return text of widget
 	     */
 		public String getText() {
-			return desktopUtils.removeCR(info.getText());
+			return getDesktopUtils().removeCR(info.getText());
 		}
 
 		/**
@@ -214,7 +184,7 @@ public class QuickWidget {
 	     * @return visible text of widget
 	     */
 		public String getVisibleText() {
-			return desktopUtils.removeCR(info.getVisibleText());
+			return getDesktopUtils().removeCR(info.getVisibleText());
 		}
 
 		/**
@@ -225,31 +195,7 @@ public class QuickWidget {
 	     * @return text of widget
 	     */
 		public String getAdditionalText() {
-			return desktopUtils.removeCR(info.getAdditionalText());
-		}
-
-
-		/**
-	     * Checks if widget text equals the text specified by the given string id
-	     *
-	     * @return true if text specified by stringId equals widget text
-	     */
-		public boolean verifyText(String stringId) {
-			String text = desktopUtils.getString(stringId, true /* skipAmpersand */);
-			
-			return getText().equals(text);
-			//return getText().indexOf(text) >= 0;
-		}
-
-		/**
-	     * Checks if widget text contains the text specified by the given string id
-	     *
-	     * @param stringId String id of string 
-	     * @return true if text specified by stringId is contained in widget text
-	     */
-		public boolean verifyContainsText(String stringId) {
-			String text = desktopUtils.getString(stringId, true);
-			return getText().indexOf(text) >= 0;
+			return getDesktopUtils().removeCR(info.getAdditionalText());
 		}
 
 		/**
@@ -295,7 +241,7 @@ public class QuickWidget {
 		 * @return true if the entry given by stringId is selected, else false
 		 */
 		public boolean isSelected(String stringId) {
-			String text = desktopUtils.getString(stringId, true);
+			String text = getDesktopUtils().getString(stringId, true);
 			return text.equals(info.getText());
 		}
 
@@ -320,22 +266,6 @@ public class QuickWidget {
 		 */
 		public DesktopWindowRect getRect() {
 			return info.getRect();
-		}
-
-		/**
-		 * @return Point describing location of widget
-		 */
-		public Point getLocation() {
-			DesktopWindowRect rect = getRect();
-			return new Point(rect.getX(), rect.getY());
-		}
-
-		/**
-		 * @return size of widget
-		 */
-		public Dimension getSize() {
-			DesktopWindowRect rect = getRect();
-			return new Dimension(rect.getWidth(), rect.getHeight());
 		}
 
 		/**

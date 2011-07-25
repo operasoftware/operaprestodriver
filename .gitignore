@@ -16,3 +16,4 @@ VERSION
 .idea/dictionaries/
 maven/src
 maven/target
+.*.swp

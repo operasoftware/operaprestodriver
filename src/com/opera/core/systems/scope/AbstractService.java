@@ -73,13 +73,17 @@ public abstract class AbstractService {
   }
 
   public Response executeCommand(ICommand command, Builder<?> builder) {
+	if (services.getConnection() == null)
+		return Response.getDefaultInstance();
     return executeCommand(command, builder,
         OperaIntervals.DEFAULT_RESPONSE_TIMEOUT.getValue());
   }
 
   public Response executeCommand(ICommand command, Builder<?> builder,
       long timeout) {
-    return services.executeCommand(command, builder, timeout);
+	  if (services.getConnection() == null)
+			return Response.getDefaultInstance();
+	  return services.executeCommand(command, builder, timeout);
   }
 
   /**

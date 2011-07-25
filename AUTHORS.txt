@@ -1,9 +1,11 @@
 Karianne Ekern <karie@opera.com>
+Payman Delshad <paymand@opera.com>
 Stuart Knightley <stuartk@opera.com>
 Jan Vidar Krey <janv@opera.com>
 James Livermont <jamesl@opera.com>
 Adam Minchinton <adamm@opera.com>
 Anders Oredsson <anderso@opera.com>
+Arne Skjærholt <arnes@opera.com>
 Simon Stewart <simon.m.stewart@gmail.com>
 Michael Tamm <mail@michaeltamm.de>
 Andreas Tolf Tolfsen <andreastt@opera.com>

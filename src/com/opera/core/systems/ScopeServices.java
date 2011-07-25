@@ -34,6 +34,9 @@ import com.opera.core.systems.scope.exceptions.CommunicationException;
 import com.opera.core.systems.scope.handlers.IConnectionHandler;
 import com.opera.core.systems.scope.internal.OperaIntervals;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo;
+import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID;
+import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo;
+import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemID;
 import com.opera.core.systems.scope.protos.EcmascriptProtos.ReadyStateChange;
 import com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeInfo;
 import com.opera.core.systems.scope.protos.ScopeProtos;
@@ -41,6 +44,7 @@ import com.opera.core.systems.scope.protos.ScopeProtos.ClientInfo;
 import com.opera.core.systems.scope.protos.ScopeProtos.HostInfo;
 import com.opera.core.systems.scope.protos.ScopeProtos.ServiceResult;
 import com.opera.core.systems.scope.protos.ScopeProtos.ServiceSelection;
+import com.opera.core.systems.scope.protos.SelftestProtos.SelftestOutput;
 import com.opera.core.systems.scope.protos.UmsProtos.Command;
 import com.opera.core.systems.scope.protos.UmsProtos.Response;
 import com.opera.core.systems.scope.services.ICookieManager;
@@ -51,6 +55,7 @@ import com.opera.core.systems.scope.services.IEcmaScriptDebugger;
 import com.opera.core.systems.scope.services.IOperaExec;
 import com.opera.core.systems.scope.services.IPrefs;
 import com.opera.core.systems.scope.services.IWindowManager;
+import com.opera.core.systems.scope.services.ISelftest;
 import com.opera.core.systems.scope.services.ums.SystemInputManager;
 import com.opera.core.systems.scope.services.ums.UmsServices;
 import com.opera.core.systems.scope.stp.StpConnection;
@@ -77,6 +82,7 @@ public class ScopeServices implements IConnectionHandler {
   private SystemInputManager systemInputManager;
   private HostInfo hostInfo;
   private ICookieManager cookieManager;
+  private ISelftest selftest;
 
   private Map<String, String> versions;
 
@@ -89,6 +95,8 @@ public class ScopeServices implements IConnectionHandler {
   private List<String> listedServices;
 
   private AtomicInteger tagCounter;
+
+  private StringBuilder selftestOutput;
 
   public Map<String, String> getVersions() {
     return versions;
@@ -170,6 +178,15 @@ public class ScopeServices implements IConnectionHandler {
     this.cookieManager = cookieManager;
   }
 
+  public ISelftest getSelftest() {
+    return selftest;
+  }
+
+  public void setSelftest(ISelftest selftest) {
+    this.selftest = selftest;
+  }
+
+
   /**
    * Creates the scope server on specified address and port Enables the required
    * services for webdriver
@@ -182,6 +199,7 @@ public class ScopeServices implements IConnectionHandler {
     this.versions = versions;
     tagCounter = new AtomicInteger();
     stpThread = new StpThread((int) OperaIntervals.SERVER_PORT.getValue(), this, new UmsEventHandler(this), manualConnect);
+    selftestOutput = new StringBuilder();
   }
 
   public void init() {
@@ -212,6 +230,9 @@ public class ScopeServices implements IConnectionHandler {
 
     if (versions.containsKey("desktop-utils"))
       wantedServices.add("desktop-utils");
+
+    if (versions.containsKey("selftest"))
+      wantedServices.add("selftest");
 
     //wantedServices.add("console-logger");
     //wantedServices.add("http-logger");
@@ -485,6 +506,22 @@ public class ScopeServices implements IConnectionHandler {
     logger.fine("DesktopWindow loaded: windowId=" + info.getWindowID());
     waitState.onDesktopWindowLoaded(info);
   }
+  
+  public void onQuickMenuShown(QuickMenuInfo info) {
+	  logger.fine("QuickMenu shown: menuName=" + info.getMenuId().getMenuName());
+	  waitState.onQuickMenuShown(info);
+  }
+
+  public void onQuickMenuItemPressed(QuickMenuItemID menuItemID) {
+	  logger.fine("QuickMenu shown: menuItem=" + menuItemID.getMenuText());
+	  waitState.onQuickMenuItemPressed(menuItemID);
+  }
+
+  // TODO ADD PARAM AGAIN, or just name?
+  public void onQuickMenuClosed(QuickMenuID id) {
+	  logger.fine("QuickMenu closed");//: menuName=" + info.getMenuId().getMenuName());
+	  waitState.onQuickMenuClosed(id);
+  }
 
   public void onHandshake(boolean stp1) {
     logger.fine("Got Stp handshake!");
@@ -505,6 +542,24 @@ public class ScopeServices implements IConnectionHandler {
   public void onOperaIdle() {
     logger.fine("Got Opera Idle event!");
     waitState.onOperaIdle();
+  }
+
+  public void onSelftestOutput(SelftestOutput output) {
+    selftestOutput = selftestOutput.append(output.getOutput());
+  }
+
+  public void onSelftestDone() {
+    String results = selftestOutput.toString();
+    selftestOutput = new StringBuilder();
+    waitState.onSelftestDone(results);
+  }
+
+  public String selftest(List<String> modules, long timeout) {
+    if (selftest == null) {
+      throw new UnsupportedOperationException("selftest is not supported");
+    }
+    selftest.runSelftests(modules);
+    return waitState.waitForSelftestDone(timeout);
   }
 
   public void waitForWindowLoaded(int activeWindowId, long timeout) {
@@ -612,6 +667,35 @@ public class ScopeServices implements IConnectionHandler {
       return 0;
     }
   }
+  
+  public String waitForMenuShown(String menuName, long timeout) {
+	  waitState.setWaitEvents(false);
+	  try {
+		  return waitState.waitForQuickMenuShown(menuName, timeout);
+	  } catch (Exception e) {
+		  return "";
+	  }	
+  }
+
+  public String waitForMenuClosed(String menuName, long timeout) {
+	  waitState.setWaitEvents(false);
+	  try {
+		  return waitState.waitForQuickMenuClosed(menuName, timeout);
+		  
+	  } catch (Exception e) {
+		  return "";
+	  }	
+  }
+
+  public String waitForMenuItemPressed(String menuItemText, long timeout) {
+	  waitState.setWaitEvents(false);
+	  try {
+		  return waitState.waitForQuickMenuItemPressed(menuItemText, timeout);
+		  
+	  } catch (Exception e) {
+		  return "";
+	  }	
+  }
 
   public void onResponseReceived(int tag, Response response) {
     if (connection != null) {
@@ -700,4 +784,5 @@ public class ScopeServices implements IConnectionHandler {
     logger.info("Window closed: windowId=" + windowId);
     waitState.onRequest(windowId);
   }
+
 }

@@ -17,10 +17,14 @@ package com.opera.core.systems.scope.handlers;
 
 import com.opera.core.systems.ScopeServices;
 import com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessage;
+import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo;
+import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID;
+import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo;
+import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemID;
 import com.opera.core.systems.scope.protos.EcmascriptProtos.ReadyStateChange;
 import com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeInfo;
+import com.opera.core.systems.scope.protos.SelftestProtos.SelftestOutput;
 import com.opera.core.systems.scope.protos.WmProtos.WindowInfo;
-import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo;
 
 /**
  * Event handler for scope events and network exceptions
@@ -128,6 +132,31 @@ public abstract class AbstractEventHandler {
    */
   public abstract void onDesktopWindowLoaded(DesktopWindowInfo info);
 
+  /**
+   * Fired when menu shown
+   *
+   * @param menuInfoShown
+   */
+  public abstract void onQuickMenuShown(QuickMenuInfo menuInfoShown);
+
+  /**
+   * Fired when menu closed
+   *
+   * @param menuInfoClosed
+   */
+  public abstract void onQuickMenuClosed(QuickMenuID menuId);
+
+  /**
+   * Fired when menu item is pressed
+   *
+   * @param menuInfoShown
+   */
+  public abstract void onQuickMenuItemPressed(QuickMenuItemID menuItemID);
+
+  public abstract void onSelftestOutput(SelftestOutput output);
+
+  public abstract void onSelftestDone();
+
   public abstract void onHttpResponse(int responseCode);
 
   public abstract void onReadyStateChange(ReadyStateChange change);
@@ -143,4 +172,5 @@ public abstract class AbstractEventHandler {
   }
 
   public abstract void onRequest(int windowId);
+
 }

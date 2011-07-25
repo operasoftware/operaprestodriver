@@ -21,6 +21,13 @@ import java.util.List;
 import com.opera.core.systems.scope.protos.SystemInputProtos.ModifierPressed;
 import com.opera.core.systems.scope.protos.SystemInputProtos.MouseInfo.MouseButton;
 
+/**
+* Interface for SystemInput
+*
+* @author Adam Minchinton, Karianne Ekern
+*
+*/
+
 public interface ISystemInput {
 
   /**
@@ -43,4 +50,15 @@ public interface ISystemInput {
    * @param modifiers - modifiers to hold
    */
   void keyPress(String key, List<ModifierPressed> modifiers);
+
+  void mouseMove(Point location, MouseButton button, List<ModifierPressed> modifiers);
+
+  void mouseUp(Point location, MouseButton button, List<ModifierPressed> modifiers);
+
+  void mouseDown(Point location, MouseButton button, List<ModifierPressed> modifiers);
+
+  void keyDown(String key, List<ModifierPressed> modifiers);
+
+  void keyUp(String key, List<ModifierPressed> modifiers);
+
 }
