@@ -447,14 +447,6 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     return windowManager.getWindowHandles().size();
   }
 
-  public Options manage() {
-    return new OperaOptions();
-  }
-
-  public Navigation navigate() {
-    return new OperaNavigation();
-  }
-
   public TargetLocator switchTo() {
     return new OperaTargetLocator();
   }
@@ -809,6 +801,10 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     );
   }
 
+  public Navigation navigate() {
+    return new OperaNavigation();
+  }
+
   private class OperaNavigation implements Navigation {
     public void back() {
       services.captureOperaIdle();
@@ -835,12 +831,18 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
       exec.action("Reload");
       waitForLoadToComplete();
     }
-
   }
 
-  // TODO: Numeric overflow
+  public Options manage() {
+    return new OperaOptions();
+  }
+
   private class OperaOptions implements Options {
+
     public void addCookie(Cookie cookie) {
+
+      // TODO: Numeric overflow
+
       if (cookie.getExpiry() == null) {
         cookie = new Cookie(
           cookie.getName(), cookie.getValue(), cookie.getDomain(), cookie.getPath(),
@@ -924,6 +926,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
       // TODO Auto-generated method stub
       return null;
     }
+
   }
 
   private class OperaTimeouts implements Timeouts {
