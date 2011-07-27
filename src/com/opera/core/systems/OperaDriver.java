@@ -371,6 +371,18 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
   }
 
   protected WebElement findElement(String by, String using) {
+    return findElement(by, using, null);
+  }
+
+  /**
+   * Find a single element using the selenium atoms.
+   * @param by How to find the element. Strings defined in RemoteWebDriver
+   *           and {@link convertByToAtom}.
+   * @param using The value to use to find the element
+   * @param el The element to search within
+   * @return
+   */
+  protected WebElement findElement(String by, String using, OperaWebElement el) {
     if (using == null) {
       throw new IllegalArgumentException("Cannot find elements when the selector is null.");
     }
@@ -381,10 +393,22 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     boolean isAvailable;
     Integer id;
 
-    String script = "return " + OperaAtoms.FIND_ELEMENT.getValue()+"({"+by+": '" + escapeJsString(using, "'") + "'})";
+    String script;
+    if (el == null) {
+      // Search the document
+      script = "return " + OperaAtoms.FIND_ELEMENT.getValue()+"({"+by+": '" + escapeJsString(using, "'") + "'})";
+    } else {
+      // Search within an element
+      script = "return " + OperaAtoms.FIND_ELEMENT.getValue()+"({"+by+": '" + escapeJsString(using, "'") + "'}, locator)";
+    }
 
     do {
-      id = debugger.getObject(script);
+      if (el == null) {
+        id = debugger.getObject(script);
+      } else {
+        id = debugger.executeScriptOnObject(script, el.getObjectId());
+      }
+
       isAvailable = (id != null);
 
       if (!isAvailable) {
@@ -412,6 +436,10 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
   }
 
   protected List<WebElement> findElements(String by, String using) {
+    return findElements(by, using, null);
+  }
+
+  protected List<WebElement> findElements(String by, String using, OperaWebElement el) {
     if (using == null) {
       throw new IllegalArgumentException("Cannot find elements when the selector is null.");
     }
@@ -425,10 +453,21 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
     List<WebElement> elements;
 
-    String script = "return " + OperaAtoms.FIND_ELEMENTS.getValue()+"({"+by+": '" + escapeJsString(using, "'") + "'})";
+    String script;
+    if (el == null) {
+      // Search in document
+      script = "return " + OperaAtoms.FIND_ELEMENTS.getValue()+"({"+by+": '" + escapeJsString(using, "'") + "'})";
+    } else {
+      // Search within an element
+      script = "return " + OperaAtoms.FIND_ELEMENTS.getValue()+"({"+by+": '" + escapeJsString(using, "'") + "'}, locator)";
+    }
 
     do {
-      id = debugger.getObject(script);
+      if (el == null) {
+        id = debugger.getObject(script);
+      } else {
+        id = debugger.executeScriptOnObject(script, el.getObjectId());
+      }
       elements = processElements(id);
 
       if (elements != null) count = elements.size();
@@ -443,7 +482,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     if (id != null) {
       return elements;
     } else {
-      throw new NoSuchElementException("Cannot find element(s) with " + by);
+      throw new NoSuchElementException("Cannot find element(s) with " + niceBy);
     }
 
   }

@@ -28,26 +28,16 @@ import org.openqa.selenium.InvalidElementStateException;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.Point;
-import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.internal.Coordinates;
-import org.openqa.selenium.internal.FindsByClassName;
-import org.openqa.selenium.internal.FindsByCssSelector;
-import org.openqa.selenium.internal.FindsById;
-import org.openqa.selenium.internal.FindsByLinkText;
-import org.openqa.selenium.internal.FindsByName;
-import org.openqa.selenium.internal.FindsByTagName;
-import org.openqa.selenium.internal.FindsByXPath;
-import org.openqa.selenium.internal.Locatable;
-import org.openqa.selenium.internal.WrapsDriver;
+import org.openqa.selenium.remote.RemoteWebElement;
 
 import com.opera.core.systems.model.Canvas;
 import com.opera.core.systems.model.ColorResult;
 import com.opera.core.systems.model.ScreenShotReply;
-import com.opera.core.systems.model.ScriptResult;
 import com.opera.core.systems.scope.internal.OperaColors;
 import com.opera.core.systems.scope.internal.OperaFlags;
 import com.opera.core.systems.scope.internal.OperaIntervals;
@@ -62,9 +52,7 @@ import com.opera.core.systems.scope.services.IOperaExec;
  * @author Deniz Turkoglu
  *
  */
-public class OperaWebElement implements WebElement, SearchContext, Locatable,
-    FindsByTagName, FindsByLinkText, FindsByClassName, FindsByXPath,
-    FindsByName, FindsById, FindsByCssSelector, WrapsDriver {
+public class OperaWebElement extends RemoteWebElement {
 
   private final int objectId;
   private final IEcmaScriptDebugger debugger;
@@ -713,6 +701,14 @@ public class OperaWebElement implements WebElement, SearchContext, Locatable,
     throw new NoSuchElementException("Cannot find element with " + type);
   }
 
+  protected WebElement findElement(String by, String using) {
+    return parent.findElement(by, using, this);
+  }
+
+  protected List<WebElement> findElements(String by, String using) {
+    return parent.findElements(by, using, this);
+  }
+
   private final List<WebElement> findMultipleElements(String using, String type) {
     Integer id = debugger.executeScriptOnObject(using, objectId);
     if (id == null) throw new NoSuchElementException(
@@ -721,105 +717,6 @@ public class OperaWebElement implements WebElement, SearchContext, Locatable,
     List<WebElement> elements = parent.processElements(id);
 
     return elements;
-  }
-
-  public WebElement findElementByLinkText(String using) {
-    return findSingleElement("var elements = locator.getElementsByTagName('a'), element = null, i = 0;\n" +
-        "for(;element = elements[i]; i++) {\n" +
-        " if(element.textContent == '"+ parent.escapeJsString(using, "'") + "'){\n"+
-        " return element; }\n"+
-        "}", "link text");
-  }
-
-  public WebElement findElementByPartialLinkText(String using) {
-    return findSingleElement("var elements = locator.getElementsByTagName('a'), element = null, i = 0;\n" +
-        "for(;element = elements[i]; i++) {\n" +
-        " if(element.textContent.indexOf('" + parent.escapeJsString(using, "'") + "') > -1){\n"+
-        " return element; }\n"+
-        "}", "partial link text");
-  }
-
-  public List<WebElement> findElementsByLinkText(String using) {
-    return findMultipleElements("var links = locator.getElementsByTagName('a'), link = null, i = 0, ret = [];"+
-          "for( ; link = links[i]; i++)"+
-          "{"+
-            "if(link.textContent == '" + parent.escapeJsString(using, "'") + "')"+
-            "{"+
-              "ret.push(link);"+
-            "}"+
-          "}"+
-          "return ret;", "link text");
-  }
-
-  public List<WebElement> findElementsByPartialLinkText(String using) {
-    return findMultipleElements("var links = locator.getElementsByTagName('a'), link = null, i = 0, ret = [];"+
-          "for( ; link = links[i]; i++)"+
-          "{"+
-            "if(link.textContent.indexOf('" + parent.escapeJsString(using, "'") + "') > -1 )"+
-            "{"+
-              "ret.push(link);"+
-            "}"+
-          "}"+
-          "return ret;", "link text");
-  }
-
-  public WebElement findElementByTagName(String using) {
-    if (using.contains(":")) {
-      // has prefix
-      String[] tagInfo = using.split(":");
-      return findSingleElement("(function(obj) { var elements = obj.getElementsByTagName('" + tagInfo[1] + "'), element = null;" +
-          "for( var i = 0; i < elements.length; i++ ) {" +
-          "if( elements[i].prefix == '" + tagInfo[0] + "' ) {" +
-          "element = elements[i];" +
-          "break;"+
-          "}" +
-          "}" +
-          "return element; })(locator)", "tag name");
-    }
-    return findSingleElement("locator.getElementsByTagName('" + parent.escapeJsString(using, "'") + "')[0]", "tag name");
-  }
-
-  public List<WebElement> findElementsByTagName(String using) {
-    if (using.contains(":")) {// has prefix
-      String[] tagInfo = using.split(":");
-      return findMultipleElements("(function(obj) { var elements = obj.getElementsByTagName('" + tagInfo[1] + "'), output = [];" +
-          "for( var i = 0; i < elements.length; i++ ) {" +
-          "if( elements[i].prefix == '" + tagInfo[0] + "' ) {" +
-          "output.push(elements[i]);" +
-          "}" +
-          "}" +
-          "return output; })(locator)", "tag name");
-    }
-    return findMultipleElements("locator.getElementsByTagName('" + parent.escapeJsString(using, "'") + "')", "tag name");
-  }
-
-
-  public WebElement findElementByClassName(String using) {
-    return findSingleElement("locator.getElementsByClassName('" + parent.escapeJsString(using, "'") + "')[0]", "class name");
-  }
-
-  public List<WebElement> findElementsByClassName(String using) {
-    return findMultipleElements("locator.getElementsByClassName('" + parent.escapeJsString(using, "'") + "')", "class name");
-  }
-
-  public WebElement findElementByXPath(String using) {
-    return findSingleElement(
-      "document.evaluate(\"" +
-      parent.escapeJsString(using) +
-      "\", locator, null, XPathResult.FIRST_ORDERED_NODE_TYPE,  null).singleNodeValue;\n",
-      "XPath");
-  }
-
-  public List<WebElement> findElementsByXPath(String using) {
-    return findMultipleElements(
-        "var result = document.evaluate(\""
-            + parent.escapeJsString(using)
-            + "\", locator, null, XPathResult.ORDERED_NODE_ITERATOR_TYPE,  null);\n"
-            + "var elements = new Array();\n"
-            + "var element = result.iterateNext();\n" + "while (element) {\n"
-            + "  elements.push(element);\n"
-            + "  element = result.iterateNext();\n" + "}\n" + "return elements",
-        "XPath");
   }
 
   public WebElement findElementByName(String using) {
@@ -838,36 +735,6 @@ public class OperaWebElement implements WebElement, SearchContext, Locatable,
         + "var element = result.iterateNext();\n" + "while (element) {\n"
         + "  elements.push(element);\n" + "  element = result.iterateNext();\n"
         + "}\n" + "return elements", "XPath");
-  }
-
-  public WebElement findElementById(String using) {
-    return findSingleElement(
-        "document.evaluate(\"descendant-or-self::*[@id='"
-            + using
-            + "']\",locator,null,XPathResult.ORDERED_NODE_ITERATOR_TYPE,null).iterateNext()",
-        "id");
-  }
-
-  public List<WebElement> findElementsById(String using) {
-    return findMultipleElements("var result = document.evaluate"
-        + "(\"descendant-or-self::*[@id='" + using + "']\""
-        + ", locator, null, XPathResult.ORDERED_NODE_ITERATOR_TYPE,  null);\n"
-        + "var elements = new Array();\n"
-        + "var element = result.iterateNext();\n" + "while (element) {\n"
-        + "  elements.push(element);\n" + "  element = result.iterateNext();\n"
-        + "}\n" + "return elements", "XPath");
-  }
-
-  public WebElement findElementByCssSelector(String using) {
-    return findSingleElement("locator.querySelector('" + using + "');", "selector");
-  }
-
-  public List<WebElement> findElementsByCssSelector(String using) {
-    return findMultipleElements(
-        "var results = locator.querySelectorAll('"
-            + parent.escapeJsString(using, "'")
-            + "'), returnValue = [], i=0;for(;returnValue[i]=results[i];i++); return returnValue;",
-        "selector");
   }
 
   @Override
