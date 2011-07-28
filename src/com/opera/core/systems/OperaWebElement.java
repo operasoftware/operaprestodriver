@@ -518,15 +518,7 @@ public class OperaWebElement extends RemoteWebElement {
    * Click top left, can be modified to click in the middle
    */
   public Point getLocation() {
-    String coordinates = debugger.callFunctionOnObject(
-        "locator.scrollIntoView();\n"
-            + "var x = 0, y = 0;\n"
-            + "if(window.frameElement) {\n"
-            + "x = (window.screenLeft - window.top.screenLeft) + window.scrollX;\n"
-            + "y = (window.screenTop - window.top.screenTop) + window.scrollY;\n"
-            + "}\n"
-            + "return (( x + locator.getBoundingClientRect().left) + ',' + ( y + locator.getBoundingClientRect().top));\n",
-        objectId);
+    String coordinates = debugger.callFunctionOnObject("var c=" + OperaAtoms.GET_LOCATION.getValue() + "(locator);return c.x+','+c.y;", objectId);
     String[] location = coordinates.split(",");
     return new Point(Integer.valueOf(location[0]), Integer.valueOf(location[1]));
   }
