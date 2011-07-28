@@ -188,8 +188,9 @@ public class OperaWebElement extends RemoteWebElement {
 		Integer id = debugger.executeScriptOnObject("return locator.parentNode", objectId);
 		OperaWebElement parentNode = new OperaWebElement(this.parent, id);
 
+		String multiple = parentNode.getAttribute("multiple");
 		if (parentNode.getTagName().equalsIgnoreCase("SELECT") &&
-		    parentNode.getAttribute("multiple") != null) {
+		     multiple != null && !multiple.equals("false")) {
 		  toggle();
 		} else if (this.getTagName().equals("OPTION")) {
 		  setSelected();
@@ -430,7 +431,7 @@ public class OperaWebElement extends RemoteWebElement {
         throw new InvalidElementStateException("Cannot select a "+tagName+" element");
     }
 
-    evaluateMethod("return " + OperaAtoms.SET_SELECTED.getValue() + "(locator)");
+    evaluateMethod("return " + OperaAtoms.SET_SELECTED.getValue() + "(locator, true)");
   }
 
   public void submit() {
@@ -764,7 +765,8 @@ public class OperaWebElement extends RemoteWebElement {
   }
 
   private void throwIfStale() {
-    if (!parent.objectIds.contains(objectId)) {
+    if (!parent.objectIds.contains(objectId) ||
+        Boolean.valueOf(debugger.callFunctionOnObject("locator.parentNode == undefined", objectId))) {
       throw new StaleElementReferenceException("You cant interact with stale elements");
     }
 
