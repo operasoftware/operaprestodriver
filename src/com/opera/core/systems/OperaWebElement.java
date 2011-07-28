@@ -469,13 +469,8 @@ public class OperaWebElement extends RemoteWebElement {
         throw new ElementNotVisibleException("Cannot select an element that is not displayed");
     }
 
-    if (tagName.equalsIgnoreCase("option")) return (Boolean) debugger.callFunctionOnObject(
-        "locator.selected = !locator.selected; return locator.selected;",
-        objectId, true);
-
     return (Boolean) debugger.callFunctionOnObject(
-        "locator.checked = !locator.checked; return locator.checked;",
-        objectId, true);
+        "return " + OperaAtoms.TOGGLE.getValue() + "(locator)", objectId, true);
   }
 
   public static void sleep(long timeInMillis) {
