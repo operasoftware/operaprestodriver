@@ -518,7 +518,10 @@ public class OperaWebElement extends RemoteWebElement {
    * Click top left, can be modified to click in the middle
    */
   public Point getLocation() {
-    String coordinates = debugger.callFunctionOnObject("var c=" + OperaAtoms.GET_LOCATION.getValue() + "(locator);return c.x+','+c.y;", objectId);
+    String coordinates = debugger.callFunctionOnObject(
+        "var c=" + OperaAtoms.GET_LOCATION.getValue() + "(locator);return c.x+','+c.y;",
+        objectId
+    );
     String[] location = coordinates.split(",");
     return new Point(Integer.valueOf(location[0]), Integer.valueOf(location[1]));
   }
@@ -528,8 +531,9 @@ public class OperaWebElement extends RemoteWebElement {
         "You cant interact with stale elements");
 
     String widthAndHeight = debugger.callFunctionOnObject(
-        "return (locator.getBoundingClientRect().width + ',' + locator.getBoundingClientRect().height);",
-        objectId);
+        "var s=" + OperaAtoms.GET_SIZE.getValue() + "(locator);return s.width+','+s.height;",
+        objectId
+    );
     String[] dimension = widthAndHeight.split(",");
     return new Dimension(Integer.valueOf(dimension[0]),
         Integer.valueOf(dimension[1]));
