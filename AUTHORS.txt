@@ -1,12 +1,13 @@
-Karianne Ekern <karie@opera.com>
-Payman Delshad <paymand@opera.com>
-Stuart Knightley <stuartk@opera.com>
-Jan Vidar Krey <janv@opera.com>
-James Livermont <jamesl@opera.com>
 Adam Minchinton <adamm@opera.com>
 Anders Oredsson <anderso@opera.com>
-Arne Skjærholt <arnes@opera.com>
-Simon Stewart <simon.m.stewart@gmail.com>
-Michael Tamm <mail@michaeltamm.de>
 Andreas Tolf Tolfsen <andreastt@opera.com>
+Arne Skjærholt <arnes@opera.com>
+Daniel Bengtsson <danielb@opera.com>
 Deniz Turkoglu <denizt@opera.com>
+James Livermont <jamesl@opera.com>
+Jan Vidar Krey <janv@opera.com>
+Karianne Ekern <karie@opera.com>
+Michael Tamm <mail@michaeltamm.de>
+Payman Delshad <paymand@opera.com>
+Simon Stewart <simon.m.stewart@gmail.com>
+Stuart Knightley <stuartk@opera.com>
