@@ -24,7 +24,6 @@ import java.util.Map;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 
-import com.opera.core.systems.OperaDriver;
 import com.opera.core.systems.OperaWebElement;
 import com.opera.core.systems.ScopeServices;
 import com.opera.core.systems.model.ScriptResult;
