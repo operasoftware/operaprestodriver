@@ -33,6 +33,7 @@ import java.util.concurrent.atomic.AtomicStampedReference;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 
+import com.opera.core.systems.OperaDriver;
 import com.opera.core.systems.OperaWebElement;
 import com.opera.core.systems.ScopeServices;
 import com.opera.core.systems.model.ScriptResult;
@@ -130,6 +131,7 @@ public class EcmascriptService extends AbstractService implements
   private Queue<Integer> garbageQueue = new LinkedList<Integer>();
 
   private ConcurrentMap<Integer, Runtime> runtimesList = new ConcurrentHashMap<Integer, Runtime>();
+  protected OperaDriver driver;
 
   public EcmascriptService(ScopeServices services, String version) {
     super(services, version);
@@ -137,6 +139,10 @@ public class EcmascriptService extends AbstractService implements
     this.windowManager = services.getWindowManager();
     this.services = services;
     resetCounters();
+  }
+
+  public void setDriver(OperaDriver driver) {
+    this.driver = driver;
   }
 
   private void resetCounters() {

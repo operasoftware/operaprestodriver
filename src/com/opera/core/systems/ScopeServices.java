@@ -395,6 +395,9 @@ public class ScopeServices implements IConnectionHandler {
       public Object examineScriptResult(Integer id) {
         return null;
       }
+
+      public void setDriver(OperaDriver driver) {
+      }
     };
   }
 
@@ -506,7 +509,7 @@ public class ScopeServices implements IConnectionHandler {
     logger.fine("DesktopWindow loaded: windowId=" + info.getWindowID());
     waitState.onDesktopWindowLoaded(info);
   }
-  
+
   public void onQuickMenuShown(QuickMenuInfo info) {
 	  logger.fine("QuickMenu shown: menuName=" + info.getMenuId().getMenuName());
 	  waitState.onQuickMenuShown(info);
@@ -667,34 +670,34 @@ public class ScopeServices implements IConnectionHandler {
       return 0;
     }
   }
-  
+
   public String waitForMenuShown(String menuName, long timeout) {
 	  waitState.setWaitEvents(false);
 	  try {
 		  return waitState.waitForQuickMenuShown(menuName, timeout);
 	  } catch (Exception e) {
 		  return "";
-	  }	
+	  }
   }
 
   public String waitForMenuClosed(String menuName, long timeout) {
 	  waitState.setWaitEvents(false);
 	  try {
 		  return waitState.waitForQuickMenuClosed(menuName, timeout);
-		  
+
 	  } catch (Exception e) {
 		  return "";
-	  }	
+	  }
   }
 
   public String waitForMenuItemPressed(String menuItemText, long timeout) {
 	  waitState.setWaitEvents(false);
 	  try {
 		  return waitState.waitForQuickMenuItemPressed(menuItemText, timeout);
-		  
+
 	  } catch (Exception e) {
 		  return "";
-	  }	
+	  }
   }
 
   public void onResponseReceived(int tag, Response response) {

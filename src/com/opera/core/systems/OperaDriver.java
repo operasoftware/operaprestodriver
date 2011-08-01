@@ -210,6 +210,8 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
     services.init();
     debugger = services.getDebugger();
+    debugger.setDriver(this);
+
     windowManager = services.getWindowManager();
     exec = services.getExec();
     mouse = new OperaMouse(this);

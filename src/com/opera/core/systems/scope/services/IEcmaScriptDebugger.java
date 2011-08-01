@@ -18,10 +18,18 @@ package com.opera.core.systems.scope.services;
 
 import java.util.List;
 
+import com.opera.core.systems.OperaDriver;
 import com.opera.core.systems.scope.protos.EcmascriptProtos.ReadyStateChange;
 import com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeInfo;
 
 public interface IEcmaScriptDebugger {
+
+  /**
+   * Set the driver this service belongs to. Needed so that we can create
+   * OperaWebElements in this service.
+   * @param driver
+   */
+  void setDriver(OperaDriver driver);
 
   int getRuntimeId();
 

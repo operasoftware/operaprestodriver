@@ -35,6 +35,7 @@ import org.openqa.selenium.NoSuchFrameException;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 
+import com.opera.core.systems.OperaDriver;
 import com.opera.core.systems.OperaWebElement;
 import com.opera.core.systems.ScopeServices;
 import com.opera.core.systems.model.ScriptResult;
@@ -72,6 +73,7 @@ public class EcmaScriptDebugger extends AbstractService implements
   protected int activeWindowId;
   protected final IWindowManager windowManager;
   private String currentFramePath;
+  protected OperaDriver driver;
 
   private AtomicStampedReference<RuntimeInfo> runtime = new AtomicStampedReference<RuntimeInfo>(
       null, 0);
@@ -107,6 +109,19 @@ public class EcmaScriptDebugger extends AbstractService implements
     }
   }
 
+  public EcmaScriptDebugger(ScopeServices services, String version) {
+    super(services, version);
+    services.setDebugger(this);
+    this.windowManager = services.getWindowManager();
+    this.services = services;
+    resetCounters();
+    currentFramePath = "_top";
+  }
+
+  public void setDriver(OperaDriver driver) {
+    this.driver = driver;
+  }
+
   public int getRuntimeId() {
     return runtime.getStamp();
   }
@@ -122,15 +137,6 @@ public class EcmaScriptDebugger extends AbstractService implements
 
   public void removeRuntime(int runtimeId) {
     runtimesList.remove(runtimeId);
-  }
-
-  public EcmaScriptDebugger(ScopeServices services, String version) {
-    super(services, version);
-    services.setDebugger(this);
-    this.windowManager = services.getWindowManager();
-    this.services = services;
-    resetCounters();
-    currentFramePath = "_top";
   }
 
   private List<RuntimeInfo> getRuntimesList() {
@@ -715,7 +721,9 @@ public class EcmaScriptDebugger extends AbstractService implements
     ObjectList list = getObjectList(id);
     String className = list.getObjectList(0).getValue().getName();
     List<Property> properties = list.getObjectList(0).getPropertyListList();
-    if (className.equals("Array")) {
+    if (className.endsWith("Element")) {
+      return new OperaWebElement(driver, id);
+    } else if (className.equals("Array")) {
       List<Object> result = new ArrayList<Object>();
 
       for (Property property : properties) {
@@ -748,5 +756,4 @@ public class EcmaScriptDebugger extends AbstractService implements
       return result;
     }
   }
-
 }
