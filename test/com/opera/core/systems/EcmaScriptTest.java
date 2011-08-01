@@ -16,10 +16,15 @@
 
 package com.opera.core.systems;
 
+import static org.junit.Assert.*;
+
+import java.util.List;
+
 import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.WebDriverException;
+import org.openqa.selenium.WebElement;
 
 public class EcmaScriptTest extends TestBase {
 
@@ -54,6 +59,12 @@ public class EcmaScriptTest extends TestBase {
     Assert.assertNull(exception);
   }
 
-  // TODO: Add more tests for actually checking that it returns a list of elements.
+  @Test
+  public void testObjectOfElements() throws Exception {
+    List<WebElement> divs = (List<WebElement>) driver.executeScript("return [document.createElement('div'), document.createElement('div')]");
+    for (WebElement el : divs) {
+      Assert.assertEquals("DIV", el.getTagName());
+    }
+  }
 
 }
