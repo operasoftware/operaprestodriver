@@ -126,7 +126,7 @@ public class OperaWebElement extends RemoteWebElement {
   }
 
   public void mouseOver() {
-    Point point = this.getLocation();
+    Point point = coordinates.getLocationInViewPort();
     execService.mouseAction(point.x, point.y);
   }
 
@@ -135,7 +135,7 @@ public class OperaWebElement extends RemoteWebElement {
    * page, generating a mouseOut event.
    */
   public void mouseOut() {
-    Point point = this.getLocation();
+    Point point = coordinates.getLocationInViewPort();
     execService.mouseAction(point.x, point.y);
     execService.mouseAction(0, 0);
   }
@@ -144,7 +144,7 @@ public class OperaWebElement extends RemoteWebElement {
    * Presses the left mouse button down on the top left of the element.
    */
   public void mouseDown() {
-    Point point = this.getLocation();
+    Point point = coordinates.getLocationInViewPort();
     execService.mouseAction(point.x, point.y, OperaMouseKeys.LEFT_DOWN);
   }
 
@@ -153,7 +153,7 @@ public class OperaWebElement extends RemoteWebElement {
    * Releases the left mouse button at the top left of the element.
    */
   public void mouseUp() {
-    Point point = this.getLocation();
+    Point point = coordinates.getLocationInViewPort();
     execService.mouseAction(point.x, point.y, OperaMouseKeys.LEFT_DOWN);
   }
 
@@ -163,7 +163,7 @@ public class OperaWebElement extends RemoteWebElement {
    * @param times The number of times to click
    */
   public void click(int times) {
-    Point point = this.getLocation();
+    Point point = coordinates.getLocationInViewPort();
     execService.mouseAction(point.x, point.y, OperaMouseKeys.LEFT.getValue(),
         times);
   }
@@ -172,7 +172,7 @@ public class OperaWebElement extends RemoteWebElement {
    * Click the middle mouse button at the top left of the element.
    */
   public void middleClick() {
-    Point point = this.getLocation();
+    Point point = coordinates.getLocationInViewPort();
     execService.mouseAction(point.x, point.y, OperaMouseKeys.MIDDLE);
   }
 
@@ -628,7 +628,7 @@ public class OperaWebElement extends RemoteWebElement {
   private Canvas buildCanvas() {
     Canvas canvas = new Canvas();
     Dimension dimension = getSize();
-    Point point = getLocation();
+    Point point = coordinates.getLocationInViewPort();
     /*
     String[] areaCoordinates = callMethod("var oElement = locator;\n" +
           "var posX = 0, posY = 0;\n" +
@@ -658,7 +658,7 @@ public class OperaWebElement extends RemoteWebElement {
   // TODO we only return location on screen when scrolled?
   // isnt this a duplicate method?
   public Point getLocationOnScreenOnceScrolledIntoView() {
-    if (isVisible()) return getLocation();
+    if (isDisplayed()) return getLocation();
     return null;
   }
 
@@ -736,25 +736,35 @@ public class OperaWebElement extends RemoteWebElement {
   }
 
   public Coordinates getCoordinates() {
-    return new Coordinates() {
-
-      public Point getLocationOnScreen() {
-        return getLocationOnScreenOnceScrolledIntoView();
-      }
-
-      public Point getLocationInViewPort() {
-        return getLocation();
-      }
-
-      public Point getLocationInDOM() {
-        throw new UnsupportedOperationException("Not supported yet.");
-      }
-
-      public Object getAuxiliry() {
-        throw new UnsupportedOperationException("Not supported yet.");
-      }
-    };
+    return coordinates;
   }
+  private Coordinates coordinates = new Coordinates() {
+    public Point getLocationOnScreen() {
+      throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public Point getLocationInViewPort() {
+      String coordinates = debugger.callFunctionOnObject(
+          "locator.scrollIntoView();\n"
+              + "var x = 0, y = 0;\n"
+              + "if(window.frameElement) {\n"
+              + "x = (window.screenLeft - window.top.screenLeft) + window.scrollX;\n"
+              + "y = (window.screenTop - window.top.screenTop) + window.scrollY;\n"
+              + "}\n"
+              + "return (( x + locator.getBoundingClientRect().left) + ',' + ( y + locator.getBoundingClientRect().top));\n",
+          objectId);
+      String[] location = coordinates.split(",");
+      return new Point(Integer.valueOf(location[0]), Integer.valueOf(location[1]));
+    }
+
+    public Point getLocationInDOM() {
+      return getLocation();
+    }
+
+    public Object getAuxiliry() {
+      throw new UnsupportedOperationException("Not supported yet.");
+    }
+  };
 
   public String getCssValue(String property) {
     return callMethod("return "+OperaAtoms.GET_EFFECTIVE_STYLE.getValue()+"(locator, '"+property+"')");
