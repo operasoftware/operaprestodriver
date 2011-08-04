@@ -49,7 +49,7 @@ public class OperaDesktopDriver extends OperaDriver {
   private String largePreferencesPath;
   private String smallPreferencesPath;
   private String cachePreferencesPath;
-
+  
   public OperaDesktopDriver() {
     super();
     initDesktopDriver();
@@ -574,10 +574,7 @@ public class OperaDesktopDriver extends OperaDriver {
 	 * @return large preferences path
 	 */
 	public String getLargePreferencesPath() {
-		if (largePreferencesPath == null)
-			return desktopUtils.getLargePreferencesPath();
-		else
-			return largePreferencesPath;
+		return desktopUtils.getLargePreferencesPath();
 	}
 
 	/**
@@ -585,10 +582,7 @@ public class OperaDesktopDriver extends OperaDriver {
 	 * @return small preferences path
 	 */
 	public String getSmallPreferencesPath() {
-		if (smallPreferencesPath == null)
-			return desktopUtils.getSmallPreferencesPath();
-		else
-			return smallPreferencesPath;
+		return desktopUtils.getSmallPreferencesPath();
 	}
 
 	/**
@@ -596,10 +590,7 @@ public class OperaDesktopDriver extends OperaDriver {
 	 * @return cache preferences path
 	 */
 	public String getCachePreferencesPath() {
-		if (cachePreferencesPath == null)
-			return desktopUtils.getCachePreferencesPath();
-		else
-			return cachePreferencesPath;
+		return desktopUtils.getCachePreferencesPath();
 	}
 
 	/**
@@ -844,10 +835,11 @@ public class OperaDesktopDriver extends OperaDriver {
 				quitOpera();
 
 				// Cleanup old profile
-				profileUtils.deleteProfile();
+				/*boolean deleted = */ profileUtils.deleteProfile();
+				
 				// Copy in the profile for the test (only if it exists)
 				// returns true if copied, else false
-				profileUtils.copyProfile(newPrefs);
+				/*deleted =*/ profileUtils.copyProfile(newPrefs); 
 
 				// Relaunch Opera and the webdriver service connection
 				startOpera();
