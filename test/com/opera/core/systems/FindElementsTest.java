@@ -1,9 +1,11 @@
 package com.opera.core.systems;
 
+import static org.junit.Assert.*;
 import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.remote.RemoteWebElement;
 
 import java.util.List;
 
@@ -60,6 +62,14 @@ public class FindElementsTest extends TestBase {
     for (WebElement el : els) {
       Assert.assertEquals(el.getAttribute("id"), "external");
     }
+  }
+
+  @Test
+  public void testElementId() throws Exception {
+    RemoteWebElement contain = (RemoteWebElement) driver.findElementById("content");
+    WebElement el = contain.findElementById("local");
+    Assert.assertEquals(el.getText(), "accumsan ante");
+
   }
 
   // XPath

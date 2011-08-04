@@ -23,7 +23,9 @@ import java.io.IOException;
 import org.openqa.selenium.Point;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.remote.RemoteWebElement;
 
+import com.opera.core.systems.OperaWebElement;
 import com.opera.core.systems.ScopeServices;
 import com.opera.core.systems.model.Canvas;
 import com.opera.core.systems.model.ScopeActions;
@@ -49,14 +51,14 @@ public class PbActionHandler extends ScopeActions {
 
   @Override
   public void click(WebElement element, String locator) {
-    Point point = element.getLocation();
+    Point point = ((RemoteWebElement) element).getCoordinates().getLocationInViewPort();
     services.getExec().mouseAction(point.x + 1, point.y + 1,
         OperaMouseKeys.LEFT);
   }
 
   @Override
   public void click(WebElement element, int x, int y) {
-    Point point = element.getLocation();
+    Point point = ((RemoteWebElement) element).getCoordinates().getLocationInViewPort();
     services.getExec().mouseAction(point.x + x, point.y + y,
         OperaMouseKeys.LEFT);
   }
@@ -68,7 +70,7 @@ public class PbActionHandler extends ScopeActions {
 
   @Override
   public void rightClick(WebElement element) {
-    Point point = element.getLocation();
+    Point point = ((RemoteWebElement) element).getCoordinates().getLocationInViewPort();
     services.getExec().mouseAction(point.x, point.y, OperaMouseKeys.RIGHT);
   }
 

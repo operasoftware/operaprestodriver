@@ -28,26 +28,16 @@ import org.openqa.selenium.InvalidElementStateException;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.Point;
-import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.internal.Coordinates;
-import org.openqa.selenium.internal.FindsByClassName;
-import org.openqa.selenium.internal.FindsByCssSelector;
-import org.openqa.selenium.internal.FindsById;
-import org.openqa.selenium.internal.FindsByLinkText;
-import org.openqa.selenium.internal.FindsByName;
-import org.openqa.selenium.internal.FindsByTagName;
-import org.openqa.selenium.internal.FindsByXPath;
-import org.openqa.selenium.internal.Locatable;
-import org.openqa.selenium.internal.WrapsDriver;
+import org.openqa.selenium.remote.RemoteWebElement;
 
 import com.opera.core.systems.model.Canvas;
 import com.opera.core.systems.model.ColorResult;
 import com.opera.core.systems.model.ScreenShotReply;
-import com.opera.core.systems.model.ScriptResult;
 import com.opera.core.systems.scope.internal.OperaColors;
 import com.opera.core.systems.scope.internal.OperaFlags;
 import com.opera.core.systems.scope.internal.OperaIntervals;
@@ -62,9 +52,7 @@ import com.opera.core.systems.scope.services.IOperaExec;
  * @author Deniz Turkoglu
  *
  */
-public class OperaWebElement implements WebElement, SearchContext, Locatable,
-    FindsByTagName, FindsByLinkText, FindsByClassName, FindsByXPath,
-    FindsByName, FindsById, FindsByCssSelector, WrapsDriver {
+public class OperaWebElement extends RemoteWebElement {
 
   private final int objectId;
   private final IEcmaScriptDebugger debugger;
@@ -122,15 +110,6 @@ public class OperaWebElement implements WebElement, SearchContext, Locatable,
     return debugger.callFunctionOnObject(using, objectId, true);
   }
 
-  public void clear() {
-    executeMethod("locator.focus()");
-    // FIXME testClearingAnElementShouldCauseTheOnChangeHandlerToFire
-    // execService.action("Clear");
-    execService.action("Select all");
-    execService.action("Delete");
-    executeMethod("locator.blur()");
-  }
-
   /**
    * Right clicks on the element.
    */
@@ -147,7 +126,7 @@ public class OperaWebElement implements WebElement, SearchContext, Locatable,
   }
 
   public void mouseOver() {
-    Point point = this.getLocation();
+    Point point = coordinates.getLocationInViewPort();
     execService.mouseAction(point.x, point.y);
   }
 
@@ -156,7 +135,7 @@ public class OperaWebElement implements WebElement, SearchContext, Locatable,
    * page, generating a mouseOut event.
    */
   public void mouseOut() {
-    Point point = this.getLocation();
+    Point point = coordinates.getLocationInViewPort();
     execService.mouseAction(point.x, point.y);
     execService.mouseAction(0, 0);
   }
@@ -165,7 +144,7 @@ public class OperaWebElement implements WebElement, SearchContext, Locatable,
    * Presses the left mouse button down on the top left of the element.
    */
   public void mouseDown() {
-    Point point = this.getLocation();
+    Point point = coordinates.getLocationInViewPort();
     execService.mouseAction(point.x, point.y, OperaMouseKeys.LEFT_DOWN);
   }
 
@@ -174,7 +153,7 @@ public class OperaWebElement implements WebElement, SearchContext, Locatable,
    * Releases the left mouse button at the top left of the element.
    */
   public void mouseUp() {
-    Point point = this.getLocation();
+    Point point = coordinates.getLocationInViewPort();
     execService.mouseAction(point.x, point.y, OperaMouseKeys.LEFT_DOWN);
   }
 
@@ -184,7 +163,7 @@ public class OperaWebElement implements WebElement, SearchContext, Locatable,
    * @param times The number of times to click
    */
   public void click(int times) {
-    Point point = this.getLocation();
+    Point point = coordinates.getLocationInViewPort();
     execService.mouseAction(point.x, point.y, OperaMouseKeys.LEFT.getValue(),
         times);
   }
@@ -193,7 +172,7 @@ public class OperaWebElement implements WebElement, SearchContext, Locatable,
    * Click the middle mouse button at the top left of the element.
    */
   public void middleClick() {
-    Point point = this.getLocation();
+    Point point = coordinates.getLocationInViewPort();
     execService.mouseAction(point.x, point.y, OperaMouseKeys.MIDDLE);
   }
 
@@ -209,8 +188,9 @@ public class OperaWebElement implements WebElement, SearchContext, Locatable,
 		Integer id = debugger.executeScriptOnObject("return locator.parentNode", objectId);
 		OperaWebElement parentNode = new OperaWebElement(this.parent, id);
 
+		String multiple = parentNode.getAttribute("multiple");
 		if (parentNode.getTagName().equalsIgnoreCase("SELECT") &&
-		    parentNode.getAttribute("multiple") != null) {
+		     multiple != null && !multiple.equals("false")) {
 		  toggle();
 		} else if (this.getTagName().equals("OPTION")) {
 		  setSelected();
@@ -241,28 +221,15 @@ public class OperaWebElement implements WebElement, SearchContext, Locatable,
   }
 
   public String getAttribute(String attribute) {
+    throwIfStale();
 
-    if (!parent.objectIds.contains(objectId)) throw new StaleElementReferenceException(
-        "You cant interact with stale elements");
-
-    String lcAttribute = attribute.toLowerCase();
-    if (lcAttribute.equals("disabled")) {
-      return String.valueOf(!isEnabled());
-    } else if (lcAttribute.equals("checked") || lcAttribute.equals("selected")) {
-      boolean selected = isSelected();
-      if (!selected) return null;
-      return String.valueOf(selected);
-    } else if (lcAttribute.equals("index")) {
-      return callMethod("locator.index");
-    }
-
-    if (lcAttribute.equals("value")) {
+    if (attribute.toLowerCase().equals("value")) {
       return callMethod("if(/^input|select|textarea$/i.test(locator.nodeName)){"+
           "return locator.value;"+
            "}"+
            "return locator.textContent;");
     } else {
-      return callMethod("locator.getAttribute('" + attribute + "')");
+      return callMethod("return " + OperaAtoms.GET_ATTRIBUTE.getValue() + "(locator, '"+attribute+"')");
     }
   }
 
@@ -276,54 +243,13 @@ public class OperaWebElement implements WebElement, SearchContext, Locatable,
   }
 
   public String getText() {
-        return callMethod("function getVisibleContents(node, checkDisplay, trimmed, preformatted_parent) {\n"+
-                "var s = '';\n"+
-                "var trim = /^\\s+|\\s+$/g;\n"+
-                "var forbidden = /^(head|script|title|style|select|textarea)$/ig;\n"+
-                "\n"+
-                "preformatted_parent = preformatted_parent || false;\n"+
-                "\n"+
-                "if (node.nodeType == Node.TEXT_NODE || node.nodeType == Node.CDATA_SECTION_NODE)\n"+
-                    "return trimmed ? node.nodeValue.replace(trim, '') : node.nodeValue;\n"+
-                    "\n"+
-                "if (node.nodeType == Node.DOCUMENT_POSITION_DISCONNECTED)\n"+
-                    "if (node.nodeName.match(forbidden) || (checkDisplay && getComputedStyle(node).display == 'none'))\n"+
-                        "return s;\n"+
-                        "\n"+
-                "if (node.nodeType == Node.DOCUMENT_POSITION_DISCONNECTED\n"+
-                    "|| node.nodeType == Node.DOCUMENT_NODE\n"+
-                    "|| node.nodeType == Node.DOCUMENT_FRAGMENT_NODE)\n"+
-                "{\n"+
-                    "if (getComputedStyle(node).whiteSpace != 'normal')\n"+
-                        "preformatted_parent = true;\n"+
-                        "\n"+
-                    "for (var i = 0, n; n = node.childNodes[i]; i++)\n"+
-                    "{\n"+
-                        "var n_s = getVisibleContents(n, checkDisplay, false, preformatted_parent);\n"+
-                        "\n"+
-                        // Parent element with non pre formatting. Remove all duplicated white-spaces
-                        "if (n.nodeType == Node.TEXT_NODE && !preformatted_parent)\n"+
-                            "n_s = n_s.replace(/\\s+/g, ' ');\n"+
-                            "\n"+
-        // Wrap with newlines if this is block element.
-                        "if (n.nodeType == Node.ELEMENT_NODE && getComputedStyle(n).display == 'block')\n"+
-                            "s += '\\n' + n_s + '\\n';\n"+
-                        "else if (n.tagName == 'BR')\n"+
-                            "s += '\\n';\n"+
-                        "else if (s.substr(-1) == ' ' && n_s.substr(0, 1) == ' ')\n"+
-                            "s += n_s.substr(1);\n"+
-                        "else\n"+
-                            "s += n_s;\n"+
-                    "}\n"+
-                "}\n"+
-                "\n"+
-                "return trimmed ? s.replace(trim, '') : s;\n"+
-            "}\n"+
-            "if(locator.tagName.toLowerCase() == 'title') document.title;\n"+
-            "else getVisibleContents(locator, true, true).replace(/(\\r*\\n)+/g, '\\n');\n");
+    return callMethod("return " + OperaAtoms.GET_TEXT.getValue() + "(locator)");
   }
 
-
+  @Deprecated
+  /**
+   * @deprecated Use {@link #getAttribute('value')} instead
+   */
   public String getValue(){
     return callMethod("if(/^input|select|textarea$/i.test(locator.nodeName)){"+
                         "return locator.value;"+
@@ -331,12 +257,19 @@ public class OperaWebElement implements WebElement, SearchContext, Locatable,
                          "return locator.textContent;");
   }
 
+  public boolean isDisplayed() {
+    throwIfStale();
+    return (Boolean) evaluateMethod("return " + OperaAtoms.IS_DISPLAYED.getValue() + "(locator)");
+  }
+
   public boolean isEnabled() {
-    return (Boolean) evaluateMethod("return !locator.disabled");
+    throwIfStale();
+    return (Boolean) evaluateMethod("return " + OperaAtoms.IS_ENABLED.getValue() + "(locator)");
   }
 
   public boolean isSelected() {
-    return (Boolean) evaluateMethod("return locator.checked != null ? locator.checked : locator.selected != null ? locator.selected : false;");
+    throwIfStale();
+    return (Boolean) evaluateMethod("return " + OperaAtoms.IS_SELECTED.getValue() + "(locator)");
   }
 
   /**
@@ -344,8 +277,11 @@ public class OperaWebElement implements WebElement, SearchContext, Locatable,
    */
   @Deprecated
   public boolean isVisible() {
-    return isDisplayed();// (Boolean)
-    // evaluateMethod("return (locator.offsetWidth > 0)");
+    return isDisplayed();
+  }
+
+  public void clear() {
+    executeMethod("return " + OperaAtoms.CLEAR.getValue() + "(locator)");
   }
 
   public void sendKeys(CharSequence... keysToSend) {
@@ -477,7 +413,6 @@ public class OperaWebElement implements WebElement, SearchContext, Locatable,
     return getAttribute(attr) != null;
   }
 
-  // FIXME isDisplayed is not working for select elements, revise
   /**
    * @deprecated Please use "click" instead
    */
@@ -496,54 +431,15 @@ public class OperaWebElement implements WebElement, SearchContext, Locatable,
         throw new InvalidElementStateException("Cannot select a "+tagName+" element");
     }
 
-    if (tagName.equalsIgnoreCase("option")) {
-      Integer id = debugger.executeScriptOnObject("return locator.parentNode",
-          objectId);
-      OperaWebElement parentNode = new OperaWebElement(this.parent,
-          id.intValue());
-
-			parent.getScopeServices().captureOperaIdle();
-      if (parentNode.getAttribute("multiple") == null) {
-        if (OperaFlags.ENABLE_CHECKS) {
-          if (!parentNode.isDisplayed()) throw new UnsupportedOperationException(
-              "You can't select an element that is not displayed");
-        }
-
-        // find all nodes
-        Integer index = Integer.valueOf(getAttribute("index"));
-        // reset prior to sending
-        parentNode.sendKeys(Keys.HOME);
-        List<WebElement> elements = parentNode.findElementsByTagName("option");
-        for (int i = 0; i < index; i++) {
-          // down only if enabled or target element
-          if (elements.get(i).isEnabled() || elements.get(i).equals(this)) parentNode.sendKeys(Keys.DOWN);
-        }
-      } else {
-        debugger.callFunctionOnObject("locator.selected = true;", objectId,
-            false);
-      }
-
-      parent.waitForLoadToComplete();
-    } else {// if(getTagName().equalsIgnoreCase("input")) {
-      if (!isSelected()) click();
-    }
+    evaluateMethod("return " + OperaAtoms.SET_SELECTED.getValue() + "(locator, true)");
   }
 
   public void submit() {
-    OperaWebElement element = (OperaWebElement) parent.executeScript("element = arguments[0];" +
-              "while (element.parentNode != null && element.tagName.toLowerCase() != \"form\") {" +
-              "element = element.parentNode;" +
-              "} return element;", this);
-    ScriptResult result = (ScriptResult) debugger.scriptExecutor("return arguments[0];", element);
+    parent.getScopeServices().captureOperaIdle();
 
-		parent.getScopeServices().captureOperaIdle();
-    if(result.getClassName().equals("HTMLFormElement")) {
-      debugger.callFunctionOnObject("if(locator.onsubmit == undefined || locator.onsubmit()) locator.submit()", element.getObjectId(), false);
-    }
-    else throw new WebDriverException("Element is not in a form, can't submit");
+    evaluateMethod("return " + OperaAtoms.SUBMIT.getValue() + "(locator)");
 
     parent.waitForLoadToComplete();
-
   }
 
   // FIXME revise with javascript guys
@@ -574,13 +470,8 @@ public class OperaWebElement implements WebElement, SearchContext, Locatable,
         throw new ElementNotVisibleException("Cannot select an element that is not displayed");
     }
 
-    if (tagName.equalsIgnoreCase("option")) return (Boolean) debugger.callFunctionOnObject(
-        "locator.selected = !locator.selected; return locator.selected;",
-        objectId, true);
-
     return (Boolean) debugger.callFunctionOnObject(
-        "locator.checked = !locator.checked; return locator.checked;",
-        objectId, true);
+        "return " + OperaAtoms.TOGGLE.getValue() + "(locator)", objectId, true);
   }
 
   public static void sleep(long timeInMillis) {
@@ -624,14 +515,9 @@ public class OperaWebElement implements WebElement, SearchContext, Locatable,
    */
   public Point getLocation() {
     String coordinates = debugger.callFunctionOnObject(
-        "locator.scrollIntoView();\n"
-            + "var x = 0, y = 0;\n"
-            + "if(window.frameElement) {\n"
-            + "x = (window.screenLeft - window.top.screenLeft) + window.scrollX;\n"
-            + "y = (window.screenTop - window.top.screenTop) + window.scrollY;\n"
-            + "}\n"
-            + "return (( x + locator.getBoundingClientRect().left) + ',' + ( y + locator.getBoundingClientRect().top));\n",
-        objectId);
+        "var c=" + OperaAtoms.GET_LOCATION.getValue() + "(locator);return c.x+','+c.y;",
+        objectId
+    );
     String[] location = coordinates.split(",");
     return new Point(Integer.valueOf(location[0]), Integer.valueOf(location[1]));
   }
@@ -641,67 +527,12 @@ public class OperaWebElement implements WebElement, SearchContext, Locatable,
         "You cant interact with stale elements");
 
     String widthAndHeight = debugger.callFunctionOnObject(
-        "return (locator.getBoundingClientRect().width + ',' + locator.getBoundingClientRect().height);",
-        objectId);
+        "var s=" + OperaAtoms.GET_SIZE.getValue() + "(locator);return s.width+','+s.height;",
+        objectId
+    );
     String[] dimension = widthAndHeight.split(",");
     return new Dimension(Integer.valueOf(dimension[0]),
         Integer.valueOf(dimension[1]));
-  }
-
-  public boolean isDisplayed() {
-    boolean isDisplayed = false;
-    if (!parent.objectIds.contains(objectId)
-        || callMethod("locator.parentNode") == null) throw new StaleElementReferenceException(
-        "You cant interact with stale elements");
-    try {
-      isDisplayed = (Boolean) evaluateMethod("function d(locator) {"
-          + "var el = locator;\n"
-          + "while (el.nodeType != 1 && !(el.nodeType >= 9 && el.nodeType <= 11)) {\n"
-          + "el = el.parentNode;\n"
-          + "}\n"
-          + "\n"
-          + "if (!el) {\n"
-          + "return false;\n"
-          + "}\n"
-          + "\n"
-          + "if (el.tagName.toLowerCase() == 'input' && el.type == 'hidden') {\n"
-          + " return false; \n"
-          + " }\n"
-          + "if(el.tagName.toLowerCase() == 'option') {\n"
-            // If this is a <option>, recurse up to its parent <select>
-            + "return d(el.parentNode);\n"
-            // Map is shown iff image that uses it is shown.
-          + "} else if (el.tagName.toLowerCase() == 'map') {\n"
-            + "if (!el.name) return false;\n"
-            + "var image = el.ownerDocument.evaluate('//*[@usemap = \"#'+ el.name +'\"]', el.ownerDocument, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;\n"
-            + "return true;"
-            + "return !!image && d(image);\n"
-          + "} else if (el.tagName.toLowerCase() == 'area') {\n"
-            + "return d(el.parentNode);\n"
-          + "}\n"
-          + "\n"
-          + "el.scrollIntoView();\n"
-          + "var box = el.getBoundingClientRect();\n"
-          + "if (box.width == 0 || box.height == 0) {\n"
-          + "return false;\n"
-          + "}\n"
-          + "var visibility = el.ownerDocument.defaultView.getComputedStyle(el, null).getPropertyValue('visibility');\n"
-          + "\n"
-          + "var _isDisplayed = function(e) {\n"
-          + " var display = e.ownerDocument.defaultView.getComputedStyle(e, null).getPropertyValue('display');\n"
-          + "if (display == 'none') return display;\n"
-          + " if (e && e.parentNode && e.parentNode.style) {\n"
-          + " return _isDisplayed(e.parentNode);\n" + "}\n"
-          + "return undefined;\n" + "};\n" + "\n"
-          + "var displayed = _isDisplayed(el);\n" + "\n"
-          + "return displayed != 'none' && visibility != 'hidden';"
-          + "}"
-          + "return d(locator);");
-    } catch (WebDriverException ex) {
-      throw new StaleElementReferenceException("This element is stale");
-    }
-
-    return isDisplayed;
   }
 
   /**
@@ -797,7 +628,7 @@ public class OperaWebElement implements WebElement, SearchContext, Locatable,
   private Canvas buildCanvas() {
     Canvas canvas = new Canvas();
     Dimension dimension = getSize();
-    Point point = getLocation();
+    Point point = coordinates.getLocationInViewPort();
     /*
     String[] areaCoordinates = callMethod("var oElement = locator;\n" +
           "var posX = 0, posY = 0;\n" +
@@ -827,7 +658,7 @@ public class OperaWebElement implements WebElement, SearchContext, Locatable,
   // TODO we only return location on screen when scrolled?
   // isnt this a duplicate method?
   public Point getLocationOnScreenOnceScrolledIntoView() {
-    if (isVisible()) return getLocation();
+    if (isDisplayed()) return getLocation();
     return null;
   }
 
@@ -862,6 +693,14 @@ public class OperaWebElement implements WebElement, SearchContext, Locatable,
     throw new NoSuchElementException("Cannot find element with " + type);
   }
 
+  protected WebElement findElement(String by, String using) {
+    return parent.findElement(by, using, this);
+  }
+
+  protected List<WebElement> findElements(String by, String using) {
+    return parent.findElements(by, using, this);
+  }
+
   private final List<WebElement> findMultipleElements(String using, String type) {
     Integer id = debugger.executeScriptOnObject(using, objectId);
     if (id == null) throw new NoSuchElementException(
@@ -870,105 +709,6 @@ public class OperaWebElement implements WebElement, SearchContext, Locatable,
     List<WebElement> elements = parent.processElements(id);
 
     return elements;
-  }
-
-  public WebElement findElementByLinkText(String using) {
-    return findSingleElement("var elements = locator.getElementsByTagName('a'), element = null, i = 0;\n" +
-        "for(;element = elements[i]; i++) {\n" +
-        " if(element.textContent == '"+ parent.escapeJsString(using, "'") + "'){\n"+
-        " return element; }\n"+
-        "}", "link text");
-  }
-
-  public WebElement findElementByPartialLinkText(String using) {
-    return findSingleElement("var elements = locator.getElementsByTagName('a'), element = null, i = 0;\n" +
-        "for(;element = elements[i]; i++) {\n" +
-        " if(element.textContent.indexOf('" + parent.escapeJsString(using, "'") + "') > -1){\n"+
-        " return element; }\n"+
-        "}", "partial link text");
-  }
-
-  public List<WebElement> findElementsByLinkText(String using) {
-    return findMultipleElements("var links = locator.getElementsByTagName('a'), link = null, i = 0, ret = [];"+
-          "for( ; link = links[i]; i++)"+
-          "{"+
-            "if(link.textContent == '" + parent.escapeJsString(using, "'") + "')"+
-            "{"+
-              "ret.push(link);"+
-            "}"+
-          "}"+
-          "return ret;", "link text");
-  }
-
-  public List<WebElement> findElementsByPartialLinkText(String using) {
-    return findMultipleElements("var links = locator.getElementsByTagName('a'), link = null, i = 0, ret = [];"+
-          "for( ; link = links[i]; i++)"+
-          "{"+
-            "if(link.textContent.indexOf('" + parent.escapeJsString(using, "'") + "') > -1 )"+
-            "{"+
-              "ret.push(link);"+
-            "}"+
-          "}"+
-          "return ret;", "link text");
-  }
-
-  public WebElement findElementByTagName(String using) {
-    if (using.contains(":")) {
-      // has prefix
-      String[] tagInfo = using.split(":");
-      return findSingleElement("(function(obj) { var elements = obj.getElementsByTagName('" + tagInfo[1] + "'), element = null;" +
-          "for( var i = 0; i < elements.length; i++ ) {" +
-          "if( elements[i].prefix == '" + tagInfo[0] + "' ) {" +
-          "element = elements[i];" +
-          "break;"+
-          "}" +
-          "}" +
-          "return element; })(locator)", "tag name");
-    }
-    return findSingleElement("locator.getElementsByTagName('" + parent.escapeJsString(using, "'") + "')[0]", "tag name");
-  }
-
-  public List<WebElement> findElementsByTagName(String using) {
-    if (using.contains(":")) {// has prefix
-      String[] tagInfo = using.split(":");
-      return findMultipleElements("(function(obj) { var elements = obj.getElementsByTagName('" + tagInfo[1] + "'), output = [];" +
-          "for( var i = 0; i < elements.length; i++ ) {" +
-          "if( elements[i].prefix == '" + tagInfo[0] + "' ) {" +
-          "output.push(elements[i]);" +
-          "}" +
-          "}" +
-          "return output; })(locator)", "tag name");
-    }
-    return findMultipleElements("locator.getElementsByTagName('" + parent.escapeJsString(using, "'") + "')", "tag name");
-  }
-
-
-  public WebElement findElementByClassName(String using) {
-    return findSingleElement("locator.getElementsByClassName('" + parent.escapeJsString(using, "'") + "')[0]", "class name");
-  }
-
-  public List<WebElement> findElementsByClassName(String using) {
-    return findMultipleElements("locator.getElementsByClassName('" + parent.escapeJsString(using, "'") + "')", "class name");
-  }
-
-  public WebElement findElementByXPath(String using) {
-    return findSingleElement(
-      "document.evaluate(\"" +
-      parent.escapeJsString(using) +
-      "\", locator, null, XPathResult.FIRST_ORDERED_NODE_TYPE,  null).singleNodeValue;\n",
-      "XPath");
-  }
-
-  public List<WebElement> findElementsByXPath(String using) {
-    return findMultipleElements(
-        "var result = document.evaluate(\""
-            + parent.escapeJsString(using)
-            + "\", locator, null, XPathResult.ORDERED_NODE_ITERATOR_TYPE,  null);\n"
-            + "var elements = new Array();\n"
-            + "var element = result.iterateNext();\n" + "while (element) {\n"
-            + "  elements.push(element);\n"
-            + "  element = result.iterateNext();\n" + "}\n" + "return elements",
-        "XPath");
   }
 
   public WebElement findElementByName(String using) {
@@ -989,36 +729,6 @@ public class OperaWebElement implements WebElement, SearchContext, Locatable,
         + "}\n" + "return elements", "XPath");
   }
 
-  public WebElement findElementById(String using) {
-    return findSingleElement(
-        "document.evaluate(\"descendant-or-self::*[@id='"
-            + using
-            + "']\",locator,null,XPathResult.ORDERED_NODE_ITERATOR_TYPE,null).iterateNext()",
-        "id");
-  }
-
-  public List<WebElement> findElementsById(String using) {
-    return findMultipleElements("var result = document.evaluate"
-        + "(\"descendant-or-self::*[@id='" + using + "']\""
-        + ", locator, null, XPathResult.ORDERED_NODE_ITERATOR_TYPE,  null);\n"
-        + "var elements = new Array();\n"
-        + "var element = result.iterateNext();\n" + "while (element) {\n"
-        + "  elements.push(element);\n" + "  element = result.iterateNext();\n"
-        + "}\n" + "return elements", "XPath");
-  }
-
-  public WebElement findElementByCssSelector(String using) {
-    return findSingleElement("locator.querySelector('" + using + "');", "selector");
-  }
-
-  public List<WebElement> findElementsByCssSelector(String using) {
-    return findMultipleElements(
-        "var results = locator.querySelectorAll('"
-            + parent.escapeJsString(using, "'")
-            + "'), returnValue = [], i=0;for(;returnValue[i]=results[i];i++); return returnValue;",
-        "selector");
-  }
-
   @Override
   protected void finalize() throws Throwable {
     debugger.releaseObject(objectId);
@@ -1026,32 +736,49 @@ public class OperaWebElement implements WebElement, SearchContext, Locatable,
   }
 
   public Coordinates getCoordinates() {
-    return new Coordinates() {
-
-      public Point getLocationOnScreen() {
-        return getLocationOnScreenOnceScrolledIntoView();
-      }
-
-      public Point getLocationInViewPort() {
-        return getLocation();
-      }
-
-      public Point getLocationInDOM() {
-        throw new UnsupportedOperationException("Not supported yet.");
-      }
-
-      public Object getAuxiliry() {
-        throw new UnsupportedOperationException("Not supported yet.");
-      }
-    };
+    return coordinates;
   }
+  private Coordinates coordinates = new Coordinates() {
+    public Point getLocationOnScreen() {
+      throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public Point getLocationInViewPort() {
+      String coordinates = debugger.callFunctionOnObject(
+          "locator.scrollIntoView();\n"
+              + "var x = 0, y = 0;\n"
+              + "if(window.frameElement) {\n"
+              + "x = (window.screenLeft - window.top.screenLeft) + window.scrollX;\n"
+              + "y = (window.screenTop - window.top.screenTop) + window.scrollY;\n"
+              + "}\n"
+              + "return (( x + locator.getBoundingClientRect().left) + ',' + ( y + locator.getBoundingClientRect().top));\n",
+          objectId);
+      String[] location = coordinates.split(",");
+      return new Point(Integer.valueOf(location[0]), Integer.valueOf(location[1]));
+    }
+
+    public Point getLocationInDOM() {
+      return getLocation();
+    }
+
+    public Object getAuxiliry() {
+      throw new UnsupportedOperationException("Not supported yet.");
+    }
+  };
 
   public String getCssValue(String property) {
-    return callMethod("return getComputedStyle(locator,null).getPropertyValue('"
-        + property + "');");
+    return callMethod("return "+OperaAtoms.GET_EFFECTIVE_STYLE.getValue()+"(locator, '"+property+"')");
   }
 
   public WebDriver getWrappedDriver() {
     return parent;
+  }
+
+  private void throwIfStale() {
+    if (!parent.objectIds.contains(objectId) ||
+        Boolean.valueOf(debugger.callFunctionOnObject("locator.parentNode == undefined", objectId))) {
+      throw new StaleElementReferenceException("You cant interact with stale elements");
+    }
+
   }
 }
