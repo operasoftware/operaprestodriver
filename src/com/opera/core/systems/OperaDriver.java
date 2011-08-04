@@ -1283,7 +1283,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
   }
 
   public Mouse getMouse() {
-    return mouse;
+    return new OperaMouse(this);
   }
 
   public String selftest(List<String> modules, long timeout) {
