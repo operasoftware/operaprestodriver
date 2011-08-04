@@ -539,13 +539,24 @@ public class EcmaScriptDebugger extends AbstractService implements
   public void changeRuntime(String frameName) {
     buildRuntimeTree();
 
-    String[] values = frameName.split("\\.");
     RuntimeNode curr = root;
-
+    // This code allows you to focus on a frame inside another frame. For e.g.
+    // "one.two.three" would search the root for a frame named "one", then
+    // inside the "one" frame for frame named "two", and inside that for
+    // a frame named "three".
+    // But the Selenium tests don't say anything about the above behaviour,
+    // but do say we have to find frames with a "."s in the name.
+    // And that's why it's commented out. We may need to bring it back if
+    // it causes regressions.
+    /*
+    String[] values = frameName.split("\\.");
     for (int i = 0; i < values.length; i++) {
       curr = findNodeByName(values[i], curr);
       if (curr == null) break;
     }
+    */
+
+    curr = findNodeByName(frameName, curr);
 
     if (curr == null) {
       throw new NoSuchFrameException("Invalid frame name " + frameName);
