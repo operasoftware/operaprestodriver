@@ -52,7 +52,6 @@ public class PbActionHandler extends ScopeActions {
   @Override
   public void click(WebElement element, String locator) {
     Point point = ((RemoteWebElement) element).getCoordinates().getLocationInViewPort();
-    System.out.println(point);
     services.getExec().mouseAction(point.x + 1, point.y + 1,
         OperaMouseKeys.LEFT);
   }
