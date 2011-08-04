@@ -92,7 +92,6 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
   protected ScopeServices services;
   protected ScopeActions actionHandler;
 
-  private OperaMouse mouse;
   private OperaKeyboard keyboard;
 
   protected final Logger logger = Logger.getLogger(this.getClass().getName());
@@ -209,7 +208,6 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
     windowManager = services.getWindowManager();
     exec = services.getExec();
-    mouse = new OperaMouse(this);
     keyboard = new OperaKeyboard(this);
     coreUtils = services.getCoreUtils();
     actionHandler = new PbActionHandler(services);
@@ -1280,7 +1278,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
   }
 
   public Mouse getMouse() {
-    return mouse;
+    return new OperaMouse(this);
   }
 
   public String selftest(List<String> modules, long timeout) {
