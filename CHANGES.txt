@@ -1,3 +1,59 @@
+2011/08/03 OperaDriver 0.6
+==========================
+
+API changes
+-----------
+
+ * Add complete support for the Advanced User Interactions API
+   http://code.google.com/p/selenium/wiki/AdvancedUserInteractions
+   * OperaWebElement.getLocation() now returns the location in the DOM, rather
+     than in the viewport. To get viewport location use
+     `getCoordinates().getLocationInViewPort()`.
+   (andreastt, stuartk)
+ * Use Selenium atoms (see below).
+ * Update Selenium jar to 2.3.0.
+
+
+New features
+------------
+
+ * Added ability to navigate menus in Opera Desktop. (Karianne Ekern,
+   Adam Minchinton)
+ * Add selftest service. (Arne Skjærholt)
+ * Use atoms from the Selenium project instead of our own custom JS for:
+   * Finding elements from OperaDriver and OperaWebElement
+   * Getting attributes, style, location and size of OperaWebElement
+   * Getting displayed, enabled and selected state of OperaWebElement
+   * Submitting and toggling OperaWebElement
+   * Getting the text of OperaWebElement
+   (stuartk) TODO list all methods?
+ * If available show Ecmascript error message in the exception. (stuartk)
+ * Correctly return WebElements when they are in another JS object, such as
+   an array. (stuartk)
+
+Bug fixes
+---------
+
+ * OperaDriver.navigate().frame(String) now switches to frames with "."s in
+   rather than sub-frames. (stuartk)
+
+Tests
+-----
+
+ * Add tests for selftest. (Arne Skjærholt)
+ * Add test for finding sub-elements on a OperaWebElement. (stuartk)
+ * Add test for executing Javascript returning an array of elements. (stuartk)
+
+Other
+-----
+
+ * Add UMS protobuf file. Regenerate the Java code (no effective changes).
+   (stuartk)
+ * Move OperaMouse and OperaKeyboard into separate classes. (andreastt)
+ * Update pom.xml to contain all needed info. (stuartk)
+
+
+
 2011/07/01 OperaDriver 0.5.2
 ============================
 
