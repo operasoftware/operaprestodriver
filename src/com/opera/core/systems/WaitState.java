@@ -319,8 +319,9 @@ public class WaitState {
     ResultItem result = getResult();
     if(result != null)
       result.remaining_idle_timeout = timeout;
-
+    
     if (result == null && timeout > 0) {
+      logger.info("We're in pollResultItem. timeout="+timeout+" idle="+idle);
       long start = System.currentTimeMillis();
       internalWait(timeout);
       long end = System.currentTimeMillis();
@@ -342,6 +343,12 @@ public class WaitState {
 
   private final ResultItem waitAndParseResult(long timeout, int match,
       String stringMatch, final ResponseType type) {
+	  logger.info("waitAndParseResult with parameters: timeout="+timeout+" match="+match+" stringMatch="+stringMatch+" ResponseType="+type);
+	  if (type == ResponseType.WINDOW_LOADED){
+		  logger.info("WE WILL CHANGE TIMEOUT NOW.");
+		  timeout=30000;
+		  logger.info("so, now: waitAndParseResult with parameters: timeout="+timeout+" match="+match+" stringMatch="+stringMatch+" ResponseType="+type);		  
+	  }
     synchronized (lock) {
       while (true) {
         ResultItem result = pollResultItem(timeout, type == ResponseType.OPERA_IDLE);
@@ -480,6 +487,7 @@ public class WaitState {
      * waitForOperaIdle() will return immediately.
      */
     public void captureOperaIdle() {
+      logger.info("capture_idle_events is now true!");
       capture_idle_events = true;
     }
 
