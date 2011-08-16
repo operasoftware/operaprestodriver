@@ -25,8 +25,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openqa.selenium.WebDriverException;
+import org.openqa.selenium.remote.DesiredCapabilities;
 
 import com.google.protobuf.GeneratedMessage;
+import com.opera.core.systems.OperaDesktopDriver;
+import com.opera.core.systems.OperaDriver;
 import com.opera.core.systems.model.ScreenShotReply;
 import com.opera.core.systems.runner.OperaRunner;
 import com.opera.core.systems.runner.OperaRunnerException;
@@ -41,40 +44,39 @@ import com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStatus
 import com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStopRequest;
 import com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStatusResponse.StatusType;
 import com.opera.core.systems.scope.internal.OperaIntervals;
-import com.opera.core.systems.settings.OperaDriverSettings;
 
 public class OperaLauncherRunner implements OperaRunner {
   private static Logger logger = Logger.getLogger(OperaLauncherRunner.class.getName());
 
   private OperaLauncherBinary launcherRunner = null;
 
-  private OperaDriverSettings settings;
+  private DesiredCapabilities capabilities;
   private OperaLauncherProtocol launcherProtocol = null;
   private String crashlog = null;
 
-  public OperaLauncherRunner(OperaDriverSettings settings) {
+  public OperaLauncherRunner(DesiredCapabilities capabilities) {
     logger.fine("Creating OperaLauncherRunner");
-    this.settings = settings;
+    this.capabilities = capabilities;
 
-    if (this.settings.getOperaLauncherBinary() == null) {
+    if (this.capabilities.getCapability(OperaDriver.LAUNCHER) == null) {
       throw new WebDriverException( "Launcher path not set");
     }
 
-    if (this.settings.getOperaBinaryLocation() == null) {
+    if (this.capabilities.getCapability(OperaDriver.BINARY) == null) {
       throw new WebDriverException("You need to set Opera's path to use opera-launcher");
     }
 
-    if (this.settings.doRunOperaLauncherFromOperaDriver()) {
+    if ((Boolean) this.capabilities.getCapability(OperaDriver.RUN_LAUNCHER)) {
       logger.fine("Running launcher from OperaDriver");
 
       List<String> stringArray = new ArrayList<String>();
       stringArray.add("-host");
       stringArray.add("127.0.0.1");
       stringArray.add("-port");
-      stringArray.add(Integer.toString(this.settings.getOperaLauncherListeningPort()));
-      if (this.settings.getOperaLauncherXvfbDisplay() != null) {
+      stringArray.add(Integer.toString((Integer) this.capabilities.getCapability(OperaDriver.LAUNCHER_PORT)));
+      if (this.capabilities.getCapability(OperaDriver.DISPLAY) != null) {
         stringArray.add("-display");
-        stringArray.add(":" + Integer.toString(this.settings.getOperaLauncherXvfbDisplay()));
+        stringArray.add(":" + Integer.toString((Integer) this.capabilities.getCapability(OperaDriver.DISPLAY)));
       }
 
       if (logger.isLoggable(Level.FINEST)) {
@@ -90,9 +92,11 @@ public class OperaLauncherRunner implements OperaRunner {
 
       // Note any launcher arguments must be before this line!
 
-      if (this.settings.getNoQuit()) stringArray.add("-noquit");
+      if ((Boolean) this.capabilities.getCapability(OperaDriver.NO_QUIT)) {
+        stringArray.add("-noquit");
+      }
       stringArray.add("-bin");
-      stringArray.add(this.settings.getOperaBinaryLocation());
+      stringArray.add((String) this.capabilities.getCapability(OperaDriver.BINARY));
 
       /*
        * We read in environmental variable OPERA_ARGS in addition to existing
@@ -102,7 +106,7 @@ public class OperaLauncherRunner implements OperaRunner {
        * Note that this is a deviation from the principle of arguments normally
        * overwriting environmental variables.
        */
-      String binaryArguments = this.settings.getOperaBinaryArguments();
+      String binaryArguments = (String) this.capabilities.getCapability(OperaDriver.ARGUMENTS);
       String environmentArguments = System.getenv("OPERA_ARGS");
 
       if (environmentArguments != null && environmentArguments.length() > 0) {
@@ -122,23 +126,24 @@ public class OperaLauncherRunner implements OperaRunner {
       if (!stringArray.contains("-autotestmode")) stringArray.add("-autotestmode");
 
       launcherRunner = new OperaLauncherBinary(
-        this.settings.getOperaLauncherBinary(),
+        (String) this.capabilities.getCapability(OperaDriver.BINARY),
         stringArray.toArray(new String[stringArray.size()])
       );
     }
 
-    logger.fine("Waiting for Opera Launcher connection on port " + this.settings.getOperaLauncherListeningPort());
+    int launcherPort = (Integer) this.capabilities.getCapability(OperaDriver.LAUNCHER_PORT);
+    logger.fine("Waiting for Opera Launcher connection on port " + launcherPort);
 
     try {
       // setup listener server
-      ServerSocket listenerServer = new ServerSocket(this.settings.getOperaLauncherListeningPort());
+      ServerSocket listenerServer = new ServerSocket(launcherPort);
       listenerServer.setSoTimeout((int) OperaIntervals.LAUNCHER_TIMEOUT.getValue());
 
       // try to connect
       launcherProtocol = new OperaLauncherProtocol(listenerServer.accept());
 
       // we did it!
-      logger.fine("Connected with Opera Launcher on port " + this.settings.getOperaLauncherListeningPort());
+      logger.fine("Connected with Opera Launcher on port " + launcherPort);
       listenerServer.close();
 
       // Do the handshake!
@@ -155,10 +160,10 @@ public class OperaLauncherRunner implements OperaRunner {
       }
     } catch (SocketTimeoutException e) {
       throw new OperaRunnerException("Timeout waiting for Opera Launcher to connect on port "
-          + this.settings.getOperaLauncherListeningPort(), e);
+          + launcherPort, e);
     } catch (IOException e) {
       throw new OperaRunnerException("Unable to listen to opera launcher port "
-          + this.settings.getOperaLauncherListeningPort(), e);
+          + launcherPort, e);
     }
   }
 
@@ -230,7 +235,7 @@ public class OperaLauncherRunner implements OperaRunner {
 
     try {
       // Send a shutdown to the launcher!
-      if (this.settings.doRunOperaLauncherFromOperaDriver()) {
+      if ((Boolean) this.capabilities.getCapability(OperaDriver.RUN_LAUNCHER)) {
         try {
           launcherProtocol.sendRequestWithoutResponse(MessageType.MSG_SHUTDOWN,
               null);

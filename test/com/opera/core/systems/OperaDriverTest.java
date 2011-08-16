@@ -1,10 +1,10 @@
 package com.opera.core.systems;
 
-import com.opera.core.systems.settings.OperaDriverSettings;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.openqa.selenium.remote.DesiredCapabilities;
 
 public class OperaDriverTest extends TestBase {
   // Replace the TestBase setup and teardown so that we don't launch opera
@@ -27,10 +27,10 @@ public class OperaDriverTest extends TestBase {
 
   @Test
   public void testNullOperaArguments() throws Exception {
-    OperaDriverSettings settings = new OperaDriverSettings();
-    settings.setOperaBinaryArguments(null);
+    DesiredCapabilities caps = new DesiredCapabilities();
+    caps.setCapability(OperaDriver.ARGUMENTS, (String) null);
 
-    OperaDriver driver = new TestOperaDriver(settings);
+    OperaDriver driver = new TestOperaDriver(caps);
     Assert.assertNotNull(driver);
     driver.quit();
   }

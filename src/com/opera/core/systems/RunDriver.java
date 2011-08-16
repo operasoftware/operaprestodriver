@@ -2,26 +2,26 @@ package com.opera.core.systems;
 
 import java.util.ArrayList;
 
+import org.openqa.selenium.remote.DesiredCapabilities;
+
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo.QuickWidgetType;
 import com.opera.core.systems.scope.protos.SystemInputProtos.ModifierPressed;
 import com.opera.core.systems.scope.protos.SystemInputProtos.MouseInfo.MouseButton;
-import com.opera.core.systems.settings.OperaDriverSettings;
 
 class RunDriver {
 	 private static OperaDesktopDriver driver;
 //	 private static OperaDriver driver;
 
 	 public static void main(String[]args) {
-		 	OperaDriverSettings settings = new OperaDriverSettings();
+		 	DesiredCapabilities capabilities = new DesiredCapabilities();
 
-		 	settings.setNoQuit(true);
-		 	settings.setNoRestart(true);
-		 	settings.setGuessOperaPath(false);
-		 	settings.setOperaBinaryLocation(null);
-
+		 	capabilities.setCapability(OperaDriver.NO_QUIT, true);
+		 	capabilities.setCapability(OperaDriver.NO_RESTART, true);
+		 	capabilities.setCapability(OperaDriver.GUESS_BINARY_PATH, false);
+		 	capabilities.setCapability(OperaDriver.BINARY, (String) null);
 
 	    	System.out.println("Create Driver");
-	        driver = new OperaDesktopDriver(settings);
+	        driver = new OperaDesktopDriver(capabilities);
 //	        driver = new OperaDriver();
 	        System.out.println(".Driver created ......");
 

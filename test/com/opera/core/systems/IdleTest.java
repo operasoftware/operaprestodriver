@@ -1,11 +1,11 @@
 package com.opera.core.systems;
 
 import com.opera.core.systems.scope.internal.OperaIntervals;
-import com.opera.core.systems.settings.OperaDriverSettings;
 import org.junit.*;
 import org.junit.rules.MethodRule;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.Statement;
+import org.openqa.selenium.remote.DesiredCapabilities;
 
 public class IdleTest extends TestBase {
   // Timeout vars for every test
@@ -31,10 +31,10 @@ public class IdleTest extends TestBase {
 
   @BeforeClass
   public static void setUpBeforeClass() throws Exception {
-    OperaDriverSettings settings = new OperaDriverSettings();
-    settings.setUseOperaIdle(true);
+    DesiredCapabilities caps = new DesiredCapabilities();
+    caps.setCapability(OperaDriver.USE_OPERAIDLE, true);
 
-    driver = new TestOperaDriver(settings);
+    driver = new TestOperaDriver(caps);
     initFixtures();
   }
 
@@ -236,9 +236,9 @@ public class IdleTest extends TestBase {
   @Test
   public void testIdleOff() throws Exception {
     driver.quit();
-    OperaDriverSettings settings = new OperaDriverSettings();
-    settings.setUseOperaIdle(false);
-    driver = new TestOperaDriver(settings);
+    DesiredCapabilities caps = new DesiredCapabilities();
+    caps.setCapability(OperaDriver.USE_OPERAIDLE, false);
+    driver = new TestOperaDriver(caps);
 
     getFixture("timer.html");
     // Idle will wait for timeout before firing
