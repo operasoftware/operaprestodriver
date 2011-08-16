@@ -102,6 +102,9 @@ public class OperaLauncherRunner implements OperaRunner {
        * overwriting environmental variables.
        */
       String binaryArguments = (String) this.capabilities.getCapability(OperaDriver.ARGUMENTS);
+      if (binaryArguments == null) {
+        binaryArguments = "";
+      }
       String environmentArguments = System.getenv("OPERA_ARGS");
 
       if (environmentArguments != null && environmentArguments.length() > 0) {
