@@ -1,6 +1,5 @@
 package com.opera.core.systems;
 
-import com.opera.core.systems.settings.OperaDriverSettings;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
