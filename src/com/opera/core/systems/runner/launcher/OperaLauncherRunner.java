@@ -126,7 +126,7 @@ public class OperaLauncherRunner implements OperaRunner {
       if (!stringArray.contains("-autotestmode")) stringArray.add("-autotestmode");
 
       launcherRunner = new OperaLauncherBinary(
-        (String) this.capabilities.getCapability(OperaDriver.BINARY),
+        (String) this.capabilities.getCapability(OperaDriver.LAUNCHER),
         stringArray.toArray(new String[stringArray.size()])
       );
     }
