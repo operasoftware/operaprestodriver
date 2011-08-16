@@ -125,7 +125,9 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
   public OperaDriver(DesiredCapabilities c) {
     capabilities = getDefaultCapabilities();
 
-    capabilities.merge(c);
+    if (c != null) {
+      capabilities.merge(c);
+    }
 
     if ((Boolean) capabilities.getCapability(AUTOSTART)) {
       OperaPaths paths = new OperaPaths();
