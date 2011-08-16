@@ -3,7 +3,9 @@ package com.opera.core.systems;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 
 
 public class DriverKeysTest extends TestBase {
@@ -165,6 +167,32 @@ public class DriverKeysTest extends TestBase {
     driver.key("backspace");
 
     Assert.assertEquals("abc ", fieldOne.getAttribute("value"));
+  }
+
+  @Test
+  public void testCopyPaste() throws Exception {
+    driver.type("hello world");
+    Actions action = new Actions(driver);
+    action.sendKeys(Keys.CONTROL + "a");
+    action.sendKeys(Keys.CONTROL + "c");
+    action.sendKeys(fieldTwo, Keys.CONTROL + "v");
+
+    action.perform();
+
+    Assert.assertEquals("hello world", fieldTwo.getAttribute("value"));
+  }
+
+  @Test
+  public void testCopyPasteLeftControl() throws Exception {
+    driver.type("hello world");
+    Actions action = new Actions(driver);
+    action.sendKeys(Keys.LEFT_CONTROL + "a");
+    action.sendKeys(Keys.LEFT_CONTROL + "c");
+    action.sendKeys(fieldTwo, Keys.LEFT_CONTROL + "v");
+
+    action.perform();
+
+    Assert.assertEquals("hello world", fieldTwo.getAttribute("value"));
   }
 
 }

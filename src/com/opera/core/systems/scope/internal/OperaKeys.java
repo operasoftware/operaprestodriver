@@ -29,7 +29,7 @@ public enum OperaKeys {
   NULL("null"), CANCEL("cancel"), // ^break
   HELP("help"), BACK_SPACE("backspace"), TAB("Tab"), CLEAR("clear"), RETURN(
       "return"), ENTER("enter"), SHIFT("Shift"), LEFT_SHIFT("Shift"), // alias
-  CONTROL("control"), LEFT_CONTROL("ctrl"), // alias
+  CONTROL("control"), LEFT_CONTROL("control"), // alias
   ALT("alt"), LEFT_ALT("alt"), // alias
   PAUSE("pause"), ESCAPE("escape"), SPACE(" "), PAGE_UP("page up"), PAGE_DOWN(
       "page down"), END("end"), HOME("home"), LEFT("left"), ARROW_LEFT("left"), // alias
