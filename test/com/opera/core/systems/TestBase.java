@@ -1,16 +1,15 @@
 package com.opera.core.systems;
 
 import com.opera.core.systems.runner.OperaRunner;
-import com.opera.core.systems.settings.OperaDriverSettings;
 import junit.framework.Assert;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.io.File;
 
 abstract public class TestBase {
   protected static TestOperaDriver driver;
-  protected static OperaDriverSettings settings;
 
   private static String fixture_dir;
 
@@ -58,15 +57,11 @@ class TestOperaDriver extends OperaDriver {
     super();
   }
 
-  public TestOperaDriver(OperaDriverSettings settings) {
-    super(settings);
+  public TestOperaDriver(DesiredCapabilities capabilities) {
+    super(capabilities);
   }
 
   public OperaRunner getRunner() {
     return operaRunner;
-  }
-
-  public OperaDriverSettings getSettings() {
-    return settings;
   }
 }

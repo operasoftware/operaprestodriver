@@ -71,15 +71,28 @@ import com.opera.core.systems.scope.services.IEcmaScriptDebugger;
 import com.opera.core.systems.scope.services.IOperaExec;
 import com.opera.core.systems.scope.services.IPrefs;
 import com.opera.core.systems.scope.services.IWindowManager;
-import com.opera.core.systems.settings.OperaDriverSettings;
 
 public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
+
+  // Want to this some of these out, but will need some rethinking.
+  public static final String BINARY = "binary";
+  public static final String LAUNCHER = "launcher";
+  public static final String LAUNCHER_PORT = "launcher_port";
+  public static final String ARGUMENTS = "arguments";
+  public static final String USE_OPERAIDLE = "use_operaide";
+  public static final String DISPLAY = "display";
+
+  public static final String AUTOSTART = "autostart";
+  public static final String RUN_LAUNCHER = "run_launcher";
+  public static final String NO_RESTART = "no_restart";
+  public static final String NO_QUIT = "no_quit";
+  public static final String GUESS_BINARY_PATH = "guess_binary_path";
 
   /*
    * These are "protected" and not "private" so that we can extend this class
    * and add methods to access these variable in tests.
    */
-  protected OperaDriverSettings settings;
+  protected DesiredCapabilities capabilities;
   protected OperaRunner operaRunner;
 
   protected IEcmaScriptDebugger debugger;
@@ -100,12 +113,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
   private String version;
 
   public OperaDriver() {
-    this(makeSettings());
-  }
-
-  @Deprecated
-  public OperaDriver(boolean autoStart) {
-    this(autoStart ? makeSettings() : null);
+    this((DesiredCapabilities) null);
   }
 
   /**
@@ -114,39 +122,63 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
    * @param settings an OperaDriverSettings object containing various settings
    *                 for the driver and the browser.
    */
-  public OperaDriver(OperaDriverSettings settings) {
-    logger.fine("Constructing OperaDriver with settings");
-    if (settings != null) {
-      this.settings = settings;
+  public OperaDriver(DesiredCapabilities c) {
+    capabilities = getDefaultCapabilities();
 
-      if (settings.getAutostart()) {
-        OperaPaths paths = new OperaPaths();
+    capabilities.merge(c);
 
-        if (settings.guessOperaPath() && settings.getOperaBinaryLocation() == null) {
-          settings.setOperaBinaryLocation(paths.operaPath());
-        } else if (settings.getOperaBinaryLocation() == null) {
-          // Don't guess, only check environment variable
-          String path = System.getenv("OPERA_PATH");
+    if ((Boolean) capabilities.getCapability(AUTOSTART)) {
+      OperaPaths paths = new OperaPaths();
 
-          if (path != null && path.length() > 0) {
-            settings.setOperaBinaryLocation(path);
-          }
-        }
+      if (((Boolean) capabilities.getCapability(GUESS_BINARY_PATH)) &&
+          capabilities.getCapability(BINARY) == null) {
+        capabilities.setCapability(BINARY, paths.operaPath());
+      } else if (capabilities.getCapability(BINARY) == null) {
+        // Don't guess, only check environment variable
+        String path = System.getenv("OPERA_PATH");
 
-        if (settings.getOperaLauncherBinary() == null) {
-          settings.setOperaLauncherBinary(paths.launcherPath());
-        }
-
-        if (settings.getOperaBinaryLocation() != null) {
-          this.operaRunner = new OperaLauncherRunner(this.settings);
+        if (path != null && path.length() > 0) {
+          capabilities.setCapability(BINARY, path);
         }
       }
-    } else {
-      // Create a default settings object
-      this.settings = new OperaDriverSettings();
-      this.settings.setAutostart(false);
+
+      if (capabilities.getCapability(LAUNCHER) == null) {
+        capabilities.setCapability(LAUNCHER, paths.launcherPath());
+      }
+
+      if (capabilities.getCapability(BINARY) != null) {
+        this.operaRunner = new OperaLauncherRunner(capabilities);
+      }
     }
 
+    start();
+  }
+
+  public static DesiredCapabilities getDefaultCapabilities() {
+    // Defaults
+    DesiredCapabilities capabilities = DesiredCapabilities.opera();
+    capabilities.setJavascriptEnabled(true);
+
+    capabilities.setCapability(BINARY, (String) null);
+    capabilities.setCapability(ARGUMENTS, "");
+
+    capabilities.setCapability(LAUNCHER, (String) null);
+    capabilities.setCapability(LAUNCHER_PORT, 9999);
+    capabilities.setCapability(RUN_LAUNCHER, true);
+
+    capabilities.setCapability(DISPLAY, (Integer) null);
+
+    capabilities.setCapability(AUTOSTART, true);
+    capabilities.setCapability(NO_RESTART, false);
+    capabilities.setCapability(NO_QUIT, false);
+    capabilities.setCapability(GUESS_BINARY_PATH, true);
+
+    capabilities.setCapability(USE_OPERAIDLE, false);
+
+    return capabilities;
+  }
+
+  private void start() {
     try {
       this.init();
     } catch (Exception e) {
@@ -160,24 +192,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     logger.fine("init() done");
   }
 
-  /**
-   * Make a new settings object, automatically finding the Opera and launcher
-   * binaries.
-   *
-   * @return A new settings object that is correctly set up.
-   */
-  private static OperaDriverSettings makeSettings() {
-    OperaDriverSettings settings = new OperaDriverSettings();
 
-    OperaPaths paths = new OperaPaths();
-
-    settings.setOperaBinaryLocation(paths.operaPath());
-    settings.setOperaLauncherBinary(paths.launcherPath());
-
-    settings.setOperaBinaryArguments("");
-
-    return settings;
-  }
 
   @Deprecated
   public void shutdown() {
@@ -233,7 +248,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
       Map<String, String> versions = getServicesList();
       boolean manualStart = true;
 
-      if (settings.getOperaBinaryLocation() != null) {
+      if (capabilities.getCapability(BINARY) != null) {
         manualStart = false;
       }
 
@@ -245,8 +260,6 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
   }
 
   public Capabilities getCapabilities() {
-    DesiredCapabilities capabilities = DesiredCapabilities.opera();
-    capabilities.setJavascriptEnabled(true);
     return capabilities;
   }
 
@@ -987,11 +1000,11 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
   }
 
   private boolean useOperaIdle() {
-    return (settings.getUseOperaIdle() && isOperaIdleAvailable());
+    return (((Boolean) capabilities.getCapability(USE_OPERAIDLE)) && isOperaIdleAvailable());
   }
 
   public void setUseOperaIdle(boolean useIdle) {
-    settings.setUseOperaIdle(useIdle);
+    capabilities.setCapability(USE_OPERAIDLE, true);
   }
 
   public Object executeScript(String script, Object... args) {
