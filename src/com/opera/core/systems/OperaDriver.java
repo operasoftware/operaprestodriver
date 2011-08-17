@@ -74,19 +74,19 @@ import com.opera.core.systems.scope.services.IWindowManager;
 
 public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
-  // Want to this some of these out, but will need some rethinking.
-  public static final String BINARY = "binary";
-  public static final String LAUNCHER = "launcher";
-  public static final String LAUNCHER_PORT = "launcher_port";
-  public static final String ARGUMENTS = "arguments";
-  public static final String USE_OPERAIDLE = "use_operaide";
-  public static final String DISPLAY = "display";
+  // Want to thin some of these out, but will need some re-thinking.
+  public static final String BINARY = "opera.binary";
+  public static final String LAUNCHER = "opera.launcher";
+  public static final String LAUNCHER_PORT = "opera.launcher_port";
+  public static final String ARGUMENTS = "opera.arguments";
+  public static final String USE_OPERAIDLE = "opera.use_operaide";
+  public static final String DISPLAY = "opera.display";
 
-  public static final String AUTOSTART = "autostart";
-  public static final String RUN_LAUNCHER = "run_launcher";
-  public static final String NO_RESTART = "no_restart";
-  public static final String NO_QUIT = "no_quit";
-  public static final String GUESS_BINARY_PATH = "guess_binary_path";
+  public static final String AUTOSTART = "opera.autostart";
+  public static final String RUN_LAUNCHER = "opera.run_launcher";
+  public static final String NO_RESTART = "opera.no_restart";
+  public static final String NO_QUIT = "opera.no_quit";
+  public static final String GUESS_BINARY_PATH = "opera.guess_binary_path";
 
   /*
    * These are "protected" and not "private" so that we can extend this class
