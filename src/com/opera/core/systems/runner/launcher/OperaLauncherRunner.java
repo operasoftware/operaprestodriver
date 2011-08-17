@@ -82,6 +82,8 @@ public class OperaLauncherRunner implements OperaRunner {
         stringArray.add("-verbosity");
         stringArray.add("FINEST");
       }
+      
+      stringArray.add("-profile " + settings.getProfile());
 
       // Note any launcher arguments must be before this line!
 

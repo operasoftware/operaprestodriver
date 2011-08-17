@@ -50,6 +50,8 @@ public class WaitState {
 
   private Object lock = new Object();
 
+  private String profile; // very sad, we should use profile-specific workarounds
+  
   enum WaitResult {
     RESPONSE, /* Got a response */
     ERROR, /* Got an error response */
@@ -321,7 +323,6 @@ public class WaitState {
       result.remaining_idle_timeout = timeout;
     
     if (result == null && timeout > 0) {
-      logger.info("We're in pollResultItem. timeout="+timeout+" idle="+idle);
       long start = System.currentTimeMillis();
       internalWait(timeout);
       long end = System.currentTimeMillis();
@@ -343,12 +344,16 @@ public class WaitState {
 
   private final ResultItem waitAndParseResult(long timeout, int match,
       String stringMatch, final ResponseType type) {
-	  logger.info("waitAndParseResult with parameters: timeout="+timeout+" match="+match+" stringMatch="+stringMatch+" ResponseType="+type);
-	  if (type == ResponseType.WINDOW_LOADED){
-		  logger.info("WE WILL CHANGE TIMEOUT NOW.");
-		  timeout=30000;
-		  logger.info("so, now: waitAndParseResult with parameters: timeout="+timeout+" match="+match+" stringMatch="+stringMatch+" ResponseType="+type);		  
+	  
+	  // desktop-specific workaround
+	  if (profile.toLowerCase().equals("desktop")){
+		  if (type == ResponseType.WINDOW_LOADED){		  
+			  long newTimeout = 30000;
+			  logger.info("WARNING: desktop-specific workaround for waitAndParseResult. Changing timeout from "+timeout+" to "+newTimeout);
+			  timeout=newTimeout;
+		  }
 	  }
+	  
     synchronized (lock) {
       while (true) {
         ResultItem result = pollResultItem(timeout, type == ResponseType.OPERA_IDLE);
@@ -575,5 +580,13 @@ public class WaitState {
       return item.desktopWindowInfo.getWindowID();
     }
     return 0;
+  }
+  
+  public void setProfile(String profile){
+	  this.profile = profile;
+  }
+  
+  public String getProfile(){
+	  return profile;
   }
 }

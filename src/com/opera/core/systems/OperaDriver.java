@@ -249,6 +249,7 @@ public class OperaDriver extends RemoteWebDriver implements WebDriver,
       }
 
       services = new ScopeServices(versions, manualStart);
+      services.setProfile(settings.getProfile()); // for profile-specific workarounds inside ScopreServives, WaitState ...
       services.startStpThread();
     } catch (IOException e) {
       throw new WebDriverException(e);
@@ -276,7 +277,7 @@ public class OperaDriver extends RemoteWebDriver implements WebDriver,
     exec.releaseKeys();
 
     int activeWindowId = windowManager.getActiveWindowId();
-
+    
     String oldUrl = getCurrentUrl();
 
     services.captureOperaIdle();
@@ -298,7 +299,7 @@ public class OperaDriver extends RemoteWebDriver implements WebDriver,
         }
       } else {
         // Wait for window is loaded
-        services.waitForWindowLoaded(activeWindowId, timeout);
+    	  services.waitForWindowLoaded(activeWindowId, timeout);
       }
 
     }

@@ -22,6 +22,7 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Logger;
 
+//import org.mortbay.log.Log;
 import org.openqa.selenium.WebDriverException;
 
 import com.google.protobuf.AbstractMessage.Builder;
@@ -90,6 +91,8 @@ public class ScopeServices implements IConnectionHandler {
 
   private AtomicInteger tagCounter;
 
+  private String profile;
+  
   public Map<String, String> getVersions() {
     return versions;
   }
@@ -185,6 +188,7 @@ public class ScopeServices implements IConnectionHandler {
   }
 
   public void init() {
+	waitState.setProfile(this.getProfile());
     waitForHandshake();
 
     boolean enableDebugger = (OperaIntervals.ENABLE_DEBUGGER.getValue() != 0);
@@ -508,6 +512,7 @@ public class ScopeServices implements IConnectionHandler {
   }
 
   public void waitForWindowLoaded(int activeWindowId, long timeout) {
+	logger.info("waitForWindowLoaded with params activeWindowId="+activeWindowId+" timeout="+timeout);
     waitState.waitForWindowLoaded(activeWindowId, timeout);
   }
 
@@ -699,5 +704,13 @@ public class ScopeServices implements IConnectionHandler {
   public void onRequest(int windowId) {
     logger.info("Window closed: windowId=" + windowId);
     waitState.onRequest(windowId);
+  }
+  
+  public void setProfile(String profile){
+	  this.profile = profile;
+  }
+  
+  public String getProfile(){
+	  return this.profile;
   }
 }
