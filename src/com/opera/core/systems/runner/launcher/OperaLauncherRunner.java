@@ -123,17 +123,34 @@ public class OperaLauncherRunner implements OperaRunner {
       binaryArguments = environmentArguments + " " + binaryArguments;
     }
 
-    // Arguments are split by single space.
-    StringTokenizer tokenizer = new StringTokenizer(binaryArguments, " ");
-    while (tokenizer.hasMoreTokens()) {
-      stringArray.add(tokenizer.nextToken());
-    }
+      // Arguments are split by single space.
+      StringTokenizer tokenizer = new StringTokenizer(binaryArguments, " ");
+      while (tokenizer.hasMoreTokens()) {
+        stringArray.add(tokenizer.nextToken());
+      }
 
-    logger.fine("Launcher arguments: " + stringArray);
+      logger.fine("Launcher arguments: " + stringArray);
 
-    // Enable auto test mode, always starts Opera on opera:debug and prevents
-    // interrupting dialogues appearing
-    if (!stringArray.contains("-autotestmode")) stringArray.add("-autotestmode");
+      // Enable auto test mode, always starts Opera on opera:debug and prevents
+      // interrupting dialogues appearing
+      if (!stringArray.contains("-autotestmode")) {
+        stringArray.add("-autotestmode");
+
+        // To be backwards compatible with Operas that don't support
+        // `-autotestmode host:port` we only provide the host:port argument
+        // if either one has been set.
+        String host = (String) this.capabilities.getCapability(OperaDriver.HOST);
+        int port = (Integer) this.capabilities.getCapability(OperaDriver.PORT);
+        if (host != null || port != 0) {
+          // Provide defaults if one hasn't been set
+          if (host == null) host = "127.0.0.1";
+          if (port == 0) port = 7001;
+
+          stringArray.add(host+":"+port);
+        }
+      }
+
+      System.out.println("command line: "+stringArray.toString());
 
     launcherRunner = new OperaLauncherBinary(
       (String) this.capabilities.getCapability(OperaDriver.LAUNCHER),

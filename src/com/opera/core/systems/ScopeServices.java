@@ -196,10 +196,11 @@ public class ScopeServices implements IConnectionHandler {
    * @param manualConnect
    * @throws IOException
    */
-  public ScopeServices(Map<String, String> versions, boolean manualConnect) throws IOException {
+  public ScopeServices(Map<String, String> versions, int port, boolean manualConnect) throws IOException {
     this.versions = versions;
     tagCounter = new AtomicInteger();
-    stpThread = new StpThread((int) OperaIntervals.SERVER_PORT.getValue(), this, new UmsEventHandler(this), manualConnect);
+    System.out.println("services on port " + port);
+    stpThread = new StpThread(port, this, new UmsEventHandler(this), manualConnect);
     selftestOutput = new StringBuilder();
   }
 

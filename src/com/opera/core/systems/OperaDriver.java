@@ -83,6 +83,17 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
   public static final String BINARY = "opera.binary";
 
   /**
+   * (String) The host Opera should connect to. Unless you're starting Opera
+   * manually you won't need this.
+   */
+  public static final String HOST = "opera.HOST";
+
+  /**
+   * (Integer) The port to Opera should connect to. 0 = Random, -1 = Opera default.
+   */
+  public static final String PORT = "opera.PORT";
+
+  /**
    * (String) Path to the launcher binary to use.
    */
   public static final String LAUNCHER = "opera.launcher";
@@ -206,6 +217,11 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     capabilities.setJavascriptEnabled(true);
 
     capabilities.setCapability(BINARY, (String) null);
+    // Default = 127.0.0.1, but need to set to null for backwards compat.
+    // with Opera versions that don't support -autotestmode host:port
+    capabilities.setCapability(HOST, (String) null);
+    // 0 = Random, -1 = Opera default (7001). See above.
+    capabilities.setCapability(PORT, 0);
     capabilities.setCapability(ARGUMENTS, "");
 
     capabilities.setCapability(LAUNCHER, (String) null);
@@ -293,7 +309,9 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
         manualStart = false;
       }
 
-      services = new ScopeServices(versions, manualStart);
+      int port = (Integer) capabilities.getCapability(PORT);
+      if (port == -1) port = 7001;
+      services = new ScopeServices(versions, port, manualStart);
       // for profile-specific workarounds inside ScopeServives, WaitState ...
       services.setProfile((String) capabilities.getCapability(BINARY_PROFILE));
       services.startStpThread();
