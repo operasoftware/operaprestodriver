@@ -74,9 +74,14 @@ public class OperaLauncherRunner implements OperaRunner {
       stringArray.add("127.0.0.1");
       stringArray.add("-port");
       stringArray.add(Integer.toString((Integer) this.capabilities.getCapability(OperaDriver.LAUNCHER_PORT)));
+
       if (this.capabilities.getCapability(OperaDriver.DISPLAY) != null) {
         stringArray.add("-display");
         stringArray.add(":" + Integer.toString((Integer) this.capabilities.getCapability(OperaDriver.DISPLAY)));
+      }
+
+      if ((Boolean) this.capabilities.getCapability(OperaDriver.NO_QUIT)) {
+        stringArray.add("-noquit");
       }
 
       if (logger.isLoggable(Level.FINEST)) {
@@ -87,9 +92,6 @@ public class OperaLauncherRunner implements OperaRunner {
 
       // Note any launcher arguments must be before this line!
 
-      if ((Boolean) this.capabilities.getCapability(OperaDriver.NO_QUIT)) {
-        stringArray.add("-noquit");
-      }
       stringArray.add("-bin");
       stringArray.add((String) this.capabilities.getCapability(OperaDriver.BINARY));
 
@@ -106,11 +108,9 @@ public class OperaLauncherRunner implements OperaRunner {
         binaryArguments = "";
       }
       String environmentArguments = System.getenv("OPERA_ARGS");
-
       if (environmentArguments != null && environmentArguments.length() > 0) {
         binaryArguments = environmentArguments + " " + binaryArguments;
       }
-
       // Arguments are split by single space.
       StringTokenizer tokenizer = new StringTokenizer(binaryArguments, " ");
       while (tokenizer.hasMoreTokens()) {
@@ -122,6 +122,15 @@ public class OperaLauncherRunner implements OperaRunner {
       // Enable auto test mode, always starts Opera on opera:debug and prevents
       // interrupting dialogues appearing
       if (!stringArray.contains("-autotestmode")) stringArray.add("-autotestmode");
+
+      {
+        String profile = (String) this.capabilities.getCapability(OperaDriver.PROFILE);
+        if (profile != null) {
+          logger.fine("Using profile in: "+ profile);
+          stringArray.add("-pd");
+          stringArray.add(profile);
+        }
+      }
 
       launcherRunner = new OperaLauncherBinary(
         (String) this.capabilities.getCapability(OperaDriver.LAUNCHER),

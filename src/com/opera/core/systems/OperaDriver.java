@@ -170,6 +170,8 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
     capabilities.setCapability(DISPLAY, (Integer) null);
 
+    capabilities.setCapability(PROFILE, (String) null);
+
     capabilities.setCapability(AUTOSTART, true);
     capabilities.setCapability(NO_RESTART, false);
     capabilities.setCapability(NO_QUIT, false);
