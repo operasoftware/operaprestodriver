@@ -397,10 +397,10 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     String script;
     if (el == null) {
       // Search the document
-      script = "return " + OperaAtoms.FIND_ELEMENT.getValue()+"({"+by+": '" + escapeJsString(using, "'") + "'})";
+      script = "return " + OperaAtoms.FIND_ELEMENT.getValue()+"({"+by+": \"" + using + "\"})";
     } else {
       // Search within an element
-      script = "return " + OperaAtoms.FIND_ELEMENT.getValue()+"({"+by+": '" + escapeJsString(using, "'") + "'}, locator)";
+      script = "return " + OperaAtoms.FIND_ELEMENT.getValue()+"({"+by+": \"" + using + "\"}, locator)";
     }
 
     do {
@@ -457,10 +457,10 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     String script;
     if (el == null) {
       // Search in document
-      script = "return " + OperaAtoms.FIND_ELEMENTS.getValue()+"({"+by+": '" + escapeJsString(using, "'") + "'})";
+      script = "return " + OperaAtoms.FIND_ELEMENTS.getValue()+"({"+by+": \"" + using + "\"})";
     } else {
       // Search within an element
-      script = "return " + OperaAtoms.FIND_ELEMENTS.getValue()+"({"+by+": '" + escapeJsString(using, "'") + "'}, locator)";
+      script = "return " + OperaAtoms.FIND_ELEMENTS.getValue()+"({"+by+": \"" + using + "\"}, locator)";
     }
 
     do {
@@ -651,7 +651,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
    * @param quote  the type of quote to escape. Either " or '
    * @return the escaped string
    */
-  protected String escapeJsString(String string, String quote) {
+  private String escapeJsString(String string, String quote) {
 
     /*
      * This should be expanded to match all invalid characters (e.g. newlines)
@@ -671,7 +671,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
        * $1 -> inserts the character before the quote
        * \\\\\" -> \\", apparently just \" isn't treated literally.
        */
-      m.appendReplacement(sb, "$1\\\\\"");
+      m.appendReplacement(sb, "$1\\\\"+ quote);
     }
 
     m.appendTail(sb);
