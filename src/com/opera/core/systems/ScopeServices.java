@@ -92,7 +92,7 @@ public class ScopeServices implements IConnectionHandler {
   private AtomicInteger tagCounter;
 
   private String profile;
-  
+
   public Map<String, String> getVersions() {
     return versions;
   }
@@ -188,7 +188,7 @@ public class ScopeServices implements IConnectionHandler {
   }
 
   public void init() {
-	waitState.setProfile(this.getProfile());
+    waitState.setProfile(this.getProfile());
     waitForHandshake();
 
     boolean enableDebugger = (OperaIntervals.ENABLE_DEBUGGER.getValue() != 0);
@@ -512,7 +512,7 @@ public class ScopeServices implements IConnectionHandler {
   }
 
   public void waitForWindowLoaded(int activeWindowId, long timeout) {
-	logger.info("waitForWindowLoaded with params activeWindowId="+activeWindowId+" timeout="+timeout);
+    logger.info("waitForWindowLoaded with params activeWindowId="+activeWindowId+" timeout="+timeout);
     waitState.waitForWindowLoaded(activeWindowId, timeout);
   }
 
@@ -707,10 +707,10 @@ public class ScopeServices implements IConnectionHandler {
   }
   
   public void setProfile(String profile){
-	  this.profile = profile;
+    this.profile = profile;
   }
   
   public String getProfile(){
-	  return this.profile;
+    return this.profile;
   }
 }

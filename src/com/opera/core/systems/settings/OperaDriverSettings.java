@@ -40,7 +40,7 @@ public class OperaDriverSettings {
   private boolean useOperaIdle = false;
 
   private boolean autostart = true;
-  
+
   private String profile; // profile name
 
   // Generated getters and setters:
@@ -201,11 +201,11 @@ public class OperaDriverSettings {
   }
   
   public void setProfile(String profile){
-	  this.profile = profile;
+    this.profile = profile;
   }
   
   public String getProfile(){
-	  return profile;
+    return profile;
   }
 
 }

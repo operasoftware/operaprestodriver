@@ -277,7 +277,7 @@ public class OperaDriver extends RemoteWebDriver implements WebDriver,
     exec.releaseKeys();
 
     int activeWindowId = windowManager.getActiveWindowId();
-    
+
     String oldUrl = getCurrentUrl();
 
     services.captureOperaIdle();
@@ -299,7 +299,7 @@ public class OperaDriver extends RemoteWebDriver implements WebDriver,
         }
       } else {
         // Wait for window is loaded
-    	  services.waitForWindowLoaded(activeWindowId, timeout);
+        services.waitForWindowLoaded(activeWindowId, timeout);
       }
 
     }

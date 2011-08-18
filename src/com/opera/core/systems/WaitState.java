@@ -344,16 +344,16 @@ public class WaitState {
 
   private final ResultItem waitAndParseResult(long timeout, int match,
       String stringMatch, final ResponseType type) {
-	  
-	  // desktop-specific workaround
-	  if (profile.toLowerCase().equals("desktop")){
-		  if ((type == ResponseType.WINDOW_LOADED) && (timeout < 30000)){		  
-			  long newTimeout = 30000;
-			  logger.info("WARNING: desktop-specific workaround for waitAndParseResult. Changing timeout from "+timeout+" to "+newTimeout);
-			  timeout=newTimeout;
-		  }
-	  }
-	  
+ 
+    // desktop-specific workaround
+    if (profile.toLowerCase().equals("desktop")){
+      if ((type == ResponseType.WINDOW_LOADED) && (timeout < 30000)){		  
+        long newTimeout = 30000;
+        logger.info("WARNING: desktop-specific workaround for waitAndParseResult. Changing timeout from "+timeout+" to "+newTimeout);
+        timeout=newTimeout;
+      }
+    }
+
     synchronized (lock) {
       while (true) {
         ResultItem result = pollResultItem(timeout, type == ResponseType.OPERA_IDLE);
@@ -583,10 +583,10 @@ public class WaitState {
   }
   
   public void setProfile(String profile){
-	  this.profile = profile;
+    this.profile = profile;
   }
   
   public String getProfile(){
-	  return profile;
+    return profile;
   }
 }

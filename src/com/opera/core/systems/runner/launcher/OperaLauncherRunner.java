@@ -82,7 +82,7 @@ public class OperaLauncherRunner implements OperaRunner {
         stringArray.add("-verbosity");
         stringArray.add("FINEST");
       }
-      
+
       stringArray.add("-profile");
       stringArray.add(settings.getProfile());
 
