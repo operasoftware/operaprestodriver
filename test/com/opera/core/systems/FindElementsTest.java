@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.RemoteWebElement;
 
@@ -152,4 +153,12 @@ public class FindElementsTest extends TestBase {
       Assert.assertEquals(el.getAttribute("name"), "radios");
     }
   }
+
+  // Special characters
+  @Test
+  public void testFindsElementsWithSingleQuotes() {
+    WebElement el = driver.findElement(By.xpath(".//div[normalize-space()=concat('single ',\"'\",'quotes',\"'\",'')]"));
+    Assert.assertNotNull(el);
+  }
+
 }
