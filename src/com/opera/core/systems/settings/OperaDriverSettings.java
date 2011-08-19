@@ -41,7 +41,7 @@ public class OperaDriverSettings {
 
   private boolean autostart = true;
 
-  private String profile; // profile name
+  private String profile=""; // profile name
 
   // Generated getters and setters:
   public boolean doRunOperaLauncherFromOperaDriver() {

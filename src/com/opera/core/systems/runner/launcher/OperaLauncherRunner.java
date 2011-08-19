@@ -83,8 +83,10 @@ public class OperaLauncherRunner implements OperaRunner {
         stringArray.add("FINEST");
       }
 
-      stringArray.add("-profile");
-      stringArray.add(settings.getProfile());
+      if (settings.getProfile() != null){
+        stringArray.add("-profile");
+        stringArray.add(settings.getProfile());
+      }
 
       // Note any launcher arguments must be before this line!
 
