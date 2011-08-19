@@ -208,7 +208,6 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
     windowManager = services.getWindowManager();
     exec = services.getExec();
-    keyboard = new OperaKeyboard(this);
     coreUtils = services.getCoreUtils();
     actionHandler = new PbActionHandler(services);
     cookieManager = services.getCookieManager();
@@ -1215,7 +1214,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
   }
 
   public Keyboard getKeyboard() {
-    return keyboard;
+    return new OperaKeyboard(this);
   }
 
   public Mouse getMouse() {
