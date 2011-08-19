@@ -377,9 +377,9 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
   /**
    * Find a single element using the selenium atoms.
-   * @param by How to find the element. Strings defined in RemoteWebDriver
-   *           and {@link convertByToAtom}.
-   * @param using The value to use to find the element
+   * @param by How to find the element.  Strings defined in RemoteWebDriver
+   *           and {@link #convertByToAtom}.
+   * @param    using The value to use to find the element
    * @param el The element to search within
    * @return
    */
@@ -387,8 +387,10 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     if (using == null) {
       throw new IllegalArgumentException("Cannot find elements when the selector is null.");
     }
+
     String niceBy = by;
     by = convertByToAtom(by);
+    using = escapeJsString(using);
 
     long start = System.currentTimeMillis();
     boolean isAvailable;
@@ -397,10 +399,10 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     String script;
     if (el == null) {
       // Search the document
-      script = "return " + OperaAtoms.FIND_ELEMENT.getValue() + "({" + by + ": \"" + escapeJsString(using) + "\"})";
+      script = "return " + OperaAtoms.FIND_ELEMENT.getValue() + "({" + by + ": \"" + using + "\"})";
     } else {
       // Search within an element
-      script = "return " + OperaAtoms.FIND_ELEMENT.getValue() + "({" + by + ": \"" + escapeJsString(using) + "\"}, locator)";
+      script = "return " + OperaAtoms.FIND_ELEMENT.getValue() + "({" + by + ": \"" + using + "\"}, locator)";
     }
 
     do {
@@ -444,8 +446,10 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     if (using == null) {
       throw new IllegalArgumentException("Cannot find elements when the selector is null.");
     }
+
     String niceBy = by;
     by = convertByToAtom(by);
+    using = escapeJsString(using);
 
     Integer id;
 
@@ -457,10 +461,10 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     String script;
     if (el == null) {
       // Search in document
-      script = "return " + OperaAtoms.FIND_ELEMENTS.getValue()+"({"+by+": \"" + using + "\"})";
+      script = "return " + OperaAtoms.FIND_ELEMENTS.getValue() + "({" + by + ": \"" + using + "\"})";
     } else {
       // Search within an element
-      script = "return " + OperaAtoms.FIND_ELEMENTS.getValue()+"({"+by+": \"" + using + "\"}, locator)";
+      script = "return " + OperaAtoms.FIND_ELEMENTS.getValue() + "({" + by + ": \"" + using + "\"}, locator)";
     }
 
     do {
@@ -485,13 +489,12 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     } else {
       throw new NoSuchElementException("Cannot find element(s) with " + niceBy);
     }
-
   }
 
   /**
    * Get the source of the last loaded page.
-   * <p/>
-   * The source will be of the modified DOM, <em>not</em> the original HTML. The
+   *
+   * The source will be of the modified DOM, <em>not</em> the original HTML.  The
    * page source returned is a representation of the underlying DOM: do not
    * expect it to be formatted or escaped in the same way as the response sent
    * from the web server.
@@ -671,7 +674,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
        * $1 -> inserts the character before the quote
        * \\\\\" -> \\", apparently just \" isn't treated literally.
        */
-      m.appendReplacement(sb, "$1\\\\"+ quote);
+      m.appendReplacement(sb, "$1\\\\" + quote);
     }
 
     m.appendTail(sb);
