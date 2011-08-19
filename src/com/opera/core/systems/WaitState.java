@@ -50,8 +50,9 @@ public class WaitState {
 
   private Object lock = new Object();
 
-  private String profile; // very sad, we should use profile-specific workarounds
-  
+  // Used for profile specific workarounds
+  private String profile; 
+
   enum WaitResult {
     RESPONSE, /* Got a response */
     ERROR, /* Got an error response */
@@ -321,7 +322,7 @@ public class WaitState {
     ResultItem result = getResult();
     if(result != null)
       result.remaining_idle_timeout = timeout;
-    
+
     if (result == null && timeout > 0) {
       long start = System.currentTimeMillis();
       internalWait(timeout);
@@ -344,10 +345,10 @@ public class WaitState {
 
   private final ResultItem waitAndParseResult(long timeout, int match,
       String stringMatch, final ResponseType type) {
- 
+
     // desktop-specific workaround
     if (profile.toLowerCase().equals("desktop")){
-      if ((type == ResponseType.WINDOW_LOADED) && (timeout < 30000)){		  
+      if ((type == ResponseType.WINDOW_LOADED) && (timeout < 30000)){
         long newTimeout = 30000;
         logger.info("WARNING: desktop-specific workaround for waitAndParseResult. Changing timeout from "+timeout+" to "+newTimeout);
         timeout=newTimeout;
@@ -581,12 +582,8 @@ public class WaitState {
     }
     return 0;
   }
-  
+
   public void setProfile(String profile){
     this.profile = profile;
-  }
-  
-  public String getProfile(){
-    return profile;
   }
 }
