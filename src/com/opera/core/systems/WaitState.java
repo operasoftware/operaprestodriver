@@ -493,7 +493,7 @@ public class WaitState {
      * waitForOperaIdle() will return immediately.
      */
     public void captureOperaIdle() {
-      logger.info("capture_idle_events is now true!");
+      logger.fine("capture_idle_events is now true!");
       capture_idle_events = true;
     }
 

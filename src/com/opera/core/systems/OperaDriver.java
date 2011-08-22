@@ -249,8 +249,8 @@ public class OperaDriver extends RemoteWebDriver implements WebDriver,
       }
 
       services = new ScopeServices(versions, manualStart);
-      // for profile-specific workarounds inside ScopreServives, WaitState ...
-      services.setProfile(settings.getProfile()); 
+      // for profile-specific workarounds inside ScopeServives, WaitState ...
+      services.setProfile(settings.getProfile());
       services.startStpThread();
     } catch (IOException e) {
       throw new WebDriverException(e);
