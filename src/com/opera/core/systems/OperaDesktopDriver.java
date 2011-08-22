@@ -148,13 +148,14 @@ public class OperaDesktopDriver extends OperaDriver {
 		versions.put("desktop-utils", "2.0");
 		return versions;
 	}
-
+	
 	/**
-	 * Shuts down the driver.
-	 * If settings.NoQuit is set, this will not quit Opera.
+	 * Shuts down the driver (but not Opera)
 	 */
 	public void quitDriver() {
-		super.quit();
+		logger.fine("Opera Driver shutting down");
+		services.shutdown();
+		if (operaRunner != null) operaRunner.shutdown();
 	}
 
 	/**
