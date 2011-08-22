@@ -83,6 +83,11 @@ public class OperaLauncherRunner implements OperaRunner {
         stringArray.add("FINEST");
       }
 
+      if (settings.getProfile() != null && !settings.getProfile().isEmpty()) {
+        stringArray.add("-profile");
+        stringArray.add(settings.getProfile());
+      }
+
       // Note any launcher arguments must be before this line!
 
       if (this.settings.getNoQuit()) stringArray.add("-noquit");

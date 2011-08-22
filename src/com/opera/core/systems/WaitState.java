@@ -53,6 +53,9 @@ public class WaitState {
 
   private Object lock = new Object();
 
+  // Used for profile specific workarounds
+  private String profile; 
+
   enum WaitResult {
     RESPONSE, /* Got a response */
     ERROR, /* Got an error response */
@@ -418,6 +421,16 @@ public class WaitState {
 
   private final ResultItem waitAndParseResult(long timeout, int match,
       String stringMatch, final ResponseType type) {
+
+    // desktop-specific workaround
+    if (profile.toLowerCase().equals("desktop")){
+      if ((type == ResponseType.WINDOW_LOADED) && (timeout < 30000)){
+        long newTimeout = 30000;
+        logger.info("WARNING: desktop-specific workaround for waitAndParseResult. Changing timeout from "+timeout+" to "+newTimeout);
+        timeout=newTimeout;
+      }
+    }
+
     synchronized (lock) {
       while (true) {
     	  
@@ -622,6 +635,7 @@ public class WaitState {
      * waitForOperaIdle() will return immediately.
      */
     public void captureOperaIdle() {
+      logger.fine("capture_idle_events is now true!");
       capture_idle_events = true;
     }
 
@@ -744,5 +758,9 @@ public class WaitState {
       return item.selftestResults;
     }
     return null;
+  }
+
+  public void setProfile(String profile){
+    this.profile = profile;
   }
 }

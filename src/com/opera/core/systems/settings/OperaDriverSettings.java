@@ -40,6 +40,9 @@ public class OperaDriverSettings {
 
   private boolean autostart = true;
 
+  // profile name
+  private String profile = "";
+
   public boolean doRunOperaLauncherFromOperaDriver() {
     return runOperaLauncherFromOperaDriver;
   }
@@ -194,6 +197,21 @@ public class OperaDriverSettings {
 
   public boolean getAutostart() {
     return autostart;
+  }
+
+  /**
+   * Set which profile (desktop, smartphone, etc.) to use.
+   * @param profile The profile name.
+   */
+  public void setProfile(String profile){
+    this.profile = profile;
+  }
+
+  /**
+   * @return The profile name to use.
+   */
+  public String getProfile(){
+    return profile;
   }
 
 }
