@@ -1253,13 +1253,8 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
   public int getPID() {
     return coreUtils.getProcessID();
   }
-  
+
   public OperaRunner getOperaRunner() {
 	  return operaRunner;
   }
-
-  public OperaRunner getOperaRunner() {
-    return operaRunner;
-  }
-
 }
