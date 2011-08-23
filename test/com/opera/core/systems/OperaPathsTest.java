@@ -2,6 +2,7 @@ package com.opera.core.systems;
 
 import junit.framework.Assert;
 import org.junit.Test;
+import org.openqa.selenium.Platform;
 
 import java.io.File;
 import java.lang.reflect.Field;
@@ -83,6 +84,9 @@ public class OperaPathsTest {
 
   @Test
   public void testOperaEnvVar() throws Exception {
+    // Doesn't work on Windows
+    if (Platform.getCurrent() == Platform.WINDOWS) return;
+
     assertNotSame(knownDir, paths.operaPath());
 
     setEnvVar("OPERA_PATH", knownDir);
@@ -92,6 +96,9 @@ public class OperaPathsTest {
 
   @Test
   public void testLauncherEnvVar() throws Exception {
+    // Doesn't work on Windows
+    if (Platform.getCurrent() == Platform.WINDOWS) return;
+
     assertNotSame(knownDir, paths.launcherPath());
 
     setEnvVar("OPERA_LAUNCHER", knownDir);
