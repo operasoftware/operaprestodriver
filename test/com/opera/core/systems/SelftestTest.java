@@ -17,7 +17,15 @@ public class SelftestTest extends TestBase {
     String product = driver.getProduct();
     if(product.equals("core-gogi")) {
       String results;
-      results = driver.selftest(Arrays.asList("about"), 30000);
+      try {
+        results = driver.selftest(Arrays.asList("about"), 30000);
+      } catch (UnsupportedOperationException e) {
+        // This service isn't available everywhere. Don't fail if we get that
+        // exception.
+        if (e.getMessage().contains("selftest is not supported")) return;
+        else throw e;
+      }
+
       Assert.assertNotNull("Running selftests doesn't blow up, returns non-null result.", results);
     }
   }
@@ -41,7 +49,15 @@ public class SelftestTest extends TestBase {
     List<SelftestResult> results;
 
     if(driver.getProduct().equals("core-gogi")) {
-      results = Selftest.parseSelftests(driver.selftest(Arrays.asList("nosuchmodule"), 30000));
+      try {
+        results = Selftest.parseSelftests(driver.selftest(Arrays.asList("nosuchmodule"), 30000));
+      } catch (UnsupportedOperationException e) {
+        // This service isn't available everywhere. Don't fail if we get that
+        // exception.
+        if (e.getMessage().contains("selftest is not supported")) return;
+        else throw e;
+      }
+
       Assert.assertNull("Running selftests for non-existent module parsed as null", results);
     }
 
