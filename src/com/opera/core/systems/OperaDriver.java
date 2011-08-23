@@ -49,6 +49,7 @@ import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.net.PortProber;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
@@ -86,12 +87,13 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
    * (String) The host Opera should connect to. Unless you're starting Opera
    * manually you won't need this.
    */
-  public static final String HOST = "opera.HOST";
+  public static final String HOST = "opera.host";
 
   /**
-   * (Integer) The port to Opera should connect to. 0 = Random, -1 = Opera default.
+   * (Integer) The port to Opera should connect to. 0 = Random,
+   * -1 = Opera default (for use with Opera < 12)
    */
-  public static final String PORT = "opera.PORT";
+  public static final String PORT = "opera.port";
 
   /**
    * (String) Path to the launcher binary to use.
@@ -203,10 +205,18 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
         capabilities.setCapability(LAUNCHER, paths.launcherPath());
         }
 
+      // If port is 0, try to find a random port.
+      if ((Integer) capabilities.getCapability(PORT) == 0) {
+        capabilities.setCapability(PORT, PortProber.findFreePort());
+      }
+
       if (capabilities.getCapability(BINARY) != null) {
         this.operaRunner = new OperaLauncherRunner(capabilities);
         }
-      }
+    } else {
+      // If we're not autostarting then we don't want to randomise the port.
+      capabilities.setCapability(PORT, -1);
+    }
 
     start();
   }

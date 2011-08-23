@@ -136,16 +136,10 @@ public class OperaLauncherRunner implements OperaRunner {
       if (!stringArray.contains("-autotestmode")) {
         stringArray.add("-autotestmode");
 
-        // To be backwards compatible with Operas that don't support
-        // `-autotestmode host:port` we only provide the host:port argument
-        // if either one has been set.
-        String host = (String) this.capabilities.getCapability(OperaDriver.HOST);
         int port = (Integer) this.capabilities.getCapability(OperaDriver.PORT);
-        if (host != null || port != 0) {
+        if (port != -1) {
           // Provide defaults if one hasn't been set
-          if (host == null) host = "127.0.0.1";
-          if (port == 0) port = 7001;
-
+          String host = "127.0.0.1";
           stringArray.add(host+":"+port);
         }
       }
