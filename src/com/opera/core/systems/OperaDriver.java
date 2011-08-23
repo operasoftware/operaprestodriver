@@ -75,17 +75,28 @@ import com.opera.core.systems.scope.services.IWindowManager;
 public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
   // Want to thin some of these out, but will need some re-thinking.
+  /// String. Path to the Opera binary to use.
   public static final String BINARY = "opera.binary";
+  /// String. Path to the launcher binary to use.
   public static final String LAUNCHER = "opera.launcher";
+  /// Integer. Port to start the launcher on.
   public static final String LAUNCHER_PORT = "opera.launcher_port";
+  /// String. Arguments to pass to Opera.
   public static final String ARGUMENTS = "opera.arguments";
+  /// Boolean. Whether to use Opera idle.
   public static final String USE_OPERAIDLE = "opera.use_operaide";
+  /// Integer. The X display to use.
   public static final String DISPLAY = "opera.display";
 
+  /// Boolean. Whether to autostart Opera.
   public static final String AUTOSTART = "opera.autostart";
+  /// Boolean. Whether to run the launcher.
   public static final String RUN_LAUNCHER = "opera.run_launcher";
+  /// Boolean. Whether to restart.
   public static final String NO_RESTART = "opera.no_restart";
+  /// Boolean. Whether to quit Opera when OperaDriver is shut down.
   public static final String NO_QUIT = "opera.no_quit";
+  /// Boolean. Whether to guess the path to Opera if it isn't set.
   public static final String GUESS_BINARY_PATH = "opera.guess_binary_path";
 
   /*
