@@ -8,6 +8,6 @@
 	<classpathentry kind="lib" path="lib/commons-io-2.0.1.jar"/>
 	<classpathentry kind="lib" path="lib/junit-4.8.2.jar"/>
 	<classpathentry kind="lib" path="lib/guava-r09.jar"/>
-	<classpathentry kind="lib" path="lib/selenium-java-2.3.0.jar"/>
+	<classpathentry kind="lib" path="lib/selenium-java-2.4.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
