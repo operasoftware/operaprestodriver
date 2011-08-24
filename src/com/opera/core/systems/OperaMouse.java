@@ -43,7 +43,7 @@ public class OperaMouse implements Mouse {
 
   public void doubleClick(Coordinates where) {
     Point p = getPoint(where, "double click");
-    parent.exec.mouseAction(p.x, p.y, OperaMouseKeys.LEFT, 2);
+    parent.exec.mouseAction(p.x, p.y, 2, OperaMouseKeys.LEFT);
   }
 
   public void mouseDown(Coordinates where) {
@@ -65,8 +65,8 @@ public class OperaMouse implements Mouse {
     Point p = getPoint(where, "mouse move");
 
     // We can't compare against Integer.MAX_VALUE and throw, because this
-    // method isn't defined as able to throw an Exception. Weird things will
-    // just happen here...
+    // method isn't defined as able to throw an Exception.  Weird things
+    // will just happen here...
     int xO = (int) xOffset;
     int yO = (int) yOffset;
 

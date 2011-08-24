@@ -47,15 +47,15 @@ public interface IOperaExec {
   void mouseAction(int x, int y, OperaMouseKeys... keys);
 
   /**
-   * Create one or more mouse actions on coordinates x,y with key as specified in
-   * {@link OperaMouseKeys} and the number of repeated events as an integer.
+   * Create one or more mouse actions on coordinates x,y with key(s) as specified
+   * in {@link OperaMouseKeys} and the number of repeated events as an integer.
    *
    * @param x
    * @param y
-   * @param key
    * @param count
+   * @param keys
    */
-  void mouseAction(int x, int y, OperaMouseKeys key, int count);
+  void mouseAction(int x, int y, int count, OperaMouseKeys... keys);
 
   /**
    * Returns the list of possible Opera Actions on host.
