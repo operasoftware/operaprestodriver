@@ -164,7 +164,7 @@ public class OperaWebElement extends RemoteWebElement {
    */
   public void click(int times) {
     Point point = coordinates.getLocationInViewPort();
-    execService.mouseAction(point.x, point.y, OperaMouseKeys.LEFT, times);
+    execService.mouseAction(point.x, point.y, times, OperaMouseKeys.LEFT);
   }
 
   /**
