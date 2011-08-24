@@ -25,7 +25,6 @@ import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.RemoteWebElement;
 
-import com.opera.core.systems.OperaWebElement;
 import com.opera.core.systems.ScopeServices;
 import com.opera.core.systems.model.Canvas;
 import com.opera.core.systems.model.ScopeActions;

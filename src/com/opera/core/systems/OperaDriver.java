@@ -92,8 +92,6 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
   protected ScopeServices services;
   protected ScopeActions actionHandler;
 
-  private OperaKeyboard keyboard;
-
   protected final Logger logger = Logger.getLogger(this.getClass().getName());
 
   protected Set<Integer> objectIds = new HashSet<Integer>();
