@@ -135,13 +135,14 @@ public class OperaLauncherRunner implements OperaRunner {
       // interrupting dialogues appearing
       if (!stringArray.contains("-autotestmode")) {
         stringArray.add("-autotestmode");
+      }
 
-        int port = (Integer) this.capabilities.getCapability(OperaDriver.PORT);
-        if (port != -1) {
-          // Provide defaults if one hasn't been set
-          String host = "127.0.0.1";
-          stringArray.add(host+":"+port);
-        }
+      int port = (Integer) this.capabilities.getCapability(OperaDriver.PORT);
+      if (port != -1) {
+        // Provide defaults if one hasn't been set
+        String host = "127.0.0.1";
+        stringArray.add("-debugproxy");
+        stringArray.add(host+":"+port);
       }
 
       System.out.println("command line: "+stringArray.toString());
