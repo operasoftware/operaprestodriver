@@ -1095,10 +1095,6 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     exec.type(using);
   }
 
-  public void mouseEvent(int x, int y, int value) {
-    exec.mouseAction(x, y, value, 1);
-  }
-
   /**
    * Returns the version number of driver.
    *

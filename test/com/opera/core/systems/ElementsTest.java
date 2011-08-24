@@ -5,11 +5,10 @@ import org.junit.Test;
 import org.openqa.selenium.WebElement;
 
 public class ElementsTest extends TestBase {
+
   @Test
   public void testClear() {
     driver.get(fixture("javascript.html"));
-    driver.mouseEvent(1, 1, 1);
-
     driver.findElementById("input_email").clear();
     Assert.assertTrue(driver.findElementById("log").getAttribute("value").contains(
       "email changed"));
@@ -18,7 +17,6 @@ public class ElementsTest extends TestBase {
   @Test
   public void testMouseOver() {
     driver.get(fixture("mouse.html"));
-    driver.mouseEvent(1, 1, 1);
 
     OperaWebElement test = ((OperaWebElement) driver.findElementById("test"));
     String hash = test.getImageHash();
@@ -30,7 +28,6 @@ public class ElementsTest extends TestBase {
   @Test
   public void testRightClick() {
     driver.get(fixture("mouse.html"));
-    driver.mouseEvent(1, 1, 1);
 
     // Cast as OperaWebElement to make rightClick available
     ((OperaWebElement) driver.findElementById("test")).rightClick();
@@ -47,4 +44,5 @@ public class ElementsTest extends TestBase {
     el.click();
     Assert.assertTrue(el.isSelected());
   }
+
 }

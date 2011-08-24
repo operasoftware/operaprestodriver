@@ -11,8 +11,6 @@ public class JavascriptTest extends TestBase {
   @Before
   public void setUp() {
     driver.get(fixture("javascript.html"));
-    // Click to focus the document
-    driver.mouseEvent(1, 1, 1);
   }
 
   @Test
@@ -26,7 +24,7 @@ public class JavascriptTest extends TestBase {
   }
 
   // Make sure that typing actually happens. When the focus switches half way
-  // through typing we should continue typing on the other textbox
+  // through typing we should continue typing on the other textbox.
   @Test
   public void testTypingKeyEvents() {
     driver.get(fixture("keys.html"));
@@ -65,4 +63,5 @@ public class JavascriptTest extends TestBase {
     Assert.assertTrue(driver.getCurrentUrl().endsWith("javascript.html"));
     Assert.assertEquals(numWindows - 1, driver.getWindowCount());
   }
+
 }
