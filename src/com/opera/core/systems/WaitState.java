@@ -423,7 +423,7 @@ public class WaitState {
       String stringMatch, final ResponseType type) {
 
     // desktop-specific workaround
-    if (profile.toLowerCase().equals("desktop")){
+    if (profile != null && profile.toLowerCase().equals("desktop")){
       if ((type == ResponseType.WINDOW_LOADED) && (timeout < 30000)){
         long newTimeout = 30000;
         logger.info("WARNING: desktop-specific workaround for waitAndParseResult. Changing timeout from "+timeout+" to "+newTimeout);
