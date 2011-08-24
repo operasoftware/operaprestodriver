@@ -23,6 +23,7 @@ import org.openqa.selenium.interactions.InvalidCoordinatesException;
 import org.openqa.selenium.interactions.internal.Coordinates;
 
 public class OperaMouse implements Mouse {
+
   private final OperaDriver parent;
   private Point lastMousePosition;
 
@@ -42,7 +43,7 @@ public class OperaMouse implements Mouse {
 
   public void doubleClick(Coordinates where) {
     Point p = getPoint(where, "double click");
-    parent.exec.mouseAction(p.x, p.y, OperaMouseKeys.LEFT.getValue(), 2);
+    parent.exec.mouseAction(p.x, p.y, OperaMouseKeys.LEFT, 2);
   }
 
   public void mouseDown(Coordinates where) {
@@ -69,7 +70,7 @@ public class OperaMouse implements Mouse {
     int xO = (int) xOffset;
     int yO = (int) yOffset;
 
-    lastMousePosition = new Point(p.x + xO, p.y+yO);
+    lastMousePosition = new Point(p.x + xO, p.y + yO);
     parent.exec.mouseAction(p.x + xO, p.y + yO);
   }
 
@@ -79,6 +80,7 @@ public class OperaMouse implements Mouse {
     if (where != null) lastMousePosition = where.getLocationInViewPort();
     if (lastMousePosition != null) return lastMousePosition;
 
-    throw new InvalidCoordinatesException("Invalid coordinates to "+action+" on");
+    throw new InvalidCoordinatesException("Invalid coordinates to " + action + " on");
   }
+
 }

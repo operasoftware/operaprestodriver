@@ -29,16 +29,16 @@ public interface IOperaExec {
   void init();
 
   /**
-   * Type a string, preserving space, sent to active window This command doesnt
-   * return a response in STP/0 hence we sleep to be on the safe side
+   * Type a string, preserving space, sent to active window This command doesn't
+   * return a response in STP/0 hence we sleep to be on the safe side.
    *
    * @param using
    */
   void type(String using);
 
   /**
-   * Create a (native) mouse action on coordinate x,y with key(s) as specified
-   * in {@link OperaMouseKeys}
+   * Create a mouse action on coordinates x,y with key(s) as specified
+   * in {@link OperaMouseKeys}.
    *
    * @param x
    * @param y
@@ -46,17 +46,26 @@ public interface IOperaExec {
    */
   void mouseAction(int x, int y, OperaMouseKeys... keys);
 
-  void mouseAction(int x, int y, int value, int count);
+  /**
+   * Create one or more mouse actions on coordinates x,y with key as specified in
+   * {@link OperaMouseKeys} and the number of repeated events as an integer.
+   *
+   * @param x
+   * @param y
+   * @param key
+   * @param count
+   */
+  void mouseAction(int x, int y, OperaMouseKeys key, int count);
 
   /**
-   * Returns the list of possible Opera Actions on host
+   * Returns the list of possible Opera Actions on host.
    *
    * @return
    */
   Set<String> getActionList();
 
   /**
-   * Execute an opera action with parameters (parameters are sent with commas)
+   * Execute an opera action with parameters (parameters are sent with commas).
    *
    * @param using
    * @param param
@@ -68,7 +77,7 @@ public interface IOperaExec {
   void action(String using, int data, String dataString, String dataStringParam);
 
   /**
-   * Execute a keypress (immediately send key down and up)
+   * Execute a key press (immediately send key down and up).
    *
    * @param key
    */
@@ -76,15 +85,16 @@ public interface IOperaExec {
 
   /**
    * Create a key event, this event controls if the key has been previously
-   * pressed before allowing key up
+   * pressed before allowing key up.
    *
    * @param key
-   * @param up down if false
+   * @param up  down if false
    */
   void key(String key, boolean up);
 
   /**
-   * Whether the given key is currently pressed down
+   * Whether the given key is currently pressed down.
+   *
    * @param key
    * @return true if the key is currently down, false if not.
    */
@@ -96,19 +106,19 @@ public interface IOperaExec {
   void releaseKeys();
 
   /**
-   * Check if the page contains color(s) as specified in {@link OperaColors}
-   * TODO needs abstraction layer
+   * Check if the page contains color(s) as specified in {@link OperaColors}.
+   * <p/>
+   * TODO: Needs abstraction layer
    *
    * @param timeout
    * @param colors
    * @return
    */
-  ScreenShotReply containsColor(Canvas canvas, long timeout,
-      OperaColors... colors);
+  ScreenShotReply containsColor(Canvas canvas, long timeout, OperaColors... colors);
 
   /**
-   * Take a screenshot of specifed {@link Area} and compare it with the given
-   * hashes (keys)
+   * Take a screenshot of specified {@link Area} and compare it with the given
+   * hashes (keys).
    *
    * @param canvas
    * @param timeout
@@ -116,7 +126,6 @@ public interface IOperaExec {
    * @param hashes
    * @return
    */
-  ScreenShotReply screenWatcher(Canvas canvas, long timeout,
-      boolean includeImage, String... hashes);
+  ScreenShotReply screenWatcher(Canvas canvas, long timeout, boolean includeImage, String... hashes);
 
 }
