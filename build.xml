@@ -65,7 +65,7 @@
       </fileset>
     </copy>
 
-    <javac debug="true" destdir="bin" includeantruntime="false">
+    <javac source="1.5" target="1.5" debug="true" destdir="bin" includeantruntime="false">
       <src path="src" />
       <classpath refid="classpath.path" />
     </javac>
@@ -97,7 +97,7 @@
 
   <!-- Compile any modified classes including test classes -->
   <target name="compile_tests">
-    <javac debug="true" destdir="test" includeantruntime="false">
+    <javac source="1.5" target="1.5" debug="true" destdir="test" includeantruntime="false">
       <src path="test" />
       <classpath refid="test.classpath.path" />
     </javac>
@@ -166,7 +166,7 @@
   </target>
 
   <target name="example" description="Run the simple example" depends="jar">
-    <javac debug="true">
+    <javac source="1.5" target="1.5" debug="true">
       <classpath refid="test.classpath.path" />
       <src path="examples/simple" />
     </javac>
