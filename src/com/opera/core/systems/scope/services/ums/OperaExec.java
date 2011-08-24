@@ -154,28 +154,23 @@ public class OperaExec extends AbstractService implements IOperaExec {
   }
 
   public void mouseAction(int x, int y, OperaMouseKeys... keys) {
-    int key = 0;
-
-    for (OperaMouseKeys operaMouseKeys : keys) {
-      key |= operaMouseKeys.getValue();
-    }
-    this.mouseAction(x, y, key, 1);
+    this.mouseAction(x, y, 1, keys);
   }
 
-  /**
-   * Added as a quick workaround for watir API
-   *
-   * @param x an unsigned int
-   * @param y an unsigned int
-   * @param value
-   */
-  public void mouseAction(int x, int y, int value, int count) {
+  public void mouseAction(int x, int y, int count, OperaMouseKeys... keys) {
     if (x < 0 || y < 0) throw new IllegalArgumentException();
+
+    int keyValue = 0;
+
+    for (OperaMouseKeys operaMouseKeys : keys) {
+      keyValue |= operaMouseKeys.getValue();
+    }
+
     MouseAction.Builder actionBuilder = MouseAction.newBuilder();
     actionBuilder.setWindowID(services.getWindowManager().getActiveWindowId());
     actionBuilder.setX(x);
     actionBuilder.setY(y);
-    actionBuilder.setButtonAction(value);
+    actionBuilder.setButtonAction(keyValue);
     /*
     if(VersionUtil.compare(getVersion(), "2.2") >= 0) {
       actionBuilder.setCount(count);
