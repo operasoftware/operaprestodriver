@@ -50,7 +50,6 @@ import com.opera.core.systems.scope.services.IOperaExec;
  * Extends the default WebElement with Opera specific methods.
  *
  * @author Deniz Turkoglu
- *
  */
 public class OperaWebElement extends RemoteWebElement {
 
@@ -149,6 +148,7 @@ public class OperaWebElement extends RemoteWebElement {
   }
 
   // TODO add check if mouse not down?
+
   /**
    * Releases the left mouse button at the top left of the element.
    */
@@ -165,7 +165,7 @@ public class OperaWebElement extends RemoteWebElement {
   public void click(int times) {
     Point point = coordinates.getLocationInViewPort();
     execService.mouseAction(point.x, point.y, OperaMouseKeys.LEFT.getValue(),
-        times);
+      times);
   }
 
   /**
@@ -179,24 +179,24 @@ public class OperaWebElement extends RemoteWebElement {
   public void click() {
     if (OperaFlags.ENABLE_CHECKS) {
       if (!isDisplayed()) throw new ElementNotVisibleException(
-          "You can't click an element that is not displayed");
+        "You can't click an element that is not displayed");
     }
 
-		parent.getScopeServices().captureOperaIdle();
+    parent.getScopeServices().captureOperaIdle();
 
-		// FIXME: temporary fix for toggle and setSelected deprecation
-		Integer id = debugger.executeScriptOnObject("return locator.parentNode", objectId);
-		OperaWebElement parentNode = new OperaWebElement(this.parent, id);
+    // FIXME: temporary fix for toggle and setSelected deprecation
+    Integer id = debugger.executeScriptOnObject("return locator.parentNode", objectId);
+    OperaWebElement parentNode = new OperaWebElement(this.parent, id);
 
-		String multiple = parentNode.getAttribute("multiple");
-		if (parentNode.getTagName().equalsIgnoreCase("SELECT") &&
-		     multiple != null && !multiple.equals("false")) {
-		  toggle();
-		} else if (this.getTagName().equals("OPTION")) {
-		  setSelected();
-		} else {
-		  parent.actionHandler.click(this, "");
-		}
+    String multiple = parentNode.getAttribute("multiple");
+    if (parentNode.getTagName().equalsIgnoreCase("SELECT") &&
+      multiple != null && !multiple.equals("false")) {
+      toggle();
+    } else if (this.getTagName().equals("OPTION")) {
+      setSelected();
+    } else {
+      parent.actionHandler.click(this, "");
+    }
     parent.waitForLoadToComplete();
   }
 
@@ -207,7 +207,7 @@ public class OperaWebElement extends RemoteWebElement {
    * @param y The distance from the top to click
    */
   public void click(int x, int y) {
-		parent.getScopeServices().captureOperaIdle();
+    parent.getScopeServices().captureOperaIdle();
     parent.actionHandler.click(this, x, y);
     parent.waitForLoadToComplete();
   }
@@ -224,12 +224,12 @@ public class OperaWebElement extends RemoteWebElement {
     throwIfStale();
 
     if (attribute.toLowerCase().equals("value")) {
-      return callMethod("if(/^input|select|textarea$/i.test(locator.nodeName)){"+
-          "return locator.value;"+
-           "}"+
-           "return locator.textContent;");
+      return callMethod("if(/^input|select|textarea$/i.test(locator.nodeName)){" +
+        "return locator.value;" +
+        "}" +
+        "return locator.textContent;");
     } else {
-      return callMethod("return " + OperaAtoms.GET_ATTRIBUTE.getValue() + "(locator, '"+attribute+"')");
+      return callMethod("return " + OperaAtoms.GET_ATTRIBUTE.getValue() + "(locator, '" + attribute + "')");
     }
   }
 
@@ -250,11 +250,11 @@ public class OperaWebElement extends RemoteWebElement {
   /**
    * @deprecated Use {@link #getAttribute('value')} instead
    */
-  public String getValue(){
-    return callMethod("if(/^input|select|textarea$/i.test(locator.nodeName)){"+
-                        "return locator.value;"+
-                         "}"+
-                         "return locator.textContent;");
+  public String getValue() {
+    return callMethod("if(/^input|select|textarea$/i.test(locator.nodeName)){" +
+      "return locator.value;" +
+      "}" +
+      "return locator.textContent;");
   }
 
   public boolean isDisplayed() {
@@ -306,13 +306,13 @@ public class OperaWebElement extends RemoteWebElement {
       } while (true);
 
       if (!isDisplayed()) throw new ElementNotVisibleException(
-          "You can't type on an element that is not displayed");
+        "You can't type on an element that is not displayed");
       if (!isEnabled()) throw new InvalidElementStateException(
-          "You can't type on an element that is disabled");
+        "You can't type on an element that is disabled");
     }
 
     if (getTagName().equalsIgnoreCase("input")
-        && (hasAttribute("type") && getAttribute("type").equals("file"))) {
+      && (hasAttribute("type") && getAttribute("type").equals("file"))) {
       click();
     } else executeMethod("locator.focus()");
 
@@ -321,7 +321,7 @@ public class OperaWebElement extends RemoteWebElement {
     // characters, we have to loop through the string and check each against
     // a list of special keys.
 
-		parent.getScopeServices().captureOperaIdle();
+    parent.getScopeServices().captureOperaIdle();
     for (CharSequence seq : keysToSend) {
       if (seq instanceof Keys) {
         String key = OperaKeys.get(((Keys) seq).name());
@@ -338,11 +338,9 @@ public class OperaWebElement extends RemoteWebElement {
         } else {
           execService.key(key);
         }
-      }
-      else if (seq.toString().equals("\n")) {
+      } else if (seq.toString().equals("\n")) {
         execService.key("enter");
-      }
-      else {
+      } else {
         // We need to check each character to see if it is a "special" key
         StringBuffer buffer = new StringBuffer();
         for (int i = 0; i < seq.length(); i++) {
@@ -352,8 +350,7 @@ public class OperaWebElement extends RemoteWebElement {
           // Buffer normal keys for a single type() call
           if (keyName == null) {
             buffer.append(c.toString());
-          }
-          else {
+          } else {
             // This is a special key, so send all buffered normal keys
             if (buffer.length() > 0) {
               execService.type(buffer.toString());
@@ -393,10 +390,12 @@ public class OperaWebElement extends RemoteWebElement {
   }
 
   private static final HashMap<Character, String> keysLookup = new HashMap<Character, String>();
+
   /**
    * Converts a character in the PUA to the name of the key, as given by
    * {@link org.openqa.selenium.Keys}. If the character doesn't appear in that
    * class then null is returned.
+   *
    * @param c The character that may be a special key.
    * @return A string containing the name of the "special" key or null.
    */
@@ -428,7 +427,7 @@ public class OperaWebElement extends RemoteWebElement {
         throw new ElementNotVisibleException("Cannot select an element that is not displayed");
 
       if (!tagName.equals("INPUT") && !tagName.equals("OPTION"))
-        throw new InvalidElementStateException("Cannot select a "+tagName+" element");
+        throw new InvalidElementStateException("Cannot select a " + tagName + " element");
     }
 
     evaluateMethod("return " + OperaAtoms.SET_SELECTED.getValue() + "(locator, true)");
@@ -443,6 +442,7 @@ public class OperaWebElement extends RemoteWebElement {
   }
 
   // FIXME revise with javascript guys
+
   /**
    * @deprecated To be removed. Determine the current state using {@link #isSelected()}
    */
@@ -450,16 +450,16 @@ public class OperaWebElement extends RemoteWebElement {
   public boolean toggle() {
     String tagName = getTagName();
     if (!tagName.equals("INPUT") && !tagName.equals("OPTION"))
-      throw new InvalidElementStateException("Cannot toggle a "+tagName+" element");
+      throw new InvalidElementStateException("Cannot toggle a " + tagName + " element");
 
     if (tagName.equalsIgnoreCase("input") && getAttribute("type").equalsIgnoreCase("radio"))
       throw new InvalidElementStateException("You can't toggle an radio element");
 
     Integer id = debugger.executeScriptOnObject("return locator.parentNode",
-        objectId);
+      objectId);
     OperaWebElement parentNode = new OperaWebElement(this.parent, id);
     if (parentNode.getTagName().equalsIgnoreCase("SELECT")
-        && parentNode.getAttribute("multiple") == null) {
+      && parentNode.getAttribute("multiple") == null) {
       throw new InvalidElementStateException("You can't toggle on a regular select");
     }
 
@@ -471,7 +471,7 @@ public class OperaWebElement extends RemoteWebElement {
     }
 
     return (Boolean) debugger.callFunctionOnObject(
-        "return " + OperaAtoms.TOGGLE.getValue() + "(locator)", objectId, true);
+      "return " + OperaAtoms.TOGGLE.getValue() + "(locator)", objectId, true);
   }
 
   public static void sleep(long timeInMillis) {
@@ -484,6 +484,7 @@ public class OperaWebElement extends RemoteWebElement {
 
   /**
    * To be replaced by the advanced interactions API.
+   *
    * @deprecated
    */
   @Deprecated
@@ -498,6 +499,7 @@ public class OperaWebElement extends RemoteWebElement {
 
   /**
    * To be replaced by the advanced interactions API.
+   *
    * @deprecated
    */
   @Deprecated
@@ -505,7 +507,7 @@ public class OperaWebElement extends RemoteWebElement {
     Point currentLocation = this.getLocation();
     Point dragPoint = element.getLocation();
     execService.mouseAction(currentLocation.x, currentLocation.y,
-        OperaMouseKeys.LEFT_DOWN);
+      OperaMouseKeys.LEFT_DOWN);
     execService.mouseAction(dragPoint.x, dragPoint.y);
     execService.mouseAction(dragPoint.x, dragPoint.y, OperaMouseKeys.LEFT_UP);
   }
@@ -515,8 +517,8 @@ public class OperaWebElement extends RemoteWebElement {
    */
   public Point getLocation() {
     String coordinates = debugger.callFunctionOnObject(
-        "var c=" + OperaAtoms.GET_LOCATION.getValue() + "(locator);return c.x+','+c.y;",
-        objectId
+      "var c=" + OperaAtoms.GET_LOCATION.getValue() + "(locator);return c.x+','+c.y;",
+      objectId
     );
     String[] location = coordinates.split(",");
     return new Point(Integer.valueOf(location[0]), Integer.valueOf(location[1]));
@@ -524,15 +526,15 @@ public class OperaWebElement extends RemoteWebElement {
 
   public Dimension getSize() {
     if (!parent.objectIds.contains(objectId)) throw new StaleElementReferenceException(
-        "You cant interact with stale elements");
+      "You cant interact with stale elements");
 
     String widthAndHeight = debugger.callFunctionOnObject(
-        "var s=" + OperaAtoms.GET_SIZE.getValue() + "(locator);return s.width+','+s.height;",
-        objectId
+      "var s=" + OperaAtoms.GET_SIZE.getValue() + "(locator);return s.width+','+s.height;",
+      objectId
     );
     String[] dimension = widthAndHeight.split(",");
     return new Dimension(Integer.valueOf(dimension[0]),
-        Integer.valueOf(dimension[1]));
+      Integer.valueOf(dimension[1]));
   }
 
   /**
@@ -550,7 +552,7 @@ public class OperaWebElement extends RemoteWebElement {
    * element's bounding-box covers and returns the MD5 hash.
    *
    * @param timeout The number of milliseconds to wait before taking the
-   *          screenshot.
+   *                screenshot.
    * @param hashes
    * @return A MD5 hash as a string.
    */
@@ -575,8 +577,8 @@ public class OperaWebElement extends RemoteWebElement {
    * image to the given filename.
    *
    * @param filename The location to save the screenshot
-   * @param timeout The number of milliseconds to wait before taking the
-   *          screenshot
+   * @param timeout  The number of milliseconds to wait before taking the
+   *                 screenshot
    * @return The MD5 hash of the screenshot
    */
   public String saveScreenshot(String filename, long timeout) {
@@ -584,10 +586,10 @@ public class OperaWebElement extends RemoteWebElement {
   }
 
   public String saveScreenshot(String filename, long timeout,
-      boolean includeImage, String... hashes) {
+                               boolean includeImage, String... hashes) {
     Canvas canvas = buildCanvas();
     ScreenShotReply reply = execService.screenWatcher(canvas, timeout,
-        includeImage, hashes);
+      includeImage, hashes);
     if (includeImage && reply.getPng() != null) {
       FileOutputStream stream;
       try {
@@ -603,10 +605,11 @@ public class OperaWebElement extends RemoteWebElement {
 
   /**
    * Take a screenshot of the area this element's bounding-box covers.
+   *
    * @param timeout The number of milliseconds to wait before taking the
-   * screenshot
-   * @param hashes A previous screenshot MD5 hash. If it matches the hash
-   * of this screenshot then no image data is returned.
+   *                screenshot
+   * @param hashes  A previous screenshot MD5 hash. If it matches the hash
+   *                of this screenshot then no image data is returned.
    */
   public ScreenShotReply saveScreenshot(long timeout, String... hashes) {
     Canvas canvas = buildCanvas();
@@ -704,7 +707,7 @@ public class OperaWebElement extends RemoteWebElement {
   private final List<WebElement> findMultipleElements(String using, String type) {
     Integer id = debugger.executeScriptOnObject(using, objectId);
     if (id == null) throw new NoSuchElementException(
-        "Cannot find element(s) with " + type);
+      "Cannot find element(s) with " + type);
 
     List<WebElement> elements = parent.processElements(id);
 
@@ -713,20 +716,20 @@ public class OperaWebElement extends RemoteWebElement {
 
   public WebElement findElementByName(String using) {
     return findSingleElement(
-        "document.evaluate(\"descendant-or-self::*[@name='"
-            + using
-            + "']\",locator,null,XPathResult.ORDERED_NODE_ITERATOR_TYPE,null).iterateNext()",
-        "name");
+      "document.evaluate(\"descendant-or-self::*[@name='"
+        + using
+        + "']\",locator,null,XPathResult.ORDERED_NODE_ITERATOR_TYPE,null).iterateNext()",
+      "name");
   }
 
   public List<WebElement> findElementsByName(String using) {
     return findMultipleElements("var result = document.evaluate"
-        + "(\"descendant-or-self::*[@name='" + using + "']\""
-        + ", locator, null, XPathResult.ORDERED_NODE_ITERATOR_TYPE,  null);\n"
-        + "var elements = new Array();\n"
-        + "var element = result.iterateNext();\n" + "while (element) {\n"
-        + "  elements.push(element);\n" + "  element = result.iterateNext();\n"
-        + "}\n" + "return elements", "XPath");
+      + "(\"descendant-or-self::*[@name='" + using + "']\""
+      + ", locator, null, XPathResult.ORDERED_NODE_ITERATOR_TYPE,  null);\n"
+      + "var elements = new Array();\n"
+      + "var element = result.iterateNext();\n" + "while (element) {\n"
+      + "  elements.push(element);\n" + "  element = result.iterateNext();\n"
+      + "}\n" + "return elements", "XPath");
   }
 
   @Override
@@ -738,6 +741,7 @@ public class OperaWebElement extends RemoteWebElement {
   public Coordinates getCoordinates() {
     return coordinates;
   }
+
   private Coordinates coordinates = new Coordinates() {
     public Point getLocationOnScreen() {
       throw new UnsupportedOperationException("Not supported yet.");
@@ -745,14 +749,14 @@ public class OperaWebElement extends RemoteWebElement {
 
     public Point getLocationInViewPort() {
       String coordinates = debugger.callFunctionOnObject(
-          "locator.scrollIntoView();\n"
-              + "var x = 0, y = 0;\n"
-              + "if(window.frameElement) {\n"
-              + "x = (window.screenLeft - window.top.screenLeft) + window.scrollX;\n"
-              + "y = (window.screenTop - window.top.screenTop) + window.scrollY;\n"
-              + "}\n"
-              + "return (( x + locator.getBoundingClientRect().left) + ',' + ( y + locator.getBoundingClientRect().top));\n",
-          objectId);
+        "locator.scrollIntoView();\n"
+          + "var x = 0, y = 0;\n"
+          + "if(window.frameElement) {\n"
+          + "x = (window.screenLeft - window.top.screenLeft) + window.scrollX;\n"
+          + "y = (window.screenTop - window.top.screenTop) + window.scrollY;\n"
+          + "}\n"
+          + "return (( x + locator.getBoundingClientRect().left) + ',' + ( y + locator.getBoundingClientRect().top));\n",
+        objectId);
       String[] location = coordinates.split(",");
       return new Point(Integer.valueOf(location[0]), Integer.valueOf(location[1]));
     }
@@ -767,7 +771,7 @@ public class OperaWebElement extends RemoteWebElement {
   };
 
   public String getCssValue(String property) {
-    return callMethod("return "+OperaAtoms.GET_EFFECTIVE_STYLE.getValue()+"(locator, '"+property+"')");
+    return callMethod("return " + OperaAtoms.GET_EFFECTIVE_STYLE.getValue() + "(locator, '" + property + "')");
   }
 
   public WebDriver getWrappedDriver() {
@@ -776,7 +780,7 @@ public class OperaWebElement extends RemoteWebElement {
 
   private void throwIfStale() {
     if (!parent.objectIds.contains(objectId) ||
-        Boolean.valueOf(debugger.callFunctionOnObject("locator.parentNode == undefined", objectId))) {
+      Boolean.valueOf(debugger.callFunctionOnObject("locator.parentNode == undefined", objectId))) {
       throw new StaleElementReferenceException("You cant interact with stale elements");
     }
 
