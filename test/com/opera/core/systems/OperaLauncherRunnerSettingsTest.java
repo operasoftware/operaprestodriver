@@ -2,83 +2,82 @@ package com.opera.core.systems;
 
 import com.opera.core.systems.runner.OperaRunnerException;
 import com.opera.core.systems.runner.launcher.OperaLauncherRunner;
+import com.opera.core.systems.settings.OperaDriverSettings;
 import org.junit.Assert;
 import org.junit.Test;
 import org.openqa.selenium.Platform;
-import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.io.File;
 
 import static org.junit.Assert.fail;
 
-public class OperaLauncherRunnerTest {
-  private static DesiredCapabilities capabilities;
+public class OperaLauncherRunnerSettingsTest {
+  private static OperaDriverSettings settings;
   private static OperaLauncherRunner runner;
 
   @Test
   public void testOperaDriverSettings() {
-    capabilities = OperaDriver.getDefaultCapabilities();
-    Assert.assertNotNull(capabilities);
+    settings = new OperaDriverSettings();
+    Assert.assertNotNull(settings);
   }
 
   @Test
   public void testDefaultDoRunOperaLauncherFromOperaDriver() {
     // default is to run launcher from the driver, so this should always be true
-    Assert.assertTrue((Boolean) capabilities.getCapability(OperaDesktopDriver.RUN_LAUNCHER));
+    Assert.assertTrue(settings.doRunOperaLauncherFromOperaDriver());
   }
 
   @Test
   public void testSetRunOperaLauncherFromOperaDriver() {
-    capabilities.setCapability(OperaDesktopDriver.RUN_LAUNCHER, false);
-    Assert.assertFalse((Boolean) capabilities.getCapability(OperaDesktopDriver.RUN_LAUNCHER));
+    settings.setRunOperaLauncherFromOperaDriver(false);
+    Assert.assertFalse(settings.doRunOperaLauncherFromOperaDriver());
   }
 
   @Test
   public void testDefaultLauncherListeningPort() {
     // the listening port should default to 9999
-    Assert.assertEquals(9999, capabilities.getCapability(OperaDesktopDriver.LAUNCHER_PORT));
+    Assert.assertEquals(9999, settings.getOperaLauncherListeningPort());
   }
 
   @Test
   public void testSetLauncherListeningPort() {
-    capabilities.setCapability(OperaDesktopDriver.LAUNCHER_PORT, 5555);
-    Assert.assertEquals(5555, capabilities.getCapability(OperaDesktopDriver.LAUNCHER_PORT));
+    settings.setOperaLauncherListeningPort(5555);
+    Assert.assertEquals(5555, settings.getOperaLauncherListeningPort());
   }
 
   @Test
   public void testDefaultOperaBinaryLocation() {
     // the opera binary location should default to null
-    Assert.assertNull(capabilities.getCapability(OperaDriver.BINARY));
+    Assert.assertNull(settings.getOperaBinaryLocation());
   }
 
   @Test
   public void testSetOperaBinaryLocation() {
-    capabilities.setCapability(OperaDriver.BINARY, "/spartan/ramdisk/launcher");
-    Assert.assertEquals("/spartan/ramdisk/launcher", capabilities.getCapability(OperaDriver.BINARY));
+    settings.setOperaBinaryLocation("/spartan/ramdisk/launcher");
+    Assert.assertEquals("/spartan/ramdisk/launcher", settings.getOperaBinaryLocation());
   }
 
   @Test
   public void testDefaultOperaBinaryArguments() {
     // the opera binary arguments should default to null
-    Assert.assertEquals(capabilities.getCapability(OperaDriver.ARGUMENTS), "");
+    Assert.assertEquals(settings.getOperaBinaryArguments(), "");
   }
 
   @Test
   public void testSetOperaBinaryArguments() {
-    capabilities.setCapability(OperaDriver.ARGUMENTS, "-host 127.0.0.1 -port 12199 -bin /spartan/ramdisk/install/launcher");
-    Assert.assertEquals("-host 127.0.0.1 -port 12199 -bin /spartan/ramdisk/install/launcher", capabilities.getCapability(OperaDriver.ARGUMENTS));
+    settings.setOperaBinaryArguments("-host 127.0.0.1 -port 12199 -bin /spartan/ramdisk/install/launcher");
+    Assert.assertEquals("-host 127.0.0.1 -port 12199 -bin /spartan/ramdisk/install/launcher", settings.getOperaBinaryArguments());
   }
 
   @Test
   public void testOperaLauncherRunnerConstructorWithSettings() {
     OperaPaths paths = new OperaPaths();
+    settings.setRunOperaLauncherFromOperaDriver(true);
+    settings.setOperaBinaryArguments("");
+    settings.setOperaBinaryLocation(paths.operaPath());
+    settings.setOperaLauncherBinary(paths.launcherPath());
 
-    capabilities.setCapability(OperaDriver.RUN_LAUNCHER, true);
-    capabilities.setCapability(OperaDriver.ARGUMENTS, "");
-    capabilities.setCapability(OperaDriver.BINARY, paths.operaPath());
-    capabilities.setCapability(OperaDriver.LAUNCHER, paths.launcherPath());
-
-    runner = new OperaLauncherRunner(capabilities);
+    runner = new OperaLauncherRunner(settings);
     Assert.assertNotNull(runner);
   }
 
@@ -118,9 +117,9 @@ public class OperaLauncherRunnerTest {
 
   @Test
   public void testOperaLauncherRunnerConstructorWithSettings2() {
-    capabilities.setCapability(OperaDriver.RUN_LAUNCHER, true);
-    capabilities.setCapability(OperaDriver.ARGUMENTS, "-geometry 1024x768");
-    runner = new OperaLauncherRunner(capabilities);
+    settings.setRunOperaLauncherFromOperaDriver(true);
+    settings.setOperaBinaryArguments("-geometry 1024x768");
+    runner = new OperaLauncherRunner(settings);
     runner.startOpera();
     Assert.assertTrue(runner.isOperaRunning());
   }
@@ -136,8 +135,8 @@ public class OperaLauncherRunnerTest {
 
   @Test
   public void testStartAndStopOperaTenTimesRoundOneStart() {
-    capabilities.setCapability(OperaDriver.ARGUMENTS, "-geometry 640x480");
-    runner = new OperaLauncherRunner(capabilities);
+    settings.setOperaBinaryArguments("-geometry 640x480");
+    runner = new OperaLauncherRunner(settings);
     runner.startOpera();
     Assert.assertTrue(runner.isOperaRunning());
   }
@@ -269,10 +268,10 @@ public class OperaLauncherRunnerTest {
 
     Assert.assertTrue("Imposter launcher exists", fakeLauncher.exists());
 
-    capabilities.setCapability(OperaDriver.LAUNCHER, fakeLauncher.getCanonicalPath());
+    settings.setOperaLauncherBinary(fakeLauncher.getCanonicalPath());
 
     try {
-      runner = new OperaLauncherRunner(capabilities);
+      runner = new OperaLauncherRunner(settings);
       Assert.fail("Did not throw OperaRunnerException");
     } catch (OperaRunnerException e) {
       Assert.assertTrue("Throws timeout error", e.getMessage().toLowerCase().contains("timeout"));

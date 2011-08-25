@@ -20,6 +20,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import org.openqa.selenium.remote.DesiredCapabilities;
+
 import com.opera.core.systems.runner.launcher.OperaLauncherRunner;
 import com.opera.core.systems.scope.exceptions.CommunicationException;
 import com.opera.core.systems.scope.internal.OperaIntervals;
@@ -49,7 +51,7 @@ public class OperaDesktopDriver extends OperaDriver {
   private String largePreferencesPath;
   private String smallPreferencesPath;
   private String cachePreferencesPath;
-  
+
   public OperaDesktopDriver() {
     super();
     initDesktopDriver();
@@ -60,10 +62,20 @@ public class OperaDesktopDriver extends OperaDriver {
 	 *
 	 * @param settings settings for binary path to Opera, prefs directory, and arguments
 	 */
+  @Deprecated
 	public OperaDesktopDriver(OperaDriverSettings settings) {
+		this(settings.getCapabilities());
+	}
+
+	/**
+	 * Constructor that starts Opera if it's not running.
+	 *
+	 * @param c Settings for binary path to Opera, prefs directory, arguments and more.
+	 */
+	public OperaDesktopDriver(DesiredCapabilities c) {
 		// OperaDriver constructor will initialize services and start Opera
 		// if the binaryPath is set in settings (by calling init in OperaDriver)
-		super(settings);
+		super(c);
 		initDesktopDriver();
 	}
 
@@ -73,7 +85,7 @@ public class OperaDesktopDriver extends OperaDriver {
 		largePreferencesPath = getLargePreferencesPath();
 		smallPreferencesPath = getSmallPreferencesPath();
 		cachePreferencesPath = getCachePreferencesPath();
-		profileUtils = new ProfileUtils(largePreferencesPath, smallPreferencesPath, cachePreferencesPath, settings);
+		profileUtils = new ProfileUtils(largePreferencesPath, smallPreferencesPath, cachePreferencesPath, capabilities);
 	}
 
 	private void setServices() {
@@ -107,8 +119,8 @@ public class OperaDesktopDriver extends OperaDriver {
 
 		// If the Opera Binary isn't set we are assuming Opera is up and we
 		// can ask it for the location of itself
-		if (settings != null && settings.getOperaBinaryLocation() == null
-				&& !settings.getNoRestart()) {
+		if (capabilities != null && capabilities.getCapability(OperaDriver.BINARY) == null
+				&& !((Boolean) capabilities.getCapability(OperaDriver.NO_RESTART))) {
 
 			String operaPath = getOperaPath();
 
@@ -116,13 +128,13 @@ public class OperaDesktopDriver extends OperaDriver {
 
 			if (operaPath.length() > 0) {
 
-				settings.setOperaBinaryLocation(operaPath);
+				capabilities.setCapability(OperaDriver.BINARY, operaPath);
 
 				// Get pid of Opera, needed to wait for it to quit
 				int pid = desktopUtils.getOperaPid();
 
 				// Now create the OperaLauncherRunner that we have the binary path
-				operaRunner = new OperaLauncherRunner(settings);
+				operaRunner = new OperaLauncherRunner(capabilities);
 
 				// Quit and wait for opera to quit properly
 				services.quit(operaRunner, pid);
@@ -179,13 +191,13 @@ public class OperaDesktopDriver extends OperaDriver {
 
 			int pid = 0;
 			if (operaPath.length() > 0) {
-				settings.setOperaBinaryLocation(operaPath);
+			  capabilities.setCapability(OperaDriver.BINARY, operaPath);
 				pid = desktopUtils.getOperaPid();
 			}
 
 			// Now create the OperaLauncherRunner that we have the binary path
 			// So we can control the shutdown
-			operaRunner = new OperaLauncherRunner(settings);
+			operaRunner = new OperaLauncherRunner(capabilities);
 
 			// Quit and wait for opera to quit properly (calls services.shutdown)
 			services.quit(operaRunner, pid);
@@ -837,10 +849,10 @@ public class OperaDesktopDriver extends OperaDriver {
 
 				// Cleanup old profile
 				/*boolean deleted = */ profileUtils.deleteProfile();
-				
+
 				// Copy in the profile for the test (only if it exists)
 				// returns true if copied, else false
-				/*deleted =*/ profileUtils.copyProfile(newPrefs); 
+				/*deleted =*/ profileUtils.copyProfile(newPrefs);
 
 				// Relaunch Opera and the webdriver service connection
 				startOpera();
