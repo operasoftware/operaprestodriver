@@ -633,11 +633,13 @@ public class WaitState {
 
           case EVENT_REQUEST_FIRED:
             if (result.data == match && type == ResponseType.REQUEST_FIRED) return null;
+            break;
 
           case EVENT_OPERA_IDLE:
             logger.finest("RECV EVENT_OPERA_IDLE!");
             if (result.data == match && type == ResponseType.OPERA_IDLE) return null;
             break;
+
           case EVENT_SELFTEST_DONE:
             // TODO:
             logger.finest("RECV EVENT_SELFTEST_DONE");
