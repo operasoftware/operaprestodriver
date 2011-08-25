@@ -78,6 +78,19 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
   // Want to thin some of these out, but will need some re-thinking.
 
   /**
+   * (String) Logging level for OperaDriver.  Available levels are: SEVERE
+   * (highest value), WARNING, INFO, CONFIG, FINE, FINER, FINEST (lowest
+   * value), ALL.
+   */
+  public static final String LOGGING_LEVEL = "opera.logging.level";
+
+  /**
+   * (String) Where to send the output of the logging.  Default is
+   * /dev/stdout.
+   */
+  public static final String LOGGING_FILE = "opera.logging.file";
+
+  /**
    * (String) Path to the Opera binary to use.
    */
   public static final String BINARY = "opera.binary";
@@ -204,6 +217,9 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     // Defaults
     DesiredCapabilities capabilities = DesiredCapabilities.opera();
     capabilities.setJavascriptEnabled(true);
+
+    capabilities.setCapability(LOGGING_LEVEL, "INFO");
+    capabilities.setCapability(LOGGING_FILE, "/dev/stdout");
 
     capabilities.setCapability(BINARY, (String) null);
     capabilities.setCapability(ARGUMENTS, "");
