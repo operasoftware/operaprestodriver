@@ -97,7 +97,7 @@
 
   <!-- Compile any modified classes including test classes -->
   <target name="compile_tests">
-    <javac source="1.5" target="1.5" debug="true" destdir="test" includeantruntime="false">
+    <javac source="1.5" target="1.5" debug="true" destdir="bin" includeantruntime="false">
       <src path="test" />
       <classpath refid="test.classpath.path" />
     </javac>
