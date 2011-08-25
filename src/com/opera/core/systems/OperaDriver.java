@@ -100,7 +100,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
   /**
    * (Boolean) Whether to use Opera idle.
    */
-  public static final String USE_OPERAIDLE = "opera.use_operaide";
+  public static final String USE_OPERAIDLE = "opera.use_operaidle";
 
   /**
    * (Integer) The X display to use.  (Only works on *nix OSes.)
