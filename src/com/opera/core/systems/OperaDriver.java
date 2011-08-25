@@ -129,6 +129,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     this((DesiredCapabilities) null);
   }
 
+  @Deprecated
   public OperaDriver(OperaDriverSettings settings) {
     this(settings.getCapabilities());
   }
@@ -147,31 +148,31 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     }
 
     if ((Boolean) capabilities.getCapability(AUTOSTART)) {
-      OperaPaths paths = new OperaPaths();
+        OperaPaths paths = new OperaPaths();
 
       if (((Boolean) capabilities.getCapability(GUESS_BINARY_PATH)) &&
           capabilities.getCapability(BINARY) == null) {
         capabilities.setCapability(BINARY, paths.operaPath());
       } else if (capabilities.getCapability(BINARY) == null) {
-        // Don't guess, only check environment variable
-        String path = System.getenv("OPERA_PATH");
+          // Don't guess, only check environment variable
+          String path = System.getenv("OPERA_PATH");
 
-        if (path != null && path.length() > 0) {
+          if (path != null && path.length() > 0) {
           capabilities.setCapability(BINARY, path);
+          }
         }
-      }
 
       if (capabilities.getCapability(LAUNCHER) == null) {
         capabilities.setCapability(LAUNCHER, paths.launcherPath());
-      }
+        }
 
       if (capabilities.getCapability(BINARY) != null) {
         this.operaRunner = new OperaLauncherRunner(capabilities);
+        }
       }
-    }
 
     start();
-  }
+    }
 
   public static DesiredCapabilities getDefaultCapabilities() {
     // Defaults
@@ -210,8 +211,6 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
     logger.fine("init() done");
   }
-
-
 
   @Deprecated
   public void shutdown() {

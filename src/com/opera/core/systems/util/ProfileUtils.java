@@ -22,6 +22,7 @@ import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import com.opera.core.systems.OperaDriver;
+import com.opera.core.systems.settings.OperaDriverSettings;
 
 /**
  * Class to manage browser profile
@@ -33,7 +34,12 @@ public class ProfileUtils {
 	private String cachePrefsFolder;
 	private DesiredCapabilities capabilities;
 
-	public ProfileUtils(String largePrefsFolder, String smallPrefsFolder, String cachePrefsFolder, DesiredCapabilities capabilities){
+	@Deprecated
+	public ProfileUtils(String largePrefsFolder, String smallPrefsFolder, String cachePrefsFolder, OperaDriverSettings settings) {
+		this(largePrefsFolder, smallPrefsFolder, cachePrefsFolder, settings.getCapabilities());
+	}
+
+	public ProfileUtils(String largePrefsFolder, String smallPrefsFolder, String cachePrefsFolder, DesiredCapabilities capabilities) {
 		this.capabilities = capabilities;
 		this.largePrefsFolder = largePrefsFolder;
 		this.smallPrefsFolder = smallPrefsFolder;

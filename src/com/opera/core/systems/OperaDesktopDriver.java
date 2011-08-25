@@ -31,6 +31,7 @@ import com.opera.core.systems.scope.protos.SystemInputProtos.ModifierPressed;
 import com.opera.core.systems.scope.services.IDesktopUtils;
 import com.opera.core.systems.scope.services.IDesktopWindowManager;
 import com.opera.core.systems.scope.services.ISystemInput;
+import com.opera.core.systems.settings.OperaDriverSettings;
 import com.opera.core.systems.util.ProfileUtils;
 
 /**
@@ -60,6 +61,16 @@ public class OperaDesktopDriver extends OperaDriver {
 	 * Constructor that starts Opera if it's not running.
 	 *
 	 * @param settings settings for binary path to Opera, prefs directory, and arguments
+	 */
+  @Deprecated
+	public OperaDesktopDriver(OperaDriverSettings settings) {
+		this(settings.getCapabilities());
+	}
+
+	/**
+	 * Constructor that starts Opera if it's not running.
+	 *
+	 * @param c Settings for binary path to Opera, prefs directory, arguments and more.
 	 */
 	public OperaDesktopDriver(DesiredCapabilities c) {
 		// OperaDriver constructor will initialize services and start Opera

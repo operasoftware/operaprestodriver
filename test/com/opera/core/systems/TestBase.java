@@ -1,6 +1,7 @@
 package com.opera.core.systems;
 
 import com.opera.core.systems.runner.OperaRunner;
+import com.opera.core.systems.settings.OperaDriverSettings;
 import junit.framework.Assert;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -55,6 +56,10 @@ abstract public class TestBase {
 class TestOperaDriver extends OperaDriver {
   public TestOperaDriver() {
     super();
+  }
+
+  public TestOperaDriver(OperaDriverSettings settings) {
+    this(settings.getCapabilities());
   }
 
   public TestOperaDriver(DesiredCapabilities capabilities) {

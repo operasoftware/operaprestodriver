@@ -44,6 +44,7 @@ import com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStatus
 import com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStopRequest;
 import com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStatusResponse.StatusType;
 import com.opera.core.systems.scope.internal.OperaIntervals;
+import com.opera.core.systems.settings.OperaDriverSettings;
 
 public class OperaLauncherRunner implements OperaRunner {
   private static Logger logger = Logger.getLogger(OperaLauncherRunner.class.getName());
@@ -53,6 +54,11 @@ public class OperaLauncherRunner implements OperaRunner {
   private DesiredCapabilities capabilities;
   private OperaLauncherProtocol launcherProtocol = null;
   private String crashlog = null;
+
+  @Deprecated
+  public OperaLauncherRunner(OperaDriverSettings settings) {
+    this(settings.getCapabilities());
+  }
 
   public OperaLauncherRunner(DesiredCapabilities capabilities) {
     logger.fine("Creating OperaLauncherRunner");

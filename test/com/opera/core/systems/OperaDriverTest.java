@@ -1,5 +1,6 @@
 package com.opera.core.systems;
 
+import com.opera.core.systems.settings.OperaDriverSettings;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -31,6 +32,16 @@ public class OperaDriverTest extends TestBase {
     caps.setCapability(OperaDriver.ARGUMENTS, (String) null);
 
     OperaDriver driver = new TestOperaDriver(caps);
+    Assert.assertNotNull(driver);
+    driver.quit();
+  }
+
+  @Test
+  public void testNullOperaArgumentsSettings() throws Exception {
+    OperaDriverSettings settings = new OperaDriverSettings();
+    settings.setOperaBinaryArguments(null);
+
+    OperaDriver driver = new TestOperaDriver(settings);
     Assert.assertNotNull(driver);
     driver.quit();
   }
