@@ -28,7 +28,6 @@ import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import com.google.protobuf.GeneratedMessage;
-import com.opera.core.systems.OperaDesktopDriver;
 import com.opera.core.systems.OperaDriver;
 import com.opera.core.systems.model.ScreenShotReply;
 import com.opera.core.systems.runner.OperaRunner;

@@ -172,7 +172,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
       }
 
     start();
-    }
+  }
 
   public static DesiredCapabilities getDefaultCapabilities() {
     // Defaults
