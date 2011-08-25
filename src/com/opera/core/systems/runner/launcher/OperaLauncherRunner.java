@@ -108,19 +108,18 @@ public class OperaLauncherRunner implements OperaRunner {
     stringArray.add((String) this.capabilities.getCapability(OperaDriver.BINARY));
 
     /*
-    * We read in environmental variable OPERA_ARGS in addition to existing
-    * arguments passed down from OperaDriverSettings. These are combined
-    * and sent to the browser.
-    *
-    * Note that this is a deviation from the principle of arguments normally
-    * overwriting environmental variables.
-    */
+     * We read in environmental variable OPERA_ARGS in addition to existing
+     * arguments passed down from OperaDriverSettings. These are combined
+     * and sent to the browser.
+     *
+     * Note that this is a deviation from the principle of arguments normally
+     * overwriting environmental variables.
+     */
     String binaryArguments = (String) this.capabilities.getCapability(OperaDriver.ARGUMENTS);
     if (binaryArguments == null) {
       binaryArguments = "";
     }
     String environmentArguments = System.getenv("OPERA_ARGS");
-
     if (environmentArguments != null && environmentArguments.length() > 0) {
       binaryArguments = environmentArguments + " " + binaryArguments;
     }
@@ -148,6 +147,15 @@ public class OperaLauncherRunner implements OperaRunner {
     }
 
     System.out.println("command line: "+stringArray.toString());
+
+    {
+      String profile = (String) this.capabilities.getCapability(OperaDriver.PROFILE);
+      if (profile != null) {
+        logger.fine("Using profile in: "+ profile);
+        stringArray.add("-pd");
+        stringArray.add(profile);
+      }
+    }
 
     launcherRunner = new OperaLauncherBinary(
       (String) this.capabilities.getCapability(OperaDriver.LAUNCHER),
