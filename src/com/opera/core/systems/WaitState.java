@@ -486,11 +486,9 @@ public class WaitState {
             break;
 
           case EXCEPTION:
-
             throw result.exception;
 
           case DISCONNECTED:
-
             throw new CommunicationException("Problem encountered : "
               + waitResult.toString());
 
@@ -506,68 +504,81 @@ public class WaitState {
 
           case EVENT_DESKTOP_WINDOW_SHOWN:
             if (type == ResponseType.DESKTOP_WINDOW_SHOWN) {
-
-
-              if (stringMatch.length() == 0) return result;
-              else {
+              if (stringMatch.length() == 0) {
+                return result;
+              } else {
                 logger.fine("EVENT_DESKTOP_WINDOW_SHOWN: Name: "
                   + result.desktopWindowInfo.getName() + " ID: "
                   + result.desktopWindowInfo.getWindowID() + " OnScreen: "
                   + result.desktopWindowInfo.getOnScreen());
 
-                if (result.desktopWindowInfo.getName().equals(stringMatch)) return result;
+                if (result.desktopWindowInfo.getName().equals(stringMatch)) {
+                  return result;
+                }
               }
             }
             break;
 
           case EVENT_DESKTOP_WINDOW_UPDATED:
             if (type == ResponseType.DESKTOP_WINDOW_UPDATED) {
-              if (stringMatch.length() == 0) return result;
-              else {
+              if (stringMatch.length() == 0) {
+                return result;
+              } else {
                 logger.fine("EVENT_DESKTOP_WINDOW_UPDATED: Name: "
                   + result.desktopWindowInfo.getName() + " ID: "
                   + result.desktopWindowInfo.getWindowID());
 
-                if (result.desktopWindowInfo.getName().equals(stringMatch)) return result;
+                if (result.desktopWindowInfo.getName().equals(stringMatch)) {
+                  return result;
+                }
               }
             }
             break;
 
           case EVENT_DESKTOP_WINDOW_ACTIVATED:
             if (type == ResponseType.DESKTOP_WINDOW_ACTIVATED) {
-              if (stringMatch.length() == 0) return result;
-              else {
+              if (stringMatch.length() == 0) {
+                return result;
+              } else {
                 logger.fine("DESKTOP_WINDOW_ACTIVATED: Name: "
                   + result.desktopWindowInfo.getName() + " ID: "
                   + result.desktopWindowInfo.getWindowID());
 
-                if (result.desktopWindowInfo.getName().equals(stringMatch)) return result;
+                if (result.desktopWindowInfo.getName().equals(stringMatch)) {
+                  return result;
+                }
               }
             }
             break;
 
           case EVENT_DESKTOP_WINDOW_CLOSED:
             if (type == ResponseType.DESKTOP_WINDOW_CLOSED) {
-              if (stringMatch.length() == 0) return result;
-              else {
+              if (stringMatch.length() == 0) {
+                return result;
+              } else {
                 logger.fine("EVENT_DESKTOP_WINDOW_CLOSED: Name: "
                   + result.desktopWindowInfo.getName() + " ID: "
                   + result.desktopWindowInfo.getWindowID());
 
-                if (result.desktopWindowInfo.getName().equals(stringMatch)) return result;
+                if (result.desktopWindowInfo.getName().equals(stringMatch)) {
+                  return result;
+                }
               }
             }
             break;
 
           case EVENT_DESKTOP_WINDOW_LOADED:
             if (type == ResponseType.DESKTOP_WINDOW_LOADED) {
-              if (stringMatch.length() == 0) return result;
-              else {
+              if (stringMatch.length() == 0) {
+                return result;
+              } else {
                 logger.fine("EVENT_DESKTOP_WINDOW_LOADED: Name: "
                   + result.desktopWindowInfo.getName() + " ID: "
                   + result.desktopWindowInfo.getWindowID());
 
-                if (result.desktopWindowInfo.getName().equals(stringMatch)) return result;
+                if (result.desktopWindowInfo.getName().equals(stringMatch)) {
+                  return result;
+                }
               }
             }
             break;
@@ -601,7 +612,6 @@ public class WaitState {
                   stringMatch = "";
                   return result;
                 }
-
               }
             }
             break;
