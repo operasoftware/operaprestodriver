@@ -26,6 +26,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openqa.selenium.WebDriverException;
+import org.openqa.selenium.net.PortProber;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import com.google.protobuf.GeneratedMessage;
@@ -74,12 +75,13 @@ public class OperaLauncherRunner implements OperaRunner {
     }
 
     logger.fine("Running launcher from OperaDriver");
+    Integer launcherPort = PortProber.findFreePort();
 
     List<String> stringArray = new ArrayList<String>();
     stringArray.add("-host");
     stringArray.add("127.0.0.1");
     stringArray.add("-port");
-    stringArray.add("9999");  // TODO: Get a random port
+    stringArray.add(launcherPort.toString());
     if (this.capabilities.getCapability(OperaDriver.DISPLAY) != null) {
       stringArray.add("-display");
       stringArray.add(":" + Integer.toString((Integer) this.capabilities.getCapability(OperaDriver.DISPLAY)));
@@ -123,36 +125,35 @@ public class OperaLauncherRunner implements OperaRunner {
       binaryArguments = environmentArguments + " " + binaryArguments;
     }
 
-      // Arguments are split by single space.
-      StringTokenizer tokenizer = new StringTokenizer(binaryArguments, " ");
-      while (tokenizer.hasMoreTokens()) {
-        stringArray.add(tokenizer.nextToken());
-      }
+    // Arguments are split by single space.
+    StringTokenizer tokenizer = new StringTokenizer(binaryArguments, " ");
+    while (tokenizer.hasMoreTokens()) {
+      stringArray.add(tokenizer.nextToken());
+    }
 
-      logger.fine("Launcher arguments: " + stringArray);
+    logger.fine("Launcher arguments: " + stringArray);
 
-      // Enable auto test mode, always starts Opera on opera:debug and prevents
-      // interrupting dialogues appearing
-      if (!stringArray.contains("-autotestmode")) {
-        stringArray.add("-autotestmode");
-      }
+    // Enable auto test mode, always starts Opera on opera:debug and prevents
+    // interrupting dialogues appearing
+    if (!stringArray.contains("-autotestmode")) {
+      stringArray.add("-autotestmode");
+    }
 
-      int port = (Integer) this.capabilities.getCapability(OperaDriver.PORT);
-      if (port != -1) {
-        // Provide defaults if one hasn't been set
-        String host = "127.0.0.1";
-        stringArray.add("-debugproxy");
-        stringArray.add(host+":"+port);
-      }
+    int port = (Integer) this.capabilities.getCapability(OperaDriver.PORT);
+    if (port != -1) {
+      // Provide defaults if one hasn't been set
+      String host = (String) this.capabilities.getCapability(OperaDriver.HOST);
+      stringArray.add("-debugproxy");
+      stringArray.add(host+":"+port);
+    }
 
-      System.out.println("command line: "+stringArray.toString());
+    System.out.println("command line: "+stringArray.toString());
 
     launcherRunner = new OperaLauncherBinary(
       (String) this.capabilities.getCapability(OperaDriver.LAUNCHER),
       stringArray.toArray(new String[stringArray.size()])
     );
 
-    int launcherPort = 9999;  // TODO: Store port from previously
     logger.fine("Waiting for Opera Launcher connection on port " + launcherPort);
 
     try {
