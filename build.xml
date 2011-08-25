@@ -25,13 +25,12 @@
     <fileset dir="lib" includes="**/*.jar" />
   </path>
   <path id="test.classpath.path">
+    <pathelement location="bin" />
     <fileset file="${jar.path}"/>
     <fileset dir="lib" includes="**/*.jar" />
   </path>
 
-  <path id="test.dir.path">
-    <pathelement location="test/com/opera/core/systems" />
-  </path>
+  <property name="test.dir.path" value="bin" />
   <property name="test.output.path" value="test-output" />
   <property name="test.report.path" value="test-reports" />
 
@@ -52,7 +51,7 @@
     <delete dir="release" />
   </target>
 
-  <!-- Compile all classes after cleaning-->
+  <!-- Compile all classes after cleaning -->
   <target name="compile" description="Compile all the source files">
     <fileset dir="bin" />
     <mkdir dir="bin" />
@@ -113,11 +112,11 @@
     <junit fork="yes" haltonfailure="no" printsummary="yes" showoutput="yes" outputtoformatters="no">
       <formatter type="xml" usefile="true" />
       <classpath refid="test.classpath.path" />
-      <classpath location="test" />
+      <classpath location="${test.classpath.path}" />
 
       <!-- run all of the tests -->
       <batchtest unless="class" todir="${test.output.path}">
-        <fileset dir="test" includes="**/*Test.class" />
+        <fileset dir="${test.dir.path}" includes="**/*Test.class" />
       </batchtest>
 
       <!-- run just one file/class. Happens when -Dfile=<file> is passed -->
