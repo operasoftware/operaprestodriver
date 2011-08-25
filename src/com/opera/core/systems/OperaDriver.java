@@ -76,31 +76,67 @@ import com.opera.core.systems.settings.OperaDriverSettings;
 public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
   // Want to thin some of these out, but will need some re-thinking.
-  /// String. Path to the Opera binary to use.
+
+  /**
+   * (String) Path to the Opera binary to use.
+   */
   public static final String BINARY = "opera.binary";
-  /// String. Path to the launcher binary to use.
+
+  /**
+   * (String) Path to the launcher binary to use.
+   */
   public static final String LAUNCHER = "opera.launcher";
-  /// Integer. Port to start the launcher on.
+
+  /**
+   * (Integer) Port to start the launcher on.
+   */
   public static final String LAUNCHER_PORT = "opera.launcher_port";
-  /// String. Arguments to pass to Opera.
+
+  /**
+   * (String) Arguments to pass to Opera, separated by spaces.
+   */
   public static final String ARGUMENTS = "opera.arguments";
-  /// Boolean. Whether to use Opera idle.
+
+  /**
+   * (Boolean) Whether to use Opera idle.
+   */
   public static final String USE_OPERAIDLE = "opera.use_operaide";
-  /// Integer. The X display to use.
+
+  /**
+   * (Integer) The X display to use.  (Only works on *nix OSes.)
+   */
   public static final String DISPLAY = "opera.display";
 
-  /// Boolean. Whether to autostart Opera.
+  /**
+   * (Boolean) Whether to auto-start Opera.
+   */
   public static final String AUTOSTART = "opera.autostart";
-  /// Boolean. Whether to run the launcher.
+
+  /**
+   * (Boolean) Whether OperaDriver should start launcher.
+   */
   public static final String RUN_LAUNCHER = "opera.run_launcher";
-  /// Boolean. Whether to restart.
+
+  /**
+   * (Boolean) Whether to restart.
+   */
   public static final String NO_RESTART = "opera.no_restart";
-  /// Boolean. Whether to quit Opera when OperaDriver is shut down.
+
+  /**
+   * (Boolean) Whether to quit Opera when OperaDriver is shut down.
+   */
   public static final String NO_QUIT = "opera.no_quit";
-  /// Boolean. Whether to guess the path to Opera if it isn't set.
+
+  /**
+   * (Boolean) Whether to guess the path to Opera if it isn't set in
+   * <code>opera.binary</code>.
+   */
   public static final String GUESS_BINARY_PATH = "opera.guess_binary_path";
 
-  /// The profile configuration we are using, for example desktop or gogi.
+  /**
+   * (String) The profile configuration we are using, for example
+   * "desktop" or "core-gogi".
+   */
   public static final String BINARY_PROFILE = "opera.binary_profile";
 
   /*
@@ -137,7 +173,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
   /**
    * Constructor that starts Opera.
    *
-   * @param c a DesiredCapabilitiesobject containing various settings
+   * @param c a DesiredCapabilities object containing various settings
    *          for the driver and the browser.
    */
   public OperaDriver(DesiredCapabilities c) {
