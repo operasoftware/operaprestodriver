@@ -16,35 +16,31 @@ limitations under the License.
 
 package com.opera.core.systems.settings;
 
+import org.openqa.selenium.remote.DesiredCapabilities;
+
+import com.opera.core.systems.OperaDriver;
+
 /**
  * Stores settings for OperaDriver.
  *
  * @author Deniz Turkoglu
+ * @deprecated Use DesiredCapabilites instead.
  */
+@Deprecated
 public class OperaDriverSettings {
 
-  private boolean runOperaLauncherFromOperaDriver = true;
-  private String operaLauncherBinary = null;
-  private int operaLauncherListeningPort = 9999;
+  private DesiredCapabilities capabilities;
 
-  private String operaBinaryLocation;
-  private String operaBinaryArguments = "";
+  public OperaDriverSettings() {
+    capabilities = new DesiredCapabilities();
+  }
 
-  private Integer operaLauncherXvfbDisplay; // could be null
-
-  private boolean noRestart = false;
-  private boolean noQuit = false;
-  private boolean guessOperaPath = true;
-
-  private boolean useOperaIdle = false;
-
-  private boolean autostart = true;
-
-  // profile name
-  private String profile = "";
+  public DesiredCapabilities getCapabilities() {
+    return capabilities;
+  }
 
   public boolean doRunOperaLauncherFromOperaDriver() {
-    return runOperaLauncherFromOperaDriver;
+    return (Boolean) capabilities.getCapability(OperaDriver.RUN_LAUNCHER);
   }
 
   /**
@@ -57,11 +53,11 @@ public class OperaDriverSettings {
    *         launcher, <code>false</code> to not.
    */
   public void setRunOperaLauncherFromOperaDriver(boolean runOperaLauncherFromOperaDriver) {
-    this.runOperaLauncherFromOperaDriver = runOperaLauncherFromOperaDriver;
+    capabilities.setCapability(OperaDriver.RUN_LAUNCHER, runOperaLauncherFromOperaDriver);
   }
 
   public int getOperaLauncherListeningPort() {
-    return operaLauncherListeningPort;
+    return (Integer) capabilities.getCapability(OperaDriver.LAUNCHER_PORT);
   }
 
   /**
@@ -70,11 +66,11 @@ public class OperaDriverSettings {
    * @param operaLauncherPort port number to listen on
    */
   public void setOperaLauncherListeningPort(int operaLauncherPort) {
-    this.operaLauncherListeningPort = operaLauncherPort;
+    capabilities.setCapability(OperaDriver.LAUNCHER_PORT, operaLauncherPort);
   }
 
   public String getOperaLauncherBinary() {
-    return operaLauncherBinary;
+    return (String) capabilities.getCapability(OperaDriver.LAUNCHER);
   }
 
   /**
@@ -83,11 +79,11 @@ public class OperaDriverSettings {
    * @param operaLauncherBinary the absolute path to the Opera launcher.
    */
   public void setOperaLauncherBinary(String operaLauncherBinary) {
-    this.operaLauncherBinary = operaLauncherBinary;
+    capabilities.setCapability(OperaDriver.LAUNCHER, operaLauncherBinary);
   }
 
   public String getOperaBinaryLocation() {
-    return operaBinaryLocation;
+    return (String) capabilities.getCapability(OperaDriver.BINARY);
   }
 
   /**
@@ -96,11 +92,11 @@ public class OperaDriverSettings {
    * @param operaBinaryLocation the absolute path to Opera.
    */
   public void setOperaBinaryLocation(String operaBinaryLocation) {
-    this.operaBinaryLocation = operaBinaryLocation;
+    capabilities.setCapability(OperaDriver.BINARY, operaBinaryLocation);
   }
 
   public String getOperaBinaryArguments() {
-    return operaBinaryArguments;
+    return (String) capabilities.getCapability(OperaDriver.ARGUMENTS);
   }
 
   /**
@@ -117,11 +113,11 @@ public class OperaDriverSettings {
       operaBinaryArguments = "";
     }
 
-    this.operaBinaryArguments = operaBinaryArguments;
+    capabilities.setCapability(OperaDriver.ARGUMENTS, operaBinaryArguments);
   }
 
   public Integer getOperaLauncherXvfbDisplay() {
-    return operaLauncherXvfbDisplay;
+    return (Integer) capabilities.getCapability(OperaDriver.DISPLAY);
   }
 
   /**
@@ -132,7 +128,7 @@ public class OperaDriverSettings {
    * @param operaLauncherXvfbDisplay the X screen number to start Opera on.
    */
   public void setOperaLauncherXvfbDisplay(Integer operaLauncherXvfbDisplay) {
-    this.operaLauncherXvfbDisplay = operaLauncherXvfbDisplay;
+    capabilities.setCapability(OperaDriver.DISPLAY, operaLauncherXvfbDisplay);
   }
 
   /**
@@ -142,14 +138,14 @@ public class OperaDriverSettings {
    * @param noQuit
    */
   public void setNoQuit(boolean noQuit) {
-    this.noQuit = noQuit;
+    capabilities.setCapability(OperaDriver.NO_QUIT, noQuit);
   }
 
   /**
    * @return
    */
   public boolean getNoQuit() {
-    return noQuit;
+    return (Boolean) capabilities.getCapability(OperaDriver.NO_QUIT);
   }
 
   /**
@@ -158,7 +154,7 @@ public class OperaDriverSettings {
    */
   @Deprecated
   public void setNoRestart(boolean noRestart) {
-    this.noRestart = noRestart;
+    capabilities.setCapability(OperaDriver.NO_RESTART, noRestart);
   }
 
   /**
@@ -167,23 +163,23 @@ public class OperaDriverSettings {
    */
   @Deprecated
   public boolean getNoRestart() {
-    return noRestart;
+    return (Boolean) capabilities.getCapability(OperaDriver.NO_RESTART);
   }
 
   public void setGuessOperaPath(boolean guess) {
-    this.guessOperaPath = guess;
+    capabilities.setCapability(OperaDriver.GUESS_BINARY_PATH, guess);
   }
 
   public boolean guessOperaPath() {
-    return guessOperaPath;
+    return (Boolean) capabilities.getCapability(OperaDriver.GUESS_BINARY_PATH);
   }
 
   public void setUseOperaIdle(boolean useOperaIdle) {
-    this.useOperaIdle = useOperaIdle;
+    capabilities.setCapability(OperaDriver.USE_OPERAIDLE, useOperaIdle);
   }
 
   public boolean getUseOperaIdle() {
-    return useOperaIdle;
+    return (Boolean) capabilities.getCapability(OperaDriver.USE_OPERAIDLE);
   }
 
   /**
@@ -192,11 +188,11 @@ public class OperaDriverSettings {
    * @param autostart true to autostart, false to wait for connection
    */
   public void setAutostart(boolean autostart) {
-    this.autostart = autostart;
+    capabilities.setCapability(OperaDriver.AUTOSTART, autostart);
   }
 
   public boolean getAutostart() {
-    return autostart;
+    return (Boolean) capabilities.getCapability(OperaDriver.AUTOSTART);
   }
 
   /**
@@ -204,14 +200,14 @@ public class OperaDriverSettings {
    * @param profile The profile name.
    */
   public void setProfile(String profile){
-    this.profile = profile;
+    capabilities.setCapability(OperaDriver.BINARY_PROFILE, profile);
   }
 
   /**
    * @return The profile name to use.
    */
   public String getProfile(){
-    return profile;
+    return (String) capabilities.getCapability(OperaDriver.BINARY_PROFILE);
   }
 
 }

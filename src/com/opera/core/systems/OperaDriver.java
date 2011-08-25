@@ -71,6 +71,7 @@ import com.opera.core.systems.scope.services.IEcmaScriptDebugger;
 import com.opera.core.systems.scope.services.IOperaExec;
 import com.opera.core.systems.scope.services.IPrefs;
 import com.opera.core.systems.scope.services.IWindowManager;
+import com.opera.core.systems.settings.OperaDriverSettings;
 
 public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
@@ -99,6 +100,9 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
   /// Boolean. Whether to guess the path to Opera if it isn't set.
   public static final String GUESS_BINARY_PATH = "opera.guess_binary_path";
 
+  /// The profile configuration we are using, for example desktop or gogi.
+  public static final String BINARY_PROFILE = "opera.binary_profile";
+
   /*
    * These are "protected" and not "private" so that we can extend this class
    * and add methods to access these variable in tests.
@@ -123,6 +127,10 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
   public OperaDriver() {
     this((DesiredCapabilities) null);
+  }
+
+  public OperaDriver(OperaDriverSettings settings) {
+    this(settings.getCapabilities());
   }
 
   /**
@@ -264,7 +272,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
       services = new ScopeServices(versions, manualStart);
       // for profile-specific workarounds inside ScopeServives, WaitState ...
-      services.setProfile(settings.getProfile());
+      services.setProfile((String) capabilities.getCapability(BINARY_PROFILE));
       services.startStpThread();
     } catch (IOException e) {
       throw new WebDriverException(e);
