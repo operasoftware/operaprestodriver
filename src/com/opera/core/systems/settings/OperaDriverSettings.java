@@ -32,7 +32,7 @@ public class OperaDriverSettings {
   private DesiredCapabilities capabilities;
 
   public OperaDriverSettings() {
-    capabilities = new DesiredCapabilities();
+    capabilities = OperaDriver.getDefaultCapabilities();
   }
 
   public DesiredCapabilities getCapabilities() {
