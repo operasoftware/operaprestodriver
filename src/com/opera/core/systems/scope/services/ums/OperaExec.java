@@ -161,6 +161,7 @@ public class OperaExec extends AbstractService implements IOperaExec {
 
     int keyValue = 0;
 
+    // Join keys together using assignment operator for OR.
     for (OperaMouseKeys operaMouseKeys : keys) {
       keyValue |= operaMouseKeys.getValue();
     }
@@ -178,9 +179,19 @@ public class OperaExec extends AbstractService implements IOperaExec {
       executeCommand(ExecCommand.SEND_MOUSE_ACTION, actionBuilder);
     } else {
     */
-    for (int i = 0; i < count; i++)
+    for (int i = 0; i < count; i++) {
       executeCommand(ExecCommand.SEND_MOUSE_ACTION, actionBuilder.clone());
+    }
     /*}*/
+
+    // If double-clicking, wait some time after executing the mouse action
+    // so that Opera doesn't consider two consecutive doubleClick()'s a
+    // quadruple-click.
+    //
+    // TODO: Also a problem if single-clicking multiple times in a row?
+    if (count > 2) {
+      try { Thread.sleep(OperaIntervals.MULTIPLE_CLICK_SLEEP.getValue()); } catch (InterruptedException e) {}
+    }
   }
 
   public Set<String> getActionList() {
