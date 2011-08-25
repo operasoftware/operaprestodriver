@@ -137,8 +137,8 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
   /**
    * Constructor that starts Opera.
    *
-   * @param settings an OperaDriverSettings object containing various settings
-   *                 for the driver and the browser.
+   * @param c a DesiredCapabilitiesobject containing various settings
+   *          for the driver and the browser.
    */
   public OperaDriver(DesiredCapabilities c) {
     capabilities = getDefaultCapabilities();
