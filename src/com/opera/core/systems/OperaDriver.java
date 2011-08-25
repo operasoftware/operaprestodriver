@@ -88,11 +88,6 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
   public static final String LAUNCHER = "opera.launcher";
 
   /**
-   * (Integer) Port to start the launcher on.
-   */
-  public static final String LAUNCHER_PORT = "opera.launcher_port";
-
-  /**
    * (String) Arguments to pass to Opera, separated by spaces.
    */
   public static final String ARGUMENTS = "opera.arguments";
@@ -111,11 +106,6 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
    * (Boolean) Whether to auto-start Opera.
    */
   public static final String AUTOSTART = "opera.autostart";
-
-  /**
-   * (Boolean) Whether OperaDriver should start launcher.
-   */
-  public static final String RUN_LAUNCHER = "opera.run_launcher";
 
   /**
    * (Boolean) Whether to restart.
@@ -219,8 +209,6 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     capabilities.setCapability(ARGUMENTS, "");
 
     capabilities.setCapability(LAUNCHER, (String) null);
-    capabilities.setCapability(LAUNCHER_PORT, 9999);
-    capabilities.setCapability(RUN_LAUNCHER, true);
 
     capabilities.setCapability(DISPLAY, (Integer) null);
 

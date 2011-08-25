@@ -40,7 +40,7 @@ public class OperaDriverSettings {
   }
 
   public boolean doRunOperaLauncherFromOperaDriver() {
-    return (Boolean) capabilities.getCapability(OperaDriver.RUN_LAUNCHER);
+    return true;
   }
 
   /**
@@ -51,22 +51,29 @@ public class OperaDriverSettings {
    * @param runOperaLauncherFromOperaDriver
    *         <code>true</code> to start Opera
    *         launcher, <code>false</code> to not.
+   * @deprecated
    */
   public void setRunOperaLauncherFromOperaDriver(boolean runOperaLauncherFromOperaDriver) {
-    capabilities.setCapability(OperaDriver.RUN_LAUNCHER, runOperaLauncherFromOperaDriver);
+    throw new UnsupportedOperationException("Due to random port probing for launcher, " +
+      "manually specifying whether to run launcher is not supported anymore.");
   }
 
+  /**
+   * @deprecated
+   */
   public int getOperaLauncherListeningPort() {
-    return (Integer) capabilities.getCapability(OperaDriver.LAUNCHER_PORT);
+    return 9999;
   }
 
   /**
    * Set the port for Opera launcher to listen on. Defaults to port 9999.
    *
    * @param operaLauncherPort port number to listen on
+   * @deprecated
    */
   public void setOperaLauncherListeningPort(int operaLauncherPort) {
-    capabilities.setCapability(OperaDriver.LAUNCHER_PORT, operaLauncherPort);
+    throw new UnsupportedOperationException("Due to random port probing for launcher, " +
+      "manually setting the launcher port is not supported anymore.");
   }
 
   public String getOperaLauncherBinary() {
@@ -197,16 +204,17 @@ public class OperaDriverSettings {
 
   /**
    * Set which profile (desktop, smartphone, etc.) to use.
+   *
    * @param profile The profile name.
    */
-  public void setProfile(String profile){
+  public void setProfile(String profile) {
     capabilities.setCapability(OperaDriver.BINARY_PROFILE, profile);
   }
 
   /**
    * @return The profile name to use.
    */
-  public String getProfile(){
+  public String getProfile() {
     return (String) capabilities.getCapability(OperaDriver.BINARY_PROFILE);
   }
 

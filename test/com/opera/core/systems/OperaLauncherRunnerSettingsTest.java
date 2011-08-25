@@ -4,7 +4,10 @@ import com.opera.core.systems.runner.OperaRunnerException;
 import com.opera.core.systems.runner.launcher.OperaLauncherRunner;
 import com.opera.core.systems.settings.OperaDriverSettings;
 import org.junit.Assert;
+import org.junit.Ignore;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.openqa.selenium.Platform;
 
 import java.io.File;
@@ -12,8 +15,12 @@ import java.io.File;
 import static org.junit.Assert.fail;
 
 public class OperaLauncherRunnerSettingsTest {
+
   private static OperaDriverSettings settings;
   private static OperaLauncherRunner runner;
+
+  @Rule
+  public ExpectedException exception = ExpectedException.none();
 
   @Test
   public void testOperaDriverSettings() {
@@ -29,8 +36,8 @@ public class OperaLauncherRunnerSettingsTest {
 
   @Test
   public void testSetRunOperaLauncherFromOperaDriver() {
+    exception.expect(UnsupportedOperationException.class);
     settings.setRunOperaLauncherFromOperaDriver(false);
-    Assert.assertFalse(settings.doRunOperaLauncherFromOperaDriver());
   }
 
   @Test
@@ -41,8 +48,8 @@ public class OperaLauncherRunnerSettingsTest {
 
   @Test
   public void testSetLauncherListeningPort() {
+    exception.expect(UnsupportedOperationException.class);
     settings.setOperaLauncherListeningPort(5555);
-    Assert.assertEquals(5555, settings.getOperaLauncherListeningPort());
   }
 
   @Test
@@ -72,7 +79,6 @@ public class OperaLauncherRunnerSettingsTest {
   @Test
   public void testOperaLauncherRunnerConstructorWithSettings() {
     OperaPaths paths = new OperaPaths();
-    settings.setRunOperaLauncherFromOperaDriver(true);
     settings.setOperaBinaryArguments("");
     settings.setOperaBinaryLocation(paths.operaPath());
     settings.setOperaLauncherBinary(paths.launcherPath());
@@ -117,7 +123,6 @@ public class OperaLauncherRunnerSettingsTest {
 
   @Test
   public void testOperaLauncherRunnerConstructorWithSettings2() {
-    settings.setRunOperaLauncherFromOperaDriver(true);
     settings.setOperaBinaryArguments("-geometry 1024x768");
     runner = new OperaLauncherRunner(settings);
     runner.startOpera();
@@ -277,4 +282,5 @@ public class OperaLauncherRunnerSettingsTest {
       Assert.assertTrue("Throws timeout error", e.getMessage().toLowerCase().contains("timeout"));
     }
   }
+
 }

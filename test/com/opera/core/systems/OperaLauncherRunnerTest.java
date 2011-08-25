@@ -22,30 +22,6 @@ public class OperaLauncherRunnerTest {
   }
 
   @Test
-  public void testDefaultDoRunOperaLauncherFromOperaDriver() {
-    // default is to run launcher from the driver, so this should always be true
-    Assert.assertTrue((Boolean) capabilities.getCapability(OperaDesktopDriver.RUN_LAUNCHER));
-  }
-
-  @Test
-  public void testSetRunOperaLauncherFromOperaDriver() {
-    capabilities.setCapability(OperaDesktopDriver.RUN_LAUNCHER, false);
-    Assert.assertFalse((Boolean) capabilities.getCapability(OperaDesktopDriver.RUN_LAUNCHER));
-  }
-
-  @Test
-  public void testDefaultLauncherListeningPort() {
-    // the listening port should default to 9999
-    Assert.assertEquals(9999, capabilities.getCapability(OperaDesktopDriver.LAUNCHER_PORT));
-  }
-
-  @Test
-  public void testSetLauncherListeningPort() {
-    capabilities.setCapability(OperaDesktopDriver.LAUNCHER_PORT, 5555);
-    Assert.assertEquals(5555, capabilities.getCapability(OperaDesktopDriver.LAUNCHER_PORT));
-  }
-
-  @Test
   public void testDefaultOperaBinaryLocation() {
     // the opera binary location should default to null
     Assert.assertNull(capabilities.getCapability(OperaDriver.BINARY));
@@ -73,7 +49,6 @@ public class OperaLauncherRunnerTest {
   public void testOperaLauncherRunnerConstructorWithSettings() {
     OperaPaths paths = new OperaPaths();
 
-    capabilities.setCapability(OperaDriver.RUN_LAUNCHER, true);
     capabilities.setCapability(OperaDriver.ARGUMENTS, "");
     capabilities.setCapability(OperaDriver.BINARY, paths.operaPath());
     capabilities.setCapability(OperaDriver.LAUNCHER, paths.launcherPath());
@@ -118,7 +93,6 @@ public class OperaLauncherRunnerTest {
 
   @Test
   public void testOperaLauncherRunnerConstructorWithSettings2() {
-    capabilities.setCapability(OperaDriver.RUN_LAUNCHER, true);
     capabilities.setCapability(OperaDriver.ARGUMENTS, "-geometry 1024x768");
     runner = new OperaLauncherRunner(capabilities);
     runner.startOpera();
