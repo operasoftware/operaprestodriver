@@ -106,6 +106,13 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
   public static final String ARGUMENTS = "opera.arguments";
 
   /**
+   * (String) Directory to use for the Opera profile. If null a random
+   * temporary directory is used. If "", an empty string, then the default
+   * autotest profile directory is used.
+   */
+  public static final String PROFILE = "opera.profile";
+
+  /**
    * (Boolean) Whether to use Opera idle.
    */
   public static final String USE_OPERAIDLE = "opera.use_operaidle";
@@ -187,23 +194,23 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     }
 
     if ((Boolean) capabilities.getCapability(AUTOSTART)) {
-        OperaPaths paths = new OperaPaths();
+      OperaPaths paths = new OperaPaths();
 
       if (((Boolean) capabilities.getCapability(GUESS_BINARY_PATH)) &&
           capabilities.getCapability(BINARY) == null) {
         capabilities.setCapability(BINARY, paths.operaPath());
       } else if (capabilities.getCapability(BINARY) == null) {
-          // Don't guess, only check environment variable
-          String path = System.getenv("OPERA_PATH");
+        // Don't guess, only check environment variable
+        String path = System.getenv("OPERA_PATH");
 
-          if (path != null && path.length() > 0) {
+        if (path != null && path.length() > 0) {
           capabilities.setCapability(BINARY, path);
-          }
         }
+      }
 
       if (capabilities.getCapability(LAUNCHER) == null) {
         capabilities.setCapability(LAUNCHER, paths.launcherPath());
-        }
+      }
 
       // If port is 0, try to find a random port.
       if ((Integer) capabilities.getCapability(PORT) == 0) {
@@ -212,7 +219,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
       if (capabilities.getCapability(BINARY) != null) {
         this.operaRunner = new OperaLauncherRunner(capabilities);
-        }
+      }
     } else {
       // If we're not autostarting then we don't want to randomise the port.
       capabilities.setCapability(PORT, -1);
@@ -238,6 +245,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
     capabilities.setCapability(DISPLAY, (Integer) null);
 
+    // TODO: set this to "" (empty string) for backward compat
     capabilities.setCapability(PROFILE, (String) null);
 
     capabilities.setCapability(AUTOSTART, true);

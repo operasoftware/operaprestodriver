@@ -6,6 +6,8 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
+import com.opera.core.systems.settings.OperaDriverSettings;
+
 public class OperaDriverTest extends TestBase {
   // Replace the TestBase setup and teardown so that we don't launch opera
   @BeforeClass
