@@ -189,7 +189,7 @@ public class OperaExec extends AbstractService implements IOperaExec {
     // quadruple-click.
     //
     // TODO: Also a problem if single-clicking multiple times in a row?
-    if (count > 2) {
+    if (count > 1) {
       try { Thread.sleep(OperaIntervals.MULTIPLE_CLICK_SLEEP.getValue()); } catch (InterruptedException e) {}
     }
   }
