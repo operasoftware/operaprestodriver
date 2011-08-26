@@ -28,6 +28,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -149,6 +150,12 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
    */
   public static final String BINARY_PROFILE = "opera.binary_profile";
 
+  /**
+   * (String) How verbose the logging should be. One of SEVERE, WARNING, INFO
+   * CONFIG, FINE, FINER, FINEST. Default is INFO.
+   */
+  public static final String VERBOSITY = "opera.verbosity";
+
   /*
    * These are "protected" and not "private" so that we can extend this class
    * and add methods to access these variable in tests.
@@ -192,6 +199,12 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     if (c != null) {
       capabilities.merge(c);
     }
+
+    // Set the logging level
+    Level logLevel = Level.parse(((String) capabilities.getCapability(VERBOSITY)).toUpperCase());
+    Logger root = Logger.getLogger("");
+    root.setLevel(logLevel);
+    for (Handler h: root.getHandlers()) { h.setLevel(logLevel); }
 
     if ((Boolean) capabilities.getCapability(AUTOSTART)) {
       OperaPaths paths = new OperaPaths();
@@ -254,6 +267,8 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     capabilities.setCapability(GUESS_BINARY_PATH, true);
 
     capabilities.setCapability(USE_OPERAIDLE, false);
+
+    capabilities.setCapability(VERBOSITY, "INFO");
 
     return capabilities;
   }
