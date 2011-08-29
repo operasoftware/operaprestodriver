@@ -16,6 +16,7 @@ limitations under the License.
 
 package com.opera.core.systems;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -50,6 +51,7 @@ import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.io.TemporaryFilesystem;
 import org.openqa.selenium.net.PortProber;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
@@ -294,6 +296,8 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
   public void quit() {
     logger.fine("Opera Driver shutting down");
+    // This will only delete the profile directory if we created it.
+    TemporaryFilesystem.getDefaultTmpFS().deleteTempDir(new File((String) capabilities.getCapability(PROFILE)));
     services.quit();
     if (operaRunner != null) operaRunner.shutdown();
   }
