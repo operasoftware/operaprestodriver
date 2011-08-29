@@ -1,3 +1,25 @@
+2011/08/29 OperaDriver 0.6.1
+============================
+
+API changes
+-----------
+
+ * Remove OperaDriver.mouseEvent(). (andreastt)
+ * Switch order and type of arguments to OperaExec.mouseAction(). (andreastt)
+ * Update Selenium jar to r13628, to include double-click fix in r13592.
+   (andreastt)
+
+Bug fixes
+---------
+
+ * Wait in between sending double-click events so that Opera does not think
+   that it is a quadruple-click. (andreastt)
+
+Tests
+-----
+
+ * Fix tests to not use OperaDriver.mouseEvent(). (andreastt)
+
 2011/08/03 OperaDriver 0.6
 ==========================
 
