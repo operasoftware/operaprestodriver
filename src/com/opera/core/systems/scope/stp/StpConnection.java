@@ -64,6 +64,7 @@ public class StpConnection implements SocketListener {
   }
 
   private State state = State.SERVICELIST;
+  private SocketMonitor monitor;
 
   private void setState(State state) {
     // logger.fine("Setting state: " + state.toString());
@@ -71,8 +72,7 @@ public class StpConnection implements SocketListener {
   }
 
   public boolean isConnected() {
-    if (socketChannel == null) return false;
-    return true;
+    return (socketChannel != null);
   }
 
   /*
@@ -93,20 +93,22 @@ public class StpConnection implements SocketListener {
    * @param socket
    * @param handler
    * @param eventHandler
+   * @param monitor
    * @throws IOException
    */
   public StpConnection(SocketChannel socket, IConnectionHandler handler,
-      AbstractEventHandler eventHandler) throws IOException {
+      AbstractEventHandler eventHandler, SocketMonitor monitor) throws IOException {
     connectionHandler = handler;
     socketChannel = socket;
     this.eventHandler = eventHandler;
+    this.monitor = monitor;
     requests = new ArrayBlockingQueue<ByteBuffer>(1024);
     recvBuffer = ByteBuffer.allocateDirect(65536);
     recvBuffer.limit(0);
 
     socket.configureBlocking(false);
 
-    SocketMonitor.instance().add(socket, this, SelectionKey.OP_READ);
+    monitor.add(socket, this, SelectionKey.OP_READ);
 
     if (!handler.onConnected(this)) {
       close();
@@ -148,7 +150,7 @@ public class StpConnection implements SocketListener {
     logger.fine("SEND: " + command.toString());
 
     requests.add(buffer);
-    SocketMonitor.instance().modify(socketChannel, this,
+    monitor.modify(socketChannel, this,
         SelectionKey.OP_READ | SelectionKey.OP_WRITE);
   }
 
@@ -186,7 +188,7 @@ public class StpConnection implements SocketListener {
     ByteBuffer buffer = ByteBuffer.allocate(bytes.length);
     buffer.put(bytes);
     requests.add(buffer);
-    SocketMonitor.instance().modify(socketChannel, this,
+    monitor.modify(socketChannel, this,
         SelectionKey.OP_READ | SelectionKey.OP_WRITE);
   }
 
@@ -241,7 +243,7 @@ public class StpConnection implements SocketListener {
             // ignore
           }
           connectionHandler.onDisconnect();
-          SocketMonitor.instance().remove(socketChannel);
+          monitor.remove(socketChannel);
           return false;
         } else if (readSize > 0) {
 
@@ -304,7 +306,7 @@ public class StpConnection implements SocketListener {
   public void close() {
     if (socketChannel == null) return;
 
-    SocketMonitor.instance().remove(socketChannel);
+    monitor.remove(socketChannel);
     try {
       socketChannel.close();
     } catch (IOException ignored) {
@@ -479,7 +481,7 @@ public class StpConnection implements SocketListener {
 
       // pop X bytes, and keep message for the rest!
       int rest = buffer.limit() - bytesWeHaveBeenreading;
-      if (rest == 0) {
+      if (rest <= 0) {
         buffer.clear();
         buffer.limit(0);
       } else {

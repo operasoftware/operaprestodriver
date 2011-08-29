@@ -36,27 +36,28 @@ public class StpThread extends Thread {
   private final Logger logger = Logger.getLogger(this.getClass().getName());
   private StpConnectionListener listener;
   private volatile boolean cancelled;
+  private SocketMonitor monitor;
 
   public StpThread(int port, IConnectionHandler handler,
       AbstractEventHandler eventHandler, boolean manualConnect)
       throws IOException {
-    SocketMonitor.instance();
+    monitor = new SocketMonitor();
     listener = new StpConnectionListener(port, handler, eventHandler,
-        manualConnect);
+        manualConnect, monitor);
     setName("stp-thread");
   }
 
   public void shutdown() {
     cancelled = true;
     listener.stop();
-    SocketMonitor.instance().stop();
+    monitor.stop();
   }
 
   @Override
   public void run() {
     logger.fine("Started StpThread.");
     while (!cancelled) {
-      SocketMonitor.poll(60000);
+      monitor.poll(60000);
     }
     logger.fine("Stopping StpThread.");
   }
