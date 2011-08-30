@@ -13,11 +13,15 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+
 package com.opera.core.systems.scope.internal;
 
 public class OperaFlags {
-  // enable checks, disabled in internal use to allow clicking on disabled
-  // elements, etc..
+
+  /**
+   * Enable checks for accessing web elements that are disabled.  This allows clicking on disabled
+   * elements, &c.
+   */
   public static final boolean ENABLE_CHECKS = true;
 
 }
