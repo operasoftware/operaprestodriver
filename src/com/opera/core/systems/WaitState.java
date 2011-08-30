@@ -226,6 +226,7 @@ public class WaitState {
 
   void onHandshake() {
     synchronized (lock) {
+      logger.finest("Event: onHandshake");
       logger.fine("Got handshake");
       events.add(new ResultItem(WaitResult.HANDSHAKE));
       lock.notify();
@@ -234,6 +235,7 @@ public class WaitState {
 
   void onResponse(int tag, Response response) {
     synchronized (lock) {
+      logger.finest("Event: onResponse");
       logger.fine("Got response for " + tag);
       events.add(new ResultItem(response, tag));
       lock.notify();
@@ -242,7 +244,7 @@ public class WaitState {
 
   void onError(int tag) {
     synchronized (lock) {
-      logger.fine("Got ERROR for " + tag);
+      logger.warning("Got ERROR for " + tag);
       events.add(new ResultItem(WaitResult.ERROR, tag));
       lock.notify();
     }
@@ -250,7 +252,7 @@ public class WaitState {
 
   void onException(Exception e) {
     synchronized (lock) {
-      logger.info("Got exception");
+      logger.warning("Got exception");
       events.add(new ResultItem(new WebDriverException(e)));
       connected = false;
       lock.notify();
@@ -259,7 +261,8 @@ public class WaitState {
 
   void onDisconnected() {
     synchronized (lock) {
-      logger.info("Got disconnected.");
+      logger.finest("Event: onDisconnected");
+      logger.fine("Got disconnected");
       events.add(new ResultItem(WaitResult.DISCONNECTED));
       connected = false;
       lock.notify();
@@ -268,7 +271,7 @@ public class WaitState {
 
   void onWindowLoaded(int windowId) {
     synchronized (lock) {
-      logger.fine("Event: onWindowLoaded");
+      logger.finest("Event: onWindowLoaded");
       events.add(new ResultItem(WaitResult.EVENT_WINDOW_LOADED, windowId));
       lock.notify();
     }
@@ -276,7 +279,7 @@ public class WaitState {
 
   public void onRequest(int windowId) {
     synchronized (lock) {
-      logger.info("Event: onRequest");
+      logger.finest("Event: onRequest");
       events.add(new ResultItem(WaitResult.EVENT_REQUEST_FIRED, windowId));
       lock.notify();
     }
@@ -284,7 +287,7 @@ public class WaitState {
 
   void onWindowClosed(int windowId) {
     synchronized (lock) {
-      logger.fine("Event: onWindowClosed");
+      logger.finest("Event: onWindowClosed");
       events.add(new ResultItem(WaitResult.EVENT_WINDOW_CLOSED, windowId));
       lock.notify();
     }
@@ -292,8 +295,8 @@ public class WaitState {
 
   void onOperaIdle() {
     synchronized (lock) {
+      logger.finest("Event: onOperaIdle");
       logger.fine("OperaIdle: Got message");
-      logger.fine("Event: onOperaIdle");
       events.add(new ResultItem(WaitResult.EVENT_OPERA_IDLE, 0));// 0 is
       // important to match later
       lock.notify();
@@ -302,7 +305,7 @@ public class WaitState {
 
   void onDesktopWindowClosed(DesktopWindowInfo info) {
     synchronized (lock) {
-      logger.fine("Event: onDesktopWindowClosed");
+      logger.finest("Event: onDesktopWindowClosed");
       events.add(new ResultItem(WaitResult.EVENT_DESKTOP_WINDOW_CLOSED, info));
       lock.notify();
     }
@@ -310,7 +313,7 @@ public class WaitState {
 
   void onDesktopWindowActivated(DesktopWindowInfo info) {
     synchronized (lock) {
-      logger.fine("Event: onDesktopWindowActivated");
+      logger.finest("Event: onDesktopWindowActivated");
       events.add(new ResultItem(WaitResult.EVENT_DESKTOP_WINDOW_ACTIVATED, info));
       lock.notify();
     }
@@ -318,7 +321,7 @@ public class WaitState {
 
   void onDesktopWindowShown(DesktopWindowInfo info) {
     synchronized (lock) {
-      logger.fine("Event: onDesktopWindowShown");
+      logger.finest("Event: onDesktopWindowShown");
       events.add(new ResultItem(WaitResult.EVENT_DESKTOP_WINDOW_SHOWN, info));
       lock.notify();
     }
@@ -326,7 +329,7 @@ public class WaitState {
 
   void onDesktopWindowUpdated(DesktopWindowInfo info) {
     synchronized (lock) {
-      logger.fine("Event: onDesktopWindowUpdated");
+      logger.finest("Event: onDesktopWindowUpdated");
       events.add(new ResultItem(WaitResult.EVENT_DESKTOP_WINDOW_UPDATED, info));
       lock.notify();
     }
@@ -334,7 +337,7 @@ public class WaitState {
 
   void onDesktopWindowLoaded(DesktopWindowInfo info) {
     synchronized (lock) {
-      logger.fine("Event: onDesktopWindowLoaded");
+      logger.finest("Event: onDesktopWindowLoaded");
       events.add(new ResultItem(WaitResult.EVENT_DESKTOP_WINDOW_LOADED, info));
       lock.notify();
     }
@@ -342,7 +345,7 @@ public class WaitState {
 
   void onQuickMenuShown(QuickMenuInfo info) {
     synchronized (lock) {
-      logger.fine("Event: onQuickMenuShown");
+      logger.finest("Event: onQuickMenuShown");
       events.add(new ResultItem(WaitResult.EVENT_QUICK_MENU_SHOWN, info));
       lock.notify();
     }
@@ -350,7 +353,7 @@ public class WaitState {
 
   void onQuickMenuClosed(QuickMenuID id) {
     synchronized (lock) {
-      logger.fine("Event: onQuickMenuClosed");
+      logger.finest("Event: onQuickMenuClosed");
       events.add(new ResultItem(WaitResult.EVENT_QUICK_MENU_CLOSED, id));
       lock.notify();
     }
@@ -358,7 +361,7 @@ public class WaitState {
 
   void onQuickMenuItemPressed(QuickMenuItemID menuItemID) {
     synchronized (lock) {
-      logger.fine("Event: onQuickMenuItemPressed");
+      logger.finest("Event: onQuickMenuItemPressed");
       events.add(new ResultItem(WaitResult.EVENT_QUICK_MENU_ITEM_PRESSED, menuItemID));
       lock.notify();
     }
@@ -366,7 +369,7 @@ public class WaitState {
 
   void onSelftestDone(String results) {
     synchronized (lock) {
-      logger.fine("Event: onSelftestDone");
+      logger.finest("Event: onSelftestDone");
       events.add(new ResultItem(results));
       lock.notify();
     }
@@ -453,7 +456,7 @@ public class WaitState {
     if (profile != null && profile.toLowerCase().equals("desktop")) {
       if ((type == ResponseType.WINDOW_LOADED) && (timeout < 30000)) {
         long newTimeout = 30000;
-        logger.info("WARNING: desktop-specific workaround for waitAndParseResult.  " +
+        logger.warning("WARNING: desktop-specific workaround for waitAndParseResult.  " +
           "Changing timeout from " + timeout + " to " + newTimeout);
         timeout = newTimeout;
       }
