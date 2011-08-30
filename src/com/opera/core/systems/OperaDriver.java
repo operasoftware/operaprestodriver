@@ -405,7 +405,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
   }
 
   private void closeWindow() {
-    exec.action("Close page");
+    windowManager.closeWindow(windowManager.getActiveWindowId());
   }
 
   /**

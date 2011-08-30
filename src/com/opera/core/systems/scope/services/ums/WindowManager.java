@@ -32,6 +32,7 @@ import com.opera.core.systems.scope.WindowManagerCommand;
 import com.opera.core.systems.scope.exceptions.WindowNotFoundException;
 import com.opera.core.systems.scope.protos.PrefsProtos.SetPrefArg;
 import com.opera.core.systems.scope.protos.UmsProtos.Response;
+import com.opera.core.systems.scope.protos.WmProtos.CloseWindowArg;
 import com.opera.core.systems.scope.protos.WmProtos.OpenURLArg;
 import com.opera.core.systems.scope.protos.WmProtos.WindowFilter;
 import com.opera.core.systems.scope.protos.WmProtos.WindowID;
@@ -185,12 +186,6 @@ public class WindowManager extends AbstractService implements IWindowManager {
     setActiveWindowId(windowId);
   }
 
-  public void closeWindow(Integer windowId) {
-    // TODO: WindowManager 2.1 has a close window command
-    services.getExec().action("Close page", windowId);
-    removeWindow(windowId);
-  }
-
   public void closeAllWindows() {
     logger.fine("closeAllWindows");
     LinkedList<Integer> list = new LinkedList<Integer>(windows.asStack());
@@ -265,6 +260,18 @@ public class WindowManager extends AbstractService implements IWindowManager {
 
     if (response == null) {
       throw new WebDriverException("Internal error while opening " + url);
+    }
+  }
+
+  public void closeWindow(int windowId) {
+    CloseWindowArg.Builder closeWindowBuilder = CloseWindowArg.newBuilder();
+    closeWindowBuilder.setWindowID(windowId);
+
+    Response response = executeCommand(WindowManagerCommand.CLOSE_WINDOW, closeWindowBuilder);
+    removeWindow(windowId);
+
+    if (response == null) {
+      throw new WebDriverException("Internal error while closing window");
     }
   }
 

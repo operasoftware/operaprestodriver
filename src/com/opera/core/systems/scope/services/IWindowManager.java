@@ -74,4 +74,6 @@ public interface IWindowManager {
   void filterWindow(Integer windowId);
 
   void openUrl(int windowId, String url);
+
+  void closeWindow(int windowId);
 }
