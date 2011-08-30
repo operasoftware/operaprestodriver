@@ -495,7 +495,6 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
     if (isAvailable) {
       String error = debugger.callFunctionOnObject("return (locator instanceof Error) ? locator.message : ''", id);
-      System.out.println(error);
       if (!error.isEmpty()) {
         throw new InvalidSelectorException(error);
       }
