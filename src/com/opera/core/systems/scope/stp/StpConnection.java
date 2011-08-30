@@ -235,8 +235,8 @@ public class StpConnection implements SocketListener {
 
         if (readSize < 0) {
           try {
-            logger.log(Level.INFO, "Channel closed : {0}",
-                socketChannel.socket().getInetAddress().getHostName());
+            logger.log(Level.FINE, "Channel closed: {0}",
+                       socketChannel.socket().getInetAddress().getHostName());
           } catch (NullPointerException e) {
             // ignore
           }
