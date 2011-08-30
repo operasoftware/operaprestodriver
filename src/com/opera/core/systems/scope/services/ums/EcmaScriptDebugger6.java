@@ -211,7 +211,7 @@ public class EcmaScriptDebugger6 extends EcmaScriptDebugger {
           throw new WebDriverException("Ecmascript exception");
         }
         // Throw the ecmascript exception
-        throw new WebDriverException("Ecmascript exception:\n  " +message);
+        throw new WebDriverException("Ecmascript exception:\n" +message);
       }
       // FIXME what is the best approach here?
       else if (status.equals("cancelled-by-scheduler")) {

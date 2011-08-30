@@ -39,6 +39,7 @@ import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.Cookie;
+import org.openqa.selenium.InvalidSelectorException;
 import org.openqa.selenium.Keyboard;
 import org.openqa.selenium.Mouse;
 import org.openqa.selenium.NoSuchElementException;
@@ -493,6 +494,12 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     OperaIntervals.WAIT_FOR_ELEMENT.setValue(0L);
 
     if (isAvailable) {
+      String error = debugger.callFunctionOnObject("return (locator instanceof Error) ? locator.message : ''", id);
+      System.out.println(error);
+      if (!error.isEmpty()) {
+        throw new InvalidSelectorException(error);
+      }
+
       Boolean isStale = Boolean.valueOf(debugger.callFunctionOnObject("locator.parentNode == undefined", id));
 
       if (isStale) {
@@ -544,6 +551,12 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
       } else {
         id = debugger.executeScriptOnObject(script, el.getObjectId());
       }
+
+      String error = debugger.callFunctionOnObject("return (locator instanceof Error) ? locator.message : ''", id);
+      if (!error.isEmpty()) {
+        throw new InvalidSelectorException(error);
+      }
+
       elements = processElements(id);
 
       if (elements != null) count = elements.size();
