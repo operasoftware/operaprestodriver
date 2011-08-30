@@ -23,12 +23,16 @@ import java.util.logging.Logger;
 import org.apache.commons.jxpath.CompiledExpression;
 import org.apache.commons.jxpath.JXPathContext;
 import org.openqa.selenium.NoSuchWindowException;
+import org.openqa.selenium.WebDriverException;
 
 import com.opera.core.systems.ScopeServices;
 import com.opera.core.systems.scope.AbstractService;
+import com.opera.core.systems.scope.PrefsCommand;
 import com.opera.core.systems.scope.WindowManagerCommand;
 import com.opera.core.systems.scope.exceptions.WindowNotFoundException;
+import com.opera.core.systems.scope.protos.PrefsProtos.SetPrefArg;
 import com.opera.core.systems.scope.protos.UmsProtos.Response;
+import com.opera.core.systems.scope.protos.WmProtos.OpenURLArg;
 import com.opera.core.systems.scope.protos.WmProtos.WindowFilter;
 import com.opera.core.systems.scope.protos.WmProtos.WindowID;
 import com.opera.core.systems.scope.protos.WmProtos.WindowInfo;
@@ -250,6 +254,18 @@ public class WindowManager extends AbstractService implements IWindowManager {
 
   public String getActiveWindowTitle() {
     return windows.peek().getTitle();
+  }
+
+  public void openUrl(int windowId, String url) {
+    OpenURLArg.Builder openUrlBuilder = OpenURLArg.newBuilder();
+    openUrlBuilder.setWindowID(windowId);
+    openUrlBuilder.setUrl(url);
+
+    Response response = executeCommand(WindowManagerCommand.OPEN_URL, openUrlBuilder);
+
+    if (response == null) {
+      throw new WebDriverException("Internal error while opening " + url);
+    }
   }
 
 }
