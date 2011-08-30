@@ -7,8 +7,8 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 
-
 public class DriverKeysTest extends TestBase {
+
   private WebElement fieldOne;
   private WebElement fieldTwo;
 

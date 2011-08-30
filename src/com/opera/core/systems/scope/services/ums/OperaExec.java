@@ -53,11 +53,10 @@ import com.opera.core.systems.util.CaseInsensitiveStringSet;
 import com.opera.core.systems.util.VersionUtil;
 
 /**
- * The exec service handles user interactions such as key presses, mouse
- * clicks, screenshot grabbing and executing actions on Opera.
+ * The exec service handles user interactions such as key presses, mouse clicks, screenshot grabbing
+ * and executing actions on Opera.
  *
- * @author Deniz Turkoglu <denizt@opera.com>,
- *         Andreas Tolf Tolfsen <andreastt@opera.com>
+ * @author Deniz Turkoglu <denizt@opera.com>, Andreas Tolf Tolfsen <andreastt@opera.com>
  */
 public class OperaExec extends AbstractService implements IOperaExec {
 
@@ -85,11 +84,14 @@ public class OperaExec extends AbstractService implements IOperaExec {
     String serviceName = "exec";
 
     if (!isVersionInRange(version, "3.0", serviceName)) {
-      throw new UnsupportedOperationException(serviceName + " version " + version + " is not supported");
+      throw new UnsupportedOperationException(
+          serviceName + " version " + version + " is not supported");
     }
 
     // Another ugly hack for patch version
-    if (VersionUtil.compare(version, "2.0.1") == -1) excludedActions.add("Close page");
+    if (VersionUtil.compare(version, "2.0.1") == -1) {
+      excludedActions.add("Close page");
+    }
 
     services.setExec(this);
     this.services = services;
@@ -116,8 +118,12 @@ public class OperaExec extends AbstractService implements IOperaExec {
   }
 
   public void type(String using) {
-    if (using == null) throw new NullPointerException("You must provide something to type");
-    if (using.length() == 0) throw new IllegalArgumentException("Can't type empty string");
+    if (using == null) {
+      throw new NullPointerException("You must provide something to type");
+    }
+    if (using.length() == 0) {
+      throw new IllegalArgumentException("Can't type empty string");
+    }
 
     if (keyIsPressed(OperaKeys.SHIFT.getValue())) {
       using = using.toUpperCase();
@@ -157,7 +163,9 @@ public class OperaExec extends AbstractService implements IOperaExec {
   }
 
   public void mouseAction(int x, int y, int count, OperaMouseKeys... keys) {
-    if (x < 0 || y < 0) throw new IllegalArgumentException();
+    if (x < 0 || y < 0) {
+      throw new IllegalArgumentException();
+    }
 
     int keyValue = 0;
 
@@ -190,7 +198,10 @@ public class OperaExec extends AbstractService implements IOperaExec {
     //
     // TODO: Also a problem if single-clicking multiple times in a row?
     if (count > 1) {
-      try { Thread.sleep(OperaIntervals.MULTIPLE_CLICK_SLEEP.getValue()); } catch (InterruptedException e) {}
+      try {
+        Thread.sleep(OperaIntervals.MULTIPLE_CLICK_SLEEP.getValue());
+      } catch (InterruptedException e) {
+      }
     }
   }
 
@@ -206,7 +217,9 @@ public class OperaExec extends AbstractService implements IOperaExec {
     ActionList.Builder builder = ActionList.newBuilder();
     Action.Builder actionBuilder = Action.newBuilder();
     actionBuilder.setName(using);
-    if (params != null && params.length > 0) actionBuilder.setValue(params[0]);
+    if (params != null && params.length > 0) {
+      actionBuilder.setValue(params[0]);
+    }
 
     if (!excludedActions.contains(using)) {
       try {
@@ -306,20 +319,19 @@ public class OperaExec extends AbstractService implements IOperaExec {
 
   /**
    * Executes a screenwatcher with the given timeout and returns the result
-   *
-   * @param builder
-   * @param timeout
-   * @return
    */
   private ScreenWatcherResult executeScreenWatcher(ScreenWatcher.Builder builder, int timeout) {
-    if (timeout <= 0) timeout = 1;
+    if (timeout <= 0) {
+      timeout = 1;
+    }
 
     builder.setTimeOut(timeout);
 
     builder.setWindowID(services.getWindowManager().getActiveWindowId());
 
     Response response = executeCommand(ExecCommand.SETUP_SCREEN_WATCHER,
-      builder, OperaIntervals.RESPONSE_TIMEOUT.getValue() + timeout);
+                                       builder,
+                                       OperaIntervals.RESPONSE_TIMEOUT.getValue() + timeout);
 
     ScreenWatcherResult.Builder watcherBuilder = ScreenWatcherResult.newBuilder();
     buildPayload(response, watcherBuilder);
@@ -338,7 +350,8 @@ public class OperaExec extends AbstractService implements IOperaExec {
     return builder;
   }
 
-  public ScreenShotReply screenWatcher(Canvas canvas, long timeout, boolean includeImage, String... hashes) {
+  public ScreenShotReply screenWatcher(Canvas canvas, long timeout, boolean includeImage,
+                                       String... hashes) {
     ScreenWatcher.Builder builder = ScreenWatcher.newBuilder();
     Area.Builder areaBuilder = Area.newBuilder();
 
@@ -349,8 +362,12 @@ public class OperaExec extends AbstractService implements IOperaExec {
     areaBuilder.setW(canvas.getWidth());
 
     builder.setArea(areaBuilder);
-    if (hashes.length > 0) builder.addAllMd5List(Arrays.asList(hashes));
-    if (!includeImage) builder.setIncludeImage(false);
+    if (hashes.length > 0) {
+      builder.addAllMd5List(Arrays.asList(hashes));
+    }
+    if (!includeImage) {
+      builder.setIncludeImage(false);
+    }
 
     ScreenWatcherResult result = executeScreenWatcher(builder, (int) timeout);
 

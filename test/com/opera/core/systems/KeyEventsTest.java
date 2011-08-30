@@ -7,6 +7,7 @@ import org.junit.Test;
 import org.openqa.selenium.WebElement;
 
 public class KeyEventsTest extends TestBase {
+
   private WebElement logEl;
 
   private boolean logContains(CharSequence s) {

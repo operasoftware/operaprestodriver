@@ -81,7 +81,6 @@ public class OperaWebElement extends RemoteWebElement {
   /**
    * Calls the method and parses the result, the result must be a string
    *
-   * @param using
    * @return response of ecmascript in string presentation
    */
   public final String callMethod(String using) {
@@ -89,20 +88,15 @@ public class OperaWebElement extends RemoteWebElement {
   }
 
   /**
-   * Executes the given script with the element's object id doesn't parse the
-   * response
-   *
-   * @param using
+   * Executes the given script with the element's object id doesn't parse the response
    */
   private final void executeMethod(String using) {
     debugger.callFunctionOnObject(using, objectId, false);
   }
 
   /**
-   * Evals the given script with object id and parses the result and returns the
-   * result object
+   * Evals the given script with object id and parses the result and returns the result object
    *
-   * @param using
    * @return {@link ValueData}
    */
   private final Object evaluateMethod(String using) {
@@ -130,8 +124,8 @@ public class OperaWebElement extends RemoteWebElement {
   }
 
   /**
-   * Moves the mouse from the top left of the element to the top left of the
-   * page, generating a mouseOut event.
+   * Moves the mouse from the top left of the element to the top left of the page, generating a
+   * mouseOut event.
    */
   public void mouseOut() {
     Point point = coordinates.getLocationInViewPort();
@@ -177,8 +171,10 @@ public class OperaWebElement extends RemoteWebElement {
 
   public void click() {
     if (OperaFlags.ENABLE_CHECKS) {
-      if (!isDisplayed()) throw new ElementNotVisibleException(
-        "You can't click an element that is not displayed");
+      if (!isDisplayed()) {
+        throw new ElementNotVisibleException(
+            "You can't click an element that is not displayed");
+      }
     }
 
     parent.getScopeServices().captureOperaIdle();
@@ -189,7 +185,7 @@ public class OperaWebElement extends RemoteWebElement {
 
     String multiple = parentNode.getAttribute("multiple");
     if (parentNode.getTagName().equalsIgnoreCase("SELECT") &&
-      multiple != null && !multiple.equals("false")) {
+        multiple != null && !multiple.equals("false")) {
       toggle();
     } else if (this.getTagName().equals("OPTION")) {
       setSelected();
@@ -224,11 +220,12 @@ public class OperaWebElement extends RemoteWebElement {
 
     if (attribute.toLowerCase().equals("value")) {
       return callMethod("if(/^input|select|textarea$/i.test(locator.nodeName)){" +
-        "return locator.value;" +
-        "}" +
-        "return locator.textContent;");
+                        "return locator.value;" +
+                        "}" +
+                        "return locator.textContent;");
     } else {
-      return callMethod("return " + OperaAtoms.GET_ATTRIBUTE.getValue() + "(locator, '" + attribute + "')");
+      return callMethod(
+          "return " + OperaAtoms.GET_ATTRIBUTE.getValue() + "(locator, '" + attribute + "')");
     }
   }
 
@@ -251,9 +248,9 @@ public class OperaWebElement extends RemoteWebElement {
    */
   public String getValue() {
     return callMethod("if(/^input|select|textarea$/i.test(locator.nodeName)){" +
-      "return locator.value;" +
-      "}" +
-      "return locator.textContent;");
+                      "return locator.value;" +
+                      "}" +
+                      "return locator.textContent;");
   }
 
   public boolean isDisplayed() {
@@ -299,21 +296,30 @@ public class OperaWebElement extends RemoteWebElement {
       do {
         isDisplayed = isDisplayed();
 
-        if (!isDisplayed && parent.hasTimeRemaining(start)) sleep(OperaIntervals.EXEC_SLEEP.getValue());
-        else break;
+        if (!isDisplayed && parent.hasTimeRemaining(start)) {
+          sleep(OperaIntervals.EXEC_SLEEP.getValue());
+        } else {
+          break;
+        }
 
       } while (true);
 
-      if (!isDisplayed()) throw new ElementNotVisibleException(
-        "You can't type on an element that is not displayed");
-      if (!isEnabled()) throw new InvalidElementStateException(
-        "You can't type on an element that is disabled");
+      if (!isDisplayed()) {
+        throw new ElementNotVisibleException(
+            "You can't type on an element that is not displayed");
+      }
+      if (!isEnabled()) {
+        throw new InvalidElementStateException(
+            "You can't type on an element that is disabled");
+      }
     }
 
     if (getTagName().equalsIgnoreCase("input")
-      && (hasAttribute("type") && getAttribute("type").equals("file"))) {
+        && (hasAttribute("type") && getAttribute("type").equals("file"))) {
       click();
-    } else executeMethod("locator.focus()");
+    } else {
+      executeMethod("locator.focus()");
+    }
 
     // This code is a bit ugly. Because "special" keys can be sent either as
     // an individual argument, or in the middle of a string of "normal"
@@ -358,7 +364,8 @@ public class OperaWebElement extends RemoteWebElement {
 
             String key = OperaKeys.get(keyName);
             // FIXME: Code repeated from above.
-            if (holdKeys.contains(key) && !heldKeys.contains(key) && !execService.keyIsPressed(key)) {
+            if (holdKeys.contains(key) && !heldKeys.contains(key) && !execService
+                .keyIsPressed(key)) {
               execService.key(key, false);
               heldKeys.add(key);
             } else if (key == "null") {
@@ -391,9 +398,9 @@ public class OperaWebElement extends RemoteWebElement {
   private static final HashMap<Character, String> keysLookup = new HashMap<Character, String>();
 
   /**
-   * Converts a character in the PUA to the name of the key, as given by
-   * {@link org.openqa.selenium.Keys}. If the character doesn't appear in that
-   * class then null is returned.
+   * Converts a character in the PUA to the name of the key, as given by {@link
+   * org.openqa.selenium.Keys}. If the character doesn't appear in that class then null is
+   * returned.
    *
    * @param c The character that may be a special key.
    * @return A string containing the name of the "special" key or null.
@@ -419,14 +426,17 @@ public class OperaWebElement extends RemoteWebElement {
     String tagName = getTagName();
 
     if (OperaFlags.ENABLE_CHECKS) {
-      if (!isEnabled())
+      if (!isEnabled()) {
         throw new InvalidElementStateException("Cannot select disabled element");
+      }
 
-      if (!isDisplayed())
+      if (!isDisplayed()) {
         throw new ElementNotVisibleException("Cannot select an element that is not displayed");
+      }
 
-      if (!tagName.equals("INPUT") && !tagName.equals("OPTION"))
+      if (!tagName.equals("INPUT") && !tagName.equals("OPTION")) {
         throw new InvalidElementStateException("Cannot select a " + tagName + " element");
+      }
     }
 
     evaluateMethod("return " + OperaAtoms.SET_SELECTED.getValue() + "(locator, true)");
@@ -448,29 +458,33 @@ public class OperaWebElement extends RemoteWebElement {
   @Deprecated
   public boolean toggle() {
     String tagName = getTagName();
-    if (!tagName.equals("INPUT") && !tagName.equals("OPTION"))
+    if (!tagName.equals("INPUT") && !tagName.equals("OPTION")) {
       throw new InvalidElementStateException("Cannot toggle a " + tagName + " element");
+    }
 
-    if (tagName.equalsIgnoreCase("input") && getAttribute("type").equalsIgnoreCase("radio"))
+    if (tagName.equalsIgnoreCase("input") && getAttribute("type").equalsIgnoreCase("radio")) {
       throw new InvalidElementStateException("You can't toggle an radio element");
+    }
 
     Integer id = debugger.executeScriptOnObject("return locator.parentNode",
-      objectId);
+                                                objectId);
     OperaWebElement parentNode = new OperaWebElement(this.parent, id);
     if (parentNode.getTagName().equalsIgnoreCase("SELECT")
-      && parentNode.getAttribute("multiple") == null) {
+        && parentNode.getAttribute("multiple") == null) {
       throw new InvalidElementStateException("You can't toggle on a regular select");
     }
 
     if (OperaFlags.ENABLE_CHECKS) {
-      if (!isEnabled())
+      if (!isEnabled()) {
         throw new InvalidElementStateException("Cannot toggle disabled element");
-      if (!isDisplayed())
+      }
+      if (!isDisplayed()) {
         throw new ElementNotVisibleException("Cannot select an element that is not displayed");
+      }
     }
 
     return (Boolean) debugger.callFunctionOnObject(
-      "return " + OperaAtoms.TOGGLE.getValue() + "(locator)", objectId, true);
+        "return " + OperaAtoms.TOGGLE.getValue() + "(locator)", objectId, true);
   }
 
   public static void sleep(long timeInMillis) {
@@ -506,7 +520,7 @@ public class OperaWebElement extends RemoteWebElement {
     Point currentLocation = this.getLocation();
     Point dragPoint = element.getLocation();
     execService.mouseAction(currentLocation.x, currentLocation.y,
-      OperaMouseKeys.LEFT_DOWN);
+                            OperaMouseKeys.LEFT_DOWN);
     execService.mouseAction(dragPoint.x, dragPoint.y);
     execService.mouseAction(dragPoint.x, dragPoint.y, OperaMouseKeys.LEFT_UP);
   }
@@ -516,29 +530,30 @@ public class OperaWebElement extends RemoteWebElement {
    */
   public Point getLocation() {
     String coordinates = debugger.callFunctionOnObject(
-      "var c=" + OperaAtoms.GET_LOCATION.getValue() + "(locator);return c.x+','+c.y;",
-      objectId
+        "var c=" + OperaAtoms.GET_LOCATION.getValue() + "(locator);return c.x+','+c.y;",
+        objectId
     );
     String[] location = coordinates.split(",");
     return new Point(Integer.valueOf(location[0]), Integer.valueOf(location[1]));
   }
 
   public Dimension getSize() {
-    if (!parent.objectIds.contains(objectId)) throw new StaleElementReferenceException(
-      "You cant interact with stale elements");
+    if (!parent.objectIds.contains(objectId)) {
+      throw new StaleElementReferenceException(
+          "You cant interact with stale elements");
+    }
 
     String widthAndHeight = debugger.callFunctionOnObject(
-      "var s=" + OperaAtoms.GET_SIZE.getValue() + "(locator);return s.width+','+s.height;",
-      objectId
+        "var s=" + OperaAtoms.GET_SIZE.getValue() + "(locator);return s.width+','+s.height;",
+        objectId
     );
     String[] dimension = widthAndHeight.split(",");
     return new Dimension(Integer.valueOf(dimension[0]),
-      Integer.valueOf(dimension[1]));
+                         Integer.valueOf(dimension[1]));
   }
 
   /**
-   * Takes a screenshot of the area this element's bounding-box covers and
-   * returns the MD5 hash.
+   * Takes a screenshot of the area this element's bounding-box covers and returns the MD5 hash.
    *
    * @return A MD5 hash as a string.
    */
@@ -547,12 +562,10 @@ public class OperaWebElement extends RemoteWebElement {
   }
 
   /**
-   * Takes a screenshot after {@link timeout} milliseconds of the area this
-   * element's bounding-box covers and returns the MD5 hash.
+   * Takes a screenshot after {@link timeout} milliseconds of the area this element's bounding-box
+   * covers and returns the MD5 hash.
    *
-   * @param timeout The number of milliseconds to wait before taking the
-   *                screenshot.
-   * @param hashes
+   * @param timeout The number of milliseconds to wait before taking the screenshot.
    * @return A MD5 hash as a string.
    */
   public String getImageHash(long timeout, String... hashes) {
@@ -560,9 +573,8 @@ public class OperaWebElement extends RemoteWebElement {
   }
 
   /**
-   * Take a screenshot of the area this element's bounding-box covers. Saves a
-   * copy of the image to the given filename, and returns an MD5 hash of the
-   * image.
+   * Take a screenshot of the area this element's bounding-box covers. Saves a copy of the image to
+   * the given filename, and returns an MD5 hash of the image.
    *
    * @param filename The location to save the screenshot
    * @return The MD5 hash of the screenshot
@@ -572,12 +584,11 @@ public class OperaWebElement extends RemoteWebElement {
   }
 
   /**
-   * Take a screenshot of the area this element covers. Saves a copy of the
-   * image to the given filename.
+   * Take a screenshot of the area this element covers. Saves a copy of the image to the given
+   * filename.
    *
    * @param filename The location to save the screenshot
-   * @param timeout  The number of milliseconds to wait before taking the
-   *                 screenshot
+   * @param timeout  The number of milliseconds to wait before taking the screenshot
    * @return The MD5 hash of the screenshot
    */
   public String saveScreenshot(String filename, long timeout) {
@@ -588,7 +599,7 @@ public class OperaWebElement extends RemoteWebElement {
                                boolean includeImage, String... hashes) {
     Canvas canvas = buildCanvas();
     ScreenShotReply reply = execService.screenWatcher(canvas, timeout,
-      includeImage, hashes);
+                                                      includeImage, hashes);
     if (includeImage && reply.getPng() != null) {
       FileOutputStream stream;
       try {
@@ -605,10 +616,9 @@ public class OperaWebElement extends RemoteWebElement {
   /**
    * Take a screenshot of the area this element's bounding-box covers.
    *
-   * @param timeout The number of milliseconds to wait before taking the
-   *                screenshot
-   * @param hashes  A previous screenshot MD5 hash. If it matches the hash
-   *                of this screenshot then no image data is returned.
+   * @param timeout The number of milliseconds to wait before taking the screenshot
+   * @param hashes  A previous screenshot MD5 hash. If it matches the hash of this screenshot then
+   *                no image data is returned.
    */
   public ScreenShotReply saveScreenshot(long timeout, String... hashes) {
     Canvas canvas = buildCanvas();
@@ -622,7 +632,9 @@ public class OperaWebElement extends RemoteWebElement {
     ScreenShotReply reply = execService.containsColor(canvas, 100L, colors);
     List<ColorResult> results = reply.getColorResult();
     for (ColorResult result : results) {
-      if (result.getCount() > 0) return true;
+      if (result.getCount() > 0) {
+        return true;
+      }
     }
     return false;
   }
@@ -660,7 +672,9 @@ public class OperaWebElement extends RemoteWebElement {
   // TODO we only return location on screen when scrolled?
   // isnt this a duplicate method?
   public Point getLocationOnScreenOnceScrolledIntoView() {
-    if (isDisplayed()) return getLocation();
+    if (isDisplayed()) {
+      return getLocation();
+    }
     return null;
   }
 
@@ -705,8 +719,10 @@ public class OperaWebElement extends RemoteWebElement {
 
   private final List<WebElement> findMultipleElements(String using, String type) {
     Integer id = debugger.executeScriptOnObject(using, objectId);
-    if (id == null) throw new NoSuchElementException(
-      "Cannot find element(s) with " + type);
+    if (id == null) {
+      throw new NoSuchElementException(
+          "Cannot find element(s) with " + type);
+    }
 
     List<WebElement> elements = parent.processElements(id);
 
@@ -715,20 +731,21 @@ public class OperaWebElement extends RemoteWebElement {
 
   public WebElement findElementByName(String using) {
     return findSingleElement(
-      "document.evaluate(\"descendant-or-self::*[@name='"
+        "document.evaluate(\"descendant-or-self::*[@name='"
         + using
         + "']\",locator,null,XPathResult.ORDERED_NODE_ITERATOR_TYPE,null).iterateNext()",
-      "name");
+        "name");
   }
 
   public List<WebElement> findElementsByName(String using) {
     return findMultipleElements("var result = document.evaluate"
-      + "(\"descendant-or-self::*[@name='" + using + "']\""
-      + ", locator, null, XPathResult.ORDERED_NODE_ITERATOR_TYPE,  null);\n"
-      + "var elements = new Array();\n"
-      + "var element = result.iterateNext();\n" + "while (element) {\n"
-      + "  elements.push(element);\n" + "  element = result.iterateNext();\n"
-      + "}\n" + "return elements", "XPath");
+                                + "(\"descendant-or-self::*[@name='" + using + "']\""
+                                + ", locator, null, XPathResult.ORDERED_NODE_ITERATOR_TYPE,  null);\n"
+                                + "var elements = new Array();\n"
+                                + "var element = result.iterateNext();\n" + "while (element) {\n"
+                                + "  elements.push(element);\n"
+                                + "  element = result.iterateNext();\n"
+                                + "}\n" + "return elements", "XPath");
   }
 
   @Override
@@ -748,14 +765,14 @@ public class OperaWebElement extends RemoteWebElement {
 
     public Point getLocationInViewPort() {
       String coordinates = debugger.callFunctionOnObject(
-        "locator.scrollIntoView();\n"
+          "locator.scrollIntoView();\n"
           + "var x = 0, y = 0;\n"
           + "if(window.frameElement) {\n"
           + "x = (window.screenLeft - window.top.screenLeft) + window.scrollX;\n"
           + "y = (window.screenTop - window.top.screenTop) + window.scrollY;\n"
           + "}\n"
           + "return (( x + locator.getBoundingClientRect().left) + ',' + ( y + locator.getBoundingClientRect().top));\n",
-        objectId);
+          objectId);
       String[] location = coordinates.split(",");
       return new Point(Integer.valueOf(location[0]), Integer.valueOf(location[1]));
     }
@@ -770,7 +787,8 @@ public class OperaWebElement extends RemoteWebElement {
   };
 
   public String getCssValue(String property) {
-    return callMethod("return " + OperaAtoms.GET_EFFECTIVE_STYLE.getValue() + "(locator, '" + property + "')");
+    return callMethod(
+        "return " + OperaAtoms.GET_EFFECTIVE_STYLE.getValue() + "(locator, '" + property + "')");
   }
 
   public WebDriver getWrappedDriver() {
@@ -779,7 +797,8 @@ public class OperaWebElement extends RemoteWebElement {
 
   private void throwIfStale() {
     if (!parent.objectIds.contains(objectId) ||
-      Boolean.valueOf(debugger.callFunctionOnObject("locator.parentNode == undefined", objectId))) {
+        Boolean
+            .valueOf(debugger.callFunctionOnObject("locator.parentNode == undefined", objectId))) {
       throw new StaleElementReferenceException("You cant interact with stale elements");
     }
 

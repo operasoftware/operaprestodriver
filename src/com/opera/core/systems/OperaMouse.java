@@ -17,6 +17,7 @@
 package com.opera.core.systems;
 
 import com.opera.core.systems.scope.internal.OperaMouseKeys;
+
 import org.openqa.selenium.Mouse;
 import org.openqa.selenium.Point;
 import org.openqa.selenium.interactions.InvalidCoordinatesException;
@@ -77,8 +78,13 @@ public class OperaMouse implements Mouse {
   private Point getPoint(Coordinates where, String action) {
     // If coordinates exist then we want to update the last known mouse
     // position and then use it in the action.
-    if (where != null) lastMousePosition = where.getLocationInViewPort();
-    if (lastMousePosition != null) return lastMousePosition;
+    if (where != null) {
+      lastMousePosition = where.getLocationInViewPort();
+    }
+
+    if (lastMousePosition != null) {
+      return lastMousePosition;
+    }
 
     throw new InvalidCoordinatesException("Invalid coordinates to " + action + " on");
   }
