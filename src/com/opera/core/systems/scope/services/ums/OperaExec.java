@@ -85,7 +85,7 @@ public class OperaExec extends AbstractService implements IOperaExec {
 
     if (!isVersionInRange(version, "3.0", serviceName)) {
       throw new UnsupportedOperationException(
-          serviceName + " version " + version + " is not supported");
+        serviceName + " version " + version + " is not supported");
     }
 
     // Another ugly hack for patch version
@@ -330,8 +330,8 @@ public class OperaExec extends AbstractService implements IOperaExec {
     builder.setWindowID(services.getWindowManager().getActiveWindowId());
 
     Response response = executeCommand(ExecCommand.SETUP_SCREEN_WATCHER,
-                                       builder,
-                                       OperaIntervals.RESPONSE_TIMEOUT.getValue() + timeout);
+      builder,
+      OperaIntervals.RESPONSE_TIMEOUT.getValue() + timeout);
 
     ScreenWatcherResult.Builder watcherBuilder = ScreenWatcherResult.newBuilder();
     buildPayload(response, watcherBuilder);
