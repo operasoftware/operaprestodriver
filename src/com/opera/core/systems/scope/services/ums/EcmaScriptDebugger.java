@@ -326,6 +326,7 @@ public class EcmaScriptDebugger extends AbstractService implements
   private void recover() {
     windowManager.findDriverWindow();
     activeWindowId = windowManager.getActiveWindowId();
+    windowManager.clearFilter();
     updateRuntime();
   }
 
