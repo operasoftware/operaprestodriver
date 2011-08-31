@@ -27,10 +27,8 @@ import org.openqa.selenium.WebDriverException;
 
 import com.opera.core.systems.ScopeServices;
 import com.opera.core.systems.scope.AbstractService;
-import com.opera.core.systems.scope.PrefsCommand;
 import com.opera.core.systems.scope.WindowManagerCommand;
 import com.opera.core.systems.scope.exceptions.WindowNotFoundException;
-import com.opera.core.systems.scope.protos.PrefsProtos.SetPrefArg;
 import com.opera.core.systems.scope.protos.UmsProtos.Response;
 import com.opera.core.systems.scope.protos.WmProtos.CloseWindowArg;
 import com.opera.core.systems.scope.protos.WmProtos.OpenURLArg;
@@ -274,5 +272,4 @@ public class WindowManager extends AbstractService implements IWindowManager {
       throw new WebDriverException("Internal error while closing window");
     }
   }
-
 }

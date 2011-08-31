@@ -41,8 +41,6 @@ public interface IWindowManager {
 
   void filterActiveWindow();
 
-  void closeWindow(Integer window);
-
   void closeAllWindows();
 
   /**

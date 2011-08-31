@@ -178,21 +178,25 @@ public class EcmaScriptDebugger extends AbstractService implements
     return false;
   }
 
+  protected List<RuntimeInfo> listRuntimes(boolean allRuntimes) {
+    RuntimeSelection.Builder selection = RuntimeSelection.newBuilder();
+    selection.setAllRuntimes(allRuntimes);
+    Response response = this.executeCommand(ESDebuggerCommand.LIST_RUNTIMES,
+        selection);
+    RuntimeList.Builder builder = RuntimeList.newBuilder();
+    buildPayload(response, builder);
+    return builder.build().getRuntimeListList();
+  }
+
   /**
    * Gets a list of runtimes and keeps the list, create runtimes for all pages
    * so even if the pages dont have script we can still inject to a 'fake'
    * runtime
    */
   protected void createAllRuntimes() {
-    RuntimeSelection.Builder selection = RuntimeSelection.newBuilder().setAllRuntimes(
-        true);
-    Response response = this.executeCommand(ESDebuggerCommand.LIST_RUNTIMES,
-        selection);
+    List<RuntimeInfo> runtimes = listRuntimes(true);
     runtimesList.clear();
-    RuntimeList.Builder builder = RuntimeList.newBuilder();
-    buildPayload(response, builder);
-    List<RuntimeInfo> allRuntimes = builder.build().getRuntimeListList();
-    for (RuntimeInfo info : allRuntimes) {
+    for (RuntimeInfo info : runtimes) {
       runtimesList.put(info.getRuntimeID(), info);
     }
 
@@ -636,15 +640,11 @@ public class EcmaScriptDebugger extends AbstractService implements
    * @see com.opera.core.systems.scope.services.xml.IEcmaScriptDebugger#cleanUpRuntimes(int)
    */
   public void cleanUpRuntimes(int windowId) {
-    // if we already have a runtime listed as _top with that window id,
-    // clean all runtimes with that window id
-    // if (findRuntime() != null) {
     for (RuntimeInfo runtime : runtimesList.values()) {
       if (runtime.getWindowID() == windowId) {
         runtimesList.remove(runtime.getRuntimeID());
       }
     }
-    // }
   }
 
   /* (non-Javadoc)
