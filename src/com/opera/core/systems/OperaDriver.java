@@ -379,11 +379,6 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     objectIds.clear();
   }
 
-  @SuppressWarnings("unused")
-  private String getText() {
-    return debugger.executeJavascript("return "+OperaAtoms.GET_TEXT.getValue()+"()");
-  }
-
   public void close() {
     closeWindow();
     windowManager.filterActiveWindow();
