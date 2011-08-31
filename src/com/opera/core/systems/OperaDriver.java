@@ -203,9 +203,6 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
       try {
         logFile = new FileHandler((String) capabilities.getCapability(LOGGING_FILE), OperaFlags.APPEND_TO_LOGFILE);
         logFile.setFormatter(new SimpleFormatter());
-
-        System.out.println(capabilities.getCapability(LOGGING_FILE));
-
       } catch (IOException e) {
         throw new WebDriverException("Unable to write to file: " + e);
       }
