@@ -17,3 +17,4 @@ VERSION
 maven/src
 maven/target
 .*.swp
+test/com/opera/core/systems/GenericTest.java
