@@ -213,7 +213,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     }
 
     if ((Boolean) capabilities.getCapability(AUTOSTART)) {
-        OperaPaths paths = new OperaPaths();
+      OperaPaths paths = new OperaPaths();
 
       if (((Boolean) capabilities.getCapability(GUESS_BINARY_PATH)) &&
           capabilities.getCapability(BINARY) == null) {
