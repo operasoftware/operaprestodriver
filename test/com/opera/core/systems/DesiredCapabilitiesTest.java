@@ -18,10 +18,15 @@ package com.opera.core.systems;
 
 import junit.framework.Assert;
 
+import java.io.File;
+
 import org.junit.After;
-import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 /**
@@ -30,21 +35,30 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 public class DesiredCapabilitiesTest {
 
   WebDriver driver;
-  DesiredCapabilities capabilities;
+  static DesiredCapabilities capabilities;
 
-  @Before
-  public void setUp() {
+  @BeforeClass
+  public static void oneTimeSetUp() {
+    capabilities = OperaDriver.getDefaultCapabilities();
   }
+
+  @After
+  public void tearDown() {
+    if (driver != null) {
+      driver.quit();
+    }
+  }
+
+  @Rule
+  public TemporaryFolder tmpFolder = new TemporaryFolder();
 
   @Test
   public void testSettingLoggingLevel() {
     capabilities.setCapability("opera.logging.level", "FINEST");
     driver = new OperaDriver(capabilities);
 
-    Assert.assertNotNull(driver);
     Assert.assertEquals("FINEST", capabilities.getCapability("opera.logging.level"));
-
-    driver.quit();
+    Assert.assertNotNull(driver);
   }
 
   @Test
@@ -52,19 +66,24 @@ public class DesiredCapabilitiesTest {
     capabilities.setCapability("opera.logging.level", "info");
     driver = new OperaDriver(capabilities);
 
+    Assert.assertEquals("info", capabilities.getCapability("opera.logging.level"));
     Assert.assertNotNull(driver);
-    Assert.assertEquals("INFO", capabilities.getCapability("opera.logging.level"));
   }
 
   @Test
-  public void testSettingLogFile() {}
+  public void testSettingLogFile() {
+    String logPath = tmpFolder + File.pathSeparator + "operadriver.log";
+    capabilities.setCapability("opera.logging.file", logPath);
+    driver = new OperaDriver(capabilities);
 
-  @Test
-  public void testSettingInvalidLogFile() {}
+    File log = new File(logPath);
+    Assert.assertTrue(log.length() > 0);
+  }
 
-  @After
-  public void tearDown() {
-    driver.quit();
+  @Test(expected = WebDriverException.class)
+  public void testSettingInvalidLogFile() throws Exception {
+    capabilities.setCapability("opera.logging.file", "/an/invalid/path");
+    driver = new OperaDriver(capabilities);
   }
 
 }
