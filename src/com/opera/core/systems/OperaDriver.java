@@ -271,7 +271,6 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
     // Launch Opera if the runner has been setup
     if (operaRunner != null) {
-      logger.fine("Calling startOpera");
       operaRunner.startOpera();
     }
 
