@@ -13,17 +13,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+
 package com.opera.core.systems.scope.handlers;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-
-import org.openqa.selenium.Point;
-import org.openqa.selenium.WebDriverException;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.remote.RemoteWebElement;
 
 import com.opera.core.systems.ScopeServices;
 import com.opera.core.systems.model.Canvas;
@@ -32,17 +23,24 @@ import com.opera.core.systems.model.ScreenShotReply;
 import com.opera.core.systems.scope.internal.OperaMouseKeys;
 import com.opera.core.systems.scope.services.IWindowManager;
 
+import org.openqa.selenium.Point;
+import org.openqa.selenium.WebDriverException;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.remote.RemoteWebElement;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
 /**
  * This library handles actions for Core 2.5+
  *
  * Core 2.5 uses a different (binary) protocol and different serializers
  *
  * @author Deniz Turkoglu <denizt@opera.com>
- *
  */
-
 // TODO Support for < Core 2.5 is deprecated, merge
-
 public class PbActionHandler extends ScopeActions {
 
   public PbActionHandler(ScopeServices services) {
@@ -53,14 +51,14 @@ public class PbActionHandler extends ScopeActions {
   public void click(WebElement element, String locator) {
     Point point = ((RemoteWebElement) element).getCoordinates().getLocationInViewPort();
     services.getExec().mouseAction(point.x + 1, point.y + 1,
-        OperaMouseKeys.LEFT);
+                                   OperaMouseKeys.LEFT);
   }
 
   @Override
   public void click(WebElement element, int x, int y) {
     Point point = ((RemoteWebElement) element).getCoordinates().getLocationInViewPort();
     services.getExec().mouseAction(point.x + x, point.y + y,
-        OperaMouseKeys.LEFT);
+                                   OperaMouseKeys.LEFT);
   }
 
   @Override
@@ -85,7 +83,7 @@ public class PbActionHandler extends ScopeActions {
     File dir = pngFile.getParentFile();
     if (!dir.exists() && !dir.mkdirs()) {
       throw new WebDriverException("Could not create directory "
-          + dir.getAbsolutePath());
+                                   + dir.getAbsolutePath());
     }
 
     Canvas canvas = new Canvas();
@@ -110,4 +108,5 @@ public class PbActionHandler extends ScopeActions {
       // TODO log
     }
   }
+
 }

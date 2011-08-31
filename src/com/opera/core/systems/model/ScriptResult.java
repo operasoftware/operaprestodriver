@@ -13,15 +13,15 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+
 package com.opera.core.systems.model;
 
 /**
- * Holds the result of a script execution, namely for an object, scope protocol
- * assigns an object id for each object retrieved through the protocol, this id
- * can also be used later on to release the object
+ * Holds the result of a script execution, namely for an object, scope protocol assigns an object id
+ * for each object retrieved through the protocol, this id can also be used later on to release the
+ * object.
  *
  * @author Deniz Turkoglu <denizt@opera.com>
- *
  */
 public class ScriptResult {
 
@@ -48,4 +48,5 @@ public class ScriptResult {
   public void setClassName(String className) {
     this.className = className;
   }
+
 }

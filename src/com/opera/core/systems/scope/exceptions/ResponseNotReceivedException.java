@@ -13,6 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+
 package com.opera.core.systems.scope.exceptions;
 
 import org.openqa.selenium.WebDriverException;
@@ -21,7 +22,6 @@ import org.openqa.selenium.WebDriverException;
  * Thrown when the response is not received in the given amount of time
  *
  * @author Deniz Turkoglu <denizt@opera.com>
- *
  */
 public class ResponseNotReceivedException extends WebDriverException {
 
@@ -42,4 +42,5 @@ public class ResponseNotReceivedException extends WebDriverException {
   public ResponseNotReceivedException(String message, Throwable cause) {
     super(message, cause);
   }
+
 }

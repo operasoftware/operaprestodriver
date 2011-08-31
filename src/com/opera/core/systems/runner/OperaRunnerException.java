@@ -13,15 +13,17 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+
 package com.opera.core.systems.runner;
 
 /**
- * User whenever runner has problems. We are NOT supposed to fix launcher
- * problems. Just pass them upwards
+ * User whenever runner has problems. We are NOT supposed to fix launcher problems.  Just pass them
+ * upwards.
  *
  * @author Anders Oredsson <anderso@opera.com>
  */
 public class OperaRunnerException extends RuntimeException {
+
   private static final long serialVersionUID = -2379934570244878775L;
 
   public OperaRunnerException() {
@@ -35,4 +37,5 @@ public class OperaRunnerException extends RuntimeException {
   public OperaRunnerException(String message, Throwable cause) {
     super(message, cause);
   }
+
 }

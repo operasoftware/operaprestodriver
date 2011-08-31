@@ -16,15 +16,6 @@ limitations under the License.
 
 package com.opera.core.systems.scope.services.ums;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.logging.Logger;
-
-import org.openqa.selenium.WebDriverException;
-
 import com.opera.core.systems.ScopeServices;
 import com.opera.core.systems.model.Canvas;
 import com.opera.core.systems.model.ColorResult;
@@ -38,19 +29,28 @@ import com.opera.core.systems.scope.internal.OperaIntervals;
 import com.opera.core.systems.scope.internal.OperaKeys;
 import com.opera.core.systems.scope.internal.OperaMouseKeys;
 import com.opera.core.systems.scope.protos.ExecProtos.ActionInfoList;
+import com.opera.core.systems.scope.protos.ExecProtos.ActionInfoList.ActionInfo;
 import com.opera.core.systems.scope.protos.ExecProtos.ActionList;
+import com.opera.core.systems.scope.protos.ExecProtos.ActionList.Action;
 import com.opera.core.systems.scope.protos.ExecProtos.Area;
 import com.opera.core.systems.scope.protos.ExecProtos.MouseAction;
 import com.opera.core.systems.scope.protos.ExecProtos.ScreenWatcher;
-import com.opera.core.systems.scope.protos.ExecProtos.ScreenWatcherResult;
-import com.opera.core.systems.scope.protos.ExecProtos.ActionInfoList.ActionInfo;
-import com.opera.core.systems.scope.protos.ExecProtos.ActionList.Action;
 import com.opera.core.systems.scope.protos.ExecProtos.ScreenWatcher.ColorSpec;
+import com.opera.core.systems.scope.protos.ExecProtos.ScreenWatcherResult;
 import com.opera.core.systems.scope.protos.ExecProtos.ScreenWatcherResult.ColorMatch;
 import com.opera.core.systems.scope.protos.UmsProtos.Response;
 import com.opera.core.systems.scope.services.IOperaExec;
 import com.opera.core.systems.util.CaseInsensitiveStringSet;
 import com.opera.core.systems.util.VersionUtil;
+
+import org.openqa.selenium.WebDriverException;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.logging.Logger;
 
 /**
  * The exec service handles user interactions such as key presses, mouse clicks, screenshot grabbing
@@ -85,7 +85,7 @@ public class OperaExec extends AbstractService implements IOperaExec {
 
     if (!isVersionInRange(version, "3.0", serviceName)) {
       throw new UnsupportedOperationException(
-        serviceName + " version " + version + " is not supported");
+          serviceName + " version " + version + " is not supported");
     }
 
     // Another ugly hack for patch version
@@ -330,8 +330,8 @@ public class OperaExec extends AbstractService implements IOperaExec {
     builder.setWindowID(services.getWindowManager().getActiveWindowId());
 
     Response response = executeCommand(ExecCommand.SETUP_SCREEN_WATCHER,
-      builder,
-      OperaIntervals.RESPONSE_TIMEOUT.getValue() + timeout);
+                                       builder,
+                                       OperaIntervals.RESPONSE_TIMEOUT.getValue() + timeout);
 
     ScreenWatcherResult.Builder watcherBuilder = ScreenWatcherResult.newBuilder();
     buildPayload(response, watcherBuilder);

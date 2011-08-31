@@ -15,18 +15,16 @@ limitations under the License.
 */
 package com.opera.core.systems.interaction;
 
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebDriver;
-
 import com.opera.core.systems.OperaDriver;
 import com.opera.core.systems.scope.internal.OperaKeys;
 
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebDriver;
+
 /**
- * Keyboard user interactions, part of OperaUserInteraction to support typing
- * and key strokes
+ * Keyboard user interactions, part of OperaUserInteraction to support typing and key strokes.
  *
  * @author Deniz Turkoglu <denizt@opera.com>
- *
  */
 public abstract class Keyboard implements UserInteraction {
 
@@ -107,7 +105,6 @@ public abstract class Keyboard implements UserInteraction {
       public void execute(WebDriver driver) {
         ((OperaDriver) driver).releaseKeys();
       }
-
     };
   }
 

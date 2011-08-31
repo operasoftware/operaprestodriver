@@ -13,17 +13,17 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+
 package com.opera.core.systems.interaction;
 
 import java.util.Arrays;
 import java.util.List;
 
 /**
- * OperaAction(s) are used to simulate continuous user events such as pressing a
- * button and clicking an element same time
+ * OperaAction(s) are used to simulate continuous user events such as pressing a button and clicking
+ * an element same time.
  *
  * @author Deniz Turkoglu <denizt@opera.com>
- *
  */
 public class OperaAction {
 
@@ -36,4 +36,5 @@ public class OperaAction {
   public OperaAction(UserInteraction... userInteractions) {
     this.actions = Arrays.asList(userInteractions);
   }
+
 }

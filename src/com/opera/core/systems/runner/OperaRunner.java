@@ -43,8 +43,7 @@ public interface OperaRunner {
   public boolean isOperaRunning(int processId);
 
   /**
-   * Did Opera crash?  This is reset on next call, so if you don't check
-   * you won't know.
+   * Did Opera crash?  This is reset on next call, so if you don't check you won't know.
    *
    * @return true if opera has crashed.
    */
@@ -66,8 +65,9 @@ public interface OperaRunner {
    * Take a screenshot of the full screen.
    *
    * @param timeout attempt to take the screenshot until the timeout is reached.
-   * @param hashes an arbitrary list of hashes to compare with.
+   * @param hashes  an arbitrary list of hashes to compare with.
    * @return a ScreenshotReply object containing MD5 hash sums and bytes.
    */
   public ScreenShotReply saveScreenshot(long timeout, String... hashes);
+
 }
