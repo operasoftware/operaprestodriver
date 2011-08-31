@@ -19,9 +19,11 @@ package com.opera.core.systems;
 import junit.framework.Assert;
 
 import java.io.File;
+import java.io.IOException;
 
 import org.junit.After;
-import org.junit.BeforeClass;
+import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -35,10 +37,10 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 public class DesiredCapabilitiesTest {
 
   WebDriver driver;
-  static DesiredCapabilities capabilities;
+  DesiredCapabilities capabilities;
 
-  @BeforeClass
-  public static void oneTimeSetUp() {
+  @Before
+  public void setUp() {
     capabilities = OperaDriver.getDefaultCapabilities();
   }
 
@@ -71,12 +73,12 @@ public class DesiredCapabilitiesTest {
   }
 
   @Test
-  public void testSettingLogFile() {
-    String logPath = tmpFolder + File.pathSeparator + "operadriver.log";
-    capabilities.setCapability("opera.logging.file", logPath);
+  @Ignore
+  public void testSettingLogFile() throws IOException {
+    File log = tmpFolder.newFile("operadriver.log");
+    capabilities.setCapability("opera.logging.file", log.getCanonicalPath());
     driver = new OperaDriver(capabilities);
 
-    File log = new File(logPath);
     Assert.assertTrue(log.length() > 0);
   }
 
