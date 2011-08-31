@@ -99,7 +99,7 @@ public class OperaPaths {
   public String launcherPath() {
     String path = System.getenv("OPERA_LAUNCHER");
     if (!isPathValid(path)) {
-      path = getOperaLauncherPath();
+      path = extractLauncher(FileUtils.getUserDirectoryPath() + File.separatorChar + ".launcher");
     }
 
     return path;
@@ -109,29 +109,28 @@ public class OperaPaths {
    * Tries to load the launcher executable from the jar file.  A copy of the launcher is put into
    * user directory and on each call is compared to the content in jar file.
    *
+   * @param executablePath directory where you wish to put the launcher
    * @return path to launcher executable
    */
-  public String getOperaLauncherPath() {
+  private String extractLauncher(String executablePath) {
     String launcherName = getLauncherNameForOS();
 
-    String executablePath = null;
-
     // Get the launcher path
-    URL res = OperaDriver.class.getClassLoader().getResource(
-        "launcher/" + launcherName);
+    URL res = OperaDriver.class.getClassLoader().getResource("launcher/" + launcherName);
+
+    // Does launcher exist among our resources?
     if (res != null) {
       String url = res.toExternalForm();
       // If the launcher is inside the jar we will need to copy it out
       if ((url.startsWith("jar:")) || (url.startsWith("wsjar:"))) {
-        executablePath = FileUtils.getUserDirectoryPath() + File.separatorChar
-                         + ".launcher" + File.separatorChar + launcherName;
-        File cur_launcher = new File(executablePath);
+        executablePath += File.separatorChar + launcherName;
+        File launcher = new File(executablePath);
 
         // Whether we need to copy a new launcher across, either because
         // it doesn't currently exist, or because its hash differs from
-        // our launcher
+        // our launcher.
         boolean copy = false;
-        if (!cur_launcher.exists()) {
+        if (!launcher.exists()) {
           copy = true;
         } else {
           try {
@@ -144,27 +143,27 @@ public class OperaPaths {
 
         if (copy == true) {
           try {
-            if (!cur_launcher.exists()) {
-              FileUtils.touch(cur_launcher);
+            if (!launcher.exists()) {
+              FileUtils.touch(launcher);
             }
 
             InputStream is = res.openStream();
-            OutputStream os = new FileOutputStream(cur_launcher);
+            OutputStream os = new FileOutputStream(launcher);
 
             IOUtils.copy(is, os);
 
             is.close();
             os.close();
 
-            cur_launcher.setLastModified(cur_launcher.lastModified());
+            launcher.setLastModified(launcher.lastModified());
           } catch (IOException e) {
-            throw new WebDriverException("Cant write file to disk : "
-                                         + e.getMessage());
+            throw new WebDriverException("Cant write file to disk : " + e.getMessage());
           }
+
           logger.fine("New launcher copied");
         }
-        // If launcher is not inside jar we can run it from it's current
-        // location
+
+      // If launcher is not inside jar we can run it from its current location
       } else if (url.startsWith("file:")) {
         File f;
         try {
