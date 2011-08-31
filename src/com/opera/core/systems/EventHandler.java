@@ -157,15 +157,15 @@ public class EventHandler extends AbstractEventHandler {
   @Override
   public void onQuickMenuClosed(QuickMenuID menuId) {
 	  services.onQuickMenuClosed(menuId);
-	
+
   }
-  
+
   @Override
   public void onQuickMenuItemPressed(QuickMenuItemID menuItemID) {
 	  services.onQuickMenuItemPressed(menuItemID);
-	
+
   }
- 
+
   public void onSelftestOutput(SelftestOutput output) {
     services.onSelftestOutput(output);
   }

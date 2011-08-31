@@ -30,6 +30,7 @@ import com.opera.core.systems.model.Canvas;
 import com.opera.core.systems.model.ScopeActions;
 import com.opera.core.systems.model.ScreenShotReply;
 import com.opera.core.systems.scope.internal.OperaMouseKeys;
+import com.opera.core.systems.scope.services.IWindowManager;
 
 /**
  * This library handles actions for Core 2.5+
@@ -64,7 +65,8 @@ public class PbActionHandler extends ScopeActions {
 
   @Override
   public void get(String url) {
-    services.getExec().action("Go", url);
+    IWindowManager wm = services.getWindowManager();
+    wm.openUrl(wm.getActiveWindowId(), url);
   }
 
   @Override

@@ -41,8 +41,6 @@ public interface IWindowManager {
 
   void filterActiveWindow();
 
-  void closeWindow(Integer window);
-
   void closeAllWindows();
 
   /**
@@ -72,4 +70,8 @@ public interface IWindowManager {
   void clearFilter();
 
   void filterWindow(Integer windowId);
+
+  void openUrl(int windowId, String url);
+
+  void closeWindow(int windowId);
 }

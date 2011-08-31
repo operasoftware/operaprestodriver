@@ -23,12 +23,15 @@ import java.util.logging.Logger;
 import org.apache.commons.jxpath.CompiledExpression;
 import org.apache.commons.jxpath.JXPathContext;
 import org.openqa.selenium.NoSuchWindowException;
+import org.openqa.selenium.WebDriverException;
 
 import com.opera.core.systems.ScopeServices;
 import com.opera.core.systems.scope.AbstractService;
 import com.opera.core.systems.scope.WindowManagerCommand;
 import com.opera.core.systems.scope.exceptions.WindowNotFoundException;
 import com.opera.core.systems.scope.protos.UmsProtos.Response;
+import com.opera.core.systems.scope.protos.WmProtos.CloseWindowArg;
+import com.opera.core.systems.scope.protos.WmProtos.OpenURLArg;
 import com.opera.core.systems.scope.protos.WmProtos.WindowFilter;
 import com.opera.core.systems.scope.protos.WmProtos.WindowID;
 import com.opera.core.systems.scope.protos.WmProtos.WindowInfo;
@@ -181,12 +184,6 @@ public class WindowManager extends AbstractService implements IWindowManager {
     setActiveWindowId(windowId);
   }
 
-  public void closeWindow(Integer windowId) {
-    // TODO: WindowManager 2.1 has a close window command
-    services.getExec().action("Close page", windowId);
-    removeWindow(windowId);
-  }
-
   public void closeAllWindows() {
     logger.fine("closeAllWindows");
     LinkedList<Integer> list = new LinkedList<Integer>(windows.asStack());
@@ -252,4 +249,27 @@ public class WindowManager extends AbstractService implements IWindowManager {
     return windows.peek().getTitle();
   }
 
+  public void openUrl(int windowId, String url) {
+    OpenURLArg.Builder openUrlBuilder = OpenURLArg.newBuilder();
+    openUrlBuilder.setWindowID(windowId);
+    openUrlBuilder.setUrl(url);
+
+    Response response = executeCommand(WindowManagerCommand.OPEN_URL, openUrlBuilder);
+
+    if (response == null) {
+      throw new WebDriverException("Internal error while opening " + url);
+    }
+  }
+
+  public void closeWindow(int windowId) {
+    CloseWindowArg.Builder closeWindowBuilder = CloseWindowArg.newBuilder();
+    closeWindowBuilder.setWindowID(windowId);
+
+    Response response = executeCommand(WindowManagerCommand.CLOSE_WINDOW, closeWindowBuilder);
+    removeWindow(windowId);
+
+    if (response == null) {
+      throw new WebDriverException("Internal error while closing window");
+    }
+  }
 }

@@ -376,7 +376,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     String oldUrl = getCurrentUrl();
 
     services.captureOperaIdle();
-    actionHandler.get(url);
+    windowManager.openUrl(activeWindowId, url);
 
     if (oldUrl == null || !url.replace(oldUrl, "").startsWith("#")) {
 
@@ -434,7 +434,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
   }
 
   private void closeWindow() {
-    exec.action("Close page");
+    windowManager.closeWindow(windowManager.getActiveWindowId());
   }
 
   /**
