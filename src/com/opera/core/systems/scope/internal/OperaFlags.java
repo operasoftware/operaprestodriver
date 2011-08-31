@@ -24,4 +24,10 @@ public class OperaFlags {
    */
   public static final boolean ENABLE_CHECKS = true;
 
+  /**
+   * Whether or not to append to log file instead of overwriting contents.  If true the driver will
+   * append, otherwise it will overwrite.  By default it overwrites the file.
+   */
+  public static final boolean APPEND_TO_LOGFILE = true;
+
 }

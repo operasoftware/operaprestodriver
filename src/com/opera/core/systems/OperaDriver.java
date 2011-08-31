@@ -28,9 +28,11 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.FileHandler;
 import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -63,6 +65,7 @@ import com.opera.core.systems.runner.OperaRunner;
 import com.opera.core.systems.runner.launcher.OperaLauncherRunner;
 import com.opera.core.systems.scope.exceptions.CommunicationException;
 import com.opera.core.systems.scope.handlers.PbActionHandler;
+import com.opera.core.systems.scope.internal.OperaFlags;
 import com.opera.core.systems.scope.internal.OperaIntervals;
 import com.opera.core.systems.scope.internal.OperaKeys;
 import com.opera.core.systems.scope.protos.PrefsProtos.Pref;
@@ -78,6 +81,17 @@ import com.opera.core.systems.settings.OperaDriverSettings;
 public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
   // Want to thin some of these out, but will need some re-thinking.
+
+  /**
+   * (String) How verbose the logging should be.  Available levels are: SEVERE (highest value),
+   * WARNING, INFO, CONFIG, FINE, FINER, FINEST (lowest value), ALL.  Default is INFO.
+   */
+  public static final String LOGGING_LEVEL = "opera.logging.level";
+
+  /**
+   * (String) Where to send the output of the logging.  Default is to not write to file.
+   */
+  public static final String LOGGING_FILE = "opera.logging.file";
 
   /**
    * (String) Path to the Opera binary to use.
@@ -131,12 +145,6 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
    */
   public static final String BINARY_PROFILE = "opera.binary_profile";
 
-  /**
-   * (String) How verbose the logging should be. One of SEVERE, WARNING, INFO
-   * CONFIG, FINE, FINER, FINEST. Default is INFO.
-   */
-  public static final String VERBOSITY = "opera.verbosity";
-
   /*
    * These are "protected" and not "private" so that we can extend this class
    * and add methods to access these variable in tests.
@@ -155,10 +163,14 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
   protected ScopeActions actionHandler;
 
   protected final Logger logger = Logger.getLogger(this.getClass().getName());
+  private FileHandler logFile = null;
 
   protected Set<Integer> objectIds = new HashSet<Integer>();
   private String version;
 
+  /**
+   * Constructor that starts Opera with the default set of capabilities.
+   */
   public OperaDriver() {
     this((DesiredCapabilities) null);
   }
@@ -169,7 +181,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
   }
 
   /**
-   * Constructor that starts Opera.
+   * Constructor that starts Opera with a set of desired capabilities.
    *
    * @param c a DesiredCapabilities object containing various settings
    *          for the driver and the browser.
@@ -181,11 +193,27 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
       capabilities.merge(c);
     }
 
-    // Set the logging level
-    Level logLevel = Level.parse(((String) capabilities.getCapability(VERBOSITY)).toUpperCase());
+    // Set the logging level for main logger instance
+    Level logLevel = Level.parse(((String) capabilities.getCapability(LOGGING_LEVEL)).toUpperCase());
     Logger root = Logger.getLogger("");
     root.setLevel(logLevel);
-    for (Handler h: root.getHandlers()) { h.setLevel(logLevel); }
+
+    // Write log to file?
+    if (capabilities.getCapability(LOGGING_FILE) != null) {
+      try {
+        logFile = new FileHandler((String) capabilities.getCapability(LOGGING_FILE), OperaFlags.APPEND_TO_LOGFILE);
+        logFile.setFormatter(new SimpleFormatter());
+      } catch (IOException e) {
+        throw new WebDriverException("Unable to write to file: " + e);
+      }
+    }
+
+    if (logFile != null) root.addHandler(logFile);
+
+    // Set logging levels on all handlers
+    for (Handler h : root.getHandlers()) {
+      h.setLevel(logLevel);
+    }
 
     if ((Boolean) capabilities.getCapability(AUTOSTART)) {
       OperaPaths paths = new OperaPaths();
@@ -214,10 +242,18 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     start();
   }
 
+  /**
+   * Gets the default capabilities of OperaDriver.
+   *
+   * @return a DesiredCapabilities object with default settings
+   */
+  // TODO: Make this private when not needed in OperaDriverSettings
   public static DesiredCapabilities getDefaultCapabilities() {
-    // Defaults
     DesiredCapabilities capabilities = DesiredCapabilities.opera();
     capabilities.setJavascriptEnabled(true);
+
+    capabilities.setCapability(LOGGING_LEVEL, "INFO");
+    capabilities.setCapability(LOGGING_FILE, (String) null);
 
     capabilities.setCapability(BINARY, (String) null);
     capabilities.setCapability(ARGUMENTS, "");
@@ -232,8 +268,6 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     capabilities.setCapability(GUESS_BINARY_PATH, true);
 
     capabilities.setCapability(USE_OPERAIDLE, false);
-
-    capabilities.setCapability(VERBOSITY, "INFO");
 
     return capabilities;
   }
@@ -261,6 +295,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     logger.fine("Opera Driver shutting down");
     services.quit();
     if (operaRunner != null) operaRunner.shutdown();
+    if (logFile != null) logFile.close();
   }
 
   /**
