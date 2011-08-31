@@ -165,7 +165,7 @@ public class OperaDesktopDriver extends OperaDriver {
 	 * Shuts down the driver (but not Opera)
 	 */
 	public void quitDriver() {
-    logger.fine("Opera Driver shutting down");
+    logger.fine("Opera Desktop Driver shutting down");
     services.shutdown();
     if (operaRunner != null) operaRunner.shutdown();
 	}

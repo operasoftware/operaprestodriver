@@ -100,13 +100,13 @@ public class WaitState {
     public ResultItem(WebDriverException ex) {
       waitResult = WaitResult.EXCEPTION;
       exception = ex;
-      logger.fine("EVENT: " + waitResult.toString() + ", exception: "
+      logger.finest("EVENT: " + waitResult.toString() + ", exception: "
         + ex.toString());
     }
 
     public ResultItem(WaitResult result) {
       this.waitResult = result;
-      logger.fine("EVENT: " + result.toString());
+      logger.finest("EVENT: " + result.toString());
     }
 
     /**
@@ -124,32 +124,32 @@ public class WaitState {
     public ResultItem(WaitResult result, int data) {
       this.waitResult = result;
       this.data = data;
-      logger.fine("EVENT: " + result.toString() + ", data=" + data);
+      logger.finest("EVENT: " + result.toString() + ", data=" + data);
     }
 
     public ResultItem(WaitResult result, DesktopWindowInfo info) {
       this.waitResult = result;
       this.desktopWindowInfo = info;
-      logger.fine("EVENT: " + result.toString() + ", desktop window=" + info.getWindowID());
+      logger.finest("EVENT: " + result.toString() + ", desktop window=" + info.getWindowID());
     }
 
     public ResultItem(WaitResult result, QuickMenuInfo info) {
       this.waitResult = result;
       this.quickMenuInfo = info; // TODO FIXME
-      logger.fine("EVENT: " + result.toString() + ", quick_menu=" + info.getMenuId().getMenuName());
+      logger.finest("EVENT: " + result.toString() + ", quick_menu=" + info.getMenuId().getMenuName());
     }
 
     public ResultItem(WaitResult result, QuickMenuID id) {
       this.waitResult = result;
       this.quickMenuId = id;
 
-      logger.fine("EVENT: " + result.toString() + ", quick_menu=" + id.getMenuName());
+      logger.finest("EVENT: " + result.toString() + ", quick_menu=" + id.getMenuName());
     }
 
     public ResultItem(WaitResult result, QuickMenuItemID info) {
       this.waitResult = result;
       this.quickMenuItemID = info; // TODO FIXME
-      logger.fine("EVENT: " + result.toString() + ", quick_menu_item=" + info.getMenuText());
+      logger.finest("EVENT: " + result.toString() + ", quick_menu_item=" + info.getMenuText());
     }
 
 
@@ -157,7 +157,7 @@ public class WaitState {
       this.response = response;
       this.data = tag;
       waitResult = WaitResult.RESPONSE;
-      logger.fine("EVENT: " + waitResult.toString() + ", data=" + data);
+      logger.finest("EVENT: " + waitResult.toString() + ", data=" + data);
     }
 
     public ResultItem(String results) {
@@ -227,7 +227,6 @@ public class WaitState {
   void onHandshake() {
     synchronized (lock) {
       logger.finest("Event: onHandshake");
-      logger.fine("Got handshake");
       events.add(new ResultItem(WaitResult.HANDSHAKE));
       lock.notify();
     }
@@ -235,8 +234,7 @@ public class WaitState {
 
   void onResponse(int tag, Response response) {
     synchronized (lock) {
-      logger.finest("Event: onResponse");
-      logger.fine("Got response for " + tag);
+      logger.finest("Event: onResponse for " + tag);
       events.add(new ResultItem(response, tag));
       lock.notify();
     }
@@ -262,7 +260,6 @@ public class WaitState {
   void onDisconnected() {
     synchronized (lock) {
       logger.finest("Event: onDisconnected");
-      logger.fine("Got disconnected");
       events.add(new ResultItem(WaitResult.DISCONNECTED));
       connected = false;
       lock.notify();
@@ -296,7 +293,6 @@ public class WaitState {
   void onOperaIdle() {
     synchronized (lock) {
       logger.finest("Event: onOperaIdle");
-      logger.fine("OperaIdle: Got message");
       events.add(new ResultItem(WaitResult.EVENT_OPERA_IDLE, 0));// 0 is
       // important to match later
       lock.notify();
@@ -428,7 +424,7 @@ public class WaitState {
       result = getResult();
       if (result != null) {
         result.remaining_idle_timeout = timeout - (end - start);
-        logger.fine("Remaining timeout:" + result.remaining_idle_timeout);
+        logger.finest("Remaining timeout:" + result.remaining_idle_timeout);
       }
     }
 
@@ -510,7 +506,7 @@ public class WaitState {
               if (stringMatch.length() == 0) {
                 return result;
               } else {
-                logger.fine("EVENT_DESKTOP_WINDOW_SHOWN: Name: "
+                logger.finest("EVENT_DESKTOP_WINDOW_SHOWN: Name: "
                   + result.desktopWindowInfo.getName() + " ID: "
                   + result.desktopWindowInfo.getWindowID() + " OnScreen: "
                   + result.desktopWindowInfo.getOnScreen());
@@ -674,7 +670,7 @@ public class WaitState {
    * waitForOperaIdle() will return immediately.
    */
   public void captureOperaIdle() {
-    logger.fine("capture_idle_events is now true!");
+    logger.finer("capture_idle_events is now true!");
     capture_idle_events = true;
   }
 
@@ -692,7 +688,7 @@ public class WaitState {
    */
   public void waitForOperaIdle(long timeout) {
     if (capture_idle_events == true && captured_idle_events > 0) {
-      logger.fine("Captured " + captured_idle_events + " OperaIdle event(s)");
+      logger.finer("Captured " + captured_idle_events + " OperaIdle event(s)");
       // reset
       capture_idle_events = false;
       captured_idle_events = 0;

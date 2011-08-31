@@ -129,7 +129,7 @@ public class StpConnection implements SocketListener {
    * @throws IOException
    */
   public void send(Command command) {
-    logger.log(Level.FINEST, command.toString());
+    logger.finest(command.toString());
     byte[] payload = command.toByteArray();
     int totalSize = payload.length + 1; // increment 1 for message type
 
@@ -145,7 +145,7 @@ public class StpConnection implements SocketListener {
     buffer.put(payload);
 
     // log what is being sent.
-    logger.fine("SEND: " + command.toString());
+    logger.finest("SEND: " + command.toString());
 
     requests.add(buffer);
     SocketMonitor.instance().modify(socketChannel, this,
@@ -174,7 +174,7 @@ public class StpConnection implements SocketListener {
    */
   private void send(String message) {
     String scopeMessage = message.length() + " " + message;
-    logger.fine("WRITE : " + scopeMessage);
+    logger.finest("WRITE : " + scopeMessage);
     byte[] bytes = null;
     try {
       bytes = scopeMessage.getBytes("UTF-16BE");
@@ -191,7 +191,7 @@ public class StpConnection implements SocketListener {
   }
 
   public boolean canRead(SelectableChannel channel) throws IOException {
-    logger.fine("canRead");
+    logger.finest("canRead");
 
     if (!channel.isOpen()) return false;
 
@@ -205,7 +205,7 @@ public class StpConnection implements SocketListener {
     // continue to read data and read messages until there are no messages
     boolean didNotFindAnyMessage = false;
     while (!didNotFindAnyMessage) {
-      logger.fine("canReadLoop!");
+      logger.finest("canReadLoop!");
 
       // read as much data as possible (until recvBuffer is full OR we don't get
       // any more data)
@@ -228,14 +228,13 @@ public class StpConnection implements SocketListener {
           }
 
         } catch (IOException ex) {
-          logger.log(Level.WARNING, "Channel closed, causing exception",
-              ex.getMessage());
+          logger.warning("Channel closed, causing exception: " + ex.getMessage());
           readSize = -1;// same as error from socketChannel.read
         }
 
         if (readSize < 0) {
           try {
-            logger.log(Level.FINE, "Channel closed: {0}",
+            logger.log(Level.FINER, "Channel closed: {0}",
                        socketChannel.socket().getInetAddress().getHostName());
           } catch (NullPointerException e) {
             // ignore
@@ -247,7 +246,7 @@ public class StpConnection implements SocketListener {
 
           // double buffer size if needed!
           if (recvBuffer.limit() + readBuffer.limit() >= recvBuffer.capacity()) {
-            logger.fine("Doubled the size of our recv buffer!");
+            logger.finest("Doubled the size of our recv buffer!");
             ByteBuffer newRecvBuffer = ByteBuffer.allocate(recvBuffer.capacity() * 2);
             newRecvBuffer.clear();
             recvBuffer.position(0);
@@ -261,7 +260,7 @@ public class StpConnection implements SocketListener {
           recvBuffer.position(recvBuffer.limit());
           recvBuffer.limit(recvBuffer.limit() + readSize);// increase limit!
           recvBuffer.put(readBuffer);
-          logger.fine("did read " + readSize + " bytes, new buffer size = "
+          logger.finest("did read " + readSize + " bytes, new buffer size = "
               + recvBuffer.limit());
         }
       } while (readSize > 0);
@@ -276,7 +275,7 @@ public class StpConnection implements SocketListener {
   }
 
   public boolean canWrite(SelectableChannel channel) throws IOException {
-    logger.fine("canWrite");
+    logger.finest("canWrite");
     if (socketChannel == null) throw new IOException(
         "We dont have a socket :-)");
 
@@ -293,7 +292,7 @@ public class StpConnection implements SocketListener {
       } while (buffer.hasRemaining());
     }
 
-    logger.fine("Wrote " + totalWritten + " bytes");
+    logger.finest("Wrote " + totalWritten + " bytes");
 
     return (!requests.isEmpty());
   }
@@ -326,7 +325,7 @@ public class StpConnection implements SocketListener {
    * @param message
    */
   public void parseServiceList(String message) {
-    logger.fine("parseServiceList: \"" + message + "\"");
+    logger.finer("parseServiceList: \"" + message + "\"");
 
     int split = message.indexOf(" ");
 
@@ -355,7 +354,7 @@ public class StpConnection implements SocketListener {
   }
 
   private void signalEvent(Event event) {
-    logger.fine("EVENT " + event.toString());
+    logger.finest("EVENT " + event.toString());
     stp1EventHandler.handleEvent(event);
   }
 
@@ -432,7 +431,7 @@ public class StpConnection implements SocketListener {
       // try to read size,
       buffer.position(0);
       if (buffer.limit() <= 0) {
-        logger.fine("STP: Empty buffer");
+        logger.finest("STP: Empty buffer");
         break;
       }
       int messageSize = readRawVarint32(buffer);// read part of buffer
@@ -464,7 +463,7 @@ public class StpConnection implements SocketListener {
         }
       } else {
         // 4 + messageSize because of the int at the beginning
-        logger.fine("tried to read a message, but expected " + (4 + messageSize)
+        logger.finest("tried to read a message, but expected " + (4 + messageSize)
             + " bytes, and only got " + buffer.limit());
 
         buffer.position(0);
@@ -495,16 +494,16 @@ public class StpConnection implements SocketListener {
         buffer.position(0);// set position back to start!
       }
 
-      logger.fine("did read message of " + bytesWeHaveBeenreading
+      logger.finest("did read message of " + bytesWeHaveBeenreading
           + " bytes, new buffer size = " + buffer.limit());
 
       return true; // we did read a message :-)
     } else {
       if (buffer.limit() > 0) {
-        logger.fine("did NOT read message from buffer of size = "
+        logger.finest("did NOT read message from buffer of size = "
             + buffer.limit());
       } else {
-        logger.fine("no messages in empty buffer");
+        logger.finest("no messages in empty buffer");
       }
       return false;
     }
@@ -522,17 +521,17 @@ public class StpConnection implements SocketListener {
     case 2:// response
       // log what is being sent.
       Response response = Response.parseFrom(payload);
-      logger.fine("RECV RESPONSE: " + response.toString());
+      logger.finest("RECV RESPONSE: " + response.toString());
       signalResponse(response.getTag(), response);
       break;
     case 3:// event
       Event event = Event.parseFrom(payload);
-      logger.fine("RECV EVENT: " + event.toString());
+      logger.finest("RECV EVENT: " + event.toString());
       signalEvent(event);
       break;
     case 4:// error
       Error error = Error.parseFrom(payload);
-      logger.fine("RECV ERROR: " + error.toString());
+      logger.finest("RECV ERROR: " + error.toString());
       if (error.getService().equals("ecmascript-debugger")
           && error.getStatus() == UmsProtos.Status.INTERNAL_ERROR.getNumber()) {
         signalResponse(error.getTag(), null);

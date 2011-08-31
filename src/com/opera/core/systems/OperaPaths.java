@@ -160,7 +160,7 @@ public class OperaPaths {
             throw new WebDriverException("Cant write file to disk : " + e.getMessage());
           }
 
-          logger.fine("New launcher copied");
+          logger.fine("New launcher copied to " + executablePath);
         }
 
       // If launcher is not inside jar we can run it from its current location

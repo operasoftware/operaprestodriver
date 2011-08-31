@@ -463,9 +463,9 @@ public class ScopeServices implements IConnectionHandler {
   }
 
   public boolean onConnected(StpConnection con) {
-    logger.fine("onConnect fired");
+    logger.finest("onConnect fired");
     if (connection == null) {
-      logger.fine("Got StpConnection");
+      logger.finest("Got StpConnection");
       connection = con;
       return true;
     }
@@ -478,58 +478,58 @@ public class ScopeServices implements IConnectionHandler {
   }
 
   public void onWindowLoaded(int id) {
-    logger.fine("Window loaded: windowId=" + id);
+    logger.finest("Window loaded: windowId=" + id);
     waitState.onWindowLoaded(id);
   }
 
   public void onWindowClosed(int id) {
-    logger.fine("Window closed: windowId=" + id);
+    logger.finest("Window closed: windowId=" + id);
     waitState.onWindowClosed(id);
   }
 
   public void onDesktopWindowShown(DesktopWindowInfo info) {
-    logger.fine("DesktopWindow shown: windowId=" + info.getWindowID());
+    logger.finest("DesktopWindow shown: windowId=" + info.getWindowID());
     waitState.onDesktopWindowShown(info);
   }
 
   public void onDesktopWindowUpdated(DesktopWindowInfo info) {
-    logger.fine("DesktopWindow updated: windowId=" + info.getWindowID());
+    logger.finest("DesktopWindow updated: windowId=" + info.getWindowID());
     waitState.onDesktopWindowUpdated(info);
   }
 
   public void onDesktopWindowClosed(DesktopWindowInfo info) {
-    logger.fine("DesktopWindow closed: windowId=" + info.getWindowID());
+    logger.finest("DesktopWindow closed: windowId=" + info.getWindowID());
     waitState.onDesktopWindowClosed(info);
   }
 
   public void onDesktopWindowActivated(DesktopWindowInfo info) {
-    logger.fine("DesktopWindow active: windowId=" + info.getWindowID());
+    logger.finest("DesktopWindow active: windowId=" + info.getWindowID());
     waitState.onDesktopWindowActivated(info);
   }
 
   public void onDesktopWindowLoaded(DesktopWindowInfo info) {
-    logger.fine("DesktopWindow loaded: windowId=" + info.getWindowID());
+    logger.finest("DesktopWindow loaded: windowId=" + info.getWindowID());
     waitState.onDesktopWindowLoaded(info);
   }
 
   public void onQuickMenuShown(QuickMenuInfo info) {
-	  logger.fine("QuickMenu shown: menuName=" + info.getMenuId().getMenuName());
+	  logger.finest("QuickMenu shown: menuName=" + info.getMenuId().getMenuName());
 	  waitState.onQuickMenuShown(info);
   }
 
   public void onQuickMenuItemPressed(QuickMenuItemID menuItemID) {
-	  logger.fine("QuickMenu shown: menuItem=" + menuItemID.getMenuText());
+	  logger.finest("QuickMenu shown: menuItem=" + menuItemID.getMenuText());
 	  waitState.onQuickMenuItemPressed(menuItemID);
   }
 
   // TODO ADD PARAM AGAIN, or just name?
   public void onQuickMenuClosed(QuickMenuID id) {
-	  logger.fine("QuickMenu closed");//: menuName=" + info.getMenuId().getMenuName());
+	  logger.finest("QuickMenu closed");//: menuName=" + info.getMenuId().getMenuName());
 	  waitState.onQuickMenuClosed(id);
   }
 
   public void onHandshake(boolean stp1) {
-    logger.fine("Got Stp handshake!");
+    logger.finest("Got Stp handshake!");
     waitState.onHandshake();
   }
 
@@ -538,14 +538,14 @@ public class ScopeServices implements IConnectionHandler {
     if (connection != null) {
       if (!shuttingDown) {
         waitState.onDisconnected();
-        logger.fine("Cleaning up...");
+        logger.finest("Cleaning up...");
         connection = null;
       }
     }
   }
 
   public void onOperaIdle() {
-    logger.fine("Got Opera Idle event!");
+    logger.finest("Got Opera Idle event!");
     waitState.onOperaIdle();
   }
 
@@ -568,7 +568,7 @@ public class ScopeServices implements IConnectionHandler {
   }
 
   public void waitForWindowLoaded(int activeWindowId, long timeout) {
-    logger.fine("waitForWindowLoaded with params activeWindowId="+activeWindowId+" timeout="+timeout);
+    logger.finest("waitForWindowLoaded with params activeWindowId="+activeWindowId+" timeout="+timeout);
     waitState.waitForWindowLoaded(activeWindowId, timeout);
   }
 
@@ -582,12 +582,12 @@ public class ScopeServices implements IConnectionHandler {
          * we don't want to use idle detection without this.
          */
         boolean ok = VersionUtil.compare(version, "1.1") >= 0;
-        logger.fine("Core service version check: " + ok + " (" + version + ")");
+        logger.finer("Core service version check: " + ok + " (" + version + ")");
         return ok;
       }
     }
 
-    logger.fine("Core service not found");
+    logger.severe("Core service not found");
     return false;
   }
 
@@ -620,9 +620,9 @@ public class ScopeServices implements IConnectionHandler {
    * @param timeout Time in milliseconds to wait before aborting
    */
   public void waitForOperaIdle(long timeout) {
-    logger.fine("OperaIdle: Waiting for (timeout = " + timeout + ")");
+    logger.finer("OperaIdle: Waiting for (timeout = " + timeout + ")");
     waitState.waitForOperaIdle(timeout);
-    logger.fine("OperaIdle: Finished waiting");
+    logger.finer("OperaIdle: Finished waiting");
   }
 
   public void waitStart() {
@@ -705,7 +705,7 @@ public class ScopeServices implements IConnectionHandler {
 
   public void onResponseReceived(int tag, Response response) {
     if (connection != null) {
-      logger.fine("Got response.");
+      logger.finest("Got response.");
       if (response != null) {
         waitState.onResponse(tag, response);
       } else {
@@ -715,7 +715,7 @@ public class ScopeServices implements IConnectionHandler {
   }
 
   public void onException(Exception ex) {
-    logger.fine("Got exception");
+    logger.finest("Got exception");
     if (connection != null) {
       waitState.onException(ex);
       connection = null;

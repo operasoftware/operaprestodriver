@@ -62,7 +62,7 @@ public class OperaLauncherRunner implements OperaRunner {
   }
 
   public OperaLauncherRunner(DesiredCapabilities capabilities) {
-    logger.fine("Creating OperaLauncherRunner");
+    logger.finer("Creating OperaLauncherRunner");
     this.capabilities = capabilities;
 
     if (this.capabilities.getCapability(OperaDriver.LAUNCHER) == null) {
@@ -224,7 +224,7 @@ public class OperaLauncherRunner implements OperaRunner {
   }
 
   public boolean isOperaRunning(int processId) {
-    logger.fine("Get Opera status");
+    logger.finer("Get Opera status");
 
     try {
       LauncherStatusRequest.Builder request = LauncherStatusRequest.newBuilder();

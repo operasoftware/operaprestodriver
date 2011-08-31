@@ -223,7 +223,7 @@ public class SocketMonitor {
             break;
           }
         } catch (CancelledKeyException e) {
-          logger.fine("Key was cancelled - ignoring...");
+          logger.finest("Key was cancelled - ignoring...");
         }
       }
       changes.clear();

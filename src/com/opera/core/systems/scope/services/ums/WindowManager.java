@@ -185,7 +185,6 @@ public class WindowManager extends AbstractService implements IWindowManager {
   }
 
   public void closeAllWindows() {
-    logger.fine("closeAllWindows");
     LinkedList<Integer> list = new LinkedList<Integer>(windows.asStack());
     boolean canCloseAll = services.getExec().getActionList().contains(
         "Close all pages");

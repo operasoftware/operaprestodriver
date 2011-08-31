@@ -104,7 +104,7 @@ public class OperaLauncherBinary extends Thread {
           int r = stream.read();
           if(r == -1) return;
           else if(r == '\n') {
-            logger.fine("LB: " + buffer);
+            logger.finer("linebreak: " + buffer);
             buffer = "";
           }
           else buffer += (char)r;
