@@ -45,6 +45,10 @@ public class OperaLauncherBinary extends Thread {
     init();
   }
 
+  public String getCommand() {
+    return commands.toString();
+  }
+
   public void kill() {
     watcher.kill();
   }

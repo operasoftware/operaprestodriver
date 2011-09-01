@@ -55,9 +55,12 @@ import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.io.TemporaryFilesystem;
+import org.openqa.selenium.net.PortProber;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -99,6 +102,18 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
   public static final String BINARY = "opera.binary";
 
   /**
+   * (String) The host Opera should connect to. Unless you're starting Opera
+   * manually you won't need this.
+   */
+  public static final String HOST = "opera.host";
+
+  /**
+   * (Integer) The port to Opera should connect to. 0 = Random,
+   * -1 = Opera default (for use with Opera < 12)
+   */
+  public static final String PORT = "opera.port";
+
+  /**
    * (String) Path to the launcher binary to use.
    */
   public static final String LAUNCHER = "opera.launcher";
@@ -107,6 +122,13 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
    * (String) Arguments to pass to Opera, separated by spaces.
    */
   public static final String ARGUMENTS = "opera.arguments";
+
+  /**
+   * (String) Directory to use for the Opera profile. If null a random
+   * temporary directory is used. If "", an empty string, then the default
+   * autotest profile directory is used.
+   */
+  public static final String PROFILE = "opera.profile";
 
   /**
    * (Boolean) Whether to use Opera idle.
@@ -238,9 +260,17 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
         capabilities.setCapability(LAUNCHER, paths.launcherPath());
       }
 
+      // If port is 0, try to find a random port.
+      if ((Integer) capabilities.getCapability(PORT) == 0) {
+        capabilities.setCapability(PORT, PortProber.findFreePort());
+      }
+
       if (capabilities.getCapability(BINARY) != null) {
         this.operaRunner = new OperaLauncherRunner(capabilities);
       }
+    } else {
+      // If we're not autostarting then we don't want to randomise the port.
+      capabilities.setCapability(PORT, -1);
     }
 
     start();
@@ -260,11 +290,22 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     capabilities.setCapability(LOGGING_FILE, (String) null);
 
     capabilities.setCapability(BINARY, (String) null);
+
+    // Default = 127.0.0.1, but need to set to null for backwards compat.
+    // with Opera versions that don't support -autotestmode host:port
+    capabilities.setCapability(HOST, "127.0.0.1");
+    // 0 = Random, -1 = Opera default (7001). See above.
+    // TODO: set this to 0 when Opera 12 is released.
+    capabilities.setCapability(PORT, -1);
+
     capabilities.setCapability(ARGUMENTS, "");
 
     capabilities.setCapability(LAUNCHER, (String) null);
 
     capabilities.setCapability(DISPLAY, (Integer) null);
+
+    // TODO: set this to (String) null when Opera 12 is released.
+    capabilities.setCapability(PROFILE, "");
 
     capabilities.setCapability(AUTOSTART, true);
     capabilities.setCapability(NO_RESTART, false);
@@ -295,6 +336,8 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
   public void quit() {
     logger.fine("Opera Driver shutting down");
+    // This will only delete the profile directory if we created it.
+    TemporaryFilesystem.getDefaultTmpFS().deleteTempDir(new File((String) capabilities.getCapability(PROFILE)));
     services.quit();
     if (operaRunner != null) {
       operaRunner.shutdown();
@@ -349,7 +392,9 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
         manualStart = false;
       }
 
-      services = new ScopeServices(versions, manualStart);
+      int port = (Integer) capabilities.getCapability(PORT);
+      if (port == -1) port = 7001;
+      services = new ScopeServices(versions, port, manualStart);
       // for profile-specific workarounds inside ScopeServives, WaitState ...
       services.setProfile((String) capabilities.getCapability(BINARY_PROFILE));
       services.startStpThread();
