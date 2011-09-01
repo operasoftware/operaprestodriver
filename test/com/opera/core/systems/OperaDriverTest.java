@@ -16,19 +16,23 @@ limitations under the License.
 
 package com.opera.core.systems;
 
-import com.opera.core.systems.settings.OperaDriverSettings;
+import java.io.File;
 
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.openqa.selenium.Platform;
 import org.openqa.selenium.remote.DesiredCapabilities;
+
+import com.opera.core.systems.settings.OperaDriverSettings;
 
 public class OperaDriverTest extends TestBase {
 
   // Replace the TestBase setup and teardown so that we don't launch Opera
   @BeforeClass
   public static void setUpBeforeClass() throws Exception {
+    initFixtures();
   }
 
   @AfterClass
@@ -134,4 +138,107 @@ public class OperaDriverTest extends TestBase {
     driver.quit();
   }
 
+  @Test
+  public void testDefaultPort() throws Exception {
+    DesiredCapabilities c = new DesiredCapabilities();
+    c.setCapability(OperaDriver.PORT, -1);
+
+    OperaDriver a = new OperaDriver(c);
+    Assert.assertEquals("7001", a.getPref("Developer Tools", "Proxy Port"));
+    a.quit();
+  }
+
+  @Test
+  public void testRandomPort() throws Exception {
+    DesiredCapabilities c = new DesiredCapabilities();
+    c.setCapability(OperaDriver.PORT, 0);
+
+    OperaDriver a = new OperaDriver(c);
+    Assert.assertNotSame("7001", a.getPref("Developer Tools", "Proxy Port"));
+    a.quit();
+  }
+
+  @Test
+  public void testSetPort() throws Exception {
+    DesiredCapabilities c = new DesiredCapabilities();
+    c.setCapability(OperaDriver.PORT, 9876);
+
+    OperaDriver a = new OperaDriver(c);
+    Assert.assertEquals("9876", a.getPref("Developer Tools", "Proxy Port"));
+    a.quit();
+  }
+
+  @Test
+  public void testDefaultProfile() throws Exception {
+    DesiredCapabilities c = new DesiredCapabilities();
+    c.setCapability(OperaDriver.PROFILE, "");
+
+    OperaDriver a = new OperaDriver(c);
+    String profile = a.getPref("User Prefs", "Opera Directory");
+    String defaultProfile = a.getDefaultPref("User Prefs", "Opera Directory");
+    Assert.assertTrue("'"+profile+"' contains '"+defaultProfile+"'" ,
+        profile.contains(defaultProfile)
+    );
+    a.quit();
+  }
+
+  @Test
+  public void testSetProfile() throws Exception {
+    if (Platform.getCurrent() != Platform.LINUX) return;
+
+    DesiredCapabilities c = new DesiredCapabilities();
+    c.setCapability(OperaDriver.PROFILE, "/tmp/opera-test-profile/");
+
+    OperaDriver a = new OperaDriver(c);
+    String profile = a.getPref("User Prefs", "Opera Directory");
+    Assert.assertEquals("/tmp/opera-test-profile/", profile);
+    a.quit();
+  }
+
+  @Test
+  public void testRandomProfile() throws Exception {
+    DesiredCapabilities c = new DesiredCapabilities();
+    c.setCapability(OperaDriver.PROFILE, (String) null);
+
+    OperaDriver a = new OperaDriver(c);
+    String profile = a.getPref("User Prefs", "Opera Directory");
+    Assert.assertTrue("'"+profile+"' contains 'tmp' or 'temp'" ,
+        profile.contains("tmp") || profile.contains("temp")
+    );
+    a.quit();
+  }
+
+  @Test
+  public void testProfileDeleted() throws Exception {
+    DesiredCapabilities c = new DesiredCapabilities();
+    c.setCapability(OperaDriver.PROFILE, (String) null);
+
+    OperaDriver a = new OperaDriver(c);
+    String profile = a.getPref("User Prefs", "Opera Directory");
+    Assert.assertTrue("Temporary directory exists", (new File(profile)).exists());
+    a.quit();
+    Assert.assertFalse("Temporary directory does not exist after quit",
+        (new File(profile)).exists()
+    );
+    a.quit();
+  }
+
+  @Test
+  public void testMultipleOperas() throws Exception {
+    OperaDriver a = new OperaDriver();
+    OperaDriver b = new OperaDriver();
+    OperaDriver c = new OperaDriver();
+
+    a.get(fixture("test.html"));
+    b.get(fixture("javascript.html"));
+    c.get(fixture("keys.html"));
+
+    Assert.assertEquals(fixture("test.html"), a.getCurrentUrl());
+    Assert.assertEquals(fixture("javascript.html"), b.getCurrentUrl());
+    Assert.assertEquals(fixture("keys.html"), c.getCurrentUrl());
+
+    a.quit();
+    b.quit();
+    c.quit();
+  }
 }

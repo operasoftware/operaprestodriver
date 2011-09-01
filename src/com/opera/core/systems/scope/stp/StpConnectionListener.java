@@ -42,14 +42,16 @@ public class StpConnectionListener implements SocketListener {
   private AbstractEventHandler eventHandler;
   private boolean manualConnect = false;
   private final Logger logger = Logger.getLogger(this.getClass().getName());
+  private SocketMonitor monitor;
 
   public StpConnectionListener(int port, IConnectionHandler handler,
-      AbstractEventHandler eventHandler, boolean manualConnect)
+      AbstractEventHandler eventHandler, boolean manualConnect, SocketMonitor monitor)
       throws IOException {
     this.port = port;
     this.handler = handler;
     this.eventHandler = eventHandler;
     this.manualConnect = manualConnect;
+    this.monitor = monitor;
     start();
   }
 
@@ -63,7 +65,7 @@ public class StpConnectionListener implements SocketListener {
     if (server == null) return;
 
     logger.fine("Shutting down STP connection listener...");
-    SocketMonitor.instance().remove(server);
+    monitor.remove(server);
     try {
       server.close();
     } catch (Exception ignored) { // IOException or NullPointerException
@@ -79,7 +81,7 @@ public class StpConnectionListener implements SocketListener {
     server.socket().setReuseAddress(true);
     server.socket().bind(new InetSocketAddress(port));
 
-    SocketMonitor.instance().add(server, this, SelectionKey.OP_ACCEPT);
+    monitor.add(server, this, SelectionKey.OP_ACCEPT);
 
     // logger.info("webdriver-opera " + "{VERSION}" +
     // " is ready to accept connections on port " + port);
@@ -101,7 +103,7 @@ public class StpConnectionListener implements SocketListener {
       logger.fine("Accepted STP connection from "
           + socket.socket().getLocalAddress());
       socket.socket().setTcpNoDelay(true);
-      new StpConnection(socket, handler, eventHandler);
+      new StpConnection(socket, handler, eventHandler, monitor);
     }
     return true;
   }

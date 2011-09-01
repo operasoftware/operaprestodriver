@@ -26,6 +26,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.openqa.selenium.WebDriverException;
+import org.openqa.selenium.io.TemporaryFilesystem;
+import org.openqa.selenium.net.PortProber;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import com.google.protobuf.GeneratedMessage;
@@ -74,12 +76,13 @@ public class OperaLauncherRunner implements OperaRunner {
     }
 
     logger.fine("Running launcher from OperaDriver");
+    Integer launcherPort = PortProber.findFreePort();
 
     List<String> stringArray = new ArrayList<String>();
     stringArray.add("-host");
     stringArray.add("127.0.0.1");
     stringArray.add("-port");
-    stringArray.add("9999");  // TODO: Get a random port
+    stringArray.add(launcherPort.toString());
     if (this.capabilities.getCapability(OperaDriver.DISPLAY) != null) {
       stringArray.add("-display");
       stringArray.add(":" + Integer.toString((Integer) this.capabilities.getCapability(OperaDriver.DISPLAY)));
@@ -106,19 +109,18 @@ public class OperaLauncherRunner implements OperaRunner {
     stringArray.add((String) this.capabilities.getCapability(OperaDriver.BINARY));
 
     /*
-    * We read in environmental variable OPERA_ARGS in addition to existing
-    * arguments passed down from OperaDriverSettings. These are combined
-    * and sent to the browser.
-    *
-    * Note that this is a deviation from the principle of arguments normally
-    * overwriting environmental variables.
-    */
+     * We read in environmental variable OPERA_ARGS in addition to existing
+     * arguments passed down from OperaDriverSettings. These are combined
+     * and sent to the browser.
+     *
+     * Note that this is a deviation from the principle of arguments normally
+     * overwriting environmental variables.
+     */
     String binaryArguments = (String) this.capabilities.getCapability(OperaDriver.ARGUMENTS);
     if (binaryArguments == null) {
       binaryArguments = "";
     }
     String environmentArguments = System.getenv("OPERA_ARGS");
-
     if (environmentArguments != null && environmentArguments.length() > 0) {
       binaryArguments = environmentArguments + " " + binaryArguments;
     }
@@ -129,18 +131,46 @@ public class OperaLauncherRunner implements OperaRunner {
       stringArray.add(tokenizer.nextToken());
     }
 
-    logger.fine("Launcher arguments: " + stringArray);
-
     // Enable auto test mode, always starts Opera on opera:debug and prevents
     // interrupting dialogues appearing
-    if (!stringArray.contains("-autotestmode")) stringArray.add("-autotestmode");
+    if (!stringArray.contains("-autotestmode")) {
+      stringArray.add("-autotestmode");
+    }
 
+    // This can't be last, otherwise it might get interpreted as the page to
+    // open, and the file listing page doesn't have a JS context to inject
+    // into.
+    {
+      String profile = (String) this.capabilities.getCapability(OperaDriver.PROFILE);
+      // If null, generate a temp directory, if not empty use the given directory.
+      if (profile == null) {
+        profile = TemporaryFilesystem.getDefaultTmpFS().createTempDir("opera-profile", "").getAbsolutePath();
+        capabilities.setCapability(OperaDriver.PROFILE, profile);
+
+        stringArray.add("-pd");
+        stringArray.add(profile);
+      } else if (!profile.isEmpty()) {
+        stringArray.add("-pd");
+        stringArray.add(profile);
+      }
+    }
+
+    {
+      int port = (Integer) this.capabilities.getCapability(OperaDriver.PORT);
+      if (port != -1) {
+        // Provide defaults if one hasn't been set
+        String host = (String) this.capabilities.getCapability(OperaDriver.HOST);
+        stringArray.add("-debugproxy");
+        stringArray.add(host+":"+port);
+      }
+    }
+
+    logger.fine("Launcher arguments: "+stringArray.toString());
     launcherRunner = new OperaLauncherBinary(
       (String) this.capabilities.getCapability(OperaDriver.LAUNCHER),
       stringArray.toArray(new String[stringArray.size()])
     );
 
-    int launcherPort = 9999;  // TODO: Store port from previously
     logger.fine("Waiting for Opera Launcher connection on port " + launcherPort);
 
     try {
@@ -193,7 +223,7 @@ public class OperaLauncherRunner implements OperaRunner {
       res = launcherProtocol.sendRequest(MessageType.MSG_STATUS, request);
 
       if (handleStatusMessage(res.getResponse()) != StatusType.RUNNING) {
-        throw new OperaRunnerException("Opera exited immediately; possibly incorrect arguments?");
+        throw new OperaRunnerException("Opera exited immediately; possibly incorrect arguments? Command:\n" + launcherRunner.getCommand());
       }
 
     } catch (IOException e) {

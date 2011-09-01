@@ -29,7 +29,7 @@ import com.opera.core.systems.scope.services.ums.SystemInputManager;
 public class QuickMenuItem extends OperaUIElement {
 		private final QuickMenuItemInfo info;
 		private final String menu;
-		
+
 		/**
 		 * Constructor.
 		 *
@@ -42,14 +42,14 @@ public class QuickMenuItem extends OperaUIElement {
 	    }
 
 		/**
-		 * Get name of the menu. 
+		 * Get name of the menu.
 		 * This is a constructed name, it is either
 		 *   - for items with an action, its action
 		 *   - for items with an action that has a parameter (such as Open link, 'bookmarkurl')
 		 *                           "action, parameter"
 		 *   - for items that opens a submenu, its submenuname
-		 *   - for separators, 'Separator'                       
-		 * 
+		 *   - for separators, 'Separator'
+		 *
 		 * @return name of menuItem
 		 */
 		public String getName() {
@@ -67,39 +67,39 @@ public class QuickMenuItem extends OperaUIElement {
 
 		/**
 		 * Get Action name for action associated with menu item, if any.
-		 * 
+		 *
 		 * @return action name of action associated with the item,
 		 *         returns empty string for an item with no associated action
 		 */
 		public String getActionName() {
 			return info.getAction();
 		}
-		
+
 		/**
-		 * 
+		 *
 		 * @return true if item opens a submenu
 		 */
 		public boolean hasSubMenu() {
 			return info.getSubmenu() != null && info.getSubmenu().length() > 0;
 		}
-		
+
 		/**
-		 * 
+		 *
 		 * @return String action parameter to the action of the menuitem, if any
 		 */
 		public String getActionParameter() {
 			return info.getActionParam();
 		}
-		
+
 		/**
-		 * 
-		 * @return name of submenu, if any 
+		 *
+		 * @return name of submenu, if any
 		 */
 		public String getSubMenu() {
 			return info.getSubmenu();
 		}
-		
-		
+
+
 		/**
 	     *
 	     * @return text of menuitem
@@ -107,7 +107,7 @@ public class QuickMenuItem extends OperaUIElement {
 		public String getText() {
 			return getDesktopUtils().removeCR(info.getText().replaceAll("&", ""));
 		}
-		
+
 
 		/**
 		 * Checks if menuitem is enabled.
@@ -125,7 +125,7 @@ public class QuickMenuItem extends OperaUIElement {
 		public boolean isChecked() {
 			return info.getChecked();
 		}
-		
+
 		/**
 		 *
 		 * @return true if item is a separator item, else false
@@ -134,15 +134,15 @@ public class QuickMenuItem extends OperaUIElement {
 			return info.getSeparator();
 		}
 
-		
+
 		/**
-		 * 
+		 *
 		 * @return true if the item text is bold, else false
 		 */
 		public boolean isBold() {
 			return info.getBold();
 		}
-		
+
 		/**
 		 * Gets the row of the widget within its parent,
 		 *
@@ -151,24 +151,24 @@ public class QuickMenuItem extends OperaUIElement {
 		public int getRow() {
 			return info.getRow();
 		}
-		
+
 		/**
-		 * 
+		 *
 		 * @return ShortcutLetter, or null if none
 		 */
 		public String getShortcutLetter() {
 			return info.getShortcutLetter();
 		}
-		
+
 		/**
-		 * 
+		 *
 		 * @return shortcut of item
 		 */
 		public String getShortcut() {
 			return info.getShortcut();
 		}
-		
-		
+
+
 		/**
 		 * @return DesktopWindowRect of the menuitem
 		 */
@@ -178,13 +178,12 @@ public class QuickMenuItem extends OperaUIElement {
 
 		@Override
 		public String toString() {
-			System.out.println("getSubMenu() = " + getSubMenu());
 			//TODO: FIXME: What field to use if no action?
-			String str = isSeparator()? "Separator" : 
+			String str = isSeparator()? "Separator" :
 				((getActionName() != null && getActionName().length() > 0) ? getActionName() : getSubMenu());
 			return "QuickMenuItem " + str;//getActionName();
 		}
-		
+
 		public String toFullString() {
 			return "QuickMenuItem\n" +
 			  "       Item name: " + getName() + "\n"
@@ -198,15 +197,12 @@ public class QuickMenuItem extends OperaUIElement {
 
 		/**
 		 * Get name of containing menu
-		 * 
+		 *
 		 * @return name of the menu the menuItem is in
 		 */
 		public String getMenu() {
 			return menu;
 		}
 
-		
+
 }
-
-
-
