@@ -94,22 +94,30 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
   public static final String LOGGING_FILE = "opera.logging.file";
 
   /**
-   * (String) Path to the Opera binary to use.
+   * (String) Path to the Opera binary to use.  If not specified, OperaDriver will guess the path to
+   * your Opera installation (typically <code>/usr/bin/opera</code> or <code>C:\Program
+   * Files\Opera\opera.exe</code>).
    */
   public static final String BINARY = "opera.binary";
 
   /**
-   * (String) Path to the launcher binary to use.
+   * (String) Path to the launcher binary to use.  The launcher is a gateway between OperaDriver and
+   * the Opera browser, and is being used for controlling the binary and taking external
+   * screenshots.  If left blank, OperaDriver will use the launcher supplied with the package.
    */
   public static final String LAUNCHER = "opera.launcher";
 
   /**
-   * (String) Arguments to pass to Opera, separated by spaces.
+   * (String) Arguments to pass to Opera, separated by spaces.  See <code>opera -help</code> for
+   * available command-line switches.
    */
   public static final String ARGUMENTS = "opera.arguments";
 
   /**
-   * (Boolean) Whether to use Opera idle.
+   * (Boolean) Whether to use Opera's alternative implicit wait implementation.  It will use an
+   * in-browser heuristic to guess when a page has finished loading, allowing us with great accuracy
+   * tell whether there are any planned events in the document.  This functionality is useful for
+   * very simple test cases, but not designed for real-world testing.  It is disabled by default.
    */
   public static final String OPERAIDLE = "opera.idle";
 
@@ -119,7 +127,9 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
   public static final String DISPLAY = "opera.display";
 
   /**
-   * (Boolean) Whether to auto-start Opera.
+   * (Boolean) Whether to auto-start the Opera binary.  If false, OperaDriver will wait for a
+   * connection from the browser.  Go to "opera:debug", enter the correct port number, and hit
+   * "Connect" to connect manually.
    */
   public static final String AUTOSTART = "opera.autostart";
 
@@ -129,7 +139,8 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
   public static final String NO_RESTART = "opera.no_restart";
 
   /**
-   * (Boolean) Whether to quit Opera when OperaDriver is shut down.
+   * (Boolean) Whether to quit Opera when OperaDriver is shut down.  If enabled, it will keep the
+   * browser running after the driver is shut down.
    */
   public static final String NO_QUIT = "opera.no_quit";
 
