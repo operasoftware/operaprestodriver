@@ -182,11 +182,11 @@ public class OperaDriverSettings {
   }
 
   public void setUseOperaIdle(boolean useOperaIdle) {
-    capabilities.setCapability(OperaDriver.USE_OPERAIDLE, useOperaIdle);
+    capabilities.setCapability("opera.idle", useOperaIdle);
   }
 
   public boolean getUseOperaIdle() {
-    return (Boolean) capabilities.getCapability(OperaDriver.USE_OPERAIDLE);
+    return (Boolean) capabilities.getCapability("opera.idle");
   }
 
   /**

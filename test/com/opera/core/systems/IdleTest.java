@@ -32,7 +32,7 @@ public class IdleTest extends TestBase {
   @BeforeClass
   public static void setUpBeforeClass() throws Exception {
     DesiredCapabilities caps = new DesiredCapabilities();
-    caps.setCapability(OperaDriver.USE_OPERAIDLE, true);
+    caps.setCapability("opera.idle", true);
 
     driver = new TestOperaDriver(caps);
     initFixtures();
@@ -237,7 +237,7 @@ public class IdleTest extends TestBase {
   public void testIdleOff() throws Exception {
     driver.quit();
     DesiredCapabilities caps = new DesiredCapabilities();
-    caps.setCapability(OperaDriver.USE_OPERAIDLE, false);
+    caps.setCapability("opera.idle", false);
     driver = new TestOperaDriver(caps);
 
     getFixture("timer.html");

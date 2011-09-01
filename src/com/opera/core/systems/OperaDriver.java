@@ -111,7 +111,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
   /**
    * (Boolean) Whether to use Opera idle.
    */
-  public static final String USE_OPERAIDLE = "opera.use_operaidle";
+  public static final String OPERAIDLE = "opera.idle";
 
   /**
    * (Integer) The X display to use.  (Only works on *nix OSes.)
@@ -271,7 +271,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     capabilities.setCapability(NO_QUIT, false);
     capabilities.setCapability(GUESS_BINARY_PATH, true);
 
-    capabilities.setCapability(USE_OPERAIDLE, false);
+    capabilities.setCapability(OPERAIDLE, false);
 
     return capabilities;
   }
@@ -1153,11 +1153,11 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
   }
 
   private boolean useOperaIdle() {
-    return (((Boolean) capabilities.getCapability(USE_OPERAIDLE)) && isOperaIdleAvailable());
+    return (((Boolean) capabilities.getCapability(OPERAIDLE)) && isOperaIdleAvailable());
   }
 
   public void setUseOperaIdle(boolean useIdle) {
-    capabilities.setCapability(USE_OPERAIDLE, true);
+    capabilities.setCapability(OPERAIDLE, true);
   }
 
   public Object executeScript(String script, Object... args) {
@@ -1420,4 +1420,5 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
   public OperaRunner getOperaRunner() {
     return operaRunner;
   }
+
 }
