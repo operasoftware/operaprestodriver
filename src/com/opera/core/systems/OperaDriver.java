@@ -104,19 +104,21 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
   public static final String BINARY = "opera.binary";
 
   /**
-   * (String) The host Opera should connect to. Unless you're starting Opera manually you won't need
-   * this.
+   * (String) The host Opera should connect to.  Unless you're starting Opera manually you won't
+   * need this.
    */
   public static final String HOST = "opera.host";
 
   /**
-   * (Integer) The port to Opera should connect to. 0 = Random, -1 = Opera default (for use with
-   * Opera < 12)
+   * (Integer) The port to Opera should connect to.  0 = Random, -1 = Opera default (for use with
+   * Opera < 12).
    */
   public static final String PORT = "opera.port";
 
   /**
-   * (String) Path to the launcher binary to use.
+   * (String) Path to the launcher binary to use.  The launcher is a gateway between OperaDriver and
+   * the Opera browser, and is being used for controlling the binary and taking external
+   * screenshots.  If left blank, OperaDriver will use the launcher supplied with the package.
    */
   public static final String LAUNCHER = "opera.launcher";
 
@@ -133,7 +135,10 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
   public static final String PROFILE = "opera.profile";
 
   /**
-   * (Boolean) Whether to use Opera idle.
+   * (Boolean) Whether to use Opera's alternative implicit wait implementation.  It will use an
+   * in-browser heuristic to guess when a page has finished loading, allowing us with great accuracy
+   * tell whether there are any planned events in the document.  This functionality is useful for
+   * very simple test cases, but not designed for real-world testing.  It is disabled by default.
    */
   public static final String OPERAIDLE = "opera.idle";
 
