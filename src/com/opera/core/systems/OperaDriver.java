@@ -349,7 +349,11 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     // This will only delete the profile directory if we created it.
     TemporaryFilesystem.getDefaultTmpFS().deleteTempDir(
         new File((String) capabilities.getCapability(PROFILE)));
-    services.quit();
+
+    // This method can be called from start(), before services are created
+    if (services != null) {
+      services.quit();
+    }
     if (operaRunner != null) {
       operaRunner.shutdown();
     }
