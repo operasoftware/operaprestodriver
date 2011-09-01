@@ -104,14 +104,14 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
   public static final String BINARY = "opera.binary";
 
   /**
-   * (String) The host Opera should connect to. Unless you're starting Opera
-   * manually you won't need this.
+   * (String) The host Opera should connect to. Unless you're starting Opera manually you won't need
+   * this.
    */
   public static final String HOST = "opera.host";
 
   /**
-   * (Integer) The port to Opera should connect to. 0 = Random,
-   * -1 = Opera default (for use with Opera < 12)
+   * (Integer) The port to Opera should connect to. 0 = Random, -1 = Opera default (for use with
+   * Opera < 12)
    */
   public static final String PORT = "opera.port";
 
@@ -127,9 +127,8 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
   public static final String ARGUMENTS = "opera.arguments";
 
   /**
-   * (String) Directory to use for the Opera profile. If null a random
-   * temporary directory is used. If "", an empty string, then the default
-   * autotest profile directory is used.
+   * (String) Directory to use for the Opera profile. If null a random temporary directory is used.
+   * If "", an empty string, then the default autotest profile directory is used.
    */
   public static final String PROFILE = "opera.profile";
 
@@ -343,7 +342,8 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
   public void quit() {
     logger.fine("Opera Driver shutting down");
     // This will only delete the profile directory if we created it.
-    TemporaryFilesystem.getDefaultTmpFS().deleteTempDir(new File((String) capabilities.getCapability(PROFILE)));
+    TemporaryFilesystem.getDefaultTmpFS().deleteTempDir(
+        new File((String) capabilities.getCapability(PROFILE)));
     services.quit();
     if (operaRunner != null) {
       operaRunner.shutdown();
@@ -399,7 +399,9 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
       }
 
       int port = (Integer) capabilities.getCapability(PORT);
-      if (port == -1) port = 7001;
+      if (port == -1) {
+        port = 7001;
+      }
       services = new ScopeServices(versions, port, manualStart);
       // for profile-specific workarounds inside ScopeServives, WaitState ...
       services.setProfile((String) capabilities.getCapability(BINARY_PROFILE));
