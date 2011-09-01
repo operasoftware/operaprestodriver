@@ -124,7 +124,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
   public static final String AUTOSTART = "opera.autostart";
 
   /**
-   * (Boolean) Whether to restart.
+   * (Boolean) Whether to restart.        St
    */
   public static final String NO_RESTART = "opera.no_restart";
 
