@@ -223,7 +223,7 @@ public class OperaLauncherRunner implements OperaRunner {
       res = launcherProtocol.sendRequest(MessageType.MSG_STATUS, request);
 
       if (handleStatusMessage(res.getResponse()) != StatusType.RUNNING) {
-        throw new OperaRunnerException("Opera exited immediately; possibly incorrect arguments?");
+        throw new OperaRunnerException("Opera exited immediately; possibly incorrect arguments? Command:\n" + launcherRunner.getCommand());
       }
 
     } catch (IOException e) {
