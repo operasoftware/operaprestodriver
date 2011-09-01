@@ -18,11 +18,14 @@ package com.opera.core.systems;
 
 import java.io.File;
 
+import org.apache.commons.io.FileUtils;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.openqa.selenium.Platform;
+import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import com.opera.core.systems.settings.OperaDriverSettings;
@@ -153,7 +156,17 @@ public class OperaDriverTest extends TestBase {
     DesiredCapabilities c = new DesiredCapabilities();
     c.setCapability(OperaDriver.PORT, 0);
 
-    OperaDriver a = new OperaDriver(c);
+    OperaDriver a;
+    try {
+      a = new OperaDriver(c);
+    } catch (Exception e) {
+      // If immediately exited, then it doesn't support the flags
+      if (e.getMessage().contains("Opera exited immediately")) {
+        return;
+      } else {
+        throw e;
+      }
+    }
     Assert.assertNotSame("7001", a.getPref("Developer Tools", "Proxy Port"));
     a.quit();
   }
@@ -163,7 +176,17 @@ public class OperaDriverTest extends TestBase {
     DesiredCapabilities c = new DesiredCapabilities();
     c.setCapability(OperaDriver.PORT, 9876);
 
-    OperaDriver a = new OperaDriver(c);
+    OperaDriver a;
+    try {
+      a = new OperaDriver(c);
+    } catch (Exception e) {
+      // If immediately exited, then it doesn't support the flags
+      if (e.getMessage().contains("Opera exited immediately")) {
+        return;
+      } else {
+        throw e;
+      }
+    }
     Assert.assertEquals("9876", a.getPref("Developer Tools", "Proxy Port"));
     a.quit();
   }
@@ -186,10 +209,22 @@ public class OperaDriverTest extends TestBase {
   public void testSetProfile() throws Exception {
     if (Platform.getCurrent() != Platform.LINUX) return;
 
+    FileUtils.deleteDirectory(new File("/tmp/opera-test-profile/"));
+
     DesiredCapabilities c = new DesiredCapabilities();
     c.setCapability(OperaDriver.PROFILE, "/tmp/opera-test-profile/");
 
-    OperaDriver a = new OperaDriver(c);
+    OperaDriver a;
+    try {
+      a = new OperaDriver(c);
+    } catch (Exception e) {
+      // If immediately exited, then it doesn't support the flags
+      if (e.getMessage().contains("Opera exited immediately")) {
+        return;
+      } else {
+        throw e;
+      }
+    }
     String profile = a.getPref("User Prefs", "Opera Directory");
     Assert.assertEquals("/tmp/opera-test-profile/", profile);
     a.quit();
@@ -200,7 +235,17 @@ public class OperaDriverTest extends TestBase {
     DesiredCapabilities c = new DesiredCapabilities();
     c.setCapability(OperaDriver.PROFILE, (String) null);
 
-    OperaDriver a = new OperaDriver(c);
+    OperaDriver a;
+    try {
+      a = new OperaDriver(c);
+    } catch (Exception e) {
+      // If immediately exited, then it doesn't support the flags
+      if (e.getMessage().contains("Opera exited immediately")) {
+        return;
+      } else {
+        throw e;
+      }
+    }
     String profile = a.getPref("User Prefs", "Opera Directory");
     Assert.assertTrue("'"+profile+"' contains 'tmp' or 'temp'" ,
         profile.contains("tmp") || profile.contains("temp")
@@ -208,12 +253,23 @@ public class OperaDriverTest extends TestBase {
     a.quit();
   }
 
+  @Ignore
   @Test
   public void testProfileDeleted() throws Exception {
     DesiredCapabilities c = new DesiredCapabilities();
     c.setCapability(OperaDriver.PROFILE, (String) null);
 
-    OperaDriver a = new OperaDriver(c);
+    OperaDriver a;
+    try {
+      a = new OperaDriver(c);
+    } catch (Exception e) {
+      // If immediately exited, then it doesn't support the flags
+      if (e.getMessage().contains("Opera exited immediately")) {
+        return;
+      } else {
+        throw e;
+      }
+    }
     String profile = a.getPref("User Prefs", "Opera Directory");
     Assert.assertTrue("Temporary directory exists", (new File(profile)).exists());
     a.quit();
@@ -225,9 +281,25 @@ public class OperaDriverTest extends TestBase {
 
   @Test
   public void testMultipleOperas() throws Exception {
-    OperaDriver a = new OperaDriver();
-    OperaDriver b = new OperaDriver();
-    OperaDriver c = new OperaDriver();
+    DesiredCapabilities cap = new DesiredCapabilities();
+    cap.setCapability(OperaDriver.PROFILE, (String) null);
+    cap.setCapability(OperaDriver.PORT, 0);
+
+    OperaDriver a;
+    OperaDriver b;
+    OperaDriver c;
+    try {
+      a = new OperaDriver(cap);
+      b = new OperaDriver(cap);
+      c = new OperaDriver(cap);
+    } catch (WebDriverException e) {
+      // If immediately exited, then it doesn't support the flags
+      if (e.getMessage().contains("Opera exited immediately")) {
+        return;
+      } else {
+        throw e;
+      }
+    }
 
     a.get(fixture("test.html"));
     b.get(fixture("javascript.html"));
