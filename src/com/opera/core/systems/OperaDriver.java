@@ -81,6 +81,12 @@ import java.util.logging.SimpleFormatter;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * OperaDriver is an implementation of the WebDriver interface that allows you to drive the Opera
+ * web browser.  The driver uses the Scope protocol to communicate with Opera directly from Java.
+ *
+ * The implementation is vendor-supported and developed by Opera Software and volunteers.
+ */
 public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
   // Want to thin some of these out, but will need some re-thinking.
