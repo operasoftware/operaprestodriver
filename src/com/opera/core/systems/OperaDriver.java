@@ -345,11 +345,6 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     logger.fine("init() done");
   }
 
-  @Deprecated
-  public void shutdown() {
-    quit();
-  }
-
   public void quit() {
     logger.fine("Opera Driver shutting down");
     // This will only delete the profile directory if we created it.
