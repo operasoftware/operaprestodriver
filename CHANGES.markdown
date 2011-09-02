@@ -1,3 +1,78 @@
+2011/09/02 OperaDriver 0.7
+==========================
+
+API changes
+-----------
+
+ * Support the use of DesiredCapabilities, instead of OperaDriverSettings.
+   OperaDriverSettings is still supported for backward compatibility, but
+   will be removed in the next point version (0.8). (stuartk)
+ * Update Selenium jar to 2.5.0.
+ * Remove OperaDriver.mouseEvent() method. Use the advanced interaction API
+   instead. Update OperaExec to allow several mouse keys to be pressed at once.
+   (andreastt)
+ * Updated SocketMonitor to not be a singleton, so that connections to
+   multiple instances of Opera can be maintained. (stuartk)
+ * Renamed OperaPaths.getOperaLauncherPath() to extractLauncher(path) to better match
+   what the method is actually doing. (andreastt)
+
+New features
+------------
+
+ * Support DesiredCapabilities. Capabilities include "opera.binary" and
+   "opera.arguments" amongst others. See the top of the OperaDriver class
+   for all of them. (stuartk)
+ * Support the "personal directory", `-pd`, flag with the "opera.profile"
+   capability. Currently only available on Linux Opera builds.
+ * Add "opera.port" capability to set the port that Opera communicates with
+   driver on. Allows multiple instances of Opera to be run at once. Requires
+   the `-debugproxy` flag, which is not yet available in current versions
+   of Opera. (stuartk)
+ * Add capability to set the logging level and file with "opera.logging.level"
+   and "opera.logging.file". (andreastt)
+ * Updated Linux launcher to support the `-profile` argument, to specify
+   which build profile we are using (Note: this ISN'T the Opera user profile).
+   (Iaroslav Tymchenko)
+ * Display the command used to start Opera when it exits immediately (usually
+   due to bad command line arguments). (stuartk)
+
+Bug fixes
+---------
+
+ * Correct LEFT_CONTROL enum in OperaKeys to make code such as
+   `action.sendKeys(Keys.CONTROL + "c")` work. (stuartk)
+ * Escape double quotes instead of single quotes in findElementsBy* methods.
+   Fixes the problems with pre-escaped strings sent from selenium-webdriver.
+   (andreastt)
+ * Fix for bug DSK-344905; Opera should not quit after testrun with noquit
+   option (Karianne Ekern)
+ * Wait between two double clicks so that Opera doesn't interpret it as as a
+   quadruple-click. (andreastt)
+ * Throw InvalidSelectorException when selectors are invalid. (stuartk)
+ * Use OpenURL command in new Window Manager service. Fixes case where loading
+   a page in a new window would cause a ResponseNotReceivedException. (stuartk)
+ * Don't timeout when a window is closed by Javascript. (stuartk)
+ * Check services isn't null before shutting it down. (stuartk)
+
+Tests
+-----
+
+ * Add tests for modifier keys. (stuartk)
+ * Ignore some launcher tests on Windows. (stuartk)
+ * Skip selftest tests when service isn't supported. (stuartk)
+ * Add tests for Profile and Port capabilities. (stuartk)
+
+Other
+-----
+
+ * Update build.xml to target Java 5/1.5. (stuartk)
+ * Compile tests to the bin/ directory, rather than the tests/ directory.
+   (andreastt)
+ * Reduce the logging level from FINE to FINER or FINEST for noisy log
+   messages. (stuartk)
+ * Update Window Manager service from 2.0 to 2.1. (stuartk)
+
+
 2011/08/29 OperaDriver 0.6.1
 ============================
 
@@ -19,6 +94,7 @@ Tests
 -----
 
  * Fix tests to not use OperaDriver.mouseEvent(). (andreastt)
+
 
 2011/08/03 OperaDriver 0.6
 ==========================
