@@ -15,6 +15,7 @@ API changes
    multiple instances of Opera can be maintained. (stuartk)
  * Renamed OperaPaths.getOperaLauncherPath() to extractLauncher(path) to better match
    what the method is actually doing. (andreastt)
+ * Remove OperaDriver.shutdown(). (stuartk)
 
 New features
 ------------
