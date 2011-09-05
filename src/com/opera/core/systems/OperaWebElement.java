@@ -355,21 +355,14 @@ public class OperaWebElement extends RemoteWebElement {
         execService.key("enter");
       } else {
         // We need to check each character to see if it is a "special" key
-        StringBuffer buffer = new StringBuffer();
         for (int i = 0; i < seq.length(); i++) {
           Character c = seq.charAt(i);
           String keyName = charToKeyName(c);
 
           // Buffer normal keys for a single type() call
           if (keyName == null) {
-            buffer.append(c.toString());
+            execService.type(c.toString());
           } else {
-            // This is a special key, so send all buffered normal keys
-            if (buffer.length() > 0) {
-              execService.type(buffer.toString());
-              buffer.delete(0, buffer.length());
-            }
-
             String key = OperaKeys.get(keyName);
             // FIXME: Code repeated from above.
             if (holdKeys.contains(key) && !heldKeys.contains(key) && !execService
@@ -384,11 +377,6 @@ public class OperaWebElement extends RemoteWebElement {
               execService.key(key);
             }
           }
-        }
-
-        // send any remaining buffered keys
-        if (buffer.length() > 0) {
-          execService.type(buffer.toString());
         }
       }
     }
