@@ -18,6 +18,7 @@ package com.opera.core.systems;
 
 import java.io.FileOutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -319,6 +320,13 @@ public class OperaWebElement extends RemoteWebElement {
       click();
     } else {
       executeMethod("locator.focus()");
+      // When focused textareas return the cursor to the last position it
+      // was at. Inputs place the cursor at the beginning, and so we need
+      // to move it to the end. We do this by pre-pending an "End" key to
+      // the keys to send (in a round-about way)
+      if (getTagName().equalsIgnoreCase("input")) {
+        executeMethod("locator.setSelectionRange(locator.value.length, locator.value.length);");
+      }
     }
 
     // This code is a bit ugly. Because "special" keys can be sent either as
