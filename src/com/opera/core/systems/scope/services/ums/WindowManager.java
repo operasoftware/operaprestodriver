@@ -38,6 +38,7 @@ import com.opera.core.systems.scope.protos.WmProtos.WindowInfo;
 import com.opera.core.systems.scope.protos.WmProtos.WindowList;
 import com.opera.core.systems.scope.services.IWindowManager;
 import com.opera.core.systems.util.StackHashMap;
+import com.opera.core.systems.util.VersionUtil;
 
 /**
  * window-manager service implementation, handles events such as window-closed
@@ -249,6 +250,14 @@ public class WindowManager extends AbstractService implements IWindowManager {
   }
 
   public void openUrl(int windowId, String url) {
+    // Opera Mobile still uses WM 2.0, and so this is a backward compatibility
+    // hack.
+    if (VersionUtil.compare(getVersion(), "2.1") < 0) {
+      services.getExec().action("Go", url);
+      return;
+    }
+
+
     OpenURLArg.Builder openUrlBuilder = OpenURLArg.newBuilder();
     openUrlBuilder.setWindowID(windowId);
     openUrlBuilder.setUrl(url);
@@ -261,6 +270,12 @@ public class WindowManager extends AbstractService implements IWindowManager {
   }
 
   public void closeWindow(int windowId) {
+    // Opera Mobile still uses WM 2.0.
+    if (VersionUtil.compare(getVersion(), "2.1") < 0) {
+      throw new UnsupportedOperationException(
+          "Window Manager version " + getVersion() + "does not support this method");
+    }
+
     CloseWindowArg.Builder closeWindowBuilder = CloseWindowArg.newBuilder();
     closeWindowBuilder.setWindowID(windowId);
 
