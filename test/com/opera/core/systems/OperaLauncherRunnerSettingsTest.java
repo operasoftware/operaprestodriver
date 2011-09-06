@@ -16,19 +16,19 @@ limitations under the License.
 
 package com.opera.core.systems;
 
-import com.opera.core.systems.runner.OperaRunnerException;
-import com.opera.core.systems.runner.launcher.OperaLauncherRunner;
-import com.opera.core.systems.settings.OperaDriverSettings;
+import static org.junit.Assert.fail;
+
+import java.io.File;
+
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.openqa.selenium.Platform;
 
-import java.io.File;
-
-import static org.junit.Assert.fail;
+import com.opera.core.systems.runner.OperaRunnerException;
+import com.opera.core.systems.runner.launcher.OperaLauncherRunner;
+import com.opera.core.systems.settings.OperaDriverSettings;
 
 public class OperaLauncherRunnerSettingsTest {
 

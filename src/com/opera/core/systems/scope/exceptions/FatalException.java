@@ -26,6 +26,8 @@ import org.openqa.selenium.WebDriverException;
  */
 public class FatalException extends WebDriverException {
 
+  private static final long serialVersionUID = 3834561306215527454L;
+
   /**
    * Creates a new instance of <code>FatalException</code> without detail message.
    */

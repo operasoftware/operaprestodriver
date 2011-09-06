@@ -18,7 +18,6 @@ package com.opera.core.systems;
 
 import java.io.FileOutputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
