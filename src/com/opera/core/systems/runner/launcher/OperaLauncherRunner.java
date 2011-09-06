@@ -64,7 +64,6 @@ public class OperaLauncherRunner implements OperaRunner {
   }
 
   public OperaLauncherRunner(DesiredCapabilities capabilities) {
-    logger.finer("Creating OperaLauncherRunner");
     this.capabilities = capabilities;
 
     if (this.capabilities.getCapability(OperaDriver.LAUNCHER) == null) {
@@ -75,7 +74,6 @@ public class OperaLauncherRunner implements OperaRunner {
       throw new WebDriverException("You need to set Opera's path to use opera-launcher");
     }
 
-    logger.fine("Running launcher from OperaDriver");
     Integer launcherPort = PortProber.findFreePort();
 
     List<String> stringArray = new ArrayList<String>();
