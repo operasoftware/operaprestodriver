@@ -512,16 +512,6 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
   }
 
   /**
-   * Stops the loading of the current page.
-   *
-   * @deprecated Use {@link #navigate()}.stop()
-   */
-  @Deprecated
-  public void stop() {
-    exec.action("Stop");
-  }
-
-  /**
    * The by string passed by remote web driver is different to the one used in the atoms. This
    * converts from the "nice" string to the atom string.
    *
