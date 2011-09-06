@@ -1,4 +1,5 @@
 Adam Minchinton <adamm@opera.com>
+Ajay Kemparaj <ajaykemparaj@gmail.com>
 Anders Oredsson <anderso@opera.com>
 Andreas Tolf Tolfsen <andreastt@opera.com>
 Arne Skjærholt <arnes@opera.com>
