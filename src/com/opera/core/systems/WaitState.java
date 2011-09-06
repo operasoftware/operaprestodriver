@@ -41,17 +41,21 @@ public class WaitState {
   private boolean connected;
   private boolean wait_events;
 
-  // Whether we should keep a note of any idle events received.
-  //
-  // This is used when we perform an action where we want to wait for an Idle
-  // event, such as clicking. First one has to wait for the "click" response,
-  // but in the mean time there may be an Idle event which would be missed.
-  // The number of missed Idle events is stored in capturedIdleEvents.
+  /**
+   * Whether we should keep a note of any idle events received.
+   *
+   * This is used when we perform an action where we want to wait for an idle event, such as
+   * clicking. First one has to wait for the "click" response, but in the mean time there may be an
+   * idle event which would be missed.  The number of missed idle events is stored in
+   * capturedIdleEvents.
+   */
   private boolean captureIdleEvents = false;
 
-  // Stores the number of Idle events seen while capture_idle_event is enabled
-  //
-  // See the explanation for capture_idle_event.
+  /**
+   * Stores the number of Idle events seen while captureIdleEvent is enabled.
+   *
+   * See the explanation for captureIdleEvent.
+   */
   private int capturedIdleEvents = 0;
 
   private Object lock = new Object();
