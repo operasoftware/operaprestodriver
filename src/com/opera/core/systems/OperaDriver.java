@@ -345,24 +345,6 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     logger.finer("Initialization done");
   }
 
-  public void quit() {
-    logger.fine("Opera Driver shutting down");
-    // This will only delete the profile directory if we created it
-    TemporaryFilesystem.getDefaultTmpFS().deleteTempDir(
-        new File((String) capabilities.getCapability(PROFILE)));
-
-    // This method can be called from start(), before services are created
-    if (services != null) {
-      services.quit();
-    }
-    if (operaRunner != null) {
-      operaRunner.shutdown();
-    }
-    if (logFile != null) {
-      logFile.close();
-    }
-  }
-
   /**
    * For testing override this method.
    */
@@ -423,6 +405,24 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
   public Capabilities getCapabilities() {
     return capabilities;
+  }
+
+  public void quit() {
+    logger.fine("Opera Driver shutting down");
+    // This will only delete the profile directory if we created it
+    TemporaryFilesystem.getDefaultTmpFS().deleteTempDir(
+        new File((String) capabilities.getCapability(PROFILE)));
+
+    // This method can be called from start(), before services are created
+    if (services != null) {
+      services.quit();
+    }
+    if (operaRunner != null) {
+      operaRunner.shutdown();
+    }
+    if (logFile != null) {
+      logFile.close();
+    }
   }
 
   public void get(String url) {
