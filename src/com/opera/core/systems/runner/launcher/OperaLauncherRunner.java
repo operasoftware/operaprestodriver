@@ -190,10 +190,10 @@ public class OperaLauncherRunner implements OperaRunner {
 
       // Are we happy?
       if (res.isSuccess()) {
-        logger.fine("Got Opera launcher handshake: " + res.getResponse().toString());
+        logger.fine("Got launcher handshake: " + res.getResponse().toString());
       } else {
         logger.fine("Did not get launcher handshake: " + res.getResponse().toString());
-        throw new OperaRunnerException("Did not get Opera launcher handshake");
+        throw new OperaRunnerException("Did not get launcher handshake");
       }
     } catch (SocketTimeoutException e) {
       throw new OperaRunnerException("Timeout waiting for launcher to connect on port " + launcherPort, e);
