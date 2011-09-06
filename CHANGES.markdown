@@ -1,3 +1,41 @@
+2011/09/06 OperaDriver 0.7.1
+============================
+
+API changes
+-----------
+
+ * Remove deprecated method OperaDriver.stop(). (andreastt)
+ * Remove deprecated method OperaDriver.closeAll(). (andreastt)
+ * Remove OperaDriver.convertByToAtom() as the WebDriver atoms now support
+   getting locators by nice wire strings. (andreastt)
+ * Remove OperaDriver.getProduct(), .getOS(), .getBinaryPath(),
+   .getCoreVersion(), .getUserAgent() and .getPID() and replace with
+   OperaDriver.utils().*  (andreastt)
+
+Bug fixes
+---------
+
+ * Make OperaWebElement.sendKeys enter text at the end when an input has
+   default text. (stuartk)
+ * Clear Should only clear editable and enabled elements. (ajayk)
+ * Call services.shutdown(), as .quit() will also shut down Opera even if
+   'opera.no_quit' is set to true. (andreastt)
+
+New features
+------------
+
+ * Add backwards-compat support for Window Manager 2.0 (for Opera Mobile).
+   (stuartk)
+
+Other
+-----
+
+ * Cleaning up logging in OperaLauncherRunner, OperaLauncherBinary,
+   OperaLauncherProtocol, StpConnection, ScopeServices (andreastt)
+ * Documenation and formatting fixes. (andreastt)
+ * Updated the atoms. (andreastt)
+
+
 2011/09/02 OperaDriver 0.7
 ==========================
 
