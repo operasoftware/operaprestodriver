@@ -18,7 +18,6 @@ package com.opera.core.systems;
 
 import java.io.FileOutputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -325,7 +324,22 @@ public class OperaWebElement extends RemoteWebElement {
       // to move it to the end. We do this by pre-pending an "End" key to
       // the keys to send (in a round-about way)
       if (getTagName().equalsIgnoreCase("input")) {
-        executeMethod("locator.setSelectionRange(locator.value.length, locator.value.length);");
+        // Javascript from webdriver_session.cc in ChromeDriver
+        executeMethod(
+            "function(elem) {"
+            + "  var doc = elem.ownerDocument || elem;"
+            + "  var prevActiveElem = doc.activeElement;"
+            + "  if (elem != prevActiveElem && prevActiveElem)"
+            + "    prevActiveElem.blur();"
+            + "  elem.focus();"
+            + "  if (elem != prevActiveElem && elem.value && elem.value.length &&"
+            + "      elem.setSelectionRange) {"
+            + "    elem.setSelectionRange(elem.value.length, elem.value.length);"
+            + "  }"
+            + "  if (elem != doc.activeElement)"
+            + "    throw new Error('Failed to send keys because cannot focus element');"
+            + "}(locator)"
+        );
       }
     }
 

@@ -191,7 +191,7 @@ public class OperaLauncherRunner implements OperaRunner {
         MessageType.MSG_HELLO, request.build().toByteArray());
 
       // Are we happy?
-      if (res.IsSuccess()) {
+      if (res.isSuccess()) {
         logger.fine("Got Opera launcher handshake: " + res.getResponse().toString());
       } else {
         logger.fine("Did not get Opera launcher handshake: " + res.getResponse().toString());

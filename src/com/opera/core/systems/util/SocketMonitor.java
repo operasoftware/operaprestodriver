@@ -38,7 +38,6 @@ public class SocketMonitor {
 
   private final Logger logger = Logger.getLogger(this.getClass().getName());
   private Selector selector;
-  private static SocketMonitor monitor = null;
   boolean locked = false;
 
   private enum Operation {

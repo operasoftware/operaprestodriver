@@ -224,7 +224,7 @@ public class EcmaScriptDebugger6 extends EcmaScriptDebugger {
 
     String dataType = result.getType();
 
-    if (dataType.equals("string")) {
+    if ("string".equals(dataType)) {
       return result.getValue();
     } else if (dataType.equals("number")) {
       return parseNumber(result.getValue());
