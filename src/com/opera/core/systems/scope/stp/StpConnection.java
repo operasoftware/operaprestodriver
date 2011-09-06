@@ -89,17 +89,11 @@ public class StpConnection implements SocketListener {
   */
 
   /**
-   * Initializes variables in object scope, sets 'count known' to false to read
-   * byte count (STP/0).
-   *
-   * @param socket
-   * @param handler
-   * @param eventHandler
-   * @param monitor
-   * @throws IOException
+   * Initializes variables in object scope, sets 'count known' to false to read byte count (STP/0).
    */
   public StpConnection(SocketChannel socket, IConnectionHandler handler,
-      AbstractEventHandler eventHandler, SocketMonitor monitor) throws IOException {
+                       AbstractEventHandler eventHandler, SocketMonitor monitor)
+      throws IOException {
     connectionHandler = handler;
     socketChannel = socket;
     this.eventHandler = eventHandler;
@@ -151,8 +145,7 @@ public class StpConnection implements SocketListener {
     logger.finest("SEND: " + command.toString());
 
     requests.add(buffer);
-    monitor.modify(socketChannel, this,
-        SelectionKey.OP_READ | SelectionKey.OP_WRITE);
+    monitor.modify(socketChannel, this, SelectionKey.OP_READ | SelectionKey.OP_WRITE);
   }
 
   public void sendEnableStp1() {
@@ -189,8 +182,7 @@ public class StpConnection implements SocketListener {
     ByteBuffer buffer = ByteBuffer.allocate(bytes.length);
     buffer.put(bytes);
     requests.add(buffer);
-    monitor.modify(socketChannel, this,
-        SelectionKey.OP_READ | SelectionKey.OP_WRITE);
+    monitor.modify(socketChannel, this, SelectionKey.OP_READ | SelectionKey.OP_WRITE);
   }
 
   public boolean canRead(SelectableChannel channel) throws IOException {
@@ -607,4 +599,5 @@ public class StpConnection implements SocketListener {
       }
     }
   }
+
 }
