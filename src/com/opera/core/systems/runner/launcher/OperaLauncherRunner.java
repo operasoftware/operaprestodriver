@@ -68,11 +68,11 @@ public class OperaLauncherRunner implements OperaRunner {
     this.capabilities = capabilities;
 
     if (this.capabilities.getCapability(OperaDriver.LAUNCHER) == null) {
-      throw new WebDriverException("Launcher path not set");
+      throw new WebDriverException("launcher path not set");
     }
 
     if (this.capabilities.getCapability(OperaDriver.BINARY) == null) {
-      throw new WebDriverException("You need to set Opera's path to use opera-launcher");
+      throw new WebDriverException("You need to set Opera's path to use the launcher");
     }
 
     Integer launcherPort = PortProber.findFreePort();
@@ -164,7 +164,7 @@ public class OperaLauncherRunner implements OperaRunner {
       }
     }
 
-    logger.config("Launcher arguments: " + stringArray.toString());
+    logger.config("launcher arguments: " + stringArray.toString());
     launcherRunner = new OperaLauncherBinary(
         (String) this.capabilities.getCapability(OperaDriver.LAUNCHER),
         stringArray.toArray(new String[stringArray.size()])
@@ -191,14 +191,14 @@ public class OperaLauncherRunner implements OperaRunner {
 
       // Are we happy?
       if (res.isSuccess()) {
-        logger.fine("Got launcher handshake: " + res.getResponse().toString());
+        logger.finer("Got launcher handshake: " + res.getResponse().toString());
       } else {
-        logger.fine("Did not get launcher handshake: " + res.getResponse().toString());
-        throw new OperaRunnerException("Did not get launcher handshake");
+        throw new OperaRunnerException(
+            "Did not get launcher handshake: " + res.getResponse().toString());
       }
     } catch (SocketTimeoutException e) {
-      throw new OperaRunnerException(
-          "Timeout waiting for launcher to connect on port " + launcherPort, e);
+      throw new OperaRunnerException("Timeout waiting for launcher to connect on port " +
+                                     launcherPort, e);
     } catch (IOException e) {
       throw new OperaRunnerException("Unable to listen to launcher port " + launcherPort, e);
     }
@@ -220,18 +220,21 @@ public class OperaLauncherRunner implements OperaRunner {
       try {
         Thread.sleep(100);
       } catch (InterruptedException e) {
+        // nothing
       }
+
       res = launcherProtocol.sendRequest(MessageType.MSG_STATUS, request);
 
       if (handleStatusMessage(res.getResponse()) != StatusType.RUNNING) {
         throw new OperaRunnerException(
-            "Opera exited immediately; possibly incorrect arguments?  Command:\n" + launcherRunner
-                .getCommand());
+            "Opera exited immediately; possibly incorrect arguments?  Command: \"" +
+            launcherRunner.getCommand() + "\"");
       }
-
     } catch (IOException e) {
       throw new OperaRunnerException("Could not start Opera", e);
     }
+
+    logger.fine("Opera launched through launcher");
   }
 
   public void stopOpera() {
@@ -250,6 +253,8 @@ public class OperaLauncherRunner implements OperaRunner {
     } catch (IOException e) {
       throw new OperaRunnerException("Could not stop Opera", e);
     }
+
+    logger.fine("Opera stopped through launcher");
   }
 
   public boolean isOperaRunning() {
@@ -282,21 +287,20 @@ public class OperaLauncherRunner implements OperaRunner {
   }
 
   public void shutdown() {
-    logger.finer("Shutting down launcher");
+    logger.fine("Shutting down launcher");
 
     try {
-      // Send a shutdown command to the launcher.
+      // Send a shutdown command to the launcher
       try {
         launcherProtocol.sendRequestWithoutResponse(MessageType.MSG_SHUTDOWN, null);
       } catch (Exception e) {
         e.printStackTrace();
       }
 
-      // Then shutdown the protocol connection.
+      // Then shutdown the protocol connection
       launcherProtocol.shutdown();
     } catch (IOException e) {
-      // Don't care.
-      throw new OperaRunnerException("Exception when shutting down", e);
+      throw new OperaRunnerException("Unable to shut down launcher", e);
     }
 
     if (launcherRunner != null) {
