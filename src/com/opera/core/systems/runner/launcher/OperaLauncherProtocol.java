@@ -94,9 +94,8 @@ public class OperaLauncherProtocol {
     this.socket = socket;
     // Just to make sure we don't block forever if something goes wrong
     this.socket.setSoTimeout(180000);
-    logger.fine("TIMEOUT=" + this.socket.getSoTimeout());
-    logger.fine("Got Opera launcher connection from "
-                + socket.getRemoteSocketAddress().toString());
+    logger.finer("Setting launcher protocol timeout to " + this.socket.getSoTimeout() + " ms");
+    logger.fine("Got launcher connection from " + socket.getRemoteSocketAddress().toString());
   }
 
   public void shutdown() throws IOException {
@@ -106,9 +105,9 @@ public class OperaLauncherProtocol {
   /**
    * Send the 8 byte header before a Opera Launcher message body (payload).
    *
-   * @param type The payload type to be sent after
-   * @param size Size of the payload following the header
-   * @throws java.io.IOException if sending failed.
+   * @param type the payload type to be sent after
+   * @param size size of the payload following the header
+   * @throws java.io.IOException if sending failed
    */
   private void sendRequestHeader(MessageType type, int size) throws IOException {
     ByteBuffer buf = ByteBuffer.allocate(8);
@@ -116,20 +115,19 @@ public class OperaLauncherProtocol {
     buf.put((byte) 'L');
     buf.put((byte) '1');
     buf.put(type.getValue());
-    buf.put((byte) 0); // request
+    buf.put((byte) 0);  // request
     buf.putInt(size);
     buf.flip();
-    logger.finest("SEND: type=" + (0) + ", command=" + ((int) type.getValue())
-                  + ", size=" + size);
+    logger.finest("SEND: type=" + (0) + ", command=" + ((int) type.getValue()) + ", size=" + size);
     socket.getOutputStream().write(buf.array());
   }
 
   /**
    * Send a request and receive a result.
    *
-   * @param type The request type to be sent
-   * @param body The serialized request payload
-   * @return The response
+   * @param type the request type to be sent
+   * @param body the serialized request payload
+   * @return the response
    */
   public ResponseEncapsulation sendRequest(MessageType type, byte[] body)
       throws IOException {
@@ -144,8 +142,8 @@ public class OperaLauncherProtocol {
   /**
    * Send a request without a response. Used for shutdown.
    *
-   * @param type The request type to be sent
-   * @param body The serialized request payload
+   * @param type the request type to be sent
+   * @param body the serialized request payload
    */
   public void sendRequestWithoutResponse(MessageType type, byte[] body)
       throws IOException {
@@ -179,7 +177,7 @@ public class OperaLauncherProtocol {
    * Receive a message response.
    *
    * @return Response body and request status code
-   * @throws java.io.IOException if socket read error or protocol parse error.
+   * @throws java.io.IOException if socket read error or protocol parse error
    */
   private ResponseEncapsulation recvMessage() throws IOException {
     GeneratedMessage msg = null;
