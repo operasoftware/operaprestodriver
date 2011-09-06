@@ -44,8 +44,14 @@ public class OperaLauncherProtocol {
   private Socket socket;
 
   public enum MessageType {
-    MSG_HELLO((byte) 0), MSG_START((byte) 1), MSG_STATUS((byte) 2), MSG_SCREENSHOT(
-        (byte) 3), MSG_STOP((byte) 4), MSG_SHUTDOWN((byte) 5);
+
+    // TODO: Document
+    MSG_HELLO((byte) 0),
+    MSG_START((byte) 1),
+    MSG_STATUS((byte) 2),
+    MSG_SCREENSHOT((byte) 3),
+    MSG_STOP((byte) 4),
+    MSG_SHUTDOWN((byte) 5);
 
     MessageType(byte n) {
       code = n;
@@ -69,6 +75,7 @@ public class OperaLauncherProtocol {
       MessageType type = lookup.get(code);
       return type;
     }
+
   }
 
   public class ResponseEncapsulation {
@@ -88,6 +95,7 @@ public class OperaLauncherProtocol {
     public boolean isSuccess() {
       return success;
     }
+
   }
 
   public OperaLauncherProtocol(Socket socket) throws SocketException {
@@ -163,6 +171,7 @@ public class OperaLauncherProtocol {
    */
   private void recv(byte[] buffer, int length) throws IOException {
     int bytes = 0;
+
     while (bytes < length) {
       int res = socket.getInputStream().read(buffer, bytes, length - bytes);
       if (res > 0) {
@@ -185,8 +194,7 @@ public class OperaLauncherProtocol {
     recv(headers, headers.length);
 
     if (headers[0] != 'L' || headers[1] != '1') {
-      throw new IOException(
-          "Wrong launcher protocol header");
+      throw new IOException("Wrong launcher protocol header");
     }
 
     ByteBuffer buf = ByteBuffer.allocate(4);
@@ -210,8 +218,7 @@ public class OperaLauncherProtocol {
     }
 
     if ((headers[3] != (byte) 1) && (headers[3] != (byte) 2)) {
-      throw new IOException(
-          "Unable to determine success or error");
+      throw new IOException("Unable to determine success or error");
     }
 
     switch (type) {
