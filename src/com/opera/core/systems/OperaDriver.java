@@ -498,35 +498,6 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     windowManager.closeWindow(windowManager.getActiveWindowId());
   }
 
-  /**
-   * The by string passed by remote web driver is different to the one used in the atoms. This
-   * converts from the "nice" string to the atom string.
-   *
-   * @param by The "nice" by string for remote web driver.
-   * @return The by string used in the atoms.
-   */
-  private String convertByToAtom(String by) {
-    if ("class name".equals(by)) {
-      by = "className";
-    } else if ("css selector".equals(by)) {
-      by = "css";
-    } else if ("id".equals(by)) {
-      // same
-    } else if ("link text".equals(by)) {
-      by = "linkText";
-    } else if ("partial link text".equals(by)) {
-      by = "partialLinkText";
-    } else if ("tag name".equals(by)) {
-      by = "tagName";
-    } else if ("xpath".equals(by)) {
-      // same
-    } else {
-      throw new WebDriverException("Cannot find matching element locator to: " + by);
-    }
-
-    return by;
-  }
-
   public WebElement findElement(By by) {
     return by.findElement(this);
   }
@@ -538,18 +509,15 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
   /**
    * Find a single element using the selenium atoms.
    *
-   * @param by    How to find the element.  Strings defined in RemoteWebDriver and {@link
-   *              #convertByToAtom}.
-   * @param using The value to use to find the element
-   * @param el    The element to search within
+   * @param by    how to find the element, strings defined in RemoteWebDriver
+   * @param using the value to use to find the element
+   * @param el    the element to search within
    */
   protected WebElement findElement(String by, String using, OperaWebElement el) {
     if (using == null) {
-      throw new IllegalArgumentException("Cannot find elements when the selector is null.");
+      throw new IllegalArgumentException("Cannot find elements when the selector is null");
     }
 
-    String niceBy = by;
-    by = convertByToAtom(by);
     using = escapeJsString(using);
 
     long start = System.currentTimeMillis();
@@ -602,7 +570,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
       return new OperaWebElement(this, id);
     } else {
-      throw new NoSuchElementException("Cannot find element(s) with " + niceBy);
+      throw new NoSuchElementException("Cannot find element(s) with " + by);
     }
   }
 
@@ -616,11 +584,9 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
   protected List<WebElement> findElements(String by, String using, OperaWebElement el) {
     if (using == null) {
-      throw new IllegalArgumentException("Cannot find elements when the selector is null.");
+      throw new IllegalArgumentException("Cannot find elements when the selector is null");
     }
 
-    String niceBy = by;
-    by = convertByToAtom(by);
     using = escapeJsString(using);
 
     Integer id;
@@ -676,7 +642,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     if (id != null) {
       return elements;
     } else {
-      throw new NoSuchElementException("Cannot find element(s) with " + niceBy);
+      throw new NoSuchElementException("Cannot find element(s) with " + by);
     }
   }
 
@@ -759,8 +725,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
           Integer.valueOf(debugger.executeJavascript("return document.frames.length"));
 
       if (frameIndex < 0 || frameIndex >= framesLength) {
-        throw new NoSuchFrameException(
-            "Invalid frame index : " + frameIndex);
+        throw new NoSuchFrameException("Invalid frame index: " + frameIndex);
       }
 
       debugger.changeRuntime(frameIndex);
@@ -1430,33 +1395,42 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     return services.selftest(modules, timeout);
   }
 
+  public Utils utils() {
+    return new OperaUtils();
+  }
+
+  public class OperaUtils implements Utils {
+
+    public String getCoreVersion() {
+      return coreUtils.getCoreVersion();
+    }
+
+    public String getOS() {
+      return coreUtils.getOperatingSystem();
+    }
+
+    public String getProduct() {
+      return coreUtils.getProduct();
+    }
+
+    public String getBinaryPath() {
+      return coreUtils.getBinaryPath();
+    }
+
+    public String getUserAgent() {
+      return coreUtils.getUserAgent();
+    }
+
+    public int getPID() {
+      return coreUtils.getProcessID();
+    }
+
+  }
+
   /**
-   * Methods to access Core service 1.2 metadata
+   * @deprecated
    */
-  public String getCoreVersion() {
-    return coreUtils.getCoreVersion();
-  }
-
-  public String getOS() {
-    return coreUtils.getOperatingSystem();
-  }
-
-  public String getProduct() {
-    return coreUtils.getProduct();
-  }
-
-  public String getBinaryPath() {
-    return coreUtils.getBinaryPath();
-  }
-
-  public String getUserAgent() {
-    return coreUtils.getUserAgent();
-  }
-
-  public int getPID() {
-    return coreUtils.getProcessID();
-  }
-
+  @Deprecated
   public OperaRunner getOperaRunner() {
     return operaRunner;
   }

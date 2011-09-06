@@ -27,7 +27,7 @@ import org.junit.runners.model.Statement;
 /**
  * @author Andreas Tolf Tolfsen <andreastt@opera.com>
  */
-public class CoreUtilsTest extends TestBase {
+public class UtilsTest extends TestBase {
 
   // Make sure these tests only run if meta data is available.
   @Rule
@@ -55,12 +55,12 @@ public class CoreUtilsTest extends TestBase {
 
   @Before
   public void setUp() {
-    coreVersion = driver.getCoreVersion();
-    os = driver.getOS();
-    product = driver.getProduct();
-    binaryPath = driver.getBinaryPath();
-    userAgent = driver.getUserAgent();
-    pid = driver.getPID();
+    coreVersion = driver.utils().getCoreVersion();
+    os = driver.utils().getOS();
+    product = driver.utils().getProduct();
+    binaryPath = driver.utils().getBinaryPath();
+    userAgent = driver.utils().getUserAgent();
+    pid = driver.utils().getPID();
   }
 
   @Test
