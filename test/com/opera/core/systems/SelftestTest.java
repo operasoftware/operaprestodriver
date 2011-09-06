@@ -14,7 +14,7 @@ import com.opera.core.systems.scope.services.ums.Selftest;
 public class SelftestTest extends TestBase {
   @Test
   public void testSelftests() {
-    String product = driver.getProduct();
+    String product = driver.utils().getProduct();
     if("core-gogi".equals(product)) {
       String results;
       try {
@@ -48,7 +48,7 @@ public class SelftestTest extends TestBase {
     String data = "foo:bar\tPASS\nlorem:ipsum dolor sit amet\tFAIL\tmore\nmore:tests here\tSKIP\treason\n";
     List<SelftestResult> results;
 
-    if(driver.getProduct().equals("core-gogi")) {
+    if(driver.utils().getProduct().equals("core-gogi")) {
       try {
         results = Selftest.parseSelftests(driver.selftest(Arrays.asList("nosuchmodule"), 30000));
       } catch (UnsupportedOperationException e) {
