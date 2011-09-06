@@ -15,6 +15,9 @@ limitations under the License.
 */
 package com.opera.core.systems.runner.launcher;
 
+import org.openqa.selenium.WebDriverException;
+import org.openqa.selenium.os.ProcessUtils;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -22,9 +25,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Logger;
-
-import org.openqa.selenium.WebDriverException;
-import org.openqa.selenium.os.ProcessUtils;
 
 public class OperaLauncherBinary extends Thread {
 
@@ -72,7 +72,7 @@ public class OperaLauncherBinary extends Thread {
 
     } catch (IOException e) {
       throw new WebDriverException("Could not start the process : "
-          + e.getMessage());
+                                   + e.getMessage());
     }
   }
 
@@ -93,6 +93,7 @@ public class OperaLauncherBinary extends Thread {
   }
 
   private class OutputWatcher implements Runnable {
+
     private Process process;
 
     public OutputWatcher(Process process) {
@@ -106,12 +107,14 @@ public class OperaLauncherBinary extends Thread {
       while (running.get()) {
         try {
           int r = stream.read();
-          if(r == -1) return;
-          else if(r == '\n') {
+          if (r == -1) {
+            return;
+          } else if (r == '\n') {
             logger.finer("linebreak: " + buffer);
             buffer = "";
+          } else {
+            buffer += (char) r;
           }
-          else buffer += (char)r;
         } catch (IOException e) {
           /* ignored */
         }
