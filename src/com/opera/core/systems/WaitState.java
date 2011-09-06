@@ -16,23 +16,22 @@ limitations under the License.
 
 package com.opera.core.systems;
 
-import java.util.LinkedList;
-import java.util.logging.Logger;
-
-import org.openqa.selenium.WebDriverException;
-
 import com.opera.core.systems.scope.exceptions.CommunicationException;
 import com.opera.core.systems.scope.exceptions.ResponseNotReceivedException;
+import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemID;
 import com.opera.core.systems.scope.protos.UmsProtos.Response;
-import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo;
+
+import org.openqa.selenium.WebDriverException;
+
+import java.util.LinkedList;
+import java.util.logging.Logger;
 
 /**
- * This class handles a queue of events to be handled from multiple threads. One
- * thread can wait for events to happen while other threads can post these
- * events by calling the on{Event} handlers.
+ * This class handles a queue of events to be handled from multiple threads. One thread can wait for
+ * events to happen while other threads can post these events by calling the on{Event} handlers.
  *
  * @author Jan Vidar Krey <janv@opera.com>
  */
@@ -101,7 +100,7 @@ public class WaitState {
       waitResult = WaitResult.EXCEPTION;
       exception = ex;
       logger.finest("EVENT: " + waitResult.toString() + ", exception: "
-        + ex.toString());
+                    + ex.toString());
     }
 
     public ResultItem(WaitResult result) {
@@ -114,12 +113,7 @@ public class WaitState {
      *
      * Response events:
      *
-     *   BINARY_EXIT    with exit code
-     *   WINDOW_LOADED  with windowID
-     *   ERROR          with tag ID
-     *
-     * @param result
-     * @param data
+     * BINARY_EXIT    with exit code WINDOW_LOADED  with windowID ERROR          with tag ID
      */
     public ResultItem(WaitResult result, int data) {
       this.waitResult = result;
@@ -136,7 +130,8 @@ public class WaitState {
     public ResultItem(WaitResult result, QuickMenuInfo info) {
       this.waitResult = result;
       this.quickMenuInfo = info; // TODO FIXME
-      logger.finest("EVENT: " + result.toString() + ", quick_menu=" + info.getMenuId().getMenuName());
+      logger
+          .finest("EVENT: " + result.toString() + ", quick_menu=" + info.getMenuId().getMenuName());
     }
 
     public ResultItem(WaitResult result, QuickMenuID id) {
@@ -217,7 +212,9 @@ public class WaitState {
 
   private void internalWait(long timeout) throws WebDriverException {
     try {
-      if (!connected) throw new CommunicationException("Waiting aborted - not connected!");
+      if (!connected) {
+        throw new CommunicationException("Waiting aborted - not connected!");
+      }
       lock.wait(timeout);
     } catch (InterruptedException e) {
       throw new WebDriverException(e);
@@ -372,7 +369,9 @@ public class WaitState {
   }
 
   private ResultItem getResult() {
-    if (events.isEmpty()) return null;
+    if (events.isEmpty()) {
+      return null;
+    }
 
     // Test if we are listening to wait events
     // We don't want to remove them from the list while we are
@@ -402,11 +401,9 @@ public class WaitState {
   }
 
   /**
-   * Checks for a result item.
-   * <p/>
-   * If no result item is available this method will wait for timeout
-   * milliseconds and try again. If still no result if available then
-   * a ResponseNotReceivedException is thrown.
+   * Checks for a result item. <p/> If no result item is available this method will wait for timeout
+   * milliseconds and try again. If still no result if available then a ResponseNotReceivedException
+   * is thrown.
    *
    * @param timeout time in milliseconds to wait before retrying.
    * @param idle    whether you are waiting for an Idle event. Changes error message.
@@ -414,8 +411,9 @@ public class WaitState {
    */
   private final ResultItem pollResultItem(long timeout, boolean idle) {
     ResultItem result = getResult();
-    if (result != null)
+    if (result != null) {
       result.remaining_idle_timeout = timeout;
+    }
 
     if (result == null && timeout > 0) {
       long start = System.currentTimeMillis();
@@ -453,7 +451,7 @@ public class WaitState {
       if ((type == ResponseType.WINDOW_LOADED) && (timeout < 30000)) {
         long newTimeout = 30000;
         logger.warning("WARNING: desktop-specific workaround for waitAndParseResult.  " +
-          "Changing timeout from " + timeout + " to " + newTimeout);
+                       "Changing timeout from " + timeout + " to " + newTimeout);
         timeout = newTimeout;
       }
     }
@@ -467,19 +465,23 @@ public class WaitState {
 
         switch (waitResult) {
           case HANDSHAKE:
-            if (type == ResponseType.HANDSHAKE) return null;
+            if (type == ResponseType.HANDSHAKE) {
+              return null;
+            }
             break;
 
           case RESPONSE:
-            if (result.data == match && type == ResponseType.RESPONSE) return result;
-            else if (type == ResponseType.HANDSHAKE) {
+            if (result.data == match && type == ResponseType.RESPONSE) {
+              return result;
+            } else if (type == ResponseType.HANDSHAKE) {
               throw new CommunicationException("Expecting handshake");
             }
             break;
 
           case ERROR:
-            if (result.data == match && type == ResponseType.RESPONSE) return null;
-            else if (type == ResponseType.HANDSHAKE) {
+            if (result.data == match && type == ResponseType.RESPONSE) {
+              return null;
+            } else if (type == ResponseType.HANDSHAKE) {
               throw new CommunicationException("Expecting handshake");
             }
             break;
@@ -489,10 +491,12 @@ public class WaitState {
 
           case DISCONNECTED:
             throw new CommunicationException("Problem encountered : "
-              + waitResult.toString());
+                                             + waitResult.toString());
 
           case EVENT_WINDOW_LOADED:
-            if (result.data == match && type == ResponseType.WINDOW_LOADED) return null;
+            if (result.data == match && type == ResponseType.WINDOW_LOADED) {
+              return null;
+            }
             break;
 
           case EVENT_WINDOW_CLOSED:
@@ -507,9 +511,9 @@ public class WaitState {
                 return result;
               } else {
                 logger.finest("EVENT_DESKTOP_WINDOW_SHOWN: Name: "
-                  + result.desktopWindowInfo.getName() + " ID: "
-                  + result.desktopWindowInfo.getWindowID() + " OnScreen: "
-                  + result.desktopWindowInfo.getOnScreen());
+                              + result.desktopWindowInfo.getName() + " ID: "
+                              + result.desktopWindowInfo.getWindowID() + " OnScreen: "
+                              + result.desktopWindowInfo.getOnScreen());
 
                 if (result.desktopWindowInfo.getName().equals(stringMatch)) {
                   return result;
@@ -524,8 +528,8 @@ public class WaitState {
                 return result;
               } else {
                 logger.fine("EVENT_DESKTOP_WINDOW_UPDATED: Name: "
-                  + result.desktopWindowInfo.getName() + " ID: "
-                  + result.desktopWindowInfo.getWindowID());
+                            + result.desktopWindowInfo.getName() + " ID: "
+                            + result.desktopWindowInfo.getWindowID());
 
                 if (result.desktopWindowInfo.getName().equals(stringMatch)) {
                   return result;
@@ -540,8 +544,8 @@ public class WaitState {
                 return result;
               } else {
                 logger.fine("DESKTOP_WINDOW_ACTIVATED: Name: "
-                  + result.desktopWindowInfo.getName() + " ID: "
-                  + result.desktopWindowInfo.getWindowID());
+                            + result.desktopWindowInfo.getName() + " ID: "
+                            + result.desktopWindowInfo.getWindowID());
 
                 if (result.desktopWindowInfo.getName().equals(stringMatch)) {
                   return result;
@@ -556,8 +560,8 @@ public class WaitState {
                 return result;
               } else {
                 logger.fine("EVENT_DESKTOP_WINDOW_CLOSED: Name: "
-                  + result.desktopWindowInfo.getName() + " ID: "
-                  + result.desktopWindowInfo.getWindowID());
+                            + result.desktopWindowInfo.getName() + " ID: "
+                            + result.desktopWindowInfo.getWindowID());
 
                 if (result.desktopWindowInfo.getName().equals(stringMatch)) {
                   return result;
@@ -572,8 +576,8 @@ public class WaitState {
                 return result;
               } else {
                 logger.fine("EVENT_DESKTOP_WINDOW_LOADED: Name: "
-                  + result.desktopWindowInfo.getName() + " ID: "
-                  + result.desktopWindowInfo.getWindowID());
+                            + result.desktopWindowInfo.getName() + " ID: "
+                            + result.desktopWindowInfo.getWindowID());
 
                 if (result.desktopWindowInfo.getName().equals(stringMatch)) {
                   return result;
@@ -588,7 +592,7 @@ public class WaitState {
                 return result;
               } else {
                 logger.fine("EVENT_QUICK_MENU_SHOWN: Name: "
-                  + result.quickMenuInfo.getMenuId().getMenuName());
+                            + result.quickMenuInfo.getMenuId().getMenuName());
 
                 if (result.quickMenuInfo.getMenuId().getMenuName().equals(stringMatch)) {
                   return result;
@@ -621,7 +625,7 @@ public class WaitState {
                 return result;
               } else {
                 logger.fine("QUICK_MENU_ITEM_PRESSED: Text: "
-                  + result.quickMenuItemID.getMenuText());
+                            + result.quickMenuItemID.getMenuText());
 
                 if (result.quickMenuItemID.getMenuText().equals(stringMatch)) {
                   return result;
@@ -631,18 +635,24 @@ public class WaitState {
             break;
 
           case EVENT_REQUEST_FIRED:
-            if (result.data == match && type == ResponseType.REQUEST_FIRED) return null;
+            if (result.data == match && type == ResponseType.REQUEST_FIRED) {
+              return null;
+            }
             break;
 
           case EVENT_OPERA_IDLE:
             logger.finest("RECV EVENT_OPERA_IDLE!");
-            if (result.data == match && type == ResponseType.OPERA_IDLE) return null;
+            if (result.data == match && type == ResponseType.OPERA_IDLE) {
+              return null;
+            }
             break;
 
           case EVENT_SELFTEST_DONE:
             // TODO:
             logger.finest("RECV EVENT_SELFTEST_DONE");
-            if (type == ResponseType.SELFTEST_DONE) return result;
+            if (type == ResponseType.SELFTEST_DONE) {
+              return result;
+            }
             break;
         }
       }
@@ -658,16 +668,12 @@ public class WaitState {
   }
 
   /**
-   * Enables the capturing on OperaIdle events.
-   * <p/>
-   * Sometimes when executing a command OperaIdle events will fire before
-   * the response is received for the sent command. This results in missing
-   * the Idle events, and later probably hitting a timeout.
-   * <p/>
-   * To prevent this you can call this method which will enable the
-   * tracking of any Idle events received between now and when you call
-   * waitForOperaIdle(). If Idle events have been received then
-   * waitForOperaIdle() will return immediately.
+   * Enables the capturing on OperaIdle events. <p/> Sometimes when executing a command OperaIdle
+   * events will fire before the response is received for the sent command. This results in missing
+   * the Idle events, and later probably hitting a timeout. <p/> To prevent this you can call this
+   * method which will enable the tracking of any Idle events received between now and when you call
+   * waitForOperaIdle(). If Idle events have been received then waitForOperaIdle() will return
+   * immediately.
    */
   public void captureOperaIdle() {
     logger.finer("captureIdleEvents is now true!");
@@ -675,14 +681,10 @@ public class WaitState {
   }
 
   /**
-   * Waits for an OperaIdle event before continuing.
-   * <p/>
-   * If captureOperaIdle() has been called since the last call of
-   * waitForOperaIdle(), and one or more OperaIdle events have occurred then
-   * this method will return immediately.
-   * <p/>
-   * After calling this method the capturing of OperaIdle events is
-   * disabled until the next call of captureOperaIdle()
+   * Waits for an OperaIdle event before continuing. <p/> If captureOperaIdle() has been called
+   * since the last call of waitForOperaIdle(), and one or more OperaIdle events have occurred then
+   * this method will return immediately. <p/> After calling this method the capturing of OperaIdle
+   * events is disabled until the next call of captureOperaIdle()
    *
    * @param timeout time in milliseconds to wait before aborting
    */
@@ -737,7 +739,9 @@ public class WaitState {
   }
 
   public int waitForDesktopWindowActivated(String win_name, long timeout) {
-    ResultItem item = waitAndParseResult(timeout, 0, win_name, ResponseType.DESKTOP_WINDOW_ACTIVATED);
+    ResultItem
+        item =
+        waitAndParseResult(timeout, 0, win_name, ResponseType.DESKTOP_WINDOW_ACTIVATED);
 
     if (item != null) {
       return item.desktopWindowInfo.getWindowID();
@@ -787,7 +791,9 @@ public class WaitState {
   }
 
   public String waitForQuickMenuItemPressed(String menuItemText, long timeout) {
-    ResultItem item = waitAndParseResult(timeout, 0, menuItemText, ResponseType.QUICK_MENU_ITEM_PRESSED);
+    ResultItem
+        item =
+        waitAndParseResult(timeout, 0, menuItemText, ResponseType.QUICK_MENU_ITEM_PRESSED);
 
     if (item != null) {
       return item.quickMenuItemID.getMenuText();
