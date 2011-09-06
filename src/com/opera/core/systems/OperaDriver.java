@@ -415,7 +415,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
     // This method can be called from start(), before services are created
     if (services != null) {
-      services.quit();
+      services.shutdown();
     }
     if (operaRunner != null) {
       operaRunner.shutdown();
