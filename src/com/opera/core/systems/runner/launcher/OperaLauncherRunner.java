@@ -165,24 +165,24 @@ public class OperaLauncherRunner implements OperaRunner {
       }
     }
 
-    logger.fine("Launcher arguments: "+stringArray.toString());
+    logger.config("Launcher arguments: " + stringArray.toString());
     launcherRunner = new OperaLauncherBinary(
       (String) this.capabilities.getCapability(OperaDriver.LAUNCHER),
       stringArray.toArray(new String[stringArray.size()])
     );
 
-    logger.fine("Waiting for Opera Launcher connection on port " + launcherPort);
+    logger.fine("Waiting for launcher connection on port " + launcherPort);
 
     try {
-      // setup listener server
+      // Setup listener server
       ServerSocket listenerServer = new ServerSocket(launcherPort);
       listenerServer.setSoTimeout((int) OperaIntervals.LAUNCHER_TIMEOUT.getValue());
 
-      // try to connect
+      // Try to connect
       launcherProtocol = new OperaLauncherProtocol(listenerServer.accept());
 
-      // we did it!
-      logger.fine("Connected with Opera Launcher on port " + launcherPort);
+      // We did it!
+      logger.fine("Connected with launcher on port " + launcherPort);
       listenerServer.close();
 
       // Do the handshake!
@@ -194,18 +194,19 @@ public class OperaLauncherRunner implements OperaRunner {
       if (res.isSuccess()) {
         logger.fine("Got Opera launcher handshake: " + res.getResponse().toString());
       } else {
-        logger.fine("Did not get Opera launcher handshake: " + res.getResponse().toString());
+        logger.fine("Did not get launcher handshake: " + res.getResponse().toString());
         throw new OperaRunnerException("Did not get Opera launcher handshake");
       }
     } catch (SocketTimeoutException e) {
-      throw new OperaRunnerException("Timeout waiting for Opera Launcher to connect on port " + launcherPort, e);
+      throw new OperaRunnerException("Timeout waiting for launcher to connect on port " + launcherPort, e);
     } catch (IOException e) {
-      throw new OperaRunnerException("Unable to listen to Opera launcher port " + launcherPort, e);
+      throw new OperaRunnerException("Unable to listen to launcher port " + launcherPort, e);
     }
   }
 
   public void startOpera() {
-    logger.fine("Launcher starting Opera...");
+    logger.fine("Instructing launcher to start Opera...");
+
     try {
       byte[] request = LauncherStartRequest.newBuilder().build().toByteArray();
 
@@ -223,7 +224,7 @@ public class OperaLauncherRunner implements OperaRunner {
       res = launcherProtocol.sendRequest(MessageType.MSG_STATUS, request);
 
       if (handleStatusMessage(res.getResponse()) != StatusType.RUNNING) {
-        throw new OperaRunnerException("Opera exited immediately; possibly incorrect arguments? Command:\n" + launcherRunner.getCommand());
+        throw new OperaRunnerException("Opera exited immediately; possibly incorrect arguments?  Command:\n" + launcherRunner.getCommand());
       }
 
     } catch (IOException e) {
@@ -232,7 +233,7 @@ public class OperaLauncherRunner implements OperaRunner {
   }
 
   public void stopOpera() {
-    logger.fine("Launcher stopping Opera...");
+    logger.fine("Instructing launcher to stop Opera...");
 
     try {
       LauncherStopRequest.Builder request = LauncherStopRequest.newBuilder();
@@ -254,7 +255,7 @@ public class OperaLauncherRunner implements OperaRunner {
   }
 
   public boolean isOperaRunning(int processId) {
-    logger.finer("Get Opera status");
+    logger.finer("Getting Opera's status from launcher");
 
     try {
       LauncherStatusRequest.Builder request = LauncherStatusRequest.newBuilder();
@@ -277,6 +278,8 @@ public class OperaLauncherRunner implements OperaRunner {
   }
 
   public void shutdown() {
+    logger.finer("Shutting down launcher");
+
     try {
       // Send a shutdown command to the launcher.
       try {
@@ -308,14 +311,17 @@ public class OperaLauncherRunner implements OperaRunner {
 
     // LOG RESULT!
     logger.finest("[LAUNCHER] Status: " + response.getStatus().toString());
+
     if (response.hasExitcode()) {
       logger.finest("[LAUNCHER] Status: exitCode=" + response.getExitcode());
     }
+
     if (response.hasCrashlog()) {
       logger.finest("[LAUNCHER] Status: crashLog=yes");
     } else {
       logger.finest("[LAUNCHER] Status: crashLog=no");
     }
+
     if (response.getLogmessagesCount() > 0) {
       for (String message : response.getLogmessagesList()) {
         logger.finest("[LAUNCHER LOG] " + message);
@@ -354,7 +360,7 @@ public class OperaLauncherRunner implements OperaRunner {
     byte[] resultBytes = null;
     boolean blank = false;
 
-    logger.fine("Get opera screenshot");
+    logger.fine("Instructing launcher to take screenshot");
 
     try {
       LauncherScreenshotRequest.Builder request = LauncherScreenshotRequest.newBuilder();
