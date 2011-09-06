@@ -13,6 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+
 package com.opera.core.systems;
 
 import com.google.protobuf.AbstractMessage.Builder;
@@ -459,8 +460,7 @@ public class ScopeServices implements IConnectionHandler {
       // We expect a CommunicationException here, because as Opera is shutting
       // down the connection will be closed.
       if (!(e instanceof CommunicationException)) {
-        logger.info("Caught exception when trying to shut down : "
-                    + e.getMessage());
+        logger.info("Caught exception when trying to shut down: " + e.getMessage());
       }
     }
 
@@ -559,7 +559,7 @@ public class ScopeServices implements IConnectionHandler {
   }
 
   public void onDisconnect() {
-    logger.fine("Disconnected, closing StpConnection.");
+    logger.fine("Disconnected, closing StpConnection");
     if (connection != null) {
       if (!shuttingDown) {
         waitState.onDisconnected();
@@ -570,7 +570,7 @@ public class ScopeServices implements IConnectionHandler {
   }
 
   public void onOperaIdle() {
-    logger.finest("Got Opera Idle event!");
+    logger.finest("Got idle event");
     waitState.onOperaIdle();
   }
 
@@ -586,15 +586,16 @@ public class ScopeServices implements IConnectionHandler {
 
   public String selftest(List<String> modules, long timeout) {
     if (selftest == null) {
-      throw new UnsupportedOperationException("selftest is not supported");
+      throw new UnsupportedOperationException("selftest service is not supported");
     }
+
     selftest.runSelftests(modules);
     return waitState.waitForSelftestDone(timeout);
   }
 
   public void waitForWindowLoaded(int activeWindowId, long timeout) {
-    logger.finest(
-        "waitForWindowLoaded with params activeWindowId=" + activeWindowId + " timeout=" + timeout);
+    logger.finest("waitForWindowLoaded with params activeWindowId=" +
+                  activeWindowId + " timeout=" + timeout);
     waitState.waitForWindowLoaded(activeWindowId, timeout);
   }
 
@@ -606,12 +607,12 @@ public class ScopeServices implements IConnectionHandler {
         // Version 1.1 introduced some important fixes, and we don't want to use idle detection
         // without this.
         boolean ok = VersionUtil.compare(version, "1.1") >= 0;
-        logger.finer("Core service version check: " + ok + " (" + version + ")");
+        logger.finer("core service version check: " + ok + " (" + version + ")");
         return ok;
       }
     }
 
-    logger.severe("Core service not found");
+    logger.severe("core service not found");
     return false;
   }
 
@@ -627,7 +628,7 @@ public class ScopeServices implements IConnectionHandler {
    * then waitForOperaIdle() will return immediately.
    */
   public void captureOperaIdle() {
-    logger.fine("Capturing OperaIdle");
+    logger.fine("Capturing idle event");
     waitState.captureOperaIdle();
   }
 
@@ -643,9 +644,9 @@ public class ScopeServices implements IConnectionHandler {
    * @param timeout Time in milliseconds to wait before aborting
    */
   public void waitForOperaIdle(long timeout) {
-    logger.finer("OperaIdle: Waiting for (timeout = " + timeout + ")");
+    logger.finer("idle: Waiting for (timeout = " + timeout + ")");
     waitState.waitForOperaIdle(timeout);
-    logger.finer("OperaIdle: Finished waiting");
+    logger.finer("idle: Finished waiting");
   }
 
   public void waitStart() {
@@ -728,7 +729,7 @@ public class ScopeServices implements IConnectionHandler {
 
   public void onResponseReceived(int tag, Response response) {
     if (connection != null) {
-      logger.finest("Got response.");
+      logger.finest("Got response");
       if (response != null) {
         waitState.onResponse(tag, response);
       } else {
