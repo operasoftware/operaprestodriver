@@ -47,13 +47,13 @@ public class WaitState {
   // This is used when we perform an action where we want to wait for an Idle
   // event, such as clicking. First one has to wait for the "click" response,
   // but in the mean time there may be an Idle event which would be missed.
-  // The number of missed Idle events is stored in captured_idle_events.
-  private boolean capture_idle_events = false;
+  // The number of missed Idle events is stored in capturedIdleEvents.
+  private boolean captureIdleEvents = false;
 
   // Stores the number of Idle events seen while capture_idle_event is enabled
   //
   // See the explanation for capture_idle_event.
-  private int captured_idle_events = 0;
+  private int capturedIdleEvents = 0;
 
   private Object lock = new Object();
 
@@ -670,8 +670,8 @@ public class WaitState {
    * waitForOperaIdle() will return immediately.
    */
   public void captureOperaIdle() {
-    logger.finer("capture_idle_events is now true!");
-    capture_idle_events = true;
+    logger.finer("captureIdleEvents is now true!");
+    captureIdleEvents = true;
   }
 
   /**
@@ -687,18 +687,18 @@ public class WaitState {
    * @param timeout time in milliseconds to wait before aborting
    */
   public void waitForOperaIdle(long timeout) {
-    if (capture_idle_events == true && captured_idle_events > 0) {
-      logger.finer("Captured " + captured_idle_events + " OperaIdle event(s)");
+    if (captureIdleEvents == true && capturedIdleEvents > 0) {
+      logger.finer("Captured " + capturedIdleEvents + " OperaIdle event(s)");
       // reset
-      capture_idle_events = false;
-      captured_idle_events = 0;
+      captureIdleEvents = false;
+      capturedIdleEvents = 0;
       return;
     }
 
     // If we're waiting for an Idle event, then we don't need to capture
-    // them anymore. If we've reached this far then captured_idle_events is
+    // them anymore. If we've reached this far then capturedIdleEvents is
     // already 0
-    capture_idle_events = false;
+    captureIdleEvents = false;
     waitAndParseResult(timeout, 0/*0 = no window id!*/, null, ResponseType.OPERA_IDLE);
   }
 
