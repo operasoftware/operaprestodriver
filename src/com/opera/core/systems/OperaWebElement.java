@@ -277,9 +277,12 @@ public class OperaWebElement extends RemoteWebElement {
     return isDisplayed();
   }
 
-  public void clear() {
-    executeMethod("return " + OperaAtoms.CLEAR.getValue() + "(locator)");
-  }
+	public void clear() {
+		if (isEnabled()) {
+			if(!Boolean.valueOf(getAttribute("readonly")))
+			executeMethod("return " + OperaAtoms.CLEAR.getValue() + "(locator)");
+		}
+	}
 
   public void sendKeys(CharSequence... keysToSend) {
     // A list of keys that should be held down, instead of pressed
