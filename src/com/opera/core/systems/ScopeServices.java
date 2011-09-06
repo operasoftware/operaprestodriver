@@ -15,18 +15,10 @@ limitations under the License.
 */
 package com.opera.core.systems;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.logging.Logger;
-
-import org.openqa.selenium.WebDriverException;
-
 import com.google.protobuf.AbstractMessage.Builder;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
+
 import com.opera.core.systems.model.ICommand;
 import com.opera.core.systems.runner.OperaRunner;
 import com.opera.core.systems.scope.ScopeCommand;
@@ -54,19 +46,27 @@ import com.opera.core.systems.scope.services.IDesktopWindowManager;
 import com.opera.core.systems.scope.services.IEcmaScriptDebugger;
 import com.opera.core.systems.scope.services.IOperaExec;
 import com.opera.core.systems.scope.services.IPrefs;
-import com.opera.core.systems.scope.services.IWindowManager;
 import com.opera.core.systems.scope.services.ISelftest;
+import com.opera.core.systems.scope.services.IWindowManager;
 import com.opera.core.systems.scope.services.ums.SystemInputManager;
 import com.opera.core.systems.scope.services.ums.UmsServices;
 import com.opera.core.systems.scope.stp.StpConnection;
 import com.opera.core.systems.scope.stp.StpThread;
 import com.opera.core.systems.util.VersionUtil;
 
+import org.openqa.selenium.WebDriverException;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.logging.Logger;
+
 /**
  * Implements the interface to the Scope protocol.
  *
- * @author Deniz Turkoglu <dturkoglu@opera.com>,
- *         Andreas Tolf Tolfsen <andreastt@opera.com>
+ * @author Deniz Turkoglu <dturkoglu@opera.com>, Andreas Tolf Tolfsen <andreastt@opera.com>
  */
 public class ScopeServices implements IConnectionHandler {
 
@@ -189,14 +189,11 @@ public class ScopeServices implements IConnectionHandler {
 
 
   /**
-   * Creates the scope server on specified address and port Enables the required
-   * services for webdriver
-   *
-   * @param versions
-   * @param manualConnect
-   * @throws IOException
+   * Creates the scope server on specified address and port Enables the required services for
+   * webdriver
    */
-  public ScopeServices(Map<String, String> versions, int port, boolean manualConnect) throws IOException {
+  public ScopeServices(Map<String, String> versions, int port, boolean manualConnect)
+      throws IOException {
     this.versions = versions;
     tagCounter = new AtomicInteger();
     stpThread = new StpThread(port, this, new UmsEventHandler(this), manualConnect);
@@ -215,26 +212,33 @@ public class ScopeServices implements IConnectionHandler {
 
     List<String> wantedServices = new ArrayList<String>();
 
-    if (enableDebugger) wantedServices.add("ecmascript-debugger");
+    if (enableDebugger) {
+      wantedServices.add("ecmascript-debugger");
+    }
 
     wantedServices.add("exec");
     wantedServices.add("window-manager");
     wantedServices.add("core");
 
-    if (versions.containsKey("prefs"))
+    if (versions.containsKey("prefs")) {
       wantedServices.add("prefs");
+    }
 
-    if (versions.containsKey("desktop-window-manager"))
+    if (versions.containsKey("desktop-window-manager")) {
       wantedServices.add("desktop-window-manager");
+    }
 
-    if (versions.containsKey("system-input"))
+    if (versions.containsKey("system-input")) {
       wantedServices.add("system-input");
+    }
 
-    if (versions.containsKey("desktop-utils"))
+    if (versions.containsKey("desktop-utils")) {
       wantedServices.add("desktop-utils");
+    }
 
-    if (versions.containsKey("selftest"))
+    if (versions.containsKey("selftest")) {
       wantedServices.add("selftest");
+    }
 
     //wantedServices.add("console-logger");
     //wantedServices.add("http-logger");
@@ -248,14 +252,26 @@ public class ScopeServices implements IConnectionHandler {
   private void initializeServices(boolean enableDebugger) {
     exec.init();
     windowManager.init();
-    if (versions.containsKey("core") && coreUtils!= null) coreUtils.init();
+    if (versions.containsKey("core") && coreUtils != null) {
+      coreUtils.init();
+    }
 
-    if (versions.containsKey("prefs") && prefs != null) prefs.init();
-    if (versions.containsKey("desktop-window-manager") && desktopWindowManager != null) desktopWindowManager.init();
-    if (versions.containsKey("system-input") && systemInputManager != null) systemInputManager.init();
-    if (versions.containsKey("desktop-utils") && desktopUtils != null) desktopUtils.init();
+    if (versions.containsKey("prefs") && prefs != null) {
+      prefs.init();
+    }
+    if (versions.containsKey("desktop-window-manager") && desktopWindowManager != null) {
+      desktopWindowManager.init();
+    }
+    if (versions.containsKey("system-input") && systemInputManager != null) {
+      systemInputManager.init();
+    }
+    if (versions.containsKey("desktop-utils") && desktopUtils != null) {
+      desktopUtils.init();
+    }
 
-    if (enableDebugger) debugger.init();
+    if (enableDebugger) {
+      debugger.init();
+    }
   }
 
   public void shutdown() {
@@ -263,7 +279,9 @@ public class ScopeServices implements IConnectionHandler {
      * This can get called twice if we get a DISCONNECTED exception when
      * closing down Opera. Check if we're already shutting down and bail.
      */
-    if (shuttingDown) return;
+    if (shuttingDown) {
+      return;
+    }
 
     shuttingDown = true;
 
@@ -300,107 +318,109 @@ public class ScopeServices implements IConnectionHandler {
 
   private void createUmsServices(boolean enableDebugger, HostInfo info) {
     new UmsServices(this, info);
-    if (!enableDebugger) debugger = new IEcmaScriptDebugger() {
+    if (!enableDebugger) {
+      debugger = new IEcmaScriptDebugger() {
 
-      public void setRuntime(RuntimeInfo runtime) {
-      }
+        public void setRuntime(RuntimeInfo runtime) {
+        }
 
-      public Object scriptExecutor(String script, Object... params) {
-        return null;
-      }
+        public Object scriptExecutor(String script, Object... params) {
+          return null;
+        }
 
-      public void removeRuntime(int runtimeId) {
-      }
+        public void removeRuntime(int runtimeId) {
+        }
 
-      public List<String> listFramePaths() {
-        return null;
-      }
+        public List<String> listFramePaths() {
+          return null;
+        }
 
-      public void init() {
-      }
+        public void init() {
+        }
 
-      public int getRuntimeId() {
-        return 0;
-      }
+        public int getRuntimeId() {
+          return 0;
+        }
 
-      public Integer getObject(String using) {
-        return null;
-      }
+        public Integer getObject(String using) {
+          return null;
+        }
 
-      public Integer executeScriptOnObject(String using, int objectId) {
-        return null;
-      }
+        public Integer executeScriptOnObject(String using, int objectId) {
+          return null;
+        }
 
-      public Object executeScript(String using, boolean responseExpected) {
-        return null;
-      }
+        public Object executeScript(String using, boolean responseExpected) {
+          return null;
+        }
 
-      public String executeJavascript(String using, boolean responseExpected) {
-        return null;
-      }
+        public String executeJavascript(String using, boolean responseExpected) {
+          return null;
+        }
 
-      public String executeJavascript(String using) {
-        return null;
-      }
+        public String executeJavascript(String using) {
+          return null;
+        }
 
-      public List<Integer> examineObjects(Integer id) {
-        return null;
-      }
+        public List<Integer> examineObjects(Integer id) {
+          return null;
+        }
 
-      public void cleanUpRuntimes() {
-      }
+        public void cleanUpRuntimes() {
+        }
 
-      public void cleanUpRuntimes(int windowId) {
-      }
+        public void cleanUpRuntimes(int windowId) {
+        }
 
-      public void changeRuntime(String framePath) {
-      }
+        public void changeRuntime(String framePath) {
+        }
 
-      public Object callFunctionOnObject(String using, int objectId,
-          boolean responseExpected) {
-        return null;
-      }
+        public Object callFunctionOnObject(String using, int objectId,
+                                           boolean responseExpected) {
+          return null;
+        }
 
-      public String callFunctionOnObject(String using, int objectId) {
-        return null;
-      }
+        public String callFunctionOnObject(String using, int objectId) {
+          return null;
+        }
 
-      public void addRuntime(RuntimeInfo info) {
-      }
+        public void addRuntime(RuntimeInfo info) {
+        }
 
-      public void releaseObjects() {
-      }
+        public void releaseObjects() {
+        }
 
-      public boolean updateRuntime() {
-        return false;
-      }
+        public boolean updateRuntime() {
+          return false;
+        }
 
-      public void resetRuntimesList() {
-      }
+        public void resetRuntimesList() {
+        }
 
-      public void readyStateChanged(ReadyStateChange change) {
-      }
+        public void readyStateChanged(ReadyStateChange change) {
+        }
 
-      public void releaseObject(int objectId) {
-      }
+        public void releaseObject(int objectId) {
+        }
 
-      public void resetFramePath() {
-      }
+        public void resetFramePath() {
+        }
 
-      public void changeRuntime(int index) {
-      }
+        public void changeRuntime(int index) {
+        }
 
-      public String executeJavascript(String using, Integer windowId) {
-        return null;
-      }
+        public String executeJavascript(String using, Integer windowId) {
+          return null;
+        }
 
-      public Object examineScriptResult(Integer id) {
-        return null;
-      }
+        public Object examineScriptResult(Integer id) {
+          return null;
+        }
 
-      public void setDriver(OperaDriver driver) {
-      }
-    };
+        public void setDriver(OperaDriver driver) {
+        }
+      };
+    }
   }
 
   private void connect() {
@@ -411,7 +431,9 @@ public class ScopeServices implements IConnectionHandler {
   public void enableServices(List<String> requiredServices) {
     for (String requiredService : requiredServices) {
       try {
-        if (getListedServices().contains(requiredService)) enable(requiredService);
+        if (getListedServices().contains(requiredService)) {
+          enable(requiredService);
+        }
       } catch (InvalidProtocolBufferException e) {
         throw new WebDriverException("Could not parse the message");
       }
@@ -428,14 +450,17 @@ public class ScopeServices implements IConnectionHandler {
 
   public void quitOpera(OperaRunner runner, int pid) {
     try {
-      if (exec.getActionList().contains("Quit")) exec.action("Quit");
-      else exec.action("Exit");
+      if (exec.getActionList().contains("Quit")) {
+        exec.action("Quit");
+      } else {
+        exec.action("Exit");
+      }
     } catch (Exception e) {
       // We expect a CommunicationException here, because as Opera is shutting
       // down the connection will be closed.
       if (!(e instanceof CommunicationException)) {
         logger.info("Caught exception when trying to shut down : "
-            + e.getMessage());
+                    + e.getMessage());
       }
     }
 
@@ -513,19 +538,19 @@ public class ScopeServices implements IConnectionHandler {
   }
 
   public void onQuickMenuShown(QuickMenuInfo info) {
-	  logger.finest("QuickMenu shown: menuName=" + info.getMenuId().getMenuName());
-	  waitState.onQuickMenuShown(info);
+    logger.finest("QuickMenu shown: menuName=" + info.getMenuId().getMenuName());
+    waitState.onQuickMenuShown(info);
   }
 
   public void onQuickMenuItemPressed(QuickMenuItemID menuItemID) {
-	  logger.finest("QuickMenu shown: menuItem=" + menuItemID.getMenuText());
-	  waitState.onQuickMenuItemPressed(menuItemID);
+    logger.finest("QuickMenu shown: menuItem=" + menuItemID.getMenuText());
+    waitState.onQuickMenuItemPressed(menuItemID);
   }
 
   // TODO ADD PARAM AGAIN, or just name?
   public void onQuickMenuClosed(QuickMenuID id) {
-	  logger.finest("QuickMenu closed");//: menuName=" + info.getMenuId().getMenuName());
-	  waitState.onQuickMenuClosed(id);
+    logger.finest("QuickMenu closed");//: menuName=" + info.getMenuId().getMenuName());
+    waitState.onQuickMenuClosed(id);
   }
 
   public void onHandshake(boolean stp1) {
@@ -568,7 +593,8 @@ public class ScopeServices implements IConnectionHandler {
   }
 
   public void waitForWindowLoaded(int activeWindowId, long timeout) {
-    logger.finest("waitForWindowLoaded with params activeWindowId="+activeWindowId+" timeout="+timeout);
+    logger.finest(
+        "waitForWindowLoaded with params activeWindowId=" + activeWindowId + " timeout=" + timeout);
     waitState.waitForWindowLoaded(activeWindowId, timeout);
   }
 
@@ -591,32 +617,31 @@ public class ScopeServices implements IConnectionHandler {
     return false;
   }
 
-	/**
-	 * Enables the capturing on OperaIdle events.
-	 *
-	 * Sometimes when executing a command OperaIdle events will fire before
-	 * the response is received for the sent command. This results in missing
-	 * the Idle events, and later probably hitting a timeout.
-	 *
-	 * To prevent this you can call this function which will enable the tracking
-	 * of any Idle events received between now and when you call
-	 * waitForOperaIdle(). If Idle events have been received then
-	 * waitForOperaIdle() will return immediately.
-	 */
-	public void captureOperaIdle() {
-	  logger.fine("Capturing OperaIdle");
-	  waitState.captureOperaIdle();
-	}
+  /**
+   * Enables the capturing on OperaIdle events.
+   *
+   * Sometimes when executing a command OperaIdle events will fire before the response is received
+   * for the sent command. This results in missing the Idle events, and later probably hitting a
+   * timeout.
+   *
+   * To prevent this you can call this function which will enable the tracking of any Idle events
+   * received between now and when you call waitForOperaIdle(). If Idle events have been received
+   * then waitForOperaIdle() will return immediately.
+   */
+  public void captureOperaIdle() {
+    logger.fine("Capturing OperaIdle");
+    waitState.captureOperaIdle();
+  }
 
   /**
    * Waits for an OperaIdle event before continuing.
    *
-   * If captureOperaIdle() has been called since the last call of
-   * waitForOperaIdle(), and one or more OperaIdle events have occurred then
-   * this function will return immediately.
+   * If captureOperaIdle() has been called since the last call of waitForOperaIdle(), and one or
+   * more OperaIdle events have occurred then this function will return immediately.
    *
-   * After calling this function the capturing of OperaIdle events is
-   * disabled until the next call of captureOperaIdle()
+   * After calling this function the capturing of OperaIdle events is disabled until the next call
+   * of captureOperaIdle()
+   *
    * @param timeout Time in milliseconds to wait before aborting
    */
   public void waitForOperaIdle(long timeout) {
@@ -675,32 +700,32 @@ public class ScopeServices implements IConnectionHandler {
   }
 
   public String waitForMenuShown(String menuName, long timeout) {
-	  waitState.setWaitEvents(false);
-	  try {
-		  return waitState.waitForQuickMenuShown(menuName, timeout);
-	  } catch (Exception e) {
-		  return "";
-	  }
+    waitState.setWaitEvents(false);
+    try {
+      return waitState.waitForQuickMenuShown(menuName, timeout);
+    } catch (Exception e) {
+      return "";
+    }
   }
 
   public String waitForMenuClosed(String menuName, long timeout) {
-	  waitState.setWaitEvents(false);
-	  try {
-		  return waitState.waitForQuickMenuClosed(menuName, timeout);
+    waitState.setWaitEvents(false);
+    try {
+      return waitState.waitForQuickMenuClosed(menuName, timeout);
 
-	  } catch (Exception e) {
-		  return "";
-	  }
+    } catch (Exception e) {
+      return "";
+    }
   }
 
   public String waitForMenuItemPressed(String menuItemText, long timeout) {
-	  waitState.setWaitEvents(false);
-	  try {
-		  return waitState.waitForQuickMenuItemPressed(menuItemText, timeout);
+    waitState.setWaitEvents(false);
+    try {
+      return waitState.waitForQuickMenuItemPressed(menuItemText, timeout);
 
-	  } catch (Exception e) {
-		  return "";
-	  }
+    } catch (Exception e) {
+      return "";
+    }
   }
 
   public void onResponseReceived(int tag, Response response) {
@@ -762,20 +787,16 @@ public class ScopeServices implements IConnectionHandler {
 
   /**
    * Sends a command and wait for the response.
-   *
-   * @param command
-   * @param builder
-   * @return
    */
   public Response executeCommand(ICommand command, Builder<?> builder) {
     return executeCommand(command, builder,
-        OperaIntervals.RESPONSE_TIMEOUT.getValue());
+                          OperaIntervals.RESPONSE_TIMEOUT.getValue());
   }
 
   public Response executeCommand(ICommand command, Builder<?> builder,
-      long timeout) {
+                                 long timeout) {
     ByteString payload = (builder != null) ? builder.build().toByteString()
-        : ByteString.EMPTY;
+                                           : ByteString.EMPTY;
     Command.Builder commandBuilder = buildCommand(command, payload);
     int tag = commandBuilder.getTag();
     connection.send(commandBuilder.build());
@@ -791,7 +812,7 @@ public class ScopeServices implements IConnectionHandler {
     waitState.onRequest(windowId);
   }
 
-  public void setProfile(String profile){
+  public void setProfile(String profile) {
     this.profile = profile;
   }
 }
