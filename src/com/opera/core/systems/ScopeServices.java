@@ -559,7 +559,7 @@ public class ScopeServices implements IConnectionHandler {
   }
 
   public void onDisconnect() {
-    logger.fine("Disconnected, closing StpConnection");
+    logger.fine("Disconnected, closing STP connection");
     if (connection != null) {
       if (!shuttingDown) {
         waitState.onDisconnected();
