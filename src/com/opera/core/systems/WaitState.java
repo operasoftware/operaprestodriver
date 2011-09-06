@@ -39,7 +39,7 @@ public class WaitState {
 
   private final Logger logger = Logger.getLogger(this.getClass().getName());
   private boolean connected;
-  private boolean wait_events;
+  private boolean waitEvents;
 
   /**
    * Whether we should keep a note of any idle events received.
@@ -207,11 +207,11 @@ public class WaitState {
 
   public WaitState() {
     connected = true;
-    wait_events = false;
+    waitEvents = false;
   }
 
   public void setWaitEvents(boolean wait_events) {
-    this.wait_events = wait_events;
+    this.waitEvents = wait_events;
   }
 
   private void internalWait(long timeout) throws WebDriverException {
@@ -379,7 +379,7 @@ public class WaitState {
 
     // Test if we are listening to wait events
     // We don't want to remove them from the list while we are
-    if (wait_events) {
+    if (waitEvents) {
       ResultItem result_item = events.getFirst();
       while (true) {
         if (!result_item.isEventToWaitFor()) {
