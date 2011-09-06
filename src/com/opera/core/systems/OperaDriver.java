@@ -527,11 +527,11 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     String script;
     if (el == null) {
       // Search the document
-      script = "return " + OperaAtoms.FIND_ELEMENT.getValue() + "({" + by + ": \"" + using + "\"})";
+      script = "return " + OperaAtoms.FIND_ELEMENT.getValue() + "({\"" + by + "\": \"" + using + "\"})";
     } else {
       // Search within an element
       script =
-          "return " + OperaAtoms.FIND_ELEMENT.getValue() + "({" + by + ": \"" + using
+          "return " + OperaAtoms.FIND_ELEMENT.getValue() + "({\"" + by + "\": \"" + using
           + "\"}, locator)";
     }
 
@@ -600,11 +600,11 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     if (el == null) {
       // Search in document
       script =
-          "return " + OperaAtoms.FIND_ELEMENTS.getValue() + "({" + by + ": \"" + using + "\"})";
+          "return " + OperaAtoms.FIND_ELEMENTS.getValue() + "({\"" + by + "\": \"" + using + "\"})";
     } else {
       // Search within an element
       script =
-          "return " + OperaAtoms.FIND_ELEMENTS.getValue() + "({" + by + ": \"" + using
+          "return " + OperaAtoms.FIND_ELEMENTS.getValue() + "({\"" + by + "\": \"" + using
           + "\"}, locator)";
     }
 
