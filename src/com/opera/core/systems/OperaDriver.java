@@ -511,7 +511,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     } else if ("css selector".equals(by)) {
       by = "css";
     } else if ("id".equals(by)) {
-      ;
+      // same
     } else if ("link text".equals(by)) {
       by = "linkText";
     } else if ("partial link text".equals(by)) {
@@ -519,7 +519,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     } else if ("tag name".equals(by)) {
       by = "tagName";
     } else if ("xpath".equals(by)) {
-      by = "xpath";
+      // same
     } else {
       throw new WebDriverException("Cannot find matching element locator to: " + by);
     }
