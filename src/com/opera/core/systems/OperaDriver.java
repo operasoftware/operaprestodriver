@@ -337,17 +337,17 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     try {
       this.init();
     } catch (Exception e) {
-      // Will make sure to kill any eventual launcher process that was started.
+      // Will make sure to kill any eventual launcher process that was started
       this.quit();
       throw new WebDriverException(e);
     }
 
-    logger.fine("init() done");
+    logger.finer("Initialization done");
   }
 
   public void quit() {
     logger.fine("Opera Driver shutting down");
-    // This will only delete the profile directory if we created it.
+    // This will only delete the profile directory if we created it
     TemporaryFilesystem.getDefaultTmpFS().deleteTempDir(
         new File((String) capabilities.getCapability(PROFILE)));
 
