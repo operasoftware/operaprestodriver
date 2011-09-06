@@ -18,6 +18,7 @@ package com.opera.core.systems;
 
 import java.io.FileOutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -319,6 +320,13 @@ public class OperaWebElement extends RemoteWebElement {
       click();
     } else {
       executeMethod("locator.focus()");
+      // When focused textareas return the cursor to the last position it
+      // was at. Inputs place the cursor at the beginning, and so we need
+      // to move it to the end. We do this by pre-pending an "End" key to
+      // the keys to send (in a round-about way)
+      if (getTagName().equalsIgnoreCase("input")) {
+        executeMethod("locator.setSelectionRange(locator.value.length, locator.value.length);");
+      }
     }
 
     // This code is a bit ugly. Because "special" keys can be sent either as
@@ -347,21 +355,14 @@ public class OperaWebElement extends RemoteWebElement {
         execService.key("enter");
       } else {
         // We need to check each character to see if it is a "special" key
-        StringBuffer buffer = new StringBuffer();
         for (int i = 0; i < seq.length(); i++) {
           Character c = seq.charAt(i);
           String keyName = charToKeyName(c);
 
           // Buffer normal keys for a single type() call
           if (keyName == null) {
-            buffer.append(c.toString());
+            execService.type(c.toString());
           } else {
-            // This is a special key, so send all buffered normal keys
-            if (buffer.length() > 0) {
-              execService.type(buffer.toString());
-              buffer.delete(0, buffer.length());
-            }
-
             String key = OperaKeys.get(keyName);
             // FIXME: Code repeated from above.
             if (holdKeys.contains(key) && !heldKeys.contains(key) && !execService
@@ -376,11 +377,6 @@ public class OperaWebElement extends RemoteWebElement {
               execService.key(key);
             }
           }
-        }
-
-        // send any remaining buffered keys
-        if (buffer.length() > 0) {
-          execService.type(buffer.toString());
         }
       }
     }
