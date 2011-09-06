@@ -527,7 +527,8 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     String script;
     if (el == null) {
       // Search the document
-      script = "return " + OperaAtoms.FIND_ELEMENT.getValue() + "({\"" + by + "\": \"" + using + "\"})";
+      script =
+          "return " + OperaAtoms.FIND_ELEMENT.getValue() + "({\"" + by + "\": \"" + using + "\"})";
     } else {
       // Search within an element
       script =
