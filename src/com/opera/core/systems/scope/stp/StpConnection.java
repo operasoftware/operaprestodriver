@@ -342,19 +342,16 @@ public class StpConnection implements SocketListener {
     int split = message.indexOf(" ");
 
     if (split < 0) {
-      connectionHandler.onException(new WebDriverException(
-          "Invalid service list received."));
+      connectionHandler.onException(new WebDriverException("Invalid service list received."));
       return;
     }
 
-    List<String> services = Arrays.asList(message.substring(split + 1).split(
-        ","));
+    List<String> services = Arrays.asList(message.substring(split + 1).split(","));
     connectionHandler.onServiceList(services);
-    logger.fine("Service List OK.");
+    logger.fine("Service list ok");
 
     if (!services.contains("stp-1")) {
-      connectionHandler.onException(new WebDriverException(
-          "STP/0 is not supported!"));
+      connectionHandler.onException(new WebDriverException("STP/0 is not supported!"));
       return;
     }
 
