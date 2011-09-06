@@ -79,7 +79,7 @@ public class OperaLauncherProtocol {
       return response;
     }
 
-    public boolean IsSuccess() {
+    public boolean isSuccess() {
       return success;
     }
   }

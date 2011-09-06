@@ -15,7 +15,7 @@ public class SelftestTest extends TestBase {
   @Test
   public void testSelftests() {
     String product = driver.getProduct();
-    if(product.equals("core-gogi")) {
+    if("core-gogi".equals(product)) {
       String results;
       try {
         results = driver.selftest(Arrays.asList("about"), 30000);
