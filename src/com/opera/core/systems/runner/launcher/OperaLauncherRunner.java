@@ -98,22 +98,20 @@ public class OperaLauncherRunner implements OperaRunner {
       stringArray.add(binary_profile);
     }
 
-    // Note any launcher arguments must be before this line!
-
     if ((Boolean) this.capabilities.getCapability(OperaDriver.NO_QUIT)) {
       stringArray.add("-noquit");
     }
     stringArray.add("-bin");
     stringArray.add((String) this.capabilities.getCapability(OperaDriver.BINARY));
 
-    /*
-     * We read in environmental variable OPERA_ARGS in addition to existing
-     * arguments passed down from OperaDriverSettings. These are combined
-     * and sent to the browser.
-     *
-     * Note that this is a deviation from the principle of arguments normally
-     * overwriting environmental variables.
-     */
+    // Note any launcher arguments must be before this line!  Any arguments appended to the launcher
+    // binary will be sent directly to Opera.
+
+    // We read in environmental variable OPERA_ARGS in addition to existing arguments passed down
+    // from OperaDriverSettings. These are combined and sent to the browser.
+    //
+    // Note that this is a deviation from the principle of arguments normally overwriting
+    // environmental variables.
     String binaryArguments = (String) this.capabilities.getCapability(OperaDriver.ARGUMENTS);
     if (binaryArguments == null) {
       binaryArguments = "";
@@ -135,9 +133,8 @@ public class OperaLauncherRunner implements OperaRunner {
       stringArray.add("-autotestmode");
     }
 
-    // This can't be last, otherwise it might get interpreted as the page to
-    // open, and the file listing page doesn't have a JS context to inject
-    // into.
+    // This can't be last, otherwise it might get interpreted as the page to open, and the file
+    // listing page doesn't have a JS context to inject into.
     {
       String profile = (String) this.capabilities.getCapability(OperaDriver.PROFILE);
       // If null, generate a temp directory, if not empty use the given directory.
