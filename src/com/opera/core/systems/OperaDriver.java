@@ -494,19 +494,6 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     windowManager.filterActiveWindow();
   }
 
-  /**
-   * Closes all open windows.
-   *
-   * @deprecated Use <code>for (String win : driver.getWindowHandles()) { if
-   *             (driver.getWindowCount() <= 1) break; driver.switchTo().window(win).close();
-   *             }</code> on Desktop.
-   */
-  @Deprecated
-  public void closeAll() {
-    windowManager.closeAllWindows();
-    windowManager.filterActiveWindow();
-  }
-
   private void closeWindow() {
     windowManager.closeWindow(windowManager.getActiveWindowId());
   }
