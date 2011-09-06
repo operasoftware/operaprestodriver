@@ -103,8 +103,7 @@ public class WaitState {
     public ResultItem(WebDriverException ex) {
       waitResult = WaitResult.EXCEPTION;
       exception = ex;
-      logger.finest("EVENT: " + waitResult.toString() + ", exception: "
-                    + ex.toString());
+      logger.finest("EVENT: " + waitResult.toString() + ", exception: " + ex.toString());
     }
 
     public ResultItem(WaitResult result) {
