@@ -104,7 +104,7 @@ public class StpConnectionListener implements SocketListener {
 
     SocketChannel socket = server.accept();
     if (socket != null) {
-      logger.info("Accepted connection from " + socket.socket().getLocalAddress());
+      logger.fine("Accepted connection from " + socket.socket().getLocalAddress());
       socket.socket().setTcpNoDelay(true);
       new StpConnection(socket, handler, eventHandler, monitor);
     }
