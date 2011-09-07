@@ -18,9 +18,6 @@ package com.opera.core.systems;
 
 import junit.framework.Assert;
 
-import java.io.File;
-import java.io.IOException;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -30,6 +27,9 @@ import org.junit.rules.TemporaryFolder;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.remote.DesiredCapabilities;
+
+import java.io.File;
+import java.io.IOException;
 
 /**
  * @author Andreas Tolf Tolfsen <andreastt@opera.com>
@@ -41,7 +41,7 @@ public class DesiredCapabilitiesTest {
 
   @Before
   public void setUp() {
-    capabilities = OperaDriver.getDefaultCapabilities();
+    capabilities = (DesiredCapabilities) OperaDriver.getDefaultCapabilities();
   }
 
   @After

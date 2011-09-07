@@ -18,6 +18,7 @@ package com.opera.core.systems;
 
 import com.opera.core.systems.runner.OperaRunnerException;
 import com.opera.core.systems.runner.launcher.OperaLauncherRunner;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.openqa.selenium.Platform;
@@ -28,12 +29,13 @@ import java.io.File;
 import static org.junit.Assert.fail;
 
 public class OperaLauncherRunnerTest {
+
   private static DesiredCapabilities capabilities;
   private static OperaLauncherRunner runner;
 
   @Test
   public void testOperaDriverSettings() {
-    capabilities = OperaDriver.getDefaultCapabilities();
+    capabilities = (DesiredCapabilities) OperaDriver.getDefaultCapabilities();
     Assert.assertNotNull(capabilities);
   }
 
@@ -46,7 +48,8 @@ public class OperaLauncherRunnerTest {
   @Test
   public void testSetOperaBinaryLocation() {
     capabilities.setCapability(OperaDriver.BINARY, "/spartan/ramdisk/launcher");
-    Assert.assertEquals("/spartan/ramdisk/launcher", capabilities.getCapability(OperaDriver.BINARY));
+    Assert
+        .assertEquals("/spartan/ramdisk/launcher", capabilities.getCapability(OperaDriver.BINARY));
   }
 
   @Test
@@ -57,8 +60,10 @@ public class OperaLauncherRunnerTest {
 
   @Test
   public void testSetOperaBinaryArguments() {
-    capabilities.setCapability(OperaDriver.ARGUMENTS, "-host 127.0.0.1 -port 12199 -bin /spartan/ramdisk/install/launcher");
-    Assert.assertEquals("-host 127.0.0.1 -port 12199 -bin /spartan/ramdisk/install/launcher", capabilities.getCapability(OperaDriver.ARGUMENTS));
+    capabilities.setCapability(OperaDriver.ARGUMENTS,
+                               "-host 127.0.0.1 -port 12199 -bin /spartan/ramdisk/install/launcher");
+    Assert.assertEquals("-host 127.0.0.1 -port 12199 -bin /spartan/ramdisk/install/launcher",
+                        capabilities.getCapability(OperaDriver.ARGUMENTS));
   }
 
   @Test
@@ -102,7 +107,8 @@ public class OperaLauncherRunnerTest {
 
     try {
       runner.startOpera();
-      fail("This test should have generated a OperaRunnerException as we tried to start Opera when the Launcher isn't running...");
+      fail(
+          "This test should have generated a OperaRunnerException as we tried to start Opera when the Launcher isn't running...");
     } catch (OperaRunnerException e) {
     }
   }
@@ -268,4 +274,5 @@ public class OperaLauncherRunnerTest {
       Assert.assertTrue("Throws timeout error", e.getMessage().toLowerCase().contains("timeout"));
     }
   }
+
 }

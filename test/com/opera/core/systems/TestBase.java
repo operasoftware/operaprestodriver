@@ -2,17 +2,20 @@ package com.opera.core.systems;
 
 import com.opera.core.systems.runner.OperaRunner;
 import com.opera.core.systems.settings.OperaDriverSettings;
+
 import junit.framework.Assert;
+
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
-import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.Capabilities;
 
 import java.io.File;
 
 abstract public class TestBase {
+
   protected static TestOperaDriver driver;
 
-  private static String fixture_dir;
+  private static String fixtureDirectory;
 
   @BeforeClass
   public static void setUpBeforeClass() throws Exception {
@@ -34,16 +37,16 @@ abstract public class TestBase {
    */
   protected static void initFixtures() {
     String separator = System.getProperty("file.separator");
-    fixture_dir = System.getProperty("user.dir");
-    fixture_dir = separator + fixture_dir + separator + separator + "test" +
-      separator + "fixtures" + separator;
+    fixtureDirectory = System.getProperty("user.dir");
+    fixtureDirectory = separator + fixtureDirectory + separator + separator + "test" +
+                       separator + "fixtures" + separator;
 
-    Assert.assertTrue(new File(fixture_dir).isDirectory());
+    Assert.assertTrue(new File(fixtureDirectory).isDirectory());
   }
 
   // / Get the URL of the given fixture file
   protected String fixture(String file) {
-    return "file://localhost" + fixture_dir + file;
+    return "file://localhost" + fixtureDirectory + file;
   }
 
   // / Navigate to the given fixture file
@@ -54,6 +57,7 @@ abstract public class TestBase {
 
 // Provides access to the Opera Runner, so we can detect crashes
 class TestOperaDriver extends OperaDriver {
+
   public TestOperaDriver() {
     super();
   }
@@ -62,11 +66,12 @@ class TestOperaDriver extends OperaDriver {
     this(settings.getCapabilities());
   }
 
-  public TestOperaDriver(DesiredCapabilities capabilities) {
+  public TestOperaDriver(Capabilities capabilities) {
     super(capabilities);
   }
 
   public OperaRunner getRunner() {
     return operaRunner;
   }
+
 }
