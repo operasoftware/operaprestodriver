@@ -213,7 +213,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
   @Deprecated
   public OperaDriver(OperaDriverSettings settings) {
-    this((Capabilities) settings.getCapabilities());
+    this(settings.getCapabilities());
   }
 
   /**

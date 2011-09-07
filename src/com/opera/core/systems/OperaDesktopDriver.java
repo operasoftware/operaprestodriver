@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.openqa.selenium.Capabilities;
-import org.openqa.selenium.remote.DesiredCapabilities;
 
 import com.opera.core.systems.runner.launcher.OperaLauncherRunner;
 import com.opera.core.systems.scope.exceptions.CommunicationException;
@@ -65,7 +64,7 @@ public class OperaDesktopDriver extends OperaDriver {
 	 */
   @Deprecated
 	public OperaDesktopDriver(OperaDriverSettings settings) {
-		this((DesiredCapabilities) settings.getCapabilities());
+		this(settings.getCapabilities());
 	}
 
 	/**

@@ -35,7 +35,6 @@ import com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStopRe
 import com.opera.core.systems.scope.internal.OperaIntervals;
 import com.opera.core.systems.settings.OperaDriverSettings;
 
-import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.io.TemporaryFilesystem;
 import org.openqa.selenium.net.PortProber;
@@ -66,7 +65,7 @@ public class OperaLauncherRunner implements OperaRunner {
   }
 
   public OperaLauncherRunner(DesiredCapabilities capabilities) {
-    this.capabilities = (DesiredCapabilities) capabilities;
+    this.capabilities = capabilities;
 
     if (this.capabilities.getCapability(OperaDriver.LAUNCHER) == null) {
       throw new WebDriverException("launcher path not set");
