@@ -20,6 +20,7 @@ import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Logger;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
@@ -59,6 +60,8 @@ public class OperaWebElement extends RemoteWebElement {
   private final int runtimeId;
 
   private final IOperaExec execService;
+
+  protected final Logger logger = Logger.getLogger(this.getClass().getName());
 
   public int getObjectId() {
     return objectId;
@@ -544,9 +547,24 @@ public class OperaWebElement extends RemoteWebElement {
    */
   public Point getLocation() {
     String coordinates = debugger.callFunctionOnObject(
-        "var c=" + OperaAtoms.GET_LOCATION.getValue() + "(locator);return c.x+','+c.y;",
+        "var coords=" + OperaAtoms.GET_LOCATION.getValue() + "(locator);return coords.x+','+coords.y;",
         objectId
     );
+
+    // FIXME: the goog.dom.getDocumentScrollElement_() function the Google
+    // closure library doesn't return the document for SVG documents. This
+    // is used by the above atom. In this case the coordinates string will be
+    // empty, so we use this fallback to get the coordinates. Hopefully a fix
+    // will be forthcoming in the closure library.
+    if (coordinates.isEmpty()) {
+      logger.warning("Falling back to non-atom positioning code in getLocation");
+      coordinates = debugger.callFunctionOnObject(
+          "var coords = locator.getBoundingClientRect();" +
+          "return (coords.left-window.pageXOffset)+','+(coords.top-window.pageYOffset)",
+          objectId
+      );
+    }
+
     String[] location = coordinates.split(",");
     return new Point(Integer.valueOf(location[0]), Integer.valueOf(location[1]));
   }
