@@ -24,6 +24,7 @@ import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
+import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.remote.DesiredCapabilities;
@@ -57,7 +58,7 @@ public class DesiredCapabilitiesTest {
   @Test
   public void testSettingLoggingLevel() {
     capabilities.setCapability("opera.logging.level", "FINEST");
-    driver = new OperaDriver(capabilities);
+    driver = new OperaDriver((Capabilities) capabilities);
 
     Assert.assertEquals("FINEST", capabilities.getCapability("opera.logging.level"));
     Assert.assertNotNull(driver);
@@ -66,7 +67,7 @@ public class DesiredCapabilitiesTest {
   @Test
   public void testSettingLoggingLevelWithSmallLetters() {
     capabilities.setCapability("opera.logging.level", "info");
-    driver = new OperaDriver(capabilities);
+    driver = new OperaDriver((Capabilities) capabilities);
 
     Assert.assertEquals("info", capabilities.getCapability("opera.logging.level"));
     Assert.assertNotNull(driver);
@@ -77,7 +78,7 @@ public class DesiredCapabilitiesTest {
   public void testSettingLogFile() throws IOException {
     File log = tmpFolder.newFile("operadriver.log");
     capabilities.setCapability("opera.logging.file", log.getCanonicalPath());
-    driver = new OperaDriver(capabilities);
+    driver = new OperaDriver((Capabilities) capabilities);
 
     Assert.assertTrue(log.length() > 0);
   }
@@ -85,7 +86,7 @@ public class DesiredCapabilitiesTest {
   @Test(expected = WebDriverException.class)
   public void testSettingInvalidLogFile() throws Exception {
     capabilities.setCapability("opera.logging.file", "/an/invalid/path");
-    driver = new OperaDriver(capabilities);
+    driver = new OperaDriver((Capabilities) capabilities);
   }
 
 }
