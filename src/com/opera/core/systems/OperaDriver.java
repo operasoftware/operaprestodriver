@@ -110,6 +110,12 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
   public static final String BINARY = "opera.binary";
 
   /**
+   * (String) Arguments to pass to Opera, separated by spaces.  See <code>opera -help</code> for
+   * available command-line switches.
+   */
+  public static final String ARGUMENTS = "opera.arguments";
+
+  /**
    * (String) The host Opera should connect to.  Unless you're starting Opera manually you won't
    * need this.
    */
@@ -127,12 +133,6 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
    * screenshots.  If left blank, OperaDriver will use the launcher supplied with the package.
    */
   public static final String LAUNCHER = "opera.launcher";
-
-  /**
-   * (String) Arguments to pass to Opera, separated by spaces.  See <code>opera -help</code> for
-   * available command-line switches.
-   */
-  public static final String ARGUMENTS = "opera.arguments";
 
   /**
    * (String) Directory to use for the Opera profile. If null a random temporary directory is used.
