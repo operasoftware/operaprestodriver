@@ -1,6 +1,5 @@
 import com.opera.core.systems.*;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.remote.DesiredCapabilities;
 
 class Example {
 
