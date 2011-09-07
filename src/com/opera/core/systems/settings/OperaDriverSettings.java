@@ -209,14 +209,14 @@ public class OperaDriverSettings {
    * @param profile The profile name.
    */
   public void setProfile(String profile) {
-    capabilities.setCapability(OperaDriver.BINARY_PROFILE, profile);
+    capabilities.setCapability(OperaDriver.PRODUCT, profile);
   }
 
   /**
    * @return The profile name to use.
    */
   public String getProfile() {
-    return (String) capabilities.getCapability(OperaDriver.BINARY_PROFILE);
+    return (String) capabilities.getCapability(OperaDriver.PRODUCT);
   }
 
 }
