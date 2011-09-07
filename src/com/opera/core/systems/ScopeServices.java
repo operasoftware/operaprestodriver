@@ -98,7 +98,7 @@ public class ScopeServices implements IConnectionHandler {
   private AtomicInteger tagCounter;
 
   private StringBuilder selftestOutput;
-  private String profile;
+  private String product;
 
   public Map<String, String> getVersions() {
     return versions;
@@ -202,7 +202,7 @@ public class ScopeServices implements IConnectionHandler {
   }
 
   public void init() {
-    waitState.setProfile(profile);
+    waitState.setProfile(product);
     waitForHandshake();
 
     boolean enableDebugger = (OperaIntervals.ENABLE_DEBUGGER.getValue() != 0);
@@ -811,7 +811,7 @@ public class ScopeServices implements IConnectionHandler {
     waitState.onRequest(windowId);
   }
 
-  public void setProfile(String profile) {
-    this.profile = profile;
+  public void setProduct(String product) {
+    this.product = product;
   }
 }

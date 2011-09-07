@@ -179,7 +179,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
   /**
    * (String) The profile configuration we are using, for example "desktop" or "core-gogi".
    */
-  public static final String BINARY_PROFILE = "opera.binary_profile";
+  public static final String PRODUCT = "opera.product";
 
   /*
    * These are "protected" and not "private" so that we can extend this class
@@ -396,7 +396,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
       }
       services = new ScopeServices(versions, port, manualStart);
       // for profile-specific workarounds inside ScopeServives, WaitState ...
-      services.setProfile((String) capabilities.getCapability(BINARY_PROFILE));
+      services.setProduct((String) capabilities.getCapability(PRODUCT));
       services.startStpThread();
     } catch (IOException e) {
       throw new WebDriverException(e);

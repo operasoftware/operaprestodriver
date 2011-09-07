@@ -94,7 +94,7 @@ public class OperaLauncherRunner implements OperaRunner {
       stringArray.add("FINEST");
     }
 
-    String binary_profile = (String) capabilities.getCapability(OperaDriver.BINARY_PROFILE);
+    String binary_profile = (String) capabilities.getCapability(OperaDriver.PRODUCT);
     if (binary_profile != null && !binary_profile.isEmpty()) {
       stringArray.add("-profile");
       stringArray.add(binary_profile);
