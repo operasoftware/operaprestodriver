@@ -116,9 +116,9 @@ public class OperaPathsTest {
    */
   @SuppressWarnings("unchecked")
   private static void setEnvVar(String key, String value) throws Exception {
-    Class[] classes = Collections.class.getDeclaredClasses();
+    Class<?>[] classes = Collections.class.getDeclaredClasses();
     Map<String, String> env = System.getenv();
-    for (Class cl : classes) {
+    for (Class<?> cl : classes) {
       if ("java.util.Collections$UnmodifiableMap".equals(cl.getName())) {
         Field field = cl.getDeclaredField("m");
         field.setAccessible(true);
