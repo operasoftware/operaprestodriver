@@ -20,6 +20,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import com.opera.core.systems.runner.launcher.OperaLauncherRunner;
@@ -64,7 +65,7 @@ public class OperaDesktopDriver extends OperaDriver {
 	 */
   @Deprecated
 	public OperaDesktopDriver(OperaDriverSettings settings) {
-		this(settings.getCapabilities());
+		this((DesiredCapabilities) settings.getCapabilities());
 	}
 
 	/**
@@ -72,7 +73,7 @@ public class OperaDesktopDriver extends OperaDriver {
 	 *
 	 * @param c Settings for binary path to Opera, prefs directory, arguments and more.
 	 */
-	public OperaDesktopDriver(DesiredCapabilities c) {
+	public OperaDesktopDriver(Capabilities c) {
 		// OperaDriver constructor will initialize services and start Opera
 		// if the binaryPath is set in settings (by calling init in OperaDriver)
 		super(c);

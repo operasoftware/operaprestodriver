@@ -19,7 +19,7 @@ import java.io.File;
 import java.io.IOException;
 
 import org.apache.commons.io.FileUtils;
-import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.Capabilities;
 
 import com.opera.core.systems.OperaDriver;
 import com.opera.core.systems.settings.OperaDriverSettings;
@@ -32,14 +32,14 @@ public class ProfileUtils {
 	private String largePrefsFolder;
 	private String smallPrefsFolder;
 	private String cachePrefsFolder;
-	private DesiredCapabilities capabilities;
+	private Capabilities capabilities;
 
 	@Deprecated
 	public ProfileUtils(String largePrefsFolder, String smallPrefsFolder, String cachePrefsFolder, OperaDriverSettings settings) {
 		this(largePrefsFolder, smallPrefsFolder, cachePrefsFolder, settings.getCapabilities());
 	}
 
-	public ProfileUtils(String largePrefsFolder, String smallPrefsFolder, String cachePrefsFolder, DesiredCapabilities capabilities) {
+	public ProfileUtils(String largePrefsFolder, String smallPrefsFolder, String cachePrefsFolder, Capabilities capabilities) {
 		this.capabilities = capabilities;
 		this.largePrefsFolder = largePrefsFolder;
 		this.smallPrefsFolder = smallPrefsFolder;

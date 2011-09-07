@@ -208,12 +208,12 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
    * Constructor that starts Opera with the default set of capabilities.
    */
   public OperaDriver() {
-    this((DesiredCapabilities) null);
+    this((Capabilities) null);
   }
 
   @Deprecated
   public OperaDriver(OperaDriverSettings settings) {
-    this(settings.getCapabilities());
+    this((Capabilities) settings.getCapabilities());
   }
 
   /**
@@ -222,8 +222,8 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
    * @param c a DesiredCapabilities object containing various settings for the driver and the
    *          browser.
    */
-  public OperaDriver(DesiredCapabilities c) {
-    capabilities = getDefaultCapabilities();
+  public OperaDriver(Capabilities c) {
+    capabilities = (DesiredCapabilities) getDefaultCapabilities();
 
     if (c != null) {
       capabilities.merge(c);
@@ -298,7 +298,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
    * @return a DesiredCapabilities object with default settings
    */
   // TODO: Make this private when not needed in OperaDriverSettings
-  public static DesiredCapabilities getDefaultCapabilities() {
+  public static Capabilities getDefaultCapabilities() {
     DesiredCapabilities capabilities = DesiredCapabilities.opera();
     capabilities.setJavascriptEnabled(true);
 

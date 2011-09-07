@@ -16,6 +16,7 @@ limitations under the License.
 
 package com.opera.core.systems.settings;
 
+import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import com.opera.core.systems.OperaDriver;
@@ -32,10 +33,10 @@ public class OperaDriverSettings {
   private DesiredCapabilities capabilities;
 
   public OperaDriverSettings() {
-    capabilities = OperaDriver.getDefaultCapabilities();
+    capabilities = (DesiredCapabilities) OperaDriver.getDefaultCapabilities();
   }
 
-  public DesiredCapabilities getCapabilities() {
+  public Capabilities getCapabilities() {
     return capabilities;
   }
 
