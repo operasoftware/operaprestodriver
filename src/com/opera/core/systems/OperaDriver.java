@@ -278,8 +278,6 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
       }
 
       // If port is 0, try to find a random port.
-      Integer.getInteger(capabilities.getCapability(PORT).toString());
-
       if ((Integer) capabilities.getCapability(PORT) == 0) {
         capabilities.setCapability(PORT, PortProber.findFreePort());
       }
