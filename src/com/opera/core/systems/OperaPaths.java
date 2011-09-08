@@ -16,21 +16,20 @@ limitations under the License.
 
 package com.opera.core.systems;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.URISyntaxException;
-import java.net.URL;
-
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.os.CommandLine;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.security.MessageDigest;
 import java.util.Arrays;
 import java.util.logging.Logger;
@@ -163,7 +162,7 @@ public class OperaPaths {
           logger.fine("New launcher copied to " + executablePath);
         }
 
-      // If launcher is not inside jar we can run it from its current location
+        // If launcher is not inside jar we can run it from its current location
       } else if (url.startsWith("file:")) {
         File f;
         try {

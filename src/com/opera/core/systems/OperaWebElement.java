@@ -16,11 +16,16 @@ limitations under the License.
 
 package com.opera.core.systems;
 
-import java.io.FileOutputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.logging.Logger;
+import com.opera.core.systems.model.Canvas;
+import com.opera.core.systems.model.ColorResult;
+import com.opera.core.systems.model.ScreenShotReply;
+import com.opera.core.systems.scope.internal.OperaColors;
+import com.opera.core.systems.scope.internal.OperaFlags;
+import com.opera.core.systems.scope.internal.OperaIntervals;
+import com.opera.core.systems.scope.internal.OperaKeys;
+import com.opera.core.systems.scope.internal.OperaMouseKeys;
+import com.opera.core.systems.scope.services.IEcmaScriptDebugger;
+import com.opera.core.systems.scope.services.IOperaExec;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
@@ -36,16 +41,11 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.internal.Coordinates;
 import org.openqa.selenium.remote.RemoteWebElement;
 
-import com.opera.core.systems.model.Canvas;
-import com.opera.core.systems.model.ColorResult;
-import com.opera.core.systems.model.ScreenShotReply;
-import com.opera.core.systems.scope.internal.OperaColors;
-import com.opera.core.systems.scope.internal.OperaFlags;
-import com.opera.core.systems.scope.internal.OperaIntervals;
-import com.opera.core.systems.scope.internal.OperaKeys;
-import com.opera.core.systems.scope.internal.OperaMouseKeys;
-import com.opera.core.systems.scope.services.IEcmaScriptDebugger;
-import com.opera.core.systems.scope.services.IOperaExec;
+import java.io.FileOutputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * Extends the default WebElement with Opera specific methods.
@@ -98,9 +98,7 @@ public class OperaWebElement extends RemoteWebElement {
   }
 
   /**
-   * Evals the given script with object id and parses the result and returns the result object
-   *
-   * @return {@link ValueData}
+   * Evaluates the given script with object id and parses the result and returns the result object.
    */
   private final Object evaluateMethod(String using) {
     return debugger.callFunctionOnObject(using, objectId, true);
@@ -547,8 +545,8 @@ public class OperaWebElement extends RemoteWebElement {
    */
   public Point getLocation() {
     String coordinates = debugger.callFunctionOnObject(
-        "var coords=" + OperaAtoms.GET_LOCATION.getValue() + "(locator);return coords.x+','+coords.y;",
-        objectId
+        "var coords = " + OperaAtoms.GET_LOCATION.getValue() +
+        "(locator); return coords.x + ',' + coords.y;", objectId
     );
 
     // FIXME: the goog.dom.getDocumentScrollElement_() function the Google
@@ -594,8 +592,8 @@ public class OperaWebElement extends RemoteWebElement {
   }
 
   /**
-   * Takes a screenshot after {@link timeout} milliseconds of the area this element's bounding-box
-   * covers and returns the MD5 hash.
+   * Takes a screenshot after timeout milliseconds of the area this element's bounding-box covers
+   * and returns the MD5 hash.
    *
    * @param timeout The number of milliseconds to wait before taking the screenshot.
    * @return A MD5 hash as a string.
