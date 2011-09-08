@@ -21,12 +21,17 @@ Bug fixes
  * Sanitizing capabilities sent across the wire, as Ruby will sent us Long's
    for Integer's which are not easily converted in Java.  (andreastt)
 
+Tests
+-----
+
+ * Correct checking for Windows platform in tests.  (stuartk)
+ * Updated various tests.  (andreastt)
+
 Other
 -----
 
  * OperaWebElement now has its own logger.  (stuartk)
  * Java code refactoring.  (ajayk)
- * Updated various tests.  (andreastt)
 
 
 2011/09/06 OperaDriver 0.7.1
