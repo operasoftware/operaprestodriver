@@ -41,7 +41,7 @@ API changes
    getting locators by nice wire strings. (andreastt)
  * Remove OperaDriver.getProduct(), .getOS(), .getBinaryPath(),
    .getCoreVersion(), .getUserAgent() and .getPID() and replace with
-   OperaDriver.utils().  (andreastt)
+   OperaDriver.utils().*  (andreastt)
 
 Bug fixes
 ---------
