@@ -155,7 +155,7 @@ public class OperaLauncherRunner implements OperaRunner {
     }
 
     {
-      int port = (Integer) this.capabilities.getCapability(OperaDriver.PORT);
+      Integer port = (Integer) this.capabilities.getCapability(OperaDriver.PORT);
       if (port != -1) {
         // Provide defaults if one hasn't been set
         String host = (String) this.capabilities.getCapability(OperaDriver.HOST);

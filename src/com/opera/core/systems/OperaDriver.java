@@ -37,6 +37,7 @@ import com.opera.core.systems.scope.services.IOperaExec;
 import com.opera.core.systems.scope.services.IPrefs;
 import com.opera.core.systems.scope.services.IWindowManager;
 import com.opera.core.systems.settings.OperaDriverSettings;
+import com.opera.core.systems.util.CapabilitiesSanitizer;
 
 import org.apache.commons.io.IOUtils;
 import org.openqa.selenium.Alert;
@@ -226,6 +227,8 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     capabilities = (DesiredCapabilities) getDefaultCapabilities();
 
     if (c != null) {
+      CapabilitiesSanitizer sanitizer = new CapabilitiesSanitizer(c);
+      c = sanitizer.sanitize();
       capabilities.merge(c);
     }
 
