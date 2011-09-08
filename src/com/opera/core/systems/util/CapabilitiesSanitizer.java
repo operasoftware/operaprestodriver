@@ -51,28 +51,20 @@ public class CapabilitiesSanitizer {
   }
 
   /**
-   * The capabilities you wish to sanitize.  Typically you want to check the user's input and not
-   * what the driver produces after merging the default capabilities and the ones provided by the
-   * user.
-   *
-   * @param capabilities a Capabilities object
-   */
-  public CapabilitiesSanitizer(Capabilities capabilities) {
-    this.capabilities = (DesiredCapabilities) capabilities;
-  }
-
-  /**
    * Performs the sanitization of the capabilities object, returning the same capabilities object
    * with nice values.
    *
    * @return a capabilities object that is safe to use
    */
-  public Capabilities sanitize() {
+  public static Capabilities sanitize(Capabilities capabilities) {
+    DesiredCapabilities desiredCapabilities = (DesiredCapabilities) capabilities;
+
     for (IntegerCapabilities c : IntegerCapabilities.values()) {
-      capabilities.setCapability(c.value, valueToInteger(capabilities.getCapability(c.value)));
+      desiredCapabilities.setCapability(c.value, valueToInteger(
+          desiredCapabilities.getCapability(c.value)));
     }
 
-    return capabilities;
+    return desiredCapabilities;
   }
 
   /**
@@ -82,7 +74,7 @@ public class CapabilitiesSanitizer {
    * @param value value to convert
    * @return an integer representation of the value
    */
-  private Object valueToInteger(Object value) {
+  private static Object valueToInteger(Object value) {
     if (value instanceof Long) {
       return ((Long) value).intValue();
     } else if (value instanceof String) {

@@ -227,9 +227,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     capabilities = (DesiredCapabilities) getDefaultCapabilities();
 
     if (c != null) {
-      CapabilitiesSanitizer sanitizer = new CapabilitiesSanitizer(c);
-      c = sanitizer.sanitize();
-      capabilities.merge(c);
+      capabilities.merge(CapabilitiesSanitizer.sanitize(c));
     }
 
     // Set the logging level for main logger instance
@@ -280,6 +278,8 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
       }
 
       // If port is 0, try to find a random port.
+      Integer.getInteger(capabilities.getCapability(PORT).toString());
+
       if ((Integer) capabilities.getCapability(PORT) == 0) {
         capabilities.setCapability(PORT, PortProber.findFreePort());
       }
