@@ -57,10 +57,10 @@ public class DesiredCapabilitiesTest {
 
   @Test
   public void testSettingLoggingLevel() {
-    capabilities.setCapability("opera.logging.level", "FINEST");
+    capabilities.setCapability("opera.logging.level", "FINER");
     driver = new OperaDriver((Capabilities) capabilities);
 
-    Assert.assertEquals("FINEST", capabilities.getCapability("opera.logging.level"));
+    Assert.assertEquals("FINER", capabilities.getCapability("opera.logging.level"));
     Assert.assertNotNull(driver);
   }
 
