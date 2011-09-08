@@ -85,7 +85,7 @@ public class OperaPathsTest {
   @Test
   public void testOperaEnvVar() throws Exception {
     // Doesn't work on Windows
-    if (Platform.getCurrent() == Platform.WINDOWS) return;
+    if (Platform.getCurrent().is(Platform.WINDOWS)) return;
 
     assertNotSame(knownDir, paths.operaPath());
 
@@ -97,7 +97,7 @@ public class OperaPathsTest {
   @Test
   public void testLauncherEnvVar() throws Exception {
     // Doesn't work on Windows
-    if (Platform.getCurrent() == Platform.WINDOWS) return;
+    if (Platform.getCurrent().is(Platform.WINDOWS)) return;
 
     assertNotSame(knownDir, paths.launcherPath());
 

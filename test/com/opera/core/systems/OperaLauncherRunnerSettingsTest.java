@@ -281,7 +281,7 @@ public class OperaLauncherRunnerSettingsTest {
   public void testBadLauncher() throws Exception {
     File fakeLauncher;
     // Programs that should be installed that have no side effects when run
-    if (Platform.getCurrent() == Platform.WINDOWS) {
+    if (Platform.getCurrent().is(Platform.WINDOWS)) {
       fakeLauncher = new File("C:\\WINDOWS\\system32\\find.exe");
     } else {
       fakeLauncher = new File("/bin/echo");
