@@ -60,6 +60,10 @@ public class CapabilitiesSanitizer {
     DesiredCapabilities desiredCapabilities = (DesiredCapabilities) capabilities;
 
     for (IntegerCapabilities c : IntegerCapabilities.values()) {
+      if (desiredCapabilities.getCapability(c.value) == null) {
+        continue;
+      }
+
       desiredCapabilities.setCapability(c.value, valueToInteger(
           desiredCapabilities.getCapability(c.value)));
     }
