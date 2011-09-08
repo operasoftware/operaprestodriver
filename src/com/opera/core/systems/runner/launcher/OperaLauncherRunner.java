@@ -109,8 +109,38 @@ public class OperaLauncherRunner implements OperaRunner {
     // Note any launcher arguments must be before this line!  Any arguments appended to the launcher
     // binary will be sent directly to Opera.
 
+    // Enable auto test mode, always starts Opera on opera:debug and prevents interrupting dialogues
+    // appearing.
+    if (!stringArray.contains("-autotestmode")) {
+      stringArray.add("-autotestmode");
+    }
+
+    // This can't be last, otherwise it might get interpreted as the page to open, and the file
+    // listing page doesn't have a JS context to inject into.
+    String profile = (String) this.capabilities.getCapability(OperaDriver.PROFILE);
+    // If null, generate a temp directory, if not empty use the given directory.
+    if (profile == null) {
+      profile = TemporaryFilesystem.getDefaultTmpFS().createTempDir("opera-profile", "")
+          .getAbsolutePath();
+      capabilities.setCapability(OperaDriver.PROFILE, profile);
+
+      stringArray.add("-pd");
+      stringArray.add(profile);
+    } else if (!profile.isEmpty()) {
+      stringArray.add("-pd");
+      stringArray.add(profile);
+    }
+
+    int port = (Integer) this.capabilities.getCapability(OperaDriver.PORT);
+    if (port != -1) {
+      // Provide defaults if one hasn't been set
+      String host = (String) this.capabilities.getCapability(OperaDriver.HOST);
+      stringArray.add("-debugproxy");
+      stringArray.add(host + ":" + port);
+    }
+
     // We read in environmental variable OPERA_ARGS in addition to existing arguments passed down
-    // from OperaDriverSettings. These are combined and sent to the browser.
+    // from requested Capabilities.  These are combined and sent to the browser.
     //
     // Note that this is a deviation from the principle of arguments normally overwriting
     // environmental variables.
@@ -127,41 +157,6 @@ public class OperaLauncherRunner implements OperaRunner {
     StringTokenizer tokenizer = new StringTokenizer(binaryArguments, " ");
     while (tokenizer.hasMoreTokens()) {
       stringArray.add(tokenizer.nextToken());
-    }
-
-    // Enable auto test mode, always starts Opera on opera:debug and prevents
-    // interrupting dialogues appearing
-    if (!stringArray.contains("-autotestmode")) {
-      stringArray.add("-autotestmode");
-    }
-
-    // This can't be last, otherwise it might get interpreted as the page to open, and the file
-    // listing page doesn't have a JS context to inject into.
-    {
-      String profile = (String) this.capabilities.getCapability(OperaDriver.PROFILE);
-      // If null, generate a temp directory, if not empty use the given directory.
-      if (profile == null) {
-        profile =
-            TemporaryFilesystem.getDefaultTmpFS().createTempDir("opera-profile", "")
-                .getAbsolutePath();
-        capabilities.setCapability(OperaDriver.PROFILE, profile);
-
-        stringArray.add("-pd");
-        stringArray.add(profile);
-      } else if (!profile.isEmpty()) {
-        stringArray.add("-pd");
-        stringArray.add(profile);
-      }
-    }
-
-    {
-      int port = (Integer) this.capabilities.getCapability(OperaDriver.PORT);
-      if (port != -1) {
-        // Provide defaults if one hasn't been set
-        String host = (String) this.capabilities.getCapability(OperaDriver.HOST);
-        stringArray.add("-debugproxy");
-        stringArray.add(host + ":" + port);
-      }
     }
 
     logger.config("launcher arguments: " + stringArray.toString());
