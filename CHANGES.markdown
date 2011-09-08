@@ -1,3 +1,34 @@
+2011/09/08 OperaDriver 0.7.2
+============================
+
+API changes
+-----------
+
+ * DefaultDriverFactory in Selenium expects a Capabilities type constructor
+   argument rather than DesiredCapabilities.  OperaDriver now uses Capabilities
+   instead to match the other WebDriver implementations.  This fixes various
+   problems related to remote driving.  (andreastt)
+
+ * The capability "opera.binary_profile" has been renamed to "opera.product".
+   (andreastt)
+
+Bug fixes
+---------
+
+ * Fix OperaWebElement.getLocation for SVG documents.  (stuartk)
+ * -autotestmode, -debugproxy and -pd arguments are now sent to Opera before
+   unwrapping the arbitrary list of arguments sent by user.  (andreastt)
+ * Sanitizing capabilities sent across the wire, as Ruby will sent us Long's
+   for Integer's which are not easily converted in Java.  (andreastt)
+
+Other
+-----
+
+ * OperaWebElement now has its own logger.  (stuartk)
+ * Java code refactoring.  (ajayk)
+ * Updated various tests.  (andreastt)
+
+
 2011/09/06 OperaDriver 0.7.1
 ============================
 
@@ -10,7 +41,7 @@ API changes
    getting locators by nice wire strings. (andreastt)
  * Remove OperaDriver.getProduct(), .getOS(), .getBinaryPath(),
    .getCoreVersion(), .getUserAgent() and .getPID() and replace with
-   OperaDriver.utils().*  (andreastt)
+   OperaDriver.utils().  (andreastt)
 
 Bug fixes
 ---------
