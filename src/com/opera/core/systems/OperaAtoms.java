@@ -3911,13 +3911,14 @@ public enum OperaAtoms {
         " d==\"number\"?d:this.a.nodeType!=1?0:this.b?-1:1;this.d=v!=void 0?v:t" +
         "his.c||0;this.b&&(this.d*=-1);this.e=!c}g(O,function(){});O.prototype." +
         "a=e;O.prototype.c=0;g(function(a,b,c,d){O.call(this,a,b,c,e,d)},O);fun" +
-        "ction P(a,b){var c=b||G;if(a.nodeType!=1||!/^i?frame$/i.test(a.tagName" +
-        "))return e;for(var d=0;d<c.frames.length;d++)if(a.contentWindow==c.fra" +
-        "mes[d])return d;return e}var Q=\"_\".split(\".\"),R=f;!(Q[0]in R)&&R.e" +
-        "xecScript&&R.execScript(\"var \"+Q[0]);for(var W;Q.length&&(W=Q.shift(" +
-        "));)!Q.length&&P!==void 0?R[W]=P:R=R[W]?R[W]:R[W]={};; return this._.a" +
-        "pply(null,arguments);}.apply({navigator:typeof window!='undefined'?win" +
-        "dow.navigator:null}, arguments);}"
+        "ction P(a,b){var c=b||G;if((!a||!(a.nodeType==1&&a.tagName.toUpperCase" +
+        "()==\"FRAME\"))&&(!a||!(a.nodeType==1&&a.tagName.toUpperCase()==\"IFRA" +
+        "ME\")))return e;for(var d=0;d<c.frames.length;d++)if(a.contentWindow==" +
+        "c.frames[d])return d;return e}var Q=\"_\".split(\".\"),R=f;!(Q[0]in R)" +
+        "&&R.execScript&&R.execScript(\"var \"+Q[0]);for(var W;Q.length&&(W=Q.s" +
+        "hift());)!Q.length&&P!==void 0?R[W]=P:R=R[W]?R[W]:R[W]={};; return thi" +
+        "s._.apply(null,arguments);}.apply({navigator:typeof window!='undefined" +
+        "'?window.navigator:null}, arguments);}"
     ),
 ;
 
