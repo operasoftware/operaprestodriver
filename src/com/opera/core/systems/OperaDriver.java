@@ -290,6 +290,8 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
       capabilities.setCapability(PORT, -1);
     }
 
+    logger.config(capabilities.toString());
+
     start();
   }
 
