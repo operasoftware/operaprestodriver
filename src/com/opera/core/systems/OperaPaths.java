@@ -54,9 +54,13 @@ public class OperaPaths {
    */
   public String operaPath() {
     String path = System.getenv("OPERA_PATH");
+    File file = new File(path);
 
-    if (isPathValid(path)) {
+    // If path is set but it's not valid, throw exception.
+    if (file.exists()) {
       return path;
+    } else if (path != null && path.length() > 0 && !file.exists()) {
+      throw new WebDriverException("Path \"" + path + "\" in OPERA_PATH does not exist");
     }
 
     Platform platform = Platform.getCurrent();
@@ -87,6 +91,7 @@ public class OperaPaths {
       default:
         throw new WebDriverException("Auto find is not support on this platform"); // android?
     }
+
     return (isPathValid(path)) ? path : null;
   }
 
