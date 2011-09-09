@@ -242,7 +242,7 @@ public class WaitState {
 
   void onError(int tag) {
     synchronized (lock) {
-      logger.warning("Got ERROR for " + tag);
+      logger.fine("Got ERROR for " + tag);
       events.add(new ResultItem(WaitResult.ERROR, tag));
       lock.notify();
     }
