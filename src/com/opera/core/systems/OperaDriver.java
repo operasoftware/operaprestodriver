@@ -773,28 +773,11 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
     // TODO: Implement need to find a way to link an element to a runtime
     public WebDriver frame(WebElement frameElement) {
-      String script =
-        "return (function(elem) {\n"
-        + "  if (elem.nodeType != 1 || !/^i?frame$/i.test(elem.tagName)) {\n"
-        + "    return -1;\n"
-        + "  }\n"
-        + "  for (var i = 0; i < window.frames.length; i++) {\n"
-        + "    if (elem.contentWindow == window.frames[i]) {\n"
-        + "      return i;"
-        + "    }\n"
-        + "  }\n"
-        + "  return -2;\n"
-        + "})(locator);";
+      String script = "return " + OperaAtoms.GET_FRAME_INDEX.getValue() + "(locator)";
       Long frameIndex = (Long) debugger.callFunctionOnObject(script, ((OperaWebElement) frameElement).getObjectId(), true);
 
-      if (frameIndex < 0) {
-        if (frameIndex == -1) {
-          throw new NoSuchFrameException("Cannot switch to non-frame element");
-        } else if (frameIndex == -2) {
-          throw new NoSuchFrameException("Frame not in the current DOM");
-        } else {
-          throw new WebDriverException("Unknown error trying to switch to a frame element");
-        }
+      if (frameIndex == null) {
+        throw new NoSuchFrameException("Non-frame element or frame not in current DOM");
       }
 
       debugger.changeRuntime(frameIndex.intValue());
