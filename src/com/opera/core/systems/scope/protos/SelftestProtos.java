@@ -4,132 +4,165 @@
 package com.opera.core.systems.scope.protos;
 
 public final class SelftestProtos {
-  private SelftestProtos() {}
+
+  private SelftestProtos() {
+  }
+
   public static void registerAllExtensions(
       com.google.protobuf.ExtensionRegistry registry) {
   }
+
   public static final class RunModulesArg extends
-      com.google.protobuf.GeneratedMessage {
+                                          com.google.protobuf.GeneratedMessage {
+
     // Use RunModulesArg.newBuilder() to construct.
     private RunModulesArg() {
       initFields();
     }
-    private RunModulesArg(boolean noInit) {}
-    
+
+    private RunModulesArg(boolean noInit) {
+    }
+
     private static final RunModulesArg defaultInstance;
+
     public static RunModulesArg getDefaultInstance() {
       return defaultInstance;
     }
-    
+
     public RunModulesArg getDefaultInstanceForType() {
       return defaultInstance;
     }
-    
+
     public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
+    getDescriptor() {
       return com.opera.core.systems.scope.protos.SelftestProtos.internal_static_scope_RunModulesArg_descriptor;
     }
-    
+
     protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-        internalGetFieldAccessorTable() {
+    internalGetFieldAccessorTable() {
       return com.opera.core.systems.scope.protos.SelftestProtos.internal_static_scope_RunModulesArg_fieldAccessorTable;
     }
-    
+
     public enum OutputType
         implements com.google.protobuf.ProtocolMessageEnum {
       HUMAN_READABLE(0, 1),
-      MACHINE_READABLE(1, 2),
-      ;
-      
-      
-      public final int getNumber() { return value; }
-      
+      MACHINE_READABLE(1, 2),;
+
+
+      public final int getNumber() {
+        return value;
+      }
+
       public static OutputType valueOf(int value) {
         switch (value) {
-          case 1: return HUMAN_READABLE;
-          case 2: return MACHINE_READABLE;
-          default: return null;
+          case 1:
+            return HUMAN_READABLE;
+          case 2:
+            return MACHINE_READABLE;
+          default:
+            return null;
         }
       }
-      
+
       public static com.google.protobuf.Internal.EnumLiteMap<OutputType>
-          internalGetValueMap() {
+      internalGetValueMap() {
         return internalValueMap;
       }
+
       private static com.google.protobuf.Internal.EnumLiteMap<OutputType>
           internalValueMap =
-            new com.google.protobuf.Internal.EnumLiteMap<OutputType>() {
-              public OutputType findValueByNumber(int number) {
-                return OutputType.valueOf(number)
-      ;        }
-            };
-      
+          new com.google.protobuf.Internal.EnumLiteMap<OutputType>() {
+            public OutputType findValueByNumber(int number) {
+              return OutputType.valueOf(number)
+                  ;
+            }
+          };
+
       public final com.google.protobuf.Descriptors.EnumValueDescriptor
-          getValueDescriptor() {
+      getValueDescriptor() {
         return getDescriptor().getValues().get(index);
       }
+
       public final com.google.protobuf.Descriptors.EnumDescriptor
-          getDescriptorForType() {
+      getDescriptorForType() {
         return getDescriptor();
       }
+
       public static final com.google.protobuf.Descriptors.EnumDescriptor
-          getDescriptor() {
-        return com.opera.core.systems.scope.protos.SelftestProtos.RunModulesArg.getDescriptor().getEnumTypes().get(0);
+      getDescriptor() {
+        return com.opera.core.systems.scope.protos.SelftestProtos.RunModulesArg.getDescriptor()
+            .getEnumTypes().get(0);
       }
-      
+
       private static final OutputType[] VALUES = {
-        HUMAN_READABLE, MACHINE_READABLE, 
+          HUMAN_READABLE, MACHINE_READABLE,
       };
+
       public static OutputType valueOf(
           com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
         if (desc.getType() != getDescriptor()) {
           throw new java.lang.IllegalArgumentException(
-            "EnumValueDescriptor is not for this type.");
+              "EnumValueDescriptor is not for this type.");
         }
         return VALUES[desc.getIndex()];
       }
+
       private final int index;
       private final int value;
+
       private OutputType(int index, int value) {
         this.index = index;
         this.value = value;
       }
-      
+
       static {
         com.opera.core.systems.scope.protos.SelftestProtos.getDescriptor();
       }
-      
+
       // @@protoc_insertion_point(enum_scope:scope.RunModulesArg.OutputType)
     }
-    
+
     // repeated string moduleList = 1;
     public static final int MODULELIST_FIELD_NUMBER = 1;
     private java.util.List<java.lang.String> moduleList_ =
-      java.util.Collections.emptyList();
+        java.util.Collections.emptyList();
+
     public java.util.List<java.lang.String> getModuleListList() {
       return moduleList_;
     }
-    public int getModuleListCount() { return moduleList_.size(); }
+
+    public int getModuleListCount() {
+      return moduleList_.size();
+    }
+
     public java.lang.String getModuleList(int index) {
       return moduleList_.get(index);
     }
-    
+
     // optional .scope.RunModulesArg.OutputType outputType = 2 [default = HUMAN_READABLE];
     public static final int OUTPUTTYPE_FIELD_NUMBER = 2;
     private boolean hasOutputType;
     private com.opera.core.systems.scope.protos.SelftestProtos.RunModulesArg.OutputType outputType_;
-    public boolean hasOutputType() { return hasOutputType; }
-    public com.opera.core.systems.scope.protos.SelftestProtos.RunModulesArg.OutputType getOutputType() { return outputType_; }
-    
-    private void initFields() {
-      outputType_ = com.opera.core.systems.scope.protos.SelftestProtos.RunModulesArg.OutputType.HUMAN_READABLE;
+
+    public boolean hasOutputType() {
+      return hasOutputType;
     }
+
+    public com.opera.core.systems.scope.protos.SelftestProtos.RunModulesArg.OutputType getOutputType() {
+      return outputType_;
+    }
+
+    private void initFields() {
+      outputType_ =
+          com.opera.core.systems.scope.protos.SelftestProtos.RunModulesArg.OutputType.HUMAN_READABLE;
+    }
+
     public final boolean isInitialized() {
       return true;
     }
-    
+
     public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
+        throws java.io.IOException {
       getSerializedSize();
       for (java.lang.String element : getModuleListList()) {
         output.writeString(1, element);
@@ -139,66 +172,78 @@ public final class SelftestProtos {
       }
       getUnknownFields().writeTo(output);
     }
-    
+
     private int memoizedSerializedSize = -1;
+
     public int getSerializedSize() {
       int size = memoizedSerializedSize;
-      if (size != -1) return size;
-    
+      if (size != -1) {
+        return size;
+      }
+
       size = 0;
       {
         int dataSize = 0;
         for (java.lang.String element : getModuleListList()) {
           dataSize += com.google.protobuf.CodedOutputStream
-            .computeStringSizeNoTag(element);
+              .computeStringSizeNoTag(element);
         }
         size += dataSize;
         size += 1 * getModuleListList().size();
       }
       if (hasOutputType()) {
         size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(2, getOutputType().getNumber());
+            .computeEnumSize(2, getOutputType().getNumber());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
       return size;
     }
-    
+
     public static com.opera.core.systems.scope.protos.SelftestProtos.RunModulesArg parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.SelftestProtos.RunModulesArg parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+          .buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.SelftestProtos.RunModulesArg parseFrom(byte[] data)
+
+    public static com.opera.core.systems.scope.protos.SelftestProtos.RunModulesArg parseFrom(
+        byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.SelftestProtos.RunModulesArg parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+          .buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.SelftestProtos.RunModulesArg parseFrom(java.io.InputStream input)
+
+    public static com.opera.core.systems.scope.protos.SelftestProtos.RunModulesArg parseFrom(
+        java.io.InputStream input)
         throws java.io.IOException {
       return newBuilder().mergeFrom(input).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.SelftestProtos.RunModulesArg parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+          .buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.SelftestProtos.RunModulesArg parseDelimitedFrom(java.io.InputStream input)
+
+    public static com.opera.core.systems.scope.protos.SelftestProtos.RunModulesArg parseDelimitedFrom(
+        java.io.InputStream input)
         throws java.io.IOException {
       Builder builder = newBuilder();
       if (builder.mergeDelimitedFrom(input)) {
@@ -207,6 +252,7 @@ public final class SelftestProtos {
         return null;
       }
     }
+
     public static com.opera.core.systems.scope.protos.SelftestProtos.RunModulesArg parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -218,109 +264,130 @@ public final class SelftestProtos {
         return null;
       }
     }
+
     public static com.opera.core.systems.scope.protos.SelftestProtos.RunModulesArg parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return newBuilder().mergeFrom(input).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.SelftestProtos.RunModulesArg parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+          .buildParsed();
     }
-    
-    public static Builder newBuilder() { return Builder.create(); }
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(com.opera.core.systems.scope.protos.SelftestProtos.RunModulesArg prototype) {
+
+    public static Builder newBuilder() {
+      return Builder.create();
+    }
+
+    public Builder newBuilderForType() {
+      return newBuilder();
+    }
+
+    public static Builder newBuilder(
+        com.opera.core.systems.scope.protos.SelftestProtos.RunModulesArg prototype) {
       return newBuilder().mergeFrom(prototype);
     }
-    public Builder toBuilder() { return newBuilder(this); }
-    
+
+    public Builder toBuilder() {
+      return newBuilder(this);
+    }
+
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> {
+                                      com.google.protobuf.GeneratedMessage.Builder<Builder> {
+
       private com.opera.core.systems.scope.protos.SelftestProtos.RunModulesArg result;
-      
+
       // Construct using com.opera.core.systems.scope.protos.SelftestProtos.RunModulesArg.newBuilder()
-      private Builder() {}
-      
+      private Builder() {
+      }
+
       private static Builder create() {
         Builder builder = new Builder();
         builder.result = new com.opera.core.systems.scope.protos.SelftestProtos.RunModulesArg();
         return builder;
       }
-      
+
       protected com.opera.core.systems.scope.protos.SelftestProtos.RunModulesArg internalGetResult() {
         return result;
       }
-      
+
       public Builder clear() {
         if (result == null) {
           throw new IllegalStateException(
-            "Cannot call clear() after build().");
+              "Cannot call clear() after build().");
         }
         result = new com.opera.core.systems.scope.protos.SelftestProtos.RunModulesArg();
         return this;
       }
-      
+
       public Builder clone() {
         return create().mergeFrom(result);
       }
-      
+
       public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
+      getDescriptorForType() {
         return com.opera.core.systems.scope.protos.SelftestProtos.RunModulesArg.getDescriptor();
       }
-      
+
       public com.opera.core.systems.scope.protos.SelftestProtos.RunModulesArg getDefaultInstanceForType() {
-        return com.opera.core.systems.scope.protos.SelftestProtos.RunModulesArg.getDefaultInstance();
+        return com.opera.core.systems.scope.protos.SelftestProtos.RunModulesArg
+            .getDefaultInstance();
       }
-      
+
       public boolean isInitialized() {
         return result.isInitialized();
       }
+
       public com.opera.core.systems.scope.protos.SelftestProtos.RunModulesArg build() {
         if (result != null && !isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return buildPartial();
       }
-      
+
       private com.opera.core.systems.scope.protos.SelftestProtos.RunModulesArg buildParsed()
           throws com.google.protobuf.InvalidProtocolBufferException {
         if (!isInitialized()) {
           throw newUninitializedMessageException(
-            result).asInvalidProtocolBufferException();
+              result).asInvalidProtocolBufferException();
         }
         return buildPartial();
       }
-      
+
       public com.opera.core.systems.scope.protos.SelftestProtos.RunModulesArg buildPartial() {
         if (result == null) {
           throw new IllegalStateException(
-            "build() has already been called on this Builder.");
+              "build() has already been called on this Builder.");
         }
         if (result.moduleList_ != java.util.Collections.EMPTY_LIST) {
           result.moduleList_ =
-            java.util.Collections.unmodifiableList(result.moduleList_);
+              java.util.Collections.unmodifiableList(result.moduleList_);
         }
         com.opera.core.systems.scope.protos.SelftestProtos.RunModulesArg returnMe = result;
         result = null;
         return returnMe;
       }
-      
+
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.opera.core.systems.scope.protos.SelftestProtos.RunModulesArg) {
-          return mergeFrom((com.opera.core.systems.scope.protos.SelftestProtos.RunModulesArg)other);
+          return mergeFrom(
+              (com.opera.core.systems.scope.protos.SelftestProtos.RunModulesArg) other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
-      
-      public Builder mergeFrom(com.opera.core.systems.scope.protos.SelftestProtos.RunModulesArg other) {
-        if (other == com.opera.core.systems.scope.protos.SelftestProtos.RunModulesArg.getDefaultInstance()) return this;
+
+      public Builder mergeFrom(
+          com.opera.core.systems.scope.protos.SelftestProtos.RunModulesArg other) {
+        if (other == com.opera.core.systems.scope.protos.SelftestProtos.RunModulesArg
+            .getDefaultInstance()) {
+          return this;
+        }
         if (!other.moduleList_.isEmpty()) {
           if (result.moduleList_.isEmpty()) {
             result.moduleList_ = new java.util.ArrayList<java.lang.String>();
@@ -333,14 +400,14 @@ public final class SelftestProtos {
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
-      
+
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
         com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder(
-            this.getUnknownFields());
+            com.google.protobuf.UnknownFieldSet.newBuilder(
+                this.getUnknownFields());
         while (true) {
           int tag = input.readTag();
           switch (tag) {
@@ -361,7 +428,10 @@ public final class SelftestProtos {
             }
             case 16: {
               int rawValue = input.readEnum();
-              com.opera.core.systems.scope.protos.SelftestProtos.RunModulesArg.OutputType value = com.opera.core.systems.scope.protos.SelftestProtos.RunModulesArg.OutputType.valueOf(rawValue);
+              com.opera.core.systems.scope.protos.SelftestProtos.RunModulesArg.OutputType
+                  value =
+                  com.opera.core.systems.scope.protos.SelftestProtos.RunModulesArg.OutputType
+                      .valueOf(rawValue);
               if (value == null) {
                 unknownFields.mergeVarintField(2, rawValue);
               } else {
@@ -372,35 +442,40 @@ public final class SelftestProtos {
           }
         }
       }
-      
-      
+
+
       // repeated string moduleList = 1;
       public java.util.List<java.lang.String> getModuleListList() {
         return java.util.Collections.unmodifiableList(result.moduleList_);
       }
+
       public int getModuleListCount() {
         return result.getModuleListCount();
       }
+
       public java.lang.String getModuleList(int index) {
         return result.getModuleList(index);
       }
+
       public Builder setModuleList(int index, java.lang.String value) {
         if (value == null) {
-    throw new NullPointerException();
-  }
-  result.moduleList_.set(index, value);
+          throw new NullPointerException();
+        }
+        result.moduleList_.set(index, value);
         return this;
       }
+
       public Builder addModuleList(java.lang.String value) {
         if (value == null) {
-    throw new NullPointerException();
-  }
-  if (result.moduleList_.isEmpty()) {
+          throw new NullPointerException();
+        }
+        if (result.moduleList_.isEmpty()) {
           result.moduleList_ = new java.util.ArrayList<java.lang.String>();
         }
         result.moduleList_.add(value);
         return this;
       }
+
       public Builder addAllModuleList(
           java.lang.Iterable<? extends java.lang.String> values) {
         if (result.moduleList_.isEmpty()) {
@@ -409,19 +484,23 @@ public final class SelftestProtos {
         super.addAll(values, result.moduleList_);
         return this;
       }
+
       public Builder clearModuleList() {
         result.moduleList_ = java.util.Collections.emptyList();
         return this;
       }
-      
+
       // optional .scope.RunModulesArg.OutputType outputType = 2 [default = HUMAN_READABLE];
       public boolean hasOutputType() {
         return result.hasOutputType();
       }
+
       public com.opera.core.systems.scope.protos.SelftestProtos.RunModulesArg.OutputType getOutputType() {
         return result.getOutputType();
       }
-      public Builder setOutputType(com.opera.core.systems.scope.protos.SelftestProtos.RunModulesArg.OutputType value) {
+
+      public Builder setOutputType(
+          com.opera.core.systems.scope.protos.SelftestProtos.RunModulesArg.OutputType value) {
         if (value == null) {
           throw new NullPointerException();
         }
@@ -429,124 +508,151 @@ public final class SelftestProtos {
         result.outputType_ = value;
         return this;
       }
+
       public Builder clearOutputType() {
         result.hasOutputType = false;
-        result.outputType_ = com.opera.core.systems.scope.protos.SelftestProtos.RunModulesArg.OutputType.HUMAN_READABLE;
+        result.outputType_ =
+            com.opera.core.systems.scope.protos.SelftestProtos.RunModulesArg.OutputType.HUMAN_READABLE;
         return this;
       }
-      
+
       // @@protoc_insertion_point(builder_scope:scope.RunModulesArg)
     }
-    
+
     static {
       defaultInstance = new RunModulesArg(true);
       com.opera.core.systems.scope.protos.SelftestProtos.internalForceInit();
       defaultInstance.initFields();
     }
-    
+
     // @@protoc_insertion_point(class_scope:scope.RunModulesArg)
   }
-  
+
   public static final class SelftestOutput extends
-      com.google.protobuf.GeneratedMessage {
+                                           com.google.protobuf.GeneratedMessage {
+
     // Use SelftestOutput.newBuilder() to construct.
     private SelftestOutput() {
       initFields();
     }
-    private SelftestOutput(boolean noInit) {}
-    
+
+    private SelftestOutput(boolean noInit) {
+    }
+
     private static final SelftestOutput defaultInstance;
+
     public static SelftestOutput getDefaultInstance() {
       return defaultInstance;
     }
-    
+
     public SelftestOutput getDefaultInstanceForType() {
       return defaultInstance;
     }
-    
+
     public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
+    getDescriptor() {
       return com.opera.core.systems.scope.protos.SelftestProtos.internal_static_scope_SelftestOutput_descriptor;
     }
-    
+
     protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-        internalGetFieldAccessorTable() {
+    internalGetFieldAccessorTable() {
       return com.opera.core.systems.scope.protos.SelftestProtos.internal_static_scope_SelftestOutput_fieldAccessorTable;
     }
-    
+
     // required string output = 2;
     public static final int OUTPUT_FIELD_NUMBER = 2;
     private boolean hasOutput;
     private java.lang.String output_ = "";
-    public boolean hasOutput() { return hasOutput; }
-    public java.lang.String getOutput() { return output_; }
-    
+
+    public boolean hasOutput() {
+      return hasOutput;
+    }
+
+    public java.lang.String getOutput() {
+      return output_;
+    }
+
     private void initFields() {
     }
+
     public final boolean isInitialized() {
-      if (!hasOutput) return false;
+      if (!hasOutput) {
+        return false;
+      }
       return true;
     }
-    
+
     public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
+        throws java.io.IOException {
       getSerializedSize();
       if (hasOutput()) {
         output.writeString(2, getOutput());
       }
       getUnknownFields().writeTo(output);
     }
-    
+
     private int memoizedSerializedSize = -1;
+
     public int getSerializedSize() {
       int size = memoizedSerializedSize;
-      if (size != -1) return size;
-    
+      if (size != -1) {
+        return size;
+      }
+
       size = 0;
       if (hasOutput()) {
         size += com.google.protobuf.CodedOutputStream
-          .computeStringSize(2, getOutput());
+            .computeStringSize(2, getOutput());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
       return size;
     }
-    
+
     public static com.opera.core.systems.scope.protos.SelftestProtos.SelftestOutput parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.SelftestProtos.SelftestOutput parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+          .buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.SelftestProtos.SelftestOutput parseFrom(byte[] data)
+
+    public static com.opera.core.systems.scope.protos.SelftestProtos.SelftestOutput parseFrom(
+        byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.SelftestProtos.SelftestOutput parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+          .buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.SelftestProtos.SelftestOutput parseFrom(java.io.InputStream input)
+
+    public static com.opera.core.systems.scope.protos.SelftestProtos.SelftestOutput parseFrom(
+        java.io.InputStream input)
         throws java.io.IOException {
       return newBuilder().mergeFrom(input).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.SelftestProtos.SelftestOutput parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+          .buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.SelftestProtos.SelftestOutput parseDelimitedFrom(java.io.InputStream input)
+
+    public static com.opera.core.systems.scope.protos.SelftestProtos.SelftestOutput parseDelimitedFrom(
+        java.io.InputStream input)
         throws java.io.IOException {
       Builder builder = newBuilder();
       if (builder.mergeDelimitedFrom(input)) {
@@ -555,6 +661,7 @@ public final class SelftestProtos {
         return null;
       }
     }
+
     public static com.opera.core.systems.scope.protos.SelftestProtos.SelftestOutput parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -566,119 +673,140 @@ public final class SelftestProtos {
         return null;
       }
     }
+
     public static com.opera.core.systems.scope.protos.SelftestProtos.SelftestOutput parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return newBuilder().mergeFrom(input).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.SelftestProtos.SelftestOutput parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+          .buildParsed();
     }
-    
-    public static Builder newBuilder() { return Builder.create(); }
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(com.opera.core.systems.scope.protos.SelftestProtos.SelftestOutput prototype) {
+
+    public static Builder newBuilder() {
+      return Builder.create();
+    }
+
+    public Builder newBuilderForType() {
+      return newBuilder();
+    }
+
+    public static Builder newBuilder(
+        com.opera.core.systems.scope.protos.SelftestProtos.SelftestOutput prototype) {
       return newBuilder().mergeFrom(prototype);
     }
-    public Builder toBuilder() { return newBuilder(this); }
-    
+
+    public Builder toBuilder() {
+      return newBuilder(this);
+    }
+
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> {
+                                      com.google.protobuf.GeneratedMessage.Builder<Builder> {
+
       private com.opera.core.systems.scope.protos.SelftestProtos.SelftestOutput result;
-      
+
       // Construct using com.opera.core.systems.scope.protos.SelftestProtos.SelftestOutput.newBuilder()
-      private Builder() {}
-      
+      private Builder() {
+      }
+
       private static Builder create() {
         Builder builder = new Builder();
         builder.result = new com.opera.core.systems.scope.protos.SelftestProtos.SelftestOutput();
         return builder;
       }
-      
+
       protected com.opera.core.systems.scope.protos.SelftestProtos.SelftestOutput internalGetResult() {
         return result;
       }
-      
+
       public Builder clear() {
         if (result == null) {
           throw new IllegalStateException(
-            "Cannot call clear() after build().");
+              "Cannot call clear() after build().");
         }
         result = new com.opera.core.systems.scope.protos.SelftestProtos.SelftestOutput();
         return this;
       }
-      
+
       public Builder clone() {
         return create().mergeFrom(result);
       }
-      
+
       public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
+      getDescriptorForType() {
         return com.opera.core.systems.scope.protos.SelftestProtos.SelftestOutput.getDescriptor();
       }
-      
+
       public com.opera.core.systems.scope.protos.SelftestProtos.SelftestOutput getDefaultInstanceForType() {
-        return com.opera.core.systems.scope.protos.SelftestProtos.SelftestOutput.getDefaultInstance();
+        return com.opera.core.systems.scope.protos.SelftestProtos.SelftestOutput
+            .getDefaultInstance();
       }
-      
+
       public boolean isInitialized() {
         return result.isInitialized();
       }
+
       public com.opera.core.systems.scope.protos.SelftestProtos.SelftestOutput build() {
         if (result != null && !isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return buildPartial();
       }
-      
+
       private com.opera.core.systems.scope.protos.SelftestProtos.SelftestOutput buildParsed()
           throws com.google.protobuf.InvalidProtocolBufferException {
         if (!isInitialized()) {
           throw newUninitializedMessageException(
-            result).asInvalidProtocolBufferException();
+              result).asInvalidProtocolBufferException();
         }
         return buildPartial();
       }
-      
+
       public com.opera.core.systems.scope.protos.SelftestProtos.SelftestOutput buildPartial() {
         if (result == null) {
           throw new IllegalStateException(
-            "build() has already been called on this Builder.");
+              "build() has already been called on this Builder.");
         }
         com.opera.core.systems.scope.protos.SelftestProtos.SelftestOutput returnMe = result;
         result = null;
         return returnMe;
       }
-      
+
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.opera.core.systems.scope.protos.SelftestProtos.SelftestOutput) {
-          return mergeFrom((com.opera.core.systems.scope.protos.SelftestProtos.SelftestOutput)other);
+          return mergeFrom(
+              (com.opera.core.systems.scope.protos.SelftestProtos.SelftestOutput) other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
-      
-      public Builder mergeFrom(com.opera.core.systems.scope.protos.SelftestProtos.SelftestOutput other) {
-        if (other == com.opera.core.systems.scope.protos.SelftestProtos.SelftestOutput.getDefaultInstance()) return this;
+
+      public Builder mergeFrom(
+          com.opera.core.systems.scope.protos.SelftestProtos.SelftestOutput other) {
+        if (other == com.opera.core.systems.scope.protos.SelftestProtos.SelftestOutput
+            .getDefaultInstance()) {
+          return this;
+        }
         if (other.hasOutput()) {
           setOutput(other.getOutput());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
-      
+
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
         com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder(
-            this.getUnknownFields());
+            com.google.protobuf.UnknownFieldSet.newBuilder(
+                this.getUnknownFields());
         while (true) {
           int tag = input.readTag();
           switch (tag) {
@@ -700,99 +828,105 @@ public final class SelftestProtos {
           }
         }
       }
-      
-      
+
+
       // required string output = 2;
       public boolean hasOutput() {
         return result.hasOutput();
       }
+
       public java.lang.String getOutput() {
         return result.getOutput();
       }
+
       public Builder setOutput(java.lang.String value) {
         if (value == null) {
-    throw new NullPointerException();
-  }
-  result.hasOutput = true;
+          throw new NullPointerException();
+        }
+        result.hasOutput = true;
         result.output_ = value;
         return this;
       }
+
       public Builder clearOutput() {
         result.hasOutput = false;
         result.output_ = getDefaultInstance().getOutput();
         return this;
       }
-      
+
       // @@protoc_insertion_point(builder_scope:scope.SelftestOutput)
     }
-    
+
     static {
       defaultInstance = new SelftestOutput(true);
       com.opera.core.systems.scope.protos.SelftestProtos.internalForceInit();
       defaultInstance.initFields();
     }
-    
+
     // @@protoc_insertion_point(class_scope:scope.SelftestOutput)
   }
-  
+
   private static com.google.protobuf.Descriptors.Descriptor
-    internal_static_scope_RunModulesArg_descriptor;
+      internal_static_scope_RunModulesArg_descriptor;
   private static
-    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+  com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_scope_RunModulesArg_fieldAccessorTable;
   private static com.google.protobuf.Descriptors.Descriptor
-    internal_static_scope_SelftestOutput_descriptor;
+      internal_static_scope_SelftestOutput_descriptor;
   private static
-    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+  com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_scope_SelftestOutput_fieldAccessorTable;
-  
+
   public static com.google.protobuf.Descriptors.FileDescriptor
-      getDescriptor() {
+  getDescriptor() {
     return descriptor;
   }
+
   private static com.google.protobuf.Descriptors.FileDescriptor
       descriptor;
+
   static {
     java.lang.String[] descriptorData = {
-      "\n\016selftest.proto\022\005scope\"\240\001\n\rRunModulesAr" +
-      "g\022\022\n\nmoduleList\030\001 \003(\t\022C\n\noutputType\030\002 \001(" +
-      "\0162\037.scope.RunModulesArg.OutputType:\016HUMA" +
-      "N_READABLE\"6\n\nOutputType\022\022\n\016HUMAN_READAB" +
-      "LE\020\001\022\024\n\020MACHINE_READABLE\020\002\" \n\016SelftestOu" +
-      "tput\022\016\n\006output\030\002 \002(\tB7\n#com.opera.core.s" +
-      "ystems.scope.protosB\016SelftestProtosH\001"
+        "\n\016selftest.proto\022\005scope\"\240\001\n\rRunModulesAr" +
+        "g\022\022\n\nmoduleList\030\001 \003(\t\022C\n\noutputType\030\002 \001(" +
+        "\0162\037.scope.RunModulesArg.OutputType:\016HUMA" +
+        "N_READABLE\"6\n\nOutputType\022\022\n\016HUMAN_READAB" +
+        "LE\020\001\022\024\n\020MACHINE_READABLE\020\002\" \n\016SelftestOu" +
+        "tput\022\016\n\006output\030\002 \002(\tB7\n#com.opera.core.s" +
+        "ystems.scope.protosB\016SelftestProtosH\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
-      new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
-        public com.google.protobuf.ExtensionRegistry assignDescriptors(
-            com.google.protobuf.Descriptors.FileDescriptor root) {
-          descriptor = root;
-          internal_static_scope_RunModulesArg_descriptor =
-            getDescriptor().getMessageTypes().get(0);
-          internal_static_scope_RunModulesArg_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_scope_RunModulesArg_descriptor,
-              new java.lang.String[] { "ModuleList", "OutputType", },
-              com.opera.core.systems.scope.protos.SelftestProtos.RunModulesArg.class,
-              com.opera.core.systems.scope.protos.SelftestProtos.RunModulesArg.Builder.class);
-          internal_static_scope_SelftestOutput_descriptor =
-            getDescriptor().getMessageTypes().get(1);
-          internal_static_scope_SelftestOutput_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_scope_SelftestOutput_descriptor,
-              new java.lang.String[] { "Output", },
-              com.opera.core.systems.scope.protos.SelftestProtos.SelftestOutput.class,
-              com.opera.core.systems.scope.protos.SelftestProtos.SelftestOutput.Builder.class);
-          return null;
-        }
-      };
+        new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
+          public com.google.protobuf.ExtensionRegistry assignDescriptors(
+              com.google.protobuf.Descriptors.FileDescriptor root) {
+            descriptor = root;
+            internal_static_scope_RunModulesArg_descriptor =
+                getDescriptor().getMessageTypes().get(0);
+            internal_static_scope_RunModulesArg_fieldAccessorTable = new
+                com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+                internal_static_scope_RunModulesArg_descriptor,
+                new java.lang.String[]{"ModuleList", "OutputType",},
+                com.opera.core.systems.scope.protos.SelftestProtos.RunModulesArg.class,
+                com.opera.core.systems.scope.protos.SelftestProtos.RunModulesArg.Builder.class);
+            internal_static_scope_SelftestOutput_descriptor =
+                getDescriptor().getMessageTypes().get(1);
+            internal_static_scope_SelftestOutput_fieldAccessorTable = new
+                com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+                internal_static_scope_SelftestOutput_descriptor,
+                new java.lang.String[]{"Output",},
+                com.opera.core.systems.scope.protos.SelftestProtos.SelftestOutput.class,
+                com.opera.core.systems.scope.protos.SelftestProtos.SelftestOutput.Builder.class);
+            return null;
+          }
+        };
     com.google.protobuf.Descriptors.FileDescriptor
-      .internalBuildGeneratedFileFrom(descriptorData,
-        new com.google.protobuf.Descriptors.FileDescriptor[] {
-        }, assigner);
+        .internalBuildGeneratedFileFrom(descriptorData,
+                                        new com.google.protobuf.Descriptors.FileDescriptor[]{
+                                        }, assigner);
   }
-  
-  public static void internalForceInit() {}
-  
+
+  public static void internalForceInit() {
+  }
+
   // @@protoc_insertion_point(outer_class_scope)
 }

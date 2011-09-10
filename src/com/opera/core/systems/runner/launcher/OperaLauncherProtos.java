@@ -4,6 +4,7 @@
 package com.opera.core.systems.runner.launcher;
 
 public final class OperaLauncherProtos {
+
   private OperaLauncherProtos() {
   }
 
@@ -12,7 +13,8 @@ public final class OperaLauncherProtos {
   }
 
   public static final class LauncherHandshakeRequest extends
-      com.google.protobuf.GeneratedMessage {
+                                                     com.google.protobuf.GeneratedMessage {
+
     // Use LauncherHandshakeRequest.newBuilder() to construct.
     private LauncherHandshakeRequest() {
       initFields();
@@ -56,7 +58,9 @@ public final class OperaLauncherProtos {
 
     public int getSerializedSize() {
       int size = memoizedSerializedSize;
-      if (size != -1) return size;
+      if (size != -1) {
+        return size;
+      }
 
       size = 0;
       size += getUnknownFields().getSerializedSize();
@@ -152,8 +156,11 @@ public final class OperaLauncherProtos {
     }
 
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> {
-      private com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherHandshakeRequest result;
+                                      com.google.protobuf.GeneratedMessage.Builder<Builder> {
+
+      private
+      com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherHandshakeRequest
+          result;
 
       // Construct using
       // com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherHandshakeRequest.newBuilder()
@@ -162,7 +169,8 @@ public final class OperaLauncherProtos {
 
       private static Builder create() {
         Builder builder = new Builder();
-        builder.result = new com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherHandshakeRequest();
+        builder.result =
+            new com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherHandshakeRequest();
         return builder;
       }
 
@@ -174,7 +182,8 @@ public final class OperaLauncherProtos {
         if (result == null) {
           throw new IllegalStateException("Cannot call clear() after build().");
         }
-        result = new com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherHandshakeRequest();
+        result =
+            new com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherHandshakeRequest();
         return this;
       }
 
@@ -183,11 +192,13 @@ public final class OperaLauncherProtos {
       }
 
       public com.google.protobuf.Descriptors.Descriptor getDescriptorForType() {
-        return com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherHandshakeRequest.getDescriptor();
+        return com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherHandshakeRequest
+            .getDescriptor();
       }
 
       public com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherHandshakeRequest getDefaultInstanceForType() {
-        return com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherHandshakeRequest.getDefaultInstance();
+        return com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherHandshakeRequest
+            .getDefaultInstance();
       }
 
       public boolean isInitialized() {
@@ -214,14 +225,17 @@ public final class OperaLauncherProtos {
           throw new IllegalStateException(
               "build() has already been called on this Builder.");
         }
-        com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherHandshakeRequest returnMe = result;
+        com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherHandshakeRequest
+            returnMe =
+            result;
         result = null;
         return returnMe;
       }
 
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherHandshakeRequest) {
-          return mergeFrom((com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherHandshakeRequest) other);
+          return mergeFrom(
+              (com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherHandshakeRequest) other);
         } else {
           super.mergeFrom(other);
           return this;
@@ -230,28 +244,33 @@ public final class OperaLauncherProtos {
 
       public Builder mergeFrom(
           com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherHandshakeRequest other) {
-        if (other == com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherHandshakeRequest.getDefaultInstance()) return this;
+        if (other == com.opera.core.systems.runner.launcher.OperaLauncherProtos
+            .LauncherHandshakeRequest.getDefaultInstance()) {
+          return this;
+        }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
 
       public Builder mergeFrom(com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                               com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields = com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
+        com.google.protobuf.UnknownFieldSet.Builder
+            unknownFields =
+            com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
         while (true) {
           int tag = input.readTag();
           switch (tag) {
-          case 0:
-            this.setUnknownFields(unknownFields.build());
-            return this;
-          default: {
-            if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+            case 0:
               this.setUnknownFields(unknownFields.build());
               return this;
+            default: {
+              if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+                this.setUnknownFields(unknownFields.build());
+                return this;
+              }
+              break;
             }
-            break;
-          }
           }
         }
       }
@@ -269,7 +288,8 @@ public final class OperaLauncherProtos {
   }
 
   public static final class LauncherStartRequest extends
-      com.google.protobuf.GeneratedMessage {
+                                                 com.google.protobuf.GeneratedMessage {
+
     // Use LauncherStartRequest.newBuilder() to construct.
     private LauncherStartRequest() {
       initFields();
@@ -313,7 +333,9 @@ public final class OperaLauncherProtos {
 
     public int getSerializedSize() {
       int size = memoizedSerializedSize;
-      if (size != -1) return size;
+      if (size != -1) {
+        return size;
+      }
 
       size = 0;
       size += getUnknownFields().getSerializedSize();
@@ -409,8 +431,11 @@ public final class OperaLauncherProtos {
     }
 
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> {
-      private com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStartRequest result;
+                                      com.google.protobuf.GeneratedMessage.Builder<Builder> {
+
+      private
+      com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStartRequest
+          result;
 
       // Construct using
       // com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStartRequest.newBuilder()
@@ -419,7 +444,8 @@ public final class OperaLauncherProtos {
 
       private static Builder create() {
         Builder builder = new Builder();
-        builder.result = new com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStartRequest();
+        builder.result =
+            new com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStartRequest();
         return builder;
       }
 
@@ -431,7 +457,8 @@ public final class OperaLauncherProtos {
         if (result == null) {
           throw new IllegalStateException("Cannot call clear() after build().");
         }
-        result = new com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStartRequest();
+        result =
+            new com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStartRequest();
         return this;
       }
 
@@ -440,11 +467,13 @@ public final class OperaLauncherProtos {
       }
 
       public com.google.protobuf.Descriptors.Descriptor getDescriptorForType() {
-        return com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStartRequest.getDescriptor();
+        return com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStartRequest
+            .getDescriptor();
       }
 
       public com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStartRequest getDefaultInstanceForType() {
-        return com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStartRequest.getDefaultInstance();
+        return com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStartRequest
+            .getDefaultInstance();
       }
 
       public boolean isInitialized() {
@@ -471,14 +500,17 @@ public final class OperaLauncherProtos {
           throw new IllegalStateException(
               "build() has already been called on this Builder.");
         }
-        com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStartRequest returnMe = result;
+        com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStartRequest
+            returnMe =
+            result;
         result = null;
         return returnMe;
       }
 
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStartRequest) {
-          return mergeFrom((com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStartRequest) other);
+          return mergeFrom(
+              (com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStartRequest) other);
         } else {
           super.mergeFrom(other);
           return this;
@@ -487,28 +519,33 @@ public final class OperaLauncherProtos {
 
       public Builder mergeFrom(
           com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStartRequest other) {
-        if (other == com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStartRequest.getDefaultInstance()) return this;
+        if (other == com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStartRequest
+            .getDefaultInstance()) {
+          return this;
+        }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
 
       public Builder mergeFrom(com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                               com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields = com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
+        com.google.protobuf.UnknownFieldSet.Builder
+            unknownFields =
+            com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
         while (true) {
           int tag = input.readTag();
           switch (tag) {
-          case 0:
-            this.setUnknownFields(unknownFields.build());
-            return this;
-          default: {
-            if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+            case 0:
               this.setUnknownFields(unknownFields.build());
               return this;
+            default: {
+              if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+                this.setUnknownFields(unknownFields.build());
+                return this;
+              }
+              break;
             }
-            break;
-          }
           }
         }
       }
@@ -526,7 +563,8 @@ public final class OperaLauncherProtos {
   }
 
   public static final class LauncherStatusRequest extends
-      com.google.protobuf.GeneratedMessage {
+                                                  com.google.protobuf.GeneratedMessage {
+
     // Use LauncherStatusRequest.newBuilder() to construct.
     private LauncherStatusRequest() {
       initFields();
@@ -586,12 +624,14 @@ public final class OperaLauncherProtos {
 
     public int getSerializedSize() {
       int size = memoizedSerializedSize;
-      if (size != -1) return size;
+      if (size != -1) {
+        return size;
+      }
 
       size = 0;
       if (hasProcessid()) {
         size += com.google.protobuf.CodedOutputStream.computeInt32Size(1,
-            getProcessid());
+                                                                       getProcessid());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -686,8 +726,11 @@ public final class OperaLauncherProtos {
     }
 
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> {
-      private com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStatusRequest result;
+                                      com.google.protobuf.GeneratedMessage.Builder<Builder> {
+
+      private
+      com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStatusRequest
+          result;
 
       // Construct using
       // com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStatusRequest.newBuilder()
@@ -696,7 +739,8 @@ public final class OperaLauncherProtos {
 
       private static Builder create() {
         Builder builder = new Builder();
-        builder.result = new com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStatusRequest();
+        builder.result =
+            new com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStatusRequest();
         return builder;
       }
 
@@ -708,7 +752,8 @@ public final class OperaLauncherProtos {
         if (result == null) {
           throw new IllegalStateException("Cannot call clear() after build().");
         }
-        result = new com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStatusRequest();
+        result =
+            new com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStatusRequest();
         return this;
       }
 
@@ -717,11 +762,13 @@ public final class OperaLauncherProtos {
       }
 
       public com.google.protobuf.Descriptors.Descriptor getDescriptorForType() {
-        return com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStatusRequest.getDescriptor();
+        return com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStatusRequest
+            .getDescriptor();
       }
 
       public com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStatusRequest getDefaultInstanceForType() {
-        return com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStatusRequest.getDefaultInstance();
+        return com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStatusRequest
+            .getDefaultInstance();
       }
 
       public boolean isInitialized() {
@@ -748,14 +795,17 @@ public final class OperaLauncherProtos {
           throw new IllegalStateException(
               "build() has already been called on this Builder.");
         }
-        com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStatusRequest returnMe = result;
+        com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStatusRequest
+            returnMe =
+            result;
         result = null;
         return returnMe;
       }
 
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStatusRequest) {
-          return mergeFrom((com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStatusRequest) other);
+          return mergeFrom(
+              (com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStatusRequest) other);
         } else {
           super.mergeFrom(other);
           return this;
@@ -764,7 +814,10 @@ public final class OperaLauncherProtos {
 
       public Builder mergeFrom(
           com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStatusRequest other) {
-        if (other == com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStatusRequest.getDefaultInstance()) return this;
+        if (other == com.opera.core.systems.runner.launcher.OperaLauncherProtos
+            .LauncherStatusRequest.getDefaultInstance()) {
+          return this;
+        }
         if (other.hasProcessid()) {
           setProcessid(other.getProcessid());
         }
@@ -773,26 +826,28 @@ public final class OperaLauncherProtos {
       }
 
       public Builder mergeFrom(com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                               com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields = com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
+        com.google.protobuf.UnknownFieldSet.Builder
+            unknownFields =
+            com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
         while (true) {
           int tag = input.readTag();
           switch (tag) {
-          case 0:
-            this.setUnknownFields(unknownFields.build());
-            return this;
-          default: {
-            if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+            case 0:
               this.setUnknownFields(unknownFields.build());
               return this;
+            default: {
+              if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+                this.setUnknownFields(unknownFields.build());
+                return this;
+              }
+              break;
             }
-            break;
-          }
-          case 8: {
-            setProcessid(input.readInt32());
-            break;
-          }
+            case 8: {
+              setProcessid(input.readInt32());
+              break;
+            }
           }
         }
       }
@@ -831,7 +886,8 @@ public final class OperaLauncherProtos {
   }
 
   public static final class LauncherStopRequest extends
-      com.google.protobuf.GeneratedMessage {
+                                                com.google.protobuf.GeneratedMessage {
+
     // Use LauncherStopRequest.newBuilder() to construct.
     private LauncherStopRequest() {
       initFields();
@@ -875,7 +931,9 @@ public final class OperaLauncherProtos {
 
     public int getSerializedSize() {
       int size = memoizedSerializedSize;
-      if (size != -1) return size;
+      if (size != -1) {
+        return size;
+      }
 
       size = 0;
       size += getUnknownFields().getSerializedSize();
@@ -971,7 +1029,8 @@ public final class OperaLauncherProtos {
     }
 
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> {
+                                      com.google.protobuf.GeneratedMessage.Builder<Builder> {
+
       private com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStopRequest result;
 
       // Construct using
@@ -981,7 +1040,8 @@ public final class OperaLauncherProtos {
 
       private static Builder create() {
         Builder builder = new Builder();
-        builder.result = new com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStopRequest();
+        builder.result =
+            new com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStopRequest();
         return builder;
       }
 
@@ -993,7 +1053,8 @@ public final class OperaLauncherProtos {
         if (result == null) {
           throw new IllegalStateException("Cannot call clear() after build().");
         }
-        result = new com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStopRequest();
+        result =
+            new com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStopRequest();
         return this;
       }
 
@@ -1002,11 +1063,13 @@ public final class OperaLauncherProtos {
       }
 
       public com.google.protobuf.Descriptors.Descriptor getDescriptorForType() {
-        return com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStopRequest.getDescriptor();
+        return com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStopRequest
+            .getDescriptor();
       }
 
       public com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStopRequest getDefaultInstanceForType() {
-        return com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStopRequest.getDefaultInstance();
+        return com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStopRequest
+            .getDefaultInstance();
       }
 
       public boolean isInitialized() {
@@ -1033,14 +1096,17 @@ public final class OperaLauncherProtos {
           throw new IllegalStateException(
               "build() has already been called on this Builder.");
         }
-        com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStopRequest returnMe = result;
+        com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStopRequest
+            returnMe =
+            result;
         result = null;
         return returnMe;
       }
 
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStopRequest) {
-          return mergeFrom((com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStopRequest) other);
+          return mergeFrom(
+              (com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStopRequest) other);
         } else {
           super.mergeFrom(other);
           return this;
@@ -1049,28 +1115,33 @@ public final class OperaLauncherProtos {
 
       public Builder mergeFrom(
           com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStopRequest other) {
-        if (other == com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStopRequest.getDefaultInstance()) return this;
+        if (other == com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStopRequest
+            .getDefaultInstance()) {
+          return this;
+        }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
 
       public Builder mergeFrom(com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                               com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields = com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
+        com.google.protobuf.UnknownFieldSet.Builder
+            unknownFields =
+            com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
         while (true) {
           int tag = input.readTag();
           switch (tag) {
-          case 0:
-            this.setUnknownFields(unknownFields.build());
-            return this;
-          default: {
-            if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+            case 0:
               this.setUnknownFields(unknownFields.build());
               return this;
+            default: {
+              if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+                this.setUnknownFields(unknownFields.build());
+                return this;
+              }
+              break;
             }
-            break;
-          }
           }
         }
       }
@@ -1088,7 +1159,8 @@ public final class OperaLauncherProtos {
   }
 
   public static final class LauncherHandshakeResponse extends
-      com.google.protobuf.GeneratedMessage {
+                                                      com.google.protobuf.GeneratedMessage {
+
     // Use LauncherHandshakeResponse.newBuilder() to construct.
     private LauncherHandshakeResponse() {
       initFields();
@@ -1187,7 +1259,9 @@ public final class OperaLauncherProtos {
     }
 
     public final boolean isInitialized() {
-      if (!hasIdentifier) return false;
+      if (!hasIdentifier) {
+        return false;
+      }
       return true;
     }
 
@@ -1216,24 +1290,26 @@ public final class OperaLauncherProtos {
 
     public int getSerializedSize() {
       int size = memoizedSerializedSize;
-      if (size != -1) return size;
+      if (size != -1) {
+        return size;
+      }
 
       size = 0;
       if (hasIdentifier()) {
         size += com.google.protobuf.CodedOutputStream.computeStringSize(1,
-            getIdentifier());
+                                                                        getIdentifier());
       }
       if (hasDevice()) {
         size += com.google.protobuf.CodedOutputStream.computeStringSize(2,
-            getDevice());
+                                                                        getDevice());
       }
       if (hasPlatform()) {
         size += com.google.protobuf.CodedOutputStream.computeStringSize(3,
-            getPlatform());
+                                                                        getPlatform());
       }
       if (hasConfiguration()) {
         size += com.google.protobuf.CodedOutputStream.computeStringSize(4,
-            getConfiguration());
+                                                                        getConfiguration());
       }
       {
         int dataSize = 0;
@@ -1336,8 +1412,11 @@ public final class OperaLauncherProtos {
     }
 
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> {
-      private com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherHandshakeResponse result;
+                                      com.google.protobuf.GeneratedMessage.Builder<Builder> {
+
+      private
+      com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherHandshakeResponse
+          result;
 
       // Construct using
       // com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherHandshakeResponse.newBuilder()
@@ -1346,7 +1425,8 @@ public final class OperaLauncherProtos {
 
       private static Builder create() {
         Builder builder = new Builder();
-        builder.result = new com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherHandshakeResponse();
+        builder.result =
+            new com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherHandshakeResponse();
         return builder;
       }
 
@@ -1358,7 +1438,8 @@ public final class OperaLauncherProtos {
         if (result == null) {
           throw new IllegalStateException("Cannot call clear() after build().");
         }
-        result = new com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherHandshakeResponse();
+        result =
+            new com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherHandshakeResponse();
         return this;
       }
 
@@ -1367,11 +1448,13 @@ public final class OperaLauncherProtos {
       }
 
       public com.google.protobuf.Descriptors.Descriptor getDescriptorForType() {
-        return com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherHandshakeResponse.getDescriptor();
+        return com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherHandshakeResponse
+            .getDescriptor();
       }
 
       public com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherHandshakeResponse getDefaultInstanceForType() {
-        return com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherHandshakeResponse.getDefaultInstance();
+        return com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherHandshakeResponse
+            .getDefaultInstance();
       }
 
       public boolean isInitialized() {
@@ -1401,14 +1484,17 @@ public final class OperaLauncherProtos {
         if (result.logmessages_ != java.util.Collections.EMPTY_LIST) {
           result.logmessages_ = java.util.Collections.unmodifiableList(result.logmessages_);
         }
-        com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherHandshakeResponse returnMe = result;
+        com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherHandshakeResponse
+            returnMe =
+            result;
         result = null;
         return returnMe;
       }
 
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherHandshakeResponse) {
-          return mergeFrom((com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherHandshakeResponse) other);
+          return mergeFrom(
+              (com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherHandshakeResponse) other);
         } else {
           super.mergeFrom(other);
           return this;
@@ -1417,7 +1503,10 @@ public final class OperaLauncherProtos {
 
       public Builder mergeFrom(
           com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherHandshakeResponse other) {
-        if (other == com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherHandshakeResponse.getDefaultInstance()) return this;
+        if (other == com.opera.core.systems.runner.launcher.OperaLauncherProtos
+            .LauncherHandshakeResponse.getDefaultInstance()) {
+          return this;
+        }
         if (other.hasIdentifier()) {
           setIdentifier(other.getIdentifier());
         }
@@ -1441,42 +1530,44 @@ public final class OperaLauncherProtos {
       }
 
       public Builder mergeFrom(com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                               com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields = com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
+        com.google.protobuf.UnknownFieldSet.Builder
+            unknownFields =
+            com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
         while (true) {
           int tag = input.readTag();
           switch (tag) {
-          case 0:
-            this.setUnknownFields(unknownFields.build());
-            return this;
-          default: {
-            if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+            case 0:
               this.setUnknownFields(unknownFields.build());
               return this;
+            default: {
+              if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+                this.setUnknownFields(unknownFields.build());
+                return this;
+              }
+              break;
             }
-            break;
-          }
-          case 10: {
-            setIdentifier(input.readString());
-            break;
-          }
-          case 18: {
-            setDevice(input.readString());
-            break;
-          }
-          case 26: {
-            setPlatform(input.readString());
-            break;
-          }
-          case 34: {
-            setConfiguration(input.readString());
-            break;
-          }
-          case 42: {
-            addLogmessages(input.readString());
-            break;
-          }
+            case 10: {
+              setIdentifier(input.readString());
+              break;
+            }
+            case 18: {
+              setDevice(input.readString());
+              break;
+            }
+            case 26: {
+              setPlatform(input.readString());
+              break;
+            }
+            case 34: {
+              setConfiguration(input.readString());
+              break;
+            }
+            case 42: {
+              addLogmessages(input.readString());
+              break;
+            }
           }
         }
       }
@@ -1636,7 +1727,8 @@ public final class OperaLauncherProtos {
   }
 
   public static final class LauncherStatusResponse extends
-      com.google.protobuf.GeneratedMessage {
+                                                   com.google.protobuf.GeneratedMessage {
+
     // Use LauncherStatusResponse.newBuilder() to construct.
     private LauncherStatusResponse() {
       initFields();
@@ -1664,7 +1756,7 @@ public final class OperaLauncherProtos {
     }
 
     public enum StatusType implements com.google.protobuf.ProtocolMessageEnum {
-      RUNNING(0, 0), STOPPED(1, 1), CRASHED(2, 2), FROZEN(3, 3), ;
+      RUNNING(0, 0), STOPPED(1, 1), CRASHED(2, 2), FROZEN(3, 3),;
 
       public final int getNumber() {
         return value;
@@ -1672,16 +1764,16 @@ public final class OperaLauncherProtos {
 
       public static StatusType valueOf(int value) {
         switch (value) {
-        case 0:
-          return RUNNING;
-        case 1:
-          return STOPPED;
-        case 2:
-          return CRASHED;
-        case 3:
-          return FROZEN;
-        default:
-          return null;
+          case 0:
+            return RUNNING;
+          case 1:
+            return STOPPED;
+          case 2:
+            return CRASHED;
+          case 3:
+            return FROZEN;
+          default:
+            return null;
         }
       }
 
@@ -1689,11 +1781,14 @@ public final class OperaLauncherProtos {
         return internalValueMap;
       }
 
-      private static com.google.protobuf.Internal.EnumLiteMap<StatusType> internalValueMap = new com.google.protobuf.Internal.EnumLiteMap<StatusType>() {
-        public StatusType findValueByNumber(int number) {
-          return StatusType.valueOf(number);
-        }
-      };
+      private static
+      com.google.protobuf.Internal.EnumLiteMap<StatusType>
+          internalValueMap =
+          new com.google.protobuf.Internal.EnumLiteMap<StatusType>() {
+            public StatusType findValueByNumber(int number) {
+              return StatusType.valueOf(number);
+            }
+          };
 
       public final com.google.protobuf.Descriptors.EnumValueDescriptor getValueDescriptor() {
         return getDescriptor().getValues().get(index);
@@ -1704,12 +1799,13 @@ public final class OperaLauncherProtos {
       }
 
       public static final com.google.protobuf.Descriptors.EnumDescriptor getDescriptor() {
-        return com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStatusResponse.getDescriptor().getEnumTypes().get(
-            0);
+        return com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStatusResponse
+            .getDescriptor().getEnumTypes().get(
+                0);
       }
 
-      private static final StatusType[] VALUES = { RUNNING, STOPPED, CRASHED,
-          FROZEN, };
+      private static final StatusType[] VALUES = {RUNNING, STOPPED, CRASHED,
+                                                  FROZEN,};
 
       public static StatusType valueOf(
           com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
@@ -1738,7 +1834,9 @@ public final class OperaLauncherProtos {
     // required .LauncherStatusResponse.StatusType status = 1;
     public static final int STATUS_FIELD_NUMBER = 1;
     private boolean hasStatus;
-    private com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStatusResponse.StatusType status_;
+    private
+    com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStatusResponse.StatusType
+        status_;
 
     public boolean hasStatus() {
       return hasStatus;
@@ -1791,11 +1889,14 @@ public final class OperaLauncherProtos {
     }
 
     private void initFields() {
-      status_ = com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStatusResponse.StatusType.RUNNING;
+      status_ =
+          com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStatusResponse.StatusType.RUNNING;
     }
 
     public final boolean isInitialized() {
-      if (!hasStatus) return false;
+      if (!hasStatus) {
+        return false;
+      }
       return true;
     }
 
@@ -1821,20 +1922,22 @@ public final class OperaLauncherProtos {
 
     public int getSerializedSize() {
       int size = memoizedSerializedSize;
-      if (size != -1) return size;
+      if (size != -1) {
+        return size;
+      }
 
       size = 0;
       if (hasStatus()) {
         size += com.google.protobuf.CodedOutputStream.computeEnumSize(1,
-            getStatus().getNumber());
+                                                                      getStatus().getNumber());
       }
       if (hasExitcode()) {
         size += com.google.protobuf.CodedOutputStream.computeInt32Size(2,
-            getExitcode());
+                                                                       getExitcode());
       }
       if (hasCrashlog()) {
         size += com.google.protobuf.CodedOutputStream.computeBytesSize(3,
-            getCrashlog());
+                                                                       getCrashlog());
       }
       {
         int dataSize = 0;
@@ -1937,8 +2040,11 @@ public final class OperaLauncherProtos {
     }
 
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> {
-      private com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStatusResponse result;
+                                      com.google.protobuf.GeneratedMessage.Builder<Builder> {
+
+      private
+      com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStatusResponse
+          result;
 
       // Construct using
       // com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStatusResponse.newBuilder()
@@ -1947,7 +2053,8 @@ public final class OperaLauncherProtos {
 
       private static Builder create() {
         Builder builder = new Builder();
-        builder.result = new com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStatusResponse();
+        builder.result =
+            new com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStatusResponse();
         return builder;
       }
 
@@ -1959,7 +2066,8 @@ public final class OperaLauncherProtos {
         if (result == null) {
           throw new IllegalStateException("Cannot call clear() after build().");
         }
-        result = new com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStatusResponse();
+        result =
+            new com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStatusResponse();
         return this;
       }
 
@@ -1968,11 +2076,13 @@ public final class OperaLauncherProtos {
       }
 
       public com.google.protobuf.Descriptors.Descriptor getDescriptorForType() {
-        return com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStatusResponse.getDescriptor();
+        return com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStatusResponse
+            .getDescriptor();
       }
 
       public com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStatusResponse getDefaultInstanceForType() {
-        return com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStatusResponse.getDefaultInstance();
+        return com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStatusResponse
+            .getDefaultInstance();
       }
 
       public boolean isInitialized() {
@@ -2002,14 +2112,17 @@ public final class OperaLauncherProtos {
         if (result.logmessages_ != java.util.Collections.EMPTY_LIST) {
           result.logmessages_ = java.util.Collections.unmodifiableList(result.logmessages_);
         }
-        com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStatusResponse returnMe = result;
+        com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStatusResponse
+            returnMe =
+            result;
         result = null;
         return returnMe;
       }
 
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStatusResponse) {
-          return mergeFrom((com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStatusResponse) other);
+          return mergeFrom(
+              (com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStatusResponse) other);
         } else {
           super.mergeFrom(other);
           return this;
@@ -2018,7 +2131,10 @@ public final class OperaLauncherProtos {
 
       public Builder mergeFrom(
           com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStatusResponse other) {
-        if (other == com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStatusResponse.getDefaultInstance()) return this;
+        if (other == com.opera.core.systems.runner.launcher.OperaLauncherProtos
+            .LauncherStatusResponse.getDefaultInstance()) {
+          return this;
+        }
         if (other.hasStatus()) {
           setStatus(other.getStatus());
         }
@@ -2039,44 +2155,49 @@ public final class OperaLauncherProtos {
       }
 
       public Builder mergeFrom(com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                               com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields = com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
+        com.google.protobuf.UnknownFieldSet.Builder
+            unknownFields =
+            com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
         while (true) {
           int tag = input.readTag();
           switch (tag) {
-          case 0:
-            this.setUnknownFields(unknownFields.build());
-            return this;
-          default: {
-            if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+            case 0:
               this.setUnknownFields(unknownFields.build());
               return this;
+            default: {
+              if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+                this.setUnknownFields(unknownFields.build());
+                return this;
+              }
+              break;
             }
-            break;
-          }
-          case 8: {
-            int rawValue = input.readEnum();
-            com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStatusResponse.StatusType value = com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStatusResponse.StatusType.valueOf(rawValue);
-            if (value == null) {
-              unknownFields.mergeVarintField(1, rawValue);
-            } else {
-              setStatus(value);
+            case 8: {
+              int rawValue = input.readEnum();
+              com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStatusResponse.StatusType
+                  value =
+                  com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStatusResponse
+                      .StatusType.valueOf(rawValue);
+              if (value == null) {
+                unknownFields.mergeVarintField(1, rawValue);
+              } else {
+                setStatus(value);
+              }
+              break;
             }
-            break;
-          }
-          case 16: {
-            setExitcode(input.readInt32());
-            break;
-          }
-          case 26: {
-            setCrashlog(input.readBytes());
-            break;
-          }
-          case 34: {
-            addLogmessages(input.readString());
-            break;
-          }
+            case 16: {
+              setExitcode(input.readInt32());
+              break;
+            }
+            case 26: {
+              setCrashlog(input.readBytes());
+              break;
+            }
+            case 34: {
+              addLogmessages(input.readString());
+              break;
+            }
           }
         }
       }
@@ -2102,7 +2223,8 @@ public final class OperaLauncherProtos {
 
       public Builder clearStatus() {
         result.hasStatus = false;
-        result.status_ = com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStatusResponse.StatusType.RUNNING;
+        result.status_ =
+            com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStatusResponse.StatusType.RUNNING;
         return this;
       }
 
@@ -2210,7 +2332,8 @@ public final class OperaLauncherProtos {
   }
 
   public static final class LauncherScreenshotRequest extends
-      com.google.protobuf.GeneratedMessage {
+                                                      com.google.protobuf.GeneratedMessage {
+
     // Use LauncherScreenshotRequest.newBuilder() to construct.
     private LauncherScreenshotRequest() {
       initFields();
@@ -2289,7 +2412,9 @@ public final class OperaLauncherProtos {
 
     public int getSerializedSize() {
       int size = memoizedSerializedSize;
-      if (size != -1) return size;
+      if (size != -1) {
+        return size;
+      }
 
       size = 0;
       {
@@ -2302,7 +2427,7 @@ public final class OperaLauncherProtos {
       }
       if (hasKnownMD5STimeoutMs()) {
         size += com.google.protobuf.CodedOutputStream.computeInt32Size(2,
-            getKnownMD5STimeoutMs());
+                                                                       getKnownMD5STimeoutMs());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -2397,8 +2522,11 @@ public final class OperaLauncherProtos {
     }
 
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> {
-      private com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherScreenshotRequest result;
+                                      com.google.protobuf.GeneratedMessage.Builder<Builder> {
+
+      private
+      com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherScreenshotRequest
+          result;
 
       // Construct using
       // com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherScreenshotRequest.newBuilder()
@@ -2407,7 +2535,8 @@ public final class OperaLauncherProtos {
 
       private static Builder create() {
         Builder builder = new Builder();
-        builder.result = new com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherScreenshotRequest();
+        builder.result =
+            new com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherScreenshotRequest();
         return builder;
       }
 
@@ -2419,7 +2548,8 @@ public final class OperaLauncherProtos {
         if (result == null) {
           throw new IllegalStateException("Cannot call clear() after build().");
         }
-        result = new com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherScreenshotRequest();
+        result =
+            new com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherScreenshotRequest();
         return this;
       }
 
@@ -2428,11 +2558,13 @@ public final class OperaLauncherProtos {
       }
 
       public com.google.protobuf.Descriptors.Descriptor getDescriptorForType() {
-        return com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherScreenshotRequest.getDescriptor();
+        return com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherScreenshotRequest
+            .getDescriptor();
       }
 
       public com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherScreenshotRequest getDefaultInstanceForType() {
-        return com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherScreenshotRequest.getDefaultInstance();
+        return com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherScreenshotRequest
+            .getDefaultInstance();
       }
 
       public boolean isInitialized() {
@@ -2462,14 +2594,17 @@ public final class OperaLauncherProtos {
         if (result.knownMD5S_ != java.util.Collections.EMPTY_LIST) {
           result.knownMD5S_ = java.util.Collections.unmodifiableList(result.knownMD5S_);
         }
-        com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherScreenshotRequest returnMe = result;
+        com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherScreenshotRequest
+            returnMe =
+            result;
         result = null;
         return returnMe;
       }
 
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherScreenshotRequest) {
-          return mergeFrom((com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherScreenshotRequest) other);
+          return mergeFrom(
+              (com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherScreenshotRequest) other);
         } else {
           super.mergeFrom(other);
           return this;
@@ -2478,7 +2613,10 @@ public final class OperaLauncherProtos {
 
       public Builder mergeFrom(
           com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherScreenshotRequest other) {
-        if (other == com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherScreenshotRequest.getDefaultInstance()) return this;
+        if (other == com.opera.core.systems.runner.launcher.OperaLauncherProtos
+            .LauncherScreenshotRequest.getDefaultInstance()) {
+          return this;
+        }
         if (!other.knownMD5S_.isEmpty()) {
           if (result.knownMD5S_.isEmpty()) {
             result.knownMD5S_ = new java.util.ArrayList<java.lang.String>();
@@ -2493,30 +2631,32 @@ public final class OperaLauncherProtos {
       }
 
       public Builder mergeFrom(com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                               com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields = com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
+        com.google.protobuf.UnknownFieldSet.Builder
+            unknownFields =
+            com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
         while (true) {
           int tag = input.readTag();
           switch (tag) {
-          case 0:
-            this.setUnknownFields(unknownFields.build());
-            return this;
-          default: {
-            if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+            case 0:
               this.setUnknownFields(unknownFields.build());
               return this;
+            default: {
+              if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+                this.setUnknownFields(unknownFields.build());
+                return this;
+              }
+              break;
             }
-            break;
-          }
-          case 10: {
-            addKnownMD5S(input.readString());
-            break;
-          }
-          case 16: {
-            setKnownMD5STimeoutMs(input.readInt32());
-            break;
-          }
+            case 10: {
+              addKnownMD5S(input.readString());
+              break;
+            }
+            case 16: {
+              setKnownMD5STimeoutMs(input.readInt32());
+              break;
+            }
           }
         }
       }
@@ -2601,7 +2741,8 @@ public final class OperaLauncherProtos {
   }
 
   public static final class LauncherScreenshotResponse extends
-      com.google.protobuf.GeneratedMessage {
+                                                       com.google.protobuf.GeneratedMessage {
+
     // Use LauncherScreenshotResponse.newBuilder() to construct.
     private LauncherScreenshotResponse() {
       initFields();
@@ -2760,32 +2901,34 @@ public final class OperaLauncherProtos {
 
     public int getSerializedSize() {
       int size = memoizedSerializedSize;
-      if (size != -1) return size;
+      if (size != -1) {
+        return size;
+      }
 
       size = 0;
       if (hasMd5()) {
         size += com.google.protobuf.CodedOutputStream.computeStringSize(1,
-            getMd5());
+                                                                        getMd5());
       }
       if (hasFormat()) {
         size += com.google.protobuf.CodedOutputStream.computeStringSize(2,
-            getFormat());
+                                                                        getFormat());
       }
       if (hasWidth()) {
         size += com.google.protobuf.CodedOutputStream.computeInt32Size(3,
-            getWidth());
+                                                                       getWidth());
       }
       if (hasHeight()) {
         size += com.google.protobuf.CodedOutputStream.computeInt32Size(4,
-            getHeight());
+                                                                       getHeight());
       }
       if (hasImagedata()) {
         size += com.google.protobuf.CodedOutputStream.computeBytesSize(5,
-            getImagedata());
+                                                                       getImagedata());
       }
       if (hasBlank()) {
         size += com.google.protobuf.CodedOutputStream.computeBoolSize(6,
-            getBlank());
+                                                                      getBlank());
       }
       {
         int dataSize = 0;
@@ -2888,8 +3031,11 @@ public final class OperaLauncherProtos {
     }
 
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> {
-      private com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherScreenshotResponse result;
+                                      com.google.protobuf.GeneratedMessage.Builder<Builder> {
+
+      private
+      com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherScreenshotResponse
+          result;
 
       // Construct using
       // com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherScreenshotResponse.newBuilder()
@@ -2898,7 +3044,8 @@ public final class OperaLauncherProtos {
 
       private static Builder create() {
         Builder builder = new Builder();
-        builder.result = new com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherScreenshotResponse();
+        builder.result =
+            new com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherScreenshotResponse();
         return builder;
       }
 
@@ -2910,7 +3057,8 @@ public final class OperaLauncherProtos {
         if (result == null) {
           throw new IllegalStateException("Cannot call clear() after build().");
         }
-        result = new com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherScreenshotResponse();
+        result =
+            new com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherScreenshotResponse();
         return this;
       }
 
@@ -2919,11 +3067,13 @@ public final class OperaLauncherProtos {
       }
 
       public com.google.protobuf.Descriptors.Descriptor getDescriptorForType() {
-        return com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherScreenshotResponse.getDescriptor();
+        return com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherScreenshotResponse
+            .getDescriptor();
       }
 
       public com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherScreenshotResponse getDefaultInstanceForType() {
-        return com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherScreenshotResponse.getDefaultInstance();
+        return com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherScreenshotResponse
+            .getDefaultInstance();
       }
 
       public boolean isInitialized() {
@@ -2953,14 +3103,17 @@ public final class OperaLauncherProtos {
         if (result.logmessages_ != java.util.Collections.EMPTY_LIST) {
           result.logmessages_ = java.util.Collections.unmodifiableList(result.logmessages_);
         }
-        com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherScreenshotResponse returnMe = result;
+        com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherScreenshotResponse
+            returnMe =
+            result;
         result = null;
         return returnMe;
       }
 
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherScreenshotResponse) {
-          return mergeFrom((com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherScreenshotResponse) other);
+          return mergeFrom(
+              (com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherScreenshotResponse) other);
         } else {
           super.mergeFrom(other);
           return this;
@@ -2969,7 +3122,10 @@ public final class OperaLauncherProtos {
 
       public Builder mergeFrom(
           com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherScreenshotResponse other) {
-        if (other == com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherScreenshotResponse.getDefaultInstance()) return this;
+        if (other == com.opera.core.systems.runner.launcher.OperaLauncherProtos
+            .LauncherScreenshotResponse.getDefaultInstance()) {
+          return this;
+        }
         if (other.hasMd5()) {
           setMd5(other.getMd5());
         }
@@ -2999,50 +3155,52 @@ public final class OperaLauncherProtos {
       }
 
       public Builder mergeFrom(com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                               com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields = com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
+        com.google.protobuf.UnknownFieldSet.Builder
+            unknownFields =
+            com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
         while (true) {
           int tag = input.readTag();
           switch (tag) {
-          case 0:
-            this.setUnknownFields(unknownFields.build());
-            return this;
-          default: {
-            if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+            case 0:
               this.setUnknownFields(unknownFields.build());
               return this;
+            default: {
+              if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+                this.setUnknownFields(unknownFields.build());
+                return this;
+              }
+              break;
             }
-            break;
-          }
-          case 10: {
-            setMd5(input.readString());
-            break;
-          }
-          case 18: {
-            setFormat(input.readString());
-            break;
-          }
-          case 24: {
-            setWidth(input.readInt32());
-            break;
-          }
-          case 32: {
-            setHeight(input.readInt32());
-            break;
-          }
-          case 42: {
-            setImagedata(input.readBytes());
-            break;
-          }
-          case 48: {
-            setBlank(input.readBool());
-            break;
-          }
-          case 58: {
-            addLogmessages(input.readString());
-            break;
-          }
+            case 10: {
+              setMd5(input.readString());
+              break;
+            }
+            case 18: {
+              setFormat(input.readString());
+              break;
+            }
+            case 24: {
+              setWidth(input.readInt32());
+              break;
+            }
+            case 32: {
+              setHeight(input.readInt32());
+              break;
+            }
+            case 42: {
+              setImagedata(input.readBytes());
+              break;
+            }
+            case 48: {
+              setBlank(input.readBool());
+              break;
+            }
+            case 58: {
+              addLogmessages(input.readString());
+              break;
+            }
           }
         }
       }
@@ -3240,118 +3398,167 @@ public final class OperaLauncherProtos {
     // @@protoc_insertion_point(class_scope:LauncherScreenshotResponse)
   }
 
-  private static com.google.protobuf.Descriptors.Descriptor internal_static_LauncherHandshakeRequest_descriptor;
-  private static com.google.protobuf.GeneratedMessage.FieldAccessorTable internal_static_LauncherHandshakeRequest_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor internal_static_LauncherStartRequest_descriptor;
-  private static com.google.protobuf.GeneratedMessage.FieldAccessorTable internal_static_LauncherStartRequest_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor internal_static_LauncherStatusRequest_descriptor;
-  private static com.google.protobuf.GeneratedMessage.FieldAccessorTable internal_static_LauncherStatusRequest_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor internal_static_LauncherStopRequest_descriptor;
-  private static com.google.protobuf.GeneratedMessage.FieldAccessorTable internal_static_LauncherStopRequest_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor internal_static_LauncherHandshakeResponse_descriptor;
-  private static com.google.protobuf.GeneratedMessage.FieldAccessorTable internal_static_LauncherHandshakeResponse_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor internal_static_LauncherStatusResponse_descriptor;
-  private static com.google.protobuf.GeneratedMessage.FieldAccessorTable internal_static_LauncherStatusResponse_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor internal_static_LauncherScreenshotRequest_descriptor;
-  private static com.google.protobuf.GeneratedMessage.FieldAccessorTable internal_static_LauncherScreenshotRequest_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor internal_static_LauncherScreenshotResponse_descriptor;
-  private static com.google.protobuf.GeneratedMessage.FieldAccessorTable internal_static_LauncherScreenshotResponse_fieldAccessorTable;
+  private static
+  com.google.protobuf.Descriptors.Descriptor
+      internal_static_LauncherHandshakeRequest_descriptor;
+  private static
+  com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_LauncherHandshakeRequest_fieldAccessorTable;
+  private static
+  com.google.protobuf.Descriptors.Descriptor
+      internal_static_LauncherStartRequest_descriptor;
+  private static
+  com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_LauncherStartRequest_fieldAccessorTable;
+  private static
+  com.google.protobuf.Descriptors.Descriptor
+      internal_static_LauncherStatusRequest_descriptor;
+  private static
+  com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_LauncherStatusRequest_fieldAccessorTable;
+  private static
+  com.google.protobuf.Descriptors.Descriptor
+      internal_static_LauncherStopRequest_descriptor;
+  private static
+  com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_LauncherStopRequest_fieldAccessorTable;
+  private static
+  com.google.protobuf.Descriptors.Descriptor
+      internal_static_LauncherHandshakeResponse_descriptor;
+  private static
+  com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_LauncherHandshakeResponse_fieldAccessorTable;
+  private static
+  com.google.protobuf.Descriptors.Descriptor
+      internal_static_LauncherStatusResponse_descriptor;
+  private static
+  com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_LauncherStatusResponse_fieldAccessorTable;
+  private static
+  com.google.protobuf.Descriptors.Descriptor
+      internal_static_LauncherScreenshotRequest_descriptor;
+  private static
+  com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_LauncherScreenshotRequest_fieldAccessorTable;
+  private static
+  com.google.protobuf.Descriptors.Descriptor
+      internal_static_LauncherScreenshotResponse_descriptor;
+  private static
+  com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_LauncherScreenshotResponse_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor getDescriptor() {
     return descriptor;
   }
 
   private static com.google.protobuf.Descriptors.FileDescriptor descriptor;
+
   static {
     java.lang.String[] descriptorData = {
         "\n\016launcher.proto\"\032\n\030LauncherHandshakeReq"
-            + "uest\"\026\n\024LauncherStartRequest\"*\n\025Launcher"
-            + "StatusRequest\022\021\n\tprocessid\030\001 \001(\005\"\025\n\023Laun"
-            + "cherStopRequest\"}\n\031LauncherHandshakeResp"
-            + "onse\022\022\n\nidentifier\030\001 \002(\t\022\016\n\006device\030\002 \001(\t"
-            + "\022\020\n\010platform\030\003 \001(\t\022\025\n\rconfiguration\030\004 \001("
-            + "\t\022\023\n\013logmessages\030\005 \003(\t\"\306\001\n\026LauncherStatu"
-            + "sResponse\0222\n\006status\030\001 \002(\0162\".LauncherStat"
-            + "usResponse.StatusType\022\020\n\010exitcode\030\002 \001(\005\022"
-            + "\020\n\010crashlog\030\003 \001(\014\022\023\n\013logmessages\030\004 \003(\t\"?",
+        + "uest\"\026\n\024LauncherStartRequest\"*\n\025Launcher"
+        + "StatusRequest\022\021\n\tprocessid\030\001 \001(\005\"\025\n\023Laun"
+        + "cherStopRequest\"}\n\031LauncherHandshakeResp"
+        + "onse\022\022\n\nidentifier\030\001 \002(\t\022\016\n\006device\030\002 \001(\t"
+        + "\022\020\n\010platform\030\003 \001(\t\022\025\n\rconfiguration\030\004 \001("
+        + "\t\022\023\n\013logmessages\030\005 \003(\t\"\306\001\n\026LauncherStatu"
+        + "sResponse\0222\n\006status\030\001 \002(\0162\".LauncherStat"
+        + "usResponse.StatusType\022\020\n\010exitcode\030\002 \001(\005\022"
+        + "\020\n\010crashlog\030\003 \001(\014\022\023\n\013logmessages\030\004 \003(\t\"?",
         "\n\nStatusType\022\013\n\007RUNNING\020\000\022\013\n\007STOPPED\020\001\022\013"
-            + "\n\007CRASHED\020\002\022\n\n\006FROZEN\020\003\"J\n\031LauncherScree"
-            + "nshotRequest\022\021\n\tknownMD5s\030\001 \003(\t\022\032\n\022known"
-            + "MD5sTimeoutMs\030\002 \001(\005\"\217\001\n\032LauncherScreensh"
-            + "otResponse\022\013\n\003md5\030\001 \001(\t\022\016\n\006format\030\002 \001(\t\022"
-            + "\r\n\005width\030\003 \001(\005\022\016\n\006height\030\004 \001(\005\022\021\n\timaged"
-            + "ata\030\005 \001(\014\022\r\n\005blank\030\006 \001(\010\022\023\n\013logmessages\030"
-            + "\007 \003(\tB?\n&com.opera.core.systems.runner.l"
-            + "auncherB\023OperaLauncherProtosH\001" };
-    com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner = new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
-      public com.google.protobuf.ExtensionRegistry assignDescriptors(
-          com.google.protobuf.Descriptors.FileDescriptor root) {
-        descriptor = root;
-        internal_static_LauncherHandshakeRequest_descriptor = getDescriptor().getMessageTypes().get(
-            0);
-        internal_static_LauncherHandshakeRequest_fieldAccessorTable = new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-            internal_static_LauncherHandshakeRequest_descriptor,
-            new java.lang.String[] {},
-            com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherHandshakeRequest.class,
-            com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherHandshakeRequest.Builder.class);
-        internal_static_LauncherStartRequest_descriptor = getDescriptor().getMessageTypes().get(
-            1);
-        internal_static_LauncherStartRequest_fieldAccessorTable = new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-            internal_static_LauncherStartRequest_descriptor,
-            new java.lang.String[] {},
-            com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStartRequest.class,
-            com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStartRequest.Builder.class);
-        internal_static_LauncherStatusRequest_descriptor = getDescriptor().getMessageTypes().get(
-            2);
-        internal_static_LauncherStatusRequest_fieldAccessorTable = new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-            internal_static_LauncherStatusRequest_descriptor,
-            new java.lang.String[] { "Processid", },
-            com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStatusRequest.class,
-            com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStatusRequest.Builder.class);
-        internal_static_LauncherStopRequest_descriptor = getDescriptor().getMessageTypes().get(
-            3);
-        internal_static_LauncherStopRequest_fieldAccessorTable = new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-            internal_static_LauncherStopRequest_descriptor,
-            new java.lang.String[] {},
-            com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStopRequest.class,
-            com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStopRequest.Builder.class);
-        internal_static_LauncherHandshakeResponse_descriptor = getDescriptor().getMessageTypes().get(
-            4);
-        internal_static_LauncherHandshakeResponse_fieldAccessorTable = new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-            internal_static_LauncherHandshakeResponse_descriptor,
-            new java.lang.String[] { "Identifier", "Device", "Platform",
-                "Configuration", "Logmessages", },
-            com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherHandshakeResponse.class,
-            com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherHandshakeResponse.Builder.class);
-        internal_static_LauncherStatusResponse_descriptor = getDescriptor().getMessageTypes().get(
-            5);
-        internal_static_LauncherStatusResponse_fieldAccessorTable = new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-            internal_static_LauncherStatusResponse_descriptor,
-            new java.lang.String[] { "Status", "Exitcode", "Crashlog",
-                "Logmessages", },
-            com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStatusResponse.class,
-            com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStatusResponse.Builder.class);
-        internal_static_LauncherScreenshotRequest_descriptor = getDescriptor().getMessageTypes().get(
-            6);
-        internal_static_LauncherScreenshotRequest_fieldAccessorTable = new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-            internal_static_LauncherScreenshotRequest_descriptor,
-            new java.lang.String[] { "KnownMD5S", "KnownMD5STimeoutMs", },
-            com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherScreenshotRequest.class,
-            com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherScreenshotRequest.Builder.class);
-        internal_static_LauncherScreenshotResponse_descriptor = getDescriptor().getMessageTypes().get(
-            7);
-        internal_static_LauncherScreenshotResponse_fieldAccessorTable = new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-            internal_static_LauncherScreenshotResponse_descriptor,
-            new java.lang.String[] { "Md5", "Format", "Width", "Height",
-                "Imagedata", "Blank", "Logmessages", },
-            com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherScreenshotResponse.class,
-            com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherScreenshotResponse.Builder.class);
-        return null;
-      }
-    };
+        + "\n\007CRASHED\020\002\022\n\n\006FROZEN\020\003\"J\n\031LauncherScree"
+        + "nshotRequest\022\021\n\tknownMD5s\030\001 \003(\t\022\032\n\022known"
+        + "MD5sTimeoutMs\030\002 \001(\005\"\217\001\n\032LauncherScreensh"
+        + "otResponse\022\013\n\003md5\030\001 \001(\t\022\016\n\006format\030\002 \001(\t\022"
+        + "\r\n\005width\030\003 \001(\005\022\016\n\006height\030\004 \001(\005\022\021\n\timaged"
+        + "ata\030\005 \001(\014\022\r\n\005blank\030\006 \001(\010\022\023\n\013logmessages\030"
+        + "\007 \003(\tB?\n&com.opera.core.systems.runner.l"
+        + "auncherB\023OperaLauncherProtosH\001"};
+    com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner
+        assigner =
+        new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
+          public com.google.protobuf.ExtensionRegistry assignDescriptors(
+              com.google.protobuf.Descriptors.FileDescriptor root) {
+            descriptor = root;
+            internal_static_LauncherHandshakeRequest_descriptor =
+                getDescriptor().getMessageTypes().get(
+                    0);
+            internal_static_LauncherHandshakeRequest_fieldAccessorTable =
+                new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+                    internal_static_LauncherHandshakeRequest_descriptor,
+                    new java.lang.String[]{},
+                    com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherHandshakeRequest.class,
+                    com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherHandshakeRequest.Builder.class);
+            internal_static_LauncherStartRequest_descriptor = getDescriptor().getMessageTypes().get(
+                1);
+            internal_static_LauncherStartRequest_fieldAccessorTable =
+                new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+                    internal_static_LauncherStartRequest_descriptor,
+                    new java.lang.String[]{},
+                    com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStartRequest.class,
+                    com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStartRequest.Builder.class);
+            internal_static_LauncherStatusRequest_descriptor =
+                getDescriptor().getMessageTypes().get(
+                    2);
+            internal_static_LauncherStatusRequest_fieldAccessorTable =
+                new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+                    internal_static_LauncherStatusRequest_descriptor,
+                    new java.lang.String[]{"Processid",},
+                    com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStatusRequest.class,
+                    com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStatusRequest.Builder.class);
+            internal_static_LauncherStopRequest_descriptor = getDescriptor().getMessageTypes().get(
+                3);
+            internal_static_LauncherStopRequest_fieldAccessorTable =
+                new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+                    internal_static_LauncherStopRequest_descriptor,
+                    new java.lang.String[]{},
+                    com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStopRequest.class,
+                    com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStopRequest.Builder.class);
+            internal_static_LauncherHandshakeResponse_descriptor =
+                getDescriptor().getMessageTypes().get(
+                    4);
+            internal_static_LauncherHandshakeResponse_fieldAccessorTable =
+                new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+                    internal_static_LauncherHandshakeResponse_descriptor,
+                    new java.lang.String[]{"Identifier", "Device", "Platform",
+                                           "Configuration", "Logmessages",},
+                    com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherHandshakeResponse.class,
+                    com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherHandshakeResponse.Builder.class);
+            internal_static_LauncherStatusResponse_descriptor =
+                getDescriptor().getMessageTypes().get(
+                    5);
+            internal_static_LauncherStatusResponse_fieldAccessorTable =
+                new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+                    internal_static_LauncherStatusResponse_descriptor,
+                    new java.lang.String[]{"Status", "Exitcode", "Crashlog",
+                                           "Logmessages",},
+                    com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStatusResponse.class,
+                    com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStatusResponse.Builder.class);
+            internal_static_LauncherScreenshotRequest_descriptor =
+                getDescriptor().getMessageTypes().get(
+                    6);
+            internal_static_LauncherScreenshotRequest_fieldAccessorTable =
+                new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+                    internal_static_LauncherScreenshotRequest_descriptor,
+                    new java.lang.String[]{"KnownMD5S", "KnownMD5STimeoutMs",},
+                    com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherScreenshotRequest.class,
+                    com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherScreenshotRequest.Builder.class);
+            internal_static_LauncherScreenshotResponse_descriptor =
+                getDescriptor().getMessageTypes().get(
+                    7);
+            internal_static_LauncherScreenshotResponse_fieldAccessorTable =
+                new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+                    internal_static_LauncherScreenshotResponse_descriptor,
+                    new java.lang.String[]{"Md5", "Format", "Width", "Height",
+                                           "Imagedata", "Blank", "Logmessages",},
+                    com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherScreenshotResponse.class,
+                    com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherScreenshotResponse.Builder.class);
+            return null;
+          }
+        };
     com.google.protobuf.Descriptors.FileDescriptor.internalBuildGeneratedFileFrom(
         descriptorData,
-        new com.google.protobuf.Descriptors.FileDescriptor[] {}, assigner);
+        new com.google.protobuf.Descriptors.FileDescriptor[]{}, assigner);
   }
 
   public static void internalForceInit() {

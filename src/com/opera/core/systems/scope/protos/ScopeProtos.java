@@ -4,6 +4,7 @@
 package com.opera.core.systems.scope.protos;
 
 public final class ScopeProtos {
+
   private ScopeProtos() {
   }
 
@@ -12,7 +13,8 @@ public final class ScopeProtos {
   }
 
   public static final class ServiceList extends
-      com.google.protobuf.GeneratedMessage {
+                                        com.google.protobuf.GeneratedMessage {
+
     // Use ServiceList.newBuilder() to construct.
     private ServiceList() {
       initFields();
@@ -75,7 +77,9 @@ public final class ScopeProtos {
 
     public int getSerializedSize() {
       int size = memoizedSerializedSize;
-      if (size != -1) return size;
+      if (size != -1) {
+        return size;
+      }
 
       size = 0;
       {
@@ -179,7 +183,8 @@ public final class ScopeProtos {
     }
 
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> {
+                                      com.google.protobuf.GeneratedMessage.Builder<Builder> {
+
       private com.opera.core.systems.scope.protos.ScopeProtos.ServiceList result;
 
       // Construct using
@@ -260,7 +265,10 @@ public final class ScopeProtos {
 
       public Builder mergeFrom(
           com.opera.core.systems.scope.protos.ScopeProtos.ServiceList other) {
-        if (other == com.opera.core.systems.scope.protos.ScopeProtos.ServiceList.getDefaultInstance()) return this;
+        if (other == com.opera.core.systems.scope.protos.ScopeProtos.ServiceList
+            .getDefaultInstance()) {
+          return this;
+        }
         if (!other.serviceList_.isEmpty()) {
           if (result.serviceList_.isEmpty()) {
             result.serviceList_ = new java.util.ArrayList<java.lang.String>();
@@ -272,26 +280,28 @@ public final class ScopeProtos {
       }
 
       public Builder mergeFrom(com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                               com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields = com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
+        com.google.protobuf.UnknownFieldSet.Builder
+            unknownFields =
+            com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
         while (true) {
           int tag = input.readTag();
           switch (tag) {
-          case 0:
-            this.setUnknownFields(unknownFields.build());
-            return this;
-          default: {
-            if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+            case 0:
               this.setUnknownFields(unknownFields.build());
               return this;
+            default: {
+              if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+                this.setUnknownFields(unknownFields.build());
+                return this;
+              }
+              break;
             }
-            break;
-          }
-          case 10: {
-            addServiceList(input.readString());
-            break;
-          }
+            case 10: {
+              addServiceList(input.readString());
+              break;
+            }
           }
         }
       }
@@ -355,7 +365,8 @@ public final class ScopeProtos {
   }
 
   public static final class MessageInfo extends
-      com.google.protobuf.GeneratedMessage {
+                                        com.google.protobuf.GeneratedMessage {
+
     // Use MessageInfo.newBuilder() to construct.
     private MessageInfo() {
       initFields();
@@ -383,7 +394,8 @@ public final class ScopeProtos {
     }
 
     public static final class FieldInfo extends
-        com.google.protobuf.GeneratedMessage {
+                                        com.google.protobuf.GeneratedMessage {
+
       // Use FieldInfo.newBuilder() to construct.
       private FieldInfo() {
         initFields();
@@ -479,9 +491,15 @@ public final class ScopeProtos {
       }
 
       public final boolean isInitialized() {
-        if (!hasName) return false;
-        if (!hasType) return false;
-        if (!hasNumber) return false;
+        if (!hasName) {
+          return false;
+        }
+        if (!hasType) {
+          return false;
+        }
+        if (!hasNumber) {
+          return false;
+        }
         return true;
       }
 
@@ -510,28 +528,30 @@ public final class ScopeProtos {
 
       public int getSerializedSize() {
         int size = memoizedSerializedSize;
-        if (size != -1) return size;
+        if (size != -1) {
+          return size;
+        }
 
         size = 0;
         if (hasName()) {
           size += com.google.protobuf.CodedOutputStream.computeStringSize(1,
-              getName());
+                                                                          getName());
         }
         if (hasType()) {
           size += com.google.protobuf.CodedOutputStream.computeUInt32Size(2,
-              getType());
+                                                                          getType());
         }
         if (hasNumber()) {
           size += com.google.protobuf.CodedOutputStream.computeUInt32Size(3,
-              getNumber());
+                                                                          getNumber());
         }
         if (hasQuantifier()) {
           size += com.google.protobuf.CodedOutputStream.computeUInt32Size(4,
-              getQuantifier());
+                                                                          getQuantifier());
         }
         if (hasMessageID()) {
           size += com.google.protobuf.CodedOutputStream.computeUInt32Size(5,
-              getMessageID());
+                                                                          getMessageID());
         }
         size += getUnknownFields().getSerializedSize();
         memoizedSerializedSize = size;
@@ -629,7 +649,8 @@ public final class ScopeProtos {
       }
 
       public static final class Builder extends
-          com.google.protobuf.GeneratedMessage.Builder<Builder> {
+                                        com.google.protobuf.GeneratedMessage.Builder<Builder> {
+
         private com.opera.core.systems.scope.protos.ScopeProtos.MessageInfo.FieldInfo result;
 
         // Construct using
@@ -639,7 +660,8 @@ public final class ScopeProtos {
 
         private static Builder create() {
           Builder builder = new Builder();
-          builder.result = new com.opera.core.systems.scope.protos.ScopeProtos.MessageInfo.FieldInfo();
+          builder.result =
+              new com.opera.core.systems.scope.protos.ScopeProtos.MessageInfo.FieldInfo();
           return builder;
         }
 
@@ -661,11 +683,13 @@ public final class ScopeProtos {
         }
 
         public com.google.protobuf.Descriptors.Descriptor getDescriptorForType() {
-          return com.opera.core.systems.scope.protos.ScopeProtos.MessageInfo.FieldInfo.getDescriptor();
+          return com.opera.core.systems.scope.protos.ScopeProtos.MessageInfo.FieldInfo
+              .getDescriptor();
         }
 
         public com.opera.core.systems.scope.protos.ScopeProtos.MessageInfo.FieldInfo getDefaultInstanceForType() {
-          return com.opera.core.systems.scope.protos.ScopeProtos.MessageInfo.FieldInfo.getDefaultInstance();
+          return com.opera.core.systems.scope.protos.ScopeProtos.MessageInfo.FieldInfo
+              .getDefaultInstance();
         }
 
         public boolean isInitialized() {
@@ -699,7 +723,8 @@ public final class ScopeProtos {
 
         public Builder mergeFrom(com.google.protobuf.Message other) {
           if (other instanceof com.opera.core.systems.scope.protos.ScopeProtos.MessageInfo.FieldInfo) {
-            return mergeFrom((com.opera.core.systems.scope.protos.ScopeProtos.MessageInfo.FieldInfo) other);
+            return mergeFrom(
+                (com.opera.core.systems.scope.protos.ScopeProtos.MessageInfo.FieldInfo) other);
           } else {
             super.mergeFrom(other);
             return this;
@@ -708,7 +733,10 @@ public final class ScopeProtos {
 
         public Builder mergeFrom(
             com.opera.core.systems.scope.protos.ScopeProtos.MessageInfo.FieldInfo other) {
-          if (other == com.opera.core.systems.scope.protos.ScopeProtos.MessageInfo.FieldInfo.getDefaultInstance()) return this;
+          if (other == com.opera.core.systems.scope.protos.ScopeProtos.MessageInfo.FieldInfo
+              .getDefaultInstance()) {
+            return this;
+          }
           if (other.hasName()) {
             setName(other.getName());
           }
@@ -729,43 +757,45 @@ public final class ScopeProtos {
         }
 
         public Builder mergeFrom(com.google.protobuf.CodedInputStream input,
-            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                                 com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws java.io.IOException {
-          com.google.protobuf.UnknownFieldSet.Builder unknownFields = com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
+          com.google.protobuf.UnknownFieldSet.Builder
+              unknownFields =
+              com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
           while (true) {
             int tag = input.readTag();
             switch (tag) {
-            case 0:
-              this.setUnknownFields(unknownFields.build());
-              return this;
-            default: {
-              if (!parseUnknownField(input, unknownFields, extensionRegistry,
-                  tag)) {
+              case 0:
                 this.setUnknownFields(unknownFields.build());
                 return this;
+              default: {
+                if (!parseUnknownField(input, unknownFields, extensionRegistry,
+                                       tag)) {
+                  this.setUnknownFields(unknownFields.build());
+                  return this;
+                }
+                break;
               }
-              break;
-            }
-            case 10: {
-              setName(input.readString());
-              break;
-            }
-            case 16: {
-              setType(input.readUInt32());
-              break;
-            }
-            case 24: {
-              setNumber(input.readUInt32());
-              break;
-            }
-            case 32: {
-              setQuantifier(input.readUInt32());
-              break;
-            }
-            case 40: {
-              setMessageID(input.readUInt32());
-              break;
-            }
+              case 10: {
+                setName(input.readString());
+                break;
+              }
+              case 16: {
+                setType(input.readUInt32());
+                break;
+              }
+              case 24: {
+                setNumber(input.readUInt32());
+                break;
+              }
+              case 32: {
+                setQuantifier(input.readUInt32());
+                break;
+              }
+              case 40: {
+                setMessageID(input.readUInt32());
+                break;
+              }
             }
           }
         }
@@ -918,7 +948,10 @@ public final class ScopeProtos {
 
     // repeated .scope.MessageInfo.FieldInfo fieldList = 3;
     public static final int FIELDLIST_FIELD_NUMBER = 3;
-    private java.util.List<com.opera.core.systems.scope.protos.ScopeProtos.MessageInfo.FieldInfo> fieldList_ = java.util.Collections.emptyList();
+    private
+    java.util.List<com.opera.core.systems.scope.protos.ScopeProtos.MessageInfo.FieldInfo>
+        fieldList_ =
+        java.util.Collections.emptyList();
 
     public java.util.List<com.opera.core.systems.scope.protos.ScopeProtos.MessageInfo.FieldInfo> getFieldListList() {
       return fieldList_;
@@ -950,10 +983,16 @@ public final class ScopeProtos {
     }
 
     public final boolean isInitialized() {
-      if (!hasId) return false;
-      if (!hasName) return false;
+      if (!hasId) {
+        return false;
+      }
+      if (!hasName) {
+        return false;
+      }
       for (com.opera.core.systems.scope.protos.ScopeProtos.MessageInfo.FieldInfo element : getFieldListList()) {
-        if (!element.isInitialized()) return false;
+        if (!element.isInitialized()) {
+          return false;
+        }
       }
       return true;
     }
@@ -980,24 +1019,26 @@ public final class ScopeProtos {
 
     public int getSerializedSize() {
       int size = memoizedSerializedSize;
-      if (size != -1) return size;
+      if (size != -1) {
+        return size;
+      }
 
       size = 0;
       if (hasId()) {
         size += com.google.protobuf.CodedOutputStream.computeUInt32Size(1,
-            getId());
+                                                                        getId());
       }
       if (hasName()) {
         size += com.google.protobuf.CodedOutputStream.computeStringSize(2,
-            getName());
+                                                                        getName());
       }
       for (com.opera.core.systems.scope.protos.ScopeProtos.MessageInfo.FieldInfo element : getFieldListList()) {
         size += com.google.protobuf.CodedOutputStream.computeMessageSize(3,
-            element);
+                                                                         element);
       }
       if (hasParentID()) {
         size += com.google.protobuf.CodedOutputStream.computeUInt32Size(4,
-            getParentID());
+                                                                        getParentID());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -1092,7 +1133,8 @@ public final class ScopeProtos {
     }
 
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> {
+                                      com.google.protobuf.GeneratedMessage.Builder<Builder> {
+
       private com.opera.core.systems.scope.protos.ScopeProtos.MessageInfo result;
 
       // Construct using
@@ -1173,7 +1215,10 @@ public final class ScopeProtos {
 
       public Builder mergeFrom(
           com.opera.core.systems.scope.protos.ScopeProtos.MessageInfo other) {
-        if (other == com.opera.core.systems.scope.protos.ScopeProtos.MessageInfo.getDefaultInstance()) return this;
+        if (other == com.opera.core.systems.scope.protos.ScopeProtos.MessageInfo
+            .getDefaultInstance()) {
+          return this;
+        }
         if (other.hasId()) {
           setId(other.getId());
         }
@@ -1182,7 +1227,8 @@ public final class ScopeProtos {
         }
         if (!other.fieldList_.isEmpty()) {
           if (result.fieldList_.isEmpty()) {
-            result.fieldList_ = new java.util.ArrayList<com.opera.core.systems.scope.protos.ScopeProtos.MessageInfo.FieldInfo>();
+            result.fieldList_ =
+                new java.util.ArrayList<com.opera.core.systems.scope.protos.ScopeProtos.MessageInfo.FieldInfo>();
           }
           result.fieldList_.addAll(other.fieldList_);
         }
@@ -1194,40 +1240,45 @@ public final class ScopeProtos {
       }
 
       public Builder mergeFrom(com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                               com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields = com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
+        com.google.protobuf.UnknownFieldSet.Builder
+            unknownFields =
+            com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
         while (true) {
           int tag = input.readTag();
           switch (tag) {
-          case 0:
-            this.setUnknownFields(unknownFields.build());
-            return this;
-          default: {
-            if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+            case 0:
               this.setUnknownFields(unknownFields.build());
               return this;
+            default: {
+              if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+                this.setUnknownFields(unknownFields.build());
+                return this;
+              }
+              break;
             }
-            break;
-          }
-          case 8: {
-            setId(input.readUInt32());
-            break;
-          }
-          case 18: {
-            setName(input.readString());
-            break;
-          }
-          case 26: {
-            com.opera.core.systems.scope.protos.ScopeProtos.MessageInfo.FieldInfo.Builder subBuilder = com.opera.core.systems.scope.protos.ScopeProtos.MessageInfo.FieldInfo.newBuilder();
-            input.readMessage(subBuilder, extensionRegistry);
-            addFieldList(subBuilder.buildPartial());
-            break;
-          }
-          case 32: {
-            setParentID(input.readUInt32());
-            break;
-          }
+            case 8: {
+              setId(input.readUInt32());
+              break;
+            }
+            case 18: {
+              setName(input.readString());
+              break;
+            }
+            case 26: {
+              com.opera.core.systems.scope.protos.ScopeProtos.MessageInfo.FieldInfo.Builder
+                  subBuilder =
+                  com.opera.core.systems.scope.protos.ScopeProtos.MessageInfo.FieldInfo
+                      .newBuilder();
+              input.readMessage(subBuilder, extensionRegistry);
+              addFieldList(subBuilder.buildPartial());
+              break;
+            }
+            case 32: {
+              setParentID(input.readUInt32());
+              break;
+            }
           }
         }
       }
@@ -1314,7 +1365,8 @@ public final class ScopeProtos {
           throw new NullPointerException();
         }
         if (result.fieldList_.isEmpty()) {
-          result.fieldList_ = new java.util.ArrayList<com.opera.core.systems.scope.protos.ScopeProtos.MessageInfo.FieldInfo>();
+          result.fieldList_ =
+              new java.util.ArrayList<com.opera.core.systems.scope.protos.ScopeProtos.MessageInfo.FieldInfo>();
         }
         result.fieldList_.add(value);
         return this;
@@ -1323,7 +1375,8 @@ public final class ScopeProtos {
       public Builder addFieldList(
           com.opera.core.systems.scope.protos.ScopeProtos.MessageInfo.FieldInfo.Builder builderForValue) {
         if (result.fieldList_.isEmpty()) {
-          result.fieldList_ = new java.util.ArrayList<com.opera.core.systems.scope.protos.ScopeProtos.MessageInfo.FieldInfo>();
+          result.fieldList_ =
+              new java.util.ArrayList<com.opera.core.systems.scope.protos.ScopeProtos.MessageInfo.FieldInfo>();
         }
         result.fieldList_.add(builderForValue.build());
         return this;
@@ -1332,7 +1385,8 @@ public final class ScopeProtos {
       public Builder addAllFieldList(
           java.lang.Iterable<? extends com.opera.core.systems.scope.protos.ScopeProtos.MessageInfo.FieldInfo> values) {
         if (result.fieldList_.isEmpty()) {
-          result.fieldList_ = new java.util.ArrayList<com.opera.core.systems.scope.protos.ScopeProtos.MessageInfo.FieldInfo>();
+          result.fieldList_ =
+              new java.util.ArrayList<com.opera.core.systems.scope.protos.ScopeProtos.MessageInfo.FieldInfo>();
         }
         super.addAll(values, result.fieldList_);
         return this;
@@ -1377,7 +1431,8 @@ public final class ScopeProtos {
   }
 
   public static final class EventInfo extends
-      com.google.protobuf.GeneratedMessage {
+                                      com.google.protobuf.GeneratedMessage {
+
     // Use EventInfo.newBuilder() to construct.
     private EventInfo() {
       initFields();
@@ -1447,9 +1502,15 @@ public final class ScopeProtos {
     }
 
     public final boolean isInitialized() {
-      if (!hasName) return false;
-      if (!hasNumber) return false;
-      if (!hasMessageID) return false;
+      if (!hasName) {
+        return false;
+      }
+      if (!hasNumber) {
+        return false;
+      }
+      if (!hasMessageID) {
+        return false;
+      }
       return true;
     }
 
@@ -1472,20 +1533,22 @@ public final class ScopeProtos {
 
     public int getSerializedSize() {
       int size = memoizedSerializedSize;
-      if (size != -1) return size;
+      if (size != -1) {
+        return size;
+      }
 
       size = 0;
       if (hasName()) {
         size += com.google.protobuf.CodedOutputStream.computeStringSize(1,
-            getName());
+                                                                        getName());
       }
       if (hasNumber()) {
         size += com.google.protobuf.CodedOutputStream.computeUInt32Size(2,
-            getNumber());
+                                                                        getNumber());
       }
       if (hasMessageID()) {
         size += com.google.protobuf.CodedOutputStream.computeUInt32Size(3,
-            getMessageID());
+                                                                        getMessageID());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -1580,7 +1643,8 @@ public final class ScopeProtos {
     }
 
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> {
+                                      com.google.protobuf.GeneratedMessage.Builder<Builder> {
+
       private com.opera.core.systems.scope.protos.ScopeProtos.EventInfo result;
 
       // Construct using
@@ -1658,7 +1722,10 @@ public final class ScopeProtos {
 
       public Builder mergeFrom(
           com.opera.core.systems.scope.protos.ScopeProtos.EventInfo other) {
-        if (other == com.opera.core.systems.scope.protos.ScopeProtos.EventInfo.getDefaultInstance()) return this;
+        if (other == com.opera.core.systems.scope.protos.ScopeProtos.EventInfo
+            .getDefaultInstance()) {
+          return this;
+        }
         if (other.hasName()) {
           setName(other.getName());
         }
@@ -1673,34 +1740,36 @@ public final class ScopeProtos {
       }
 
       public Builder mergeFrom(com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                               com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields = com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
+        com.google.protobuf.UnknownFieldSet.Builder
+            unknownFields =
+            com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
         while (true) {
           int tag = input.readTag();
           switch (tag) {
-          case 0:
-            this.setUnknownFields(unknownFields.build());
-            return this;
-          default: {
-            if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+            case 0:
               this.setUnknownFields(unknownFields.build());
               return this;
+            default: {
+              if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+                this.setUnknownFields(unknownFields.build());
+                return this;
+              }
+              break;
             }
-            break;
-          }
-          case 10: {
-            setName(input.readString());
-            break;
-          }
-          case 16: {
-            setNumber(input.readUInt32());
-            break;
-          }
-          case 24: {
-            setMessageID(input.readUInt32());
-            break;
-          }
+            case 10: {
+              setName(input.readString());
+              break;
+            }
+            case 16: {
+              setNumber(input.readUInt32());
+              break;
+            }
+            case 24: {
+              setMessageID(input.readUInt32());
+              break;
+            }
           }
         }
       }
@@ -1784,7 +1853,8 @@ public final class ScopeProtos {
   }
 
   public static final class Service extends
-      com.google.protobuf.GeneratedMessage {
+                                    com.google.protobuf.GeneratedMessage {
+
     // Use Service.newBuilder() to construct.
     private Service() {
       initFields();
@@ -1841,8 +1911,12 @@ public final class ScopeProtos {
     }
 
     public final boolean isInitialized() {
-      if (!hasName) return false;
-      if (!hasVersion) return false;
+      if (!hasName) {
+        return false;
+      }
+      if (!hasVersion) {
+        return false;
+      }
       return true;
     }
 
@@ -1862,16 +1936,18 @@ public final class ScopeProtos {
 
     public int getSerializedSize() {
       int size = memoizedSerializedSize;
-      if (size != -1) return size;
+      if (size != -1) {
+        return size;
+      }
 
       size = 0;
       if (hasName()) {
         size += com.google.protobuf.CodedOutputStream.computeStringSize(1,
-            getName());
+                                                                        getName());
       }
       if (hasVersion()) {
         size += com.google.protobuf.CodedOutputStream.computeStringSize(2,
-            getVersion());
+                                                                        getVersion());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -1966,7 +2042,8 @@ public final class ScopeProtos {
     }
 
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> {
+                                      com.google.protobuf.GeneratedMessage.Builder<Builder> {
+
       private com.opera.core.systems.scope.protos.ScopeProtos.Service result;
 
       // Construct using
@@ -2044,7 +2121,9 @@ public final class ScopeProtos {
 
       public Builder mergeFrom(
           com.opera.core.systems.scope.protos.ScopeProtos.Service other) {
-        if (other == com.opera.core.systems.scope.protos.ScopeProtos.Service.getDefaultInstance()) return this;
+        if (other == com.opera.core.systems.scope.protos.ScopeProtos.Service.getDefaultInstance()) {
+          return this;
+        }
         if (other.hasName()) {
           setName(other.getName());
         }
@@ -2056,30 +2135,32 @@ public final class ScopeProtos {
       }
 
       public Builder mergeFrom(com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                               com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields = com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
+        com.google.protobuf.UnknownFieldSet.Builder
+            unknownFields =
+            com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
         while (true) {
           int tag = input.readTag();
           switch (tag) {
-          case 0:
-            this.setUnknownFields(unknownFields.build());
-            return this;
-          default: {
-            if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+            case 0:
               this.setUnknownFields(unknownFields.build());
               return this;
+            default: {
+              if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+                this.setUnknownFields(unknownFields.build());
+                return this;
+              }
+              break;
             }
-            break;
-          }
-          case 10: {
-            setName(input.readString());
-            break;
-          }
-          case 18: {
-            setVersion(input.readString());
-            break;
-          }
+            case 10: {
+              setName(input.readString());
+              break;
+            }
+            case 18: {
+              setVersion(input.readString());
+              break;
+            }
           }
         }
       }
@@ -2145,7 +2226,8 @@ public final class ScopeProtos {
   }
 
   public static final class HostInfo extends
-      com.google.protobuf.GeneratedMessage {
+                                     com.google.protobuf.GeneratedMessage {
+
     // Use HostInfo.newBuilder() to construct.
     private HostInfo() {
       initFields();
@@ -2239,7 +2321,10 @@ public final class ScopeProtos {
 
     // repeated .scope.Service serviceList = 6;
     public static final int SERVICELIST_FIELD_NUMBER = 6;
-    private java.util.List<com.opera.core.systems.scope.protos.ScopeProtos.Service> serviceList_ = java.util.Collections.emptyList();
+    private
+    java.util.List<com.opera.core.systems.scope.protos.ScopeProtos.Service>
+        serviceList_ =
+        java.util.Collections.emptyList();
 
     public java.util.List<com.opera.core.systems.scope.protos.ScopeProtos.Service> getServiceListList() {
       return serviceList_;
@@ -2258,13 +2343,25 @@ public final class ScopeProtos {
     }
 
     public final boolean isInitialized() {
-      if (!hasStpVersion) return false;
-      if (!hasCoreVersion) return false;
-      if (!hasPlatform) return false;
-      if (!hasOperatingSystem) return false;
-      if (!hasUserAgent) return false;
+      if (!hasStpVersion) {
+        return false;
+      }
+      if (!hasCoreVersion) {
+        return false;
+      }
+      if (!hasPlatform) {
+        return false;
+      }
+      if (!hasOperatingSystem) {
+        return false;
+      }
+      if (!hasUserAgent) {
+        return false;
+      }
       for (com.opera.core.systems.scope.protos.ScopeProtos.Service element : getServiceListList()) {
-        if (!element.isInitialized()) return false;
+        if (!element.isInitialized()) {
+          return false;
+        }
       }
       return true;
     }
@@ -2297,32 +2394,34 @@ public final class ScopeProtos {
 
     public int getSerializedSize() {
       int size = memoizedSerializedSize;
-      if (size != -1) return size;
+      if (size != -1) {
+        return size;
+      }
 
       size = 0;
       if (hasStpVersion()) {
         size += com.google.protobuf.CodedOutputStream.computeUInt32Size(1,
-            getStpVersion());
+                                                                        getStpVersion());
       }
       if (hasCoreVersion()) {
         size += com.google.protobuf.CodedOutputStream.computeStringSize(2,
-            getCoreVersion());
+                                                                        getCoreVersion());
       }
       if (hasPlatform()) {
         size += com.google.protobuf.CodedOutputStream.computeStringSize(3,
-            getPlatform());
+                                                                        getPlatform());
       }
       if (hasOperatingSystem()) {
         size += com.google.protobuf.CodedOutputStream.computeStringSize(4,
-            getOperatingSystem());
+                                                                        getOperatingSystem());
       }
       if (hasUserAgent()) {
         size += com.google.protobuf.CodedOutputStream.computeStringSize(5,
-            getUserAgent());
+                                                                        getUserAgent());
       }
       for (com.opera.core.systems.scope.protos.ScopeProtos.Service element : getServiceListList()) {
         size += com.google.protobuf.CodedOutputStream.computeMessageSize(6,
-            element);
+                                                                         element);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -2417,7 +2516,8 @@ public final class ScopeProtos {
     }
 
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> {
+                                      com.google.protobuf.GeneratedMessage.Builder<Builder> {
+
       private com.opera.core.systems.scope.protos.ScopeProtos.HostInfo result;
 
       // Construct using
@@ -2498,7 +2598,10 @@ public final class ScopeProtos {
 
       public Builder mergeFrom(
           com.opera.core.systems.scope.protos.ScopeProtos.HostInfo other) {
-        if (other == com.opera.core.systems.scope.protos.ScopeProtos.HostInfo.getDefaultInstance()) return this;
+        if (other == com.opera.core.systems.scope.protos.ScopeProtos.HostInfo
+            .getDefaultInstance()) {
+          return this;
+        }
         if (other.hasStpVersion()) {
           setStpVersion(other.getStpVersion());
         }
@@ -2516,7 +2619,8 @@ public final class ScopeProtos {
         }
         if (!other.serviceList_.isEmpty()) {
           if (result.serviceList_.isEmpty()) {
-            result.serviceList_ = new java.util.ArrayList<com.opera.core.systems.scope.protos.ScopeProtos.Service>();
+            result.serviceList_ =
+                new java.util.ArrayList<com.opera.core.systems.scope.protos.ScopeProtos.Service>();
           }
           result.serviceList_.addAll(other.serviceList_);
         }
@@ -2525,48 +2629,52 @@ public final class ScopeProtos {
       }
 
       public Builder mergeFrom(com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                               com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields = com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
+        com.google.protobuf.UnknownFieldSet.Builder
+            unknownFields =
+            com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
         while (true) {
           int tag = input.readTag();
           switch (tag) {
-          case 0:
-            this.setUnknownFields(unknownFields.build());
-            return this;
-          default: {
-            if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+            case 0:
               this.setUnknownFields(unknownFields.build());
               return this;
+            default: {
+              if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+                this.setUnknownFields(unknownFields.build());
+                return this;
+              }
+              break;
             }
-            break;
-          }
-          case 8: {
-            setStpVersion(input.readUInt32());
-            break;
-          }
-          case 18: {
-            setCoreVersion(input.readString());
-            break;
-          }
-          case 26: {
-            setPlatform(input.readString());
-            break;
-          }
-          case 34: {
-            setOperatingSystem(input.readString());
-            break;
-          }
-          case 42: {
-            setUserAgent(input.readString());
-            break;
-          }
-          case 50: {
-            com.opera.core.systems.scope.protos.ScopeProtos.Service.Builder subBuilder = com.opera.core.systems.scope.protos.ScopeProtos.Service.newBuilder();
-            input.readMessage(subBuilder, extensionRegistry);
-            addServiceList(subBuilder.buildPartial());
-            break;
-          }
+            case 8: {
+              setStpVersion(input.readUInt32());
+              break;
+            }
+            case 18: {
+              setCoreVersion(input.readString());
+              break;
+            }
+            case 26: {
+              setPlatform(input.readString());
+              break;
+            }
+            case 34: {
+              setOperatingSystem(input.readString());
+              break;
+            }
+            case 42: {
+              setUserAgent(input.readString());
+              break;
+            }
+            case 50: {
+              com.opera.core.systems.scope.protos.ScopeProtos.Service.Builder
+                  subBuilder =
+                  com.opera.core.systems.scope.protos.ScopeProtos.Service.newBuilder();
+              input.readMessage(subBuilder, extensionRegistry);
+              addServiceList(subBuilder.buildPartial());
+              break;
+            }
           }
         }
       }
@@ -2703,7 +2811,7 @@ public final class ScopeProtos {
       }
 
       public Builder setServiceList(int index,
-          com.opera.core.systems.scope.protos.ScopeProtos.Service value) {
+                                    com.opera.core.systems.scope.protos.ScopeProtos.Service value) {
         if (value == null) {
           throw new NullPointerException();
         }
@@ -2724,7 +2832,8 @@ public final class ScopeProtos {
           throw new NullPointerException();
         }
         if (result.serviceList_.isEmpty()) {
-          result.serviceList_ = new java.util.ArrayList<com.opera.core.systems.scope.protos.ScopeProtos.Service>();
+          result.serviceList_ =
+              new java.util.ArrayList<com.opera.core.systems.scope.protos.ScopeProtos.Service>();
         }
         result.serviceList_.add(value);
         return this;
@@ -2733,7 +2842,8 @@ public final class ScopeProtos {
       public Builder addServiceList(
           com.opera.core.systems.scope.protos.ScopeProtos.Service.Builder builderForValue) {
         if (result.serviceList_.isEmpty()) {
-          result.serviceList_ = new java.util.ArrayList<com.opera.core.systems.scope.protos.ScopeProtos.Service>();
+          result.serviceList_ =
+              new java.util.ArrayList<com.opera.core.systems.scope.protos.ScopeProtos.Service>();
         }
         result.serviceList_.add(builderForValue.build());
         return this;
@@ -2742,7 +2852,8 @@ public final class ScopeProtos {
       public Builder addAllServiceList(
           java.lang.Iterable<? extends com.opera.core.systems.scope.protos.ScopeProtos.Service> values) {
         if (result.serviceList_.isEmpty()) {
-          result.serviceList_ = new java.util.ArrayList<com.opera.core.systems.scope.protos.ScopeProtos.Service>();
+          result.serviceList_ =
+              new java.util.ArrayList<com.opera.core.systems.scope.protos.ScopeProtos.Service>();
         }
         super.addAll(values, result.serviceList_);
         return this;
@@ -2766,7 +2877,8 @@ public final class ScopeProtos {
   }
 
   public static final class ClientInfo extends
-      com.google.protobuf.GeneratedMessage {
+                                       com.google.protobuf.GeneratedMessage {
+
     // Use ClientInfo.newBuilder() to construct.
     private ClientInfo() {
       initFields();
@@ -2810,7 +2922,9 @@ public final class ScopeProtos {
     }
 
     public final boolean isInitialized() {
-      if (!hasFormat) return false;
+      if (!hasFormat) {
+        return false;
+      }
       return true;
     }
 
@@ -2827,12 +2941,14 @@ public final class ScopeProtos {
 
     public int getSerializedSize() {
       int size = memoizedSerializedSize;
-      if (size != -1) return size;
+      if (size != -1) {
+        return size;
+      }
 
       size = 0;
       if (hasFormat()) {
         size += com.google.protobuf.CodedOutputStream.computeStringSize(1,
-            getFormat());
+                                                                        getFormat());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -2927,7 +3043,8 @@ public final class ScopeProtos {
     }
 
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> {
+                                      com.google.protobuf.GeneratedMessage.Builder<Builder> {
+
       private com.opera.core.systems.scope.protos.ScopeProtos.ClientInfo result;
 
       // Construct using
@@ -3005,7 +3122,10 @@ public final class ScopeProtos {
 
       public Builder mergeFrom(
           com.opera.core.systems.scope.protos.ScopeProtos.ClientInfo other) {
-        if (other == com.opera.core.systems.scope.protos.ScopeProtos.ClientInfo.getDefaultInstance()) return this;
+        if (other == com.opera.core.systems.scope.protos.ScopeProtos.ClientInfo
+            .getDefaultInstance()) {
+          return this;
+        }
         if (other.hasFormat()) {
           setFormat(other.getFormat());
         }
@@ -3014,26 +3134,28 @@ public final class ScopeProtos {
       }
 
       public Builder mergeFrom(com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                               com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields = com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
+        com.google.protobuf.UnknownFieldSet.Builder
+            unknownFields =
+            com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
         while (true) {
           int tag = input.readTag();
           switch (tag) {
-          case 0:
-            this.setUnknownFields(unknownFields.build());
-            return this;
-          default: {
-            if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+            case 0:
               this.setUnknownFields(unknownFields.build());
               return this;
+            default: {
+              if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+                this.setUnknownFields(unknownFields.build());
+                return this;
+              }
+              break;
             }
-            break;
-          }
-          case 10: {
-            setFormat(input.readString());
-            break;
-          }
+            case 10: {
+              setFormat(input.readString());
+              break;
+            }
           }
         }
       }
@@ -3075,7 +3197,8 @@ public final class ScopeProtos {
   }
 
   public static final class MessageInfoList extends
-      com.google.protobuf.GeneratedMessage {
+                                            com.google.protobuf.GeneratedMessage {
+
     // Use MessageInfoList.newBuilder() to construct.
     private MessageInfoList() {
       initFields();
@@ -3104,7 +3227,10 @@ public final class ScopeProtos {
 
     // repeated .scope.MessageInfo messageList = 1;
     public static final int MESSAGELIST_FIELD_NUMBER = 1;
-    private java.util.List<com.opera.core.systems.scope.protos.ScopeProtos.MessageInfo> messageList_ = java.util.Collections.emptyList();
+    private
+    java.util.List<com.opera.core.systems.scope.protos.ScopeProtos.MessageInfo>
+        messageList_ =
+        java.util.Collections.emptyList();
 
     public java.util.List<com.opera.core.systems.scope.protos.ScopeProtos.MessageInfo> getMessageListList() {
       return messageList_;
@@ -3124,7 +3250,9 @@ public final class ScopeProtos {
 
     public final boolean isInitialized() {
       for (com.opera.core.systems.scope.protos.ScopeProtos.MessageInfo element : getMessageListList()) {
-        if (!element.isInitialized()) return false;
+        if (!element.isInitialized()) {
+          return false;
+        }
       }
       return true;
     }
@@ -3142,12 +3270,14 @@ public final class ScopeProtos {
 
     public int getSerializedSize() {
       int size = memoizedSerializedSize;
-      if (size != -1) return size;
+      if (size != -1) {
+        return size;
+      }
 
       size = 0;
       for (com.opera.core.systems.scope.protos.ScopeProtos.MessageInfo element : getMessageListList()) {
         size += com.google.protobuf.CodedOutputStream.computeMessageSize(1,
-            element);
+                                                                         element);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -3242,7 +3372,8 @@ public final class ScopeProtos {
     }
 
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> {
+                                      com.google.protobuf.GeneratedMessage.Builder<Builder> {
+
       private com.opera.core.systems.scope.protos.ScopeProtos.MessageInfoList result;
 
       // Construct using
@@ -3323,10 +3454,14 @@ public final class ScopeProtos {
 
       public Builder mergeFrom(
           com.opera.core.systems.scope.protos.ScopeProtos.MessageInfoList other) {
-        if (other == com.opera.core.systems.scope.protos.ScopeProtos.MessageInfoList.getDefaultInstance()) return this;
+        if (other == com.opera.core.systems.scope.protos.ScopeProtos.MessageInfoList
+            .getDefaultInstance()) {
+          return this;
+        }
         if (!other.messageList_.isEmpty()) {
           if (result.messageList_.isEmpty()) {
-            result.messageList_ = new java.util.ArrayList<com.opera.core.systems.scope.protos.ScopeProtos.MessageInfo>();
+            result.messageList_ =
+                new java.util.ArrayList<com.opera.core.systems.scope.protos.ScopeProtos.MessageInfo>();
           }
           result.messageList_.addAll(other.messageList_);
         }
@@ -3335,28 +3470,32 @@ public final class ScopeProtos {
       }
 
       public Builder mergeFrom(com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                               com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields = com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
+        com.google.protobuf.UnknownFieldSet.Builder
+            unknownFields =
+            com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
         while (true) {
           int tag = input.readTag();
           switch (tag) {
-          case 0:
-            this.setUnknownFields(unknownFields.build());
-            return this;
-          default: {
-            if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+            case 0:
               this.setUnknownFields(unknownFields.build());
               return this;
+            default: {
+              if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+                this.setUnknownFields(unknownFields.build());
+                return this;
+              }
+              break;
             }
-            break;
-          }
-          case 10: {
-            com.opera.core.systems.scope.protos.ScopeProtos.MessageInfo.Builder subBuilder = com.opera.core.systems.scope.protos.ScopeProtos.MessageInfo.newBuilder();
-            input.readMessage(subBuilder, extensionRegistry);
-            addMessageList(subBuilder.buildPartial());
-            break;
-          }
+            case 10: {
+              com.opera.core.systems.scope.protos.ScopeProtos.MessageInfo.Builder
+                  subBuilder =
+                  com.opera.core.systems.scope.protos.ScopeProtos.MessageInfo.newBuilder();
+              input.readMessage(subBuilder, extensionRegistry);
+              addMessageList(subBuilder.buildPartial());
+              break;
+            }
           }
         }
       }
@@ -3376,7 +3515,7 @@ public final class ScopeProtos {
       }
 
       public Builder setMessageList(int index,
-          com.opera.core.systems.scope.protos.ScopeProtos.MessageInfo value) {
+                                    com.opera.core.systems.scope.protos.ScopeProtos.MessageInfo value) {
         if (value == null) {
           throw new NullPointerException();
         }
@@ -3397,7 +3536,8 @@ public final class ScopeProtos {
           throw new NullPointerException();
         }
         if (result.messageList_.isEmpty()) {
-          result.messageList_ = new java.util.ArrayList<com.opera.core.systems.scope.protos.ScopeProtos.MessageInfo>();
+          result.messageList_ =
+              new java.util.ArrayList<com.opera.core.systems.scope.protos.ScopeProtos.MessageInfo>();
         }
         result.messageList_.add(value);
         return this;
@@ -3406,7 +3546,8 @@ public final class ScopeProtos {
       public Builder addMessageList(
           com.opera.core.systems.scope.protos.ScopeProtos.MessageInfo.Builder builderForValue) {
         if (result.messageList_.isEmpty()) {
-          result.messageList_ = new java.util.ArrayList<com.opera.core.systems.scope.protos.ScopeProtos.MessageInfo>();
+          result.messageList_ =
+              new java.util.ArrayList<com.opera.core.systems.scope.protos.ScopeProtos.MessageInfo>();
         }
         result.messageList_.add(builderForValue.build());
         return this;
@@ -3415,7 +3556,8 @@ public final class ScopeProtos {
       public Builder addAllMessageList(
           java.lang.Iterable<? extends com.opera.core.systems.scope.protos.ScopeProtos.MessageInfo> values) {
         if (result.messageList_.isEmpty()) {
-          result.messageList_ = new java.util.ArrayList<com.opera.core.systems.scope.protos.ScopeProtos.MessageInfo>();
+          result.messageList_ =
+              new java.util.ArrayList<com.opera.core.systems.scope.protos.ScopeProtos.MessageInfo>();
         }
         super.addAll(values, result.messageList_);
         return this;
@@ -3439,7 +3581,8 @@ public final class ScopeProtos {
   }
 
   public static final class ServiceSelection extends
-      com.google.protobuf.GeneratedMessage {
+                                             com.google.protobuf.GeneratedMessage {
+
     // Use ServiceSelection.newBuilder() to construct.
     private ServiceSelection() {
       initFields();
@@ -3483,7 +3626,9 @@ public final class ScopeProtos {
     }
 
     public final boolean isInitialized() {
-      if (!hasName) return false;
+      if (!hasName) {
+        return false;
+      }
       return true;
     }
 
@@ -3500,12 +3645,14 @@ public final class ScopeProtos {
 
     public int getSerializedSize() {
       int size = memoizedSerializedSize;
-      if (size != -1) return size;
+      if (size != -1) {
+        return size;
+      }
 
       size = 0;
       if (hasName()) {
         size += com.google.protobuf.CodedOutputStream.computeStringSize(1,
-            getName());
+                                                                        getName());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -3600,7 +3747,8 @@ public final class ScopeProtos {
     }
 
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> {
+                                      com.google.protobuf.GeneratedMessage.Builder<Builder> {
+
       private com.opera.core.systems.scope.protos.ScopeProtos.ServiceSelection result;
 
       // Construct using
@@ -3635,7 +3783,8 @@ public final class ScopeProtos {
       }
 
       public com.opera.core.systems.scope.protos.ScopeProtos.ServiceSelection getDefaultInstanceForType() {
-        return com.opera.core.systems.scope.protos.ScopeProtos.ServiceSelection.getDefaultInstance();
+        return com.opera.core.systems.scope.protos.ScopeProtos.ServiceSelection
+            .getDefaultInstance();
       }
 
       public boolean isInitialized() {
@@ -3669,7 +3818,8 @@ public final class ScopeProtos {
 
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.opera.core.systems.scope.protos.ScopeProtos.ServiceSelection) {
-          return mergeFrom((com.opera.core.systems.scope.protos.ScopeProtos.ServiceSelection) other);
+          return mergeFrom(
+              (com.opera.core.systems.scope.protos.ScopeProtos.ServiceSelection) other);
         } else {
           super.mergeFrom(other);
           return this;
@@ -3678,7 +3828,10 @@ public final class ScopeProtos {
 
       public Builder mergeFrom(
           com.opera.core.systems.scope.protos.ScopeProtos.ServiceSelection other) {
-        if (other == com.opera.core.systems.scope.protos.ScopeProtos.ServiceSelection.getDefaultInstance()) return this;
+        if (other == com.opera.core.systems.scope.protos.ScopeProtos.ServiceSelection
+            .getDefaultInstance()) {
+          return this;
+        }
         if (other.hasName()) {
           setName(other.getName());
         }
@@ -3687,26 +3840,28 @@ public final class ScopeProtos {
       }
 
       public Builder mergeFrom(com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                               com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields = com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
+        com.google.protobuf.UnknownFieldSet.Builder
+            unknownFields =
+            com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
         while (true) {
           int tag = input.readTag();
           switch (tag) {
-          case 0:
-            this.setUnknownFields(unknownFields.build());
-            return this;
-          default: {
-            if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+            case 0:
               this.setUnknownFields(unknownFields.build());
               return this;
+            default: {
+              if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+                this.setUnknownFields(unknownFields.build());
+                return this;
+              }
+              break;
             }
-            break;
-          }
-          case 10: {
-            setName(input.readString());
-            break;
-          }
+            case 10: {
+              setName(input.readString());
+              break;
+            }
           }
         }
       }
@@ -3748,7 +3903,8 @@ public final class ScopeProtos {
   }
 
   public static final class ServiceInfo extends
-      com.google.protobuf.GeneratedMessage {
+                                        com.google.protobuf.GeneratedMessage {
+
     // Use ServiceInfo.newBuilder() to construct.
     private ServiceInfo() {
       initFields();
@@ -3777,7 +3933,10 @@ public final class ScopeProtos {
 
     // repeated .scope.CommandInfo commandList = 1;
     public static final int COMMANDLIST_FIELD_NUMBER = 1;
-    private java.util.List<com.opera.core.systems.scope.protos.ScopeProtos.CommandInfo> commandList_ = java.util.Collections.emptyList();
+    private
+    java.util.List<com.opera.core.systems.scope.protos.ScopeProtos.CommandInfo>
+        commandList_ =
+        java.util.Collections.emptyList();
 
     public java.util.List<com.opera.core.systems.scope.protos.ScopeProtos.CommandInfo> getCommandListList() {
       return commandList_;
@@ -3794,7 +3953,10 @@ public final class ScopeProtos {
 
     // repeated .scope.EventInfo eventList = 2;
     public static final int EVENTLIST_FIELD_NUMBER = 2;
-    private java.util.List<com.opera.core.systems.scope.protos.ScopeProtos.EventInfo> eventList_ = java.util.Collections.emptyList();
+    private
+    java.util.List<com.opera.core.systems.scope.protos.ScopeProtos.EventInfo>
+        eventList_ =
+        java.util.Collections.emptyList();
 
     public java.util.List<com.opera.core.systems.scope.protos.ScopeProtos.EventInfo> getEventListList() {
       return eventList_;
@@ -3814,10 +3976,14 @@ public final class ScopeProtos {
 
     public final boolean isInitialized() {
       for (com.opera.core.systems.scope.protos.ScopeProtos.CommandInfo element : getCommandListList()) {
-        if (!element.isInitialized()) return false;
+        if (!element.isInitialized()) {
+          return false;
+        }
       }
       for (com.opera.core.systems.scope.protos.ScopeProtos.EventInfo element : getEventListList()) {
-        if (!element.isInitialized()) return false;
+        if (!element.isInitialized()) {
+          return false;
+        }
       }
       return true;
     }
@@ -3838,16 +4004,18 @@ public final class ScopeProtos {
 
     public int getSerializedSize() {
       int size = memoizedSerializedSize;
-      if (size != -1) return size;
+      if (size != -1) {
+        return size;
+      }
 
       size = 0;
       for (com.opera.core.systems.scope.protos.ScopeProtos.CommandInfo element : getCommandListList()) {
         size += com.google.protobuf.CodedOutputStream.computeMessageSize(1,
-            element);
+                                                                         element);
       }
       for (com.opera.core.systems.scope.protos.ScopeProtos.EventInfo element : getEventListList()) {
         size += com.google.protobuf.CodedOutputStream.computeMessageSize(2,
-            element);
+                                                                         element);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -3942,7 +4110,8 @@ public final class ScopeProtos {
     }
 
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> {
+                                      com.google.protobuf.GeneratedMessage.Builder<Builder> {
+
       private com.opera.core.systems.scope.protos.ScopeProtos.ServiceInfo result;
 
       // Construct using
@@ -4026,16 +4195,21 @@ public final class ScopeProtos {
 
       public Builder mergeFrom(
           com.opera.core.systems.scope.protos.ScopeProtos.ServiceInfo other) {
-        if (other == com.opera.core.systems.scope.protos.ScopeProtos.ServiceInfo.getDefaultInstance()) return this;
+        if (other == com.opera.core.systems.scope.protos.ScopeProtos.ServiceInfo
+            .getDefaultInstance()) {
+          return this;
+        }
         if (!other.commandList_.isEmpty()) {
           if (result.commandList_.isEmpty()) {
-            result.commandList_ = new java.util.ArrayList<com.opera.core.systems.scope.protos.ScopeProtos.CommandInfo>();
+            result.commandList_ =
+                new java.util.ArrayList<com.opera.core.systems.scope.protos.ScopeProtos.CommandInfo>();
           }
           result.commandList_.addAll(other.commandList_);
         }
         if (!other.eventList_.isEmpty()) {
           if (result.eventList_.isEmpty()) {
-            result.eventList_ = new java.util.ArrayList<com.opera.core.systems.scope.protos.ScopeProtos.EventInfo>();
+            result.eventList_ =
+                new java.util.ArrayList<com.opera.core.systems.scope.protos.ScopeProtos.EventInfo>();
           }
           result.eventList_.addAll(other.eventList_);
         }
@@ -4044,34 +4218,40 @@ public final class ScopeProtos {
       }
 
       public Builder mergeFrom(com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                               com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields = com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
+        com.google.protobuf.UnknownFieldSet.Builder
+            unknownFields =
+            com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
         while (true) {
           int tag = input.readTag();
           switch (tag) {
-          case 0:
-            this.setUnknownFields(unknownFields.build());
-            return this;
-          default: {
-            if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+            case 0:
               this.setUnknownFields(unknownFields.build());
               return this;
+            default: {
+              if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+                this.setUnknownFields(unknownFields.build());
+                return this;
+              }
+              break;
             }
-            break;
-          }
-          case 10: {
-            com.opera.core.systems.scope.protos.ScopeProtos.CommandInfo.Builder subBuilder = com.opera.core.systems.scope.protos.ScopeProtos.CommandInfo.newBuilder();
-            input.readMessage(subBuilder, extensionRegistry);
-            addCommandList(subBuilder.buildPartial());
-            break;
-          }
-          case 18: {
-            com.opera.core.systems.scope.protos.ScopeProtos.EventInfo.Builder subBuilder = com.opera.core.systems.scope.protos.ScopeProtos.EventInfo.newBuilder();
-            input.readMessage(subBuilder, extensionRegistry);
-            addEventList(subBuilder.buildPartial());
-            break;
-          }
+            case 10: {
+              com.opera.core.systems.scope.protos.ScopeProtos.CommandInfo.Builder
+                  subBuilder =
+                  com.opera.core.systems.scope.protos.ScopeProtos.CommandInfo.newBuilder();
+              input.readMessage(subBuilder, extensionRegistry);
+              addCommandList(subBuilder.buildPartial());
+              break;
+            }
+            case 18: {
+              com.opera.core.systems.scope.protos.ScopeProtos.EventInfo.Builder
+                  subBuilder =
+                  com.opera.core.systems.scope.protos.ScopeProtos.EventInfo.newBuilder();
+              input.readMessage(subBuilder, extensionRegistry);
+              addEventList(subBuilder.buildPartial());
+              break;
+            }
           }
         }
       }
@@ -4091,7 +4271,7 @@ public final class ScopeProtos {
       }
 
       public Builder setCommandList(int index,
-          com.opera.core.systems.scope.protos.ScopeProtos.CommandInfo value) {
+                                    com.opera.core.systems.scope.protos.ScopeProtos.CommandInfo value) {
         if (value == null) {
           throw new NullPointerException();
         }
@@ -4112,7 +4292,8 @@ public final class ScopeProtos {
           throw new NullPointerException();
         }
         if (result.commandList_.isEmpty()) {
-          result.commandList_ = new java.util.ArrayList<com.opera.core.systems.scope.protos.ScopeProtos.CommandInfo>();
+          result.commandList_ =
+              new java.util.ArrayList<com.opera.core.systems.scope.protos.ScopeProtos.CommandInfo>();
         }
         result.commandList_.add(value);
         return this;
@@ -4121,7 +4302,8 @@ public final class ScopeProtos {
       public Builder addCommandList(
           com.opera.core.systems.scope.protos.ScopeProtos.CommandInfo.Builder builderForValue) {
         if (result.commandList_.isEmpty()) {
-          result.commandList_ = new java.util.ArrayList<com.opera.core.systems.scope.protos.ScopeProtos.CommandInfo>();
+          result.commandList_ =
+              new java.util.ArrayList<com.opera.core.systems.scope.protos.ScopeProtos.CommandInfo>();
         }
         result.commandList_.add(builderForValue.build());
         return this;
@@ -4130,7 +4312,8 @@ public final class ScopeProtos {
       public Builder addAllCommandList(
           java.lang.Iterable<? extends com.opera.core.systems.scope.protos.ScopeProtos.CommandInfo> values) {
         if (result.commandList_.isEmpty()) {
-          result.commandList_ = new java.util.ArrayList<com.opera.core.systems.scope.protos.ScopeProtos.CommandInfo>();
+          result.commandList_ =
+              new java.util.ArrayList<com.opera.core.systems.scope.protos.ScopeProtos.CommandInfo>();
         }
         super.addAll(values, result.commandList_);
         return this;
@@ -4156,7 +4339,7 @@ public final class ScopeProtos {
       }
 
       public Builder setEventList(int index,
-          com.opera.core.systems.scope.protos.ScopeProtos.EventInfo value) {
+                                  com.opera.core.systems.scope.protos.ScopeProtos.EventInfo value) {
         if (value == null) {
           throw new NullPointerException();
         }
@@ -4177,7 +4360,8 @@ public final class ScopeProtos {
           throw new NullPointerException();
         }
         if (result.eventList_.isEmpty()) {
-          result.eventList_ = new java.util.ArrayList<com.opera.core.systems.scope.protos.ScopeProtos.EventInfo>();
+          result.eventList_ =
+              new java.util.ArrayList<com.opera.core.systems.scope.protos.ScopeProtos.EventInfo>();
         }
         result.eventList_.add(value);
         return this;
@@ -4186,7 +4370,8 @@ public final class ScopeProtos {
       public Builder addEventList(
           com.opera.core.systems.scope.protos.ScopeProtos.EventInfo.Builder builderForValue) {
         if (result.eventList_.isEmpty()) {
-          result.eventList_ = new java.util.ArrayList<com.opera.core.systems.scope.protos.ScopeProtos.EventInfo>();
+          result.eventList_ =
+              new java.util.ArrayList<com.opera.core.systems.scope.protos.ScopeProtos.EventInfo>();
         }
         result.eventList_.add(builderForValue.build());
         return this;
@@ -4195,7 +4380,8 @@ public final class ScopeProtos {
       public Builder addAllEventList(
           java.lang.Iterable<? extends com.opera.core.systems.scope.protos.ScopeProtos.EventInfo> values) {
         if (result.eventList_.isEmpty()) {
-          result.eventList_ = new java.util.ArrayList<com.opera.core.systems.scope.protos.ScopeProtos.EventInfo>();
+          result.eventList_ =
+              new java.util.ArrayList<com.opera.core.systems.scope.protos.ScopeProtos.EventInfo>();
         }
         super.addAll(values, result.eventList_);
         return this;
@@ -4219,7 +4405,8 @@ public final class ScopeProtos {
   }
 
   public static final class ErrorInfo extends
-      com.google.protobuf.GeneratedMessage {
+                                      com.google.protobuf.GeneratedMessage {
+
     // Use ErrorInfo.newBuilder() to construct.
     private ErrorInfo() {
       initFields();
@@ -4263,7 +4450,9 @@ public final class ScopeProtos {
     }
 
     public final boolean isInitialized() {
-      if (!hasDescription) return false;
+      if (!hasDescription) {
+        return false;
+      }
       return true;
     }
 
@@ -4280,12 +4469,14 @@ public final class ScopeProtos {
 
     public int getSerializedSize() {
       int size = memoizedSerializedSize;
-      if (size != -1) return size;
+      if (size != -1) {
+        return size;
+      }
 
       size = 0;
       if (hasDescription()) {
         size += com.google.protobuf.CodedOutputStream.computeStringSize(1,
-            getDescription());
+                                                                        getDescription());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -4380,7 +4571,8 @@ public final class ScopeProtos {
     }
 
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> {
+                                      com.google.protobuf.GeneratedMessage.Builder<Builder> {
+
       private com.opera.core.systems.scope.protos.ScopeProtos.ErrorInfo result;
 
       // Construct using
@@ -4458,7 +4650,10 @@ public final class ScopeProtos {
 
       public Builder mergeFrom(
           com.opera.core.systems.scope.protos.ScopeProtos.ErrorInfo other) {
-        if (other == com.opera.core.systems.scope.protos.ScopeProtos.ErrorInfo.getDefaultInstance()) return this;
+        if (other == com.opera.core.systems.scope.protos.ScopeProtos.ErrorInfo
+            .getDefaultInstance()) {
+          return this;
+        }
         if (other.hasDescription()) {
           setDescription(other.getDescription());
         }
@@ -4467,26 +4662,28 @@ public final class ScopeProtos {
       }
 
       public Builder mergeFrom(com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                               com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields = com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
+        com.google.protobuf.UnknownFieldSet.Builder
+            unknownFields =
+            com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
         while (true) {
           int tag = input.readTag();
           switch (tag) {
-          case 0:
-            this.setUnknownFields(unknownFields.build());
-            return this;
-          default: {
-            if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+            case 0:
               this.setUnknownFields(unknownFields.build());
               return this;
+            default: {
+              if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+                this.setUnknownFields(unknownFields.build());
+                return this;
+              }
+              break;
             }
-            break;
-          }
-          case 10: {
-            setDescription(input.readString());
-            break;
-          }
+            case 10: {
+              setDescription(input.readString());
+              break;
+            }
           }
         }
       }
@@ -4528,7 +4725,8 @@ public final class ScopeProtos {
   }
 
   public static final class MessageSelection extends
-      com.google.protobuf.GeneratedMessage {
+                                             com.google.protobuf.GeneratedMessage {
+
     // Use MessageSelection.newBuilder() to construct.
     private MessageSelection() {
       initFields();
@@ -4614,7 +4812,9 @@ public final class ScopeProtos {
     }
 
     public final boolean isInitialized() {
-      if (!hasServiceName) return false;
+      if (!hasServiceName) {
+        return false;
+      }
       return true;
     }
 
@@ -4640,12 +4840,14 @@ public final class ScopeProtos {
 
     public int getSerializedSize() {
       int size = memoizedSerializedSize;
-      if (size != -1) return size;
+      if (size != -1) {
+        return size;
+      }
 
       size = 0;
       if (hasServiceName()) {
         size += com.google.protobuf.CodedOutputStream.computeStringSize(1,
-            getServiceName());
+                                                                        getServiceName());
       }
       {
         int dataSize = 0;
@@ -4657,11 +4859,11 @@ public final class ScopeProtos {
       }
       if (hasIncludeRelated()) {
         size += com.google.protobuf.CodedOutputStream.computeBoolSize(3,
-            getIncludeRelated());
+                                                                      getIncludeRelated());
       }
       if (hasIncludeAll()) {
         size += com.google.protobuf.CodedOutputStream.computeBoolSize(4,
-            getIncludeAll());
+                                                                      getIncludeAll());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -4756,7 +4958,8 @@ public final class ScopeProtos {
     }
 
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> {
+                                      com.google.protobuf.GeneratedMessage.Builder<Builder> {
+
       private com.opera.core.systems.scope.protos.ScopeProtos.MessageSelection result;
 
       // Construct using
@@ -4791,7 +4994,8 @@ public final class ScopeProtos {
       }
 
       public com.opera.core.systems.scope.protos.ScopeProtos.MessageSelection getDefaultInstanceForType() {
-        return com.opera.core.systems.scope.protos.ScopeProtos.MessageSelection.getDefaultInstance();
+        return com.opera.core.systems.scope.protos.ScopeProtos.MessageSelection
+            .getDefaultInstance();
       }
 
       public boolean isInitialized() {
@@ -4828,7 +5032,8 @@ public final class ScopeProtos {
 
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.opera.core.systems.scope.protos.ScopeProtos.MessageSelection) {
-          return mergeFrom((com.opera.core.systems.scope.protos.ScopeProtos.MessageSelection) other);
+          return mergeFrom(
+              (com.opera.core.systems.scope.protos.ScopeProtos.MessageSelection) other);
         } else {
           super.mergeFrom(other);
           return this;
@@ -4837,7 +5042,10 @@ public final class ScopeProtos {
 
       public Builder mergeFrom(
           com.opera.core.systems.scope.protos.ScopeProtos.MessageSelection other) {
-        if (other == com.opera.core.systems.scope.protos.ScopeProtos.MessageSelection.getDefaultInstance()) return this;
+        if (other == com.opera.core.systems.scope.protos.ScopeProtos.MessageSelection
+            .getDefaultInstance()) {
+          return this;
+        }
         if (other.hasServiceName()) {
           setServiceName(other.getServiceName());
         }
@@ -4858,47 +5066,49 @@ public final class ScopeProtos {
       }
 
       public Builder mergeFrom(com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                               com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields = com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
+        com.google.protobuf.UnknownFieldSet.Builder
+            unknownFields =
+            com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
         while (true) {
           int tag = input.readTag();
           switch (tag) {
-          case 0:
-            this.setUnknownFields(unknownFields.build());
-            return this;
-          default: {
-            if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+            case 0:
               this.setUnknownFields(unknownFields.build());
               return this;
+            default: {
+              if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+                this.setUnknownFields(unknownFields.build());
+                return this;
+              }
+              break;
             }
-            break;
-          }
-          case 10: {
-            setServiceName(input.readString());
-            break;
-          }
-          case 16: {
-            addIdList(input.readUInt32());
-            break;
-          }
-          case 18: {
-            int length = input.readRawVarint32();
-            int limit = input.pushLimit(length);
-            while (input.getBytesUntilLimit() > 0) {
+            case 10: {
+              setServiceName(input.readString());
+              break;
+            }
+            case 16: {
               addIdList(input.readUInt32());
+              break;
             }
-            input.popLimit(limit);
-            break;
-          }
-          case 24: {
-            setIncludeRelated(input.readBool());
-            break;
-          }
-          case 32: {
-            setIncludeAll(input.readBool());
-            break;
-          }
+            case 18: {
+              int length = input.readRawVarint32();
+              int limit = input.pushLimit(length);
+              while (input.getBytesUntilLimit() > 0) {
+                addIdList(input.readUInt32());
+              }
+              input.popLimit(limit);
+              break;
+            }
+            case 24: {
+              setIncludeRelated(input.readBool());
+              break;
+            }
+            case 32: {
+              setIncludeAll(input.readBool());
+              break;
+            }
           }
         }
       }
@@ -5022,7 +5232,8 @@ public final class ScopeProtos {
   }
 
   public static final class ServiceResult extends
-      com.google.protobuf.GeneratedMessage {
+                                          com.google.protobuf.GeneratedMessage {
+
     // Use ServiceResult.newBuilder() to construct.
     private ServiceResult() {
       initFields();
@@ -5066,7 +5277,9 @@ public final class ScopeProtos {
     }
 
     public final boolean isInitialized() {
-      if (!hasName) return false;
+      if (!hasName) {
+        return false;
+      }
       return true;
     }
 
@@ -5083,12 +5296,14 @@ public final class ScopeProtos {
 
     public int getSerializedSize() {
       int size = memoizedSerializedSize;
-      if (size != -1) return size;
+      if (size != -1) {
+        return size;
+      }
 
       size = 0;
       if (hasName()) {
         size += com.google.protobuf.CodedOutputStream.computeStringSize(1,
-            getName());
+                                                                        getName());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -5183,7 +5398,8 @@ public final class ScopeProtos {
     }
 
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> {
+                                      com.google.protobuf.GeneratedMessage.Builder<Builder> {
+
       private com.opera.core.systems.scope.protos.ScopeProtos.ServiceResult result;
 
       // Construct using
@@ -5261,7 +5477,10 @@ public final class ScopeProtos {
 
       public Builder mergeFrom(
           com.opera.core.systems.scope.protos.ScopeProtos.ServiceResult other) {
-        if (other == com.opera.core.systems.scope.protos.ScopeProtos.ServiceResult.getDefaultInstance()) return this;
+        if (other == com.opera.core.systems.scope.protos.ScopeProtos.ServiceResult
+            .getDefaultInstance()) {
+          return this;
+        }
         if (other.hasName()) {
           setName(other.getName());
         }
@@ -5270,26 +5489,28 @@ public final class ScopeProtos {
       }
 
       public Builder mergeFrom(com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                               com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields = com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
+        com.google.protobuf.UnknownFieldSet.Builder
+            unknownFields =
+            com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
         while (true) {
           int tag = input.readTag();
           switch (tag) {
-          case 0:
-            this.setUnknownFields(unknownFields.build());
-            return this;
-          default: {
-            if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+            case 0:
               this.setUnknownFields(unknownFields.build());
               return this;
+            default: {
+              if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+                this.setUnknownFields(unknownFields.build());
+                return this;
+              }
+              break;
             }
-            break;
-          }
-          case 10: {
-            setName(input.readString());
-            break;
-          }
+            case 10: {
+              setName(input.readString());
+              break;
+            }
           }
         }
       }
@@ -5331,7 +5552,8 @@ public final class ScopeProtos {
   }
 
   public static final class CommandInfo extends
-      com.google.protobuf.GeneratedMessage {
+                                        com.google.protobuf.GeneratedMessage {
+
     // Use CommandInfo.newBuilder() to construct.
     private CommandInfo() {
       initFields();
@@ -5414,10 +5636,18 @@ public final class ScopeProtos {
     }
 
     public final boolean isInitialized() {
-      if (!hasName) return false;
-      if (!hasNumber) return false;
-      if (!hasMessageID) return false;
-      if (!hasResponseID) return false;
+      if (!hasName) {
+        return false;
+      }
+      if (!hasNumber) {
+        return false;
+      }
+      if (!hasMessageID) {
+        return false;
+      }
+      if (!hasResponseID) {
+        return false;
+      }
       return true;
     }
 
@@ -5443,24 +5673,26 @@ public final class ScopeProtos {
 
     public int getSerializedSize() {
       int size = memoizedSerializedSize;
-      if (size != -1) return size;
+      if (size != -1) {
+        return size;
+      }
 
       size = 0;
       if (hasName()) {
         size += com.google.protobuf.CodedOutputStream.computeStringSize(1,
-            getName());
+                                                                        getName());
       }
       if (hasNumber()) {
         size += com.google.protobuf.CodedOutputStream.computeUInt32Size(2,
-            getNumber());
+                                                                        getNumber());
       }
       if (hasMessageID()) {
         size += com.google.protobuf.CodedOutputStream.computeUInt32Size(3,
-            getMessageID());
+                                                                        getMessageID());
       }
       if (hasResponseID()) {
         size += com.google.protobuf.CodedOutputStream.computeUInt32Size(4,
-            getResponseID());
+                                                                        getResponseID());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -5555,7 +5787,8 @@ public final class ScopeProtos {
     }
 
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> {
+                                      com.google.protobuf.GeneratedMessage.Builder<Builder> {
+
       private com.opera.core.systems.scope.protos.ScopeProtos.CommandInfo result;
 
       // Construct using
@@ -5633,7 +5866,10 @@ public final class ScopeProtos {
 
       public Builder mergeFrom(
           com.opera.core.systems.scope.protos.ScopeProtos.CommandInfo other) {
-        if (other == com.opera.core.systems.scope.protos.ScopeProtos.CommandInfo.getDefaultInstance()) return this;
+        if (other == com.opera.core.systems.scope.protos.ScopeProtos.CommandInfo
+            .getDefaultInstance()) {
+          return this;
+        }
         if (other.hasName()) {
           setName(other.getName());
         }
@@ -5651,38 +5887,40 @@ public final class ScopeProtos {
       }
 
       public Builder mergeFrom(com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                               com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields = com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
+        com.google.protobuf.UnknownFieldSet.Builder
+            unknownFields =
+            com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
         while (true) {
           int tag = input.readTag();
           switch (tag) {
-          case 0:
-            this.setUnknownFields(unknownFields.build());
-            return this;
-          default: {
-            if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+            case 0:
               this.setUnknownFields(unknownFields.build());
               return this;
+            default: {
+              if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+                this.setUnknownFields(unknownFields.build());
+                return this;
+              }
+              break;
             }
-            break;
-          }
-          case 10: {
-            setName(input.readString());
-            break;
-          }
-          case 16: {
-            setNumber(input.readUInt32());
-            break;
-          }
-          case 24: {
-            setMessageID(input.readUInt32());
-            break;
-          }
-          case 32: {
-            setResponseID(input.readUInt32());
-            break;
-          }
+            case 10: {
+              setName(input.readString());
+              break;
+            }
+            case 16: {
+              setNumber(input.readUInt32());
+              break;
+            }
+            case 24: {
+              setMessageID(input.readUInt32());
+              break;
+            }
+            case 32: {
+              setResponseID(input.readUInt32());
+              break;
+            }
           }
         }
       }
@@ -5786,180 +6024,257 @@ public final class ScopeProtos {
     // @@protoc_insertion_point(class_scope:scope.CommandInfo)
   }
 
-  private static com.google.protobuf.Descriptors.Descriptor internal_static_scope_ServiceList_descriptor;
-  private static com.google.protobuf.GeneratedMessage.FieldAccessorTable internal_static_scope_ServiceList_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor internal_static_scope_MessageInfo_descriptor;
-  private static com.google.protobuf.GeneratedMessage.FieldAccessorTable internal_static_scope_MessageInfo_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor internal_static_scope_MessageInfo_FieldInfo_descriptor;
-  private static com.google.protobuf.GeneratedMessage.FieldAccessorTable internal_static_scope_MessageInfo_FieldInfo_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor internal_static_scope_EventInfo_descriptor;
-  private static com.google.protobuf.GeneratedMessage.FieldAccessorTable internal_static_scope_EventInfo_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor internal_static_scope_Service_descriptor;
-  private static com.google.protobuf.GeneratedMessage.FieldAccessorTable internal_static_scope_Service_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor internal_static_scope_HostInfo_descriptor;
-  private static com.google.protobuf.GeneratedMessage.FieldAccessorTable internal_static_scope_HostInfo_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor internal_static_scope_ClientInfo_descriptor;
-  private static com.google.protobuf.GeneratedMessage.FieldAccessorTable internal_static_scope_ClientInfo_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor internal_static_scope_MessageInfoList_descriptor;
-  private static com.google.protobuf.GeneratedMessage.FieldAccessorTable internal_static_scope_MessageInfoList_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor internal_static_scope_ServiceSelection_descriptor;
-  private static com.google.protobuf.GeneratedMessage.FieldAccessorTable internal_static_scope_ServiceSelection_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor internal_static_scope_ServiceInfo_descriptor;
-  private static com.google.protobuf.GeneratedMessage.FieldAccessorTable internal_static_scope_ServiceInfo_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor internal_static_scope_ErrorInfo_descriptor;
-  private static com.google.protobuf.GeneratedMessage.FieldAccessorTable internal_static_scope_ErrorInfo_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor internal_static_scope_MessageSelection_descriptor;
-  private static com.google.protobuf.GeneratedMessage.FieldAccessorTable internal_static_scope_MessageSelection_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor internal_static_scope_ServiceResult_descriptor;
-  private static com.google.protobuf.GeneratedMessage.FieldAccessorTable internal_static_scope_ServiceResult_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor internal_static_scope_CommandInfo_descriptor;
-  private static com.google.protobuf.GeneratedMessage.FieldAccessorTable internal_static_scope_CommandInfo_fieldAccessorTable;
+  private static
+  com.google.protobuf.Descriptors.Descriptor
+      internal_static_scope_ServiceList_descriptor;
+  private static
+  com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_scope_ServiceList_fieldAccessorTable;
+  private static
+  com.google.protobuf.Descriptors.Descriptor
+      internal_static_scope_MessageInfo_descriptor;
+  private static
+  com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_scope_MessageInfo_fieldAccessorTable;
+  private static
+  com.google.protobuf.Descriptors.Descriptor
+      internal_static_scope_MessageInfo_FieldInfo_descriptor;
+  private static
+  com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_scope_MessageInfo_FieldInfo_fieldAccessorTable;
+  private static
+  com.google.protobuf.Descriptors.Descriptor
+      internal_static_scope_EventInfo_descriptor;
+  private static
+  com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_scope_EventInfo_fieldAccessorTable;
+  private static
+  com.google.protobuf.Descriptors.Descriptor
+      internal_static_scope_Service_descriptor;
+  private static
+  com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_scope_Service_fieldAccessorTable;
+  private static
+  com.google.protobuf.Descriptors.Descriptor
+      internal_static_scope_HostInfo_descriptor;
+  private static
+  com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_scope_HostInfo_fieldAccessorTable;
+  private static
+  com.google.protobuf.Descriptors.Descriptor
+      internal_static_scope_ClientInfo_descriptor;
+  private static
+  com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_scope_ClientInfo_fieldAccessorTable;
+  private static
+  com.google.protobuf.Descriptors.Descriptor
+      internal_static_scope_MessageInfoList_descriptor;
+  private static
+  com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_scope_MessageInfoList_fieldAccessorTable;
+  private static
+  com.google.protobuf.Descriptors.Descriptor
+      internal_static_scope_ServiceSelection_descriptor;
+  private static
+  com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_scope_ServiceSelection_fieldAccessorTable;
+  private static
+  com.google.protobuf.Descriptors.Descriptor
+      internal_static_scope_ServiceInfo_descriptor;
+  private static
+  com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_scope_ServiceInfo_fieldAccessorTable;
+  private static
+  com.google.protobuf.Descriptors.Descriptor
+      internal_static_scope_ErrorInfo_descriptor;
+  private static
+  com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_scope_ErrorInfo_fieldAccessorTable;
+  private static
+  com.google.protobuf.Descriptors.Descriptor
+      internal_static_scope_MessageSelection_descriptor;
+  private static
+  com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_scope_MessageSelection_fieldAccessorTable;
+  private static
+  com.google.protobuf.Descriptors.Descriptor
+      internal_static_scope_ServiceResult_descriptor;
+  private static
+  com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_scope_ServiceResult_fieldAccessorTable;
+  private static
+  com.google.protobuf.Descriptors.Descriptor
+      internal_static_scope_CommandInfo_descriptor;
+  private static
+  com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_scope_CommandInfo_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor getDescriptor() {
     return descriptor;
   }
 
   private static com.google.protobuf.Descriptors.FileDescriptor descriptor;
+
   static {
     java.lang.String[] descriptorData = {
         "\n\013scope.proto\022\005scope\"\"\n\013ServiceList\022\023\n\013s"
-            + "erviceList\030\001 \003(\t\"\315\001\n\013MessageInfo\022\n\n\002id\030\001"
-            + " \002(\r\022\014\n\004name\030\002 \002(\t\022/\n\tfieldList\030\003 \003(\0132\034."
-            + "scope.MessageInfo.FieldInfo\022\020\n\010parentID\030"
-            + "\004 \001(\r\032a\n\tFieldInfo\022\014\n\004name\030\001 \002(\t\022\014\n\004type"
-            + "\030\002 \002(\r\022\016\n\006number\030\003 \002(\r\022\025\n\nquantifier\030\004 \001"
-            + "(\r:\0010\022\021\n\tmessageID\030\005 \001(\r\"<\n\tEventInfo\022\014\n"
-            + "\004name\030\001 \002(\t\022\016\n\006number\030\002 \002(\r\022\021\n\tmessageID"
-            + "\030\003 \002(\r\"(\n\007Service\022\014\n\004name\030\001 \002(\t\022\017\n\007versi"
-            + "on\030\002 \002(\t\"\226\001\n\010HostInfo\022\022\n\nstpVersion\030\001 \002(",
+        + "erviceList\030\001 \003(\t\"\315\001\n\013MessageInfo\022\n\n\002id\030\001"
+        + " \002(\r\022\014\n\004name\030\002 \002(\t\022/\n\tfieldList\030\003 \003(\0132\034."
+        + "scope.MessageInfo.FieldInfo\022\020\n\010parentID\030"
+        + "\004 \001(\r\032a\n\tFieldInfo\022\014\n\004name\030\001 \002(\t\022\014\n\004type"
+        + "\030\002 \002(\r\022\016\n\006number\030\003 \002(\r\022\025\n\nquantifier\030\004 \001"
+        + "(\r:\0010\022\021\n\tmessageID\030\005 \001(\r\"<\n\tEventInfo\022\014\n"
+        + "\004name\030\001 \002(\t\022\016\n\006number\030\002 \002(\r\022\021\n\tmessageID"
+        + "\030\003 \002(\r\"(\n\007Service\022\014\n\004name\030\001 \002(\t\022\017\n\007versi"
+        + "on\030\002 \002(\t\"\226\001\n\010HostInfo\022\022\n\nstpVersion\030\001 \002(",
         "\r\022\023\n\013coreVersion\030\002 \002(\t\022\020\n\010platform\030\003 \002(\t"
-            + "\022\027\n\017operatingSystem\030\004 \002(\t\022\021\n\tuserAgent\030\005"
-            + " \002(\t\022#\n\013serviceList\030\006 \003(\0132\016.scope.Servic"
-            + "e\"\034\n\nClientInfo\022\016\n\006format\030\001 \002(\t\":\n\017Messa"
-            + "geInfoList\022\'\n\013messageList\030\001 \003(\0132\022.scope."
-            + "MessageInfo\" \n\020ServiceSelection\022\014\n\004name\030"
-            + "\001 \002(\t\"[\n\013ServiceInfo\022\'\n\013commandList\030\001 \003("
-            + "\0132\022.scope.CommandInfo\022#\n\teventList\030\002 \003(\013"
-            + "2\020.scope.EventInfo\" \n\tErrorInfo\022\023\n\013descr"
-            + "iption\030\001 \002(\t\"c\n\020MessageSelection\022\023\n\013serv",
+        + "\022\027\n\017operatingSystem\030\004 \002(\t\022\021\n\tuserAgent\030\005"
+        + " \002(\t\022#\n\013serviceList\030\006 \003(\0132\016.scope.Servic"
+        + "e\"\034\n\nClientInfo\022\016\n\006format\030\001 \002(\t\":\n\017Messa"
+        + "geInfoList\022\'\n\013messageList\030\001 \003(\0132\022.scope."
+        + "MessageInfo\" \n\020ServiceSelection\022\014\n\004name\030"
+        + "\001 \002(\t\"[\n\013ServiceInfo\022\'\n\013commandList\030\001 \003("
+        + "\0132\022.scope.CommandInfo\022#\n\teventList\030\002 \003(\013"
+        + "2\020.scope.EventInfo\" \n\tErrorInfo\022\023\n\013descr"
+        + "iption\030\001 \002(\t\"c\n\020MessageSelection\022\023\n\013serv",
         "iceName\030\001 \002(\t\022\016\n\006idList\030\002 \003(\r\022\026\n\016include"
-            + "Related\030\003 \001(\010\022\022\n\nincludeAll\030\004 \001(\010\"\035\n\rSer"
-            + "viceResult\022\014\n\004name\030\001 \002(\t\"R\n\013CommandInfo\022"
-            + "\014\n\004name\030\001 \002(\t\022\016\n\006number\030\002 \002(\r\022\021\n\tmessage"
-            + "ID\030\003 \002(\r\022\022\n\nresponseID\030\004 \002(\rB4\n#com.oper"
-            + "a.core.systems.scope.protosB\013ScopeProtos" + "H\001" };
-    com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner = new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
-      public com.google.protobuf.ExtensionRegistry assignDescriptors(
-          com.google.protobuf.Descriptors.FileDescriptor root) {
-        descriptor = root;
-        internal_static_scope_ServiceList_descriptor = getDescriptor().getMessageTypes().get(
-            0);
-        internal_static_scope_ServiceList_fieldAccessorTable = new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-            internal_static_scope_ServiceList_descriptor,
-            new java.lang.String[] { "ServiceList", },
-            com.opera.core.systems.scope.protos.ScopeProtos.ServiceList.class,
-            com.opera.core.systems.scope.protos.ScopeProtos.ServiceList.Builder.class);
-        internal_static_scope_MessageInfo_descriptor = getDescriptor().getMessageTypes().get(
-            1);
-        internal_static_scope_MessageInfo_fieldAccessorTable = new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-            internal_static_scope_MessageInfo_descriptor,
-            new java.lang.String[] { "Id", "Name", "FieldList", "ParentID", },
-            com.opera.core.systems.scope.protos.ScopeProtos.MessageInfo.class,
-            com.opera.core.systems.scope.protos.ScopeProtos.MessageInfo.Builder.class);
-        internal_static_scope_MessageInfo_FieldInfo_descriptor = internal_static_scope_MessageInfo_descriptor.getNestedTypes().get(
-            0);
-        internal_static_scope_MessageInfo_FieldInfo_fieldAccessorTable = new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-            internal_static_scope_MessageInfo_FieldInfo_descriptor,
-            new java.lang.String[] { "Name", "Type", "Number", "Quantifier",
-                "MessageID", },
-            com.opera.core.systems.scope.protos.ScopeProtos.MessageInfo.FieldInfo.class,
-            com.opera.core.systems.scope.protos.ScopeProtos.MessageInfo.FieldInfo.Builder.class);
-        internal_static_scope_EventInfo_descriptor = getDescriptor().getMessageTypes().get(
-            2);
-        internal_static_scope_EventInfo_fieldAccessorTable = new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-            internal_static_scope_EventInfo_descriptor,
-            new java.lang.String[] { "Name", "Number", "MessageID", },
-            com.opera.core.systems.scope.protos.ScopeProtos.EventInfo.class,
-            com.opera.core.systems.scope.protos.ScopeProtos.EventInfo.Builder.class);
-        internal_static_scope_Service_descriptor = getDescriptor().getMessageTypes().get(
-            3);
-        internal_static_scope_Service_fieldAccessorTable = new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-            internal_static_scope_Service_descriptor,
-            new java.lang.String[] { "Name", "Version", },
-            com.opera.core.systems.scope.protos.ScopeProtos.Service.class,
-            com.opera.core.systems.scope.protos.ScopeProtos.Service.Builder.class);
-        internal_static_scope_HostInfo_descriptor = getDescriptor().getMessageTypes().get(
-            4);
-        internal_static_scope_HostInfo_fieldAccessorTable = new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-            internal_static_scope_HostInfo_descriptor,
-            new java.lang.String[] { "StpVersion", "CoreVersion", "Platform",
-                "OperatingSystem", "UserAgent", "ServiceList", },
-            com.opera.core.systems.scope.protos.ScopeProtos.HostInfo.class,
-            com.opera.core.systems.scope.protos.ScopeProtos.HostInfo.Builder.class);
-        internal_static_scope_ClientInfo_descriptor = getDescriptor().getMessageTypes().get(
-            5);
-        internal_static_scope_ClientInfo_fieldAccessorTable = new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-            internal_static_scope_ClientInfo_descriptor,
-            new java.lang.String[] { "Format", },
-            com.opera.core.systems.scope.protos.ScopeProtos.ClientInfo.class,
-            com.opera.core.systems.scope.protos.ScopeProtos.ClientInfo.Builder.class);
-        internal_static_scope_MessageInfoList_descriptor = getDescriptor().getMessageTypes().get(
-            6);
-        internal_static_scope_MessageInfoList_fieldAccessorTable = new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-            internal_static_scope_MessageInfoList_descriptor,
-            new java.lang.String[] { "MessageList", },
-            com.opera.core.systems.scope.protos.ScopeProtos.MessageInfoList.class,
-            com.opera.core.systems.scope.protos.ScopeProtos.MessageInfoList.Builder.class);
-        internal_static_scope_ServiceSelection_descriptor = getDescriptor().getMessageTypes().get(
-            7);
-        internal_static_scope_ServiceSelection_fieldAccessorTable = new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-            internal_static_scope_ServiceSelection_descriptor,
-            new java.lang.String[] { "Name", },
-            com.opera.core.systems.scope.protos.ScopeProtos.ServiceSelection.class,
-            com.opera.core.systems.scope.protos.ScopeProtos.ServiceSelection.Builder.class);
-        internal_static_scope_ServiceInfo_descriptor = getDescriptor().getMessageTypes().get(
-            8);
-        internal_static_scope_ServiceInfo_fieldAccessorTable = new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-            internal_static_scope_ServiceInfo_descriptor,
-            new java.lang.String[] { "CommandList", "EventList", },
-            com.opera.core.systems.scope.protos.ScopeProtos.ServiceInfo.class,
-            com.opera.core.systems.scope.protos.ScopeProtos.ServiceInfo.Builder.class);
-        internal_static_scope_ErrorInfo_descriptor = getDescriptor().getMessageTypes().get(
-            9);
-        internal_static_scope_ErrorInfo_fieldAccessorTable = new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-            internal_static_scope_ErrorInfo_descriptor,
-            new java.lang.String[] { "Description", },
-            com.opera.core.systems.scope.protos.ScopeProtos.ErrorInfo.class,
-            com.opera.core.systems.scope.protos.ScopeProtos.ErrorInfo.Builder.class);
-        internal_static_scope_MessageSelection_descriptor = getDescriptor().getMessageTypes().get(
-            10);
-        internal_static_scope_MessageSelection_fieldAccessorTable = new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-            internal_static_scope_MessageSelection_descriptor,
-            new java.lang.String[] { "ServiceName", "IdList", "IncludeRelated",
-                "IncludeAll", },
-            com.opera.core.systems.scope.protos.ScopeProtos.MessageSelection.class,
-            com.opera.core.systems.scope.protos.ScopeProtos.MessageSelection.Builder.class);
-        internal_static_scope_ServiceResult_descriptor = getDescriptor().getMessageTypes().get(
-            11);
-        internal_static_scope_ServiceResult_fieldAccessorTable = new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-            internal_static_scope_ServiceResult_descriptor,
-            new java.lang.String[] { "Name", },
-            com.opera.core.systems.scope.protos.ScopeProtos.ServiceResult.class,
-            com.opera.core.systems.scope.protos.ScopeProtos.ServiceResult.Builder.class);
-        internal_static_scope_CommandInfo_descriptor = getDescriptor().getMessageTypes().get(
-            12);
-        internal_static_scope_CommandInfo_fieldAccessorTable = new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-            internal_static_scope_CommandInfo_descriptor,
-            new java.lang.String[] { "Name", "Number", "MessageID",
-                "ResponseID", },
-            com.opera.core.systems.scope.protos.ScopeProtos.CommandInfo.class,
-            com.opera.core.systems.scope.protos.ScopeProtos.CommandInfo.Builder.class);
-        return null;
-      }
-    };
+        + "Related\030\003 \001(\010\022\022\n\nincludeAll\030\004 \001(\010\"\035\n\rSer"
+        + "viceResult\022\014\n\004name\030\001 \002(\t\"R\n\013CommandInfo\022"
+        + "\014\n\004name\030\001 \002(\t\022\016\n\006number\030\002 \002(\r\022\021\n\tmessage"
+        + "ID\030\003 \002(\r\022\022\n\nresponseID\030\004 \002(\rB4\n#com.oper"
+        + "a.core.systems.scope.protosB\013ScopeProtos" + "H\001"};
+    com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner
+        assigner =
+        new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
+          public com.google.protobuf.ExtensionRegistry assignDescriptors(
+              com.google.protobuf.Descriptors.FileDescriptor root) {
+            descriptor = root;
+            internal_static_scope_ServiceList_descriptor = getDescriptor().getMessageTypes().get(
+                0);
+            internal_static_scope_ServiceList_fieldAccessorTable =
+                new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+                    internal_static_scope_ServiceList_descriptor,
+                    new java.lang.String[]{"ServiceList",},
+                    com.opera.core.systems.scope.protos.ScopeProtos.ServiceList.class,
+                    com.opera.core.systems.scope.protos.ScopeProtos.ServiceList.Builder.class);
+            internal_static_scope_MessageInfo_descriptor = getDescriptor().getMessageTypes().get(
+                1);
+            internal_static_scope_MessageInfo_fieldAccessorTable =
+                new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+                    internal_static_scope_MessageInfo_descriptor,
+                    new java.lang.String[]{"Id", "Name", "FieldList", "ParentID",},
+                    com.opera.core.systems.scope.protos.ScopeProtos.MessageInfo.class,
+                    com.opera.core.systems.scope.protos.ScopeProtos.MessageInfo.Builder.class);
+            internal_static_scope_MessageInfo_FieldInfo_descriptor =
+                internal_static_scope_MessageInfo_descriptor.getNestedTypes().get(
+                    0);
+            internal_static_scope_MessageInfo_FieldInfo_fieldAccessorTable =
+                new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+                    internal_static_scope_MessageInfo_FieldInfo_descriptor,
+                    new java.lang.String[]{"Name", "Type", "Number", "Quantifier",
+                                           "MessageID",},
+                    com.opera.core.systems.scope.protos.ScopeProtos.MessageInfo.FieldInfo.class,
+                    com.opera.core.systems.scope.protos.ScopeProtos.MessageInfo.FieldInfo.Builder.class);
+            internal_static_scope_EventInfo_descriptor = getDescriptor().getMessageTypes().get(
+                2);
+            internal_static_scope_EventInfo_fieldAccessorTable =
+                new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+                    internal_static_scope_EventInfo_descriptor,
+                    new java.lang.String[]{"Name", "Number", "MessageID",},
+                    com.opera.core.systems.scope.protos.ScopeProtos.EventInfo.class,
+                    com.opera.core.systems.scope.protos.ScopeProtos.EventInfo.Builder.class);
+            internal_static_scope_Service_descriptor = getDescriptor().getMessageTypes().get(
+                3);
+            internal_static_scope_Service_fieldAccessorTable =
+                new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+                    internal_static_scope_Service_descriptor,
+                    new java.lang.String[]{"Name", "Version",},
+                    com.opera.core.systems.scope.protos.ScopeProtos.Service.class,
+                    com.opera.core.systems.scope.protos.ScopeProtos.Service.Builder.class);
+            internal_static_scope_HostInfo_descriptor = getDescriptor().getMessageTypes().get(
+                4);
+            internal_static_scope_HostInfo_fieldAccessorTable =
+                new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+                    internal_static_scope_HostInfo_descriptor,
+                    new java.lang.String[]{"StpVersion", "CoreVersion", "Platform",
+                                           "OperatingSystem", "UserAgent", "ServiceList",},
+                    com.opera.core.systems.scope.protos.ScopeProtos.HostInfo.class,
+                    com.opera.core.systems.scope.protos.ScopeProtos.HostInfo.Builder.class);
+            internal_static_scope_ClientInfo_descriptor = getDescriptor().getMessageTypes().get(
+                5);
+            internal_static_scope_ClientInfo_fieldAccessorTable =
+                new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+                    internal_static_scope_ClientInfo_descriptor,
+                    new java.lang.String[]{"Format",},
+                    com.opera.core.systems.scope.protos.ScopeProtos.ClientInfo.class,
+                    com.opera.core.systems.scope.protos.ScopeProtos.ClientInfo.Builder.class);
+            internal_static_scope_MessageInfoList_descriptor =
+                getDescriptor().getMessageTypes().get(
+                    6);
+            internal_static_scope_MessageInfoList_fieldAccessorTable =
+                new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+                    internal_static_scope_MessageInfoList_descriptor,
+                    new java.lang.String[]{"MessageList",},
+                    com.opera.core.systems.scope.protos.ScopeProtos.MessageInfoList.class,
+                    com.opera.core.systems.scope.protos.ScopeProtos.MessageInfoList.Builder.class);
+            internal_static_scope_ServiceSelection_descriptor =
+                getDescriptor().getMessageTypes().get(
+                    7);
+            internal_static_scope_ServiceSelection_fieldAccessorTable =
+                new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+                    internal_static_scope_ServiceSelection_descriptor,
+                    new java.lang.String[]{"Name",},
+                    com.opera.core.systems.scope.protos.ScopeProtos.ServiceSelection.class,
+                    com.opera.core.systems.scope.protos.ScopeProtos.ServiceSelection.Builder.class);
+            internal_static_scope_ServiceInfo_descriptor = getDescriptor().getMessageTypes().get(
+                8);
+            internal_static_scope_ServiceInfo_fieldAccessorTable =
+                new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+                    internal_static_scope_ServiceInfo_descriptor,
+                    new java.lang.String[]{"CommandList", "EventList",},
+                    com.opera.core.systems.scope.protos.ScopeProtos.ServiceInfo.class,
+                    com.opera.core.systems.scope.protos.ScopeProtos.ServiceInfo.Builder.class);
+            internal_static_scope_ErrorInfo_descriptor = getDescriptor().getMessageTypes().get(
+                9);
+            internal_static_scope_ErrorInfo_fieldAccessorTable =
+                new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+                    internal_static_scope_ErrorInfo_descriptor,
+                    new java.lang.String[]{"Description",},
+                    com.opera.core.systems.scope.protos.ScopeProtos.ErrorInfo.class,
+                    com.opera.core.systems.scope.protos.ScopeProtos.ErrorInfo.Builder.class);
+            internal_static_scope_MessageSelection_descriptor =
+                getDescriptor().getMessageTypes().get(
+                    10);
+            internal_static_scope_MessageSelection_fieldAccessorTable =
+                new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+                    internal_static_scope_MessageSelection_descriptor,
+                    new java.lang.String[]{"ServiceName", "IdList", "IncludeRelated",
+                                           "IncludeAll",},
+                    com.opera.core.systems.scope.protos.ScopeProtos.MessageSelection.class,
+                    com.opera.core.systems.scope.protos.ScopeProtos.MessageSelection.Builder.class);
+            internal_static_scope_ServiceResult_descriptor = getDescriptor().getMessageTypes().get(
+                11);
+            internal_static_scope_ServiceResult_fieldAccessorTable =
+                new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+                    internal_static_scope_ServiceResult_descriptor,
+                    new java.lang.String[]{"Name",},
+                    com.opera.core.systems.scope.protos.ScopeProtos.ServiceResult.class,
+                    com.opera.core.systems.scope.protos.ScopeProtos.ServiceResult.Builder.class);
+            internal_static_scope_CommandInfo_descriptor = getDescriptor().getMessageTypes().get(
+                12);
+            internal_static_scope_CommandInfo_fieldAccessorTable =
+                new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+                    internal_static_scope_CommandInfo_descriptor,
+                    new java.lang.String[]{"Name", "Number", "MessageID",
+                                           "ResponseID",},
+                    com.opera.core.systems.scope.protos.ScopeProtos.CommandInfo.class,
+                    com.opera.core.systems.scope.protos.ScopeProtos.CommandInfo.Builder.class);
+            return null;
+          }
+        };
     com.google.protobuf.Descriptors.FileDescriptor.internalBuildGeneratedFileFrom(
         descriptorData,
-        new com.google.protobuf.Descriptors.FileDescriptor[] {}, assigner);
+        new com.google.protobuf.Descriptors.FileDescriptor[]{}, assigner);
   }
 
   public static void internalForceInit() {

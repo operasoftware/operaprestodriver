@@ -16,23 +16,23 @@ limitations under the License.
 
 package com.opera.core.systems;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
-import org.openqa.selenium.Platform;
-import org.openqa.selenium.WebDriverException;
-import org.openqa.selenium.os.CommandLine;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.channels.FileChannel;
 import java.security.MessageDigest;
 import java.util.Arrays;
 import java.util.logging.Logger;
+
+import org.apache.commons.io.FileUtils;
+
+import org.openqa.selenium.Platform;
+import org.openqa.selenium.WebDriverException;
+import org.openqa.selenium.os.CommandLine;
 
 /**
  * This class tries to find the paths to Opera and Opera Launcher on any system. If it cannot find a
@@ -151,13 +151,13 @@ public class OperaPaths {
               FileUtils.touch(launcher);
             }
 
-            InputStream is = res.openStream();
-            OutputStream os = new FileOutputStream(launcher);
+            FileChannel in = new FileInputStream(res.getFile()).getChannel();
+            FileChannel out = new FileOutputStream(launcher).getChannel();
 
-            IOUtils.copy(is, os);
+            in.transferTo(0, in.size(), out);
 
-            is.close();
-            os.close();
+            in.close();
+            out.close();
 
             launcher.setLastModified(launcher.lastModified());
           } catch (IOException e) {

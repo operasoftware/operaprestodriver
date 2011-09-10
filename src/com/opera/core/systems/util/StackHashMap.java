@@ -26,15 +26,11 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentMap;
 
 /**
- * A thread safe stack hash map for use in window manager The backing map is a
- * {@link LinkedHashMap} that provides predictable iteration order. All the
- * operations that require thread safety are protected by the lock of
- * synchronized map.
+ * A thread safe stack hash map for use in window manager The backing map is a {@link LinkedHashMap}
+ * that provides predictable iteration order. All the operations that require thread safety are
+ * protected by the lock of synchronized map.
  *
  * @author Deniz Turkoglu <denizt@opera.com>
- *
- * @param <K>
- * @param <V>
  */
 public class StackHashMap<K, V> implements ConcurrentMap<K, V> {
 
@@ -61,10 +57,14 @@ public class StackHashMap<K, V> implements ConcurrentMap<K, V> {
   public V put(K key, V value) {
     synchronized (map) {
       // check if we already have the key
-      if (!map.containsKey(key)) list.addLast(key); // if not add last
+      if (!map.containsKey(key)) {
+        list.addLast(key); // if not add last
+      }
       // if we already have the key, just update the value
-      else value = (value == null) ? map.get(key) : value; // we already know
-                                                           // this
+      else {
+        value = (value == null) ? map.get(key) : value; // we already know
+      }
+      // this
       // key and don't want to
       // nullify it
       return map.put(key, value);
@@ -166,11 +166,8 @@ public class StackHashMap<K, V> implements ConcurrentMap<K, V> {
   }
 
   /**
-   * Puts a key to top of the map if absent if the key is present in stack it is
-   * removed
+   * Puts a key to top of the map if absent if the key is present in stack it is removed
    *
-   * @param k
-   * @param v
    * @return the value if it is not contained, null otherwise
    */
   public V putIfAbsent(K k, V v) {

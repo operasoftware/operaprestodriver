@@ -12,7 +12,8 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
-*/package com.opera.core.systems;
+*/
+package com.opera.core.systems;
 
 import java.awt.Point;
 import java.util.List;
@@ -30,304 +31,314 @@ import com.opera.core.systems.scope.services.ums.SystemInputManager;
  * Represents a widget in the Opera desktop UI.
  *
  * @author Adam Minchinton, Karianne Ekern.
- *
  */
 public class QuickWidget extends OperaUIElement {
-		private final QuickWidgetInfo info;
-		private final int parentWindowId;
 
-		public enum DropPosition {
-			CENTER(0),
-			EDGE(1),
-			BETWEEN(2),
-			;
-			private DropPosition(int value) {
-				this.value = value;
-			}
+  private final QuickWidgetInfo info;
+  private final int parentWindowId;
 
-			private Integer value;
+  public enum DropPosition {
+    CENTER(0),
+    EDGE(1),
+    BETWEEN(2),;
 
-			public Integer getValue() {
-				return value;
-			}
-		}
+    private DropPosition(int value) {
+      this.value = value;
+    }
 
-		/**
-		 * Constructor.
-		 *
-		 * @param desktopUtils
-		 * @param inputManager
-		 * @param info QuickWidgetInfo of the widget
-		 * @param parentWindowId id of parent window
-		 */
-		public QuickWidget(IDesktopUtils desktopUtils, SystemInputManager inputManager,
-				QuickWidgetInfo info, int parentWindowId) {
-			super(inputManager, desktopUtils);
-	        this.info = info;
-	        this.parentWindowId = parentWindowId;
-	    }
+    private Integer value;
 
-		/**
-		 * Gets window id of this widgets parent window.
-		 *
-		 * @return window id of parent window of this QuickWidget
-		 */
-		public int getParentWindowId() {
-			return parentWindowId;
-		}
+    public Integer getValue() {
+      return value;
+    }
+  }
 
-		// Intersect two lines
-		private Point intersection(int x1,int y1,int x2,int y2, int x3, int y3, int x4,int y4) {
-			double dem = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4);
+  /**
+   * Constructor.
+   *
+   * @param info           QuickWidgetInfo of the widget
+   * @param parentWindowId id of parent window
+   */
+  public QuickWidget(IDesktopUtils desktopUtils, SystemInputManager inputManager,
+                     QuickWidgetInfo info, int parentWindowId) {
+    super(inputManager, desktopUtils);
+    this.info = info;
+    this.parentWindowId = parentWindowId;
+  }
 
-			// Solve the intersect point
-			double xi = ((x1 * y2 - y1 * x2) * (x3 - x4) - (x1 - x2) * (x3 * y4 - y3 * x4)) / dem;
-			double yi = ((x1 * y2 - y1 * x2) * (y3 - y4) - (y1 - y2) * (x3 * y4 - y3 * x4)) / dem;
+  /**
+   * Gets window id of this widgets parent window.
+   *
+   * @return window id of parent window of this QuickWidget
+   */
+  public int getParentWindowId() {
+    return parentWindowId;
+  }
 
-			// Check the point isn't off the ends of the lines
-			if ((x1 - xi) * (xi - x2) >= 0 && (x3 - xi) * (xi - x4) >= 0 && (y1 - yi) * (yi - y2) >= 0 && (y3 - yi) * (yi - y4) >= 0) {
-				return new Point((int) xi, (int) yi);
-			}
-			return null;
-		}
+  // Intersect two lines
+  private Point intersection(int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4) {
+    double dem = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4);
 
-		// Intersect a line and a DesktopWindowRect
-		private Point intersection(int x1,int y1,int x2,int y2, DesktopWindowRect rect) {
-			Point bottom = intersection(x1, y1, x2, y2, rect.getX(), rect.getY(), rect.getX() + rect.getHeight(), rect.getY());
-			if (bottom != null)
-				return bottom;
+    // Solve the intersect point
+    double xi = ((x1 * y2 - y1 * x2) * (x3 - x4) - (x1 - x2) * (x3 * y4 - y3 * x4)) / dem;
+    double yi = ((x1 * y2 - y1 * x2) * (y3 - y4) - (y1 - y2) * (x3 * y4 - y3 * x4)) / dem;
 
-			Point right = intersection(x1, y1, x2, y2, rect.getX() + rect.getWidth(), rect.getY(), rect.getX() + rect.getWidth(), rect.getY() + rect.getHeight());
-			if (right != null)
-				return right;
+    // Check the point isn't off the ends of the lines
+    if ((x1 - xi) * (xi - x2) >= 0 && (x3 - xi) * (xi - x4) >= 0 && (y1 - yi) * (yi - y2) >= 0
+        && (y3 - yi) * (yi - y4) >= 0) {
+      return new Point((int) xi, (int) yi);
+    }
+    return null;
+  }
 
-			Point top = intersection(x1, y1, x2, y2, rect.getX(), rect.getY() + rect.getHeight(), rect.getX() + rect.getWidth(), rect.getY() + rect.getHeight());
-			if (top != null)
-				return top;
+  // Intersect a line and a DesktopWindowRect
+  private Point intersection(int x1, int y1, int x2, int y2, DesktopWindowRect rect) {
+    Point
+        bottom =
+        intersection(x1, y1, x2, y2, rect.getX(), rect.getY(), rect.getX() + rect.getHeight(),
+                     rect.getY());
+    if (bottom != null) {
+      return bottom;
+    }
 
-			Point left = intersection(x1, y1, x2, y2, rect.getX(), rect.getY(), rect.getX(), rect.getY() + rect.getHeight());
-			if (left != null)
-				return left;
+    Point
+        right =
+        intersection(x1, y1, x2, y2, rect.getX() + rect.getWidth(), rect.getY(),
+                     rect.getX() + rect.getWidth(), rect.getY() + rect.getHeight());
+    if (right != null) {
+      return right;
+    }
 
-			return null;
-		}
+    Point
+        top =
+        intersection(x1, y1, x2, y2, rect.getX(), rect.getY() + rect.getHeight(),
+                     rect.getX() + rect.getWidth(), rect.getY() + rect.getHeight());
+    if (top != null) {
+      return top;
+    }
 
-		/**
-		 * Drags this widget onto the specified widget at the given drop position
-		 *
-		 * @param widget the widget to drop this widget onto
-		 * @param dropPos the position to drop this widget into, CENTER, EDGE or BETWEEN
-		 */
-		public void dragAndDropOn(QuickWidget widget, DropPosition dropPos) {
-			/*
-			 * FIXME: Handle MousePosition
-			 */
-			Point currentLocation = getCenterLocation();
-			Point dropPoint = getDropPoint(widget, dropPos);
+    Point
+        left =
+        intersection(x1, y1, x2, y2, rect.getX(), rect.getY(), rect.getX(),
+                     rect.getY() + rect.getHeight());
+    if (left != null) {
+      return left;
+    }
 
-			List<ModifierPressed> alist = new ArrayList<ModifierPressed>();
-			alist.add(ModifierPressed.NONE);
+    return null;
+  }
 
-			getSystemInputManager().mouseDown(currentLocation, MouseButton.LEFT, alist);
-			getSystemInputManager().mouseMove(dropPoint, MouseButton.LEFT, alist);
-			getSystemInputManager().mouseUp(dropPoint, MouseButton.LEFT, alist);
-		}
+  /**
+   * Drags this widget onto the specified widget at the given drop position
+   *
+   * @param widget  the widget to drop this widget onto
+   * @param dropPos the position to drop this widget into, CENTER, EDGE or BETWEEN
+   */
+  public void dragAndDropOn(QuickWidget widget, DropPosition dropPos) {
+    /*
+                         * FIXME: Handle MousePosition
+                         */
+    Point currentLocation = getCenterLocation();
+    Point dropPoint = getDropPoint(widget, dropPos);
 
-		// Gets the coordinates of the drop point between the two quick widgets
-		// The drop point is on the quick widget passed in
-		private Point getDropPoint(QuickWidget element, DropPosition pos) {
-			Point dropPoint = new Point(element.getCenterLocation().x, element.getCenterLocation().y);
-			if (pos == DropPosition.CENTER)
-				return dropPoint;
+    List<ModifierPressed> alist = new ArrayList<ModifierPressed>();
+    alist.add(ModifierPressed.NONE);
 
-			Point dragPoint = new Point(this.getCenterLocation().x, this.getCenterLocation().y);
+    getSystemInputManager().mouseDown(currentLocation, MouseButton.LEFT, alist);
+    getSystemInputManager().mouseMove(dropPoint, MouseButton.LEFT, alist);
+    getSystemInputManager().mouseUp(dropPoint, MouseButton.LEFT, alist);
+  }
 
-			// Find the side of the DesktopWindowRect of the widget that as the intersect
-			Point dragIntersectPoint = intersection(dragPoint.x, dragPoint.y, dropPoint.x, dropPoint.y, this.getRect());
+  // Gets the coordinates of the drop point between the two quick widgets
+  // The drop point is on the quick widget passed in
+  private Point getDropPoint(QuickWidget element, DropPosition pos) {
+    Point dropPoint = new Point(element.getCenterLocation().x, element.getCenterLocation().y);
+    if (pos == DropPosition.CENTER) {
+      return dropPoint;
+    }
 
-			if (dragIntersectPoint != null) {
-				Point dropIntersectPoint = intersection(dragPoint.x, dragPoint.y, dropPoint.x, dropPoint.y, element.getRect());
+    Point dragPoint = new Point(this.getCenterLocation().x, this.getCenterLocation().y);
 
-				if (dropIntersectPoint != null) {
-					if (pos == DropPosition.EDGE)
-					{
-						return dropIntersectPoint;
-					}
+    // Find the side of the DesktopWindowRect of the widget that as the intersect
+    Point
+        dragIntersectPoint =
+        intersection(dragPoint.x, dragPoint.y, dropPoint.x, dropPoint.y, this.getRect());
 
-					// Get the mid point of the line
-					return new Point((dragIntersectPoint.x + dropIntersectPoint.x) / 2, (dragIntersectPoint.y + dropIntersectPoint.y) / 2);
-				}
-			}
+    if (dragIntersectPoint != null) {
+      Point
+          dropIntersectPoint =
+          intersection(dragPoint.x, dragPoint.y, dropPoint.x, dropPoint.y, element.getRect());
 
-			return null;
-		}
+      if (dropIntersectPoint != null) {
+        if (pos == DropPosition.EDGE) {
+          return dropIntersectPoint;
+        }
 
-		/**
-	     *
-	     * @return name of widget
-	     */
-		public String getName() {
-			return info.getName();
-		}
+        // Get the mid point of the line
+        return new Point((dragIntersectPoint.x + dropIntersectPoint.x) / 2,
+                         (dragIntersectPoint.y + dropIntersectPoint.y) / 2);
+      }
+    }
 
-		/**
-	     *
-	     * @return text of widget
-	     */
-		public String getText() {
-			return getDesktopUtils().removeCR(info.getText());
-		}
+    return null;
+  }
 
-		/**
-	     * Gets the visible text of the widget.
-	     *
-	     * @return visible text of widget
-	     */
-		public String getVisibleText() {
-			return getDesktopUtils().removeCR(info.getVisibleText());
-		}
+  /**
+   * @return name of widget
+   */
+  public String getName() {
+    return info.getName();
+  }
 
-		/**
-	     * Gets additional text of this widget.
-	     * Used for widgets that have more text attributes, e.g.
-	     * for highlighted text in the address field
-	     *
-	     * @return text of widget
-	     */
-		public String getAdditionalText() {
-			return getDesktopUtils().removeCR(info.getAdditionalText());
-		}
+  /**
+   * @return text of widget
+   */
+  public String getText() {
+    return getDesktopUtils().removeCR(info.getText());
+  }
 
-		/**
-		 * Checks if widget is default.
-		 *
-		 * Typically used to check if e.g. a button is the default pressed button
-		 * among buttons in a dialog, and such.
-		 *
-		 * @return true if widget is default, else false
-		 */
-		public boolean isDefault() {
-			return info.getDefaultLook();
-		}
+  /**
+   * Gets the visible text of the widget.
+   *
+   * @return visible text of widget
+   */
+  public String getVisibleText() {
+    return getDesktopUtils().removeCR(info.getVisibleText());
+  }
 
-		/**
-		 *
-		 * @return true if this widget has focused look
-		 */
-		public boolean hasFocusedLook() {
-			return info.getFocusedLook();
-		}
+  /**
+   * Gets additional text of this widget. Used for widgets that have more text attributes, e.g. for
+   * highlighted text in the address field
+   *
+   * @return text of widget
+   */
+  public String getAdditionalText() {
+    return getDesktopUtils().removeCR(info.getAdditionalText());
+  }
 
-		/**
-		 * Checks if widget is enabled.
-		 *
-		 * @return true if enabled, else false
-		 */
-		public boolean isEnabled() {
-			return info.getEnabled();
-		}
+  /**
+   * Checks if widget is default.
+   *
+   * Typically used to check if e.g. a button is the default pressed button among buttons in a
+   * dialog, and such.
+   *
+   * @return true if widget is default, else false
+   */
+  public boolean isDefault() {
+    return info.getDefaultLook();
+  }
 
-		/**
-		 *
-		 * @return true if widget is selected, else false
-		 */
-		public boolean isSelected() {
-			return info.getValue() == 1;
-		}
+  /**
+   * @return true if this widget has focused look
+   */
+  public boolean hasFocusedLook() {
+    return info.getFocusedLook();
+  }
 
-		/**
-		 *
-		 * @param stringId stringid of entry to check if is selected
-		 * @return true if the entry given by stringId is selected, else false
-		 */
-		public boolean isSelected(String stringId) {
-			String text = getDesktopUtils().getString(stringId, true);
-			return text.equals(info.getText());
-		}
+  /**
+   * Checks if widget is enabled.
+   *
+   * @return true if enabled, else false
+   */
+  public boolean isEnabled() {
+    return info.getEnabled();
+  }
 
-		/**
-		 * @return true if widget is visible, else false
-		 */
-		public boolean isVisible(){
-			return info.getVisible();
-		}
+  /**
+   * @return true if widget is selected, else false
+   */
+  public boolean isSelected() {
+    return info.getValue() == 1;
+  }
 
-		/**
-		 *
-		 * @return QuickWidgetType type of this widget. See {@link QuickWidgetType}
-		 * 			for the possible types
-		 */
-		public QuickWidgetType getType(){
-			return info.getType();
-		}
+  /**
+   * @param stringId stringid of entry to check if is selected
+   * @return true if the entry given by stringId is selected, else false
+   */
+  public boolean isSelected(String stringId) {
+    String text = getDesktopUtils().getString(stringId, true);
+    return text.equals(info.getText());
+  }
 
-		/**
-		 * @return DesktopWindowRect of the widget
-		 */
-		public DesktopWindowRect getRect() {
-			return info.getRect();
-		}
+  /**
+   * @return true if widget is visible, else false
+   */
+  public boolean isVisible() {
+    return info.getVisible();
+  }
 
-		/**
-		 * Gets the row of the widget within its parent,
-		 * e.g. of a treeviewitem in a treeview.
-		 * Returns 0 for all widgets that don't have a row
-		 * within its parent
-		 *
-		 * @return row of widget\
-		 */
-		public int getRow() {
-			return info.getRow();
-		}
+  /**
+   * @return QuickWidgetType type of this widget. See {@link QuickWidgetType} for the possible
+   *         types
+   */
+  public QuickWidgetType getType() {
+    return info.getType();
+  }
 
-		/**
- 		 * Gets the column of the widget within its parent,
-		 * e.g. for a tab within the pagebar, or a treeviewitem in a treeview
-		 * returns 0 for widgets that don't have a column number within its
-		 * parent
-		 *
-		 * @return column of widget
-		 */
-		public int getColumn() {
-			return info.getCol();
-		}
+  /**
+   * @return DesktopWindowRect of the widget
+   */
+  public DesktopWindowRect getRect() {
+    return info.getRect();
+  }
 
-		/**
-		 * @return value
-		 */
-		protected int getValue() {
-			return info.getValue();
-		}
+  /**
+   * Gets the row of the widget within its parent, e.g. of a treeviewitem in a treeview. Returns 0
+   * for all widgets that don't have a row within its parent
+   *
+   * @return row of widget\
+   */
+  public int getRow() {
+    return info.getRow();
+  }
 
-		/**
-		 * Gets name of parent widget of this widget
-		 *
-		 * @return name of parent widget
-		 */
-		public String getParentName() {
-			return info.getParent();
-		}
+  /**
+   * Gets the column of the widget within its parent, e.g. for a tab within the pagebar, or a
+   * treeviewitem in a treeview returns 0 for widgets that don't have a column number within its
+   * parent
+   *
+   * @return column of widget
+   */
+  public int getColumn() {
+    return info.getCol();
+  }
 
-		@Override
-		public String toString() {
-			return "QuickWidget " + getName();
-		}
+  /**
+   * @return value
+   */
+  protected int getValue() {
+    return info.getValue();
+  }
 
-		public String toFullString() {
-			return "QuickWidget\n" +
-			  "       Widget name: " + getName() + "\n"
-		//	+ "       type: " + getType()  + "\n" // TODO: FIXME
-			+ "    visible: " + isVisible() + "\n"
-			+ "       text: " + getText() + "\n"
-			+ "      state: " + getValue() + "\n"
-			+ "    enabled: " + isEnabled() + "\n"
-			+ "    default: " + isDefault() + "\n"
-			+ "    focused: " + hasFocusedLook() + "\n"
-			+ "          x: " + getRect().getX() + "\n"
-			+ "          y: " + getRect().getY() + "\n"
-			+ "      width: " + getRect().getWidth() + "\n"
-			+ "     height: " + getRect().getHeight() + " \n";
-		}
+  /**
+   * Gets name of parent widget of this widget
+   *
+   * @return name of parent widget
+   */
+  public String getParentName() {
+    return info.getParent();
+  }
+
+  @Override
+  public String toString() {
+    return "QuickWidget " + getName();
+  }
+
+  public String toFullString() {
+    return "QuickWidget\n" +
+           "       Widget name: " + getName() + "\n"
+           //	+ "       type: " + getType()  + "\n" // TODO: FIXME
+           + "    visible: " + isVisible() + "\n"
+           + "       text: " + getText() + "\n"
+           + "      state: " + getValue() + "\n"
+           + "    enabled: " + isEnabled() + "\n"
+           + "    default: " + isDefault() + "\n"
+           + "    focused: " + hasFocusedLook() + "\n"
+           + "          x: " + getRect().getX() + "\n"
+           + "          y: " + getRect().getY() + "\n"
+           + "      width: " + getRect().getWidth() + "\n"
+           + "     height: " + getRect().getHeight() + " \n";
+  }
 }
 
 

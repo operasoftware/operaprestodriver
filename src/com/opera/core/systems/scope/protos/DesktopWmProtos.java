@@ -4,253 +4,363 @@
 package com.opera.core.systems.scope.protos;
 
 public final class DesktopWmProtos {
-  private DesktopWmProtos() {}
+
+  private DesktopWmProtos() {
+  }
+
   public static void registerAllExtensions(
       com.google.protobuf.ExtensionRegistry registry) {
   }
+
   public static final class DesktopWindowInfo extends
-      com.google.protobuf.GeneratedMessage {
+                                              com.google.protobuf.GeneratedMessage {
+
     // Use DesktopWindowInfo.newBuilder() to construct.
     private DesktopWindowInfo() {
       initFields();
     }
-    private DesktopWindowInfo(boolean noInit) {}
-    
+
+    private DesktopWindowInfo(boolean noInit) {
+    }
+
     private static final DesktopWindowInfo defaultInstance;
+
     public static DesktopWindowInfo getDefaultInstance() {
       return defaultInstance;
     }
-    
+
     public DesktopWindowInfo getDefaultInstanceForType() {
       return defaultInstance;
     }
-    
+
     public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
+    getDescriptor() {
       return com.opera.core.systems.scope.protos.DesktopWmProtos.internal_static_scope_DesktopWindowInfo_descriptor;
     }
-    
+
     protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-        internalGetFieldAccessorTable() {
+    internalGetFieldAccessorTable() {
       return com.opera.core.systems.scope.protos.DesktopWmProtos.internal_static_scope_DesktopWindowInfo_fieldAccessorTable;
     }
-    
+
     public enum DesktopWindowType
         implements com.google.protobuf.ProtocolMessageEnum {
       UNKNOWN(0, 0),
       DIALOG(1, 1),
-      NORMAL(2, 2),
-      ;
-      
-      
-      public final int getNumber() { return value; }
-      
+      NORMAL(2, 2),;
+
+
+      public final int getNumber() {
+        return value;
+      }
+
       public static DesktopWindowType valueOf(int value) {
         switch (value) {
-          case 0: return UNKNOWN;
-          case 1: return DIALOG;
-          case 2: return NORMAL;
-          default: return null;
+          case 0:
+            return UNKNOWN;
+          case 1:
+            return DIALOG;
+          case 2:
+            return NORMAL;
+          default:
+            return null;
         }
       }
-      
+
       public static com.google.protobuf.Internal.EnumLiteMap<DesktopWindowType>
-          internalGetValueMap() {
+      internalGetValueMap() {
         return internalValueMap;
       }
+
       private static com.google.protobuf.Internal.EnumLiteMap<DesktopWindowType>
           internalValueMap =
-            new com.google.protobuf.Internal.EnumLiteMap<DesktopWindowType>() {
-              public DesktopWindowType findValueByNumber(int number) {
-                return DesktopWindowType.valueOf(number)
-      ;        }
-            };
-      
+          new com.google.protobuf.Internal.EnumLiteMap<DesktopWindowType>() {
+            public DesktopWindowType findValueByNumber(int number) {
+              return DesktopWindowType.valueOf(number)
+                  ;
+            }
+          };
+
       public final com.google.protobuf.Descriptors.EnumValueDescriptor
-          getValueDescriptor() {
+      getValueDescriptor() {
         return getDescriptor().getValues().get(index);
       }
+
       public final com.google.protobuf.Descriptors.EnumDescriptor
-          getDescriptorForType() {
+      getDescriptorForType() {
         return getDescriptor();
       }
+
       public static final com.google.protobuf.Descriptors.EnumDescriptor
-          getDescriptor() {
-        return com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo.getDescriptor().getEnumTypes().get(0);
+      getDescriptor() {
+        return com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo.getDescriptor()
+            .getEnumTypes().get(0);
       }
-      
+
       private static final DesktopWindowType[] VALUES = {
-        UNKNOWN, DIALOG, NORMAL, 
+          UNKNOWN, DIALOG, NORMAL,
       };
+
       public static DesktopWindowType valueOf(
           com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
         if (desc.getType() != getDescriptor()) {
           throw new java.lang.IllegalArgumentException(
-            "EnumValueDescriptor is not for this type.");
+              "EnumValueDescriptor is not for this type.");
         }
         return VALUES[desc.getIndex()];
       }
+
       private final int index;
       private final int value;
+
       private DesktopWindowType(int index, int value) {
         this.index = index;
         this.value = value;
       }
-      
+
       static {
         com.opera.core.systems.scope.protos.DesktopWmProtos.getDescriptor();
       }
-      
+
       // @@protoc_insertion_point(enum_scope:scope.DesktopWindowInfo.DesktopWindowType)
     }
-    
+
     public enum DesktopWindowState
         implements com.google.protobuf.ProtocolMessageEnum {
       RESTORED(0, 0),
       MINIMIZED(1, 1),
       MAXIMIZED(2, 2),
-      FULLSCREEN(3, 3),
-      ;
-      
-      
-      public final int getNumber() { return value; }
-      
+      FULLSCREEN(3, 3),;
+
+
+      public final int getNumber() {
+        return value;
+      }
+
       public static DesktopWindowState valueOf(int value) {
         switch (value) {
-          case 0: return RESTORED;
-          case 1: return MINIMIZED;
-          case 2: return MAXIMIZED;
-          case 3: return FULLSCREEN;
-          default: return null;
+          case 0:
+            return RESTORED;
+          case 1:
+            return MINIMIZED;
+          case 2:
+            return MAXIMIZED;
+          case 3:
+            return FULLSCREEN;
+          default:
+            return null;
         }
       }
-      
+
       public static com.google.protobuf.Internal.EnumLiteMap<DesktopWindowState>
-          internalGetValueMap() {
+      internalGetValueMap() {
         return internalValueMap;
       }
+
       private static com.google.protobuf.Internal.EnumLiteMap<DesktopWindowState>
           internalValueMap =
-            new com.google.protobuf.Internal.EnumLiteMap<DesktopWindowState>() {
-              public DesktopWindowState findValueByNumber(int number) {
-                return DesktopWindowState.valueOf(number)
-      ;        }
-            };
-      
+          new com.google.protobuf.Internal.EnumLiteMap<DesktopWindowState>() {
+            public DesktopWindowState findValueByNumber(int number) {
+              return DesktopWindowState.valueOf(number)
+                  ;
+            }
+          };
+
       public final com.google.protobuf.Descriptors.EnumValueDescriptor
-          getValueDescriptor() {
+      getValueDescriptor() {
         return getDescriptor().getValues().get(index);
       }
+
       public final com.google.protobuf.Descriptors.EnumDescriptor
-          getDescriptorForType() {
+      getDescriptorForType() {
         return getDescriptor();
       }
+
       public static final com.google.protobuf.Descriptors.EnumDescriptor
-          getDescriptor() {
-        return com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo.getDescriptor().getEnumTypes().get(1);
+      getDescriptor() {
+        return com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo.getDescriptor()
+            .getEnumTypes().get(1);
       }
-      
+
       private static final DesktopWindowState[] VALUES = {
-        RESTORED, MINIMIZED, MAXIMIZED, FULLSCREEN, 
+          RESTORED, MINIMIZED, MAXIMIZED, FULLSCREEN,
       };
+
       public static DesktopWindowState valueOf(
           com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
         if (desc.getType() != getDescriptor()) {
           throw new java.lang.IllegalArgumentException(
-            "EnumValueDescriptor is not for this type.");
+              "EnumValueDescriptor is not for this type.");
         }
         return VALUES[desc.getIndex()];
       }
+
       private final int index;
       private final int value;
+
       private DesktopWindowState(int index, int value) {
         this.index = index;
         this.value = value;
       }
-      
+
       static {
         com.opera.core.systems.scope.protos.DesktopWmProtos.getDescriptor();
       }
-      
+
       // @@protoc_insertion_point(enum_scope:scope.DesktopWindowInfo.DesktopWindowState)
     }
-    
+
     // required uint32 windowID = 1;
     public static final int WINDOWID_FIELD_NUMBER = 1;
     private boolean hasWindowID;
     private int windowID_ = 0;
-    public boolean hasWindowID() { return hasWindowID; }
-    public int getWindowID() { return windowID_; }
-    
+
+    public boolean hasWindowID() {
+      return hasWindowID;
+    }
+
+    public int getWindowID() {
+      return windowID_;
+    }
+
     // required string title = 2;
     public static final int TITLE_FIELD_NUMBER = 2;
     private boolean hasTitle;
     private java.lang.String title_ = "";
-    public boolean hasTitle() { return hasTitle; }
-    public java.lang.String getTitle() { return title_; }
-    
+
+    public boolean hasTitle() {
+      return hasTitle;
+    }
+
+    public java.lang.String getTitle() {
+      return title_;
+    }
+
     // required string name = 3;
     public static final int NAME_FIELD_NUMBER = 3;
     private boolean hasName;
     private java.lang.String name_ = "";
-    public boolean hasName() { return hasName; }
-    public java.lang.String getName() { return name_; }
-    
+
+    public boolean hasName() {
+      return hasName;
+    }
+
+    public java.lang.String getName() {
+      return name_;
+    }
+
     // required .scope.DesktopWindowInfo.DesktopWindowType windowType = 4;
     public static final int WINDOWTYPE_FIELD_NUMBER = 4;
     private boolean hasWindowType;
-    private com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo.DesktopWindowType windowType_;
-    public boolean hasWindowType() { return hasWindowType; }
-    public com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo.DesktopWindowType getWindowType() { return windowType_; }
-    
+    private
+    com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo.DesktopWindowType
+        windowType_;
+
+    public boolean hasWindowType() {
+      return hasWindowType;
+    }
+
+    public com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo.DesktopWindowType getWindowType() {
+      return windowType_;
+    }
+
     // required bool onScreen = 5;
     public static final int ONSCREEN_FIELD_NUMBER = 5;
     private boolean hasOnScreen;
     private boolean onScreen_ = false;
-    public boolean hasOnScreen() { return hasOnScreen; }
-    public boolean getOnScreen() { return onScreen_; }
-    
+
+    public boolean hasOnScreen() {
+      return hasOnScreen;
+    }
+
+    public boolean getOnScreen() {
+      return onScreen_;
+    }
+
     // required .scope.DesktopWindowInfo.DesktopWindowState state = 6;
     public static final int STATE_FIELD_NUMBER = 6;
     private boolean hasState;
-    private com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo.DesktopWindowState state_;
-    public boolean hasState() { return hasState; }
-    public com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo.DesktopWindowState getState() { return state_; }
-    
+    private
+    com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo.DesktopWindowState
+        state_;
+
+    public boolean hasState() {
+      return hasState;
+    }
+
+    public com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo.DesktopWindowState getState() {
+      return state_;
+    }
+
     // required .scope.DesktopWindowRect rect = 7;
     public static final int RECT_FIELD_NUMBER = 7;
     private boolean hasRect;
     private com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect rect_;
-    public boolean hasRect() { return hasRect; }
-    public com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect getRect() { return rect_; }
-    
+
+    public boolean hasRect() {
+      return hasRect;
+    }
+
+    public com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect getRect() {
+      return rect_;
+    }
+
     // required bool active = 8;
     public static final int ACTIVE_FIELD_NUMBER = 8;
     private boolean hasActive;
     private boolean active_ = false;
-    public boolean hasActive() { return hasActive; }
-    public boolean getActive() { return active_; }
-    
-    private void initFields() {
-      windowType_ = com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo.DesktopWindowType.UNKNOWN;
-      state_ = com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo.DesktopWindowState.RESTORED;
-      rect_ = com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect.getDefaultInstance();
+
+    public boolean hasActive() {
+      return hasActive;
     }
+
+    public boolean getActive() {
+      return active_;
+    }
+
+    private void initFields() {
+      windowType_ =
+          com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo.DesktopWindowType.UNKNOWN;
+      state_ =
+          com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo.DesktopWindowState.RESTORED;
+      rect_ =
+          com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect
+              .getDefaultInstance();
+    }
+
     public final boolean isInitialized() {
-      if (!hasWindowID) return false;
-      if (!hasTitle) return false;
-      if (!hasName) return false;
-      if (!hasWindowType) return false;
-      if (!hasOnScreen) return false;
-      if (!hasState) return false;
-      if (!hasRect) return false;
-      if (!hasActive) return false;
-      if (!getRect().isInitialized()) return false;
+      if (!hasWindowID) {
+        return false;
+      }
+      if (!hasTitle) {
+        return false;
+      }
+      if (!hasName) {
+        return false;
+      }
+      if (!hasWindowType) {
+        return false;
+      }
+      if (!hasOnScreen) {
+        return false;
+      }
+      if (!hasState) {
+        return false;
+      }
+      if (!hasRect) {
+        return false;
+      }
+      if (!hasActive) {
+        return false;
+      }
+      if (!getRect().isInitialized()) {
+        return false;
+      }
       return true;
     }
-    
+
     public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
+        throws java.io.IOException {
       getSerializedSize();
       if (hasWindowID()) {
         output.writeUInt32(1, getWindowID());
@@ -278,85 +388,97 @@ public final class DesktopWmProtos {
       }
       getUnknownFields().writeTo(output);
     }
-    
+
     private int memoizedSerializedSize = -1;
+
     public int getSerializedSize() {
       int size = memoizedSerializedSize;
-      if (size != -1) return size;
-    
+      if (size != -1) {
+        return size;
+      }
+
       size = 0;
       if (hasWindowID()) {
         size += com.google.protobuf.CodedOutputStream
-          .computeUInt32Size(1, getWindowID());
+            .computeUInt32Size(1, getWindowID());
       }
       if (hasTitle()) {
         size += com.google.protobuf.CodedOutputStream
-          .computeStringSize(2, getTitle());
+            .computeStringSize(2, getTitle());
       }
       if (hasName()) {
         size += com.google.protobuf.CodedOutputStream
-          .computeStringSize(3, getName());
+            .computeStringSize(3, getName());
       }
       if (hasWindowType()) {
         size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(4, getWindowType().getNumber());
+            .computeEnumSize(4, getWindowType().getNumber());
       }
       if (hasOnScreen()) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBoolSize(5, getOnScreen());
+            .computeBoolSize(5, getOnScreen());
       }
       if (hasState()) {
         size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(6, getState().getNumber());
+            .computeEnumSize(6, getState().getNumber());
       }
       if (hasRect()) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(7, getRect());
+            .computeMessageSize(7, getRect());
       }
       if (hasActive()) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBoolSize(8, getActive());
+            .computeBoolSize(8, getActive());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
       return size;
     }
-    
+
     public static com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+          .buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo parseFrom(byte[] data)
+
+    public static com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo parseFrom(
+        byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+          .buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo parseFrom(java.io.InputStream input)
+
+    public static com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo parseFrom(
+        java.io.InputStream input)
         throws java.io.IOException {
       return newBuilder().mergeFrom(input).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+          .buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo parseDelimitedFrom(java.io.InputStream input)
+
+    public static com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo parseDelimitedFrom(
+        java.io.InputStream input)
         throws java.io.IOException {
       Builder builder = newBuilder();
       if (builder.mergeDelimitedFrom(input)) {
@@ -365,6 +487,7 @@ public final class DesktopWmProtos {
         return null;
       }
     }
+
     public static com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -376,105 +499,128 @@ public final class DesktopWmProtos {
         return null;
       }
     }
+
     public static com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return newBuilder().mergeFrom(input).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+          .buildParsed();
     }
-    
-    public static Builder newBuilder() { return Builder.create(); }
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo prototype) {
+
+    public static Builder newBuilder() {
+      return Builder.create();
+    }
+
+    public Builder newBuilderForType() {
+      return newBuilder();
+    }
+
+    public static Builder newBuilder(
+        com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo prototype) {
       return newBuilder().mergeFrom(prototype);
     }
-    public Builder toBuilder() { return newBuilder(this); }
-    
+
+    public Builder toBuilder() {
+      return newBuilder(this);
+    }
+
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> {
+                                      com.google.protobuf.GeneratedMessage.Builder<Builder> {
+
       private com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo result;
-      
+
       // Construct using com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo.newBuilder()
-      private Builder() {}
-      
+      private Builder() {
+      }
+
       private static Builder create() {
         Builder builder = new Builder();
-        builder.result = new com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo();
+        builder.result =
+            new com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo();
         return builder;
       }
-      
+
       protected com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo internalGetResult() {
         return result;
       }
-      
+
       public Builder clear() {
         if (result == null) {
           throw new IllegalStateException(
-            "Cannot call clear() after build().");
+              "Cannot call clear() after build().");
         }
         result = new com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo();
         return this;
       }
-      
+
       public Builder clone() {
         return create().mergeFrom(result);
       }
-      
+
       public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
-        return com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo.getDescriptor();
+      getDescriptorForType() {
+        return com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo
+            .getDescriptor();
       }
-      
+
       public com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo getDefaultInstanceForType() {
-        return com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo.getDefaultInstance();
+        return com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo
+            .getDefaultInstance();
       }
-      
+
       public boolean isInitialized() {
         return result.isInitialized();
       }
+
       public com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo build() {
         if (result != null && !isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return buildPartial();
       }
-      
+
       private com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo buildParsed()
           throws com.google.protobuf.InvalidProtocolBufferException {
         if (!isInitialized()) {
           throw newUninitializedMessageException(
-            result).asInvalidProtocolBufferException();
+              result).asInvalidProtocolBufferException();
         }
         return buildPartial();
       }
-      
+
       public com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo buildPartial() {
         if (result == null) {
           throw new IllegalStateException(
-            "build() has already been called on this Builder.");
+              "build() has already been called on this Builder.");
         }
         com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo returnMe = result;
         result = null;
         return returnMe;
       }
-      
+
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo) {
-          return mergeFrom((com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo)other);
+          return mergeFrom(
+              (com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo) other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
-      
-      public Builder mergeFrom(com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo other) {
-        if (other == com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo.getDefaultInstance()) return this;
+
+      public Builder mergeFrom(
+          com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo other) {
+        if (other == com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo
+            .getDefaultInstance()) {
+          return this;
+        }
         if (other.hasWindowID()) {
           setWindowID(other.getWindowID());
         }
@@ -502,14 +648,14 @@ public final class DesktopWmProtos {
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
-      
+
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
         com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder(
-            this.getUnknownFields());
+            com.google.protobuf.UnknownFieldSet.newBuilder(
+                this.getUnknownFields());
         while (true) {
           int tag = input.readTag();
           switch (tag) {
@@ -538,7 +684,10 @@ public final class DesktopWmProtos {
             }
             case 32: {
               int rawValue = input.readEnum();
-              com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo.DesktopWindowType value = com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo.DesktopWindowType.valueOf(rawValue);
+              com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo.DesktopWindowType
+                  value =
+                  com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo
+                      .DesktopWindowType.valueOf(rawValue);
               if (value == null) {
                 unknownFields.mergeVarintField(4, rawValue);
               } else {
@@ -552,7 +701,10 @@ public final class DesktopWmProtos {
             }
             case 48: {
               int rawValue = input.readEnum();
-              com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo.DesktopWindowState value = com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo.DesktopWindowState.valueOf(rawValue);
+              com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo.DesktopWindowState
+                  value =
+                  com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo
+                      .DesktopWindowState.valueOf(rawValue);
               if (value == null) {
                 unknownFields.mergeVarintField(6, rawValue);
               } else {
@@ -561,7 +713,10 @@ public final class DesktopWmProtos {
               break;
             }
             case 58: {
-              com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect.Builder subBuilder = com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect.newBuilder();
+              com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect.Builder
+                  subBuilder =
+                  com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect
+                      .newBuilder();
               if (hasRect()) {
                 subBuilder.mergeFrom(getRect());
               }
@@ -576,76 +731,88 @@ public final class DesktopWmProtos {
           }
         }
       }
-      
-      
+
+
       // required uint32 windowID = 1;
       public boolean hasWindowID() {
         return result.hasWindowID();
       }
+
       public int getWindowID() {
         return result.getWindowID();
       }
+
       public Builder setWindowID(int value) {
         result.hasWindowID = true;
         result.windowID_ = value;
         return this;
       }
+
       public Builder clearWindowID() {
         result.hasWindowID = false;
         result.windowID_ = 0;
         return this;
       }
-      
+
       // required string title = 2;
       public boolean hasTitle() {
         return result.hasTitle();
       }
+
       public java.lang.String getTitle() {
         return result.getTitle();
       }
+
       public Builder setTitle(java.lang.String value) {
         if (value == null) {
-    throw new NullPointerException();
-  }
-  result.hasTitle = true;
+          throw new NullPointerException();
+        }
+        result.hasTitle = true;
         result.title_ = value;
         return this;
       }
+
       public Builder clearTitle() {
         result.hasTitle = false;
         result.title_ = getDefaultInstance().getTitle();
         return this;
       }
-      
+
       // required string name = 3;
       public boolean hasName() {
         return result.hasName();
       }
+
       public java.lang.String getName() {
         return result.getName();
       }
+
       public Builder setName(java.lang.String value) {
         if (value == null) {
-    throw new NullPointerException();
-  }
-  result.hasName = true;
+          throw new NullPointerException();
+        }
+        result.hasName = true;
         result.name_ = value;
         return this;
       }
+
       public Builder clearName() {
         result.hasName = false;
         result.name_ = getDefaultInstance().getName();
         return this;
       }
-      
+
       // required .scope.DesktopWindowInfo.DesktopWindowType windowType = 4;
       public boolean hasWindowType() {
         return result.hasWindowType();
       }
+
       public com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo.DesktopWindowType getWindowType() {
         return result.getWindowType();
       }
-      public Builder setWindowType(com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo.DesktopWindowType value) {
+
+      public Builder setWindowType(
+          com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo.DesktopWindowType value) {
         if (value == null) {
           throw new NullPointerException();
         }
@@ -653,38 +820,46 @@ public final class DesktopWmProtos {
         result.windowType_ = value;
         return this;
       }
+
       public Builder clearWindowType() {
         result.hasWindowType = false;
-        result.windowType_ = com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo.DesktopWindowType.UNKNOWN;
+        result.windowType_ =
+            com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo.DesktopWindowType.UNKNOWN;
         return this;
       }
-      
+
       // required bool onScreen = 5;
       public boolean hasOnScreen() {
         return result.hasOnScreen();
       }
+
       public boolean getOnScreen() {
         return result.getOnScreen();
       }
+
       public Builder setOnScreen(boolean value) {
         result.hasOnScreen = true;
         result.onScreen_ = value;
         return this;
       }
+
       public Builder clearOnScreen() {
         result.hasOnScreen = false;
         result.onScreen_ = false;
         return this;
       }
-      
+
       // required .scope.DesktopWindowInfo.DesktopWindowState state = 6;
       public boolean hasState() {
         return result.hasState();
       }
+
       public com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo.DesktopWindowState getState() {
         return result.getState();
       }
-      public Builder setState(com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo.DesktopWindowState value) {
+
+      public Builder setState(
+          com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo.DesktopWindowState value) {
         if (value == null) {
           throw new NullPointerException();
         }
@@ -692,20 +867,25 @@ public final class DesktopWmProtos {
         result.state_ = value;
         return this;
       }
+
       public Builder clearState() {
         result.hasState = false;
-        result.state_ = com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo.DesktopWindowState.RESTORED;
+        result.state_ =
+            com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo.DesktopWindowState.RESTORED;
         return this;
       }
-      
+
       // required .scope.DesktopWindowRect rect = 7;
       public boolean hasRect() {
         return result.hasRect();
       }
+
       public com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect getRect() {
         return result.getRect();
       }
-      public Builder setRect(com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect value) {
+
+      public Builder setRect(
+          com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect value) {
         if (value == null) {
           throw new NullPointerException();
         }
@@ -713,125 +893,174 @@ public final class DesktopWmProtos {
         result.rect_ = value;
         return this;
       }
-      public Builder setRect(com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect.Builder builderForValue) {
+
+      public Builder setRect(
+          com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect.Builder builderForValue) {
         result.hasRect = true;
         result.rect_ = builderForValue.build();
         return this;
       }
-      public Builder mergeRect(com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect value) {
+
+      public Builder mergeRect(
+          com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect value) {
         if (result.hasRect() &&
-            result.rect_ != com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect.getDefaultInstance()) {
+            result.rect_ != com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect
+                .getDefaultInstance()) {
           result.rect_ =
-            com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect.newBuilder(result.rect_).mergeFrom(value).buildPartial();
+              com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect
+                  .newBuilder(result.rect_).mergeFrom(value).buildPartial();
         } else {
           result.rect_ = value;
         }
         result.hasRect = true;
         return this;
       }
+
       public Builder clearRect() {
         result.hasRect = false;
-        result.rect_ = com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect.getDefaultInstance();
+        result.rect_ =
+            com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect
+                .getDefaultInstance();
         return this;
       }
-      
+
       // required bool active = 8;
       public boolean hasActive() {
         return result.hasActive();
       }
+
       public boolean getActive() {
         return result.getActive();
       }
+
       public Builder setActive(boolean value) {
         result.hasActive = true;
         result.active_ = value;
         return this;
       }
+
       public Builder clearActive() {
         result.hasActive = false;
         result.active_ = false;
         return this;
       }
-      
+
       // @@protoc_insertion_point(builder_scope:scope.DesktopWindowInfo)
     }
-    
+
     static {
       defaultInstance = new DesktopWindowInfo(true);
       com.opera.core.systems.scope.protos.DesktopWmProtos.internalForceInit();
       defaultInstance.initFields();
     }
-    
+
     // @@protoc_insertion_point(class_scope:scope.DesktopWindowInfo)
   }
-  
+
   public static final class DesktopWindowRect extends
-      com.google.protobuf.GeneratedMessage {
+                                              com.google.protobuf.GeneratedMessage {
+
     // Use DesktopWindowRect.newBuilder() to construct.
     private DesktopWindowRect() {
       initFields();
     }
-    private DesktopWindowRect(boolean noInit) {}
-    
+
+    private DesktopWindowRect(boolean noInit) {
+    }
+
     private static final DesktopWindowRect defaultInstance;
+
     public static DesktopWindowRect getDefaultInstance() {
       return defaultInstance;
     }
-    
+
     public DesktopWindowRect getDefaultInstanceForType() {
       return defaultInstance;
     }
-    
+
     public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
+    getDescriptor() {
       return com.opera.core.systems.scope.protos.DesktopWmProtos.internal_static_scope_DesktopWindowRect_descriptor;
     }
-    
+
     protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-        internalGetFieldAccessorTable() {
+    internalGetFieldAccessorTable() {
       return com.opera.core.systems.scope.protos.DesktopWmProtos.internal_static_scope_DesktopWindowRect_fieldAccessorTable;
     }
-    
+
     // required uint32 x = 1;
     public static final int X_FIELD_NUMBER = 1;
     private boolean hasX;
     private int x_ = 0;
-    public boolean hasX() { return hasX; }
-    public int getX() { return x_; }
-    
+
+    public boolean hasX() {
+      return hasX;
+    }
+
+    public int getX() {
+      return x_;
+    }
+
     // required uint32 y = 2;
     public static final int Y_FIELD_NUMBER = 2;
     private boolean hasY;
     private int y_ = 0;
-    public boolean hasY() { return hasY; }
-    public int getY() { return y_; }
-    
+
+    public boolean hasY() {
+      return hasY;
+    }
+
+    public int getY() {
+      return y_;
+    }
+
     // required uint32 width = 3;
     public static final int WIDTH_FIELD_NUMBER = 3;
     private boolean hasWidth;
     private int width_ = 0;
-    public boolean hasWidth() { return hasWidth; }
-    public int getWidth() { return width_; }
-    
+
+    public boolean hasWidth() {
+      return hasWidth;
+    }
+
+    public int getWidth() {
+      return width_;
+    }
+
     // required uint32 height = 4;
     public static final int HEIGHT_FIELD_NUMBER = 4;
     private boolean hasHeight;
     private int height_ = 0;
-    public boolean hasHeight() { return hasHeight; }
-    public int getHeight() { return height_; }
-    
+
+    public boolean hasHeight() {
+      return hasHeight;
+    }
+
+    public int getHeight() {
+      return height_;
+    }
+
     private void initFields() {
     }
+
     public final boolean isInitialized() {
-      if (!hasX) return false;
-      if (!hasY) return false;
-      if (!hasWidth) return false;
-      if (!hasHeight) return false;
+      if (!hasX) {
+        return false;
+      }
+      if (!hasY) {
+        return false;
+      }
+      if (!hasWidth) {
+        return false;
+      }
+      if (!hasHeight) {
+        return false;
+      }
       return true;
     }
-    
+
     public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
+        throws java.io.IOException {
       getSerializedSize();
       if (hasX()) {
         output.writeUInt32(1, getX());
@@ -847,69 +1076,81 @@ public final class DesktopWmProtos {
       }
       getUnknownFields().writeTo(output);
     }
-    
+
     private int memoizedSerializedSize = -1;
+
     public int getSerializedSize() {
       int size = memoizedSerializedSize;
-      if (size != -1) return size;
-    
+      if (size != -1) {
+        return size;
+      }
+
       size = 0;
       if (hasX()) {
         size += com.google.protobuf.CodedOutputStream
-          .computeUInt32Size(1, getX());
+            .computeUInt32Size(1, getX());
       }
       if (hasY()) {
         size += com.google.protobuf.CodedOutputStream
-          .computeUInt32Size(2, getY());
+            .computeUInt32Size(2, getY());
       }
       if (hasWidth()) {
         size += com.google.protobuf.CodedOutputStream
-          .computeUInt32Size(3, getWidth());
+            .computeUInt32Size(3, getWidth());
       }
       if (hasHeight()) {
         size += com.google.protobuf.CodedOutputStream
-          .computeUInt32Size(4, getHeight());
+            .computeUInt32Size(4, getHeight());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
       return size;
     }
-    
+
     public static com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+          .buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect parseFrom(byte[] data)
+
+    public static com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect parseFrom(
+        byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+          .buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect parseFrom(java.io.InputStream input)
+
+    public static com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect parseFrom(
+        java.io.InputStream input)
         throws java.io.IOException {
       return newBuilder().mergeFrom(input).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+          .buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect parseDelimitedFrom(java.io.InputStream input)
+
+    public static com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect parseDelimitedFrom(
+        java.io.InputStream input)
         throws java.io.IOException {
       Builder builder = newBuilder();
       if (builder.mergeDelimitedFrom(input)) {
@@ -918,6 +1159,7 @@ public final class DesktopWmProtos {
         return null;
       }
     }
+
     public static com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -929,105 +1171,128 @@ public final class DesktopWmProtos {
         return null;
       }
     }
+
     public static com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return newBuilder().mergeFrom(input).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+          .buildParsed();
     }
-    
-    public static Builder newBuilder() { return Builder.create(); }
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect prototype) {
+
+    public static Builder newBuilder() {
+      return Builder.create();
+    }
+
+    public Builder newBuilderForType() {
+      return newBuilder();
+    }
+
+    public static Builder newBuilder(
+        com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect prototype) {
       return newBuilder().mergeFrom(prototype);
     }
-    public Builder toBuilder() { return newBuilder(this); }
-    
+
+    public Builder toBuilder() {
+      return newBuilder(this);
+    }
+
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> {
+                                      com.google.protobuf.GeneratedMessage.Builder<Builder> {
+
       private com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect result;
-      
+
       // Construct using com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect.newBuilder()
-      private Builder() {}
-      
+      private Builder() {
+      }
+
       private static Builder create() {
         Builder builder = new Builder();
-        builder.result = new com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect();
+        builder.result =
+            new com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect();
         return builder;
       }
-      
+
       protected com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect internalGetResult() {
         return result;
       }
-      
+
       public Builder clear() {
         if (result == null) {
           throw new IllegalStateException(
-            "Cannot call clear() after build().");
+              "Cannot call clear() after build().");
         }
         result = new com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect();
         return this;
       }
-      
+
       public Builder clone() {
         return create().mergeFrom(result);
       }
-      
+
       public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
-        return com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect.getDescriptor();
+      getDescriptorForType() {
+        return com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect
+            .getDescriptor();
       }
-      
+
       public com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect getDefaultInstanceForType() {
-        return com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect.getDefaultInstance();
+        return com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect
+            .getDefaultInstance();
       }
-      
+
       public boolean isInitialized() {
         return result.isInitialized();
       }
+
       public com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect build() {
         if (result != null && !isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return buildPartial();
       }
-      
+
       private com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect buildParsed()
           throws com.google.protobuf.InvalidProtocolBufferException {
         if (!isInitialized()) {
           throw newUninitializedMessageException(
-            result).asInvalidProtocolBufferException();
+              result).asInvalidProtocolBufferException();
         }
         return buildPartial();
       }
-      
+
       public com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect buildPartial() {
         if (result == null) {
           throw new IllegalStateException(
-            "build() has already been called on this Builder.");
+              "build() has already been called on this Builder.");
         }
         com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect returnMe = result;
         result = null;
         return returnMe;
       }
-      
+
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect) {
-          return mergeFrom((com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect)other);
+          return mergeFrom(
+              (com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect) other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
-      
-      public Builder mergeFrom(com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect other) {
-        if (other == com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect.getDefaultInstance()) return this;
+
+      public Builder mergeFrom(
+          com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect other) {
+        if (other == com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect
+            .getDefaultInstance()) {
+          return this;
+        }
         if (other.hasX()) {
           setX(other.getX());
         }
@@ -1043,14 +1308,14 @@ public final class DesktopWmProtos {
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
-      
+
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
         com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder(
-            this.getUnknownFields());
+            com.google.protobuf.UnknownFieldSet.newBuilder(
+                this.getUnknownFields());
         while (true) {
           int tag = input.readTag();
           switch (tag) {
@@ -1084,192 +1349,229 @@ public final class DesktopWmProtos {
           }
         }
       }
-      
-      
+
+
       // required uint32 x = 1;
       public boolean hasX() {
         return result.hasX();
       }
+
       public int getX() {
         return result.getX();
       }
+
       public Builder setX(int value) {
         result.hasX = true;
         result.x_ = value;
         return this;
       }
+
       public Builder clearX() {
         result.hasX = false;
         result.x_ = 0;
         return this;
       }
-      
+
       // required uint32 y = 2;
       public boolean hasY() {
         return result.hasY();
       }
+
       public int getY() {
         return result.getY();
       }
+
       public Builder setY(int value) {
         result.hasY = true;
         result.y_ = value;
         return this;
       }
+
       public Builder clearY() {
         result.hasY = false;
         result.y_ = 0;
         return this;
       }
-      
+
       // required uint32 width = 3;
       public boolean hasWidth() {
         return result.hasWidth();
       }
+
       public int getWidth() {
         return result.getWidth();
       }
+
       public Builder setWidth(int value) {
         result.hasWidth = true;
         result.width_ = value;
         return this;
       }
+
       public Builder clearWidth() {
         result.hasWidth = false;
         result.width_ = 0;
         return this;
       }
-      
+
       // required uint32 height = 4;
       public boolean hasHeight() {
         return result.hasHeight();
       }
+
       public int getHeight() {
         return result.getHeight();
       }
+
       public Builder setHeight(int value) {
         result.hasHeight = true;
         result.height_ = value;
         return this;
       }
+
       public Builder clearHeight() {
         result.hasHeight = false;
         result.height_ = 0;
         return this;
       }
-      
+
       // @@protoc_insertion_point(builder_scope:scope.DesktopWindowRect)
     }
-    
+
     static {
       defaultInstance = new DesktopWindowRect(true);
       com.opera.core.systems.scope.protos.DesktopWmProtos.internalForceInit();
       defaultInstance.initFields();
     }
-    
+
     // @@protoc_insertion_point(class_scope:scope.DesktopWindowRect)
   }
-  
+
   public static final class QuickMenuID extends
-      com.google.protobuf.GeneratedMessage {
+                                        com.google.protobuf.GeneratedMessage {
+
     // Use QuickMenuID.newBuilder() to construct.
     private QuickMenuID() {
       initFields();
     }
-    private QuickMenuID(boolean noInit) {}
-    
+
+    private QuickMenuID(boolean noInit) {
+    }
+
     private static final QuickMenuID defaultInstance;
+
     public static QuickMenuID getDefaultInstance() {
       return defaultInstance;
     }
-    
+
     public QuickMenuID getDefaultInstanceForType() {
       return defaultInstance;
     }
-    
+
     public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
+    getDescriptor() {
       return com.opera.core.systems.scope.protos.DesktopWmProtos.internal_static_scope_QuickMenuID_descriptor;
     }
-    
+
     protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-        internalGetFieldAccessorTable() {
+    internalGetFieldAccessorTable() {
       return com.opera.core.systems.scope.protos.DesktopWmProtos.internal_static_scope_QuickMenuID_fieldAccessorTable;
     }
-    
+
     // required string menuName = 1;
     public static final int MENUNAME_FIELD_NUMBER = 1;
     private boolean hasMenuName;
     private java.lang.String menuName_ = "";
-    public boolean hasMenuName() { return hasMenuName; }
-    public java.lang.String getMenuName() { return menuName_; }
-    
+
+    public boolean hasMenuName() {
+      return hasMenuName;
+    }
+
+    public java.lang.String getMenuName() {
+      return menuName_;
+    }
+
     private void initFields() {
     }
+
     public final boolean isInitialized() {
-      if (!hasMenuName) return false;
+      if (!hasMenuName) {
+        return false;
+      }
       return true;
     }
-    
+
     public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
+        throws java.io.IOException {
       getSerializedSize();
       if (hasMenuName()) {
         output.writeString(1, getMenuName());
       }
       getUnknownFields().writeTo(output);
     }
-    
+
     private int memoizedSerializedSize = -1;
+
     public int getSerializedSize() {
       int size = memoizedSerializedSize;
-      if (size != -1) return size;
-    
+      if (size != -1) {
+        return size;
+      }
+
       size = 0;
       if (hasMenuName()) {
         size += com.google.protobuf.CodedOutputStream
-          .computeStringSize(1, getMenuName());
+            .computeStringSize(1, getMenuName());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
       return size;
     }
-    
+
     public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+          .buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID parseFrom(byte[] data)
+
+    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID parseFrom(
+        byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+          .buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID parseFrom(java.io.InputStream input)
+
+    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID parseFrom(
+        java.io.InputStream input)
         throws java.io.IOException {
       return newBuilder().mergeFrom(input).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+          .buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID parseDelimitedFrom(java.io.InputStream input)
+
+    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID parseDelimitedFrom(
+        java.io.InputStream input)
         throws java.io.IOException {
       Builder builder = newBuilder();
       if (builder.mergeDelimitedFrom(input)) {
@@ -1278,6 +1580,7 @@ public final class DesktopWmProtos {
         return null;
       }
     }
+
     public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -1289,119 +1592,138 @@ public final class DesktopWmProtos {
         return null;
       }
     }
+
     public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return newBuilder().mergeFrom(input).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+          .buildParsed();
     }
-    
-    public static Builder newBuilder() { return Builder.create(); }
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID prototype) {
+
+    public static Builder newBuilder() {
+      return Builder.create();
+    }
+
+    public Builder newBuilderForType() {
+      return newBuilder();
+    }
+
+    public static Builder newBuilder(
+        com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID prototype) {
       return newBuilder().mergeFrom(prototype);
     }
-    public Builder toBuilder() { return newBuilder(this); }
-    
+
+    public Builder toBuilder() {
+      return newBuilder(this);
+    }
+
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> {
+                                      com.google.protobuf.GeneratedMessage.Builder<Builder> {
+
       private com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID result;
-      
+
       // Construct using com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID.newBuilder()
-      private Builder() {}
-      
+      private Builder() {
+      }
+
       private static Builder create() {
         Builder builder = new Builder();
         builder.result = new com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID();
         return builder;
       }
-      
+
       protected com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID internalGetResult() {
         return result;
       }
-      
+
       public Builder clear() {
         if (result == null) {
           throw new IllegalStateException(
-            "Cannot call clear() after build().");
+              "Cannot call clear() after build().");
         }
         result = new com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID();
         return this;
       }
-      
+
       public Builder clone() {
         return create().mergeFrom(result);
       }
-      
+
       public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
+      getDescriptorForType() {
         return com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID.getDescriptor();
       }
-      
+
       public com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID getDefaultInstanceForType() {
         return com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID.getDefaultInstance();
       }
-      
+
       public boolean isInitialized() {
         return result.isInitialized();
       }
+
       public com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID build() {
         if (result != null && !isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return buildPartial();
       }
-      
+
       private com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID buildParsed()
           throws com.google.protobuf.InvalidProtocolBufferException {
         if (!isInitialized()) {
           throw newUninitializedMessageException(
-            result).asInvalidProtocolBufferException();
+              result).asInvalidProtocolBufferException();
         }
         return buildPartial();
       }
-      
+
       public com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID buildPartial() {
         if (result == null) {
           throw new IllegalStateException(
-            "build() has already been called on this Builder.");
+              "build() has already been called on this Builder.");
         }
         com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID returnMe = result;
         result = null;
         return returnMe;
       }
-      
+
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID) {
-          return mergeFrom((com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID)other);
+          return mergeFrom((com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID) other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
-      
-      public Builder mergeFrom(com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID other) {
-        if (other == com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID.getDefaultInstance()) return this;
+
+      public Builder mergeFrom(
+          com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID other) {
+        if (other == com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID
+            .getDefaultInstance()) {
+          return this;
+        }
         if (other.hasMenuName()) {
           setMenuName(other.getMenuName());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
-      
+
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
         com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder(
-            this.getUnknownFields());
+            com.google.protobuf.UnknownFieldSet.newBuilder(
+                this.getUnknownFields());
         while (true) {
           int tag = input.readTag();
           switch (tag) {
@@ -1423,148 +1745,178 @@ public final class DesktopWmProtos {
           }
         }
       }
-      
-      
+
+
       // required string menuName = 1;
       public boolean hasMenuName() {
         return result.hasMenuName();
       }
+
       public java.lang.String getMenuName() {
         return result.getMenuName();
       }
+
       public Builder setMenuName(java.lang.String value) {
         if (value == null) {
-    throw new NullPointerException();
-  }
-  result.hasMenuName = true;
+          throw new NullPointerException();
+        }
+        result.hasMenuName = true;
         result.menuName_ = value;
         return this;
       }
+
       public Builder clearMenuName() {
         result.hasMenuName = false;
         result.menuName_ = getDefaultInstance().getMenuName();
         return this;
       }
-      
+
       // @@protoc_insertion_point(builder_scope:scope.QuickMenuID)
     }
-    
+
     static {
       defaultInstance = new QuickMenuID(true);
       com.opera.core.systems.scope.protos.DesktopWmProtos.internalForceInit();
       defaultInstance.initFields();
     }
-    
+
     // @@protoc_insertion_point(class_scope:scope.QuickMenuID)
   }
-  
+
   public static final class QuickMenuList extends
-      com.google.protobuf.GeneratedMessage {
+                                          com.google.protobuf.GeneratedMessage {
+
     // Use QuickMenuList.newBuilder() to construct.
     private QuickMenuList() {
       initFields();
     }
-    private QuickMenuList(boolean noInit) {}
-    
+
+    private QuickMenuList(boolean noInit) {
+    }
+
     private static final QuickMenuList defaultInstance;
+
     public static QuickMenuList getDefaultInstance() {
       return defaultInstance;
     }
-    
+
     public QuickMenuList getDefaultInstanceForType() {
       return defaultInstance;
     }
-    
+
     public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
+    getDescriptor() {
       return com.opera.core.systems.scope.protos.DesktopWmProtos.internal_static_scope_QuickMenuList_descriptor;
     }
-    
+
     protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-        internalGetFieldAccessorTable() {
+    internalGetFieldAccessorTable() {
       return com.opera.core.systems.scope.protos.DesktopWmProtos.internal_static_scope_QuickMenuList_fieldAccessorTable;
     }
-    
+
     // repeated .scope.QuickMenuInfo menuList = 1;
     public static final int MENULIST_FIELD_NUMBER = 1;
-    private java.util.List<com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo> menuList_ =
-      java.util.Collections.emptyList();
+    private
+    java.util.List<com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo>
+        menuList_ =
+        java.util.Collections.emptyList();
+
     public java.util.List<com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo> getMenuListList() {
       return menuList_;
     }
-    public int getMenuListCount() { return menuList_.size(); }
-    public com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo getMenuList(int index) {
+
+    public int getMenuListCount() {
+      return menuList_.size();
+    }
+
+    public com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo getMenuList(
+        int index) {
       return menuList_.get(index);
     }
-    
+
     private void initFields() {
     }
+
     public final boolean isInitialized() {
       for (com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo element : getMenuListList()) {
-        if (!element.isInitialized()) return false;
+        if (!element.isInitialized()) {
+          return false;
+        }
       }
       return true;
     }
-    
+
     public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
+        throws java.io.IOException {
       getSerializedSize();
       for (com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo element : getMenuListList()) {
         output.writeMessage(1, element);
       }
       getUnknownFields().writeTo(output);
     }
-    
+
     private int memoizedSerializedSize = -1;
+
     public int getSerializedSize() {
       int size = memoizedSerializedSize;
-      if (size != -1) return size;
-    
+      if (size != -1) {
+        return size;
+      }
+
       size = 0;
       for (com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo element : getMenuListList()) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(1, element);
+            .computeMessageSize(1, element);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
       return size;
     }
-    
+
     public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuList parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuList parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+          .buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuList parseFrom(byte[] data)
+
+    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuList parseFrom(
+        byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuList parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+          .buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuList parseFrom(java.io.InputStream input)
+
+    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuList parseFrom(
+        java.io.InputStream input)
         throws java.io.IOException {
       return newBuilder().mergeFrom(input).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuList parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+          .buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuList parseDelimitedFrom(java.io.InputStream input)
+
+    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuList parseDelimitedFrom(
+        java.io.InputStream input)
         throws java.io.IOException {
       Builder builder = newBuilder();
       if (builder.mergeDelimitedFrom(input)) {
@@ -1573,6 +1925,7 @@ public final class DesktopWmProtos {
         return null;
       }
     }
+
     public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuList parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -1584,126 +1937,148 @@ public final class DesktopWmProtos {
         return null;
       }
     }
+
     public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuList parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return newBuilder().mergeFrom(input).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuList parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+          .buildParsed();
     }
-    
-    public static Builder newBuilder() { return Builder.create(); }
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuList prototype) {
+
+    public static Builder newBuilder() {
+      return Builder.create();
+    }
+
+    public Builder newBuilderForType() {
+      return newBuilder();
+    }
+
+    public static Builder newBuilder(
+        com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuList prototype) {
       return newBuilder().mergeFrom(prototype);
     }
-    public Builder toBuilder() { return newBuilder(this); }
-    
+
+    public Builder toBuilder() {
+      return newBuilder(this);
+    }
+
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> {
+                                      com.google.protobuf.GeneratedMessage.Builder<Builder> {
+
       private com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuList result;
-      
+
       // Construct using com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuList.newBuilder()
-      private Builder() {}
-      
+      private Builder() {
+      }
+
       private static Builder create() {
         Builder builder = new Builder();
         builder.result = new com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuList();
         return builder;
       }
-      
+
       protected com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuList internalGetResult() {
         return result;
       }
-      
+
       public Builder clear() {
         if (result == null) {
           throw new IllegalStateException(
-            "Cannot call clear() after build().");
+              "Cannot call clear() after build().");
         }
         result = new com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuList();
         return this;
       }
-      
+
       public Builder clone() {
         return create().mergeFrom(result);
       }
-      
+
       public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
+      getDescriptorForType() {
         return com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuList.getDescriptor();
       }
-      
+
       public com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuList getDefaultInstanceForType() {
-        return com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuList.getDefaultInstance();
+        return com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuList
+            .getDefaultInstance();
       }
-      
+
       public boolean isInitialized() {
         return result.isInitialized();
       }
+
       public com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuList build() {
         if (result != null && !isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return buildPartial();
       }
-      
+
       private com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuList buildParsed()
           throws com.google.protobuf.InvalidProtocolBufferException {
         if (!isInitialized()) {
           throw newUninitializedMessageException(
-            result).asInvalidProtocolBufferException();
+              result).asInvalidProtocolBufferException();
         }
         return buildPartial();
       }
-      
+
       public com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuList buildPartial() {
         if (result == null) {
           throw new IllegalStateException(
-            "build() has already been called on this Builder.");
+              "build() has already been called on this Builder.");
         }
         if (result.menuList_ != java.util.Collections.EMPTY_LIST) {
           result.menuList_ =
-            java.util.Collections.unmodifiableList(result.menuList_);
+              java.util.Collections.unmodifiableList(result.menuList_);
         }
         com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuList returnMe = result;
         result = null;
         return returnMe;
       }
-      
+
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuList) {
-          return mergeFrom((com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuList)other);
+          return mergeFrom(
+              (com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuList) other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
-      
-      public Builder mergeFrom(com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuList other) {
-        if (other == com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuList.getDefaultInstance()) return this;
+
+      public Builder mergeFrom(
+          com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuList other) {
+        if (other == com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuList
+            .getDefaultInstance()) {
+          return this;
+        }
         if (!other.menuList_.isEmpty()) {
           if (result.menuList_.isEmpty()) {
-            result.menuList_ = new java.util.ArrayList<com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo>();
+            result.menuList_ =
+                new java.util.ArrayList<com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo>();
           }
           result.menuList_.addAll(other.menuList_);
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
-      
+
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
         com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder(
-            this.getUnknownFields());
+            com.google.protobuf.UnknownFieldSet.newBuilder(
+                this.getUnknownFields());
         while (true) {
           int tag = input.readTag();
           switch (tag) {
@@ -1719,7 +2094,9 @@ public final class DesktopWmProtos {
               break;
             }
             case 10: {
-              com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo.Builder subBuilder = com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo.newBuilder();
+              com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo.Builder
+                  subBuilder =
+                  com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo.newBuilder();
               input.readMessage(subBuilder, extensionRegistry);
               addMenuList(subBuilder.buildPartial());
               break;
@@ -1727,151 +2104,216 @@ public final class DesktopWmProtos {
           }
         }
       }
-      
-      
+
+
       // repeated .scope.QuickMenuInfo menuList = 1;
       public java.util.List<com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo> getMenuListList() {
         return java.util.Collections.unmodifiableList(result.menuList_);
       }
+
       public int getMenuListCount() {
         return result.getMenuListCount();
       }
-      public com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo getMenuList(int index) {
+
+      public com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo getMenuList(
+          int index) {
         return result.getMenuList(index);
       }
-      public Builder setMenuList(int index, com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo value) {
+
+      public Builder setMenuList(int index,
+                                 com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo value) {
         if (value == null) {
           throw new NullPointerException();
         }
         result.menuList_.set(index, value);
         return this;
       }
-      public Builder setMenuList(int index, com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo.Builder builderForValue) {
+
+      public Builder setMenuList(int index,
+                                 com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo.Builder builderForValue) {
         result.menuList_.set(index, builderForValue.build());
         return this;
       }
-      public Builder addMenuList(com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo value) {
+
+      public Builder addMenuList(
+          com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo value) {
         if (value == null) {
           throw new NullPointerException();
         }
         if (result.menuList_.isEmpty()) {
-          result.menuList_ = new java.util.ArrayList<com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo>();
+          result.menuList_ =
+              new java.util.ArrayList<com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo>();
         }
         result.menuList_.add(value);
         return this;
       }
-      public Builder addMenuList(com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo.Builder builderForValue) {
+
+      public Builder addMenuList(
+          com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo.Builder builderForValue) {
         if (result.menuList_.isEmpty()) {
-          result.menuList_ = new java.util.ArrayList<com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo>();
+          result.menuList_ =
+              new java.util.ArrayList<com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo>();
         }
         result.menuList_.add(builderForValue.build());
         return this;
       }
+
       public Builder addAllMenuList(
           java.lang.Iterable<? extends com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo> values) {
         if (result.menuList_.isEmpty()) {
-          result.menuList_ = new java.util.ArrayList<com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo>();
+          result.menuList_ =
+              new java.util.ArrayList<com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo>();
         }
         super.addAll(values, result.menuList_);
         return this;
       }
+
       public Builder clearMenuList() {
         result.menuList_ = java.util.Collections.emptyList();
         return this;
       }
-      
+
       // @@protoc_insertion_point(builder_scope:scope.QuickMenuList)
     }
-    
+
     static {
       defaultInstance = new QuickMenuList(true);
       com.opera.core.systems.scope.protos.DesktopWmProtos.internalForceInit();
       defaultInstance.initFields();
     }
-    
+
     // @@protoc_insertion_point(class_scope:scope.QuickMenuList)
   }
-  
+
   public static final class QuickMenuInfo extends
-      com.google.protobuf.GeneratedMessage {
+                                          com.google.protobuf.GeneratedMessage {
+
     // Use QuickMenuInfo.newBuilder() to construct.
     private QuickMenuInfo() {
       initFields();
     }
-    private QuickMenuInfo(boolean noInit) {}
-    
+
+    private QuickMenuInfo(boolean noInit) {
+    }
+
     private static final QuickMenuInfo defaultInstance;
+
     public static QuickMenuInfo getDefaultInstance() {
       return defaultInstance;
     }
-    
+
     public QuickMenuInfo getDefaultInstanceForType() {
       return defaultInstance;
     }
-    
+
     public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
+    getDescriptor() {
       return com.opera.core.systems.scope.protos.DesktopWmProtos.internal_static_scope_QuickMenuInfo_descriptor;
     }
-    
+
     protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-        internalGetFieldAccessorTable() {
+    internalGetFieldAccessorTable() {
       return com.opera.core.systems.scope.protos.DesktopWmProtos.internal_static_scope_QuickMenuInfo_fieldAccessorTable;
     }
-    
+
     // required .scope.QuickMenuID menuId = 1;
     public static final int MENUID_FIELD_NUMBER = 1;
     private boolean hasMenuId;
     private com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID menuId_;
-    public boolean hasMenuId() { return hasMenuId; }
-    public com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID getMenuId() { return menuId_; }
-    
+
+    public boolean hasMenuId() {
+      return hasMenuId;
+    }
+
+    public com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID getMenuId() {
+      return menuId_;
+    }
+
     // required .scope.DesktopWindowRect rect = 2;
     public static final int RECT_FIELD_NUMBER = 2;
     private boolean hasRect;
     private com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect rect_;
-    public boolean hasRect() { return hasRect; }
-    public com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect getRect() { return rect_; }
-    
+
+    public boolean hasRect() {
+      return hasRect;
+    }
+
+    public com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect getRect() {
+      return rect_;
+    }
+
     // required .scope.DesktopWindowID windowId = 3;
     public static final int WINDOWID_FIELD_NUMBER = 3;
     private boolean hasWindowId;
     private com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID windowId_;
-    public boolean hasWindowId() { return hasWindowId; }
-    public com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID getWindowId() { return windowId_; }
-    
+
+    public boolean hasWindowId() {
+      return hasWindowId;
+    }
+
+    public com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID getWindowId() {
+      return windowId_;
+    }
+
     // repeated .scope.QuickMenuItemInfo menuItemList = 4;
     public static final int MENUITEMLIST_FIELD_NUMBER = 4;
-    private java.util.List<com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo> menuItemList_ =
-      java.util.Collections.emptyList();
+    private
+    java.util.List<com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo>
+        menuItemList_ =
+        java.util.Collections.emptyList();
+
     public java.util.List<com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo> getMenuItemListList() {
       return menuItemList_;
     }
-    public int getMenuItemListCount() { return menuItemList_.size(); }
-    public com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo getMenuItemList(int index) {
+
+    public int getMenuItemListCount() {
+      return menuItemList_.size();
+    }
+
+    public com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo getMenuItemList(
+        int index) {
       return menuItemList_.get(index);
     }
-    
+
     private void initFields() {
-      menuId_ = com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID.getDefaultInstance();
-      rect_ = com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect.getDefaultInstance();
-      windowId_ = com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID.getDefaultInstance();
+      menuId_ =
+          com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID.getDefaultInstance();
+      rect_ =
+          com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect
+              .getDefaultInstance();
+      windowId_ =
+          com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID.getDefaultInstance();
     }
+
     public final boolean isInitialized() {
-      if (!hasMenuId) return false;
-      if (!hasRect) return false;
-      if (!hasWindowId) return false;
-      if (!getMenuId().isInitialized()) return false;
-      if (!getRect().isInitialized()) return false;
-      if (!getWindowId().isInitialized()) return false;
+      if (!hasMenuId) {
+        return false;
+      }
+      if (!hasRect) {
+        return false;
+      }
+      if (!hasWindowId) {
+        return false;
+      }
+      if (!getMenuId().isInitialized()) {
+        return false;
+      }
+      if (!getRect().isInitialized()) {
+        return false;
+      }
+      if (!getWindowId().isInitialized()) {
+        return false;
+      }
       for (com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo element : getMenuItemListList()) {
-        if (!element.isInitialized()) return false;
+        if (!element.isInitialized()) {
+          return false;
+        }
       }
       return true;
     }
-    
+
     public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
+        throws java.io.IOException {
       getSerializedSize();
       if (hasMenuId()) {
         output.writeMessage(1, getMenuId());
@@ -1887,69 +2329,81 @@ public final class DesktopWmProtos {
       }
       getUnknownFields().writeTo(output);
     }
-    
+
     private int memoizedSerializedSize = -1;
+
     public int getSerializedSize() {
       int size = memoizedSerializedSize;
-      if (size != -1) return size;
-    
+      if (size != -1) {
+        return size;
+      }
+
       size = 0;
       if (hasMenuId()) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(1, getMenuId());
+            .computeMessageSize(1, getMenuId());
       }
       if (hasRect()) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(2, getRect());
+            .computeMessageSize(2, getRect());
       }
       if (hasWindowId()) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(3, getWindowId());
+            .computeMessageSize(3, getWindowId());
       }
       for (com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo element : getMenuItemListList()) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(4, element);
+            .computeMessageSize(4, element);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
       return size;
     }
-    
+
     public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+          .buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo parseFrom(byte[] data)
+
+    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo parseFrom(
+        byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+          .buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo parseFrom(java.io.InputStream input)
+
+    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo parseFrom(
+        java.io.InputStream input)
         throws java.io.IOException {
       return newBuilder().mergeFrom(input).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+          .buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo parseDelimitedFrom(java.io.InputStream input)
+
+    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo parseDelimitedFrom(
+        java.io.InputStream input)
         throws java.io.IOException {
       Builder builder = newBuilder();
       if (builder.mergeDelimitedFrom(input)) {
@@ -1958,6 +2412,7 @@ public final class DesktopWmProtos {
         return null;
       }
     }
+
     public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -1969,109 +2424,130 @@ public final class DesktopWmProtos {
         return null;
       }
     }
+
     public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return newBuilder().mergeFrom(input).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+          .buildParsed();
     }
-    
-    public static Builder newBuilder() { return Builder.create(); }
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo prototype) {
+
+    public static Builder newBuilder() {
+      return Builder.create();
+    }
+
+    public Builder newBuilderForType() {
+      return newBuilder();
+    }
+
+    public static Builder newBuilder(
+        com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo prototype) {
       return newBuilder().mergeFrom(prototype);
     }
-    public Builder toBuilder() { return newBuilder(this); }
-    
+
+    public Builder toBuilder() {
+      return newBuilder(this);
+    }
+
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> {
+                                      com.google.protobuf.GeneratedMessage.Builder<Builder> {
+
       private com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo result;
-      
+
       // Construct using com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo.newBuilder()
-      private Builder() {}
-      
+      private Builder() {
+      }
+
       private static Builder create() {
         Builder builder = new Builder();
         builder.result = new com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo();
         return builder;
       }
-      
+
       protected com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo internalGetResult() {
         return result;
       }
-      
+
       public Builder clear() {
         if (result == null) {
           throw new IllegalStateException(
-            "Cannot call clear() after build().");
+              "Cannot call clear() after build().");
         }
         result = new com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo();
         return this;
       }
-      
+
       public Builder clone() {
         return create().mergeFrom(result);
       }
-      
+
       public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
+      getDescriptorForType() {
         return com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo.getDescriptor();
       }
-      
+
       public com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo getDefaultInstanceForType() {
-        return com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo.getDefaultInstance();
+        return com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo
+            .getDefaultInstance();
       }
-      
+
       public boolean isInitialized() {
         return result.isInitialized();
       }
+
       public com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo build() {
         if (result != null && !isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return buildPartial();
       }
-      
+
       private com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo buildParsed()
           throws com.google.protobuf.InvalidProtocolBufferException {
         if (!isInitialized()) {
           throw newUninitializedMessageException(
-            result).asInvalidProtocolBufferException();
+              result).asInvalidProtocolBufferException();
         }
         return buildPartial();
       }
-      
+
       public com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo buildPartial() {
         if (result == null) {
           throw new IllegalStateException(
-            "build() has already been called on this Builder.");
+              "build() has already been called on this Builder.");
         }
         if (result.menuItemList_ != java.util.Collections.EMPTY_LIST) {
           result.menuItemList_ =
-            java.util.Collections.unmodifiableList(result.menuItemList_);
+              java.util.Collections.unmodifiableList(result.menuItemList_);
         }
         com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo returnMe = result;
         result = null;
         return returnMe;
       }
-      
+
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo) {
-          return mergeFrom((com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo)other);
+          return mergeFrom(
+              (com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo) other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
-      
-      public Builder mergeFrom(com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo other) {
-        if (other == com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo.getDefaultInstance()) return this;
+
+      public Builder mergeFrom(
+          com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo other) {
+        if (other == com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo
+            .getDefaultInstance()) {
+          return this;
+        }
         if (other.hasMenuId()) {
           mergeMenuId(other.getMenuId());
         }
@@ -2083,21 +2559,22 @@ public final class DesktopWmProtos {
         }
         if (!other.menuItemList_.isEmpty()) {
           if (result.menuItemList_.isEmpty()) {
-            result.menuItemList_ = new java.util.ArrayList<com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo>();
+            result.menuItemList_ =
+                new java.util.ArrayList<com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo>();
           }
           result.menuItemList_.addAll(other.menuItemList_);
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
-      
+
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
         com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder(
-            this.getUnknownFields());
+            com.google.protobuf.UnknownFieldSet.newBuilder(
+                this.getUnknownFields());
         while (true) {
           int tag = input.readTag();
           switch (tag) {
@@ -2113,7 +2590,9 @@ public final class DesktopWmProtos {
               break;
             }
             case 10: {
-              com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID.Builder subBuilder = com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID.newBuilder();
+              com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID.Builder
+                  subBuilder =
+                  com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID.newBuilder();
               if (hasMenuId()) {
                 subBuilder.mergeFrom(getMenuId());
               }
@@ -2122,7 +2601,10 @@ public final class DesktopWmProtos {
               break;
             }
             case 18: {
-              com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect.Builder subBuilder = com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect.newBuilder();
+              com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect.Builder
+                  subBuilder =
+                  com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect
+                      .newBuilder();
               if (hasRect()) {
                 subBuilder.mergeFrom(getRect());
               }
@@ -2131,7 +2613,9 @@ public final class DesktopWmProtos {
               break;
             }
             case 26: {
-              com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID.Builder subBuilder = com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID.newBuilder();
+              com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID.Builder
+                  subBuilder =
+                  com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID.newBuilder();
               if (hasWindowId()) {
                 subBuilder.mergeFrom(getWindowId());
               }
@@ -2140,7 +2624,10 @@ public final class DesktopWmProtos {
               break;
             }
             case 34: {
-              com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo.Builder subBuilder = com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo.newBuilder();
+              com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo.Builder
+                  subBuilder =
+                  com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo
+                      .newBuilder();
               input.readMessage(subBuilder, extensionRegistry);
               addMenuItemList(subBuilder.buildPartial());
               break;
@@ -2148,16 +2635,19 @@ public final class DesktopWmProtos {
           }
         }
       }
-      
-      
+
+
       // required .scope.QuickMenuID menuId = 1;
       public boolean hasMenuId() {
         return result.hasMenuId();
       }
+
       public com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID getMenuId() {
         return result.getMenuId();
       }
-      public Builder setMenuId(com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID value) {
+
+      public Builder setMenuId(
+          com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID value) {
         if (value == null) {
           throw new NullPointerException();
         }
@@ -2165,36 +2655,47 @@ public final class DesktopWmProtos {
         result.menuId_ = value;
         return this;
       }
-      public Builder setMenuId(com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID.Builder builderForValue) {
+
+      public Builder setMenuId(
+          com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID.Builder builderForValue) {
         result.hasMenuId = true;
         result.menuId_ = builderForValue.build();
         return this;
       }
-      public Builder mergeMenuId(com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID value) {
+
+      public Builder mergeMenuId(
+          com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID value) {
         if (result.hasMenuId() &&
-            result.menuId_ != com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID.getDefaultInstance()) {
+            result.menuId_ != com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID
+                .getDefaultInstance()) {
           result.menuId_ =
-            com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID.newBuilder(result.menuId_).mergeFrom(value).buildPartial();
+              com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID
+                  .newBuilder(result.menuId_).mergeFrom(value).buildPartial();
         } else {
           result.menuId_ = value;
         }
         result.hasMenuId = true;
         return this;
       }
+
       public Builder clearMenuId() {
         result.hasMenuId = false;
-        result.menuId_ = com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID.getDefaultInstance();
+        result.menuId_ =
+            com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID.getDefaultInstance();
         return this;
       }
-      
+
       // required .scope.DesktopWindowRect rect = 2;
       public boolean hasRect() {
         return result.hasRect();
       }
+
       public com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect getRect() {
         return result.getRect();
       }
-      public Builder setRect(com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect value) {
+
+      public Builder setRect(
+          com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect value) {
         if (value == null) {
           throw new NullPointerException();
         }
@@ -2202,36 +2703,48 @@ public final class DesktopWmProtos {
         result.rect_ = value;
         return this;
       }
-      public Builder setRect(com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect.Builder builderForValue) {
+
+      public Builder setRect(
+          com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect.Builder builderForValue) {
         result.hasRect = true;
         result.rect_ = builderForValue.build();
         return this;
       }
-      public Builder mergeRect(com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect value) {
+
+      public Builder mergeRect(
+          com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect value) {
         if (result.hasRect() &&
-            result.rect_ != com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect.getDefaultInstance()) {
+            result.rect_ != com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect
+                .getDefaultInstance()) {
           result.rect_ =
-            com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect.newBuilder(result.rect_).mergeFrom(value).buildPartial();
+              com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect
+                  .newBuilder(result.rect_).mergeFrom(value).buildPartial();
         } else {
           result.rect_ = value;
         }
         result.hasRect = true;
         return this;
       }
+
       public Builder clearRect() {
         result.hasRect = false;
-        result.rect_ = com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect.getDefaultInstance();
+        result.rect_ =
+            com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect
+                .getDefaultInstance();
         return this;
       }
-      
+
       // required .scope.DesktopWindowID windowId = 3;
       public boolean hasWindowId() {
         return result.hasWindowId();
       }
+
       public com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID getWindowId() {
         return result.getWindowId();
       }
-      public Builder setWindowId(com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID value) {
+
+      public Builder setWindowId(
+          com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID value) {
         if (value == null) {
           throw new NullPointerException();
         }
@@ -2239,141 +2752,185 @@ public final class DesktopWmProtos {
         result.windowId_ = value;
         return this;
       }
-      public Builder setWindowId(com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID.Builder builderForValue) {
+
+      public Builder setWindowId(
+          com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID.Builder builderForValue) {
         result.hasWindowId = true;
         result.windowId_ = builderForValue.build();
         return this;
       }
-      public Builder mergeWindowId(com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID value) {
+
+      public Builder mergeWindowId(
+          com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID value) {
         if (result.hasWindowId() &&
-            result.windowId_ != com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID.getDefaultInstance()) {
+            result.windowId_ != com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID
+                .getDefaultInstance()) {
           result.windowId_ =
-            com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID.newBuilder(result.windowId_).mergeFrom(value).buildPartial();
+              com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID
+                  .newBuilder(result.windowId_).mergeFrom(value).buildPartial();
         } else {
           result.windowId_ = value;
         }
         result.hasWindowId = true;
         return this;
       }
+
       public Builder clearWindowId() {
         result.hasWindowId = false;
-        result.windowId_ = com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID.getDefaultInstance();
+        result.windowId_ =
+            com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID
+                .getDefaultInstance();
         return this;
       }
-      
+
       // repeated .scope.QuickMenuItemInfo menuItemList = 4;
       public java.util.List<com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo> getMenuItemListList() {
         return java.util.Collections.unmodifiableList(result.menuItemList_);
       }
+
       public int getMenuItemListCount() {
         return result.getMenuItemListCount();
       }
-      public com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo getMenuItemList(int index) {
+
+      public com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo getMenuItemList(
+          int index) {
         return result.getMenuItemList(index);
       }
-      public Builder setMenuItemList(int index, com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo value) {
+
+      public Builder setMenuItemList(int index,
+                                     com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo value) {
         if (value == null) {
           throw new NullPointerException();
         }
         result.menuItemList_.set(index, value);
         return this;
       }
-      public Builder setMenuItemList(int index, com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo.Builder builderForValue) {
+
+      public Builder setMenuItemList(int index,
+                                     com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo.Builder builderForValue) {
         result.menuItemList_.set(index, builderForValue.build());
         return this;
       }
-      public Builder addMenuItemList(com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo value) {
+
+      public Builder addMenuItemList(
+          com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo value) {
         if (value == null) {
           throw new NullPointerException();
         }
         if (result.menuItemList_.isEmpty()) {
-          result.menuItemList_ = new java.util.ArrayList<com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo>();
+          result.menuItemList_ =
+              new java.util.ArrayList<com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo>();
         }
         result.menuItemList_.add(value);
         return this;
       }
-      public Builder addMenuItemList(com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo.Builder builderForValue) {
+
+      public Builder addMenuItemList(
+          com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo.Builder builderForValue) {
         if (result.menuItemList_.isEmpty()) {
-          result.menuItemList_ = new java.util.ArrayList<com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo>();
+          result.menuItemList_ =
+              new java.util.ArrayList<com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo>();
         }
         result.menuItemList_.add(builderForValue.build());
         return this;
       }
+
       public Builder addAllMenuItemList(
           java.lang.Iterable<? extends com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo> values) {
         if (result.menuItemList_.isEmpty()) {
-          result.menuItemList_ = new java.util.ArrayList<com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo>();
+          result.menuItemList_ =
+              new java.util.ArrayList<com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo>();
         }
         super.addAll(values, result.menuItemList_);
         return this;
       }
+
       public Builder clearMenuItemList() {
         result.menuItemList_ = java.util.Collections.emptyList();
         return this;
       }
-      
+
       // @@protoc_insertion_point(builder_scope:scope.QuickMenuInfo)
     }
-    
+
     static {
       defaultInstance = new QuickMenuInfo(true);
       com.opera.core.systems.scope.protos.DesktopWmProtos.internalForceInit();
       defaultInstance.initFields();
     }
-    
+
     // @@protoc_insertion_point(class_scope:scope.QuickMenuInfo)
   }
-  
+
   public static final class QuickMenuItemID extends
-      com.google.protobuf.GeneratedMessage {
+                                            com.google.protobuf.GeneratedMessage {
+
     // Use QuickMenuItemID.newBuilder() to construct.
     private QuickMenuItemID() {
       initFields();
     }
-    private QuickMenuItemID(boolean noInit) {}
-    
+
+    private QuickMenuItemID(boolean noInit) {
+    }
+
     private static final QuickMenuItemID defaultInstance;
+
     public static QuickMenuItemID getDefaultInstance() {
       return defaultInstance;
     }
-    
+
     public QuickMenuItemID getDefaultInstanceForType() {
       return defaultInstance;
     }
-    
+
     public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
+    getDescriptor() {
       return com.opera.core.systems.scope.protos.DesktopWmProtos.internal_static_scope_QuickMenuItemID_descriptor;
     }
-    
+
     protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-        internalGetFieldAccessorTable() {
+    internalGetFieldAccessorTable() {
       return com.opera.core.systems.scope.protos.DesktopWmProtos.internal_static_scope_QuickMenuItemID_fieldAccessorTable;
     }
-    
+
     // required string menuText = 1;
     public static final int MENUTEXT_FIELD_NUMBER = 1;
     private boolean hasMenuText;
     private java.lang.String menuText_ = "";
-    public boolean hasMenuText() { return hasMenuText; }
-    public java.lang.String getMenuText() { return menuText_; }
-    
+
+    public boolean hasMenuText() {
+      return hasMenuText;
+    }
+
+    public java.lang.String getMenuText() {
+      return menuText_;
+    }
+
     // optional bool popupMenu = 2;
     public static final int POPUPMENU_FIELD_NUMBER = 2;
     private boolean hasPopupMenu;
     private boolean popupMenu_ = false;
-    public boolean hasPopupMenu() { return hasPopupMenu; }
-    public boolean getPopupMenu() { return popupMenu_; }
-    
+
+    public boolean hasPopupMenu() {
+      return hasPopupMenu;
+    }
+
+    public boolean getPopupMenu() {
+      return popupMenu_;
+    }
+
     private void initFields() {
     }
+
     public final boolean isInitialized() {
-      if (!hasMenuText) return false;
+      if (!hasMenuText) {
+        return false;
+      }
       return true;
     }
-    
+
     public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
+        throws java.io.IOException {
       getSerializedSize();
       if (hasMenuText()) {
         output.writeString(1, getMenuText());
@@ -2383,61 +2940,73 @@ public final class DesktopWmProtos {
       }
       getUnknownFields().writeTo(output);
     }
-    
+
     private int memoizedSerializedSize = -1;
+
     public int getSerializedSize() {
       int size = memoizedSerializedSize;
-      if (size != -1) return size;
-    
+      if (size != -1) {
+        return size;
+      }
+
       size = 0;
       if (hasMenuText()) {
         size += com.google.protobuf.CodedOutputStream
-          .computeStringSize(1, getMenuText());
+            .computeStringSize(1, getMenuText());
       }
       if (hasPopupMenu()) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBoolSize(2, getPopupMenu());
+            .computeBoolSize(2, getPopupMenu());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
       return size;
     }
-    
+
     public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemID parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemID parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+          .buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemID parseFrom(byte[] data)
+
+    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemID parseFrom(
+        byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemID parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+          .buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemID parseFrom(java.io.InputStream input)
+
+    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemID parseFrom(
+        java.io.InputStream input)
         throws java.io.IOException {
       return newBuilder().mergeFrom(input).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemID parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+          .buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemID parseDelimitedFrom(java.io.InputStream input)
+
+    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemID parseDelimitedFrom(
+        java.io.InputStream input)
         throws java.io.IOException {
       Builder builder = newBuilder();
       if (builder.mergeDelimitedFrom(input)) {
@@ -2446,6 +3015,7 @@ public final class DesktopWmProtos {
         return null;
       }
     }
+
     public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemID parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -2457,105 +3027,126 @@ public final class DesktopWmProtos {
         return null;
       }
     }
+
     public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemID parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return newBuilder().mergeFrom(input).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemID parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+          .buildParsed();
     }
-    
-    public static Builder newBuilder() { return Builder.create(); }
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemID prototype) {
+
+    public static Builder newBuilder() {
+      return Builder.create();
+    }
+
+    public Builder newBuilderForType() {
+      return newBuilder();
+    }
+
+    public static Builder newBuilder(
+        com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemID prototype) {
       return newBuilder().mergeFrom(prototype);
     }
-    public Builder toBuilder() { return newBuilder(this); }
-    
+
+    public Builder toBuilder() {
+      return newBuilder(this);
+    }
+
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> {
+                                      com.google.protobuf.GeneratedMessage.Builder<Builder> {
+
       private com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemID result;
-      
+
       // Construct using com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemID.newBuilder()
-      private Builder() {}
-      
+      private Builder() {
+      }
+
       private static Builder create() {
         Builder builder = new Builder();
         builder.result = new com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemID();
         return builder;
       }
-      
+
       protected com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemID internalGetResult() {
         return result;
       }
-      
+
       public Builder clear() {
         if (result == null) {
           throw new IllegalStateException(
-            "Cannot call clear() after build().");
+              "Cannot call clear() after build().");
         }
         result = new com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemID();
         return this;
       }
-      
+
       public Builder clone() {
         return create().mergeFrom(result);
       }
-      
+
       public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
+      getDescriptorForType() {
         return com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemID.getDescriptor();
       }
-      
+
       public com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemID getDefaultInstanceForType() {
-        return com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemID.getDefaultInstance();
+        return com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemID
+            .getDefaultInstance();
       }
-      
+
       public boolean isInitialized() {
         return result.isInitialized();
       }
+
       public com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemID build() {
         if (result != null && !isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return buildPartial();
       }
-      
+
       private com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemID buildParsed()
           throws com.google.protobuf.InvalidProtocolBufferException {
         if (!isInitialized()) {
           throw newUninitializedMessageException(
-            result).asInvalidProtocolBufferException();
+              result).asInvalidProtocolBufferException();
         }
         return buildPartial();
       }
-      
+
       public com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemID buildPartial() {
         if (result == null) {
           throw new IllegalStateException(
-            "build() has already been called on this Builder.");
+              "build() has already been called on this Builder.");
         }
         com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemID returnMe = result;
         result = null;
         return returnMe;
       }
-      
+
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemID) {
-          return mergeFrom((com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemID)other);
+          return mergeFrom(
+              (com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemID) other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
-      
-      public Builder mergeFrom(com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemID other) {
-        if (other == com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemID.getDefaultInstance()) return this;
+
+      public Builder mergeFrom(
+          com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemID other) {
+        if (other == com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemID
+            .getDefaultInstance()) {
+          return this;
+        }
         if (other.hasMenuText()) {
           setMenuText(other.getMenuText());
         }
@@ -2565,14 +3156,14 @@ public final class DesktopWmProtos {
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
-      
+
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
         com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder(
-            this.getUnknownFields());
+            com.google.protobuf.UnknownFieldSet.newBuilder(
+                this.getUnknownFields());
         while (true) {
           int tag = input.readTag();
           switch (tag) {
@@ -2598,187 +3189,288 @@ public final class DesktopWmProtos {
           }
         }
       }
-      
-      
+
+
       // required string menuText = 1;
       public boolean hasMenuText() {
         return result.hasMenuText();
       }
+
       public java.lang.String getMenuText() {
         return result.getMenuText();
       }
+
       public Builder setMenuText(java.lang.String value) {
         if (value == null) {
-    throw new NullPointerException();
-  }
-  result.hasMenuText = true;
+          throw new NullPointerException();
+        }
+        result.hasMenuText = true;
         result.menuText_ = value;
         return this;
       }
+
       public Builder clearMenuText() {
         result.hasMenuText = false;
         result.menuText_ = getDefaultInstance().getMenuText();
         return this;
       }
-      
+
       // optional bool popupMenu = 2;
       public boolean hasPopupMenu() {
         return result.hasPopupMenu();
       }
+
       public boolean getPopupMenu() {
         return result.getPopupMenu();
       }
+
       public Builder setPopupMenu(boolean value) {
         result.hasPopupMenu = true;
         result.popupMenu_ = value;
         return this;
       }
+
       public Builder clearPopupMenu() {
         result.hasPopupMenu = false;
         result.popupMenu_ = false;
         return this;
       }
-      
+
       // @@protoc_insertion_point(builder_scope:scope.QuickMenuItemID)
     }
-    
+
     static {
       defaultInstance = new QuickMenuItemID(true);
       com.opera.core.systems.scope.protos.DesktopWmProtos.internalForceInit();
       defaultInstance.initFields();
     }
-    
+
     // @@protoc_insertion_point(class_scope:scope.QuickMenuItemID)
   }
-  
+
   public static final class QuickMenuItemInfo extends
-      com.google.protobuf.GeneratedMessage {
+                                              com.google.protobuf.GeneratedMessage {
+
     // Use QuickMenuItemInfo.newBuilder() to construct.
     private QuickMenuItemInfo() {
       initFields();
     }
-    private QuickMenuItemInfo(boolean noInit) {}
-    
+
+    private QuickMenuItemInfo(boolean noInit) {
+    }
+
     private static final QuickMenuItemInfo defaultInstance;
+
     public static QuickMenuItemInfo getDefaultInstance() {
       return defaultInstance;
     }
-    
+
     public QuickMenuItemInfo getDefaultInstanceForType() {
       return defaultInstance;
     }
-    
+
     public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
+    getDescriptor() {
       return com.opera.core.systems.scope.protos.DesktopWmProtos.internal_static_scope_QuickMenuItemInfo_descriptor;
     }
-    
+
     protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-        internalGetFieldAccessorTable() {
+    internalGetFieldAccessorTable() {
       return com.opera.core.systems.scope.protos.DesktopWmProtos.internal_static_scope_QuickMenuItemInfo_fieldAccessorTable;
     }
-    
+
     // required string text = 1;
     public static final int TEXT_FIELD_NUMBER = 1;
     private boolean hasText;
     private java.lang.String text_ = "";
-    public boolean hasText() { return hasText; }
-    public java.lang.String getText() { return text_; }
-    
+
+    public boolean hasText() {
+      return hasText;
+    }
+
+    public java.lang.String getText() {
+      return text_;
+    }
+
     // optional string action = 2;
     public static final int ACTION_FIELD_NUMBER = 2;
     private boolean hasAction;
     private java.lang.String action_ = "";
-    public boolean hasAction() { return hasAction; }
-    public java.lang.String getAction() { return action_; }
-    
+
+    public boolean hasAction() {
+      return hasAction;
+    }
+
+    public java.lang.String getAction() {
+      return action_;
+    }
+
     // optional string submenu = 3;
     public static final int SUBMENU_FIELD_NUMBER = 3;
     private boolean hasSubmenu;
     private java.lang.String submenu_ = "";
-    public boolean hasSubmenu() { return hasSubmenu; }
-    public java.lang.String getSubmenu() { return submenu_; }
-    
+
+    public boolean hasSubmenu() {
+      return hasSubmenu;
+    }
+
+    public java.lang.String getSubmenu() {
+      return submenu_;
+    }
+
     // optional string actionParam = 4;
     public static final int ACTIONPARAM_FIELD_NUMBER = 4;
     private boolean hasActionParam;
     private java.lang.String actionParam_ = "";
-    public boolean hasActionParam() { return hasActionParam; }
-    public java.lang.String getActionParam() { return actionParam_; }
-    
+
+    public boolean hasActionParam() {
+      return hasActionParam;
+    }
+
+    public java.lang.String getActionParam() {
+      return actionParam_;
+    }
+
     // required uint32 row = 5;
     public static final int ROW_FIELD_NUMBER = 5;
     private boolean hasRow;
     private int row_ = 0;
-    public boolean hasRow() { return hasRow; }
-    public int getRow() { return row_; }
-    
+
+    public boolean hasRow() {
+      return hasRow;
+    }
+
+    public int getRow() {
+      return row_;
+    }
+
     // optional string shortcutLetter = 6;
     public static final int SHORTCUTLETTER_FIELD_NUMBER = 6;
     private boolean hasShortcutLetter;
     private java.lang.String shortcutLetter_ = "";
-    public boolean hasShortcutLetter() { return hasShortcutLetter; }
-    public java.lang.String getShortcutLetter() { return shortcutLetter_; }
-    
+
+    public boolean hasShortcutLetter() {
+      return hasShortcutLetter;
+    }
+
+    public java.lang.String getShortcutLetter() {
+      return shortcutLetter_;
+    }
+
     // optional string shortcut = 7;
     public static final int SHORTCUT_FIELD_NUMBER = 7;
     private boolean hasShortcut;
     private java.lang.String shortcut_ = "";
-    public boolean hasShortcut() { return hasShortcut; }
-    public java.lang.String getShortcut() { return shortcut_; }
-    
+
+    public boolean hasShortcut() {
+      return hasShortcut;
+    }
+
+    public java.lang.String getShortcut() {
+      return shortcut_;
+    }
+
     // required .scope.DesktopWindowRect rect = 8;
     public static final int RECT_FIELD_NUMBER = 8;
     private boolean hasRect;
     private com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect rect_;
-    public boolean hasRect() { return hasRect; }
-    public com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect getRect() { return rect_; }
-    
+
+    public boolean hasRect() {
+      return hasRect;
+    }
+
+    public com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect getRect() {
+      return rect_;
+    }
+
     // required bool enabled = 9;
     public static final int ENABLED_FIELD_NUMBER = 9;
     private boolean hasEnabled;
     private boolean enabled_ = false;
-    public boolean hasEnabled() { return hasEnabled; }
-    public boolean getEnabled() { return enabled_; }
-    
+
+    public boolean hasEnabled() {
+      return hasEnabled;
+    }
+
+    public boolean getEnabled() {
+      return enabled_;
+    }
+
     // required bool checked = 10;
     public static final int CHECKED_FIELD_NUMBER = 10;
     private boolean hasChecked;
     private boolean checked_ = false;
-    public boolean hasChecked() { return hasChecked; }
-    public boolean getChecked() { return checked_; }
-    
+
+    public boolean hasChecked() {
+      return hasChecked;
+    }
+
+    public boolean getChecked() {
+      return checked_;
+    }
+
     // required bool bold = 11;
     public static final int BOLD_FIELD_NUMBER = 11;
     private boolean hasBold;
     private boolean bold_ = false;
-    public boolean hasBold() { return hasBold; }
-    public boolean getBold() { return bold_; }
-    
+
+    public boolean hasBold() {
+      return hasBold;
+    }
+
+    public boolean getBold() {
+      return bold_;
+    }
+
     // required bool separator = 12;
     public static final int SEPARATOR_FIELD_NUMBER = 12;
     private boolean hasSeparator;
     private boolean separator_ = false;
-    public boolean hasSeparator() { return hasSeparator; }
-    public boolean getSeparator() { return separator_; }
-    
-    private void initFields() {
-      rect_ = com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect.getDefaultInstance();
+
+    public boolean hasSeparator() {
+      return hasSeparator;
     }
+
+    public boolean getSeparator() {
+      return separator_;
+    }
+
+    private void initFields() {
+      rect_ =
+          com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect
+              .getDefaultInstance();
+    }
+
     public final boolean isInitialized() {
-      if (!hasText) return false;
-      if (!hasRow) return false;
-      if (!hasRect) return false;
-      if (!hasEnabled) return false;
-      if (!hasChecked) return false;
-      if (!hasBold) return false;
-      if (!hasSeparator) return false;
-      if (!getRect().isInitialized()) return false;
+      if (!hasText) {
+        return false;
+      }
+      if (!hasRow) {
+        return false;
+      }
+      if (!hasRect) {
+        return false;
+      }
+      if (!hasEnabled) {
+        return false;
+      }
+      if (!hasChecked) {
+        return false;
+      }
+      if (!hasBold) {
+        return false;
+      }
+      if (!hasSeparator) {
+        return false;
+      }
+      if (!getRect().isInitialized()) {
+        return false;
+      }
       return true;
     }
-    
+
     public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
+        throws java.io.IOException {
       getSerializedSize();
       if (hasText()) {
         output.writeString(1, getText());
@@ -2818,101 +3510,113 @@ public final class DesktopWmProtos {
       }
       getUnknownFields().writeTo(output);
     }
-    
+
     private int memoizedSerializedSize = -1;
+
     public int getSerializedSize() {
       int size = memoizedSerializedSize;
-      if (size != -1) return size;
-    
+      if (size != -1) {
+        return size;
+      }
+
       size = 0;
       if (hasText()) {
         size += com.google.protobuf.CodedOutputStream
-          .computeStringSize(1, getText());
+            .computeStringSize(1, getText());
       }
       if (hasAction()) {
         size += com.google.protobuf.CodedOutputStream
-          .computeStringSize(2, getAction());
+            .computeStringSize(2, getAction());
       }
       if (hasSubmenu()) {
         size += com.google.protobuf.CodedOutputStream
-          .computeStringSize(3, getSubmenu());
+            .computeStringSize(3, getSubmenu());
       }
       if (hasActionParam()) {
         size += com.google.protobuf.CodedOutputStream
-          .computeStringSize(4, getActionParam());
+            .computeStringSize(4, getActionParam());
       }
       if (hasRow()) {
         size += com.google.protobuf.CodedOutputStream
-          .computeUInt32Size(5, getRow());
+            .computeUInt32Size(5, getRow());
       }
       if (hasShortcutLetter()) {
         size += com.google.protobuf.CodedOutputStream
-          .computeStringSize(6, getShortcutLetter());
+            .computeStringSize(6, getShortcutLetter());
       }
       if (hasShortcut()) {
         size += com.google.protobuf.CodedOutputStream
-          .computeStringSize(7, getShortcut());
+            .computeStringSize(7, getShortcut());
       }
       if (hasRect()) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(8, getRect());
+            .computeMessageSize(8, getRect());
       }
       if (hasEnabled()) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBoolSize(9, getEnabled());
+            .computeBoolSize(9, getEnabled());
       }
       if (hasChecked()) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBoolSize(10, getChecked());
+            .computeBoolSize(10, getChecked());
       }
       if (hasBold()) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBoolSize(11, getBold());
+            .computeBoolSize(11, getBold());
       }
       if (hasSeparator()) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBoolSize(12, getSeparator());
+            .computeBoolSize(12, getSeparator());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
       return size;
     }
-    
+
     public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+          .buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo parseFrom(byte[] data)
+
+    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo parseFrom(
+        byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+          .buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo parseFrom(java.io.InputStream input)
+
+    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo parseFrom(
+        java.io.InputStream input)
         throws java.io.IOException {
       return newBuilder().mergeFrom(input).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+          .buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo parseDelimitedFrom(java.io.InputStream input)
+
+    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo parseDelimitedFrom(
+        java.io.InputStream input)
         throws java.io.IOException {
       Builder builder = newBuilder();
       if (builder.mergeDelimitedFrom(input)) {
@@ -2921,6 +3625,7 @@ public final class DesktopWmProtos {
         return null;
       }
     }
+
     public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -2932,105 +3637,128 @@ public final class DesktopWmProtos {
         return null;
       }
     }
+
     public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return newBuilder().mergeFrom(input).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+          .buildParsed();
     }
-    
-    public static Builder newBuilder() { return Builder.create(); }
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo prototype) {
+
+    public static Builder newBuilder() {
+      return Builder.create();
+    }
+
+    public Builder newBuilderForType() {
+      return newBuilder();
+    }
+
+    public static Builder newBuilder(
+        com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo prototype) {
       return newBuilder().mergeFrom(prototype);
     }
-    public Builder toBuilder() { return newBuilder(this); }
-    
+
+    public Builder toBuilder() {
+      return newBuilder(this);
+    }
+
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> {
+                                      com.google.protobuf.GeneratedMessage.Builder<Builder> {
+
       private com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo result;
-      
+
       // Construct using com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo.newBuilder()
-      private Builder() {}
-      
+      private Builder() {
+      }
+
       private static Builder create() {
         Builder builder = new Builder();
-        builder.result = new com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo();
+        builder.result =
+            new com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo();
         return builder;
       }
-      
+
       protected com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo internalGetResult() {
         return result;
       }
-      
+
       public Builder clear() {
         if (result == null) {
           throw new IllegalStateException(
-            "Cannot call clear() after build().");
+              "Cannot call clear() after build().");
         }
         result = new com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo();
         return this;
       }
-      
+
       public Builder clone() {
         return create().mergeFrom(result);
       }
-      
+
       public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
-        return com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo.getDescriptor();
+      getDescriptorForType() {
+        return com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo
+            .getDescriptor();
       }
-      
+
       public com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo getDefaultInstanceForType() {
-        return com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo.getDefaultInstance();
+        return com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo
+            .getDefaultInstance();
       }
-      
+
       public boolean isInitialized() {
         return result.isInitialized();
       }
+
       public com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo build() {
         if (result != null && !isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return buildPartial();
       }
-      
+
       private com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo buildParsed()
           throws com.google.protobuf.InvalidProtocolBufferException {
         if (!isInitialized()) {
           throw newUninitializedMessageException(
-            result).asInvalidProtocolBufferException();
+              result).asInvalidProtocolBufferException();
         }
         return buildPartial();
       }
-      
+
       public com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo buildPartial() {
         if (result == null) {
           throw new IllegalStateException(
-            "build() has already been called on this Builder.");
+              "build() has already been called on this Builder.");
         }
         com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo returnMe = result;
         result = null;
         return returnMe;
       }
-      
+
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo) {
-          return mergeFrom((com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo)other);
+          return mergeFrom(
+              (com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo) other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
-      
-      public Builder mergeFrom(com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo other) {
-        if (other == com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo.getDefaultInstance()) return this;
+
+      public Builder mergeFrom(
+          com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo other) {
+        if (other == com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo
+            .getDefaultInstance()) {
+          return this;
+        }
         if (other.hasText()) {
           setText(other.getText());
         }
@@ -3070,14 +3798,14 @@ public final class DesktopWmProtos {
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
-      
+
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
         com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder(
-            this.getUnknownFields());
+            com.google.protobuf.UnknownFieldSet.newBuilder(
+                this.getUnknownFields());
         while (true) {
           int tag = input.readTag();
           switch (tag) {
@@ -3121,7 +3849,10 @@ public final class DesktopWmProtos {
               break;
             }
             case 66: {
-              com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect.Builder subBuilder = com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect.newBuilder();
+              com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect.Builder
+                  subBuilder =
+                  com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect
+                      .newBuilder();
               if (hasRect()) {
                 subBuilder.mergeFrom(getRect());
               }
@@ -3148,160 +3879,184 @@ public final class DesktopWmProtos {
           }
         }
       }
-      
-      
+
+
       // required string text = 1;
       public boolean hasText() {
         return result.hasText();
       }
+
       public java.lang.String getText() {
         return result.getText();
       }
+
       public Builder setText(java.lang.String value) {
         if (value == null) {
-    throw new NullPointerException();
-  }
-  result.hasText = true;
+          throw new NullPointerException();
+        }
+        result.hasText = true;
         result.text_ = value;
         return this;
       }
+
       public Builder clearText() {
         result.hasText = false;
         result.text_ = getDefaultInstance().getText();
         return this;
       }
-      
+
       // optional string action = 2;
       public boolean hasAction() {
         return result.hasAction();
       }
+
       public java.lang.String getAction() {
         return result.getAction();
       }
+
       public Builder setAction(java.lang.String value) {
         if (value == null) {
-    throw new NullPointerException();
-  }
-  result.hasAction = true;
+          throw new NullPointerException();
+        }
+        result.hasAction = true;
         result.action_ = value;
         return this;
       }
+
       public Builder clearAction() {
         result.hasAction = false;
         result.action_ = getDefaultInstance().getAction();
         return this;
       }
-      
+
       // optional string submenu = 3;
       public boolean hasSubmenu() {
         return result.hasSubmenu();
       }
+
       public java.lang.String getSubmenu() {
         return result.getSubmenu();
       }
+
       public Builder setSubmenu(java.lang.String value) {
         if (value == null) {
-    throw new NullPointerException();
-  }
-  result.hasSubmenu = true;
+          throw new NullPointerException();
+        }
+        result.hasSubmenu = true;
         result.submenu_ = value;
         return this;
       }
+
       public Builder clearSubmenu() {
         result.hasSubmenu = false;
         result.submenu_ = getDefaultInstance().getSubmenu();
         return this;
       }
-      
+
       // optional string actionParam = 4;
       public boolean hasActionParam() {
         return result.hasActionParam();
       }
+
       public java.lang.String getActionParam() {
         return result.getActionParam();
       }
+
       public Builder setActionParam(java.lang.String value) {
         if (value == null) {
-    throw new NullPointerException();
-  }
-  result.hasActionParam = true;
+          throw new NullPointerException();
+        }
+        result.hasActionParam = true;
         result.actionParam_ = value;
         return this;
       }
+
       public Builder clearActionParam() {
         result.hasActionParam = false;
         result.actionParam_ = getDefaultInstance().getActionParam();
         return this;
       }
-      
+
       // required uint32 row = 5;
       public boolean hasRow() {
         return result.hasRow();
       }
+
       public int getRow() {
         return result.getRow();
       }
+
       public Builder setRow(int value) {
         result.hasRow = true;
         result.row_ = value;
         return this;
       }
+
       public Builder clearRow() {
         result.hasRow = false;
         result.row_ = 0;
         return this;
       }
-      
+
       // optional string shortcutLetter = 6;
       public boolean hasShortcutLetter() {
         return result.hasShortcutLetter();
       }
+
       public java.lang.String getShortcutLetter() {
         return result.getShortcutLetter();
       }
+
       public Builder setShortcutLetter(java.lang.String value) {
         if (value == null) {
-    throw new NullPointerException();
-  }
-  result.hasShortcutLetter = true;
+          throw new NullPointerException();
+        }
+        result.hasShortcutLetter = true;
         result.shortcutLetter_ = value;
         return this;
       }
+
       public Builder clearShortcutLetter() {
         result.hasShortcutLetter = false;
         result.shortcutLetter_ = getDefaultInstance().getShortcutLetter();
         return this;
       }
-      
+
       // optional string shortcut = 7;
       public boolean hasShortcut() {
         return result.hasShortcut();
       }
+
       public java.lang.String getShortcut() {
         return result.getShortcut();
       }
+
       public Builder setShortcut(java.lang.String value) {
         if (value == null) {
-    throw new NullPointerException();
-  }
-  result.hasShortcut = true;
+          throw new NullPointerException();
+        }
+        result.hasShortcut = true;
         result.shortcut_ = value;
         return this;
       }
+
       public Builder clearShortcut() {
         result.hasShortcut = false;
         result.shortcut_ = getDefaultInstance().getShortcut();
         return this;
       }
-      
+
       // required .scope.DesktopWindowRect rect = 8;
       public boolean hasRect() {
         return result.hasRect();
       }
+
       public com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect getRect() {
         return result.getRect();
       }
-      public Builder setRect(com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect value) {
+
+      public Builder setRect(
+          com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect value) {
         if (value == null) {
           throw new NullPointerException();
         }
@@ -3309,139 +4064,164 @@ public final class DesktopWmProtos {
         result.rect_ = value;
         return this;
       }
-      public Builder setRect(com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect.Builder builderForValue) {
+
+      public Builder setRect(
+          com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect.Builder builderForValue) {
         result.hasRect = true;
         result.rect_ = builderForValue.build();
         return this;
       }
-      public Builder mergeRect(com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect value) {
+
+      public Builder mergeRect(
+          com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect value) {
         if (result.hasRect() &&
-            result.rect_ != com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect.getDefaultInstance()) {
+            result.rect_ != com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect
+                .getDefaultInstance()) {
           result.rect_ =
-            com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect.newBuilder(result.rect_).mergeFrom(value).buildPartial();
+              com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect
+                  .newBuilder(result.rect_).mergeFrom(value).buildPartial();
         } else {
           result.rect_ = value;
         }
         result.hasRect = true;
         return this;
       }
+
       public Builder clearRect() {
         result.hasRect = false;
-        result.rect_ = com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect.getDefaultInstance();
+        result.rect_ =
+            com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect
+                .getDefaultInstance();
         return this;
       }
-      
+
       // required bool enabled = 9;
       public boolean hasEnabled() {
         return result.hasEnabled();
       }
+
       public boolean getEnabled() {
         return result.getEnabled();
       }
+
       public Builder setEnabled(boolean value) {
         result.hasEnabled = true;
         result.enabled_ = value;
         return this;
       }
+
       public Builder clearEnabled() {
         result.hasEnabled = false;
         result.enabled_ = false;
         return this;
       }
-      
+
       // required bool checked = 10;
       public boolean hasChecked() {
         return result.hasChecked();
       }
+
       public boolean getChecked() {
         return result.getChecked();
       }
+
       public Builder setChecked(boolean value) {
         result.hasChecked = true;
         result.checked_ = value;
         return this;
       }
+
       public Builder clearChecked() {
         result.hasChecked = false;
         result.checked_ = false;
         return this;
       }
-      
+
       // required bool bold = 11;
       public boolean hasBold() {
         return result.hasBold();
       }
+
       public boolean getBold() {
         return result.getBold();
       }
+
       public Builder setBold(boolean value) {
         result.hasBold = true;
         result.bold_ = value;
         return this;
       }
+
       public Builder clearBold() {
         result.hasBold = false;
         result.bold_ = false;
         return this;
       }
-      
+
       // required bool separator = 12;
       public boolean hasSeparator() {
         return result.hasSeparator();
       }
+
       public boolean getSeparator() {
         return result.getSeparator();
       }
+
       public Builder setSeparator(boolean value) {
         result.hasSeparator = true;
         result.separator_ = value;
         return this;
       }
+
       public Builder clearSeparator() {
         result.hasSeparator = false;
         result.separator_ = false;
         return this;
       }
-      
+
       // @@protoc_insertion_point(builder_scope:scope.QuickMenuItemInfo)
     }
-    
+
     static {
       defaultInstance = new QuickMenuItemInfo(true);
       com.opera.core.systems.scope.protos.DesktopWmProtos.internalForceInit();
       defaultInstance.initFields();
     }
-    
+
     // @@protoc_insertion_point(class_scope:scope.QuickMenuItemInfo)
   }
-  
+
   public static final class QuickWidgetInfo extends
-      com.google.protobuf.GeneratedMessage {
+                                            com.google.protobuf.GeneratedMessage {
+
     // Use QuickWidgetInfo.newBuilder() to construct.
     private QuickWidgetInfo() {
       initFields();
     }
-    private QuickWidgetInfo(boolean noInit) {}
-    
+
+    private QuickWidgetInfo(boolean noInit) {
+    }
+
     private static final QuickWidgetInfo defaultInstance;
+
     public static QuickWidgetInfo getDefaultInstance() {
       return defaultInstance;
     }
-    
+
     public QuickWidgetInfo getDefaultInstanceForType() {
       return defaultInstance;
     }
-    
+
     public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
+    getDescriptor() {
       return com.opera.core.systems.scope.protos.DesktopWmProtos.internal_static_scope_QuickWidgetInfo_descriptor;
     }
-    
+
     protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-        internalGetFieldAccessorTable() {
+    internalGetFieldAccessorTable() {
       return com.opera.core.systems.scope.protos.DesktopWmProtos.internal_static_scope_QuickWidgetInfo_fieldAccessorTable;
     }
-    
+
     public enum QuickWidgetType
         implements com.google.protobuf.ProtocolMessageEnum {
       UNKNOWN(0, 0),
@@ -3462,205 +4242,346 @@ public final class DesktopWmProtos {
       THUMBNAIL(15, 15),
       GRIDLAYOUT(16, 16),
       GRIDITEM(17, 17),
-      QUICKFIND(18, 18),
-      ;
-      
-      
-      public final int getNumber() { return value; }
-      
+      QUICKFIND(18, 18),;
+
+
+      public final int getNumber() {
+        return value;
+      }
+
       public static QuickWidgetType valueOf(int value) {
         switch (value) {
-          case 0: return UNKNOWN;
-          case 1: return BUTTON;
-          case 2: return CHECKBOX;
-          case 3: return DIALOGTAB;
-          case 4: return DROPDOWN;
-          case 5: return DROPDOWNITEM;
-          case 6: return EDITFIELD;
-          case 7: return LABEL;
-          case 8: return RADIOBUTTON;
-          case 9: return ADDRESSFIELD;
-          case 10: return SEARCH;
-          case 11: return TOOLBAR;
-          case 12: return TREEVIEW;
-          case 13: return TREEITEM;
-          case 14: return TABBUTTON;
-          case 15: return THUMBNAIL;
-          case 16: return GRIDLAYOUT;
-          case 17: return GRIDITEM;
-          case 18: return QUICKFIND;
-          default: return null;
+          case 0:
+            return UNKNOWN;
+          case 1:
+            return BUTTON;
+          case 2:
+            return CHECKBOX;
+          case 3:
+            return DIALOGTAB;
+          case 4:
+            return DROPDOWN;
+          case 5:
+            return DROPDOWNITEM;
+          case 6:
+            return EDITFIELD;
+          case 7:
+            return LABEL;
+          case 8:
+            return RADIOBUTTON;
+          case 9:
+            return ADDRESSFIELD;
+          case 10:
+            return SEARCH;
+          case 11:
+            return TOOLBAR;
+          case 12:
+            return TREEVIEW;
+          case 13:
+            return TREEITEM;
+          case 14:
+            return TABBUTTON;
+          case 15:
+            return THUMBNAIL;
+          case 16:
+            return GRIDLAYOUT;
+          case 17:
+            return GRIDITEM;
+          case 18:
+            return QUICKFIND;
+          default:
+            return null;
         }
       }
-      
+
       public static com.google.protobuf.Internal.EnumLiteMap<QuickWidgetType>
-          internalGetValueMap() {
+      internalGetValueMap() {
         return internalValueMap;
       }
+
       private static com.google.protobuf.Internal.EnumLiteMap<QuickWidgetType>
           internalValueMap =
-            new com.google.protobuf.Internal.EnumLiteMap<QuickWidgetType>() {
-              public QuickWidgetType findValueByNumber(int number) {
-                return QuickWidgetType.valueOf(number)
-      ;        }
-            };
-      
+          new com.google.protobuf.Internal.EnumLiteMap<QuickWidgetType>() {
+            public QuickWidgetType findValueByNumber(int number) {
+              return QuickWidgetType.valueOf(number)
+                  ;
+            }
+          };
+
       public final com.google.protobuf.Descriptors.EnumValueDescriptor
-          getValueDescriptor() {
+      getValueDescriptor() {
         return getDescriptor().getValues().get(index);
       }
+
       public final com.google.protobuf.Descriptors.EnumDescriptor
-          getDescriptorForType() {
+      getDescriptorForType() {
         return getDescriptor();
       }
+
       public static final com.google.protobuf.Descriptors.EnumDescriptor
-          getDescriptor() {
-        return com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo.getDescriptor().getEnumTypes().get(0);
+      getDescriptor() {
+        return com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo.getDescriptor()
+            .getEnumTypes().get(0);
       }
-      
+
       private static final QuickWidgetType[] VALUES = {
-        UNKNOWN, BUTTON, CHECKBOX, DIALOGTAB, DROPDOWN, DROPDOWNITEM, EDITFIELD, LABEL, RADIOBUTTON, ADDRESSFIELD, SEARCH, TOOLBAR, TREEVIEW, TREEITEM, TABBUTTON, THUMBNAIL, GRIDLAYOUT, GRIDITEM, QUICKFIND, 
+          UNKNOWN, BUTTON, CHECKBOX, DIALOGTAB, DROPDOWN, DROPDOWNITEM, EDITFIELD, LABEL,
+          RADIOBUTTON, ADDRESSFIELD, SEARCH, TOOLBAR, TREEVIEW, TREEITEM, TABBUTTON, THUMBNAIL,
+          GRIDLAYOUT, GRIDITEM, QUICKFIND,
       };
+
       public static QuickWidgetType valueOf(
           com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
         if (desc.getType() != getDescriptor()) {
           throw new java.lang.IllegalArgumentException(
-            "EnumValueDescriptor is not for this type.");
+              "EnumValueDescriptor is not for this type.");
         }
         return VALUES[desc.getIndex()];
       }
+
       private final int index;
       private final int value;
+
       private QuickWidgetType(int index, int value) {
         this.index = index;
         this.value = value;
       }
-      
+
       static {
         com.opera.core.systems.scope.protos.DesktopWmProtos.getDescriptor();
       }
-      
+
       // @@protoc_insertion_point(enum_scope:scope.QuickWidgetInfo.QuickWidgetType)
     }
-    
+
     // required string name = 1;
     public static final int NAME_FIELD_NUMBER = 1;
     private boolean hasName;
     private java.lang.String name_ = "";
-    public boolean hasName() { return hasName; }
-    public java.lang.String getName() { return name_; }
-    
+
+    public boolean hasName() {
+      return hasName;
+    }
+
+    public java.lang.String getName() {
+      return name_;
+    }
+
     // required .scope.QuickWidgetInfo.QuickWidgetType type = 2;
     public static final int TYPE_FIELD_NUMBER = 2;
     private boolean hasType;
-    private com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo.QuickWidgetType type_;
-    public boolean hasType() { return hasType; }
-    public com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo.QuickWidgetType getType() { return type_; }
-    
+    private
+    com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo.QuickWidgetType
+        type_;
+
+    public boolean hasType() {
+      return hasType;
+    }
+
+    public com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo.QuickWidgetType getType() {
+      return type_;
+    }
+
     // required bool visible = 3;
     public static final int VISIBLE_FIELD_NUMBER = 3;
     private boolean hasVisible;
     private boolean visible_ = false;
-    public boolean hasVisible() { return hasVisible; }
-    public boolean getVisible() { return visible_; }
-    
+
+    public boolean hasVisible() {
+      return hasVisible;
+    }
+
+    public boolean getVisible() {
+      return visible_;
+    }
+
     // required string text = 4;
     public static final int TEXT_FIELD_NUMBER = 4;
     private boolean hasText;
     private java.lang.String text_ = "";
-    public boolean hasText() { return hasText; }
-    public java.lang.String getText() { return text_; }
-    
+
+    public boolean hasText() {
+      return hasText;
+    }
+
+    public java.lang.String getText() {
+      return text_;
+    }
+
     // required uint32 value = 5;
     public static final int VALUE_FIELD_NUMBER = 5;
     private boolean hasValue;
     private int value_ = 0;
-    public boolean hasValue() { return hasValue; }
-    public int getValue() { return value_; }
-    
+
+    public boolean hasValue() {
+      return hasValue;
+    }
+
+    public int getValue() {
+      return value_;
+    }
+
     // required bool enabled = 6;
     public static final int ENABLED_FIELD_NUMBER = 6;
     private boolean hasEnabled;
     private boolean enabled_ = false;
-    public boolean hasEnabled() { return hasEnabled; }
-    public boolean getEnabled() { return enabled_; }
-    
+
+    public boolean hasEnabled() {
+      return hasEnabled;
+    }
+
+    public boolean getEnabled() {
+      return enabled_;
+    }
+
     // required bool defaultLook = 7;
     public static final int DEFAULTLOOK_FIELD_NUMBER = 7;
     private boolean hasDefaultLook;
     private boolean defaultLook_ = false;
-    public boolean hasDefaultLook() { return hasDefaultLook; }
-    public boolean getDefaultLook() { return defaultLook_; }
-    
+
+    public boolean hasDefaultLook() {
+      return hasDefaultLook;
+    }
+
+    public boolean getDefaultLook() {
+      return defaultLook_;
+    }
+
     // required bool focusedLook = 8;
     public static final int FOCUSEDLOOK_FIELD_NUMBER = 8;
     private boolean hasFocusedLook;
     private boolean focusedLook_ = false;
-    public boolean hasFocusedLook() { return hasFocusedLook; }
-    public boolean getFocusedLook() { return focusedLook_; }
-    
+
+    public boolean hasFocusedLook() {
+      return hasFocusedLook;
+    }
+
+    public boolean getFocusedLook() {
+      return focusedLook_;
+    }
+
     // required .scope.DesktopWindowRect rect = 9;
     public static final int RECT_FIELD_NUMBER = 9;
     private boolean hasRect;
     private com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect rect_;
-    public boolean hasRect() { return hasRect; }
-    public com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect getRect() { return rect_; }
-    
+
+    public boolean hasRect() {
+      return hasRect;
+    }
+
+    public com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect getRect() {
+      return rect_;
+    }
+
     // optional string parent = 10;
     public static final int PARENT_FIELD_NUMBER = 10;
     private boolean hasParent;
     private java.lang.String parent_ = "";
-    public boolean hasParent() { return hasParent; }
-    public java.lang.String getParent() { return parent_; }
-    
+
+    public boolean hasParent() {
+      return hasParent;
+    }
+
+    public java.lang.String getParent() {
+      return parent_;
+    }
+
     // optional uint32 row = 11;
     public static final int ROW_FIELD_NUMBER = 11;
     private boolean hasRow;
     private int row_ = 0;
-    public boolean hasRow() { return hasRow; }
-    public int getRow() { return row_; }
-    
+
+    public boolean hasRow() {
+      return hasRow;
+    }
+
+    public int getRow() {
+      return row_;
+    }
+
     // optional uint32 col = 12;
     public static final int COL_FIELD_NUMBER = 12;
     private boolean hasCol;
     private int col_ = 0;
-    public boolean hasCol() { return hasCol; }
-    public int getCol() { return col_; }
-    
+
+    public boolean hasCol() {
+      return hasCol;
+    }
+
+    public int getCol() {
+      return col_;
+    }
+
     // optional string visible_text = 13;
     public static final int VISIBLE_TEXT_FIELD_NUMBER = 13;
     private boolean hasVisibleText;
     private java.lang.String visibleText_ = "";
-    public boolean hasVisibleText() { return hasVisibleText; }
-    public java.lang.String getVisibleText() { return visibleText_; }
-    
+
+    public boolean hasVisibleText() {
+      return hasVisibleText;
+    }
+
+    public java.lang.String getVisibleText() {
+      return visibleText_;
+    }
+
     // optional string additional_text = 14;
     public static final int ADDITIONAL_TEXT_FIELD_NUMBER = 14;
     private boolean hasAdditionalText;
     private java.lang.String additionalText_ = "";
-    public boolean hasAdditionalText() { return hasAdditionalText; }
-    public java.lang.String getAdditionalText() { return additionalText_; }
-    
-    private void initFields() {
-      type_ = com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo.QuickWidgetType.UNKNOWN;
-      rect_ = com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect.getDefaultInstance();
+
+    public boolean hasAdditionalText() {
+      return hasAdditionalText;
     }
+
+    public java.lang.String getAdditionalText() {
+      return additionalText_;
+    }
+
+    private void initFields() {
+      type_ =
+          com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo.QuickWidgetType.UNKNOWN;
+      rect_ =
+          com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect
+              .getDefaultInstance();
+    }
+
     public final boolean isInitialized() {
-      if (!hasName) return false;
-      if (!hasType) return false;
-      if (!hasVisible) return false;
-      if (!hasText) return false;
-      if (!hasValue) return false;
-      if (!hasEnabled) return false;
-      if (!hasDefaultLook) return false;
-      if (!hasFocusedLook) return false;
-      if (!hasRect) return false;
-      if (!getRect().isInitialized()) return false;
+      if (!hasName) {
+        return false;
+      }
+      if (!hasType) {
+        return false;
+      }
+      if (!hasVisible) {
+        return false;
+      }
+      if (!hasText) {
+        return false;
+      }
+      if (!hasValue) {
+        return false;
+      }
+      if (!hasEnabled) {
+        return false;
+      }
+      if (!hasDefaultLook) {
+        return false;
+      }
+      if (!hasFocusedLook) {
+        return false;
+      }
+      if (!hasRect) {
+        return false;
+      }
+      if (!getRect().isInitialized()) {
+        return false;
+      }
       return true;
     }
-    
+
     public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
+        throws java.io.IOException {
       getSerializedSize();
       if (hasName()) {
         output.writeString(1, getName());
@@ -3706,109 +4627,121 @@ public final class DesktopWmProtos {
       }
       getUnknownFields().writeTo(output);
     }
-    
+
     private int memoizedSerializedSize = -1;
+
     public int getSerializedSize() {
       int size = memoizedSerializedSize;
-      if (size != -1) return size;
-    
+      if (size != -1) {
+        return size;
+      }
+
       size = 0;
       if (hasName()) {
         size += com.google.protobuf.CodedOutputStream
-          .computeStringSize(1, getName());
+            .computeStringSize(1, getName());
       }
       if (hasType()) {
         size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(2, getType().getNumber());
+            .computeEnumSize(2, getType().getNumber());
       }
       if (hasVisible()) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBoolSize(3, getVisible());
+            .computeBoolSize(3, getVisible());
       }
       if (hasText()) {
         size += com.google.protobuf.CodedOutputStream
-          .computeStringSize(4, getText());
+            .computeStringSize(4, getText());
       }
       if (hasValue()) {
         size += com.google.protobuf.CodedOutputStream
-          .computeUInt32Size(5, getValue());
+            .computeUInt32Size(5, getValue());
       }
       if (hasEnabled()) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBoolSize(6, getEnabled());
+            .computeBoolSize(6, getEnabled());
       }
       if (hasDefaultLook()) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBoolSize(7, getDefaultLook());
+            .computeBoolSize(7, getDefaultLook());
       }
       if (hasFocusedLook()) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBoolSize(8, getFocusedLook());
+            .computeBoolSize(8, getFocusedLook());
       }
       if (hasRect()) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(9, getRect());
+            .computeMessageSize(9, getRect());
       }
       if (hasParent()) {
         size += com.google.protobuf.CodedOutputStream
-          .computeStringSize(10, getParent());
+            .computeStringSize(10, getParent());
       }
       if (hasRow()) {
         size += com.google.protobuf.CodedOutputStream
-          .computeUInt32Size(11, getRow());
+            .computeUInt32Size(11, getRow());
       }
       if (hasCol()) {
         size += com.google.protobuf.CodedOutputStream
-          .computeUInt32Size(12, getCol());
+            .computeUInt32Size(12, getCol());
       }
       if (hasVisibleText()) {
         size += com.google.protobuf.CodedOutputStream
-          .computeStringSize(13, getVisibleText());
+            .computeStringSize(13, getVisibleText());
       }
       if (hasAdditionalText()) {
         size += com.google.protobuf.CodedOutputStream
-          .computeStringSize(14, getAdditionalText());
+            .computeStringSize(14, getAdditionalText());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
       return size;
     }
-    
+
     public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+          .buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo parseFrom(byte[] data)
+
+    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo parseFrom(
+        byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+          .buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo parseFrom(java.io.InputStream input)
+
+    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo parseFrom(
+        java.io.InputStream input)
         throws java.io.IOException {
       return newBuilder().mergeFrom(input).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+          .buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo parseDelimitedFrom(java.io.InputStream input)
+
+    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo parseDelimitedFrom(
+        java.io.InputStream input)
         throws java.io.IOException {
       Builder builder = newBuilder();
       if (builder.mergeDelimitedFrom(input)) {
@@ -3817,6 +4750,7 @@ public final class DesktopWmProtos {
         return null;
       }
     }
+
     public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -3828,105 +4762,126 @@ public final class DesktopWmProtos {
         return null;
       }
     }
+
     public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return newBuilder().mergeFrom(input).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+          .buildParsed();
     }
-    
-    public static Builder newBuilder() { return Builder.create(); }
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo prototype) {
+
+    public static Builder newBuilder() {
+      return Builder.create();
+    }
+
+    public Builder newBuilderForType() {
+      return newBuilder();
+    }
+
+    public static Builder newBuilder(
+        com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo prototype) {
       return newBuilder().mergeFrom(prototype);
     }
-    public Builder toBuilder() { return newBuilder(this); }
-    
+
+    public Builder toBuilder() {
+      return newBuilder(this);
+    }
+
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> {
+                                      com.google.protobuf.GeneratedMessage.Builder<Builder> {
+
       private com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo result;
-      
+
       // Construct using com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo.newBuilder()
-      private Builder() {}
-      
+      private Builder() {
+      }
+
       private static Builder create() {
         Builder builder = new Builder();
         builder.result = new com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo();
         return builder;
       }
-      
+
       protected com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo internalGetResult() {
         return result;
       }
-      
+
       public Builder clear() {
         if (result == null) {
           throw new IllegalStateException(
-            "Cannot call clear() after build().");
+              "Cannot call clear() after build().");
         }
         result = new com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo();
         return this;
       }
-      
+
       public Builder clone() {
         return create().mergeFrom(result);
       }
-      
+
       public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
+      getDescriptorForType() {
         return com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo.getDescriptor();
       }
-      
+
       public com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo getDefaultInstanceForType() {
-        return com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo.getDefaultInstance();
+        return com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo
+            .getDefaultInstance();
       }
-      
+
       public boolean isInitialized() {
         return result.isInitialized();
       }
+
       public com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo build() {
         if (result != null && !isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return buildPartial();
       }
-      
+
       private com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo buildParsed()
           throws com.google.protobuf.InvalidProtocolBufferException {
         if (!isInitialized()) {
           throw newUninitializedMessageException(
-            result).asInvalidProtocolBufferException();
+              result).asInvalidProtocolBufferException();
         }
         return buildPartial();
       }
-      
+
       public com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo buildPartial() {
         if (result == null) {
           throw new IllegalStateException(
-            "build() has already been called on this Builder.");
+              "build() has already been called on this Builder.");
         }
         com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo returnMe = result;
         result = null;
         return returnMe;
       }
-      
+
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo) {
-          return mergeFrom((com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo)other);
+          return mergeFrom(
+              (com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo) other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
-      
-      public Builder mergeFrom(com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo other) {
-        if (other == com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo.getDefaultInstance()) return this;
+
+      public Builder mergeFrom(
+          com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo other) {
+        if (other == com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo
+            .getDefaultInstance()) {
+          return this;
+        }
         if (other.hasName()) {
           setName(other.getName());
         }
@@ -3972,14 +4927,14 @@ public final class DesktopWmProtos {
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
-      
+
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
         com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder(
-            this.getUnknownFields());
+            com.google.protobuf.UnknownFieldSet.newBuilder(
+                this.getUnknownFields());
         while (true) {
           int tag = input.readTag();
           switch (tag) {
@@ -4000,7 +4955,10 @@ public final class DesktopWmProtos {
             }
             case 16: {
               int rawValue = input.readEnum();
-              com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo.QuickWidgetType value = com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo.QuickWidgetType.valueOf(rawValue);
+              com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo.QuickWidgetType
+                  value =
+                  com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo
+                      .QuickWidgetType.valueOf(rawValue);
               if (value == null) {
                 unknownFields.mergeVarintField(2, rawValue);
               } else {
@@ -4033,7 +4991,10 @@ public final class DesktopWmProtos {
               break;
             }
             case 74: {
-              com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect.Builder subBuilder = com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect.newBuilder();
+              com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect.Builder
+                  subBuilder =
+                  com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect
+                      .newBuilder();
               if (hasRect()) {
                 subBuilder.mergeFrom(getRect());
               }
@@ -4064,37 +5025,43 @@ public final class DesktopWmProtos {
           }
         }
       }
-      
-      
+
+
       // required string name = 1;
       public boolean hasName() {
         return result.hasName();
       }
+
       public java.lang.String getName() {
         return result.getName();
       }
+
       public Builder setName(java.lang.String value) {
         if (value == null) {
-    throw new NullPointerException();
-  }
-  result.hasName = true;
+          throw new NullPointerException();
+        }
+        result.hasName = true;
         result.name_ = value;
         return this;
       }
+
       public Builder clearName() {
         result.hasName = false;
         result.name_ = getDefaultInstance().getName();
         return this;
       }
-      
+
       // required .scope.QuickWidgetInfo.QuickWidgetType type = 2;
       public boolean hasType() {
         return result.hasType();
       }
+
       public com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo.QuickWidgetType getType() {
         return result.getType();
       }
-      public Builder setType(com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo.QuickWidgetType value) {
+
+      public Builder setType(
+          com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo.QuickWidgetType value) {
         if (value == null) {
           throw new NullPointerException();
         }
@@ -4102,131 +5069,154 @@ public final class DesktopWmProtos {
         result.type_ = value;
         return this;
       }
+
       public Builder clearType() {
         result.hasType = false;
-        result.type_ = com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo.QuickWidgetType.UNKNOWN;
+        result.type_ =
+            com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo.QuickWidgetType.UNKNOWN;
         return this;
       }
-      
+
       // required bool visible = 3;
       public boolean hasVisible() {
         return result.hasVisible();
       }
+
       public boolean getVisible() {
         return result.getVisible();
       }
+
       public Builder setVisible(boolean value) {
         result.hasVisible = true;
         result.visible_ = value;
         return this;
       }
+
       public Builder clearVisible() {
         result.hasVisible = false;
         result.visible_ = false;
         return this;
       }
-      
+
       // required string text = 4;
       public boolean hasText() {
         return result.hasText();
       }
+
       public java.lang.String getText() {
         return result.getText();
       }
+
       public Builder setText(java.lang.String value) {
         if (value == null) {
-    throw new NullPointerException();
-  }
-  result.hasText = true;
+          throw new NullPointerException();
+        }
+        result.hasText = true;
         result.text_ = value;
         return this;
       }
+
       public Builder clearText() {
         result.hasText = false;
         result.text_ = getDefaultInstance().getText();
         return this;
       }
-      
+
       // required uint32 value = 5;
       public boolean hasValue() {
         return result.hasValue();
       }
+
       public int getValue() {
         return result.getValue();
       }
+
       public Builder setValue(int value) {
         result.hasValue = true;
         result.value_ = value;
         return this;
       }
+
       public Builder clearValue() {
         result.hasValue = false;
         result.value_ = 0;
         return this;
       }
-      
+
       // required bool enabled = 6;
       public boolean hasEnabled() {
         return result.hasEnabled();
       }
+
       public boolean getEnabled() {
         return result.getEnabled();
       }
+
       public Builder setEnabled(boolean value) {
         result.hasEnabled = true;
         result.enabled_ = value;
         return this;
       }
+
       public Builder clearEnabled() {
         result.hasEnabled = false;
         result.enabled_ = false;
         return this;
       }
-      
+
       // required bool defaultLook = 7;
       public boolean hasDefaultLook() {
         return result.hasDefaultLook();
       }
+
       public boolean getDefaultLook() {
         return result.getDefaultLook();
       }
+
       public Builder setDefaultLook(boolean value) {
         result.hasDefaultLook = true;
         result.defaultLook_ = value;
         return this;
       }
+
       public Builder clearDefaultLook() {
         result.hasDefaultLook = false;
         result.defaultLook_ = false;
         return this;
       }
-      
+
       // required bool focusedLook = 8;
       public boolean hasFocusedLook() {
         return result.hasFocusedLook();
       }
+
       public boolean getFocusedLook() {
         return result.getFocusedLook();
       }
+
       public Builder setFocusedLook(boolean value) {
         result.hasFocusedLook = true;
         result.focusedLook_ = value;
         return this;
       }
+
       public Builder clearFocusedLook() {
         result.hasFocusedLook = false;
         result.focusedLook_ = false;
         return this;
       }
-      
+
       // required .scope.DesktopWindowRect rect = 9;
       public boolean hasRect() {
         return result.hasRect();
       }
+
       public com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect getRect() {
         return result.getRect();
       }
-      public Builder setRect(com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect value) {
+
+      public Builder setRect(
+          com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect value) {
         if (value == null) {
           throw new NullPointerException();
         }
@@ -4234,239 +5224,288 @@ public final class DesktopWmProtos {
         result.rect_ = value;
         return this;
       }
-      public Builder setRect(com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect.Builder builderForValue) {
+
+      public Builder setRect(
+          com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect.Builder builderForValue) {
         result.hasRect = true;
         result.rect_ = builderForValue.build();
         return this;
       }
-      public Builder mergeRect(com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect value) {
+
+      public Builder mergeRect(
+          com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect value) {
         if (result.hasRect() &&
-            result.rect_ != com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect.getDefaultInstance()) {
+            result.rect_ != com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect
+                .getDefaultInstance()) {
           result.rect_ =
-            com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect.newBuilder(result.rect_).mergeFrom(value).buildPartial();
+              com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect
+                  .newBuilder(result.rect_).mergeFrom(value).buildPartial();
         } else {
           result.rect_ = value;
         }
         result.hasRect = true;
         return this;
       }
+
       public Builder clearRect() {
         result.hasRect = false;
-        result.rect_ = com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect.getDefaultInstance();
+        result.rect_ =
+            com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect
+                .getDefaultInstance();
         return this;
       }
-      
+
       // optional string parent = 10;
       public boolean hasParent() {
         return result.hasParent();
       }
+
       public java.lang.String getParent() {
         return result.getParent();
       }
+
       public Builder setParent(java.lang.String value) {
         if (value == null) {
-    throw new NullPointerException();
-  }
-  result.hasParent = true;
+          throw new NullPointerException();
+        }
+        result.hasParent = true;
         result.parent_ = value;
         return this;
       }
+
       public Builder clearParent() {
         result.hasParent = false;
         result.parent_ = getDefaultInstance().getParent();
         return this;
       }
-      
+
       // optional uint32 row = 11;
       public boolean hasRow() {
         return result.hasRow();
       }
+
       public int getRow() {
         return result.getRow();
       }
+
       public Builder setRow(int value) {
         result.hasRow = true;
         result.row_ = value;
         return this;
       }
+
       public Builder clearRow() {
         result.hasRow = false;
         result.row_ = 0;
         return this;
       }
-      
+
       // optional uint32 col = 12;
       public boolean hasCol() {
         return result.hasCol();
       }
+
       public int getCol() {
         return result.getCol();
       }
+
       public Builder setCol(int value) {
         result.hasCol = true;
         result.col_ = value;
         return this;
       }
+
       public Builder clearCol() {
         result.hasCol = false;
         result.col_ = 0;
         return this;
       }
-      
+
       // optional string visible_text = 13;
       public boolean hasVisibleText() {
         return result.hasVisibleText();
       }
+
       public java.lang.String getVisibleText() {
         return result.getVisibleText();
       }
+
       public Builder setVisibleText(java.lang.String value) {
         if (value == null) {
-    throw new NullPointerException();
-  }
-  result.hasVisibleText = true;
+          throw new NullPointerException();
+        }
+        result.hasVisibleText = true;
         result.visibleText_ = value;
         return this;
       }
+
       public Builder clearVisibleText() {
         result.hasVisibleText = false;
         result.visibleText_ = getDefaultInstance().getVisibleText();
         return this;
       }
-      
+
       // optional string additional_text = 14;
       public boolean hasAdditionalText() {
         return result.hasAdditionalText();
       }
+
       public java.lang.String getAdditionalText() {
         return result.getAdditionalText();
       }
+
       public Builder setAdditionalText(java.lang.String value) {
         if (value == null) {
-    throw new NullPointerException();
-  }
-  result.hasAdditionalText = true;
+          throw new NullPointerException();
+        }
+        result.hasAdditionalText = true;
         result.additionalText_ = value;
         return this;
       }
+
       public Builder clearAdditionalText() {
         result.hasAdditionalText = false;
         result.additionalText_ = getDefaultInstance().getAdditionalText();
         return this;
       }
-      
+
       // @@protoc_insertion_point(builder_scope:scope.QuickWidgetInfo)
     }
-    
+
     static {
       defaultInstance = new QuickWidgetInfo(true);
       com.opera.core.systems.scope.protos.DesktopWmProtos.internalForceInit();
       defaultInstance.initFields();
     }
-    
+
     // @@protoc_insertion_point(class_scope:scope.QuickWidgetInfo)
   }
-  
+
   public static final class DesktopWindowID extends
-      com.google.protobuf.GeneratedMessage {
+                                            com.google.protobuf.GeneratedMessage {
+
     // Use DesktopWindowID.newBuilder() to construct.
     private DesktopWindowID() {
       initFields();
     }
-    private DesktopWindowID(boolean noInit) {}
-    
+
+    private DesktopWindowID(boolean noInit) {
+    }
+
     private static final DesktopWindowID defaultInstance;
+
     public static DesktopWindowID getDefaultInstance() {
       return defaultInstance;
     }
-    
+
     public DesktopWindowID getDefaultInstanceForType() {
       return defaultInstance;
     }
-    
+
     public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
+    getDescriptor() {
       return com.opera.core.systems.scope.protos.DesktopWmProtos.internal_static_scope_DesktopWindowID_descriptor;
     }
-    
+
     protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-        internalGetFieldAccessorTable() {
+    internalGetFieldAccessorTable() {
       return com.opera.core.systems.scope.protos.DesktopWmProtos.internal_static_scope_DesktopWindowID_fieldAccessorTable;
     }
-    
+
     // required uint32 windowID = 1;
     public static final int WINDOWID_FIELD_NUMBER = 1;
     private boolean hasWindowID;
     private int windowID_ = 0;
-    public boolean hasWindowID() { return hasWindowID; }
-    public int getWindowID() { return windowID_; }
-    
+
+    public boolean hasWindowID() {
+      return hasWindowID;
+    }
+
+    public int getWindowID() {
+      return windowID_;
+    }
+
     private void initFields() {
     }
+
     public final boolean isInitialized() {
-      if (!hasWindowID) return false;
+      if (!hasWindowID) {
+        return false;
+      }
       return true;
     }
-    
+
     public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
+        throws java.io.IOException {
       getSerializedSize();
       if (hasWindowID()) {
         output.writeUInt32(1, getWindowID());
       }
       getUnknownFields().writeTo(output);
     }
-    
+
     private int memoizedSerializedSize = -1;
+
     public int getSerializedSize() {
       int size = memoizedSerializedSize;
-      if (size != -1) return size;
-    
+      if (size != -1) {
+        return size;
+      }
+
       size = 0;
       if (hasWindowID()) {
         size += com.google.protobuf.CodedOutputStream
-          .computeUInt32Size(1, getWindowID());
+            .computeUInt32Size(1, getWindowID());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
       return size;
     }
-    
+
     public static com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+          .buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID parseFrom(byte[] data)
+
+    public static com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID parseFrom(
+        byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+          .buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID parseFrom(java.io.InputStream input)
+
+    public static com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID parseFrom(
+        java.io.InputStream input)
         throws java.io.IOException {
       return newBuilder().mergeFrom(input).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+          .buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID parseDelimitedFrom(java.io.InputStream input)
+
+    public static com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID parseDelimitedFrom(
+        java.io.InputStream input)
         throws java.io.IOException {
       Builder builder = newBuilder();
       if (builder.mergeDelimitedFrom(input)) {
@@ -4475,6 +5514,7 @@ public final class DesktopWmProtos {
         return null;
       }
     }
+
     public static com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -4486,119 +5526,140 @@ public final class DesktopWmProtos {
         return null;
       }
     }
+
     public static com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return newBuilder().mergeFrom(input).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+          .buildParsed();
     }
-    
-    public static Builder newBuilder() { return Builder.create(); }
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID prototype) {
+
+    public static Builder newBuilder() {
+      return Builder.create();
+    }
+
+    public Builder newBuilderForType() {
+      return newBuilder();
+    }
+
+    public static Builder newBuilder(
+        com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID prototype) {
       return newBuilder().mergeFrom(prototype);
     }
-    public Builder toBuilder() { return newBuilder(this); }
-    
+
+    public Builder toBuilder() {
+      return newBuilder(this);
+    }
+
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> {
+                                      com.google.protobuf.GeneratedMessage.Builder<Builder> {
+
       private com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID result;
-      
+
       // Construct using com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID.newBuilder()
-      private Builder() {}
-      
+      private Builder() {
+      }
+
       private static Builder create() {
         Builder builder = new Builder();
         builder.result = new com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID();
         return builder;
       }
-      
+
       protected com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID internalGetResult() {
         return result;
       }
-      
+
       public Builder clear() {
         if (result == null) {
           throw new IllegalStateException(
-            "Cannot call clear() after build().");
+              "Cannot call clear() after build().");
         }
         result = new com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID();
         return this;
       }
-      
+
       public Builder clone() {
         return create().mergeFrom(result);
       }
-      
+
       public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
+      getDescriptorForType() {
         return com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID.getDescriptor();
       }
-      
+
       public com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID getDefaultInstanceForType() {
-        return com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID.getDefaultInstance();
+        return com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID
+            .getDefaultInstance();
       }
-      
+
       public boolean isInitialized() {
         return result.isInitialized();
       }
+
       public com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID build() {
         if (result != null && !isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return buildPartial();
       }
-      
+
       private com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID buildParsed()
           throws com.google.protobuf.InvalidProtocolBufferException {
         if (!isInitialized()) {
           throw newUninitializedMessageException(
-            result).asInvalidProtocolBufferException();
+              result).asInvalidProtocolBufferException();
         }
         return buildPartial();
       }
-      
+
       public com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID buildPartial() {
         if (result == null) {
           throw new IllegalStateException(
-            "build() has already been called on this Builder.");
+              "build() has already been called on this Builder.");
         }
         com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID returnMe = result;
         result = null;
         return returnMe;
       }
-      
+
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID) {
-          return mergeFrom((com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID)other);
+          return mergeFrom(
+              (com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID) other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
-      
-      public Builder mergeFrom(com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID other) {
-        if (other == com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID.getDefaultInstance()) return this;
+
+      public Builder mergeFrom(
+          com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID other) {
+        if (other == com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID
+            .getDefaultInstance()) {
+          return this;
+        }
         if (other.hasWindowID()) {
           setWindowID(other.getWindowID());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
-      
+
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
         com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder(
-            this.getUnknownFields());
+            com.google.protobuf.UnknownFieldSet.newBuilder(
+                this.getUnknownFields());
         while (true) {
           int tag = input.readTag();
           switch (tag) {
@@ -4620,145 +5681,175 @@ public final class DesktopWmProtos {
           }
         }
       }
-      
-      
+
+
       // required uint32 windowID = 1;
       public boolean hasWindowID() {
         return result.hasWindowID();
       }
+
       public int getWindowID() {
         return result.getWindowID();
       }
+
       public Builder setWindowID(int value) {
         result.hasWindowID = true;
         result.windowID_ = value;
         return this;
       }
+
       public Builder clearWindowID() {
         result.hasWindowID = false;
         result.windowID_ = 0;
         return this;
       }
-      
+
       // @@protoc_insertion_point(builder_scope:scope.DesktopWindowID)
     }
-    
+
     static {
       defaultInstance = new DesktopWindowID(true);
       com.opera.core.systems.scope.protos.DesktopWmProtos.internalForceInit();
       defaultInstance.initFields();
     }
-    
+
     // @@protoc_insertion_point(class_scope:scope.DesktopWindowID)
   }
-  
+
   public static final class DesktopWindowList extends
-      com.google.protobuf.GeneratedMessage {
+                                              com.google.protobuf.GeneratedMessage {
+
     // Use DesktopWindowList.newBuilder() to construct.
     private DesktopWindowList() {
       initFields();
     }
-    private DesktopWindowList(boolean noInit) {}
-    
+
+    private DesktopWindowList(boolean noInit) {
+    }
+
     private static final DesktopWindowList defaultInstance;
+
     public static DesktopWindowList getDefaultInstance() {
       return defaultInstance;
     }
-    
+
     public DesktopWindowList getDefaultInstanceForType() {
       return defaultInstance;
     }
-    
+
     public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
+    getDescriptor() {
       return com.opera.core.systems.scope.protos.DesktopWmProtos.internal_static_scope_DesktopWindowList_descriptor;
     }
-    
+
     protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-        internalGetFieldAccessorTable() {
+    internalGetFieldAccessorTable() {
       return com.opera.core.systems.scope.protos.DesktopWmProtos.internal_static_scope_DesktopWindowList_fieldAccessorTable;
     }
-    
+
     // repeated .scope.DesktopWindowInfo windowList = 1;
     public static final int WINDOWLIST_FIELD_NUMBER = 1;
-    private java.util.List<com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo> windowList_ =
-      java.util.Collections.emptyList();
+    private
+    java.util.List<com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo>
+        windowList_ =
+        java.util.Collections.emptyList();
+
     public java.util.List<com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo> getWindowListList() {
       return windowList_;
     }
-    public int getWindowListCount() { return windowList_.size(); }
-    public com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo getWindowList(int index) {
+
+    public int getWindowListCount() {
+      return windowList_.size();
+    }
+
+    public com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo getWindowList(
+        int index) {
       return windowList_.get(index);
     }
-    
+
     private void initFields() {
     }
+
     public final boolean isInitialized() {
       for (com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo element : getWindowListList()) {
-        if (!element.isInitialized()) return false;
+        if (!element.isInitialized()) {
+          return false;
+        }
       }
       return true;
     }
-    
+
     public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
+        throws java.io.IOException {
       getSerializedSize();
       for (com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo element : getWindowListList()) {
         output.writeMessage(1, element);
       }
       getUnknownFields().writeTo(output);
     }
-    
+
     private int memoizedSerializedSize = -1;
+
     public int getSerializedSize() {
       int size = memoizedSerializedSize;
-      if (size != -1) return size;
-    
+      if (size != -1) {
+        return size;
+      }
+
       size = 0;
       for (com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo element : getWindowListList()) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(1, element);
+            .computeMessageSize(1, element);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
       return size;
     }
-    
+
     public static com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowList parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowList parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+          .buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowList parseFrom(byte[] data)
+
+    public static com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowList parseFrom(
+        byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowList parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+          .buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowList parseFrom(java.io.InputStream input)
+
+    public static com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowList parseFrom(
+        java.io.InputStream input)
         throws java.io.IOException {
       return newBuilder().mergeFrom(input).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowList parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+          .buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowList parseDelimitedFrom(java.io.InputStream input)
+
+    public static com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowList parseDelimitedFrom(
+        java.io.InputStream input)
         throws java.io.IOException {
       Builder builder = newBuilder();
       if (builder.mergeDelimitedFrom(input)) {
@@ -4767,6 +5858,7 @@ public final class DesktopWmProtos {
         return null;
       }
     }
+
     public static com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowList parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -4778,126 +5870,150 @@ public final class DesktopWmProtos {
         return null;
       }
     }
+
     public static com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowList parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return newBuilder().mergeFrom(input).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowList parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+          .buildParsed();
     }
-    
-    public static Builder newBuilder() { return Builder.create(); }
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowList prototype) {
+
+    public static Builder newBuilder() {
+      return Builder.create();
+    }
+
+    public Builder newBuilderForType() {
+      return newBuilder();
+    }
+
+    public static Builder newBuilder(
+        com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowList prototype) {
       return newBuilder().mergeFrom(prototype);
     }
-    public Builder toBuilder() { return newBuilder(this); }
-    
+
+    public Builder toBuilder() {
+      return newBuilder(this);
+    }
+
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> {
+                                      com.google.protobuf.GeneratedMessage.Builder<Builder> {
+
       private com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowList result;
-      
+
       // Construct using com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowList.newBuilder()
-      private Builder() {}
-      
+      private Builder() {
+      }
+
       private static Builder create() {
         Builder builder = new Builder();
-        builder.result = new com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowList();
+        builder.result =
+            new com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowList();
         return builder;
       }
-      
+
       protected com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowList internalGetResult() {
         return result;
       }
-      
+
       public Builder clear() {
         if (result == null) {
           throw new IllegalStateException(
-            "Cannot call clear() after build().");
+              "Cannot call clear() after build().");
         }
         result = new com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowList();
         return this;
       }
-      
+
       public Builder clone() {
         return create().mergeFrom(result);
       }
-      
+
       public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
-        return com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowList.getDescriptor();
+      getDescriptorForType() {
+        return com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowList
+            .getDescriptor();
       }
-      
+
       public com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowList getDefaultInstanceForType() {
-        return com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowList.getDefaultInstance();
+        return com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowList
+            .getDefaultInstance();
       }
-      
+
       public boolean isInitialized() {
         return result.isInitialized();
       }
+
       public com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowList build() {
         if (result != null && !isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return buildPartial();
       }
-      
+
       private com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowList buildParsed()
           throws com.google.protobuf.InvalidProtocolBufferException {
         if (!isInitialized()) {
           throw newUninitializedMessageException(
-            result).asInvalidProtocolBufferException();
+              result).asInvalidProtocolBufferException();
         }
         return buildPartial();
       }
-      
+
       public com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowList buildPartial() {
         if (result == null) {
           throw new IllegalStateException(
-            "build() has already been called on this Builder.");
+              "build() has already been called on this Builder.");
         }
         if (result.windowList_ != java.util.Collections.EMPTY_LIST) {
           result.windowList_ =
-            java.util.Collections.unmodifiableList(result.windowList_);
+              java.util.Collections.unmodifiableList(result.windowList_);
         }
         com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowList returnMe = result;
         result = null;
         return returnMe;
       }
-      
+
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowList) {
-          return mergeFrom((com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowList)other);
+          return mergeFrom(
+              (com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowList) other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
-      
-      public Builder mergeFrom(com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowList other) {
-        if (other == com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowList.getDefaultInstance()) return this;
+
+      public Builder mergeFrom(
+          com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowList other) {
+        if (other == com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowList
+            .getDefaultInstance()) {
+          return this;
+        }
         if (!other.windowList_.isEmpty()) {
           if (result.windowList_.isEmpty()) {
-            result.windowList_ = new java.util.ArrayList<com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo>();
+            result.windowList_ =
+                new java.util.ArrayList<com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo>();
           }
           result.windowList_.addAll(other.windowList_);
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
-      
+
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
         com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder(
-            this.getUnknownFields());
+            com.google.protobuf.UnknownFieldSet.newBuilder(
+                this.getUnknownFields());
         while (true) {
           int tag = input.readTag();
           switch (tag) {
@@ -4913,7 +6029,10 @@ public final class DesktopWmProtos {
               break;
             }
             case 10: {
-              com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo.Builder subBuilder = com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo.newBuilder();
+              com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo.Builder
+                  subBuilder =
+                  com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo
+                      .newBuilder();
               input.readMessage(subBuilder, extensionRegistry);
               addWindowList(subBuilder.buildPartial());
               break;
@@ -4921,178 +6040,221 @@ public final class DesktopWmProtos {
           }
         }
       }
-      
-      
+
+
       // repeated .scope.DesktopWindowInfo windowList = 1;
       public java.util.List<com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo> getWindowListList() {
         return java.util.Collections.unmodifiableList(result.windowList_);
       }
+
       public int getWindowListCount() {
         return result.getWindowListCount();
       }
-      public com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo getWindowList(int index) {
+
+      public com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo getWindowList(
+          int index) {
         return result.getWindowList(index);
       }
-      public Builder setWindowList(int index, com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo value) {
+
+      public Builder setWindowList(int index,
+                                   com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo value) {
         if (value == null) {
           throw new NullPointerException();
         }
         result.windowList_.set(index, value);
         return this;
       }
-      public Builder setWindowList(int index, com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo.Builder builderForValue) {
+
+      public Builder setWindowList(int index,
+                                   com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo.Builder builderForValue) {
         result.windowList_.set(index, builderForValue.build());
         return this;
       }
-      public Builder addWindowList(com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo value) {
+
+      public Builder addWindowList(
+          com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo value) {
         if (value == null) {
           throw new NullPointerException();
         }
         if (result.windowList_.isEmpty()) {
-          result.windowList_ = new java.util.ArrayList<com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo>();
+          result.windowList_ =
+              new java.util.ArrayList<com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo>();
         }
         result.windowList_.add(value);
         return this;
       }
-      public Builder addWindowList(com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo.Builder builderForValue) {
+
+      public Builder addWindowList(
+          com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo.Builder builderForValue) {
         if (result.windowList_.isEmpty()) {
-          result.windowList_ = new java.util.ArrayList<com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo>();
+          result.windowList_ =
+              new java.util.ArrayList<com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo>();
         }
         result.windowList_.add(builderForValue.build());
         return this;
       }
+
       public Builder addAllWindowList(
           java.lang.Iterable<? extends com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo> values) {
         if (result.windowList_.isEmpty()) {
-          result.windowList_ = new java.util.ArrayList<com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo>();
+          result.windowList_ =
+              new java.util.ArrayList<com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo>();
         }
         super.addAll(values, result.windowList_);
         return this;
       }
+
       public Builder clearWindowList() {
         result.windowList_ = java.util.Collections.emptyList();
         return this;
       }
-      
+
       // @@protoc_insertion_point(builder_scope:scope.DesktopWindowList)
     }
-    
+
     static {
       defaultInstance = new DesktopWindowList(true);
       com.opera.core.systems.scope.protos.DesktopWmProtos.internalForceInit();
       defaultInstance.initFields();
     }
-    
+
     // @@protoc_insertion_point(class_scope:scope.DesktopWindowList)
   }
-  
+
   public static final class QuickWidgetInfoList extends
-      com.google.protobuf.GeneratedMessage {
+                                                com.google.protobuf.GeneratedMessage {
+
     // Use QuickWidgetInfoList.newBuilder() to construct.
     private QuickWidgetInfoList() {
       initFields();
     }
-    private QuickWidgetInfoList(boolean noInit) {}
-    
+
+    private QuickWidgetInfoList(boolean noInit) {
+    }
+
     private static final QuickWidgetInfoList defaultInstance;
+
     public static QuickWidgetInfoList getDefaultInstance() {
       return defaultInstance;
     }
-    
+
     public QuickWidgetInfoList getDefaultInstanceForType() {
       return defaultInstance;
     }
-    
+
     public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
+    getDescriptor() {
       return com.opera.core.systems.scope.protos.DesktopWmProtos.internal_static_scope_QuickWidgetInfoList_descriptor;
     }
-    
+
     protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-        internalGetFieldAccessorTable() {
+    internalGetFieldAccessorTable() {
       return com.opera.core.systems.scope.protos.DesktopWmProtos.internal_static_scope_QuickWidgetInfoList_fieldAccessorTable;
     }
-    
+
     // repeated .scope.QuickWidgetInfo quickwidgetList = 1;
     public static final int QUICKWIDGETLIST_FIELD_NUMBER = 1;
-    private java.util.List<com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo> quickwidgetList_ =
-      java.util.Collections.emptyList();
+    private
+    java.util.List<com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo>
+        quickwidgetList_ =
+        java.util.Collections.emptyList();
+
     public java.util.List<com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo> getQuickwidgetListList() {
       return quickwidgetList_;
     }
-    public int getQuickwidgetListCount() { return quickwidgetList_.size(); }
-    public com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo getQuickwidgetList(int index) {
+
+    public int getQuickwidgetListCount() {
+      return quickwidgetList_.size();
+    }
+
+    public com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo getQuickwidgetList(
+        int index) {
       return quickwidgetList_.get(index);
     }
-    
+
     private void initFields() {
     }
+
     public final boolean isInitialized() {
       for (com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo element : getQuickwidgetListList()) {
-        if (!element.isInitialized()) return false;
+        if (!element.isInitialized()) {
+          return false;
+        }
       }
       return true;
     }
-    
+
     public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
+        throws java.io.IOException {
       getSerializedSize();
       for (com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo element : getQuickwidgetListList()) {
         output.writeMessage(1, element);
       }
       getUnknownFields().writeTo(output);
     }
-    
+
     private int memoizedSerializedSize = -1;
+
     public int getSerializedSize() {
       int size = memoizedSerializedSize;
-      if (size != -1) return size;
-    
+      if (size != -1) {
+        return size;
+      }
+
       size = 0;
       for (com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo element : getQuickwidgetListList()) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(1, element);
+            .computeMessageSize(1, element);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
       return size;
     }
-    
+
     public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfoList parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfoList parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+          .buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfoList parseFrom(byte[] data)
+
+    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfoList parseFrom(
+        byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfoList parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+          .buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfoList parseFrom(java.io.InputStream input)
+
+    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfoList parseFrom(
+        java.io.InputStream input)
         throws java.io.IOException {
       return newBuilder().mergeFrom(input).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfoList parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+          .buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfoList parseDelimitedFrom(java.io.InputStream input)
+
+    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfoList parseDelimitedFrom(
+        java.io.InputStream input)
         throws java.io.IOException {
       Builder builder = newBuilder();
       if (builder.mergeDelimitedFrom(input)) {
@@ -5101,6 +6263,7 @@ public final class DesktopWmProtos {
         return null;
       }
     }
+
     public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfoList parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -5112,126 +6275,150 @@ public final class DesktopWmProtos {
         return null;
       }
     }
+
     public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfoList parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return newBuilder().mergeFrom(input).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfoList parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+          .buildParsed();
     }
-    
-    public static Builder newBuilder() { return Builder.create(); }
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfoList prototype) {
+
+    public static Builder newBuilder() {
+      return Builder.create();
+    }
+
+    public Builder newBuilderForType() {
+      return newBuilder();
+    }
+
+    public static Builder newBuilder(
+        com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfoList prototype) {
       return newBuilder().mergeFrom(prototype);
     }
-    public Builder toBuilder() { return newBuilder(this); }
-    
+
+    public Builder toBuilder() {
+      return newBuilder(this);
+    }
+
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> {
+                                      com.google.protobuf.GeneratedMessage.Builder<Builder> {
+
       private com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfoList result;
-      
+
       // Construct using com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfoList.newBuilder()
-      private Builder() {}
-      
+      private Builder() {
+      }
+
       private static Builder create() {
         Builder builder = new Builder();
-        builder.result = new com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfoList();
+        builder.result =
+            new com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfoList();
         return builder;
       }
-      
+
       protected com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfoList internalGetResult() {
         return result;
       }
-      
+
       public Builder clear() {
         if (result == null) {
           throw new IllegalStateException(
-            "Cannot call clear() after build().");
+              "Cannot call clear() after build().");
         }
         result = new com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfoList();
         return this;
       }
-      
+
       public Builder clone() {
         return create().mergeFrom(result);
       }
-      
+
       public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
-        return com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfoList.getDescriptor();
+      getDescriptorForType() {
+        return com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfoList
+            .getDescriptor();
       }
-      
+
       public com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfoList getDefaultInstanceForType() {
-        return com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfoList.getDefaultInstance();
+        return com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfoList
+            .getDefaultInstance();
       }
-      
+
       public boolean isInitialized() {
         return result.isInitialized();
       }
+
       public com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfoList build() {
         if (result != null && !isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return buildPartial();
       }
-      
+
       private com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfoList buildParsed()
           throws com.google.protobuf.InvalidProtocolBufferException {
         if (!isInitialized()) {
           throw newUninitializedMessageException(
-            result).asInvalidProtocolBufferException();
+              result).asInvalidProtocolBufferException();
         }
         return buildPartial();
       }
-      
+
       public com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfoList buildPartial() {
         if (result == null) {
           throw new IllegalStateException(
-            "build() has already been called on this Builder.");
+              "build() has already been called on this Builder.");
         }
         if (result.quickwidgetList_ != java.util.Collections.EMPTY_LIST) {
           result.quickwidgetList_ =
-            java.util.Collections.unmodifiableList(result.quickwidgetList_);
+              java.util.Collections.unmodifiableList(result.quickwidgetList_);
         }
         com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfoList returnMe = result;
         result = null;
         return returnMe;
       }
-      
+
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfoList) {
-          return mergeFrom((com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfoList)other);
+          return mergeFrom(
+              (com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfoList) other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
-      
-      public Builder mergeFrom(com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfoList other) {
-        if (other == com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfoList.getDefaultInstance()) return this;
+
+      public Builder mergeFrom(
+          com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfoList other) {
+        if (other == com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfoList
+            .getDefaultInstance()) {
+          return this;
+        }
         if (!other.quickwidgetList_.isEmpty()) {
           if (result.quickwidgetList_.isEmpty()) {
-            result.quickwidgetList_ = new java.util.ArrayList<com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo>();
+            result.quickwidgetList_ =
+                new java.util.ArrayList<com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo>();
           }
           result.quickwidgetList_.addAll(other.quickwidgetList_);
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
-      
+
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
         com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder(
-            this.getUnknownFields());
+            com.google.protobuf.UnknownFieldSet.newBuilder(
+                this.getUnknownFields());
         while (true) {
           int tag = input.readTag();
           switch (tag) {
@@ -5247,7 +6434,9 @@ public final class DesktopWmProtos {
               break;
             }
             case 10: {
-              com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo.Builder subBuilder = com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo.newBuilder();
+              com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo.Builder
+                  subBuilder =
+                  com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo.newBuilder();
               input.readMessage(subBuilder, extensionRegistry);
               addQuickwidgetList(subBuilder.buildPartial());
               break;
@@ -5255,202 +6444,266 @@ public final class DesktopWmProtos {
           }
         }
       }
-      
-      
+
+
       // repeated .scope.QuickWidgetInfo quickwidgetList = 1;
       public java.util.List<com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo> getQuickwidgetListList() {
         return java.util.Collections.unmodifiableList(result.quickwidgetList_);
       }
+
       public int getQuickwidgetListCount() {
         return result.getQuickwidgetListCount();
       }
-      public com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo getQuickwidgetList(int index) {
+
+      public com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo getQuickwidgetList(
+          int index) {
         return result.getQuickwidgetList(index);
       }
-      public Builder setQuickwidgetList(int index, com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo value) {
+
+      public Builder setQuickwidgetList(int index,
+                                        com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo value) {
         if (value == null) {
           throw new NullPointerException();
         }
         result.quickwidgetList_.set(index, value);
         return this;
       }
-      public Builder setQuickwidgetList(int index, com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo.Builder builderForValue) {
+
+      public Builder setQuickwidgetList(int index,
+                                        com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo.Builder builderForValue) {
         result.quickwidgetList_.set(index, builderForValue.build());
         return this;
       }
-      public Builder addQuickwidgetList(com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo value) {
+
+      public Builder addQuickwidgetList(
+          com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo value) {
         if (value == null) {
           throw new NullPointerException();
         }
         if (result.quickwidgetList_.isEmpty()) {
-          result.quickwidgetList_ = new java.util.ArrayList<com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo>();
+          result.quickwidgetList_ =
+              new java.util.ArrayList<com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo>();
         }
         result.quickwidgetList_.add(value);
         return this;
       }
-      public Builder addQuickwidgetList(com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo.Builder builderForValue) {
+
+      public Builder addQuickwidgetList(
+          com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo.Builder builderForValue) {
         if (result.quickwidgetList_.isEmpty()) {
-          result.quickwidgetList_ = new java.util.ArrayList<com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo>();
+          result.quickwidgetList_ =
+              new java.util.ArrayList<com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo>();
         }
         result.quickwidgetList_.add(builderForValue.build());
         return this;
       }
+
       public Builder addAllQuickwidgetList(
           java.lang.Iterable<? extends com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo> values) {
         if (result.quickwidgetList_.isEmpty()) {
-          result.quickwidgetList_ = new java.util.ArrayList<com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo>();
+          result.quickwidgetList_ =
+              new java.util.ArrayList<com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo>();
         }
         super.addAll(values, result.quickwidgetList_);
         return this;
       }
+
       public Builder clearQuickwidgetList() {
         result.quickwidgetList_ = java.util.Collections.emptyList();
         return this;
       }
-      
+
       // @@protoc_insertion_point(builder_scope:scope.QuickWidgetInfoList)
     }
-    
+
     static {
       defaultInstance = new QuickWidgetInfoList(true);
       com.opera.core.systems.scope.protos.DesktopWmProtos.internalForceInit();
       defaultInstance.initFields();
     }
-    
+
     // @@protoc_insertion_point(class_scope:scope.QuickWidgetInfoList)
   }
-  
+
   public static final class QuickWidgetSearch extends
-      com.google.protobuf.GeneratedMessage {
+                                              com.google.protobuf.GeneratedMessage {
+
     // Use QuickWidgetSearch.newBuilder() to construct.
     private QuickWidgetSearch() {
       initFields();
     }
-    private QuickWidgetSearch(boolean noInit) {}
-    
+
+    private QuickWidgetSearch(boolean noInit) {
+    }
+
     private static final QuickWidgetSearch defaultInstance;
+
     public static QuickWidgetSearch getDefaultInstance() {
       return defaultInstance;
     }
-    
+
     public QuickWidgetSearch getDefaultInstanceForType() {
       return defaultInstance;
     }
-    
+
     public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
+    getDescriptor() {
       return com.opera.core.systems.scope.protos.DesktopWmProtos.internal_static_scope_QuickWidgetSearch_descriptor;
     }
-    
+
     protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-        internalGetFieldAccessorTable() {
+    internalGetFieldAccessorTable() {
       return com.opera.core.systems.scope.protos.DesktopWmProtos.internal_static_scope_QuickWidgetSearch_fieldAccessorTable;
     }
-    
+
     public enum QuickWidgetSearchType
         implements com.google.protobuf.ProtocolMessageEnum {
       NAME(0, 0),
       TEXT(1, 1),
-      POS(2, 2),
-      ;
-      
-      
-      public final int getNumber() { return value; }
-      
+      POS(2, 2),;
+
+
+      public final int getNumber() {
+        return value;
+      }
+
       public static QuickWidgetSearchType valueOf(int value) {
         switch (value) {
-          case 0: return NAME;
-          case 1: return TEXT;
-          case 2: return POS;
-          default: return null;
+          case 0:
+            return NAME;
+          case 1:
+            return TEXT;
+          case 2:
+            return POS;
+          default:
+            return null;
         }
       }
-      
+
       public static com.google.protobuf.Internal.EnumLiteMap<QuickWidgetSearchType>
-          internalGetValueMap() {
+      internalGetValueMap() {
         return internalValueMap;
       }
+
       private static com.google.protobuf.Internal.EnumLiteMap<QuickWidgetSearchType>
           internalValueMap =
-            new com.google.protobuf.Internal.EnumLiteMap<QuickWidgetSearchType>() {
-              public QuickWidgetSearchType findValueByNumber(int number) {
-                return QuickWidgetSearchType.valueOf(number)
-      ;        }
-            };
-      
+          new com.google.protobuf.Internal.EnumLiteMap<QuickWidgetSearchType>() {
+            public QuickWidgetSearchType findValueByNumber(int number) {
+              return QuickWidgetSearchType.valueOf(number)
+                  ;
+            }
+          };
+
       public final com.google.protobuf.Descriptors.EnumValueDescriptor
-          getValueDescriptor() {
+      getValueDescriptor() {
         return getDescriptor().getValues().get(index);
       }
+
       public final com.google.protobuf.Descriptors.EnumDescriptor
-          getDescriptorForType() {
+      getDescriptorForType() {
         return getDescriptor();
       }
+
       public static final com.google.protobuf.Descriptors.EnumDescriptor
-          getDescriptor() {
-        return com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearch.getDescriptor().getEnumTypes().get(0);
+      getDescriptor() {
+        return com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearch.getDescriptor()
+            .getEnumTypes().get(0);
       }
-      
+
       private static final QuickWidgetSearchType[] VALUES = {
-        NAME, TEXT, POS, 
+          NAME, TEXT, POS,
       };
+
       public static QuickWidgetSearchType valueOf(
           com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
         if (desc.getType() != getDescriptor()) {
           throw new java.lang.IllegalArgumentException(
-            "EnumValueDescriptor is not for this type.");
+              "EnumValueDescriptor is not for this type.");
         }
         return VALUES[desc.getIndex()];
       }
+
       private final int index;
       private final int value;
+
       private QuickWidgetSearchType(int index, int value) {
         this.index = index;
         this.value = value;
       }
-      
+
       static {
         com.opera.core.systems.scope.protos.DesktopWmProtos.getDescriptor();
       }
-      
+
       // @@protoc_insertion_point(enum_scope:scope.QuickWidgetSearch.QuickWidgetSearchType)
     }
-    
+
     // required .scope.DesktopWindowID windowID = 1;
     public static final int WINDOWID_FIELD_NUMBER = 1;
     private boolean hasWindowID;
     private com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID windowID_;
-    public boolean hasWindowID() { return hasWindowID; }
-    public com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID getWindowID() { return windowID_; }
-    
+
+    public boolean hasWindowID() {
+      return hasWindowID;
+    }
+
+    public com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID getWindowID() {
+      return windowID_;
+    }
+
     // required .scope.QuickWidgetSearch.QuickWidgetSearchType searchType = 2;
     public static final int SEARCHTYPE_FIELD_NUMBER = 2;
     private boolean hasSearchType;
-    private com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearch.QuickWidgetSearchType searchType_;
-    public boolean hasSearchType() { return hasSearchType; }
-    public com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearch.QuickWidgetSearchType getSearchType() { return searchType_; }
-    
+    private
+    com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearch.QuickWidgetSearchType
+        searchType_;
+
+    public boolean hasSearchType() {
+      return hasSearchType;
+    }
+
+    public com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearch.QuickWidgetSearchType getSearchType() {
+      return searchType_;
+    }
+
     // required string data = 3;
     public static final int DATA_FIELD_NUMBER = 3;
     private boolean hasData;
     private java.lang.String data_ = "";
-    public boolean hasData() { return hasData; }
-    public java.lang.String getData() { return data_; }
-    
-    private void initFields() {
-      windowID_ = com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID.getDefaultInstance();
-      searchType_ = com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearch.QuickWidgetSearchType.NAME;
+
+    public boolean hasData() {
+      return hasData;
     }
+
+    public java.lang.String getData() {
+      return data_;
+    }
+
+    private void initFields() {
+      windowID_ =
+          com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID.getDefaultInstance();
+      searchType_ =
+          com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearch.QuickWidgetSearchType.NAME;
+    }
+
     public final boolean isInitialized() {
-      if (!hasWindowID) return false;
-      if (!hasSearchType) return false;
-      if (!hasData) return false;
-      if (!getWindowID().isInitialized()) return false;
+      if (!hasWindowID) {
+        return false;
+      }
+      if (!hasSearchType) {
+        return false;
+      }
+      if (!hasData) {
+        return false;
+      }
+      if (!getWindowID().isInitialized()) {
+        return false;
+      }
       return true;
     }
-    
+
     public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
+        throws java.io.IOException {
       getSerializedSize();
       if (hasWindowID()) {
         output.writeMessage(1, getWindowID());
@@ -5463,65 +6716,77 @@ public final class DesktopWmProtos {
       }
       getUnknownFields().writeTo(output);
     }
-    
+
     private int memoizedSerializedSize = -1;
+
     public int getSerializedSize() {
       int size = memoizedSerializedSize;
-      if (size != -1) return size;
-    
+      if (size != -1) {
+        return size;
+      }
+
       size = 0;
       if (hasWindowID()) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(1, getWindowID());
+            .computeMessageSize(1, getWindowID());
       }
       if (hasSearchType()) {
         size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(2, getSearchType().getNumber());
+            .computeEnumSize(2, getSearchType().getNumber());
       }
       if (hasData()) {
         size += com.google.protobuf.CodedOutputStream
-          .computeStringSize(3, getData());
+            .computeStringSize(3, getData());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
       return size;
     }
-    
+
     public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearch parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearch parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+          .buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearch parseFrom(byte[] data)
+
+    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearch parseFrom(
+        byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearch parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+          .buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearch parseFrom(java.io.InputStream input)
+
+    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearch parseFrom(
+        java.io.InputStream input)
         throws java.io.IOException {
       return newBuilder().mergeFrom(input).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearch parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+          .buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearch parseDelimitedFrom(java.io.InputStream input)
+
+    public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearch parseDelimitedFrom(
+        java.io.InputStream input)
         throws java.io.IOException {
       Builder builder = newBuilder();
       if (builder.mergeDelimitedFrom(input)) {
@@ -5530,6 +6795,7 @@ public final class DesktopWmProtos {
         return null;
       }
     }
+
     public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearch parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -5541,105 +6807,128 @@ public final class DesktopWmProtos {
         return null;
       }
     }
+
     public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearch parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return newBuilder().mergeFrom(input).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearch parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+          .buildParsed();
     }
-    
-    public static Builder newBuilder() { return Builder.create(); }
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearch prototype) {
+
+    public static Builder newBuilder() {
+      return Builder.create();
+    }
+
+    public Builder newBuilderForType() {
+      return newBuilder();
+    }
+
+    public static Builder newBuilder(
+        com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearch prototype) {
       return newBuilder().mergeFrom(prototype);
     }
-    public Builder toBuilder() { return newBuilder(this); }
-    
+
+    public Builder toBuilder() {
+      return newBuilder(this);
+    }
+
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> {
+                                      com.google.protobuf.GeneratedMessage.Builder<Builder> {
+
       private com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearch result;
-      
+
       // Construct using com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearch.newBuilder()
-      private Builder() {}
-      
+      private Builder() {
+      }
+
       private static Builder create() {
         Builder builder = new Builder();
-        builder.result = new com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearch();
+        builder.result =
+            new com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearch();
         return builder;
       }
-      
+
       protected com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearch internalGetResult() {
         return result;
       }
-      
+
       public Builder clear() {
         if (result == null) {
           throw new IllegalStateException(
-            "Cannot call clear() after build().");
+              "Cannot call clear() after build().");
         }
         result = new com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearch();
         return this;
       }
-      
+
       public Builder clone() {
         return create().mergeFrom(result);
       }
-      
+
       public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
-        return com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearch.getDescriptor();
+      getDescriptorForType() {
+        return com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearch
+            .getDescriptor();
       }
-      
+
       public com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearch getDefaultInstanceForType() {
-        return com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearch.getDefaultInstance();
+        return com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearch
+            .getDefaultInstance();
       }
-      
+
       public boolean isInitialized() {
         return result.isInitialized();
       }
+
       public com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearch build() {
         if (result != null && !isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return buildPartial();
       }
-      
+
       private com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearch buildParsed()
           throws com.google.protobuf.InvalidProtocolBufferException {
         if (!isInitialized()) {
           throw newUninitializedMessageException(
-            result).asInvalidProtocolBufferException();
+              result).asInvalidProtocolBufferException();
         }
         return buildPartial();
       }
-      
+
       public com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearch buildPartial() {
         if (result == null) {
           throw new IllegalStateException(
-            "build() has already been called on this Builder.");
+              "build() has already been called on this Builder.");
         }
         com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearch returnMe = result;
         result = null;
         return returnMe;
       }
-      
+
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearch) {
-          return mergeFrom((com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearch)other);
+          return mergeFrom(
+              (com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearch) other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
-      
-      public Builder mergeFrom(com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearch other) {
-        if (other == com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearch.getDefaultInstance()) return this;
+
+      public Builder mergeFrom(
+          com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearch other) {
+        if (other == com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearch
+            .getDefaultInstance()) {
+          return this;
+        }
         if (other.hasWindowID()) {
           mergeWindowID(other.getWindowID());
         }
@@ -5652,14 +6941,14 @@ public final class DesktopWmProtos {
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
-      
+
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
         com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder(
-            this.getUnknownFields());
+            com.google.protobuf.UnknownFieldSet.newBuilder(
+                this.getUnknownFields());
         while (true) {
           int tag = input.readTag();
           switch (tag) {
@@ -5675,7 +6964,9 @@ public final class DesktopWmProtos {
               break;
             }
             case 10: {
-              com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID.Builder subBuilder = com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID.newBuilder();
+              com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID.Builder
+                  subBuilder =
+                  com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID.newBuilder();
               if (hasWindowID()) {
                 subBuilder.mergeFrom(getWindowID());
               }
@@ -5685,7 +6976,10 @@ public final class DesktopWmProtos {
             }
             case 16: {
               int rawValue = input.readEnum();
-              com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearch.QuickWidgetSearchType value = com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearch.QuickWidgetSearchType.valueOf(rawValue);
+              com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearch.QuickWidgetSearchType
+                  value =
+                  com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearch
+                      .QuickWidgetSearchType.valueOf(rawValue);
               if (value == null) {
                 unknownFields.mergeVarintField(2, rawValue);
               } else {
@@ -5700,16 +6994,19 @@ public final class DesktopWmProtos {
           }
         }
       }
-      
-      
+
+
       // required .scope.DesktopWindowID windowID = 1;
       public boolean hasWindowID() {
         return result.hasWindowID();
       }
+
       public com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID getWindowID() {
         return result.getWindowID();
       }
-      public Builder setWindowID(com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID value) {
+
+      public Builder setWindowID(
+          com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID value) {
         if (value == null) {
           throw new NullPointerException();
         }
@@ -5717,36 +7014,48 @@ public final class DesktopWmProtos {
         result.windowID_ = value;
         return this;
       }
-      public Builder setWindowID(com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID.Builder builderForValue) {
+
+      public Builder setWindowID(
+          com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID.Builder builderForValue) {
         result.hasWindowID = true;
         result.windowID_ = builderForValue.build();
         return this;
       }
-      public Builder mergeWindowID(com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID value) {
+
+      public Builder mergeWindowID(
+          com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID value) {
         if (result.hasWindowID() &&
-            result.windowID_ != com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID.getDefaultInstance()) {
+            result.windowID_ != com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID
+                .getDefaultInstance()) {
           result.windowID_ =
-            com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID.newBuilder(result.windowID_).mergeFrom(value).buildPartial();
+              com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID
+                  .newBuilder(result.windowID_).mergeFrom(value).buildPartial();
         } else {
           result.windowID_ = value;
         }
         result.hasWindowID = true;
         return this;
       }
+
       public Builder clearWindowID() {
         result.hasWindowID = false;
-        result.windowID_ = com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID.getDefaultInstance();
+        result.windowID_ =
+            com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID
+                .getDefaultInstance();
         return this;
       }
-      
+
       // required .scope.QuickWidgetSearch.QuickWidgetSearchType searchType = 2;
       public boolean hasSearchType() {
         return result.hasSearchType();
       }
+
       public com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearch.QuickWidgetSearchType getSearchType() {
         return result.getSearchType();
       }
-      public Builder setSearchType(com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearch.QuickWidgetSearchType value) {
+
+      public Builder setSearchType(
+          com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearch.QuickWidgetSearchType value) {
         if (value == null) {
           throw new NullPointerException();
         }
@@ -5754,280 +7063,297 @@ public final class DesktopWmProtos {
         result.searchType_ = value;
         return this;
       }
+
       public Builder clearSearchType() {
         result.hasSearchType = false;
-        result.searchType_ = com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearch.QuickWidgetSearchType.NAME;
+        result.searchType_ =
+            com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearch.QuickWidgetSearchType.NAME;
         return this;
       }
-      
+
       // required string data = 3;
       public boolean hasData() {
         return result.hasData();
       }
+
       public java.lang.String getData() {
         return result.getData();
       }
+
       public Builder setData(java.lang.String value) {
         if (value == null) {
-    throw new NullPointerException();
-  }
-  result.hasData = true;
+          throw new NullPointerException();
+        }
+        result.hasData = true;
         result.data_ = value;
         return this;
       }
+
       public Builder clearData() {
         result.hasData = false;
         result.data_ = getDefaultInstance().getData();
         return this;
       }
-      
+
       // @@protoc_insertion_point(builder_scope:scope.QuickWidgetSearch)
     }
-    
+
     static {
       defaultInstance = new QuickWidgetSearch(true);
       com.opera.core.systems.scope.protos.DesktopWmProtos.internalForceInit();
       defaultInstance.initFields();
     }
-    
+
     // @@protoc_insertion_point(class_scope:scope.QuickWidgetSearch)
   }
-  
+
   private static com.google.protobuf.Descriptors.Descriptor
-    internal_static_scope_DesktopWindowInfo_descriptor;
+      internal_static_scope_DesktopWindowInfo_descriptor;
   private static
-    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+  com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_scope_DesktopWindowInfo_fieldAccessorTable;
   private static com.google.protobuf.Descriptors.Descriptor
-    internal_static_scope_DesktopWindowRect_descriptor;
+      internal_static_scope_DesktopWindowRect_descriptor;
   private static
-    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+  com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_scope_DesktopWindowRect_fieldAccessorTable;
   private static com.google.protobuf.Descriptors.Descriptor
-    internal_static_scope_QuickMenuID_descriptor;
+      internal_static_scope_QuickMenuID_descriptor;
   private static
-    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+  com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_scope_QuickMenuID_fieldAccessorTable;
   private static com.google.protobuf.Descriptors.Descriptor
-    internal_static_scope_QuickMenuList_descriptor;
+      internal_static_scope_QuickMenuList_descriptor;
   private static
-    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+  com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_scope_QuickMenuList_fieldAccessorTable;
   private static com.google.protobuf.Descriptors.Descriptor
-    internal_static_scope_QuickMenuInfo_descriptor;
+      internal_static_scope_QuickMenuInfo_descriptor;
   private static
-    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+  com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_scope_QuickMenuInfo_fieldAccessorTable;
   private static com.google.protobuf.Descriptors.Descriptor
-    internal_static_scope_QuickMenuItemID_descriptor;
+      internal_static_scope_QuickMenuItemID_descriptor;
   private static
-    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+  com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_scope_QuickMenuItemID_fieldAccessorTable;
   private static com.google.protobuf.Descriptors.Descriptor
-    internal_static_scope_QuickMenuItemInfo_descriptor;
+      internal_static_scope_QuickMenuItemInfo_descriptor;
   private static
-    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+  com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_scope_QuickMenuItemInfo_fieldAccessorTable;
   private static com.google.protobuf.Descriptors.Descriptor
-    internal_static_scope_QuickWidgetInfo_descriptor;
+      internal_static_scope_QuickWidgetInfo_descriptor;
   private static
-    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+  com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_scope_QuickWidgetInfo_fieldAccessorTable;
   private static com.google.protobuf.Descriptors.Descriptor
-    internal_static_scope_DesktopWindowID_descriptor;
+      internal_static_scope_DesktopWindowID_descriptor;
   private static
-    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+  com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_scope_DesktopWindowID_fieldAccessorTable;
   private static com.google.protobuf.Descriptors.Descriptor
-    internal_static_scope_DesktopWindowList_descriptor;
+      internal_static_scope_DesktopWindowList_descriptor;
   private static
-    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+  com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_scope_DesktopWindowList_fieldAccessorTable;
   private static com.google.protobuf.Descriptors.Descriptor
-    internal_static_scope_QuickWidgetInfoList_descriptor;
+      internal_static_scope_QuickWidgetInfoList_descriptor;
   private static
-    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+  com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_scope_QuickWidgetInfoList_fieldAccessorTable;
   private static com.google.protobuf.Descriptors.Descriptor
-    internal_static_scope_QuickWidgetSearch_descriptor;
+      internal_static_scope_QuickWidgetSearch_descriptor;
   private static
-    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+  com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_scope_QuickWidgetSearch_fieldAccessorTable;
-  
+
   public static com.google.protobuf.Descriptors.FileDescriptor
-      getDescriptor() {
+  getDescriptor() {
     return descriptor;
   }
+
   private static com.google.protobuf.Descriptors.FileDescriptor
       descriptor;
+
   static {
     java.lang.String[] descriptorData = {
-      "\n\034desktop_window_manager.proto\022\005scope\"\224\003" +
-      "\n\021DesktopWindowInfo\022\020\n\010windowID\030\001 \002(\r\022\r\n" +
-      "\005title\030\002 \002(\t\022\014\n\004name\030\003 \002(\t\022>\n\nwindowType" +
-      "\030\004 \002(\0162*.scope.DesktopWindowInfo.Desktop" +
-      "WindowType\022\020\n\010onScreen\030\005 \002(\010\022:\n\005state\030\006 " +
-      "\002(\0162+.scope.DesktopWindowInfo.DesktopWin" +
-      "dowState\022&\n\004rect\030\007 \002(\0132\030.scope.DesktopWi" +
-      "ndowRect\022\016\n\006active\030\010 \002(\010\"8\n\021DesktopWindo" +
-      "wType\022\013\n\007UNKNOWN\020\000\022\n\n\006DIALOG\020\001\022\n\n\006NORMAL" +
-      "\020\002\"P\n\022DesktopWindowState\022\014\n\010RESTORED\020\000\022\r",
-      "\n\tMINIMIZED\020\001\022\r\n\tMAXIMIZED\020\002\022\016\n\nFULLSCRE" +
-      "EN\020\003\"H\n\021DesktopWindowRect\022\t\n\001x\030\001 \002(\r\022\t\n\001" +
-      "y\030\002 \002(\r\022\r\n\005width\030\003 \002(\r\022\016\n\006height\030\004 \002(\r\"\037" +
-      "\n\013QuickMenuID\022\020\n\010menuName\030\001 \002(\t\"7\n\rQuick" +
-      "MenuList\022&\n\010menuList\030\001 \003(\0132\024.scope.Quick" +
-      "MenuInfo\"\265\001\n\rQuickMenuInfo\022\"\n\006menuId\030\001 \002" +
-      "(\0132\022.scope.QuickMenuID\022&\n\004rect\030\002 \002(\0132\030.s" +
-      "cope.DesktopWindowRect\022(\n\010windowId\030\003 \002(\013" +
-      "2\026.scope.DesktopWindowID\022.\n\014menuItemList" +
-      "\030\004 \003(\0132\030.scope.QuickMenuItemInfo\"6\n\017Quic",
-      "kMenuItemID\022\020\n\010menuText\030\001 \002(\t\022\021\n\tpopupMe" +
-      "nu\030\002 \001(\010\"\371\001\n\021QuickMenuItemInfo\022\014\n\004text\030\001" +
-      " \002(\t\022\016\n\006action\030\002 \001(\t\022\017\n\007submenu\030\003 \001(\t\022\023\n" +
-      "\013actionParam\030\004 \001(\t\022\013\n\003row\030\005 \002(\r\022\026\n\016short" +
-      "cutLetter\030\006 \001(\t\022\020\n\010shortcut\030\007 \001(\t\022&\n\004rec" +
-      "t\030\010 \002(\0132\030.scope.DesktopWindowRect\022\017\n\007ena" +
-      "bled\030\t \002(\010\022\017\n\007checked\030\n \002(\010\022\014\n\004bold\030\013 \002(" +
-      "\010\022\021\n\tseparator\030\014 \002(\010\"\346\004\n\017QuickWidgetInfo" +
-      "\022\014\n\004name\030\001 \002(\t\0224\n\004type\030\002 \002(\0162&.scope.Qui" +
-      "ckWidgetInfo.QuickWidgetType\022\017\n\007visible\030",
-      "\003 \002(\010\022\014\n\004text\030\004 \002(\t\022\r\n\005value\030\005 \002(\r\022\017\n\007en" +
-      "abled\030\006 \002(\010\022\023\n\013defaultLook\030\007 \002(\010\022\023\n\013focu" +
-      "sedLook\030\010 \002(\010\022&\n\004rect\030\t \002(\0132\030.scope.Desk" +
-      "topWindowRect\022\016\n\006parent\030\n \001(\t\022\013\n\003row\030\013 \001" +
-      "(\r\022\013\n\003col\030\014 \001(\r\022\024\n\014visible_text\030\r \001(\t\022\027\n" +
-      "\017additional_text\030\016 \001(\t\"\244\002\n\017QuickWidgetTy" +
-      "pe\022\013\n\007UNKNOWN\020\000\022\n\n\006BUTTON\020\001\022\014\n\010CHECKBOX\020" +
-      "\002\022\r\n\tDIALOGTAB\020\003\022\014\n\010DROPDOWN\020\004\022\020\n\014DROPDO" +
-      "WNITEM\020\005\022\r\n\tEDITFIELD\020\006\022\t\n\005LABEL\020\007\022\017\n\013RA" +
-      "DIOBUTTON\020\010\022\020\n\014ADDRESSFIELD\020\t\022\n\n\006SEARCH\020",
-      "\n\022\013\n\007TOOLBAR\020\013\022\014\n\010TREEVIEW\020\014\022\014\n\010TREEITEM" +
-      "\020\r\022\r\n\tTABBUTTON\020\016\022\r\n\tTHUMBNAIL\020\017\022\016\n\nGRID" +
-      "LAYOUT\020\020\022\014\n\010GRIDITEM\020\021\022\r\n\tQUICKFIND\020\022\"#\n" +
-      "\017DesktopWindowID\022\020\n\010windowID\030\001 \002(\r\"A\n\021De" +
-      "sktopWindowList\022,\n\nwindowList\030\001 \003(\0132\030.sc" +
-      "ope.DesktopWindowInfo\"F\n\023QuickWidgetInfo" +
-      "List\022/\n\017quickwidgetList\030\001 \003(\0132\026.scope.Qu" +
-      "ickWidgetInfo\"\305\001\n\021QuickWidgetSearch\022(\n\010w" +
-      "indowID\030\001 \002(\0132\026.scope.DesktopWindowID\022B\n" +
-      "\nsearchType\030\002 \002(\0162..scope.QuickWidgetSea",
-      "rch.QuickWidgetSearchType\022\014\n\004data\030\003 \002(\t\"" +
-      "4\n\025QuickWidgetSearchType\022\010\n\004NAME\020\000\022\010\n\004TE" +
-      "XT\020\001\022\007\n\003POS\020\002B8\n#com.opera.core.systems." +
-      "scope.protosB\017DesktopWmProtosH\001"
+        "\n\034desktop_window_manager.proto\022\005scope\"\224\003" +
+        "\n\021DesktopWindowInfo\022\020\n\010windowID\030\001 \002(\r\022\r\n" +
+        "\005title\030\002 \002(\t\022\014\n\004name\030\003 \002(\t\022>\n\nwindowType" +
+        "\030\004 \002(\0162*.scope.DesktopWindowInfo.Desktop" +
+        "WindowType\022\020\n\010onScreen\030\005 \002(\010\022:\n\005state\030\006 " +
+        "\002(\0162+.scope.DesktopWindowInfo.DesktopWin" +
+        "dowState\022&\n\004rect\030\007 \002(\0132\030.scope.DesktopWi" +
+        "ndowRect\022\016\n\006active\030\010 \002(\010\"8\n\021DesktopWindo" +
+        "wType\022\013\n\007UNKNOWN\020\000\022\n\n\006DIALOG\020\001\022\n\n\006NORMAL" +
+        "\020\002\"P\n\022DesktopWindowState\022\014\n\010RESTORED\020\000\022\r",
+        "\n\tMINIMIZED\020\001\022\r\n\tMAXIMIZED\020\002\022\016\n\nFULLSCRE" +
+        "EN\020\003\"H\n\021DesktopWindowRect\022\t\n\001x\030\001 \002(\r\022\t\n\001" +
+        "y\030\002 \002(\r\022\r\n\005width\030\003 \002(\r\022\016\n\006height\030\004 \002(\r\"\037"
+        +
+        "\n\013QuickMenuID\022\020\n\010menuName\030\001 \002(\t\"7\n\rQuick" +
+        "MenuList\022&\n\010menuList\030\001 \003(\0132\024.scope.Quick" +
+        "MenuInfo\"\265\001\n\rQuickMenuInfo\022\"\n\006menuId\030\001 \002" +
+        "(\0132\022.scope.QuickMenuID\022&\n\004rect\030\002 \002(\0132\030.s" +
+        "cope.DesktopWindowRect\022(\n\010windowId\030\003 \002(\013" +
+        "2\026.scope.DesktopWindowID\022.\n\014menuItemList" +
+        "\030\004 \003(\0132\030.scope.QuickMenuItemInfo\"6\n\017Quic",
+        "kMenuItemID\022\020\n\010menuText\030\001 \002(\t\022\021\n\tpopupMe" +
+        "nu\030\002 \001(\010\"\371\001\n\021QuickMenuItemInfo\022\014\n\004text\030\001" +
+        " \002(\t\022\016\n\006action\030\002 \001(\t\022\017\n\007submenu\030\003 \001(\t\022\023\n"
+        +
+        "\013actionParam\030\004 \001(\t\022\013\n\003row\030\005 \002(\r\022\026\n\016short" +
+        "cutLetter\030\006 \001(\t\022\020\n\010shortcut\030\007 \001(\t\022&\n\004rec" +
+        "t\030\010 \002(\0132\030.scope.DesktopWindowRect\022\017\n\007ena" +
+        "bled\030\t \002(\010\022\017\n\007checked\030\n \002(\010\022\014\n\004bold\030\013 \002("
+        +
+        "\010\022\021\n\tseparator\030\014 \002(\010\"\346\004\n\017QuickWidgetInfo" +
+        "\022\014\n\004name\030\001 \002(\t\0224\n\004type\030\002 \002(\0162&.scope.Qui" +
+        "ckWidgetInfo.QuickWidgetType\022\017\n\007visible\030",
+        "\003 \002(\010\022\014\n\004text\030\004 \002(\t\022\r\n\005value\030\005 \002(\r\022\017\n\007en"
+        +
+        "abled\030\006 \002(\010\022\023\n\013defaultLook\030\007 \002(\010\022\023\n\013focu" +
+        "sedLook\030\010 \002(\010\022&\n\004rect\030\t \002(\0132\030.scope.Desk" +
+        "topWindowRect\022\016\n\006parent\030\n \001(\t\022\013\n\003row\030\013 \001" +
+        "(\r\022\013\n\003col\030\014 \001(\r\022\024\n\014visible_text\030\r \001(\t\022\027\n" +
+        "\017additional_text\030\016 \001(\t\"\244\002\n\017QuickWidgetTy" +
+        "pe\022\013\n\007UNKNOWN\020\000\022\n\n\006BUTTON\020\001\022\014\n\010CHECKBOX\020" +
+        "\002\022\r\n\tDIALOGTAB\020\003\022\014\n\010DROPDOWN\020\004\022\020\n\014DROPDO" +
+        "WNITEM\020\005\022\r\n\tEDITFIELD\020\006\022\t\n\005LABEL\020\007\022\017\n\013RA" +
+        "DIOBUTTON\020\010\022\020\n\014ADDRESSFIELD\020\t\022\n\n\006SEARCH\020",
+        "\n\022\013\n\007TOOLBAR\020\013\022\014\n\010TREEVIEW\020\014\022\014\n\010TREEITEM" +
+        "\020\r\022\r\n\tTABBUTTON\020\016\022\r\n\tTHUMBNAIL\020\017\022\016\n\nGRID" +
+        "LAYOUT\020\020\022\014\n\010GRIDITEM\020\021\022\r\n\tQUICKFIND\020\022\"#\n" +
+        "\017DesktopWindowID\022\020\n\010windowID\030\001 \002(\r\"A\n\021De" +
+        "sktopWindowList\022,\n\nwindowList\030\001 \003(\0132\030.sc" +
+        "ope.DesktopWindowInfo\"F\n\023QuickWidgetInfo" +
+        "List\022/\n\017quickwidgetList\030\001 \003(\0132\026.scope.Qu" +
+        "ickWidgetInfo\"\305\001\n\021QuickWidgetSearch\022(\n\010w" +
+        "indowID\030\001 \002(\0132\026.scope.DesktopWindowID\022B\n" +
+        "\nsearchType\030\002 \002(\0162..scope.QuickWidgetSea",
+        "rch.QuickWidgetSearchType\022\014\n\004data\030\003 \002(\t\"" +
+        "4\n\025QuickWidgetSearchType\022\010\n\004NAME\020\000\022\010\n\004TE" +
+        "XT\020\001\022\007\n\003POS\020\002B8\n#com.opera.core.systems." +
+        "scope.protosB\017DesktopWmProtosH\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
-      new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
-        public com.google.protobuf.ExtensionRegistry assignDescriptors(
-            com.google.protobuf.Descriptors.FileDescriptor root) {
-          descriptor = root;
-          internal_static_scope_DesktopWindowInfo_descriptor =
-            getDescriptor().getMessageTypes().get(0);
-          internal_static_scope_DesktopWindowInfo_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_scope_DesktopWindowInfo_descriptor,
-              new java.lang.String[] { "WindowID", "Title", "Name", "WindowType", "OnScreen", "State", "Rect", "Active", },
-              com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo.class,
-              com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo.Builder.class);
-          internal_static_scope_DesktopWindowRect_descriptor =
-            getDescriptor().getMessageTypes().get(1);
-          internal_static_scope_DesktopWindowRect_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_scope_DesktopWindowRect_descriptor,
-              new java.lang.String[] { "X", "Y", "Width", "Height", },
-              com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect.class,
-              com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect.Builder.class);
-          internal_static_scope_QuickMenuID_descriptor =
-            getDescriptor().getMessageTypes().get(2);
-          internal_static_scope_QuickMenuID_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_scope_QuickMenuID_descriptor,
-              new java.lang.String[] { "MenuName", },
-              com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID.class,
-              com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID.Builder.class);
-          internal_static_scope_QuickMenuList_descriptor =
-            getDescriptor().getMessageTypes().get(3);
-          internal_static_scope_QuickMenuList_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_scope_QuickMenuList_descriptor,
-              new java.lang.String[] { "MenuList", },
-              com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuList.class,
-              com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuList.Builder.class);
-          internal_static_scope_QuickMenuInfo_descriptor =
-            getDescriptor().getMessageTypes().get(4);
-          internal_static_scope_QuickMenuInfo_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_scope_QuickMenuInfo_descriptor,
-              new java.lang.String[] { "MenuId", "Rect", "WindowId", "MenuItemList", },
-              com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo.class,
-              com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo.Builder.class);
-          internal_static_scope_QuickMenuItemID_descriptor =
-            getDescriptor().getMessageTypes().get(5);
-          internal_static_scope_QuickMenuItemID_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_scope_QuickMenuItemID_descriptor,
-              new java.lang.String[] { "MenuText", "PopupMenu", },
-              com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemID.class,
-              com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemID.Builder.class);
-          internal_static_scope_QuickMenuItemInfo_descriptor =
-            getDescriptor().getMessageTypes().get(6);
-          internal_static_scope_QuickMenuItemInfo_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_scope_QuickMenuItemInfo_descriptor,
-              new java.lang.String[] { "Text", "Action", "Submenu", "ActionParam", "Row", "ShortcutLetter", "Shortcut", "Rect", "Enabled", "Checked", "Bold", "Separator", },
-              com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo.class,
-              com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo.Builder.class);
-          internal_static_scope_QuickWidgetInfo_descriptor =
-            getDescriptor().getMessageTypes().get(7);
-          internal_static_scope_QuickWidgetInfo_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_scope_QuickWidgetInfo_descriptor,
-              new java.lang.String[] { "Name", "Type", "Visible", "Text", "Value", "Enabled", "DefaultLook", "FocusedLook", "Rect", "Parent", "Row", "Col", "VisibleText", "AdditionalText", },
-              com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo.class,
-              com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo.Builder.class);
-          internal_static_scope_DesktopWindowID_descriptor =
-            getDescriptor().getMessageTypes().get(8);
-          internal_static_scope_DesktopWindowID_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_scope_DesktopWindowID_descriptor,
-              new java.lang.String[] { "WindowID", },
-              com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID.class,
-              com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID.Builder.class);
-          internal_static_scope_DesktopWindowList_descriptor =
-            getDescriptor().getMessageTypes().get(9);
-          internal_static_scope_DesktopWindowList_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_scope_DesktopWindowList_descriptor,
-              new java.lang.String[] { "WindowList", },
-              com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowList.class,
-              com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowList.Builder.class);
-          internal_static_scope_QuickWidgetInfoList_descriptor =
-            getDescriptor().getMessageTypes().get(10);
-          internal_static_scope_QuickWidgetInfoList_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_scope_QuickWidgetInfoList_descriptor,
-              new java.lang.String[] { "QuickwidgetList", },
-              com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfoList.class,
-              com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfoList.Builder.class);
-          internal_static_scope_QuickWidgetSearch_descriptor =
-            getDescriptor().getMessageTypes().get(11);
-          internal_static_scope_QuickWidgetSearch_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_scope_QuickWidgetSearch_descriptor,
-              new java.lang.String[] { "WindowID", "SearchType", "Data", },
-              com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearch.class,
-              com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearch.Builder.class);
-          return null;
-        }
-      };
+        new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
+          public com.google.protobuf.ExtensionRegistry assignDescriptors(
+              com.google.protobuf.Descriptors.FileDescriptor root) {
+            descriptor = root;
+            internal_static_scope_DesktopWindowInfo_descriptor =
+                getDescriptor().getMessageTypes().get(0);
+            internal_static_scope_DesktopWindowInfo_fieldAccessorTable = new
+                com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+                internal_static_scope_DesktopWindowInfo_descriptor,
+                new java.lang.String[]{"WindowID", "Title", "Name", "WindowType", "OnScreen",
+                                       "State", "Rect", "Active",},
+                com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo.class,
+                com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo.Builder.class);
+            internal_static_scope_DesktopWindowRect_descriptor =
+                getDescriptor().getMessageTypes().get(1);
+            internal_static_scope_DesktopWindowRect_fieldAccessorTable = new
+                com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+                internal_static_scope_DesktopWindowRect_descriptor,
+                new java.lang.String[]{"X", "Y", "Width", "Height",},
+                com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect.class,
+                com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect.Builder.class);
+            internal_static_scope_QuickMenuID_descriptor =
+                getDescriptor().getMessageTypes().get(2);
+            internal_static_scope_QuickMenuID_fieldAccessorTable = new
+                com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+                internal_static_scope_QuickMenuID_descriptor,
+                new java.lang.String[]{"MenuName",},
+                com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID.class,
+                com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID.Builder.class);
+            internal_static_scope_QuickMenuList_descriptor =
+                getDescriptor().getMessageTypes().get(3);
+            internal_static_scope_QuickMenuList_fieldAccessorTable = new
+                com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+                internal_static_scope_QuickMenuList_descriptor,
+                new java.lang.String[]{"MenuList",},
+                com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuList.class,
+                com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuList.Builder.class);
+            internal_static_scope_QuickMenuInfo_descriptor =
+                getDescriptor().getMessageTypes().get(4);
+            internal_static_scope_QuickMenuInfo_fieldAccessorTable = new
+                com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+                internal_static_scope_QuickMenuInfo_descriptor,
+                new java.lang.String[]{"MenuId", "Rect", "WindowId", "MenuItemList",},
+                com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo.class,
+                com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo.Builder.class);
+            internal_static_scope_QuickMenuItemID_descriptor =
+                getDescriptor().getMessageTypes().get(5);
+            internal_static_scope_QuickMenuItemID_fieldAccessorTable = new
+                com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+                internal_static_scope_QuickMenuItemID_descriptor,
+                new java.lang.String[]{"MenuText", "PopupMenu",},
+                com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemID.class,
+                com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemID.Builder.class);
+            internal_static_scope_QuickMenuItemInfo_descriptor =
+                getDescriptor().getMessageTypes().get(6);
+            internal_static_scope_QuickMenuItemInfo_fieldAccessorTable = new
+                com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+                internal_static_scope_QuickMenuItemInfo_descriptor,
+                new java.lang.String[]{"Text", "Action", "Submenu", "ActionParam", "Row",
+                                       "ShortcutLetter", "Shortcut", "Rect", "Enabled", "Checked",
+                                       "Bold", "Separator",},
+                com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo.class,
+                com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo.Builder.class);
+            internal_static_scope_QuickWidgetInfo_descriptor =
+                getDescriptor().getMessageTypes().get(7);
+            internal_static_scope_QuickWidgetInfo_fieldAccessorTable = new
+                com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+                internal_static_scope_QuickWidgetInfo_descriptor,
+                new java.lang.String[]{"Name", "Type", "Visible", "Text", "Value", "Enabled",
+                                       "DefaultLook", "FocusedLook", "Rect", "Parent", "Row", "Col",
+                                       "VisibleText", "AdditionalText",},
+                com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo.class,
+                com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo.Builder.class);
+            internal_static_scope_DesktopWindowID_descriptor =
+                getDescriptor().getMessageTypes().get(8);
+            internal_static_scope_DesktopWindowID_fieldAccessorTable = new
+                com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+                internal_static_scope_DesktopWindowID_descriptor,
+                new java.lang.String[]{"WindowID",},
+                com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID.class,
+                com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID.Builder.class);
+            internal_static_scope_DesktopWindowList_descriptor =
+                getDescriptor().getMessageTypes().get(9);
+            internal_static_scope_DesktopWindowList_fieldAccessorTable = new
+                com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+                internal_static_scope_DesktopWindowList_descriptor,
+                new java.lang.String[]{"WindowList",},
+                com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowList.class,
+                com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowList.Builder.class);
+            internal_static_scope_QuickWidgetInfoList_descriptor =
+                getDescriptor().getMessageTypes().get(10);
+            internal_static_scope_QuickWidgetInfoList_fieldAccessorTable = new
+                com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+                internal_static_scope_QuickWidgetInfoList_descriptor,
+                new java.lang.String[]{"QuickwidgetList",},
+                com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfoList.class,
+                com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfoList.Builder.class);
+            internal_static_scope_QuickWidgetSearch_descriptor =
+                getDescriptor().getMessageTypes().get(11);
+            internal_static_scope_QuickWidgetSearch_fieldAccessorTable = new
+                com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+                internal_static_scope_QuickWidgetSearch_descriptor,
+                new java.lang.String[]{"WindowID", "SearchType", "Data",},
+                com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearch.class,
+                com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearch.Builder.class);
+            return null;
+          }
+        };
     com.google.protobuf.Descriptors.FileDescriptor
-      .internalBuildGeneratedFileFrom(descriptorData,
-        new com.google.protobuf.Descriptors.FileDescriptor[] {
-        }, assigner);
+        .internalBuildGeneratedFileFrom(descriptorData,
+                                        new com.google.protobuf.Descriptors.FileDescriptor[]{
+                                        }, assigner);
   }
-  
-  public static void internalForceInit() {}
-  
+
+  public static void internalForceInit() {
+  }
+
   // @@protoc_insertion_point(outer_class_scope)
 }

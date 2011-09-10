@@ -28,6 +28,7 @@ import org.openqa.selenium.WebDriverException;
 import com.google.protobuf.GeneratedMessage;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.AbstractMessage.Builder;
+
 import com.opera.core.systems.ScopeServices;
 import com.opera.core.systems.model.ICommand;
 import com.opera.core.systems.scope.protos.UmsProtos.Response;
@@ -38,7 +39,6 @@ import com.opera.core.systems.util.VersionUtil;
  * All scope services derive from this base class for generic operations
  *
  * @author Deniz Turkoglu
- *
  */
 public abstract class AbstractService {
 
@@ -66,30 +66,33 @@ public abstract class AbstractService {
   }
 
   public boolean isVersionInRange(String version, String maxVersion,
-      String serviceName) {
+                                  String serviceName) {
     if (VersionUtil.compare(version, maxVersion) >= 0
-        || VersionUtil.compare(version, services.getMinVersionFor(serviceName)) < 0) return false;
+        || VersionUtil.compare(version, services.getMinVersionFor(serviceName)) < 0) {
+      return false;
+    }
     return true;
   }
 
   public Response executeCommand(ICommand command, Builder<?> builder) {
-	if (services.getConnection() == null)
-		return Response.getDefaultInstance();
+    if (services.getConnection() == null) {
+      return Response.getDefaultInstance();
+    }
     return executeCommand(command, builder,
-        OperaIntervals.DEFAULT_RESPONSE_TIMEOUT.getValue());
+                          OperaIntervals.DEFAULT_RESPONSE_TIMEOUT.getValue());
   }
 
   public Response executeCommand(ICommand command, Builder<?> builder,
-      long timeout) {
-	  if (services.getConnection() == null)
-			return Response.getDefaultInstance();
-	  return services.executeCommand(command, builder, timeout);
+                                 long timeout) {
+    if (services.getConnection() == null) {
+      return Response.getDefaultInstance();
+    }
+    return services.executeCommand(command, builder, timeout);
   }
 
   /**
    * Query a collection with JXPath and return value of node
    *
-   * @param collection
    * @param query a valid XPath query
    * @return result
    */
@@ -105,11 +108,8 @@ public abstract class AbstractService {
   }
 
   /**
-   * Query a collection JXPath and return a pointer FIXME: This does not belong
-   * here!
+   * Query a collection JXPath and return a pointer FIXME: This does not belong here!
    *
-   * @param collection
-   * @param query
    * @return Pointer to node
    */
   public Pointer xpathPointer(Collection<?> collection, String query) {
@@ -124,11 +124,8 @@ public abstract class AbstractService {
   }
 
   /**
-   * Query a collection JXPath and return a pointer FIXME: This does not belong
-   * here!
+   * Query a collection JXPath and return a pointer FIXME: This does not belong here!
    *
-   * @param collection
-   * @param query
    * @return Pointer to node
    */
   public Iterator<?> xpathIterator(Collection<?> collection, String query) {
@@ -153,8 +150,8 @@ public abstract class AbstractService {
       return builder.mergeFrom(message);
     } catch (InvalidProtocolBufferException ex) {
       throw new WebDriverException("Could not build "
-          + builder.getDescriptorForType().getFullName() + " : "
-          + ex.getMessage());
+                                   + builder.getDescriptorForType().getFullName() + " : "
+                                   + ex.getMessage());
     }
   }
 

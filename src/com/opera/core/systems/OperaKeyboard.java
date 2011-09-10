@@ -1,10 +1,12 @@
 package com.opera.core.systems;
 
 import com.opera.core.systems.scope.internal.OperaKeys;
+
 import org.openqa.selenium.Keyboard;
 import org.openqa.selenium.Keys;
 
 public class OperaKeyboard implements Keyboard {
+
   private final OperaDriver parent;
 
   public OperaKeyboard(OperaDriver parent) {

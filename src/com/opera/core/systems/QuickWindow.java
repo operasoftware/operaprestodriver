@@ -12,7 +12,8 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
-*/package com.opera.core.systems;
+*/
+package com.opera.core.systems;
 
 import java.awt.Dimension;
 import java.awt.Point;
@@ -22,10 +23,9 @@ import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo.Des
 import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect;
 
 /**
- * Represents a window in the Desktop UI. 
+ * Represents a window in the Desktop UI.
  *
  * @author Adam Minchinton, Karianne Ekern
- *
  */
 public class QuickWindow {
 
@@ -65,9 +65,9 @@ public class QuickWindow {
    * @return true if window is active
    */
   public boolean isActive() {
-	  return info.getActive();
+    return info.getActive();
   }
-  
+
   /**
    * @return true if the window is on screen, otherwise false
    */
@@ -108,7 +108,7 @@ public class QuickWindow {
   @Override
   public String toString() {
     return "QuickWindow " + getWindowID() + ", " + getName() + ", "
-        + getTitle();
+           + getTitle();
   }
 
 }

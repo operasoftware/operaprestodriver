@@ -4,6 +4,7 @@
 package com.opera.core.systems.scope.protos;
 
 public final class SystemInputProtos {
+
   private SystemInputProtos() {
   }
 
@@ -12,8 +13,8 @@ public final class SystemInputProtos {
   }
 
   public enum ModifierPressed implements
-      com.google.protobuf.ProtocolMessageEnum {
-    NONE(0, 0), CTRL(1, 1), SHIFT(2, 2), ALT(3, 4), META(4, 8), SUPER(5, 16), ;
+                              com.google.protobuf.ProtocolMessageEnum {
+    NONE(0, 0), CTRL(1, 1), SHIFT(2, 2), ALT(3, 4), META(4, 8), SUPER(5, 16),;
 
     public final int getNumber() {
       return value;
@@ -21,20 +22,20 @@ public final class SystemInputProtos {
 
     public static ModifierPressed valueOf(int value) {
       switch (value) {
-      case 0:
-        return NONE;
-      case 1:
-        return CTRL;
-      case 2:
-        return SHIFT;
-      case 4:
-        return ALT;
-      case 8:
-        return META;
-      case 16:
-        return SUPER;
-      default:
-        return null;
+        case 0:
+          return NONE;
+        case 1:
+          return CTRL;
+        case 2:
+          return SHIFT;
+        case 4:
+          return ALT;
+        case 8:
+          return META;
+        case 16:
+          return SUPER;
+        default:
+          return null;
       }
     }
 
@@ -42,11 +43,14 @@ public final class SystemInputProtos {
       return internalValueMap;
     }
 
-    private static com.google.protobuf.Internal.EnumLiteMap<ModifierPressed> internalValueMap = new com.google.protobuf.Internal.EnumLiteMap<ModifierPressed>() {
-      public ModifierPressed findValueByNumber(int number) {
-        return ModifierPressed.valueOf(number);
-      }
-    };
+    private static
+    com.google.protobuf.Internal.EnumLiteMap<ModifierPressed>
+        internalValueMap =
+        new com.google.protobuf.Internal.EnumLiteMap<ModifierPressed>() {
+          public ModifierPressed findValueByNumber(int number) {
+            return ModifierPressed.valueOf(number);
+          }
+        };
 
     public final com.google.protobuf.Descriptors.EnumValueDescriptor getValueDescriptor() {
       return getDescriptor().getValues().get(index);
@@ -57,12 +61,13 @@ public final class SystemInputProtos {
     }
 
     public static final com.google.protobuf.Descriptors.EnumDescriptor getDescriptor() {
-      return com.opera.core.systems.scope.protos.SystemInputProtos.getDescriptor().getEnumTypes().get(
-          0);
+      return com.opera.core.systems.scope.protos.SystemInputProtos.getDescriptor().getEnumTypes()
+          .get(
+              0);
     }
 
-    private static final ModifierPressed[] VALUES = { NONE, CTRL, SHIFT, ALT,
-        META, SUPER, };
+    private static final ModifierPressed[] VALUES = {NONE, CTRL, SHIFT, ALT,
+                                                     META, SUPER,};
 
     public static ModifierPressed valueOf(
         com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
@@ -89,7 +94,8 @@ public final class SystemInputProtos {
   }
 
   public static final class MouseInfo extends
-      com.google.protobuf.GeneratedMessage {
+                                      com.google.protobuf.GeneratedMessage {
+
     // Use MouseInfo.newBuilder() to construct.
     private MouseInfo() {
       initFields();
@@ -117,7 +123,7 @@ public final class SystemInputProtos {
     }
 
     public enum MouseButton implements com.google.protobuf.ProtocolMessageEnum {
-      LEFT(0, 0), RIGHT(1, 1), MIDDLE(2, 2), ;
+      LEFT(0, 0), RIGHT(1, 1), MIDDLE(2, 2),;
 
       public final int getNumber() {
         return value;
@@ -125,14 +131,14 @@ public final class SystemInputProtos {
 
       public static MouseButton valueOf(int value) {
         switch (value) {
-        case 0:
-          return LEFT;
-        case 1:
-          return RIGHT;
-        case 2:
-          return MIDDLE;
-        default:
-          return null;
+          case 0:
+            return LEFT;
+          case 1:
+            return RIGHT;
+          case 2:
+            return MIDDLE;
+          default:
+            return null;
         }
       }
 
@@ -140,11 +146,14 @@ public final class SystemInputProtos {
         return internalValueMap;
       }
 
-      private static com.google.protobuf.Internal.EnumLiteMap<MouseButton> internalValueMap = new com.google.protobuf.Internal.EnumLiteMap<MouseButton>() {
-        public MouseButton findValueByNumber(int number) {
-          return MouseButton.valueOf(number);
-        }
-      };
+      private static
+      com.google.protobuf.Internal.EnumLiteMap<MouseButton>
+          internalValueMap =
+          new com.google.protobuf.Internal.EnumLiteMap<MouseButton>() {
+            public MouseButton findValueByNumber(int number) {
+              return MouseButton.valueOf(number);
+            }
+          };
 
       public final com.google.protobuf.Descriptors.EnumValueDescriptor getValueDescriptor() {
         return getDescriptor().getValues().get(index);
@@ -155,11 +164,12 @@ public final class SystemInputProtos {
       }
 
       public static final com.google.protobuf.Descriptors.EnumDescriptor getDescriptor() {
-        return com.opera.core.systems.scope.protos.SystemInputProtos.MouseInfo.getDescriptor().getEnumTypes().get(
-            0);
+        return com.opera.core.systems.scope.protos.SystemInputProtos.MouseInfo.getDescriptor()
+            .getEnumTypes().get(
+                0);
       }
 
-      private static final MouseButton[] VALUES = { LEFT, RIGHT, MIDDLE, };
+      private static final MouseButton[] VALUES = {LEFT, RIGHT, MIDDLE,};
 
       public static MouseButton valueOf(
           com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
@@ -255,11 +265,21 @@ public final class SystemInputProtos {
     }
 
     public final boolean isInitialized() {
-      if (!hasX) return false;
-      if (!hasY) return false;
-      if (!hasButton) return false;
-      if (!hasNumClicks) return false;
-      if (!hasModifier) return false;
+      if (!hasX) {
+        return false;
+      }
+      if (!hasY) {
+        return false;
+      }
+      if (!hasButton) {
+        return false;
+      }
+      if (!hasNumClicks) {
+        return false;
+      }
+      if (!hasModifier) {
+        return false;
+      }
       return true;
     }
 
@@ -288,28 +308,30 @@ public final class SystemInputProtos {
 
     public int getSerializedSize() {
       int size = memoizedSerializedSize;
-      if (size != -1) return size;
+      if (size != -1) {
+        return size;
+      }
 
       size = 0;
       if (hasX()) {
         size += com.google.protobuf.CodedOutputStream.computeUInt32Size(1,
-            getX());
+                                                                        getX());
       }
       if (hasY()) {
         size += com.google.protobuf.CodedOutputStream.computeUInt32Size(2,
-            getY());
+                                                                        getY());
       }
       if (hasButton()) {
         size += com.google.protobuf.CodedOutputStream.computeEnumSize(3,
-            getButton().getNumber());
+                                                                      getButton().getNumber());
       }
       if (hasNumClicks()) {
         size += com.google.protobuf.CodedOutputStream.computeUInt32Size(4,
-            getNumClicks());
+                                                                        getNumClicks());
       }
       if (hasModifier()) {
         size += com.google.protobuf.CodedOutputStream.computeUInt32Size(5,
-            getModifier());
+                                                                        getModifier());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -404,7 +426,8 @@ public final class SystemInputProtos {
     }
 
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> {
+                                      com.google.protobuf.GeneratedMessage.Builder<Builder> {
+
       private com.opera.core.systems.scope.protos.SystemInputProtos.MouseInfo result;
 
       // Construct using
@@ -482,7 +505,10 @@ public final class SystemInputProtos {
 
       public Builder mergeFrom(
           com.opera.core.systems.scope.protos.SystemInputProtos.MouseInfo other) {
-        if (other == com.opera.core.systems.scope.protos.SystemInputProtos.MouseInfo.getDefaultInstance()) return this;
+        if (other == com.opera.core.systems.scope.protos.SystemInputProtos.MouseInfo
+            .getDefaultInstance()) {
+          return this;
+        }
         if (other.hasX()) {
           setX(other.getX());
         }
@@ -503,48 +529,53 @@ public final class SystemInputProtos {
       }
 
       public Builder mergeFrom(com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                               com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields = com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
+        com.google.protobuf.UnknownFieldSet.Builder
+            unknownFields =
+            com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
         while (true) {
           int tag = input.readTag();
           switch (tag) {
-          case 0:
-            this.setUnknownFields(unknownFields.build());
-            return this;
-          default: {
-            if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+            case 0:
               this.setUnknownFields(unknownFields.build());
               return this;
+            default: {
+              if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+                this.setUnknownFields(unknownFields.build());
+                return this;
+              }
+              break;
             }
-            break;
-          }
-          case 8: {
-            setX(input.readUInt32());
-            break;
-          }
-          case 16: {
-            setY(input.readUInt32());
-            break;
-          }
-          case 24: {
-            int rawValue = input.readEnum();
-            com.opera.core.systems.scope.protos.SystemInputProtos.MouseInfo.MouseButton value = com.opera.core.systems.scope.protos.SystemInputProtos.MouseInfo.MouseButton.valueOf(rawValue);
-            if (value == null) {
-              unknownFields.mergeVarintField(3, rawValue);
-            } else {
-              setButton(value);
+            case 8: {
+              setX(input.readUInt32());
+              break;
             }
-            break;
-          }
-          case 32: {
-            setNumClicks(input.readUInt32());
-            break;
-          }
-          case 40: {
-            setModifier(input.readUInt32());
-            break;
-          }
+            case 16: {
+              setY(input.readUInt32());
+              break;
+            }
+            case 24: {
+              int rawValue = input.readEnum();
+              com.opera.core.systems.scope.protos.SystemInputProtos.MouseInfo.MouseButton
+                  value =
+                  com.opera.core.systems.scope.protos.SystemInputProtos.MouseInfo.MouseButton
+                      .valueOf(rawValue);
+              if (value == null) {
+                unknownFields.mergeVarintField(3, rawValue);
+              } else {
+                setButton(value);
+              }
+              break;
+            }
+            case 32: {
+              setNumClicks(input.readUInt32());
+              break;
+            }
+            case 40: {
+              setModifier(input.readUInt32());
+              break;
+            }
           }
         }
       }
@@ -612,7 +643,8 @@ public final class SystemInputProtos {
 
       public Builder clearButton() {
         result.hasButton = false;
-        result.button_ = com.opera.core.systems.scope.protos.SystemInputProtos.MouseInfo.MouseButton.LEFT;
+        result.button_ =
+            com.opera.core.systems.scope.protos.SystemInputProtos.MouseInfo.MouseButton.LEFT;
         return this;
       }
 
@@ -671,7 +703,8 @@ public final class SystemInputProtos {
   }
 
   public static final class KeyPressInfo extends
-      com.google.protobuf.GeneratedMessage {
+                                         com.google.protobuf.GeneratedMessage {
+
     // Use KeyPressInfo.newBuilder() to construct.
     private KeyPressInfo() {
       initFields();
@@ -728,8 +761,12 @@ public final class SystemInputProtos {
     }
 
     public final boolean isInitialized() {
-      if (!hasKey) return false;
-      if (!hasModifier) return false;
+      if (!hasKey) {
+        return false;
+      }
+      if (!hasModifier) {
+        return false;
+      }
       return true;
     }
 
@@ -749,16 +786,18 @@ public final class SystemInputProtos {
 
     public int getSerializedSize() {
       int size = memoizedSerializedSize;
-      if (size != -1) return size;
+      if (size != -1) {
+        return size;
+      }
 
       size = 0;
       if (hasKey()) {
         size += com.google.protobuf.CodedOutputStream.computeStringSize(1,
-            getKey());
+                                                                        getKey());
       }
       if (hasModifier()) {
         size += com.google.protobuf.CodedOutputStream.computeUInt32Size(2,
-            getModifier());
+                                                                        getModifier());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -853,7 +892,8 @@ public final class SystemInputProtos {
     }
 
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> {
+                                      com.google.protobuf.GeneratedMessage.Builder<Builder> {
+
       private com.opera.core.systems.scope.protos.SystemInputProtos.KeyPressInfo result;
 
       // Construct using
@@ -888,7 +928,8 @@ public final class SystemInputProtos {
       }
 
       public com.opera.core.systems.scope.protos.SystemInputProtos.KeyPressInfo getDefaultInstanceForType() {
-        return com.opera.core.systems.scope.protos.SystemInputProtos.KeyPressInfo.getDefaultInstance();
+        return com.opera.core.systems.scope.protos.SystemInputProtos.KeyPressInfo
+            .getDefaultInstance();
       }
 
       public boolean isInitialized() {
@@ -922,7 +963,8 @@ public final class SystemInputProtos {
 
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.opera.core.systems.scope.protos.SystemInputProtos.KeyPressInfo) {
-          return mergeFrom((com.opera.core.systems.scope.protos.SystemInputProtos.KeyPressInfo) other);
+          return mergeFrom(
+              (com.opera.core.systems.scope.protos.SystemInputProtos.KeyPressInfo) other);
         } else {
           super.mergeFrom(other);
           return this;
@@ -931,7 +973,10 @@ public final class SystemInputProtos {
 
       public Builder mergeFrom(
           com.opera.core.systems.scope.protos.SystemInputProtos.KeyPressInfo other) {
-        if (other == com.opera.core.systems.scope.protos.SystemInputProtos.KeyPressInfo.getDefaultInstance()) return this;
+        if (other == com.opera.core.systems.scope.protos.SystemInputProtos.KeyPressInfo
+            .getDefaultInstance()) {
+          return this;
+        }
         if (other.hasKey()) {
           setKey(other.getKey());
         }
@@ -943,30 +988,32 @@ public final class SystemInputProtos {
       }
 
       public Builder mergeFrom(com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                               com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields = com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
+        com.google.protobuf.UnknownFieldSet.Builder
+            unknownFields =
+            com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
         while (true) {
           int tag = input.readTag();
           switch (tag) {
-          case 0:
-            this.setUnknownFields(unknownFields.build());
-            return this;
-          default: {
-            if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+            case 0:
               this.setUnknownFields(unknownFields.build());
               return this;
+            default: {
+              if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+                this.setUnknownFields(unknownFields.build());
+                return this;
+              }
+              break;
             }
-            break;
-          }
-          case 10: {
-            setKey(input.readString());
-            break;
-          }
-          case 16: {
-            setModifier(input.readUInt32());
-            break;
-          }
+            case 10: {
+              setKey(input.readString());
+              break;
+            }
+            case 16: {
+              setModifier(input.readUInt32());
+              break;
+            }
           }
         }
       }
@@ -1028,52 +1075,67 @@ public final class SystemInputProtos {
     // @@protoc_insertion_point(class_scope:scope.KeyPressInfo)
   }
 
-  private static com.google.protobuf.Descriptors.Descriptor internal_static_scope_MouseInfo_descriptor;
-  private static com.google.protobuf.GeneratedMessage.FieldAccessorTable internal_static_scope_MouseInfo_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor internal_static_scope_KeyPressInfo_descriptor;
-  private static com.google.protobuf.GeneratedMessage.FieldAccessorTable internal_static_scope_KeyPressInfo_fieldAccessorTable;
+  private static
+  com.google.protobuf.Descriptors.Descriptor
+      internal_static_scope_MouseInfo_descriptor;
+  private static
+  com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_scope_MouseInfo_fieldAccessorTable;
+  private static
+  com.google.protobuf.Descriptors.Descriptor
+      internal_static_scope_KeyPressInfo_descriptor;
+  private static
+  com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_scope_KeyPressInfo_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor getDescriptor() {
     return descriptor;
   }
 
   private static com.google.protobuf.Descriptors.FileDescriptor descriptor;
+
   static {
-    java.lang.String[] descriptorData = { "\n\022system_input.proto\022\005scope\"\244\001\n\tMouseInf"
-        + "o\022\t\n\001x\030\001 \002(\r\022\t\n\001y\030\002 \002(\r\022,\n\006button\030\003 \002(\0162"
-        + "\034.scope.MouseInfo.MouseButton\022\021\n\tnumClic"
-        + "ks\030\004 \002(\r\022\020\n\010modifier\030\005 \002(\r\".\n\013MouseButto"
-        + "n\022\010\n\004LEFT\020\000\022\t\n\005RIGHT\020\001\022\n\n\006MIDDLE\020\002\"-\n\014Ke"
-        + "yPressInfo\022\013\n\003key\030\001 \002(\t\022\020\n\010modifier\030\002 \002("
-        + "\r*N\n\017ModifierPressed\022\010\n\004NONE\020\000\022\010\n\004CTRL\020\001"
-        + "\022\t\n\005SHIFT\020\002\022\007\n\003ALT\020\004\022\010\n\004META\020\010\022\t\n\005SUPER\020"
-        + "\020B:\n#com.opera.core.systems.scope.protos"
-        + "B\021SystemInputProtosH\001" };
-    com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner = new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
-      public com.google.protobuf.ExtensionRegistry assignDescriptors(
-          com.google.protobuf.Descriptors.FileDescriptor root) {
-        descriptor = root;
-        internal_static_scope_MouseInfo_descriptor = getDescriptor().getMessageTypes().get(
-            0);
-        internal_static_scope_MouseInfo_fieldAccessorTable = new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-            internal_static_scope_MouseInfo_descriptor,
-            new java.lang.String[] { "X", "Y", "Button", "NumClicks",
-                "Modifier", },
-            com.opera.core.systems.scope.protos.SystemInputProtos.MouseInfo.class,
-            com.opera.core.systems.scope.protos.SystemInputProtos.MouseInfo.Builder.class);
-        internal_static_scope_KeyPressInfo_descriptor = getDescriptor().getMessageTypes().get(
-            1);
-        internal_static_scope_KeyPressInfo_fieldAccessorTable = new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-            internal_static_scope_KeyPressInfo_descriptor,
-            new java.lang.String[] { "Key", "Modifier", },
-            com.opera.core.systems.scope.protos.SystemInputProtos.KeyPressInfo.class,
-            com.opera.core.systems.scope.protos.SystemInputProtos.KeyPressInfo.Builder.class);
-        return null;
-      }
-    };
+    java.lang.String[]
+        descriptorData =
+        {"\n\022system_input.proto\022\005scope\"\244\001\n\tMouseInf"
+         + "o\022\t\n\001x\030\001 \002(\r\022\t\n\001y\030\002 \002(\r\022,\n\006button\030\003 \002(\0162"
+         + "\034.scope.MouseInfo.MouseButton\022\021\n\tnumClic"
+         + "ks\030\004 \002(\r\022\020\n\010modifier\030\005 \002(\r\".\n\013MouseButto"
+         + "n\022\010\n\004LEFT\020\000\022\t\n\005RIGHT\020\001\022\n\n\006MIDDLE\020\002\"-\n\014Ke"
+         + "yPressInfo\022\013\n\003key\030\001 \002(\t\022\020\n\010modifier\030\002 \002("
+         + "\r*N\n\017ModifierPressed\022\010\n\004NONE\020\000\022\010\n\004CTRL\020\001"
+         + "\022\t\n\005SHIFT\020\002\022\007\n\003ALT\020\004\022\010\n\004META\020\010\022\t\n\005SUPER\020"
+         + "\020B:\n#com.opera.core.systems.scope.protos"
+         + "B\021SystemInputProtosH\001"};
+    com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner
+        assigner =
+        new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
+          public com.google.protobuf.ExtensionRegistry assignDescriptors(
+              com.google.protobuf.Descriptors.FileDescriptor root) {
+            descriptor = root;
+            internal_static_scope_MouseInfo_descriptor = getDescriptor().getMessageTypes().get(
+                0);
+            internal_static_scope_MouseInfo_fieldAccessorTable =
+                new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+                    internal_static_scope_MouseInfo_descriptor,
+                    new java.lang.String[]{"X", "Y", "Button", "NumClicks",
+                                           "Modifier",},
+                    com.opera.core.systems.scope.protos.SystemInputProtos.MouseInfo.class,
+                    com.opera.core.systems.scope.protos.SystemInputProtos.MouseInfo.Builder.class);
+            internal_static_scope_KeyPressInfo_descriptor = getDescriptor().getMessageTypes().get(
+                1);
+            internal_static_scope_KeyPressInfo_fieldAccessorTable =
+                new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+                    internal_static_scope_KeyPressInfo_descriptor,
+                    new java.lang.String[]{"Key", "Modifier",},
+                    com.opera.core.systems.scope.protos.SystemInputProtos.KeyPressInfo.class,
+                    com.opera.core.systems.scope.protos.SystemInputProtos.KeyPressInfo.Builder.class);
+            return null;
+          }
+        };
     com.google.protobuf.Descriptors.FileDescriptor.internalBuildGeneratedFileFrom(
         descriptorData,
-        new com.google.protobuf.Descriptors.FileDescriptor[] {}, assigner);
+        new com.google.protobuf.Descriptors.FileDescriptor[]{}, assigner);
   }
 
   public static void internalForceInit() {

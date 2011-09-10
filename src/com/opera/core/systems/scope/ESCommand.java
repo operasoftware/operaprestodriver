@@ -29,8 +29,9 @@ public enum ESCommand implements ICommand {
   private static final Map<Integer, ESCommand> lookup = new HashMap<Integer, ESCommand>();
 
   static {
-    for (ESCommand command : EnumSet.allOf(ESCommand.class))
+    for (ESCommand command : EnumSet.allOf(ESCommand.class)) {
       lookup.put(command.getCommandID(), command);
+    }
   }
 
   private ESCommand(int code) {
@@ -43,7 +44,9 @@ public enum ESCommand implements ICommand {
 
   public static ESCommand get(int code) {
     ESCommand command = lookup.get(code);
-    if (command == null) return DEFAULT;
+    if (command == null) {
+      return DEFAULT;
+    }
     return command;
   }
 

@@ -44,7 +44,7 @@ public class Prefs extends AbstractService implements IPrefs {
 
     if (!isVersionInRange(version, "2.0", serviceName)) {
       throw new UnsupportedOperationException(serviceName + " version "
-          + version + " is not supported");
+                                              + version + " is not supported");
     }
 
     services.setPrefs(this);

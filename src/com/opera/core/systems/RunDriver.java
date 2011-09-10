@@ -9,23 +9,24 @@ import com.opera.core.systems.scope.protos.SystemInputProtos.ModifierPressed;
 import com.opera.core.systems.scope.protos.SystemInputProtos.MouseInfo.MouseButton;
 
 class RunDriver {
-	 private static OperaDesktopDriver driver;
+
+  private static OperaDesktopDriver driver;
 //	 private static OperaDriver driver;
 
-	 public static void main(String[]args) {
-		 	DesiredCapabilities capabilities = new DesiredCapabilities();
+  public static void main(String[] args) {
+    DesiredCapabilities capabilities = new DesiredCapabilities();
 
-		 	capabilities.setCapability(OperaDriver.NO_QUIT, true);
-		 	capabilities.setCapability(OperaDriver.NO_RESTART, true);
-		 	capabilities.setCapability(OperaDriver.GUESS_BINARY_PATH, false);
-		 	capabilities.setCapability(OperaDriver.BINARY, (String) null);
+    capabilities.setCapability(OperaDriver.NO_QUIT, true);
+    capabilities.setCapability(OperaDriver.NO_RESTART, true);
+    capabilities.setCapability(OperaDriver.GUESS_BINARY_PATH, false);
+    capabilities.setCapability(OperaDriver.BINARY, (String) null);
 
-	    	System.out.println("Create Driver");
-	        driver = new OperaDesktopDriver(capabilities);
+    System.out.println("Create Driver");
+    driver = new OperaDesktopDriver(capabilities);
 //	        driver = new OperaDriver();
-	        System.out.println(".Driver created ......");
+    System.out.println(".Driver created ......");
 
-	        driver.waitStart();
+    driver.waitStart();
 /*
 	        driver.pressQuickMenuItem("File");
 	        String menu_text = driver.waitForMenuItemPressed("File");
@@ -48,30 +49,31 @@ class RunDriver {
 	        menu_text = driver.waitForMenuItemPressed("What is Opera Unite?");
 	        System.out.println("Menu Found: "+menu_text);
 	*/
-	        QuickWindow qw = driver.findWindowByName("Document Window");
-	        QuickWidget address_bar = driver.findWidgetByName(QuickWidgetType.ADDRESSFIELD, qw.getWindowID(), "tba_address_field");
+    QuickWindow qw = driver.findWindowByName("Document Window");
+    QuickWidget
+        address_bar =
+        driver
+            .findWidgetByName(QuickWidgetType.ADDRESSFIELD, qw.getWindowID(), "tba_address_field");
 
-			ArrayList<ModifierPressed> mods = new ArrayList<ModifierPressed>();
-			mods.add(ModifierPressed.NONE);
+    ArrayList<ModifierPressed> mods = new ArrayList<ModifierPressed>();
+    mods.add(ModifierPressed.NONE);
 
-			address_bar.click(MouseButton.RIGHT, 1, mods);
+    address_bar.click(MouseButton.RIGHT, 1, mods);
 
-
-	       //driver.pressQuickMenuItem("Paste and Go");
-	        String menu_text = driver.waitForMenuItemPressed("Paste and Go");
-	        System.out.println("Menu Found: "+menu_text);
-
+    //driver.pressQuickMenuItem("Paste and Go");
+    String menu_text = driver.waitForMenuItemPressed("Paste and Go");
+    System.out.println("Menu Found: " + menu_text);
 
 /*
-	        String window_name = "New Preferences Dialog", action_name = "Show preferences";
+                String window_name = "New Preferences Dialog", action_name = "Show preferences";
 //	        String window_name = "", action_name = "Delete private data";
 
-	        driver.waitStart(); // wait for dialog to open
-	        System.out.println("-- wait for dialog -- ");
-	        driver.operaDesktopAction(action_name);
-	        int window_id = driver.waitForWindowShown(window_name);
+                driver.waitStart(); // wait for dialog to open
+                System.out.println("-- wait for dialog -- ");
+                driver.operaDesktopAction(action_name);
+                int window_id = driver.waitForWindowShown(window_name);
 
-	        QuickWidget ti = driver.findWidgetByStringId(window_id, "D_NEW_PREFS_PROGRAMS", "Advanced_treeview");
+                QuickWidget ti = driver.findWidgetByStringId(window_id, "D_NEW_PREFS_PROGRAMS", "Advanced_treeview");
 */
 /*
 	        QuickWindow qw = driver.findWindowByName("Browser Window");
@@ -147,25 +149,25 @@ class RunDriver {
 
 //	        driver.get("http://www.google.com");
 	*/
-	        /*
-	        System.out.println("Do wait start");
-	        driver.waitStart(); // wait for dialog to open
-	        System.out.println("Do add to bookmarks action ");
-	        driver.operaAction("Add to bookmarks");
+    /*
+                    System.out.println("Do wait start");
+                    driver.waitStart(); // wait for dialog to open
+                    System.out.println("Do add to bookmarks action ");
+                    driver.operaAction("Add to bookmarks");
 
-	        System.out.println("Wait for window activated ");
-	        driver.waitForWindowShown();
+                    System.out.println("Wait for window activated ");
+                    driver.waitForWindowShown();
 
-        	// ---- Internal stuff to check text on the dialog -------
-	        int id = driver.getWindowID("Bookmark Properties");
-	        System.out.println("Id of bookmark dialog is " + id);
-	        driver.getWidgetList(id);
-	        System.out.println("Get Widget label_for_Nick_edit");
-	        int widget_id = driver.getQuickWidgetID(id, "name", "label_for_Nick_edit");
-	        System.out.println("widget_id returned is " + widget_id);
-	        System.out.println("-- Done --");
-	        // _-----------------------
-*/
+                    // ---- Internal stuff to check text on the dialog -------
+                    int id = driver.getWindowID("Bookmark Properties");
+                    System.out.println("Id of bookmark dialog is " + id);
+                    driver.getWidgetList(id);
+                    System.out.println("Get Widget label_for_Nick_edit");
+                    int widget_id = driver.getQuickWidgetID(id, "name", "label_for_Nick_edit");
+                    System.out.println("widget_id returned is " + widget_id);
+                    System.out.println("-- Done --");
+                    // _-----------------------
+    */
 /*
 	        driver.waitStart(); // wait for dialog to open
 	        System.out.println("-- wait for dialog -- ");
@@ -187,16 +189,16 @@ class RunDriver {
 		    }
 
 */
-		    // IN ruby:
-        	//driver.label("name", "label_for_Nick_edit").verify_contains("Nickname");
-	        /*
-	        QuickWidget widget = (QuickWidget) driver.findWidgetByName("label_for_Nick_edit");
-	        if (widget.getText().equals("Nickname"))
-	        	System.out.println("Success");
-	        else
-	        	System.out.println("Failure");
-	        */
-	        // ---------------------
+    // IN ruby:
+    //driver.label("name", "label_for_Nick_edit").verify_contains("Nickname");
+    /*
+                QuickWidget widget = (QuickWidget) driver.findWidgetByName("label_for_Nick_edit");
+                if (widget.getText().equals("Nickname"))
+                        System.out.println("Success");
+                else
+                        System.out.println("Failure");
+                */
+    // ---------------------
 /*
 	        driver.waitStart();
 	        driver.operaDesktopAction("Show preferences");
@@ -209,7 +211,7 @@ class RunDriver {
 	        //qw.verifyText("D_STARTUP_WITH_HOMEPAGE");
 	        qw.isVisible();
 	        */
-	       // qw.click(MouseButton.LEFT, 0, ModifierPressed.NONE);
+    // qw.click(MouseButton.LEFT, 0, ModifierPressed.NONE);
 /*
 	        System.out.println("Window name: " + driver.getWindowName(win_id));
 
@@ -259,16 +261,16 @@ class RunDriver {
 	        driver.waitForWindowClose("Add Bookmark Dialog");
 */
 
-	        /*
-	        System.out.println("--Go to Google --");
-	        driver.get("http://www.google.com");
-	        System.out.println("Gone to google ");
+    /*
+                System.out.println("--Go to Google --");
+                driver.get("http://www.google.com");
+                System.out.println("Gone to google ");
 
-	        OperaWebElement element = (OperaWebElement) driver.findElementByName("q");
-	        element.sendKeys("Opera Software");
-	        element.submit();
-	        */
-	        System.out.println("Done ");
-	        //driver.quit();
-	    }
+                OperaWebElement element = (OperaWebElement) driver.findElementByName("q");
+                element.sendKeys("Opera Software");
+                element.submit();
+                */
+    System.out.println("Done ");
+    //driver.quit();
+  }
 }
