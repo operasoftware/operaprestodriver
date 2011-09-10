@@ -16,15 +16,14 @@ limitations under the License.
 package com.opera.core.systems.scope;
 
 import com.opera.core.systems.model.ICommand;
+
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * This enum maps the commands for the <a href=
- * "http://dragonfly.opera.com/app/scope-interface/services/Scope/Scope_1_0.html"
+ * This enum maps the commands for the <a href= "http://dragonfly.opera.com/app/scope-interface/services/Scope/Scope_1_0.html"
  * >Scope 1.0</a>.
- *
  */
 public enum ScopeCommand implements ICommand {
   CONNECT(3), DISCONNECT(4), ENABLE(5), DISABLE(6), INFO(7), QUIT(8), HOST_INFO(
@@ -34,8 +33,9 @@ public enum ScopeCommand implements ICommand {
   private static final Map<Integer, ScopeCommand> lookup = new HashMap<Integer, ScopeCommand>();
 
   static {
-    for (ScopeCommand command : EnumSet.allOf(ScopeCommand.class))
+    for (ScopeCommand command : EnumSet.allOf(ScopeCommand.class)) {
       lookup.put(command.getCommandID(), command);
+    }
   }
 
   private ScopeCommand(int code) {

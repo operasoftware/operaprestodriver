@@ -19,6 +19,7 @@ import org.openqa.selenium.WebDriverException;
 
 import com.google.protobuf.GeneratedMessage;
 import com.google.protobuf.InvalidProtocolBufferException;
+
 import com.opera.core.systems.scope.CoreUtilsCommand;
 import com.opera.core.systems.scope.DesktopWindowManagerCommand;
 import com.opera.core.systems.scope.ESDebuggerCommand;
@@ -53,101 +54,101 @@ public class UmsEventParser {
 
     if (service.equals("ecmascript-debugger")) {
       switch (ESDebuggerCommand.get(eventId)) {
-      case RUNTIME_STARTED:
-        RuntimeInfo.Builder infoBuilder = RuntimeInfo.newBuilder();
-        buildPayload(event, infoBuilder);
-        eventHandler.onRuntimeStarted(infoBuilder.build());
-        break;
-      case RUNTIME_STOPPED:
-        RuntimeID.Builder idBuilder = RuntimeID.newBuilder();
-        buildPayload(event, idBuilder);
-        Integer id = idBuilder.build().getRuntimeID();
-        eventHandler.onRuntimeStopped(id);
-        break;
-      default:
-        break;
+        case RUNTIME_STARTED:
+          RuntimeInfo.Builder infoBuilder = RuntimeInfo.newBuilder();
+          buildPayload(event, infoBuilder);
+          eventHandler.onRuntimeStarted(infoBuilder.build());
+          break;
+        case RUNTIME_STOPPED:
+          RuntimeID.Builder idBuilder = RuntimeID.newBuilder();
+          buildPayload(event, idBuilder);
+          Integer id = idBuilder.build().getRuntimeID();
+          eventHandler.onRuntimeStopped(id);
+          break;
+        default:
+          break;
       }
     } else if (service.equals("window-manager")) {
       switch (WindowManagerCommand.get(eventId)) {
-      case WINDOW_ACTIVATED:
-        WindowID.Builder activeWindowIdBuilder = WindowID.newBuilder();
-        buildPayload(event, activeWindowIdBuilder);
-        Integer activeWindowID = activeWindowIdBuilder.build().getWindowID();
-        eventHandler.onActiveWindow(activeWindowID);
-        break;
-      case WINDOW_CLOSED:
-        WindowID.Builder closedWindowBuilder = WindowID.newBuilder();
-        buildPayload(event, closedWindowBuilder);
-        Integer closedWindowID = closedWindowBuilder.build().getWindowID();
-        eventHandler.onWindowClosed(closedWindowID);
-        break;
-      case WINDOW_UPDATED:
-        WindowInfo.Builder windowInfoBuilder = WindowInfo.newBuilder();
-        buildPayload(event, windowInfoBuilder);
-        WindowInfo info = windowInfoBuilder.build();
-        eventHandler.onUpdatedWindow(info);
-        break;
-      case WINDOW_LOADED:
-        WindowID.Builder loadedWindowBuilder = WindowID.newBuilder();
-        buildPayload(event, loadedWindowBuilder);
-        Integer loadedWindowID = loadedWindowBuilder.build().getWindowID();
-        eventHandler.onWindowLoaded(loadedWindowID.intValue());
-        break;
-      default:
-        break;
+        case WINDOW_ACTIVATED:
+          WindowID.Builder activeWindowIdBuilder = WindowID.newBuilder();
+          buildPayload(event, activeWindowIdBuilder);
+          Integer activeWindowID = activeWindowIdBuilder.build().getWindowID();
+          eventHandler.onActiveWindow(activeWindowID);
+          break;
+        case WINDOW_CLOSED:
+          WindowID.Builder closedWindowBuilder = WindowID.newBuilder();
+          buildPayload(event, closedWindowBuilder);
+          Integer closedWindowID = closedWindowBuilder.build().getWindowID();
+          eventHandler.onWindowClosed(closedWindowID);
+          break;
+        case WINDOW_UPDATED:
+          WindowInfo.Builder windowInfoBuilder = WindowInfo.newBuilder();
+          buildPayload(event, windowInfoBuilder);
+          WindowInfo info = windowInfoBuilder.build();
+          eventHandler.onUpdatedWindow(info);
+          break;
+        case WINDOW_LOADED:
+          WindowID.Builder loadedWindowBuilder = WindowID.newBuilder();
+          buildPayload(event, loadedWindowBuilder);
+          Integer loadedWindowID = loadedWindowBuilder.build().getWindowID();
+          eventHandler.onWindowLoaded(loadedWindowID.intValue());
+          break;
+        default:
+          break;
       }
     } else if (service.equals("desktop-window-manager")) {
       switch (DesktopWindowManagerCommand.get(eventId)) {
-      case WINDOW_SHOWN:
-        DesktopWindowInfo.Builder shownDWBuilder = DesktopWindowInfo.newBuilder();
-        buildPayload(event, shownDWBuilder);
-        DesktopWindowInfo info_shown = shownDWBuilder.build();
-        eventHandler.onDesktopWindowShown(info_shown);
-        break;
-      case WINDOW_UPDATED:
-        DesktopWindowInfo.Builder updatedDWBuilder = DesktopWindowInfo.newBuilder();
-        buildPayload(event, updatedDWBuilder);
-        DesktopWindowInfo info_updated = updatedDWBuilder.build();
-        eventHandler.onDesktopWindowUpdated(info_updated);
-        break;
-      case WINDOW_ACTIVATED:
-        DesktopWindowInfo.Builder activatedDWBuilder = DesktopWindowInfo.newBuilder();
-        buildPayload(event, activatedDWBuilder);
-        DesktopWindowInfo info_activated = activatedDWBuilder.build();
-        eventHandler.onDesktopWindowActivated(info_activated);
-        break;
-      case WINDOW_CLOSED:
-        DesktopWindowInfo.Builder closedDWBuilder = DesktopWindowInfo.newBuilder();
-        buildPayload(event, closedDWBuilder);
-        DesktopWindowInfo info_closed = closedDWBuilder.build();
-        eventHandler.onDesktopWindowClosed(info_closed);
-        break;
-      case WINDOW_LOADED:
-        DesktopWindowInfo.Builder loadedDWBuilder = DesktopWindowInfo.newBuilder();
-        buildPayload(event, loadedDWBuilder);
-        DesktopWindowInfo info_loaded = loadedDWBuilder.build();
-        eventHandler.onDesktopWindowLoaded(info_loaded);
-        break;
-      case MENU_SHOWN:
-    	QuickMenuInfo.Builder shownQMBuilder = QuickMenuInfo.newBuilder();
-    	buildPayload(event, shownQMBuilder);
-    	QuickMenuInfo menuInfoShown = shownQMBuilder.build();
-    	eventHandler.onQuickMenuShown(menuInfoShown);
-    	break;
-      case MENU_CLOSED:
-    	QuickMenuID.Builder closedQMBuilder = QuickMenuID.newBuilder();
-      	buildPayload(event, closedQMBuilder);
-      	QuickMenuID menuId = closedQMBuilder.build();
-      	eventHandler.onQuickMenuClosed(menuId);
-      	break;
-      case MENU_PRESSED:
-    	QuickMenuItemID.Builder pressedQMIBuilder = QuickMenuItemID.newBuilder();
-      	buildPayload(event, pressedQMIBuilder);
-      	QuickMenuItemID menuItemID = pressedQMIBuilder.build();
-      	eventHandler.onQuickMenuItemPressed(menuItemID);
-      	break;
-      default:
-        break;
+        case WINDOW_SHOWN:
+          DesktopWindowInfo.Builder shownDWBuilder = DesktopWindowInfo.newBuilder();
+          buildPayload(event, shownDWBuilder);
+          DesktopWindowInfo info_shown = shownDWBuilder.build();
+          eventHandler.onDesktopWindowShown(info_shown);
+          break;
+        case WINDOW_UPDATED:
+          DesktopWindowInfo.Builder updatedDWBuilder = DesktopWindowInfo.newBuilder();
+          buildPayload(event, updatedDWBuilder);
+          DesktopWindowInfo info_updated = updatedDWBuilder.build();
+          eventHandler.onDesktopWindowUpdated(info_updated);
+          break;
+        case WINDOW_ACTIVATED:
+          DesktopWindowInfo.Builder activatedDWBuilder = DesktopWindowInfo.newBuilder();
+          buildPayload(event, activatedDWBuilder);
+          DesktopWindowInfo info_activated = activatedDWBuilder.build();
+          eventHandler.onDesktopWindowActivated(info_activated);
+          break;
+        case WINDOW_CLOSED:
+          DesktopWindowInfo.Builder closedDWBuilder = DesktopWindowInfo.newBuilder();
+          buildPayload(event, closedDWBuilder);
+          DesktopWindowInfo info_closed = closedDWBuilder.build();
+          eventHandler.onDesktopWindowClosed(info_closed);
+          break;
+        case WINDOW_LOADED:
+          DesktopWindowInfo.Builder loadedDWBuilder = DesktopWindowInfo.newBuilder();
+          buildPayload(event, loadedDWBuilder);
+          DesktopWindowInfo info_loaded = loadedDWBuilder.build();
+          eventHandler.onDesktopWindowLoaded(info_loaded);
+          break;
+        case MENU_SHOWN:
+          QuickMenuInfo.Builder shownQMBuilder = QuickMenuInfo.newBuilder();
+          buildPayload(event, shownQMBuilder);
+          QuickMenuInfo menuInfoShown = shownQMBuilder.build();
+          eventHandler.onQuickMenuShown(menuInfoShown);
+          break;
+        case MENU_CLOSED:
+          QuickMenuID.Builder closedQMBuilder = QuickMenuID.newBuilder();
+          buildPayload(event, closedQMBuilder);
+          QuickMenuID menuId = closedQMBuilder.build();
+          eventHandler.onQuickMenuClosed(menuId);
+          break;
+        case MENU_PRESSED:
+          QuickMenuItemID.Builder pressedQMIBuilder = QuickMenuItemID.newBuilder();
+          buildPayload(event, pressedQMIBuilder);
+          QuickMenuItemID menuItemID = pressedQMIBuilder.build();
+          eventHandler.onQuickMenuItemPressed(menuItemID);
+          break;
+        default:
+          break;
       }
     } else if (service.equals("console-logger")) {
       // console logger only sends one message
@@ -171,17 +172,17 @@ public class UmsEventParser {
       eventHandler.onRequest(header.getWindowID());
     } else if (service.equals("core")) {
       switch (CoreUtilsCommand.get(eventId)) {
-      case ONACTIVE:
-        // No active event handler...
-        // Opera only becomes active as reaction on other event
-        // sent from operadriver, so we already know.
-        break;
-      case ONIDLE:
-        eventHandler.onOperaIdle();
-        break;
+        case ONACTIVE:
+          // No active event handler...
+          // Opera only becomes active as reaction on other event
+          // sent from operadriver, so we already know.
+          break;
+        case ONIDLE:
+          eventHandler.onOperaIdle();
+          break;
       }
     } else if (service.equals("selftest")) {
-      switch(SelftestCommand.get(eventId)) {
+      switch (SelftestCommand.get(eventId)) {
         case OUTPUT:
           SelftestOutput.Builder builder = SelftestOutput.newBuilder();
           buildPayload(event, builder);
@@ -195,7 +196,7 @@ public class UmsEventParser {
   }
 
   private final GeneratedMessage.Builder<?> buildPayload(Event event,
-      GeneratedMessage.Builder<?> builder) {
+                                                         GeneratedMessage.Builder<?> builder) {
     return buildMessage(builder, event.getPayload().toByteArray());
   }
 
@@ -205,8 +206,8 @@ public class UmsEventParser {
       return builder.mergeFrom(message);
     } catch (InvalidProtocolBufferException ex) {
       throw new WebDriverException("Could not build "
-          + builder.getDescriptorForType().getFullName() + " : "
-          + ex.getMessage());
+                                   + builder.getDescriptorForType().getFullName() + " : "
+                                   + ex.getMessage());
     }
   }
 }

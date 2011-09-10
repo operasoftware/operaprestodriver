@@ -4,6 +4,7 @@
 package com.opera.core.systems.scope.protos;
 
 public final class DesktopUtilsProtos {
+
   private DesktopUtilsProtos() {
   }
 
@@ -12,7 +13,8 @@ public final class DesktopUtilsProtos {
   }
 
   public static final class DesktopStringID extends
-      com.google.protobuf.GeneratedMessage {
+                                            com.google.protobuf.GeneratedMessage {
+
     // Use DesktopStringID.newBuilder() to construct.
     private DesktopStringID() {
       initFields();
@@ -56,7 +58,9 @@ public final class DesktopUtilsProtos {
     }
 
     public final boolean isInitialized() {
-      if (!hasEnumText) return false;
+      if (!hasEnumText) {
+        return false;
+      }
       return true;
     }
 
@@ -73,12 +77,14 @@ public final class DesktopUtilsProtos {
 
     public int getSerializedSize() {
       int size = memoizedSerializedSize;
-      if (size != -1) return size;
+      if (size != -1) {
+        return size;
+      }
 
       size = 0;
       if (hasEnumText()) {
         size += com.google.protobuf.CodedOutputStream.computeStringSize(1,
-            getEnumText());
+                                                                        getEnumText());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -173,7 +179,8 @@ public final class DesktopUtilsProtos {
     }
 
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> {
+                                      com.google.protobuf.GeneratedMessage.Builder<Builder> {
+
       private com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopStringID result;
 
       // Construct using
@@ -183,7 +190,8 @@ public final class DesktopUtilsProtos {
 
       private static Builder create() {
         Builder builder = new Builder();
-        builder.result = new com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopStringID();
+        builder.result =
+            new com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopStringID();
         return builder;
       }
 
@@ -204,11 +212,13 @@ public final class DesktopUtilsProtos {
       }
 
       public com.google.protobuf.Descriptors.Descriptor getDescriptorForType() {
-        return com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopStringID.getDescriptor();
+        return com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopStringID
+            .getDescriptor();
       }
 
       public com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopStringID getDefaultInstanceForType() {
-        return com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopStringID.getDefaultInstance();
+        return com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopStringID
+            .getDefaultInstance();
       }
 
       public boolean isInitialized() {
@@ -242,7 +252,8 @@ public final class DesktopUtilsProtos {
 
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopStringID) {
-          return mergeFrom((com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopStringID) other);
+          return mergeFrom(
+              (com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopStringID) other);
         } else {
           super.mergeFrom(other);
           return this;
@@ -251,7 +262,10 @@ public final class DesktopUtilsProtos {
 
       public Builder mergeFrom(
           com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopStringID other) {
-        if (other == com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopStringID.getDefaultInstance()) return this;
+        if (other == com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopStringID
+            .getDefaultInstance()) {
+          return this;
+        }
         if (other.hasEnumText()) {
           setEnumText(other.getEnumText());
         }
@@ -260,26 +274,28 @@ public final class DesktopUtilsProtos {
       }
 
       public Builder mergeFrom(com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                               com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields = com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
+        com.google.protobuf.UnknownFieldSet.Builder
+            unknownFields =
+            com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
         while (true) {
           int tag = input.readTag();
           switch (tag) {
-          case 0:
-            this.setUnknownFields(unknownFields.build());
-            return this;
-          default: {
-            if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+            case 0:
               this.setUnknownFields(unknownFields.build());
               return this;
+            default: {
+              if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+                this.setUnknownFields(unknownFields.build());
+                return this;
+              }
+              break;
             }
-            break;
-          }
-          case 10: {
-            setEnumText(input.readString());
-            break;
-          }
+            case 10: {
+              setEnumText(input.readString());
+              break;
+            }
           }
         }
       }
@@ -321,7 +337,8 @@ public final class DesktopUtilsProtos {
   }
 
   public static final class DesktopStringText extends
-      com.google.protobuf.GeneratedMessage {
+                                              com.google.protobuf.GeneratedMessage {
+
     // Use DesktopStringText.newBuilder() to construct.
     private DesktopStringText() {
       initFields();
@@ -365,7 +382,9 @@ public final class DesktopUtilsProtos {
     }
 
     public final boolean isInitialized() {
-      if (!hasText) return false;
+      if (!hasText) {
+        return false;
+      }
       return true;
     }
 
@@ -382,12 +401,14 @@ public final class DesktopUtilsProtos {
 
     public int getSerializedSize() {
       int size = memoizedSerializedSize;
-      if (size != -1) return size;
+      if (size != -1) {
+        return size;
+      }
 
       size = 0;
       if (hasText()) {
         size += com.google.protobuf.CodedOutputStream.computeStringSize(1,
-            getText());
+                                                                        getText());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -482,7 +503,8 @@ public final class DesktopUtilsProtos {
     }
 
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> {
+                                      com.google.protobuf.GeneratedMessage.Builder<Builder> {
+
       private com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopStringText result;
 
       // Construct using
@@ -492,7 +514,8 @@ public final class DesktopUtilsProtos {
 
       private static Builder create() {
         Builder builder = new Builder();
-        builder.result = new com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopStringText();
+        builder.result =
+            new com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopStringText();
         return builder;
       }
 
@@ -513,11 +536,13 @@ public final class DesktopUtilsProtos {
       }
 
       public com.google.protobuf.Descriptors.Descriptor getDescriptorForType() {
-        return com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopStringText.getDescriptor();
+        return com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopStringText
+            .getDescriptor();
       }
 
       public com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopStringText getDefaultInstanceForType() {
-        return com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopStringText.getDefaultInstance();
+        return com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopStringText
+            .getDefaultInstance();
       }
 
       public boolean isInitialized() {
@@ -551,7 +576,8 @@ public final class DesktopUtilsProtos {
 
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopStringText) {
-          return mergeFrom((com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopStringText) other);
+          return mergeFrom(
+              (com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopStringText) other);
         } else {
           super.mergeFrom(other);
           return this;
@@ -560,7 +586,10 @@ public final class DesktopUtilsProtos {
 
       public Builder mergeFrom(
           com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopStringText other) {
-        if (other == com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopStringText.getDefaultInstance()) return this;
+        if (other == com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopStringText
+            .getDefaultInstance()) {
+          return this;
+        }
         if (other.hasText()) {
           setText(other.getText());
         }
@@ -569,26 +598,28 @@ public final class DesktopUtilsProtos {
       }
 
       public Builder mergeFrom(com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                               com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields = com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
+        com.google.protobuf.UnknownFieldSet.Builder
+            unknownFields =
+            com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
         while (true) {
           int tag = input.readTag();
           switch (tag) {
-          case 0:
-            this.setUnknownFields(unknownFields.build());
-            return this;
-          default: {
-            if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+            case 0:
               this.setUnknownFields(unknownFields.build());
               return this;
+            default: {
+              if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+                this.setUnknownFields(unknownFields.build());
+                return this;
+              }
+              break;
             }
-            break;
-          }
-          case 10: {
-            setText(input.readString());
-            break;
-          }
+            case 10: {
+              setText(input.readString());
+              break;
+            }
           }
         }
       }
@@ -630,7 +661,8 @@ public final class DesktopUtilsProtos {
   }
 
   public static final class DesktopPath extends
-      com.google.protobuf.GeneratedMessage {
+                                        com.google.protobuf.GeneratedMessage {
+
     // Use DesktopPath.newBuilder() to construct.
     private DesktopPath() {
       initFields();
@@ -674,7 +706,9 @@ public final class DesktopUtilsProtos {
     }
 
     public final boolean isInitialized() {
-      if (!hasPath) return false;
+      if (!hasPath) {
+        return false;
+      }
       return true;
     }
 
@@ -691,12 +725,14 @@ public final class DesktopUtilsProtos {
 
     public int getSerializedSize() {
       int size = memoizedSerializedSize;
-      if (size != -1) return size;
+      if (size != -1) {
+        return size;
+      }
 
       size = 0;
       if (hasPath()) {
         size += com.google.protobuf.CodedOutputStream.computeStringSize(1,
-            getPath());
+                                                                        getPath());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -791,7 +827,8 @@ public final class DesktopUtilsProtos {
     }
 
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> {
+                                      com.google.protobuf.GeneratedMessage.Builder<Builder> {
+
       private com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopPath result;
 
       // Construct using
@@ -826,7 +863,8 @@ public final class DesktopUtilsProtos {
       }
 
       public com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopPath getDefaultInstanceForType() {
-        return com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopPath.getDefaultInstance();
+        return com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopPath
+            .getDefaultInstance();
       }
 
       public boolean isInitialized() {
@@ -860,7 +898,8 @@ public final class DesktopUtilsProtos {
 
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopPath) {
-          return mergeFrom((com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopPath) other);
+          return mergeFrom(
+              (com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopPath) other);
         } else {
           super.mergeFrom(other);
           return this;
@@ -869,7 +908,10 @@ public final class DesktopUtilsProtos {
 
       public Builder mergeFrom(
           com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopPath other) {
-        if (other == com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopPath.getDefaultInstance()) return this;
+        if (other == com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopPath
+            .getDefaultInstance()) {
+          return this;
+        }
         if (other.hasPath()) {
           setPath(other.getPath());
         }
@@ -878,26 +920,28 @@ public final class DesktopUtilsProtos {
       }
 
       public Builder mergeFrom(com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                               com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields = com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
+        com.google.protobuf.UnknownFieldSet.Builder
+            unknownFields =
+            com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
         while (true) {
           int tag = input.readTag();
           switch (tag) {
-          case 0:
-            this.setUnknownFields(unknownFields.build());
-            return this;
-          default: {
-            if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+            case 0:
               this.setUnknownFields(unknownFields.build());
               return this;
+            default: {
+              if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+                this.setUnknownFields(unknownFields.build());
+                return this;
+              }
+              break;
             }
-            break;
-          }
-          case 10: {
-            setPath(input.readString());
-            break;
-          }
+            case 10: {
+              setPath(input.readString());
+              break;
+            }
           }
         }
       }
@@ -939,7 +983,8 @@ public final class DesktopUtilsProtos {
   }
 
   public static final class DesktopPid extends
-      com.google.protobuf.GeneratedMessage {
+                                       com.google.protobuf.GeneratedMessage {
+
     // Use DesktopPid.newBuilder() to construct.
     private DesktopPid() {
       initFields();
@@ -983,7 +1028,9 @@ public final class DesktopUtilsProtos {
     }
 
     public final boolean isInitialized() {
-      if (!hasPid) return false;
+      if (!hasPid) {
+        return false;
+      }
       return true;
     }
 
@@ -1000,12 +1047,14 @@ public final class DesktopUtilsProtos {
 
     public int getSerializedSize() {
       int size = memoizedSerializedSize;
-      if (size != -1) return size;
+      if (size != -1) {
+        return size;
+      }
 
       size = 0;
       if (hasPid()) {
         size += com.google.protobuf.CodedOutputStream.computeUInt32Size(1,
-            getPid());
+                                                                        getPid());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -1100,7 +1149,8 @@ public final class DesktopUtilsProtos {
     }
 
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> {
+                                      com.google.protobuf.GeneratedMessage.Builder<Builder> {
+
       private com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopPid result;
 
       // Construct using
@@ -1135,7 +1185,8 @@ public final class DesktopUtilsProtos {
       }
 
       public com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopPid getDefaultInstanceForType() {
-        return com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopPid.getDefaultInstance();
+        return com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopPid
+            .getDefaultInstance();
       }
 
       public boolean isInitialized() {
@@ -1169,7 +1220,8 @@ public final class DesktopUtilsProtos {
 
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopPid) {
-          return mergeFrom((com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopPid) other);
+          return mergeFrom(
+              (com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopPid) other);
         } else {
           super.mergeFrom(other);
           return this;
@@ -1178,7 +1230,10 @@ public final class DesktopUtilsProtos {
 
       public Builder mergeFrom(
           com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopPid other) {
-        if (other == com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopPid.getDefaultInstance()) return this;
+        if (other == com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopPid
+            .getDefaultInstance()) {
+          return this;
+        }
         if (other.hasPid()) {
           setPid(other.getPid());
         }
@@ -1187,26 +1242,28 @@ public final class DesktopUtilsProtos {
       }
 
       public Builder mergeFrom(com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                               com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields = com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
+        com.google.protobuf.UnknownFieldSet.Builder
+            unknownFields =
+            com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
         while (true) {
           int tag = input.readTag();
           switch (tag) {
-          case 0:
-            this.setUnknownFields(unknownFields.build());
-            return this;
-          default: {
-            if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+            case 0:
               this.setUnknownFields(unknownFields.build());
               return this;
+            default: {
+              if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+                this.setUnknownFields(unknownFields.build());
+                return this;
+              }
+              break;
             }
-            break;
-          }
-          case 8: {
-            setPid(input.readUInt32());
-            break;
-          }
+            case 8: {
+              setPid(input.readUInt32());
+              break;
+            }
           }
         }
       }
@@ -1244,65 +1301,90 @@ public final class DesktopUtilsProtos {
     // @@protoc_insertion_point(class_scope:scope.DesktopPid)
   }
 
-  private static com.google.protobuf.Descriptors.Descriptor internal_static_scope_DesktopStringID_descriptor;
-  private static com.google.protobuf.GeneratedMessage.FieldAccessorTable internal_static_scope_DesktopStringID_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor internal_static_scope_DesktopStringText_descriptor;
-  private static com.google.protobuf.GeneratedMessage.FieldAccessorTable internal_static_scope_DesktopStringText_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor internal_static_scope_DesktopPath_descriptor;
-  private static com.google.protobuf.GeneratedMessage.FieldAccessorTable internal_static_scope_DesktopPath_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor internal_static_scope_DesktopPid_descriptor;
-  private static com.google.protobuf.GeneratedMessage.FieldAccessorTable internal_static_scope_DesktopPid_fieldAccessorTable;
+  private static
+  com.google.protobuf.Descriptors.Descriptor
+      internal_static_scope_DesktopStringID_descriptor;
+  private static
+  com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_scope_DesktopStringID_fieldAccessorTable;
+  private static
+  com.google.protobuf.Descriptors.Descriptor
+      internal_static_scope_DesktopStringText_descriptor;
+  private static
+  com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_scope_DesktopStringText_fieldAccessorTable;
+  private static
+  com.google.protobuf.Descriptors.Descriptor
+      internal_static_scope_DesktopPath_descriptor;
+  private static
+  com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_scope_DesktopPath_fieldAccessorTable;
+  private static
+  com.google.protobuf.Descriptors.Descriptor
+      internal_static_scope_DesktopPid_descriptor;
+  private static
+  com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_scope_DesktopPid_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor getDescriptor() {
     return descriptor;
   }
 
   private static com.google.protobuf.Descriptors.FileDescriptor descriptor;
+
   static {
-    java.lang.String[] descriptorData = { "\n\023desktop_utils.proto\022\005scope\"#\n\017DesktopS"
-        + "tringID\022\020\n\010enumText\030\001 \002(\t\"!\n\021DesktopStri"
-        + "ngText\022\014\n\004text\030\001 \002(\t\"\033\n\013DesktopPath\022\014\n\004p"
-        + "ath\030\001 \002(\t\"\031\n\nDesktopPid\022\013\n\003pid\030\001 \002(\rB;\n#"
-        + "com.opera.core.systems.scope.protosB\022Des"
-        + "ktopUtilsProtosH\001" };
-    com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner = new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
-      public com.google.protobuf.ExtensionRegistry assignDescriptors(
-          com.google.protobuf.Descriptors.FileDescriptor root) {
-        descriptor = root;
-        internal_static_scope_DesktopStringID_descriptor = getDescriptor().getMessageTypes().get(
-            0);
-        internal_static_scope_DesktopStringID_fieldAccessorTable = new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-            internal_static_scope_DesktopStringID_descriptor,
-            new java.lang.String[] { "EnumText", },
-            com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopStringID.class,
-            com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopStringID.Builder.class);
-        internal_static_scope_DesktopStringText_descriptor = getDescriptor().getMessageTypes().get(
-            1);
-        internal_static_scope_DesktopStringText_fieldAccessorTable = new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-            internal_static_scope_DesktopStringText_descriptor,
-            new java.lang.String[] { "Text", },
-            com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopStringText.class,
-            com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopStringText.Builder.class);
-        internal_static_scope_DesktopPath_descriptor = getDescriptor().getMessageTypes().get(
-            2);
-        internal_static_scope_DesktopPath_fieldAccessorTable = new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-            internal_static_scope_DesktopPath_descriptor,
-            new java.lang.String[] { "Path", },
-            com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopPath.class,
-            com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopPath.Builder.class);
-        internal_static_scope_DesktopPid_descriptor = getDescriptor().getMessageTypes().get(
-            3);
-        internal_static_scope_DesktopPid_fieldAccessorTable = new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-            internal_static_scope_DesktopPid_descriptor,
-            new java.lang.String[] { "Pid", },
-            com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopPid.class,
-            com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopPid.Builder.class);
-        return null;
-      }
-    };
+    java.lang.String[] descriptorData = {"\n\023desktop_utils.proto\022\005scope\"#\n\017DesktopS"
+                                         + "tringID\022\020\n\010enumText\030\001 \002(\t\"!\n\021DesktopStri"
+                                         + "ngText\022\014\n\004text\030\001 \002(\t\"\033\n\013DesktopPath\022\014\n\004p"
+                                         + "ath\030\001 \002(\t\"\031\n\nDesktopPid\022\013\n\003pid\030\001 \002(\rB;\n#"
+                                         + "com.opera.core.systems.scope.protosB\022Des"
+                                         + "ktopUtilsProtosH\001"};
+    com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner
+        assigner =
+        new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
+          public com.google.protobuf.ExtensionRegistry assignDescriptors(
+              com.google.protobuf.Descriptors.FileDescriptor root) {
+            descriptor = root;
+            internal_static_scope_DesktopStringID_descriptor =
+                getDescriptor().getMessageTypes().get(
+                    0);
+            internal_static_scope_DesktopStringID_fieldAccessorTable =
+                new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+                    internal_static_scope_DesktopStringID_descriptor,
+                    new java.lang.String[]{"EnumText",},
+                    com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopStringID.class,
+                    com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopStringID.Builder.class);
+            internal_static_scope_DesktopStringText_descriptor =
+                getDescriptor().getMessageTypes().get(
+                    1);
+            internal_static_scope_DesktopStringText_fieldAccessorTable =
+                new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+                    internal_static_scope_DesktopStringText_descriptor,
+                    new java.lang.String[]{"Text",},
+                    com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopStringText.class,
+                    com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopStringText.Builder.class);
+            internal_static_scope_DesktopPath_descriptor = getDescriptor().getMessageTypes().get(
+                2);
+            internal_static_scope_DesktopPath_fieldAccessorTable =
+                new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+                    internal_static_scope_DesktopPath_descriptor,
+                    new java.lang.String[]{"Path",},
+                    com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopPath.class,
+                    com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopPath.Builder.class);
+            internal_static_scope_DesktopPid_descriptor = getDescriptor().getMessageTypes().get(
+                3);
+            internal_static_scope_DesktopPid_fieldAccessorTable =
+                new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+                    internal_static_scope_DesktopPid_descriptor,
+                    new java.lang.String[]{"Pid",},
+                    com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopPid.class,
+                    com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopPid.Builder.class);
+            return null;
+          }
+        };
     com.google.protobuf.Descriptors.FileDescriptor.internalBuildGeneratedFileFrom(
         descriptorData,
-        new com.google.protobuf.Descriptors.FileDescriptor[] {}, assigner);
+        new com.google.protobuf.Descriptors.FileDescriptor[]{}, assigner);
   }
 
   public static void internalForceInit() {

@@ -36,7 +36,6 @@ import com.opera.core.systems.scope.services.ICookieManager;
  * Cookie manager to manage cookies via scope
  *
  * @author Deniz Turkoglu
- *
  */
 public class CookieManager extends AbstractService implements ICookieManager {
 
@@ -104,25 +103,31 @@ public class CookieManager extends AbstractService implements ICookieManager {
   }
 
   public Set<Cookie> getCookie(String domain, String path) {
-    if (domain == null) throw new NullPointerException("Domain can not be null");
+    if (domain == null) {
+      throw new NullPointerException("Domain can not be null");
+    }
 
     GetCookieArg.Builder arg = GetCookieArg.newBuilder();
     arg.setDomain(domain);
 
-    if (path != null) arg.setPath(path);
+    if (path != null) {
+      arg.setPath(path);
+    }
 
     Response response = executeCommand(CookieManagerCommand.GET_COOKIE, arg);
     CookieList.Builder builder = CookieList.newBuilder();
     buildPayload(response, builder);
     CookieList list = builder.build();
 
-    List<com.opera.core.systems.scope.protos.CookieMngProtos.Cookie> cookies = list.getCookieListList();
+    List<com.opera.core.systems.scope.protos.CookieMngProtos.Cookie>
+        cookies =
+        list.getCookieListList();
     Set<Cookie> result = new HashSet<Cookie>(cookies.size());
 
     for (com.opera.core.systems.scope.protos.CookieMngProtos.Cookie cookie : cookies) {
       result.add(new Cookie(cookie.getName(), cookie.getValue(),
-          cookie.getDomain(), cookie.getPath(), new Date(cookie.getExpires()),
-          cookie.getIsSecure()));
+                            cookie.getDomain(), cookie.getPath(), new Date(cookie.getExpires()),
+                            cookie.getIsSecure()));
     }
 
     return result;
@@ -130,14 +135,20 @@ public class CookieManager extends AbstractService implements ICookieManager {
   }
 
   public void removeCookie(String domain, String path, String name) {
-    if (domain == null) throw new NullPointerException("Domain can not be null");
+    if (domain == null) {
+      throw new NullPointerException("Domain can not be null");
+    }
 
     RemoveCookieArg.Builder arg = RemoveCookieArg.newBuilder();
     arg.setDomain(domain);
 
-    if (path != null) arg.setPath(path);
+    if (path != null) {
+      arg.setPath(path);
+    }
 
-    if (name != null) arg.setName(name);
+    if (name != null) {
+      arg.setName(name);
+    }
 
     executeCommand(CookieManagerCommand.REMOVE_COOKIE, arg);
   }

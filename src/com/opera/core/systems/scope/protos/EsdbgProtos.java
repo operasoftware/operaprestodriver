@@ -4,6 +4,7 @@
 package com.opera.core.systems.scope.protos;
 
 public final class EsdbgProtos {
+
   private EsdbgProtos() {
   }
 
@@ -12,7 +13,8 @@ public final class EsdbgProtos {
   }
 
   public static final class ExamineList extends
-      com.google.protobuf.GeneratedMessage {
+                                        com.google.protobuf.GeneratedMessage {
+
     // Use ExamineList.newBuilder() to construct.
     private ExamineList() {
       initFields();
@@ -72,7 +74,9 @@ public final class EsdbgProtos {
     }
 
     public final boolean isInitialized() {
-      if (!hasRuntimeID) return false;
+      if (!hasRuntimeID) {
+        return false;
+      }
       return true;
     }
 
@@ -92,12 +96,14 @@ public final class EsdbgProtos {
 
     public int getSerializedSize() {
       int size = memoizedSerializedSize;
-      if (size != -1) return size;
+      if (size != -1) {
+        return size;
+      }
 
       size = 0;
       if (hasRuntimeID()) {
         size += com.google.protobuf.CodedOutputStream.computeUInt32Size(1,
-            getRuntimeID());
+                                                                        getRuntimeID());
       }
       {
         int dataSize = 0;
@@ -200,7 +206,8 @@ public final class EsdbgProtos {
     }
 
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> {
+                                      com.google.protobuf.GeneratedMessage.Builder<Builder> {
+
       private com.opera.core.systems.scope.protos.EsdbgProtos.ExamineList result;
 
       // Construct using
@@ -281,7 +288,10 @@ public final class EsdbgProtos {
 
       public Builder mergeFrom(
           com.opera.core.systems.scope.protos.EsdbgProtos.ExamineList other) {
-        if (other == com.opera.core.systems.scope.protos.EsdbgProtos.ExamineList.getDefaultInstance()) return this;
+        if (other == com.opera.core.systems.scope.protos.EsdbgProtos.ExamineList
+            .getDefaultInstance()) {
+          return this;
+        }
         if (other.hasRuntimeID()) {
           setRuntimeID(other.getRuntimeID());
         }
@@ -296,39 +306,41 @@ public final class EsdbgProtos {
       }
 
       public Builder mergeFrom(com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                               com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields = com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
+        com.google.protobuf.UnknownFieldSet.Builder
+            unknownFields =
+            com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
         while (true) {
           int tag = input.readTag();
           switch (tag) {
-          case 0:
-            this.setUnknownFields(unknownFields.build());
-            return this;
-          default: {
-            if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+            case 0:
               this.setUnknownFields(unknownFields.build());
               return this;
+            default: {
+              if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+                this.setUnknownFields(unknownFields.build());
+                return this;
+              }
+              break;
             }
-            break;
-          }
-          case 8: {
-            setRuntimeID(input.readUInt32());
-            break;
-          }
-          case 16: {
-            addObjectList(input.readUInt32());
-            break;
-          }
-          case 18: {
-            int length = input.readRawVarint32();
-            int limit = input.pushLimit(length);
-            while (input.getBytesUntilLimit() > 0) {
+            case 8: {
+              setRuntimeID(input.readUInt32());
+              break;
+            }
+            case 16: {
               addObjectList(input.readUInt32());
+              break;
             }
-            input.popLimit(limit);
-            break;
-          }
+            case 18: {
+              int length = input.readRawVarint32();
+              int limit = input.pushLimit(length);
+              while (input.getBytesUntilLimit() > 0) {
+                addObjectList(input.readUInt32());
+              }
+              input.popLimit(limit);
+              break;
+            }
           }
         }
       }
@@ -407,7 +419,8 @@ public final class EsdbgProtos {
   }
 
   public static final class RuntimeInfo extends
-      com.google.protobuf.GeneratedMessage {
+                                        com.google.protobuf.GeneratedMessage {
+
     // Use RuntimeInfo.newBuilder() to construct.
     private RuntimeInfo() {
       initFields();
@@ -503,11 +516,21 @@ public final class EsdbgProtos {
     }
 
     public final boolean isInitialized() {
-      if (!hasRuntimeID) return false;
-      if (!hasHtmlFramePath) return false;
-      if (!hasWindowID) return false;
-      if (!hasObjectID) return false;
-      if (!hasUri) return false;
+      if (!hasRuntimeID) {
+        return false;
+      }
+      if (!hasHtmlFramePath) {
+        return false;
+      }
+      if (!hasWindowID) {
+        return false;
+      }
+      if (!hasObjectID) {
+        return false;
+      }
+      if (!hasUri) {
+        return false;
+      }
       return true;
     }
 
@@ -536,28 +559,30 @@ public final class EsdbgProtos {
 
     public int getSerializedSize() {
       int size = memoizedSerializedSize;
-      if (size != -1) return size;
+      if (size != -1) {
+        return size;
+      }
 
       size = 0;
       if (hasRuntimeID()) {
         size += com.google.protobuf.CodedOutputStream.computeUInt32Size(1,
-            getRuntimeID());
+                                                                        getRuntimeID());
       }
       if (hasHtmlFramePath()) {
         size += com.google.protobuf.CodedOutputStream.computeStringSize(2,
-            getHtmlFramePath());
+                                                                        getHtmlFramePath());
       }
       if (hasWindowID()) {
         size += com.google.protobuf.CodedOutputStream.computeUInt32Size(3,
-            getWindowID());
+                                                                        getWindowID());
       }
       if (hasObjectID()) {
         size += com.google.protobuf.CodedOutputStream.computeUInt32Size(4,
-            getObjectID());
+                                                                        getObjectID());
       }
       if (hasUri()) {
         size += com.google.protobuf.CodedOutputStream.computeStringSize(5,
-            getUri());
+                                                                        getUri());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -652,7 +677,8 @@ public final class EsdbgProtos {
     }
 
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> {
+                                      com.google.protobuf.GeneratedMessage.Builder<Builder> {
+
       private com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeInfo result;
 
       // Construct using
@@ -730,7 +756,10 @@ public final class EsdbgProtos {
 
       public Builder mergeFrom(
           com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeInfo other) {
-        if (other == com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeInfo.getDefaultInstance()) return this;
+        if (other == com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeInfo
+            .getDefaultInstance()) {
+          return this;
+        }
         if (other.hasRuntimeID()) {
           setRuntimeID(other.getRuntimeID());
         }
@@ -751,42 +780,44 @@ public final class EsdbgProtos {
       }
 
       public Builder mergeFrom(com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                               com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields = com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
+        com.google.protobuf.UnknownFieldSet.Builder
+            unknownFields =
+            com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
         while (true) {
           int tag = input.readTag();
           switch (tag) {
-          case 0:
-            this.setUnknownFields(unknownFields.build());
-            return this;
-          default: {
-            if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+            case 0:
               this.setUnknownFields(unknownFields.build());
               return this;
+            default: {
+              if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+                this.setUnknownFields(unknownFields.build());
+                return this;
+              }
+              break;
             }
-            break;
-          }
-          case 8: {
-            setRuntimeID(input.readUInt32());
-            break;
-          }
-          case 18: {
-            setHtmlFramePath(input.readString());
-            break;
-          }
-          case 24: {
-            setWindowID(input.readUInt32());
-            break;
-          }
-          case 32: {
-            setObjectID(input.readUInt32());
-            break;
-          }
-          case 42: {
-            setUri(input.readString());
-            break;
-          }
+            case 8: {
+              setRuntimeID(input.readUInt32());
+              break;
+            }
+            case 18: {
+              setHtmlFramePath(input.readString());
+              break;
+            }
+            case 24: {
+              setWindowID(input.readUInt32());
+              break;
+            }
+            case 32: {
+              setObjectID(input.readUInt32());
+              break;
+            }
+            case 42: {
+              setUri(input.readString());
+              break;
+            }
           }
         }
       }
@@ -915,7 +946,8 @@ public final class EsdbgProtos {
   }
 
   public static final class RuntimeID extends
-      com.google.protobuf.GeneratedMessage {
+                                      com.google.protobuf.GeneratedMessage {
+
     // Use RuntimeID.newBuilder() to construct.
     private RuntimeID() {
       initFields();
@@ -959,7 +991,9 @@ public final class EsdbgProtos {
     }
 
     public final boolean isInitialized() {
-      if (!hasRuntimeID) return false;
+      if (!hasRuntimeID) {
+        return false;
+      }
       return true;
     }
 
@@ -976,12 +1010,14 @@ public final class EsdbgProtos {
 
     public int getSerializedSize() {
       int size = memoizedSerializedSize;
-      if (size != -1) return size;
+      if (size != -1) {
+        return size;
+      }
 
       size = 0;
       if (hasRuntimeID()) {
         size += com.google.protobuf.CodedOutputStream.computeUInt32Size(1,
-            getRuntimeID());
+                                                                        getRuntimeID());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -1076,7 +1112,8 @@ public final class EsdbgProtos {
     }
 
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> {
+                                      com.google.protobuf.GeneratedMessage.Builder<Builder> {
+
       private com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeID result;
 
       // Construct using
@@ -1154,7 +1191,10 @@ public final class EsdbgProtos {
 
       public Builder mergeFrom(
           com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeID other) {
-        if (other == com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeID.getDefaultInstance()) return this;
+        if (other == com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeID
+            .getDefaultInstance()) {
+          return this;
+        }
         if (other.hasRuntimeID()) {
           setRuntimeID(other.getRuntimeID());
         }
@@ -1163,26 +1203,28 @@ public final class EsdbgProtos {
       }
 
       public Builder mergeFrom(com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                               com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields = com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
+        com.google.protobuf.UnknownFieldSet.Builder
+            unknownFields =
+            com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
         while (true) {
           int tag = input.readTag();
           switch (tag) {
-          case 0:
-            this.setUnknownFields(unknownFields.build());
-            return this;
-          default: {
-            if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+            case 0:
               this.setUnknownFields(unknownFields.build());
               return this;
+            default: {
+              if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+                this.setUnknownFields(unknownFields.build());
+                return this;
+              }
+              break;
             }
-            break;
-          }
-          case 8: {
-            setRuntimeID(input.readUInt32());
-            break;
-          }
+            case 8: {
+              setRuntimeID(input.readUInt32());
+              break;
+            }
           }
         }
       }
@@ -1221,7 +1263,8 @@ public final class EsdbgProtos {
   }
 
   public static final class RuntimeSelection extends
-      com.google.protobuf.GeneratedMessage {
+                                             com.google.protobuf.GeneratedMessage {
+
     // Use RuntimeSelection.newBuilder() to construct.
     private RuntimeSelection() {
       initFields();
@@ -1300,7 +1343,9 @@ public final class EsdbgProtos {
 
     public int getSerializedSize() {
       int size = memoizedSerializedSize;
-      if (size != -1) return size;
+      if (size != -1) {
+        return size;
+      }
 
       size = 0;
       {
@@ -1313,7 +1358,7 @@ public final class EsdbgProtos {
       }
       if (hasAllRuntimes()) {
         size += com.google.protobuf.CodedOutputStream.computeBoolSize(2,
-            getAllRuntimes());
+                                                                      getAllRuntimes());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -1408,7 +1453,8 @@ public final class EsdbgProtos {
     }
 
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> {
+                                      com.google.protobuf.GeneratedMessage.Builder<Builder> {
+
       private com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeSelection result;
 
       // Construct using
@@ -1443,7 +1489,8 @@ public final class EsdbgProtos {
       }
 
       public com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeSelection getDefaultInstanceForType() {
-        return com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeSelection.getDefaultInstance();
+        return com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeSelection
+            .getDefaultInstance();
       }
 
       public boolean isInitialized() {
@@ -1480,7 +1527,8 @@ public final class EsdbgProtos {
 
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeSelection) {
-          return mergeFrom((com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeSelection) other);
+          return mergeFrom(
+              (com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeSelection) other);
         } else {
           super.mergeFrom(other);
           return this;
@@ -1489,7 +1537,10 @@ public final class EsdbgProtos {
 
       public Builder mergeFrom(
           com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeSelection other) {
-        if (other == com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeSelection.getDefaultInstance()) return this;
+        if (other == com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeSelection
+            .getDefaultInstance()) {
+          return this;
+        }
         if (!other.runtimeList_.isEmpty()) {
           if (result.runtimeList_.isEmpty()) {
             result.runtimeList_ = new java.util.ArrayList<java.lang.Integer>();
@@ -1504,39 +1555,41 @@ public final class EsdbgProtos {
       }
 
       public Builder mergeFrom(com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                               com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields = com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
+        com.google.protobuf.UnknownFieldSet.Builder
+            unknownFields =
+            com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
         while (true) {
           int tag = input.readTag();
           switch (tag) {
-          case 0:
-            this.setUnknownFields(unknownFields.build());
-            return this;
-          default: {
-            if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+            case 0:
               this.setUnknownFields(unknownFields.build());
               return this;
+            default: {
+              if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+                this.setUnknownFields(unknownFields.build());
+                return this;
+              }
+              break;
             }
-            break;
-          }
-          case 8: {
-            addRuntimeList(input.readUInt32());
-            break;
-          }
-          case 10: {
-            int length = input.readRawVarint32();
-            int limit = input.pushLimit(length);
-            while (input.getBytesUntilLimit() > 0) {
+            case 8: {
               addRuntimeList(input.readUInt32());
+              break;
             }
-            input.popLimit(limit);
-            break;
-          }
-          case 16: {
-            setAllRuntimes(input.readBool());
-            break;
-          }
+            case 10: {
+              int length = input.readRawVarint32();
+              int limit = input.pushLimit(length);
+              while (input.getBytesUntilLimit() > 0) {
+                addRuntimeList(input.readUInt32());
+              }
+              input.popLimit(limit);
+              break;
+            }
+            case 16: {
+              setAllRuntimes(input.readBool());
+              break;
+            }
           }
         }
       }
@@ -1615,7 +1668,8 @@ public final class EsdbgProtos {
   }
 
   public static final class ObjectInfo extends
-      com.google.protobuf.GeneratedMessage {
+                                       com.google.protobuf.GeneratedMessage {
+
     // Use ObjectInfo.newBuilder() to construct.
     private ObjectInfo() {
       initFields();
@@ -1643,7 +1697,8 @@ public final class EsdbgProtos {
     }
 
     public static final class Property extends
-        com.google.protobuf.GeneratedMessage {
+                                       com.google.protobuf.GeneratedMessage {
+
       // Use Property.newBuilder() to construct.
       private Property() {
         initFields();
@@ -1723,14 +1778,21 @@ public final class EsdbgProtos {
       }
 
       private void initFields() {
-        objectValue_ = com.opera.core.systems.scope.protos.EsdbgProtos.ObjectValue.getDefaultInstance();
+        objectValue_ =
+            com.opera.core.systems.scope.protos.EsdbgProtos.ObjectValue.getDefaultInstance();
       }
 
       public final boolean isInitialized() {
-        if (!hasName) return false;
-        if (!hasType) return false;
+        if (!hasName) {
+          return false;
+        }
+        if (!hasType) {
+          return false;
+        }
         if (hasObjectValue()) {
-          if (!getObjectValue().isInitialized()) return false;
+          if (!getObjectValue().isInitialized()) {
+            return false;
+          }
         }
         return true;
       }
@@ -1757,24 +1819,26 @@ public final class EsdbgProtos {
 
       public int getSerializedSize() {
         int size = memoizedSerializedSize;
-        if (size != -1) return size;
+        if (size != -1) {
+          return size;
+        }
 
         size = 0;
         if (hasName()) {
           size += com.google.protobuf.CodedOutputStream.computeStringSize(1,
-              getName());
+                                                                          getName());
         }
         if (hasType()) {
           size += com.google.protobuf.CodedOutputStream.computeStringSize(2,
-              getType());
+                                                                          getType());
         }
         if (hasValue()) {
           size += com.google.protobuf.CodedOutputStream.computeStringSize(3,
-              getValue());
+                                                                          getValue());
         }
         if (hasObjectValue()) {
           size += com.google.protobuf.CodedOutputStream.computeMessageSize(4,
-              getObjectValue());
+                                                                           getObjectValue());
         }
         size += getUnknownFields().getSerializedSize();
         memoizedSerializedSize = size;
@@ -1872,7 +1936,8 @@ public final class EsdbgProtos {
       }
 
       public static final class Builder extends
-          com.google.protobuf.GeneratedMessage.Builder<Builder> {
+                                        com.google.protobuf.GeneratedMessage.Builder<Builder> {
+
         private com.opera.core.systems.scope.protos.EsdbgProtos.ObjectInfo.Property result;
 
         // Construct using
@@ -1882,7 +1947,8 @@ public final class EsdbgProtos {
 
         private static Builder create() {
           Builder builder = new Builder();
-          builder.result = new com.opera.core.systems.scope.protos.EsdbgProtos.ObjectInfo.Property();
+          builder.result =
+              new com.opera.core.systems.scope.protos.EsdbgProtos.ObjectInfo.Property();
           return builder;
         }
 
@@ -1904,11 +1970,13 @@ public final class EsdbgProtos {
         }
 
         public com.google.protobuf.Descriptors.Descriptor getDescriptorForType() {
-          return com.opera.core.systems.scope.protos.EsdbgProtos.ObjectInfo.Property.getDescriptor();
+          return com.opera.core.systems.scope.protos.EsdbgProtos.ObjectInfo.Property
+              .getDescriptor();
         }
 
         public com.opera.core.systems.scope.protos.EsdbgProtos.ObjectInfo.Property getDefaultInstanceForType() {
-          return com.opera.core.systems.scope.protos.EsdbgProtos.ObjectInfo.Property.getDefaultInstance();
+          return com.opera.core.systems.scope.protos.EsdbgProtos.ObjectInfo.Property
+              .getDefaultInstance();
         }
 
         public boolean isInitialized() {
@@ -1942,7 +2010,8 @@ public final class EsdbgProtos {
 
         public Builder mergeFrom(com.google.protobuf.Message other) {
           if (other instanceof com.opera.core.systems.scope.protos.EsdbgProtos.ObjectInfo.Property) {
-            return mergeFrom((com.opera.core.systems.scope.protos.EsdbgProtos.ObjectInfo.Property) other);
+            return mergeFrom(
+                (com.opera.core.systems.scope.protos.EsdbgProtos.ObjectInfo.Property) other);
           } else {
             super.mergeFrom(other);
             return this;
@@ -1951,7 +2020,10 @@ public final class EsdbgProtos {
 
         public Builder mergeFrom(
             com.opera.core.systems.scope.protos.EsdbgProtos.ObjectInfo.Property other) {
-          if (other == com.opera.core.systems.scope.protos.EsdbgProtos.ObjectInfo.Property.getDefaultInstance()) return this;
+          if (other == com.opera.core.systems.scope.protos.EsdbgProtos.ObjectInfo.Property
+              .getDefaultInstance()) {
+            return this;
+          }
           if (other.hasName()) {
             setName(other.getName());
           }
@@ -1969,44 +2041,48 @@ public final class EsdbgProtos {
         }
 
         public Builder mergeFrom(com.google.protobuf.CodedInputStream input,
-            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                                 com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws java.io.IOException {
-          com.google.protobuf.UnknownFieldSet.Builder unknownFields = com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
+          com.google.protobuf.UnknownFieldSet.Builder
+              unknownFields =
+              com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
           while (true) {
             int tag = input.readTag();
             switch (tag) {
-            case 0:
-              this.setUnknownFields(unknownFields.build());
-              return this;
-            default: {
-              if (!parseUnknownField(input, unknownFields, extensionRegistry,
-                  tag)) {
+              case 0:
                 this.setUnknownFields(unknownFields.build());
                 return this;
+              default: {
+                if (!parseUnknownField(input, unknownFields, extensionRegistry,
+                                       tag)) {
+                  this.setUnknownFields(unknownFields.build());
+                  return this;
+                }
+                break;
               }
-              break;
-            }
-            case 10: {
-              setName(input.readString());
-              break;
-            }
-            case 18: {
-              setType(input.readString());
-              break;
-            }
-            case 26: {
-              setValue(input.readString());
-              break;
-            }
-            case 34: {
-              com.opera.core.systems.scope.protos.EsdbgProtos.ObjectValue.Builder subBuilder = com.opera.core.systems.scope.protos.EsdbgProtos.ObjectValue.newBuilder();
-              if (hasObjectValue()) {
-                subBuilder.mergeFrom(getObjectValue());
+              case 10: {
+                setName(input.readString());
+                break;
               }
-              input.readMessage(subBuilder, extensionRegistry);
-              setObjectValue(subBuilder.buildPartial());
-              break;
-            }
+              case 18: {
+                setType(input.readString());
+                break;
+              }
+              case 26: {
+                setValue(input.readString());
+                break;
+              }
+              case 34: {
+                com.opera.core.systems.scope.protos.EsdbgProtos.ObjectValue.Builder
+                    subBuilder =
+                    com.opera.core.systems.scope.protos.EsdbgProtos.ObjectValue.newBuilder();
+                if (hasObjectValue()) {
+                  subBuilder.mergeFrom(getObjectValue());
+                }
+                input.readMessage(subBuilder, extensionRegistry);
+                setObjectValue(subBuilder.buildPartial());
+                break;
+              }
             }
           }
         }
@@ -2112,9 +2188,11 @@ public final class EsdbgProtos {
         public Builder mergeObjectValue(
             com.opera.core.systems.scope.protos.EsdbgProtos.ObjectValue value) {
           if (result.hasObjectValue()
-              && result.objectValue_ != com.opera.core.systems.scope.protos.EsdbgProtos.ObjectValue.getDefaultInstance()) {
-            result.objectValue_ = com.opera.core.systems.scope.protos.EsdbgProtos.ObjectValue.newBuilder(
-                result.objectValue_).mergeFrom(value).buildPartial();
+              && result.objectValue_ != com.opera.core.systems.scope.protos.EsdbgProtos.ObjectValue
+              .getDefaultInstance()) {
+            result.objectValue_ =
+                com.opera.core.systems.scope.protos.EsdbgProtos.ObjectValue.newBuilder(
+                    result.objectValue_).mergeFrom(value).buildPartial();
           } else {
             result.objectValue_ = value;
           }
@@ -2124,7 +2202,8 @@ public final class EsdbgProtos {
 
         public Builder clearObjectValue() {
           result.hasObjectValue = false;
-          result.objectValue_ = com.opera.core.systems.scope.protos.EsdbgProtos.ObjectValue.getDefaultInstance();
+          result.objectValue_ =
+              com.opera.core.systems.scope.protos.EsdbgProtos.ObjectValue.getDefaultInstance();
           return this;
         }
 
@@ -2155,7 +2234,10 @@ public final class EsdbgProtos {
 
     // repeated .scope.ObjectInfo.Property propertyList = 2;
     public static final int PROPERTYLIST_FIELD_NUMBER = 2;
-    private java.util.List<com.opera.core.systems.scope.protos.EsdbgProtos.ObjectInfo.Property> propertyList_ = java.util.Collections.emptyList();
+    private
+    java.util.List<com.opera.core.systems.scope.protos.EsdbgProtos.ObjectInfo.Property>
+        propertyList_ =
+        java.util.Collections.emptyList();
 
     public java.util.List<com.opera.core.systems.scope.protos.EsdbgProtos.ObjectInfo.Property> getPropertyListList() {
       return propertyList_;
@@ -2175,10 +2257,16 @@ public final class EsdbgProtos {
     }
 
     public final boolean isInitialized() {
-      if (!hasValue) return false;
-      if (!getValue().isInitialized()) return false;
+      if (!hasValue) {
+        return false;
+      }
+      if (!getValue().isInitialized()) {
+        return false;
+      }
       for (com.opera.core.systems.scope.protos.EsdbgProtos.ObjectInfo.Property element : getPropertyListList()) {
-        if (!element.isInitialized()) return false;
+        if (!element.isInitialized()) {
+          return false;
+        }
       }
       return true;
     }
@@ -2199,16 +2287,18 @@ public final class EsdbgProtos {
 
     public int getSerializedSize() {
       int size = memoizedSerializedSize;
-      if (size != -1) return size;
+      if (size != -1) {
+        return size;
+      }
 
       size = 0;
       if (hasValue()) {
         size += com.google.protobuf.CodedOutputStream.computeMessageSize(1,
-            getValue());
+                                                                         getValue());
       }
       for (com.opera.core.systems.scope.protos.EsdbgProtos.ObjectInfo.Property element : getPropertyListList()) {
         size += com.google.protobuf.CodedOutputStream.computeMessageSize(2,
-            element);
+                                                                         element);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -2303,7 +2393,8 @@ public final class EsdbgProtos {
     }
 
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> {
+                                      com.google.protobuf.GeneratedMessage.Builder<Builder> {
+
       private com.opera.core.systems.scope.protos.EsdbgProtos.ObjectInfo result;
 
       // Construct using
@@ -2384,13 +2475,17 @@ public final class EsdbgProtos {
 
       public Builder mergeFrom(
           com.opera.core.systems.scope.protos.EsdbgProtos.ObjectInfo other) {
-        if (other == com.opera.core.systems.scope.protos.EsdbgProtos.ObjectInfo.getDefaultInstance()) return this;
+        if (other == com.opera.core.systems.scope.protos.EsdbgProtos.ObjectInfo
+            .getDefaultInstance()) {
+          return this;
+        }
         if (other.hasValue()) {
           mergeValue(other.getValue());
         }
         if (!other.propertyList_.isEmpty()) {
           if (result.propertyList_.isEmpty()) {
-            result.propertyList_ = new java.util.ArrayList<com.opera.core.systems.scope.protos.EsdbgProtos.ObjectInfo.Property>();
+            result.propertyList_ =
+                new java.util.ArrayList<com.opera.core.systems.scope.protos.EsdbgProtos.ObjectInfo.Property>();
           }
           result.propertyList_.addAll(other.propertyList_);
         }
@@ -2399,37 +2494,43 @@ public final class EsdbgProtos {
       }
 
       public Builder mergeFrom(com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                               com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields = com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
+        com.google.protobuf.UnknownFieldSet.Builder
+            unknownFields =
+            com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
         while (true) {
           int tag = input.readTag();
           switch (tag) {
-          case 0:
-            this.setUnknownFields(unknownFields.build());
-            return this;
-          default: {
-            if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+            case 0:
               this.setUnknownFields(unknownFields.build());
               return this;
+            default: {
+              if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+                this.setUnknownFields(unknownFields.build());
+                return this;
+              }
+              break;
             }
-            break;
-          }
-          case 10: {
-            com.opera.core.systems.scope.protos.EsdbgProtos.ObjectValue.Builder subBuilder = com.opera.core.systems.scope.protos.EsdbgProtos.ObjectValue.newBuilder();
-            if (hasValue()) {
-              subBuilder.mergeFrom(getValue());
+            case 10: {
+              com.opera.core.systems.scope.protos.EsdbgProtos.ObjectValue.Builder
+                  subBuilder =
+                  com.opera.core.systems.scope.protos.EsdbgProtos.ObjectValue.newBuilder();
+              if (hasValue()) {
+                subBuilder.mergeFrom(getValue());
+              }
+              input.readMessage(subBuilder, extensionRegistry);
+              setValue(subBuilder.buildPartial());
+              break;
             }
-            input.readMessage(subBuilder, extensionRegistry);
-            setValue(subBuilder.buildPartial());
-            break;
-          }
-          case 18: {
-            com.opera.core.systems.scope.protos.EsdbgProtos.ObjectInfo.Property.Builder subBuilder = com.opera.core.systems.scope.protos.EsdbgProtos.ObjectInfo.Property.newBuilder();
-            input.readMessage(subBuilder, extensionRegistry);
-            addPropertyList(subBuilder.buildPartial());
-            break;
-          }
+            case 18: {
+              com.opera.core.systems.scope.protos.EsdbgProtos.ObjectInfo.Property.Builder
+                  subBuilder =
+                  com.opera.core.systems.scope.protos.EsdbgProtos.ObjectInfo.Property.newBuilder();
+              input.readMessage(subBuilder, extensionRegistry);
+              addPropertyList(subBuilder.buildPartial());
+              break;
+            }
           }
         }
       }
@@ -2463,7 +2564,8 @@ public final class EsdbgProtos {
       public Builder mergeValue(
           com.opera.core.systems.scope.protos.EsdbgProtos.ObjectValue value) {
         if (result.hasValue()
-            && result.value_ != com.opera.core.systems.scope.protos.EsdbgProtos.ObjectValue.getDefaultInstance()) {
+            && result.value_ != com.opera.core.systems.scope.protos.EsdbgProtos.ObjectValue
+            .getDefaultInstance()) {
           result.value_ = com.opera.core.systems.scope.protos.EsdbgProtos.ObjectValue.newBuilder(
               result.value_).mergeFrom(value).buildPartial();
         } else {
@@ -2475,7 +2577,8 @@ public final class EsdbgProtos {
 
       public Builder clearValue() {
         result.hasValue = false;
-        result.value_ = com.opera.core.systems.scope.protos.EsdbgProtos.ObjectValue.getDefaultInstance();
+        result.value_ =
+            com.opera.core.systems.scope.protos.EsdbgProtos.ObjectValue.getDefaultInstance();
         return this;
       }
 
@@ -2516,7 +2619,8 @@ public final class EsdbgProtos {
           throw new NullPointerException();
         }
         if (result.propertyList_.isEmpty()) {
-          result.propertyList_ = new java.util.ArrayList<com.opera.core.systems.scope.protos.EsdbgProtos.ObjectInfo.Property>();
+          result.propertyList_ =
+              new java.util.ArrayList<com.opera.core.systems.scope.protos.EsdbgProtos.ObjectInfo.Property>();
         }
         result.propertyList_.add(value);
         return this;
@@ -2525,7 +2629,8 @@ public final class EsdbgProtos {
       public Builder addPropertyList(
           com.opera.core.systems.scope.protos.EsdbgProtos.ObjectInfo.Property.Builder builderForValue) {
         if (result.propertyList_.isEmpty()) {
-          result.propertyList_ = new java.util.ArrayList<com.opera.core.systems.scope.protos.EsdbgProtos.ObjectInfo.Property>();
+          result.propertyList_ =
+              new java.util.ArrayList<com.opera.core.systems.scope.protos.EsdbgProtos.ObjectInfo.Property>();
         }
         result.propertyList_.add(builderForValue.build());
         return this;
@@ -2534,7 +2639,8 @@ public final class EsdbgProtos {
       public Builder addAllPropertyList(
           java.lang.Iterable<? extends com.opera.core.systems.scope.protos.EsdbgProtos.ObjectInfo.Property> values) {
         if (result.propertyList_.isEmpty()) {
-          result.propertyList_ = new java.util.ArrayList<com.opera.core.systems.scope.protos.EsdbgProtos.ObjectInfo.Property>();
+          result.propertyList_ =
+              new java.util.ArrayList<com.opera.core.systems.scope.protos.EsdbgProtos.ObjectInfo.Property>();
         }
         super.addAll(values, result.propertyList_);
         return this;
@@ -2558,7 +2664,8 @@ public final class EsdbgProtos {
   }
 
   public static final class Configuration extends
-      com.google.protobuf.GeneratedMessage {
+                                          com.google.protobuf.GeneratedMessage {
+
     // Use Configuration.newBuilder() to construct.
     private Configuration() {
       initFields();
@@ -2698,32 +2805,34 @@ public final class EsdbgProtos {
 
     public int getSerializedSize() {
       int size = memoizedSerializedSize;
-      if (size != -1) return size;
+      if (size != -1) {
+        return size;
+      }
 
       size = 0;
       if (hasStopAtScript()) {
         size += com.google.protobuf.CodedOutputStream.computeBoolSize(1,
-            getStopAtScript());
+                                                                      getStopAtScript());
       }
       if (hasStopAtException()) {
         size += com.google.protobuf.CodedOutputStream.computeBoolSize(2,
-            getStopAtException());
+                                                                      getStopAtException());
       }
       if (hasStopAtError()) {
         size += com.google.protobuf.CodedOutputStream.computeBoolSize(3,
-            getStopAtError());
+                                                                      getStopAtError());
       }
       if (hasStopAtAbort()) {
         size += com.google.protobuf.CodedOutputStream.computeBoolSize(4,
-            getStopAtAbort());
+                                                                      getStopAtAbort());
       }
       if (hasStopAtGc()) {
         size += com.google.protobuf.CodedOutputStream.computeBoolSize(5,
-            getStopAtGc());
+                                                                      getStopAtGc());
       }
       if (hasStopAtDebuggerStatement()) {
         size += com.google.protobuf.CodedOutputStream.computeBoolSize(6,
-            getStopAtDebuggerStatement());
+                                                                      getStopAtDebuggerStatement());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -2818,7 +2927,8 @@ public final class EsdbgProtos {
     }
 
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> {
+                                      com.google.protobuf.GeneratedMessage.Builder<Builder> {
+
       private com.opera.core.systems.scope.protos.EsdbgProtos.Configuration result;
 
       // Construct using
@@ -2896,7 +3006,10 @@ public final class EsdbgProtos {
 
       public Builder mergeFrom(
           com.opera.core.systems.scope.protos.EsdbgProtos.Configuration other) {
-        if (other == com.opera.core.systems.scope.protos.EsdbgProtos.Configuration.getDefaultInstance()) return this;
+        if (other == com.opera.core.systems.scope.protos.EsdbgProtos.Configuration
+            .getDefaultInstance()) {
+          return this;
+        }
         if (other.hasStopAtScript()) {
           setStopAtScript(other.getStopAtScript());
         }
@@ -2920,46 +3033,48 @@ public final class EsdbgProtos {
       }
 
       public Builder mergeFrom(com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                               com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields = com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
+        com.google.protobuf.UnknownFieldSet.Builder
+            unknownFields =
+            com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
         while (true) {
           int tag = input.readTag();
           switch (tag) {
-          case 0:
-            this.setUnknownFields(unknownFields.build());
-            return this;
-          default: {
-            if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+            case 0:
               this.setUnknownFields(unknownFields.build());
               return this;
+            default: {
+              if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+                this.setUnknownFields(unknownFields.build());
+                return this;
+              }
+              break;
             }
-            break;
-          }
-          case 8: {
-            setStopAtScript(input.readBool());
-            break;
-          }
-          case 16: {
-            setStopAtException(input.readBool());
-            break;
-          }
-          case 24: {
-            setStopAtError(input.readBool());
-            break;
-          }
-          case 32: {
-            setStopAtAbort(input.readBool());
-            break;
-          }
-          case 40: {
-            setStopAtGc(input.readBool());
-            break;
-          }
-          case 48: {
-            setStopAtDebuggerStatement(input.readBool());
-            break;
-          }
+            case 8: {
+              setStopAtScript(input.readBool());
+              break;
+            }
+            case 16: {
+              setStopAtException(input.readBool());
+              break;
+            }
+            case 24: {
+              setStopAtError(input.readBool());
+              break;
+            }
+            case 32: {
+              setStopAtAbort(input.readBool());
+              break;
+            }
+            case 40: {
+              setStopAtGc(input.readBool());
+              break;
+            }
+            case 48: {
+              setStopAtDebuggerStatement(input.readBool());
+              break;
+            }
           }
         }
       }
@@ -3103,7 +3218,8 @@ public final class EsdbgProtos {
   }
 
   public static final class ObjectList extends
-      com.google.protobuf.GeneratedMessage {
+                                       com.google.protobuf.GeneratedMessage {
+
     // Use ObjectList.newBuilder() to construct.
     private ObjectList() {
       initFields();
@@ -3132,7 +3248,10 @@ public final class EsdbgProtos {
 
     // repeated .scope.ObjectInfo objectList = 1;
     public static final int OBJECTLIST_FIELD_NUMBER = 1;
-    private java.util.List<com.opera.core.systems.scope.protos.EsdbgProtos.ObjectInfo> objectList_ = java.util.Collections.emptyList();
+    private
+    java.util.List<com.opera.core.systems.scope.protos.EsdbgProtos.ObjectInfo>
+        objectList_ =
+        java.util.Collections.emptyList();
 
     public java.util.List<com.opera.core.systems.scope.protos.EsdbgProtos.ObjectInfo> getObjectListList() {
       return objectList_;
@@ -3152,7 +3271,9 @@ public final class EsdbgProtos {
 
     public final boolean isInitialized() {
       for (com.opera.core.systems.scope.protos.EsdbgProtos.ObjectInfo element : getObjectListList()) {
-        if (!element.isInitialized()) return false;
+        if (!element.isInitialized()) {
+          return false;
+        }
       }
       return true;
     }
@@ -3170,12 +3291,14 @@ public final class EsdbgProtos {
 
     public int getSerializedSize() {
       int size = memoizedSerializedSize;
-      if (size != -1) return size;
+      if (size != -1) {
+        return size;
+      }
 
       size = 0;
       for (com.opera.core.systems.scope.protos.EsdbgProtos.ObjectInfo element : getObjectListList()) {
         size += com.google.protobuf.CodedOutputStream.computeMessageSize(1,
-            element);
+                                                                         element);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -3270,7 +3393,8 @@ public final class EsdbgProtos {
     }
 
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> {
+                                      com.google.protobuf.GeneratedMessage.Builder<Builder> {
+
       private com.opera.core.systems.scope.protos.EsdbgProtos.ObjectList result;
 
       // Construct using
@@ -3351,10 +3475,14 @@ public final class EsdbgProtos {
 
       public Builder mergeFrom(
           com.opera.core.systems.scope.protos.EsdbgProtos.ObjectList other) {
-        if (other == com.opera.core.systems.scope.protos.EsdbgProtos.ObjectList.getDefaultInstance()) return this;
+        if (other == com.opera.core.systems.scope.protos.EsdbgProtos.ObjectList
+            .getDefaultInstance()) {
+          return this;
+        }
         if (!other.objectList_.isEmpty()) {
           if (result.objectList_.isEmpty()) {
-            result.objectList_ = new java.util.ArrayList<com.opera.core.systems.scope.protos.EsdbgProtos.ObjectInfo>();
+            result.objectList_ =
+                new java.util.ArrayList<com.opera.core.systems.scope.protos.EsdbgProtos.ObjectInfo>();
           }
           result.objectList_.addAll(other.objectList_);
         }
@@ -3363,28 +3491,32 @@ public final class EsdbgProtos {
       }
 
       public Builder mergeFrom(com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                               com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields = com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
+        com.google.protobuf.UnknownFieldSet.Builder
+            unknownFields =
+            com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
         while (true) {
           int tag = input.readTag();
           switch (tag) {
-          case 0:
-            this.setUnknownFields(unknownFields.build());
-            return this;
-          default: {
-            if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+            case 0:
               this.setUnknownFields(unknownFields.build());
               return this;
+            default: {
+              if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+                this.setUnknownFields(unknownFields.build());
+                return this;
+              }
+              break;
             }
-            break;
-          }
-          case 10: {
-            com.opera.core.systems.scope.protos.EsdbgProtos.ObjectInfo.Builder subBuilder = com.opera.core.systems.scope.protos.EsdbgProtos.ObjectInfo.newBuilder();
-            input.readMessage(subBuilder, extensionRegistry);
-            addObjectList(subBuilder.buildPartial());
-            break;
-          }
+            case 10: {
+              com.opera.core.systems.scope.protos.EsdbgProtos.ObjectInfo.Builder
+                  subBuilder =
+                  com.opera.core.systems.scope.protos.EsdbgProtos.ObjectInfo.newBuilder();
+              input.readMessage(subBuilder, extensionRegistry);
+              addObjectList(subBuilder.buildPartial());
+              break;
+            }
           }
         }
       }
@@ -3404,7 +3536,7 @@ public final class EsdbgProtos {
       }
 
       public Builder setObjectList(int index,
-          com.opera.core.systems.scope.protos.EsdbgProtos.ObjectInfo value) {
+                                   com.opera.core.systems.scope.protos.EsdbgProtos.ObjectInfo value) {
         if (value == null) {
           throw new NullPointerException();
         }
@@ -3425,7 +3557,8 @@ public final class EsdbgProtos {
           throw new NullPointerException();
         }
         if (result.objectList_.isEmpty()) {
-          result.objectList_ = new java.util.ArrayList<com.opera.core.systems.scope.protos.EsdbgProtos.ObjectInfo>();
+          result.objectList_ =
+              new java.util.ArrayList<com.opera.core.systems.scope.protos.EsdbgProtos.ObjectInfo>();
         }
         result.objectList_.add(value);
         return this;
@@ -3434,7 +3567,8 @@ public final class EsdbgProtos {
       public Builder addObjectList(
           com.opera.core.systems.scope.protos.EsdbgProtos.ObjectInfo.Builder builderForValue) {
         if (result.objectList_.isEmpty()) {
-          result.objectList_ = new java.util.ArrayList<com.opera.core.systems.scope.protos.EsdbgProtos.ObjectInfo>();
+          result.objectList_ =
+              new java.util.ArrayList<com.opera.core.systems.scope.protos.EsdbgProtos.ObjectInfo>();
         }
         result.objectList_.add(builderForValue.build());
         return this;
@@ -3443,7 +3577,8 @@ public final class EsdbgProtos {
       public Builder addAllObjectList(
           java.lang.Iterable<? extends com.opera.core.systems.scope.protos.EsdbgProtos.ObjectInfo> values) {
         if (result.objectList_.isEmpty()) {
-          result.objectList_ = new java.util.ArrayList<com.opera.core.systems.scope.protos.EsdbgProtos.ObjectInfo>();
+          result.objectList_ =
+              new java.util.ArrayList<com.opera.core.systems.scope.protos.EsdbgProtos.ObjectInfo>();
         }
         super.addAll(values, result.objectList_);
         return this;
@@ -3467,7 +3602,8 @@ public final class EsdbgProtos {
   }
 
   public static final class EvalResult extends
-      com.google.protobuf.GeneratedMessage {
+                                       com.google.protobuf.GeneratedMessage {
+
     // Use EvalResult.newBuilder() to construct.
     private EvalResult() {
       initFields();
@@ -3547,14 +3683,21 @@ public final class EsdbgProtos {
     }
 
     private void initFields() {
-      objectValue_ = com.opera.core.systems.scope.protos.EsdbgProtos.ObjectValue.getDefaultInstance();
+      objectValue_ =
+          com.opera.core.systems.scope.protos.EsdbgProtos.ObjectValue.getDefaultInstance();
     }
 
     public final boolean isInitialized() {
-      if (!hasStatus) return false;
-      if (!hasType) return false;
+      if (!hasStatus) {
+        return false;
+      }
+      if (!hasType) {
+        return false;
+      }
       if (hasObjectValue()) {
-        if (!getObjectValue().isInitialized()) return false;
+        if (!getObjectValue().isInitialized()) {
+          return false;
+        }
       }
       return true;
     }
@@ -3581,24 +3724,26 @@ public final class EsdbgProtos {
 
     public int getSerializedSize() {
       int size = memoizedSerializedSize;
-      if (size != -1) return size;
+      if (size != -1) {
+        return size;
+      }
 
       size = 0;
       if (hasStatus()) {
         size += com.google.protobuf.CodedOutputStream.computeStringSize(1,
-            getStatus());
+                                                                        getStatus());
       }
       if (hasType()) {
         size += com.google.protobuf.CodedOutputStream.computeStringSize(2,
-            getType());
+                                                                        getType());
       }
       if (hasValue()) {
         size += com.google.protobuf.CodedOutputStream.computeStringSize(3,
-            getValue());
+                                                                        getValue());
       }
       if (hasObjectValue()) {
         size += com.google.protobuf.CodedOutputStream.computeMessageSize(4,
-            getObjectValue());
+                                                                         getObjectValue());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -3693,7 +3838,8 @@ public final class EsdbgProtos {
     }
 
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> {
+                                      com.google.protobuf.GeneratedMessage.Builder<Builder> {
+
       private com.opera.core.systems.scope.protos.EsdbgProtos.EvalResult result;
 
       // Construct using
@@ -3771,7 +3917,10 @@ public final class EsdbgProtos {
 
       public Builder mergeFrom(
           com.opera.core.systems.scope.protos.EsdbgProtos.EvalResult other) {
-        if (other == com.opera.core.systems.scope.protos.EsdbgProtos.EvalResult.getDefaultInstance()) return this;
+        if (other == com.opera.core.systems.scope.protos.EsdbgProtos.EvalResult
+            .getDefaultInstance()) {
+          return this;
+        }
         if (other.hasStatus()) {
           setStatus(other.getStatus());
         }
@@ -3789,43 +3938,47 @@ public final class EsdbgProtos {
       }
 
       public Builder mergeFrom(com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                               com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields = com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
+        com.google.protobuf.UnknownFieldSet.Builder
+            unknownFields =
+            com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
         while (true) {
           int tag = input.readTag();
           switch (tag) {
-          case 0:
-            this.setUnknownFields(unknownFields.build());
-            return this;
-          default: {
-            if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+            case 0:
               this.setUnknownFields(unknownFields.build());
               return this;
+            default: {
+              if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+                this.setUnknownFields(unknownFields.build());
+                return this;
+              }
+              break;
             }
-            break;
-          }
-          case 10: {
-            setStatus(input.readString());
-            break;
-          }
-          case 18: {
-            setType(input.readString());
-            break;
-          }
-          case 26: {
-            setValue(input.readString());
-            break;
-          }
-          case 34: {
-            com.opera.core.systems.scope.protos.EsdbgProtos.ObjectValue.Builder subBuilder = com.opera.core.systems.scope.protos.EsdbgProtos.ObjectValue.newBuilder();
-            if (hasObjectValue()) {
-              subBuilder.mergeFrom(getObjectValue());
+            case 10: {
+              setStatus(input.readString());
+              break;
             }
-            input.readMessage(subBuilder, extensionRegistry);
-            setObjectValue(subBuilder.buildPartial());
-            break;
-          }
+            case 18: {
+              setType(input.readString());
+              break;
+            }
+            case 26: {
+              setValue(input.readString());
+              break;
+            }
+            case 34: {
+              com.opera.core.systems.scope.protos.EsdbgProtos.ObjectValue.Builder
+                  subBuilder =
+                  com.opera.core.systems.scope.protos.EsdbgProtos.ObjectValue.newBuilder();
+              if (hasObjectValue()) {
+                subBuilder.mergeFrom(getObjectValue());
+              }
+              input.readMessage(subBuilder, extensionRegistry);
+              setObjectValue(subBuilder.buildPartial());
+              break;
+            }
           }
         }
       }
@@ -3931,9 +4084,11 @@ public final class EsdbgProtos {
       public Builder mergeObjectValue(
           com.opera.core.systems.scope.protos.EsdbgProtos.ObjectValue value) {
         if (result.hasObjectValue()
-            && result.objectValue_ != com.opera.core.systems.scope.protos.EsdbgProtos.ObjectValue.getDefaultInstance()) {
-          result.objectValue_ = com.opera.core.systems.scope.protos.EsdbgProtos.ObjectValue.newBuilder(
-              result.objectValue_).mergeFrom(value).buildPartial();
+            && result.objectValue_ != com.opera.core.systems.scope.protos.EsdbgProtos.ObjectValue
+            .getDefaultInstance()) {
+          result.objectValue_ =
+              com.opera.core.systems.scope.protos.EsdbgProtos.ObjectValue.newBuilder(
+                  result.objectValue_).mergeFrom(value).buildPartial();
         } else {
           result.objectValue_ = value;
         }
@@ -3943,7 +4098,8 @@ public final class EsdbgProtos {
 
       public Builder clearObjectValue() {
         result.hasObjectValue = false;
-        result.objectValue_ = com.opera.core.systems.scope.protos.EsdbgProtos.ObjectValue.getDefaultInstance();
+        result.objectValue_ =
+            com.opera.core.systems.scope.protos.EsdbgProtos.ObjectValue.getDefaultInstance();
         return this;
       }
 
@@ -3960,7 +4116,8 @@ public final class EsdbgProtos {
   }
 
   public static final class ObjectValue extends
-      com.google.protobuf.GeneratedMessage {
+                                        com.google.protobuf.GeneratedMessage {
+
     // Use ObjectValue.newBuilder() to construct.
     private ObjectValue() {
       initFields();
@@ -4069,10 +4226,18 @@ public final class EsdbgProtos {
     }
 
     public final boolean isInitialized() {
-      if (!hasObjectID) return false;
-      if (!hasIsCallable) return false;
-      if (!hasIsFunction) return false;
-      if (!hasType) return false;
+      if (!hasObjectID) {
+        return false;
+      }
+      if (!hasIsCallable) {
+        return false;
+      }
+      if (!hasIsFunction) {
+        return false;
+      }
+      if (!hasType) {
+        return false;
+      }
       return true;
     }
 
@@ -4104,32 +4269,34 @@ public final class EsdbgProtos {
 
     public int getSerializedSize() {
       int size = memoizedSerializedSize;
-      if (size != -1) return size;
+      if (size != -1) {
+        return size;
+      }
 
       size = 0;
       if (hasObjectID()) {
         size += com.google.protobuf.CodedOutputStream.computeUInt32Size(1,
-            getObjectID());
+                                                                        getObjectID());
       }
       if (hasIsCallable()) {
         size += com.google.protobuf.CodedOutputStream.computeBoolSize(2,
-            getIsCallable());
+                                                                      getIsCallable());
       }
       if (hasIsFunction()) {
         size += com.google.protobuf.CodedOutputStream.computeBoolSize(3,
-            getIsFunction());
+                                                                      getIsFunction());
       }
       if (hasType()) {
         size += com.google.protobuf.CodedOutputStream.computeStringSize(4,
-            getType());
+                                                                        getType());
       }
       if (hasPrototypeID()) {
         size += com.google.protobuf.CodedOutputStream.computeUInt32Size(5,
-            getPrototypeID());
+                                                                        getPrototypeID());
       }
       if (hasName()) {
         size += com.google.protobuf.CodedOutputStream.computeStringSize(6,
-            getName());
+                                                                        getName());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -4224,7 +4391,8 @@ public final class EsdbgProtos {
     }
 
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> {
+                                      com.google.protobuf.GeneratedMessage.Builder<Builder> {
+
       private com.opera.core.systems.scope.protos.EsdbgProtos.ObjectValue result;
 
       // Construct using
@@ -4302,7 +4470,10 @@ public final class EsdbgProtos {
 
       public Builder mergeFrom(
           com.opera.core.systems.scope.protos.EsdbgProtos.ObjectValue other) {
-        if (other == com.opera.core.systems.scope.protos.EsdbgProtos.ObjectValue.getDefaultInstance()) return this;
+        if (other == com.opera.core.systems.scope.protos.EsdbgProtos.ObjectValue
+            .getDefaultInstance()) {
+          return this;
+        }
         if (other.hasObjectID()) {
           setObjectID(other.getObjectID());
         }
@@ -4326,46 +4497,48 @@ public final class EsdbgProtos {
       }
 
       public Builder mergeFrom(com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                               com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields = com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
+        com.google.protobuf.UnknownFieldSet.Builder
+            unknownFields =
+            com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
         while (true) {
           int tag = input.readTag();
           switch (tag) {
-          case 0:
-            this.setUnknownFields(unknownFields.build());
-            return this;
-          default: {
-            if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+            case 0:
               this.setUnknownFields(unknownFields.build());
               return this;
+            default: {
+              if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+                this.setUnknownFields(unknownFields.build());
+                return this;
+              }
+              break;
             }
-            break;
-          }
-          case 8: {
-            setObjectID(input.readUInt32());
-            break;
-          }
-          case 16: {
-            setIsCallable(input.readBool());
-            break;
-          }
-          case 24: {
-            setIsFunction(input.readBool());
-            break;
-          }
-          case 34: {
-            setType(input.readString());
-            break;
-          }
-          case 40: {
-            setPrototypeID(input.readUInt32());
-            break;
-          }
-          case 50: {
-            setName(input.readString());
-            break;
-          }
+            case 8: {
+              setObjectID(input.readUInt32());
+              break;
+            }
+            case 16: {
+              setIsCallable(input.readBool());
+              break;
+            }
+            case 24: {
+              setIsFunction(input.readBool());
+              break;
+            }
+            case 34: {
+              setType(input.readString());
+              break;
+            }
+            case 40: {
+              setPrototypeID(input.readUInt32());
+              break;
+            }
+            case 50: {
+              setName(input.readString());
+              break;
+            }
           }
         }
       }
@@ -4515,7 +4688,8 @@ public final class EsdbgProtos {
   }
 
   public static final class RuntimeList extends
-      com.google.protobuf.GeneratedMessage {
+                                        com.google.protobuf.GeneratedMessage {
+
     // Use RuntimeList.newBuilder() to construct.
     private RuntimeList() {
       initFields();
@@ -4544,7 +4718,10 @@ public final class EsdbgProtos {
 
     // repeated .scope.RuntimeInfo runtimeList = 1;
     public static final int RUNTIMELIST_FIELD_NUMBER = 1;
-    private java.util.List<com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeInfo> runtimeList_ = java.util.Collections.emptyList();
+    private
+    java.util.List<com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeInfo>
+        runtimeList_ =
+        java.util.Collections.emptyList();
 
     public java.util.List<com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeInfo> getRuntimeListList() {
       return runtimeList_;
@@ -4564,7 +4741,9 @@ public final class EsdbgProtos {
 
     public final boolean isInitialized() {
       for (com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeInfo element : getRuntimeListList()) {
-        if (!element.isInitialized()) return false;
+        if (!element.isInitialized()) {
+          return false;
+        }
       }
       return true;
     }
@@ -4582,12 +4761,14 @@ public final class EsdbgProtos {
 
     public int getSerializedSize() {
       int size = memoizedSerializedSize;
-      if (size != -1) return size;
+      if (size != -1) {
+        return size;
+      }
 
       size = 0;
       for (com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeInfo element : getRuntimeListList()) {
         size += com.google.protobuf.CodedOutputStream.computeMessageSize(1,
-            element);
+                                                                         element);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -4682,7 +4863,8 @@ public final class EsdbgProtos {
     }
 
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> {
+                                      com.google.protobuf.GeneratedMessage.Builder<Builder> {
+
       private com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeList result;
 
       // Construct using
@@ -4763,10 +4945,14 @@ public final class EsdbgProtos {
 
       public Builder mergeFrom(
           com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeList other) {
-        if (other == com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeList.getDefaultInstance()) return this;
+        if (other == com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeList
+            .getDefaultInstance()) {
+          return this;
+        }
         if (!other.runtimeList_.isEmpty()) {
           if (result.runtimeList_.isEmpty()) {
-            result.runtimeList_ = new java.util.ArrayList<com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeInfo>();
+            result.runtimeList_ =
+                new java.util.ArrayList<com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeInfo>();
           }
           result.runtimeList_.addAll(other.runtimeList_);
         }
@@ -4775,28 +4961,32 @@ public final class EsdbgProtos {
       }
 
       public Builder mergeFrom(com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                               com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields = com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
+        com.google.protobuf.UnknownFieldSet.Builder
+            unknownFields =
+            com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
         while (true) {
           int tag = input.readTag();
           switch (tag) {
-          case 0:
-            this.setUnknownFields(unknownFields.build());
-            return this;
-          default: {
-            if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+            case 0:
               this.setUnknownFields(unknownFields.build());
               return this;
+            default: {
+              if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+                this.setUnknownFields(unknownFields.build());
+                return this;
+              }
+              break;
             }
-            break;
-          }
-          case 10: {
-            com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeInfo.Builder subBuilder = com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeInfo.newBuilder();
-            input.readMessage(subBuilder, extensionRegistry);
-            addRuntimeList(subBuilder.buildPartial());
-            break;
-          }
+            case 10: {
+              com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeInfo.Builder
+                  subBuilder =
+                  com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeInfo.newBuilder();
+              input.readMessage(subBuilder, extensionRegistry);
+              addRuntimeList(subBuilder.buildPartial());
+              break;
+            }
           }
         }
       }
@@ -4816,7 +5006,7 @@ public final class EsdbgProtos {
       }
 
       public Builder setRuntimeList(int index,
-          com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeInfo value) {
+                                    com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeInfo value) {
         if (value == null) {
           throw new NullPointerException();
         }
@@ -4837,7 +5027,8 @@ public final class EsdbgProtos {
           throw new NullPointerException();
         }
         if (result.runtimeList_.isEmpty()) {
-          result.runtimeList_ = new java.util.ArrayList<com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeInfo>();
+          result.runtimeList_ =
+              new java.util.ArrayList<com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeInfo>();
         }
         result.runtimeList_.add(value);
         return this;
@@ -4846,7 +5037,8 @@ public final class EsdbgProtos {
       public Builder addRuntimeList(
           com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeInfo.Builder builderForValue) {
         if (result.runtimeList_.isEmpty()) {
-          result.runtimeList_ = new java.util.ArrayList<com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeInfo>();
+          result.runtimeList_ =
+              new java.util.ArrayList<com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeInfo>();
         }
         result.runtimeList_.add(builderForValue.build());
         return this;
@@ -4855,7 +5047,8 @@ public final class EsdbgProtos {
       public Builder addAllRuntimeList(
           java.lang.Iterable<? extends com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeInfo> values) {
         if (result.runtimeList_.isEmpty()) {
-          result.runtimeList_ = new java.util.ArrayList<com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeInfo>();
+          result.runtimeList_ =
+              new java.util.ArrayList<com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeInfo>();
         }
         super.addAll(values, result.runtimeList_);
         return this;
@@ -4879,7 +5072,8 @@ public final class EsdbgProtos {
   }
 
   public static final class EvalData extends
-      com.google.protobuf.GeneratedMessage {
+                                     com.google.protobuf.GeneratedMessage {
+
     // Use EvalData.newBuilder() to construct.
     private EvalData() {
       initFields();
@@ -4907,7 +5101,8 @@ public final class EsdbgProtos {
     }
 
     public static final class Variable extends
-        com.google.protobuf.GeneratedMessage {
+                                       com.google.protobuf.GeneratedMessage {
+
       // Use Variable.newBuilder() to construct.
       private Variable() {
         initFields();
@@ -4964,8 +5159,12 @@ public final class EsdbgProtos {
       }
 
       public final boolean isInitialized() {
-        if (!hasName) return false;
-        if (!hasObjectID) return false;
+        if (!hasName) {
+          return false;
+        }
+        if (!hasObjectID) {
+          return false;
+        }
         return true;
       }
 
@@ -4985,16 +5184,18 @@ public final class EsdbgProtos {
 
       public int getSerializedSize() {
         int size = memoizedSerializedSize;
-        if (size != -1) return size;
+        if (size != -1) {
+          return size;
+        }
 
         size = 0;
         if (hasName()) {
           size += com.google.protobuf.CodedOutputStream.computeStringSize(1,
-              getName());
+                                                                          getName());
         }
         if (hasObjectID()) {
           size += com.google.protobuf.CodedOutputStream.computeUInt32Size(2,
-              getObjectID());
+                                                                          getObjectID());
         }
         size += getUnknownFields().getSerializedSize();
         memoizedSerializedSize = size;
@@ -5092,7 +5293,8 @@ public final class EsdbgProtos {
       }
 
       public static final class Builder extends
-          com.google.protobuf.GeneratedMessage.Builder<Builder> {
+                                        com.google.protobuf.GeneratedMessage.Builder<Builder> {
+
         private com.opera.core.systems.scope.protos.EsdbgProtos.EvalData.Variable result;
 
         // Construct using
@@ -5128,7 +5330,8 @@ public final class EsdbgProtos {
         }
 
         public com.opera.core.systems.scope.protos.EsdbgProtos.EvalData.Variable getDefaultInstanceForType() {
-          return com.opera.core.systems.scope.protos.EsdbgProtos.EvalData.Variable.getDefaultInstance();
+          return com.opera.core.systems.scope.protos.EsdbgProtos.EvalData.Variable
+              .getDefaultInstance();
         }
 
         public boolean isInitialized() {
@@ -5162,7 +5365,8 @@ public final class EsdbgProtos {
 
         public Builder mergeFrom(com.google.protobuf.Message other) {
           if (other instanceof com.opera.core.systems.scope.protos.EsdbgProtos.EvalData.Variable) {
-            return mergeFrom((com.opera.core.systems.scope.protos.EsdbgProtos.EvalData.Variable) other);
+            return mergeFrom(
+                (com.opera.core.systems.scope.protos.EsdbgProtos.EvalData.Variable) other);
           } else {
             super.mergeFrom(other);
             return this;
@@ -5171,7 +5375,10 @@ public final class EsdbgProtos {
 
         public Builder mergeFrom(
             com.opera.core.systems.scope.protos.EsdbgProtos.EvalData.Variable other) {
-          if (other == com.opera.core.systems.scope.protos.EsdbgProtos.EvalData.Variable.getDefaultInstance()) return this;
+          if (other == com.opera.core.systems.scope.protos.EsdbgProtos.EvalData.Variable
+              .getDefaultInstance()) {
+            return this;
+          }
           if (other.hasName()) {
             setName(other.getName());
           }
@@ -5183,31 +5390,33 @@ public final class EsdbgProtos {
         }
 
         public Builder mergeFrom(com.google.protobuf.CodedInputStream input,
-            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                                 com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws java.io.IOException {
-          com.google.protobuf.UnknownFieldSet.Builder unknownFields = com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
+          com.google.protobuf.UnknownFieldSet.Builder
+              unknownFields =
+              com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
           while (true) {
             int tag = input.readTag();
             switch (tag) {
-            case 0:
-              this.setUnknownFields(unknownFields.build());
-              return this;
-            default: {
-              if (!parseUnknownField(input, unknownFields, extensionRegistry,
-                  tag)) {
+              case 0:
                 this.setUnknownFields(unknownFields.build());
                 return this;
+              default: {
+                if (!parseUnknownField(input, unknownFields, extensionRegistry,
+                                       tag)) {
+                  this.setUnknownFields(unknownFields.build());
+                  return this;
+                }
+                break;
               }
-              break;
-            }
-            case 10: {
-              setName(input.readString());
-              break;
-            }
-            case 16: {
-              setObjectID(input.readUInt32());
-              break;
-            }
+              case 10: {
+                setName(input.readString());
+                break;
+              }
+              case 16: {
+                setObjectID(input.readUInt32());
+                break;
+              }
             }
           }
         }
@@ -5323,7 +5532,10 @@ public final class EsdbgProtos {
 
     // repeated .scope.EvalData.Variable variableList = 5;
     public static final int VARIABLELIST_FIELD_NUMBER = 5;
-    private java.util.List<com.opera.core.systems.scope.protos.EsdbgProtos.EvalData.Variable> variableList_ = java.util.Collections.emptyList();
+    private
+    java.util.List<com.opera.core.systems.scope.protos.EsdbgProtos.EvalData.Variable>
+        variableList_ =
+        java.util.Collections.emptyList();
 
     public java.util.List<com.opera.core.systems.scope.protos.EsdbgProtos.EvalData.Variable> getVariableListList() {
       return variableList_;
@@ -5342,12 +5554,22 @@ public final class EsdbgProtos {
     }
 
     public final boolean isInitialized() {
-      if (!hasRuntimeID) return false;
-      if (!hasThreadID) return false;
-      if (!hasFrameIndex) return false;
-      if (!hasScriptData) return false;
+      if (!hasRuntimeID) {
+        return false;
+      }
+      if (!hasThreadID) {
+        return false;
+      }
+      if (!hasFrameIndex) {
+        return false;
+      }
+      if (!hasScriptData) {
+        return false;
+      }
       for (com.opera.core.systems.scope.protos.EsdbgProtos.EvalData.Variable element : getVariableListList()) {
-        if (!element.isInitialized()) return false;
+        if (!element.isInitialized()) {
+          return false;
+        }
       }
       return true;
     }
@@ -5377,28 +5599,30 @@ public final class EsdbgProtos {
 
     public int getSerializedSize() {
       int size = memoizedSerializedSize;
-      if (size != -1) return size;
+      if (size != -1) {
+        return size;
+      }
 
       size = 0;
       if (hasRuntimeID()) {
         size += com.google.protobuf.CodedOutputStream.computeUInt32Size(1,
-            getRuntimeID());
+                                                                        getRuntimeID());
       }
       if (hasThreadID()) {
         size += com.google.protobuf.CodedOutputStream.computeUInt32Size(2,
-            getThreadID());
+                                                                        getThreadID());
       }
       if (hasFrameIndex()) {
         size += com.google.protobuf.CodedOutputStream.computeUInt32Size(3,
-            getFrameIndex());
+                                                                        getFrameIndex());
       }
       if (hasScriptData()) {
         size += com.google.protobuf.CodedOutputStream.computeStringSize(4,
-            getScriptData());
+                                                                        getScriptData());
       }
       for (com.opera.core.systems.scope.protos.EsdbgProtos.EvalData.Variable element : getVariableListList()) {
         size += com.google.protobuf.CodedOutputStream.computeMessageSize(5,
-            element);
+                                                                         element);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -5493,7 +5717,8 @@ public final class EsdbgProtos {
     }
 
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> {
+                                      com.google.protobuf.GeneratedMessage.Builder<Builder> {
+
       private com.opera.core.systems.scope.protos.EsdbgProtos.EvalData result;
 
       // Construct using
@@ -5574,7 +5799,10 @@ public final class EsdbgProtos {
 
       public Builder mergeFrom(
           com.opera.core.systems.scope.protos.EsdbgProtos.EvalData other) {
-        if (other == com.opera.core.systems.scope.protos.EsdbgProtos.EvalData.getDefaultInstance()) return this;
+        if (other == com.opera.core.systems.scope.protos.EsdbgProtos.EvalData
+            .getDefaultInstance()) {
+          return this;
+        }
         if (other.hasRuntimeID()) {
           setRuntimeID(other.getRuntimeID());
         }
@@ -5589,7 +5817,8 @@ public final class EsdbgProtos {
         }
         if (!other.variableList_.isEmpty()) {
           if (result.variableList_.isEmpty()) {
-            result.variableList_ = new java.util.ArrayList<com.opera.core.systems.scope.protos.EsdbgProtos.EvalData.Variable>();
+            result.variableList_ =
+                new java.util.ArrayList<com.opera.core.systems.scope.protos.EsdbgProtos.EvalData.Variable>();
           }
           result.variableList_.addAll(other.variableList_);
         }
@@ -5598,44 +5827,48 @@ public final class EsdbgProtos {
       }
 
       public Builder mergeFrom(com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                               com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields = com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
+        com.google.protobuf.UnknownFieldSet.Builder
+            unknownFields =
+            com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
         while (true) {
           int tag = input.readTag();
           switch (tag) {
-          case 0:
-            this.setUnknownFields(unknownFields.build());
-            return this;
-          default: {
-            if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+            case 0:
               this.setUnknownFields(unknownFields.build());
               return this;
+            default: {
+              if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+                this.setUnknownFields(unknownFields.build());
+                return this;
+              }
+              break;
             }
-            break;
-          }
-          case 8: {
-            setRuntimeID(input.readUInt32());
-            break;
-          }
-          case 16: {
-            setThreadID(input.readUInt32());
-            break;
-          }
-          case 24: {
-            setFrameIndex(input.readUInt32());
-            break;
-          }
-          case 34: {
-            setScriptData(input.readString());
-            break;
-          }
-          case 42: {
-            com.opera.core.systems.scope.protos.EsdbgProtos.EvalData.Variable.Builder subBuilder = com.opera.core.systems.scope.protos.EsdbgProtos.EvalData.Variable.newBuilder();
-            input.readMessage(subBuilder, extensionRegistry);
-            addVariableList(subBuilder.buildPartial());
-            break;
-          }
+            case 8: {
+              setRuntimeID(input.readUInt32());
+              break;
+            }
+            case 16: {
+              setThreadID(input.readUInt32());
+              break;
+            }
+            case 24: {
+              setFrameIndex(input.readUInt32());
+              break;
+            }
+            case 34: {
+              setScriptData(input.readString());
+              break;
+            }
+            case 42: {
+              com.opera.core.systems.scope.protos.EsdbgProtos.EvalData.Variable.Builder
+                  subBuilder =
+                  com.opera.core.systems.scope.protos.EsdbgProtos.EvalData.Variable.newBuilder();
+              input.readMessage(subBuilder, extensionRegistry);
+              addVariableList(subBuilder.buildPartial());
+              break;
+            }
           }
         }
       }
@@ -5764,7 +5997,8 @@ public final class EsdbgProtos {
           throw new NullPointerException();
         }
         if (result.variableList_.isEmpty()) {
-          result.variableList_ = new java.util.ArrayList<com.opera.core.systems.scope.protos.EsdbgProtos.EvalData.Variable>();
+          result.variableList_ =
+              new java.util.ArrayList<com.opera.core.systems.scope.protos.EsdbgProtos.EvalData.Variable>();
         }
         result.variableList_.add(value);
         return this;
@@ -5773,7 +6007,8 @@ public final class EsdbgProtos {
       public Builder addVariableList(
           com.opera.core.systems.scope.protos.EsdbgProtos.EvalData.Variable.Builder builderForValue) {
         if (result.variableList_.isEmpty()) {
-          result.variableList_ = new java.util.ArrayList<com.opera.core.systems.scope.protos.EsdbgProtos.EvalData.Variable>();
+          result.variableList_ =
+              new java.util.ArrayList<com.opera.core.systems.scope.protos.EsdbgProtos.EvalData.Variable>();
         }
         result.variableList_.add(builderForValue.build());
         return this;
@@ -5782,7 +6017,8 @@ public final class EsdbgProtos {
       public Builder addAllVariableList(
           java.lang.Iterable<? extends com.opera.core.systems.scope.protos.EsdbgProtos.EvalData.Variable> values) {
         if (result.variableList_.isEmpty()) {
-          result.variableList_ = new java.util.ArrayList<com.opera.core.systems.scope.protos.EsdbgProtos.EvalData.Variable>();
+          result.variableList_ =
+              new java.util.ArrayList<com.opera.core.systems.scope.protos.EsdbgProtos.EvalData.Variable>();
         }
         super.addAll(values, result.variableList_);
         return this;
@@ -5805,177 +6041,248 @@ public final class EsdbgProtos {
     // @@protoc_insertion_point(class_scope:scope.EvalData)
   }
 
-  private static com.google.protobuf.Descriptors.Descriptor internal_static_scope_ExamineList_descriptor;
-  private static com.google.protobuf.GeneratedMessage.FieldAccessorTable internal_static_scope_ExamineList_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor internal_static_scope_RuntimeInfo_descriptor;
-  private static com.google.protobuf.GeneratedMessage.FieldAccessorTable internal_static_scope_RuntimeInfo_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor internal_static_scope_RuntimeID_descriptor;
-  private static com.google.protobuf.GeneratedMessage.FieldAccessorTable internal_static_scope_RuntimeID_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor internal_static_scope_RuntimeSelection_descriptor;
-  private static com.google.protobuf.GeneratedMessage.FieldAccessorTable internal_static_scope_RuntimeSelection_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor internal_static_scope_ObjectInfo_descriptor;
-  private static com.google.protobuf.GeneratedMessage.FieldAccessorTable internal_static_scope_ObjectInfo_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor internal_static_scope_ObjectInfo_Property_descriptor;
-  private static com.google.protobuf.GeneratedMessage.FieldAccessorTable internal_static_scope_ObjectInfo_Property_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor internal_static_scope_Configuration_descriptor;
-  private static com.google.protobuf.GeneratedMessage.FieldAccessorTable internal_static_scope_Configuration_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor internal_static_scope_ObjectList_descriptor;
-  private static com.google.protobuf.GeneratedMessage.FieldAccessorTable internal_static_scope_ObjectList_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor internal_static_scope_EvalResult_descriptor;
-  private static com.google.protobuf.GeneratedMessage.FieldAccessorTable internal_static_scope_EvalResult_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor internal_static_scope_ObjectValue_descriptor;
-  private static com.google.protobuf.GeneratedMessage.FieldAccessorTable internal_static_scope_ObjectValue_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor internal_static_scope_RuntimeList_descriptor;
-  private static com.google.protobuf.GeneratedMessage.FieldAccessorTable internal_static_scope_RuntimeList_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor internal_static_scope_EvalData_descriptor;
-  private static com.google.protobuf.GeneratedMessage.FieldAccessorTable internal_static_scope_EvalData_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor internal_static_scope_EvalData_Variable_descriptor;
-  private static com.google.protobuf.GeneratedMessage.FieldAccessorTable internal_static_scope_EvalData_Variable_fieldAccessorTable;
+  private static
+  com.google.protobuf.Descriptors.Descriptor
+      internal_static_scope_ExamineList_descriptor;
+  private static
+  com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_scope_ExamineList_fieldAccessorTable;
+  private static
+  com.google.protobuf.Descriptors.Descriptor
+      internal_static_scope_RuntimeInfo_descriptor;
+  private static
+  com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_scope_RuntimeInfo_fieldAccessorTable;
+  private static
+  com.google.protobuf.Descriptors.Descriptor
+      internal_static_scope_RuntimeID_descriptor;
+  private static
+  com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_scope_RuntimeID_fieldAccessorTable;
+  private static
+  com.google.protobuf.Descriptors.Descriptor
+      internal_static_scope_RuntimeSelection_descriptor;
+  private static
+  com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_scope_RuntimeSelection_fieldAccessorTable;
+  private static
+  com.google.protobuf.Descriptors.Descriptor
+      internal_static_scope_ObjectInfo_descriptor;
+  private static
+  com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_scope_ObjectInfo_fieldAccessorTable;
+  private static
+  com.google.protobuf.Descriptors.Descriptor
+      internal_static_scope_ObjectInfo_Property_descriptor;
+  private static
+  com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_scope_ObjectInfo_Property_fieldAccessorTable;
+  private static
+  com.google.protobuf.Descriptors.Descriptor
+      internal_static_scope_Configuration_descriptor;
+  private static
+  com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_scope_Configuration_fieldAccessorTable;
+  private static
+  com.google.protobuf.Descriptors.Descriptor
+      internal_static_scope_ObjectList_descriptor;
+  private static
+  com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_scope_ObjectList_fieldAccessorTable;
+  private static
+  com.google.protobuf.Descriptors.Descriptor
+      internal_static_scope_EvalResult_descriptor;
+  private static
+  com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_scope_EvalResult_fieldAccessorTable;
+  private static
+  com.google.protobuf.Descriptors.Descriptor
+      internal_static_scope_ObjectValue_descriptor;
+  private static
+  com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_scope_ObjectValue_fieldAccessorTable;
+  private static
+  com.google.protobuf.Descriptors.Descriptor
+      internal_static_scope_RuntimeList_descriptor;
+  private static
+  com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_scope_RuntimeList_fieldAccessorTable;
+  private static
+  com.google.protobuf.Descriptors.Descriptor
+      internal_static_scope_EvalData_descriptor;
+  private static
+  com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_scope_EvalData_fieldAccessorTable;
+  private static
+  com.google.protobuf.Descriptors.Descriptor
+      internal_static_scope_EvalData_Variable_descriptor;
+  private static
+  com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_scope_EvalData_Variable_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor getDescriptor() {
     return descriptor;
   }
 
   private static com.google.protobuf.Descriptors.FileDescriptor descriptor;
+
   static {
     java.lang.String[] descriptorData = {
         "\n\"ecmascript_debugger_stripped.proto\022\005sc"
-            + "ope\"4\n\013ExamineList\022\021\n\truntimeID\030\001 \002(\r\022\022\n"
-            + "\nobjectList\030\002 \003(\r\"h\n\013RuntimeInfo\022\021\n\trunt"
-            + "imeID\030\001 \002(\r\022\025\n\rhtmlFramePath\030\002 \002(\t\022\020\n\010wi"
-            + "ndowID\030\003 \002(\r\022\020\n\010objectID\030\004 \002(\r\022\013\n\003uri\030\005 "
-            + "\002(\t\"\036\n\tRuntimeID\022\021\n\truntimeID\030\001 \002(\r\"<\n\020R"
-            + "untimeSelection\022\023\n\013runtimeList\030\001 \003(\r\022\023\n\013"
-            + "allRuntimes\030\002 \001(\010\"\301\001\n\nObjectInfo\022!\n\005valu"
-            + "e\030\001 \002(\0132\022.scope.ObjectValue\0220\n\014propertyL"
-            + "ist\030\002 \003(\0132\032.scope.ObjectInfo.Property\032^\n",
+        + "ope\"4\n\013ExamineList\022\021\n\truntimeID\030\001 \002(\r\022\022\n"
+        + "\nobjectList\030\002 \003(\r\"h\n\013RuntimeInfo\022\021\n\trunt"
+        + "imeID\030\001 \002(\r\022\025\n\rhtmlFramePath\030\002 \002(\t\022\020\n\010wi"
+        + "ndowID\030\003 \002(\r\022\020\n\010objectID\030\004 \002(\r\022\013\n\003uri\030\005 "
+        + "\002(\t\"\036\n\tRuntimeID\022\021\n\truntimeID\030\001 \002(\r\"<\n\020R"
+        + "untimeSelection\022\023\n\013runtimeList\030\001 \003(\r\022\023\n\013"
+        + "allRuntimes\030\002 \001(\010\"\301\001\n\nObjectInfo\022!\n\005valu"
+        + "e\030\001 \002(\0132\022.scope.ObjectValue\0220\n\014propertyL"
+        + "ist\030\002 \003(\0132\032.scope.ObjectInfo.Property\032^\n",
         "\010Property\022\014\n\004name\030\001 \002(\t\022\014\n\004type\030\002 \002(\t\022\r\n"
-            + "\005value\030\003 \001(\t\022\'\n\013objectValue\030\004 \001(\0132\022.scop"
-            + "e.ObjectValue\"\233\001\n\rConfiguration\022\024\n\014stopA"
-            + "tScript\030\001 \001(\010\022\027\n\017stopAtException\030\002 \001(\010\022\023"
-            + "\n\013stopAtError\030\003 \001(\010\022\023\n\013stopAtAbort\030\004 \001(\010"
-            + "\022\020\n\010stopAtGc\030\005 \001(\010\022\037\n\027stopAtDebuggerStat"
-            + "ement\030\006 \001(\010\"3\n\nObjectList\022%\n\nobjectList\030"
-            + "\001 \003(\0132\021.scope.ObjectInfo\"b\n\nEvalResult\022\016"
-            + "\n\006status\030\001 \002(\t\022\014\n\004type\030\002 \002(\t\022\r\n\005value\030\003 "
-            + "\001(\t\022\'\n\013objectValue\030\004 \001(\0132\022.scope.ObjectV",
+        + "\005value\030\003 \001(\t\022\'\n\013objectValue\030\004 \001(\0132\022.scop"
+        + "e.ObjectValue\"\233\001\n\rConfiguration\022\024\n\014stopA"
+        + "tScript\030\001 \001(\010\022\027\n\017stopAtException\030\002 \001(\010\022\023"
+        + "\n\013stopAtError\030\003 \001(\010\022\023\n\013stopAtAbort\030\004 \001(\010"
+        + "\022\020\n\010stopAtGc\030\005 \001(\010\022\037\n\027stopAtDebuggerStat"
+        + "ement\030\006 \001(\010\"3\n\nObjectList\022%\n\nobjectList\030"
+        + "\001 \003(\0132\021.scope.ObjectInfo\"b\n\nEvalResult\022\016"
+        + "\n\006status\030\001 \002(\t\022\014\n\004type\030\002 \002(\t\022\r\n\005value\030\003 "
+        + "\001(\t\022\'\n\013objectValue\030\004 \001(\0132\022.scope.ObjectV",
         "alue\"x\n\013ObjectValue\022\020\n\010objectID\030\001 \002(\r\022\022\n"
-            + "\nisCallable\030\002 \002(\010\022\022\n\nisFunction\030\003 \002(\010\022\014\n"
-            + "\004type\030\004 \002(\t\022\023\n\013prototypeID\030\005 \001(\r\022\014\n\004name"
-            + "\030\006 \001(\t\"6\n\013RuntimeList\022\'\n\013runtimeList\030\001 \003"
-            + "(\0132\022.scope.RuntimeInfo\"\263\001\n\010EvalData\022\021\n\tr"
-            + "untimeID\030\001 \002(\r\022\020\n\010threadID\030\002 \002(\r\022\022\n\nfram"
-            + "eIndex\030\003 \002(\r\022\022\n\nscriptData\030\004 \002(\t\022.\n\014vari"
-            + "ableList\030\005 \003(\0132\030.scope.EvalData.Variable"
-            + "\032*\n\010Variable\022\014\n\004name\030\001 \002(\t\022\020\n\010objectID\030\002"
-            + " \002(\rB4\n#com.opera.core.systems.scope.pro",
-        "tosB\013EsdbgProtosH\001" };
-    com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner = new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
-      public com.google.protobuf.ExtensionRegistry assignDescriptors(
-          com.google.protobuf.Descriptors.FileDescriptor root) {
-        descriptor = root;
-        internal_static_scope_ExamineList_descriptor = getDescriptor().getMessageTypes().get(
-            0);
-        internal_static_scope_ExamineList_fieldAccessorTable = new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-            internal_static_scope_ExamineList_descriptor,
-            new java.lang.String[] { "RuntimeID", "ObjectList", },
-            com.opera.core.systems.scope.protos.EsdbgProtos.ExamineList.class,
-            com.opera.core.systems.scope.protos.EsdbgProtos.ExamineList.Builder.class);
-        internal_static_scope_RuntimeInfo_descriptor = getDescriptor().getMessageTypes().get(
-            1);
-        internal_static_scope_RuntimeInfo_fieldAccessorTable = new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-            internal_static_scope_RuntimeInfo_descriptor,
-            new java.lang.String[] { "RuntimeID", "HtmlFramePath", "WindowID",
-                "ObjectID", "Uri", },
-            com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeInfo.class,
-            com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeInfo.Builder.class);
-        internal_static_scope_RuntimeID_descriptor = getDescriptor().getMessageTypes().get(
-            2);
-        internal_static_scope_RuntimeID_fieldAccessorTable = new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-            internal_static_scope_RuntimeID_descriptor,
-            new java.lang.String[] { "RuntimeID", },
-            com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeID.class,
-            com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeID.Builder.class);
-        internal_static_scope_RuntimeSelection_descriptor = getDescriptor().getMessageTypes().get(
-            3);
-        internal_static_scope_RuntimeSelection_fieldAccessorTable = new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-            internal_static_scope_RuntimeSelection_descriptor,
-            new java.lang.String[] { "RuntimeList", "AllRuntimes", },
-            com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeSelection.class,
-            com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeSelection.Builder.class);
-        internal_static_scope_ObjectInfo_descriptor = getDescriptor().getMessageTypes().get(
-            4);
-        internal_static_scope_ObjectInfo_fieldAccessorTable = new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-            internal_static_scope_ObjectInfo_descriptor,
-            new java.lang.String[] { "Value", "PropertyList", },
-            com.opera.core.systems.scope.protos.EsdbgProtos.ObjectInfo.class,
-            com.opera.core.systems.scope.protos.EsdbgProtos.ObjectInfo.Builder.class);
-        internal_static_scope_ObjectInfo_Property_descriptor = internal_static_scope_ObjectInfo_descriptor.getNestedTypes().get(
-            0);
-        internal_static_scope_ObjectInfo_Property_fieldAccessorTable = new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-            internal_static_scope_ObjectInfo_Property_descriptor,
-            new java.lang.String[] { "Name", "Type", "Value", "ObjectValue", },
-            com.opera.core.systems.scope.protos.EsdbgProtos.ObjectInfo.Property.class,
-            com.opera.core.systems.scope.protos.EsdbgProtos.ObjectInfo.Property.Builder.class);
-        internal_static_scope_Configuration_descriptor = getDescriptor().getMessageTypes().get(
-            5);
-        internal_static_scope_Configuration_fieldAccessorTable = new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-            internal_static_scope_Configuration_descriptor,
-            new java.lang.String[] { "StopAtScript", "StopAtException",
-                "StopAtError", "StopAtAbort", "StopAtGc",
-                "StopAtDebuggerStatement", },
-            com.opera.core.systems.scope.protos.EsdbgProtos.Configuration.class,
-            com.opera.core.systems.scope.protos.EsdbgProtos.Configuration.Builder.class);
-        internal_static_scope_ObjectList_descriptor = getDescriptor().getMessageTypes().get(
-            6);
-        internal_static_scope_ObjectList_fieldAccessorTable = new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-            internal_static_scope_ObjectList_descriptor,
-            new java.lang.String[] { "ObjectList", },
-            com.opera.core.systems.scope.protos.EsdbgProtos.ObjectList.class,
-            com.opera.core.systems.scope.protos.EsdbgProtos.ObjectList.Builder.class);
-        internal_static_scope_EvalResult_descriptor = getDescriptor().getMessageTypes().get(
-            7);
-        internal_static_scope_EvalResult_fieldAccessorTable = new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-            internal_static_scope_EvalResult_descriptor,
-            new java.lang.String[] { "Status", "Type", "Value", "ObjectValue", },
-            com.opera.core.systems.scope.protos.EsdbgProtos.EvalResult.class,
-            com.opera.core.systems.scope.protos.EsdbgProtos.EvalResult.Builder.class);
-        internal_static_scope_ObjectValue_descriptor = getDescriptor().getMessageTypes().get(
-            8);
-        internal_static_scope_ObjectValue_fieldAccessorTable = new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-            internal_static_scope_ObjectValue_descriptor,
-            new java.lang.String[] { "ObjectID", "IsCallable", "IsFunction",
-                "Type", "PrototypeID", "Name", },
-            com.opera.core.systems.scope.protos.EsdbgProtos.ObjectValue.class,
-            com.opera.core.systems.scope.protos.EsdbgProtos.ObjectValue.Builder.class);
-        internal_static_scope_RuntimeList_descriptor = getDescriptor().getMessageTypes().get(
-            9);
-        internal_static_scope_RuntimeList_fieldAccessorTable = new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-            internal_static_scope_RuntimeList_descriptor,
-            new java.lang.String[] { "RuntimeList", },
-            com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeList.class,
-            com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeList.Builder.class);
-        internal_static_scope_EvalData_descriptor = getDescriptor().getMessageTypes().get(
-            10);
-        internal_static_scope_EvalData_fieldAccessorTable = new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-            internal_static_scope_EvalData_descriptor,
-            new java.lang.String[] { "RuntimeID", "ThreadID", "FrameIndex",
-                "ScriptData", "VariableList", },
-            com.opera.core.systems.scope.protos.EsdbgProtos.EvalData.class,
-            com.opera.core.systems.scope.protos.EsdbgProtos.EvalData.Builder.class);
-        internal_static_scope_EvalData_Variable_descriptor = internal_static_scope_EvalData_descriptor.getNestedTypes().get(
-            0);
-        internal_static_scope_EvalData_Variable_fieldAccessorTable = new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-            internal_static_scope_EvalData_Variable_descriptor,
-            new java.lang.String[] { "Name", "ObjectID", },
-            com.opera.core.systems.scope.protos.EsdbgProtos.EvalData.Variable.class,
-            com.opera.core.systems.scope.protos.EsdbgProtos.EvalData.Variable.Builder.class);
-        return null;
-      }
-    };
+        + "\nisCallable\030\002 \002(\010\022\022\n\nisFunction\030\003 \002(\010\022\014\n"
+        + "\004type\030\004 \002(\t\022\023\n\013prototypeID\030\005 \001(\r\022\014\n\004name"
+        + "\030\006 \001(\t\"6\n\013RuntimeList\022\'\n\013runtimeList\030\001 \003"
+        + "(\0132\022.scope.RuntimeInfo\"\263\001\n\010EvalData\022\021\n\tr"
+        + "untimeID\030\001 \002(\r\022\020\n\010threadID\030\002 \002(\r\022\022\n\nfram"
+        + "eIndex\030\003 \002(\r\022\022\n\nscriptData\030\004 \002(\t\022.\n\014vari"
+        + "ableList\030\005 \003(\0132\030.scope.EvalData.Variable"
+        + "\032*\n\010Variable\022\014\n\004name\030\001 \002(\t\022\020\n\010objectID\030\002"
+        + " \002(\rB4\n#com.opera.core.systems.scope.pro",
+        "tosB\013EsdbgProtosH\001"};
+    com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner
+        assigner =
+        new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
+          public com.google.protobuf.ExtensionRegistry assignDescriptors(
+              com.google.protobuf.Descriptors.FileDescriptor root) {
+            descriptor = root;
+            internal_static_scope_ExamineList_descriptor = getDescriptor().getMessageTypes().get(
+                0);
+            internal_static_scope_ExamineList_fieldAccessorTable =
+                new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+                    internal_static_scope_ExamineList_descriptor,
+                    new java.lang.String[]{"RuntimeID", "ObjectList",},
+                    com.opera.core.systems.scope.protos.EsdbgProtos.ExamineList.class,
+                    com.opera.core.systems.scope.protos.EsdbgProtos.ExamineList.Builder.class);
+            internal_static_scope_RuntimeInfo_descriptor = getDescriptor().getMessageTypes().get(
+                1);
+            internal_static_scope_RuntimeInfo_fieldAccessorTable =
+                new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+                    internal_static_scope_RuntimeInfo_descriptor,
+                    new java.lang.String[]{"RuntimeID", "HtmlFramePath", "WindowID",
+                                           "ObjectID", "Uri",},
+                    com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeInfo.class,
+                    com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeInfo.Builder.class);
+            internal_static_scope_RuntimeID_descriptor = getDescriptor().getMessageTypes().get(
+                2);
+            internal_static_scope_RuntimeID_fieldAccessorTable =
+                new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+                    internal_static_scope_RuntimeID_descriptor,
+                    new java.lang.String[]{"RuntimeID",},
+                    com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeID.class,
+                    com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeID.Builder.class);
+            internal_static_scope_RuntimeSelection_descriptor =
+                getDescriptor().getMessageTypes().get(
+                    3);
+            internal_static_scope_RuntimeSelection_fieldAccessorTable =
+                new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+                    internal_static_scope_RuntimeSelection_descriptor,
+                    new java.lang.String[]{"RuntimeList", "AllRuntimes",},
+                    com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeSelection.class,
+                    com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeSelection.Builder.class);
+            internal_static_scope_ObjectInfo_descriptor = getDescriptor().getMessageTypes().get(
+                4);
+            internal_static_scope_ObjectInfo_fieldAccessorTable =
+                new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+                    internal_static_scope_ObjectInfo_descriptor,
+                    new java.lang.String[]{"Value", "PropertyList",},
+                    com.opera.core.systems.scope.protos.EsdbgProtos.ObjectInfo.class,
+                    com.opera.core.systems.scope.protos.EsdbgProtos.ObjectInfo.Builder.class);
+            internal_static_scope_ObjectInfo_Property_descriptor =
+                internal_static_scope_ObjectInfo_descriptor.getNestedTypes().get(
+                    0);
+            internal_static_scope_ObjectInfo_Property_fieldAccessorTable =
+                new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+                    internal_static_scope_ObjectInfo_Property_descriptor,
+                    new java.lang.String[]{"Name", "Type", "Value", "ObjectValue",},
+                    com.opera.core.systems.scope.protos.EsdbgProtos.ObjectInfo.Property.class,
+                    com.opera.core.systems.scope.protos.EsdbgProtos.ObjectInfo.Property.Builder.class);
+            internal_static_scope_Configuration_descriptor = getDescriptor().getMessageTypes().get(
+                5);
+            internal_static_scope_Configuration_fieldAccessorTable =
+                new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+                    internal_static_scope_Configuration_descriptor,
+                    new java.lang.String[]{"StopAtScript", "StopAtException",
+                                           "StopAtError", "StopAtAbort", "StopAtGc",
+                                           "StopAtDebuggerStatement",},
+                    com.opera.core.systems.scope.protos.EsdbgProtos.Configuration.class,
+                    com.opera.core.systems.scope.protos.EsdbgProtos.Configuration.Builder.class);
+            internal_static_scope_ObjectList_descriptor = getDescriptor().getMessageTypes().get(
+                6);
+            internal_static_scope_ObjectList_fieldAccessorTable =
+                new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+                    internal_static_scope_ObjectList_descriptor,
+                    new java.lang.String[]{"ObjectList",},
+                    com.opera.core.systems.scope.protos.EsdbgProtos.ObjectList.class,
+                    com.opera.core.systems.scope.protos.EsdbgProtos.ObjectList.Builder.class);
+            internal_static_scope_EvalResult_descriptor = getDescriptor().getMessageTypes().get(
+                7);
+            internal_static_scope_EvalResult_fieldAccessorTable =
+                new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+                    internal_static_scope_EvalResult_descriptor,
+                    new java.lang.String[]{"Status", "Type", "Value", "ObjectValue",},
+                    com.opera.core.systems.scope.protos.EsdbgProtos.EvalResult.class,
+                    com.opera.core.systems.scope.protos.EsdbgProtos.EvalResult.Builder.class);
+            internal_static_scope_ObjectValue_descriptor = getDescriptor().getMessageTypes().get(
+                8);
+            internal_static_scope_ObjectValue_fieldAccessorTable =
+                new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+                    internal_static_scope_ObjectValue_descriptor,
+                    new java.lang.String[]{"ObjectID", "IsCallable", "IsFunction",
+                                           "Type", "PrototypeID", "Name",},
+                    com.opera.core.systems.scope.protos.EsdbgProtos.ObjectValue.class,
+                    com.opera.core.systems.scope.protos.EsdbgProtos.ObjectValue.Builder.class);
+            internal_static_scope_RuntimeList_descriptor = getDescriptor().getMessageTypes().get(
+                9);
+            internal_static_scope_RuntimeList_fieldAccessorTable =
+                new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+                    internal_static_scope_RuntimeList_descriptor,
+                    new java.lang.String[]{"RuntimeList",},
+                    com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeList.class,
+                    com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeList.Builder.class);
+            internal_static_scope_EvalData_descriptor = getDescriptor().getMessageTypes().get(
+                10);
+            internal_static_scope_EvalData_fieldAccessorTable =
+                new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+                    internal_static_scope_EvalData_descriptor,
+                    new java.lang.String[]{"RuntimeID", "ThreadID", "FrameIndex",
+                                           "ScriptData", "VariableList",},
+                    com.opera.core.systems.scope.protos.EsdbgProtos.EvalData.class,
+                    com.opera.core.systems.scope.protos.EsdbgProtos.EvalData.Builder.class);
+            internal_static_scope_EvalData_Variable_descriptor =
+                internal_static_scope_EvalData_descriptor.getNestedTypes().get(
+                    0);
+            internal_static_scope_EvalData_Variable_fieldAccessorTable =
+                new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+                    internal_static_scope_EvalData_Variable_descriptor,
+                    new java.lang.String[]{"Name", "ObjectID",},
+                    com.opera.core.systems.scope.protos.EsdbgProtos.EvalData.Variable.class,
+                    com.opera.core.systems.scope.protos.EsdbgProtos.EvalData.Variable.Builder.class);
+            return null;
+          }
+        };
     com.google.protobuf.Descriptors.FileDescriptor.internalBuildGeneratedFileFrom(
         descriptorData,
-        new com.google.protobuf.Descriptors.FileDescriptor[] {}, assigner);
+        new com.google.protobuf.Descriptors.FileDescriptor[]{}, assigner);
   }
 
   public static void internalForceInit() {

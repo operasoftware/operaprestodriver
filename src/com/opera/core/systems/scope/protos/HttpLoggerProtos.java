@@ -4,6 +4,7 @@
 package com.opera.core.systems.scope.protos;
 
 public final class HttpLoggerProtos {
+
   private HttpLoggerProtos() {
   }
 
@@ -12,6 +13,7 @@ public final class HttpLoggerProtos {
   }
 
   public static final class Header extends com.google.protobuf.GeneratedMessage {
+
     // Use Header.newBuilder() to construct.
     private Header() {
       initFields();
@@ -94,10 +96,18 @@ public final class HttpLoggerProtos {
     }
 
     public final boolean isInitialized() {
-      if (!hasRequestID) return false;
-      if (!hasWindowID) return false;
-      if (!hasTime) return false;
-      if (!hasHeader) return false;
+      if (!hasRequestID) {
+        return false;
+      }
+      if (!hasWindowID) {
+        return false;
+      }
+      if (!hasTime) {
+        return false;
+      }
+      if (!hasHeader) {
+        return false;
+      }
       return true;
     }
 
@@ -123,24 +133,26 @@ public final class HttpLoggerProtos {
 
     public int getSerializedSize() {
       int size = memoizedSerializedSize;
-      if (size != -1) return size;
+      if (size != -1) {
+        return size;
+      }
 
       size = 0;
       if (hasRequestID()) {
         size += com.google.protobuf.CodedOutputStream.computeUInt32Size(1,
-            getRequestID());
+                                                                        getRequestID());
       }
       if (hasWindowID()) {
         size += com.google.protobuf.CodedOutputStream.computeUInt32Size(2,
-            getWindowID());
+                                                                        getWindowID());
       }
       if (hasTime()) {
         size += com.google.protobuf.CodedOutputStream.computeStringSize(3,
-            getTime());
+                                                                        getTime());
       }
       if (hasHeader()) {
         size += com.google.protobuf.CodedOutputStream.computeStringSize(4,
-            getHeader());
+                                                                        getHeader());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -235,7 +247,8 @@ public final class HttpLoggerProtos {
     }
 
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> {
+                                      com.google.protobuf.GeneratedMessage.Builder<Builder> {
+
       private com.opera.core.systems.scope.protos.HttpLoggerProtos.Header result;
 
       // Construct using
@@ -313,7 +326,10 @@ public final class HttpLoggerProtos {
 
       public Builder mergeFrom(
           com.opera.core.systems.scope.protos.HttpLoggerProtos.Header other) {
-        if (other == com.opera.core.systems.scope.protos.HttpLoggerProtos.Header.getDefaultInstance()) return this;
+        if (other == com.opera.core.systems.scope.protos.HttpLoggerProtos.Header
+            .getDefaultInstance()) {
+          return this;
+        }
         if (other.hasRequestID()) {
           setRequestID(other.getRequestID());
         }
@@ -331,38 +347,40 @@ public final class HttpLoggerProtos {
       }
 
       public Builder mergeFrom(com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                               com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields = com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
+        com.google.protobuf.UnknownFieldSet.Builder
+            unknownFields =
+            com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
         while (true) {
           int tag = input.readTag();
           switch (tag) {
-          case 0:
-            this.setUnknownFields(unknownFields.build());
-            return this;
-          default: {
-            if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+            case 0:
               this.setUnknownFields(unknownFields.build());
               return this;
+            default: {
+              if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+                this.setUnknownFields(unknownFields.build());
+                return this;
+              }
+              break;
             }
-            break;
-          }
-          case 8: {
-            setRequestID(input.readUInt32());
-            break;
-          }
-          case 16: {
-            setWindowID(input.readUInt32());
-            break;
-          }
-          case 26: {
-            setTime(input.readString());
-            break;
-          }
-          case 34: {
-            setHeader(input.readString());
-            break;
-          }
+            case 8: {
+              setRequestID(input.readUInt32());
+              break;
+            }
+            case 16: {
+              setWindowID(input.readUInt32());
+              break;
+            }
+            case 26: {
+              setTime(input.readString());
+              break;
+            }
+            case 34: {
+              setHeader(input.readString());
+              break;
+            }
           }
         }
       }
@@ -470,35 +488,43 @@ public final class HttpLoggerProtos {
   }
 
   private static com.google.protobuf.Descriptors.Descriptor internal_static_scope_Header_descriptor;
-  private static com.google.protobuf.GeneratedMessage.FieldAccessorTable internal_static_scope_Header_fieldAccessorTable;
+  private static
+  com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_scope_Header_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor getDescriptor() {
     return descriptor;
   }
 
   private static com.google.protobuf.Descriptors.FileDescriptor descriptor;
+
   static {
-    java.lang.String[] descriptorData = { "\n\021http_logger.proto\022\005scope\"K\n\006Header\022\021\n\t"
-        + "requestID\030\001 \002(\r\022\020\n\010windowID\030\002 \002(\r\022\014\n\004tim"
-        + "e\030\003 \002(\t\022\016\n\006header\030\004 \002(\tB9\n#com.opera.cor"
-        + "e.systems.scope.protosB\020HttpLoggerProtos" + "H\001" };
-    com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner = new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
-      public com.google.protobuf.ExtensionRegistry assignDescriptors(
-          com.google.protobuf.Descriptors.FileDescriptor root) {
-        descriptor = root;
-        internal_static_scope_Header_descriptor = getDescriptor().getMessageTypes().get(
-            0);
-        internal_static_scope_Header_fieldAccessorTable = new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-            internal_static_scope_Header_descriptor,
-            new java.lang.String[] { "RequestID", "WindowID", "Time", "Header", },
-            com.opera.core.systems.scope.protos.HttpLoggerProtos.Header.class,
-            com.opera.core.systems.scope.protos.HttpLoggerProtos.Header.Builder.class);
-        return null;
-      }
-    };
+    java.lang.String[]
+        descriptorData =
+        {"\n\021http_logger.proto\022\005scope\"K\n\006Header\022\021\n\t"
+         + "requestID\030\001 \002(\r\022\020\n\010windowID\030\002 \002(\r\022\014\n\004tim"
+         + "e\030\003 \002(\t\022\016\n\006header\030\004 \002(\tB9\n#com.opera.cor"
+         + "e.systems.scope.protosB\020HttpLoggerProtos" + "H\001"};
+    com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner
+        assigner =
+        new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
+          public com.google.protobuf.ExtensionRegistry assignDescriptors(
+              com.google.protobuf.Descriptors.FileDescriptor root) {
+            descriptor = root;
+            internal_static_scope_Header_descriptor = getDescriptor().getMessageTypes().get(
+                0);
+            internal_static_scope_Header_fieldAccessorTable =
+                new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+                    internal_static_scope_Header_descriptor,
+                    new java.lang.String[]{"RequestID", "WindowID", "Time", "Header",},
+                    com.opera.core.systems.scope.protos.HttpLoggerProtos.Header.class,
+                    com.opera.core.systems.scope.protos.HttpLoggerProtos.Header.Builder.class);
+            return null;
+          }
+        };
     com.google.protobuf.Descriptors.FileDescriptor.internalBuildGeneratedFileFrom(
         descriptorData,
-        new com.google.protobuf.Descriptors.FileDescriptor[] {}, assigner);
+        new com.google.protobuf.Descriptors.FileDescriptor[]{}, assigner);
   }
 
   public static void internalForceInit() {

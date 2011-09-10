@@ -22,6 +22,7 @@ import com.opera.core.systems.scope.CoreUtilsCommand;
 import com.opera.core.systems.scope.protos.UmsProtos.Response;
 import com.opera.core.systems.scope.protos.CoreProtos.BrowserInformation;
 import com.opera.core.systems.scope.services.ICoreUtils;
+
 import org.openqa.selenium.UnsupportedCommandException;
 
 /**
@@ -29,82 +30,81 @@ import org.openqa.selenium.UnsupportedCommandException;
  */
 public class CoreUtils extends AbstractService implements ICoreUtils {
 
-    private boolean supportsMeta = false;
-    private BrowserInformation browserInformation;
+  private boolean supportsMeta = false;
+  private BrowserInformation browserInformation;
 
-    public CoreUtils(ScopeServices services, String version) {
-        super(services, version);
+  public CoreUtils(ScopeServices services, String version) {
+    super(services, version);
 
-        String serviceName = "core";
+    String serviceName = "core";
 
-        // Version 1.2 is required for browser meta information
-        if (!isVersionInRange(version, "1.2", serviceName)) {
-            supportsMeta = true;
-        }
-
-        services.setCoreUtils(this);
+    // Version 1.2 is required for browser meta information
+    if (!isVersionInRange(version, "1.2", serviceName)) {
+      supportsMeta = true;
     }
 
-    public void init() {
-        if (supportsMeta) {
-            browserInformation = getBrowserInformation();
-        }
+    services.setCoreUtils(this);
+  }
+
+  public void init() {
+    if (supportsMeta) {
+      browserInformation = getBrowserInformation();
     }
+  }
 
-    public boolean hasMetaInformation() {
-        return supportsMeta;
+  public boolean hasMetaInformation() {
+    return supportsMeta;
+  }
+
+  public String getCoreVersion() {
+    if (!browserInformation.hasCoreVersion()) {
+      throw new UnsupportedCommandException("not available in this product");
     }
+    return browserInformation.getCoreVersion();
+  }
 
-    public String getCoreVersion() {
-        if (!browserInformation.hasCoreVersion()) {
-            throw new UnsupportedCommandException("not available in this product");
-        }
-        return browserInformation.getCoreVersion();
+  public String getOperatingSystem() {
+    if (!browserInformation.hasOperatingSystem()) {
+      throw new UnsupportedCommandException("not available in this product");
     }
+    return browserInformation.getOperatingSystem();
+  }
 
-    public String getOperatingSystem() {
-        if (!browserInformation.hasOperatingSystem()) {
-            throw new UnsupportedCommandException("not available in this product");
-        }
-        return browserInformation.getOperatingSystem();
+  public String getProduct() {
+    if (!browserInformation.hasProduct()) {
+      throw new UnsupportedCommandException("not available in this product");
     }
+    return browserInformation.getProduct();
+  }
 
-    public String getProduct() {
-        if (!browserInformation.hasProduct()) {
-            throw new UnsupportedCommandException("not available in this product");
-        }
-        return browserInformation.getProduct();
+  public String getBinaryPath() {
+    if (!browserInformation.hasBinaryPath()) {
+      throw new UnsupportedCommandException("not available in this product");
     }
+    return browserInformation.getBinaryPath();
+  }
 
-    public String getBinaryPath() {
-        if (!browserInformation.hasBinaryPath()) {
-            throw new UnsupportedCommandException("not available in this product");
-        }
-        return browserInformation.getBinaryPath();
+  public String getUserAgent() {
+    if (!browserInformation.hasUserAgent()) {
+      throw new UnsupportedCommandException("not available in this product");
     }
+    return browserInformation.getUserAgent();
+  }
 
-    public String getUserAgent() {
-        if (!browserInformation.hasUserAgent()) {
-            throw new UnsupportedCommandException("not available in this product");
-        }
-        return browserInformation.getUserAgent();
+  public Integer getProcessID() {
+    if (!browserInformation.hasProcessID()) {
+      throw new UnsupportedCommandException("not available in this product");
     }
+    return browserInformation.getProcessID();
+  }
 
-    public Integer getProcessID() {
-        if (!browserInformation.hasProcessID()) {
-            throw new UnsupportedCommandException("not available in this product");
-        }
-        return browserInformation.getProcessID();
-    }
+  // Private methods follow
 
-
-    // Private methods follow
-
-    private BrowserInformation getBrowserInformation() {
-        Response response = executeCommand(CoreUtilsCommand.GET_BROWSER_INFORMATION, null);
-        BrowserInformation.Builder builder = BrowserInformation.newBuilder();
-        buildPayload(response, builder);
-        return builder.build();
-    }
+  private BrowserInformation getBrowserInformation() {
+    Response response = executeCommand(CoreUtilsCommand.GET_BROWSER_INFORMATION, null);
+    BrowserInformation.Builder builder = BrowserInformation.newBuilder();
+    buildPayload(response, builder);
+    return builder.build();
+  }
 
 }

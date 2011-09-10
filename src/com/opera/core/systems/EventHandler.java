@@ -30,7 +30,6 @@ import com.opera.core.systems.scope.protos.WmProtos.WindowInfo;
  * Provides an interface to the Scope protocol.
  *
  * @author Deniz Turkoglu
- *
  */
 public class EventHandler extends AbstractEventHandler {
 
@@ -50,8 +49,8 @@ public class EventHandler extends AbstractEventHandler {
   }
 
   /**
-   * Remove any runtime that has been stopped. This call can be quite late and
-   * hence is resolved by cleanup method in onRuntimeStarted
+   * Remove any runtime that has been stopped. This call can be quite late and hence is resolved by
+   * cleanup method in onRuntimeStarted
    */
   @Override
   public void onRuntimeStopped(Integer id) {
@@ -69,8 +68,8 @@ public class EventHandler extends AbstractEventHandler {
   }
 
   /**
-   * Handles windows that have been closed. Removes it from the list and removes
-   * the runtimes that are associated with it
+   * Handles windows that have been closed. Removes it from the list and removes the runtimes that
+   * are associated with it
    */
   @Override
   public void onWindowClosed(Integer id) {
@@ -116,7 +115,7 @@ public class EventHandler extends AbstractEventHandler {
   @Override
   public void onHttpResponse(int responseCode) {
     services.getWindowManager().getLastHttpResponseCode().compareAndSet(0,
-        responseCode);
+                                                                        responseCode);
   }
 
   @Override
@@ -151,18 +150,18 @@ public class EventHandler extends AbstractEventHandler {
 
   @Override
   public void onQuickMenuShown(QuickMenuInfo menuInfoShown) {
-	  services.onQuickMenuShown(menuInfoShown);
+    services.onQuickMenuShown(menuInfoShown);
   }
 
   @Override
   public void onQuickMenuClosed(QuickMenuID menuId) {
-	  services.onQuickMenuClosed(menuId);
+    services.onQuickMenuClosed(menuId);
 
   }
 
   @Override
   public void onQuickMenuItemPressed(QuickMenuItemID menuItemID) {
-	  services.onQuickMenuItemPressed(menuItemID);
+    services.onQuickMenuItemPressed(menuItemID);
 
   }
 

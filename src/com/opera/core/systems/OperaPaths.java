@@ -153,7 +153,7 @@ public class OperaPaths {
 
             FileChannel in = new FileInputStream(res.getFile()).getChannel();
             FileChannel out = new FileOutputStream(launcher).getChannel();
-            
+
             in.transferTo(0, in.size(), out);
 
             in.close();

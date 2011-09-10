@@ -4,10 +4,14 @@
 package com.opera.core.systems.scope.protos;
 
 public final class CoreUtilsProtos {
-  private CoreUtilsProtos() {}
+
+  private CoreUtilsProtos() {
+  }
+
   public static void registerAllExtensions(
       com.google.protobuf.ExtensionRegistry registry) {
   }
+
   public enum ClearFlags
       implements com.google.protobuf.ProtocolMessageEnum {
     CLEAR_ALL(0, 0),
@@ -25,149 +29,193 @@ public final class CoreUtilsProtos {
     CLEAR_WEBSTORAGE(12, 12),
     CLEAR_APPCACHE(13, 13),
     CLEAR_GEOLOCATION_PERMISSIONS(14, 14),
-    CLEAR_SITE_PREFS(15, 15),
-    ;
-    
-    
-    public final int getNumber() { return value; }
-    
+    CLEAR_SITE_PREFS(15, 15),;
+
+
+    public final int getNumber() {
+      return value;
+    }
+
     public static ClearFlags valueOf(int value) {
       switch (value) {
-        case 0: return CLEAR_ALL;
-        case 1: return CLEAR_VISITED_LINKS;
-        case 2: return CLEAR_DISK_CACHE;
-        case 3: return CLEAR_IMAGE_CACHE;
-        case 4: return CLEAR_MEMORY_CACHE;
-        case 5: return CLEAR_SENSITIVE_DATA;
-        case 6: return CLEAR_SESSION_COOKIES;
-        case 7: return CLEAR_ALL_COOKIES;
-        case 8: return CLEAR_GLOBAL_HISTORY;
-        case 9: return CLEAR_CONSOLE;
-        case 10: return CLEAR_THUMBNAILS;
-        case 11: return CLEAR_WEBDATABASES;
-        case 12: return CLEAR_WEBSTORAGE;
-        case 13: return CLEAR_APPCACHE;
-        case 14: return CLEAR_GEOLOCATION_PERMISSIONS;
-        case 15: return CLEAR_SITE_PREFS;
-        default: return null;
+        case 0:
+          return CLEAR_ALL;
+        case 1:
+          return CLEAR_VISITED_LINKS;
+        case 2:
+          return CLEAR_DISK_CACHE;
+        case 3:
+          return CLEAR_IMAGE_CACHE;
+        case 4:
+          return CLEAR_MEMORY_CACHE;
+        case 5:
+          return CLEAR_SENSITIVE_DATA;
+        case 6:
+          return CLEAR_SESSION_COOKIES;
+        case 7:
+          return CLEAR_ALL_COOKIES;
+        case 8:
+          return CLEAR_GLOBAL_HISTORY;
+        case 9:
+          return CLEAR_CONSOLE;
+        case 10:
+          return CLEAR_THUMBNAILS;
+        case 11:
+          return CLEAR_WEBDATABASES;
+        case 12:
+          return CLEAR_WEBSTORAGE;
+        case 13:
+          return CLEAR_APPCACHE;
+        case 14:
+          return CLEAR_GEOLOCATION_PERMISSIONS;
+        case 15:
+          return CLEAR_SITE_PREFS;
+        default:
+          return null;
       }
     }
-    
+
     public static com.google.protobuf.Internal.EnumLiteMap<ClearFlags>
-        internalGetValueMap() {
+    internalGetValueMap() {
       return internalValueMap;
     }
+
     private static com.google.protobuf.Internal.EnumLiteMap<ClearFlags>
         internalValueMap =
-          new com.google.protobuf.Internal.EnumLiteMap<ClearFlags>() {
-            public ClearFlags findValueByNumber(int number) {
-              return ClearFlags.valueOf(number)
-    ;        }
-          };
-    
+        new com.google.protobuf.Internal.EnumLiteMap<ClearFlags>() {
+          public ClearFlags findValueByNumber(int number) {
+            return ClearFlags.valueOf(number)
+                ;
+          }
+        };
+
     public final com.google.protobuf.Descriptors.EnumValueDescriptor
-        getValueDescriptor() {
+    getValueDescriptor() {
       return getDescriptor().getValues().get(index);
     }
+
     public final com.google.protobuf.Descriptors.EnumDescriptor
-        getDescriptorForType() {
+    getDescriptorForType() {
       return getDescriptor();
     }
+
     public static final com.google.protobuf.Descriptors.EnumDescriptor
-        getDescriptor() {
-      return com.opera.core.systems.scope.protos.CoreUtilsProtos.getDescriptor().getEnumTypes().get(0);
+    getDescriptor() {
+      return com.opera.core.systems.scope.protos.CoreUtilsProtos.getDescriptor().getEnumTypes()
+          .get(0);
     }
-    
+
     private static final ClearFlags[] VALUES = {
-      CLEAR_ALL, CLEAR_VISITED_LINKS, CLEAR_DISK_CACHE, CLEAR_IMAGE_CACHE, CLEAR_MEMORY_CACHE, CLEAR_SENSITIVE_DATA, CLEAR_SESSION_COOKIES, CLEAR_ALL_COOKIES, CLEAR_GLOBAL_HISTORY, CLEAR_CONSOLE, CLEAR_THUMBNAILS, CLEAR_WEBDATABASES, CLEAR_WEBSTORAGE, CLEAR_APPCACHE, CLEAR_GEOLOCATION_PERMISSIONS, CLEAR_SITE_PREFS, 
+        CLEAR_ALL, CLEAR_VISITED_LINKS, CLEAR_DISK_CACHE, CLEAR_IMAGE_CACHE, CLEAR_MEMORY_CACHE,
+        CLEAR_SENSITIVE_DATA, CLEAR_SESSION_COOKIES, CLEAR_ALL_COOKIES, CLEAR_GLOBAL_HISTORY,
+        CLEAR_CONSOLE, CLEAR_THUMBNAILS, CLEAR_WEBDATABASES, CLEAR_WEBSTORAGE, CLEAR_APPCACHE,
+        CLEAR_GEOLOCATION_PERMISSIONS, CLEAR_SITE_PREFS,
     };
+
     public static ClearFlags valueOf(
         com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
       if (desc.getType() != getDescriptor()) {
         throw new java.lang.IllegalArgumentException(
-          "EnumValueDescriptor is not for this type.");
+            "EnumValueDescriptor is not for this type.");
       }
       return VALUES[desc.getIndex()];
     }
+
     private final int index;
     private final int value;
+
     private ClearFlags(int index, int value) {
       this.index = index;
       this.value = value;
     }
-    
+
     static {
       com.opera.core.systems.scope.protos.CoreUtilsProtos.getDescriptor();
     }
-    
+
     // @@protoc_insertion_point(enum_scope:scope.ClearFlags)
   }
-  
+
   public static final class ClearPrivateDataArg extends
-      com.google.protobuf.GeneratedMessage {
+                                                com.google.protobuf.GeneratedMessage {
+
     // Use ClearPrivateDataArg.newBuilder() to construct.
     private ClearPrivateDataArg() {
       initFields();
     }
-    private ClearPrivateDataArg(boolean noInit) {}
-    
+
+    private ClearPrivateDataArg(boolean noInit) {
+    }
+
     private static final ClearPrivateDataArg defaultInstance;
+
     public static ClearPrivateDataArg getDefaultInstance() {
       return defaultInstance;
     }
-    
+
     public ClearPrivateDataArg getDefaultInstanceForType() {
       return defaultInstance;
     }
-    
+
     public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
+    getDescriptor() {
       return com.opera.core.systems.scope.protos.CoreUtilsProtos.internal_static_scope_ClearPrivateDataArg_descriptor;
     }
-    
+
     protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-        internalGetFieldAccessorTable() {
+    internalGetFieldAccessorTable() {
       return com.opera.core.systems.scope.protos.CoreUtilsProtos.internal_static_scope_ClearPrivateDataArg_fieldAccessorTable;
     }
-    
+
     // repeated .scope.ClearFlags clearList = 1;
     public static final int CLEARLIST_FIELD_NUMBER = 1;
-    private java.util.List<com.opera.core.systems.scope.protos.CoreUtilsProtos.ClearFlags> clearList_ =
-      java.util.Collections.emptyList();
+    private
+    java.util.List<com.opera.core.systems.scope.protos.CoreUtilsProtos.ClearFlags>
+        clearList_ =
+        java.util.Collections.emptyList();
+
     public java.util.List<com.opera.core.systems.scope.protos.CoreUtilsProtos.ClearFlags> getClearListList() {
       return clearList_;
     }
-    public int getClearListCount() { return clearList_.size(); }
+
+    public int getClearListCount() {
+      return clearList_.size();
+    }
+
     public com.opera.core.systems.scope.protos.CoreUtilsProtos.ClearFlags getClearList(int index) {
       return clearList_.get(index);
     }
-    
+
     private void initFields() {
     }
+
     public final boolean isInitialized() {
       return true;
     }
-    
+
     public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
+        throws java.io.IOException {
       getSerializedSize();
       for (com.opera.core.systems.scope.protos.CoreUtilsProtos.ClearFlags element : getClearListList()) {
         output.writeEnum(1, element.getNumber());
       }
       getUnknownFields().writeTo(output);
     }
-    
+
     private int memoizedSerializedSize = -1;
+
     public int getSerializedSize() {
       int size = memoizedSerializedSize;
-      if (size != -1) return size;
-    
+      if (size != -1) {
+        return size;
+      }
+
       size = 0;
       {
         int dataSize = 0;
         for (com.opera.core.systems.scope.protos.CoreUtilsProtos.ClearFlags element : getClearListList()) {
           dataSize += com.google.protobuf.CodedOutputStream
-            .computeEnumSizeNoTag(element.getNumber());
+              .computeEnumSizeNoTag(element.getNumber());
         }
         size += dataSize;
         size += 1 * getClearListList().size();
@@ -176,42 +224,51 @@ public final class CoreUtilsProtos {
       memoizedSerializedSize = size;
       return size;
     }
-    
+
     public static com.opera.core.systems.scope.protos.CoreUtilsProtos.ClearPrivateDataArg parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.CoreUtilsProtos.ClearPrivateDataArg parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+          .buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.CoreUtilsProtos.ClearPrivateDataArg parseFrom(byte[] data)
+
+    public static com.opera.core.systems.scope.protos.CoreUtilsProtos.ClearPrivateDataArg parseFrom(
+        byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.CoreUtilsProtos.ClearPrivateDataArg parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+          .buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.CoreUtilsProtos.ClearPrivateDataArg parseFrom(java.io.InputStream input)
+
+    public static com.opera.core.systems.scope.protos.CoreUtilsProtos.ClearPrivateDataArg parseFrom(
+        java.io.InputStream input)
         throws java.io.IOException {
       return newBuilder().mergeFrom(input).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.CoreUtilsProtos.ClearPrivateDataArg parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+          .buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.CoreUtilsProtos.ClearPrivateDataArg parseDelimitedFrom(java.io.InputStream input)
+
+    public static com.opera.core.systems.scope.protos.CoreUtilsProtos.ClearPrivateDataArg parseDelimitedFrom(
+        java.io.InputStream input)
         throws java.io.IOException {
       Builder builder = newBuilder();
       if (builder.mergeDelimitedFrom(input)) {
@@ -220,6 +277,7 @@ public final class CoreUtilsProtos {
         return null;
       }
     }
+
     public static com.opera.core.systems.scope.protos.CoreUtilsProtos.ClearPrivateDataArg parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -231,126 +289,150 @@ public final class CoreUtilsProtos {
         return null;
       }
     }
+
     public static com.opera.core.systems.scope.protos.CoreUtilsProtos.ClearPrivateDataArg parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return newBuilder().mergeFrom(input).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.CoreUtilsProtos.ClearPrivateDataArg parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+          .buildParsed();
     }
-    
-    public static Builder newBuilder() { return Builder.create(); }
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(com.opera.core.systems.scope.protos.CoreUtilsProtos.ClearPrivateDataArg prototype) {
+
+    public static Builder newBuilder() {
+      return Builder.create();
+    }
+
+    public Builder newBuilderForType() {
+      return newBuilder();
+    }
+
+    public static Builder newBuilder(
+        com.opera.core.systems.scope.protos.CoreUtilsProtos.ClearPrivateDataArg prototype) {
       return newBuilder().mergeFrom(prototype);
     }
-    public Builder toBuilder() { return newBuilder(this); }
-    
+
+    public Builder toBuilder() {
+      return newBuilder(this);
+    }
+
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> {
+                                      com.google.protobuf.GeneratedMessage.Builder<Builder> {
+
       private com.opera.core.systems.scope.protos.CoreUtilsProtos.ClearPrivateDataArg result;
-      
+
       // Construct using com.opera.core.systems.scope.protos.CoreUtilsProtos.ClearPrivateDataArg.newBuilder()
-      private Builder() {}
-      
+      private Builder() {
+      }
+
       private static Builder create() {
         Builder builder = new Builder();
-        builder.result = new com.opera.core.systems.scope.protos.CoreUtilsProtos.ClearPrivateDataArg();
+        builder.result =
+            new com.opera.core.systems.scope.protos.CoreUtilsProtos.ClearPrivateDataArg();
         return builder;
       }
-      
+
       protected com.opera.core.systems.scope.protos.CoreUtilsProtos.ClearPrivateDataArg internalGetResult() {
         return result;
       }
-      
+
       public Builder clear() {
         if (result == null) {
           throw new IllegalStateException(
-            "Cannot call clear() after build().");
+              "Cannot call clear() after build().");
         }
         result = new com.opera.core.systems.scope.protos.CoreUtilsProtos.ClearPrivateDataArg();
         return this;
       }
-      
+
       public Builder clone() {
         return create().mergeFrom(result);
       }
-      
+
       public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
-        return com.opera.core.systems.scope.protos.CoreUtilsProtos.ClearPrivateDataArg.getDescriptor();
+      getDescriptorForType() {
+        return com.opera.core.systems.scope.protos.CoreUtilsProtos.ClearPrivateDataArg
+            .getDescriptor();
       }
-      
+
       public com.opera.core.systems.scope.protos.CoreUtilsProtos.ClearPrivateDataArg getDefaultInstanceForType() {
-        return com.opera.core.systems.scope.protos.CoreUtilsProtos.ClearPrivateDataArg.getDefaultInstance();
+        return com.opera.core.systems.scope.protos.CoreUtilsProtos.ClearPrivateDataArg
+            .getDefaultInstance();
       }
-      
+
       public boolean isInitialized() {
         return result.isInitialized();
       }
+
       public com.opera.core.systems.scope.protos.CoreUtilsProtos.ClearPrivateDataArg build() {
         if (result != null && !isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return buildPartial();
       }
-      
+
       private com.opera.core.systems.scope.protos.CoreUtilsProtos.ClearPrivateDataArg buildParsed()
           throws com.google.protobuf.InvalidProtocolBufferException {
         if (!isInitialized()) {
           throw newUninitializedMessageException(
-            result).asInvalidProtocolBufferException();
+              result).asInvalidProtocolBufferException();
         }
         return buildPartial();
       }
-      
+
       public com.opera.core.systems.scope.protos.CoreUtilsProtos.ClearPrivateDataArg buildPartial() {
         if (result == null) {
           throw new IllegalStateException(
-            "build() has already been called on this Builder.");
+              "build() has already been called on this Builder.");
         }
         if (result.clearList_ != java.util.Collections.EMPTY_LIST) {
           result.clearList_ =
-            java.util.Collections.unmodifiableList(result.clearList_);
+              java.util.Collections.unmodifiableList(result.clearList_);
         }
         com.opera.core.systems.scope.protos.CoreUtilsProtos.ClearPrivateDataArg returnMe = result;
         result = null;
         return returnMe;
       }
-      
+
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.opera.core.systems.scope.protos.CoreUtilsProtos.ClearPrivateDataArg) {
-          return mergeFrom((com.opera.core.systems.scope.protos.CoreUtilsProtos.ClearPrivateDataArg)other);
+          return mergeFrom(
+              (com.opera.core.systems.scope.protos.CoreUtilsProtos.ClearPrivateDataArg) other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
-      
-      public Builder mergeFrom(com.opera.core.systems.scope.protos.CoreUtilsProtos.ClearPrivateDataArg other) {
-        if (other == com.opera.core.systems.scope.protos.CoreUtilsProtos.ClearPrivateDataArg.getDefaultInstance()) return this;
+
+      public Builder mergeFrom(
+          com.opera.core.systems.scope.protos.CoreUtilsProtos.ClearPrivateDataArg other) {
+        if (other == com.opera.core.systems.scope.protos.CoreUtilsProtos.ClearPrivateDataArg
+            .getDefaultInstance()) {
+          return this;
+        }
         if (!other.clearList_.isEmpty()) {
           if (result.clearList_.isEmpty()) {
-            result.clearList_ = new java.util.ArrayList<com.opera.core.systems.scope.protos.CoreUtilsProtos.ClearFlags>();
+            result.clearList_ =
+                new java.util.ArrayList<com.opera.core.systems.scope.protos.CoreUtilsProtos.ClearFlags>();
           }
           result.clearList_.addAll(other.clearList_);
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
-      
+
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
         com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder(
-            this.getUnknownFields());
+            com.google.protobuf.UnknownFieldSet.newBuilder(
+                this.getUnknownFields());
         while (true) {
           int tag = input.readTag();
           switch (tag) {
@@ -367,7 +449,9 @@ public final class CoreUtilsProtos {
             }
             case 8: {
               int rawValue = input.readEnum();
-              com.opera.core.systems.scope.protos.CoreUtilsProtos.ClearFlags value = com.opera.core.systems.scope.protos.CoreUtilsProtos.ClearFlags.valueOf(rawValue);
+              com.opera.core.systems.scope.protos.CoreUtilsProtos.ClearFlags
+                  value =
+                  com.opera.core.systems.scope.protos.CoreUtilsProtos.ClearFlags.valueOf(rawValue);
               if (value == null) {
                 unknownFields.mergeVarintField(1, rawValue);
               } else {
@@ -378,9 +462,12 @@ public final class CoreUtilsProtos {
             case 10: {
               int length = input.readRawVarint32();
               int oldLimit = input.pushLimit(length);
-              while(input.getBytesUntilLimit() > 0) {
+              while (input.getBytesUntilLimit() > 0) {
                 int rawValue = input.readEnum();
-                com.opera.core.systems.scope.protos.CoreUtilsProtos.ClearFlags value = com.opera.core.systems.scope.protos.CoreUtilsProtos.ClearFlags.valueOf(rawValue);
+                com.opera.core.systems.scope.protos.CoreUtilsProtos.ClearFlags
+                    value =
+                    com.opera.core.systems.scope.protos.CoreUtilsProtos.ClearFlags
+                        .valueOf(rawValue);
                 if (value == null) {
                   unknownFields.mergeVarintField(1, rawValue);
                 } else {
@@ -393,142 +480,204 @@ public final class CoreUtilsProtos {
           }
         }
       }
-      
-      
+
+
       // repeated .scope.ClearFlags clearList = 1;
       public java.util.List<com.opera.core.systems.scope.protos.CoreUtilsProtos.ClearFlags> getClearListList() {
         return java.util.Collections.unmodifiableList(result.clearList_);
       }
+
       public int getClearListCount() {
         return result.getClearListCount();
       }
-      public com.opera.core.systems.scope.protos.CoreUtilsProtos.ClearFlags getClearList(int index) {
+
+      public com.opera.core.systems.scope.protos.CoreUtilsProtos.ClearFlags getClearList(
+          int index) {
         return result.getClearList(index);
       }
-      public Builder setClearList(int index, com.opera.core.systems.scope.protos.CoreUtilsProtos.ClearFlags value) {
+
+      public Builder setClearList(int index,
+                                  com.opera.core.systems.scope.protos.CoreUtilsProtos.ClearFlags value) {
         if (value == null) {
           throw new NullPointerException();
         }
         result.clearList_.set(index, value);
         return this;
       }
-      public Builder addClearList(com.opera.core.systems.scope.protos.CoreUtilsProtos.ClearFlags value) {
+
+      public Builder addClearList(
+          com.opera.core.systems.scope.protos.CoreUtilsProtos.ClearFlags value) {
         if (value == null) {
           throw new NullPointerException();
         }
         if (result.clearList_.isEmpty()) {
-          result.clearList_ = new java.util.ArrayList<com.opera.core.systems.scope.protos.CoreUtilsProtos.ClearFlags>();
+          result.clearList_ =
+              new java.util.ArrayList<com.opera.core.systems.scope.protos.CoreUtilsProtos.ClearFlags>();
         }
         result.clearList_.add(value);
         return this;
       }
+
       public Builder addAllClearList(
           java.lang.Iterable<? extends com.opera.core.systems.scope.protos.CoreUtilsProtos.ClearFlags> values) {
         if (result.clearList_.isEmpty()) {
-          result.clearList_ = new java.util.ArrayList<com.opera.core.systems.scope.protos.CoreUtilsProtos.ClearFlags>();
+          result.clearList_ =
+              new java.util.ArrayList<com.opera.core.systems.scope.protos.CoreUtilsProtos.ClearFlags>();
         }
         super.addAll(values, result.clearList_);
         return this;
       }
+
       public Builder clearClearList() {
         result.clearList_ = java.util.Collections.emptyList();
         return this;
       }
-      
+
       // @@protoc_insertion_point(builder_scope:scope.ClearPrivateDataArg)
     }
-    
+
     static {
       defaultInstance = new ClearPrivateDataArg(true);
       com.opera.core.systems.scope.protos.CoreUtilsProtos.internalForceInit();
       defaultInstance.initFields();
     }
-    
+
     // @@protoc_insertion_point(class_scope:scope.ClearPrivateDataArg)
   }
-  
+
   public static final class BrowserInformation extends
-      com.google.protobuf.GeneratedMessage {
+                                               com.google.protobuf.GeneratedMessage {
+
     // Use BrowserInformation.newBuilder() to construct.
     private BrowserInformation() {
       initFields();
     }
-    private BrowserInformation(boolean noInit) {}
-    
+
+    private BrowserInformation(boolean noInit) {
+    }
+
     private static final BrowserInformation defaultInstance;
+
     public static BrowserInformation getDefaultInstance() {
       return defaultInstance;
     }
-    
+
     public BrowserInformation getDefaultInstanceForType() {
       return defaultInstance;
     }
-    
+
     public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
+    getDescriptor() {
       return com.opera.core.systems.scope.protos.CoreUtilsProtos.internal_static_scope_BrowserInformation_descriptor;
     }
-    
+
     protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-        internalGetFieldAccessorTable() {
+    internalGetFieldAccessorTable() {
       return com.opera.core.systems.scope.protos.CoreUtilsProtos.internal_static_scope_BrowserInformation_fieldAccessorTable;
     }
-    
+
     // required string coreVersion = 1;
     public static final int COREVERSION_FIELD_NUMBER = 1;
     private boolean hasCoreVersion;
     private java.lang.String coreVersion_ = "";
-    public boolean hasCoreVersion() { return hasCoreVersion; }
-    public java.lang.String getCoreVersion() { return coreVersion_; }
-    
+
+    public boolean hasCoreVersion() {
+      return hasCoreVersion;
+    }
+
+    public java.lang.String getCoreVersion() {
+      return coreVersion_;
+    }
+
     // required string operatingSystem = 2;
     public static final int OPERATINGSYSTEM_FIELD_NUMBER = 2;
     private boolean hasOperatingSystem;
     private java.lang.String operatingSystem_ = "";
-    public boolean hasOperatingSystem() { return hasOperatingSystem; }
-    public java.lang.String getOperatingSystem() { return operatingSystem_; }
-    
+
+    public boolean hasOperatingSystem() {
+      return hasOperatingSystem;
+    }
+
+    public java.lang.String getOperatingSystem() {
+      return operatingSystem_;
+    }
+
     // required string product = 3;
     public static final int PRODUCT_FIELD_NUMBER = 3;
     private boolean hasProduct;
     private java.lang.String product_ = "";
-    public boolean hasProduct() { return hasProduct; }
-    public java.lang.String getProduct() { return product_; }
-    
+
+    public boolean hasProduct() {
+      return hasProduct;
+    }
+
+    public java.lang.String getProduct() {
+      return product_;
+    }
+
     // required string binaryPath = 4;
     public static final int BINARYPATH_FIELD_NUMBER = 4;
     private boolean hasBinaryPath;
     private java.lang.String binaryPath_ = "";
-    public boolean hasBinaryPath() { return hasBinaryPath; }
-    public java.lang.String getBinaryPath() { return binaryPath_; }
-    
+
+    public boolean hasBinaryPath() {
+      return hasBinaryPath;
+    }
+
+    public java.lang.String getBinaryPath() {
+      return binaryPath_;
+    }
+
     // required string userAgent = 5;
     public static final int USERAGENT_FIELD_NUMBER = 5;
     private boolean hasUserAgent;
     private java.lang.String userAgent_ = "";
-    public boolean hasUserAgent() { return hasUserAgent; }
-    public java.lang.String getUserAgent() { return userAgent_; }
-    
+
+    public boolean hasUserAgent() {
+      return hasUserAgent;
+    }
+
+    public java.lang.String getUserAgent() {
+      return userAgent_;
+    }
+
     // optional uint32 processID = 6;
     public static final int PROCESSID_FIELD_NUMBER = 6;
     private boolean hasProcessID;
     private int processID_ = 0;
-    public boolean hasProcessID() { return hasProcessID; }
-    public int getProcessID() { return processID_; }
-    
+
+    public boolean hasProcessID() {
+      return hasProcessID;
+    }
+
+    public int getProcessID() {
+      return processID_;
+    }
+
     private void initFields() {
     }
+
     public final boolean isInitialized() {
-      if (!hasCoreVersion) return false;
-      if (!hasOperatingSystem) return false;
-      if (!hasProduct) return false;
-      if (!hasBinaryPath) return false;
-      if (!hasUserAgent) return false;
+      if (!hasCoreVersion) {
+        return false;
+      }
+      if (!hasOperatingSystem) {
+        return false;
+      }
+      if (!hasProduct) {
+        return false;
+      }
+      if (!hasBinaryPath) {
+        return false;
+      }
+      if (!hasUserAgent) {
+        return false;
+      }
       return true;
     }
-    
+
     public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
+        throws java.io.IOException {
       getSerializedSize();
       if (hasCoreVersion()) {
         output.writeString(1, getCoreVersion());
@@ -550,77 +699,89 @@ public final class CoreUtilsProtos {
       }
       getUnknownFields().writeTo(output);
     }
-    
+
     private int memoizedSerializedSize = -1;
+
     public int getSerializedSize() {
       int size = memoizedSerializedSize;
-      if (size != -1) return size;
-    
+      if (size != -1) {
+        return size;
+      }
+
       size = 0;
       if (hasCoreVersion()) {
         size += com.google.protobuf.CodedOutputStream
-          .computeStringSize(1, getCoreVersion());
+            .computeStringSize(1, getCoreVersion());
       }
       if (hasOperatingSystem()) {
         size += com.google.protobuf.CodedOutputStream
-          .computeStringSize(2, getOperatingSystem());
+            .computeStringSize(2, getOperatingSystem());
       }
       if (hasProduct()) {
         size += com.google.protobuf.CodedOutputStream
-          .computeStringSize(3, getProduct());
+            .computeStringSize(3, getProduct());
       }
       if (hasBinaryPath()) {
         size += com.google.protobuf.CodedOutputStream
-          .computeStringSize(4, getBinaryPath());
+            .computeStringSize(4, getBinaryPath());
       }
       if (hasUserAgent()) {
         size += com.google.protobuf.CodedOutputStream
-          .computeStringSize(5, getUserAgent());
+            .computeStringSize(5, getUserAgent());
       }
       if (hasProcessID()) {
         size += com.google.protobuf.CodedOutputStream
-          .computeUInt32Size(6, getProcessID());
+            .computeUInt32Size(6, getProcessID());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
       return size;
     }
-    
+
     public static com.opera.core.systems.scope.protos.CoreUtilsProtos.BrowserInformation parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.CoreUtilsProtos.BrowserInformation parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+          .buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.CoreUtilsProtos.BrowserInformation parseFrom(byte[] data)
+
+    public static com.opera.core.systems.scope.protos.CoreUtilsProtos.BrowserInformation parseFrom(
+        byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.CoreUtilsProtos.BrowserInformation parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+          .buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.CoreUtilsProtos.BrowserInformation parseFrom(java.io.InputStream input)
+
+    public static com.opera.core.systems.scope.protos.CoreUtilsProtos.BrowserInformation parseFrom(
+        java.io.InputStream input)
         throws java.io.IOException {
       return newBuilder().mergeFrom(input).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.CoreUtilsProtos.BrowserInformation parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+          .buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.CoreUtilsProtos.BrowserInformation parseDelimitedFrom(java.io.InputStream input)
+
+    public static com.opera.core.systems.scope.protos.CoreUtilsProtos.BrowserInformation parseDelimitedFrom(
+        java.io.InputStream input)
         throws java.io.IOException {
       Builder builder = newBuilder();
       if (builder.mergeDelimitedFrom(input)) {
@@ -629,6 +790,7 @@ public final class CoreUtilsProtos {
         return null;
       }
     }
+
     public static com.opera.core.systems.scope.protos.CoreUtilsProtos.BrowserInformation parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -640,105 +802,128 @@ public final class CoreUtilsProtos {
         return null;
       }
     }
+
     public static com.opera.core.systems.scope.protos.CoreUtilsProtos.BrowserInformation parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return newBuilder().mergeFrom(input).buildParsed();
     }
+
     public static com.opera.core.systems.scope.protos.CoreUtilsProtos.BrowserInformation parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+          .buildParsed();
     }
-    
-    public static Builder newBuilder() { return Builder.create(); }
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(com.opera.core.systems.scope.protos.CoreUtilsProtos.BrowserInformation prototype) {
+
+    public static Builder newBuilder() {
+      return Builder.create();
+    }
+
+    public Builder newBuilderForType() {
+      return newBuilder();
+    }
+
+    public static Builder newBuilder(
+        com.opera.core.systems.scope.protos.CoreUtilsProtos.BrowserInformation prototype) {
       return newBuilder().mergeFrom(prototype);
     }
-    public Builder toBuilder() { return newBuilder(this); }
-    
+
+    public Builder toBuilder() {
+      return newBuilder(this);
+    }
+
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> {
+                                      com.google.protobuf.GeneratedMessage.Builder<Builder> {
+
       private com.opera.core.systems.scope.protos.CoreUtilsProtos.BrowserInformation result;
-      
+
       // Construct using com.opera.core.systems.scope.protos.CoreUtilsProtos.BrowserInformation.newBuilder()
-      private Builder() {}
-      
+      private Builder() {
+      }
+
       private static Builder create() {
         Builder builder = new Builder();
-        builder.result = new com.opera.core.systems.scope.protos.CoreUtilsProtos.BrowserInformation();
+        builder.result =
+            new com.opera.core.systems.scope.protos.CoreUtilsProtos.BrowserInformation();
         return builder;
       }
-      
+
       protected com.opera.core.systems.scope.protos.CoreUtilsProtos.BrowserInformation internalGetResult() {
         return result;
       }
-      
+
       public Builder clear() {
         if (result == null) {
           throw new IllegalStateException(
-            "Cannot call clear() after build().");
+              "Cannot call clear() after build().");
         }
         result = new com.opera.core.systems.scope.protos.CoreUtilsProtos.BrowserInformation();
         return this;
       }
-      
+
       public Builder clone() {
         return create().mergeFrom(result);
       }
-      
+
       public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
-        return com.opera.core.systems.scope.protos.CoreUtilsProtos.BrowserInformation.getDescriptor();
+      getDescriptorForType() {
+        return com.opera.core.systems.scope.protos.CoreUtilsProtos.BrowserInformation
+            .getDescriptor();
       }
-      
+
       public com.opera.core.systems.scope.protos.CoreUtilsProtos.BrowserInformation getDefaultInstanceForType() {
-        return com.opera.core.systems.scope.protos.CoreUtilsProtos.BrowserInformation.getDefaultInstance();
+        return com.opera.core.systems.scope.protos.CoreUtilsProtos.BrowserInformation
+            .getDefaultInstance();
       }
-      
+
       public boolean isInitialized() {
         return result.isInitialized();
       }
+
       public com.opera.core.systems.scope.protos.CoreUtilsProtos.BrowserInformation build() {
         if (result != null && !isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return buildPartial();
       }
-      
+
       private com.opera.core.systems.scope.protos.CoreUtilsProtos.BrowserInformation buildParsed()
           throws com.google.protobuf.InvalidProtocolBufferException {
         if (!isInitialized()) {
           throw newUninitializedMessageException(
-            result).asInvalidProtocolBufferException();
+              result).asInvalidProtocolBufferException();
         }
         return buildPartial();
       }
-      
+
       public com.opera.core.systems.scope.protos.CoreUtilsProtos.BrowserInformation buildPartial() {
         if (result == null) {
           throw new IllegalStateException(
-            "build() has already been called on this Builder.");
+              "build() has already been called on this Builder.");
         }
         com.opera.core.systems.scope.protos.CoreUtilsProtos.BrowserInformation returnMe = result;
         result = null;
         return returnMe;
       }
-      
+
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.opera.core.systems.scope.protos.CoreUtilsProtos.BrowserInformation) {
-          return mergeFrom((com.opera.core.systems.scope.protos.CoreUtilsProtos.BrowserInformation)other);
+          return mergeFrom(
+              (com.opera.core.systems.scope.protos.CoreUtilsProtos.BrowserInformation) other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
-      
-      public Builder mergeFrom(com.opera.core.systems.scope.protos.CoreUtilsProtos.BrowserInformation other) {
-        if (other == com.opera.core.systems.scope.protos.CoreUtilsProtos.BrowserInformation.getDefaultInstance()) return this;
+
+      public Builder mergeFrom(
+          com.opera.core.systems.scope.protos.CoreUtilsProtos.BrowserInformation other) {
+        if (other == com.opera.core.systems.scope.protos.CoreUtilsProtos.BrowserInformation
+            .getDefaultInstance()) {
+          return this;
+        }
         if (other.hasCoreVersion()) {
           setCoreVersion(other.getCoreVersion());
         }
@@ -760,14 +945,14 @@ public final class CoreUtilsProtos {
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
-      
+
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
         com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder(
-            this.getUnknownFields());
+            com.google.protobuf.UnknownFieldSet.newBuilder(
+                this.getUnknownFields());
         while (true) {
           int tag = input.readTag();
           switch (tag) {
@@ -809,211 +994,233 @@ public final class CoreUtilsProtos {
           }
         }
       }
-      
-      
+
+
       // required string coreVersion = 1;
       public boolean hasCoreVersion() {
         return result.hasCoreVersion();
       }
+
       public java.lang.String getCoreVersion() {
         return result.getCoreVersion();
       }
+
       public Builder setCoreVersion(java.lang.String value) {
         if (value == null) {
-    throw new NullPointerException();
-  }
-  result.hasCoreVersion = true;
+          throw new NullPointerException();
+        }
+        result.hasCoreVersion = true;
         result.coreVersion_ = value;
         return this;
       }
+
       public Builder clearCoreVersion() {
         result.hasCoreVersion = false;
         result.coreVersion_ = getDefaultInstance().getCoreVersion();
         return this;
       }
-      
+
       // required string operatingSystem = 2;
       public boolean hasOperatingSystem() {
         return result.hasOperatingSystem();
       }
+
       public java.lang.String getOperatingSystem() {
         return result.getOperatingSystem();
       }
+
       public Builder setOperatingSystem(java.lang.String value) {
         if (value == null) {
-    throw new NullPointerException();
-  }
-  result.hasOperatingSystem = true;
+          throw new NullPointerException();
+        }
+        result.hasOperatingSystem = true;
         result.operatingSystem_ = value;
         return this;
       }
+
       public Builder clearOperatingSystem() {
         result.hasOperatingSystem = false;
         result.operatingSystem_ = getDefaultInstance().getOperatingSystem();
         return this;
       }
-      
+
       // required string product = 3;
       public boolean hasProduct() {
         return result.hasProduct();
       }
+
       public java.lang.String getProduct() {
         return result.getProduct();
       }
+
       public Builder setProduct(java.lang.String value) {
         if (value == null) {
-    throw new NullPointerException();
-  }
-  result.hasProduct = true;
+          throw new NullPointerException();
+        }
+        result.hasProduct = true;
         result.product_ = value;
         return this;
       }
+
       public Builder clearProduct() {
         result.hasProduct = false;
         result.product_ = getDefaultInstance().getProduct();
         return this;
       }
-      
+
       // required string binaryPath = 4;
       public boolean hasBinaryPath() {
         return result.hasBinaryPath();
       }
+
       public java.lang.String getBinaryPath() {
         return result.getBinaryPath();
       }
+
       public Builder setBinaryPath(java.lang.String value) {
         if (value == null) {
-    throw new NullPointerException();
-  }
-  result.hasBinaryPath = true;
+          throw new NullPointerException();
+        }
+        result.hasBinaryPath = true;
         result.binaryPath_ = value;
         return this;
       }
+
       public Builder clearBinaryPath() {
         result.hasBinaryPath = false;
         result.binaryPath_ = getDefaultInstance().getBinaryPath();
         return this;
       }
-      
+
       // required string userAgent = 5;
       public boolean hasUserAgent() {
         return result.hasUserAgent();
       }
+
       public java.lang.String getUserAgent() {
         return result.getUserAgent();
       }
+
       public Builder setUserAgent(java.lang.String value) {
         if (value == null) {
-    throw new NullPointerException();
-  }
-  result.hasUserAgent = true;
+          throw new NullPointerException();
+        }
+        result.hasUserAgent = true;
         result.userAgent_ = value;
         return this;
       }
+
       public Builder clearUserAgent() {
         result.hasUserAgent = false;
         result.userAgent_ = getDefaultInstance().getUserAgent();
         return this;
       }
-      
+
       // optional uint32 processID = 6;
       public boolean hasProcessID() {
         return result.hasProcessID();
       }
+
       public int getProcessID() {
         return result.getProcessID();
       }
+
       public Builder setProcessID(int value) {
         result.hasProcessID = true;
         result.processID_ = value;
         return this;
       }
+
       public Builder clearProcessID() {
         result.hasProcessID = false;
         result.processID_ = 0;
         return this;
       }
-      
+
       // @@protoc_insertion_point(builder_scope:scope.BrowserInformation)
     }
-    
+
     static {
       defaultInstance = new BrowserInformation(true);
       com.opera.core.systems.scope.protos.CoreUtilsProtos.internalForceInit();
       defaultInstance.initFields();
     }
-    
+
     // @@protoc_insertion_point(class_scope:scope.BrowserInformation)
   }
-  
+
   private static com.google.protobuf.Descriptors.Descriptor
-    internal_static_scope_ClearPrivateDataArg_descriptor;
+      internal_static_scope_ClearPrivateDataArg_descriptor;
   private static
-    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+  com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_scope_ClearPrivateDataArg_fieldAccessorTable;
   private static com.google.protobuf.Descriptors.Descriptor
-    internal_static_scope_BrowserInformation_descriptor;
+      internal_static_scope_BrowserInformation_descriptor;
   private static
-    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+  com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_scope_BrowserInformation_fieldAccessorTable;
-  
+
   public static com.google.protobuf.Descriptors.FileDescriptor
-      getDescriptor() {
+  getDescriptor() {
     return descriptor;
   }
+
   private static com.google.protobuf.Descriptors.FileDescriptor
       descriptor;
+
   static {
     java.lang.String[] descriptorData = {
-      "\n\022core_1.3.proto.tmp\022\005scope\";\n\023ClearPriv" +
-      "ateDataArg\022$\n\tclearList\030\001 \003(\0162\021.scope.Cl" +
-      "earFlags\"\215\001\n\022BrowserInformation\022\023\n\013coreV" +
-      "ersion\030\001 \002(\t\022\027\n\017operatingSystem\030\002 \002(\t\022\017\n" +
-      "\007product\030\003 \002(\t\022\022\n\nbinaryPath\030\004 \002(\t\022\021\n\tus" +
-      "erAgent\030\005 \002(\t\022\021\n\tprocessID\030\006 \001(\r*\203\003\n\nCle" +
-      "arFlags\022\r\n\tCLEAR_ALL\020\000\022\027\n\023CLEAR_VISITED_" +
-      "LINKS\020\001\022\024\n\020CLEAR_DISK_CACHE\020\002\022\025\n\021CLEAR_I" +
-      "MAGE_CACHE\020\003\022\026\n\022CLEAR_MEMORY_CACHE\020\004\022\030\n\024" +
-      "CLEAR_SENSITIVE_DATA\020\005\022\031\n\025CLEAR_SESSION_",
-      "COOKIES\020\006\022\025\n\021CLEAR_ALL_COOKIES\020\007\022\030\n\024CLEA" +
-      "R_GLOBAL_HISTORY\020\010\022\021\n\rCLEAR_CONSOLE\020\t\022\024\n" +
-      "\020CLEAR_THUMBNAILS\020\n\022\026\n\022CLEAR_WEBDATABASE" +
-      "S\020\013\022\024\n\020CLEAR_WEBSTORAGE\020\014\022\022\n\016CLEAR_APPCA" +
-      "CHE\020\r\022!\n\035CLEAR_GEOLOCATION_PERMISSIONS\020\016" +
-      "\022\024\n\020CLEAR_SITE_PREFS\020\017B8\n#com.opera.core" +
-      ".systems.scope.protosB\017CoreUtilsProtosH\001"
+        "\n\022core_1.3.proto.tmp\022\005scope\";\n\023ClearPriv" +
+        "ateDataArg\022$\n\tclearList\030\001 \003(\0162\021.scope.Cl" +
+        "earFlags\"\215\001\n\022BrowserInformation\022\023\n\013coreV" +
+        "ersion\030\001 \002(\t\022\027\n\017operatingSystem\030\002 \002(\t\022\017\n" +
+        "\007product\030\003 \002(\t\022\022\n\nbinaryPath\030\004 \002(\t\022\021\n\tus" +
+        "erAgent\030\005 \002(\t\022\021\n\tprocessID\030\006 \001(\r*\203\003\n\nCle" +
+        "arFlags\022\r\n\tCLEAR_ALL\020\000\022\027\n\023CLEAR_VISITED_" +
+        "LINKS\020\001\022\024\n\020CLEAR_DISK_CACHE\020\002\022\025\n\021CLEAR_I" +
+        "MAGE_CACHE\020\003\022\026\n\022CLEAR_MEMORY_CACHE\020\004\022\030\n\024" +
+        "CLEAR_SENSITIVE_DATA\020\005\022\031\n\025CLEAR_SESSION_",
+        "COOKIES\020\006\022\025\n\021CLEAR_ALL_COOKIES\020\007\022\030\n\024CLEA" +
+        "R_GLOBAL_HISTORY\020\010\022\021\n\rCLEAR_CONSOLE\020\t\022\024\n" +
+        "\020CLEAR_THUMBNAILS\020\n\022\026\n\022CLEAR_WEBDATABASE" +
+        "S\020\013\022\024\n\020CLEAR_WEBSTORAGE\020\014\022\022\n\016CLEAR_APPCA" +
+        "CHE\020\r\022!\n\035CLEAR_GEOLOCATION_PERMISSIONS\020\016" +
+        "\022\024\n\020CLEAR_SITE_PREFS\020\017B8\n#com.opera.core" +
+        ".systems.scope.protosB\017CoreUtilsProtosH\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
-      new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
-        public com.google.protobuf.ExtensionRegistry assignDescriptors(
-            com.google.protobuf.Descriptors.FileDescriptor root) {
-          descriptor = root;
-          internal_static_scope_ClearPrivateDataArg_descriptor =
-            getDescriptor().getMessageTypes().get(0);
-          internal_static_scope_ClearPrivateDataArg_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_scope_ClearPrivateDataArg_descriptor,
-              new java.lang.String[] { "ClearList", },
-              com.opera.core.systems.scope.protos.CoreUtilsProtos.ClearPrivateDataArg.class,
-              com.opera.core.systems.scope.protos.CoreUtilsProtos.ClearPrivateDataArg.Builder.class);
-          internal_static_scope_BrowserInformation_descriptor =
-            getDescriptor().getMessageTypes().get(1);
-          internal_static_scope_BrowserInformation_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_scope_BrowserInformation_descriptor,
-              new java.lang.String[] { "CoreVersion", "OperatingSystem", "Product", "BinaryPath", "UserAgent", "ProcessID", },
-              com.opera.core.systems.scope.protos.CoreUtilsProtos.BrowserInformation.class,
-              com.opera.core.systems.scope.protos.CoreUtilsProtos.BrowserInformation.Builder.class);
-          return null;
-        }
-      };
+        new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
+          public com.google.protobuf.ExtensionRegistry assignDescriptors(
+              com.google.protobuf.Descriptors.FileDescriptor root) {
+            descriptor = root;
+            internal_static_scope_ClearPrivateDataArg_descriptor =
+                getDescriptor().getMessageTypes().get(0);
+            internal_static_scope_ClearPrivateDataArg_fieldAccessorTable = new
+                com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+                internal_static_scope_ClearPrivateDataArg_descriptor,
+                new java.lang.String[]{"ClearList",},
+                com.opera.core.systems.scope.protos.CoreUtilsProtos.ClearPrivateDataArg.class,
+                com.opera.core.systems.scope.protos.CoreUtilsProtos.ClearPrivateDataArg.Builder.class);
+            internal_static_scope_BrowserInformation_descriptor =
+                getDescriptor().getMessageTypes().get(1);
+            internal_static_scope_BrowserInformation_fieldAccessorTable = new
+                com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+                internal_static_scope_BrowserInformation_descriptor,
+                new java.lang.String[]{"CoreVersion", "OperatingSystem", "Product", "BinaryPath",
+                                       "UserAgent", "ProcessID",},
+                com.opera.core.systems.scope.protos.CoreUtilsProtos.BrowserInformation.class,
+                com.opera.core.systems.scope.protos.CoreUtilsProtos.BrowserInformation.Builder.class);
+            return null;
+          }
+        };
     com.google.protobuf.Descriptors.FileDescriptor
-      .internalBuildGeneratedFileFrom(descriptorData,
-        new com.google.protobuf.Descriptors.FileDescriptor[] {
-        }, assigner);
+        .internalBuildGeneratedFileFrom(descriptorData,
+                                        new com.google.protobuf.Descriptors.FileDescriptor[]{
+                                        }, assigner);
   }
-  
-  public static void internalForceInit() {}
-  
+
+  public static void internalForceInit() {
+  }
+
   // @@protoc_insertion_point(outer_class_scope)
 }

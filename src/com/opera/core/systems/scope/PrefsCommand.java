@@ -16,6 +16,7 @@ limitations under the License.
 package com.opera.core.systems.scope;
 
 import com.opera.core.systems.model.ICommand;
+
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
@@ -27,8 +28,9 @@ public enum PrefsCommand implements ICommand {
   private static final Map<Integer, PrefsCommand> lookup = new HashMap<Integer, PrefsCommand>();
 
   static {
-    for (PrefsCommand command : EnumSet.allOf(PrefsCommand.class))
+    for (PrefsCommand command : EnumSet.allOf(PrefsCommand.class)) {
       lookup.put(command.getCommandID(), command);
+    }
   }
 
   private PrefsCommand(int code) {

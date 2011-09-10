@@ -4,6 +4,7 @@
 package com.opera.core.systems.scope.protos;
 
 public final class CookieMngProtos {
+
   private CookieMngProtos() {
   }
 
@@ -12,6 +13,7 @@ public final class CookieMngProtos {
   }
 
   public static final class Cookie extends com.google.protobuf.GeneratedMessage {
+
     // Use Cookie.newBuilder() to construct.
     private Cookie() {
       initFields();
@@ -133,13 +135,27 @@ public final class CookieMngProtos {
     }
 
     public final boolean isInitialized() {
-      if (!hasDomain) return false;
-      if (!hasPath) return false;
-      if (!hasName) return false;
-      if (!hasValue) return false;
-      if (!hasExpires) return false;
-      if (!hasIsSecure) return false;
-      if (!hasIsHTTPOnly) return false;
+      if (!hasDomain) {
+        return false;
+      }
+      if (!hasPath) {
+        return false;
+      }
+      if (!hasName) {
+        return false;
+      }
+      if (!hasValue) {
+        return false;
+      }
+      if (!hasExpires) {
+        return false;
+      }
+      if (!hasIsSecure) {
+        return false;
+      }
+      if (!hasIsHTTPOnly) {
+        return false;
+      }
       return true;
     }
 
@@ -174,36 +190,38 @@ public final class CookieMngProtos {
 
     public int getSerializedSize() {
       int size = memoizedSerializedSize;
-      if (size != -1) return size;
+      if (size != -1) {
+        return size;
+      }
 
       size = 0;
       if (hasDomain()) {
         size += com.google.protobuf.CodedOutputStream.computeStringSize(1,
-            getDomain());
+                                                                        getDomain());
       }
       if (hasPath()) {
         size += com.google.protobuf.CodedOutputStream.computeStringSize(2,
-            getPath());
+                                                                        getPath());
       }
       if (hasName()) {
         size += com.google.protobuf.CodedOutputStream.computeStringSize(3,
-            getName());
+                                                                        getName());
       }
       if (hasValue()) {
         size += com.google.protobuf.CodedOutputStream.computeStringSize(4,
-            getValue());
+                                                                        getValue());
       }
       if (hasExpires()) {
         size += com.google.protobuf.CodedOutputStream.computeUInt32Size(5,
-            getExpires());
+                                                                        getExpires());
       }
       if (hasIsSecure()) {
         size += com.google.protobuf.CodedOutputStream.computeBoolSize(6,
-            getIsSecure());
+                                                                      getIsSecure());
       }
       if (hasIsHTTPOnly()) {
         size += com.google.protobuf.CodedOutputStream.computeBoolSize(7,
-            getIsHTTPOnly());
+                                                                      getIsHTTPOnly());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -298,7 +316,8 @@ public final class CookieMngProtos {
     }
 
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> {
+                                      com.google.protobuf.GeneratedMessage.Builder<Builder> {
+
       private com.opera.core.systems.scope.protos.CookieMngProtos.Cookie result;
 
       // Construct using
@@ -376,7 +395,10 @@ public final class CookieMngProtos {
 
       public Builder mergeFrom(
           com.opera.core.systems.scope.protos.CookieMngProtos.Cookie other) {
-        if (other == com.opera.core.systems.scope.protos.CookieMngProtos.Cookie.getDefaultInstance()) return this;
+        if (other == com.opera.core.systems.scope.protos.CookieMngProtos.Cookie
+            .getDefaultInstance()) {
+          return this;
+        }
         if (other.hasDomain()) {
           setDomain(other.getDomain());
         }
@@ -403,50 +425,52 @@ public final class CookieMngProtos {
       }
 
       public Builder mergeFrom(com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                               com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields = com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
+        com.google.protobuf.UnknownFieldSet.Builder
+            unknownFields =
+            com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
         while (true) {
           int tag = input.readTag();
           switch (tag) {
-          case 0:
-            this.setUnknownFields(unknownFields.build());
-            return this;
-          default: {
-            if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+            case 0:
               this.setUnknownFields(unknownFields.build());
               return this;
+            default: {
+              if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+                this.setUnknownFields(unknownFields.build());
+                return this;
+              }
+              break;
             }
-            break;
-          }
-          case 10: {
-            setDomain(input.readString());
-            break;
-          }
-          case 18: {
-            setPath(input.readString());
-            break;
-          }
-          case 26: {
-            setName(input.readString());
-            break;
-          }
-          case 34: {
-            setValue(input.readString());
-            break;
-          }
-          case 40: {
-            setExpires(input.readUInt32());
-            break;
-          }
-          case 48: {
-            setIsSecure(input.readBool());
-            break;
-          }
-          case 56: {
-            setIsHTTPOnly(input.readBool());
-            break;
-          }
+            case 10: {
+              setDomain(input.readString());
+              break;
+            }
+            case 18: {
+              setPath(input.readString());
+              break;
+            }
+            case 26: {
+              setName(input.readString());
+              break;
+            }
+            case 34: {
+              setValue(input.readString());
+              break;
+            }
+            case 40: {
+              setExpires(input.readUInt32());
+              break;
+            }
+            case 48: {
+              setIsSecure(input.readBool());
+              break;
+            }
+            case 56: {
+              setIsHTTPOnly(input.readBool());
+              break;
+            }
           }
         }
       }
@@ -623,7 +647,8 @@ public final class CookieMngProtos {
   }
 
   public static final class CookieList extends
-      com.google.protobuf.GeneratedMessage {
+                                       com.google.protobuf.GeneratedMessage {
+
     // Use CookieList.newBuilder() to construct.
     private CookieList() {
       initFields();
@@ -652,7 +677,10 @@ public final class CookieMngProtos {
 
     // repeated .scope.Cookie cookieList = 1;
     public static final int COOKIELIST_FIELD_NUMBER = 1;
-    private java.util.List<com.opera.core.systems.scope.protos.CookieMngProtos.Cookie> cookieList_ = java.util.Collections.emptyList();
+    private
+    java.util.List<com.opera.core.systems.scope.protos.CookieMngProtos.Cookie>
+        cookieList_ =
+        java.util.Collections.emptyList();
 
     public java.util.List<com.opera.core.systems.scope.protos.CookieMngProtos.Cookie> getCookieListList() {
       return cookieList_;
@@ -672,7 +700,9 @@ public final class CookieMngProtos {
 
     public final boolean isInitialized() {
       for (com.opera.core.systems.scope.protos.CookieMngProtos.Cookie element : getCookieListList()) {
-        if (!element.isInitialized()) return false;
+        if (!element.isInitialized()) {
+          return false;
+        }
       }
       return true;
     }
@@ -690,12 +720,14 @@ public final class CookieMngProtos {
 
     public int getSerializedSize() {
       int size = memoizedSerializedSize;
-      if (size != -1) return size;
+      if (size != -1) {
+        return size;
+      }
 
       size = 0;
       for (com.opera.core.systems.scope.protos.CookieMngProtos.Cookie element : getCookieListList()) {
         size += com.google.protobuf.CodedOutputStream.computeMessageSize(1,
-            element);
+                                                                         element);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -790,7 +822,8 @@ public final class CookieMngProtos {
     }
 
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> {
+                                      com.google.protobuf.GeneratedMessage.Builder<Builder> {
+
       private com.opera.core.systems.scope.protos.CookieMngProtos.CookieList result;
 
       // Construct using
@@ -871,10 +904,14 @@ public final class CookieMngProtos {
 
       public Builder mergeFrom(
           com.opera.core.systems.scope.protos.CookieMngProtos.CookieList other) {
-        if (other == com.opera.core.systems.scope.protos.CookieMngProtos.CookieList.getDefaultInstance()) return this;
+        if (other == com.opera.core.systems.scope.protos.CookieMngProtos.CookieList
+            .getDefaultInstance()) {
+          return this;
+        }
         if (!other.cookieList_.isEmpty()) {
           if (result.cookieList_.isEmpty()) {
-            result.cookieList_ = new java.util.ArrayList<com.opera.core.systems.scope.protos.CookieMngProtos.Cookie>();
+            result.cookieList_ =
+                new java.util.ArrayList<com.opera.core.systems.scope.protos.CookieMngProtos.Cookie>();
           }
           result.cookieList_.addAll(other.cookieList_);
         }
@@ -883,28 +920,32 @@ public final class CookieMngProtos {
       }
 
       public Builder mergeFrom(com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                               com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields = com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
+        com.google.protobuf.UnknownFieldSet.Builder
+            unknownFields =
+            com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
         while (true) {
           int tag = input.readTag();
           switch (tag) {
-          case 0:
-            this.setUnknownFields(unknownFields.build());
-            return this;
-          default: {
-            if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+            case 0:
               this.setUnknownFields(unknownFields.build());
               return this;
+            default: {
+              if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+                this.setUnknownFields(unknownFields.build());
+                return this;
+              }
+              break;
             }
-            break;
-          }
-          case 10: {
-            com.opera.core.systems.scope.protos.CookieMngProtos.Cookie.Builder subBuilder = com.opera.core.systems.scope.protos.CookieMngProtos.Cookie.newBuilder();
-            input.readMessage(subBuilder, extensionRegistry);
-            addCookieList(subBuilder.buildPartial());
-            break;
-          }
+            case 10: {
+              com.opera.core.systems.scope.protos.CookieMngProtos.Cookie.Builder
+                  subBuilder =
+                  com.opera.core.systems.scope.protos.CookieMngProtos.Cookie.newBuilder();
+              input.readMessage(subBuilder, extensionRegistry);
+              addCookieList(subBuilder.buildPartial());
+              break;
+            }
           }
         }
       }
@@ -924,7 +965,7 @@ public final class CookieMngProtos {
       }
 
       public Builder setCookieList(int index,
-          com.opera.core.systems.scope.protos.CookieMngProtos.Cookie value) {
+                                   com.opera.core.systems.scope.protos.CookieMngProtos.Cookie value) {
         if (value == null) {
           throw new NullPointerException();
         }
@@ -945,7 +986,8 @@ public final class CookieMngProtos {
           throw new NullPointerException();
         }
         if (result.cookieList_.isEmpty()) {
-          result.cookieList_ = new java.util.ArrayList<com.opera.core.systems.scope.protos.CookieMngProtos.Cookie>();
+          result.cookieList_ =
+              new java.util.ArrayList<com.opera.core.systems.scope.protos.CookieMngProtos.Cookie>();
         }
         result.cookieList_.add(value);
         return this;
@@ -954,7 +996,8 @@ public final class CookieMngProtos {
       public Builder addCookieList(
           com.opera.core.systems.scope.protos.CookieMngProtos.Cookie.Builder builderForValue) {
         if (result.cookieList_.isEmpty()) {
-          result.cookieList_ = new java.util.ArrayList<com.opera.core.systems.scope.protos.CookieMngProtos.Cookie>();
+          result.cookieList_ =
+              new java.util.ArrayList<com.opera.core.systems.scope.protos.CookieMngProtos.Cookie>();
         }
         result.cookieList_.add(builderForValue.build());
         return this;
@@ -963,7 +1006,8 @@ public final class CookieMngProtos {
       public Builder addAllCookieList(
           java.lang.Iterable<? extends com.opera.core.systems.scope.protos.CookieMngProtos.Cookie> values) {
         if (result.cookieList_.isEmpty()) {
-          result.cookieList_ = new java.util.ArrayList<com.opera.core.systems.scope.protos.CookieMngProtos.Cookie>();
+          result.cookieList_ =
+              new java.util.ArrayList<com.opera.core.systems.scope.protos.CookieMngProtos.Cookie>();
         }
         super.addAll(values, result.cookieList_);
         return this;
@@ -987,7 +1031,8 @@ public final class CookieMngProtos {
   }
 
   public static final class GetCookieArg extends
-      com.google.protobuf.GeneratedMessage {
+                                         com.google.protobuf.GeneratedMessage {
+
     // Use GetCookieArg.newBuilder() to construct.
     private GetCookieArg() {
       initFields();
@@ -1044,7 +1089,9 @@ public final class CookieMngProtos {
     }
 
     public final boolean isInitialized() {
-      if (!hasDomain) return false;
+      if (!hasDomain) {
+        return false;
+      }
       return true;
     }
 
@@ -1064,16 +1111,18 @@ public final class CookieMngProtos {
 
     public int getSerializedSize() {
       int size = memoizedSerializedSize;
-      if (size != -1) return size;
+      if (size != -1) {
+        return size;
+      }
 
       size = 0;
       if (hasDomain()) {
         size += com.google.protobuf.CodedOutputStream.computeStringSize(1,
-            getDomain());
+                                                                        getDomain());
       }
       if (hasPath()) {
         size += com.google.protobuf.CodedOutputStream.computeStringSize(2,
-            getPath());
+                                                                        getPath());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -1168,7 +1217,8 @@ public final class CookieMngProtos {
     }
 
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> {
+                                      com.google.protobuf.GeneratedMessage.Builder<Builder> {
+
       private com.opera.core.systems.scope.protos.CookieMngProtos.GetCookieArg result;
 
       // Construct using
@@ -1203,7 +1253,8 @@ public final class CookieMngProtos {
       }
 
       public com.opera.core.systems.scope.protos.CookieMngProtos.GetCookieArg getDefaultInstanceForType() {
-        return com.opera.core.systems.scope.protos.CookieMngProtos.GetCookieArg.getDefaultInstance();
+        return com.opera.core.systems.scope.protos.CookieMngProtos.GetCookieArg
+            .getDefaultInstance();
       }
 
       public boolean isInitialized() {
@@ -1237,7 +1288,8 @@ public final class CookieMngProtos {
 
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.opera.core.systems.scope.protos.CookieMngProtos.GetCookieArg) {
-          return mergeFrom((com.opera.core.systems.scope.protos.CookieMngProtos.GetCookieArg) other);
+          return mergeFrom(
+              (com.opera.core.systems.scope.protos.CookieMngProtos.GetCookieArg) other);
         } else {
           super.mergeFrom(other);
           return this;
@@ -1246,7 +1298,10 @@ public final class CookieMngProtos {
 
       public Builder mergeFrom(
           com.opera.core.systems.scope.protos.CookieMngProtos.GetCookieArg other) {
-        if (other == com.opera.core.systems.scope.protos.CookieMngProtos.GetCookieArg.getDefaultInstance()) return this;
+        if (other == com.opera.core.systems.scope.protos.CookieMngProtos.GetCookieArg
+            .getDefaultInstance()) {
+          return this;
+        }
         if (other.hasDomain()) {
           setDomain(other.getDomain());
         }
@@ -1258,30 +1313,32 @@ public final class CookieMngProtos {
       }
 
       public Builder mergeFrom(com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                               com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields = com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
+        com.google.protobuf.UnknownFieldSet.Builder
+            unknownFields =
+            com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
         while (true) {
           int tag = input.readTag();
           switch (tag) {
-          case 0:
-            this.setUnknownFields(unknownFields.build());
-            return this;
-          default: {
-            if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+            case 0:
               this.setUnknownFields(unknownFields.build());
               return this;
+            default: {
+              if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+                this.setUnknownFields(unknownFields.build());
+                return this;
+              }
+              break;
             }
-            break;
-          }
-          case 10: {
-            setDomain(input.readString());
-            break;
-          }
-          case 18: {
-            setPath(input.readString());
-            break;
-          }
+            case 10: {
+              setDomain(input.readString());
+              break;
+            }
+            case 18: {
+              setPath(input.readString());
+              break;
+            }
           }
         }
       }
@@ -1347,7 +1404,8 @@ public final class CookieMngProtos {
   }
 
   public static final class RemoveCookieArg extends
-      com.google.protobuf.GeneratedMessage {
+                                            com.google.protobuf.GeneratedMessage {
+
     // Use RemoveCookieArg.newBuilder() to construct.
     private RemoveCookieArg() {
       initFields();
@@ -1417,7 +1475,9 @@ public final class CookieMngProtos {
     }
 
     public final boolean isInitialized() {
-      if (!hasDomain) return false;
+      if (!hasDomain) {
+        return false;
+      }
       return true;
     }
 
@@ -1440,20 +1500,22 @@ public final class CookieMngProtos {
 
     public int getSerializedSize() {
       int size = memoizedSerializedSize;
-      if (size != -1) return size;
+      if (size != -1) {
+        return size;
+      }
 
       size = 0;
       if (hasDomain()) {
         size += com.google.protobuf.CodedOutputStream.computeStringSize(1,
-            getDomain());
+                                                                        getDomain());
       }
       if (hasPath()) {
         size += com.google.protobuf.CodedOutputStream.computeStringSize(2,
-            getPath());
+                                                                        getPath());
       }
       if (hasName()) {
         size += com.google.protobuf.CodedOutputStream.computeStringSize(3,
-            getName());
+                                                                        getName());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -1548,7 +1610,8 @@ public final class CookieMngProtos {
     }
 
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> {
+                                      com.google.protobuf.GeneratedMessage.Builder<Builder> {
+
       private com.opera.core.systems.scope.protos.CookieMngProtos.RemoveCookieArg result;
 
       // Construct using
@@ -1583,7 +1646,8 @@ public final class CookieMngProtos {
       }
 
       public com.opera.core.systems.scope.protos.CookieMngProtos.RemoveCookieArg getDefaultInstanceForType() {
-        return com.opera.core.systems.scope.protos.CookieMngProtos.RemoveCookieArg.getDefaultInstance();
+        return com.opera.core.systems.scope.protos.CookieMngProtos.RemoveCookieArg
+            .getDefaultInstance();
       }
 
       public boolean isInitialized() {
@@ -1617,7 +1681,8 @@ public final class CookieMngProtos {
 
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.opera.core.systems.scope.protos.CookieMngProtos.RemoveCookieArg) {
-          return mergeFrom((com.opera.core.systems.scope.protos.CookieMngProtos.RemoveCookieArg) other);
+          return mergeFrom(
+              (com.opera.core.systems.scope.protos.CookieMngProtos.RemoveCookieArg) other);
         } else {
           super.mergeFrom(other);
           return this;
@@ -1626,7 +1691,10 @@ public final class CookieMngProtos {
 
       public Builder mergeFrom(
           com.opera.core.systems.scope.protos.CookieMngProtos.RemoveCookieArg other) {
-        if (other == com.opera.core.systems.scope.protos.CookieMngProtos.RemoveCookieArg.getDefaultInstance()) return this;
+        if (other == com.opera.core.systems.scope.protos.CookieMngProtos.RemoveCookieArg
+            .getDefaultInstance()) {
+          return this;
+        }
         if (other.hasDomain()) {
           setDomain(other.getDomain());
         }
@@ -1641,34 +1709,36 @@ public final class CookieMngProtos {
       }
 
       public Builder mergeFrom(com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                               com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields = com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
+        com.google.protobuf.UnknownFieldSet.Builder
+            unknownFields =
+            com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
         while (true) {
           int tag = input.readTag();
           switch (tag) {
-          case 0:
-            this.setUnknownFields(unknownFields.build());
-            return this;
-          default: {
-            if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+            case 0:
               this.setUnknownFields(unknownFields.build());
               return this;
+            default: {
+              if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+                this.setUnknownFields(unknownFields.build());
+                return this;
+              }
+              break;
             }
-            break;
-          }
-          case 10: {
-            setDomain(input.readString());
-            break;
-          }
-          case 18: {
-            setPath(input.readString());
-            break;
-          }
-          case 26: {
-            setName(input.readString());
-            break;
-          }
+            case 10: {
+              setDomain(input.readString());
+              break;
+            }
+            case 18: {
+              setPath(input.readString());
+              break;
+            }
+            case 26: {
+              setName(input.readString());
+              break;
+            }
           }
         }
       }
@@ -1758,7 +1828,8 @@ public final class CookieMngProtos {
   }
 
   public static final class CookieSettings extends
-      com.google.protobuf.GeneratedMessage {
+                                           com.google.protobuf.GeneratedMessage {
+
     // Use CookieSettings.newBuilder() to construct.
     private CookieSettings() {
       initFields();
@@ -1828,9 +1899,15 @@ public final class CookieMngProtos {
     }
 
     public final boolean isInitialized() {
-      if (!hasMaxCookies) return false;
-      if (!hasMaxCookiesPerDomain) return false;
-      if (!hasMaxCookieLength) return false;
+      if (!hasMaxCookies) {
+        return false;
+      }
+      if (!hasMaxCookiesPerDomain) {
+        return false;
+      }
+      if (!hasMaxCookieLength) {
+        return false;
+      }
       return true;
     }
 
@@ -1853,20 +1930,22 @@ public final class CookieMngProtos {
 
     public int getSerializedSize() {
       int size = memoizedSerializedSize;
-      if (size != -1) return size;
+      if (size != -1) {
+        return size;
+      }
 
       size = 0;
       if (hasMaxCookies()) {
         size += com.google.protobuf.CodedOutputStream.computeUInt32Size(1,
-            getMaxCookies());
+                                                                        getMaxCookies());
       }
       if (hasMaxCookiesPerDomain()) {
         size += com.google.protobuf.CodedOutputStream.computeUInt32Size(2,
-            getMaxCookiesPerDomain());
+                                                                        getMaxCookiesPerDomain());
       }
       if (hasMaxCookieLength()) {
         size += com.google.protobuf.CodedOutputStream.computeUInt32Size(3,
-            getMaxCookieLength());
+                                                                        getMaxCookieLength());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -1961,7 +2040,8 @@ public final class CookieMngProtos {
     }
 
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> {
+                                      com.google.protobuf.GeneratedMessage.Builder<Builder> {
+
       private com.opera.core.systems.scope.protos.CookieMngProtos.CookieSettings result;
 
       // Construct using
@@ -1996,7 +2076,8 @@ public final class CookieMngProtos {
       }
 
       public com.opera.core.systems.scope.protos.CookieMngProtos.CookieSettings getDefaultInstanceForType() {
-        return com.opera.core.systems.scope.protos.CookieMngProtos.CookieSettings.getDefaultInstance();
+        return com.opera.core.systems.scope.protos.CookieMngProtos.CookieSettings
+            .getDefaultInstance();
       }
 
       public boolean isInitialized() {
@@ -2030,7 +2111,8 @@ public final class CookieMngProtos {
 
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.opera.core.systems.scope.protos.CookieMngProtos.CookieSettings) {
-          return mergeFrom((com.opera.core.systems.scope.protos.CookieMngProtos.CookieSettings) other);
+          return mergeFrom(
+              (com.opera.core.systems.scope.protos.CookieMngProtos.CookieSettings) other);
         } else {
           super.mergeFrom(other);
           return this;
@@ -2039,7 +2121,10 @@ public final class CookieMngProtos {
 
       public Builder mergeFrom(
           com.opera.core.systems.scope.protos.CookieMngProtos.CookieSettings other) {
-        if (other == com.opera.core.systems.scope.protos.CookieMngProtos.CookieSettings.getDefaultInstance()) return this;
+        if (other == com.opera.core.systems.scope.protos.CookieMngProtos.CookieSettings
+            .getDefaultInstance()) {
+          return this;
+        }
         if (other.hasMaxCookies()) {
           setMaxCookies(other.getMaxCookies());
         }
@@ -2054,34 +2139,36 @@ public final class CookieMngProtos {
       }
 
       public Builder mergeFrom(com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                               com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields = com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
+        com.google.protobuf.UnknownFieldSet.Builder
+            unknownFields =
+            com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
         while (true) {
           int tag = input.readTag();
           switch (tag) {
-          case 0:
-            this.setUnknownFields(unknownFields.build());
-            return this;
-          default: {
-            if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+            case 0:
               this.setUnknownFields(unknownFields.build());
               return this;
+            default: {
+              if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+                this.setUnknownFields(unknownFields.build());
+                return this;
+              }
+              break;
             }
-            break;
-          }
-          case 8: {
-            setMaxCookies(input.readUInt32());
-            break;
-          }
-          case 16: {
-            setMaxCookiesPerDomain(input.readUInt32());
-            break;
-          }
-          case 24: {
-            setMaxCookieLength(input.readUInt32());
-            break;
-          }
+            case 8: {
+              setMaxCookies(input.readUInt32());
+              break;
+            }
+            case 16: {
+              setMaxCookiesPerDomain(input.readUInt32());
+              break;
+            }
+            case 24: {
+              setMaxCookieLength(input.readUInt32());
+              break;
+            }
           }
         }
       }
@@ -2162,82 +2249,109 @@ public final class CookieMngProtos {
   }
 
   private static com.google.protobuf.Descriptors.Descriptor internal_static_scope_Cookie_descriptor;
-  private static com.google.protobuf.GeneratedMessage.FieldAccessorTable internal_static_scope_Cookie_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor internal_static_scope_CookieList_descriptor;
-  private static com.google.protobuf.GeneratedMessage.FieldAccessorTable internal_static_scope_CookieList_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor internal_static_scope_GetCookieArg_descriptor;
-  private static com.google.protobuf.GeneratedMessage.FieldAccessorTable internal_static_scope_GetCookieArg_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor internal_static_scope_RemoveCookieArg_descriptor;
-  private static com.google.protobuf.GeneratedMessage.FieldAccessorTable internal_static_scope_RemoveCookieArg_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor internal_static_scope_CookieSettings_descriptor;
-  private static com.google.protobuf.GeneratedMessage.FieldAccessorTable internal_static_scope_CookieSettings_fieldAccessorTable;
+  private static
+  com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_scope_Cookie_fieldAccessorTable;
+  private static
+  com.google.protobuf.Descriptors.Descriptor
+      internal_static_scope_CookieList_descriptor;
+  private static
+  com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_scope_CookieList_fieldAccessorTable;
+  private static
+  com.google.protobuf.Descriptors.Descriptor
+      internal_static_scope_GetCookieArg_descriptor;
+  private static
+  com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_scope_GetCookieArg_fieldAccessorTable;
+  private static
+  com.google.protobuf.Descriptors.Descriptor
+      internal_static_scope_RemoveCookieArg_descriptor;
+  private static
+  com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_scope_RemoveCookieArg_fieldAccessorTable;
+  private static
+  com.google.protobuf.Descriptors.Descriptor
+      internal_static_scope_CookieSettings_descriptor;
+  private static
+  com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_scope_CookieSettings_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor getDescriptor() {
     return descriptor;
   }
 
   private static com.google.protobuf.Descriptors.FileDescriptor descriptor;
+
   static {
     java.lang.String[] descriptorData = {
         "\n\024cookie_manager.proto\022\005scope\"z\n\006Cookie\022"
-            + "\016\n\006domain\030\001 \002(\t\022\014\n\004path\030\002 \002(\t\022\014\n\004name\030\003 "
-            + "\002(\t\022\r\n\005value\030\004 \002(\t\022\017\n\007expires\030\005 \002(\r\022\020\n\010i"
-            + "sSecure\030\006 \002(\010\022\022\n\nisHTTPOnly\030\007 \002(\010\"/\n\nCoo"
-            + "kieList\022!\n\ncookieList\030\001 \003(\0132\r.scope.Cook"
-            + "ie\",\n\014GetCookieArg\022\016\n\006domain\030\001 \002(\t\022\014\n\004pa"
-            + "th\030\002 \001(\t\"=\n\017RemoveCookieArg\022\016\n\006domain\030\001 "
-            + "\002(\t\022\014\n\004path\030\002 \001(\t\022\014\n\004name\030\003 \001(\t\"Z\n\016Cooki"
-            + "eSettings\022\022\n\nmaxCookies\030\001 \002(\r\022\033\n\023maxCook"
-            + "iesPerDomain\030\002 \002(\r\022\027\n\017maxCookieLength\030\003 ",
+        + "\016\n\006domain\030\001 \002(\t\022\014\n\004path\030\002 \002(\t\022\014\n\004name\030\003 "
+        + "\002(\t\022\r\n\005value\030\004 \002(\t\022\017\n\007expires\030\005 \002(\r\022\020\n\010i"
+        + "sSecure\030\006 \002(\010\022\022\n\nisHTTPOnly\030\007 \002(\010\"/\n\nCoo"
+        + "kieList\022!\n\ncookieList\030\001 \003(\0132\r.scope.Cook"
+        + "ie\",\n\014GetCookieArg\022\016\n\006domain\030\001 \002(\t\022\014\n\004pa"
+        + "th\030\002 \001(\t\"=\n\017RemoveCookieArg\022\016\n\006domain\030\001 "
+        + "\002(\t\022\014\n\004path\030\002 \001(\t\022\014\n\004name\030\003 \001(\t\"Z\n\016Cooki"
+        + "eSettings\022\022\n\nmaxCookies\030\001 \002(\r\022\033\n\023maxCook"
+        + "iesPerDomain\030\002 \002(\r\022\027\n\017maxCookieLength\030\003 ",
         "\002(\rB8\n#com.opera.core.systems.scope.prot"
-            + "osB\017CookieMngProtosH\001" };
-    com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner = new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
-      public com.google.protobuf.ExtensionRegistry assignDescriptors(
-          com.google.protobuf.Descriptors.FileDescriptor root) {
-        descriptor = root;
-        internal_static_scope_Cookie_descriptor = getDescriptor().getMessageTypes().get(
-            0);
-        internal_static_scope_Cookie_fieldAccessorTable = new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-            internal_static_scope_Cookie_descriptor,
-            new java.lang.String[] { "Domain", "Path", "Name", "Value",
-                "Expires", "IsSecure", "IsHTTPOnly", },
-            com.opera.core.systems.scope.protos.CookieMngProtos.Cookie.class,
-            com.opera.core.systems.scope.protos.CookieMngProtos.Cookie.Builder.class);
-        internal_static_scope_CookieList_descriptor = getDescriptor().getMessageTypes().get(
-            1);
-        internal_static_scope_CookieList_fieldAccessorTable = new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-            internal_static_scope_CookieList_descriptor,
-            new java.lang.String[] { "CookieList", },
-            com.opera.core.systems.scope.protos.CookieMngProtos.CookieList.class,
-            com.opera.core.systems.scope.protos.CookieMngProtos.CookieList.Builder.class);
-        internal_static_scope_GetCookieArg_descriptor = getDescriptor().getMessageTypes().get(
-            2);
-        internal_static_scope_GetCookieArg_fieldAccessorTable = new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-            internal_static_scope_GetCookieArg_descriptor,
-            new java.lang.String[] { "Domain", "Path", },
-            com.opera.core.systems.scope.protos.CookieMngProtos.GetCookieArg.class,
-            com.opera.core.systems.scope.protos.CookieMngProtos.GetCookieArg.Builder.class);
-        internal_static_scope_RemoveCookieArg_descriptor = getDescriptor().getMessageTypes().get(
-            3);
-        internal_static_scope_RemoveCookieArg_fieldAccessorTable = new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-            internal_static_scope_RemoveCookieArg_descriptor,
-            new java.lang.String[] { "Domain", "Path", "Name", },
-            com.opera.core.systems.scope.protos.CookieMngProtos.RemoveCookieArg.class,
-            com.opera.core.systems.scope.protos.CookieMngProtos.RemoveCookieArg.Builder.class);
-        internal_static_scope_CookieSettings_descriptor = getDescriptor().getMessageTypes().get(
-            4);
-        internal_static_scope_CookieSettings_fieldAccessorTable = new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-            internal_static_scope_CookieSettings_descriptor,
-            new java.lang.String[] { "MaxCookies", "MaxCookiesPerDomain",
-                "MaxCookieLength", },
-            com.opera.core.systems.scope.protos.CookieMngProtos.CookieSettings.class,
-            com.opera.core.systems.scope.protos.CookieMngProtos.CookieSettings.Builder.class);
-        return null;
-      }
-    };
+        + "osB\017CookieMngProtosH\001"};
+    com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner
+        assigner =
+        new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
+          public com.google.protobuf.ExtensionRegistry assignDescriptors(
+              com.google.protobuf.Descriptors.FileDescriptor root) {
+            descriptor = root;
+            internal_static_scope_Cookie_descriptor = getDescriptor().getMessageTypes().get(
+                0);
+            internal_static_scope_Cookie_fieldAccessorTable =
+                new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+                    internal_static_scope_Cookie_descriptor,
+                    new java.lang.String[]{"Domain", "Path", "Name", "Value",
+                                           "Expires", "IsSecure", "IsHTTPOnly",},
+                    com.opera.core.systems.scope.protos.CookieMngProtos.Cookie.class,
+                    com.opera.core.systems.scope.protos.CookieMngProtos.Cookie.Builder.class);
+            internal_static_scope_CookieList_descriptor = getDescriptor().getMessageTypes().get(
+                1);
+            internal_static_scope_CookieList_fieldAccessorTable =
+                new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+                    internal_static_scope_CookieList_descriptor,
+                    new java.lang.String[]{"CookieList",},
+                    com.opera.core.systems.scope.protos.CookieMngProtos.CookieList.class,
+                    com.opera.core.systems.scope.protos.CookieMngProtos.CookieList.Builder.class);
+            internal_static_scope_GetCookieArg_descriptor = getDescriptor().getMessageTypes().get(
+                2);
+            internal_static_scope_GetCookieArg_fieldAccessorTable =
+                new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+                    internal_static_scope_GetCookieArg_descriptor,
+                    new java.lang.String[]{"Domain", "Path",},
+                    com.opera.core.systems.scope.protos.CookieMngProtos.GetCookieArg.class,
+                    com.opera.core.systems.scope.protos.CookieMngProtos.GetCookieArg.Builder.class);
+            internal_static_scope_RemoveCookieArg_descriptor =
+                getDescriptor().getMessageTypes().get(
+                    3);
+            internal_static_scope_RemoveCookieArg_fieldAccessorTable =
+                new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+                    internal_static_scope_RemoveCookieArg_descriptor,
+                    new java.lang.String[]{"Domain", "Path", "Name",},
+                    com.opera.core.systems.scope.protos.CookieMngProtos.RemoveCookieArg.class,
+                    com.opera.core.systems.scope.protos.CookieMngProtos.RemoveCookieArg.Builder.class);
+            internal_static_scope_CookieSettings_descriptor = getDescriptor().getMessageTypes().get(
+                4);
+            internal_static_scope_CookieSettings_fieldAccessorTable =
+                new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+                    internal_static_scope_CookieSettings_descriptor,
+                    new java.lang.String[]{"MaxCookies", "MaxCookiesPerDomain",
+                                           "MaxCookieLength",},
+                    com.opera.core.systems.scope.protos.CookieMngProtos.CookieSettings.class,
+                    com.opera.core.systems.scope.protos.CookieMngProtos.CookieSettings.Builder.class);
+            return null;
+          }
+        };
     com.google.protobuf.Descriptors.FileDescriptor.internalBuildGeneratedFileFrom(
         descriptorData,
-        new com.google.protobuf.Descriptors.FileDescriptor[] {}, assigner);
+        new com.google.protobuf.Descriptors.FileDescriptor[]{}, assigner);
   }
 
   public static void internalForceInit() {

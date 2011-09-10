@@ -16,6 +16,7 @@ limitations under the License.
 package com.opera.core.systems.scope;
 
 import com.opera.core.systems.model.ICommand;
+
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
@@ -23,7 +24,6 @@ import java.util.Map;
 /**
  * This enum maps the commands for the <a href="http://dragonfly.opera.com/app/scope-interface/services/WindowManager/WindowManager_2_0.html"
  * >Window Manager 2.0</a>.
- *
  */
 public enum WindowManagerCommand implements ICommand {
   // Commands
@@ -44,11 +44,15 @@ public enum WindowManagerCommand implements ICommand {
   DEFAULT(-1);
 
   private int code;
-  private static final Map<Integer, WindowManagerCommand> lookup = new HashMap<Integer, WindowManagerCommand>();
+  private static final
+  Map<Integer, WindowManagerCommand>
+      lookup =
+      new HashMap<Integer, WindowManagerCommand>();
 
   static {
-    for (WindowManagerCommand command : EnumSet.allOf(WindowManagerCommand.class))
+    for (WindowManagerCommand command : EnumSet.allOf(WindowManagerCommand.class)) {
       lookup.put(command.getCommandID(), command);
+    }
   }
 
   private WindowManagerCommand(int code) {

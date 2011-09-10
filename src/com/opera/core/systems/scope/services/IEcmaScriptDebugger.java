@@ -25,43 +25,33 @@ import com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeInfo;
 public interface IEcmaScriptDebugger {
 
   /**
-   * Set the driver this service belongs to. Needed so that we can create
-   * OperaWebElements in this service.
-   * @param driver
+   * Set the driver this service belongs to. Needed so that we can create OperaWebElements in this
+   * service.
    */
   void setDriver(OperaDriver driver);
 
   int getRuntimeId();
 
   /**
-   * Sets the runtime to be used in injection required for event handler (STP/1
-   * only)
-   *
-   * @param runtime
+   * Sets the runtime to be used in injection required for event handler (STP/1 only)
    */
   void setRuntime(RuntimeInfo runtime);
 
   /**
-   * Removes a runtime from the list, doesnt get called often due to
-   * runtime-stopped being sent late (runtimes get suspended)
-   *
-   * @param runtimeId
+   * Removes a runtime from the list, doesnt get called often due to runtime-stopped being sent late
+   * (runtimes get suspended)
    */
   void removeRuntime(int runtimeId);
 
   /**
-   * Adds a runtime to the list of runtimes maintained in the service (STP/1
-   * only)
-   *
-   * @param info
+   * Adds a runtime to the list of runtimes maintained in the service (STP/1 only)
    */
   void addRuntime(RuntimeInfo info);
 
   /**
-   * Initialize the debugger, set the configuration to NOT stop on error,
-   * exception, script or abort Create all runtimes and find a suitable runtime
-   * for injection (Currently has a workaround or 'return 1;' for GOGI dialog at
-   * opera:debug)
+   * Initialize the debugger, set the configuration to NOT stop on error, exception, script or abort
+   * Create all runtimes and find a suitable runtime for injection (Currently has a workaround or
+   * 'return 1;' for GOGI dialog at opera:debug)
    */
   void init();
 
@@ -70,7 +60,6 @@ public interface IEcmaScriptDebugger {
    *
    * @param script The script to be executed on host
    * @param params Array of params, can be string, long or web element(s)
-   * @return
    */
   Object scriptExecutor(String script, Object... params);
 
@@ -78,15 +67,14 @@ public interface IEcmaScriptDebugger {
    * Execute a script and wait for response
    *
    * @param using script to execute
-   * @return
    */
   String executeJavascript(String using);
 
   /**
-   * Execute a script, this method allows fine tuning of responses, we are not
-   * interested in return value in some injections
+   * Execute a script, this method allows fine tuning of responses, we are not interested in return
+   * value in some injections
    *
-   * @param using script to execute
+   * @param using            script to execute
    * @param responseExpected if true parse the response
    * @return String representation of the response
    */
@@ -95,10 +83,9 @@ public interface IEcmaScriptDebugger {
   /**
    * Executes a script and returns the response (based on responseExpected)
    *
-   * @param using The script to be injected
+   * @param using            The script to be injected
    * @param responseExpected The flag to enable/disable parsing response
-   * @return The raw result object if response is expected, <code>null</code>
-   *         otherwise
+   * @return The raw result object if response is expected, <code>null</code> otherwise
    */
   Object executeScript(String using, boolean responseExpected);
 
@@ -113,36 +100,29 @@ public interface IEcmaScriptDebugger {
   /**
    * The script to be executed on/using an object
    *
-   * @param using Script with reference to the object "locator"
+   * @param using    Script with reference to the object "locator"
    * @param objectId The object to be used for injection
    * @return The string value returned by the executed Javascript
    */
   String callFunctionOnObject(String using, int objectId);
 
   Object callFunctionOnObject(String using, int objectId,
-      boolean responseExpected);
+                              boolean responseExpected);
 
   Integer executeScriptOnObject(String using, int objectId);
 
   /**
    * Changes the frame by index
-   *
-   * @param index
    */
   void changeRuntime(int index);
 
   /**
    * Changes the frame by frame name address nested frames by dot (first.second)
-   *
-   * @param frameName
    */
   void changeRuntime(String frameName);
 
   /**
-   * Cleanup possible dead/suspended runtimes on runtime-started or
-   * window-closed
-   *
-   * @param windowId
+   * Cleanup possible dead/suspended runtimes on runtime-started or window-closed
    */
   void cleanUpRuntimes(int windowId);
 
@@ -174,8 +154,8 @@ public interface IEcmaScriptDebugger {
   boolean updateRuntime();
 
   /**
-   * Resets the list of runtimes and fetches a fresh list from Opera, this can
-   * be used to recover in cases where runtimes go out of sync
+   * Resets the list of runtimes and fetches a fresh list from Opera, this can be used to recover in
+   * cases where runtimes go out of sync
    */
   void resetRuntimesList();
 

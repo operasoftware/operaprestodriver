@@ -16,6 +16,7 @@ limitations under the License.
 package com.opera.core.systems.scope;
 
 import com.opera.core.systems.model.ICommand;
+
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
@@ -23,7 +24,6 @@ import java.util.Map;
 /**
  * This enum maps the commands for the <a href="http://dragonfly.opera.com/app/scope-interface/services/EcmascriptDebugger/EcmascriptDebugger_6_0.html"
  * >EcmascriptDebugger 6.0</a>.
- *
  */
 public enum ESDebuggerCommand implements ICommand {
   LIST_RUNTIMES(1), EVAL(3), INSPECT_DOM(13), EXAMINE_OBJECTS(4), SET_CONFIGURATION(
@@ -32,11 +32,15 @@ public enum ESDebuggerCommand implements ICommand {
       20), OBJECT_SELECTED(21), PARSE_ERROR(28), DEFAULT(-1);
 
   private int code;
-  private static final Map<Integer, ESDebuggerCommand> lookup = new HashMap<Integer, ESDebuggerCommand>();
+  private static final
+  Map<Integer, ESDebuggerCommand>
+      lookup =
+      new HashMap<Integer, ESDebuggerCommand>();
 
   static {
-    for (ESDebuggerCommand command : EnumSet.allOf(ESDebuggerCommand.class))
+    for (ESDebuggerCommand command : EnumSet.allOf(ESDebuggerCommand.class)) {
       lookup.put(command.getCommandID(), command);
+    }
   }
 
   private ESDebuggerCommand(int code) {

@@ -45,18 +45,16 @@ public class OperaDriverSettings {
   }
 
   /**
-   * Set whether OperaDriver should start Opera launcher. Defaults to
-   * <code>true</code>. Set to <code>false</code> if you will start Opera
-   * launcher manually.
+   * Set whether OperaDriver should start Opera launcher. Defaults to <code>true</code>. Set to
+   * <code>false</code> if you will start Opera launcher manually.
    *
    * @param runOperaLauncherFromOperaDriver
-   *         <code>true</code> to start Opera
-   *         launcher, <code>false</code> to not.
+   *         <code>true</code> to start Opera launcher, <code>false</code> to not.
    * @deprecated
    */
   public void setRunOperaLauncherFromOperaDriver(boolean runOperaLauncherFromOperaDriver) {
     throw new UnsupportedOperationException("Due to random port probing for launcher, " +
-      "manually specifying whether to run launcher is not supported anymore.");
+                                            "manually specifying whether to run launcher is not supported anymore.");
   }
 
   /**
@@ -74,7 +72,7 @@ public class OperaDriverSettings {
    */
   public void setOperaLauncherListeningPort(int operaLauncherPort) {
     throw new UnsupportedOperationException("Due to random port probing for launcher, " +
-      "manually setting the launcher port is not supported anymore.");
+                                            "manually setting the launcher port is not supported anymore.");
   }
 
   public String getOperaLauncherBinary() {
@@ -108,10 +106,8 @@ public class OperaDriverSettings {
   }
 
   /**
-   * Set the arguments that will be passed to Opera.
-   * <p/>
-   * For example: <code>opera -nosession opera:debug</code> to start without
-   * restoring a session (on *nix systems), and load the
+   * Set the arguments that will be passed to Opera. <p/> For example: <code>opera -nosession
+   * opera:debug</code> to start without restoring a session (on *nix systems), and load the
    * <code>opera:debug</code> page in a tab.
    *
    * @param operaBinaryArguments the arguments to pass, separated by spaces.
@@ -129,9 +125,8 @@ public class OperaDriverSettings {
   }
 
   /**
-   * Set the *nix display to start Opera on. This will be concatenated with ":"
-   * e.g. passing <code>1</code> will result in the command line option
-   * <code>-display :1</code> being passed.
+   * Set the *nix display to start Opera on. This will be concatenated with ":" e.g. passing
+   * <code>1</code> will result in the command line option <code>-display :1</code> being passed.
    *
    * @param operaLauncherXvfbDisplay the X screen number to start Opera on.
    */
@@ -140,10 +135,7 @@ public class OperaDriverSettings {
   }
 
   /**
-   * If set then launcher will not close Opera when OperaDriver finishes, and it
-   * quits.
-   *
-   * @param noQuit
+   * If set then launcher will not close Opera when OperaDriver finishes, and it quits.
    */
   public void setNoQuit(boolean noQuit) {
     capabilities.setCapability(OperaDriver.NO_QUIT, noQuit);
@@ -157,7 +149,6 @@ public class OperaDriverSettings {
   }
 
   /**
-   * @param noRestart
    * @deprecated
    */
   @Deprecated
@@ -166,7 +157,6 @@ public class OperaDriverSettings {
   }
 
   /**
-   * @return
    * @deprecated
    */
   @Deprecated

@@ -41,8 +41,8 @@ public interface Utils {
   String getOS();
 
   /**
-   * A string which describes the product.  For regular desktop builds this will be "desktop".
-   * Other examples are "mobile" and "gogi".
+   * A string which describes the product.  For regular desktop builds this will be "desktop". Other
+   * examples are "mobile" and "gogi".
    *
    * @return browser's product type
    */

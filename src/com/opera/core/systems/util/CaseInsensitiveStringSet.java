@@ -7,6 +7,7 @@ import java.util.Set;
 
 /**
  * A set that stores strings and compares them case-insensitively.
+ *
  * @author stuartk
  */
 
@@ -27,8 +28,7 @@ public class CaseInsensitiveStringSet implements Set<String> {
   }
 
   /**
-   * Returns true if this set contains the specified string, compared
-   * case-insensitively.
+   * Returns true if this set contains the specified string, compared case-insensitively.
    */
   public boolean contains(Object o) {
     if (o instanceof String) {

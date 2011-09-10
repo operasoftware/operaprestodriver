@@ -4,6 +4,7 @@
 package com.opera.core.systems.scope.protos;
 
 public final class ConsoleLoggerProtos {
+
   private ConsoleLoggerProtos() {
   }
 
@@ -12,7 +13,8 @@ public final class ConsoleLoggerProtos {
   }
 
   public static final class ConsoleMessage extends
-      com.google.protobuf.GeneratedMessage {
+                                           com.google.protobuf.GeneratedMessage {
+
     // Use ConsoleMessage.newBuilder() to construct.
     private ConsoleMessage() {
       initFields();
@@ -134,9 +136,15 @@ public final class ConsoleLoggerProtos {
     }
 
     public final boolean isInitialized() {
-      if (!hasWindowID) return false;
-      if (!hasTime) return false;
-      if (!hasDescription) return false;
+      if (!hasWindowID) {
+        return false;
+      }
+      if (!hasTime) {
+        return false;
+      }
+      if (!hasDescription) {
+        return false;
+      }
       return true;
     }
 
@@ -171,36 +179,38 @@ public final class ConsoleLoggerProtos {
 
     public int getSerializedSize() {
       int size = memoizedSerializedSize;
-      if (size != -1) return size;
+      if (size != -1) {
+        return size;
+      }
 
       size = 0;
       if (hasWindowID()) {
         size += com.google.protobuf.CodedOutputStream.computeUInt32Size(1,
-            getWindowID());
+                                                                        getWindowID());
       }
       if (hasTime()) {
         size += com.google.protobuf.CodedOutputStream.computeUInt32Size(2,
-            getTime());
+                                                                        getTime());
       }
       if (hasDescription()) {
         size += com.google.protobuf.CodedOutputStream.computeStringSize(3,
-            getDescription());
+                                                                        getDescription());
       }
       if (hasUri()) {
         size += com.google.protobuf.CodedOutputStream.computeStringSize(4,
-            getUri());
+                                                                        getUri());
       }
       if (hasContext()) {
         size += com.google.protobuf.CodedOutputStream.computeStringSize(5,
-            getContext());
+                                                                        getContext());
       }
       if (hasSource()) {
         size += com.google.protobuf.CodedOutputStream.computeStringSize(6,
-            getSource());
+                                                                        getSource());
       }
       if (hasSeverity()) {
         size += com.google.protobuf.CodedOutputStream.computeStringSize(7,
-            getSeverity());
+                                                                        getSeverity());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -295,7 +305,8 @@ public final class ConsoleLoggerProtos {
     }
 
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> {
+                                      com.google.protobuf.GeneratedMessage.Builder<Builder> {
+
       private com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessage result;
 
       // Construct using
@@ -305,7 +316,8 @@ public final class ConsoleLoggerProtos {
 
       private static Builder create() {
         Builder builder = new Builder();
-        builder.result = new com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessage();
+        builder.result =
+            new com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessage();
         return builder;
       }
 
@@ -326,11 +338,13 @@ public final class ConsoleLoggerProtos {
       }
 
       public com.google.protobuf.Descriptors.Descriptor getDescriptorForType() {
-        return com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessage.getDescriptor();
+        return com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessage
+            .getDescriptor();
       }
 
       public com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessage getDefaultInstanceForType() {
-        return com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessage.getDefaultInstance();
+        return com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessage
+            .getDefaultInstance();
       }
 
       public boolean isInitialized() {
@@ -364,7 +378,8 @@ public final class ConsoleLoggerProtos {
 
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessage) {
-          return mergeFrom((com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessage) other);
+          return mergeFrom(
+              (com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessage) other);
         } else {
           super.mergeFrom(other);
           return this;
@@ -373,7 +388,10 @@ public final class ConsoleLoggerProtos {
 
       public Builder mergeFrom(
           com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessage other) {
-        if (other == com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessage.getDefaultInstance()) return this;
+        if (other == com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessage
+            .getDefaultInstance()) {
+          return this;
+        }
         if (other.hasWindowID()) {
           setWindowID(other.getWindowID());
         }
@@ -400,50 +418,52 @@ public final class ConsoleLoggerProtos {
       }
 
       public Builder mergeFrom(com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                               com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields = com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
+        com.google.protobuf.UnknownFieldSet.Builder
+            unknownFields =
+            com.google.protobuf.UnknownFieldSet.newBuilder(this.getUnknownFields());
         while (true) {
           int tag = input.readTag();
           switch (tag) {
-          case 0:
-            this.setUnknownFields(unknownFields.build());
-            return this;
-          default: {
-            if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+            case 0:
               this.setUnknownFields(unknownFields.build());
               return this;
+            default: {
+              if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
+                this.setUnknownFields(unknownFields.build());
+                return this;
+              }
+              break;
             }
-            break;
-          }
-          case 8: {
-            setWindowID(input.readUInt32());
-            break;
-          }
-          case 16: {
-            setTime(input.readUInt32());
-            break;
-          }
-          case 26: {
-            setDescription(input.readString());
-            break;
-          }
-          case 34: {
-            setUri(input.readString());
-            break;
-          }
-          case 42: {
-            setContext(input.readString());
-            break;
-          }
-          case 50: {
-            setSource(input.readString());
-            break;
-          }
-          case 58: {
-            setSeverity(input.readString());
-            break;
-          }
+            case 8: {
+              setWindowID(input.readUInt32());
+              break;
+            }
+            case 16: {
+              setTime(input.readUInt32());
+              break;
+            }
+            case 26: {
+              setDescription(input.readString());
+              break;
+            }
+            case 34: {
+              setUri(input.readString());
+              break;
+            }
+            case 42: {
+              setContext(input.readString());
+              break;
+            }
+            case 50: {
+              setSource(input.readString());
+              break;
+            }
+            case 58: {
+              setSeverity(input.readString());
+              break;
+            }
           }
         }
       }
@@ -622,39 +642,49 @@ public final class ConsoleLoggerProtos {
     // @@protoc_insertion_point(class_scope:scope.ConsoleMessage)
   }
 
-  private static com.google.protobuf.Descriptors.Descriptor internal_static_scope_ConsoleMessage_descriptor;
-  private static com.google.protobuf.GeneratedMessage.FieldAccessorTable internal_static_scope_ConsoleMessage_fieldAccessorTable;
+  private static
+  com.google.protobuf.Descriptors.Descriptor
+      internal_static_scope_ConsoleMessage_descriptor;
+  private static
+  com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_scope_ConsoleMessage_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor getDescriptor() {
     return descriptor;
   }
 
   private static com.google.protobuf.Descriptors.FileDescriptor descriptor;
+
   static {
-    java.lang.String[] descriptorData = { "\n\024console_logger.proto\022\005scope\"\205\001\n\016Consol"
-        + "eMessage\022\020\n\010windowID\030\001 \002(\r\022\014\n\004time\030\002 \002(\r"
-        + "\022\023\n\013description\030\003 \002(\t\022\013\n\003uri\030\004 \001(\t\022\017\n\007co"
-        + "ntext\030\005 \001(\t\022\016\n\006source\030\006 \001(\t\022\020\n\010severity\030"
-        + "\007 \001(\tB<\n#com.opera.core.systems.scope.pr"
-        + "otosB\023ConsoleLoggerProtosH\001" };
-    com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner = new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
-      public com.google.protobuf.ExtensionRegistry assignDescriptors(
-          com.google.protobuf.Descriptors.FileDescriptor root) {
-        descriptor = root;
-        internal_static_scope_ConsoleMessage_descriptor = getDescriptor().getMessageTypes().get(
-            0);
-        internal_static_scope_ConsoleMessage_fieldAccessorTable = new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-            internal_static_scope_ConsoleMessage_descriptor,
-            new java.lang.String[] { "WindowID", "Time", "Description", "Uri",
-                "Context", "Source", "Severity", },
-            com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessage.class,
-            com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessage.Builder.class);
-        return null;
-      }
-    };
+    java.lang.String[]
+        descriptorData =
+        {"\n\024console_logger.proto\022\005scope\"\205\001\n\016Consol"
+         + "eMessage\022\020\n\010windowID\030\001 \002(\r\022\014\n\004time\030\002 \002(\r"
+         + "\022\023\n\013description\030\003 \002(\t\022\013\n\003uri\030\004 \001(\t\022\017\n\007co"
+         + "ntext\030\005 \001(\t\022\016\n\006source\030\006 \001(\t\022\020\n\010severity\030"
+         + "\007 \001(\tB<\n#com.opera.core.systems.scope.pr"
+         + "otosB\023ConsoleLoggerProtosH\001"};
+    com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner
+        assigner =
+        new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
+          public com.google.protobuf.ExtensionRegistry assignDescriptors(
+              com.google.protobuf.Descriptors.FileDescriptor root) {
+            descriptor = root;
+            internal_static_scope_ConsoleMessage_descriptor = getDescriptor().getMessageTypes().get(
+                0);
+            internal_static_scope_ConsoleMessage_fieldAccessorTable =
+                new com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+                    internal_static_scope_ConsoleMessage_descriptor,
+                    new java.lang.String[]{"WindowID", "Time", "Description", "Uri",
+                                           "Context", "Source", "Severity",},
+                    com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessage.class,
+                    com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessage.Builder.class);
+            return null;
+          }
+        };
     com.google.protobuf.Descriptors.FileDescriptor.internalBuildGeneratedFileFrom(
         descriptorData,
-        new com.google.protobuf.Descriptors.FileDescriptor[] {}, assigner);
+        new com.google.protobuf.Descriptors.FileDescriptor[]{}, assigner);
   }
 
   public static void internalForceInit() {
