@@ -719,11 +719,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     }
 
     public WebDriver frame(int frameIndex) {
-      // make sure we execute this one on "_top"
-      debugger.resetFramePath();
-      int
-          framesLength =
-          Integer.valueOf(debugger.executeJavascript("return document.frames.length"));
+      int framesLength = Integer.valueOf(debugger.executeJavascript("return document.frames.length"));
 
       if (frameIndex < 0 || frameIndex >= framesLength) {
         throw new NoSuchFrameException("Invalid frame index: " + frameIndex);
