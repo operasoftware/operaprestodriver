@@ -54,12 +54,10 @@ public class OperaPaths {
    */
   public String operaPath() {
     String path = System.getenv("OPERA_PATH");
-    File file = new File(path);
 
-    // If path is set but it's not valid, throw exception.
-    if (file.exists()) {
+    if (isPathValid(path)) {
       return path;
-    } else if (path != null && path.length() > 0 && !file.exists()) {
+    } else if (!isPathValid(path) && (path != null && path.length() > 0)) {
       throw new WebDriverException("Path \"" + path + "\" in OPERA_PATH does not exist");
     }
 
