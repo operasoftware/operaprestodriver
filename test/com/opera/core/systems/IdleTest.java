@@ -99,6 +99,7 @@ public class IdleTest extends TestBase {
   }
 
   @Test
+  @Ignore
   public void testRefresh() throws Exception {
     getFixture("test.html");
     ((OperaWebElement) driver.findElementById("input_email")).sendKeys("before refresh");
@@ -133,6 +134,7 @@ public class IdleTest extends TestBase {
   }
 
   @Test
+  @Ignore
   public void testKeyEnter() throws Exception {
     getFixture("javascript.html");
 
