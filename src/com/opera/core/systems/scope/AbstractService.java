@@ -65,6 +65,15 @@ public abstract class AbstractService {
     }
   }
 
+  /**
+   * Returns true if the given version is less than the maximum given version
+   * and greater than the minimum version set in the ScopeServices constructor
+   * by OperaDriver.
+   * @param version Service version
+   * @param maxVersion Maximum version for the service
+   * @param serviceName Name of the service (used for the error message)
+   * @return
+   */
   public boolean isVersionInRange(String version, String maxVersion,
       String serviceName) {
     if (VersionUtil.compare(version, maxVersion) >= 0
