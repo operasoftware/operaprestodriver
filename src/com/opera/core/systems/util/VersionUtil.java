@@ -36,6 +36,14 @@ public class VersionUtil {
   private VersionUtil() {
   }
 
+  /**
+   * Returns a negative number if the first version is lower than the second,
+   * zero if they are equal, and a positive number if the first version is
+   * higher than the second.
+   * @param a
+   * @param b
+   * @return
+   */
   public static int compare(String a, String b) {
     int minlen = (a.length() < b.length()) ? a.length() : b.length();
 

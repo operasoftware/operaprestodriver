@@ -15,30 +15,30 @@ limitations under the License.
 */
 package com.opera.core.systems.scope;
 
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import com.google.protobuf.AbstractMessage.Builder;
+import com.google.protobuf.GeneratedMessage;
+import com.google.protobuf.InvalidProtocolBufferException;
+
+import com.opera.core.systems.ScopeServices;
+import com.opera.core.systems.model.ICommand;
+import com.opera.core.systems.scope.internal.OperaIntervals;
+import com.opera.core.systems.scope.protos.UmsProtos.Response;
+import com.opera.core.systems.util.VersionUtil;
 
 import org.apache.commons.jxpath.JXPathContext;
 import org.apache.commons.jxpath.JXPathNotFoundException;
 import org.apache.commons.jxpath.Pointer;
 import org.openqa.selenium.WebDriverException;
 
-import com.google.protobuf.GeneratedMessage;
-import com.google.protobuf.InvalidProtocolBufferException;
-import com.google.protobuf.AbstractMessage.Builder;
-import com.opera.core.systems.ScopeServices;
-import com.opera.core.systems.model.ICommand;
-import com.opera.core.systems.scope.protos.UmsProtos.Response;
-import com.opera.core.systems.scope.internal.OperaIntervals;
-import com.opera.core.systems.util.VersionUtil;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * All scope services derive from this base class for generic operations
  *
  * @author Deniz Turkoglu
- *
  */
 public abstract class AbstractService {
 
@@ -65,31 +65,46 @@ public abstract class AbstractService {
     }
   }
 
+  /**
+   * Returns true if the given version is less than the maximum given version and greater than the
+   * minimum version set in the ScopeServices constructor by OperaDriver.
+   *
+   * @param version     Service version
+   * @param maxVersion  Maximum version for the service
+   * @param serviceName Name of the service (used for the error message)
+   */
   public boolean isVersionInRange(String version, String maxVersion,
-      String serviceName) {
-    if (VersionUtil.compare(version, maxVersion) >= 0
-        || VersionUtil.compare(version, services.getMinVersionFor(serviceName)) < 0) return false;
+                                  String serviceName) {
+
+    logger.warning(String.valueOf(VersionUtil.compare(version, maxVersion)));
+    logger.warning(String.valueOf(VersionUtil.compare(version, services.getMinVersionFor(serviceName))));
+
+    if (VersionUtil.compare(version, maxVersion) > 0
+        || VersionUtil.compare(version, services.getMinVersionFor(serviceName)) < 0) {
+      return false;
+    }
     return true;
   }
 
   public Response executeCommand(ICommand command, Builder<?> builder) {
-	if (services.getConnection() == null)
-		return Response.getDefaultInstance();
+    if (services.getConnection() == null) {
+      return Response.getDefaultInstance();
+    }
     return executeCommand(command, builder,
-        OperaIntervals.DEFAULT_RESPONSE_TIMEOUT.getValue());
+                          OperaIntervals.DEFAULT_RESPONSE_TIMEOUT.getValue());
   }
 
   public Response executeCommand(ICommand command, Builder<?> builder,
-      long timeout) {
-	  if (services.getConnection() == null)
-			return Response.getDefaultInstance();
-	  return services.executeCommand(command, builder, timeout);
+                                 long timeout) {
+    if (services.getConnection() == null) {
+      return Response.getDefaultInstance();
+    }
+    return services.executeCommand(command, builder, timeout);
   }
 
   /**
    * Query a collection with JXPath and return value of node
    *
-   * @param collection
    * @param query a valid XPath query
    * @return result
    */
@@ -105,11 +120,8 @@ public abstract class AbstractService {
   }
 
   /**
-   * Query a collection JXPath and return a pointer FIXME: This does not belong
-   * here!
+   * Query a collection JXPath and return a pointer FIXME: This does not belong here!
    *
-   * @param collection
-   * @param query
    * @return Pointer to node
    */
   public Pointer xpathPointer(Collection<?> collection, String query) {
@@ -124,11 +136,8 @@ public abstract class AbstractService {
   }
 
   /**
-   * Query a collection JXPath and return a pointer FIXME: This does not belong
-   * here!
+   * Query a collection JXPath and return a pointer FIXME: This does not belong here!
    *
-   * @param collection
-   * @param query
    * @return Pointer to node
    */
   public Iterator<?> xpathIterator(Collection<?> collection, String query) {
@@ -153,8 +162,8 @@ public abstract class AbstractService {
       return builder.mergeFrom(message);
     } catch (InvalidProtocolBufferException ex) {
       throw new WebDriverException("Could not build "
-          + builder.getDescriptorForType().getFullName() + " : "
-          + ex.getMessage());
+                                   + builder.getDescriptorForType().getFullName() + " : "
+                                   + ex.getMessage());
     }
   }
 
