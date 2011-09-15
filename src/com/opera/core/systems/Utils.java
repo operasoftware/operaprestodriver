@@ -16,8 +16,6 @@ limitations under the License.
 
 package com.opera.core.systems;
 
-import com.opera.core.systems.runner.OperaRunner;
-
 /**
  * Interface for accessing the browser's meta- and utility information, such as the operating system
  * it's running on, its user agent string, &c.

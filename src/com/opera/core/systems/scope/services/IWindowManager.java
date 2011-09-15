@@ -18,8 +18,6 @@ package com.opera.core.systems.scope.services;
 
 import com.opera.core.systems.scope.protos.WmProtos.WindowInfo;
 
-import org.openqa.selenium.WebDriverException;
-
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
