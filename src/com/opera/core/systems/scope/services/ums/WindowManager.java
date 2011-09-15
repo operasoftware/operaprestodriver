@@ -13,17 +13,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+
 package com.opera.core.systems.scope.services.ums;
-
-import java.util.LinkedList;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.logging.Logger;
-
-import org.apache.commons.jxpath.CompiledExpression;
-import org.apache.commons.jxpath.JXPathContext;
-import org.openqa.selenium.NoSuchWindowException;
-import org.openqa.selenium.WebDriverException;
 
 import com.opera.core.systems.ScopeServices;
 import com.opera.core.systems.scope.AbstractService;
@@ -40,12 +31,21 @@ import com.opera.core.systems.scope.services.IWindowManager;
 import com.opera.core.systems.util.StackHashMap;
 import com.opera.core.systems.util.VersionUtil;
 
+import org.apache.commons.jxpath.CompiledExpression;
+import org.apache.commons.jxpath.JXPathContext;
+import org.openqa.selenium.NoSuchWindowException;
+import org.openqa.selenium.WebDriverException;
+
+import java.util.LinkedList;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.logging.Logger;
+
 /**
- * window-manager service implementation, handles events such as window-closed
- * and updated and tracks window being loaded
+ * window-manager service implementation, handles events such as window-closed and updated and
+ * tracks window being loaded
  *
  * @author Deniz Turkoglu <denizt@opera.com>
- *
  */
 public class WindowManager extends AbstractService implements IWindowManager {
 
@@ -64,8 +64,10 @@ public class WindowManager extends AbstractService implements IWindowManager {
 
     String serviceName = "window-manager";
 
-    if (!isVersionInRange(version, "3.0", serviceName)) throw new UnsupportedOperationException(
-        serviceName + " version " + version + " is not supported");
+    if (!isVersionInRange(version, "3.0", serviceName)) {
+      throw new UnsupportedOperationException(
+          serviceName + " version " + version + " is not supported");
+    }
 
     services.setWindowManager(this);
     windowFinder = JXPathContext.compile("/.[windowType='normal']/windowID");
@@ -132,15 +134,15 @@ public class WindowManager extends AbstractService implements IWindowManager {
   // NOTE: This is proven to be not working on Opera side...
   private WindowID findActiveWindow() {
     Response response = executeCommand(WindowManagerCommand.GET_ACTIVE_WINDOW,
-        null);
+                                       null);
     WindowID.Builder builder = WindowID.newBuilder();
     buildPayload(response, builder);
     return builder.build();
   }
 
   /**
-   * Filter only the active window so we don't get messages from other windows
-   * (like thread messages)
+   * Filter only the active window so we don't get messages from other windows (like thread
+   * messages)
    */
   public void filterActiveWindow() {
     WindowFilter.Builder filterBuilder = WindowFilter.newBuilder();
@@ -151,8 +153,7 @@ public class WindowManager extends AbstractService implements IWindowManager {
   }
 
   /**
-   * Set the filter to include all windows so we can get a list and maintain a
-   * list of windows
+   * Set the filter to include all windows so we can get a list and maintain a list of windows
    */
   private void initializeWindows() {
     clearFilter();
@@ -179,9 +180,11 @@ public class WindowManager extends AbstractService implements IWindowManager {
    */
   public void setActiveWindow(String title) {
     Integer windowId = (Integer) xpathPointer(windows.values(),
-        "/.[title='" + title + "']/windowID").getValue();
-    if (windowId == null) throw new NoSuchWindowException("No such window : "
-        + title);
+                                              "/.[title='" + title + "']/windowID").getValue();
+    if (windowId == null) {
+      throw new NoSuchWindowException("No such window : "
+                                      + title);
+    }
     setActiveWindowId(windowId);
   }
 
@@ -202,7 +205,8 @@ public class WindowManager extends AbstractService implements IWindowManager {
         } catch (InterruptedException e) {
           e.printStackTrace();
         }
-        logger.warning("Bad hack: sleeping 10ms between closing of windows, to prevent opera from crashing!");
+        logger.warning(
+            "Bad hack: sleeping 10ms between closing of windows, to prevent opera from crashing!");
         // BAD HACK DONE!
       }
     }
@@ -257,7 +261,6 @@ public class WindowManager extends AbstractService implements IWindowManager {
       return;
     }
 
-
     OpenURLArg.Builder openUrlBuilder = OpenURLArg.newBuilder();
     openUrlBuilder.setWindowID(windowId);
     openUrlBuilder.setUrl(url);
@@ -286,4 +289,5 @@ public class WindowManager extends AbstractService implements IWindowManager {
       throw new WebDriverException("Internal error while closing window");
     }
   }
+
 }

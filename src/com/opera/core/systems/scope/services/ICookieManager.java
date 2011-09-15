@@ -16,15 +16,14 @@ limitations under the License.
 
 package com.opera.core.systems.scope.services;
 
-import java.util.Set;
-
 import org.openqa.selenium.Cookie;
+
+import java.util.Set;
 
 /**
  * New cookie manager service (work in progress)
  *
- * @author Deniz Turkoglu <denizt@opera.com>
- *
+ * @author Deniz Turkoglu <dturkoglu@opera.com>
  */
 public interface ICookieManager {
 
