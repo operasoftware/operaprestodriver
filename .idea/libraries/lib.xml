@@ -4,7 +4,14 @@
       <root url="file://$PROJECT_DIR$/lib" />
     </CLASSES>
     <JAVADOC />
-    <SOURCES />
+    <SOURCES>
+      <root url="file://$PROJECT_DIR$/../selenium/android/app/src/java" />
+      <root url="file://$PROJECT_DIR$/../selenium/java/client/src" />
+      <root url="file://$PROJECT_DIR$/../selenium/java/server/test" />
+      <root url="file://$PROJECT_DIR$/../selenium/java/client/test" />
+      <root url="file://$PROJECT_DIR$/../selenium/android/app/gen" />
+      <root url="file://$PROJECT_DIR$/../selenium/java/server/src" />
+    </SOURCES>
     <jarDirectory url="file://$PROJECT_DIR$/lib" recursive="false" />
   </library>
 </component>
