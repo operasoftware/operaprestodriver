@@ -16,6 +16,7 @@ limitations under the License.
 
 package com.opera.core.systems.runner.launcher;
 
+import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.os.ProcessUtils;
 
@@ -71,7 +72,13 @@ public class OperaLauncherBinary extends Thread {
       running.set(true);
       outputWatcherThread.start();
     } catch (IOException e) {
-      throw new WebDriverException("Could not start the launcher process: " + e.getMessage());
+      if (Platform.getCurrent() == Platform.WINDOWS) {
+        throw new WebDriverException(
+            "Could not start the launcher process, make sure you have the Microsoft Visual C++ 2008 Redistributable Package installed on your system: "
+            + e.getMessage());
+      } else {
+        throw new WebDriverException("Could not start the launcher process: " + e.getMessage());
+      }
     }
   }
 
