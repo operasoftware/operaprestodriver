@@ -24,7 +24,6 @@ import com.opera.core.systems.model.ICommand;
 import com.opera.core.systems.scope.internal.OperaIntervals;
 import com.opera.core.systems.scope.protos.UmsProtos.Response;
 import com.opera.core.systems.util.VersionUtil;
-import com.sun.org.apache.xerces.internal.impl.Version;
 
 import org.apache.commons.jxpath.JXPathContext;
 import org.apache.commons.jxpath.JXPathNotFoundException;
