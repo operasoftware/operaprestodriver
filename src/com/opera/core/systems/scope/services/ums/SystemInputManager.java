@@ -15,23 +15,22 @@ limitations under the License.
 */
 package com.opera.core.systems.scope.services.ums;
 
-import java.awt.Point;
-import java.util.List;
-
 import com.opera.core.systems.ScopeServices;
 import com.opera.core.systems.scope.AbstractService;
 import com.opera.core.systems.scope.SystemInputCommand;
 import com.opera.core.systems.scope.protos.SystemInputProtos.KeyPressInfo;
 import com.opera.core.systems.scope.protos.SystemInputProtos.ModifierPressed;
-import com.opera.core.systems.scope.protos.SystemInputProtos.MouseInfo.MouseButton;
 import com.opera.core.systems.scope.protos.SystemInputProtos.MouseInfo;
+import com.opera.core.systems.scope.protos.SystemInputProtos.MouseInfo.MouseButton;
 import com.opera.core.systems.scope.services.ISystemInput;
+
+import java.awt.*;
+import java.util.List;
 
 /**
  * SystemInputManager handles systemInput simulating real clicks, and key presses.
  *
  * @author Adam Minchinton, Karianne Ekern
- *
  */
 public class SystemInputManager extends AbstractService implements ISystemInput {
 
@@ -42,7 +41,7 @@ public class SystemInputManager extends AbstractService implements ISystemInput 
 
     if (!isVersionInRange(version, "2.0", serviceName)) {
       throw new UnsupportedOperationException(serviceName + " version "
-          + version + " is not supported");
+                                              + version + " is not supported");
     }
 
     services.setSystemInputManager(this);
@@ -52,7 +51,7 @@ public class SystemInputManager extends AbstractService implements ISystemInput 
   }
 
   public void click(Point location, MouseButton button, int numClicks,
-      List<ModifierPressed> modifiers) {
+                    List<ModifierPressed> modifiers) {
     MouseInfo.Builder actionBuilder = MouseInfo.newBuilder();
     actionBuilder.setX(location.x);
     actionBuilder.setY(location.y);
@@ -67,7 +66,7 @@ public class SystemInputManager extends AbstractService implements ISystemInput 
   }
 
   public void mouseMove(Point location, MouseButton button,
-      List<ModifierPressed> modifiers) {
+                        List<ModifierPressed> modifiers) {
     MouseInfo.Builder actionBuilder = MouseInfo.newBuilder();
     actionBuilder.setX(location.x);
     actionBuilder.setY(location.y);
@@ -82,7 +81,7 @@ public class SystemInputManager extends AbstractService implements ISystemInput 
   }
 
   public void mouseUp(Point location, MouseButton button,
-      List<ModifierPressed> modifiers) {
+                      List<ModifierPressed> modifiers) {
     MouseInfo.Builder actionBuilder = MouseInfo.newBuilder();
     actionBuilder.setX(location.x);
     actionBuilder.setY(location.y);
@@ -97,7 +96,7 @@ public class SystemInputManager extends AbstractService implements ISystemInput 
   }
 
   public void mouseDown(Point location, MouseButton button,
-      List<ModifierPressed> modifiers) {
+                        List<ModifierPressed> modifiers) {
     MouseInfo.Builder actionBuilder = MouseInfo.newBuilder();
     actionBuilder.setX(location.x);
     actionBuilder.setY(location.y);

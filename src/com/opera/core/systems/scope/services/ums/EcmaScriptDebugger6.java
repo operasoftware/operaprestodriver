@@ -13,16 +13,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+
 package com.opera.core.systems.scope.services.ums;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.openqa.selenium.WebDriverException;
-import org.openqa.selenium.WebElement;
 
 import com.opera.core.systems.OperaWebElement;
 import com.opera.core.systems.ScopeServices;
@@ -31,26 +23,36 @@ import com.opera.core.systems.scope.ESDebuggerCommand;
 import com.opera.core.systems.scope.protos.Esdbg6Protos.EvalResult;
 import com.opera.core.systems.scope.protos.Esdbg6Protos.ExamineList;
 import com.opera.core.systems.scope.protos.Esdbg6Protos.ObjectChainList;
-import com.opera.core.systems.scope.protos.Esdbg6Protos.ObjectValue;
 import com.opera.core.systems.scope.protos.Esdbg6Protos.ObjectInfo.Property;
+import com.opera.core.systems.scope.protos.Esdbg6Protos.ObjectValue;
 import com.opera.core.systems.scope.protos.EsdbgProtos.EvalData;
 import com.opera.core.systems.scope.protos.EsdbgProtos.EvalData.Variable;
 import com.opera.core.systems.scope.protos.UmsProtos.Response;
 import com.opera.core.systems.util.VersionUtil;
 
+import org.openqa.selenium.WebDriverException;
+import org.openqa.selenium.WebElement;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 /**
- * Ecmascript debugger 6.0 implementation handles injection and runtime
- * management to the new version of debugger
+ * EcmaScript debugger 6.0 implementation handles injection and runtime management to the new
+ * version of debugger
  *
  * @author Deniz Turkoglu <denizt@opera.com>
- *
  */
 public class EcmaScriptDebugger6 extends EcmaScriptDebugger {
 
   public EcmaScriptDebugger6(ScopeServices services, String version) {
     super(services, version);
-    if (VersionUtil.compare(version, "7.0") >= 0) throw new UnsupportedOperationException(
-        "ecmascript-debugger version " + version + " is not supported");
+    if (VersionUtil.compare(version, "7.0") >= 0) {
+      throw new UnsupportedOperationException(
+          "ecmascript-debugger version " + version + " is not supported");
+    }
 
   }
 
@@ -60,7 +62,9 @@ public class EcmaScriptDebugger6 extends EcmaScriptDebugger {
 
     EvalResult reply = parseEvalData(eval(using, variable));
     Object object = parseEvalReply(reply);
-    if (object == null || !(object instanceof ObjectValue)) return null;
+    if (object == null || !(object instanceof ObjectValue)) {
+      return null;
+    }
     return ((ObjectValue) object).getObjectID();
   }
 
@@ -83,7 +87,9 @@ public class EcmaScriptDebugger6 extends EcmaScriptDebugger {
             builder.append(",");
           }
           int lastCharIndex = builder.length() - 1;
-          if (builder.charAt(lastCharIndex) != '[') builder.deleteCharAt(lastCharIndex);
+          if (builder.charAt(lastCharIndex) != '[') {
+            builder.deleteCharAt(lastCharIndex);
+          }
 
           builder.append("]");
         } else {
@@ -101,14 +107,16 @@ public class EcmaScriptDebugger6 extends EcmaScriptDebugger {
 
     for (WebElement webElement : elements) {
       Variable variable = buildVariable(webElement.toString(),
-          ((OperaWebElement) webElement).getObjectId());
+                                        ((OperaWebElement) webElement).getObjectId());
       evalBuilder.addVariableList(variable);
     }
 
     Response response = executeCommand(ESDebuggerCommand.EVAL, evalBuilder);
 
-    if (response == null) throw new WebDriverException(
-        "Internal error while executing script");
+    if (response == null) {
+      throw new WebDriverException(
+          "Internal error while executing script");
+    }
 
     EvalResult result = parseEvalData(response);
 
@@ -116,7 +124,9 @@ public class EcmaScriptDebugger6 extends EcmaScriptDebugger {
     if (parsed instanceof ObjectValue) {
       ObjectValue data = (ObjectValue) parsed;
       return new ScriptResult(data.getObjectID(), data.getClassName());
-    } else return parsed;
+    } else {
+      return parsed;
+    }
   }
 
   @Override
@@ -127,7 +137,9 @@ public class EcmaScriptDebugger6 extends EcmaScriptDebugger {
     List<Property> properties = list.getObjectChainList(0).getObjectListList().get(
         0).getPropertyListList();
     for (Property property : properties) {
-      if (property.getType().equals("object")) ids.add(property.getObjectValue().getObjectID());
+      if (property.getType().equals("object")) {
+        ids.add(property.getObjectValue().getObjectID());
+      }
     }
 
     return ids;
@@ -140,7 +152,7 @@ public class EcmaScriptDebugger6 extends EcmaScriptDebugger {
     examine.setRuntimeID(getRuntimeId());
     examine.addObjectList(id);
     Response response = executeCommand(ESDebuggerCommand.EXAMINE_OBJECTS,
-        examine);
+                                       examine);
 
     ObjectChainList.Builder builder = ObjectChainList.newBuilder();
     buildPayload(response, builder);
@@ -153,7 +165,9 @@ public class EcmaScriptDebugger6 extends EcmaScriptDebugger {
     ObjectChainList list = getChainList(id);
     List<Property> properties = list.getObjectChainList(0).getObjectListList().get(
         0).getPropertyListList();
-    String className = list.getObjectChainListList().get(0).getObjectList(0).getValue().getClassName();
+    String
+        className =
+        list.getObjectChainListList().get(0).getObjectList(0).getValue().getClassName();
     if (className.endsWith("Element")) {
       return new OperaWebElement(driver, id);
     } else if (className.equals("Array")) {
@@ -180,10 +194,10 @@ public class EcmaScriptDebugger6 extends EcmaScriptDebugger {
           // ignore ?!?
         } else if (property.getType().equals("object")) {
           result.put(property.getName(),
-              examineScriptResult(property.getObjectValue().getObjectID()));
+                     examineScriptResult(property.getObjectValue().getObjectID()));
         } else {
           result.put(property.getName(), parseValue(property.getType(),
-              property.getValue()));
+                                                    property.getValue()));
         }
       }
       return result;
@@ -204,14 +218,16 @@ public class EcmaScriptDebugger6 extends EcmaScriptDebugger {
       if (status.equals("unhandled-exception")) {
         String message;
         try {
-          message = (String) callFunctionOnObject("return locator.name+': '+locator.message;", result.getObjectValue().getObjectID(), true);
+          message =
+              (String) callFunctionOnObject("return locator.name+': '+locator.message;",
+                                            result.getObjectValue().getObjectID(), true);
         } catch (Exception e) {
           // If we get an exception while trying to get the message just throw
           // a generic Ecmascript exception.
           throw new WebDriverException("Ecmascript exception");
         }
         // Throw the ecmascript exception
-        throw new WebDriverException("Ecmascript exception:\n" +message);
+        throw new WebDriverException("Ecmascript exception:\n" + message);
       }
       // FIXME what is the best approach here?
       else if (status.equals("cancelled-by-scheduler")) {
@@ -241,7 +257,7 @@ public class EcmaScriptDebugger6 extends EcmaScriptDebugger {
 
   @Override
   public Object callFunctionOnObject(String using, int objectId,
-      boolean responseExpected) {
+                                     boolean responseExpected) {
     Variable variable = buildVariable("locator", objectId);
 
     Response response = eval(using, variable);
@@ -263,7 +279,7 @@ public class EcmaScriptDebugger6 extends EcmaScriptDebugger {
 
   @Override
   public Object executeScript(String using, boolean responseExpected,
-      int runtimeId) {
+                              int runtimeId) {
     Response reply = eval(using, runtimeId);
     return responseExpected ? parseEvalReply(parseEvalData(reply)) : null;
   }
@@ -272,14 +288,14 @@ public class EcmaScriptDebugger6 extends EcmaScriptDebugger {
   public Integer getObject(String using) {
     EvalResult reply = parseEvalData(eval(using));
     return (reply.getType().equals("object")) ? reply.getObjectValue().getObjectID()
-        : null;
+                                              : null;
   }
 
   @Override
   public Integer getObject(String using, int runtimeId) {
     EvalResult reply = parseEvalData(eval(using, runtimeId));
     return (reply.getType().equals("object")) ? reply.getObjectValue().getObjectID()
-        : null;
+                                              : null;
   }
 
 }

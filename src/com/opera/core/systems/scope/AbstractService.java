@@ -13,6 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+
 package com.opera.core.systems.scope;
 
 import com.google.protobuf.AbstractMessage.Builder;
@@ -73,11 +74,11 @@ public abstract class AbstractService {
    * @param maxVersion  Maximum version for the service
    * @param serviceName Name of the service (used for the error message)
    */
-  public boolean isVersionInRange(String version, String maxVersion,
-                                  String serviceName) {
+  public boolean isVersionInRange(String version, String maxVersion, String serviceName) {
 
     logger.warning(String.valueOf(VersionUtil.compare(version, maxVersion)));
-    logger.warning(String.valueOf(VersionUtil.compare(version, services.getMinVersionFor(serviceName))));
+    logger.warning(
+        String.valueOf(VersionUtil.compare(version, services.getMinVersionFor(serviceName))));
 
     if (VersionUtil.compare(version, maxVersion) > 0
         || VersionUtil.compare(version, services.getMinVersionFor(serviceName)) < 0) {

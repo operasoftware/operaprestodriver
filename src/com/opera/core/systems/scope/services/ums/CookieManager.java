@@ -13,14 +13,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+
 package com.opera.core.systems.scope.services.ums;
-
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import org.openqa.selenium.Cookie;
 
 import com.opera.core.systems.ScopeServices;
 import com.opera.core.systems.scope.AbstractService;
@@ -32,48 +26,19 @@ import com.opera.core.systems.scope.protos.CookieMngProtos.RemoveCookieArg;
 import com.opera.core.systems.scope.protos.UmsProtos.Response;
 import com.opera.core.systems.scope.services.ICookieManager;
 
+import org.openqa.selenium.Cookie;
+
+import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 /**
  * Cookie manager to manage cookies via scope
  *
- * @author Deniz Turkoglu
- *
+ * @author Deniz Turkoglu <dturkoglu@opera.com>
  */
 public class CookieManager extends AbstractService implements ICookieManager {
-
-  // syntax = "scope";
-  //
-  // service CookieManager
-  // {
-  // option (version) = "1.0";
-  //
-  // /**
-  // * Retrieve a list of cookies for a given domain.
-  // *
-  // * @param domain Name of domain to look for, e.g. "opera.com"
-  // * @param path Limit cookie list to specified path or subpath.
-  // */
-  // command GetCookie(GetCookieArg) returns (CookieList) = 1;
-  //
-  // /**
-  // * Removes selected cookies or all cookies in a domain.
-  // *
-  // * @param domain Name of domain to remove cookies from, e.g. "opera.com"
-  // * @param path If specified only removes cookies from specified path or
-  // subpath.
-  // * @param name Name of cookie to remove, if unspecified removes all cookies
-  // matching domain/path.
-  // */
-  // command RemoveCookie(RemoveCookieArg) returns (Default) = 2;
-  //
-  // /**
-  // * Removes all cookies.
-  // */
-  // command RemoveAllCookies(Default) returns (Default) = 3;
-  //
-  // command GetCookieSettings(Default) returns (CookieSettings) = 4;
-  // }
-  //
-  // */
 
   private int maxCookies;
   private int maxCookiesPerDomain;
@@ -104,25 +69,31 @@ public class CookieManager extends AbstractService implements ICookieManager {
   }
 
   public Set<Cookie> getCookie(String domain, String path) {
-    if (domain == null) throw new NullPointerException("Domain can not be null");
+    if (domain == null) {
+      throw new NullPointerException("Domain can not be null");
+    }
 
     GetCookieArg.Builder arg = GetCookieArg.newBuilder();
     arg.setDomain(domain);
 
-    if (path != null) arg.setPath(path);
+    if (path != null) {
+      arg.setPath(path);
+    }
 
     Response response = executeCommand(CookieManagerCommand.GET_COOKIE, arg);
     CookieList.Builder builder = CookieList.newBuilder();
     buildPayload(response, builder);
     CookieList list = builder.build();
 
-    List<com.opera.core.systems.scope.protos.CookieMngProtos.Cookie> cookies = list.getCookieListList();
+    List<com.opera.core.systems.scope.protos.CookieMngProtos.Cookie>
+        cookies =
+        list.getCookieListList();
     Set<Cookie> result = new HashSet<Cookie>(cookies.size());
 
     for (com.opera.core.systems.scope.protos.CookieMngProtos.Cookie cookie : cookies) {
       result.add(new Cookie(cookie.getName(), cookie.getValue(),
-          cookie.getDomain(), cookie.getPath(), new Date(cookie.getExpires()),
-          cookie.getIsSecure()));
+                            cookie.getDomain(), cookie.getPath(), new Date(cookie.getExpires()),
+                            cookie.getIsSecure()));
     }
 
     return result;
@@ -130,14 +101,20 @@ public class CookieManager extends AbstractService implements ICookieManager {
   }
 
   public void removeCookie(String domain, String path, String name) {
-    if (domain == null) throw new NullPointerException("Domain can not be null");
+    if (domain == null) {
+      throw new NullPointerException("Domain can not be null");
+    }
 
     RemoveCookieArg.Builder arg = RemoveCookieArg.newBuilder();
     arg.setDomain(domain);
 
-    if (path != null) arg.setPath(path);
+    if (path != null) {
+      arg.setPath(path);
+    }
 
-    if (name != null) arg.setName(name);
+    if (name != null) {
+      arg.setName(name);
+    }
 
     executeCommand(CookieManagerCommand.REMOVE_COOKIE, arg);
   }
@@ -153,4 +130,5 @@ public class CookieManager extends AbstractService implements ICookieManager {
     buildPayload(response, builder);
     return builder.build();
   }
+
 }
