@@ -108,9 +108,11 @@ public class OperaPaths {
   public String launcherPath() {
     String path = System.getenv("OPERA_LAUNCHER");
 
-    if (!isPathValid(path) && (path != null && path.length() > 0)) {
-      throw new WebDriverException("Path \"" + path + "\" in OPERA_LAUNCHER does not exist");
-    } else if (!isPathValid(path)) {
+    if (!isPathValid(path)) {
+      if (path != null && path.length() > 0) {
+        throw new WebDriverException("Path \"" + path + "\" in OPERA_LAUNCHER does not exist");
+      }
+
       path = extractLauncher(FileUtils.getUserDirectoryPath() + File.separator + ".launcher");
     }
 
