@@ -24,6 +24,7 @@ import com.opera.core.systems.model.ICommand;
 import com.opera.core.systems.scope.internal.OperaIntervals;
 import com.opera.core.systems.scope.protos.UmsProtos.Response;
 import com.opera.core.systems.util.VersionUtil;
+import com.sun.org.apache.xerces.internal.impl.Version;
 
 import org.apache.commons.jxpath.JXPathContext;
 import org.apache.commons.jxpath.JXPathNotFoundException;
@@ -75,7 +76,11 @@ public abstract class AbstractService {
    */
   public boolean isVersionInRange(String version, String maxVersion,
                                   String serviceName) {
-    if (VersionUtil.compare(version, maxVersion) >= 0
+
+    logger.warning(String.valueOf(VersionUtil.compare(version, maxVersion)));
+    logger.warning(String.valueOf(VersionUtil.compare(version, services.getMinVersionFor(serviceName))));
+
+    if (VersionUtil.compare(version, maxVersion) > 0
         || VersionUtil.compare(version, services.getMinVersionFor(serviceName)) < 0) {
       return false;
     }
