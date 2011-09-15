@@ -16,40 +16,49 @@
 
 package com.opera.core.systems.scope;
 
+import com.opera.core.systems.model.ICommand;
+
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
-
-import com.opera.core.systems.model.ICommand;
 
 /**
  * @author Andreas Tolf Tolfsen <andreastt@opera.com>
  */
 public enum CoreUtilsCommand implements ICommand {
-    ONACTIVE(1), ONIDLE(2), GET_BROWSER_INFORMATION(3), DEFAULT(-1);
 
-    private int code;
-    private static final Map<Integer, CoreUtilsCommand> lookup = new HashMap<Integer, CoreUtilsCommand>();
+  ONACTIVE                ( 1),
+  ONIDLE                  ( 2),
+  GET_BROWSER_INFORMATION ( 3),
+  DEFAULT                 (-1);
 
-    static {
-        for (CoreUtilsCommand command : EnumSet.allOf(CoreUtilsCommand.class))
-            lookup.put(command.getCommandID(), command);
+  private int code;
+  private static final
+  Map<Integer, CoreUtilsCommand>
+      lookup =
+      new HashMap<Integer, CoreUtilsCommand>();
+
+  static {
+    for (CoreUtilsCommand command : EnumSet.allOf(CoreUtilsCommand.class)) {
+      lookup.put(command.getCommandID(), command);
     }
+  }
 
-    private CoreUtilsCommand(int code) {
-        this.code = code;
-    }
+  private CoreUtilsCommand(int code) {
+    this.code = code;
+  }
 
-    public int getCommandID() {
-        return code;
-    }
+  public int getCommandID() {
+    return code;
+  }
 
-    public String getServiceName() {
-        return "core"; //"core-utils";
-    }
+  public String getServiceName() {
+    return "core"; //"core-utils";
+  }
 
-    public static CoreUtilsCommand get(int code) {
-        CoreUtilsCommand command = lookup.get(code);
-        return (command != null) ? command : DEFAULT;
-    }
+  public static CoreUtilsCommand get(int code) {
+    CoreUtilsCommand command = lookup.get(code);
+    return (command != null) ? command : DEFAULT;
+  }
+
 }
