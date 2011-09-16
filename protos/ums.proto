@@ -5,12 +5,6 @@
  * It was not used to generate the UmsProtos.java file.
  */
 
-package scope;
-
-option java_package = "com.opera.core.systems.scope.protos";
-option java_outer_classname = "UmsProtos";
-option optimize_for = SPEED;
-
 /**
  * STP1-TYPE represents which type of STP/1 message is found in the HEADERS
  * which is represented by the protocol buffer message TransportMessage. The

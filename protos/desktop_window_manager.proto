@@ -46,6 +46,8 @@ message DesktopWindowInfo
 	required DesktopWindowState state		= 6;
 
     required DesktopWindowRect rect 		= 7;
+
+    required bool active = 8;
 }
 
 message DesktopWindowRect
@@ -54,6 +56,50 @@ message DesktopWindowRect
 	required uint32 y      = 2;
 	required uint32 width  = 3;
 	required uint32 height = 4;
+}
+
+message QuickMenuID
+{
+    required string menuName = 1;
+}
+
+
+message QuickMenuList
+{
+	repeated QuickMenuInfo menuList = 1;
+}
+
+message QuickMenuInfo
+{
+	required QuickMenuID menuId = 1;
+	required DesktopWindowRect rect = 2;
+	required DesktopWindowID windowId = 3; // for menubars
+	repeated QuickMenuItemInfo menuItemList = 4; 
+}
+
+message QuickMenuItemID
+{
+    required string menuText = 1; // This is used because of MenuItemPressed. Text doesn't really  identify uniquely an item
+    optional bool popupMenu = 2; 	  // Set when this is a pop-menu used for drop downs (e.g. on Mac Drop Downs) 
+}
+
+message QuickMenuItemInfo 
+{
+	required string text = 1;
+	optional string action = 2;
+	optional string submenu = 3; /*an item will either be a submenu item or have an associated action*/
+	optional string actionParam = 4;	
+
+	required uint32 row    = 5;
+	optional string shortcutLetter = 6;
+	optional string shortcut = 7;
+
+	required DesktopWindowRect rect = 8;
+
+	required bool enabled = 9;
+	required bool checked = 10; 
+	required bool bold = 11;
+	required bool separator = 12; // Means almost everything else should be optional ??
 }
 
 message QuickWidgetInfo
@@ -73,16 +119,20 @@ message QuickWidgetInfo
 		CHECKBOX 	= 2;
 		DIALOGTAB 	= 3;
 		DROPDOWN	= 4;
-		EDITFIELD 	= 5;
-		LABEL 		= 6;
-		RADIOBUTTON     = 7;
-		ADDRESSFIELD    = 8;
-		SEARCH          = 9;
-		TOOLBAR         = 10;
-		TREEVIEW        = 11;
-		TREEITEM        = 12;
-		TABBUTTON       = 13;
-		THUMBNAIL       = 14;
+		DROPDOWNITEM    = 5;
+		EDITFIELD 	= 6;
+		LABEL 		= 7;
+		RADIOBUTTON     = 8;
+		ADDRESSFIELD    = 9;
+		SEARCH          = 10;
+		TOOLBAR         = 11;
+		TREEVIEW        = 12;
+		TREEITEM        = 13;
+		TABBUTTON       = 14;
+		THUMBNAIL       = 15;
+		GRIDLAYOUT      = 16;
+		GRIDITEM        = 17;
+		QUICKFIND       = 18;
 	}
     required QuickWidgetType type 	= 2;
     required bool visible	    	= 3;
@@ -126,7 +176,7 @@ service DesktopWindowManager
 {
     option (cpp_hfile) = "adjunct/desktop_scope/scope_desktop_window_manager.h";
     option (core_release) = "2.5";
-    option (version) = "2.1";
+    option (version) = "2.3";
     option (cpp_class) = OpScopeDesktopWindowManager;
 
     /**
@@ -169,6 +219,20 @@ service DesktopWindowManager
      * Sent whenever the webpage is finished loading in the window
      */
     event OnWindowPageLoaded returns (DesktopWindowInfo) = 9;
+
+    /* --- Menu stuff --- */
+    command ListQuickMenus(Default) returns(QuickMenuList) = 10;
+
+    event OnMenuShown returns (QuickMenuInfo) = 11;
+    event OnMenuClosed returns (QuickMenuID) = 12;
+
+    /* Used if platform doesn't support getting coordinates for menu items */
+    command PressQuickMenuItem(QuickMenuItemID) returns (Default) = 13;
+    /** 
+     *  Sent when menu item is pressed if the platform doesn't support 
+     *	getting coordinates of menu items
+     **/
+    event OnMenuItemPressed returns (QuickMenuItemID) = 14;
 }
 
 message DesktopWindowID
@@ -186,6 +250,8 @@ message QuickWidgetInfoList
     repeated QuickWidgetInfo quickwidgetList = 1;
 }
 
+/* Note: this isn't really neccessary as currently for search,
+   all widgets are sent to OperaDriver and search is performed there */
 message QuickWidgetSearch
 {
 	required DesktopWindowID windowID = 1;
