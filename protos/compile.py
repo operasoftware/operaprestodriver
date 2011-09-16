@@ -8,22 +8,26 @@ import re
 # Might be lower, but not tested. Definitely needs to be > 2.3.0
 MIN_PROTOC_VERSION = '2.4.1'
 SERVICES = {
-  'console_logger-2.0': 'ConsoleLoggerProtos',
-  'cookie_manager-1.0': 'CookieMngProtos',
-  'core_1.3': 'CoreUtilsProtos',
-  'desktop_utils': 'DesktopUtilsProtos',
-  'desktop_window_manager': 'DesktopWmProtos',
-  'ecmascript-1.0': 'EcmascriptProtos',
-  'ecmascript_debugger-6.1': 'Esdbg6Protos',
-  'ecmascript_debugger-5.0': 'EsdbgProtos',
-  'exec-2.1': 'ExecProtos',
-  'http_logger-2.0': 'HttpLoggerProtos',
-  'prefs-1.0': 'PrefsProtos',
-  'scope-1.0': 'ScopeProtos',
-  'selftest': 'SelftestProtos',
-  'system_input': 'SystemInputProtos',
-  'ums': 'UmsProtos',
-  'window_manager-2.1': 'WmProtos',
+  'console_logger-2.0': ['com.opera.core.systems.scope.protos', 'ConsoleLoggerProtos'],
+  'cookie_manager-1.0': ['com.opera.core.systems.scope.protos', 'CookieMngProtos'],
+  'core_1.3': ['com.opera.core.systems.scope.protos', 'CoreProtos'],
+  'desktop_utils': ['com.opera.core.systems.scope.protos', 'DesktopUtilsProtos'],
+  'desktop_window_manager': ['com.opera.core.systems.scope.protos', 'DesktopWmProtos'],
+  'ecmascript-1.0': ['com.opera.core.systems.scope.protos', 'EcmascriptProtos'],
+  'ecmascript_debugger-6.1': ['com.opera.core.systems.scope.protos', 'Esdbg6Protos'],
+  'ecmascript_debugger-5.0': ['com.opera.core.systems.scope.protos', 'EsdbgProtos'],
+  'exec-2.1': ['com.opera.core.systems.scope.protos', 'ExecProtos'],
+  'http_logger-2.0': ['com.opera.core.systems.scope.protos', 'HttpLoggerProtos'],
+  'prefs-1.0': ['com.opera.core.systems.scope.protos', 'PrefsProtos'],
+  'scope-1.0': ['com.opera.core.systems.scope.protos', 'ScopeProtos'],
+  'selftest': ['com.opera.core.systems.scope.protos', 'SelftestProtos'],
+  'system_input': ['com.opera.core.systems.scope.protos', 'SystemInputProtos'],
+  'ums': ['com.opera.core.systems.scope.protos', 'UmsProtos'],
+  'window_manager-2.1': ['com.opera.core.systems.scope.protos', 'WmProtos'],
+
+  # NOTE: This is not a scope protocol and the generated Java must be moved
+  # to src/com/opera/core/systems/runner/launcher/
+  'launcher': ['com.opera.core.systems.runner.launcher', 'OperaLauncherProtos']
 }
 
 RESULT = {
@@ -53,7 +57,8 @@ def main():
       sys.stderr.write("Error: Service %s is not known. Known services: %s\n" % (name, SERVICES.keys()))
       return RESULT['INVALID_SERVICE']
     else:
-      service_class = SERVICES[name]
+      service_package = SERVICES[name][0]
+      service_class = SERVICES[name][1]
 
     with open(fname) as f:
       content = f.read()
@@ -61,7 +66,7 @@ def main():
     # Pre-process
     content = remove_scope_syntax(content)
     content = remove_service_block(content)
-    content = add_options(content, service_class)
+    content = add_options(content, service_package, service_class)
 
     # TODO: Create a proper temp file?
     with open('temp.proto', 'w') as f:
@@ -114,13 +119,13 @@ def remove_service_block(content):
 
   return '\n'.join(lines)
 
-def add_options(content, service_class):
+def add_options(content, service_package, service_class):
   options = """package scope;
 
-option java_package = "com.opera.core.systems.scope.protos";
+option java_package = "%s";
 option java_outer_classname = "%s";
 option optimize_for = SPEED;
-""" % service_class
+""" % (service_package, service_class)
 
   return options + content
 
