@@ -158,7 +158,7 @@ public abstract class AbstractService {
       return builder.mergeFrom(message);
     } catch (InvalidProtocolBufferException ex) {
       throw new WebDriverException("Could not build "
-                                   + builder.getDescriptorForType().getFullName() + " : "
+                                   + builder.getDescriptorForType().getFullName() + ": "
                                    + ex.getMessage());
     }
   }
