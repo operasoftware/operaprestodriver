@@ -751,8 +751,7 @@ public class OperaWebElement extends RemoteWebElement {
     Integer id = debugger.executeScriptOnObject(using, objectId);
 
     if (id == null) {
-      throw new NoSuchElementException(
-          "Cannot find element(s) with " + type);
+      throw new NoSuchElementException("Cannot find element(s) with " + type);
     }
 
     return parent.processElements(id);
