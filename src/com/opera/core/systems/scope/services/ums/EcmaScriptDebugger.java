@@ -522,8 +522,10 @@ public class EcmaScriptDebugger extends AbstractService implements
   private void buildRuntimeTree() {
     updateRuntime();
     RuntimeInfo rootInfo = findRuntime();
+    String rootPath = rootInfo.getHtmlFramePath();
+
     root = new RuntimeNode();
-    root.setFrameName("_top");
+    root.setFrameName(rootPath);
     root.setRuntimeID(rootInfo.getRuntimeID());
 
     List<RuntimeInfo> runtimesInfos = new ArrayList<RuntimeInfo>(
@@ -531,7 +533,10 @@ public class EcmaScriptDebugger extends AbstractService implements
     runtimesInfos.remove(rootInfo);
 
     for (RuntimeInfo runtimeInfo : runtimesInfos) {
-      addNode(runtimeInfo, root);
+      // Only add frames which are beneath the root frame
+      if (runtimeInfo.getHtmlFramePath().startsWith(rootPath)) {
+        addNode(runtimeInfo, root);
+      }
     }
   }
 
@@ -553,21 +558,6 @@ public class EcmaScriptDebugger extends AbstractService implements
     buildRuntimeTree();
 
     RuntimeNode curr = root;
-    // This code allows you to focus on a frame inside another frame. For e.g.
-    // "one.two.three" would search the root for a frame named "one", then
-    // inside the "one" frame for frame named "two", and inside that for
-    // a frame named "three".
-    // But the Selenium tests don't say anything about the above behaviour,
-    // but do say we have to find frames with a "."s in the name.
-    // And that's why it's commented out. We may need to bring it back if
-    // it causes regressions.
-    /*
-    String[] values = frameName.split("\\.");
-    for (int i = 0; i < values.length; i++) {
-      curr = findNodeByName(values[i], curr);
-      if (curr == null) break;
-    }
-    */
 
     curr = findNodeByName(frameName, curr);
 
@@ -622,10 +612,11 @@ public class EcmaScriptDebugger extends AbstractService implements
   }
 
   private void addNode(RuntimeInfo info, RuntimeNode root) {
-    String[] values = info.getHtmlFramePath().split("/");
+    String relFramePath = info.getHtmlFramePath().replace(root.getFrameName()+"/", "");
+
+    String[] values = relFramePath.split("/");
     RuntimeNode curr = root;
-    // first frame is always _top, so we skip it
-    for (int i = 1; i < values.length; ++i) {
+    for (int i = 0; i < values.length; ++i) {
       int index = framePathToIndex(values[i]);
       if (curr.getNodes().get(index) == null) {
         // add to this node

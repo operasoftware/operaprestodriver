@@ -722,11 +722,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     }
 
     public WebDriver frame(int frameIndex) {
-      // make sure we execute this one on "_top"
-      debugger.resetFramePath();
-      int
-          framesLength =
-          Integer.valueOf(debugger.executeJavascript("return document.frames.length"));
+      int framesLength = Integer.valueOf(debugger.executeJavascript("return document.frames.length"));
 
       if (frameIndex < 0 || frameIndex >= framesLength) {
         throw new NoSuchFrameException("Invalid frame index: " + frameIndex);
@@ -777,7 +773,16 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
     // TODO: Implement need to find a way to link an element to a runtime
     public WebDriver frame(WebElement frameElement) {
-      throw new UnsupportedOperationException();
+      String script = "return " + OperaAtoms.GET_FRAME_INDEX.getValue() + "(locator)";
+      Long frameIndex = (Long) debugger.callFunctionOnObject(script, ((OperaWebElement) frameElement).getObjectId(), true);
+
+      if (frameIndex == null) {
+        throw new NoSuchFrameException("Non-frame element or frame not in current DOM");
+      }
+
+      debugger.changeRuntime(frameIndex.intValue());
+
+      return OperaDriver.this;
     }
 
     /*

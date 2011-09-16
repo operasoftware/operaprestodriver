@@ -289,7 +289,7 @@ public class EcmascriptService extends AbstractService implements
     ExamineObjectsArg.Builder builder = ExamineObjectsArg.newBuilder();
     builder.setExaminePrototypes(false);
     builder.setRuntimeID(getRuntimeId());
-    builder.addObjectList(objectId);
+    builder.addObjectIDList(objectId);
     Response response = executeCommand(ESCommand.EXAMINE_OBJECTS, builder);
 
     ObjectList.Builder objListBuilder = ObjectList.newBuilder();
@@ -557,7 +557,7 @@ public class EcmascriptService extends AbstractService implements
 
   private void processGcObjects() {
     ReleaseObjectsArg.Builder builder = ReleaseObjectsArg.newBuilder();
-    builder.addAllObjectList(garbageQueue);
+    builder.addAllObjectIDList(garbageQueue);
     executeCommand(ESCommand.RELEASE_OBJECTS, builder);
     garbageQueue.clear();
   }
@@ -570,7 +570,7 @@ public class EcmascriptService extends AbstractService implements
    */
   private Runtime getRuntime(int runtimeID) {
     ListRuntimesArg.Builder builder = ListRuntimesArg.newBuilder();
-    builder.addRuntimeList(runtimeID);
+    builder.addRuntimeIDList(runtimeID);
     builder.setCreate(true);
 
     Response response = executeCommand(ESCommand.LIST_RUNTIMES, builder);

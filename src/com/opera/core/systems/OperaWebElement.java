@@ -52,7 +52,7 @@ import java.util.logging.Logger;
 /**
  * Extends the default WebElement with Opera specific methods.
  *
- * @author Deniz Turkoglu
+ * @author Deniz Turkoglu <dturkoglu@opera.com>
  */
 public class OperaWebElement extends RemoteWebElement {
 
@@ -86,24 +86,25 @@ public class OperaWebElement extends RemoteWebElement {
   /**
    * Calls the method and parses the result, the result must be a string
    *
-   * @return response of ecmascript in string presentation
+   * @param method the method to call
+   * @return response of EcmaScript in string presentation
    */
-  public final String callMethod(String using) {
-    return debugger.callFunctionOnObject(using, objectId);
+  public final String callMethod(String method) {
+    return debugger.callFunctionOnObject(method, objectId);
   }
 
   /**
-   * Executes the given script with the element's object id doesn't parse the response
+   * Executes the given script with the element's object ID doesn't parse the response
    */
-  private final void executeMethod(String using) {
-    debugger.callFunctionOnObject(using, objectId, false);
+  private void executeMethod(String script) {
+    debugger.callFunctionOnObject(script, objectId, false);
   }
 
   /**
-   * Evaluates the given script with object id and parses the result and returns the result object.
+   * Evaluates the given script with object ID and parses the result and returns the result object.
    */
-  private final Object evaluateMethod(String using) {
-    return debugger.callFunctionOnObject(using, objectId, true);
+  private Object evaluateMethod(String script) {
+    return debugger.callFunctionOnObject(script, objectId, true);
   }
 
   /**
@@ -235,7 +236,7 @@ public class OperaWebElement extends RemoteWebElement {
   /**
    * Get the tag name of this element.
    *
-   * @return The tag name in upper-case
+   * @return the tag name in upper-case
    */
   public String getElementName() {
     return callMethod("locator.nodeName");
@@ -504,9 +505,9 @@ public class OperaWebElement extends RemoteWebElement {
         "return " + OperaAtoms.TOGGLE.getValue() + "(locator)", objectId, true);
   }
 
-  public static void sleep(long timeInMillis) {
+  public static void sleep(long ms) {
     try {
-      Thread.sleep(timeInMillis);
+      Thread.sleep(ms);
     } catch (InterruptedException e) {
       Thread.currentThread().interrupt();
     }
@@ -587,7 +588,7 @@ public class OperaWebElement extends RemoteWebElement {
   /**
    * Takes a screenshot of the area this element's bounding-box covers and returns the MD5 hash.
    *
-   * @return A MD5 hash as a string.
+   * @return an MD5 hash as a string
    */
   public String getImageHash() {
     return getImageHash(10L);
@@ -597,8 +598,9 @@ public class OperaWebElement extends RemoteWebElement {
    * Takes a screenshot after timeout milliseconds of the area this element's bounding-box covers
    * and returns the MD5 hash.
    *
-   * @param timeout The number of milliseconds to wait before taking the screenshot.
-   * @return A MD5 hash as a string.
+   * @param timeout the number of milliseconds to wait before taking the screenshot
+   * @param hashes optional hashes to compare the hashes with
+   * @return an MD5 hash as a string
    */
   public String getImageHash(long timeout, String... hashes) {
     return saveScreenshot("", timeout, false, hashes);
@@ -749,16 +751,14 @@ public class OperaWebElement extends RemoteWebElement {
     return parent.findElements(by, using, this);
   }
 
-  private final List<WebElement> findMultipleElements(String using, String type) {
+  private List<WebElement> findMultipleElements(String using, String type) {
     Integer id = debugger.executeScriptOnObject(using, objectId);
+
     if (id == null) {
-      throw new NoSuchElementException(
-          "Cannot find element(s) with " + type);
+      throw new NoSuchElementException("Cannot find element(s) with " + type);
     }
 
-    List<WebElement> elements = parent.processElements(id);
-
-    return elements;
+    return parent.processElements(id);
   }
 
   public WebElement findElementByName(String using) {
@@ -799,7 +799,7 @@ public class OperaWebElement extends RemoteWebElement {
       String coordinates = debugger.callFunctionOnObject(
           "locator.scrollIntoView();\n"
           + "var x = 0, y = 0;\n"
-          + "if(window.frameElement) {\n"
+          + "if(window.top !== window.self) {\n"
           + "x = (window.screenLeft - window.top.screenLeft) + window.scrollX;\n"
           + "y = (window.screenTop - window.top.screenTop) + window.scrollY;\n"
           + "}\n"
@@ -833,6 +833,6 @@ public class OperaWebElement extends RemoteWebElement {
             .valueOf(debugger.callFunctionOnObject("locator.parentNode == undefined", objectId))) {
       throw new StaleElementReferenceException("You cant interact with stale elements");
     }
-
   }
+
 }

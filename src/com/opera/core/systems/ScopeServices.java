@@ -188,10 +188,9 @@ public class ScopeServices implements IConnectionHandler {
     this.selftest = selftest;
   }
 
-
   /**
-   * Creates the scope server on specified address and port Enables the required services for
-   * webdriver
+   * Creates the Scope server on specified address and port, as well as enabling the required
+   * services for OperaDriver.
    */
   public ScopeServices(Map<String, String> versions, int port, boolean manualConnect)
       throws IOException {
@@ -276,10 +275,8 @@ public class ScopeServices implements IConnectionHandler {
   }
 
   public void shutdown() {
-    /*
-     * This can get called twice if we get a DISCONNECTED exception when
-     * closing down Opera. Check if we're already shutting down and bail.
-     */
+    // This can get called twice if we get a DISCONNECTED exception when closing down Opera.  Check
+    // if we're already shutting down and bail.
     if (shuttingDown) {
       return;
     }
@@ -310,6 +307,7 @@ public class ScopeServices implements IConnectionHandler {
 
   private HostInfo getHostInfo() {
     Response response = executeCommand(ScopeCommand.HOST_INFO, null);
+
     try {
       return HostInfo.parseFrom(response.getPayload());
     } catch (InvalidProtocolBufferException ex) {
@@ -319,6 +317,7 @@ public class ScopeServices implements IConnectionHandler {
 
   private void createUmsServices(boolean enableDebugger, HostInfo info) {
     new UmsServices(this, info);
+
     if (!enableDebugger) {
       debugger = new IEcmaScriptDebugger() {
 
@@ -814,4 +813,5 @@ public class ScopeServices implements IConnectionHandler {
   public void setProduct(String product) {
     this.product = product;
   }
+
 }
