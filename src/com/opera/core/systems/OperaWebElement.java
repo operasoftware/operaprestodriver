@@ -797,7 +797,7 @@ public class OperaWebElement extends RemoteWebElement {
       String coordinates = debugger.callFunctionOnObject(
           "locator.scrollIntoView();\n"
           + "var x = 0, y = 0;\n"
-          + "if(window.frameElement) {\n"
+          + "if(window.top !== window.self) {\n"
           + "x = (window.screenLeft - window.top.screenLeft) + window.scrollX;\n"
           + "y = (window.screenTop - window.top.screenTop) + window.scrollY;\n"
           + "}\n"
