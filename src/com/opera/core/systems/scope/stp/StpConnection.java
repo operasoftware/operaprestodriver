@@ -514,34 +514,34 @@ public class StpConnection implements SocketListener {
     logger.finest("processMessage: " + stpType);
 
     switch (stpType) {
-      /*
-      * case 1://command //commands are not supposed to be received
-      * throw new WebDriverException("Received command from host?");
-      */
-      case 2:// response
+      //case 1: //command //commands are not supposed to be received
+      //throw new WebDriverException("Received command from host?");
+      case 2: // response
         // Log what is being sent.
         Response response = Response.parseFrom(payload);
         logger.finest("RECV RESPONSE: " + response.toString());
         signalResponse(response.getTag(), response);
         break;
 
-      case 3:// event
+      case 3: // event
         Event event = Event.parseFrom(payload);
         logger.finest("RECV EVENT: " + event.toString());
         signalEvent(event);
         break;
 
-      case 4:// error
+      case 4: // error
         Error error = Error.parseFrom(payload);
         logger.finest("RECV ERROR: " + error.toString());
+
         if (error.getService().equals("ecmascript-debugger")
             && error.getStatus() == UmsProtos.Status.INTERNAL_ERROR.getNumber()) {
           signalResponse(error.getTag(), null);
         } else {
           logger.log(Level.SEVERE, "Error : {0}", error.toString());
           connectionHandler.onException(new WebDriverException(
-              "Error on command : " + error.toString()));
+              "Error on command: " + error.toString()));
         }
+
         break;
 
       default:
