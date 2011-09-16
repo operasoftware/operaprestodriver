@@ -747,16 +747,15 @@ public class OperaWebElement extends RemoteWebElement {
     return parent.findElements(by, using, this);
   }
 
-  private final List<WebElement> findMultipleElements(String using, String type) {
+  private List<WebElement> findMultipleElements(String using, String type) {
     Integer id = debugger.executeScriptOnObject(using, objectId);
+
     if (id == null) {
       throw new NoSuchElementException(
           "Cannot find element(s) with " + type);
     }
 
-    List<WebElement> elements = parent.processElements(id);
-
-    return elements;
+    return parent.processElements(id);
   }
 
   public WebElement findElementByName(String using) {
