@@ -53,6 +53,7 @@ def main():
   for fname in args.proto_file:
     # Get the Java class name
     (name, _) = os.path.splitext(fname)
+    name = os.path.basename(name)
     if not name in SERVICES:
       sys.stderr.write("Error: Service %s is not known. Known services: %s\n" % (name, SERVICES.keys()))
       return RESULT['INVALID_SERVICE']
