@@ -75,12 +75,7 @@ public abstract class AbstractService {
    * @param serviceName Name of the service (used for the error message)
    */
   public boolean isVersionInRange(String version, String maxVersion, String serviceName) {
-
-    logger.warning(String.valueOf(VersionUtil.compare(version, maxVersion)));
-    logger.warning(
-        String.valueOf(VersionUtil.compare(version, services.getMinVersionFor(serviceName))));
-
-    if (VersionUtil.compare(version, maxVersion) > 0
+    if (VersionUtil.compare(version, maxVersion) >= 0
         || VersionUtil.compare(version, services.getMinVersionFor(serviceName)) < 0) {
       return false;
     }
