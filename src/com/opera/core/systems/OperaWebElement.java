@@ -42,6 +42,8 @@ import org.openqa.selenium.interactions.internal.Coordinates;
 import org.openqa.selenium.remote.RemoteWebElement;
 
 import java.io.FileOutputStream;
+import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -633,10 +635,10 @@ public class OperaWebElement extends RemoteWebElement {
     ScreenShotReply reply = execService.screenWatcher(canvas, timeout,
                                                       includeImage, hashes);
     if (includeImage && reply.getPng() != null) {
-      FileOutputStream stream;
+      FileChannel stream;
       try {
-        stream = new FileOutputStream(filename);
-        stream.write(reply.getPng());
+        stream = new FileOutputStream(filename).getChannel();
+        stream.write(ByteBuffer.wrap(reply.getPng()));
         stream.close();
       } catch (Exception e) {
         throw new WebDriverException("Failed to write file: " + e.getMessage());

@@ -224,7 +224,7 @@ public class OperaDesktopDriver extends OperaDriver {
 	public List<QuickWidget> getQuickWidgetList(String windowName) {
 		int id = getQuickWindowID(windowName);
 
-		if (id >= 0 || windowName.length() == 0) {
+		if (id >= 0 || windowName.isEmpty()) {
 			return getQuickWidgetList(id);
 		}
 		return Collections.emptyList();
