@@ -120,7 +120,7 @@ public class OperaPathsTest {
     try {
       WebDriver driver = new OperaDriver();
     } catch (WebDriverException e) {
-      assertTrue(e.getMessage().contains("does not exist"));
+      assertTrue("'"+e.getMessage() + "' contains 'does not exist'", e.getMessage().contains("does not exist"));
       return;
     }
 
@@ -141,7 +141,7 @@ public class OperaPathsTest {
     try {
       WebDriver driver = new OperaDriver();
     } catch (WebDriverException e) {
-      assertTrue(e.getMessage().contains("does not exist"));
+      assertTrue("'"+e.getMessage() + "' contains 'does not exist'", e.getMessage().contains("does not exist"));
       return;
     }
 

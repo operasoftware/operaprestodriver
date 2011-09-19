@@ -247,8 +247,8 @@ public class OperaDriverTest extends TestBase {
       }
     }
     String profile = a.getPref("User Prefs", "Opera Directory");
-    Assert.assertTrue("'"+profile+"' contains 'tmp' or 'temp'" ,
-        profile.contains("tmp") || profile.contains("temp")
+    Assert.assertTrue("'"+profile+"' (case insensitively) contains 'tmp' or 'temp'" ,
+        profile.toLowerCase().contains("tmp") || profile.toLowerCase().contains("temp")
     );
     a.quit();
   }
@@ -305,9 +305,9 @@ public class OperaDriverTest extends TestBase {
     b.get(fixture("javascript.html"));
     c.get(fixture("keys.html"));
 
-    Assert.assertEquals(fixture("test.html"), a.getCurrentUrl());
-    Assert.assertEquals(fixture("javascript.html"), b.getCurrentUrl());
-    Assert.assertEquals(fixture("keys.html"), c.getCurrentUrl());
+    Assert.assertTrue("Instance a has url test.html", a.getCurrentUrl().endsWith("test.html"));
+    Assert.assertTrue("Instance a has url javascript.html", b.getCurrentUrl().endsWith("javascript.html"));
+    Assert.assertTrue("Instance a has url keys.html", c.getCurrentUrl().endsWith("keys.html"));
 
     a.quit();
     b.quit();
