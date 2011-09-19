@@ -221,7 +221,7 @@ public class OperaWebElement extends RemoteWebElement {
     throwIfStale();
 
     if (attribute.toLowerCase().equals("value")) {
-      return callMethod("if(/^input|select|textarea$/i.test(locator.nodeName)){" +
+      return callMethod("if(/^input|select|option|textarea$/i.test(locator.nodeName)){" +
                         "return locator.value;" +
                         "}" +
                         "return locator.textContent;");
@@ -249,7 +249,7 @@ public class OperaWebElement extends RemoteWebElement {
    * @deprecated Use {@link #getAttribute('value')} instead
    */
   public String getValue() {
-    return callMethod("if(/^input|select|textarea$/i.test(locator.nodeName)){" +
+    return callMethod("if(/^input|select|option|textarea$/i.test(locator.nodeName)){" +
                       "return locator.value;" +
                       "}" +
                       "return locator.textContent;");
