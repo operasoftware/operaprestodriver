@@ -172,6 +172,7 @@ public class OperaDriverTest extends TestBase {
   }
 
   @Test
+  @Ignore(value="Once this is set the autotestmode profile no longer connects on 7001, breaking future tests")
   public void testSetPort() throws Exception {
     DesiredCapabilities c = new DesiredCapabilities();
     c.setCapability(OperaDriver.PORT, 9876);
