@@ -38,6 +38,7 @@ import com.opera.core.systems.scope.services.IPrefs;
 import com.opera.core.systems.scope.services.IWindowManager;
 import com.opera.core.systems.settings.OperaDriverSettings;
 import com.opera.core.systems.util.CapabilitiesSanitizer;
+import com.sun.java.swing.plaf.windows.resources.windows_zh_HK;
 
 import org.apache.commons.io.IOUtils;
 import org.openqa.selenium.Alert;
@@ -204,6 +205,8 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
   protected Set<Integer> objectIds = new HashSet<Integer>();
   private String version;
+
+  private int assignedWindowIds = 0;
 
   /**
    * Constructor that starts Opera with the default set of capabilities.
@@ -667,8 +670,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
   }
 
   public String getWindowHandle() {
-    return debugger
-        .executeJavascript("return top.window.name ? top.window.name : top.document.title;");
+    return getWindowHandle(null);
   }
 
   public Set<String> getWindowHandles() {
@@ -686,17 +688,37 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     windowManager.clearFilter();
 
     for (Integer windowId : windowIds) {
-      // windowManager.filterWindow(windowId);
-      String handleName = debugger.executeJavascript(
-          "return top.window.name ? top.window.name : (top.document.title ? top.document.title : 'undefined');",
-          windowId
-      );
+      String handleName = getWindowHandle(windowId);
       handles.add(handleName);
     }
 
     windowManager.filterActiveWindow();
     debugger.resetRuntimesList();
     return handles;
+  }
+
+  private String getWindowHandle(Integer windowId) {
+    String windowName;
+
+    String script = "return top.window.name;";
+
+    if (windowId == null) {
+      windowName = debugger.executeJavascript(script);
+    } else {
+      windowName = debugger.executeJavascript(script, windowId);
+    }
+    if (windowName.isEmpty()) {
+      windowName = "operadriver-window" + (assignedWindowIds++);
+      script = "top.window.name = '" + windowName + "';";
+
+      if (windowId == null) {
+        windowName = debugger.executeJavascript(script);
+      } else {
+        windowName = debugger.executeJavascript(script, windowId);
+      }
+    }
+
+    return windowName;
   }
 
   public int getWindowCount() {
