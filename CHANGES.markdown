@@ -1,3 +1,49 @@
+2011/09/19 OperaDriver 0.7.3
+============================
+
+API changes
+-----------
+
+ * Update Selenium jar to 2.6.0. (Ajay Kemparaj)
+ * Update the protobuf library from 2.3.0 to 2.4.1 and regenerating all
+   Proto files. (stuartk)
+ * If OPERA_PATH or OPERA_LAUNCHER are set to invalid paths, we will now fail
+   instead of attempting to recover by guessing Opera's path. (andreastt)
+
+New features
+------------
+
+ * Add support for OperaDriver.switchTo().frame(WebElement). (stuartk)
+
+Bug fixes
+---------
+
+ * Fix bug preventing switching to frames beneath the current one. (stuartk)
+ * Fix for switching to sub-sub-frames. (stuartk)
+ * Fix getAttribute("value") on option element. (takahah)
+
+
+Tests
+-----
+
+ * Ignore failing tests. (stuartk)
+
+Other
+-----
+
+ * Major refactoring of OperaPaths. (andreastt)
+ * Better exception if failing to start the launcher on Windows, explaining
+   Visual C++ dependency. (andreastt)
+ * Add script to compile Opera .proto files. (stuartk)
+ * Add .proto file for Opera launcher. (stuartk)
+ * Lowering error logging level for key errors. (andreastt)
+ * Update Selenium atoms to r13805. (stuartk)
+ * Add documentation for some internal methods. (stuartk)
+ * If running OperaDriver from the source directory it will now find the
+   launcher in the launcher/ directory. (andreastt)
+ * Update OperaWebElement.saveScreenshot() to use FileChannels. (Ajay Kemparaj)
+
+
 2011/09/08 OperaDriver 0.7.2
 ============================
 

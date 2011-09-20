@@ -222,8 +222,8 @@ public class OperaLauncherRunner implements OperaRunner {
 
       if (handleStatusMessage(res.getResponse()) != StatusType.RUNNING) {
         throw new OperaRunnerException(
-            "Opera exited immediately; possibly incorrect arguments?  Command: \"" +
-            launcherRunner.getCommand() + "\"");
+            "Opera exited immediately; possibly incorrect arguments?  Command: " +
+            launcherRunner.getCommand());
       }
     } catch (IOException e) {
       throw new OperaRunnerException("Could not start Opera", e);

@@ -50,6 +50,12 @@ def main():
   if not check_protoc_version(args.protoc):
     return RESULT['INVALID_PROTOC']
 
+  # Ant gives us a single argument with the paths separated by ":" on Linux
+  # and ";" on Windows. This seperater is stored in os.pathsep. If we get an
+  # argument that looks like this, split it.
+  if len(args.proto_file) == 1 and os.pathsep in args.proto_file[0]:
+    args.proto_file = args.proto_file[0].split(os.pathsep)
+
   for fname in args.proto_file:
     # Get the Java class name
     (name, _) = os.path.splitext(fname)
@@ -87,8 +93,8 @@ def compile_proto(protoc, out, fname):
     return False
   return True
 
-
 def remove_scope_syntax(content):
+  # Quotes are optional
   return re.sub(r'^syntax = "?scope"?;', '', content)
 
 def remove_service_block(content):

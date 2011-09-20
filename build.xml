@@ -102,6 +102,22 @@
     </javac>
   </target>
 
+  <target name="compile_protos" description="Compile all the proto/*.proto files into Java classes. Use -Dprotoc=... to specify protoc binary">
+    <path id="protos.path">
+      <fileset dir="protos" includes="*.proto" />
+    </path>
+    <!-- If the protoc property isn't set, use the default -->
+    <property name="protoc" value="protoc" />
+    <exec executable="python" failifexecutionfails="true" failonerror="true">
+      <arg value="protos/compile.py" />
+      <arg value="--java_out" />
+      <arg value="src" />
+      <arg value="--protoc" />
+      <arg value="${protoc}" />
+      <arg pathref="protos.path" />
+    </exec>
+  </target>
+
   <!-- Run all junit tests -->
   <target name="test" description="Run all tests on the JAR. Pass -Dclass=&lt;classname&gt; to only run one test" depends="jar, compile_tests">
     <delete dir="${test.output.path}" />
