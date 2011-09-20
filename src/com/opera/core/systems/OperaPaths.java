@@ -351,7 +351,7 @@ public class OperaPaths {
       }
     };
 
-    File parent = new File(outputPath.getParent());
+    File parent = outputPath;
     File current = null;
 
     for (int i = 3; i >= 0; i--) {
