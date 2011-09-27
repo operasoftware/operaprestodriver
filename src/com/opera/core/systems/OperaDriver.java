@@ -336,6 +336,9 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     return capabilities;
   }
 
+  /**
+   * Start Opera, and handle any exceptions that might occur.
+   */
   private void start() {
     try {
       this.init();
@@ -349,6 +352,8 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
   }
 
   /**
+   * Initialise all the Scope services that we need.
+   *
    * For testing override this method.
    */
   protected void init() {
@@ -372,6 +377,9 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     prefs = services.getPrefs();
   }
 
+  /**
+   * @return a map of service names to the minimum versions we require.
+   */
   protected Map<String, String> getServicesList() {
     Map<String, String> versions = new HashMap<String, String>();
     versions.put("ecmascript-debugger", "5.0");
@@ -384,6 +392,9 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     return versions;
   }
 
+  /**
+   * Set up the Scope connection and thread.
+   */
   private void createScopeServices() {
     try {
       Map<String, String> versions = getServicesList();
