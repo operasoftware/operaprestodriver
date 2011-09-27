@@ -58,6 +58,7 @@ public class EcmaScriptTest extends TestBase {
     Assert.assertNull(exception);
   }
 
+  @SuppressWarnings("unchecked")
   @Test
   public void testObjectOfElements() throws Exception {
     List<WebElement> divs = (List<WebElement>) driver.executeScript("return [document.createElement('div'), document.createElement('div')]");

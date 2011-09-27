@@ -37,8 +37,6 @@ import org.openqa.selenium.remote.DesiredCapabilities;
  */
 public class CapabilitiesSanitizer {
 
-  private DesiredCapabilities capabilities;
-
   private enum IntegerCapabilities {
     PORT(OperaDriver.PORT),
     DISPLAY(OperaDriver.DISPLAY);

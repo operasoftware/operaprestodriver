@@ -38,7 +38,6 @@ import com.opera.core.systems.scope.services.IPrefs;
 import com.opera.core.systems.scope.services.IWindowManager;
 import com.opera.core.systems.settings.OperaDriverSettings;
 import com.opera.core.systems.util.CapabilitiesSanitizer;
-import com.sun.java.swing.plaf.windows.resources.windows_zh_HK;
 
 import org.apache.commons.io.IOUtils;
 import org.openqa.selenium.Alert;
