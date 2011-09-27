@@ -78,12 +78,6 @@ public class OperaDriverTest extends TestBase {
   }
 
   @Test
-  public void testGetWindowHandle() {
-    driver.get("http://t/core/standards/dom0/link/pathname/002.html");
-    Assert.assertEquals("URL with explicit pathname and hash", driver.getWindowHandle());
-  }
-
-  @Test
   public void testGetTitle() {
     Assert.assertEquals("URL with explicit pathname and hash", driver.getTitle());
   }
