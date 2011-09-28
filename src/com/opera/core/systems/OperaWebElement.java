@@ -73,6 +73,10 @@ public class OperaWebElement extends RemoteWebElement {
     return runtimeId;
   }
 
+  /**
+   * @param parent driver that this element belongs to
+   * @param objectId the Ecmascript object id of this element
+   */
   public OperaWebElement(OperaDriver parent, int objectId) {
     this.parent = parent;
     this.objectId = objectId;
@@ -122,6 +126,10 @@ public class OperaWebElement extends RemoteWebElement {
     mouseOver();
   }
 
+  /**
+   * Moves the mouse to the top left of this element, generating a mouseOver
+   * event.
+   */
   public void mouseOver() {
     Point point = coordinates.getLocationInViewPort();
     execService.mouseAction(point.x, point.y);
@@ -413,6 +421,10 @@ public class OperaWebElement extends RemoteWebElement {
     // executeMethod("locator.blur()");
   }
 
+  /**
+   * Stores a map of special character codes to the string representation.
+   * For example "\uE00E" maps to "page_up"
+   */
   private static final HashMap<Character, String> keysLookup = new HashMap<Character, String>();
 
   /**
@@ -505,7 +517,7 @@ public class OperaWebElement extends RemoteWebElement {
         "return " + OperaAtoms.TOGGLE.getValue() + "(locator)", objectId, true);
   }
 
-  public static void sleep(long ms) {
+  private static void sleep(long ms) {
     try {
       Thread.sleep(ms);
     } catch (InterruptedException e) {
@@ -629,6 +641,16 @@ public class OperaWebElement extends RemoteWebElement {
     return this.saveScreenshot(filename, timeout, true);
   }
 
+  /**
+   * Take a screenshot of the area this element covers. If the hash of the image
+   * matches any of the given hashes then no image is saved, otherwise it saves
+   * a copy of the image to the given filename.
+   * @param filename     The location to save the screenshot.
+   * @param timeout      The number of milliseconds to wait before taking the screenshot.
+   * @param includeImage Whether to get the image data. Disable if you just need the MD5 hash.
+   * @param hashes       Known image hashes.
+   * @return The MD5 hash of the screenshot.
+   */
   public String saveScreenshot(String filename, long timeout,
                                boolean includeImage, String... hashes) {
     Canvas canvas = buildCanvas();
@@ -659,6 +681,12 @@ public class OperaWebElement extends RemoteWebElement {
     return execService.screenWatcher(canvas, timeout, true, hashes);
   }
 
+  /**
+   * Check if the current webpage contains any of the given colors. Used
+   * on tests that use red to show a failure.
+   * @param colors list of colors to check for.
+   * @return true if the page contains any of the given colors, false otherwise.
+   */
   public boolean containsColor(OperaColors... colors) {
     // List<String> keys = Arrays.asList(hashes);
 
@@ -673,6 +701,11 @@ public class OperaWebElement extends RemoteWebElement {
     return false;
   }
 
+  /**
+   * Create a "canvas", which is an object that specifies a rectangle to take
+   * a screenshot of.
+   * @return a canvas representing the size and position of this element.
+   */
   private Canvas buildCanvas() {
     Canvas canvas = new Canvas();
     Dimension dimension = getSize();
