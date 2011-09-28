@@ -324,9 +324,16 @@ public class EcmascriptService extends AbstractEcmascriptService implements
     }
   }
 
+  /**
+   * Find the runtime for injection (default) Typically this is _top runtime with the active window
+   * that has focus
+   */
   protected Runtime findRuntime() {
+    return findRuntime(windowManager.getActiveWindowId());
+  }
+
+  protected Runtime findRuntime(int windowId) {
     createAllRuntimes();
-    int windowId = windowManager.getActiveWindowId();
     Runtime runtime = (Runtime) xpathPointer(runtimesList.values(),
         "/.[htmlFramePath='" + currentFramePath + "' and windowID='" + windowId
         + "']").getValue();
@@ -505,9 +512,16 @@ public class EcmascriptService extends AbstractEcmascriptService implements
   }
 
   public String executeJavascript(String using, Integer windowId) {
-    // TODO Auto-generated method stub
-    System.out.println("TODO executeJavascript(String using, Integer windowId)");
-    return null;
+    // FIXME workaround for frame issues when executing in a specific window
+    String tmp = currentFramePath;
+    currentFramePath = "_top";
+    Runtime runtime = findRuntime(windowId);
+    currentFramePath = tmp;
+    if (runtime == null) // speed dial doesn't have a runtime
+    {
+      return "";
+    }
+    return (String) executeScript(using, true, runtime.getRuntimeID());
   }
 
   public Object examineScriptResult(Integer id) {
