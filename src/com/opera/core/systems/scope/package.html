@@ -1,3 +1,14 @@
 <html>
-  <body>The Scope protocol is used to communicate with the Opera browser.</body>
+  <body>
+    <p>The Scope protocol is used to communicate with the Opera browser.</p>
+    
+    <p>This package contains a number of <code>*Command</code> classes.
+    These classes are enumerations of the <code>command</code> messages in the
+    <code>*.proto</code> files in the "protos/" directory.</p>
+    
+    <p>The <code>event</code> messages in the <code>*.proto</code> files are
+    handled in the <code>scope.stp.UmsEventParser</code> class. These messages
+    are then passed to <code>EventHandler</code>, where they are passed to the
+    correct class. Any new events must be added in these classes.</p> 
+  </body>
 </html>
