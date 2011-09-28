@@ -13,15 +13,16 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+
 package com.opera.core.systems.model;
 
 /**
  * A simple pojo file to hold the color values
  *
  * @author Deniz Turkoglu <denizt@opera.com>
- *
  */
 public class OperaColor {
+
   protected int id;
   protected Integer lowRed;
   protected Integer highRed;

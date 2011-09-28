@@ -13,7 +13,12 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+
 package com.opera.core.systems.runner.launcher;
+
+import org.openqa.selenium.Platform;
+import org.openqa.selenium.WebDriverException;
+import org.openqa.selenium.os.ProcessUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -22,9 +27,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Logger;
-
-import org.openqa.selenium.WebDriverException;
-import org.openqa.selenium.os.ProcessUtils;
 
 public class OperaLauncherBinary extends Thread {
 
@@ -37,12 +39,18 @@ public class OperaLauncherBinary extends Thread {
 
   public OperaLauncherBinary(String location, String... args) {
     super(new ThreadGroup("run-process"), "launcher");
+
     commands.add(location);
 
     if (args != null && args.length > 0) {
       commands.addAll(Arrays.asList(args));
     }
+
     init();
+  }
+
+  public String getCommand() {
+    return commands.toString();
   }
 
   public void kill() {
@@ -55,41 +63,45 @@ public class OperaLauncherBinary extends Thread {
 
   public void init() {
     ProcessBuilder builder = new ProcessBuilder(commands);
+
     try {
-
-      process = builder.start();
       builder.redirectErrorStream(true);
-
+      process = builder.start();
       watcher = new OutputWatcher(process);
-
-      outputWatcherThread = new Thread(getThreadGroup(), watcher,
-          "output-watcher");
-      outputWatcherThread.start();
-
+      outputWatcherThread = new Thread(getThreadGroup(), watcher, "output-watcher");
       running.set(true);
+      outputWatcherThread.start();
     } catch (IOException e) {
-      throw new WebDriverException("Could not start the process : "
-          + e.getMessage());
+      if (Platform.getCurrent() == Platform.WINDOWS) {
+        throw new WebDriverException(
+            "Could not start the launcher process, make sure you have the Microsoft Visual C++ 2008 Redistributable Package installed on your system: "
+            + e.getMessage());
+      } else {
+        throw new WebDriverException("Could not start the launcher process: " + e.getMessage());
+      }
     }
   }
 
   @Override
   public void run() {
-    logger.fine("Waiting for Launcher binary to exit.");
-    int exit = 0;
+    logger.fine("Waiting for launcher binary to exit");
+
+    int exit;
+
     while (running.get()) {
       try {
         exit = process.waitFor();
-        logger.info("Launcher exited with return value " + exit);
+        logger.fine("Launcher exited with return value " + exit);
         running.set(false);
       } catch (InterruptedException e) {
-        logger.fine("Got interrupted. Will terminate Launcher.");
+        logger.warning("Got interrupted, will terminate launcher");
         process.destroy();
       }
     }
   }
 
   private class OutputWatcher implements Runnable {
+
     private Process process;
 
     public OutputWatcher(Process process) {
@@ -97,20 +109,24 @@ public class OperaLauncherBinary extends Thread {
     }
 
     public void run() {
-      logger.config("Running launcher: " + running.get());
+      logger.finer("Running launcher: " + running.get());
+
       InputStream stream = process.getInputStream();
       String buffer = "";
+
       while (running.get()) {
         try {
           int r = stream.read();
-          if(r == -1) return;
-          else if(r == '\n') {
-            logger.fine("LB: " + buffer);
+          if (r == -1) {
+            return;
+          } else if (r == '\n') {
+            logger.finest("line break: " + buffer);
             buffer = "";
+          } else {
+            buffer += (char) r;
           }
-          else buffer += (char)r;
         } catch (IOException e) {
-          /* ignored */
+          // ignored
         }
       }
     }
@@ -119,10 +135,12 @@ public class OperaLauncherBinary extends Thread {
       running.set(false);
       try {
         ProcessUtils.killProcess(process);
-      } catch (Exception e) { // ProcessStillAliveException, RuntimeException
-        // we cant do much here
-        logger.warning("Could not kill the process : " + e.getMessage());
+      } catch (Exception e) {  // ProcessStillAliveException, RuntimeException
+        // We can't do much here...
+        logger.warning("Could not kill the process: " + e.getMessage());
       }
     }
+
   }
+
 }

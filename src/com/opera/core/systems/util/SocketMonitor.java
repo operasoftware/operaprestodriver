@@ -38,7 +38,6 @@ public class SocketMonitor {
 
   private final Logger logger = Logger.getLogger(this.getClass().getName());
   private Selector selector;
-  private static SocketMonitor monitor = null;
   boolean locked = false;
 
   private enum Operation {
@@ -89,15 +88,7 @@ public class SocketMonitor {
 
   private LinkedList<SelectorChangeRequest> changes = new LinkedList<SelectorChangeRequest>();
 
-  public static SocketMonitor instance() {
-    synchronized (SocketMonitor.class) {
-      if (monitor == null) monitor = new SocketMonitor();
-    }
-    return monitor;
-
-  }
-
-  private SocketMonitor() {
+  public SocketMonitor() {
     try {
       selector = SelectorProvider.provider().openSelector();
       logger.setLevel(Level.OFF);
@@ -149,13 +140,13 @@ public class SocketMonitor {
     selector.wakeup();
   }
 
-  public static boolean poll() {
+  public boolean poll() {
     return poll(java.lang.Long.MAX_VALUE);
   }
 
-  public static boolean poll(long ms) {
-    boolean ok = instance().pollSockets(ms);
-    instance().applyChanges();
+  public boolean poll(long ms) {
+    boolean ok = pollSockets(ms);
+    applyChanges();
     return ok;
   }
 
@@ -223,7 +214,7 @@ public class SocketMonitor {
             break;
           }
         } catch (CancelledKeyException e) {
-          logger.fine("Key was cancelled - ignoring...");
+          logger.finest("Key was cancelled - ignoring...");
         }
       }
       changes.clear();

@@ -20,15 +20,17 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import org.openqa.selenium.Capabilities;
+
 import com.opera.core.systems.runner.launcher.OperaLauncherRunner;
 import com.opera.core.systems.scope.exceptions.CommunicationException;
 import com.opera.core.systems.scope.internal.OperaIntervals;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo.QuickWidgetType;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearch.QuickWidgetSearchType;
 import com.opera.core.systems.scope.protos.SystemInputProtos.ModifierPressed;
-import com.opera.core.systems.scope.services.IDesktopWindowManager;
 import com.opera.core.systems.scope.services.IDesktopUtils;
-import com.opera.core.systems.scope.services.ums.SystemInputManager;
+import com.opera.core.systems.scope.services.IDesktopWindowManager;
+import com.opera.core.systems.scope.services.ISystemInput;
 import com.opera.core.systems.settings.OperaDriverSettings;
 import com.opera.core.systems.util.ProfileUtils;
 
@@ -41,7 +43,7 @@ import com.opera.core.systems.util.ProfileUtils;
  */
 public class OperaDesktopDriver extends OperaDriver {
   private IDesktopWindowManager desktopWindowManager;
-  private SystemInputManager systemInputManager;
+  private ISystemInput systemInputManager;
   private IDesktopUtils desktopUtils;
   private ProfileUtils profileUtils;
   private boolean firstTestRun = true;
@@ -60,10 +62,20 @@ public class OperaDesktopDriver extends OperaDriver {
 	 *
 	 * @param settings settings for binary path to Opera, prefs directory, and arguments
 	 */
+  @Deprecated
 	public OperaDesktopDriver(OperaDriverSettings settings) {
+		this(settings.getCapabilities());
+	}
+
+	/**
+	 * Constructor that starts Opera if it's not running.
+	 *
+	 * @param c Settings for binary path to Opera, prefs directory, arguments and more.
+	 */
+	public OperaDesktopDriver(Capabilities c) {
 		// OperaDriver constructor will initialize services and start Opera
 		// if the binaryPath is set in settings (by calling init in OperaDriver)
-		super(settings);
+		super(c);
 		initDesktopDriver();
 	}
 
@@ -73,7 +85,7 @@ public class OperaDesktopDriver extends OperaDriver {
 		largePreferencesPath = getLargePreferencesPath();
 		smallPreferencesPath = getSmallPreferencesPath();
 		cachePreferencesPath = getCachePreferencesPath();
-		profileUtils = new ProfileUtils(largePreferencesPath, smallPreferencesPath, cachePreferencesPath, settings);
+		profileUtils = new ProfileUtils(largePreferencesPath, smallPreferencesPath, cachePreferencesPath, capabilities);
 	}
 
 	private void setServices() {
@@ -107,8 +119,8 @@ public class OperaDesktopDriver extends OperaDriver {
 
 		// If the Opera Binary isn't set we are assuming Opera is up and we
 		// can ask it for the location of itself
-		if (settings != null && settings.getOperaBinaryLocation() == null
-				&& !settings.getNoRestart()) {
+		if (capabilities != null && capabilities.getCapability(OperaDriver.BINARY) == null
+				&& !((Boolean) capabilities.getCapability(OperaDriver.NO_RESTART))) {
 
 			String operaPath = getOperaPath();
 
@@ -116,13 +128,13 @@ public class OperaDesktopDriver extends OperaDriver {
 
 			if (operaPath.length() > 0) {
 
-				settings.setOperaBinaryLocation(operaPath);
+				capabilities.setCapability(OperaDriver.BINARY, operaPath);
 
 				// Get pid of Opera, needed to wait for it to quit
 				int pid = desktopUtils.getOperaPid();
 
 				// Now create the OperaLauncherRunner that we have the binary path
-				operaRunner = new OperaLauncherRunner(settings);
+				operaRunner = new OperaLauncherRunner(capabilities);
 
 				// Quit and wait for opera to quit properly
 				services.quit(operaRunner, pid);
@@ -150,11 +162,12 @@ public class OperaDesktopDriver extends OperaDriver {
 	}
 
 	/**
-	 * Shuts down the driver.
-	 * If settings.NoQuit is set, this will not quit Opera.
+	 * Shuts down the driver (but not Opera)
 	 */
 	public void quitDriver() {
-		super.quit();
+    logger.fine("Opera Desktop Driver shutting down");
+    services.shutdown();
+    if (operaRunner != null) operaRunner.shutdown();
 	}
 
 	/**
@@ -169,22 +182,22 @@ public class OperaDesktopDriver extends OperaDriver {
 
 				// Quit Opera
 				operaRunner.stopOpera();
-			} 
+			}
 		} else {
-			
+
 			// Quit with action as opera wasn't started with the launcher
 			String operaPath = desktopUtils.getOperaPath();
 			logger.info("OperaBinaryLocation retrieved from Opera: " + operaPath);
 
 			int pid = 0;
 			if (operaPath.length() > 0) {
-				settings.setOperaBinaryLocation(operaPath);
+			  capabilities.setCapability(OperaDriver.BINARY, operaPath);
 				pid = desktopUtils.getOperaPid();
 			}
 
 			// Now create the OperaLauncherRunner that we have the binary path
 			// So we can control the shutdown
-			operaRunner = new OperaLauncherRunner(settings);
+			operaRunner = new OperaLauncherRunner(capabilities);
 
 			// Quit and wait for opera to quit properly (calls services.shutdown)
 			services.quit(operaRunner, pid);
@@ -211,7 +224,7 @@ public class OperaDesktopDriver extends OperaDriver {
 	public List<QuickWidget> getQuickWidgetList(String windowName) {
 		int id = getQuickWindowID(windowName);
 
-		if (id >= 0 || windowName.length() == 0) {
+		if (id >= 0 || windowName.isEmpty()) {
 			return getQuickWidgetList(id);
 		}
 		return Collections.emptyList();
@@ -236,6 +249,45 @@ public class OperaDesktopDriver extends OperaDriver {
 	 */
 	public List<QuickWindow> getQuickWindowList() {
 		return desktopWindowManager.getQuickWindowList();
+	}
+
+	/**
+	 * Get a menu based on its name (Note; the menubar is also seen as a menu)
+	 *
+	 * @param menuName (as found in standard_menu.ini)
+	 * @return QuickMenu with the given name, or null if no such menu is found
+	 */
+	public QuickMenu getQuickMenu(String menuName) {
+		return desktopWindowManager.getQuickMenu(menuName);
+	}
+
+	/**
+	 * Get a menu based on its name and windowid
+	 * - makes it possible to get the menubar of a specific main window
+	 *
+	 * @param menuName Name of the menu
+	 * @param windowId WindowId of the menu (the window it is attached to)
+	 * @return QuickMenu with given menuName and windowId, or null if no such
+	 *             menu can be found.
+	 */
+	public QuickMenu getQuickMenu(String menuName, int windowId) {
+		return desktopWindowManager.getQuickMenu(menuName, windowId);
+	}
+
+	/**
+	 *
+	 * @return list of all open menus, as QuickMenus
+	 */
+	public List<QuickMenu> getQuickMenuList() {
+		return desktopWindowManager.getQuickMenuList();
+	}
+
+	/**
+	 *
+	 * @return list of all QuickMenuItems in open menus
+	 */
+	public List<QuickMenuItem> getQuickMenuItemList() {
+		return desktopWindowManager.getQuickMenuItemList();
 	}
 
 	/**
@@ -365,7 +417,122 @@ public class OperaDesktopDriver extends OperaDriver {
 	}
 
 	/**
-	 * Finds a Window by its name.
+	 *
+	 * @param menuItemText Menu item text
+	 */
+	public void pressQuickMenuItem(String menuItemText, boolean popMenu) { // Note: Used for mac
+		desktopWindowManager.pressQuickMenuItem(menuItemText, popMenu);
+	}
+
+	/**
+	 * Get a QuickMenuItem by its action
+	 *
+	 * @param name - name of action of item (as specified in standard_menu.ini)
+	 * @return QuickMenuItem
+	 */
+	public QuickMenuItem getQuickMenuItemByAction(String action) {
+		return desktopWindowManager.getQuickMenuItemByAction(action);
+	}
+
+	/**
+	 * Get a quickmenuitem by its submenuname
+	 *
+	 * @param name - name of submenu of item (as specified in standard_menu.ini)
+	 * @return
+	 */
+	public QuickMenuItem getQuickMenuItemBySubmenu(String submenu) {
+		return desktopWindowManager.getQuickMenuItemBySubmenu(submenu);
+	}
+
+	/**
+	 *
+	 * @param name Name of menuitem
+	 *        For a command/action item, this is its action name
+	 *        For a command/action item, with a parameter to its action, this is
+	 *                        "action, parameter" (e.g. "Open link, www.elg.no")
+	 *        For an item that opens a submenu, this is the submenuname
+	 *        (all as found in standard_menu.ini)
+	 *
+	 * @return
+	 */
+	public QuickMenuItem getQuickMenuItemByName(String name) {
+		return desktopWindowManager.getQuickMenuItemByName(name);
+	}
+
+	/**
+	 * Get a menuitem by its name and the windowid of the window the menu it is in
+	 *   is in. This is only relevant for the menubar. Makes it possible to distinguish
+	 *   between menubar items in different main windows.
+	 *
+	 * @param name
+	 * @param window_id
+	 * @return
+	 */
+	public QuickMenuItem getQuickMenuItemByName(String name, int window_id) {
+		return desktopWindowManager.getQuickMenuItemByName(name, window_id);
+	}
+
+	/**
+	 * Get an item by its text. Not language independant, and therefore
+	 * not a recommended way to get an item.
+	 *
+	 * @param text - text of the item (as shown in UI).
+	 * @return
+	 */
+	public QuickMenuItem getQuickMenuItemByText(String text) {
+		return desktopWindowManager.getQuickMenuItemByText(text);
+	}
+
+	/**
+	 * Get an item by its position (row). Rows starts counting at 0, and note
+	 * that also menu separators are counted.
+	 * Note that this is only unique within a single menu (specified by parentName),
+	 * if parentName is null, this retrieves the first match.
+	 *
+	 * @param name - Position (row) in menu of item
+	 * @param menuName - name of menu item is in
+	 * @return
+	 */
+	public QuickMenuItem getQuickMenuItemByPosition(int row, String menuName) {
+		return desktopWindowManager.getQuickMenuItemByPosition(row, menuName);
+	}
+
+	/**
+	 *
+	 * @param name - Accelerator key in menu of item (the letter that's underlined in the menu
+	 *               item text)
+	 *               Note: not platform independant, as it cannot be used on mac.
+	 *
+	 * @param menuName - name of menu item is in
+	 * @return
+	 */
+	public QuickMenuItem getQuickMenuItemByAccKey(String key, String menuName) {
+		return desktopWindowManager.getQuickMenuItemByAccKey(key, menuName);
+	}
+
+	/**
+	 *
+	 * @param name - Shortcut of item
+	 * @return
+	 */
+	public QuickMenuItem getQuickMenuItemByShortcut(String shortcut) {
+		return desktopWindowManager.getQuickMenuItemByShortcut(shortcut);
+	}
+
+	/**
+	 * Get an item in a language independant way from its stringId.
+	 *
+	 * @param stringId StringId as found in standard_menu.ini
+	 * @return
+	 */
+	public QuickMenuItem getQuickMenuItemByStringId(String stringId) {
+		String text = desktopUtils.getString(stringId, true);
+		return desktopWindowManager.getQuickMenuItemByText(text);
+	}
+
+
+	/**
+	 * Find a Window by its name.
 	 *
 	 * @param windowName name of window
 	 * @return QuickWindow or null if no window with windowName is found
@@ -373,6 +540,8 @@ public class OperaDesktopDriver extends OperaDriver {
 	public QuickWindow findWindowByName(String windowName) {
 		return desktopWindowManager.getQuickWindow(QuickWidgetSearchType.NAME, windowName);
 	}
+
+
 
 	/**
 	 * Find window by window id.
@@ -418,10 +587,7 @@ public class OperaDesktopDriver extends OperaDriver {
 	 * @return large preferences path
 	 */
 	public String getLargePreferencesPath() {
-		if (largePreferencesPath == null)
-			return desktopUtils.getLargePreferencesPath();
-		else
-			return largePreferencesPath;
+		return desktopUtils.getLargePreferencesPath();
 	}
 
 	/**
@@ -429,10 +595,7 @@ public class OperaDesktopDriver extends OperaDriver {
 	 * @return small preferences path
 	 */
 	public String getSmallPreferencesPath() {
-		if (smallPreferencesPath == null)
-			return desktopUtils.getSmallPreferencesPath();
-		else
-			return smallPreferencesPath;
+		return desktopUtils.getSmallPreferencesPath();
 	}
 
 	/**
@@ -440,10 +603,7 @@ public class OperaDesktopDriver extends OperaDriver {
 	 * @return cache preferences path
 	 */
 	public String getCachePreferencesPath() {
-		if (cachePreferencesPath == null)
-			return desktopUtils.getCachePreferencesPath();
-		else
-			return cachePreferencesPath;
+		return desktopUtils.getCachePreferencesPath();
 	}
 
 	/**
@@ -615,6 +775,52 @@ public class OperaDesktopDriver extends OperaDriver {
 	}
 
 	/**
+	 * Waits until the menu is shown, and then returns the
+	 * name of the window
+	 *
+	 * @param menu - window to wait for shown event on
+	 * @return id of window
+	 * @throws CommuncationException if no connection
+	 */
+	public String waitForMenuShown(String menuName) {
+		if (services.getConnection() == null)
+			throw new CommunicationException("waiting for a window failed because Opera is not connected.");
+
+		return services.waitForMenuShown(menuName, OperaIntervals.MENU_EVENT_TIMEOUT.getValue());
+	}
+
+	/**
+	 * Waits until the menu is closed, and then returns the
+	 * name of the window
+	 *
+	 * @param menu - window to wait for shown event on
+	 * @return id of window
+	 * @throws CommuncationException if no connection
+	 */
+	public String waitForMenuClosed(String menuName) {
+		if (services.getConnection() == null)
+			throw new CommunicationException("waiting for a window failed because Opera is not connected.");
+
+		return services.waitForMenuClosed(menuName, OperaIntervals.MENU_EVENT_TIMEOUT.getValue());
+	}
+
+
+	/**
+	 * Waits until the menu item is pressed and then
+	 * returns the text of the menu item pressed
+	 *
+	 * @param menuItemText - window to wait for shown event on
+	 * @return text of the menu item
+	 * @throws CommuncationException if no connection
+	 */
+	public String waitForMenuItemPressed(String menuItemText) {
+		if (services.getConnection() == null)
+			throw new CommunicationException("waiting for a menu item to be pressed failed because Opera is not connected.");
+
+		return services.waitForMenuItemPressed(menuItemText, OperaIntervals.MENU_EVENT_TIMEOUT.getValue());
+	}
+
+	/**
 	 *
 	 * resetOperaPrefs - restarts Opera after copying over newPrefs to profile,
 	 *                    if newPrefs folder exists.
@@ -622,7 +828,7 @@ public class OperaDesktopDriver extends OperaDriver {
 	 * Copies prefs in folder newPrefs to the profile for the connected Opera instance.
 	 * Will first quit Opera, then delete the old prefs, and copy the new prefs over, then
 	 * restart Opera with the new prefs.
-	 * 
+	 *
 	 * Does nothing if profile used is default main user profile
 	 *
 	 * @param newPrefs - path to where new prefs to be copied into the prefs folders are located
@@ -642,11 +848,12 @@ public class OperaDesktopDriver extends OperaDriver {
 				quitOpera();
 
 				// Cleanup old profile
-				profileUtils.deleteProfile();
+				/*boolean deleted = */ profileUtils.deleteProfile();
+
 				// Copy in the profile for the test (only if it exists)
 				// returns true if copied, else false
-				profileUtils.copyProfile(newPrefs);
-				
+				/*deleted =*/ profileUtils.copyProfile(newPrefs);
+
 				// Relaunch Opera and the webdriver service connection
 				startOpera();
 			}
@@ -678,7 +885,19 @@ public class OperaDesktopDriver extends OperaDriver {
 		}
 	}
 
+	/**
+	 *
+	 * @return Process id of Opera browser that is connected to this driver.
+	 */
 	public int getPid() {
 		return desktopUtils.getOperaPid();
+	}
+
+	// Note: Should only be used in launcher mode
+	/**
+	 * @return true if Opera is running, and running under the launcher
+	 */
+	public boolean isOperaRunning() {
+		return operaRunner != null && isOperaRunning();
 	}
 }

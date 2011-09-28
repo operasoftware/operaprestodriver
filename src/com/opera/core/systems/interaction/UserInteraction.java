@@ -13,16 +13,18 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+
 package com.opera.core.systems.interaction;
 
 import org.openqa.selenium.WebDriver;
 
 /**
- * UserInteractions execute keypresses and clicks on the given driver
+ * UserInteractions execute keypresses and clicks on the given driver.
  *
  * @author Deniz Turkoglu
- *
  */
 public interface UserInteraction {
+
   void execute(WebDriver driver);
+
 }

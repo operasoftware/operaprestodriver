@@ -16,7 +16,12 @@ limitations under the License.
 
 package com.opera.core.systems.scope.services;
 
+/**
+ * @author Adam Minchinton, Karianne Ekern
+ */
+
 public interface IDesktopUtils {
+
   void init();
 
   /**
@@ -42,14 +47,12 @@ public interface IDesktopUtils {
   /**
    * Gets the string specified by the given string id.
    *
-   * @param enumText
    * @return string corresponding to the enumText
    */
   String getString(String enumText, boolean stripAmpersand);
 
   /**
-   * Used to stop problems comparing strings that have just \n with those with
-   * \r\n.
+   * Used to stop problems comparing strings that have just \n with those with \r\n.
    *
    * @param text to remove the \r's from
    * @return string without \r's

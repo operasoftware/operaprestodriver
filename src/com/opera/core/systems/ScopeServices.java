@@ -13,20 +13,13 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+
 package com.opera.core.systems;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.logging.Logger;
-
-import org.openqa.selenium.WebDriverException;
 
 import com.google.protobuf.AbstractMessage.Builder;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
+
 import com.opera.core.systems.model.ICommand;
 import com.opera.core.systems.runner.OperaRunner;
 import com.opera.core.systems.scope.ScopeCommand;
@@ -34,6 +27,9 @@ import com.opera.core.systems.scope.exceptions.CommunicationException;
 import com.opera.core.systems.scope.handlers.IConnectionHandler;
 import com.opera.core.systems.scope.internal.OperaIntervals;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo;
+import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID;
+import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo;
+import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemID;
 import com.opera.core.systems.scope.protos.EcmascriptProtos.ReadyStateChange;
 import com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeInfo;
 import com.opera.core.systems.scope.protos.ScopeProtos;
@@ -42,14 +38,17 @@ import com.opera.core.systems.scope.protos.ScopeProtos.HostInfo;
 import com.opera.core.systems.scope.protos.ScopeProtos.Service;
 import com.opera.core.systems.scope.protos.ScopeProtos.ServiceResult;
 import com.opera.core.systems.scope.protos.ScopeProtos.ServiceSelection;
+import com.opera.core.systems.scope.protos.SelftestProtos.SelftestOutput;
 import com.opera.core.systems.scope.protos.UmsProtos.Command;
 import com.opera.core.systems.scope.protos.UmsProtos.Response;
 import com.opera.core.systems.scope.services.ICookieManager;
+import com.opera.core.systems.scope.services.ICoreUtils;
 import com.opera.core.systems.scope.services.IDesktopUtils;
 import com.opera.core.systems.scope.services.IDesktopWindowManager;
 import com.opera.core.systems.scope.services.IEcmaScriptDebugger;
 import com.opera.core.systems.scope.services.IOperaExec;
 import com.opera.core.systems.scope.services.IPrefs;
+import com.opera.core.systems.scope.services.ISelftest;
 import com.opera.core.systems.scope.services.IWindowManager;
 import com.opera.core.systems.scope.services.ums.EcmascriptService;
 import com.opera.core.systems.scope.services.ums.SystemInputManager;
@@ -58,16 +57,25 @@ import com.opera.core.systems.scope.stp.StpConnection;
 import com.opera.core.systems.scope.stp.StpThread;
 import com.opera.core.systems.util.VersionUtil;
 
+import org.openqa.selenium.WebDriverException;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.logging.Logger;
+
 /**
  * Implements the interface to the Scope protocol.
  *
- * @author Deniz Turkoglu
- *
+ * @author Deniz Turkoglu <dturkoglu@opera.com>, Andreas Tolf Tolfsen <andreastt@opera.com>
  */
 public class ScopeServices implements IConnectionHandler {
 
   private final Logger logger = Logger.getLogger(this.getClass().getName());
 
+  private ICoreUtils coreUtils;
   private IEcmaScriptDebugger debugger;
   private IOperaExec exec;
   private IWindowManager windowManager;
@@ -77,6 +85,7 @@ public class ScopeServices implements IConnectionHandler {
   private SystemInputManager systemInputManager;
   private HostInfo hostInfo;
   private ICookieManager cookieManager;
+  private ISelftest selftest;
 
   private Map<String, String> versions;
 
@@ -90,13 +99,8 @@ public class ScopeServices implements IConnectionHandler {
 
   private AtomicInteger tagCounter;
 
-  public ICookieManager getCookieManager() {
-    return cookieManager;
-  }
-
-  public void setCookieManager(ICookieManager cookieManager) {
-    this.cookieManager = cookieManager;
-  }
+  private StringBuilder selftestOutput;
+  private String product;
 
   public Map<String, String> getVersions() {
     return versions;
@@ -130,7 +134,15 @@ public class ScopeServices implements IConnectionHandler {
     this.windowManager = windowManager;
   }
 
-  IPrefs getPrefs() {
+  public ICoreUtils getCoreUtils() {
+    return coreUtils;
+  }
+
+  public void setCoreUtils(ICoreUtils coreUtils) {
+    this.coreUtils = coreUtils;
+  }
+
+  public IPrefs getPrefs() {
     return prefs;
   }
 
@@ -138,7 +150,7 @@ public class ScopeServices implements IConnectionHandler {
     this.prefs = prefs;
   }
 
-  IDesktopWindowManager getDesktopWindowManager() {
+  public IDesktopWindowManager getDesktopWindowManager() {
     return desktopWindowManager;
   }
 
@@ -146,7 +158,7 @@ public class ScopeServices implements IConnectionHandler {
     this.desktopWindowManager = desktopWindowManager;
   }
 
-  IDesktopUtils getDesktopUtils() {
+  public IDesktopUtils getDesktopUtils() {
     return desktopUtils;
   }
 
@@ -154,7 +166,7 @@ public class ScopeServices implements IConnectionHandler {
     this.desktopUtils = desktopUtils;
   }
 
-  SystemInputManager getSystemInputManager() {
+  public SystemInputManager getSystemInputManager() {
     return systemInputManager;
   }
 
@@ -162,23 +174,40 @@ public class ScopeServices implements IConnectionHandler {
     this.systemInputManager = manager;
   }
 
+  public ICookieManager getCookieManager() {
+    return cookieManager;
+  }
+
+  public void setCookieManager(ICookieManager cookieManager) {
+    this.cookieManager = cookieManager;
+  }
+
+  public ISelftest getSelftest() {
+    return selftest;
+  }
+
+  public void setSelftest(ISelftest selftest) {
+    this.selftest = selftest;
+  }
+
   /**
-   * Creates the scope server on specified address and port Enables the required
-   * services for webdriver
-   *
-   * @param versions
-   * @param manualConnect
-   * @throws IOException
+   * Creates the Scope server on specified address and port, as well as enabling the required
+   * services for OperaDriver.
    */
-  public ScopeServices(Map<String, String> versions, boolean manualConnect)
+  public ScopeServices(Map<String, String> versions, int port, boolean manualConnect)
       throws IOException {
     this.versions = versions;
     tagCounter = new AtomicInteger();
-    stpThread = new StpThread((int) OperaIntervals.SERVER_PORT.getValue(),
-        this, new UmsEventHandler(this), manualConnect);
+    stpThread = new StpThread(port, this, new UmsEventHandler(this), manualConnect);
+    selftestOutput = new StringBuilder();
   }
 
+  /**
+   * Gets the supported services from Opera and calls methods to enable the
+   * ones we requested .
+   */
   public void init() {
+    waitState.setProfile(product);
     waitForHandshake();
 
     boolean enableDebugger = (OperaIntervals.ENABLE_DEBUGGER.getValue() != 0);
@@ -203,22 +232,30 @@ public class ScopeServices implements IConnectionHandler {
 
     wantedServices.add("exec");
     wantedServices.add("window-manager");
-
-    if (versions.containsKey("prefs"))
-      wantedServices.add("prefs");
-
-    if (versions.containsKey("desktop-window-manager"))
-      wantedServices.add("desktop-window-manager");
-
-    if (versions.containsKey("system-input"))
-      wantedServices.add("system-input");
-
-    if (versions.containsKey("desktop-utils"))
-      wantedServices.add("desktop-utils");
-
-//    wantedServices.add("console-logger");
-//    wantedServices.add("http-logger");
     wantedServices.add("core");
+
+    if (versions.containsKey("prefs")) {
+      wantedServices.add("prefs");
+    }
+
+    if (versions.containsKey("desktop-window-manager")) {
+      wantedServices.add("desktop-window-manager");
+    }
+
+    if (versions.containsKey("system-input")) {
+      wantedServices.add("system-input");
+    }
+
+    if (versions.containsKey("desktop-utils")) {
+      wantedServices.add("desktop-utils");
+    }
+
+    if (versions.containsKey("selftest")) {
+      wantedServices.add("selftest");
+    }
+
+    //wantedServices.add("console-logger");
+    //wantedServices.add("http-logger");
     wantedServices.add("cookie-manager");
 
     enableServices(wantedServices);
@@ -226,32 +263,50 @@ public class ScopeServices implements IConnectionHandler {
     initializeServices(enableDebugger);
   }
 
+  /**
+   * Initialises the services that are available.
+   * @param enableDebugger
+   */
   private void initializeServices(boolean enableDebugger) {
     exec.init();
     windowManager.init();
+    if (versions.containsKey("core") && coreUtils != null) {
+      coreUtils.init();
+    }
 
-    if (versions.containsKey("prefs") && prefs != null) prefs.init();
+    if (versions.containsKey("prefs") && prefs != null) {
+      prefs.init();
+    }
+    if (versions.containsKey("desktop-window-manager") && desktopWindowManager != null) {
+      desktopWindowManager.init();
+    }
+    if (versions.containsKey("system-input") && systemInputManager != null) {
+      systemInputManager.init();
+    }
+    if (versions.containsKey("desktop-utils") && desktopUtils != null) {
+      desktopUtils.init();
+    }
 
-    if (versions.containsKey("desktop-window-manager")
-        && desktopWindowManager != null) desktopWindowManager.init();
-
-    if (versions.containsKey("system-input") && systemInputManager != null) systemInputManager.init();
-
-    if (versions.containsKey("desktop-utils") && desktopUtils != null) desktopUtils.init();
-
-    if (enableDebugger) debugger.init();
+    if (enableDebugger) {
+      debugger.init();
+    }
   }
 
   public void shutdown() {
-    // This can get called twice if we get a DISCONNECTED exception when
-    // closing down Opera. Check if we're already shutting down and bail.
-    if (shuttingDown) return;
+    // This can get called twice if we get a DISCONNECTED exception when closing down Opera.  Check
+    // if we're already shutting down and bail.
+    if (shuttingDown) {
+      return;
+    }
 
     shuttingDown = true;
+
     if (connection != null) {
       connection.close();
     }
+
     stpThread.shutdown();
+
     try {
       stpThread.join();
     } catch (InterruptedException ex) {
@@ -268,8 +323,13 @@ public class ScopeServices implements IConnectionHandler {
     }
   }
 
+  /**
+   * Gets information on available services and their versions from Opera.
+   * @return
+   */
   private HostInfo getHostInfo() {
     Response response = executeCommand(ScopeCommand.HOST_INFO, null);
+
     try {
       return HostInfo.parseFrom(response.getPayload());
     } catch (InvalidProtocolBufferException ex) {
@@ -277,108 +337,124 @@ public class ScopeServices implements IConnectionHandler {
     }
   }
 
+  /**
+   * Creates all of the services that we requested and are available. If the
+   * debugger is disabled (which currently never happens) then it creates
+   * a dummy class.
+   * @param enableDebugger
+   * @param info
+   */
   private void createUmsServices(boolean enableDebugger, HostInfo info) {
     new UmsServices(this, info);
-    if (!enableDebugger) debugger = new IEcmaScriptDebugger() {
 
-      public void setRuntime(RuntimeInfo runtime) {
-      }
+    if (!enableDebugger) {
+      debugger = new IEcmaScriptDebugger() {
 
-      public Object scriptExecutor(String script, Object... params) {
-        return null;
-      }
+        public void setRuntime(RuntimeInfo runtime) {
+        }
 
-      public void removeRuntime(int runtimeId) {
-      }
+        public Object scriptExecutor(String script, Object... params) {
+          return null;
+        }
 
-      public List<String> listFramePaths() {
-        return null;
-      }
+        public void removeRuntime(int runtimeId) {
+        }
 
-      public void init() {
-      }
+        public List<String> listFramePaths() {
+          return null;
+        }
 
-      public int getRuntimeId() {
-        return 0;
-      }
+        public void init() {
+        }
 
-      public Integer getObject(String using) {
-        return null;
-      }
+        public int getRuntimeId() {
+          return 0;
+        }
 
-      public Integer executeScriptOnObject(String using, int objectId) {
-        return null;
-      }
+        public Integer getObject(String using) {
+          return null;
+        }
 
-      public Object executeScript(String using, boolean responseExpected) {
-        return null;
-      }
+        public Integer executeScriptOnObject(String using, int objectId) {
+          return null;
+        }
 
-      public String executeJavascript(String using, boolean responseExpected) {
-        return null;
-      }
+        public Object executeScript(String using, boolean responseExpected) {
+          return null;
+        }
 
-      public String executeJavascript(String using) {
-        return null;
-      }
+        public String executeJavascript(String using, boolean responseExpected) {
+          return null;
+        }
 
-      public List<Integer> examineObjects(Integer id) {
-        return null;
-      }
+        public String executeJavascript(String using) {
+          return null;
+        }
 
-      public void cleanUpRuntimes() {
-      }
+        public List<Integer> examineObjects(Integer id) {
+          return null;
+        }
 
-      public void cleanUpRuntimes(int windowId) {
-      }
+        public void cleanUpRuntimes() {
+        }
 
-      public void changeRuntime(String framePath) {
-      }
+        public void cleanUpRuntimes(int windowId) {
+        }
 
-      public Object callFunctionOnObject(String using, int objectId,
-          boolean responseExpected) {
-        return null;
-      }
+        public void changeRuntime(String framePath) {
+        }
 
-      public String callFunctionOnObject(String using, int objectId) {
-        return null;
-      }
+        public Object callFunctionOnObject(String using, int objectId,
+                                           boolean responseExpected) {
+          return null;
+        }
 
-      public void addRuntime(RuntimeInfo info) {
-      }
+        public String callFunctionOnObject(String using, int objectId) {
+          return null;
+        }
 
-      public void releaseObjects() {
-      }
+        public void addRuntime(RuntimeInfo info) {
+        }
 
-      public boolean updateRuntime() {
-        return false;
-      }
+        public void releaseObjects() {
+        }
 
-      public void resetRuntimesList() {
-      }
+        public boolean updateRuntime() {
+          return false;
+        }
 
-      public void readyStateChanged(ReadyStateChange change) {
-      }
+        public void resetRuntimesList() {
+        }
 
-      public void releaseObject(int objectId) {
-      }
+        public void readyStateChanged(ReadyStateChange change) {
+        }
 
-      public void resetFramePath() {
-      }
+        public void releaseObject(int objectId) {
+        }
 
-      public void changeRuntime(int index) {
-      }
+        public void resetFramePath() {
+        }
 
-      public String executeJavascript(String using, Integer windowId) {
-        return null;
-      }
+        public void changeRuntime(int index) {
+        }
 
-      public Object examineScriptResult(Integer id) {
-        return null;
-      }
-    };
+        public String executeJavascript(String using, Integer windowId) {
+          return null;
+        }
+
+        public Object examineScriptResult(Integer id) {
+          return null;
+        }
+
+        public void setDriver(OperaDriver driver) {
+        }
+      };
+    }
   }
 
+  /**
+   * Connects and resets any settings and services that the client used earlier.
+   */
   private void connect() {
     ClientInfo.Builder info = ClientInfo.newBuilder().setFormat("protobuf");
     executeCommand(ScopeCommand.CONNECT, info);
@@ -387,7 +463,9 @@ public class ScopeServices implements IConnectionHandler {
   public void enableServices(List<String> requiredServices) {
     for (String requiredService : requiredServices) {
       try {
-        if (getListedServices().contains(requiredService)) enable(requiredService);
+        if (getListedServices().contains(requiredService)) {
+          enable(requiredService);
+        }
       } catch (InvalidProtocolBufferException e) {
         throw new WebDriverException("Could not parse the message");
       }
@@ -404,14 +482,16 @@ public class ScopeServices implements IConnectionHandler {
 
   public void quitOpera(OperaRunner runner, int pid) {
     try {
-      if (exec.getActionList().contains("Quit")) exec.action("Quit");
-      else exec.action("Exit");
+      if (exec.getActionList().contains("Quit")) {
+        exec.action("Quit");
+      } else {
+        exec.action("Exit");
+      }
     } catch (Exception e) {
       // We expect a CommunicationException here, because as Opera is shutting
       // down the connection will be closed.
       if (!(e instanceof CommunicationException)) {
-        logger.info("Caught exception when trying to shut down : "
-            + e.getMessage());
+        logger.info("Caught exception when trying to shut down: " + e.getMessage());
       }
     }
 
@@ -439,9 +519,9 @@ public class ScopeServices implements IConnectionHandler {
   }
 
   public boolean onConnected(StpConnection con) {
-    logger.fine("onConnect fired");
+    logger.finest("onConnect fired");
     if (connection == null) {
-      logger.fine("Got StpConnection");
+      logger.finest("Got StpConnection");
       connection = con;
       return true;
     }
@@ -454,116 +534,150 @@ public class ScopeServices implements IConnectionHandler {
   }
 
   public void onWindowLoaded(int id) {
-    logger.fine("Window loaded: windowId=" + id);
+    logger.finest("Window loaded: windowId=" + id);
     waitState.onWindowLoaded(id);
   }
 
   public void onWindowClosed(int id) {
-    logger.fine("Window closed: windowId=" + id);
+    logger.finest("Window closed: windowId=" + id);
     waitState.onWindowClosed(id);
   }
 
   public void onDesktopWindowShown(DesktopWindowInfo info) {
-    logger.fine("DesktopWindow shown: windowId=" + info.getWindowID());
+    logger.finest("DesktopWindow shown: windowId=" + info.getWindowID());
     waitState.onDesktopWindowShown(info);
   }
 
   public void onDesktopWindowUpdated(DesktopWindowInfo info) {
-    logger.fine("DesktopWindow updated: windowId=" + info.getWindowID());
+    logger.finest("DesktopWindow updated: windowId=" + info.getWindowID());
     waitState.onDesktopWindowUpdated(info);
   }
 
   public void onDesktopWindowClosed(DesktopWindowInfo info) {
-    logger.fine("DesktopWindow closed: windowId=" + info.getWindowID());
+    logger.finest("DesktopWindow closed: windowId=" + info.getWindowID());
     waitState.onDesktopWindowClosed(info);
   }
 
   public void onDesktopWindowActivated(DesktopWindowInfo info) {
-    logger.fine("DesktopWindow active: windowId=" + info.getWindowID());
+    logger.finest("DesktopWindow active: windowId=" + info.getWindowID());
     waitState.onDesktopWindowActivated(info);
   }
 
   public void onDesktopWindowLoaded(DesktopWindowInfo info) {
-    logger.fine("DesktopWindow loaded: windowId=" + info.getWindowID());
+    logger.finest("DesktopWindow loaded: windowId=" + info.getWindowID());
     waitState.onDesktopWindowLoaded(info);
   }
 
+  public void onQuickMenuShown(QuickMenuInfo info) {
+    logger.finest("QuickMenu shown: menuName=" + info.getMenuId().getMenuName());
+    waitState.onQuickMenuShown(info);
+  }
+
+  public void onQuickMenuItemPressed(QuickMenuItemID menuItemID) {
+    logger.finest("QuickMenu shown: menuItem=" + menuItemID.getMenuText());
+    waitState.onQuickMenuItemPressed(menuItemID);
+  }
+
+  // TODO ADD PARAM AGAIN, or just name?
+  public void onQuickMenuClosed(QuickMenuID id) {
+    logger.finest("QuickMenu closed");//: menuName=" + info.getMenuId().getMenuName());
+    waitState.onQuickMenuClosed(id);
+  }
+
   public void onHandshake(boolean stp1) {
-    logger.fine("Got Stp handshake!");
+    logger.finest("Got Stp handshake!");
     waitState.onHandshake();
   }
 
   public void onDisconnect() {
-    logger.fine("Disconnected, closing StpConnection.");
+    logger.fine("Disconnected, closing STP connection");
     if (connection != null) {
       if (!shuttingDown) {
         waitState.onDisconnected();
-        logger.fine("Cleaning up...");
+        logger.finest("Cleaning up...");
         connection = null;
       }
     }
   }
 
   public void onOperaIdle() {
-    logger.fine("Got Opera Idle event!");
+    logger.finest("Got idle event");
     waitState.onOperaIdle();
   }
 
+  public void onSelftestOutput(SelftestOutput output) {
+    selftestOutput = selftestOutput.append(output.getOutput());
+  }
+
+  public void onSelftestDone() {
+    String results = selftestOutput.toString();
+    selftestOutput = new StringBuilder();
+    waitState.onSelftestDone(results);
+  }
+
+  public String selftest(List<String> modules, long timeout) {
+    if (selftest == null) {
+      throw new UnsupportedOperationException("selftest service is not supported");
+    }
+
+    selftest.runSelftests(modules);
+    return waitState.waitForSelftestDone(timeout);
+  }
+
   public void waitForWindowLoaded(int activeWindowId, long timeout) {
+    logger.finest("waitForWindowLoaded with params activeWindowId=" +
+                  activeWindowId + " timeout=" + timeout);
     waitState.waitForWindowLoaded(activeWindowId, timeout);
   }
 
   public boolean isOperaIdleAvailable() {
-    for( ScopeProtos.Service service : hostInfo.getServiceListList() )
-    {
-      if( service.getName().equals("core") )
-      {
+    for (ScopeProtos.Service service : hostInfo.getServiceListList()) {
+      if (service.getName().equals("core")) {
         String version = service.getVersion();
 
-        // Version 1.1 introduced some important fixes
-        // we don't want to use idle detection without this.
-        boolean ok = VersionUtil.compare(version,"1.1") >= 0;
-        logger.fine("Core service version check: " + ok + " (" + version + ")");
+        // Version 1.1 introduced some important fixes, and we don't want to use idle detection
+        // without this.
+        boolean ok = VersionUtil.compare(version, "1.1") >= 0;
+        logger.finer("core service version check: " + ok + " (" + version + ")");
         return ok;
       }
     }
 
-    logger.fine("Core service not found");
+    logger.severe("core service not found");
     return false;
   }
 
-	/**
-	 * Enables the capturing on OperaIdle events.
-	 *
-	 * Sometimes when executing a command OperaIdle events will fire before
-	 * the response is received for the sent command. This results in missing
-	 * the Idle events, and later probably hitting a timeout.
-	 *
-	 * To prevent this you can call this function which will enable the tracking
-	 * of any Idle events received between now and when you call
-	 * waitForOperaIdle(). If Idle events have been received then
-	 * waitForOperaIdle() will return immediately.
-	 */
-	public void captureOperaIdle() {
-	  logger.fine("Capturing OperaIdle");
-	  waitState.captureOperaIdle();
-	}
+  /**
+   * Enables the capturing on OperaIdle events.
+   *
+   * Sometimes when executing a command OperaIdle events will fire before the response is received
+   * for the sent command. This results in missing the Idle events, and later probably hitting a
+   * timeout.
+   *
+   * To prevent this you can call this function which will enable the tracking of any Idle events
+   * received between now and when you call waitForOperaIdle(). If Idle events have been received
+   * then waitForOperaIdle() will return immediately.
+   */
+  public void captureOperaIdle() {
+    logger.fine("Capturing idle event");
+    waitState.captureOperaIdle();
+  }
 
   /**
    * Waits for an OperaIdle event before continuing.
    *
-   * If captureOperaIdle() has been called since the last call of
-   * waitForOperaIdle(), and one or more OperaIdle events have occurred then
-   * this function will return immediately.
+   * If captureOperaIdle() has been called since the last call of waitForOperaIdle(), and one or
+   * more OperaIdle events have occurred then this function will return immediately.
    *
-   * After calling this function the capturing of OperaIdle events is
-   * disabled until the next call of captureOperaIdle()
+   * After calling this function the capturing of OperaIdle events is disabled until the next call
+   * of captureOperaIdle()
+   *
    * @param timeout Time in milliseconds to wait before aborting
    */
   public void waitForOperaIdle(long timeout) {
-    logger.fine("OperaIdle: Waiting for (timeout = " + timeout + ")");
+    logger.finer("idle: Waiting for (timeout = " + timeout + ")");
     waitState.waitForOperaIdle(timeout);
-    logger.fine("OperaIdle: Finished waiting");
+    logger.finer("idle: Finished waiting");
   }
 
   public void waitStart() {
@@ -615,9 +729,38 @@ public class ScopeServices implements IConnectionHandler {
     }
   }
 
+  public String waitForMenuShown(String menuName, long timeout) {
+    waitState.setWaitEvents(false);
+    try {
+      return waitState.waitForQuickMenuShown(menuName, timeout);
+    } catch (Exception e) {
+      return "";
+    }
+  }
+
+  public String waitForMenuClosed(String menuName, long timeout) {
+    waitState.setWaitEvents(false);
+    try {
+      return waitState.waitForQuickMenuClosed(menuName, timeout);
+
+    } catch (Exception e) {
+      return "";
+    }
+  }
+
+  public String waitForMenuItemPressed(String menuItemText, long timeout) {
+    waitState.setWaitEvents(false);
+    try {
+      return waitState.waitForQuickMenuItemPressed(menuItemText, timeout);
+
+    } catch (Exception e) {
+      return "";
+    }
+  }
+
   public void onResponseReceived(int tag, Response response) {
     if (connection != null) {
-      logger.fine("Got response.");
+      logger.finest("Got response");
       if (response != null) {
         waitState.onResponse(tag, response);
       } else {
@@ -627,13 +770,19 @@ public class ScopeServices implements IConnectionHandler {
   }
 
   public void onException(Exception ex) {
-    logger.fine("Got exception");
+    logger.finest("Got exception");
     if (connection != null) {
       waitState.onException(ex);
       connection = null;
     }
   }
 
+  /**
+   * Gets the minimum version for this service, as provided by OperaDriver in
+   * the constructor.
+   * @param service
+   * @return
+   */
   public String getMinVersionFor(String service) {
     return versions.get(service);
   }
@@ -674,20 +823,16 @@ public class ScopeServices implements IConnectionHandler {
 
   /**
    * Sends a command and wait for the response.
-   *
-   * @param command
-   * @param builder
-   * @return
    */
   public Response executeCommand(ICommand command, Builder<?> builder) {
     return executeCommand(command, builder,
-        OperaIntervals.RESPONSE_TIMEOUT.getValue());
+                          OperaIntervals.RESPONSE_TIMEOUT.getValue());
   }
 
   public Response executeCommand(ICommand command, Builder<?> builder,
-      long timeout) {
+                                 long timeout) {
     ByteString payload = (builder != null) ? builder.build().toByteString()
-        : ByteString.EMPTY;
+                                           : ByteString.EMPTY;
     Command.Builder commandBuilder = buildCommand(command, payload);
     int tag = commandBuilder.getTag();
     connection.send(commandBuilder.build());
@@ -702,4 +847,9 @@ public class ScopeServices implements IConnectionHandler {
     logger.info("Window closed: windowId=" + windowId);
     waitState.onRequest(windowId);
   }
+
+  public void setProduct(String product) {
+    this.product = product;
+  }
+
 }

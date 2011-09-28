@@ -13,7 +13,25 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+
 package com.opera.core.systems.scope.stp;
+
+import com.google.protobuf.ByteString;
+import com.google.protobuf.CodedOutputStream;
+
+import com.opera.core.systems.scope.handlers.AbstractEventHandler;
+import com.opera.core.systems.scope.handlers.IConnectionHandler;
+import com.opera.core.systems.scope.internal.OperaIntervals;
+import com.opera.core.systems.scope.protos.UmsProtos;
+import com.opera.core.systems.scope.protos.UmsProtos.Command;
+import com.opera.core.systems.scope.protos.UmsProtos.Error;
+import com.opera.core.systems.scope.protos.UmsProtos.Event;
+import com.opera.core.systems.scope.protos.UmsProtos.Response;
+import com.opera.core.systems.scope.protos.UmsProtos.Status;
+import com.opera.core.systems.util.SocketListener;
+import com.opera.core.systems.util.SocketMonitor;
+
+import org.openqa.selenium.WebDriverException;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -27,20 +45,6 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.openqa.selenium.WebDriverException;
-
-import com.google.protobuf.ByteString;
-import com.google.protobuf.CodedOutputStream;
-import com.opera.core.systems.scope.handlers.AbstractEventHandler;
-import com.opera.core.systems.scope.handlers.IConnectionHandler;
-import com.opera.core.systems.scope.internal.OperaIntervals;
-import com.opera.core.systems.scope.protos.UmsProtos.Command;
-import com.opera.core.systems.scope.protos.UmsProtos.Error;
-import com.opera.core.systems.scope.protos.UmsProtos.Event;
-import com.opera.core.systems.scope.protos.UmsProtos.Response;
-import com.opera.core.systems.util.SocketListener;
-import com.opera.core.systems.util.SocketMonitor;
-
 public class StpConnection implements SocketListener {
 
   private final Logger logger = Logger.getLogger(this.getClass().getName());
@@ -51,7 +55,7 @@ public class StpConnection implements SocketListener {
   private ByteBuffer recvBuffer;
 
   // For STP1
-  final byte[] prefix = { 'S', 'T', 'P', 1 };
+  final byte[] prefix = {'S', 'T', 'P', 1};
   private ByteString stpPrefix = ByteString.copyFrom(prefix);
 
   private AbstractEventHandler eventHandler;
@@ -63,6 +67,7 @@ public class StpConnection implements SocketListener {
   }
 
   private State state = State.SERVICELIST;
+  private SocketMonitor monitor;
 
   private void setState(State state) {
     // logger.fine("Setting state: " + state.toString());
@@ -70,8 +75,7 @@ public class StpConnection implements SocketListener {
   }
 
   public boolean isConnected() {
-    if (socketChannel == null) return false;
-    return true;
+    return (socketChannel != null);
   }
 
   /*
@@ -86,26 +90,22 @@ public class StpConnection implements SocketListener {
   */
 
   /**
-   * Initializes variables in object scope, sets 'count known' to false to read
-   * byte count (STP/0).
-   *
-   * @param socket
-   * @param handler
-   * @param eventHandler
-   * @throws IOException
+   * Initializes variables in object scope, sets 'count known' to false to read byte count (STP/0).
    */
   public StpConnection(SocketChannel socket, IConnectionHandler handler,
-      AbstractEventHandler eventHandler) throws IOException {
+                       AbstractEventHandler eventHandler, SocketMonitor monitor)
+      throws IOException {
     connectionHandler = handler;
     socketChannel = socket;
     this.eventHandler = eventHandler;
+    this.monitor = monitor;
     requests = new ArrayBlockingQueue<ByteBuffer>(1024);
     recvBuffer = ByteBuffer.allocateDirect(65536);
     recvBuffer.limit(0);
 
     socket.configureBlocking(false);
 
-    SocketMonitor.instance().add(socket, this, SelectionKey.OP_READ);
+    monitor.add(socket, this, SelectionKey.OP_READ);
 
     if (!handler.onConnected(this)) {
       close();
@@ -121,14 +121,13 @@ public class StpConnection implements SocketListener {
   }
 
   /**
-   * Queues up an STP/1 message sent from another thread and wakes up selector
-   * to register it to the key
+   * Queues up an STP/1 message sent from another thread and wakes up selector to register it to the
+   * key.
    *
    * @param command to add to the request queue
-   * @throws IOException
    */
   public void send(Command command) {
-    logger.log(Level.FINEST, command.toString());
+    logger.finest(command.toString());
     byte[] payload = command.toByteArray();
     int totalSize = payload.length + 1; // increment 1 for message type
 
@@ -136,23 +135,22 @@ public class StpConnection implements SocketListener {
 
     // create the message
     ByteBuffer buffer = ByteBuffer.allocateDirect(prefix.length
-        + outMessageSize.position() + 1 + payload.length);
+                                                  + outMessageSize.position() + 1 + payload.length);
     buffer.put(prefix, 0, prefix.length);
     outMessageSize.flip();
     buffer.put(outMessageSize);
     buffer.put((byte) 1);
     buffer.put(payload);
 
-    // log what is being sent.
-    logger.fine("SEND: " + command.toString());
+    // Log what is being sent.
+    logger.finest("SEND: " + command.toString());
 
     requests.add(buffer);
-    SocketMonitor.instance().modify(socketChannel, this,
-        SelectionKey.OP_READ | SelectionKey.OP_WRITE);
+    monitor.modify(socketChannel, this, SelectionKey.OP_READ | SelectionKey.OP_WRITE);
   }
 
   public void sendEnableStp1() {
-    // temporary fix for CORE-33057
+    // Temporary fix for CORE-33057
     try {
       Thread.sleep(OperaIntervals.EXEC_SLEEP.getValue());
     } catch (InterruptedException e) {
@@ -166,14 +164,14 @@ public class StpConnection implements SocketListener {
   }
 
   /**
-   * Queues up an STP/0 message sent from another thread and wakes up selector
-   * to register it to the key
+   * Queues up an STP/0 message sent from another thread and wakes up selector to register it to the
+   * key.
    *
    * @param message to add to the request queue
    */
   private void send(String message) {
     String scopeMessage = message.length() + " " + message;
-    logger.fine("WRITE : " + scopeMessage);
+    logger.finest("WRITE : " + scopeMessage);
     byte[] bytes = null;
     try {
       bytes = scopeMessage.getBytes("UTF-16BE");
@@ -185,28 +183,31 @@ public class StpConnection implements SocketListener {
     ByteBuffer buffer = ByteBuffer.allocate(bytes.length);
     buffer.put(bytes);
     requests.add(buffer);
-    SocketMonitor.instance().modify(socketChannel, this,
-        SelectionKey.OP_READ | SelectionKey.OP_WRITE);
+    monitor.modify(socketChannel, this, SelectionKey.OP_READ | SelectionKey.OP_WRITE);
   }
 
   public boolean canRead(SelectableChannel channel) throws IOException {
-    logger.fine("canRead");
+    logger.finest("canRead");
 
-    if (!channel.isOpen()) return false;
+    if (!channel.isOpen()) {
+      return false;
+    }
 
-    if (socketChannel == null) throw new IOException(
-        "We dont have a socket :-)");
+    if (socketChannel == null) {
+      throw new IOException(
+          "We dont have a socket :-)");
+    }
 
-    // read as much data as possible into buffer!
+    // Read as much data as possible into buffer.
     ByteBuffer readBuffer = ByteBuffer.allocateDirect(1000);
     int readSize = 0;
 
-    // continue to read data and read messages until there are no messages
+    // Continue to read data and read messages until there are no messages
     boolean didNotFindAnyMessage = false;
     while (!didNotFindAnyMessage) {
-      logger.fine("canReadLoop!");
+      logger.finest("canReadLoop!");
 
-      // read as much data as possible (until recvBuffer is full OR we don't get
+      // Read as much data as possible (until recvBuffer is full OR we don't get
       // any more data)
       do {
         readBuffer.clear();
@@ -227,26 +228,25 @@ public class StpConnection implements SocketListener {
           }
 
         } catch (IOException ex) {
-          logger.log(Level.WARNING, "Channel closed, causing exception",
-              ex.getMessage());
-          readSize = -1;// same as error from socketChannel.read
+          logger.warning("Channel closed, causing exception: " + ex.getMessage());
+          readSize = -1; // Same as error from socketChannel.read
         }
 
         if (readSize < 0) {
           try {
-            logger.log(Level.INFO, "Channel closed : {0}",
-                socketChannel.socket().getInetAddress().getHostName());
+            logger.log(Level.FINER, "Channel closed: {0}",
+                       socketChannel.socket().getInetAddress().getHostName());
           } catch (NullPointerException e) {
             // ignore
           }
           connectionHandler.onDisconnect();
-          SocketMonitor.instance().remove(socketChannel);
+          monitor.remove(socketChannel);
           return false;
         } else if (readSize > 0) {
 
-          // double buffer size if needed!
+          // Double buffer size if needed!
           if (recvBuffer.limit() + readBuffer.limit() >= recvBuffer.capacity()) {
-            logger.fine("Doubled the size of our recv buffer!");
+            logger.finest("Doubled the size of our recv buffer!");
             ByteBuffer newRecvBuffer = ByteBuffer.allocate(recvBuffer.capacity() * 2);
             newRecvBuffer.clear();
             recvBuffer.position(0);
@@ -260,12 +260,12 @@ public class StpConnection implements SocketListener {
           recvBuffer.position(recvBuffer.limit());
           recvBuffer.limit(recvBuffer.limit() + readSize);// increase limit!
           recvBuffer.put(readBuffer);
-          logger.fine("did read " + readSize + " bytes, new buffer size = "
-              + recvBuffer.limit());
+          logger.finest("did read " + readSize + " bytes, new buffer size = "
+                        + recvBuffer.limit());
         }
       } while (readSize > 0);
 
-      // read as many messages as possible, and only
+      // Read as many messages as possible, and only
       didNotFindAnyMessage = true;
       while (readMessage(recvBuffer)) {
         didNotFindAnyMessage = false;
@@ -275,9 +275,11 @@ public class StpConnection implements SocketListener {
   }
 
   public boolean canWrite(SelectableChannel channel) throws IOException {
-    logger.fine("canWrite");
-    if (socketChannel == null) throw new IOException(
-        "We dont have a socket :-)");
+    logger.finest("canWrite");
+
+    if (socketChannel == null) {
+      throw new IOException("We don't have a socket :-)");
+    }
 
     int totalWritten = 0;
     while (!requests.isEmpty()) {
@@ -287,23 +289,29 @@ public class StpConnection implements SocketListener {
 
       do {
         written = socketChannel.write(buffer);
-        if (written <= 0) break;
-        if (written > 0) totalWritten += written;
+        if (written <= 0) {
+          break;
+        }
+        if (written > 0) {
+          totalWritten += written;
+        }
       } while (buffer.hasRemaining());
     }
 
-    logger.fine("Wrote " + totalWritten + " bytes");
+    logger.finest("Wrote " + totalWritten + " bytes");
 
     return (!requests.isEmpty());
   }
 
   /**
-   * Switches the wait state and wakes up the selector to process
+   * Switches the wait state and wakes up the selector to process.
    */
   public void close() {
-    if (socketChannel == null) return;
+    if (socketChannel == null) {
+      return;
+    }
 
-    SocketMonitor.instance().remove(socketChannel);
+    monitor.remove(socketChannel);
     try {
       socketChannel.close();
     } catch (IOException ignored) {
@@ -314,35 +322,29 @@ public class StpConnection implements SocketListener {
   }
 
   /**
-   * Processes an incoming message and passes it to event handler if needed, the
-   * following events are to our interest: Runtime-Started : ecmascript runtime
-   * starts in Opera (that we can inject to) Runtime-Stopped : ecmascript
-   * runtime stops (not used, buggy) Message: fired from console log event
-   * Updated-Window: a window is updated OR created (opener-id=0) Active-Window:
-   * window focus changed Window-Closed: self explanatory If message matches
-   * none it is added to the response queue (probably response to command)
-   *
-   * @param message
+   * Processes an incoming message and passes it to event handler if needed, the following events
+   * are to our interest: Runtime-Started : ecmascript runtime starts in Opera (that we can inject
+   * to) Runtime-Stopped : ecmascript runtime stops (not used, buggy) Message: fired from console
+   * log event Updated-Window: a window is updated OR created (opener-id=0) Active-Window: window
+   * focus changed Window-Closed: self explanatory If message matches none it is added to the
+   * response queue (probably response to command).
    */
   public void parseServiceList(String message) {
-    logger.fine("parseServiceList: \"" + message + "\"");
+    logger.finer("parseServiceList: \"" + message + "\"");
 
     int split = message.indexOf(" ");
 
     if (split < 0) {
-      connectionHandler.onException(new WebDriverException(
-          "Invalid service list received."));
+      connectionHandler.onException(new WebDriverException("Invalid service list received."));
       return;
     }
 
-    List<String> services = Arrays.asList(message.substring(split + 1).split(
-        ","));
+    List<String> services = Arrays.asList(message.substring(split + 1).split(","));
     connectionHandler.onServiceList(services);
-    logger.fine("Service List OK.");
+    logger.fine("Service list ok");
 
     if (!services.contains("stp-1")) {
-      connectionHandler.onException(new WebDriverException(
-          "STP/0 is not supported!"));
+      connectionHandler.onException(new WebDriverException("STP/0 is not supported!"));
       return;
     }
 
@@ -354,15 +356,15 @@ public class StpConnection implements SocketListener {
   }
 
   private void signalEvent(Event event) {
-    logger.fine("EVENT " + event.toString());
+    logger.finest("EVENT " + event.toString());
     stp1EventHandler.handleEvent(event);
   }
 
   /**
-   * reads a message from the buffer, and pops the used data out of the buffer!
+   * Reads a message from the buffer, and pops the used data out of the buffer.
    *
    * @param buffer the buffer containing messages
-   * @return true if we got a message from the buffer!
+   * @return true if we got a message from the buffer
    */
   private boolean readMessage(ByteBuffer buffer) {
 
@@ -374,111 +376,111 @@ public class StpConnection implements SocketListener {
     int bytesWeHaveBeenreading = 0;
 
     switch (state) {
-    case SERVICELIST:
-      StringBuilder builder = new StringBuilder();
-      builder.append(buffer.asCharBuffer());
-      parseServiceList(builder.toString());
-      buffer.position(0);// reset position!
-      bytesWeHaveBeenreading = buffer.limit(); // bytesWeHaveBeenreading = all
-      // bytes in buffer!
-      break;
-
-    case HANDSHAKE:
-      if (buffer.limit() >= 6) {
-        byte[] dst = new byte[6];
-        buffer.position(0);// read from start!
-        buffer.get(dst);
+      case SERVICELIST:
+        StringBuilder builder = new StringBuilder();
+        builder.append(buffer.asCharBuffer());
+        parseServiceList(builder.toString());
         buffer.position(0);// reset position!
-        bytesWeHaveBeenreading = 6; // 6 bytes will be removed from buffer
-        String handShake = new String(dst);
-        if (!handShake.equals("STP/1\n")) {
-          close();
-          connectionHandler.onException(new WebDriverException(
-              "Scope Transport Protocol Error : Handshake"));
-        } else {
-          setState(State.EMPTY);
-          connectionHandler.onHandshake(true);
-        }
-      }
-      break;
-
-    case EMPTY: // read 4 byte header: STP\0
-      if (buffer.limit() >= 4) {
-        byte[] headerPrefix = new byte[4];
-        buffer.get(headerPrefix);
-        buffer.position(0);
-        bytesWeHaveBeenreading = 4;
-        ByteString incomingPrefix = ByteString.copyFrom(headerPrefix);
-        if (stpPrefix.equals(incomingPrefix)) {
-          setState(State.STP);
-          /*
-          if(buffer.hasRemaining()){
-              buffer.compact();
-              readMessage(buffer, buffer.position(), true);
-          } else {
-              buffer.clear();
-          }
-          */
-        } else {
-          close();
-          connectionHandler.onException(new WebDriverException(
-              "Scope Transport Protocol Error : Header"));
-        }
-      }
-      break;
-
-    case STP:
-      // try to read size,
-      buffer.position(0);
-      if (buffer.limit() <= 0) {
-        logger.fine("STP: Empty buffer");
+        bytesWeHaveBeenreading = buffer.limit(); // bytesWeHaveBeenreading = all
+        // bytes in buffer!
         break;
-      }
-      int messageSize = readRawVarint32(buffer);// read part of buffer
-      bytesWeHaveBeenreading = buffer.position();
-      buffer.position(0);
 
-      // if we got size, read more, if not just leave it!
-      if (buffer.limit() >= bytesWeHaveBeenreading + messageSize) {
-        buffer.position(bytesWeHaveBeenreading);
-
-        // Read type and Payload!
-        int messageType = buffer.get();
-        bytesWeHaveBeenreading += 1;
-
-        byte[] payload = new byte[--messageSize];
-        buffer.get(payload);
-        buffer.position(0);
-
-        bytesWeHaveBeenreading += messageSize;// 32 bits = 4 bytes :-)
-
-        setState(State.EMPTY);
-
-        try {
-          processMessage(messageType, payload);
-        } catch (IOException e) {
-          close();
-          connectionHandler.onException(new WebDriverException(
-              "Error while processing the message: " + e.getMessage()));
+      case HANDSHAKE:
+        if (buffer.limit() >= 6) {
+          byte[] dst = new byte[6];
+          buffer.position(0);// read from start!
+          buffer.get(dst);
+          buffer.position(0);// reset position!
+          bytesWeHaveBeenreading = 6; // 6 bytes will be removed from buffer
+          String handShake = new String(dst);
+          if (!handShake.equals("STP/1\n")) {
+            close();
+            connectionHandler.onException(new WebDriverException(
+                "Scope Transport Protocol Error : Handshake"));
+          } else {
+            setState(State.EMPTY);
+            connectionHandler.onHandshake(true);
+          }
         }
-      } else {
-        // 4 + messageSize because of the int at the beginning
-        logger.fine("tried to read a message, but expected " + (4 + messageSize)
-            + " bytes, and only got " + buffer.limit());
+        break;
 
+      case EMPTY: // read 4 byte header: STP\0
+        if (buffer.limit() >= 4) {
+          byte[] headerPrefix = new byte[4];
+          buffer.get(headerPrefix);
+          buffer.position(0);
+          bytesWeHaveBeenreading = 4;
+          ByteString incomingPrefix = ByteString.copyFrom(headerPrefix);
+          if (stpPrefix.equals(incomingPrefix)) {
+            setState(State.STP);
+            /*
+            if(buffer.hasRemaining()){
+                buffer.compact();
+                readMessage(buffer, buffer.position(), true);
+            } else {
+                buffer.clear();
+            }
+            */
+          } else {
+            close();
+            connectionHandler.onException(new WebDriverException(
+                "Scope Transport Protocol Error : Header"));
+          }
+        }
+        break;
+
+      case STP:
+        // Try to read size
         buffer.position(0);
-        bytesWeHaveBeenreading = 0;
-      }
-      break;
+        if (buffer.limit() <= 0) {
+          logger.finest("STP: Empty buffer");
+          break;
+        }
+        int messageSize = readRawVarint32(buffer);// read part of buffer
+        bytesWeHaveBeenreading = buffer.position();
+        buffer.position(0);
+
+        // If we got size, read more, if not just leave it!
+        if (buffer.limit() >= bytesWeHaveBeenreading + messageSize) {
+          buffer.position(bytesWeHaveBeenreading);
+
+          // Read type and Payload!
+          int messageType = buffer.get();
+          bytesWeHaveBeenreading += 1;
+
+          byte[] payload = new byte[--messageSize];
+          buffer.get(payload);
+          buffer.position(0);
+
+          bytesWeHaveBeenreading += messageSize; // 32 bits = 4 bytes :-)
+
+          setState(State.EMPTY);
+
+          try {
+            processMessage(messageType, payload);
+          } catch (IOException e) {
+            close();
+            connectionHandler.onException(new WebDriverException(
+                "Error while processing the message: " + e.getMessage()));
+          }
+        } else {
+          // 4 + messageSize because of the int at the beginning
+          logger.finest("tried to read a message, but expected " + (4 + messageSize)
+                        + " bytes, and only got " + buffer.limit());
+
+          buffer.position(0);
+          bytesWeHaveBeenreading = 0;
+        }
+        break;
 
     }
 
-    // pop number of read bytes from
+    // Pop number of read bytes from
     if (bytesWeHaveBeenreading > 0) {
 
-      // pop X bytes, and keep message for the rest!
+      // Pop X bytes, and keep message for the rest
       int rest = buffer.limit() - bytesWeHaveBeenreading;
-      if (rest == 0) {
+      if (rest <= 0) {
         buffer.clear();
         buffer.limit(0);
       } else {
@@ -494,62 +496,62 @@ public class StpConnection implements SocketListener {
         buffer.position(0);// set position back to start!
       }
 
-      logger.fine("did read message of " + bytesWeHaveBeenreading
-          + " bytes, new buffer size = " + buffer.limit());
+      logger.finest("Did read message of " + bytesWeHaveBeenreading
+                    + " bytes, new buffer size = " + buffer.limit());
 
-      return true; // we did read a message :-)
+      return true; // We did read a message :-)
     } else {
       if (buffer.limit() > 0) {
-        logger.fine("did NOT read message from buffer of size = "
-            + buffer.limit());
+        logger.finest("did NOT read message from buffer of size = "
+                      + buffer.limit());
       } else {
-        logger.fine("no messages in empty buffer");
+        logger.finest("no messages in empty buffer");
       }
       return false;
     }
   }
 
   private void processMessage(int stpType, byte[] payload) throws IOException {
-
     logger.finest("processMessage: " + stpType);
 
     switch (stpType) {
-    /*
-     * case 1://command //commands are not supposed to be received
-     * throw new WebDriverException("Received command from host?");
-     */
-    case 2:// response
-      // log what is being sent.
-      Response response = Response.parseFrom(payload);
-      logger.fine("RECV RESPONSE: " + response.toString());
-      signalResponse(response.getTag(), response);
-      break;
-    case 3:// event
-      Event event = Event.parseFrom(payload);
-      logger.fine("RECV EVENT: " + event.toString());
-      signalEvent(event);
-      break;
-    case 4:// error
-      Error error = Error.parseFrom(payload);
-      logger.fine("RECV ERROR: " + error.toString());
+      //case 1: //command //commands are not supposed to be received
+      //throw new WebDriverException("Received command from host?");
+      case 2: // response
+        // Log what is being sent.
+        Response response = Response.parseFrom(payload);
+        logger.finest("RECV RESPONSE: " + response.toString());
+        signalResponse(response.getTag(), response);
+        break;
+
+      case 3: // event
+        Event event = Event.parseFrom(payload);
+        logger.finest("RECV EVENT: " + event.toString());
+        signalEvent(event);
+        break;
+      case 4: // error
+        Error error = Error.parseFrom(payload);
+      logger.finest("RECV ERROR: " + error.toString());
 
       String service = error.getService();
       int status = error.getStatus();
 
       // We get exceptions when, in the ecmascript services, we use a runtime
       // that doesn't exist. We can ignore these exceptions and carry on.
-      if ((service.equals("ecmascript-debugger") && status == Status.INTERNAL_ERROR.getCode()) ||
-          (service.equals("ecmascript") && status == Status.BAD_REQUEST.getCode())) {
-        signalResponse(error.getTag(), null);
-      } else {
-        logger.log(Level.SEVERE, "Error : {0}", error.toString());
+      if ((service.equals("ecmascript-debugger") && status == Status.INTERNAL_ERROR.getNumber()) ||
+          (service.equals("ecmascript") && status == Status.BAD_REQUEST.getNumber())) {
+          signalResponse(error.getTag(), null);
+        } else {
+          logger.log(Level.SEVERE, "Error : {0}", error.toString());
+          connectionHandler.onException(new WebDriverException(
+              "Error on command: " + error.toString()));
+        }
+
+        break;
+
+      default:
         connectionHandler.onException(new WebDriverException(
-            "Error on command : " + error.toString()));
-      }
-      break;
-    default:
-      connectionHandler.onException(new WebDriverException(
-          "Unhandled STP type: " + stpType));
+            "Unhandled STP type: " + stpType));
     }
   }
 
@@ -577,7 +579,9 @@ public class StpConnection implements SocketListener {
           if (tmp < 0) {
             // Discard upper 32 bits.
             for (int i = 0; i < 5; i++) {
-              if (bytes.get() >= 0) return result;
+              if (bytes.get() >= 0) {
+                return result;
+              }
             }
             connectionHandler.onException(new WebDriverException(
                 "Error while reading raw int"));
@@ -600,4 +604,5 @@ public class StpConnection implements SocketListener {
       }
     }
   }
+
 }

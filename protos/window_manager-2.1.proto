@@ -33,6 +33,8 @@ message WindowInfo
      * - "info"
      * - "dialog"
      * - "thumbnail"
+     * - "normal_hidden"
+     * - "devtools"
      */
     required string windowType = 3;
     /**
@@ -61,9 +63,9 @@ message WindowInfo
 service WindowManager
 {
     option (cpp_hfile) = "modules/scope/src/scope_window_manager.h";
-    option (version) = "2.0";
+    option (version) = "2.1";
     option (cpp_class) = OpScopeWindowManager;
- 
+
     /**
      * Request the currently active window.
      */
@@ -104,9 +106,33 @@ service WindowManager
      * Sent whenever a window has finished loading. This
      * event happens after external resources are loaded.
      * Note: if the page uses scripting to dynamically change the page or load more data, this event may occur
-     * multiple times for the same window. 
+     *       multiple times for the same window.
      */
     event OnWindowLoaded returns (WindowID) = 7;
+
+    /**
+     * Create a new window, and (if successful) return its ID.
+     */
+    command CreateWindow(CreateWindowArg) returns (WindowID) = 8;
+
+    /**
+     * Request the closing of a specific window. Window closing is asynchronous, and your
+     * request may be silently ignored or denied. If the Window actually was closed, then
+     * an OnWindowClosed event will fire.
+     *
+     * Attempting to close a non-existent window will trigger an error.
+     */
+    command CloseWindow(CloseWindowArg) returns (Default) = 9;
+
+    /**
+     * Open a URL in the the specified Window, and start loading.
+     */
+    command OpenURL(OpenURLArg) returns (Default) = 10;
+
+    /**
+     * The type filter lets you exclude certain window types completely.
+     */
+    command ModifyTypeFilter(ModifyTypeFilterArg) returns (Default) = 11;
 }
 
 message WindowID
@@ -133,3 +159,73 @@ message WindowList
     repeated WindowInfo windowList = 1;
 }
 
+message CreateWindowArg
+{
+    /**
+     * Type is one of:
+     * - "normal"
+     * - "download"
+     * - "cache"
+     * - "plugins"
+     * - "history"
+     * - "help"
+     * - "mail_view"
+     * - "mail_compose"
+     * - "newsfeed_view"
+     * - "ad"
+     * - "im_view"
+     * - "p2p_view"
+     * - "brand_view"
+     * - "print_selection"
+     * - "js_console"
+     * - "gadget"
+     * - "controller"
+     * - "info"
+     * - "dialog"
+     * - "thumbnail"
+     * - "normal_hidden"
+     * - "devtools"
+     */
+    optional string windowType = 1;
+}
+
+message CloseWindowArg
+{
+    /**
+     * Close window with the specified ID. If a window with that ID does
+     * not exist, an error is returned.
+     */
+    required uint32 windowID = 1;
+}
+
+message OpenURLArg
+{
+    /**
+     * Start loading the URL in this Window.
+     */
+    required uint32 windowID = 1;
+
+    /**
+     * The URL to load.
+     */
+    required string url = 2;
+}
+
+message ModifyTypeFilterArg
+{
+    /**
+     * Possible values:
+     *
+     *  - "replace" clears the current filter, and replaces it with the input values.
+     *  - "append" adds the input values to the current filter. It is acceptable to
+     *    add a value already present in the filter (silent fail).
+     *  - "default" resets the filter to its defaults. The input values are ignored.
+     *    The default is ["normal_hidden", "devtools"].
+     */
+    required string mode = 2;
+
+    /**
+     * A list of window types to exclude. For valid window types, see CreateWindowArg.
+     */
+    repeated string typeList = 1;
+}

@@ -22,7 +22,7 @@ import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo.Des
 import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect;
 
 /**
- * Represents a window in the Desktop UI.
+ * Represents a window in the Desktop UI. 
  *
  * @author Adam Minchinton, Karianne Ekern
  *
@@ -61,6 +61,13 @@ public class QuickWindow {
     return info.getName();
   }
 
+  /**
+   * @return true if window is active
+   */
+  public boolean isActive() {
+	  return info.getActive();
+  }
+  
   /**
    * @return true if the window is on screen, otherwise false
    */

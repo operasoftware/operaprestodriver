@@ -13,37 +13,35 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+
 package com.opera.core.systems.settings;
 
+import org.openqa.selenium.Capabilities;
+import org.openqa.selenium.remote.DesiredCapabilities;
+
+import com.opera.core.systems.OperaDriver;
 
 /**
  * Stores settings for OperaDriver.
  *
  * @author Deniz Turkoglu
- *
+ * @deprecated Use DesiredCapabilites instead.
  */
+@Deprecated
 public class OperaDriverSettings {
 
-  private boolean runOperaLauncherFromOperaDriver = true;
-  private String operaLauncherBinary = null;
-  private int operaLauncherListeningPort = 9999;
+  private DesiredCapabilities capabilities;
 
-  private String operaBinaryLocation;
-  private String operaBinaryArguments = "";
+  public OperaDriverSettings() {
+    capabilities = (DesiredCapabilities) OperaDriver.getDefaultCapabilities();
+  }
 
-  private Integer operaLauncherXvfbDisplay; // could be null
+  public Capabilities getCapabilities() {
+    return capabilities;
+  }
 
-  private boolean noRestart = false;
-  private boolean noQuit = false;
-  private boolean guessOperaPath = true;
-
-  private boolean useOperaIdle = false;
-
-  private boolean autostart = true;
-
-  // Generated getters and setters:
   public boolean doRunOperaLauncherFromOperaDriver() {
-    return runOperaLauncherFromOperaDriver;
+    return true;
   }
 
   /**
@@ -51,76 +49,83 @@ public class OperaDriverSettings {
    * <code>true</code>. Set to <code>false</code> if you will start Opera
    * launcher manually.
    *
-   * @param runOperaLauncherFromOperaDriver <code>true</code> to start Opera
-   *          launcher, <code>false</code> to not.
+   * @param runOperaLauncherFromOperaDriver
+   *         <code>true</code> to start Opera
+   *         launcher, <code>false</code> to not.
+   * @deprecated
    */
-  public void setRunOperaLauncherFromOperaDriver(
-      boolean runOperaLauncherFromOperaDriver) {
-    this.runOperaLauncherFromOperaDriver = runOperaLauncherFromOperaDriver;
+  public void setRunOperaLauncherFromOperaDriver(boolean runOperaLauncherFromOperaDriver) {
+    throw new UnsupportedOperationException("Due to random port probing for launcher, " +
+      "manually specifying whether to run launcher is not supported anymore.");
   }
 
+  /**
+   * @deprecated
+   */
   public int getOperaLauncherListeningPort() {
-    return operaLauncherListeningPort;
+    return 9999;
   }
 
   /**
    * Set the port for Opera launcher to listen on. Defaults to port 9999.
    *
-   * @param operaLauncherPort Port number to listen on
+   * @param operaLauncherPort port number to listen on
+   * @deprecated
    */
   public void setOperaLauncherListeningPort(int operaLauncherPort) {
-    this.operaLauncherListeningPort = operaLauncherPort;
+    throw new UnsupportedOperationException("Due to random port probing for launcher, " +
+      "manually setting the launcher port is not supported anymore.");
   }
 
   public String getOperaLauncherBinary() {
-    return operaLauncherBinary;
+    return (String) capabilities.getCapability(OperaDriver.LAUNCHER);
   }
 
   /**
    * Set the location of the Opera launcher binary.
    *
-   * @param operaLauncherBinary The absolute path to the Opera launcher.
+   * @param operaLauncherBinary the absolute path to the Opera launcher.
    */
   public void setOperaLauncherBinary(String operaLauncherBinary) {
-    this.operaLauncherBinary = operaLauncherBinary;
+    capabilities.setCapability(OperaDriver.LAUNCHER, operaLauncherBinary);
   }
 
   public String getOperaBinaryLocation() {
-    return operaBinaryLocation;
+    return (String) capabilities.getCapability(OperaDriver.BINARY);
   }
 
   /**
    * Set the path to the of Opera.
    *
-   * @param operaBinaryLocation The absolute path to Opera.
+   * @param operaBinaryLocation the absolute path to Opera.
    */
   public void setOperaBinaryLocation(String operaBinaryLocation) {
-    this.operaBinaryLocation = operaBinaryLocation;
+    capabilities.setCapability(OperaDriver.BINARY, operaBinaryLocation);
   }
 
   public String getOperaBinaryArguments() {
-    return operaBinaryArguments;
+    return (String) capabilities.getCapability(OperaDriver.ARGUMENTS);
   }
 
   /**
    * Set the arguments that will be passed to Opera.
-   *
+   * <p/>
    * For example: <code>opera -nosession opera:debug</code> to start without
    * restoring a session (on *nix systems), and load the
    * <code>opera:debug</code> page in a tab.
    *
-   * @param operaBinaryArguments The arguments to pass, separated by spaces.
+   * @param operaBinaryArguments the arguments to pass, separated by spaces.
    */
   public void setOperaBinaryArguments(String operaBinaryArguments) {
     if (operaBinaryArguments == null) {
-        operaBinaryArguments = "";
+      operaBinaryArguments = "";
     }
 
-    this.operaBinaryArguments = operaBinaryArguments;
+    capabilities.setCapability(OperaDriver.ARGUMENTS, operaBinaryArguments);
   }
 
   public Integer getOperaLauncherXvfbDisplay() {
-    return operaLauncherXvfbDisplay;
+    return (Integer) capabilities.getCapability(OperaDriver.DISPLAY);
   }
 
   /**
@@ -128,10 +133,10 @@ public class OperaDriverSettings {
    * e.g. passing <code>1</code> will result in the command line option
    * <code>-display :1</code> being passed.
    *
-   * @param operaLauncherXvfbDisplay The X screen number to start Opera on.
+   * @param operaLauncherXvfbDisplay the X screen number to start Opera on.
    */
   public void setOperaLauncherXvfbDisplay(Integer operaLauncherXvfbDisplay) {
-    this.operaLauncherXvfbDisplay = operaLauncherXvfbDisplay;
+    capabilities.setCapability(OperaDriver.DISPLAY, operaLauncherXvfbDisplay);
   }
 
   /**
@@ -141,48 +146,48 @@ public class OperaDriverSettings {
    * @param noQuit
    */
   public void setNoQuit(boolean noQuit) {
-    this.noQuit = noQuit;
+    capabilities.setCapability(OperaDriver.NO_QUIT, noQuit);
   }
 
   /**
    * @return
    */
   public boolean getNoQuit() {
-    return noQuit;
+    return (Boolean) capabilities.getCapability(OperaDriver.NO_QUIT);
   }
 
   /**
-   * @deprecated
    * @param noRestart
+   * @deprecated
    */
   @Deprecated
   public void setNoRestart(boolean noRestart) {
-    this.noRestart = noRestart;
+    capabilities.setCapability(OperaDriver.NO_RESTART, noRestart);
   }
 
   /**
-   * @deprecated
    * @return
+   * @deprecated
    */
   @Deprecated
   public boolean getNoRestart() {
-    return noRestart;
+    return (Boolean) capabilities.getCapability(OperaDriver.NO_RESTART);
   }
 
   public void setGuessOperaPath(boolean guess) {
-    this.guessOperaPath = guess;
+    capabilities.setCapability(OperaDriver.GUESS_BINARY_PATH, guess);
   }
 
   public boolean guessOperaPath() {
-    return guessOperaPath;
+    return (Boolean) capabilities.getCapability(OperaDriver.GUESS_BINARY_PATH);
   }
 
   public void setUseOperaIdle(boolean useOperaIdle) {
-    this.useOperaIdle = useOperaIdle;
+    capabilities.setCapability("opera.idle", useOperaIdle);
   }
 
   public boolean getUseOperaIdle() {
-    return useOperaIdle;
+    return (Boolean) capabilities.getCapability("opera.idle");
   }
 
   /**
@@ -191,11 +196,27 @@ public class OperaDriverSettings {
    * @param autostart true to autostart, false to wait for connection
    */
   public void setAutostart(boolean autostart) {
-    this.autostart = autostart;
+    capabilities.setCapability(OperaDriver.AUTOSTART, autostart);
   }
 
   public boolean getAutostart() {
-    return autostart;
+    return (Boolean) capabilities.getCapability(OperaDriver.AUTOSTART);
+  }
+
+  /**
+   * Set which profile (desktop, smartphone, etc.) to use.
+   *
+   * @param profile The profile name.
+   */
+  public void setProfile(String profile) {
+    capabilities.setCapability(OperaDriver.PRODUCT, profile);
+  }
+
+  /**
+   * @return The profile name to use.
+   */
+  public String getProfile() {
+    return (String) capabilities.getCapability(OperaDriver.PRODUCT);
   }
 
 }

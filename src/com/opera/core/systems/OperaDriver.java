@@ -16,6 +16,52 @@ limitations under the License.
 
 package com.opera.core.systems;
 
+import com.opera.core.systems.interaction.OperaAction;
+import com.opera.core.systems.interaction.UserInteraction;
+import com.opera.core.systems.model.ScopeActions;
+import com.opera.core.systems.model.ScreenShotReply;
+import com.opera.core.systems.model.ScriptResult;
+import com.opera.core.systems.runner.OperaRunner;
+import com.opera.core.systems.runner.launcher.OperaLauncherRunner;
+import com.opera.core.systems.scope.exceptions.CommunicationException;
+import com.opera.core.systems.scope.handlers.PbActionHandler;
+import com.opera.core.systems.scope.internal.OperaFlags;
+import com.opera.core.systems.scope.internal.OperaIntervals;
+import com.opera.core.systems.scope.internal.OperaKeys;
+import com.opera.core.systems.scope.protos.PrefsProtos.GetPrefArg.Mode;
+import com.opera.core.systems.scope.protos.PrefsProtos.Pref;
+import com.opera.core.systems.scope.services.ICookieManager;
+import com.opera.core.systems.scope.services.ICoreUtils;
+import com.opera.core.systems.scope.services.IEcmaScriptDebugger;
+import com.opera.core.systems.scope.services.IOperaExec;
+import com.opera.core.systems.scope.services.IPrefs;
+import com.opera.core.systems.scope.services.IWindowManager;
+import com.opera.core.systems.settings.OperaDriverSettings;
+import com.opera.core.systems.util.CapabilitiesSanitizer;
+
+import org.apache.commons.io.IOUtils;
+import org.openqa.selenium.Alert;
+import org.openqa.selenium.By;
+import org.openqa.selenium.Capabilities;
+import org.openqa.selenium.Cookie;
+import org.openqa.selenium.InvalidSelectorException;
+import org.openqa.selenium.Keyboard;
+import org.openqa.selenium.Mouse;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.NoSuchFrameException;
+import org.openqa.selenium.NoSuchWindowException;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.StaleElementReferenceException;
+import org.openqa.selenium.TakesScreenshot;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebDriverException;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.io.TemporaryFilesystem;
+import org.openqa.selenium.net.PortProber;
+import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.RemoteWebDriver;
+
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -28,163 +74,288 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.FileHandler;
+import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import org.apache.commons.io.IOUtils;
-import org.openqa.selenium.Alert;
-import org.openqa.selenium.By;
-import org.openqa.selenium.Cookie;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.NoSuchFrameException;
-import org.openqa.selenium.NoSuchWindowException;
-import org.openqa.selenium.OutputType;
-import org.openqa.selenium.SearchContext;
-import org.openqa.selenium.StaleElementReferenceException;
-import org.openqa.selenium.TakesScreenshot;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebDriverException;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.internal.FindsByClassName;
-import org.openqa.selenium.internal.FindsByCssSelector;
-import org.openqa.selenium.internal.FindsById;
-import org.openqa.selenium.internal.FindsByLinkText;
-import org.openqa.selenium.internal.FindsByName;
-import org.openqa.selenium.internal.FindsByTagName;
-import org.openqa.selenium.internal.FindsByXPath;
-
-import com.opera.core.systems.interaction.OperaAction;
-import com.opera.core.systems.interaction.UserInteraction;
-import com.opera.core.systems.model.ScopeActions;
-import com.opera.core.systems.model.ScreenShotReply;
-import com.opera.core.systems.model.ScriptResult;
-import com.opera.core.systems.runner.OperaRunner;
-import com.opera.core.systems.runner.launcher.OperaLauncherRunner;
-import com.opera.core.systems.scope.exceptions.CommunicationException;
-import com.opera.core.systems.scope.handlers.PbActionHandler;
-import com.opera.core.systems.scope.internal.OperaIntervals;
-import com.opera.core.systems.scope.internal.OperaKeys;
-import com.opera.core.systems.scope.protos.PrefsProtos.Pref;
-import com.opera.core.systems.scope.protos.PrefsProtos.GetPrefArg.Mode;
-import com.opera.core.systems.scope.services.ICookieManager;
-import com.opera.core.systems.scope.services.IEcmaScriptDebugger;
-import com.opera.core.systems.scope.services.IOperaExec;
-import com.opera.core.systems.scope.services.IPrefs;
-import com.opera.core.systems.scope.services.IWindowManager;
-import com.opera.core.systems.settings.OperaDriverSettings;
+import java.util.logging.SimpleFormatter;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
- * Opera's webdriver implementation. See AUTHORS and LICENSE for details
+ * OperaDriver is an implementation of the WebDriver interface that allows you to drive the Opera
+ * web browser.  The driver uses the Scope protocol to communicate with Opera directly from Java.
  *
+ * The implementation is vendor-supported and developed by Opera Software and volunteers.
  */
-public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
-    FindsByXPath, FindsByName, FindsByTagName, FindsByClassName,
-    FindsByCssSelector, SearchContext, JavascriptExecutor, TakesScreenshot {
+public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
-  // These are "protected" and not "private" so that we can extend this class
-  // and add methods to access these variable in tests
-  protected OperaDriverSettings settings;
+  // Want to thin some of these out, but will need some re-thinking.
+
+  /**
+   * (String) How verbose the logging should be.  Available levels are: SEVERE (highest value),
+   * WARNING, INFO, CONFIG, FINE, FINER, FINEST (lowest value), ALL.  Default is INFO.
+   */
+  public static final String LOGGING_LEVEL = "opera.logging.level";
+
+  /**
+   * (String) Where to send the output of the logging.  Default is to not write to file.
+   */
+  public static final String LOGGING_FILE = "opera.logging.file";
+
+  /**
+   * (String) Path to the Opera binary to use.  If not specified, OperaDriver will guess the path to
+   * your Opera installation (typically <code>/usr/bin/opera</code> or <code>C:\Program
+   * Files\Opera\opera.exe</code>).
+   */
+  public static final String BINARY = "opera.binary";
+
+  /**
+   * (String) Arguments to pass to Opera, separated by spaces.  See <code>opera -help</code> for
+   * available command-line switches.
+   */
+  public static final String ARGUMENTS = "opera.arguments";
+
+  /**
+   * (String) The host Opera should connect to.  Unless you're starting Opera manually you won't
+   * need this.
+   */
+  public static final String HOST = "opera.host";
+
+  /**
+   * (Integer) The port to Opera should connect to.  0 = Random, -1 = Opera default (for use with
+   * Opera < 12).
+   */
+  public static final String PORT = "opera.port";
+
+  /**
+   * (String) Path to the launcher binary to use.  The launcher is a gateway between OperaDriver and
+   * the Opera browser, and is being used for controlling the binary and taking external
+   * screenshots.  If left blank, OperaDriver will use the launcher supplied with the package.
+   */
+  public static final String LAUNCHER = "opera.launcher";
+
+  /**
+   * (String) Directory to use for the Opera profile. If null a random temporary directory is used.
+   * If "", an empty string, then the default autotest profile directory is used.
+   */
+  public static final String PROFILE = "opera.profile";
+
+  /**
+   * (Boolean) Whether to use Opera's alternative implicit wait implementation.  It will use an
+   * in-browser heuristic to guess when a page has finished loading, allowing us with great accuracy
+   * tell whether there are any planned events in the document.  This functionality is useful for
+   * very simple test cases, but not designed for real-world testing.  It is disabled by default.
+   */
+  public static final String OPERAIDLE = "opera.idle";
+
+  /**
+   * (Integer) The X display to use.  (Only works on *nix OSes.)
+   */
+  public static final String DISPLAY = "opera.display";
+
+  /**
+   * (Boolean) Whether to auto-start the Opera binary.  If false, OperaDriver will wait for a
+   * connection from the browser.  Go to "opera:debug", enter the correct port number, and hit
+   * "Connect" to connect manually.
+   */
+  public static final String AUTOSTART = "opera.autostart";
+
+  /**
+   * (Boolean) Whether to restart.
+   */
+  public static final String NO_RESTART = "opera.no_restart";
+
+  /**
+   * (Boolean) Whether to quit Opera when OperaDriver is shut down.  If enabled, it will keep the
+   * browser running after the driver is shut down.
+   */
+  public static final String NO_QUIT = "opera.no_quit";
+
+  /**
+   * (Boolean) Whether to guess the path to Opera if it isn't set in <code>opera.binary</code>.
+   */
+  public static final String GUESS_BINARY_PATH = "opera.guess_binary_path";
+
+  /**
+   * (String) The profile configuration we are using, for example "desktop" or "core-gogi".
+   */
+  public static final String PRODUCT = "opera.product";
+
+  /*
+   * These are "protected" and not "private" so that we can extend this class
+   * and add methods to access these variable in tests.
+   */
+  protected DesiredCapabilities capabilities;
   protected OperaRunner operaRunner;
-
-  protected final Logger logger = Logger.getLogger(this.getClass().getName());
 
   protected IEcmaScriptDebugger debugger;
   protected IOperaExec exec;
   protected IPrefs prefs;
   protected IWindowManager windowManager;
+  protected ICoreUtils coreUtils;
   protected ICookieManager cookieManager;
+
   protected ScopeServices services;
   protected ScopeActions actionHandler;
+
+  protected final Logger logger = Logger.getLogger(this.getClass().getName());
+  private FileHandler logFile = null;
 
   protected Set<Integer> objectIds = new HashSet<Integer>();
   private String version;
 
+  private int assignedWindowIds = 0;
+
+  /**
+   * Constructor that starts Opera with the default set of capabilities.
+   */
   public OperaDriver() {
-    this(makeSettings());
+    this((Capabilities) null);
   }
 
   @Deprecated
-  public OperaDriver(boolean autoStart) {
-    this(autoStart ? makeSettings() : null);
+  public OperaDriver(OperaDriverSettings settings) {
+    this(settings.getCapabilities());
   }
 
   /**
-   * Constructor that starts opera.
+   * Constructor that starts Opera with a set of desired capabilities.
+   *
+   * @param c a DesiredCapabilities object containing various settings for the driver and the
+   *          browser.
    */
-  public OperaDriver(OperaDriverSettings settings) {
-    logger.fine("Constructing OperaDriver with settings");
-    if (settings != null) {
-      this.settings = settings;
+  public OperaDriver(Capabilities c) {
+    capabilities = (DesiredCapabilities) getDefaultCapabilities();
 
-      if (settings.getAutostart() == true) {
-        OperaPaths paths = new OperaPaths();
-
-        if (settings.guessOperaPath()
-            && settings.getOperaBinaryLocation() == null) {
-          settings.setOperaBinaryLocation(paths.operaPath());
-        } else if (settings.getOperaBinaryLocation() == null) {
-          // Don't guess, only check environment variable
-          String path = System.getenv("OPERA_PATH");
-          if (path != null && path.length() > 0) settings.setOperaBinaryLocation(path);
-        }
-
-        if (settings.getOperaLauncherBinary() == null) {
-          settings.setOperaLauncherBinary(paths.launcherPath());
-        }
-
-        if (settings.getOperaBinaryLocation() != null) {
-          this.operaRunner = new OperaLauncherRunner(this.settings);
-        }
-      }
-    } else {
-      // Create a default settings object
-      this.settings = new OperaDriverSettings();
-      this.settings.setAutostart(false);
+    if (c != null) {
+      capabilities.merge(CapabilitiesSanitizer.sanitize(c));
     }
 
-    try { this.init(); }
-    catch (Exception e)
-    {
-      logger.log(Level.SEVERE, "Error initializing OperaDriver with exception ", e);
+    // Set the logging level for main logger instance
+    Level
+        logLevel =
+        Level.parse(((String) capabilities.getCapability(LOGGING_LEVEL)).toUpperCase());
+    Logger root = Logger.getLogger("");
+    root.setLevel(logLevel);
+
+    // Write log to file?
+    if (capabilities.getCapability(LOGGING_FILE) != null) {
+      try {
+        logFile =
+            new FileHandler((String) capabilities.getCapability(LOGGING_FILE),
+                            OperaFlags.APPEND_TO_LOGFILE);
+        logFile.setFormatter(new SimpleFormatter());
+      } catch (IOException e) {
+        throw new WebDriverException("Unable to write to file: " + e);
+      }
+    }
+
+    if (logFile != null) {
+      root.addHandler(logFile);
+    }
+
+    // Set logging levels on all handlers
+    for (Handler h : root.getHandlers()) {
+      h.setLevel(logLevel);
+    }
+
+    if ((Boolean) capabilities.getCapability(AUTOSTART)) {
+      OperaPaths paths = new OperaPaths();
+
+      if (((Boolean) capabilities.getCapability(GUESS_BINARY_PATH)) &&
+          capabilities.getCapability(BINARY) == null) {
+        capabilities.setCapability(BINARY, paths.operaPath());
+      } else if (capabilities.getCapability(BINARY) == null) {
+        // Don't guess, only check environment variable
+        String path = System.getenv("OPERA_PATH");
+
+        if (path != null && path.length() > 0) {
+          capabilities.setCapability(BINARY, path);
+        }
+      }
+
+      if (capabilities.getCapability(LAUNCHER) == null) {
+        capabilities.setCapability(LAUNCHER, paths.launcherPath());
+      }
+
+      // If port is 0, try to find a random port.
+      if ((Integer) capabilities.getCapability(PORT) == 0) {
+        capabilities.setCapability(PORT, PortProber.findFreePort());
+      }
+
+      if (capabilities.getCapability(BINARY) != null) {
+        this.operaRunner = new OperaLauncherRunner(capabilities);
+      }
+    } else {
+      // If we're not autostarting then we don't want to randomise the port.
+      capabilities.setCapability(PORT, -1);
+    }
+
+    logger.config(capabilities.toString());
+
+    start();
+  }
+
+  /**
+   * Gets the default capabilities of OperaDriver.
+   *
+   * @return a DesiredCapabilities object with default settings
+   */
+  // TODO: Make this private when not needed in OperaDriverSettings
+  public static Capabilities getDefaultCapabilities() {
+    DesiredCapabilities capabilities = DesiredCapabilities.opera();
+    capabilities.setJavascriptEnabled(true);
+
+    capabilities.setCapability(LOGGING_LEVEL, "INFO");
+    capabilities.setCapability(LOGGING_FILE, (String) null);
+
+    capabilities.setCapability(BINARY, (String) null);
+
+    // Default = 127.0.0.1, but need to set to null for backwards compat.
+    // with Opera versions that don't support -autotestmode host:port
+    capabilities.setCapability(HOST, "127.0.0.1");
+    // 0 = Random, -1 = Opera default (7001). See above.
+    // TODO: set this to 0 when Opera 12 is released.
+    capabilities.setCapability(PORT, -1);
+
+    capabilities.setCapability(ARGUMENTS, "");
+
+    capabilities.setCapability(LAUNCHER, (String) null);
+
+    capabilities.setCapability(DISPLAY, (Integer) null);
+
+    // TODO: set this to (String) null when Opera 12 is released.
+    capabilities.setCapability(PROFILE, "");
+
+    capabilities.setCapability(AUTOSTART, true);
+    capabilities.setCapability(NO_RESTART, false);
+    capabilities.setCapability(NO_QUIT, false);
+    capabilities.setCapability(GUESS_BINARY_PATH, true);
+
+    capabilities.setCapability(OPERAIDLE, false);
+
+    return capabilities;
+  }
+
+  /**
+   * Start Opera, and handle any exceptions that might occur.
+   */
+  private void start() {
+    try {
+      this.init();
+    } catch (Exception e) {
       // Will make sure to kill any eventual launcher process that was started
       this.quit();
       throw new WebDriverException(e);
     }
-    logger.fine("init() done");
+
+    logger.finer("Initialization done");
   }
 
   /**
-   * Make a new settings object, automatically finding the Opera and launcher
-   * binaries.
+   * Initialise all the Scope services that we need.
    *
-   * @return A new settings object that is correctly set up.
-   */
-  private static OperaDriverSettings makeSettings() {
-    OperaDriverSettings settings = new OperaDriverSettings();
-
-    OperaPaths paths = new OperaPaths();
-
-    settings.setOperaBinaryLocation(paths.operaPath());
-    settings.setOperaLauncherBinary(paths.launcherPath());
-
-    settings.setOperaBinaryArguments("");
-
-    return settings;
-  }
-
-  @Deprecated
-  public void shutdown() {
-    quit();
-  }
-
-  public void quit() {
-    logger.fine("Opera Driver shutting down");
-    services.shutdown();
-    if (operaRunner != null) operaRunner.shutdown();
-  }
-
-  /**
    * For testing override this method.
    */
   protected void init() {
@@ -192,20 +363,25 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
 
     // Launch Opera if the runner has been setup
     if (operaRunner != null) {
-      logger.fine("Calling startOpera");
       operaRunner.startOpera();
     }
 
     services.init();
     debugger = services.getDebugger();
+    debugger.setDriver(this);
+
     windowManager = services.getWindowManager();
     exec = services.getExec();
+    coreUtils = services.getCoreUtils();
     actionHandler = new PbActionHandler(services);
     cookieManager = services.getCookieManager();
-    // cookieManager.updateCookieSettings();
+    //cookieManager.updateCookieSettings();
     prefs = services.getPrefs();
   }
 
+  /**
+   * @return a map of service names to the minimum versions we require.
+   */
   protected Map<String, String> getServicesList() {
     Map<String, String> versions = new HashMap<String, String>();
     versions.put("ecmascript-debugger", "5.0");
@@ -214,22 +390,54 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
     versions.put("core", "1.0");
     versions.put("cookie-manager", "1.0");
     versions.put("prefs", "1.0");
+    versions.put("selftest", "1.1");
     return versions;
   }
 
+  /**
+   * Set up the Scope connection and thread.
+   */
   private void createScopeServices() {
     try {
       Map<String, String> versions = getServicesList();
       boolean manualStart = true;
 
-      if (settings.getOperaBinaryLocation() != null) {
+      if (capabilities.getCapability(BINARY) != null) {
         manualStart = false;
       }
 
-      services = new ScopeServices(versions, manualStart);
+      int port = (Integer) capabilities.getCapability(PORT);
+      if (port == -1) {
+        port = 7001;
+      }
+      services = new ScopeServices(versions, port, manualStart);
+      // for profile-specific workarounds inside ScopeServives, WaitState ...
+      services.setProduct((String) capabilities.getCapability(PRODUCT));
       services.startStpThread();
     } catch (IOException e) {
       throw new WebDriverException(e);
+    }
+  }
+
+  public Capabilities getCapabilities() {
+    return capabilities;
+  }
+
+  public void quit() {
+    logger.fine("Opera Driver shutting down");
+    // This will only delete the profile directory if we created it
+    TemporaryFilesystem.getDefaultTmpFS().deleteTempDir(
+        new File((String) capabilities.getCapability(PROFILE)));
+
+    // This method can be called from start(), before services are created
+    if (services != null) {
+      services.shutdown();
+    }
+    if (operaRunner != null) {
+      operaRunner.shutdown();
+    }
+    if (logFile != null) {
+      logFile.close();
     }
   }
 
@@ -238,31 +446,40 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
   }
 
   public int get(String url, long timeout) {
-    if (url == null) throw new NullPointerException("Invalid url");
+    if (url == null) {
+      throw new NullPointerException("Invalid url");
+    }
 
-    if (services.getConnection() == null) throw new CommunicationException(
-        "Unable to open URL because Opera is not connected.");
+    if (services.getConnection() == null) {
+      throw new CommunicationException("Unable to open URL because Opera is not connected.");
+    }
 
     gc();
+    // As this is an artificial page load we release all the held keys.
+    // Is the user click()s a link, any keys remain held.
+    exec.releaseKeys();
 
     int activeWindowId = windowManager.getActiveWindowId();
 
     String oldUrl = getCurrentUrl();
 
     services.captureOperaIdle();
-    actionHandler.get(url);
+    windowManager.openUrl(activeWindowId, url);
 
     if (oldUrl == null || !url.replace(oldUrl, "").startsWith("#")) {
 
       if (useOperaIdle()) {
         try {
-          // Wait for opera is idle
-          if (timeout == OperaIntervals.PAGE_LOAD_TIMEOUT.getValue()) timeout = OperaIntervals.OPERA_IDLE_TIMEOUT.getValue();
+          // Wait for Opera to become idle
+          if (timeout == OperaIntervals.PAGE_LOAD_TIMEOUT.getValue()) {
+            timeout = OperaIntervals.OPERA_IDLE_TIMEOUT.getValue();
+          }
           services.waitForOperaIdle(timeout);
         } catch (WebDriverException e) {
-          // This could for example be a gif animation, preventing
-          // idle from being passed.
-          // Common case, and should not result in test error.
+          /*
+           * This could for example be a gif animation, preventing idle from
+           * being passed.  Common case, and should not result in test error.
+           */
           logger.warning("Opera Idle timed out, continue test... exception: " + e);
         }
       } else {
@@ -272,7 +489,9 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
 
     }
 
-    if (OperaIntervals.ENABLE_DEBUGGER.getValue() == 1) switchTo().defaultContent();
+    if (OperaIntervals.ENABLE_DEBUGGER.getValue() == 1) {
+      switchTo().defaultContent();
+    }
 
     return windowManager.getLastHttpResponseCode().getAndSet(0);
   }
@@ -286,94 +505,174 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
     objectIds.clear();
   }
 
-  @SuppressWarnings("unused")
-  private String getText(){
-        return debugger.executeJavascript("var visibleText = \"\";\n"+
-                "    var travers = function(ele)\n"+
-                "    {\n"+
-                "      var children = ele.childNodes, child = null, i = 0, computedStyle = null;\n"+
-                "      for( ; child = children[i]; i++)\n"+
-                "      {\n"+
-                "        switch (child.nodeType)\n"+
-                "        {\n"+
-                "          case document.ELEMENT_NODE:\n"+
-                "          {\n"+
-                "            computedStyle = getComputedStyle(child, null);\n"+
-                "            if( computedStyle.getPropertyValue('display') != \"none\" &&\n"+
-                "                computedStyle.getPropertyValue('visibility') != \"hidden\" &&\n"+
-                "                !/^select$/i.test(child.nodeName) )\n"+
-                "            {\n"+
-                "              travers(child);\n"+
-                "            }\n"+
-                "            break;\n"+
-                "          }\n"+
-                "          case document.CDATA_SECTION_NODE:\n"+
-                "          case document.TEXT_NODE:\n"+
-                "          {\n"+
-                "            visibleText += child.nodeValue;\n"+
-                "          }\n"+
-                "        }\n"+
-                "\n"+
-                "      }\n"+
-                "      if( /^select|input$/i.test(ele.nodeName) &&\n"+
-                "                /^text|button|file|$/i.test(ele.type) )\n"+
-                "      {\n"+
-                "        visibleText += ele.value\n"+
-                "      }\n"+
-                "    };\n"+
-                "    travers(document);\n"+
-                "    return visibleText;");
-  }
-
   public void close() {
     closeWindow();
     windowManager.filterActiveWindow();
   }
 
-  /**
-   * Closes all open windows.
-   * @deprecated Use <code>for (String win : driver.getWindowHandles()) {
-   *   if (driver.getWindowCount() <= 1) break;
-   *   driver.switchTo().window(win).close();
-   * }</code> on Desktop.
-   */
-  @Deprecated
-  public void closeAll() {
-    windowManager.closeAllWindows();
-    windowManager.filterActiveWindow();
-  }
-
   private void closeWindow() {
-    exec.action("Close page");
-  }
-
-  /**
-   * Stops the loading of the current page.
-   * @deprecated Use {@link #navigate()}.stop()
-   */
-  @Deprecated
-  public void stop() {
-    exec.action("Stop");
+    windowManager.closeWindow(windowManager.getActiveWindowId());
   }
 
   public WebElement findElement(By by) {
     return by.findElement(this);
   }
 
+  protected WebElement findElement(String by, String using) {
+    return findElement(by, using, null);
+  }
+
+  /**
+   * Find a single element using the selenium atoms.
+   *
+   * @param by    how to find the element, strings defined in RemoteWebDriver
+   * @param using the value to use to find the element
+   * @param el    the element to search within
+   */
+  protected WebElement findElement(String by, String using, OperaWebElement el) {
+    if (using == null) {
+      throw new IllegalArgumentException("Cannot find elements when the selector is null");
+    }
+
+    using = escapeJsString(using);
+
+    long start = System.currentTimeMillis();
+    boolean isAvailable;
+    Integer id;
+
+    String script;
+    if (el == null) {
+      // Search the document
+      script =
+          "return " + OperaAtoms.FIND_ELEMENT.getValue() + "({\"" + by + "\": \"" + using + "\"})";
+    } else {
+      // Search within an element
+      script =
+          "return " + OperaAtoms.FIND_ELEMENT.getValue() + "({\"" + by + "\": \"" + using
+          + "\"}, locator)";
+    }
+
+    do {
+      if (el == null) {
+        id = debugger.getObject(script);
+      } else {
+        id = debugger.executeScriptOnObject(script, el.getObjectId());
+      }
+
+      isAvailable = (id != null);
+
+      if (!isAvailable) {
+        sleep(OperaIntervals.EXEC_SLEEP.getValue());
+      }
+    } while (!isAvailable && hasTimeRemaining(start));
+
+    OperaIntervals.WAIT_FOR_ELEMENT.setValue(0L);
+
+    if (isAvailable) {
+      String
+          error =
+          debugger
+              .callFunctionOnObject("return (locator instanceof Error) ? locator.message : ''", id);
+      if (!error.isEmpty()) {
+        throw new InvalidSelectorException(error);
+      }
+
+      Boolean
+          isStale =
+          Boolean.valueOf(debugger.callFunctionOnObject("locator.parentNode == undefined", id));
+
+      if (isStale) {
+        throw new StaleElementReferenceException("This element is no longer part of DOM");
+      }
+
+      return new OperaWebElement(this, id);
+    } else {
+      throw new NoSuchElementException("Cannot find element(s) with " + by);
+    }
+  }
+
   public List<WebElement> findElements(By by) {
     return by.findElements(this);
   }
 
+  protected List<WebElement> findElements(String by, String using) {
+    return findElements(by, using, null);
+  }
+
+  protected List<WebElement> findElements(String by, String using, OperaWebElement el) {
+    if (using == null) {
+      throw new IllegalArgumentException("Cannot find elements when the selector is null");
+    }
+
+    using = escapeJsString(using);
+
+    Integer id;
+
+    long start = System.currentTimeMillis();
+    int count = 0;
+
+    List<WebElement> elements;
+
+    String script;
+    if (el == null) {
+      // Search in document
+      script =
+          "return " + OperaAtoms.FIND_ELEMENTS.getValue() + "({\"" + by + "\": \"" + using + "\"})";
+    } else {
+      // Search within an element
+      script =
+          "return " + OperaAtoms.FIND_ELEMENTS.getValue() + "({\"" + by + "\": \"" + using
+          + "\"}, locator)";
+    }
+
+    do {
+      if (el == null) {
+        id = debugger.getObject(script);
+      } else {
+        id = debugger.executeScriptOnObject(script, el.getObjectId());
+      }
+
+      String
+          error =
+          debugger
+              .callFunctionOnObject("return (locator instanceof Error) ? locator.message : ''", id);
+      if (!error.isEmpty()) {
+        throw new InvalidSelectorException(error);
+      }
+
+      elements = processElements(id);
+
+      if (elements != null) {
+        count = elements.size();
+      }
+
+      if (count == 0 && hasTimeRemaining(start)) {
+        sleep(OperaIntervals.EXEC_SLEEP.getValue());
+      } else {
+        break;
+      }
+
+    } while (true);
+
+    OperaIntervals.WAIT_FOR_ELEMENT.setValue(0L);
+
+    if (id != null) {
+      return elements;
+    } else {
+      throw new NoSuchElementException("Cannot find element(s) with " + by);
+    }
+  }
+
   /**
-   * Get the source of the last loaded page.
-   *
-   * The source will be of the modified DOM, <em>not</em> the original HTML. The
-   * page source returned is a representation of the underlying DOM: do not
-   * expect it to be formatted or escaped in the same way as the response sent
-   * from the web server.
+   * Get the source of the last loaded page. <p/> The source will be of the modified DOM,
+   * <em>not</em> the original HTML.  The page source returned is a representation of the underlying
+   * DOM: do not expect it to be formatted or escaped in the same way as the response sent from the
+   * web server.
    */
   public String getPageSource() {
-    return debugger.executeJavascript("return document.documentElement.outerHTML || (typeof window.XMLSerializer != 'undefined') ? (new window.XMLSerializer()).serializeToString(document) : ''");
+    return debugger.executeJavascript(
+        "return document.documentElement.outerHTML || (typeof window.XMLSerializer != 'undefined') ? (new window.XMLSerializer()).serializeToString(document) : ''"
+    );
   }
 
   public String getTitle() {
@@ -381,7 +680,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
   }
 
   public String getWindowHandle() {
-    return debugger.executeJavascript("return top.window.name ? top.window.name : top.document.title;");
+    return getWindowHandle(null);
   }
 
   public Set<String> getWindowHandles() {
@@ -399,10 +698,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
     windowManager.clearFilter();
 
     for (Integer windowId : windowIds) {
-      // windowManager.filterWindow(windowId);
-      String handleName = debugger.executeJavascript(
-          "return top.window.name ? top.window.name : (top.document.title ? top.document.title : 'undefined');",
-          windowId);
+      String handleName = getWindowHandle(windowId);
       handles.add(handleName);
     }
 
@@ -411,16 +707,32 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
     return handles;
   }
 
+  private String getWindowHandle(Integer windowId) {
+    String windowName;
+
+    String script = "return top.window.name;";
+
+    if (windowId == null) {
+      windowName = debugger.executeJavascript(script);
+    } else {
+      windowName = debugger.executeJavascript(script, windowId);
+    }
+    if (windowName.isEmpty()) {
+      windowName = "operadriver-window" + (assignedWindowIds++);
+      script = "top.window.name = '" + windowName + "';";
+
+      if (windowId == null) {
+        windowName = debugger.executeJavascript(script);
+      } else {
+        windowName = debugger.executeJavascript(script, windowId);
+      }
+    }
+
+    return windowName;
+  }
+
   public int getWindowCount() {
     return windowManager.getWindowHandles().size();
-  }
-
-  public Options manage() {
-    return new OperaOptions();
-  }
-
-  public Navigation navigate() {
-    return new OperaNavigation();
   }
 
   public TargetLocator switchTo() {
@@ -442,12 +754,11 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
     }
 
     public WebDriver frame(int frameIndex) {
-      // make sure we execute this one on "_top"
-      debugger.resetFramePath();
       int framesLength = Integer.valueOf(debugger.executeJavascript("return document.frames.length"));
 
-      if (frameIndex < 0 || frameIndex >= framesLength) throw new NoSuchFrameException(
-          "Invalid frame index : " + frameIndex);
+      if (frameIndex < 0 || frameIndex >= framesLength) {
+        throw new NoSuchFrameException("Invalid frame index: " + frameIndex);
+      }
 
       debugger.changeRuntime(frameIndex);
 
@@ -463,38 +774,53 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
       windowManager.clearFilter();
 
       List<Integer> windowIds = windowManager.getWindowHandles();
-
       Integer id = 0;
 
       for (Integer windowId : windowIds) {
         String name = debugger.executeJavascript(
             "return top.window.name ? top.window.name : top.document.title;",
-            windowId);
+            windowId
+        );
+
         if (name.equals(windowName)) {
           id = windowId;
           break;
         }
       }
 
-      if (id == 0) throw new NoSuchWindowException("Window with name "
-          + windowName + " not found");
+      if (id == 0) {
+        throw new NoSuchWindowException("Window with name " + windowName + " not found");
+      }
+
       windowManager.setActiveWindowId(id);
 
       windowManager.filterActiveWindow();
       debugger.resetRuntimesList();
 
-      defaultContent(); // set runtime to _top
-      debugger.executeJavascript("window.focus()", false); // steal focus
+      defaultContent();  // set runtime to _top
+      debugger.executeJavascript("window.focus()", false);  // steal focus
+
       return OperaDriver.this;
     }
 
-    // TODO implement need to find a way to link an element to a runtime
+    // TODO: Implement need to find a way to link an element to a runtime
     public WebDriver frame(WebElement frameElement) {
-      throw new UnsupportedOperationException();
+      String script = "return " + OperaAtoms.GET_FRAME_INDEX.getValue() + "(locator)";
+      Long frameIndex = (Long) debugger.callFunctionOnObject(script, ((OperaWebElement) frameElement).getObjectId(), true);
+
+      if (frameIndex == null) {
+        throw new NoSuchFrameException("Non-frame element or frame not in current DOM");
+      }
+
+      debugger.changeRuntime(frameIndex.intValue());
+
+      return OperaDriver.this;
     }
 
-    // This and more functionality will be provided natively in near future, in
-    // progress
+    /*
+     * This and more functionality will be provided natively in near future, in
+     * progress.
+     */
     public Alert alert() {
       throw new UnsupportedOperationException();
     }
@@ -502,122 +828,69 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
   }
 
   /**
-   * @return list of frames available for chosing
+   * @return list of frames
    */
   public List<String> listFrames() {
     return debugger.listFramePaths();
+  }
+
+  /**
+   * Escape characters for safe insertion in a Javascript string contained by double quotes (").
+   *
+   * @param string the string to escape
+   * @return an escaped string
+   */
+  protected String escapeJsString(String string) {
+    return escapeJsString(string, "\"");
+  }
+
+  /**
+   * Escape characters for safe insertion in a JavaScript string.
+   *
+   * @param string the string to escape
+   * @param quote  the type of quote to escape. Either " or '
+   * @return the escaped string
+   */
+  private String escapeJsString(String string, String quote) {
+
+    /*
+     * This should be expanded to match all invalid characters (e.g. newlines)
+     * but for the moment we'll trust we'll only get quotes.
+     */
+    Pattern escapePattern = Pattern.compile("([^\\\\])" + quote);
+
+    /*
+     * Prepend a space so that the regex can match quotes at the beginning of
+     * the string.
+     */
+    Matcher m = escapePattern.matcher(" " + string);
+    StringBuffer sb = new StringBuffer();
+
+    while (m.find()) {
+      /*
+       * $1 -> inserts the character before the quote
+       * \\\\\" -> \\", apparently just \" isn't treated literally.
+       */
+      m.appendReplacement(sb, "$1\\\\" + quote);
+    }
+
+    m.appendTail(sb);
+
+    // Remove the prepended space.
+    return sb.substring(1);
   }
 
   private WebElement findActiveElement() {
     return findSingleElement("document.activeElement;", "active element");
   }
 
-  public WebElement findElementByLinkText(String using) {
-    return findSingleElement("(function(){\n"+
-          "var links = document.getElementsByTagName('a'), element = null;\n"+
-          "for (var i = 0; i < links.length && !element; ++i) {\n"+
-          "if(links[i].textContent.replace(/\\s+/g, ' ').trim() == \"" + using +"\".replace(/\\s+/g, ' ')) {\n"+
-          "element = links[i];\n"+
-          "}\n"+
-          "}\n"+
-          "return element;\n})()", "link text");
-  }
-
-  public WebElement findElementByPartialLinkText(String using) {
-    return findSingleElement("(function(){\n"+
-            "var links = document.getElementsByTagName('a'), element = null;\n"+
-            "for (var i = 0; i < links.length && !element; ++i) {\n"+
-            "if(links[i].textContent.replace(/\\s+/g, ' ').indexOf('" + using +"') > -1){\n"+
-            "element = links[i];\n"+
-            "}\n"+
-            "}\n"+
-            "return element;\n})()", "link text");
-  }
-
-  public List<WebElement> findElementsByLinkText(String using) {
-    return findMultipleElements("(function(){\n"+
-        "var links = document.links, link = null, i = 0, elements = [];\n"+
-        "for( ; link = links[i]; i++)\n"+
-        "{\n"+
-        "if(link.textContent.replace(/\\s+/g, ' ').trim() == \"" + using +"\".replace(/\\s+/g, ' '))\n"+
-        "{\n"+
-        "elements.push(link);\n"+
-          "}\n"+
-        "}\n" +
-        "return elements; })()", "link text");
-  }
-
   protected List<WebElement> processElements(Integer id) {
     List<Integer> ids = debugger.examineObjects(id);
     List<WebElement> toReturn = new ArrayList<WebElement>();
-    for (Integer objectId : ids)
+    for (Integer objectId : ids) {
       toReturn.add(new OperaWebElement(this, objectId));
+    }
     return toReturn;
-  }
-
-  public List<WebElement> findElementsByPartialLinkText(String using) {
-
-    return findMultipleElements("(function(){\n"+
-        "var links = document.links, link = null, i = 0, elements = [];\n"+
-        "for( ; link = links[i]; i++)\n"+
-        "{\n"+
-        "if(link.textContent.replace(/\\s+/g, ' ').indexOf('" + using +"') > -1)\n"+
-        "{\n"+
-        "elements.push(link);\n"+
-          "}\n"+
-        "}\n" +
-        "return elements; })()", "partial link text");
-  }
-
-  public WebElement findElementById(String using) {
-    //return findSingleElement("document.querySelector(\"#\" + " + using + ")", "id");
-    return findSingleElement("document.getElementById('" + using + "');", "id");
-  }
-
-  /**
-   * This method breaks web standards
-   */
-  public List<WebElement> findElementsById(String using) {
-    return findMultipleElements("var alls = document.all, element = null, i = 0, elements = [];\n" +
-        "for( ; element = alls[i]; i++)\n"+
-        "{\n"+
-            "if(element.getAttribute('id') == '" + using +"')\n"+
-            "{\n"+
-              "elements.push(element);\n"+
-            "}\n"+
-          "}\n"+
-          "return elements;", "by id");
-
-  }
-
-  public WebElement findElementByXPath(String using) {
-    return findSingleElement(
-        "document.evaluate(\""
-            + using
-            + "\", document, null, XPathResult.FIRST_ORDERED_NODE_TYPE,  null).singleNodeValue;\n",
-        "xpath");
-  }
-
-  public WebElement findElementByClassName(String using) {
-    return findSingleElement("document.getElementsByClassName('" + using
-        + "')[0];", "class name");
-  }
-
-  public List<WebElement> findElementsByClassName(String using) {
-    return findMultipleElements("document.getElementsByClassName('" + using
-        + "');\n", "class name");
-  }
-
-  public List<WebElement> findElementsByXPath(String using) {
-    return findMultipleElements(
-        "var result = document.evaluate(\""
-            + using
-            + "\", document, null, XPathResult.ORDERED_NODE_ITERATOR_TYPE,  null);\n"
-            + "var elements = new Array();\n"
-            + "var element = result.iterateNext();\n"
-            + "while (element) {\n" + "  elements.push(element);\n"
-            + "  element = result.iterateNext();\n" + "}\n"
-            + "return elements", "XPath");
   }
 
   // FIXME when timeout has completed, send 'stop' command?
@@ -626,42 +899,56 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
       // new opera wait for page
       services.waitForOperaIdle(OperaIntervals.PAGE_LOAD_TIMEOUT.getValue());
     } else {
-      // Sometimes we get here before the next page has even *started* loading,
-      // and so return too quickly. This sleep is enough to make sure
-      // readyState has been set to "loading"
+
+      /*
+       * Sometimes we get here before the next page has even *started*
+       * loading, and so return too quickly. This sleep is enough to make
+       * sure readyState has been set to "loading".
+       */
       try {
         Thread.sleep(5);
       } catch (InterruptedException e) {
         Thread.currentThread().interrupt();
       }
-      long endTime = System.currentTimeMillis()
-          + OperaIntervals.PAGE_LOAD_TIMEOUT.getValue();
+
+      long endTime = System.currentTimeMillis() + OperaIntervals.PAGE_LOAD_TIMEOUT.getValue();
+
       while (!"complete".equals(debugger.executeJavascript("return document.readyState"))) {
-        if (System.currentTimeMillis() < endTime) sleep(OperaIntervals.POLL_INVERVAL.getValue());
-        else throw new WebDriverException("Timeout while loading page");
+        if (System.currentTimeMillis() < endTime) {
+          sleep(OperaIntervals.POLL_INVERVAL.getValue());
+        } else {
+          throw new WebDriverException("Timeout while loading page");
+        }
       }
     }
   }
 
   public WebElement findElementByName(String using) {
-    return findSingleElement("document.getElementsByName('" + using + "')[0];",
-        "name");
+    return findSingleElement(
+        "document.getElementsByName('" + escapeJsString(using, "'") + "')[0];", "name"
+    );
   }
 
   public List<WebElement> findElementsByName(String using) {
-    return findMultipleElements("document.getElementsByName('" + using + "');",
-        "name");
+    return findMultipleElements(
+        "document.getElementsByName('" + escapeJsString(using, "'") + "');", "name"
+    );
+  }
+
+  public Navigation navigate() {
+    return new OperaNavigation();
   }
 
   private class OperaNavigation implements Navigation {
+
     public void back() {
-		  services.captureOperaIdle();
+      services.captureOperaIdle();
       exec.action("Back");
       waitForLoadToComplete();
     }
 
     public void forward() {
-		  services.captureOperaIdle();
+      services.captureOperaIdle();
       exec.action("Forward");
       waitForLoadToComplete();
     }
@@ -675,23 +962,30 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
     }
 
     public void refresh() {
-		  services.captureOperaIdle();
+      services.captureOperaIdle();
       exec.action("Reload");
       waitForLoadToComplete();
     }
+  }
 
+  public Options manage() {
+    return new OperaOptions();
   }
 
   private class OperaOptions implements Options {
+
     public void addCookie(Cookie cookie) {
+
+      // TODO: Numeric overflow
+
       if (cookie.getExpiry() == null) {
-        cookie = new Cookie(cookie.getName(), cookie.getValue(),
-            cookie.getDomain(), cookie.getPath(), new Date(
-            new Date().getTime() + (10 * 365 * 24 * 60 * 60 * 1000)), false);
+        cookie = new Cookie(
+            cookie.getName(), cookie.getValue(), cookie.getDomain(), cookie.getPath(),
+            new Date(new Date().getTime() + (10 * 365 * 24 * 60 * 60 * 1000)), false
+        );
       }
 
-      debugger.executeJavascript("document.cookie='" + cookie.toString() + "'",
-          false);
+      debugger.executeJavascript("document.cookie='" + cookie.toString() + "'", false);
     }
 
     public void deleteCookieNamed(String name) {
@@ -700,12 +994,16 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
     }
 
     public void deleteCookie(Cookie cookie) {
-      if (cookieManager == null) throw new UnsupportedOperationException(
-          "Deleting cookies are not supported without the cookie-manager service");
+      if (cookieManager == null) {
+        throw new UnsupportedOperationException(
+            "Deleting cookies are not supported without the cookie-manager service");
+      }
 
       cookieManager.removeCookie(cookie.getDomain(), cookie.getPath(),
-          cookie.getName());
+                                 cookie.getName());
+
       gc();
+
       /*
       Date dateInPast = new Date(0);
       Cookie toDelete = new Cookie(cookie.getName(), cookie.getValue(), cookie.getDomain(), cookie.getPath(), dateInPast, false);
@@ -714,10 +1012,13 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
     }
 
     public void deleteAllCookies() {
-      if (cookieManager == null) throw new UnsupportedOperationException(
-          "Deleting cookies are not supported without the cookie-manager service");
+      if (cookieManager == null) {
+        throw new UnsupportedOperationException(
+            "Deleting cookies are not supported without the cookie-manager service");
+      }
 
       cookieManager.removeAllCookies();
+
       /*
       Set<Cookie> cookies = getCookies();
       for (Cookie cookie : cookies) {
@@ -727,21 +1028,25 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
     }
 
     public Set<Cookie> getCookies() {
-      if (cookieManager == null) throw new UnsupportedOperationException(
-          "Setting cookies are not supported without the cookie-manager service");
+      if (cookieManager == null) {
+        throw new UnsupportedOperationException(
+            "Setting cookies are not supported without the cookie-manager service");
+      }
 
-      return cookieManager.getCookie(
-          debugger.executeJavascript("window.location.hostname"), null);
+      return cookieManager.getCookie(debugger.executeJavascript("window.location.hostname"), null);
     }
 
     public Cookie getCookieNamed(String name) {
       Set<Cookie> allCookies = getCookies();
 
       for (Cookie cookie : allCookies) {
-        if (cookie.getName().equals(name)) return cookie;
+        if (cookie.getName().equals(name)) {
+          return cookie;
+        }
       }
 
       return null;
+
       /*
       String value = debugger.executeJavascript("var getCookieNamed = function(key)\n"+
                               "{"+
@@ -761,19 +1066,18 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
       // TODO Auto-generated method stub
       return null;
     }
+
   }
 
   private class OperaTimeouts implements Timeouts {
 
     public Timeouts implicitlyWait(long time, TimeUnit unit) {
-      OperaIntervals.WAIT_FOR_ELEMENT.setValue(TimeUnit.MILLISECONDS.convert(
-          time, unit));
+      OperaIntervals.WAIT_FOR_ELEMENT.setValue(TimeUnit.MILLISECONDS.convert(time, unit));
       return this;
     }
 
     public Timeouts setScriptTimeout(long time, TimeUnit unit) {
-      OperaIntervals.SCRIPT_TIMEOUT.setValue(TimeUnit.MILLISECONDS.convert(
-          time, unit));
+      OperaIntervals.SCRIPT_TIMEOUT.setValue(TimeUnit.MILLISECONDS.convert(time, unit));
       return this;
     }
 
@@ -782,12 +1086,11 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
   /**
    * Performs a special action, such as setting an Opera preference.
    *
-   * @param using The action to perform. For a list of actions call
-   *          {@link #getOperaActionList()} at run time
+   * @param using  The action to perform. For a list of actions call {@link #getOperaActionList()}
+   *               at run time
    * @param params Parameters to pass to the action call
    */
   public void operaAction(String using, String... params) {
-
     exec.action(using, params);
   }
 
@@ -804,50 +1107,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
     }
   }
 
-  public WebElement findElementByTagName(String using) {
-    if (using.contains(":")) {// has prefix
-      String[] tagInfo = using.split(":");
-      return findSingleElement("(function() { var elements = document.getElementsByTagName('" + tagInfo[1] + "'), element = null;" +
-          "for( var i = 0; i < elements.length; i++ ) {" +
-          "if( elements[i].prefix == '" + tagInfo[0] + "' ) {" +
-          "element = elements[i];" +
-          "break;"+
-          "}" +
-          "}" +
-          "return element; })()", "tag name");
-    }
-    return findSingleElement("document.getElementsByTagName('" + using +"')[0];", "tag name");
-  }
-
-
-  public List<WebElement> findElementsByTagName(String using) {
-    if (using.contains(":")) {// has prefix
-      String[] tagInfo = using.split(":");
-      return findMultipleElements("(function() { var elements = document.getElementsByTagName('" + tagInfo[1] + "'), output = [];" +
-          "for( var i = 0; i < elements.length; i++ ) {" +
-          "if( elements[i].prefix == '" + tagInfo[0] + "' ) {" +
-          "output.push(elements[i]);" +
-          "}" +
-          "}" +
-          "return output; })()", "tag name");
-    }
-    return findMultipleElements("document.getElementsByTagName('"+ using + "');\n", "tag name");
-  }
-
-  public WebElement findElementByCssSelector(String using) {
-    return findSingleElement("document.querySelector('" + using + "');",
-        "selector");
-  }
-
-  public List<WebElement> findElementsByCssSelector(String using) {
-    return findMultipleElements(
-        "(function(){ var results = document.querySelectorAll('"
-            + using
-            + "'), returnValue = [], i=0;for(;returnValue[i]=results[i];i++); return returnValue;})()",
-        "selector");
-  }
-
-  private final List<WebElement> findMultipleElements(String script, String type) {
+  private List<WebElement> findMultipleElements(String script, String type) {
     Integer id;
 
     long start = System.currentTimeMillis();
@@ -859,10 +1119,15 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
       id = debugger.getObject(script);
       elements = processElements(id);
 
-      if (elements != null) count = elements.size();
+      if (elements != null) {
+        count = elements.size();
+      }
 
-      if (count == 0 && hasTimeRemaining(start)) sleep(OperaIntervals.EXEC_SLEEP.getValue());
-      else break;
+      if (count == 0 && hasTimeRemaining(start)) {
+        sleep(OperaIntervals.EXEC_SLEEP.getValue());
+      } else {
+        break;
+      }
 
     } while (true);
 
@@ -875,27 +1140,30 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
     }
   }
 
-  private final WebElement findSingleElement(String script, String type) {
+  private WebElement findSingleElement(String script, String type) {
     long start = System.currentTimeMillis();
-    boolean isAvailable = false;
+    boolean isAvailable;
     Integer id;
 
     do {
-			id = debugger.getObject(script);
-			isAvailable = (id != null);
+      id = debugger.getObject(script);
+      isAvailable = (id != null);
 
-			if (!isAvailable)
-				sleep(OperaIntervals.EXEC_SLEEP.getValue());
-
-		} while (!isAvailable && hasTimeRemaining(start));
+      if (!isAvailable) {
+        sleep(OperaIntervals.EXEC_SLEEP.getValue());
+      }
+    } while (!isAvailable && hasTimeRemaining(start));
 
     OperaIntervals.WAIT_FOR_ELEMENT.setValue(0L);
 
     if (isAvailable) {
-			Boolean isStale = Boolean.valueOf(debugger.callFunctionOnObject("locator.parentNode == undefined", id));
+      Boolean
+          isStale =
+          Boolean.valueOf(debugger.callFunctionOnObject("locator.parentNode == undefined", id));
 
-			if(isStale)
-				throw new StaleElementReferenceException("This element is no longer part of DOM");
+      if (isStale) {
+        throw new StaleElementReferenceException("This element is no longer part of DOM");
+      }
 
       return new OperaWebElement(this, id);
     } else {
@@ -908,13 +1176,12 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
   }
 
   /**
-   * Takes a screenshot of the whole screen, including areas outside of the
-   * Opera browser window.
+   * Takes a screenshot of the whole screen, including areas outside of the Opera browser window.
    *
-   * @param timeout The number of milliseconds to wait before taking the
-   *          screenshot
-   * @param hashes A previous screenshot MD5 hash. If it matches the hash of
-   *          this screenshot then no image data is returned.
+   * @param timeout the number of milliseconds to wait before taking the screenshot
+   * @param hashes  A previous screenshot MD5 hash.  If it matches the hash of this screenshot then
+   *                no image data is returned.
+   * @return a ScreenShotReply object
    */
   public ScreenShotReply saveScreenshot(long timeout, String... hashes) {
     return operaRunner.saveScreenshot(timeout, hashes);
@@ -932,43 +1199,55 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
   }
 
   private boolean useOperaIdle() {
-    return (settings.getUseOperaIdle() && isOperaIdleAvailable());
+    return (((Boolean) capabilities.getCapability(OPERAIDLE)) && isOperaIdleAvailable());
   }
 
-  public void setUseOperaIdle(boolean useIdle)
-  {
-      settings.setUseOperaIdle(useIdle);
+  public void setUseOperaIdle(boolean useIdle) {
+    capabilities.setCapability(OPERAIDLE, true);
   }
 
   public Object executeScript(String script, Object... args) {
     Object object = debugger.scriptExecutor(script, args);
 
-    // we probably have an element OR list
+    // We probably have an element _or_ a list.
     if (object instanceof ScriptResult) {
       ScriptResult result = (ScriptResult) object;
       Integer objectId = result.getObjectId();
-      if (objectId == null) return null;
-      if (result.getClassName().endsWith("Element")) return new OperaWebElement(
-          this, objectId);
-      if (result.getClassName().equals("NodeList")) return processElements(objectId);
+
+      if (objectId == null) {
+        return null;
+      }
+      if (result.getClassName().endsWith("Element")) {
+        return new OperaWebElement(this, objectId);
+      }
+      if (result.getClassName().equals("NodeList")) {
+        return processElements(objectId);
+      }
       if (result.getClassName().equals("Array")
           || result.getClassName().equals("Object")) {
         return debugger.examineScriptResult(objectId);
       }
     }
+
     return object;
   }
 
+  /**
+   * Is JavaScript enables in this driver?
+   *
+   * @return true if JavaScript is enabled
+   */
   public boolean isJavascriptEnabled() {
     return (OperaIntervals.ENABLE_DEBUGGER.getValue() == 1);
   }
 
   /**
+   * @param action a string identifying the Opera Action to use.
    * @deprecated
    */
   @Deprecated
   public void executeActions(OperaAction action) {
-            services.captureOperaIdle();
+    services.captureOperaIdle();
     List<UserInteraction> actions = action.getActions();
     for (UserInteraction userInteraction : actions) {
       userInteraction.execute(this);
@@ -977,16 +1256,17 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
   }
 
   /**
-   * Presses and releases the given key. If the key is "enter" then OperaDriver
-   * waits for the page to finish loading.
+   * Presses and releases the given key.  If the key is "enter" then OperaDriver waits for the page
+   * to finish loading.
    *
-   * @param key A string containing the key to press. This can be a single
-   *          character (e.g. "a") or a special key (e.g. "left"), and is
-   *          matched case insensitively. For a list of keys see
-   *          {@link OperaKeys}.
+   * @param key A string containing the key to press. This can be a single character (e.g. "a") or a
+   *            special key (e.g. "left"), and is matched case insensitively.  For a list of keys
+   *            see {@link OperaKeys}.
    */
   public void key(String key) {
-    if (key.equalsIgnoreCase("enter")) services.captureOperaIdle();
+    if (key.equalsIgnoreCase("enter")) {
+      services.captureOperaIdle();
+    }
 
     keyDown(key);
     keyUp(key);
@@ -997,10 +1277,9 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
   }
 
   /**
-   * Presses and holds the given key. You cannot press a key that is already
-   * down.
+   * Presses and holds the given key. You cannot press a key that is already down.
    *
-   * @param key The key to press. See {@link #key(String)} for more information.
+   * @param key the key to press, see {@link #key(String)} for more information.
    */
   public void keyDown(String key) {
     exec.key(key, false);
@@ -1009,8 +1288,7 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
   /**
    * Releases the given key.
    *
-   * @param key The key to release. See {@link #key(String)} for more
-   *          information.
+   * @param key the key to release, see {@link #key(String)} for more information.
    */
   public void keyUp(String key) {
     exec.key(key, true);
@@ -1024,21 +1302,19 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
   }
 
   /**
-   * Types the given string as-is in to the browser window. To press special
-   * keys use {@link #key(String)}.
+   * Types the given string as-is in to the browser window.  To press special keys use {@link
+   * #key(String)}.
    *
-   * @param using The string to type
+   * @param using the string to type
    */
   public void type(String using) {
     exec.type(using);
   }
 
-  public void mouseEvent(int x, int y, int value) {
-    exec.mouseAction(x, y, value, 1);
-  }
-
   /**
    * Returns the version number of driver.
+   *
+   * @return version number
    */
   public String getVersion() {
     if (version == null) {
@@ -1074,9 +1350,9 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
   /**
    * Get the value of the requested preference.
    *
-   * @param section The section the preference is in.
-   * @param key The key name of the preference to get.
-   * @return The value of the preference.
+   * @param section the section the preference is in
+   * @param key     the key name of the preference to get
+   * @return the value of the preference
    */
   public String getPref(String section, String key) {
     return services.getPrefs().getPref(section, key, Mode.CURRENT);
@@ -1085,32 +1361,60 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
   /**
    * Gets the default value of the requested preference.
    *
-   * @param section The section the preference is in.
-   * @param key The key name of the preference.
-   * @return The default string value of the preference.
+   * @param section the section the preference is in
+   * @param key     the key name of the preference
+   * @return the default string value of the preference
    */
   public String getDefaultPref(String section, String key) {
     return services.getPrefs().getPref(section, key, Mode.DEFAULT);
   }
 
   /**
-   * Returns a list of preferences in the requested section.
+   * Returns a Map of preference names to preferences in the requested section.
    *
-   * @param sort Whether to alphabetically sort the preference keys.
-   * @param section The section to retreive the preferences from.
-   * @return A list of preferences.
+   * @param sort    whether to alphabetically sort the preference keys
+   * @param section the section to retrieve the preferences from
+   * @return a Map of preference names to preferences.
    */
-  public List<Pref> listPrefs(boolean sort, String section) {
-    return services.getPrefs().listPrefs(sort, section);
+  public Map<String, Pref> listPrefs(boolean sort, String section) {
+    Map<String, Pref> map = new HashMap<String, Pref>();
+
+    for (Pref p : prefs.listPrefs(sort, section)) {
+      map.put(p.getKey(), p);
+    }
+    return map;
   }
 
   /**
-   * Set the {@link value} of the preference, {@link key}, in section
-   * {@link section}.
+   * Returns a Map of sections names mapping to a Map of preference names mapping to Pref objects.
    *
-   * @param section The section the preference is in.
-   * @param key The key name of the preference to set.
-   * @param value The value to set the preference to.
+   * @return a map of preference objects
+   */
+  public Map<String, Map<String, Pref>> listAllPrefs() {
+    List<Pref> allPrefs = prefs.listPrefs(true, null);
+
+    HashMap<String, Map<String, Pref>> result = new HashMap<String, Map<String, Pref>>();
+
+    for (Pref pref : allPrefs) {
+      String section = pref.getSection();
+      String key = pref.getKey();
+
+      if (!result.containsKey(section)) {
+        result.put(section, new HashMap<String, Pref>());
+      }
+
+      result.get(section).put(key, pref);
+    }
+
+    return result;
+  }
+
+  /**
+   * Set the value of a preference using section and key as locators.
+   *
+   * @param section the section the preference is in
+   * @param key     the key name of the preference to set
+   * @param value   the value to set the preference to
    */
   public void setPref(String section, String key, String value) {
     services.getPrefs().setPrefs(section, key, value);
@@ -1118,6 +1422,58 @@ public class OperaDriver implements WebDriver, FindsByLinkText, FindsById,
 
   public Object executeAsyncScript(String script, Object... args) {
     throw new UnsupportedOperationException();
+  }
+
+  public Keyboard getKeyboard() {
+    return new OperaKeyboard(this);
+  }
+
+  public Mouse getMouse() {
+    return new OperaMouse(this);
+  }
+
+  public String selftest(List<String> modules, long timeout) {
+    return services.selftest(modules, timeout);
+  }
+
+  public Utils utils() {
+    return new OperaUtils();
+  }
+
+  public class OperaUtils implements Utils {
+
+    public String getCoreVersion() {
+      return coreUtils.getCoreVersion();
+    }
+
+    public String getOS() {
+      return coreUtils.getOperatingSystem();
+    }
+
+    public String getProduct() {
+      return coreUtils.getProduct();
+    }
+
+    public String getBinaryPath() {
+      return coreUtils.getBinaryPath();
+    }
+
+    public String getUserAgent() {
+      return coreUtils.getUserAgent();
+    }
+
+    public int getPID() {
+      return coreUtils.getProcessID();
+    }
+
+  }
+
+  /**
+   * @deprecated
+   */
+  @Deprecated
+  public OperaRunner getOperaRunner() {
+    return operaRunner;
   }
 
 }

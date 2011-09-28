@@ -14,15 +14,15 @@ class Example {
       OPERA_PATH - absolute path to your Opera binary
       OPERA_LAUNCHER - absolute path to the Opera launcher binary
 
-    or create a OperaDriverSettings object:
+    or create a DesiredCapabilities object:
 
-      import com.opera.core.systems.settings.*
+      import org.openqa.selenium.remote.DesiredCapabilities;
       ...
-      OperaDriverSettings settings = new OperaDriverSettings();
-      settings.setOperaBinaryLocation(...);
-      settings.setOperaLauncherBinary(...);
+      DesiredCapabilities capabilities = new DesiredCapabilities();
+      capabilities.setCapability(OperaDriver.BINARY, ...);
+      capabilities.setCapability(OperaDriver.LAUNCHER, ...);
 
-      OperaDriver driver = new OperaDriver(settings);
+      OperaDriver driver = new OperaDriver(capabilities);
 
     Have a look at the documentation for more settings.
     */

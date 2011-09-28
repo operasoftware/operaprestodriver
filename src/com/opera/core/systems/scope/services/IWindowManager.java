@@ -16,20 +16,16 @@ limitations under the License.
 
 package com.opera.core.systems.scope.services;
 
+import com.opera.core.systems.scope.protos.WmProtos.WindowInfo;
+
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
-
-import org.openqa.selenium.WebDriverException;
-
-import com.opera.core.systems.scope.protos.WmProtos.WindowInfo;
 
 public interface IWindowManager {
 
   /**
-   * Sets the active window if the window is of type 'normal' discards any other
-   * window such as 'dialog' or 'unknown'
-   *
-   * @param windowId
+   * Sets the active window if the window is of type 'normal' discards any other window such as
+   * 'dialog' or 'unknown'.
    */
   void setActiveWindowId(Integer windowId);
 
@@ -41,19 +37,17 @@ public interface IWindowManager {
 
   void filterActiveWindow();
 
-  void closeWindow(Integer window);
-
   void closeAllWindows();
 
   /**
-   * Get the list of all windows, then find a driver window (which needs to be
-   * 'normal' window) after that set the active window to that window
+   * Get the list of all windows, then find a driver window (which needs to be 'normal' window)
+   * after that set the active window to that window.
    */
   void init();
 
   /**
-   * Find a window suitable for driving, find the active window, if it is not a
-   * normal window, find the first normal window via JXPath
+   * Find a window suitable for driving, find the active window, if it is not a normal window, find
+   * the first normal window via JXPath.
    *
    * @throws WebDriverException if no window is available for driving
    */
@@ -72,4 +66,9 @@ public interface IWindowManager {
   void clearFilter();
 
   void filterWindow(Integer windowId);
+
+  void openUrl(int windowId, String url);
+
+  void closeWindow(int windowId);
+
 }

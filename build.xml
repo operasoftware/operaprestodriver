@@ -17,7 +17,7 @@
 
   <!-- Variables  -->
 
-  <property name="jar.filename" value="webdriver-opera-${version}.jar" />
+  <property name="jar.filename" value="operadriver-${version}.jar" />
   <property name="jar.path" value="pkg/${jar.filename}" />
 
   <path id="classpath.path">
@@ -25,13 +25,12 @@
     <fileset dir="lib" includes="**/*.jar" />
   </path>
   <path id="test.classpath.path">
+    <pathelement location="bin" />
     <fileset file="${jar.path}"/>
     <fileset dir="lib" includes="**/*.jar" />
   </path>
 
-  <path id="test.dir.path">
-    <pathelement location="test/com/opera/core/systems" />
-  </path>
+  <property name="test.dir.path" value="bin" />
   <property name="test.output.path" value="test-output" />
   <property name="test.report.path" value="test-reports" />
 
@@ -52,7 +51,7 @@
     <delete dir="release" />
   </target>
 
-  <!-- Compile all classes after cleaning-->
+  <!-- Compile all classes after cleaning -->
   <target name="compile" description="Compile all the source files">
     <fileset dir="bin" />
     <mkdir dir="bin" />
@@ -65,7 +64,7 @@
       </fileset>
     </copy>
 
-    <javac debug="true" destdir="bin" includeantruntime="false">
+    <javac source="1.5" target="1.5" debug="true" destdir="bin" includeantruntime="false">
       <src path="src" />
       <classpath refid="classpath.path" />
     </javac>
@@ -97,10 +96,26 @@
 
   <!-- Compile any modified classes including test classes -->
   <target name="compile_tests">
-    <javac debug="true" destdir="test" includeantruntime="false">
+    <javac source="1.5" target="1.5" debug="true" destdir="bin" includeantruntime="false">
       <src path="test" />
       <classpath refid="test.classpath.path" />
     </javac>
+  </target>
+
+  <target name="compile_protos" description="Compile all the proto/*.proto files into Java classes. Use -Dprotoc=... to specify protoc binary">
+    <path id="protos.path">
+      <fileset dir="protos" includes="*.proto" />
+    </path>
+    <!-- If the protoc property isn't set, use the default -->
+    <property name="protoc" value="protoc" />
+    <exec executable="python" failifexecutionfails="true" failonerror="true">
+      <arg value="protos/compile.py" />
+      <arg value="--java_out" />
+      <arg value="src" />
+      <arg value="--protoc" />
+      <arg value="${protoc}" />
+      <arg pathref="protos.path" />
+    </exec>
   </target>
 
   <!-- Run all junit tests -->
@@ -113,11 +128,11 @@
     <junit fork="yes" haltonfailure="no" printsummary="yes" showoutput="yes" outputtoformatters="no">
       <formatter type="xml" usefile="true" />
       <classpath refid="test.classpath.path" />
-      <classpath location="test" />
+      <classpath location="${test.classpath.path}" />
 
       <!-- run all of the tests -->
       <batchtest unless="class" todir="${test.output.path}">
-        <fileset dir="test" includes="**/*Test.class" />
+        <fileset dir="${test.dir.path}" includes="**/*Test.class" />
       </batchtest>
 
       <!-- run just one file/class. Happens when -Dfile=<file> is passed -->
@@ -166,7 +181,7 @@
   </target>
 
   <target name="example" description="Run the simple example" depends="jar">
-    <javac debug="true">
+    <javac source="1.5" target="1.5" debug="true">
       <classpath refid="test.classpath.path" />
       <src path="examples/simple" />
     </javac>
@@ -179,17 +194,18 @@
   <target name="release" description="Generate a ZIP for release including the JAR, docs and examples" depends="clean,jar,doc">
     <mkdir dir="release" />
     <property name="release-zip.name" value="operadriver-${version}" />
+    <jar destfile="release/${release-zip.name}-source.jar" basedir="src" />
     <zip destfile="release/${release-zip.name}.zip">
       <!-- Add the docs -->
       <zipfileset prefix="${release-zip.name}/docs" dir="docs/" />
       <!-- Add the examples -->
       <zipfileset prefix="${release-zip.name}/examples" dir="examples/" />
-      <!-- add OperaDriver jar to the lib directory -->
-      <zipfileset prefix="${release-zip.name}/lib" dir="pkg" />
+      <!-- add OperaDriver (source) jar to the zip -->
+      <zipfileset prefix="${release-zip.name}" dir="pkg" />
+      <zipfileset prefix="${release-zip.name}" dir="release" includes="${release-zip.name}-source.jar" />
       <!-- Add all the jar libs -->
       <zipfileset prefix="${release-zip.name}/lib" dir="lib" excludes="junit*.jar"/>
       <zipfileset prefix="${release-zip.name}" dir="." includes="README.txt CHANGES.txt AUTHORS.txt LICENSE.txt VERSION"/>
     </zip>
-    <jar destfile="release/${release-zip.name}-source.jar" basedir="src" />
   </target>
 </project>

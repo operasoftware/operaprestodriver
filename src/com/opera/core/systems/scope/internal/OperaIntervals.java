@@ -13,14 +13,14 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+
 package com.opera.core.systems.scope.internal;
 
 /**
- *
- * Enumerator for delay values in miliseconds
- *
+ * Enumerator for delay values in milliseconds.
  */
 public enum OperaIntervals {
+
   RESPONSE_TIMEOUT(5000),
   PAGE_LOAD_TIMEOUT(30000),
   WINDOW_EVENT_TIMEOUT(5000),
@@ -39,7 +39,9 @@ public enum OperaIntervals {
   QUIT_POLL_INTERVAL(100),
   QUIT_RESPONSE_TIMEOUT(10000),
   SCRIPT_TIMEOUT(10000),
-  LAUNCHER_TIMEOUT(5000);
+  LAUNCHER_TIMEOUT(5000),
+  MENU_EVENT_TIMEOUT(1000),
+  MULTIPLE_CLICK_SLEEP(640);
 
   private long value;
 
@@ -54,4 +56,5 @@ public enum OperaIntervals {
   public long getValue() {
     return value;
   }
+
 }

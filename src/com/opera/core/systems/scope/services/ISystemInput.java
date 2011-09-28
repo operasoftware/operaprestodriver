@@ -13,34 +13,50 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-package com.opera.core.systems.scope.services;
 
-import java.awt.Point;
-import java.util.List;
+package com.opera.core.systems.scope.services;
 
 import com.opera.core.systems.scope.protos.SystemInputProtos.ModifierPressed;
 import com.opera.core.systems.scope.protos.SystemInputProtos.MouseInfo.MouseButton;
 
+import java.awt.*;
+import java.util.List;
+
+/**
+ * Interface for SystemInput.
+ *
+ * @author Adam Minchinton <adamm@opera.com>, Karianne Ekern <karie@opera.com>
+ */
+
 public interface ISystemInput {
 
   /**
-   * Clicks MouseButton a specified number of times with zero or more modifiers
-   * held down.
+   * Clicks MouseButton a specified number of times with zero or more modifiers held down.
    *
-   * @param location - Point to click
-   * @param button - MouseButton to click
+   * @param location  - Point to click
+   * @param button    - MouseButton to click
    * @param numClicks - number of clicks
    * @param modifiers - modifiers to hold down during click
-   *
    */
   void click(Point location, MouseButton button, int numClicks,
-      List<ModifierPressed> modifiers);
+             List<ModifierPressed> modifiers);
 
   /**
    * Presses key, optionally with one or more modifiers held down.
    *
-   * @param key - key to press
+   * @param key       - key to press
    * @param modifiers - modifiers to hold
    */
   void keyPress(String key, List<ModifierPressed> modifiers);
+
+  void mouseMove(Point location, MouseButton button, List<ModifierPressed> modifiers);
+
+  void mouseUp(Point location, MouseButton button, List<ModifierPressed> modifiers);
+
+  void mouseDown(Point location, MouseButton button, List<ModifierPressed> modifiers);
+
+  void keyDown(String key, List<ModifierPressed> modifiers);
+
+  void keyUp(String key, List<ModifierPressed> modifiers);
+
 }

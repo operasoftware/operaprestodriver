@@ -13,19 +13,18 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+
 package com.opera.core.systems.interaction;
+
+import com.opera.core.systems.OperaWebElement;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
-import com.opera.core.systems.OperaWebElement;
-
 /**
- * Mouse user interactions, part of OperaUserInteraction to support clicking and
- * moving the mouse
+ * Mouse user interactions, part of OperaUserInteraction to support clicking and moving the mouse.
  *
  * @author Deniz Turkoglu <denizt@opera.com>
- *
  */
 public abstract class Mouse implements UserInteraction {
 

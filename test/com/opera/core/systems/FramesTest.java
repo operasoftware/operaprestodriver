@@ -1,11 +1,10 @@
 package com.opera.core.systems;
 
-import java.util.List;
-
 import junit.framework.Assert;
-
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.List;
 
 public class FramesTest extends TestBase {
   List<String> frames;

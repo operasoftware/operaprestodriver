@@ -13,3 +13,8 @@ doc/
 VERSION
 *.orig
 .idea/workspace.xml
+.idea/dictionaries/
+maven/src
+maven/target
+.*.swp
+test/com/opera/core/systems/GenericTest.java

@@ -13,16 +13,17 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+
 package com.opera.core.systems.model;
 
 /**
- * A canvas object to use in taking screenshots of Opera's viewport. The
- * screenshot can be relative to viewport or to the window
+ * A canvas object to use in taking screenshots of Opera's viewport. The screenshot can be relative
+ * to viewport or to the window
  *
  * @author Deniz Turkoglu <denizt@opera.com>
- *
  */
 public class Canvas {
+
   protected int x;
   protected int y;
   protected int width;
@@ -46,8 +47,7 @@ public class Canvas {
   }
 
   /**
-   * Sets the screenshots to be relative to screen or to window, default is
-   * window.
+   * Sets the screenshots to be relative to screen or to window, default is window.
    *
    * @param viewPortRelative true if relative to window
    */
@@ -89,11 +89,13 @@ public class Canvas {
 
   @Override
   public boolean equals(Object obj) {
-    if (obj == null || !(obj instanceof Canvas)) return false;
+    if (obj == null || !(obj instanceof Canvas)) {
+      return false;
+    }
 
     Canvas canvas = (Canvas) obj;
     return (getX() == canvas.getX() && getY() == canvas.getY()
-        && getHeight() == canvas.getHeight() && getWidth() == canvas.getWidth());
+            && getHeight() == canvas.getHeight() && getWidth() == canvas.getWidth());
   }
 
   @Override
@@ -104,6 +106,7 @@ public class Canvas {
   @Override
   public String toString() {
     return "Canvas [x=" + x + ", y=" + y + ", width=" + width + ", height="
-        + height + ", viewPortRelative=" + viewPortRelative + "]";
+           + height + ", viewPortRelative=" + viewPortRelative + "]";
   }
+
 }

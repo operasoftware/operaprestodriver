@@ -6,20 +6,15 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.openqa.selenium.WebElement;
 
-public class JavascriptTest extends TestBase
-{
+public class JavascriptTest extends TestBase {
 
   @Before
-  public void setUp()
-  {
+  public void setUp() {
     driver.get(fixture("javascript.html"));
-    // Click to focus the document
-    driver.mouseEvent(1, 1, 1);
   }
 
   @Test
-  public void testTyping()
-  {
+  public void testTyping() {
     String text = "Hello, world!";
 
     driver.executeScript("document.getElementById('one').focus()");
@@ -29,10 +24,9 @@ public class JavascriptTest extends TestBase
   }
 
   // Make sure that typing actually happens. When the focus switches half way
-  // through typing we should continue typing on the other textbox
+  // through typing we should continue typing on the other textbox.
   @Test
-  public void testTypingKeyEvents()
-  {
+  public void testTypingKeyEvents() {
     driver.get(fixture("keys.html"));
 
     driver.type("hi");
@@ -43,8 +37,7 @@ public class JavascriptTest extends TestBase
   }
 
   @Test
-  public void testDoubleClick()
-  {
+  public void testDoubleClick() {
     WebElement one = driver.findElementById("one");
     one.click();
     one.click();
@@ -70,4 +63,5 @@ public class JavascriptTest extends TestBase
     Assert.assertTrue(driver.getCurrentUrl().endsWith("javascript.html"));
     Assert.assertEquals(numWindows - 1, driver.getWindowCount());
   }
+
 }

@@ -19,20 +19,25 @@ import org.openqa.selenium.WebDriverException;
 
 import com.google.protobuf.GeneratedMessage;
 import com.google.protobuf.InvalidProtocolBufferException;
+import com.opera.core.systems.scope.CoreUtilsCommand;
+import com.opera.core.systems.scope.DesktopWindowManagerCommand;
+import com.opera.core.systems.scope.ESDebuggerCommand;
+import com.opera.core.systems.scope.SelftestCommand;
+import com.opera.core.systems.scope.WindowManagerCommand;
 import com.opera.core.systems.scope.handlers.AbstractEventHandler;
 import com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessage;
+import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo;
+import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID;
+import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo;
+import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemID;
 import com.opera.core.systems.scope.protos.EcmascriptProtos.ReadyStateChange;
 import com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeID;
 import com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeInfo;
 import com.opera.core.systems.scope.protos.HttpLoggerProtos.Header;
+import com.opera.core.systems.scope.protos.SelftestProtos.SelftestOutput;
 import com.opera.core.systems.scope.protos.UmsProtos.Event;
 import com.opera.core.systems.scope.protos.WmProtos.WindowID;
 import com.opera.core.systems.scope.protos.WmProtos.WindowInfo;
-import com.opera.core.systems.scope.CoreCommand;
-import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo;
-import com.opera.core.systems.scope.ESDebuggerCommand;
-import com.opera.core.systems.scope.WindowManagerCommand;
-import com.opera.core.systems.scope.DesktopWindowManagerCommand;
 
 public class UmsEventParser {
 
@@ -123,6 +128,24 @@ public class UmsEventParser {
         DesktopWindowInfo info_loaded = loadedDWBuilder.build();
         eventHandler.onDesktopWindowLoaded(info_loaded);
         break;
+      case MENU_SHOWN:
+    	QuickMenuInfo.Builder shownQMBuilder = QuickMenuInfo.newBuilder();
+    	buildPayload(event, shownQMBuilder);
+    	QuickMenuInfo menuInfoShown = shownQMBuilder.build();
+    	eventHandler.onQuickMenuShown(menuInfoShown);
+    	break;
+      case MENU_CLOSED:
+    	QuickMenuID.Builder closedQMBuilder = QuickMenuID.newBuilder();
+      	buildPayload(event, closedQMBuilder);
+      	QuickMenuID menuId = closedQMBuilder.build();
+      	eventHandler.onQuickMenuClosed(menuId);
+      	break;
+      case MENU_PRESSED:
+    	QuickMenuItemID.Builder pressedQMIBuilder = QuickMenuItemID.newBuilder();
+      	buildPayload(event, pressedQMIBuilder);
+      	QuickMenuItemID menuItemID = pressedQMIBuilder.build();
+      	eventHandler.onQuickMenuItemPressed(menuItemID);
+      	break;
       default:
         break;
       }
@@ -147,7 +170,7 @@ public class UmsEventParser {
       }
       eventHandler.onRequest(header.getWindowID());
     } else if (service.equals("core")) {
-      switch (CoreCommand.get(eventId)) {
+      switch (CoreUtilsCommand.get(eventId)) {
       case ONACTIVE:
         // No active event handler...
         // Opera only becomes active as reaction on other event
@@ -156,6 +179,17 @@ public class UmsEventParser {
       case ONIDLE:
         eventHandler.onOperaIdle();
         break;
+      }
+    } else if (service.equals("selftest")) {
+      switch(SelftestCommand.get(eventId)) {
+        case OUTPUT:
+          SelftestOutput.Builder builder = SelftestOutput.newBuilder();
+          buildPayload(event, builder);
+          eventHandler.onSelftestOutput(builder.build());
+          break;
+        case FINISHED:
+          eventHandler.onSelftestDone();
+          break;
       }
     }
   }

@@ -35,6 +35,7 @@ import org.openqa.selenium.NoSuchFrameException;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 
+import com.opera.core.systems.OperaDriver;
 import com.opera.core.systems.OperaWebElement;
 import com.opera.core.systems.ScopeServices;
 import com.opera.core.systems.model.RuntimeNode;
@@ -595,7 +596,7 @@ public class EcmascriptService extends AbstractEcmascriptService implements
 
   private void processGcObjects() {
     ReleaseObjectsArg.Builder builder = ReleaseObjectsArg.newBuilder();
-    builder.addAllObjectList(garbageQueue);
+    builder.addAllObjectIDList(garbageQueue);
     executeCommand(ESCommand.RELEASE_OBJECTS, builder);
     garbageQueue.clear();
   }
@@ -608,7 +609,7 @@ public class EcmascriptService extends AbstractEcmascriptService implements
    */
   private Runtime getRuntime(int runtimeID) {
     ListRuntimesArg.Builder builder = ListRuntimesArg.newBuilder();
-    builder.addRuntimeList(runtimeID);
+    builder.addRuntimeIDList(runtimeID);
     builder.setCreate(true);
 
     Response response = executeCommand(ESCommand.LIST_RUNTIMES, builder);
@@ -622,7 +623,7 @@ public class EcmascriptService extends AbstractEcmascriptService implements
     ExamineObjectsArg.Builder builder = ExamineObjectsArg.newBuilder();
     builder.setExaminePrototypes(false);
     builder.setRuntimeID(getRuntimeId());
-    builder.addObjectList(id);
+    builder.addObjectIDList(id);
     Response response = executeCommand(ESCommand.EXAMINE_OBJECTS, builder);
 
     ObjectList.Builder objListBuilder = ObjectList.newBuilder();

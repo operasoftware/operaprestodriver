@@ -13,6 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+
 package com.opera.core.systems.scope.exceptions;
 
 import org.openqa.selenium.WebDriverException;
@@ -36,4 +37,5 @@ public class WindowNotFoundException extends WebDriverException {
   public WindowNotFoundException(String message, Throwable cause) {
     super(message, cause);
   }
+
 }

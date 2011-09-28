@@ -26,10 +26,22 @@ import java.util.Map;
  *
  */
 public enum WindowManagerCommand implements ICommand {
-  GET_ACTIVE_WINDOW(1), LIST_WINDOWS(2), MODIFY_FILTER(3), WINDOW_UPDATED(4), // event
-  WINDOW_CLOSED(5), // event
-  WINDOW_ACTIVATED(6), // event
-  WINDOW_LOADED(7), DEFAULT(-1); // event
+  // Commands
+  GET_ACTIVE_WINDOW(1),
+  LIST_WINDOWS(2),
+  MODIFY_FILTER(3),
+  // Events
+  WINDOW_UPDATED(4),
+  WINDOW_CLOSED(5),
+  WINDOW_ACTIVATED(6),
+  WINDOW_LOADED(7),
+  // Commands
+  CREATE_WINDOW(8),
+  CLOSE_WINDOW(9),
+  OPEN_URL(10),
+  MODIFY_TYPE_FILTER(11),
+
+  DEFAULT(-1);
 
   private int code;
   private static final Map<Integer, WindowManagerCommand> lookup = new HashMap<Integer, WindowManagerCommand>();

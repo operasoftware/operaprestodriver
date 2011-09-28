@@ -8,6 +8,7 @@ import java.util.List;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 
+import com.opera.core.systems.OperaDriver;
 import com.opera.core.systems.ScopeServices;
 import com.opera.core.systems.model.RuntimeNode;
 import com.opera.core.systems.scope.internal.OperaIntervals;
@@ -28,6 +29,7 @@ public abstract class AbstractEcmascriptService extends AbstractService
   /// The window our current runtime is contained in.
   protected int activeWindowId;
 
+  protected OperaDriver driver;
 
   protected RuntimeNode root;
 
@@ -148,5 +150,9 @@ public abstract class AbstractEcmascriptService extends AbstractService
   public void cleanUpRuntimes() {
     int windowId = windowManager.getActiveWindowId();
     cleanUpRuntimes(windowId);
+  }
+
+  public void setDriver(OperaDriver driver) {
+    this.driver = driver;
   }
 }

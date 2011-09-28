@@ -13,26 +13,23 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+
 package com.opera.core.systems.scope.services.ums;
 
+import com.opera.core.systems.ScopeServices;
 import com.opera.core.systems.scope.AbstractService;
 import com.opera.core.systems.scope.DesktopUtilsCommand;
-import com.opera.core.systems.ScopeServices;
-
-//import org.openqa.selenium.WebDriverException;
-
-import com.opera.core.systems.scope.protos.UmsProtos.Response;
-
-import com.opera.core.systems.scope.services.IDesktopUtils;
+import com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopPath;
 import com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopPid;
 import com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopStringID;
 import com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopStringText;
-import com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopPath;
+import com.opera.core.systems.scope.protos.UmsProtos.Response;
+import com.opera.core.systems.scope.services.IDesktopUtils;
+
+//import org.openqa.selenium.WebDriverException;
 
 /**
- *
  * @author Adam Minchinton, Karianne Ekern
- *
  */
 public class DesktopUtils extends AbstractService implements IDesktopUtils {
 
@@ -41,8 +38,10 @@ public class DesktopUtils extends AbstractService implements IDesktopUtils {
 
     String serviceName = "desktop-utils";
 
-    if (!isVersionInRange(version, "3.0", serviceName)) throw new UnsupportedOperationException(
-        serviceName + " version " + version + " is not supported");
+    if (!isVersionInRange(version, "3.0", serviceName)) {
+      throw new UnsupportedOperationException(
+          serviceName + " version " + version + " is not supported");
+    }
 
     services.setDesktopUtils(this);
   }
@@ -50,24 +49,26 @@ public class DesktopUtils extends AbstractService implements IDesktopUtils {
   public void init() {
   }
 
-	public String getString(String enumText, boolean stripAmpersand) {
-		DesktopStringID.Builder stringBuilder = DesktopStringID.newBuilder();
-		stringBuilder.setEnumText(enumText);
+  public String getString(String enumText, boolean stripAmpersand) {
+    DesktopStringID.Builder stringBuilder = DesktopStringID.newBuilder();
+    stringBuilder.setEnumText(enumText);
 
     Response response = executeCommand(DesktopUtilsCommand.GET_STRING,
-        stringBuilder);
+                                       stringBuilder);
 
     DesktopStringText.Builder stringTextBuilder = DesktopStringText.newBuilder();
     buildPayload(response, stringTextBuilder);
     DesktopStringText stringText = stringTextBuilder.build();
 
-    // Remember to remove all CRLF
+    // 	Remember to remove all CRLF
     String str = removeCR(stringText.getText());
-		
-    if (stripAmpersand && str.contains("&")) {
-    	return str.replace("&", "");
+
+    if (stripAmpersand && str.contains("(&")) {
+      return str.replaceAll("\\(&.\\)", "");
     }
-		
+    if (stripAmpersand && str.contains("&")) {
+      return str.replace("&", "");
+    }
     return str;
   }
 

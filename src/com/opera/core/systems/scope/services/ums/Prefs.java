@@ -13,28 +13,25 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+
 package com.opera.core.systems.scope.services.ums;
 
-import java.util.List;
-
-import org.openqa.selenium.WebDriverException;
-
+import com.opera.core.systems.ScopeServices;
 import com.opera.core.systems.scope.AbstractService;
 import com.opera.core.systems.scope.PrefsCommand;
-import com.opera.core.systems.ScopeServices;
-
-//import org.openqa.selenium.WebDriverException;
-
-import com.opera.core.systems.scope.protos.UmsProtos.Response;
-
-import com.opera.core.systems.scope.services.IPrefs;
 import com.opera.core.systems.scope.protos.PrefsProtos.GetPrefArg;
 import com.opera.core.systems.scope.protos.PrefsProtos.GetPrefArg.Mode;
 import com.opera.core.systems.scope.protos.PrefsProtos.ListPrefsArg;
+import com.opera.core.systems.scope.protos.PrefsProtos.Pref;
+import com.opera.core.systems.scope.protos.PrefsProtos.PrefList;
 import com.opera.core.systems.scope.protos.PrefsProtos.PrefValue;
 import com.opera.core.systems.scope.protos.PrefsProtos.SetPrefArg;
-import com.opera.core.systems.scope.protos.PrefsProtos.PrefList;
-import com.opera.core.systems.scope.protos.PrefsProtos.Pref;
+import com.opera.core.systems.scope.protos.UmsProtos.Response;
+import com.opera.core.systems.scope.services.IPrefs;
+
+import org.openqa.selenium.WebDriverException;
+
+import java.util.List;
 
 public class Prefs extends AbstractService implements IPrefs {
 
@@ -44,7 +41,7 @@ public class Prefs extends AbstractService implements IPrefs {
 
     if (!isVersionInRange(version, "2.0", serviceName)) {
       throw new UnsupportedOperationException(serviceName + " version "
-          + version + " is not supported");
+                                              + version + " is not supported");
     }
 
     services.setPrefs(this);
@@ -68,10 +65,14 @@ public class Prefs extends AbstractService implements IPrefs {
     return prefsString.getValue();
   }
 
-  public List<Pref> listPrefs(boolean sort, String section) {
+  public List<Pref> listPrefs(Boolean sort, String section) {
     ListPrefsArg.Builder listPrefBuilder = ListPrefsArg.newBuilder();
-    listPrefBuilder.setSort(sort);
-    listPrefBuilder.setSection(section);
+    if (sort != null) {
+      listPrefBuilder.setSort(sort);
+    }
+    if (section != null && !"".equals(section)) {
+      listPrefBuilder.setSection(section);
+    }
 
     Response response = executeCommand(PrefsCommand.LIST_PREFS, listPrefBuilder);
 
