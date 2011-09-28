@@ -42,6 +42,7 @@ import com.opera.core.systems.scope.AbstractEcmascriptService;
 import com.opera.core.systems.scope.ESCommand;
 import com.opera.core.systems.scope.internal.OperaIntervals;
 import com.opera.core.systems.scope.protos.EcmascriptProtos;
+//Highlight when we're using EsdbgProtos, instead of importing them directly.
 import com.opera.core.systems.scope.protos.EsdbgProtos;
 import com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg;
 import com.opera.core.systems.scope.protos.EcmascriptProtos.EvalResult;
@@ -60,8 +61,6 @@ import com.opera.core.systems.scope.protos.EcmascriptProtos.Value.Type;
 // We can't import this, because of the java "Object" class.
 // Leaving this commented out to help in the future!
 //import com.opera.core.systems.scope.protos.EcmascriptProtos.Object;
-// Highlight when we're using EsdbgProtos, instead of importing them directly.
-import com.opera.core.systems.scope.protos.EsdbgProtos;
 import com.opera.core.systems.scope.protos.UmsProtos.Response;
 import com.opera.core.systems.scope.services.IEcmaScriptDebugger;
 
@@ -517,7 +516,10 @@ public class EcmascriptService extends AbstractEcmascriptService implements
     String className = obj.getClassName();
 
     List<Property> properties = obj.getPropertyListList();
-    if (className.equals("Array")) {
+
+    if (className.endsWith("Element")) {
+      return new OperaWebElement(driver, id);
+    } else if (className.equals("Array")) {
       List<Object> result = new ArrayList<Object>();
 
       for (Property property : properties) {

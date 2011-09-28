@@ -581,7 +581,9 @@ public class EcmaScriptDebugger extends AbstractEcmascriptService implements
   public Object examineScriptResult(Integer id) {
     ObjectList list = getObjectList(id);
     String className = list.getObjectList(0).getValue().getName();
+
     List<Property> properties = list.getObjectList(0).getPropertyListList();
+
     if (className.endsWith("Element")) {
       return new OperaWebElement(driver, id);
     } else if (className.equals("Array")) {

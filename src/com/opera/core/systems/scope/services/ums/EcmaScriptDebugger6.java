@@ -243,11 +243,10 @@ public class EcmaScriptDebugger6 extends EcmaScriptDebugger {
   @Override
   public Object examineScriptResult(Integer id) {
     ObjectChainList list = getChainList(id);
-    List<Property> properties = list.getObjectChainList(0).getObjectListList().get(
-        0).getPropertyListList();
-    String
-        className =
-        list.getObjectChainListList().get(0).getObjectList(0).getValue().getClassName();
+    List<Property> properties = list.getObjectChainList(0).getObjectListList().get(0).getPropertyListList();
+
+    String className = list.getObjectChainListList().get(0).getObjectList(0).getValue().getClassName();
+
     if (className.endsWith("Element")) {
       return new OperaWebElement(driver, id);
     } else if (className.equals("Array")) {
