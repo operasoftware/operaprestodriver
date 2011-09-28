@@ -200,6 +200,10 @@ public class ScopeServices implements IConnectionHandler {
     selftestOutput = new StringBuilder();
   }
 
+  /**
+   * Gets the supported services from Opera and calls methods to enable the
+   * ones we requested .
+   */
   public void init() {
     waitState.setProfile(product);
     waitForHandshake();
@@ -249,6 +253,10 @@ public class ScopeServices implements IConnectionHandler {
     initializeServices(enableDebugger);
   }
 
+  /**
+   * Initialises the services that are available.
+   * @param enableDebugger
+   */
   private void initializeServices(boolean enableDebugger) {
     exec.init();
     windowManager.init();
@@ -305,6 +313,10 @@ public class ScopeServices implements IConnectionHandler {
     }
   }
 
+  /**
+   * Gets information on available services and their versions from Opera.
+   * @return
+   */
   private HostInfo getHostInfo() {
     Response response = executeCommand(ScopeCommand.HOST_INFO, null);
 
@@ -315,6 +327,13 @@ public class ScopeServices implements IConnectionHandler {
     }
   }
 
+  /**
+   * Creates all of the services that we requested and are available. If the
+   * debugger is disabled (which currently never happens) then it creates
+   * a dummy class.
+   * @param enableDebugger
+   * @param info
+   */
   private void createUmsServices(boolean enableDebugger, HostInfo info) {
     new UmsServices(this, info);
 
@@ -423,6 +442,9 @@ public class ScopeServices implements IConnectionHandler {
     }
   }
 
+  /**
+   * Connects and resets any settings and services that the client used earlier.
+   */
   private void connect() {
     ClientInfo.Builder info = ClientInfo.newBuilder().setFormat("protobuf");
     executeCommand(ScopeCommand.CONNECT, info);
@@ -745,6 +767,12 @@ public class ScopeServices implements IConnectionHandler {
     }
   }
 
+  /**
+   * Gets the minimum version for this service, as provided by OperaDriver in
+   * the constructor.
+   * @param service
+   * @return
+   */
   public String getMinVersionFor(String service) {
     return versions.get(service);
   }
