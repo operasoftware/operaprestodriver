@@ -19,8 +19,6 @@ package com.opera.core.systems.scope.services.ums;
 import java.util.List;
 import java.util.logging.Logger;
 
-import org.openqa.selenium.WebDriverException;
-
 import com.opera.core.systems.ScopeServices;
 import com.opera.core.systems.scope.protos.ScopeProtos.HostInfo;
 import com.opera.core.systems.scope.protos.ScopeProtos.Service;
@@ -34,8 +32,6 @@ import com.opera.core.systems.scope.services.IPrefs;
 import com.opera.core.systems.scope.services.ISelftest;
 import com.opera.core.systems.scope.services.IWindowManager;
 import com.opera.core.systems.util.VersionUtil;
-
-import java.util.List;
 
 /**
  * @author Deniz Turkoglu <dturkoglu@opera.com>, Andreas Tolf Tolfsen <andreastt@opera.com>

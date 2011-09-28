@@ -1,3 +1,4 @@
+
 package com.opera.core.systems;
 
 import junit.framework.Assert;

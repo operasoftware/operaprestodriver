@@ -16,11 +16,8 @@ limitations under the License.
 
 package com.opera.core.systems.scope.services.ums;
 
-import java.text.NumberFormat;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -40,7 +37,6 @@ import com.opera.core.systems.OperaWebElement;
 import com.opera.core.systems.ScopeServices;
 import com.opera.core.systems.model.ScriptResult;
 import com.opera.core.systems.scope.AbstractEcmascriptService;
-import com.opera.core.systems.scope.AbstractService;
 import com.opera.core.systems.scope.ESDebuggerCommand;
 import com.opera.core.systems.scope.internal.OperaIntervals;
 import com.opera.core.systems.scope.protos.EcmascriptProtos.ReadyStateChange;

@@ -1,7 +1,5 @@
 package com.opera.core.systems;
 
-import static org.junit.Assert.*;
-
 import java.util.List;
 
 import junit.framework.Assert;
