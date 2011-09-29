@@ -211,7 +211,11 @@ public class EcmascriptService extends AbstractEcmascriptService implements
   }
 
   private Response eval(String using, int runtimeId, Variable... variables) {
-    processQueues();
+    // This call causes us to release objects, which allows them to be garbage
+    // collected, and sometimes causes this method to fail. So I've commented
+    // it out. But I reckon it might cause high memory usage in Opera, so
+    // the method might need to be updated in the future.
+    //processQueues();
 
     EvalArg.Builder builder = buildEval(using, runtimeId);
     builder.addAllVariableList(Arrays.asList(variables));
