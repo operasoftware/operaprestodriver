@@ -778,11 +778,11 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
       for (Integer windowId : windowIds) {
         String name = debugger.executeJavascript(
-            "return top.window.name ? top.window.name : top.document.title;",
+            "return top.window.name || top.document.title || null",
             windowId
         );
 
-        if (name.equals(windowName)) {
+        if (name != null && name.equals(windowName)) {
           id = windowId;
           break;
         }
