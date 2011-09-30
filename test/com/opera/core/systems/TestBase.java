@@ -8,6 +8,7 @@ import junit.framework.Assert;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.openqa.selenium.Capabilities;
+import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.io.File;
 
@@ -19,7 +20,9 @@ abstract public class TestBase {
 
   @BeforeClass
   public static void setUpBeforeClass() throws Exception {
-    driver = new TestOperaDriver();
+    DesiredCapabilities caps = new DesiredCapabilities();
+    caps.setCapability(OperaDriver.LOGGING_LEVEL, "FINE");
+    driver = new TestOperaDriver(caps);
     Assert.assertNotNull(driver);
 
     initFixtures();
