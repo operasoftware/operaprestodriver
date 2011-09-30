@@ -24,6 +24,9 @@ import org.junit.rules.MethodRule;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.Statement;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 /**
  * @author Andreas Tolf Tolfsen <andreastt@opera.com>
  */
@@ -65,7 +68,7 @@ public class UtilsTest extends TestBase {
 
   @Test
   public void testCoreVersion() {
-    Assert.assertTrue(coreVersion.matches("\\d+\\.\\d+\\.\\d+"));
+    assertTrue(coreVersion.matches("\\d+\\.\\d+\\.\\d+"));
   }
 
   @Test
@@ -75,12 +78,12 @@ public class UtilsTest extends TestBase {
 
   @Test
   public void testProductIsNotUnknown() {
-    Assert.assertFalse(product.contains("unknown"));
+    assertFalse(product.contains("unknown"));
   }
 
   @Test
   public void testProductIsKnown() {
-    Assert.assertTrue(product.matches("core-gogi|desktop"));
+    assertTrue(product.matches("core-gogi|desktop"));
   }
 
   @Test
@@ -90,12 +93,12 @@ public class UtilsTest extends TestBase {
 
   @Test
   public void testUserAgent() {
-    Assert.assertTrue(userAgent.matches("Opera/\\d+\\.\\d+.+"));
+    assertTrue(userAgent.matches("Opera/\\d+\\.\\d+.+"));
   }
 
   @Test
   public void testPID() {
-    Assert.assertTrue(pid > 0);
+    assertTrue(pid > 0);
   }
 
 }

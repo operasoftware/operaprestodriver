@@ -1,8 +1,17 @@
 package com.opera.core.systems;
 
 import com.opera.core.systems.scope.exceptions.CommunicationException;
-import junit.framework.Assert;
-import org.junit.*;
+
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Ignore;
+import org.junit.Test;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 
 // FIXME make tests pass
 public class CrashTest extends TestBase {
@@ -30,27 +39,27 @@ public class CrashTest extends TestBase {
   @Ignore
   @Test
   public void testCore34284() {
-    Assert.assertTrue(driver.getRunner().isOperaRunning());
+    assertTrue(driver.getRunner().isOperaRunning());
 
     try {
       driver.get("http://t/core/bts/crashers/visual/CORE-34284/001.html");
     } catch (CommunicationException e) {
     }
 
-    Assert.assertFalse(driver.getRunner().isOperaRunning());
+    assertFalse(driver.getRunner().isOperaRunning());
   }
 
   @Ignore
   @Test
   public void testCore32224() {
-    Assert.assertTrue(driver.getRunner().isOperaRunning());
+    assertTrue(driver.getRunner().isOperaRunning());
 
     try {
       driver.get("http://t/core/bts/crashers/visual/CORE-32224/001.html");
     } catch (CommunicationException e) {
     }
 
-    Assert.assertFalse(driver.getRunner().isOperaRunning());
+    assertFalse(driver.getRunner().isOperaRunning());
   }
 
 }

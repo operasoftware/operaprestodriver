@@ -1,7 +1,9 @@
 package com.opera.core.systems;
 
-import org.junit.Assert;
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class NavigationTest extends TestBase {
   @Test
@@ -11,27 +13,27 @@ public class NavigationTest extends TestBase {
     getFixture("keys.html");
 
     driver.navigate().back();
-    Assert.assertTrue(driver.getCurrentUrl().indexOf("test.html") > 0);
+    assertTrue(driver.getCurrentUrl().indexOf("test.html") > 0);
   }
 
   @Test
   public void testForward() {
     driver.navigate().forward();
-    Assert.assertTrue(driver.getCurrentUrl().indexOf("keys.html") > 0);
+    assertTrue(driver.getCurrentUrl().indexOf("keys.html") > 0);
   }
 
   @Test
   public void testBack2() {
     driver.navigate().back();
     driver.navigate().back();
-    Assert.assertTrue(driver.getCurrentUrl().indexOf("javascript.html") > 0);
+    assertTrue(driver.getCurrentUrl().indexOf("javascript.html") > 0);
   }
 
   @Test
   public void testForward2() {
     driver.navigate().forward();
     driver.navigate().forward();
-    Assert.assertTrue(driver.getCurrentUrl().indexOf("keys.html") > 0);
+    assertTrue(driver.getCurrentUrl().indexOf("keys.html") > 0);
   }
 
   @Test
@@ -41,7 +43,7 @@ public class NavigationTest extends TestBase {
     // Wait for redirect
     Thread.sleep(1000);
 
-    Assert.assertEquals("http://t/core/bts/javascript/CORE-26410/001-3.php",
-      driver.getCurrentUrl());
+    assertEquals("http://t/core/bts/javascript/CORE-26410/001-3.php",
+                 driver.getCurrentUrl());
   }
 }

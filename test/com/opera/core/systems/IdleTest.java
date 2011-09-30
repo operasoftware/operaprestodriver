@@ -1,11 +1,20 @@
 package com.opera.core.systems;
 
 import com.opera.core.systems.scope.internal.OperaIntervals;
-import org.junit.*;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Ignore;
+import org.junit.Rule;
+import org.junit.Test;
 import org.junit.rules.MethodRule;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.Statement;
 import org.openqa.selenium.remote.DesiredCapabilities;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class IdleTest extends TestBase {
   // Timeout vars for every test
@@ -49,7 +58,7 @@ public class IdleTest extends TestBase {
   public void tearDown() {
     // Make sure the test hasn't passed because we hit the page load
     // timeout instead of using OperaIdle
-    Assert.assertTrue("Took less than Idle timeout", end - start < timeout);
+    assertTrue("Took less than Idle timeout", end - start < timeout);
   }
 
   private void start() {
@@ -66,7 +75,7 @@ public class IdleTest extends TestBase {
     getFixture("test.html");
     stop();
 
-    Assert.assertTrue(driver.getCurrentUrl().endsWith("test.html"));
+    assertTrue(driver.getCurrentUrl().endsWith("test.html"));
   }
 
   @Test
@@ -77,7 +86,7 @@ public class IdleTest extends TestBase {
     driver.navigate().back();
     stop();
 
-    Assert.assertTrue(driver.getCurrentUrl().endsWith("test.html"));
+    assertTrue(driver.getCurrentUrl().endsWith("test.html"));
   }
 
   @Test
@@ -86,7 +95,7 @@ public class IdleTest extends TestBase {
     driver.navigate().forward();
     stop();
 
-    Assert.assertTrue(driver.getCurrentUrl().endsWith("javascript.html"));
+    assertTrue(driver.getCurrentUrl().endsWith("javascript.html"));
   }
 
   @Test
@@ -95,7 +104,7 @@ public class IdleTest extends TestBase {
     driver.navigate().back();
     stop();
 
-    Assert.assertTrue(driver.getCurrentUrl().endsWith("test.html"));
+    assertTrue(driver.getCurrentUrl().endsWith("test.html"));
   }
 
   @Test
@@ -108,7 +117,7 @@ public class IdleTest extends TestBase {
     driver.navigate().refresh();
     stop();
 
-    Assert.assertEquals("", driver.findElementById("input_email").getAttribute("value"));
+    assertEquals("", driver.findElementById("input_email").getAttribute("value"));
   }
 
   @Test
@@ -119,7 +128,7 @@ public class IdleTest extends TestBase {
     driver.findElementById("local").click();
     stop();
 
-    Assert.assertTrue(driver.getCurrentUrl().endsWith("two_input_fields.html"));
+    assertTrue(driver.getCurrentUrl().endsWith("two_input_fields.html"));
   }
 
   @Test
@@ -130,7 +139,7 @@ public class IdleTest extends TestBase {
     ((OperaWebElement) driver.findElementById("local")).click(3, 5);
     stop();
 
-    Assert.assertTrue(driver.getCurrentUrl().endsWith("two_input_fields.html"));
+    assertTrue(driver.getCurrentUrl().endsWith("two_input_fields.html"));
   }
 
   @Test
@@ -147,7 +156,7 @@ public class IdleTest extends TestBase {
     stop();
 
     // +"?" for submitted query string
-    Assert.assertTrue(driver.getCurrentUrl().endsWith("test.html?"));
+    assertTrue(driver.getCurrentUrl().endsWith("test.html?"));
   }
 
   @Test
@@ -160,7 +169,7 @@ public class IdleTest extends TestBase {
     stop();
 
     // +"?" for submitted query string
-    Assert.assertTrue(driver.getCurrentUrl().endsWith("test.html?"));
+    assertTrue(driver.getCurrentUrl().endsWith("test.html?"));
   }
 
   @Test
@@ -173,7 +182,7 @@ public class IdleTest extends TestBase {
     stop();
 
     // +"?" for submitted query string
-    Assert.assertTrue(driver.getCurrentUrl().endsWith("test.html?"));
+    assertTrue(driver.getCurrentUrl().endsWith("test.html?"));
   }
 
   @Test
@@ -186,7 +195,7 @@ public class IdleTest extends TestBase {
     stop();
 
     // +"?" for submitted query string
-    Assert.assertTrue(driver.getCurrentUrl().endsWith("test.html?"));
+    assertTrue(driver.getCurrentUrl().endsWith("test.html?"));
   }
 
   /* Begin testing OperaIdle conditions */
@@ -197,7 +206,7 @@ public class IdleTest extends TestBase {
     getFixture("idle/ecmascript-loop.html");
     stop();
 
-    Assert.assertEquals("done", driver.findElementById("out").getText());
+    assertEquals("done", driver.findElementById("out").getText());
   }
 
   @Test
@@ -206,7 +215,7 @@ public class IdleTest extends TestBase {
     getFixture("idle/ecmascript-timeout.html");
     stop();
 
-    Assert.assertEquals("done", driver.findElementById("out").getText());
+    assertEquals("done", driver.findElementById("out").getText());
   }
 
   @Test
@@ -215,14 +224,14 @@ public class IdleTest extends TestBase {
     getFixture("idle/ecmascript-timeout-loop.html");
     stop();
 
-    Assert.assertEquals("done", driver.findElementById("out").getText());
+    assertEquals("done", driver.findElementById("out").getText());
   }
 
   @Test
   public void testMetarefresh() throws Exception {
     getFixture("idle/metarefresh.html");
 
-    Assert.assertTrue(driver.getCurrentUrl().endsWith("test.html"));
+    assertTrue(driver.getCurrentUrl().endsWith("test.html"));
   }
 
   @Test
@@ -232,7 +241,7 @@ public class IdleTest extends TestBase {
     end = System.currentTimeMillis();
 
     // Check we hit the timeout (+ a 100ms margin)
-    Assert.assertTrue("Custom timout", end - start < 500 + 100);
+    assertTrue("Custom timout", end - start < 500 + 100);
   }
 
   @Test
@@ -244,6 +253,6 @@ public class IdleTest extends TestBase {
 
     getFixture("timer.html");
     // Idle will wait for timeout before firing
-    Assert.assertEquals("default", driver.findElementById("one").getAttribute("value"));
+    assertEquals("default", driver.findElementById("one").getAttribute("value"));
   }
 }

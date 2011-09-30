@@ -1,10 +1,10 @@
 package com.opera.core.systems;
 
+import com.opera.core.systems.util.VersionUtil;
+
 import junit.framework.TestCase;
 
 import org.junit.Test;
-
-import com.opera.core.systems.util.VersionUtil;
 
 public class VersionUtilsTest extends TestCase {
 

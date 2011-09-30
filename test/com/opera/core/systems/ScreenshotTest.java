@@ -1,16 +1,26 @@
 package com.opera.core.systems;
 
 import com.opera.core.systems.model.ScreenShotReply;
-import org.junit.*;
+
+import org.junit.AfterClass;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
 import org.openqa.selenium.OutputType;
 
-import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.zip.Adler32;
+
+import javax.imageio.ImageIO;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class ScreenshotTest extends TestBase {
 
@@ -57,7 +67,7 @@ public class ScreenshotTest extends TestBase {
     String one = radioLittle.saveScreenshot("one.png");
     String two = radioSome.saveScreenshot("two.png");
 
-    Assert.assertEquals(one, two);
+    assertEquals(one, two);
   }
 
   @Test
@@ -67,7 +77,7 @@ public class ScreenshotTest extends TestBase {
     radioLittle.saveScreenshot(one);
     radioSome.saveScreenshot(two);
 
-    Assert.assertEquals(digest(one), digest(two));
+    assertEquals(digest(one), digest(two));
   }
 
   @Test
@@ -109,7 +119,7 @@ public class ScreenshotTest extends TestBase {
 
     // Confirm that a png is not returned when the hash matches
     Assert.assertNotSame(0, one.length());
-    Assert.assertEquals(0, two.length());
+    assertEquals(0, two.length());
   }
 
   @Test
@@ -117,15 +127,15 @@ public class ScreenshotTest extends TestBase {
     ScreenShotReply reply = driver.saveScreenshot(0);
     byte[] png = reply.getPng();
 
-    Assert.assertTrue("PNG magic bytes match",
-      png[0] == (byte) 0x89 &&
-        png[1] == (byte) 0x50 &&
-        png[2] == (byte) 0x4E &&
-        png[3] == (byte) 0x47 &&
-        png[4] == (byte) 0x0D &&
-        png[5] == (byte) 0x0A &&
-        png[6] == (byte) 0x1A &&
-        png[7] == (byte) 0x0A
+    assertTrue("PNG magic bytes match",
+               png[0] == (byte) 0x89 &&
+               png[1] == (byte) 0x50 &&
+               png[2] == (byte) 0x4E &&
+               png[3] == (byte) 0x47 &&
+               png[4] == (byte) 0x0D &&
+               png[5] == (byte) 0x0A &&
+               png[6] == (byte) 0x1A &&
+               png[7] == (byte) 0x0A
     );
   }
 
@@ -137,11 +147,11 @@ public class ScreenshotTest extends TestBase {
     ScreenShotReply one = radioLittle.saveScreenshot(0);
     ScreenShotReply two = radioSome.saveScreenshot(0);
 
-    Assert.assertEquals(one.getMd5(), two.getMd5());
-    Assert.assertTrue("PNG data is the same", Arrays.equals(one.getPng(), two.getPng()));
+    assertEquals(one.getMd5(), two.getMd5());
+    assertTrue("PNG data is the same", Arrays.equals(one.getPng(), two.getPng()));
 
-    Assert.assertFalse(one.isBlank());
-    Assert.assertFalse(two.isBlank());
+    assertFalse(one.isBlank());
+    assertFalse(two.isBlank());
   }
 
   @Test
@@ -166,7 +176,7 @@ public class ScreenshotTest extends TestBase {
     String imgMD5 = img.saveScreenshot("one.png");
     String flashMD5 = flash.saveScreenshot("two.png");
 
-    Assert.assertEquals(imgMD5, flashMD5);
+    assertEquals(imgMD5, flashMD5);
   }
 
   @Test
@@ -175,11 +185,11 @@ public class ScreenshotTest extends TestBase {
     File file = driver.getScreenshotAs(OutputType.FILE);
 
     BufferedImage img = ImageIO.read(file);
-    Assert.assertEquals(5100, img.getHeight());
+    assertEquals(5100, img.getHeight());
 
     // Check the top pixel
     int botcol = img.getRGB(0, 0);
-    Assert.assertEquals(0xFF0000, botcol & 0xFFFFFF);
+    assertEquals(0xFF0000, botcol & 0xFFFFFF);
   }
 
   @Test
@@ -189,11 +199,11 @@ public class ScreenshotTest extends TestBase {
     File file = driver.getScreenshotAs(OutputType.FILE);
 
     BufferedImage img = ImageIO.read(file);
-    Assert.assertEquals(5100, img.getHeight());
+    assertEquals(5100, img.getHeight());
 
     // Make sure the bottom colour is green, not black.
     int botcol = img.getRGB(0, 5050);
-    Assert.assertEquals(0xFF00, botcol & 0xFF00);
+    assertEquals(0xFF00, botcol & 0xFF00);
 
   }
 }

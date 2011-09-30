@@ -1,10 +1,13 @@
 package com.opera.core.systems;
 
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.WebElement;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class KeyEventsTest extends TestBase {
 
@@ -29,16 +32,16 @@ public class KeyEventsTest extends TestBase {
   public void testKey() throws Exception {
     driver.key("a");
 
-    Assert.assertTrue("keyDown event fired", logContains("down, 65, A"));
-    Assert.assertTrue("keyPress event fired", logContains("press"));
-    Assert.assertTrue("keyUp event fired", logContains("up, 65, A"));
+    assertTrue("keyDown event fired", logContains("down, 65, A"));
+    assertTrue("keyPress event fired", logContains("press"));
+    assertTrue("keyUp event fired", logContains("up, 65, A"));
   }
 
   @Test
   public void testKeyDown() throws Exception {
     driver.keyDown("a");
 
-    Assert.assertTrue("keyDown event fired", logContains("down, 65, A"));
+    assertTrue("keyDown event fired", logContains("down, 65, A"));
   }
 
   @Test
@@ -46,7 +49,7 @@ public class KeyEventsTest extends TestBase {
     driver.keyDown("a");
     driver.keyUp("a");
 
-    Assert.assertTrue("keyUp event fired", logContains("up, 65, A"));
+    assertTrue("keyUp event fired", logContains("up, 65, A"));
   }
 
   @Test
@@ -55,29 +58,29 @@ public class KeyEventsTest extends TestBase {
     driver.keyDown("shift");
     driver.keyUp("control");
 
-    Assert.assertTrue("control down", logContains("down, 17"));
-    Assert.assertTrue("shift down", logContains("down, 16"));
-    Assert.assertTrue("control up", logContains("up, 17"));
+    assertTrue("control down", logContains("down, 17"));
+    assertTrue("shift down", logContains("down, 16"));
+    assertTrue("control up", logContains("up, 17"));
     // shift should not have come up
-    Assert.assertFalse("shift up", logContains("up, 16"));
+    assertFalse("shift up", logContains("up, 16"));
   }
 
   @Test
   public void testSpecialKeys() throws Exception {
     driver.key("f5");
-    Assert.assertTrue("F5", logContains("press, 116"));
+    assertTrue("F5", logContains("press, 116"));
 
     driver.key("home");
-    Assert.assertTrue("Home", logContains("press, 36"));
+    assertTrue("Home", logContains("press, 36"));
 
     driver.key("pagedown");
-    Assert.assertTrue("page down", logContains("press, 34"));
+    assertTrue("page down", logContains("press, 34"));
 
     driver.key("del");
-    Assert.assertTrue("delete", logContains("press, 46"));
+    assertTrue("delete", logContains("press, 46"));
 
     driver.key("backspace");
-    Assert.assertTrue("backspace", logContains("press, 8"));
+    assertTrue("backspace", logContains("press, 8"));
   }
 
   @Test
@@ -88,7 +91,7 @@ public class KeyEventsTest extends TestBase {
 
     driver.key("f5");
     //driver.waitForLoadToComplete();
-    Assert.assertEquals("", driver.findElementById("input_email").getAttribute("value"));
+    assertEquals("", driver.findElementById("input_email").getAttribute("value"));
   }
 
   @Test
@@ -98,8 +101,8 @@ public class KeyEventsTest extends TestBase {
 
     driver.releaseKeys();
 
-    Assert.assertTrue("released", logContains("up, 16"));
-    Assert.assertTrue("released", logContains("up, 17"));
+    assertTrue("released", logContains("up, 16"));
+    assertTrue("released", logContains("up, 17"));
   }
 
   @Test
@@ -107,12 +110,12 @@ public class KeyEventsTest extends TestBase {
     driver.keyDown("control");
     driver.releaseKeys();
 
-    Assert.assertTrue("released", logContains("down, 17"));
-    Assert.assertTrue("released", logContains("up, 17"));
+    assertTrue("released", logContains("down, 17"));
+    assertTrue("released", logContains("up, 17"));
 
     driver.keyDown("control");
 
-    Assert.assertTrue("released", logEl.getAttribute("value").endsWith("down, 17, , ctrl\n"));
+    assertTrue("released", logEl.getAttribute("value").endsWith("down, 17, , ctrl\n"));
   }
 
   // Pressing enter will wait for a page to load, check what happens when
@@ -120,6 +123,6 @@ public class KeyEventsTest extends TestBase {
   @Test
   public void testEnter() throws Exception {
     driver.key("Enter");
-    Assert.assertTrue("released", logContains("up, 13"));
+    assertTrue("released", logContains("up, 13"));
   }
 }

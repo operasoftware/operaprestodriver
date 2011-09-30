@@ -11,6 +11,8 @@ import org.openqa.selenium.Capabilities;
 
 import java.io.File;
 
+import static org.junit.Assert.assertTrue;
+
 abstract public class TestBase {
 
   protected static TestOperaDriver driver;
@@ -41,7 +43,7 @@ abstract public class TestBase {
     fixtureDirectory = separator + fixtureDirectory + separator + separator + "test" +
                        separator + "fixtures" + separator;
 
-    Assert.assertTrue(new File(fixtureDirectory).isDirectory());
+    assertTrue(new File(fixtureDirectory).isDirectory());
   }
 
   // / Get the URL of the given fixture file

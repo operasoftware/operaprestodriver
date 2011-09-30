@@ -1,11 +1,12 @@
 package com.opera.core.systems;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
+
+import static org.junit.Assert.assertEquals;
 
 public class DriverKeysTest extends TestBase {
 
@@ -24,7 +25,7 @@ public class DriverKeysTest extends TestBase {
   @Test
   public void testSingleCharacter() {
     driver.key("a");
-    Assert.assertEquals("a", fieldOne.getAttribute("value"));
+    assertEquals("a", fieldOne.getAttribute("value"));
   }
 
   @Test
@@ -35,7 +36,7 @@ public class DriverKeysTest extends TestBase {
     driver.key("d");
     driver.key("e");
     driver.key("f");
-    Assert.assertEquals("abcdef", fieldOne.getAttribute("value"));
+    assertEquals("abcdef", fieldOne.getAttribute("value"));
   }
 
   @Test
@@ -44,7 +45,7 @@ public class DriverKeysTest extends TestBase {
     driver.keyUp("a");
     driver.keyDown("b");
     driver.keyUp("b");
-    Assert.assertEquals("ab", fieldOne.getAttribute("value"));
+    assertEquals("ab", fieldOne.getAttribute("value"));
 
   }
 
@@ -55,25 +56,25 @@ public class DriverKeysTest extends TestBase {
     driver.key("ー");
     driver.key(" ");
     driver.key("水");
-    Assert.assertEquals("ルビー 水", fieldOne.getAttribute("value"));
+    assertEquals("ルビー 水", fieldOne.getAttribute("value"));
   }
 
   @Test
   public void testTypeSingle() {
     driver.type("a");
-    Assert.assertEquals("a", fieldOne.getAttribute("value"));
+    assertEquals("a", fieldOne.getAttribute("value"));
   }
 
   @Test
   public void testTypeMulti() {
     driver.type("abcdef");
-    Assert.assertEquals("abcdef", fieldOne.getAttribute("value"));
+    assertEquals("abcdef", fieldOne.getAttribute("value"));
   }
 
   @Test
   public void testTypeMultiByte() {
     driver.type("ルビー 水");
-    Assert.assertEquals("ルビー 水", fieldOne.getAttribute("value"));
+    assertEquals("ルビー 水", fieldOne.getAttribute("value"));
   }
 
   @Test
@@ -81,7 +82,7 @@ public class DriverKeysTest extends TestBase {
     driver.type("ac");
     driver.type("left");
     driver.type("b");
-    Assert.assertEquals("acleftb", fieldOne.getAttribute("value"));
+    assertEquals("acleftb", fieldOne.getAttribute("value"));
   }
 
   @Test
@@ -89,7 +90,7 @@ public class DriverKeysTest extends TestBase {
     driver.type("ac");
     driver.key("Left");
     driver.type("b");
-    Assert.assertEquals("abc", fieldOne.getAttribute("value"));
+    assertEquals("abc", fieldOne.getAttribute("value"));
   }
 
   @Test
@@ -98,7 +99,7 @@ public class DriverKeysTest extends TestBase {
     driver.keyDown("Left");
     driver.keyUp("Left");
     driver.type("b");
-    Assert.assertEquals("abc", fieldOne.getAttribute("value"));
+    assertEquals("abc", fieldOne.getAttribute("value"));
   }
 
   @Test
@@ -106,7 +107,7 @@ public class DriverKeysTest extends TestBase {
     driver.type("ac");
     driver.key("left");
     driver.key("b");
-    Assert.assertEquals("abc", fieldOne.getAttribute("value"));
+    assertEquals("abc", fieldOne.getAttribute("value"));
   }
 
   @Test
@@ -114,8 +115,8 @@ public class DriverKeysTest extends TestBase {
     driver.type("ab");
     driver.key("tab");
     driver.type("c");
-    Assert.assertEquals("ab", fieldOne.getAttribute("value"));
-    Assert.assertEquals("c", fieldTwo.getAttribute("value"));
+    assertEquals("ab", fieldOne.getAttribute("value"));
+    assertEquals("c", fieldTwo.getAttribute("value"));
   }
 
   @Test
@@ -129,7 +130,7 @@ public class DriverKeysTest extends TestBase {
     driver.keyUp("shift");
     driver.key("b");
 
-    Assert.assertEquals("ab", fieldOne.getAttribute("value"));
+    assertEquals("ab", fieldOne.getAttribute("value"));
   }
 
   @Test
@@ -141,7 +142,7 @@ public class DriverKeysTest extends TestBase {
     driver.keyUp("shift");
     driver.type("d");
 
-    Assert.assertEquals("aBCd", fieldOne.getAttribute("value"));
+    assertEquals("aBCd", fieldOne.getAttribute("value"));
   }
 
   @Test
@@ -153,7 +154,7 @@ public class DriverKeysTest extends TestBase {
     driver.keyUp("control");
     driver.key("b");
     driver.key("c");
-    Assert.assertEquals("bc", fieldOne.getAttribute("value"));
+    assertEquals("bc", fieldOne.getAttribute("value"));
   }
 
   @Test
@@ -166,7 +167,7 @@ public class DriverKeysTest extends TestBase {
     driver.keyUp("shift");
     driver.key("backspace");
 
-    Assert.assertEquals("abc ", fieldOne.getAttribute("value"));
+    assertEquals("abc ", fieldOne.getAttribute("value"));
   }
 
   @Test
@@ -179,7 +180,7 @@ public class DriverKeysTest extends TestBase {
 
     action.perform();
 
-    Assert.assertEquals("hello world", fieldTwo.getAttribute("value"));
+    assertEquals("hello world", fieldTwo.getAttribute("value"));
   }
 
   @Test
@@ -192,7 +193,7 @@ public class DriverKeysTest extends TestBase {
 
     action.perform();
 
-    Assert.assertEquals("hello world", fieldTwo.getAttribute("value"));
+    assertEquals("hello world", fieldTwo.getAttribute("value"));
   }
 
 }

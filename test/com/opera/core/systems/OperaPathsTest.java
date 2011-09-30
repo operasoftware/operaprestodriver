@@ -14,7 +14,12 @@ import java.lang.reflect.Field;
 import java.util.Collections;
 import java.util.Map;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 public class OperaPathsTest {
 
@@ -56,9 +61,9 @@ public class OperaPathsTest {
     File launcher = new File(paths.launcherPath());
     launcher.delete();
 
-    Assert.assertFalse(launcher.exists());
+    assertFalse(launcher.exists());
     paths.launcherPath();
-    Assert.assertTrue(launcher.exists());
+    assertTrue(launcher.exists());
   }
 
   /**
@@ -69,9 +74,9 @@ public class OperaPathsTest {
     File launcher = new File(paths.launcherPath());
     launcher.delete();
 
-    Assert.assertFalse(launcher.exists());
+    assertFalse(launcher.exists());
     launcher.createNewFile();
-    Assert.assertEquals(0, launcher.length());
+    assertEquals(0, launcher.length());
 
     paths.launcherPath();
 
@@ -87,7 +92,7 @@ public class OperaPathsTest {
     long modified = launcher.lastModified();
 
     paths.launcherPath();
-    Assert.assertEquals(modified, launcher.lastModified());
+    assertEquals(modified, launcher.lastModified());
   }
 
   /**
