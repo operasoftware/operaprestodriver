@@ -316,8 +316,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     // with Opera versions that don't support -autotestmode host:port
     capabilities.setCapability(HOST, "127.0.0.1");
     // 0 = Random, -1 = Opera default (7001). See above.
-    // TODO: set this to 0 when Opera 12 is released.
-    capabilities.setCapability(PORT, -1);
+    capabilities.setCapability(PORT, 0);
 
     capabilities.setCapability(ARGUMENTS, "");
 
@@ -325,8 +324,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
     capabilities.setCapability(DISPLAY, (Integer) null);
 
-    // TODO: set this to (String) null when Opera 12 is released.
-    capabilities.setCapability(PROFILE, "");
+    capabilities.setCapability(PROFILE, (String) null);
 
     capabilities.setCapability(AUTOSTART, true);
     capabilities.setCapability(NO_RESTART, false);
