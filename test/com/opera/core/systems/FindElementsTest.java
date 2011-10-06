@@ -1,7 +1,5 @@
 package com.opera.core.systems;
 
-import java.util.List;
-
 import junit.framework.Assert;
 
 import org.junit.Before;
@@ -9,6 +7,11 @@ import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.RemoteWebElement;
+
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class FindElementsTest extends TestBase {
   @Before
@@ -19,15 +22,15 @@ public class FindElementsTest extends TestBase {
   @Test
   public void testLinkText() {
     WebElement el = driver.findElementByLinkText("accumsan ante");
-    Assert.assertEquals(el.getAttribute("id"), "local");
+    assertEquals(el.getAttribute("id"), "local");
   }
 
   public void testElementsLinkText() {
     List<WebElement> els = driver.findElementsByLinkText("accumsan ante");
 
     for (WebElement el : els) {
-      Assert.assertEquals(el.getText(), "accumsan ante");
-      Assert.assertEquals(el.getTagName().toLowerCase(), "a");
+      assertEquals(el.getText(), "accumsan ante");
+      assertEquals(el.getTagName().toLowerCase(), "a");
     }
   }
 
@@ -35,7 +38,7 @@ public class FindElementsTest extends TestBase {
   @Test
   public void testPartialLinkText() {
     WebElement el = driver.findElementByPartialLinkText("pell");
-    Assert.assertEquals(el.getAttribute("id"), "external");
+    assertEquals(el.getAttribute("id"), "external");
   }
 
   @Test
@@ -43,8 +46,8 @@ public class FindElementsTest extends TestBase {
     List<WebElement> els = driver.findElementsByPartialLinkText("te");
 
     for (WebElement el : els) {
-      Assert.assertTrue(el.getText().contains("te"));
-      Assert.assertEquals(el.getTagName().toLowerCase(), "a");
+      assertTrue(el.getText().contains("te"));
+      assertEquals(el.getTagName().toLowerCase(), "a");
     }
   }
 
@@ -52,8 +55,8 @@ public class FindElementsTest extends TestBase {
   @Test
   public void testId() {
     WebElement el = driver.findElementById("call-to-action");
-    Assert.assertEquals(el.getAttribute("id"), "call-to-action");
-    Assert.assertEquals(el.getTagName().toLowerCase(), "p");
+    assertEquals(el.getAttribute("id"), "call-to-action");
+    assertEquals(el.getTagName().toLowerCase(), "p");
   }
 
   @Test
@@ -61,7 +64,7 @@ public class FindElementsTest extends TestBase {
     List<WebElement> els = driver.findElementsById("external");
 
     for (WebElement el : els) {
-      Assert.assertEquals(el.getAttribute("id"), "external");
+      assertEquals(el.getAttribute("id"), "external");
     }
   }
 
@@ -69,7 +72,7 @@ public class FindElementsTest extends TestBase {
   public void testElementId() throws Exception {
     RemoteWebElement contain = (RemoteWebElement) driver.findElementById("content");
     WebElement el = contain.findElementById("local");
-    Assert.assertEquals(el.getText(), "accumsan ante");
+    assertEquals(el.getText(), "accumsan ante");
 
   }
 
@@ -77,13 +80,13 @@ public class FindElementsTest extends TestBase {
   @Test
   public void testXPath() {
     WebElement el = driver.findElementByXPath("(//span)[4]");
-    Assert.assertEquals(el.getText(), "ante");
+    assertEquals(el.getText(), "ante");
   }
 
   public void testElementsXPath() {
     List<WebElement> els = driver.findElementsByXPath("//span");
     for (WebElement el : els) {
-      Assert.assertEquals(el.getTagName().toLowerCase(), "span");
+      assertEquals(el.getTagName().toLowerCase(), "span");
     }
   }
 
@@ -91,7 +94,7 @@ public class FindElementsTest extends TestBase {
   @Test
   public void testClass() {
     WebElement el = driver.findElementByClassName("invert");
-    Assert.assertEquals(el.getText(), "Ante");
+    assertEquals(el.getText(), "Ante");
   }
 
   @Test
@@ -99,7 +102,7 @@ public class FindElementsTest extends TestBase {
     List<WebElement> els = driver.findElementsByClassName("invert");
 
     for (WebElement el : els) {
-      Assert.assertTrue(el.getAttribute("class").contains("invert"));
+      assertTrue(el.getAttribute("class").contains("invert"));
     }
   }
 
@@ -107,16 +110,16 @@ public class FindElementsTest extends TestBase {
   @Test
   public void testName() {
     WebElement el = driver.findElementByName("radios");
-    Assert.assertEquals(el.getAttribute("id"), "radio_little");
+    assertEquals(el.getAttribute("id"), "radio_little");
   }
 
   @Test
   public void testElementsName() {
     List<WebElement> els = driver.findElementsByName("radios");
 
-    Assert.assertEquals(3, els.size());
+    assertEquals(3, els.size());
     for (WebElement el : els) {
-      Assert.assertEquals(el.getAttribute("name"), "radios");
+      assertEquals(el.getAttribute("name"), "radios");
     }
   }
 
@@ -124,16 +127,16 @@ public class FindElementsTest extends TestBase {
   @Test
   public void testTagName() {
     WebElement el = driver.findElementByTagName("label");
-    Assert.assertEquals(el.getAttribute("for"), "input_email");
+    assertEquals(el.getAttribute("for"), "input_email");
   }
 
   @Test
   public void testElementsTagName() {
     List<WebElement> els = driver.findElementsByTagName("label");
 
-    Assert.assertEquals(4, els.size());
+    assertEquals(4, els.size());
     for (WebElement el : els) {
-      Assert.assertEquals(el.getTagName(), "LABEL");
+      assertEquals(el.getTagName(), "LABEL");
     }
   }
 
@@ -141,16 +144,16 @@ public class FindElementsTest extends TestBase {
   @Test
   public void testCssSelector() {
     WebElement el = driver.findElementByCssSelector("p > span + a");
-    Assert.assertEquals(el.getAttribute("id"), "local");
+    assertEquals(el.getAttribute("id"), "local");
   }
 
   @Test
   public void testElementsCssSelector() {
     List<WebElement> els = driver.findElementsByCssSelector("div input[name=radios]");
 
-    Assert.assertEquals(3, els.size());
+    assertEquals(3, els.size());
     for (WebElement el : els) {
-      Assert.assertEquals(el.getAttribute("name"), "radios");
+      assertEquals(el.getAttribute("name"), "radios");
     }
   }
 

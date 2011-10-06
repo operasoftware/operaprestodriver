@@ -16,8 +16,6 @@ limitations under the License.
 
 package com.opera.core.systems;
 
-import junit.framework.Assert;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -31,6 +29,10 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.io.File;
 import java.io.IOException;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 /**
  * @author Andreas Tolf Tolfsen <andreastt@opera.com>
@@ -60,8 +62,8 @@ public class DesiredCapabilitiesTest {
     capabilities.setCapability("opera.logging.level", "FINER");
     driver = new OperaDriver((Capabilities) capabilities);
 
-    Assert.assertEquals("FINER", capabilities.getCapability("opera.logging.level"));
-    Assert.assertNotNull(driver);
+    assertEquals("FINER", capabilities.getCapability("opera.logging.level"));
+    assertNotNull(driver);
   }
 
   @Test
@@ -69,8 +71,8 @@ public class DesiredCapabilitiesTest {
     capabilities.setCapability("opera.logging.level", "info");
     driver = new OperaDriver((Capabilities) capabilities);
 
-    Assert.assertEquals("info", capabilities.getCapability("opera.logging.level"));
-    Assert.assertNotNull(driver);
+    assertEquals("info", capabilities.getCapability("opera.logging.level"));
+    assertNotNull(driver);
   }
 
   @Test
@@ -80,7 +82,7 @@ public class DesiredCapabilitiesTest {
     capabilities.setCapability("opera.logging.file", log.getCanonicalPath());
     driver = new OperaDriver((Capabilities) capabilities);
 
-    Assert.assertTrue(log.length() > 0);
+    assertTrue(log.length() > 0);
   }
 
   @Test(expected = WebDriverException.class)

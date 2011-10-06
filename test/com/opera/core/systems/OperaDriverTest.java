@@ -16,7 +16,7 @@ limitations under the License.
 
 package com.opera.core.systems;
 
-import java.io.File;
+import com.opera.core.systems.settings.OperaDriverSettings;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.AfterClass;
@@ -28,7 +28,11 @@ import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
-import com.opera.core.systems.settings.OperaDriverSettings;
+import java.io.File;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class OperaDriverTest extends TestBase {
 
@@ -74,32 +78,32 @@ public class OperaDriverTest extends TestBase {
   @Test
   public void testDefaultWindowCount() {
     driver = new TestOperaDriver();
-    Assert.assertTrue(driver.getWindowCount() >= 1);
+    assertTrue(driver.getWindowCount() >= 1);
   }
 
   @Test
   public void testGetTitle() {
     driver.get("http://t/core/standards/dom0/link/pathname/002.html");
-    Assert.assertEquals("URL with explicit pathname and hash", driver.getTitle());
+    assertEquals("URL with explicit pathname and hash", driver.getTitle());
   }
 
   @Test
   public void testGetText() {
     driver.get("http://t/core/standards/quotes/none.html");
-    Assert.assertEquals("you should see nothing below",
-                        driver.findElementByTagName("body").getText().trim());
+    assertEquals("you should see nothing below",
+                 driver.findElementByTagName("body").getText().trim());
   }
 
   @Test
   public void testGetURL() {
     driver.get("www.ebay.co.uk");
-    Assert.assertTrue(driver.getCurrentUrl().indexOf("www.ebay.co.uk") > 0);
+    assertTrue(driver.getCurrentUrl().indexOf("www.ebay.co.uk") > 0);
   }
 
   @Test
   public void testGetURL2() {
     driver.get("www.nyt.com", 15000);
-    Assert.assertTrue(driver.getCurrentUrl().indexOf("www.nytimes.com") > 0);
+    assertTrue(driver.getCurrentUrl().indexOf("www.nytimes.com") > 0);
   }
 
   @Test
@@ -116,7 +120,7 @@ public class OperaDriverTest extends TestBase {
     getFixture("keys.html");
 
     driver.operaAction("Back");
-    Assert.assertTrue(driver.getCurrentUrl().indexOf("test.html") > 0);
+    assertTrue(driver.getCurrentUrl().indexOf("test.html") > 0);
   }
 
   @Test
@@ -126,7 +130,7 @@ public class OperaDriverTest extends TestBase {
     getFixture("keys.html");
 
     driver.operaAction("bACk");
-    Assert.assertTrue(driver.getCurrentUrl().indexOf("test.html") > 0);
+    assertTrue(driver.getCurrentUrl().indexOf("test.html") > 0);
   }
 
   @Test
@@ -142,7 +146,7 @@ public class OperaDriverTest extends TestBase {
     c.setCapability(OperaDriver.PORT, -1);
 
     OperaDriver a = new OperaDriver(c);
-    Assert.assertEquals("7001", a.getPref("Developer Tools", "Proxy Port"));
+    assertEquals("7001", a.getPref("Developer Tools", "Proxy Port"));
     a.quit();
   }
 
@@ -183,7 +187,7 @@ public class OperaDriverTest extends TestBase {
         throw e;
       }
     }
-    Assert.assertEquals("9876", a.getPref("Developer Tools", "Proxy Port"));
+    assertEquals("9876", a.getPref("Developer Tools", "Proxy Port"));
     a.quit();
   }
 
@@ -195,8 +199,8 @@ public class OperaDriverTest extends TestBase {
     OperaDriver a = new OperaDriver(c);
     String profile = a.getPref("User Prefs", "Opera Directory");
     String defaultProfile = a.getDefaultPref("User Prefs", "Opera Directory");
-    Assert.assertTrue("'"+profile+"' contains '"+defaultProfile+"'" ,
-        profile.contains(defaultProfile)
+    assertTrue("'" + profile + "' contains '" + defaultProfile + "'",
+               profile.contains(defaultProfile)
     );
     a.quit();
   }
@@ -222,7 +226,7 @@ public class OperaDriverTest extends TestBase {
       }
     }
     String profile = a.getPref("User Prefs", "Opera Directory");
-    Assert.assertEquals("/tmp/opera-test-profile/", profile);
+    assertEquals("/tmp/opera-test-profile/", profile);
     a.quit();
   }
 
@@ -243,8 +247,8 @@ public class OperaDriverTest extends TestBase {
       }
     }
     String profile = a.getPref("User Prefs", "Opera Directory");
-    Assert.assertTrue("'"+profile+"' (case insensitively) contains 'tmp' or 'temp'" ,
-        profile.toLowerCase().contains("tmp") || profile.toLowerCase().contains("temp")
+    assertTrue("'" + profile + "' (case insensitively) contains 'tmp' or 'temp'",
+               profile.toLowerCase().contains("tmp") || profile.toLowerCase().contains("temp")
     );
     a.quit();
   }
@@ -267,10 +271,10 @@ public class OperaDriverTest extends TestBase {
       }
     }
     String profile = a.getPref("User Prefs", "Opera Directory");
-    Assert.assertTrue("Temporary directory exists", (new File(profile)).exists());
+    assertTrue("Temporary directory exists", (new File(profile)).exists());
     a.quit();
-    Assert.assertFalse("Temporary directory does not exist after quit",
-        (new File(profile)).exists()
+    assertFalse("Temporary directory does not exist after quit",
+                (new File(profile)).exists()
     );
     a.quit();
   }
@@ -301,9 +305,9 @@ public class OperaDriverTest extends TestBase {
     b.get(fixture("javascript.html"));
     c.get(fixture("keys.html"));
 
-    Assert.assertTrue("Instance a has url test.html", a.getCurrentUrl().endsWith("test.html"));
-    Assert.assertTrue("Instance a has url javascript.html", b.getCurrentUrl().endsWith("javascript.html"));
-    Assert.assertTrue("Instance a has url keys.html", c.getCurrentUrl().endsWith("keys.html"));
+    assertTrue("Instance a has url test.html", a.getCurrentUrl().endsWith("test.html"));
+    assertTrue("Instance a has url javascript.html", b.getCurrentUrl().endsWith("javascript.html"));
+    assertTrue("Instance a has url keys.html", c.getCurrentUrl().endsWith("keys.html"));
 
     a.quit();
     b.quit();

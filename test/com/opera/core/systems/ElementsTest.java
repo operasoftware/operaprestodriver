@@ -2,8 +2,11 @@
 package com.opera.core.systems;
 
 import junit.framework.Assert;
+
 import org.junit.Test;
 import org.openqa.selenium.WebElement;
+
+import static org.junit.Assert.assertTrue;
 
 public class ElementsTest extends TestBase {
 
@@ -11,8 +14,8 @@ public class ElementsTest extends TestBase {
   public void testClear() {
     driver.get(fixture("javascript.html"));
     driver.findElementById("input_email").clear();
-    Assert.assertTrue(driver.findElementById("log").getAttribute("value").contains(
-      "email changed"));
+    assertTrue(driver.findElementById("log").getAttribute("value").contains(
+        "email changed"));
   }
 
   @Test
@@ -32,10 +35,10 @@ public class ElementsTest extends TestBase {
 
     // Cast as OperaWebElement to make rightClick available
     ((OperaWebElement) driver.findElementById("test")).rightClick();
-    Assert.assertTrue(driver.findElementById("log").getAttribute("value").contains(
-      "mousedown 2"));
-    Assert.assertTrue(driver.findElementById("log").getAttribute("value").contains(
-      "mouseup 2"));
+    assertTrue(driver.findElementById("log").getAttribute("value").contains(
+        "mousedown 2"));
+    assertTrue(driver.findElementById("log").getAttribute("value").contains(
+        "mouseup 2"));
   }
 
   @Test
@@ -43,7 +46,7 @@ public class ElementsTest extends TestBase {
     getFixture("select.html");
     WebElement el = driver.findElementById("dog");
     el.click();
-    Assert.assertTrue(el.isSelected());
+    assertTrue(el.isSelected());
   }
 
 }

@@ -16,14 +16,16 @@
 
 package com.opera.core.systems;
 
-import java.util.List;
-
 import junit.framework.Assert;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
+
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
 
 public class EcmaScriptTest extends TestBase {
 
@@ -63,7 +65,7 @@ public class EcmaScriptTest extends TestBase {
   public void testObjectOfElements() throws Exception {
     List<WebElement> divs = (List<WebElement>) driver.executeScript("return [document.createElement('div'), document.createElement('div')]");
     for (WebElement el : divs) {
-      Assert.assertEquals("DIV", el.getTagName());
+      assertEquals("DIV", el.getTagName());
     }
   }
 
