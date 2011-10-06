@@ -1,10 +1,12 @@
 package com.opera.core.systems;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.openqa.selenium.WebElement;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class JavascriptTest extends TestBase {
 
@@ -20,7 +22,7 @@ public class JavascriptTest extends TestBase {
     driver.executeScript("document.getElementById('one').focus()");
     driver.type(text);
 
-    Assert.assertEquals(text, driver.findElementById("one").getAttribute("value"));
+    assertEquals(text, driver.findElementById("one").getAttribute("value"));
   }
 
   // Make sure that typing actually happens. When the focus switches half way
@@ -32,8 +34,8 @@ public class JavascriptTest extends TestBase {
     driver.type("hi");
 
     String log = driver.findElementById("log").getAttribute("value");
-    Assert.assertTrue(log.contains("press, 104, h,"));
-    Assert.assertTrue(log.contains("up, 73, I,"));
+    assertTrue(log.contains("press, 104, h,"));
+    assertTrue(log.contains("up, 73, I,"));
   }
 
   @Test
@@ -41,7 +43,7 @@ public class JavascriptTest extends TestBase {
     WebElement one = driver.findElementById("one");
     one.click();
     one.click();
-    Assert.assertEquals(driver.findElementById("two").getAttribute("value"), "double");
+    assertEquals(driver.findElementById("two").getAttribute("value"), "double");
   }
 
   @Test
@@ -50,7 +52,7 @@ public class JavascriptTest extends TestBase {
 
     driver.findElementById("open_window").click();
 
-    Assert.assertEquals(numWindows + 1, driver.getWindowCount());
+    assertEquals(numWindows + 1, driver.getWindowCount());
   }
 
   @Ignore
@@ -60,8 +62,8 @@ public class JavascriptTest extends TestBase {
 
     driver.close();
 
-    Assert.assertTrue(driver.getCurrentUrl().endsWith("javascript.html"));
-    Assert.assertEquals(numWindows - 1, driver.getWindowCount());
+    assertTrue(driver.getCurrentUrl().endsWith("javascript.html"));
+    assertEquals(numWindows - 1, driver.getWindowCount());
   }
 
 }

@@ -1,10 +1,13 @@
 package com.opera.core.systems;
 
 import junit.framework.Assert;
+
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.List;
+
+import static org.junit.Assert.assertEquals;
 
 public class FramesTest extends TestBase {
   List<String> frames;
@@ -18,7 +21,7 @@ public class FramesTest extends TestBase {
   @Test
   public void testList() throws Exception {
     // frameset page, and three frames
-    Assert.assertEquals(4, frames.size());
+    assertEquals(4, frames.size());
   }
 
   @Test

@@ -18,7 +18,9 @@ package com.opera.core.systems;
 
 import com.opera.core.systems.scope.protos.PrefsProtos.Pref;
 import com.opera.core.systems.scope.protos.PrefsProtos.Pref.Type;
+
 import junit.framework.Assert;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -26,6 +28,9 @@ import org.junit.Test;
 import org.openqa.selenium.WebDriverException;
 
 import java.util.Map;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * @author Andreas Tolf Tolfsen <andreastt@opera.com>
@@ -50,7 +55,7 @@ public class PrefsTest extends TestBase {
 
   @Test
   public void testGetValidPreference() {
-    Assert.assertEquals("#ffffff", driver.getPref("Colors", "Background"));
+    assertEquals("#ffffff", driver.getPref("Colors", "Background"));
   }
 
   @Test
@@ -107,7 +112,7 @@ public class PrefsTest extends TestBase {
 
   @Test
   public void testGetValidDefaultPreference() {
-    Assert.assertEquals("#ffffff", driver.getDefaultPref("Colors", "Background"));
+    assertEquals("#ffffff", driver.getDefaultPref("Colors", "Background"));
   }
 
   @Test
@@ -181,22 +186,22 @@ public class PrefsTest extends TestBase {
   public void testListAllPreferences() {
     Map<String, Map<String, Pref>> prefs = driver.listAllPrefs();
 
-    Assert.assertTrue("Prefs contains User Prefs", prefs.containsKey("User Prefs"));
+    assertTrue("Prefs contains User Prefs", prefs.containsKey("User Prefs"));
     Map<String, Pref> userPrefs = prefs.get("User Prefs");
-    Assert.assertTrue("User Prefs contains Opera Directory", userPrefs.containsKey("Opera Directory"));
-    Assert.assertTrue("Opera Directory", userPrefs.get("Opera Directory").getType() == Type.DIRECTORY);
+    assertTrue("User Prefs contains Opera Directory", userPrefs.containsKey("Opera Directory"));
+    assertTrue("Opera Directory", userPrefs.get("Opera Directory").getType() == Type.DIRECTORY);
   }
 
   @Test
   public void testSetValidPreference() {
     driver.setPref("Colors", "Background", "#eeeeee");
-    Assert.assertEquals("#eeeeee", driver.getPref("Colors", "Background"));
+    assertEquals("#eeeeee", driver.getPref("Colors", "Background"));
   }
 
   @Test
   public void testSetValidPreferenceWithSpacesInSection() {
     driver.setPref("File Types Section Info", "Version", "2");
-    Assert.assertEquals("2", driver.getPref("File Types Section Info", "Version"));
+    assertEquals("2", driver.getPref("File Types Section Info", "Version"));
   }
 
   @Test
