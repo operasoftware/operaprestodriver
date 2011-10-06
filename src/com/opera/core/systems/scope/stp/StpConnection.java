@@ -27,6 +27,7 @@ import com.opera.core.systems.scope.protos.UmsProtos.Command;
 import com.opera.core.systems.scope.protos.UmsProtos.Error;
 import com.opera.core.systems.scope.protos.UmsProtos.Event;
 import com.opera.core.systems.scope.protos.UmsProtos.Response;
+import com.opera.core.systems.scope.protos.UmsProtos.Status;
 import com.opera.core.systems.util.SocketListener;
 import com.opera.core.systems.util.SocketMonitor;
 
@@ -528,13 +529,17 @@ public class StpConnection implements SocketListener {
         logger.finest("RECV EVENT: " + event.toString());
         signalEvent(event);
         break;
-
       case 4: // error
         Error error = Error.parseFrom(payload);
-        logger.finest("RECV ERROR: " + error.toString());
+      logger.finest("RECV ERROR: " + error.toString());
 
-        if (error.getService().equals("ecmascript-debugger")
-            && error.getStatus() == UmsProtos.Status.INTERNAL_ERROR.getNumber()) {
+      String service = error.getService();
+      int status = error.getStatus();
+
+      // We get exceptions when, in the ecmascript services, we use a runtime
+      // that doesn't exist. We can ignore these exceptions and carry on.
+      if ((service.equals("ecmascript-debugger") && status == Status.INTERNAL_ERROR.getNumber()) ||
+          (service.equals("ecmascript") && status == Status.BAD_REQUEST.getNumber())) {
           signalResponse(error.getTag(), null);
         } else {
           logger.log(Level.SEVERE, "Error : {0}", error.toString());

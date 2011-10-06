@@ -16,6 +16,9 @@
 
 package com.opera.core.systems.scope.services.ums;
 
+import java.util.List;
+import java.util.logging.Logger;
+
 import com.opera.core.systems.ScopeServices;
 import com.opera.core.systems.scope.protos.ScopeProtos.HostInfo;
 import com.opera.core.systems.scope.protos.ScopeProtos.Service;
@@ -30,12 +33,11 @@ import com.opera.core.systems.scope.services.ISelftest;
 import com.opera.core.systems.scope.services.IWindowManager;
 import com.opera.core.systems.util.VersionUtil;
 
-import java.util.List;
-
 /**
  * @author Deniz Turkoglu <dturkoglu@opera.com>, Andreas Tolf Tolfsen <andreastt@opera.com>
  */
 public class UmsServices {
+  protected final Logger logger = Logger.getLogger(this.getClass().getName());
 
   protected final IEcmaScriptDebugger debugger;
   protected final IOperaExec exec;
@@ -123,22 +125,20 @@ public class UmsServices {
       desktopWindowManager = null;
     }
 
-    /*
-  if (findServiceNamed(serviceList, "ecmascript") != null) {
+    if (findServiceNamed(serviceList, "ecmascript") != null) {
+      logger.info("Using Ecmascript Service");
+      String ecmascriptVersion = getVersionForService(serviceList, "ecmascript");
+      debugger = new EcmascriptService(services, ecmascriptVersion);
 
-    String ecmascriptVersion = getVersionForService(serviceList, "ecmascript");
-    debugger = new EcmascriptService(services, ecmascriptVersion);
-
-  } else {
-    */
-    String esdbgVersion = getVersionForService(serviceList, "ecmascript-debugger");
-    if (VersionUtil.compare(esdbgVersion, "6.0") >= 0) {
-      debugger = new EcmaScriptDebugger6(services, esdbgVersion);
     } else {
-      debugger = new EcmaScriptDebugger(services, esdbgVersion);
+      String esdbgVersion = getVersionForService(serviceList,
+          "ecmascript-debugger");
+      if (VersionUtil.compare(esdbgVersion, "6.0") >= 0) debugger = new EcmaScriptDebugger6(
+          services, esdbgVersion);
+      else debugger = new EcmaScriptDebugger(services, esdbgVersion);
+
     }
 
-    /* } */
     exec = new OperaExec(services, getVersionForService(serviceList, "exec"));
 
     if (findServiceNamed(serviceList, "cookie-manager") != null

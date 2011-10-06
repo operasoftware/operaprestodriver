@@ -16,25 +16,34 @@ limitations under the License.
 
 package com.opera.core.systems;
 
-import com.google.protobuf.AbstractMessage.Builder;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.logging.Logger;
+
+import org.openqa.selenium.WebDriverException;
+
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
-
+import com.google.protobuf.AbstractMessage.Builder;
 import com.opera.core.systems.model.ICommand;
 import com.opera.core.systems.runner.OperaRunner;
 import com.opera.core.systems.scope.ScopeCommand;
 import com.opera.core.systems.scope.exceptions.CommunicationException;
 import com.opera.core.systems.scope.handlers.IConnectionHandler;
 import com.opera.core.systems.scope.internal.OperaIntervals;
+import com.opera.core.systems.scope.protos.ScopeProtos;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemID;
 import com.opera.core.systems.scope.protos.EcmascriptProtos.ReadyStateChange;
 import com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeInfo;
-import com.opera.core.systems.scope.protos.ScopeProtos;
 import com.opera.core.systems.scope.protos.ScopeProtos.ClientInfo;
 import com.opera.core.systems.scope.protos.ScopeProtos.HostInfo;
+import com.opera.core.systems.scope.protos.ScopeProtos.Service;
 import com.opera.core.systems.scope.protos.ScopeProtos.ServiceResult;
 import com.opera.core.systems.scope.protos.ScopeProtos.ServiceSelection;
 import com.opera.core.systems.scope.protos.SelftestProtos.SelftestOutput;
@@ -54,15 +63,6 @@ import com.opera.core.systems.scope.services.ums.UmsServices;
 import com.opera.core.systems.scope.stp.StpConnection;
 import com.opera.core.systems.scope.stp.StpThread;
 import com.opera.core.systems.util.VersionUtil;
-
-import org.openqa.selenium.WebDriverException;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.logging.Logger;
 
 /**
  * Implements the interface to the Scope protocol.
@@ -216,9 +216,17 @@ public class ScopeServices implements IConnectionHandler {
 
     List<String> wantedServices = new ArrayList<String>();
 
-    if (enableDebugger) {
-      wantedServices.add("ecmascript-debugger");
+    boolean ecmascriptService = false;
+    for (Service service : hostInfo.getServiceListList()) {
+      if (service.getName().equals("ecmascript")) {
+        ecmascriptService = true;
+        break;
+      }
     }
+    if (ecmascriptService)
+      wantedServices.add("ecmascript");
+    else
+      wantedServices.add("ecmascript-debugger");
 
     wantedServices.add("exec");
     wantedServices.add("window-manager");

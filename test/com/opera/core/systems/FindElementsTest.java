@@ -154,6 +154,18 @@ public class FindElementsTest extends TestBase {
     }
   }
 
+  @Test
+  public void testMultipleElements() throws Exception {
+    OperaWebElement form = (OperaWebElement) driver.findElementByTagName("form");
+    List<WebElement> els = form.findElements(By.tagName("input"));
+
+    Assert.assertEquals(5, els.size());
+    for (WebElement el : els)
+    {
+      Assert.assertEquals(el.getTagName(), "INPUT");
+    }
+  }
+
   // Special characters
   @Test
   public void testFindsElementsWithSingleQuotes() {
