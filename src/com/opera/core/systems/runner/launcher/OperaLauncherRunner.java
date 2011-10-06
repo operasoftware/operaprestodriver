@@ -123,20 +123,16 @@ public class OperaLauncherRunner implements OperaRunner {
       profile = TemporaryFilesystem.getDefaultTmpFS().createTempDir("opera-profile", "")
           .getAbsolutePath();
       capabilities.setCapability(OperaDriver.PROFILE, profile);
-
-      stringArray.add("-pd");
-      stringArray.add(profile);
+      stringArray.add("-pd=" + profile);
     } else if (!profile.isEmpty()) {
-      stringArray.add("-pd");
-      stringArray.add(profile);
+      stringArray.add("-pd=" + profile);
     }
 
     int port = (Integer) this.capabilities.getCapability(OperaDriver.PORT);
     if (port != -1) {
       // Provide defaults if one hasn't been set
       String host = (String) this.capabilities.getCapability(OperaDriver.HOST);
-      stringArray.add("-debugproxy");
-      stringArray.add(host + ":" + port);
+      stringArray.add("-debugproxy=" + host + ":" + port);
     }
 
     // We read in environmental variable OPERA_ARGS in addition to existing arguments passed down
