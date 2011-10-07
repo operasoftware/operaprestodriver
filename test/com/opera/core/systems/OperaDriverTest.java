@@ -247,9 +247,8 @@ public class OperaDriverTest extends TestBase {
       }
     }
     String profile = a.getPref("User Prefs", "Opera Directory");
-    assertTrue("'" + profile + "' (case insensitively) contains 'tmp' or 'temp'",
-               profile.toLowerCase().contains("tmp") || profile.toLowerCase().contains("temp")
-    );
+    assertTrue("'" + profile + "' (case insensitively) should contain 'tmp' or 'temp'",
+               profile.toLowerCase().contains("tmp") || profile.toLowerCase().contains("temp"));
     a.quit();
   }
 
