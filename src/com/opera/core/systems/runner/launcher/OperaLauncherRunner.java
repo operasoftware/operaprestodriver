@@ -132,7 +132,8 @@ public class OperaLauncherRunner implements OperaRunner {
     if (port != -1) {
       // Provide defaults if one hasn't been set
       String host = (String) this.capabilities.getCapability(OperaDriver.HOST);
-      stringArray.add("-debugproxy=" + host + ":" + port);
+      stringArray.add("-debugproxy");
+      stringArray.add(host + ":" + port);
     }
 
     // We read in environmental variable OPERA_ARGS in addition to existing arguments passed down
