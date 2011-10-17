@@ -91,86 +91,23 @@ You can use the
 [DesiredCapabilities](http://selenium.googlecode.com/svn/trunk/docs/api/java/org/openqa/selenium/remote/DesiredCapabilities.html)
 class to specify settings for OperaDriver.  The capabilities we support are:
 
-#### opera.logging.level
-
-*(String)* How verbose the logging should be.  Available levels are: SEVERE
-(highest value), WARNING, INFO, CONFIG, FINE, FINER, FINEST (lowest value),
-ALL.  Default is INFO.
-
-#### opera.logging.file
-
-*(String)* Where to send the output of the logging.  Default is to not write to
-file.
-
-#### opera.binary
-
-*(String)* Path to the Opera binary to use.  If not specified, OperaDriver will
-guess the path to your Opera installation.
-
-#### opera.arguments
-
-*(String)* Arguments to pass on to Opera, separated by spaces.  See `opera
--help` for available command-line arguments.
-
-#### opera.host
-
-*(String)* The host Opera should connect to.  Unless you're starting Opera
-manually you won't need this.
-
-#### opera.port
-
-*(Integer)* The port Opera should connect to.  0 = Random port, -1 = Opera
-default (for use with Opera < 12).
-
-#### opera.launcher
-
-*(String)* Absolute path to the launcher binary to use.  The launcher is a
-gateway between OperaDriver and the Opera browser, and is being used for
-controlling and monitoring the binary, and taking external screenshots.  If
-left blank, OperaDriver will use the launcher supplied with the package.
-
-#### opera.profile
-
-*(String)* Directory to use for the Opera profile.  If null a random temporary
-directory is used.  If "", an empty string, then the default autotest profile
-directory is used.
-
-#### opera.idle
-
-*(Boolean)* Whether to use Opera's alternative implicit wait implementation.
-It will use an in-browser heuristic to guess when a page has finished loading,
-allowing us to determine with great accuracy whether there are any planned
-events in the document.  This functionality is useful for very simple test
-cases, but not designed for real-world testing.  It is disabled by default.
-
-#### opera.display
-
-*(Integer)* The X display to use.  (Only works on UNIX-like OSes.)
-
-#### opera.autostart
-
-*(Boolean)* Whether to auto-start the Opera binary.  If false, OperaDriver will
-wait for a connection from the browser.  Go to "opera:debug", enter the correct
-port number and hit "Connect" to connect manually.
-
-#### opera.no_restart
-
-*(Boolean)* Whether to restart.
-
-#### opera.no_quit
-
-*(Boolean)* Whether to quit Opera when OperaDriver is shut down.  If enabled,
-it will keep the browser running after the driver is shut down.
-
-#### opera.guess_binary_path
-
-*(Boolean)* Whether to guess the path to Opera if it isn't set in
-`opera.binary`.
-
-#### opera.profile
-
-*(String)* The profile configuration we are using, for example "desktop" or
-"core-gogi".
+| __Capability__              | __Type__ | __Default__ | __Description__             |
+|-----------------------------|----------|-------------|-----------------------------|
+| __opera.logging.level__     | String   | "INFO"      | How verbose the logging should be.  Available levels are: SEVERE (highest value), WARNING, INFO, CONFIG, FINE, FINER, FINEST (lowest value), ALL.  Default is INFO.
+| __opera.logging.file__      | String   | null        | Where to send the output of the logging.  Default is to not write to file.
+| __opera.binary__            | String   | null        | Path to the Opera binary to use.  If not specified, OperaDriver will guess the path to your Opera installation.
+| __opera.arguments__         | String   | null        | Arguments to pass on to Opera, separated by spaces.  See `opera -help` for available command-line arguments.
+| __opera.host__              | String   | "127.0.0.1" | The host Opera should connect to.  Unless you're starting Opera manually you won't need this.
+| __opera.port__              | Integer  | 7001        | The port Opera should connect to.  0 = Random port, -1 = Opera default (for use with Opera < 12).
+| __opera.launcher__          | String   | null        | Absolute path to the launcher binary to use.  The launcher is a gateway between OperaDriver and the Opera browser, and is being used for controlling and monitoring the binary, and taking external screenshots.  If left blank, OperaDriver will use the launcher supplied with the package.
+| __opera.profile__           | String   | null        | Directory to use for the Opera profile.  If null a random temporary directory is used.  If "", an empty string, then the default autotest profile directory is used.
+| __opera.idle__              | Boolean  | false       | Whether to use Opera's alternative implicit wait implementation.  It will use an in-browser heuristic to guess when a page has finished loading,allowing us to determine with great accuracy whether there are any planned events in the document.  This functionality is useful for very simple test cases, but not designed for real-world testing.  It is disabled by default.
+| __opera.display__           | Integer  | null        | The X display to use.  (Only works on UNIX-like OSes.)
+| __opera.autostart__         | Boolean  | true        | Whether to auto-start the Opera binary.  If false, OperaDriver will wait for a connection from the browser.  Go to "opera:debug", enter the correct port number and hit "Connect" to connect manually.
+| __opera.no_restart__        | Boolean  | false       | Whether to restart.
+| __opera.no_quit__           | Boolean  | false       | Whether to quit Opera when OperaDriver is shut down.  If enabled, it will keep the browser running after the driver is shut down.
+| __opera.guess_binary_path__ | Boolean  | true        | Whether to guess the path to Opera if it isn't set in `opera.binary`.
+| __opera.profile__           | String   | null        | The profile configuration we are using, for example "desktop" or "core-gogi".
 
 
 ### Environment variables
