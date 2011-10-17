@@ -36,8 +36,16 @@ location for each system:
 
 However, you can override this and specify a custom location to Opera by
 setting the capability `opera.path` or environmnetal variable `OPERA_PATH`.
-You can read more about configuring WebDriver under [Advanced
-Usage][advancedusage].
+You can read more about configuring WebDriver under Advanced Usage.
+
+Other libraries required by OperaDriver:
+
+  * Apache Commons IO v2.0.1
+  * Apache Commons JXPath v1.3
+  * Google Guava r09
+  * JUnit v4.9
+  * Google protobuf v2.4.1
+  * Selenium v2.7
 
 
 Getting started
