@@ -109,6 +109,22 @@ class to specify settings for OperaDriver.  The capabilities we support are:
 | __opera.guess_binary_path__ | Boolean  | true        | Whether to guess the path to Opera if it isn't set in `opera.binary`.
 | __opera.profile__           | String   | null        | The profile configuration we are using, for example "desktop" or "core-gogi".
 
+To use capabilities:
+
+    DesiredCapabilities capabilities = new DesiredCapabilities();
+    capabilities.setCapability("opera.logging.level", "CONFIG");
+    capabilities.setCapability("opera.loggin.file", "/var/log/operadriver.log");
+    capabilities.setCapability("opera.display", 8);
+    capabilities.setCapability("opera.profile", "/home/andreastt/my-own-opera-profile");
+
+    // Now use it
+    WebDriver driver = new OperaDriver(capabilities);
+    driver.navigate().to("http://opera.com/");
+
+See also the information available on the
+[RemoteWebDriver](http://code.google.com/p/selenium/wiki/RemoteWebDriver) at
+the Selenium wiki.
+
 
 ### Environment variables
 
@@ -117,20 +133,15 @@ command-line arguments to use, you may use environmental variables also.  This
 is a list of the environmental variables which can be set on any operating
 system:
 
-#### OPERA_PATH
+| __Name__       | __Description__                                                                                                                                          |
+|----------------|----------------------------------------------------------------------------------------------------------------------------------------------------------|
+| __OPERA_PATH__ | The absolute path to the Opera binary you want to use.  If not set OperaDriver will try to locate Opera on your system.                                  |
+| __OPERA_ARGS__ | A space-delimited list of arguments to pass on to Opera, e.g. `-nowindow`, `-dimensions 1600x1200`, &c.  See `opera --help` to view available arguments. |
 
-The absolute path to the Opera binary you want to use.  If not set OperaDriver
-will try to locate Opera on your system.
+To set environment variables:
 
-#### OPERA_ARGS
-
-A space-delimited list of arguments to pass on to Opera, e.g. `-nowindow`,
-`-dimensions 1600x1200`, &c.  See `opera --help` to view available arguments.
-
-#### To set environment variables
-
-  * _Linux and Mac_: `export OPERA_PATH=...`, and add this line to `~/.bashrc` to use in all future sessions.
-  * _Windows_: Please follow this guide: http://support.microsoft.com/kb/310519
+  * __Linux and Mac__: `export OPERA_PATH=...`, and add this line to `~/.bashrc` (or your shell's configuration file) to use in all future sessions.
+  * __Windows__: Please follow this guide: http://support.microsoft.com/kb/310519
 
 
 Supported Opera versions
@@ -147,9 +158,21 @@ This is a list of the official Opera Desktop versions supported by OperaDriver:
 | 11.50       |                                                                                            |
 | 11.11       |                                                                                            |
 | 11.10       |                                                                                            |
-| 11.01       | `-autotestmode` command-line argument is not supported, use a [wrapper script][wrapper]    |
-| 11.00       |                                                                                            |
+| 11.01       | `-autotestmode` command-line argument is not supported, use a wrapper script               |
+| 11.00       | `-autotestmode` command-line argument is not supported, use a wrapper script               |
 
+
+#### Wrapper script
+
+Some Opera versions don't accept the `-autotestmode` or `-debugproxy` arguments
+sent by OperaDriver by default.  You can bypass this problem by creating a
+wrapper script like this and pointing the capability `opera.binary` to its
+absolute path:
+
+    #!/bin/sh
+    # Wrapper to prevent the -autotestmode argument reaching this version of Opera
+    # which doesn't support it.
+    `dirname $0`/opera
 
 Known issues 
 ------------
