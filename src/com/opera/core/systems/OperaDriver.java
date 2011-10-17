@@ -1171,7 +1171,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
   }
 
   public void setUseOperaIdle(boolean useIdle) {
-    capabilities.setCapability(OPERAIDLE, true);
+    capabilities.setCapability(OPERAIDLE, useIdle);
   }
 
   public Object executeScript(String script, Object... args) {
