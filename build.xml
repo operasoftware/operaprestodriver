@@ -205,7 +205,7 @@
       <zipfileset prefix="${release-zip.name}" dir="release" includes="${release-zip.name}-source.jar" />
       <!-- Add all the jar libs -->
       <zipfileset prefix="${release-zip.name}/lib" dir="lib" excludes="junit*.jar"/>
-      <zipfileset prefix="${release-zip.name}" dir="." includes="README.txt CHANGES.txt AUTHORS.txt LICENSE.txt VERSION"/>
+      <zipfileset prefix="${release-zip.name}" dir="." includes="README.md CHANGES AUTHORS LICENSE VERSION"/>
     </zip>
   </target>
 </project>
