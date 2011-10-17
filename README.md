@@ -30,9 +30,9 @@ location for each system:
 
 | __OS__    | __Expected Location of Opera__               |
 |-----------|----------------------------------------------|
-| GNU/Linux | /usr/bin/opera
-| Mac       | /Applications/Opera.app/Contents/MacOS/Opera
-| WIndows   | \%PROGRAMFILES%\Opera\opera.exe
+| GNU/Linux | /usr/bin/opera                               |
+| Mac       | /Applications/Opera.app/Contents/MacOS/Opera |
+| WIndows   | \%PROGRAMFILES%\Opera\opera.exe              |
 
 However, you can override this and specify a custom location to Opera by
 setting the capability `opera.path` or environmnetal variable `OPERA_PATH`.
@@ -203,15 +203,15 @@ Supported Opera versions
 
 This is a list of the official Opera Desktop versions supported by OperaDriver:
 
-| _Version_ | _Workaround/tweaks needed_                                                                 |
-|:----------|-------------------------------------------------------------------------------------------:|
-| 12.00     | *(Not released yet)*                                                                       |
-| 11.51     | Set `opera.port` to `0` and `opera.profile` to null to enable parallelization on GNU/Linux |
-| 11.50     |                                                                                            |
-| 11.11     |                                                                                            |
-| 11.10     |                                                                                            |
-| 11.01     | `-autotestmode` command-line argument is not supported, use a [wrapper script][wrapper]    |
-| 11.00     |                                                                                            |
+| __Version__ | __Workaround/tweaks needed__                                                               |
+|-------------|--------------------------------------------------------------------------------------------|
+| 12.00       | *(Not released yet)*                                                                       |
+| 11.51       | Set `opera.port` to `0` and `opera.profile` to null to enable parallelization on GNU/Linux |
+| 11.50       |                                                                                            |
+| 11.11       |                                                                                            |
+| 11.10       |                                                                                            |
+| 11.01       | `-autotestmode` command-line argument is not supported, use a [wrapper script][wrapper]    |
+| 11.00       |                                                                                            |
 
 
 Known issues 
