@@ -28,8 +28,8 @@ or newer.
 The OperaDriver server expects you to have Opera installed in the default
 location for each system:
 
-| _OS_      | _Expected Location of Opera_                 |
-|:----------|---------------------------------------------:|
+| __OS__    | __Expected Location of Opera__               |
+|-----------|----------------------------------------------|
 | GNU/Linux | /usr/bin/opera
 | Mac       | /Applications/Opera.app/Contents/MacOS/Opera
 | WIndows   | \%PROGRAMFILES%\Opera\opera.exe
