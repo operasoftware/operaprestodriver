@@ -16,8 +16,10 @@ limitations under the License.
 
 package com.opera.core.systems;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
+import com.google.common.io.ByteStreams;
+import com.google.common.io.Closeables;
+import com.google.common.io.Files;
+
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.os.CommandLine;
@@ -113,7 +115,8 @@ public class OperaPaths {
         throw new WebDriverException("Path \"" + path + "\" in OPERA_LAUNCHER does not exist");
       }
 
-      path = extractLauncher(FileUtils.getUserDirectoryPath() + File.separator + ".launcher");
+      String userHome = System.getProperty("user.home");
+      path = extractLauncher(userHome + File.separator + ".launcher");
     }
 
     return path;
@@ -185,23 +188,29 @@ public class OperaPaths {
     }
 
     if (copy) {
+      InputStream is = null;
+      OutputStream os = null;
       try {
         if (!targetLauncher.exists()) {
           new File(launcherPath).mkdirs();
-          FileUtils.touch(targetLauncher);
+          Files.touch(targetLauncher);
         }
 
-        InputStream is = (res != null) ? res.openStream() : new FileInputStream(sourceLauncher);
-        OutputStream os = new FileOutputStream(targetLauncher);
+        is = (res != null) ? res.openStream() : new FileInputStream(sourceLauncher);
+        os = new FileOutputStream(targetLauncher);
 
-        IOUtils.copy(is, os);
-
-        is.close();
-        os.close();
+        ByteStreams.copy(is, os);
 
         targetLauncher.setLastModified(targetLauncher.lastModified());
       } catch (IOException e) {
         throw new WebDriverException("Cannot write file to disk: " + e.getMessage());
+      } finally {
+        if (is != null) {
+          Closeables.closeQuietly(is);
+        }
+        if (os != null) {
+          Closeables.closeQuietly(os);
+        }
       }
 
       logger.fine("New launcher copied to " + targetLauncher.getAbsolutePath());

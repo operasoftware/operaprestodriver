@@ -15,11 +15,13 @@ limitations under the License.
 */
 package com.opera.core.systems.util;
 
+import com.google.common.io.Files;
+
 import java.io.File;
 import java.io.IOException;
 
-import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.Capabilities;
+import org.openqa.selenium.io.FileHandler;
 
 import com.opera.core.systems.OperaDriver;
 import com.opera.core.systems.settings.OperaDriverSettings;
@@ -155,7 +157,7 @@ public class ProfileUtils {
 		}
 
 		try {
-			FileUtils.copyDirectory(new File(newPrefs), new File(smallPrefsFolder));
+      Files.copy(new File(newPrefs), new File(smallPrefsFolder));
 		} catch (IOException e) {
 			// Ignore
 			// e.printStackTrace();
@@ -171,6 +173,6 @@ public class ProfileUtils {
 	 */
 	private boolean deleteFolder(String folderPath) {
 		//true if the file or directory was deleted, otherwise false
-		return FileUtils.deleteQuietly(new File(folderPath));
+    return FileHandler.delete(new File(folderPath));
 	}
 }

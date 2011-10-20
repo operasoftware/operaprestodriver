@@ -18,7 +18,6 @@ package com.opera.core.systems;
 
 import com.opera.core.systems.settings.OperaDriverSettings;
 
-import org.apache.commons.io.FileUtils;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -26,6 +25,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriverException;
+import org.openqa.selenium.io.FileHandler;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.io.File;
@@ -209,7 +209,7 @@ public class OperaDriverTest extends TestBase {
   public void testSetProfile() throws Exception {
     if (Platform.getCurrent() != Platform.LINUX) return;
 
-    FileUtils.deleteDirectory(new File("/tmp/opera-test-profile/"));
+    FileHandler.delete(new File("/tmp/opera-test-profile/"));
 
     DesiredCapabilities c = new DesiredCapabilities();
     c.setCapability(OperaDriver.PROFILE, "/tmp/opera-test-profile/");
