@@ -16,6 +16,9 @@ limitations under the License.
 
 package com.opera.core.systems;
 
+import com.google.common.base.Charsets;
+import com.google.common.io.Resources;
+
 import com.opera.core.systems.interaction.OperaAction;
 import com.opera.core.systems.interaction.UserInteraction;
 import com.opera.core.systems.model.ScopeActions;
@@ -39,7 +42,6 @@ import com.opera.core.systems.scope.services.IWindowManager;
 import com.opera.core.systems.settings.OperaDriverSettings;
 import com.opera.core.systems.util.CapabilitiesSanitizer;
 
-import org.apache.commons.io.IOUtils;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Capabilities;
@@ -1319,9 +1321,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
       URL res = OperaDriver.class.getClassLoader().getResource("VERSION");
 
       try {
-        InputStream stream = res.openStream();
-        version = IOUtils.toString(stream);
-        stream.close();
+        version = Resources.toString(res, Charsets.UTF_8);
       } catch (Exception e) {
         version = "(Unknown)";
       }
