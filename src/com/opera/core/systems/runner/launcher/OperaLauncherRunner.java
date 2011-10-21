@@ -109,12 +109,6 @@ public class OperaLauncherRunner implements OperaRunner {
     // Note any launcher arguments must be before this line!  Any arguments appended to the launcher
     // binary will be sent directly to Opera.
 
-    // Enable auto test mode, always starts Opera on opera:debug and prevents interrupting dialogues
-    // appearing.
-    if (!stringArray.contains("-autotestmode")) {
-      stringArray.add("-autotestmode");
-    }
-
     // This can't be last, otherwise it might get interpreted as the page to open, and the file
     // listing page doesn't have a JS context to inject into.
     String profile = (String) this.capabilities.getCapability(OperaDriver.PROFILE);
@@ -123,9 +117,17 @@ public class OperaLauncherRunner implements OperaRunner {
       profile = TemporaryFilesystem.getDefaultTmpFS().createTempDir("opera-profile", "")
           .getAbsolutePath();
       capabilities.setCapability(OperaDriver.PROFILE, profile);
-      stringArray.add("-pd=" + profile);
+      stringArray.add("-pd");
+      stringArray.add(profile);
     } else if (!profile.isEmpty()) {
-      stringArray.add("-pd=" + profile);
+      stringArray.add("-pd");
+      stringArray.add(profile);
+    }
+
+    // Enable auto test mode, always starts Opera on opera:debug and prevents interrupting dialogues
+    // appearing.
+    if (!stringArray.contains("-autotestmode")) {
+      stringArray.add("-autotestmode");
     }
 
     int port = (Integer) this.capabilities.getCapability(OperaDriver.PORT);
