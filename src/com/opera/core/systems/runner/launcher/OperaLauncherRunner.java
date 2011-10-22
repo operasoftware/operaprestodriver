@@ -126,6 +126,12 @@ public class OperaLauncherRunner implements OperaRunner {
 
     // Enable auto test mode, always starts Opera on opera:debug and prevents interrupting dialogues
     // appearing.
+    //
+    // This must come after the -pd argument since that is not recognized by the internal Opera core
+    // builds, gogi.  For some reason this argument will not make the value of the -pd argument
+    // considered the URL to start on.  Since that value is typically a folder located on the
+    // system and Opera disables script injection in local file listings, that would break testing
+    // on these internal builds.
     if (!stringArray.contains("-autotestmode")) {
       stringArray.add("-autotestmode");
     }
