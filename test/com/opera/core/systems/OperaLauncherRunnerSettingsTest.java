@@ -32,6 +32,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+
 public class OperaLauncherRunnerSettingsTest {
 
   private static OperaDriverSettings settings;
@@ -90,7 +91,8 @@ public class OperaLauncherRunnerSettingsTest {
 
   @Test
   public void testSetOperaBinaryArguments() {
-    settings.setOperaBinaryArguments("-host 127.0.0.1 -port 12199 -bin /spartan/ramdisk/install/launcher");
+    settings.setOperaBinaryArguments(
+        "-host 127.0.0.1 -port 12199 -bin /spartan/ramdisk/install/launcher");
     assertEquals("-host 127.0.0.1 -port 12199 -bin /spartan/ramdisk/install/launcher",
                  settings.getOperaBinaryArguments());
   }
@@ -135,7 +137,8 @@ public class OperaLauncherRunnerSettingsTest {
 
     try {
       runner.startOpera();
-      fail("This test should have generated a OperaRunnerException as we tried to start Opera when the Launcher isn't running...");
+      fail(
+          "This test should have generated a OperaRunnerException as we tried to start Opera when the Launcher isn't running...");
     } catch (OperaRunnerException e) {
     }
   }

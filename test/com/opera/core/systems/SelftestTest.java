@@ -1,3 +1,19 @@
+/*
+Copyright 2011 Opera Software ASA
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
 package com.opera.core.systems;
 
 import com.opera.core.systems.scope.services.ISelftest.ResultType;
@@ -14,18 +30,22 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 public class SelftestTest extends TestBase {
+
   @Test
   public void testSelftests() {
     String product = driver.utils().getProduct();
-    if("core-gogi".equals(product)) {
+    if ("core-gogi".equals(product)) {
       String results;
       try {
         results = driver.selftest(Arrays.asList("about"), 30000);
       } catch (UnsupportedOperationException e) {
         // This service isn't available everywhere. Don't fail if we get that
         // exception.
-        if (e.getMessage().contains("selftest is not supported")) return;
-        else throw e;
+        if (e.getMessage().contains("selftest is not supported")) {
+          return;
+        } else {
+          throw e;
+        }
       }
 
       assertNotNull("Running selftests doesn't blow up, returns non-null result.", results);
@@ -47,26 +67,35 @@ public class SelftestTest extends TestBase {
 
   @Test
   public void parsing() {
-    String data = "foo:bar\tPASS\nlorem:ipsum dolor sit amet\tFAIL\tmore\nmore:tests here\tSKIP\treason\n";
+    String
+        data =
+        "foo:bar\tPASS\nlorem:ipsum dolor sit amet\tFAIL\tmore\nmore:tests here\tSKIP\treason\n";
     List<SelftestResult> results;
 
-    if(driver.utils().getProduct().equals("core-gogi")) {
+    if (driver.utils().getProduct().equals("core-gogi")) {
       try {
         results = Selftest.parseSelftests(driver.selftest(Arrays.asList("nosuchmodule"), 30000));
       } catch (UnsupportedOperationException e) {
         // This service isn't available everywhere. Don't fail if we get that
         // exception.
-        if (e.getMessage().contains("selftest is not supported")) return;
-        else throw e;
+        if (e.getMessage().contains("selftest is not supported")) {
+          return;
+        } else {
+          throw e;
+        }
       }
 
       assertNull("Running selftests for non-existent module parsed as null", results);
     }
 
     List<SelftestResult> expected = Arrays.asList(new SelftestResult("foo", "bar", ResultType.PASS),
-                                                  new SelftestResult("lorem", "ipsum dolor sit amet", ResultType.FAIL, "more"),
-                                                  new SelftestResult("more", "tests here", ResultType.SKIP, "reason"));
+                                                  new SelftestResult("lorem",
+                                                                     "ipsum dolor sit amet",
+                                                                     ResultType.FAIL, "more"),
+                                                  new SelftestResult("more", "tests here",
+                                                                     ResultType.SKIP, "reason"));
     results = Selftest.parseSelftests(data);
     assertEquals("Sample output parsed correctly", expected, results);
   }
+
 }
