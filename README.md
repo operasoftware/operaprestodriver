@@ -40,12 +40,11 @@ You can read more about configuring WebDriver under Advanced Usage.
 
 Other libraries required by OperaDriver:
 
-  * Apache Commons IO v2.0.1
   * Apache Commons JXPath v1.3
-  * Google Guava r09
-  * JUnit v4.9
+  * Google Guava 10.0.1
+  * JUnit v4.10
   * Google protobuf v2.4.1
-  * Selenium v2.7
+  * Selenium v2.8
 
 
 Getting started
