@@ -18,7 +18,8 @@ package com.opera.core.systems.runner.launcher;
 
 import com.google.protobuf.GeneratedMessage;
 
-import com.opera.core.systems.OperaDriver;
+import com.opera.core.systems.arguments.OperaArgument;
+import com.opera.core.systems.arguments.OperaCoreArguments;
 import com.opera.core.systems.model.ScreenShotReply;
 import com.opera.core.systems.runner.OperaRunner;
 import com.opera.core.systems.runner.OperaRunnerException;
@@ -33,10 +34,7 @@ import com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStatus
 import com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStatusResponse.StatusType;
 import com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStopRequest;
 import com.opera.core.systems.scope.internal.OperaIntervals;
-import com.opera.core.systems.settings.OperaDriverSettings;
 
-import org.openqa.selenium.WebDriverException;
-import org.openqa.selenium.io.TemporaryFilesystem;
 import org.openqa.selenium.net.PortProber;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
@@ -45,11 +43,10 @@ import java.net.ServerSocket;
 import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class OperaLauncherRunner implements OperaRunner {
+public class OperaLauncherRunner extends OperaRunner implements com.opera.core.systems.runner.interfaces.OperaRunner {
 
   private static Logger logger = Logger.getLogger(OperaLauncherRunner.class.getName());
 
@@ -59,6 +56,93 @@ public class OperaLauncherRunner implements OperaRunner {
   private OperaLauncherProtocol launcherProtocol = null;
   private String crashlog = null;
 
+  public OperaLauncherRunner() {
+    this((OperaLauncherRunnerSettings) OperaLauncherRunnerSettings.getDefaultSettings());
+  }
+
+  public OperaLauncherRunner(OperaLauncherRunnerSettings settings) {
+    // Rely on OperaRunner to parse most of the settings
+    super(settings);
+
+    // Parse remaining launcher-related settings
+    Integer launcherPort = PortProber.findFreePort();
+    Integer display = settings.getDisplay();
+    String product = settings.getProduct();
+    String profile = settings.getProfile();
+
+    List<String> launcherArguments = new ArrayList<String>();
+    launcherArguments.add("-host");
+    launcherArguments.add("127.0.0.1");
+    launcherArguments.add("-port");
+    launcherArguments.add(launcherPort.toString());
+    if (display != null && display > 0) {
+      launcherArguments.add("-display");
+      launcherArguments.add(":" + display.toString());
+    }
+    if (settings.getLoggingLevel() == Level.FINEST) {
+      launcherArguments.add("-console");  // TODO(andreastt): Allow for file logging
+      launcherArguments.add("-verbosity");
+      launcherArguments.add(Level.FINEST.toString());
+    }
+    if (product != null && !product.isEmpty()) {
+      launcherArguments.add("-profile");
+      launcherArguments.add(product);
+    }
+    if (settings.getNoQuit()) {
+      launcherArguments.add("-noquit");
+    }
+    launcherArguments.add("-bin");
+    launcherArguments.add(settings.getBinary().getAbsolutePath());
+
+    for (OperaArgument argument : super.settings.getArguments().getArguments()) {
+      launcherArguments.add(super.settings.getArguments().sign() + argument.getArgument());
+      if (argument.getValue() != null && !argument.getValue().isEmpty()) {
+        launcherArguments.add(argument.getValue());
+      }
+    }
+
+    logger.config("launcher arguments: " + launcherArguments.toString());
+
+    // Setup the launcher binary
+    launcherRunner = new OperaLauncherBinary(
+        settings.getLauncher().getAbsolutePath(),
+        launcherArguments.toArray(new String[launcherArguments.size()])
+    );
+
+    logger.fine("Waiting for launcher connection on port " + launcherPort);
+
+    try {
+      // Setup listener server
+      ServerSocket listenerServer = new ServerSocket(launcherPort);
+      listenerServer.setSoTimeout((int) OperaIntervals.LAUNCHER_TIMEOUT.getValue());  // TODO
+
+      // Try to connect
+      launcherProtocol = new OperaLauncherProtocol(listenerServer.accept());
+
+      // We did it!
+      logger.fine("Connected with launcher on port " + launcherPort);
+      listenerServer.close();
+
+      // Do the handshake!
+      LauncherHandshakeRequest.Builder request = LauncherHandshakeRequest.newBuilder();
+      ResponseEncapsulation res = launcherProtocol.sendRequest(
+          MessageType.MSG_HELLO, request.build().toByteArray());
+
+      // Are we happy?
+      if (res.isSuccess()) {
+        logger.finer("Got launcher handshake: " + res.getResponse().toString());
+      } else {
+        throw new OperaRunnerException("Did not get launcher handshake: " + res.getResponse().toString());
+      }
+    } catch (SocketTimeoutException e) {
+      throw new OperaRunnerException("Timeout waiting for launcher to connect on port " +
+                                     launcherPort, e);
+    } catch (IOException e) {
+      throw new OperaRunnerException("Unable to listen to launcher port " + launcherPort, e);
+    }
+  }
+
+  /*
   @Deprecated
   public OperaLauncherRunner(OperaDriverSettings settings) {
     this((DesiredCapabilities) settings.getCapabilities());
@@ -197,6 +281,7 @@ public class OperaLauncherRunner implements OperaRunner {
       throw new OperaRunnerException("Unable to listen to launcher port " + launcherPort, e);
     }
   }
+  */
 
   public void startOpera() {
     logger.fine("Instructing launcher to start Opera...");

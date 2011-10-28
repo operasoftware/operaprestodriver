@@ -1,74 +1,200 @@
-/*
-Copyright 2008-2011 Opera Software ASA
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-     http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-*/
-
 package com.opera.core.systems.runner;
 
 import com.opera.core.systems.model.ScreenShotReply;
+import com.opera.core.systems.arguments.OperaCoreArguments;
+import com.opera.core.systems.arguments.OperaDesktopArguments;
+import com.opera.core.systems.arguments.interfaces.OperaArguments;
+
+import org.openqa.selenium.io.TemporaryFilesystem;
+import org.openqa.selenium.net.PortProber;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.PrintStream;
+import java.util.concurrent.locks.ReentrantLock;
+import java.util.logging.Logger;
 
 /**
- * Defines interface for controlling the Opera binary.
+ * OperaRunner is an interface for controlling the Opera browser binary.  OperaRunner implements a
+ * pure-Java process manager, OperaLauncherRunner implements one in C++ with a Java API.
+ *
+ * @author Andreas Tolf Tolfsen <andreastt@opera.com>
  */
-public interface OperaRunner {
+public class OperaRunner implements com.opera.core.systems.runner.interfaces.OperaRunner {
+
+  protected static Logger logger = Logger.getLogger(OperaRunner.class.getName());
+  public OperaRunnerSettings settings;
 
   /**
-   * Start Opera, does nothing if Opera is already started.
+   * Controls access to {@link #process}.
    */
-  public void startOpera();
+  private final ReentrantLock lock = new ReentrantLock();
 
   /**
-   * Stops Opera, does nothing if Opera isn't running.  Typically we'll use the exec service to stop
-   * Opera, but this method will _ensure_ that Opera is quit from an external process controller.
+   * Used to spawn a new child process when this service is {@link #startOpera()} started}.
    */
-  public void stopOpera();
+  private ProcessBuilder processBuilder;  // TODO(andreastt): final
 
   /**
-   * Is Opera running?
-   *
-   * @return true if running, false if not running or crashed
+   * A reference to the current child process.  Will be <code>null</code> whenever this service is
+   * not running.
    */
-  public boolean isOperaRunning();
+  private Process process = null;
 
-  public boolean isOperaRunning(int processId);
+  public OperaRunner() {
+    this(OperaRunnerSettings.getDefaultSettings());
+  }
+
+  public OperaRunner(OperaRunnerSettings s) {
+    settings = s;
+
+    logger.config("OperaRunner settings: " + s);
+
+    // Use arguments provided by user if set
+    OperaArguments arguments;
+    if (settings.getProduct() != null && settings.getProduct().equals("desktop")) {
+      arguments = new OperaDesktopArguments();
+    } else {
+      arguments = new OperaCoreArguments();
+    }
+
+    // This can't be last, otherwise it might get interpreted as the page to open, and the file
+    // listing page doesn't have a JS context to inject into.
+    String profile = settings.getProfile();
+
+    // If null, generate a temp directory, if not empty use the given directory.
+    if (profile == null) {
+      profile = TemporaryFilesystem
+          .getDefaultTmpFS()
+          .createTempDir("opera-profile", "")
+          .getAbsolutePath();
+      settings.setProfile(profile);
+      arguments.add("-pd", profile);
+    } else if (!profile.isEmpty()) {
+      arguments.add("-pd", profile);
+    }
+
+    // The port Opera should connect to.  0 = Random, -1 = Opera default (for use with Opera < 12).
+    // Currently we don't append -debugproxy if port is set to -1 because of backwards compatibility.
+    Integer port = settings.getPort();
+    if (port == 0) {
+      arguments.add("-debugproxy", settings.getHost() + ":" + PortProber.findFreePort());
+    } else if (port != -1) {
+      // Provide defaults if one hasn't been set
+      arguments.add("-debugproxy", settings.getHost() + ":" + port);
+    }
+
+    // We read in environmental variable OPERA_ARGS in addition to existing arguments passed down
+    // from OperaArguments.  These are combined and sent to the browser.
+    //
+    // Note that this is a deviation from the principle of arguments normally overwriting
+    // environmental variables.
+
+    // TODO(andreastt): WTF is going on here?
+    /*
+    OperaArguments userArguments = settings.getArguments();
+    for (OperaArgument argument : userArguments.getArguments()) {
+      if (argument.getValue() != null && !argument.getValue().isEmpty()) {
+        arguments.add(argument.getArgument(), argument.getValue());
+      } else {
+        arguments.add(argument.getArgument());
+      }
+    }
+    */
+
+    arguments.merge(settings.getArguments());
+    settings.setArguments(arguments);
+
+    logger.config("Opera arguments: " + settings.getArguments().getArguments().toString());
+
+    // TODO(andreastt): Should this be abstracted into its own class?
+    //processBuilder = new ProcessBuilder(settings.getArguments().getArgumentsAsStrings());
+  }
+
+  public void startOpera() {
+    lock.lock();
+
+    try {
+      if (process != null) {
+        return;
+      }
+      process = processBuilder.start();
+      pipe(process.getErrorStream(), System.err);
+      pipe(process.getInputStream(), System.out);
+    } catch (IOException e) {
+      // TODO(andreastt): Can we check this earlier?
+    } finally {
+      lock.unlock();
+    }
+  }
+
+  public void stopOpera() {
+    lock.lock();
+
+    try {
+      if (process == null) {
+        return;
+      }
+
+      // TODO(andreastt): Implement
+    } finally {
+      process = null;
+      lock.unlock();
+    }
+  }
+
+  public boolean isOperaRunning() {
+    return isOperaRunning(0);
+  }
+
+  public boolean isOperaRunning(int processID) {
+    lock.lock();
+
+    try {
+      if (process == null) {
+        return false;
+      }
+      process.exitValue();
+      return false;
+    } catch (IllegalThreadStateException e) {
+      return true;
+    } finally {
+      lock.unlock();
+    }
+  }
+
+  public boolean hasOperaCrashed() {
+    return false;
+  }
+
+  public String getOperaCrashlog() {
+    return "";
+  }
 
   /**
-   * Did Opera crash?  This is reset on next call, so if you don't check you won't know.
-   *
-   * @return true if opera has crashed
+   * Handles safe shutdown of the OperaRunner class.
    */
-  public boolean hasOperaCrashed();
+  public void shutdown() {
+  }
 
-  /**
-   * If Opera crashed there should be a crashlog.
-   *
-   * @return the crashlog, or null if it does not exist
-   */
-  public String getOperaCrashlog();
+  public ScreenShotReply saveScreenshot(long timeout, String... hashes) {
+    throw new UnsupportedOperationException("not implemented");
+  }
 
-  /**
-   * In case the runner has sockets and stuff, it needs to be shut down.
-   */
-  public void shutdown();
-
-  /**
-   * Take a screenshot of the full screen.
-   *
-   * @param timeout attempt to take the screenshot until the timeout is reached
-   * @param hashes  an arbitrary list of hashes to compare with
-   * @return a ScreenshotReply object containing MD5 hash sums and bytes
-   */
-  public ScreenShotReply saveScreenshot(long timeout, String... hashes);
+  // http://stackoverflow.com/questions/60302
+  private static void pipe(final InputStream src, final PrintStream dest) {
+    new Thread(new Runnable() {
+      public void run() {
+        try {
+          byte[] buffer = new byte[1024];
+          for (int n = 0; n != -1; n = src.read(buffer)) {
+            dest.write(buffer, 0, n);
+          }
+        } catch (IOException e) {
+          // Do nothing.
+        }
+      }
+    }).start();
+  }
 
 }

@@ -25,7 +25,9 @@ import com.opera.core.systems.model.ScopeActions;
 import com.opera.core.systems.model.ScreenShotReply;
 import com.opera.core.systems.model.ScriptResult;
 import com.opera.core.systems.runner.OperaRunner;
+import com.opera.core.systems.runner.interfaces.OperaRunnerSettings;
 import com.opera.core.systems.runner.launcher.OperaLauncherRunner;
+import com.opera.core.systems.runner.launcher.OperaLauncherRunnerSettings;
 import com.opera.core.systems.scope.exceptions.CommunicationException;
 import com.opera.core.systems.scope.handlers.PbActionHandler;
 import com.opera.core.systems.scope.internal.OperaFlags;
@@ -229,6 +231,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
    */
   public OperaDriver(Capabilities c) {
     capabilities = (DesiredCapabilities) getDefaultCapabilities();
+    OperaLauncherRunnerSettings settings = new OperaLauncherRunnerSettings();
 
     if (c != null) {
       capabilities.merge(CapabilitiesSanitizer.sanitize(c));
@@ -263,31 +266,27 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     }
 
     if ((Boolean) capabilities.getCapability(AUTOSTART)) {
-      OperaPaths paths = new OperaPaths();
-
       if (((Boolean) capabilities.getCapability(GUESS_BINARY_PATH)) &&
           capabilities.getCapability(BINARY) == null) {
-        capabilities.setCapability(BINARY, paths.operaPath());
+        capabilities.setCapability(BINARY, OperaPaths.operaPath());
+        settings.setBinary(OperaPaths.operaPath());
       } else if (capabilities.getCapability(BINARY) == null) {
         // Don't guess, only check environment variable
         String path = System.getenv("OPERA_PATH");
 
         if (path != null && path.length() > 0) {
           capabilities.setCapability(BINARY, path);
+          settings.setBinary(path);
         }
       }
 
-      if (capabilities.getCapability(LAUNCHER) == null) {
-        capabilities.setCapability(LAUNCHER, paths.launcherPath());
-      }
-
-      // If port is 0, try to find a random port.
-      if ((Integer) capabilities.getCapability(PORT) == 0) {
-        capabilities.setCapability(PORT, PortProber.findFreePort());
-      }
+      OperaArguments arguments = new OperaArguments();
+      OperaArguments parsed = OperaArguments.parse((String) capabilities.getCapability(ARGUMENTS));
+      arguments.merge(parsed);
+      settings.setArguments(arguments);
 
       if (capabilities.getCapability(BINARY) != null) {
-        this.operaRunner = new OperaLauncherRunner(capabilities);
+        this.operaRunner = new OperaLauncherRunner(settings);
       }
     } else {
       // If we're not autostarting then we don't want to randomise the port.
