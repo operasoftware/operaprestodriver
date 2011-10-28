@@ -15,7 +15,9 @@ limitations under the License.
 */
 package com.opera.core.systems;
 
+import com.opera.core.systems.runner.OperaRunnerSettings;
 import com.opera.core.systems.runner.launcher.OperaLauncherRunner;
+import com.opera.core.systems.runner.launcher.OperaLauncherRunnerSettings;
 import com.opera.core.systems.scope.exceptions.CommunicationException;
 import com.opera.core.systems.scope.internal.OperaIntervals;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo.QuickWidgetType;
@@ -40,6 +42,8 @@ import java.util.Map;
  * @author Adam Minchinton, Karianne Ekern
  */
 public class OperaDesktopDriver extends OperaDriver {
+
+  private OperaLauncherRunnerSettings settings;
 
   private IDesktopWindowManager desktopWindowManager;
   private ISystemInput systemInputManager;
@@ -129,12 +133,13 @@ public class OperaDesktopDriver extends OperaDriver {
       if (operaPath.length() > 0) {
 
         capabilities.setCapability(OperaDriver.BINARY, operaPath);
+        settings.setBinary(operaPath);
 
         // Get pid of Opera, needed to wait for it to quit
         int pid = desktopUtils.getOperaPid();
 
         // Now create the OperaLauncherRunner that we have the binary path
-        operaRunner = new OperaLauncherRunner(capabilities);
+        operaRunner = new OperaLauncherRunner(settings);
 
         // Quit and wait for opera to quit properly
         services.quit(operaRunner, pid);
@@ -194,12 +199,13 @@ public class OperaDesktopDriver extends OperaDriver {
       int pid = 0;
       if (operaPath.length() > 0) {
         capabilities.setCapability(OperaDriver.BINARY, operaPath);
+        settings.setBinary(operaPath);
         pid = desktopUtils.getOperaPid();
       }
 
       // Now create the OperaLauncherRunner that we have the binary path
       // So we can control the shutdown
-      operaRunner = new OperaLauncherRunner(capabilities);
+      operaRunner = new OperaLauncherRunner(settings);
 
       // Quit and wait for opera to quit properly (calls services.shutdown)
       services.quit(operaRunner, pid);
