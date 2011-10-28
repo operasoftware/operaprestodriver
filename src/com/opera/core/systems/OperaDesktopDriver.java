@@ -15,7 +15,6 @@ limitations under the License.
 */
 package com.opera.core.systems;
 
-import com.opera.core.systems.runner.OperaRunnerSettings;
 import com.opera.core.systems.runner.launcher.OperaLauncherRunner;
 import com.opera.core.systems.runner.launcher.OperaLauncherRunnerSettings;
 import com.opera.core.systems.scope.exceptions.CommunicationException;
@@ -110,8 +109,8 @@ public class OperaDesktopDriver extends OperaDriver {
    * Initializes services and starts Opera.
    *
    * If OperaBinaryLocation is not set, the binary location is retrieved from the connected Opera
-   * instance, before shutting it down, waiting for it to quit properly, and then restarting it under
-   * the control of the {@link OperaLauncherRunner}.
+   * instance, before shutting it down, waiting for it to quit properly, and then restarting it
+   * under the control of the {@link OperaLauncherRunner}.
    */
   private void initDesktopDriver() {
     //super.init();
@@ -342,8 +341,8 @@ public class OperaDesktopDriver extends OperaDriver {
   /**
    * Finds widget with the text specified in the window with the given window id.
    *
-   * Note, if there are several widgets in this window with the same text, the widget returned can be
-   * any one of those
+   * Note, if there are several widgets in this window with the same text, the widget returned can
+   * be any one of those
    *
    * @param windowId - id of parent window
    * @param text     - text of widget
@@ -360,8 +359,8 @@ public class OperaDesktopDriver extends OperaDriver {
    * @param windowId   id of parent window
    * @param text       text of widget
    * @param parentName name of parent widget
-   * @return QuickWidget with the given text and parent in the window with id windowId, or null if no
-   *         such widget exists
+   * @return QuickWidget with the given text and parent in the window with id windowId, or null if
+   *         no such widget exists
    */
   public QuickWidget findWidgetByText(QuickWidgetType type, int windowId, String text,
                                       String parentName) {
@@ -433,7 +432,7 @@ public class OperaDesktopDriver extends OperaDriver {
   /**
    * Get a QuickMenuItem by its action
    *
-   * @param name - name of action of item (as specified in standard_menu.ini)
+   * @param action name of action of item (as specified in standard_menu.ini)
    * @return QuickMenuItem
    */
   public QuickMenuItem getQuickMenuItemByAction(String action) {
@@ -443,7 +442,7 @@ public class OperaDesktopDriver extends OperaDriver {
   /**
    * Get a quickmenuitem by its submenuname
    *
-   * @param name - name of submenu of item (as specified in standard_menu.ini)
+   * @param submenu name of submenu of item (as specified in standard_menu.ini)
    */
   public QuickMenuItem getQuickMenuItemBySubmenu(String submenu) {
     return desktopWindowManager.getQuickMenuItemBySubmenu(submenu);
@@ -469,8 +468,8 @@ public class OperaDesktopDriver extends OperaDriver {
   }
 
   /**
-   * Get an item by its text. Not language independant, and therefore not a recommended way to get an
-   * item.
+   * Get an item by its text. Not language independant, and therefore not a recommended way to get
+   * an item.
    *
    * @param text - text of the item (as shown in UI).
    */
@@ -479,28 +478,28 @@ public class OperaDesktopDriver extends OperaDriver {
   }
 
   /**
-   * Get an item by its position (row). Rows starts counting at 0, and note that also menu separators
-   * are counted. Note that this is only unique within a single menu (specified by parentName), if
-   * parentName is null, this retrieves the first match.
+   * Get an item by its position (row). Rows starts counting at 0, and note that also menu
+   * separators are counted. Note that this is only unique within a single menu (specified by
+   * parentName), if parentName is null, this retrieves the first match.
    *
-   * @param name     - Position (row) in menu of item
-   * @param menuName - name of menu item is in
+   * @param row      position (row) in menu of item
+   * @param menuName name of menu item is in
    */
   public QuickMenuItem getQuickMenuItemByPosition(int row, String menuName) {
     return desktopWindowManager.getQuickMenuItemByPosition(row, menuName);
   }
 
   /**
-   * @param name     - Accelerator key in menu of item (the letter that's underlined in the menu item
+   * @param key      accelerator key in menu of item (the letter that's underlined in the menu item
    *                 text) Note: not platform independant, as it cannot be used on mac.
-   * @param menuName - name of menu item is in
+   * @param menuName name of menu item is in
    */
   public QuickMenuItem getQuickMenuItemByAccKey(String key, String menuName) {
     return desktopWindowManager.getQuickMenuItemByAccKey(key, menuName);
   }
 
   /**
-   * @param name - Shortcut of item
+   * @param shortcut shortcut of item
    */
   public QuickMenuItem getQuickMenuItemByShortcut(String shortcut) {
     return desktopWindowManager.getQuickMenuItemByShortcut(shortcut);
@@ -643,8 +642,6 @@ public class OperaDesktopDriver extends OperaDriver {
    *
    * After this call, messages to the driver about window events are not thrown away, so that the
    * notification about window shown is not lost because of other events or messages
-   *
-   * @throws CommuncationException if no connection
    */
   public void waitStart() {
     if (services.getConnection() == null) {
@@ -657,8 +654,6 @@ public class OperaDesktopDriver extends OperaDriver {
 
   /**
    * Waits for any window update event.
-   *
-   * @throws CommuncationException if no connection
    */
   public void waitForWindowUpdated() {
     waitForWindowUpdated("");
@@ -666,8 +661,6 @@ public class OperaDesktopDriver extends OperaDriver {
 
   /**
    * Waits for any window activated event.
-   *
-   * @throws CommuncationException if no connection
    */
   public void waitForWindowActivated() {
     waitForWindowActivated("");
@@ -675,8 +668,6 @@ public class OperaDesktopDriver extends OperaDriver {
 
   /**
    * Waits for any window close event.
-   *
-   * @throws CommuncationException if no connection
    */
   public void waitForWindowClose() {
     waitForWindowClose("");
@@ -687,7 +678,6 @@ public class OperaDesktopDriver extends OperaDriver {
    *
    * @param windowName - window to wait for shown event on
    * @return id of window
-   * @throws CommuncationException if no connection
    */
   public int waitForWindowShown(String windowName) {
     if (services.getConnection() == null) {
@@ -704,7 +694,6 @@ public class OperaDesktopDriver extends OperaDriver {
    *
    * @param windowName - window to wait for shown event on
    * @return id of window
-   * @throws CommuncationException if no connection
    */
   public int waitForWindowUpdated(String windowName) {
     if (services.getConnection() == null) {
@@ -721,7 +710,6 @@ public class OperaDesktopDriver extends OperaDriver {
    *
    * @param windowName - window to wait for shown event on
    * @return id of window
-   * @throws CommuncationException if no connection
    */
   public int waitForWindowActivated(String windowName) {
     if (services.getConnection() == null) {
@@ -739,7 +727,6 @@ public class OperaDesktopDriver extends OperaDriver {
    *
    * @param windowName - window to wait for shown event on
    * @return id of window
-   * @throws CommuncationException if no connection
    */
   public int waitForWindowClose(String windowName) {
     if (services.getConnection() == null) {
@@ -756,7 +743,6 @@ public class OperaDesktopDriver extends OperaDriver {
    *
    * @param windowName - window to wait for shown event on
    * @return id of window
-   * @throws CommuncationException if no connection
    */
   public int waitForWindowLoaded(String windowName) {
     if (services.getConnection() == null) {
@@ -771,9 +757,8 @@ public class OperaDesktopDriver extends OperaDriver {
   /**
    * Waits until the menu is shown, and then returns the name of the window
    *
-   * @param menu - window to wait for shown event on
+   * @param menuName window to wait for shown event on
    * @return id of window
-   * @throws CommuncationException if no connection
    */
   public String waitForMenuShown(String menuName) {
     if (services.getConnection() == null) {
@@ -787,9 +772,8 @@ public class OperaDesktopDriver extends OperaDriver {
   /**
    * Waits until the menu is closed, and then returns the name of the window
    *
-   * @param menu - window to wait for shown event on
+   * @param menuName window to wait for shown event on
    * @return id of window
-   * @throws CommuncationException if no connection
    */
   public String waitForMenuClosed(String menuName) {
     if (services.getConnection() == null) {
@@ -806,7 +790,6 @@ public class OperaDesktopDriver extends OperaDriver {
    *
    * @param menuItemText - window to wait for shown event on
    * @return text of the menu item
-   * @throws CommuncationException if no connection
    */
   public String waitForMenuItemPressed(String menuItemText) {
     if (services.getConnection() == null) {
@@ -822,9 +805,9 @@ public class OperaDesktopDriver extends OperaDriver {
    * resetOperaPrefs - restarts Opera after copying over newPrefs to profile, if newPrefs folder
    * exists.
    *
-   * Copies prefs in folder newPrefs to the profile for the connected Opera instance. Will first quit
-   * Opera, then delete the old prefs, and copy the new prefs over, then restart Opera with the new
-   * prefs.
+   * Copies prefs in folder newPrefs to the profile for the connected Opera instance. Will first
+   * quit Opera, then delete the old prefs, and copy the new prefs over, then restart Opera with the
+   * new prefs.
    *
    * Does nothing if profile used is default main user profile
    *
@@ -895,4 +878,5 @@ public class OperaDesktopDriver extends OperaDriver {
   public boolean isOperaRunning() {
     return operaRunner != null && isOperaRunning();
   }
+
 }
