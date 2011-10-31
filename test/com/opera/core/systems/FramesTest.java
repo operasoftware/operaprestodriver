@@ -1,6 +1,20 @@
-package com.opera.core.systems;
+/*
+Copyright 2011 Opera Software ASA
 
-import junit.framework.Assert;
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+package com.opera.core.systems;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -8,6 +22,7 @@ import org.junit.Test;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 public class FramesTest extends TestBase {
   List<String> frames;
@@ -29,7 +44,7 @@ public class FramesTest extends TestBase {
     driver.switchTo().frame("a");
 
     // first frame
-    Assert.assertNotNull(driver.findElementById("one"));
+    assertNotNull(driver.findElementById("one"));
   }
 
   @Test
@@ -37,7 +52,7 @@ public class FramesTest extends TestBase {
     driver.switchTo().frame("b");
 
     // second frame
-    Assert.assertNotNull(driver.findElementById("radio_little"));
+    assertNotNull(driver.findElementById("radio_little"));
   }
 
   @Test
@@ -45,7 +60,7 @@ public class FramesTest extends TestBase {
     driver.switchTo().frame(0);
 
     // first frame
-    Assert.assertNotNull(driver.findElementById("one"));
+    assertNotNull(driver.findElementById("one"));
   }
 
   @Test
@@ -53,7 +68,7 @@ public class FramesTest extends TestBase {
     driver.switchTo().frame(2);
 
     // only exists in third frame
-    Assert.assertNotNull(driver.findElementById("img_container"));
+    assertNotNull(driver.findElementById("img_container"));
   }
 
 }

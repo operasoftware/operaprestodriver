@@ -1,25 +1,23 @@
 /*
- * Copyright 2011 Opera Software ASA
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+Copyright 2011 Opera Software ASA
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
 
 package com.opera.core.systems;
 
 import com.opera.core.systems.scope.protos.PrefsProtos.Pref;
 import com.opera.core.systems.scope.protos.PrefsProtos.Pref.Type;
-
-import junit.framework.Assert;
 
 import org.junit.After;
 import org.junit.Before;
@@ -29,7 +27,10 @@ import org.openqa.selenium.WebDriverException;
 
 import java.util.Map;
 
+import static junit.framework.Assert.assertNotSame;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -60,12 +61,12 @@ public class PrefsTest extends TestBase {
 
   @Test
   public void testGetValidPreferenceWithSpacesInSection() {
-    Assert.assertNotNull(driver.getPref("File Types Section Info", "Version"));
+    assertNotNull(driver.getPref("File Types Section Info", "Version"));
   }
 
   @Test
   public void testGetValidPreferenceWithSpacesInKey() {
-    Assert.assertNotNull(driver.getPref("Colors", "Highlighted Background Unfocused"));
+    assertNotNull(driver.getPref("Colors", "Highlighted Background Unfocused"));
   }
 
   @Test
@@ -79,7 +80,7 @@ public class PrefsTest extends TestBase {
       invalidPreferenceException = e;
     }
 
-    Assert.assertNotNull(invalidPreferenceException);
+    assertNotNull(invalidPreferenceException);
   }
 
   @Test
@@ -93,7 +94,7 @@ public class PrefsTest extends TestBase {
       invalidSectionException = e;
     }
 
-    Assert.assertNotNull(invalidSectionException);
+    assertNotNull(invalidSectionException);
   }
 
   @Test
@@ -107,7 +108,7 @@ public class PrefsTest extends TestBase {
       invalidKeyException = e;
     }
 
-    Assert.assertNotNull(invalidKeyException);
+    assertNotNull(invalidKeyException);
   }
 
   @Test
@@ -117,12 +118,12 @@ public class PrefsTest extends TestBase {
 
   @Test
   public void testGetValidDefaultPreferenceWithSpacesInSection() {
-    Assert.assertNotNull(driver.getDefaultPref("File Types Section Info", "Version"));
+    assertNotNull(driver.getDefaultPref("File Types Section Info", "Version"));
   }
 
   @Test
   public void testGetValidDefaultPreferenceWithSpacesInKey() {
-    Assert.assertNotNull(driver.getDefaultPref("Colors", "Highlighted Background Unfocused"));
+    assertNotNull(driver.getDefaultPref("Colors", "Highlighted Background Unfocused"));
   }
 
   @Test
@@ -136,7 +137,7 @@ public class PrefsTest extends TestBase {
       invalidPreference = e;
     }
 
-    Assert.assertNotNull(invalidPreference);
+    assertNotNull(invalidPreference);
   }
 
   @Test
@@ -150,7 +151,7 @@ public class PrefsTest extends TestBase {
       invalidPreference = e;
     }
 
-    Assert.assertNotNull(invalidPreference);
+    assertNotNull(invalidPreference);
   }
 
   @Test
@@ -164,7 +165,7 @@ public class PrefsTest extends TestBase {
       invalidPreference = e;
     }
 
-    Assert.assertNotNull(invalidPreference);
+    assertNotNull(invalidPreference);
   }
 
   @Test
@@ -209,7 +210,7 @@ public class PrefsTest extends TestBase {
   public void testSetValidPreferencesWithInvalidType() {
     // User Display Mode → Author CSS expects boolean
     driver.setPref("User Display Mode", "Author CSS", "hoobaflooba");
-    Assert.assertNotSame("hoobaflooba", driver.getPref("User Display Mode", "Author CSS"));
+    assertNotSame("hoobaflooba", driver.getPref("User Display Mode", "Author CSS"));
   }
 
   @Test
@@ -223,7 +224,7 @@ public class PrefsTest extends TestBase {
       invalidSectionException = e;
     }
 
-    Assert.assertNotNull(invalidSectionException);
+    assertNotNull(invalidSectionException);
   }
 
   @Test
@@ -237,7 +238,7 @@ public class PrefsTest extends TestBase {
       invalidKeyException = e;
     }
 
-    Assert.assertNotNull(invalidKeyException);
+    assertNotNull(invalidKeyException);
   }
 
   @Test
@@ -251,7 +252,7 @@ public class PrefsTest extends TestBase {
       noException = e;
     }
 
-    Assert.assertNull(noException);
+    assertNull(noException);
   }
 
   @Test
@@ -265,7 +266,7 @@ public class PrefsTest extends TestBase {
       invalidSectionAndKeyException = e;
     }
 
-    Assert.assertNotNull(invalidSectionAndKeyException);
+    assertNotNull(invalidSectionAndKeyException);
   }
 
 }
