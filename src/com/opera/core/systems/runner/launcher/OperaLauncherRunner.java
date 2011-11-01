@@ -45,7 +45,8 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class OperaLauncherRunner extends OperaRunner implements com.opera.core.systems.runner.interfaces.OperaRunner {
+public class OperaLauncherRunner extends OperaRunner
+    implements com.opera.core.systems.runner.interfaces.OperaRunner {
 
   private static Logger logger = Logger.getLogger(OperaLauncherRunner.class.getName());
 
@@ -93,6 +94,7 @@ public class OperaLauncherRunner extends OperaRunner implements com.opera.core.s
     launcherArguments.add("-bin");
     launcherArguments.add(settings.getBinary().getAbsolutePath());
 
+    // The launcher will pass on any extra arguments after -bin to Opera
     for (OperaArgument argument : super.settings.getArguments().getArguments()) {
       launcherArguments.add(super.settings.getArguments().sign() + argument.getArgument());
       if (argument.getValue() != null && !argument.getValue().isEmpty()) {
@@ -106,145 +108,6 @@ public class OperaLauncherRunner extends OperaRunner implements com.opera.core.s
     launcherRunner = new OperaLauncherBinary(
         settings.getLauncher().getAbsolutePath(),
         launcherArguments.toArray(new String[launcherArguments.size()])
-    );
-
-    logger.fine("Waiting for launcher connection on port " + launcherPort);
-
-    try {
-      // Setup listener server
-      ServerSocket listenerServer = new ServerSocket(launcherPort);
-      listenerServer.setSoTimeout((int) OperaIntervals.LAUNCHER_TIMEOUT.getValue());  // TODO
-
-      // Try to connect
-      launcherProtocol = new OperaLauncherProtocol(listenerServer.accept());
-
-      // We did it!
-      logger.fine("Connected with launcher on port " + launcherPort);
-      listenerServer.close();
-
-      // Do the handshake!
-      LauncherHandshakeRequest.Builder request = LauncherHandshakeRequest.newBuilder();
-      ResponseEncapsulation res = launcherProtocol.sendRequest(
-          MessageType.MSG_HELLO, request.build().toByteArray());
-
-      // Are we happy?
-      if (res.isSuccess()) {
-        logger.finer("Got launcher handshake: " + res.getResponse().toString());
-      } else {
-        throw new OperaRunnerException("Did not get launcher handshake: " + res.getResponse().toString());
-      }
-    } catch (SocketTimeoutException e) {
-      throw new OperaRunnerException("Timeout waiting for launcher to connect on port " +
-                                     launcherPort, e);
-    } catch (IOException e) {
-      throw new OperaRunnerException("Unable to listen to launcher port " + launcherPort, e);
-    }
-  }
-
-  /*
-  @Deprecated
-  public OperaLauncherRunner(OperaDriverSettings settings) {
-    this((DesiredCapabilities) settings.getCapabilities());
-  }
-
-  public OperaLauncherRunner(DesiredCapabilities capabilities) {
-    this.capabilities = capabilities;
-
-    if (this.capabilities.getCapability(OperaDriver.LAUNCHER) == null) {
-      throw new WebDriverException("launcher path not set");
-    }
-
-    if (this.capabilities.getCapability(OperaDriver.BINARY) == null) {
-      throw new WebDriverException("You need to set Opera's path to use the launcher");
-    }
-
-    Integer launcherPort = PortProber.findFreePort();
-
-    List<String> stringArray = new ArrayList<String>();
-    stringArray.add("-host");
-    stringArray.add("127.0.0.1");
-    stringArray.add("-port");
-    stringArray.add(launcherPort.toString());
-    if (this.capabilities.getCapability(OperaDriver.DISPLAY) != null) {
-      stringArray.add("-display");
-      stringArray.add(
-          ":" + Integer.toString((Integer) this.capabilities.getCapability(OperaDriver.DISPLAY)));
-    }
-
-    if (logger.isLoggable(Level.FINEST)) {
-      stringArray.add("-console");
-      stringArray.add("-verbosity");
-      stringArray.add("FINEST");
-    }
-
-    String product = (String) capabilities.getCapability(OperaDriver.PRODUCT);
-    if (product != null && !product.isEmpty()) {
-      stringArray.add("-profile");
-      stringArray.add(product);
-    }
-
-    if ((Boolean) this.capabilities.getCapability(OperaDriver.NO_QUIT)) {
-      stringArray.add("-noquit");
-    }
-    stringArray.add("-bin");
-    stringArray.add((String) this.capabilities.getCapability(OperaDriver.BINARY));
-
-    // Note any launcher arguments must be before this line!  Any arguments appended to the launcher
-    // binary will be sent directly to Opera.
-
-    // This can't be last, otherwise it might get interpreted as the page to open, and the file
-    // listing page doesn't have a JS context to inject into.
-    String profile = (String) this.capabilities.getCapability(OperaDriver.PROFILE);
-    // If null, generate a temp directory, if not empty use the given directory.
-    if (profile == null) {
-      profile = TemporaryFilesystem.getDefaultTmpFS().createTempDir("opera-profile", "")
-          .getAbsolutePath();
-      capabilities.setCapability(OperaDriver.PROFILE, profile);
-      stringArray.add("-pd");
-      stringArray.add(profile);
-    } else if (!profile.isEmpty()) {
-      stringArray.add("-pd");
-      stringArray.add(profile);
-    }
-
-    // Enable auto test mode, always starts Opera on opera:debug and prevents interrupting dialogues
-    // appearing.
-    if (!stringArray.contains("-autotestmode")) {
-      stringArray.add("-autotestmode");
-    }
-
-    int port = (Integer) this.capabilities.getCapability(OperaDriver.PORT);
-    if (port != -1) {
-      // Provide defaults if one hasn't been set
-      String host = (String) this.capabilities.getCapability(OperaDriver.HOST);
-      stringArray.add("-debugproxy");
-      stringArray.add(host + ":" + port);
-    }
-
-    // We read in environmental variable OPERA_ARGS in addition to existing arguments passed down
-    // from requested Capabilities.  These are combined and sent to the browser.
-    //
-    // Note that this is a deviation from the principle of arguments normally overwriting
-    // environmental variables.
-    String binaryArguments = (String) this.capabilities.getCapability(OperaDriver.ARGUMENTS);
-    if (binaryArguments == null) {
-      binaryArguments = "";
-    }
-    String environmentArguments = System.getenv("OPERA_ARGS");
-    if (environmentArguments != null && environmentArguments.length() > 0) {
-      binaryArguments = environmentArguments + " " + binaryArguments;
-    }
-
-    // Arguments are split by single space.
-    StringTokenizer tokenizer = new StringTokenizer(binaryArguments, " ");
-    while (tokenizer.hasMoreTokens()) {
-      stringArray.add(tokenizer.nextToken());
-    }
-
-    logger.config("launcher arguments: " + stringArray.toString());
-    launcherRunner = new OperaLauncherBinary(
-        (String) this.capabilities.getCapability(OperaDriver.LAUNCHER),
-        stringArray.toArray(new String[stringArray.size()])
     );
 
     logger.fine("Waiting for launcher connection on port " + launcherPort);
@@ -280,7 +143,6 @@ public class OperaLauncherRunner extends OperaRunner implements com.opera.core.s
       throw new OperaRunnerException("Unable to listen to launcher port " + launcherPort, e);
     }
   }
-  */
 
   public void startOpera() {
     logger.fine("Instructing launcher to start Opera...");
