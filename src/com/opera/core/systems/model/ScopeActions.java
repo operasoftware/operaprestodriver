@@ -26,9 +26,9 @@ import java.io.File;
 
 /**
  * ScopeActions handles actions that differ from Core 2.3 and 2.4+, it calls the appropriate action
- * depending on the spec as the spec varies
+ * depending on the spec as the specification varies.
  *
- * @author Deniz Turkoglu <denizt@opera.com>
+ * @author Deniz Turkoglu <dturkoglu@opera.com>
  */
 // TODO Merge as we dropped support < 2.5
 public abstract class ScopeActions {

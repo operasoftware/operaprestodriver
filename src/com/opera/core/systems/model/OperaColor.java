@@ -17,9 +17,9 @@ limitations under the License.
 package com.opera.core.systems.model;
 
 /**
- * A simple pojo file to hold the color values
+ * A simple pojo file to hold the colour values.
  *
- * @author Deniz Turkoglu <denizt@opera.com>
+ * @author Deniz Turkoglu <dturkoglu@opera.com>
  */
 public class OperaColor {
 
