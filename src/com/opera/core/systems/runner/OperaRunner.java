@@ -6,7 +6,6 @@ import com.opera.core.systems.arguments.OperaDesktopArguments;
 import com.opera.core.systems.arguments.interfaces.OperaArguments;
 
 import org.openqa.selenium.io.TemporaryFilesystem;
-import org.openqa.selenium.net.PortProber;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -72,14 +71,10 @@ public class OperaRunner implements com.opera.core.systems.runner.interfaces.Ope
       arguments.add("-pd", profile);
     }
 
-    // The port Opera should connect to.  0 = Random, -1 = Opera default (for use with Opera < 12).
-    // Currently we don't append -debugproxy if port is set to -1 because of backwards compatibility.
-    Integer port = settings.getPort();
-    if (port == 0) {
-      arguments.add("debugproxy", settings.getHost() + ":" + PortProber.findFreePort());
-    } else if (port != -1) {
-      // Provide defaults if one hasn't been set
-      arguments.add("debugproxy", settings.getHost() + ":" + port);
+    // If port is set to -1 it means we're in compatibility mode as Opera < 12 does not support the
+    // -debugproxy command-line argument.  It will instead use the default port 7001.
+    if (settings.supportsDebugProxy()) {
+      arguments.add("debugproxy", settings.getHost() + ":" + settings.getPort());
     }
 
     arguments.add("autotestmode");
@@ -105,7 +100,7 @@ public class OperaRunner implements com.opera.core.systems.runner.interfaces.Ope
     arguments.merge(settings.getArguments());
     settings.setArguments(arguments);
 
-    logger.config("Opera arguments: " + settings.getArguments().getArguments().toString());
+    logger.config("Opera arguments: " + settings.getArguments());
 
     // TODO(andreastt): Should this be abstracted into its own class?
     //processBuilder = new ProcessBuilder(settings.getArguments().getArgumentsAsStrings());

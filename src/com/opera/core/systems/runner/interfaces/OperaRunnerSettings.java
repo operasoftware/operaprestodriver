@@ -3,7 +3,6 @@ package com.opera.core.systems.runner.interfaces;
 import com.opera.core.systems.arguments.interfaces.OperaArguments;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.logging.Level;
 
 /**
@@ -58,7 +57,9 @@ public interface OperaRunnerSettings {
   public void setProduct(String product);
 
   /**
-   * Sets the directory to use for the Opera profile.
+   * Sets the directory to use for the Opera profile.  If null, generate a temporary directory.  If
+   * not empty use the given directory.  To not create a temporary directory for backwards
+   * compatibility reasons, set it to an empty string (""), such as for Opera < 12.
    *
    * @return the absolute path to the profile directory
    */
@@ -92,12 +93,18 @@ public interface OperaRunnerSettings {
   /**
    * The host Opera should connect to.
    *
+   *   0 = Random
+   *   -1 = Opera default (for use with Opera < 12)
+   *
    * @return the host Opera should connect to
    */
   public String getHost();
 
   /**
    * The host Opera should connect to.
+   *
+   *   0 = Random
+   *   -1 = Opera default (for use with Opera < 12)
    *
    * @param host the host Opera should connect to
    */

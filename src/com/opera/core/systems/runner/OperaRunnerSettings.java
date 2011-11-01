@@ -3,8 +3,11 @@ package com.opera.core.systems.runner;
 import com.opera.core.systems.arguments.OperaCoreArguments;
 import com.opera.core.systems.arguments.OperaDesktopArguments;
 import com.opera.core.systems.arguments.interfaces.OperaArguments;
+import com.opera.core.systems.scope.internal.OperaIntervals;
 
 import org.openqa.selenium.Platform;
+import org.openqa.selenium.io.TemporaryFilesystem;
+import org.openqa.selenium.net.PortProber;
 
 import java.io.File;
 import java.util.logging.Level;
@@ -18,15 +21,15 @@ import java.util.logging.Level;
 public class OperaRunnerSettings
     implements com.opera.core.systems.runner.interfaces.OperaRunnerSettings {
 
-  private File operaBinary;
-  private Integer display = null;
-  private String product;
-  private String profile;
-  private boolean noQuit;
-  private String host = "127.0.0.1";
-  private Integer port = 0;
+  private File    operaBinary  = null;
+  private Integer display      = null;
+  private String  product      = null;
+  private String  profile      = null;         // "" for Opera < 12
+  private boolean noQuit       = false;
+  private String  host         = "127.0.0.1";
+  private Integer port         = 0;            // -1 for Opera < 12
+  private Level   loggingLevel = Level.INFO;
   private com.opera.core.systems.arguments.interfaces.OperaArguments arguments;
-  private Level loggingLevel = Level.INFO;
 
   public OperaRunnerSettings() {
     // We read in environmental variable OPERA_ARGS in addition to existing arguments passed down
@@ -55,7 +58,12 @@ public class OperaRunnerSettings
   }
 
   public void setBinary(String path) {
-    operaBinary = new File(path);
+    if (path != null && !path.isEmpty()) {
+      File binary = new File(path);
+      if (binary.exists()) {
+        operaBinary = binary;
+      }
+    }
   }
 
   public Integer getDisplay() {
@@ -80,6 +88,11 @@ public class OperaRunnerSettings
   }
 
   public String getProfile() {
+    if (profile == null) {
+      profile = TemporaryFilesystem.getDefaultTmpFS().createTempDir("opera-profile", "")
+          .getAbsolutePath();
+    }
+
     return profile;
   }
 
@@ -104,7 +117,19 @@ public class OperaRunnerSettings
   }
 
   public Integer getPort() {
+    // The port Opera should connect to.  0 = Random, -1 = Opera default (7001) (for use with Opera
+    // < 12).
+    if (port == 0) {
+      port = PortProber.findFreePort();
+    } else if (port == 0 && supportsDebugProxy()) {
+      port = (int) OperaIntervals.SERVER_PORT.getValue();
+    }
+
     return port;
+  }
+
+  public boolean supportsDebugProxy() {
+    return port != -1;
   }
 
   public void setPort(Integer port) {
