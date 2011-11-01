@@ -11,8 +11,9 @@ public class OperaCoreArguments extends OperaArguments implements
                                 com.opera.core.systems.arguments.interfaces.OperaArguments {
 
   public OperaCoreArguments() {
-    OperaArgument argument = new OperaArgument("autotestmode");
-    super.arguments.add(argument);
+    // TODO(andreastt): gogi doesn't support -pd, and for some reason this must be sent last
+    //OperaArgument argument = new OperaArgument("autotestmode");
+    //super.arguments.add(argument);
   }
 
   public static OperaArguments parse(String string) {

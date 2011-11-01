@@ -48,8 +48,6 @@ public class OperaRunner implements com.opera.core.systems.runner.interfaces.Ope
   public OperaRunner(OperaRunnerSettings s) {
     settings = s;
 
-    logger.config("OperaRunner settings: " + s);
-
     // Use arguments provided by user if set
     OperaArguments arguments;
     if (settings.getProduct() != null && settings.getProduct().equals("desktop")) {
@@ -78,11 +76,13 @@ public class OperaRunner implements com.opera.core.systems.runner.interfaces.Ope
     // Currently we don't append -debugproxy if port is set to -1 because of backwards compatibility.
     Integer port = settings.getPort();
     if (port == 0) {
-      arguments.add("-debugproxy", settings.getHost() + ":" + PortProber.findFreePort());
+      arguments.add("debugproxy", settings.getHost() + ":" + PortProber.findFreePort());
     } else if (port != -1) {
       // Provide defaults if one hasn't been set
-      arguments.add("-debugproxy", settings.getHost() + ":" + port);
+      arguments.add("debugproxy", settings.getHost() + ":" + port);
     }
+
+    arguments.add("autotestmode");
 
     // We read in environmental variable OPERA_ARGS in addition to existing arguments passed down
     // from OperaArguments.  These are combined and sent to the browser.
