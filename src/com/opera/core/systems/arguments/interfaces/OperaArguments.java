@@ -20,7 +20,9 @@ public interface OperaArguments {
 
   public List<OperaArgument> getArguments();
 
-  public List<String> getArgumentsAsStrings();
+  public List<String> getArgumentsAsStringList();
+
+  public String toString();
 
   public void merge(OperaArguments extraArguments);
 
