@@ -24,7 +24,7 @@ import org.openqa.selenium.WebDriver;
 /**
  * Keyboard user interactions, part of OperaUserInteraction to support typing and key strokes.
  *
- * @author Deniz Turkoglu <denizt@opera.com>
+ * @author Deniz Turkoglu <dturkoglu@opera.com>
  */
 public abstract class Keyboard implements UserInteraction {
 

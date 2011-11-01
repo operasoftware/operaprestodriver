@@ -19,9 +19,9 @@ package com.opera.core.systems.interaction;
 import org.openqa.selenium.WebDriver;
 
 /**
- * UserInteractions execute keypresses and clicks on the given driver.
+ * UserInteractions execute key presses and clicks on the given driver.
  *
- * @author Deniz Turkoglu
+ * @author Deniz Turkoglu <dturkoglu@opera.com>
  */
 public interface UserInteraction {
 

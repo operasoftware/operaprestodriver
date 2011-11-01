@@ -23,7 +23,7 @@ import java.util.List;
  * OperaAction(s) are used to simulate continuous user events such as pressing a button and clicking
  * an element same time.
  *
- * @author Deniz Turkoglu <denizt@opera.com>
+ * @author Deniz Turkoglu <dturkoglu@opera.com>
  */
 public class OperaAction {
 

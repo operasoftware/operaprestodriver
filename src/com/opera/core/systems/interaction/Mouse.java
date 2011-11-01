@@ -24,7 +24,7 @@ import org.openqa.selenium.WebElement;
 /**
  * Mouse user interactions, part of OperaUserInteraction to support clicking and moving the mouse.
  *
- * @author Deniz Turkoglu <denizt@opera.com>
+ * @author Deniz Turkoglu <dturkoglu@opera.com>
  */
 public abstract class Mouse implements UserInteraction {
 
