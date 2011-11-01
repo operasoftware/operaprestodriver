@@ -1,5 +1,7 @@
 package com.opera.core.systems;
 
+import com.google.common.base.Joiner;
+
 import com.opera.core.systems.arguments.OperaArgument;
 
 import java.util.ArrayList;
@@ -31,17 +33,22 @@ public class OperaArguments implements com.opera.core.systems.arguments.interfac
     return arguments;
   }
 
-  public List<String> getArgumentsAsStrings() {
+  public List<String> getArgumentsAsStringList() {
     List<String> stringList = new ArrayList<String>();
 
     for (OperaArgument argument : arguments) {
-      stringList.add(argument.getArgument());
+      stringList.add(sign() + argument.getArgument());
       if (argument.getValue() != null && !argument.getValue().isEmpty()) {
         stringList.add(argument.getValue());
       }
     }
 
     return stringList;
+  }
+
+  public String toString() {
+    Joiner joiner = Joiner.on(" ").skipNulls();
+    return joiner.join(getArgumentsAsStringList());
   }
 
   public static OperaArguments parse(String string) {
