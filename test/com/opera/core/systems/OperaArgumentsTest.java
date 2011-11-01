@@ -51,8 +51,8 @@ public class OperaArgumentsTest {
 
   @Test
   public void testGettingArgumentsAsStringList() {
-    Assert.assertEquals(5, arguments.getArgumentsAsStrings().size());
-    Assert.assertEquals("hooba", arguments.getArgumentsAsStrings().get(3));
+    Assert.assertEquals(5, arguments.getArgumentsAsStringList().size());
+    Assert.assertEquals("hooba", arguments.getArgumentsAsStringList().get(3));
   }
 
   @Test
