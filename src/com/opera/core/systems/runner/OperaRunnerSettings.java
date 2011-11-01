@@ -21,14 +21,14 @@ import java.util.logging.Level;
 public class OperaRunnerSettings
     implements com.opera.core.systems.runner.interfaces.OperaRunnerSettings {
 
-  private File    operaBinary  = null;
-  private Integer display      = null;
-  private String  product      = null;
-  private String  profile      = null;         // "" for Opera < 12
-  private boolean noQuit       = false;
-  private String  host         = "127.0.0.1";
-  private Integer port         = 0;            // -1 for Opera < 12
-  private Level   loggingLevel = Level.INFO;
+  private File operaBinary = null;
+  private Integer display = null;
+  private String product = null;
+  private String profile = null;         // "" for Opera < 12
+  private boolean noQuit = false;
+  private String host = "127.0.0.1";
+  private Integer port = 0;            // -1 for Opera < 12
+  private Level loggingLevel = Level.INFO;
   private com.opera.core.systems.arguments.interfaces.OperaArguments arguments;
 
   public OperaRunnerSettings() {

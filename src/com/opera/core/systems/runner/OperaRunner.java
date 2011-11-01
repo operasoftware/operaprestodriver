@@ -1,9 +1,25 @@
+/*
+Copyright 2011 Opera Software ASA
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
 package com.opera.core.systems.runner;
 
-import com.opera.core.systems.model.ScreenShotReply;
 import com.opera.core.systems.arguments.OperaCoreArguments;
 import com.opera.core.systems.arguments.OperaDesktopArguments;
 import com.opera.core.systems.arguments.interfaces.OperaArguments;
+import com.opera.core.systems.model.ScreenShotReply;
 
 import org.openqa.selenium.io.TemporaryFilesystem;
 
@@ -14,8 +30,7 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.logging.Logger;
 
 /**
- * OperaRunner is an interface for controlling the Opera browser binary.  OperaRunner implements a
- * pure-Java process manager, OperaLauncherRunner implements one in C++ with a Java API.
+ * OperaRunner implements a pure-Java process manager for controlling the Opera binary.
  *
  * @author Andreas Tolf Tolfsen <andreastt@opera.com>
  */

@@ -4,7 +4,6 @@ import com.google.common.io.ByteStreams;
 import com.google.common.io.Closeables;
 import com.google.common.io.Files;
 
-import com.opera.core.systems.OperaDriver;
 import com.opera.core.systems.OperaPaths;
 import com.opera.core.systems.runner.OperaLaunchers;
 import com.opera.core.systems.runner.OperaRunnerException;
@@ -49,7 +48,8 @@ public class OperaLauncherRunnerSettings extends OperaRunnerSettings {
    * OperaDriver.
    *
    * @return the path to the launcher
-   * @throws org.openqa.selenium.WebDriverException if launcher is not found
+   * @throws org.openqa.selenium.WebDriverException
+   *          if launcher is not found
    */
   private static String launcherPath() {
     String path = System.getenv("OPERA_LAUNCHER");
@@ -221,7 +221,8 @@ public class OperaLauncherRunnerSettings extends OperaRunnerSettings {
    *
    * @param fis the input stream to use
    * @return a byte array of the MD5 hash
-   * @throws java.security.NoSuchAlgorithmException if MD5 is not available
+   * @throws java.security.NoSuchAlgorithmException
+   *          if MD5 is not available
    */
   private static byte[] md5(InputStream fis) throws Exception {
     byte[] buffer = new byte[1024];

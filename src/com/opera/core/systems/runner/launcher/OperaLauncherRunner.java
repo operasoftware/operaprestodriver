@@ -45,6 +45,10 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * OperaLauncherRunner implements an interface in C++ with a Java API for controlling the Opera
+ * binary.
+ */
 public class OperaLauncherRunner extends OperaRunner
     implements com.opera.core.systems.runner.interfaces.OperaRunner {
 
