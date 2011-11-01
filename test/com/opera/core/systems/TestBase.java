@@ -91,7 +91,7 @@ class TestOperaDriver extends OperaDriver {
   }
 
   public OperaRunner getRunner() {
-    return operaRunner;
+    return runner;
   }
 
 }

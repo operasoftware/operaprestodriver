@@ -138,10 +138,10 @@ public class OperaDesktopDriver extends OperaDriver {
         int pid = desktopUtils.getOperaPid();
 
         // Now create the OperaLauncherRunner that we have the binary path
-        operaRunner = new OperaLauncherRunner(settings);
+        runner = new OperaLauncherRunner(settings);
 
         // Quit and wait for opera to quit properly
-        services.quit(operaRunner, pid);
+        services.quit(runner, pid);
 
         // Delete the profile to start the first test with a clean profile
         profileUtils.deleteProfile();
@@ -171,8 +171,8 @@ public class OperaDesktopDriver extends OperaDriver {
   public void quitDriver() {
     logger.fine("Opera Desktop Driver shutting down");
     services.shutdown();
-    if (operaRunner != null) {
-      operaRunner.shutdown();
+    if (runner != null) {
+      runner.shutdown();
     }
   }
 
@@ -181,13 +181,13 @@ public class OperaDesktopDriver extends OperaDriver {
    */
   public void quitOpera() {
     // running opera under the launcher
-    if (operaRunner != null) {
-      if (operaRunner.isOperaRunning() || operaRunner.hasOperaCrashed()) {
+    if (runner != null) {
+      if (runner.isOperaRunning() || runner.hasOperaCrashed()) {
         // Cut off the services connection to free the port
         services.shutdown();
 
         // Quit Opera
-        operaRunner.stopOpera();
+        runner.stopOpera();
       }
     } else {
 
@@ -204,10 +204,10 @@ public class OperaDesktopDriver extends OperaDriver {
 
       // Now create the OperaLauncherRunner that we have the binary path
       // So we can control the shutdown
-      operaRunner = new OperaLauncherRunner(settings);
+      runner = new OperaLauncherRunner(settings);
 
       // Quit and wait for opera to quit properly (calls services.shutdown)
-      services.quit(operaRunner, pid);
+      services.quit(runner, pid);
 
     }
   }
@@ -855,7 +855,7 @@ public class OperaDesktopDriver extends OperaDriver {
   public void deleteOperaPrefs() {
     // Only delete if Opera is currently not running
     // Don't delete in no-launcher mode
-    if (operaRunner != null && !operaRunner.isOperaRunning()) {
+    if (runner != null && !runner.isOperaRunning()) {
       // Will only delete profile if it's not a default main profile
       profileUtils.deleteProfile();
     } else {
@@ -876,7 +876,7 @@ public class OperaDesktopDriver extends OperaDriver {
    * @return true if Opera is running, and running under the launcher
    */
   public boolean isOperaRunning() {
-    return operaRunner != null && isOperaRunning();
+    return runner != null && isOperaRunning();
   }
 
 }

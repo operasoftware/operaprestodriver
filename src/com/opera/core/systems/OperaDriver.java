@@ -61,13 +61,11 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.io.TemporaryFilesystem;
-import org.openqa.selenium.net.PortProber;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
@@ -191,7 +189,8 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
    * and add methods to access these variable in tests.
    */
   protected DesiredCapabilities capabilities;
-  protected OperaRunner operaRunner;
+  protected OperaRunnerSettings settings;
+  protected OperaRunner runner;
 
   protected IEcmaScriptDebugger debugger;
   protected IOperaExec exec;
@@ -231,7 +230,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
    */
   public OperaDriver(Capabilities c) {
     capabilities = (DesiredCapabilities) getDefaultCapabilities();
-    OperaLauncherRunnerSettings settings = new OperaLauncherRunnerSettings();
+    settings = new OperaLauncherRunnerSettings();
 
     if (c != null) {
       capabilities.merge(CapabilitiesSanitizer.sanitize(c));
@@ -268,14 +267,12 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     if ((Boolean) capabilities.getCapability(AUTOSTART)) {
       if (((Boolean) capabilities.getCapability(GUESS_BINARY_PATH)) &&
           capabilities.getCapability(BINARY) == null) {
-        capabilities.setCapability(BINARY, OperaPaths.operaPath());
         settings.setBinary(OperaPaths.operaPath());
       } else if (capabilities.getCapability(BINARY) == null) {
         // Don't guess, only check environment variable
         String path = System.getenv("OPERA_PATH");
 
         if (path != null && path.length() > 0) {
-          capabilities.setCapability(BINARY, path);
           settings.setBinary(path);
         }
       }
@@ -285,8 +282,8 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
       arguments.merge(parsed);
       settings.setArguments(arguments);
 
-      if (capabilities.getCapability(BINARY) != null) {
-        this.operaRunner = new OperaLauncherRunner(settings);
+      if (settings.getBinary() != null) {
+        runner = new OperaLauncherRunner((OperaLauncherRunnerSettings) settings);
       }
     } else {
       // If we're not autostarting then we don't want to randomise the port.
@@ -361,8 +358,8 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     createScopeServices();
 
     // Launch Opera if the runner has been setup
-    if (operaRunner != null) {
-      operaRunner.startOpera();
+    if (runner != null) {
+      runner.startOpera();
     }
 
     services.init();
@@ -432,8 +429,8 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     if (services != null) {
       services.shutdown();
     }
-    if (operaRunner != null) {
-      operaRunner.shutdown();
+    if (runner != null) {
+      runner.shutdown();
     }
     if (logFile != null) {
       logFile.close();
@@ -1183,7 +1180,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
    * @return a ScreenShotReply object
    */
   public ScreenShotReply saveScreenshot(long timeout, String... hashes) {
-    return operaRunner.saveScreenshot(timeout, hashes);
+    return runner.saveScreenshot(timeout, hashes);
   }
 
   // FIXME: CORE-39436 areas outside of the current viewport are black. This is
@@ -1469,8 +1466,8 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
    * @deprecated
    */
   @Deprecated
-  public OperaRunner getOperaRunner() {
-    return operaRunner;
+  public OperaRunner getRunner() {
+    return runner;
   }
 
 }
