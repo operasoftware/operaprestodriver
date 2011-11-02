@@ -155,10 +155,6 @@ public class OperaRunnerSettings
   public static OperaRunnerSettings getDefaultSettings() {
     OperaRunnerSettings settings = new OperaRunnerSettings();
 
-    // TODO(andreastt): WTF?  This is already defined as default values to the fields during initialization
-    //settings.setProduct("core-gogi");
-    //settings.setPort(0);
-
     OperaArguments arguments;
     if (settings.getProduct().equals("desktop")) {
       arguments = new OperaDesktopArguments();
