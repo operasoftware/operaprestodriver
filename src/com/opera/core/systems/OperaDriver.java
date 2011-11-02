@@ -283,6 +283,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
       settings.setBinary((String) capabilities.getCapability(BINARY));
       settings.setArguments(arguments);
       settings.setPort((Integer) capabilities.getCapability(PORT));
+      settings.setProfile((Integer) capabilities.getCapability(PROFILE));
       capabilities.setCapability(ARGUMENTS, settings.getArguments().toString());
       capabilities.setCapability(PORT, settings.getPort());
       capabilities.setCapability(PROFILE, settings.getProfile());
