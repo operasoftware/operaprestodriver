@@ -16,19 +16,27 @@ limitations under the License.
 
 package com.opera.core.systems;
 
+import com.opera.core.systems.model.ScreenShotReply;
+import com.opera.core.systems.runner.OperaRunnerException;
 import com.opera.core.systems.runner.launcher.OperaLauncherRunner;
 import com.opera.core.systems.runner.launcher.OperaLauncherRunnerSettings;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.openqa.selenium.Platform;
 
+import java.io.File;
+
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 public class OperaLauncherRunnerTest {
 
   private OperaLauncherRunnerSettings settings;
-  private OperaLauncherRunner runner;
+  private static OperaLauncherRunner runner;
 
   @Before
   public void beforeEach() {
@@ -50,45 +58,45 @@ public class OperaLauncherRunnerTest {
 
   @Test
   public void testDefaultCrashedState() {
-    Assert.assertFalse(runner.hasOperaCrashed());
+    assertFalse(runner.hasOperaCrashed());
   }
 
   @Test
   public void testDefaultIsOperaRunning() {
-    Assert.assertFalse(runner.isOperaRunning());
+    assertFalse(runner.isOperaRunning());
   }
 
   @Test
   public void testStartOpera() {
-    Assert.assertNotNull(runner);
+    assertNotNull(runner);
     runner.startOpera();
-    Assert.assertTrue(runner.isOperaRunning());
+    assertTrue(runner.isOperaRunning());
   }
 
   @Test
   public void testShutdownOpera() {
     runner.stopOpera();
-    Assert.assertFalse(runner.isOperaRunning());
+    assertFalse(runner.isOperaRunning());
   }
- /*
+
   @Test
   public void testShutdownLauncher() {
     runner.shutdown();
 
     try {
       runner.startOpera();
-      fail(
-          "This test should have generated a OperaRunnerException as we tried to start Opera when the Launcher isn't running...");
+      fail("This test should have generated a OperaRunnerException as we tried to start Opera when the Launcher isn't running...");
     } catch (OperaRunnerException e) {
+      // Do nothing
     }
   }
 
   @Test
-  public void testOperaLauncherRunnerConstructorWithSettings2() {
-    capabilities.setCapability(OperaDriver.ARGUMENTS, "-geometry 1024x768");
-    runner = new OperaLauncherRunner(capabilities);
+  public void testConstructorWithSettings2() {
+    settings.setArguments(OperaArguments.parse("-geometry 1024x768"));
+    runner = new OperaLauncherRunner(settings);
     runner.startOpera();
-    Assert.assertTrue(runner.isOperaRunning());
+    assertTrue(runner.isOperaRunning());
   }
 
   @Test
@@ -102,124 +110,124 @@ public class OperaLauncherRunnerTest {
 
   @Test
   public void testStartAndStopOperaTenTimesRoundOneStart() {
-    capabilities.setCapability(OperaDriver.ARGUMENTS, "-geometry 640x480");
-    runner = new OperaLauncherRunner(capabilities);
+    settings.setArguments(OperaArguments.parse("-geometry 640x480"));
+    runner = new OperaLauncherRunner(settings);
     runner.startOpera();
-    Assert.assertTrue(runner.isOperaRunning());
+    assertTrue(runner.isOperaRunning());
   }
 
   @Test
   public void testStartAndStopOperaTenTimesRoundOneStop() {
     runner.stopOpera();
-    Assert.assertFalse(runner.isOperaRunning());
+    assertFalse(runner.isOperaRunning());
   }
 
   @Test
   public void testStartAndStopOperaTenTimesRoundTwoStart() {
     runner.startOpera();
-    Assert.assertTrue(runner.isOperaRunning());
+    assertTrue(runner.isOperaRunning());
   }
 
   @Test
   public void testStartAndStopOperaTenTimesRoundTwoStop() {
     runner.stopOpera();
-    Assert.assertFalse(runner.isOperaRunning());
+    assertFalse(runner.isOperaRunning());
   }
 
   @Test
   public void testStartAndStopOperaTenTimesRoundThreeStart() {
     runner.startOpera();
-    Assert.assertTrue(runner.isOperaRunning());
+    assertTrue(runner.isOperaRunning());
   }
 
   @Test
   public void testStartAndStopOperaTenTimesRoundThreeStop() {
     runner.stopOpera();
-    Assert.assertFalse(runner.isOperaRunning());
+    assertFalse(runner.isOperaRunning());
   }
 
   @Test
   public void testStartAndStopOperaTenTimesRoundFourStart() {
     runner.startOpera();
-    Assert.assertTrue(runner.isOperaRunning());
+    assertTrue(runner.isOperaRunning());
   }
 
   @Test
   public void testStartAndStopOperaTenTimesRoundFourStop() {
     runner.stopOpera();
-    Assert.assertFalse(runner.isOperaRunning());
+    assertFalse(runner.isOperaRunning());
   }
 
   @Test
   public void testStartAndStopOperaTenTimesRoundFiveStart() {
     runner.startOpera();
-    Assert.assertTrue(runner.isOperaRunning());
+    assertTrue(runner.isOperaRunning());
   }
 
   @Test
   public void testStartAndStopOperaTenTimesRoundFiveStop() {
     runner.stopOpera();
-    Assert.assertFalse(runner.isOperaRunning());
+    assertFalse(runner.isOperaRunning());
   }
 
   @Test
   public void testStartAndStopOperaTenTimesRoundSixStart() {
     runner.startOpera();
-    Assert.assertTrue(runner.isOperaRunning());
+    assertTrue(runner.isOperaRunning());
   }
 
   @Test
   public void testStartAndStopOperaTenTimesRoundSixStop() {
     runner.stopOpera();
-    Assert.assertFalse(runner.isOperaRunning());
+    assertFalse(runner.isOperaRunning());
   }
 
   @Test
   public void testStartAndStopOperaTenTimesRoundSevenStart() {
     runner.startOpera();
-    Assert.assertTrue(runner.isOperaRunning());
+    assertTrue(runner.isOperaRunning());
   }
 
   @Test
   public void testStartAndStopOperaTenTimesRoundSevenStop() {
     runner.stopOpera();
-    Assert.assertFalse(runner.isOperaRunning());
+    assertFalse(runner.isOperaRunning());
   }
 
   @Test
   public void testStartAndStopOperaTenTimesRoundEightStart() {
     runner.startOpera();
-    Assert.assertTrue(runner.isOperaRunning());
+    assertTrue(runner.isOperaRunning());
   }
 
   @Test
   public void testStartAndStopOperaTenTimesRoundEightStop() {
     runner.stopOpera();
-    Assert.assertFalse(runner.isOperaRunning());
+    assertFalse(runner.isOperaRunning());
   }
 
   @Test
   public void testStartAndStopOperaTenTimesRoundNineStart() {
     runner.startOpera();
-    Assert.assertTrue(runner.isOperaRunning());
+    assertTrue(runner.isOperaRunning());
   }
 
   @Test
   public void testStartAndStopOperaTenTimesRoundNineStop() {
     runner.stopOpera();
-    Assert.assertFalse(runner.isOperaRunning());
+    assertFalse(runner.isOperaRunning());
   }
 
   @Test
   public void testStartAndStopOperaTenTimesRoundTenStart() {
     runner.startOpera();
-    Assert.assertTrue(runner.isOperaRunning());
+    assertTrue(runner.isOperaRunning());
   }
 
   @Test
   public void testStartAndStopOperaTenTimesRoundTenStop() {
     runner.stopOpera();
-    Assert.assertFalse(runner.isOperaRunning());
+    assertFalse(runner.isOperaRunning());
     runner.shutdown();
   }
 
@@ -233,16 +241,31 @@ public class OperaLauncherRunnerTest {
       fakeLauncher = new File("/bin/echo");
     }
 
-    Assert.assertTrue("Imposter launcher exists", fakeLauncher.exists());
+    assertTrue("Imposter launcher exists", fakeLauncher.exists());
 
-    capabilities.setCapability(OperaDriver.LAUNCHER, fakeLauncher.getCanonicalPath());
+    settings.setLauncher(fakeLauncher.getCanonicalFile());
 
     try {
-      runner = new OperaLauncherRunner(capabilities);
-      Assert.fail("Did not throw OperaRunnerException");
+      runner = new OperaLauncherRunner(settings);
+      fail("Did not throw OperaRunnerException");
     } catch (OperaRunnerException e) {
-      Assert.assertTrue("Throws timeout error", e.getMessage().toLowerCase().contains("timeout"));
+      assertTrue("Throws timeout error", e.getMessage().toLowerCase().contains("timeout"));
     }
   }
-     */
+
+  @Test
+  public void testGetOperaCrashlog() {
+    runner = new OperaLauncherRunner(settings);
+    runner.startOpera();
+    String crashlog = runner.getOperaCrashlog();
+    assertNull(crashlog);
+  }
+
+  @Test
+  public void testSaveScreenshot() {
+    ScreenShotReply screenshot = runner.saveScreenshot(0);
+    assertNotNull(screenshot);
+    runner.shutdown();
+  }
+
 }
