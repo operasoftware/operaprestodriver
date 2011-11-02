@@ -62,6 +62,10 @@ public class OperaArguments implements com.opera.core.systems.arguments.interfac
   public static OperaArguments parse(String string) {
     OperaArguments parsed = new OperaArguments();
 
+    if (string == null || string.isEmpty()) {
+      return parsed;
+    }
+
     Pattern p = Pattern.compile("(-{1,2}[\\w]+)\\s*=*([\\w]*)");
     Matcher m = p.matcher(string);
 
