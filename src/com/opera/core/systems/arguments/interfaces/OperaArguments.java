@@ -34,11 +34,15 @@ public interface OperaArguments {
 
   public void add(OperaArgument argument);
 
+  public OperaArgument get(int index);
+
   public List<OperaArgument> getArguments();
 
   public List<String> getArgumentsAsStringList();
 
   public String toString();
+
+  public int size();
 
   public void merge(OperaArguments extraArguments);
 

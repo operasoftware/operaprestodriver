@@ -29,6 +29,10 @@ public class OperaArguments implements com.opera.core.systems.arguments.interfac
     arguments.add(argument);
   }
 
+  public OperaArgument get(int index) {
+    return arguments.get(index);
+  }
+
   public List<OperaArgument> getArguments() {
     return arguments;
   }
@@ -49,6 +53,10 @@ public class OperaArguments implements com.opera.core.systems.arguments.interfac
   public String toString() {
     Joiner joiner = Joiner.on(" ").skipNulls();
     return joiner.join(getArgumentsAsStringList());
+  }
+
+  public int size() {
+    return arguments.size();
   }
 
   public static OperaArguments parse(String string) {
