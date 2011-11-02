@@ -16,14 +16,13 @@ limitations under the License.
 
 package com.opera.core.systems;
 
+import com.opera.core.systems.runner.OperaRunnerException;
+
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
-import org.openqa.selenium.Capabilities;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
@@ -39,11 +38,12 @@ import static org.junit.Assert.assertTrue;
  */
 public class DesiredCapabilitiesTest {
 
-  WebDriver driver;
+  OperaDriver driver;
   DesiredCapabilities capabilities;
 
   @Before
   public void setUp() {
+    //initFixtures();
     capabilities = (DesiredCapabilities) OperaDriver.getDefaultCapabilities();
   }
 
@@ -60,7 +60,7 @@ public class DesiredCapabilitiesTest {
   @Test
   public void testSettingLoggingLevel() {
     capabilities.setCapability("opera.logging.level", "FINER");
-    driver = new OperaDriver((Capabilities) capabilities);
+    driver = new OperaDriver(capabilities);
 
     assertEquals("FINER", capabilities.getCapability("opera.logging.level"));
     assertNotNull(driver);
@@ -69,18 +69,17 @@ public class DesiredCapabilitiesTest {
   @Test
   public void testSettingLoggingLevelWithSmallLetters() {
     capabilities.setCapability("opera.logging.level", "info");
-    driver = new OperaDriver((Capabilities) capabilities);
+    driver = new OperaDriver(capabilities);
 
     assertEquals("info", capabilities.getCapability("opera.logging.level"));
     assertNotNull(driver);
   }
 
   @Test
-  @Ignore
   public void testSettingLogFile() throws IOException {
     File log = tmpFolder.newFile("operadriver.log");
     capabilities.setCapability("opera.logging.file", log.getCanonicalPath());
-    driver = new OperaDriver((Capabilities) capabilities);
+    driver = new OperaDriver(capabilities);
 
     assertTrue(log.length() > 0);
   }
@@ -88,7 +87,60 @@ public class DesiredCapabilitiesTest {
   @Test(expected = WebDriverException.class)
   public void testSettingInvalidLogFile() throws Exception {
     capabilities.setCapability("opera.logging.file", "/an/invalid/path");
-    driver = new OperaDriver((Capabilities) capabilities);
+    driver = new OperaDriver(capabilities);
+  }
+
+  @Test
+  public void testSettingBinary() {
+    capabilities.setCapability(OperaDriver.BINARY, OperaPaths.operaPath());
+    driver = new OperaDriver(capabilities);
+    assertEquals(OperaPaths.operaPath(), driver.utils().getBinaryPath());
+  }
+
+  @Test(expected = OperaRunnerException.class)
+  public void testSettingInvalidBinary() {
+    capabilities.setCapability(OperaDriver.BINARY, "/invalid/path");
+    driver = new OperaDriver(capabilities);
+  }
+
+  @Test
+  public void testSettingHost() {
+    capabilities.setCapability(OperaDriver.HOST, "localhost");
+    driver = new OperaDriver(capabilities);
+    assertNotNull(driver);
+    driver.quit();
+  }
+
+  @Test
+  public void testSettingPort() {
+    capabilities.setCapability(OperaDriver.PORT, -1);
+    driver = new OperaDriver(capabilities);
+    assertNotNull(driver);
+    driver.quit();
+  }
+
+  @Test
+  public void testSettingProfile() throws IOException {
+    capabilities.setCapability(OperaDriver.PROFILE, tmpFolder.newFolder().getCanonicalPath());
+    driver = new OperaDriver(capabilities);
+    assertNotNull(driver);
+    driver.quit();
+  }
+
+  @Test
+  public void testSettingIdle() {
+    capabilities.setCapability(OperaDriver.OPERAIDLE, true);
+    driver = new OperaDriver(capabilities);
+    driver.navigate().to("about:blank");
+    driver.quit();
+  }
+
+  @Test
+  public void testSettingAutostartToTrue() {
+    capabilities.setCapability(OperaDriver.AUTOSTART, true);
+    driver = new OperaDriver(capabilities);
+    assertTrue(driver.runner.isOperaRunning());
+    driver.quit();
   }
 
 }
