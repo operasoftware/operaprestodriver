@@ -43,7 +43,6 @@ public class DesiredCapabilitiesTest {
 
   @Before
   public void setUp() {
-    //initFixtures();
     capabilities = (DesiredCapabilities) OperaDriver.getDefaultCapabilities();
   }
 
@@ -59,7 +58,7 @@ public class DesiredCapabilitiesTest {
 
   @Test
   public void testSettingLoggingLevel() {
-    capabilities.setCapability("opera.logging.level", "FINER");
+    capabilities.setCapability(OperaDriver.LOGGING_LEVEL, "FINER");
     driver = new OperaDriver(capabilities);
 
     assertEquals("FINER", capabilities.getCapability("opera.logging.level"));
@@ -68,7 +67,7 @@ public class DesiredCapabilitiesTest {
 
   @Test
   public void testSettingLoggingLevelWithSmallLetters() {
-    capabilities.setCapability("opera.logging.level", "info");
+    capabilities.setCapability(OperaDriver.LOGGING_LEVEL, "info");
     driver = new OperaDriver(capabilities);
 
     assertEquals("info", capabilities.getCapability("opera.logging.level"));
@@ -78,7 +77,7 @@ public class DesiredCapabilitiesTest {
   @Test
   public void testSettingLogFile() throws IOException {
     File log = tmpFolder.newFile("operadriver.log");
-    capabilities.setCapability("opera.logging.file", log.getCanonicalPath());
+    capabilities.setCapability(OperaDriver.LOGGING_FILE, log.getCanonicalPath());
     driver = new OperaDriver(capabilities);
 
     assertTrue(log.length() > 0);
@@ -86,7 +85,7 @@ public class DesiredCapabilitiesTest {
 
   @Test(expected = WebDriverException.class)
   public void testSettingInvalidLogFile() throws Exception {
-    capabilities.setCapability("opera.logging.file", "/an/invalid/path");
+    capabilities.setCapability(OperaDriver.LOGGING_FILE, "/an/invalid/path");
     driver = new OperaDriver(capabilities);
   }
 
