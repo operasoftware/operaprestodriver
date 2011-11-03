@@ -181,7 +181,7 @@ public class OperaRunnerSettingsTest {
   public void testSetPortToUseDefaultPort() {
     // -1 means using the default port (7001)
     settings.setPort(-1);
-    assertEquals(-1, (int) OperaIntervals.SERVER_PORT.getValue());
+    assertEquals(OperaIntervals.SERVER_PORT.getValue(), (int) settings.getPort());
   }
 
   @Test
@@ -200,7 +200,7 @@ public class OperaRunnerSettingsTest {
   public void testDefaultSettings() {
     OperaRunnerSettings defaultSettings = OperaRunnerSettings.getDefaultSettings();
     assertNotNull(defaultSettings);
-    assertEquals("core-gogi", defaultSettings.getProduct());
+    assertNull(defaultSettings.getProduct());
     assertEquals(new Integer(0), defaultSettings.getPort());
     assertTrue(defaultSettings.getArguments() instanceof OperaCoreArguments);
   }
