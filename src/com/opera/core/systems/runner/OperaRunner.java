@@ -115,7 +115,7 @@ public class OperaRunner implements com.opera.core.systems.runner.interfaces.Ope
     arguments.merge(settings.getArguments());
     settings.setArguments(arguments);
 
-    logger.config("Opera arguments: " + settings.getArguments());
+    logger.config("Opera arguments: " + settings.getArguments().getArgumentsAsStringList());
 
     // TODO(andreastt): Should this be abstracted into its own class?
     //processBuilder = new ProcessBuilder(settings.getArguments().getArgumentsAsStrings());
