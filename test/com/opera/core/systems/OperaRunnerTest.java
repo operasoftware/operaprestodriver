@@ -1,7 +1,5 @@
 package com.opera.core.systems;
 
-import com.opera.core.systems.OperaArguments;
-import com.opera.core.systems.OperaArgumentsTest;
 import com.opera.core.systems.runner.OperaRunner;
 import com.opera.core.systems.runner.OperaRunnerSettings;
 import com.opera.core.systems.arguments.OperaArgument;
@@ -33,12 +31,13 @@ public class OperaRunnerTest {
     runner = new OperaRunner();
     List<OperaArgument> arguments = runner.settings.getArguments().getArguments();
 
+    // TODO(andreastt): Problems with core-gogi disallows us to have -autotestmode as the first argument
     assertNotNull(runner);
     assertNotNull(runner.settings.getProfile());
-    assertEquals("autotestmode", arguments.get(0).getArgument());
-    assertEquals("pd", arguments.get(1).getArgument());
-    assertEquals("debugproxy", arguments.get(2).getArgument());
-    assertTrue(Integer.valueOf(runner.settings.getArguments().getArguments().get(2).getValue().split(":")[1]) > 0);
+    assertEquals("autotestmode", arguments.get(2).getArgument());  // 0
+    assertEquals("pd", arguments.get(0).getArgument());  // 1
+    assertEquals("debugproxy", arguments.get(1).getArgument());  // 2
+    assertTrue(Integer.valueOf(arguments.get(1).getValue().split(":")[1]) > 0);  // 2
   }
 
   @Test
@@ -69,7 +68,7 @@ public class OperaRunnerTest {
     settings.setProfile(profile);
     runner = new OperaRunner(settings);
     assertNotNull(runner);
-    assertEquals(profile, runner.settings.getArguments().getArguments().get(1).getValue());
+    assertEquals(profile, runner.settings.getArguments().getArguments().get(0).getValue());  // 1
   }
 
   @Test
@@ -79,7 +78,7 @@ public class OperaRunnerTest {
     settings.setPort(0);
     runner = new OperaRunner(settings);
     assertNotNull(runner);
-    assertTrue(Integer.valueOf(runner.settings.getArguments().getArguments().get(2).getValue().split(":")[1]) > 0);
+    assertTrue(Integer.valueOf(runner.settings.getArguments().getArguments().get(1).getValue().split(":")[1]) > 0);  // 2
   }
 
   @Test
