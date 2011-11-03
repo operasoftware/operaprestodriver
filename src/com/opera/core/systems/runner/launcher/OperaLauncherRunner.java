@@ -18,6 +18,7 @@ package com.opera.core.systems.runner.launcher;
 
 import com.google.protobuf.GeneratedMessage;
 
+import com.opera.core.systems.OperaPaths;
 import com.opera.core.systems.arguments.OperaArgument;
 import com.opera.core.systems.model.ScreenShotReply;
 import com.opera.core.systems.runner.OperaRunner;
@@ -35,7 +36,6 @@ import com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStopRe
 import com.opera.core.systems.scope.internal.OperaIntervals;
 
 import org.openqa.selenium.net.PortProber;
-import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -55,13 +55,11 @@ public class OperaLauncherRunner extends OperaRunner
   private static Logger logger = Logger.getLogger(OperaLauncherRunner.class.getName());
 
   private OperaLauncherBinary launcherRunner = null;
-
-  private DesiredCapabilities capabilities;
   private OperaLauncherProtocol launcherProtocol = null;
   private String crashlog = null;
 
   public OperaLauncherRunner() {
-    this((OperaLauncherRunnerSettings) OperaLauncherRunnerSettings.getDefaultSettings());
+    this(OperaLauncherRunnerSettings.getDefaultSettings());
   }
 
   public OperaLauncherRunner(OperaLauncherRunnerSettings settings) {
@@ -73,6 +71,12 @@ public class OperaLauncherRunner extends OperaRunner
     Integer display = settings.getDisplay();
     String product = settings.getProduct();
     String profile = settings.getProfile();
+    String binary;
+    if (settings.getBinary() == null) {
+      binary = OperaPaths.operaPath();
+    } else {
+      binary = settings.getBinary().getAbsolutePath();
+    }
 
     List<String> launcherArguments = new ArrayList<String>();
     launcherArguments.add("-host");
@@ -96,7 +100,7 @@ public class OperaLauncherRunner extends OperaRunner
       launcherArguments.add("-noquit");
     }
     launcherArguments.add("-bin");
-    launcherArguments.add(settings.getBinary().getAbsolutePath());
+    launcherArguments.add(binary);
 
     // The launcher will pass on any extra arguments after -bin to Opera
     for (OperaArgument argument : super.settings.getArguments().getArguments()) {
