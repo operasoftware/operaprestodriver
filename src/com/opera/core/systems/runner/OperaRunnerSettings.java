@@ -24,10 +24,10 @@ public class OperaRunnerSettings
   private File operaBinary = null;
   private Integer display = null;
   private String product = null;
-  private String profile = null;         // "" for Opera < 12
+  private String profile = null;  // "" for Opera < 12
   private boolean noQuit = false;
   private String host = "127.0.0.1";
-  private Integer port = 0;            // -1 for Opera < 12
+  private Integer port = 0;  // -1 for Opera < 12
   private Level loggingLevel = Level.INFO;
   private com.opera.core.systems.arguments.interfaces.OperaArguments arguments;
 
@@ -60,10 +60,21 @@ public class OperaRunnerSettings
   public void setBinary(String path) {
     if (path != null && !path.isEmpty()) {
       File binary = new File(path);
-      if (binary.exists()) {
+      if (binary.exists() && binary.isFile() && binary.canExecute()) {
         operaBinary = binary;
+      } else {
+        throw new OperaRunnerException("No such file or not executable: " + binary);
       }
+    } else {
+      throw new OperaRunnerException("Invalid file path: " + path);
     }
+  }
+
+  public void setBinary(File binary) {
+    if (binary == null) {
+      throw new OperaRunnerException("Invalid file: " + binary);
+    }
+    operaBinary = binary;
   }
 
   public Integer getDisplay() {
@@ -121,19 +132,29 @@ public class OperaRunnerSettings
     // < 12).
     if (port == 0) {
       port = PortProber.findFreePort();
-    } else if (port == 0 && supportsDebugProxy()) {
+    } else if (port == -1) {
       port = (int) OperaIntervals.SERVER_PORT.getValue();
     }
 
     return port;
   }
 
-  public boolean supportsDebugProxy() {
-    return port != -1;
+  public void setPort(Integer port) {
+    // The port Opera should connect to.  0 = Random, -1 = Opera default (7001) (for use with Opera
+    // < 12).
+    if (port == 0) {
+      this.port = PortProber.findFreePort();
+    } else if (port == -1) {
+      this.port = (int) OperaIntervals.SERVER_PORT.getValue();
+    } else {
+      this.port = port;
+    }
+
+    this.port = port;
   }
 
-  public void setPort(Integer port) {
-    this.port = port;
+  public boolean supportsDebugProxy() {
+    return port != OperaIntervals.SERVER_PORT.getValue();
   }
 
   public OperaArguments getArguments() {
@@ -156,7 +177,7 @@ public class OperaRunnerSettings
     OperaRunnerSettings settings = new OperaRunnerSettings();
 
     OperaArguments arguments;
-    if (settings.getProduct().equals("desktop")) {
+    if (settings.getProduct() != null && settings.getProduct().equals("desktop")) {
       arguments = new OperaDesktopArguments();
     } else {
       arguments = new OperaCoreArguments();
