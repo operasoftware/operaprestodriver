@@ -1,12 +1,16 @@
 package com.opera.core.systems;
 
 import com.opera.core.systems.arguments.OperaCoreArguments;
+import com.opera.core.systems.runner.OperaRunnerException;
 import com.opera.core.systems.runner.OperaRunnerSettings;
+import com.opera.core.systems.scope.internal.OperaIntervals;
 
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openqa.selenium.Platform;
 
+import java.io.File;
 import java.lang.reflect.Field;
 import java.util.Collections;
 import java.util.Map;
@@ -21,12 +25,22 @@ import static org.junit.Assert.assertTrue;
 public class OperaRunnerSettingsTest {
 
   private OperaRunnerSettings settings;
+  private static File fakeBinary;
+
+  @BeforeClass
+  public static void beforeAll() {
+    if (Platform.getCurrent().is(Platform.WINDOWS)) {
+      fakeBinary = new File("C:\\WINDOWS\\system32\\find.exe");
+    } else {
+      fakeBinary = new File("/bin/echo");
+    }
+  }
 
   @Before
   public void beforeEach() throws Exception {
-    // Make sure we always reset OPERA_ARGS.  Since the constructor of OperaRunnerSettings
-    // has different behaviour depending on whether its set, it is going to impact the outcome
-    // of our tests.
+    // Make sure we always reset OPERA_ARGS.  Since the constructor of OperaRunnerSettings has
+    // different behaviour depending on whether its set, it is going to impact the outcome of our
+    // tests.
     setEnvVar("OPERA_ARGS", "");
     settings = new OperaRunnerSettings();
   }
@@ -47,11 +61,23 @@ public class OperaRunnerSettingsTest {
   }
 
   @Test
-  public void testBinary() {
+  public void testBinaryString() {
+    settings.setBinary(fakeBinary.getAbsolutePath());
+    assertNotNull(settings.getBinary());
+    assertEquals(fakeBinary.getAbsolutePath(), settings.getBinary().getAbsolutePath());
+  }
+
+  @Test(expected = OperaRunnerException.class)
+  public void testInvalidBinaryString() {
     String binary = "/some/binary";
     settings.setBinary(binary);
+  }
+
+  @Test
+  public void testBinaryFileObject() {
+    settings.setBinary(fakeBinary);
     assertNotNull(settings.getBinary());
-    assertEquals(binary, settings.getBinary().getAbsolutePath());
+    assertEquals(fakeBinary, settings.getBinary());
   }
 
   @Test
@@ -65,7 +91,7 @@ public class OperaRunnerSettingsTest {
     Exception unsupportedOperationException = null;
 
     try {
-        settings.setDisplay(display);
+      settings.setDisplay(display);
     } catch (UnsupportedOperationException e) {
       unsupportedOperationException = e;
     }
@@ -73,7 +99,7 @@ public class OperaRunnerSettingsTest {
     if (Platform.getCurrent() == Platform.WINDOWS) {
       assertNotNull(unsupportedOperationException);
     } else if (Platform.getCurrent() == Platform.LINUX ||
-                Platform.getCurrent() == Platform.UNIX) {
+               Platform.getCurrent() == Platform.UNIX) {
       assertNull(unsupportedOperationException);
       assertEquals(display, settings.getDisplay());
     }
@@ -126,8 +152,15 @@ public class OperaRunnerSettingsTest {
 
   @Test
   public void testGetPort() {
-    Integer defaultPort = -1;
-    assertEquals(defaultPort, settings.getPort());
+    int
+        userDefinedPort =
+        (Integer) OperaDriver.getDefaultCapabilities().getCapability(OperaDriver.PORT);
+
+    if (userDefinedPort == 0) {
+      assertTrue(settings.getPort() > 0);
+    } else if (userDefinedPort == -1) {
+      assertEquals(userDefinedPort, (int) OperaIntervals.SERVER_PORT.getValue());
+    }
   }
 
   @Test
@@ -135,6 +168,20 @@ public class OperaRunnerSettingsTest {
     Integer port = 1234;
     settings.setPort(port);
     assertEquals(port, settings.getPort());
+  }
+
+  @Test
+  public void testSetPortToUseRandomPort() {
+    // 0 means using a random port
+    settings.setPort(0);
+    assertTrue(settings.getPort() > 0);
+  }
+
+  @Test
+  public void testSetPortToUseDefaultPort() {
+    // -1 means using the default port (7001)
+    settings.setPort(-1);
+    assertEquals(-1, (int) OperaIntervals.SERVER_PORT.getValue());
   }
 
   @Test
@@ -159,8 +206,8 @@ public class OperaRunnerSettingsTest {
   }
 
   /**
-   * Massive hack to set the environment variables inside this JVM.  Used to
-   * test if OperaPaths is checking the environment variables.
+   * Massive hack to set the environment variables inside this JVM.  Used to test if OperaPaths is
+   * checking the environment variables.
    *
    * http://stackoverflow.com/questions/318239/how-do-i-set-environment-variables-from-java/496849#496849
    *
@@ -168,7 +215,8 @@ public class OperaRunnerSettingsTest {
    * @param value the new environment variable's value
    */
   @SuppressWarnings("unchecked")
-  private static void setEnvVar(String key, String value) throws Exception {
+  private static void setEnvVar(String key, String value)
+      throws IllegalAccessException, NoSuchFieldException {
     Class<?>[] classes = Collections.class.getDeclaredClasses();
     Map<String, String> env = System.getenv();
     for (Class<?> cl : classes) {
