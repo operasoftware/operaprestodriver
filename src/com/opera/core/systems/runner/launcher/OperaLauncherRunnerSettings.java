@@ -5,6 +5,9 @@ import com.google.common.io.Closeables;
 import com.google.common.io.Files;
 
 import com.opera.core.systems.OperaPaths;
+import com.opera.core.systems.arguments.OperaCoreArguments;
+import com.opera.core.systems.arguments.OperaDesktopArguments;
+import com.opera.core.systems.arguments.interfaces.OperaArguments;
 import com.opera.core.systems.runner.OperaLaunchers;
 import com.opera.core.systems.runner.OperaRunnerException;
 import com.opera.core.systems.runner.OperaRunnerSettings;
@@ -27,7 +30,7 @@ import java.util.logging.Logger;
 public class OperaLauncherRunnerSettings extends OperaRunnerSettings {
 
   public static final Logger logger = Logger.getLogger(OperaLauncherRunnerSettings.class.getName());
-  private File launcher;
+  protected File launcher;
 
   public OperaLauncherRunnerSettings() {
     super();
@@ -39,6 +42,28 @@ public class OperaLauncherRunnerSettings extends OperaRunnerSettings {
     }
 
     return launcher;
+  }
+
+  public void setLauncher(File launcher) {
+    if (launcher.exists() && launcher.isFile() && launcher.canExecute()) {
+      this.launcher = launcher;
+    } else {
+      throw new OperaRunnerException("No such file: " + launcher);
+    }
+  }
+
+  public static OperaLauncherRunnerSettings getDefaultSettings() {
+    OperaLauncherRunnerSettings settings = new OperaLauncherRunnerSettings();
+
+    OperaArguments arguments;
+    if (settings.getProduct() != null && settings.getProduct().equals("desktop")) {
+      arguments = new OperaDesktopArguments();
+    } else {
+      arguments = new OperaCoreArguments();
+    }
+
+    settings.setArguments(arguments);
+    return settings;
   }
 
   /**
@@ -61,9 +86,9 @@ public class OperaLauncherRunnerSettings extends OperaRunnerSettings {
 
       try {
         String userHome = System.getProperty("user.home");
-        path = extractLauncher(userHome + File.separator + ".launcher");
+        path = extractLauncher(new File(userHome + File.separator + ".launcher"));
       } catch (OperaRunnerException e) {
-        throw new WebDriverException("Unable to locate bundled launcher: " + e.getMessage());
+        throw new WebDriverException("Unable to extract bundled launcher: " + e.getMessage());
       }
     }
 
@@ -77,10 +102,12 @@ public class OperaLauncherRunnerSettings extends OperaRunnerSettings {
    * @param launcherPath directory where you wish to put the launcher
    * @return path to the launcher executable
    */
-  private static String extractLauncher(String launcherPath) {
+  private static String extractLauncher(File launcherPath) {
     String launcherName = getLauncherNameForOS();
     File sourceLauncher = null;
-    File targetLauncher = new File(launcherPath + File.separatorChar + launcherName);
+    File
+        targetLauncher =
+        new File(launcherPath.getAbsolutePath() + File.separatorChar + launcherName);
 
     // Whether we need to copy a new launcher across, either because it doesn't currently exist, or
     // because its hash differs from our launcher.
@@ -91,8 +118,6 @@ public class OperaLauncherRunnerSettings extends OperaRunnerSettings {
 
     // Does launcher exist among our resources?
     if (res != null) {
-      logger.finer("launcher found among resources");
-
       String url = res.toExternalForm();
 
       if (url.startsWith("jar:") || url.startsWith("wsjar:")) {
@@ -126,7 +151,7 @@ public class OperaLauncherRunnerSettings extends OperaRunnerSettings {
 
       try {
         if (!targetLauncher.exists()) {
-          new File(launcherPath).mkdirs();
+          launcherPath.mkdirs();
           Files.touch(targetLauncher);
         }
 
