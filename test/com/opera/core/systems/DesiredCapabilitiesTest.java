@@ -29,6 +29,11 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import java.io.File;
 import java.io.IOException;
 
+import static com.opera.core.systems.OperaProduct.CORE;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 /**
  * @author Andreas Tolf Tolfsen <andreastt@opera.com>
  */
