@@ -30,6 +30,19 @@ import java.io.File;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+
+import static com.opera.core.systems.OperaProduct.CORE;
+import static com.opera.core.systems.OperaProduct.CORE_DESKTOP;
+import static com.opera.core.systems.OperaProduct.CORE_SMARTPHONE;
+import static com.opera.core.systems.OperaProduct.CORE_TV;
+import static com.opera.core.systems.OperaProduct.MINI;
+import static com.opera.core.systems.OperaProduct.MOBILE;
+
+import static org.openqa.selenium.Platform.LINUX;
+import static org.openqa.selenium.Platform.WINDOWS;
+import static org.openqa.selenium.Platform.MAC;
 
 @RunWith(OperaDriverTestRunner.class)
 public abstract class OperaDriverTestCase {
