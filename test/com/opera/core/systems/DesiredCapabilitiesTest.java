@@ -29,14 +29,12 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import java.io.File;
 import java.io.IOException;
 
-import static com.opera.core.systems.OperaProduct.CORE;
-
 /**
  * @author Andreas Tolf Tolfsen <andreastt@opera.com>
  */
-public class DesiredCapabilitiesTest extends DriverTestCase {
+public class DesiredCapabilitiesTest extends OperaDriverTestCase {
 
-  OperaDriver driver;
+  //OperaDriver driver;
   DesiredCapabilities capabilities;
 
   @Before
@@ -57,7 +55,7 @@ public class DesiredCapabilitiesTest extends DriverTestCase {
   @Test
   public void testSettingLoggingLevel() {
     capabilities.setCapability(OperaDriver.LOGGING_LEVEL, "FINER");
-    driver = new OperaDriver(capabilities);
+    driver = new TestOperaDriver(capabilities);
 
     assertEquals("FINER", capabilities.getCapability("opera.logging.level"));
     assertNotNull(driver);
@@ -66,7 +64,7 @@ public class DesiredCapabilitiesTest extends DriverTestCase {
   @Test
   public void testSettingLoggingLevelWithSmallLetters() {
     capabilities.setCapability(OperaDriver.LOGGING_LEVEL, "info");
-    driver = new OperaDriver(capabilities);
+    driver = new TestOperaDriver(capabilities);
 
     assertEquals("info", capabilities.getCapability("opera.logging.level"));
     assertNotNull(driver);
@@ -77,7 +75,7 @@ public class DesiredCapabilitiesTest extends DriverTestCase {
     //File log = tmpFolder.newFile("operadriver.log");
     File log = new File("/home/andreastt/operadriver.log");
     capabilities.setCapability(OperaDriver.LOGGING_FILE, log.getCanonicalPath());
-    driver = new OperaDriver(capabilities);
+    driver = new TestOperaDriver(capabilities);
 
     System.out.println(log.getAbsolutePath());
 
@@ -87,26 +85,26 @@ public class DesiredCapabilitiesTest extends DriverTestCase {
   @Test(expected = WebDriverException.class)
   public void testSettingInvalidLogFile() throws Exception {
     capabilities.setCapability(OperaDriver.LOGGING_FILE, "/an/invalid/path");
-    driver = new OperaDriver(capabilities);
+    driver = new TestOperaDriver(capabilities);
   }
 
   @Test
   public void testSettingBinary() {
     capabilities.setCapability(OperaDriver.BINARY, OperaPaths.operaPath());
-    driver = new OperaDriver(capabilities);
+    driver = new TestOperaDriver(capabilities);
     driver.navigate().to("about:blank");
   }
 
   @Test(expected = OperaRunnerException.class)
   public void testSettingInvalidBinary() {
     capabilities.setCapability(OperaDriver.BINARY, "/invalid/path");
-    driver = new OperaDriver(capabilities);
+    driver = new TestOperaDriver(capabilities);
   }
 
   @Test
   public void testSettingHost() {
     capabilities.setCapability(OperaDriver.HOST, "localhost");
-    driver = new OperaDriver(capabilities);
+    driver = new TestOperaDriver(capabilities);
     assertNotNull(driver);
     driver.quit();
   }
@@ -115,7 +113,7 @@ public class DesiredCapabilitiesTest extends DriverTestCase {
   @Ignore(products = CORE, reason = "core does not reset port number if -debugproxy is ommitted")
   public void testSettingPort() {
     capabilities.setCapability(OperaDriver.PORT, -1);
-    driver = new OperaDriver(capabilities);
+    driver = new TestOperaDriver(capabilities);
     assertNotNull(driver);
     driver.quit();
   }
@@ -123,7 +121,7 @@ public class DesiredCapabilitiesTest extends DriverTestCase {
   @Test
   public void testSettingProfile() throws IOException {
     capabilities.setCapability(OperaDriver.PROFILE, tmpFolder.newFolder().getCanonicalPath());
-    driver = new OperaDriver(capabilities);
+    driver = new TestOperaDriver(capabilities);
     assertNotNull(driver);
     driver.quit();
   }
@@ -131,7 +129,7 @@ public class DesiredCapabilitiesTest extends DriverTestCase {
   @Test
   public void testSettingIdle() {
     capabilities.setCapability(OperaDriver.OPERAIDLE, true);
-    driver = new OperaDriver(capabilities);
+    driver = new TestOperaDriver(capabilities);
     driver.navigate().to("about:blank");
     driver.quit();
   }
@@ -139,7 +137,7 @@ public class DesiredCapabilitiesTest extends DriverTestCase {
   @Test
   public void testSettingAutostartToTrue() {
     capabilities.setCapability(OperaDriver.AUTOSTART, true);
-    driver = new OperaDriver(capabilities);
+    driver = new TestOperaDriver(capabilities);
     assertTrue(driver.runner.isOperaRunning());
     driver.quit();
   }
