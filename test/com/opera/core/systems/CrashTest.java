@@ -41,12 +41,14 @@ public class CrashTest extends OperaDriverTestCase {
 
   @Before
   public void setUp() throws Exception {
-    super.setUpBeforeClass();
+    //super.setUpBeforeClass();
+    setUpBeforeClass();
   }
 
   @After
   public void tearDown() throws Exception {
-    super.tearDownAfterClass();
+    //super.tearDownAfterClass();
+    tearDownAfterClass();
     // Make sure Opera is gone
     Runtime.getRuntime().exec("kill `pgrep opera").waitFor();
   }

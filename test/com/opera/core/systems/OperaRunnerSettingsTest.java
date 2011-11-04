@@ -5,6 +5,7 @@ import com.opera.core.systems.runner.OperaRunnerException;
 import com.opera.core.systems.runner.OperaRunnerSettings;
 import com.opera.core.systems.scope.internal.OperaIntervals;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -16,10 +17,13 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.logging.Level;
 
+import static com.google.common.collect.Ranges.greaterThan;
+import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 public class OperaRunnerSettingsTest {
@@ -201,7 +205,7 @@ public class OperaRunnerSettingsTest {
     OperaRunnerSettings defaultSettings = OperaRunnerSettings.getDefaultSettings();
     assertNotNull(defaultSettings);
     assertNull(defaultSettings.getProduct());
-    assertEquals(new Integer(0), defaultSettings.getPort());
+    assertTrue("default port should be greater than 0", defaultSettings.getPort() > 0);
     assertTrue(defaultSettings.getArguments() instanceof OperaCoreArguments);
   }
 

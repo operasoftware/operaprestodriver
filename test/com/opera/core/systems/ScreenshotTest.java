@@ -23,6 +23,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.openqa.selenium.By;
 import org.openqa.selenium.OutputType;
 
 import java.awt.image.BufferedImage;
@@ -49,10 +50,10 @@ public class ScreenshotTest extends OperaDriverTestCase {
   public void setUp() throws Exception {
     getFixture("test.html");
 
-    text = (OperaWebElement) driver.findElementById("input_email");
-    radioSome = (OperaWebElement) driver.findElementById("radio_some");
-    radioLittle = (OperaWebElement) driver.findElementById("radio_little");
-    radioLots = (OperaWebElement) driver.findElementById("radio_lots");
+    text = (OperaWebElement) driver.findElement(By.id("input_email"));
+    radioSome = (OperaWebElement) driver.findElement(By.id("radio_some"));
+    radioLittle = (OperaWebElement) driver.findElement(By.id("radio_little"));
+    radioLots = (OperaWebElement) driver.findElement(By.id("radio_lots"));
   }
 
   @AfterClass
@@ -117,7 +118,7 @@ public class ScreenshotTest extends OperaDriverTestCase {
   @Test
   public void testTimout() throws Exception {
     getFixture("timer.html");
-    OperaWebElement text = (OperaWebElement) driver.findElementById("one");
+    OperaWebElement text = (OperaWebElement) driver.findElement(By.id("one"));
 
     String original = text.saveScreenshot("one.png");
     String changed = text.saveScreenshot("two.png", 2000);
@@ -175,19 +176,19 @@ public class ScreenshotTest extends OperaDriverTestCase {
     // Shouldn't throw exceptions
 
     getFixture("zero-height-standards.html");
-    ((OperaWebElement) driver.findElementByTagName("html")).getImageHash();
+    ((OperaWebElement) driver.findElement(By.tagName("html"))).getImageHash();
 
     getFixture("zero-height-quirks.html");
-    ((OperaWebElement) driver.findElementByTagName("html")).getImageHash();
+    ((OperaWebElement) driver.findElement(By.tagName("html"))).getImageHash();
   }
 
   // Can cause problems on Windows, so moved to last
-  @Ignore(value = "We don't support taking single element screenshots of plugins")
+  @Ignore("We don't support taking single element screenshots of plugins")
   @Test
   public void testFlash() throws Exception {
     getFixture("flash.html");
-    OperaWebElement img = (OperaWebElement) driver.findElementById("img_container");
-    OperaWebElement flash = (OperaWebElement) driver.findElementById("flash_container");
+    OperaWebElement img = (OperaWebElement) driver.findElement(By.id("img_container"));
+    OperaWebElement flash = (OperaWebElement) driver.findElement(By.id("flash_container"));
 
     String imgMD5 = img.saveScreenshot("one.png");
     String flashMD5 = flash.saveScreenshot("two.png");
@@ -209,7 +210,7 @@ public class ScreenshotTest extends OperaDriverTestCase {
   }
 
   @Test
-  @Ignore(value = "Opera problem. Areas outside current viewport are black.")
+  @Ignore("Opera problem. Areas outside current viewport are black.")
   public void testFullScreenshot() throws Exception {
     getFixture("tall.html");
     File file = driver.getScreenshotAs(OutputType.FILE);

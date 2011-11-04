@@ -65,7 +65,7 @@ public class PrefsTest extends OperaDriverTestCase {
   }
 
   @Test
-  @Ignore("CORE-xxxxx")
+  @Ignore("Opera closes connection if requesting invalid preference")  // TODO(andreastt): File CORE bug
   public void testGetInvalidPreference() {
     Exception invalidPreferenceException = null;
 
@@ -79,7 +79,7 @@ public class PrefsTest extends OperaDriverTestCase {
   }
 
   @Test
-  @Ignore("CORE-xxxxx")
+  @Ignore("Opera closes connection if requesting invalid preference")  // TODO(andreastt): File CORE bug
   public void testGetPreferenceWithInvalidSection() {
     Exception invalidSectionException = null;
 
@@ -93,7 +93,7 @@ public class PrefsTest extends OperaDriverTestCase {
   }
 
   @Test
-  @Ignore("CORE-xxxxx")
+  @Ignore("Opera closes connection if requesting invalid preference")  // TODO(andreastt): File CORE bug
   public void testGetPreferenceWithInvalidKey() {
     Exception invalidKeyException = null;
 
@@ -122,7 +122,7 @@ public class PrefsTest extends OperaDriverTestCase {
   }
 
   @Test
-  @Ignore("CORE-xxxxx")
+  @Ignore("Opera closes connection if requesting invalid preference")  // TODO(andreastt): File CORE bug
   public void testGetInvalidDefaultPreference() {
     Exception invalidPreference = null;
 
@@ -136,7 +136,7 @@ public class PrefsTest extends OperaDriverTestCase {
   }
 
   @Test
-  @Ignore("CORE-xxxxx")
+  @Ignore("Opera closes connection if requesting invalid preference")  // TODO(andreastt): File CORE bug
   public void testGetDefaultPreferenceWithInvalidSection() {
     Exception invalidPreference = null;
 
@@ -150,7 +150,7 @@ public class PrefsTest extends OperaDriverTestCase {
   }
 
   @Test
-  @Ignore("CORE-xxxxx")
+  @Ignore("Opera closes connection if requesting invalid preference")  // TODO(andreastt): File CORE bug
   public void testGetDefaultPreferenceWithInvalidKey() {
     Exception invalidPreference = null;
 
@@ -201,7 +201,7 @@ public class PrefsTest extends OperaDriverTestCase {
   }
 
   @Test
-  @Ignore("CORE-xxxxx")
+  @Ignore("Opera closes connection if requesting invalid preference")  // TODO(andreastt): File CORE bug
   public void testSetValidPreferencesWithInvalidType() {
     // User Display Mode → Author CSS expects boolean
     driver.setPref("User Display Mode", "Author CSS", "hoobaflooba");
@@ -209,7 +209,7 @@ public class PrefsTest extends OperaDriverTestCase {
   }
 
   @Test
-  @Ignore("CORE-xxxxx")
+  @Ignore("Opera closes connection if requesting invalid preference")  // TODO(andreastt): File CORE bug
   public void testSetPreferenceWithInvalidSection() {
     Exception invalidSectionException = null;
 
@@ -223,7 +223,7 @@ public class PrefsTest extends OperaDriverTestCase {
   }
 
   @Test
-  @Ignore("CORE-xxxxx")
+  @Ignore("Opera closes connection if requesting invalid preference")  // TODO(andreastt): File CORE bug
   public void testSetPreferenceWithInvalidKey() {
     Exception invalidKeyException = null;
 
@@ -251,7 +251,7 @@ public class PrefsTest extends OperaDriverTestCase {
   }
 
   @Test
-  @Ignore("CORE-xxxxx")
+  @Ignore("Opera closes connection if requesting invalid preference")  // TODO(andreastt): File CORE bug
   public void testSetPreferenceWithInvalidSectionAndKey() {
     Exception invalidSectionAndKeyException = null;
 

@@ -234,6 +234,7 @@ public class OperaDriverTest extends OperaDriverTestCase {
   }
 
   @Test
+  @Ignore(products = CORE, value = "core does not support -pd")
   public void testRandomProfile() throws Exception {
     DesiredCapabilities c = new DesiredCapabilities();
     c.setCapability(OperaDriver.PROFILE, (String) null);
@@ -255,8 +256,8 @@ public class OperaDriverTest extends OperaDriverTestCase {
     a.quit();
   }
 
-  @Ignore
   @Test
+  @Ignore // TODO(andreastt): No good reason why we're ignoring this, investigate
   public void testProfileDeleted() throws Exception {
     DesiredCapabilities c = new DesiredCapabilities();
     c.setCapability(OperaDriver.PROFILE, (String) null);
