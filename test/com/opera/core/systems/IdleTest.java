@@ -32,7 +32,7 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-public class IdleTest extends TestBase {
+public class IdleTest extends OperaDriverTestCase {
 
   // Timeout vars for every test
   private static long start, end;

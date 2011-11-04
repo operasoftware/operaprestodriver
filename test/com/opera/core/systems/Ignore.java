@@ -16,22 +16,21 @@ limitations under the License.
 
 package com.opera.core.systems;
 
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
+import org.openqa.selenium.Platform;
 
-public class DesktopTestBase extends OperaDriverTestCase {
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-  protected static OperaDesktopDriver driver;
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ ElementType.TYPE, ElementType.METHOD })
+public @interface Ignore {
 
-  @BeforeClass
-  public static void setUpBeforeClass() throws Exception {
-    driver = new OperaDesktopDriver();
-  }
+  OperaProduct[] products() default OperaProduct.ALL;
 
+  Platform[] platforms() default Platform.ANY;
 
-  @AfterClass
-  public static void tearDownAfterClass() throws Exception {
-    driver.quit();
-  }
+  String reason() default "Not supported by product yet";
 
 }

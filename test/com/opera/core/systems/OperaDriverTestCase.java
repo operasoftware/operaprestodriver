@@ -21,7 +21,9 @@ import com.opera.core.systems.settings.OperaDriverSettings;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.junit.runner.RunWith;
 import org.openqa.selenium.Capabilities;
+import org.openqa.selenium.Platform;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.io.File;
@@ -29,9 +31,12 @@ import java.io.File;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-abstract public class TestBase {
+@RunWith(OperaDriverTestRunner.class)
+public abstract class OperaDriverTestCase {
 
   protected static TestOperaDriver driver;
+  protected static OperaProduct currentProduct = OperaProduct.CORE;
+  protected static Platform currentPlatform = Platform.getCurrent();
 
   private static String fixtureDirectory;
 
@@ -39,21 +44,35 @@ abstract public class TestBase {
   public static void setUpBeforeClass() throws Exception {
     DesiredCapabilities caps = new DesiredCapabilities();
     caps.setCapability(OperaDriver.LOGGING_LEVEL, "FINE");
+
     driver = new TestOperaDriver(caps);
     assertNotNull(driver);
+
+    String requestedProduct = System.getenv("OPERA_PRODUCT");
+    if (requestedProduct == null || requestedProduct.isEmpty()) {
+      requestedProduct = driver.utils().getProduct();
+    }
+
+    if (requestedProduct != null && !requestedProduct.isEmpty()) {
+      try {
+        currentProduct = OperaProduct.valueOf(requestedProduct);
+      } catch (IllegalArgumentException e) {
+        // product not found
+      }
+    }
 
     initFixtures();
   }
 
   @AfterClass
   public static void tearDownAfterClass() throws Exception {
-    driver.quit();
+    if (driver != null && driver.getRunner().isOperaRunning()) {
+      driver.quit();
+    }
   }
 
-  // Easy access to fixtures
-
   /**
-   * Setup the fixture directory
+   * Setup the fixture directory.
    */
   protected static void initFixtures() {
     String separator = System.getProperty("file.separator");
@@ -64,24 +83,36 @@ abstract public class TestBase {
     assertTrue(new File(fixtureDirectory).isDirectory());
   }
 
-  // / Get the URL of the given fixture file
+  /**
+   * Get the URL of the given fixture file.
+   *
+   * @param file the filename to get
+   * @return the URL to the fixture file
+   */
   protected String fixture(String file) {
     return "file://localhost" + fixtureDirectory + file;
   }
 
-  // / Navigate to the given fixture file
+  /**
+   * Navigate to the given fixture file.
+   *
+   * @param file the filename from the fixture directory to navigate to
+   */
   protected void getFixture(String file) {
     driver.get(fixture(file));
   }
 }
 
-// Provides access to the Opera Runner, so we can detect crashes
+/**
+ * Provides access to the Opera Runner, so we can detect crashes.
+ */
 class TestOperaDriver extends OperaDriver {
 
   public TestOperaDriver() {
     super();
   }
 
+  @Deprecated
   public TestOperaDriver(OperaDriverSettings settings) {
     this(settings.getCapabilities());
   }

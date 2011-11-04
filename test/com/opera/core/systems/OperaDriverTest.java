@@ -34,7 +34,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-public class OperaDriverTest extends TestBase {
+public class OperaDriverTest extends OperaDriverTestCase {
 
   // Replace the TestBase setup and teardown so that we don't launch Opera
   @BeforeClass

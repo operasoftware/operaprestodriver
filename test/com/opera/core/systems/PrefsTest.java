@@ -36,7 +36,7 @@ import static org.junit.Assert.assertTrue;
 /**
  * @author Andreas Tolf Tolfsen <andreastt@opera.com>
  */
-public class PrefsTest extends TestBase {
+public class PrefsTest extends OperaDriverTestCase {
 
   @Before
   public void setUp() throws Exception {

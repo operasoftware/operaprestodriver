@@ -24,7 +24,7 @@ import org.openqa.selenium.interactions.Actions;
 
 import static org.junit.Assert.assertEquals;
 
-public class DriverKeysTest extends TestBase {
+public class DriverKeysTest extends OperaDriverTestCase {
 
   private WebElement fieldOne;
   private WebElement fieldTwo;

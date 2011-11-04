@@ -29,7 +29,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
-public class SelftestTest extends TestBase {
+public class SelftestTest extends OperaDriverTestCase {
 
   @Test
   public void testSelftests() {

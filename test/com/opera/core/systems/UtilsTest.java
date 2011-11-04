@@ -30,7 +30,7 @@ import static org.junit.Assert.assertTrue;
 /**
  * @author Andreas Tolf Tolfsen <andreastt@opera.com>
  */
-public class UtilsTest extends TestBase {
+public class UtilsTest extends OperaDriverTestCase {
 
   // Make sure these tests only run if meta data is available.
   @Rule

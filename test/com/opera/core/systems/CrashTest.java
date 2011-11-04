@@ -29,7 +29,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 // FIXME make tests pass
-public class CrashTest extends TestBase {
+public class CrashTest extends OperaDriverTestCase {
 
   @BeforeClass
   public static void setUpBeforeClass() throws Exception {

@@ -29,14 +29,12 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import java.io.File;
 import java.io.IOException;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static com.opera.core.systems.OperaProduct.CORE;
 
 /**
  * @author Andreas Tolf Tolfsen <andreastt@opera.com>
  */
-public class DesiredCapabilitiesTest {
+public class DesiredCapabilitiesTest extends DriverTestCase {
 
   OperaDriver driver;
   DesiredCapabilities capabilities;
@@ -76,9 +74,12 @@ public class DesiredCapabilitiesTest {
 
   @Test
   public void testSettingLogFile() throws IOException {
-    File log = tmpFolder.newFile("operadriver.log");
+    //File log = tmpFolder.newFile("operadriver.log");
+    File log = new File("/home/andreastt/operadriver.log");
     capabilities.setCapability(OperaDriver.LOGGING_FILE, log.getCanonicalPath());
     driver = new OperaDriver(capabilities);
+
+    System.out.println(log.getAbsolutePath());
 
     assertTrue(log.length() > 0);
   }
@@ -93,7 +94,7 @@ public class DesiredCapabilitiesTest {
   public void testSettingBinary() {
     capabilities.setCapability(OperaDriver.BINARY, OperaPaths.operaPath());
     driver = new OperaDriver(capabilities);
-    assertEquals(OperaPaths.operaPath(), driver.utils().getBinaryPath());
+    driver.navigate().to("about:blank");
   }
 
   @Test(expected = OperaRunnerException.class)
@@ -111,6 +112,7 @@ public class DesiredCapabilitiesTest {
   }
 
   @Test
+  @Ignore(products = CORE, reason = "core does not reset port number if -debugproxy is ommitted")
   public void testSettingPort() {
     capabilities.setCapability(OperaDriver.PORT, -1);
     driver = new OperaDriver(capabilities);

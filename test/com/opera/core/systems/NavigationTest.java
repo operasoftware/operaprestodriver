@@ -21,7 +21,7 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-public class NavigationTest extends TestBase {
+public class NavigationTest extends OperaDriverTestCase {
 
   @Test
   public void testBack() {

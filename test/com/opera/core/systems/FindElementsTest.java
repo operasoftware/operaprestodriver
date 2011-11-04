@@ -29,7 +29,7 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-public class FindElementsTest extends TestBase {
+public class FindElementsTest extends OperaDriverTestCase {
 
   @Before
   public void setUp() {
