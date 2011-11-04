@@ -17,11 +17,11 @@ limitations under the License.
 package com.opera.core.systems;
 
 import com.opera.core.systems.settings.OperaDriverSettings;
+import com.opera.core.systems.Ignore;
 
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriverException;
@@ -30,6 +30,7 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.io.File;
 
+import static com.opera.core.systems.OperaProduct.CORE;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -141,6 +142,7 @@ public class OperaDriverTest extends OperaDriverTestCase {
   }
 
   @Test
+  @Ignore(products = CORE, reason = "core does not reset port number if -debugproxy is ommitted")
   public void testDefaultPort() throws Exception {
     DesiredCapabilities c = new DesiredCapabilities();
     c.setCapability(OperaDriver.PORT, -1);
@@ -171,7 +173,7 @@ public class OperaDriverTest extends OperaDriverTestCase {
   }
 
   @Test
-  @Ignore(value="Once this is set the autotestmode profile no longer connects on 7001, breaking future tests")
+  @Ignore(products = CORE, reason = "Once this is set the autotestmode profile no longer connects on 7001, breaking future tests")
   public void testSetPort() throws Exception {
     DesiredCapabilities c = new DesiredCapabilities();
     c.setCapability(OperaDriver.PORT, 9876);
