@@ -19,7 +19,9 @@ package com.opera.core.systems;
 import com.opera.core.systems.runner.OperaRunnerException;
 
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -39,8 +41,25 @@ import static org.junit.Assert.assertTrue;
  */
 public class DesiredCapabilitiesTest extends OperaDriverTestCase {
 
-  //OperaDriver driver;
-  DesiredCapabilities capabilities;
+  public DesiredCapabilities capabilities;
+
+  /**
+   * Overrides {@link OperaDriverTestCase#setUpBeforeClass();)}
+   *
+   * @throws Exception these things happen
+   */
+  @BeforeClass
+  public static void setUpBeforeClass() throws Exception {
+  }
+
+  /**
+   * Overrides {@link OperaDriverTestCase#tearDownAfterClass()} ();)}
+   *
+   * @throws Exception these things happen
+   */
+  @AfterClass
+  public static void tearDownAfterClass() throws Exception {
+  }
 
   @Before
   public void setUp() {
@@ -49,7 +68,7 @@ public class DesiredCapabilitiesTest extends OperaDriverTestCase {
 
   @After
   public void tearDown() {
-    if (driver != null) {
+    if (driver.isRunning()) {
       driver.quit();
     }
   }
@@ -62,7 +81,7 @@ public class DesiredCapabilitiesTest extends OperaDriverTestCase {
     capabilities.setCapability(OperaDriver.LOGGING_LEVEL, "FINER");
     driver = new TestOperaDriver(capabilities);
 
-    assertEquals("FINER", capabilities.getCapability("opera.logging.level"));
+    assertEquals("FINER", capabilities.getCapability(OperaDriver.LOGGING_LEVEL));
     assertNotNull(driver);
   }
 
@@ -71,18 +90,16 @@ public class DesiredCapabilitiesTest extends OperaDriverTestCase {
     capabilities.setCapability(OperaDriver.LOGGING_LEVEL, "info");
     driver = new TestOperaDriver(capabilities);
 
-    assertEquals("info", capabilities.getCapability("opera.logging.level"));
+    assertEquals("info", capabilities.getCapability(OperaDriver.LOGGING_LEVEL));
     assertNotNull(driver);
   }
 
   @Test
   public void testSettingLogFile() throws IOException {
-    //File log = tmpFolder.newFile("operadriver.log");
-    File log = new File("/home/andreastt/operadriver.log");
+    File log = tmpFolder.newFile("operadriver.log");
     capabilities.setCapability(OperaDriver.LOGGING_FILE, log.getCanonicalPath());
+    capabilities.setCapability(OperaDriver.LOGGING_LEVEL, "ALL");  // up the level to get some ompf
     driver = new TestOperaDriver(capabilities);
-
-    System.out.println(log.getAbsolutePath());
 
     assertTrue(log.length() > 0);
   }
@@ -115,7 +132,7 @@ public class DesiredCapabilitiesTest extends OperaDriverTestCase {
   }
 
   @Test
-  @Ignore(products = CORE, reason = "core does not reset port number if -debugproxy is ommitted")
+  @Ignore(products = CORE, value = "core does not reset port number if -debugproxy is ommitted")
   public void testSettingPort() {
     capabilities.setCapability(OperaDriver.PORT, -1);
     driver = new TestOperaDriver(capabilities);

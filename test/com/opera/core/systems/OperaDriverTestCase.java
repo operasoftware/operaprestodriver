@@ -42,6 +42,10 @@ public abstract class OperaDriverTestCase {
 
   @BeforeClass
   public static void setUpBeforeClass() throws Exception {
+    if (driver != null && driver.isRunning()) {
+      return;
+    }
+
     DesiredCapabilities caps = new DesiredCapabilities();
     caps.setCapability(OperaDriver.LOGGING_LEVEL, "FINE");
 
@@ -66,7 +70,7 @@ public abstract class OperaDriverTestCase {
 
   @AfterClass
   public static void tearDownAfterClass() throws Exception {
-    if (driver != null && driver.getRunner().isOperaRunning()) {
+    if (driver.isRunning()) {
       driver.quit();
     }
   }
@@ -101,12 +105,19 @@ public abstract class OperaDriverTestCase {
   protected void getFixture(String file) {
     driver.get(fixture(file));
   }
+
+  private static boolean isDriverRunning() {
+    return (driver != null) && driver.isRunning();
+  }
+
 }
 
 /**
- * Provides access to the Opera Runner, so we can detect crashes.
+ * Provides access to the {@link OperaRunner}, so we can detect crashes.
  */
 class TestOperaDriver extends OperaDriver {
+
+  private boolean isRunning = false;
 
   public TestOperaDriver() {
     super();
@@ -119,10 +130,20 @@ class TestOperaDriver extends OperaDriver {
 
   public TestOperaDriver(Capabilities capabilities) {
     super(capabilities);
+    isRunning = true;
   }
 
   public OperaRunner getRunner() {
     return runner;
+  }
+
+  public void quit() {
+    super.quit();
+    isRunning = false;
+  }
+
+  public boolean isRunning() {
+    return isRunning;
   }
 
 }
