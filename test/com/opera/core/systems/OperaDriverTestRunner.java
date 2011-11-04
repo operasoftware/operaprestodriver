@@ -42,38 +42,15 @@ import org.openqa.selenium.Platform;
  * a browser instance for determining the current product.
  *
  * To use this class, apply the <code>@RunWith(OperaDriverTestRunner.class)</code> annotation to
- * your class, or extend the {@link DriverTestCase} class.
+ * your class, or extend the {@link OperaDriverTestCase} class.
  *
  * @see {@link OperaProduct}, {@link Platform}
  * @author Andreas Tolf Tolfsen <andreastt@opera.com>
  */
 public class OperaDriverTestRunner extends BlockJUnit4ClassRunner {
 
-  /*
-  private Product currentProduct = Product.CORE;
-  private Platform currentPlatform = Platform.getCurrent();
-  */
-
   public OperaDriverTestRunner(Class<?> klass) throws InitializationError {
     super(klass);
-
-    /*
-    String requestedProduct = System.getenv("OPERA_PRODUCT");
-    if (requestedProduct == null || requestedProduct.isEmpty()) {
-      OperaDriver driver = new OperaDriver();
-      requestedProduct = driver.utils().getProduct();
-      driver.quit();
-    }
-
-    // TODO(andreastt): core builds currently only return "core-gogi", not including the profile name
-    if (requestedProduct != null && !requestedProduct.isEmpty()) {
-      try {
-        currentProduct = Product.valueOf(requestedProduct);
-      } catch (IllegalArgumentException e) {
-        // product not found
-      }
-    }
-    */
   }
 
   @Override

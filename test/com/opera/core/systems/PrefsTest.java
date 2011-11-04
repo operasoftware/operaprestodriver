@@ -20,7 +20,6 @@ import com.opera.core.systems.scope.protos.PrefsProtos.Pref;
 import com.opera.core.systems.scope.protos.PrefsProtos.Pref.Type;
 
 import org.junit.After;
-import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.openqa.selenium.WebDriverException;
@@ -37,10 +36,6 @@ import static org.junit.Assert.assertTrue;
  * @author Andreas Tolf Tolfsen <andreastt@opera.com>
  */
 public class PrefsTest extends OperaDriverTestCase {
-
-  @Before
-  public void setUp() throws Exception {
-  }
 
   /*
   * Resets all used preferences to their defaults.  Remember

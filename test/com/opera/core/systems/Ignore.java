@@ -31,6 +31,6 @@ public @interface Ignore {
 
   Platform[] platforms() default Platform.ANY;
 
-  String reason() default "Not supported by product yet";
+  String value() default "Not supported by product yet";
 
 }

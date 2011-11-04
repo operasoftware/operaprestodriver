@@ -57,7 +57,7 @@ public class CrashTest extends OperaDriverTestCase {
     assertTrue(driver.getRunner().isOperaRunning());
 
     try {
-      driver.get("http://t/core/bts/crashers/visual/CORE-34284/001.html");
+      driver.navigate().to("http://t/core/bts/crashers/visual/CORE-34284/001.html");
     } catch (CommunicationException e) {
     }
 
@@ -70,7 +70,7 @@ public class CrashTest extends OperaDriverTestCase {
     assertTrue(driver.getRunner().isOperaRunning());
 
     try {
-      driver.get("http://t/core/bts/crashers/visual/CORE-32224/001.html");
+      driver.navigate().to("http://t/core/bts/crashers/visual/CORE-32224/001.html");
     } catch (CommunicationException e) {
     }
 

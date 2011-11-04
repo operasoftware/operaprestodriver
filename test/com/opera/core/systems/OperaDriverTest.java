@@ -142,7 +142,7 @@ public class OperaDriverTest extends OperaDriverTestCase {
   }
 
   @Test
-  @Ignore(products = CORE, reason = "core does not reset port number if -debugproxy is ommitted")
+  @Ignore(products = CORE, value = "core does not reset port number if -debugproxy is ommitted")
   public void testDefaultPort() throws Exception {
     DesiredCapabilities c = new DesiredCapabilities();
     c.setCapability(OperaDriver.PORT, -1);
@@ -173,7 +173,7 @@ public class OperaDriverTest extends OperaDriverTestCase {
   }
 
   @Test
-  @Ignore(products = CORE, reason = "Once this is set the autotestmode profile no longer connects on 7001, breaking future tests")
+  @Ignore(products = CORE, value = "Once this is set the autotestmode profile no longer connects on 7001, breaking future tests")
   public void testSetPort() throws Exception {
     DesiredCapabilities c = new DesiredCapabilities();
     c.setCapability(OperaDriver.PORT, 9876);
@@ -208,6 +208,7 @@ public class OperaDriverTest extends OperaDriverTestCase {
   }
 
   @Test
+  @Ignore(products = CORE, value = "core does not support -pd")
   public void testSetProfile() throws Exception {
     if (Platform.getCurrent() != Platform.LINUX) return;
 
