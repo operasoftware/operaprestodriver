@@ -31,21 +31,22 @@ import org.openqa.selenium.Platform;
  *
  * Before a test run it will launch the default Opera using {@link OperaDriver} to determine the
  * current product's name.  You can then use <code>@Ignore(product = Product.CORE_SMARTPHONE)</code>
- * in your tests to ignore a certain product.  See {@link OperaProduct} for a full list of products.
+ * in your tests to ignore a certain product.  See {@link OperaProduct} for a full list of
+ * products.
  *
  * You may also utilize Selenium's {@link Platform} enum to ignore platforms/operating systems.  To
  * combine this with ignoring a product, an ignore rule (annotation) might look like <code>@Ignore({
  * product = Product.CORE_SMARTPHONE, platform = Platform.LINUX })</code>.
  *
  * You can specify the current product manually by setting the <code>OPERA_PRODUCT</code>
- * environment variable to a value defined in {@link OperaProduct}.  This will skip the step of creating
- * a browser instance for determining the current product.
+ * environment variable to a value defined in {@link OperaProduct}.  This will skip the step of
+ * creating a browser instance for determining the current product.
  *
  * To use this class, apply the <code>@RunWith(OperaDriverTestRunner.class)</code> annotation to
  * your class, or extend the {@link OperaDriverTestCase} class.
  *
- * @see {@link OperaProduct}, {@link Platform}
  * @author Andreas Tolf Tolfsen <andreastt@opera.com>
+ * @see {@link OperaProduct}, {@link Platform}
  */
 public class OperaDriverTestRunner extends BlockJUnit4ClassRunner {
 
@@ -70,8 +71,8 @@ public class OperaDriverTestRunner extends BlockJUnit4ClassRunner {
   }
 
   /**
-   * Determines whether a test should be ignored or not based on a JUnit ignore annotation rule.
-   * The check for this is mutually exclusive, meaning that if <em>either</em> the product or the
+   * Determines whether a test should be ignored or not based on a JUnit ignore annotation rule. The
+   * check for this is mutually exclusive, meaning that if <em>either</em> the product or the
    * platform is true, the test will be ignored.
    *
    * @param ignoreAnnotation a custom ignore annotation
@@ -88,7 +89,7 @@ public class OperaDriverTestRunner extends BlockJUnit4ClassRunner {
     }
 
     for (OperaProduct product : ignoreAnnotation.products()) {
-      if (OperaDriverTestCase.currentProduct.is(product)) {
+      if (product.is(OperaDriverTestCase.currentProduct)) {
         return true;
       }
     }

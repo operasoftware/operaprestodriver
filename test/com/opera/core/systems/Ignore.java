@@ -27,10 +27,10 @@ import java.lang.annotation.Target;
 @Target({ ElementType.TYPE, ElementType.METHOD })
 public @interface Ignore {
 
-  OperaProduct[] products() default OperaProduct.ALL;
+  OperaProduct[] products() default { OperaProduct.ALL };
 
-  Platform[] platforms() default Platform.ANY;
+  Platform[] platforms() default { Platform.ANY };
 
-  String value() default "Not supported by product yet";
+  String value() default ("Not supported by product yet");
 
 }
