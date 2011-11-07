@@ -454,8 +454,9 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     }
 
     gc();
-    // As this is an artificial page load we release all the held keys.
-    // Is the user click()s a link, any keys remain held.
+
+    // As this is an artificial page load we release all the held keys.  If the user clicks a link,
+    // any keys remain held.
     exec.releaseKeys();
 
     int activeWindowId = windowManager.getActiveWindowId();
@@ -892,23 +893,13 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     return toReturn;
   }
 
-  // FIXME when timeout has completed, send 'stop' command?
   public void waitForLoadToComplete() {
     if (useOperaIdle()) {
-      // new opera wait for page
-      services.waitForOperaIdle(OperaIntervals.PAGE_LOAD_TIMEOUT.getValue());
+      services.waitForOperaIdle(OperaIntervals.OPERA_IDLE_TIMEOUT.getValue());
     } else {
-
-      /*
-       * Sometimes we get here before the next page has even *started*
-       * loading, and so return too quickly. This sleep is enough to make
-       * sure readyState has been set to "loading".
-       */
-      try {
-        Thread.sleep(5);
-      } catch (InterruptedException e) {
-        Thread.currentThread().interrupt();
-      }
+      // Sometimes we get here before the next page has even *started* loading, and so return too
+      // quickly. This sleep is enough to make sure readyState has been set to "loading".
+      sleep(5);
 
       long endTime = System.currentTimeMillis() + OperaIntervals.PAGE_LOAD_TIMEOUT.getValue();
 
@@ -1098,9 +1089,9 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     return exec.getActionList();
   }
 
-  private static void sleep(long timeInMillis) {
+  private static void sleep(long ms) {
     try {
-      Thread.sleep(timeInMillis);
+      Thread.sleep(ms);
     } catch (InterruptedException e) {
       Thread.currentThread().interrupt();
     }
