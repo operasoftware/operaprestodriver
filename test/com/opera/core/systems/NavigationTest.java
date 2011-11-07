@@ -30,27 +30,27 @@ public class NavigationTest extends OperaDriverTestCase {
     getFixture("keys.html");
 
     driver.navigate().back();
-    assertTrue(driver.getCurrentUrl().indexOf("test.html") > 0);
+    assertTrue(driver.getCurrentUrl().contains("test.html"));
   }
 
   @Test
   public void testForward() {
     driver.navigate().forward();
-    assertTrue(driver.getCurrentUrl().indexOf("keys.html") > 0);
+    assertTrue(driver.getCurrentUrl().contains("keys.html"));
   }
 
   @Test
   public void testBack2() {
     driver.navigate().back();
     driver.navigate().back();
-    assertTrue(driver.getCurrentUrl().indexOf("javascript.html") > 0);
+    assertTrue(driver.getCurrentUrl().contains("javascript.html"));
   }
 
   @Test
   public void testForward2() {
     driver.navigate().forward();
     driver.navigate().forward();
-    assertTrue(driver.getCurrentUrl().indexOf("keys.html") > 0);
+    assertTrue(driver.getCurrentUrl().contains("keys.html"));
   }
 
   @Test
@@ -60,8 +60,7 @@ public class NavigationTest extends OperaDriverTestCase {
     // Wait for redirect
     Thread.sleep(1000);
 
-    assertEquals("http://t/core/bts/javascript/CORE-26410/001-3.php",
-                 driver.getCurrentUrl());
+    assertEquals("http://t/core/bts/javascript/CORE-26410/001-3.php", driver.getCurrentUrl());
   }
 
 }
