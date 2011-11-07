@@ -21,7 +21,6 @@ import com.opera.core.systems.model.ScreenShotReply;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.OutputType;
@@ -183,8 +182,8 @@ public class ScreenshotTest extends OperaDriverTestCase {
   }
 
   // Can cause problems on Windows, so moved to last
-  @Ignore("We don't support taking single element screenshots of plugins")
   @Test
+  @Ignore("We don't support taking single element screenshots of plugins")
   public void testFlash() throws Exception {
     getFixture("flash.html");
     OperaWebElement img = (OperaWebElement) driver.findElement(By.id("img_container"));
@@ -210,7 +209,7 @@ public class ScreenshotTest extends OperaDriverTestCase {
   }
 
   @Test
-  @Ignore("Opera problem. Areas outside current viewport are black.")
+  @Ignore("Opera problem: Areas outside current viewport are black")
   public void testFullScreenshot() throws Exception {
     getFixture("tall.html");
     File file = driver.getScreenshotAs(OutputType.FILE);

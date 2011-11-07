@@ -22,13 +22,12 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-// FIXME make tests pass
+// TODO(stuartk): Make tests pass
 public class CrashTest extends OperaDriverTestCase {
 
   @BeforeClass
@@ -41,13 +40,11 @@ public class CrashTest extends OperaDriverTestCase {
 
   @Before
   public void setUp() throws Exception {
-    //super.setUpBeforeClass();
     setUpBeforeClass();
   }
 
   @After
   public void tearDown() throws Exception {
-    //super.tearDownAfterClass();
     tearDownAfterClass();
     // Make sure Opera is gone
     Runtime.getRuntime().exec("kill `pgrep opera").waitFor();
@@ -61,6 +58,7 @@ public class CrashTest extends OperaDriverTestCase {
     try {
       driver.navigate().to("http://t/core/bts/crashers/visual/CORE-34284/001.html");
     } catch (CommunicationException e) {
+      // nothing
     }
 
     assertFalse(driver.getRunner().isOperaRunning());
@@ -74,6 +72,7 @@ public class CrashTest extends OperaDriverTestCase {
     try {
       driver.navigate().to("http://t/core/bts/crashers/visual/CORE-32224/001.html");
     } catch (CommunicationException e) {
+      // nothing
     }
 
     assertFalse(driver.getRunner().isOperaRunning());
