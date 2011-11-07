@@ -30,27 +30,27 @@ public class NavigationTest extends OperaDriverTestCase {
     getFixture("keys.html");
 
     driver.navigate().back();
-    assertTrue(driver.getCurrentUrl().contains("test.html"));
+    assertTrue(driver.getCurrentUrl().endsWith("test.html"));
   }
 
   @Test
   public void testForward() {
     driver.navigate().forward();
-    assertTrue(driver.getCurrentUrl().contains("keys.html"));
+    assertTrue(driver.getCurrentUrl().endsWith("keys.html"));
   }
 
   @Test
   public void testBack2() {
     driver.navigate().back();
     driver.navigate().back();
-    assertTrue(driver.getCurrentUrl().contains("javascript.html"));
+    assertTrue(driver.getCurrentUrl().endsWith("javascript.html"));
   }
 
   @Test
   public void testForward2() {
     driver.navigate().forward();
     driver.navigate().forward();
-    assertTrue(driver.getCurrentUrl().contains("keys.html"));
+    assertTrue(driver.getCurrentUrl().endsWith("keys.html"));
   }
 
   @Test
