@@ -24,8 +24,6 @@ import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.net.URL;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
