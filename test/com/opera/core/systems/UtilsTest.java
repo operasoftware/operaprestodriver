@@ -17,7 +17,6 @@ limitations under the License.
 package com.opera.core.systems;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.MethodRule;
@@ -26,6 +25,7 @@ import org.junit.runners.model.Statement;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.openqa.selenium.Platform.WINDOWS;
 
 /**
  * @author Andreas Tolf Tolfsen <andreastt@opera.com>
@@ -36,7 +36,8 @@ public class UtilsTest extends OperaDriverTestCase {
   @Rule
   public MethodRule random = new MethodRule() {
     public Statement apply(Statement base, FrameworkMethod method, Object target) {
-      if (driver.services.getCoreUtils().hasMetaInformation()) {  // If meta info is exposed, return tests
+      if (driver.services.getCoreUtils()
+          .hasMetaInformation()) {  // If meta info is exposed, return tests
         return base;
       } else {
         return new Statement() {  // otherwise return an empty statement -> test doesn't run
@@ -49,56 +50,40 @@ public class UtilsTest extends OperaDriverTestCase {
     }
   };
 
-  private String coreVersion;
-  private String os;
-  private String product;
-  private String binaryPath;
-  private String userAgent;
-  private int pid;
-
-  @Before
-  public void setUp() {
-    coreVersion = driver.utils().getCoreVersion();
-    os = driver.utils().getOS();
-    product = driver.utils().getProduct();
-    binaryPath = driver.utils().getBinaryPath();
-    userAgent = driver.utils().getUserAgent();
-    pid = driver.utils().getPID();
-  }
-
   @Test
   public void testCoreVersion() {
-    assertTrue(coreVersion.matches("\\d+\\.\\d+\\.\\d+"));
+    assertTrue(driver.utils().getCoreVersion().matches("\\d+\\.\\d+\\.\\d+"));
   }
 
   @Test
   public void testOS() {
-    Assert.assertNotNull(os);
+    Assert.assertNotNull(driver.utils().getOS());
   }
 
   @Test
   public void testProductIsNotUnknown() {
-    assertFalse(product.contains("unknown"));
+    assertFalse(driver.utils().getProduct().contains("unknown"));
   }
 
   @Test
   public void testProductIsKnown() {
-    assertTrue(product.matches("core-gogi|desktop"));
+    assertTrue(driver.utils().getProduct().matches("core-gogi|desktop"));
   }
 
   @Test
   public void testBinaryPath() {
-    Assert.assertNotNull(binaryPath);
+    Assert.assertNotNull(driver.utils().getBinaryPath());
   }
 
   @Test
   public void testUserAgent() {
-    assertTrue(userAgent.matches("Opera/\\d+\\.\\d+.+"));
+    assertTrue(driver.utils().getUserAgent().matches("Opera/\\d+\\.\\d+.+"));
   }
 
   @Test
+  @Ignore(platforms = WINDOWS)
   public void testPID() {
-    assertTrue(pid > 0);
+    assertTrue(driver.utils().getPID() > 0);
   }
 
 }
