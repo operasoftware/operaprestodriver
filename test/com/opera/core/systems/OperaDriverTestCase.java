@@ -31,6 +31,15 @@ import java.io.File;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+/**
+ * You can extend OperaDriverTestCase in your test case to gain access to convenience methods
+ * related to finding the current product used, auto-starting Opera before the test, quitting Opera
+ * after the test, and gaining access to the fixtures directory.
+ *
+ * It also holds an extension of {@link OperaDriver}, called {@link TestOperaDriver}, that exposes
+ * the {@link OperaRunner} and a method for determining whether the constructor and
+ * {@link OperaDriver#quit()} methods has been called, {@link TestOperaDriver#isRunning()}.
+ */
 @RunWith(OperaDriverTestRunner.class)
 public abstract class OperaDriverTestCase {
 
@@ -61,7 +70,7 @@ public abstract class OperaDriverTestCase {
       try {
         currentProduct = OperaProduct.valueOf(requestedProduct);
       } catch (IllegalArgumentException e) {
-        // product not found
+        // product not found, defaulting to CORE
       }
     }
 
