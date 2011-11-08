@@ -61,6 +61,25 @@ public abstract class OperaDriverTestCase {
     driver = new TestOperaDriver(caps);
     assertNotNull(driver);
 
+    initProduct();
+    initFixtures();
+  }
+
+  @AfterClass
+  public static void tearDownAfterClass() throws Exception {
+    if (driver.isRunning()) {
+      driver.quit();
+    }
+  }
+
+  /**
+   * Fetch the product from the connected driver.
+   */
+  protected static void initProduct() {
+    if (driver == null || !driver.isRunning()) {
+      return;
+    }
+
     String requestedProduct = System.getenv("OPERA_PRODUCT");
     if (requestedProduct == null || requestedProduct.isEmpty()) {
       requestedProduct = driver.utils().getProduct();
@@ -72,15 +91,6 @@ public abstract class OperaDriverTestCase {
       } catch (IllegalArgumentException e) {
         // product not found, defaulting to CORE
       }
-    }
-
-    initFixtures();
-  }
-
-  @AfterClass
-  public static void tearDownAfterClass() throws Exception {
-    if (driver.isRunning()) {
-      driver.quit();
     }
   }
 

@@ -28,6 +28,7 @@ import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.Statement;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
+import static com.opera.core.systems.OperaProduct.DESKTOP;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -64,6 +65,7 @@ public class IdleTest extends OperaDriverTestCase {
     caps.setCapability("opera.idle", true);
 
     driver = new TestOperaDriver(caps);
+    initProduct();
     initFixtures();
   }
 
@@ -218,6 +220,8 @@ public class IdleTest extends OperaDriverTestCase {
   /* Begin testing OperaIdle conditions */
 
   @Test
+  @Ignore
+  //@Ignore(products = DESKTOP, value = "DSK-347592")  // TODO(andreastt): Not working because desktop returns "CORE"
   public void testEcmascriptLoop() throws Exception {
     start();
     getFixture("idle/ecmascript-loop.html");
