@@ -74,8 +74,7 @@ public class IdleTest extends OperaDriverTestCase {
 
   @After
   public void tearDown() {
-    // Make sure the test hasn't passed because we hit the page load
-    // timeout instead of using OperaIdle
+    // Make sure the test hasn't passed because we hit the page load timeout instead of using idle
     assertTrue("Took less than Idle timeout", end - start < timeout);
   }
 
@@ -129,7 +128,7 @@ public class IdleTest extends OperaDriverTestCase {
   @Ignore
   public void testRefresh() throws Exception {
     getFixture("test.html");
-    ((OperaWebElement) driver.findElementById("input_email")).sendKeys("before refresh");
+    driver.findElementById("input_email").sendKeys("before refresh");
 
     start();
     driver.navigate().refresh();
@@ -183,7 +182,7 @@ public class IdleTest extends OperaDriverTestCase {
 
     // Focus textbox
     start();
-    ((OperaWebElement) driver.findElementById("one")).sendKeys("\n");
+    driver.findElementById("one").sendKeys("\n");
     stop();
 
     // +"?" for submitted query string
@@ -196,7 +195,7 @@ public class IdleTest extends OperaDriverTestCase {
 
     // Check checkbox, fires a submit even on the form
     start();
-    ((OperaWebElement) driver.findElementById("check")).click();
+    driver.findElementById("check").click();
     stop();
 
     // +"?" for submitted query string
@@ -209,7 +208,7 @@ public class IdleTest extends OperaDriverTestCase {
 
     // Check checkbox, fires a submit even on the form
     start();
-    ((OperaWebElement) driver.findElementById("test_form")).submit();
+    driver.findElementById("test_form").submit();
     stop();
 
     // +"?" for submitted query string
