@@ -31,6 +31,10 @@ public class OperaArgument {
     private OperaArgumentSign(String sign) {
       this.sign = sign;
     }
+
+    public String getValue() {
+      return sign;
+    }
   }
 
   public OperaArgument(String argument) {

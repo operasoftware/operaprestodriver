@@ -3,6 +3,7 @@ package com.opera.core.systems;
 import com.google.common.base.Joiner;
 
 import com.opera.core.systems.arguments.OperaArgument;
+import com.opera.core.systems.arguments.OperaArgument.OperaArgumentSign;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +12,7 @@ import java.util.regex.Pattern;
 
 public class OperaArguments implements com.opera.core.systems.arguments.interfaces.OperaArguments {
 
-  public static String DEFAULT_SIGN = "-";
+  public static String DEFAULT_SIGN = OperaArgumentSign.POSIX_SIGN.getValue();
 
   protected List<OperaArgument> arguments = new ArrayList<OperaArgument>();
 
