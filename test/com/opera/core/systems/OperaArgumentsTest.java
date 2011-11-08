@@ -89,6 +89,25 @@ public class OperaArgumentsTest {
   }
 
   @Test
+  public void testParsingComplexString() {
+    OperaArguments parsed = OperaArguments.parse("-foo bar -baz=bah -path /path/to/somewhere -anotherpath=C:\\another\\path -a==abc \\b hei --c \"hei\"");
+    assertEquals("foo", parsed.get(0).getArgument());
+    assertEquals("bar", parsed.get(0).getValue());
+    assertEquals("baz", parsed.get(1).getArgument());
+    assertEquals("bah", parsed.get(1).getValue());
+    assertEquals("path", parsed.get(2).getArgument());
+    assertEquals("/path/to/somewhere", parsed.get(2).getValue());
+    assertEquals("anotherpath", parsed.get(3).getArgument());
+    assertEquals("C:\\another\\path", parsed.get(3).getValue());
+    assertEquals("a", parsed.get(4).getArgument());
+    assertEquals("=abc", parsed.get(4).getValue());
+    assertEquals("b", parsed.get(5).getArgument());
+    assertEquals("hei", parsed.get(5).getValue());
+    assertEquals("c", parsed.get(6).getArgument());
+    assertEquals("hei", parsed.get(6).getValue());
+  }
+
+  @Test
   public void testMerge() {
     OperaArguments extraArguments = new OperaArguments();
     extraArguments.add("abc", "def");

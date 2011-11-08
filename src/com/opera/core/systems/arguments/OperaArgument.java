@@ -23,7 +23,7 @@ package com.opera.core.systems.arguments;
 public class OperaArgument {
 
   private String argument;
-  private String value = "";
+  private String value;
 
   /**
    * Holds definitions for prepended signs for arguments in various styles.  Available signs are
@@ -46,7 +46,7 @@ public class OperaArgument {
     /**
      * The WINDOWS sign consists of a slash, <var>/</var>.
      */
-    WINDOWS_SIGN("/");
+    WINDOWS_SIGN("\\");
 
     private final String sign;
 
@@ -101,7 +101,7 @@ public class OperaArgument {
   /**
    * Gets the value of the argument if it exists.
    *
-   * @return value of argument, empty string if there is no value
+   * @return value of argument, null if there is no value
    */
   public String getValue() {
     return value;
@@ -133,7 +133,7 @@ public class OperaArgument {
    * @see OperaArgumentSign
    */
   private static Boolean hasSwitch(String key, String sign) {
-    return key.substring(0, sign.length()).equals(sign);
+    return (key.length() > sign.length()) && key.substring(0, sign.length()).equals(sign);
   }
 
 }

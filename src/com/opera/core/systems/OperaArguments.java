@@ -67,11 +67,11 @@ public class OperaArguments implements com.opera.core.systems.arguments.interfac
       return parsed;
     }
 
-    Pattern p = Pattern.compile("(-{1,2}[\\w]+)\\s*=*([\\w]*)");
+    Pattern p = Pattern.compile("(-{1,2}|\\\\?)([\\w]+)(\\s|=)?\"?([\\w:=\\.\\/\\\\]*)\"?");
     Matcher m = p.matcher(string);
 
     while (m.find()) {
-      parsed.add(m.group(1), m.group(2));
+      parsed.add(m.group(2), m.group(4));
     }
 
     return parsed;
