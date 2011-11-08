@@ -82,8 +82,7 @@ public class OperaRunnerSettings
   }
 
   public void setDisplay(Integer display) throws UnsupportedOperationException {
-    if (Platform.getCurrent() != Platform.LINUX &&
-        Platform.getCurrent() != Platform.UNIX) {
+    if (!Platform.getCurrent().is(Platform.LINUX)) {
       throw new UnsupportedOperationException(
           "Unsupported operating system: " + Platform.getCurrent());
     }

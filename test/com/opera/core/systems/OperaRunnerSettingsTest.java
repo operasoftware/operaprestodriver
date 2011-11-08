@@ -111,7 +111,7 @@ public class OperaRunnerSettingsTest {
 
   @Test
   public void testProduct() {
-    String product = "core-gogi";
+    String product = "core-desktop";
     settings.setProduct(product);
     assertEquals(product, settings.getProduct());
   }

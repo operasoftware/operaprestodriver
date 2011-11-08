@@ -44,7 +44,7 @@ public class OperaRunnerTest {
   public void testConstructionWithProductCore() {
     runner = null;  // Cleaning up from previous test
 
-    settings.setProduct("core-gogi");
+    settings.setProduct("core-desktop");
     runner = new OperaRunner(settings);
     assertNotNull(runner);
     assertTrue(runner.settings.getArguments() instanceof OperaCoreArguments);
