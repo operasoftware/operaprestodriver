@@ -64,6 +64,9 @@ public class StpConnectionListener implements SocketListener {
     super.finalize();
   }
 
+  /**
+   * Shuts down and cleans up the STP connection to Opera.
+   */
   public void stop() {
     if (server == null) {
       return;
@@ -80,6 +83,11 @@ public class StpConnectionListener implements SocketListener {
     }
   }
 
+  /**
+   * Starts the STP connection listener.
+   *
+   * @throws IOException if unable to bind to address
+   */
   public void start() throws IOException {
     server = ServerSocketChannel.open();
     server.configureBlocking(false);
@@ -87,9 +95,6 @@ public class StpConnectionListener implements SocketListener {
     server.socket().bind(new InetSocketAddress(port));
 
     monitor.add(server, this, SelectionKey.OP_ACCEPT);
-
-    // logger.info("webdriver-opera " + "{VERSION}" +
-    // " is ready to accept connections on port " + port);
 
     // Print a message when we are waiting to connect manually
     if (manualConnect) {
@@ -111,7 +116,7 @@ public class StpConnectionListener implements SocketListener {
     return true;
   }
 
-  // FIXME ?
+  // TODO: Not implemented?
   public boolean canWrite(SelectableChannel ch) throws IOException {
     return false;
   }
