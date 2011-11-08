@@ -19,17 +19,27 @@ package com.opera.core.systems.arguments;
 import com.opera.core.systems.OperaArguments;
 
 /**
- * Handles a list of strings/arguments for the Opera core-gogi binary.
+ * Handles a list of strings/arguments for the Opera core binary.
  *
  * @author Andreas Tolf Tolfsen <andreastt@opera.com>
  */
 public class OperaCoreArguments extends OperaArguments implements
                                                        com.opera.core.systems.arguments.interfaces.OperaArguments {
 
+  /**
+   * The -autotestmode argument is always added to the arguments list passed to the browser.  This
+   * enabled Proxy Auto Connect and (in Desktop) prevents loading of Speed Dial (which is not
+   * script-injectable), the license dialogue, the crash dialogue amongst other things.
+   *
+   * We also read in environmental variable OPERA_ARGS before everything else.  These will typically
+   * later be combined with the arguments set in {@link org.openqa.selenium.remote.DesiredCapabilities}
+   * and passed on to the browser.
+   */
   public OperaCoreArguments() {
     // TODO(andreastt): gogi doesn't support -pd, and for some reason this must be sent last
     //OperaArgument argument = new OperaArgument("autotestmode");
     //super.arguments.add(argument);
+    merge(parse(System.getenv("OPERA_ARGS")));
   }
 
   public static OperaArguments parse(String string) {
