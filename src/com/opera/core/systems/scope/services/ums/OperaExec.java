@@ -43,6 +43,7 @@ import com.opera.core.systems.scope.services.IOperaExec;
 import com.opera.core.systems.util.CaseInsensitiveStringSet;
 import com.opera.core.systems.util.VersionUtil;
 
+import org.openqa.selenium.UnsupportedCommandException;
 import org.openqa.selenium.WebDriverException;
 
 import java.util.ArrayList;
@@ -133,10 +134,9 @@ public class OperaExec extends AbstractService implements IOperaExec {
     for (int i = 0; i < using.length(); ++i) {
       char ch = using.charAt(i);
       if (Character.isUpperCase(ch)) {
-        // If shift is already pressed down, we don't need to press it for
-        // capitals. We don't release it if we're typing lower-case, because
-        // if the user has pressed shift and then types lower-case presumably
-        // they want to type upper-case characters.
+        // If shift is already pressed down, we don't need to press it for capitals.  We don't
+        // release it if we're typing lower-case, because if the user has pressed shift and then
+        // types lower-case presumably they want to type upper-case characters.
         boolean releaseShift = false;
 
         if (!keyIsPressed(OperaKeys.SHIFT.getValue())) {
@@ -235,13 +235,13 @@ public class OperaExec extends AbstractService implements IOperaExec {
     // type.setSpace("preserve");
     builder.addActionList(actionBuilder);
     if (executeCommand(ExecCommand.EXEC, builder) == null) {
-      throw new WebDriverException("Unexpected error while calling action : " + using);
+      throw new WebDriverException("Unexpected error while calling action: " + using);
     }
   }
 
   public void action(String using, int data, String dataString, String dataStringParam) {
     if (!actions.contains(using)) {
-      throw new WebDriverException("The requested action is not supported : " + using);
+      throw new UnsupportedCommandException("The requested action is not supported: " + using);
     }
 
     ActionList.Builder builder = ActionList.newBuilder();
@@ -254,7 +254,7 @@ public class OperaExec extends AbstractService implements IOperaExec {
     // type.setSpace("preserve");
     builder.addActionList(actionBuilder);
     if (executeCommand(ExecCommand.EXEC, builder) == null) {
-      throw new WebDriverException("Unexpected error while calling action : " + using);
+      throw new WebDriverException("Unexpected error while calling action: " + using);
     }
   }
 
@@ -289,8 +289,6 @@ public class OperaExec extends AbstractService implements IOperaExec {
   }
 
   public ScreenShotReply containsColor(Canvas canvas, long timeout, OperaColors... colors) {
-    // command SetupScreenWatcher(ScreenWatcher) returns (ScreenWatcherResult) = 3
-
     ScreenWatcher.Builder builder = ScreenWatcher.newBuilder();
     Area.Builder areaBuilder = Area.newBuilder();
 
@@ -320,7 +318,7 @@ public class OperaExec extends AbstractService implements IOperaExec {
   }
 
   /**
-   * Executes a screenwatcher with the given timeout and returns the result
+   * Executes a screenwatcher with the given timeout and returns the result.
    */
   private ScreenWatcherResult executeScreenWatcher(ScreenWatcher.Builder builder, int timeout) {
     if (timeout <= 0) {
