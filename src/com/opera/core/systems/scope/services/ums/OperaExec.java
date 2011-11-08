@@ -121,6 +121,7 @@ public class OperaExec extends AbstractService implements IOperaExec {
     if (using == null) {
       throw new NullPointerException("You must provide something to type");
     }
+
     if (using.length() == 0) {
       throw new IllegalArgumentException("Can't type empty string");
     }
@@ -192,15 +193,16 @@ public class OperaExec extends AbstractService implements IOperaExec {
     }
     /*}*/
 
-    // If double-clicking, wait some time after executing the mouse action
-    // so that Opera doesn't consider two consecutive doubleClick()'s a
-    // quadruple-click.
+    // If double-clicking, wait some time after executing the mouse action so that Opera doesn't
+    // consider two consecutive doubleClick()'s a quadruple-click.
     //
-    // TODO: Also a problem if single-clicking multiple times in a row?
+    // TODO(andreastt): Also a problem if single-clicking multiple times in a row?
+    // TODO(andreastt): Introduce actionBuilder.setCount(y) instead
     if (count > 1) {
       try {
         Thread.sleep(OperaIntervals.MULTIPLE_CLICK_SLEEP.getValue());
       } catch (InterruptedException e) {
+        // nothing
       }
     }
   }
@@ -256,7 +258,7 @@ public class OperaExec extends AbstractService implements IOperaExec {
     }
   }
 
-  // FIXME sending params, we have commas, space, what?
+  // TODO: Sending params, we have commas, spaces, what?
   public void action(String using, String... params) {
     action(using, services.getWindowManager().getActiveWindowId(), params);
   }
