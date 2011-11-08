@@ -56,7 +56,7 @@ import java.util.logging.Logger;
  * The exec service handles user interactions such as key presses, mouse clicks, screenshot grabbing
  * and executing actions on Opera.
  *
- * @author Deniz Turkoglu <denizt@opera.com>, Andreas Tolf Tolfsen <andreastt@opera.com>
+ * @author Deniz Turkoglu <dturkoglu@opera.com>, Andreas Tolf Tolfsen <andreastt@opera.com>
  */
 public class OperaExec extends AbstractService implements IOperaExec {
 
