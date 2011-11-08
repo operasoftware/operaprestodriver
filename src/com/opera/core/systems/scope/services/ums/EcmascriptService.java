@@ -231,7 +231,7 @@ public class EcmascriptService extends AbstractEcmascriptService implements
       return eval(using, variables);
     } else if (retries >= OperaIntervals.SCRIPT_RETRY.getValue()) {
       resetCounters();
-      throw new WebDriverException("Internal error");
+      throw new WebDriverException("No response on executing JS command");
     }
 
     resetCounters();
@@ -256,8 +256,7 @@ public class EcmascriptService extends AbstractEcmascriptService implements
   public Integer getObject(String using) {
     EvalResult reply = parseEvalData(eval(using));
     return (reply.getValue().getType().equals(Type.OBJECT)) ? reply.getValue().getObject()
-        .getObjectID()
-                                                            : null;
+        .getObjectID() : null;
   }
 
 

@@ -324,7 +324,6 @@ public class EcmaScriptDebugger extends AbstractEcmascriptService implements
    * string.
    */
   protected Object parseEvalReply(EvalResult result) {
-
     String status = result.getStatus();
 
     if (!status.equals("completed")) {
