@@ -337,7 +337,7 @@ public class OperaLauncherRunner extends OperaRunner
     } catch (SocketTimeoutException e) {
       throw new OperaRunnerException("Could not get screenshot from launcher (Socket Timeout)", e);
     } catch (IOException e) {
-      throw new OperaRunnerException("Could not get screenshot from launcher with exception:" + e,
+      throw new OperaRunnerException("Could not get screenshot from launcher with exception: " + e,
                                      e);
     }
 
