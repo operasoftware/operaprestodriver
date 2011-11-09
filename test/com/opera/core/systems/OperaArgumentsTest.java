@@ -90,7 +90,7 @@ public class OperaArgumentsTest {
 
   @Test
   public void testParsingComplexString() {
-    OperaArguments parsed = OperaArguments.parse("-foo bar -baz=bah -path /path/to/somewhere -anotherpath=C:\\another\\path -a==abc \\b hei --c \"hei\"");
+    OperaArguments parsed = OperaArguments.parse("-foo bar -baz=bah -path /path/to/somewhere -anotherpath=C:\\another\\path -a==abc /b hei --c \"hei\"");
     assertEquals("foo", parsed.get(0).getArgument());
     assertEquals("bar", parsed.get(0).getValue());
     assertEquals("baz", parsed.get(1).getArgument());

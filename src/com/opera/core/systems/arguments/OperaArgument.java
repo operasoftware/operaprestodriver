@@ -46,7 +46,7 @@ public class OperaArgument {
     /**
      * The WINDOWS sign consists of a slash, <var>/</var>.
      */
-    WINDOWS_SIGN("\\");
+    WINDOWS_SIGN("/");
 
     private final String sign;
 
