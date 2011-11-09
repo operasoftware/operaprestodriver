@@ -24,6 +24,7 @@ public class OperaRunnerTest {
   @Before
   public void beforeEach() {
     settings = new OperaRunnerSettings();
+    runner = null;
   }
 
   @Test
@@ -42,8 +43,6 @@ public class OperaRunnerTest {
 
   @Test
   public void testConstructionWithProductCore() {
-    runner = null;  // Cleaning up from previous test
-
     settings.setProduct("core-desktop");
     runner = new OperaRunner(settings);
     assertNotNull(runner);
@@ -52,8 +51,6 @@ public class OperaRunnerTest {
 
   @Test
   public void testConstructionWithProductDesktop() {
-    runner = null;  // Cleaning up from previous test
-
     settings.setProduct("desktop");
     runner = new OperaRunner(settings);
     assertNotNull(runner);
@@ -62,8 +59,6 @@ public class OperaRunnerTest {
 
   @Test
   public void testConstructionWithProfile() {
-    runner = null;  // Cleaning up from previous test
-
     String profile = "/my/profile";
     settings.setProfile(profile);
     runner = new OperaRunner(settings);
@@ -73,8 +68,6 @@ public class OperaRunnerTest {
 
   @Test
   public void testConstructionWithPort() {
-    runner = null;  // Cleaning up from previous test
-
     settings.setPort(0);
     runner = new OperaRunner(settings);
     assertNotNull(runner);
@@ -83,8 +76,6 @@ public class OperaRunnerTest {
 
   @Test
   public void testConstructionWithArguments() {
-    runner = null;  // Cleaning up from previous test
-
     OperaArguments arguments = new OperaArguments();
     arguments.add("foo");
     arguments.add("bar", "bah");
