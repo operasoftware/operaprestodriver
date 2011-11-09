@@ -262,8 +262,6 @@ public class OperaLauncherRunner implements OperaRunner {
   }
 
   public boolean isOperaRunning(int processId) {
-    logger.finer("Getting Opera's status from launcher");
-
     try {
       LauncherStatusRequest.Builder request = LauncherStatusRequest.newBuilder();
       if (processId > 0) {
@@ -272,6 +270,8 @@ public class OperaLauncherRunner implements OperaRunner {
 
       ResponseEncapsulation res = launcherProtocol.sendRequest(
           MessageType.MSG_STATUS, request.build().toByteArray());
+      logger.finer("Getting Opera's status from launcher: " + res.getResponse().toString());
+
       return handleStatusMessage(res.getResponse()) == StatusType.RUNNING;
     } catch (IOException e) {
       throw new OperaRunnerException("Could not get state of Opera", e);
