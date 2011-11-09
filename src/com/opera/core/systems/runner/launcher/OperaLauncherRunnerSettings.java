@@ -24,6 +24,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.logging.Logger;
 
@@ -246,23 +247,12 @@ public class OperaLauncherRunnerSettings extends OperaRunnerSettings {
    *
    * @param fis the input stream to use
    * @return a byte array of the MD5 hash
-   * @throws java.security.NoSuchAlgorithmException
-   *          if MD5 is not available
+   * @throws NoSuchAlgorithmException if MD5 is not available
+   * @throws IOException              if an I/O error occurs
    */
-  private static byte[] md5(InputStream fis) throws Exception {
-    byte[] buffer = new byte[1024];
-    MessageDigest complete = MessageDigest.getInstance("MD5");
-
-    int numRead;
-    do {
-      numRead = fis.read(buffer);
-      if (numRead > 0) {
-        complete.update(buffer, 0, numRead);
-      }
-    } while (numRead != -1);
-    fis.close();
-
-    return complete.digest();
+  private static byte[] md5(InputStream fis) throws NoSuchAlgorithmException, IOException {
+    return ByteStreams.getDigest(ByteStreams.newInputStreamSupplier(ByteStreams.toByteArray(fis)),
+                                 MessageDigest.getInstance("MD5"));
   }
 
   /**
@@ -270,11 +260,11 @@ public class OperaLauncherRunnerSettings extends OperaRunnerSettings {
    *
    * @param file file to compute a hash on
    * @return a byte array of the MD5 hash
-   * @throws java.io.FileNotFoundException if file cannot be found
-   * @since v0.8
+   * @throws IOException              if file cannot be found
+   * @throws NoSuchAlgorithmException if MD5 is not available
    */
-  private static byte[] md5(File file) throws Exception {
-    return md5(new FileInputStream(file));
+  private static byte[] md5(File file) throws NoSuchAlgorithmException, IOException {
+    return Files.getDigest(file, MessageDigest.getInstance("MD5"));
   }
 
 }
