@@ -49,7 +49,7 @@ public class OperaLauncherRunnerSettings extends OperaRunnerSettings {
     if (launcher.exists() && launcher.isFile() && launcher.canExecute()) {
       this.launcher = launcher;
     } else {
-      throw new OperaRunnerException("No such file: " + launcher);
+      throw new OperaRunnerException("Invalid launcher: " + launcher);
     }
   }
 
