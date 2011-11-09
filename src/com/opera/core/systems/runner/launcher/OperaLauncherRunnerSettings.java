@@ -130,20 +130,18 @@ public class OperaLauncherRunnerSettings extends OperaRunnerSettings {
 
     // Copy the launcher if it doesn't exist or if the current launcher on the system doesn't match
     // the one bundled with OperaDriver (launcher needs to be upgraded).
-    if (!targetLauncher.exists()) {
+    if (targetLauncher.exists()) {
+      logger.fine("Old launcher detected, upgrading");
+      try {
+        copy = !Arrays.equals(md5(targetLauncher), md5(res.openStream()));
+      } catch (NoSuchAlgorithmException e) {
+        throw new OperaRunnerException("Algorithm is not available in your environment: " + e);
+      } catch (IOException e) {
+        throw new OperaRunnerException("Unable to open stream or file: " + e);
+      }
+    } else {
       logger.fine("No launcher found, copying");
       copy = true;
-    } else {
-      try {
-        if (res != null) {
-          copy = !Arrays.equals(md5(targetLauncher), md5(res.openStream()));
-        } else {
-          copy = !Arrays.equals(md5(targetLauncher), md5(sourceLauncher));
-        }
-      } catch (Exception e) {
-        logger.fine("Old launcher detected, upgrading");
-        copy = true;
-      }
     }
 
     if (copy) {
@@ -156,7 +154,7 @@ public class OperaLauncherRunnerSettings extends OperaRunnerSettings {
           Files.touch(targetLauncher);
         }
 
-        is = (res != null) ? res.openStream() : new FileInputStream(sourceLauncher);
+        is = res.openStream();
         os = new FileOutputStream(targetLauncher);
 
         ByteStreams.copy(is, os);
@@ -176,7 +174,7 @@ public class OperaLauncherRunnerSettings extends OperaRunnerSettings {
       logger.fine("New launcher copied to " + targetLauncher.getAbsolutePath());
     }
 
-    if (copy && targetLauncher != null) {
+    if (copy) {
       makeLauncherExecutable(targetLauncher);
     }
 
