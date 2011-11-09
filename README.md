@@ -188,4 +188,4 @@ Known issues
 
 * Problems with Operas with IME feature enabled (Opera Mobile, Android)
 * No support for Opera Mini
-* Issues with JavaScript alert/popup dialogues
+* No support for JavaScript alert/popup dialogues
