@@ -105,7 +105,7 @@ class to specify settings for OperaDriver.  The capabilities we support are:
 | __opera.binary__            | String   | null        | Path to the Opera binary to use.  If not specified, OperaDriver will guess the path to your Opera installation.
 | __opera.arguments__         | String   | null        | Arguments to pass on to Opera, separated by spaces.  See `opera -help` for available command-line arguments.
 | __opera.host__              | String   | "127.0.0.1" | The host Opera should connect to.  Unless you're starting Opera manually you won't need this.
-| __opera.port__              | Integer  | 7001        | The port Opera should connect to.  0 = Random port, -1 = Opera default (for use with Opera < 12).
+| __opera.port__              | Integer  | 7001        | The port Opera should connect to.  0 = Random port, -1 = Opera default (port 7001) (for use with Opera < 12).
 | __opera.launcher__          | String   | null        | Absolute path to the launcher binary to use.  The launcher is a gateway between OperaDriver and the Opera browser, and is being used for controlling and monitoring the binary, and taking external screenshots.  If left blank, OperaDriver will use the launcher supplied with the package.
 | __opera.profile__           | String   | null        | Directory to use for the Opera profile.  If null a random temporary directory is used.  If "", an empty string, then the default autotest profile directory is used.
 | __opera.idle__              | Boolean  | false       | Whether to use Opera's alternative implicit wait implementation.  It will use an in-browser heuristic to guess when a page has finished loading,allowing us to determine with great accuracy whether there are any planned events in the document.  This functionality is useful for very simple test cases, but not designed for real-world testing.  It is disabled by default.
@@ -114,7 +114,7 @@ class to specify settings for OperaDriver.  The capabilities we support are:
 | __opera.no_restart__        | Boolean  | false       | Whether to restart.
 | __opera.no_quit__           | Boolean  | false       | Whether to quit Opera when OperaDriver is shut down.  If enabled, it will keep the browser running after the driver is shut down.
 | __opera.guess_binary_path__ | Boolean  | true        | Whether to guess the path to Opera if it isn't set in `opera.binary`.
-| __opera.profile__           | String   | null        | The profile configuration we are using, for example "desktop" or "core-gogi".
+| __opera.product__           | String   | null        | The product we are using, for example "desktop" or "core-desktop", "sdk".  See [OperaProduct](https://github.com/operasoftware/operadriver/blob/master/src/com/opera/core/systems/OperaProduct.java) for all available values.
 
 To use capabilities:
 
@@ -140,10 +140,11 @@ command-line arguments to use, you may use environmental variables also.  This
 is a list of the environmental variables which can be set on any operating
 system:
 
-| __Name__       | __Description__                                                                                                                                          |
-|----------------|----------------------------------------------------------------------------------------------------------------------------------------------------------|
-| __OPERA_PATH__ | The absolute path to the Opera binary you want to use.  If not set OperaDriver will try to locate Opera on your system.                                  |
-| __OPERA_ARGS__ | A space-delimited list of arguments to pass on to Opera, e.g. `-nowindow`, `-dimensions 1600x1200`, &c.  See `opera --help` to view available arguments. |
+| __Name__          | __Description__                                                                                                                                                                                                              |
+|-------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| __OPERA_PATH__    | The absolute path to the Opera binary you want to use.  If not set OperaDriver will try to locate Opera on your system.                                                                                                      |
+| __OPERA_ARGS__    | A space-delimited list of arguments to pass on to Opera, e.g. `-nowindow`, `-dimensions 1600x1200`, &c.  See `opera --help` to view available arguments.                                                                     |
+| __OPERA_PRODUCT__ | To override the product check when running the OperaDriver tests.  Set this to any value specified in [OperaProduct](https://github.com/operasoftware/operadriver/blob/master/src/com/opera/core/systems/OperaProduct.java). |
 
 To set environment variables:
 
@@ -158,23 +159,24 @@ Supported Opera versions
 
 This is a list of the official Opera Desktop versions supported by OperaDriver:
 
-| __Version__ | __Workaround/tweaks needed__                                                               |
-|-------------|--------------------------------------------------------------------------------------------|
-| 12.00       | *(Not released yet)*                                                                       |
-| 11.51       | Set `opera.port` to `0` and `opera.profile` to null to enable parallelization on GNU/Linux |
-| 11.50       |                                                                                            |
-| 11.11       |                                                                                            |
-| 11.10       |                                                                                            |
-| 11.01       | `-autotestmode` command-line argument is not supported, use a wrapper script               |
-| 11.00       | `-autotestmode` command-line argument is not supported, use a wrapper script               |
+| __Version__ | __Workaround/tweaks needed__                                                                                                |
+|-------------|-----------------------------------------------------------------------------------------------------------------------------|
+| 12.00       | *(Not released yet)*                                                                                                        |
+| 11.60       |                                                                                                                             |
+| 11.51       | Set `opera.port` to `-1` and `opera.profile` to "" (empty string) to disable `-debugproxy` and `-pd` command-line arguments |
+| 11.50       |                                                                                                                             |
+| 11.11       |                                                                                                                             |
+| 11.10       |                                                                                                                             |
+| 11.01       | `-autotestmode` command-line argument is not supported, use a wrapper script                                                |
+| 11.00       |                                                                                                                             |
 
 
 #### Wrapper script
 
-Some Opera versions don't accept the `-autotestmode` or `-debugproxy` arguments
-sent by OperaDriver by default.  You can bypass this problem by creating a
-wrapper script like this and pointing the capability `opera.binary` to its
-absolute path:
+Some Opera versions don't support the `-autotestmode`, `-debugproxy` or `-pd`
+arguments sent by OperaDriver by default.  You can bypass this problem by
+creating a wrapper script like this and pointing the capability `opera.binary`
+to its absolute path:
 
     #!/bin/sh
     # Wrapper to prevent the -autotestmode argument reaching this version of Opera
@@ -185,3 +187,5 @@ Known issues
 ------------
 
 * Problems with Operas with IME feature enabled (Opera Mobile, Android)
+* No support for Opera Mini
+* Issues with JavaScript alert/popup dialogues
