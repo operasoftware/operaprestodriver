@@ -318,8 +318,8 @@ public class OperaLauncherRunner extends OperaRunner
 
     try {
       LauncherScreenshotRequest.Builder request = LauncherScreenshotRequest.newBuilder();
-      for (int i = 0; i < hashes.length; i++) {
-        request.addKnownMD5S(hashes[i]);
+      for (String hash : hashes) {
+        request.addKnownMD5S(hash);
       }
       request.setKnownMD5STimeoutMs((int) timeout);
 
