@@ -71,7 +71,7 @@ public class OperaArguments implements com.opera.core.systems.arguments.interfac
     Matcher m = p.matcher(string);
 
     while (m.find()) {
-      parsed.add(m.group(2), m.group(4));
+      parsed.add(m.group(1), m.group(2));
     }
 
     return parsed;
