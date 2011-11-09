@@ -192,7 +192,7 @@ public class OperaLauncherRunnerSettings extends OperaRunnerSettings {
     Platform current = Platform.getCurrent();
 
     if (current.is(Platform.UNIX) || current.is(Platform.MAC)) {
-      CommandLine line = new CommandLine("chmod", "755", launcher.getAbsolutePath());
+      CommandLine line = new CommandLine("chmod", "u+x", launcher.getAbsolutePath());
       line.execute();
     }
   }
