@@ -16,6 +16,32 @@ limitations under the License.
 
 package com.opera.core.systems.scope.services.ums;
 
+import com.opera.core.systems.OperaWebElement;
+import com.opera.core.systems.ScopeServices;
+import com.opera.core.systems.model.ScriptResult;
+import com.opera.core.systems.scope.AbstractEcmascriptService;
+import com.opera.core.systems.scope.ESDebuggerCommand;
+import com.opera.core.systems.scope.internal.OperaIntervals;
+import com.opera.core.systems.scope.protos.EcmascriptProtos.ReadyStateChange;
+import com.opera.core.systems.scope.protos.EsdbgProtos.Configuration;
+import com.opera.core.systems.scope.protos.EsdbgProtos.EvalData;
+import com.opera.core.systems.scope.protos.EsdbgProtos.EvalData.Variable;
+import com.opera.core.systems.scope.protos.EsdbgProtos.EvalResult;
+import com.opera.core.systems.scope.protos.EsdbgProtos.ExamineList;
+import com.opera.core.systems.scope.protos.EsdbgProtos.ObjectInfo.Property;
+import com.opera.core.systems.scope.protos.EsdbgProtos.ObjectList;
+import com.opera.core.systems.scope.protos.EsdbgProtos.ObjectValue;
+import com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeInfo;
+import com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeList;
+import com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeSelection;
+import com.opera.core.systems.scope.protos.UmsProtos.Response;
+import com.opera.core.systems.scope.services.IEcmaScriptDebugger;
+
+import org.apache.commons.jxpath.Pointer;
+import org.openqa.selenium.NoSuchFrameException;
+import org.openqa.selenium.WebDriverException;
+import org.openqa.selenium.WebElement;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -27,51 +53,18 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicStampedReference;
 
-import org.apache.commons.jxpath.Pointer;
-import org.openqa.selenium.NoSuchFrameException;
-import org.openqa.selenium.WebDriverException;
-import org.openqa.selenium.WebElement;
-
-import com.opera.core.systems.OperaDriver;
-import com.opera.core.systems.OperaWebElement;
-import com.opera.core.systems.ScopeServices;
-import com.opera.core.systems.model.ScriptResult;
-import com.opera.core.systems.scope.AbstractEcmascriptService;
-import com.opera.core.systems.scope.ESDebuggerCommand;
-import com.opera.core.systems.scope.internal.OperaIntervals;
-import com.opera.core.systems.scope.protos.EcmascriptProtos.ReadyStateChange;
-import com.opera.core.systems.scope.protos.EsdbgProtos.Configuration;
-import com.opera.core.systems.scope.protos.EsdbgProtos.EvalData;
-import com.opera.core.systems.scope.protos.EsdbgProtos.EvalResult;
-import com.opera.core.systems.scope.protos.EsdbgProtos.ExamineList;
-import com.opera.core.systems.scope.protos.EsdbgProtos.ObjectList;
-import com.opera.core.systems.scope.protos.EsdbgProtos.ObjectValue;
-import com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeInfo;
-import com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeList;
-import com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeSelection;
-import com.opera.core.systems.scope.protos.EsdbgProtos.EvalData.Variable;
-import com.opera.core.systems.scope.protos.EsdbgProtos.ObjectInfo.Property;
-import com.opera.core.systems.scope.protos.UmsProtos.Response;
-import com.opera.core.systems.scope.services.IEcmaScriptDebugger;
-import com.opera.core.systems.scope.services.IWindowManager;
-
 /**
  * Manages the ecmascript-debugger service Handles runtime management and script injection
  *
  * @author Deniz Turkoglu <denizt@opera.com>
  */
 public class EcmaScriptDebugger extends AbstractEcmascriptService implements
-                                                        IEcmaScriptDebugger {
+                                                                  IEcmaScriptDebugger {
 
-  private int retries;
-  private long sleepDuration;
-  protected int activeWindowId;
-  protected final IWindowManager windowManager;
-  private String currentFramePath;
-  protected OperaDriver driver;
-
-  private AtomicStampedReference<RuntimeInfo> runtime = new AtomicStampedReference<RuntimeInfo>(
-      null, 0);
+  private
+  AtomicStampedReference<RuntimeInfo>
+      runtime =
+      new AtomicStampedReference<RuntimeInfo>(null, 0);
 
   private
   ConcurrentMap<Integer, RuntimeInfo>
@@ -212,8 +205,7 @@ public class EcmaScriptDebugger extends AbstractEcmascriptService implements
     Response response = executeCommand(ESDebuggerCommand.EVAL, evalBuilder);
 
     if (response == null) {
-      throw new WebDriverException(
-          "Internal error while executing script");
+      throw new WebDriverException("Internal error while executing script");
     }
 
     EvalResult result = parseEvalData(response);
@@ -270,7 +262,7 @@ public class EcmaScriptDebugger extends AbstractEcmascriptService implements
       return eval(using, variables);
     } else if (retries >= OperaIntervals.SCRIPT_RETRY.getValue()) {
       resetCounters();
-      throw new WebDriverException("Internal error");
+      throw new WebDriverException("No response on executing JS command");
     }
 
     resetCounters();
@@ -287,22 +279,19 @@ public class EcmaScriptDebugger extends AbstractEcmascriptService implements
     return executeScript(using, responseExpected, getRuntimeId());
   }
 
-  public Object executeScript(String using, boolean responseExpected,
-                              int runtimeId) {
+  public Object executeScript(String using, boolean responseExpected, int runtimeId) {
     Response reply = eval(using, runtimeId);
     return responseExpected ? parseEvalReply(parseEvalData(reply)) : null;
   }
 
   public Integer getObject(String using) {
     EvalResult reply = parseEvalData(eval(using));
-    return (reply.getType().equals("object")) ? reply.getObjectValue().getObjectID()
-                                              : null;
+    return (reply.getType().equals("object")) ? reply.getObjectValue().getObjectID() : null;
   }
 
   protected Integer getObject(String using, int runtimeId) {
     EvalResult reply = parseEvalData(eval(using, runtimeId));
-    return (reply.getType().equals("object")) ? reply.getObjectValue().getObjectID()
-                                              : null;
+    return (reply.getType().equals("object")) ? reply.getObjectValue().getObjectID() : null;
   }
 
   public String callFunctionOnObject(String using, int objectId) {
@@ -312,8 +301,7 @@ public class EcmaScriptDebugger extends AbstractEcmascriptService implements
     return reply.getType().equals("null") ? null : reply.getValue();
   }
 
-  public Object callFunctionOnObject(String using, int objectId,
-                                     boolean responseExpected) {
+  public Object callFunctionOnObject(String using, int objectId, boolean responseExpected) {
     Variable variable = buildVariable("locator", objectId);
 
     Response response = eval(using, variable);
@@ -333,10 +321,9 @@ public class EcmaScriptDebugger extends AbstractEcmascriptService implements
 
   /**
    * Parses a reply and returns the following types String presentation of number, boolean or
-   * string
+   * string.
    */
   protected Object parseEvalReply(EvalResult result) {
-
     String status = result.getStatus();
 
     if (!status.equals("completed")) {
@@ -396,8 +383,7 @@ public class EcmaScriptDebugger extends AbstractEcmascriptService implements
   /**
    * Updates the runtimes list to most recent version TODO this has to be kept up to date with
    * events and as failover we should update It builds a tree to find the frame we are looking for
-   * It builds a tree to find the frame we are looking for
-   * TODO tree also must be kept up to date
+   * It builds a tree to find the frame we are looking for TODO tree also must be kept up to date
    */
   private void buildRuntimeTree() {
     updateRuntime();
@@ -482,7 +468,7 @@ public class EcmaScriptDebugger extends AbstractEcmascriptService implements
   }
 
   private void addNode(RuntimeInfo info, RuntimeNode root) {
-    String relFramePath = info.getHtmlFramePath().replace(root.getFrameName()+"/", "");
+    String relFramePath = info.getHtmlFramePath().replace(root.getFrameName() + "/", "");
 
     String[] values = relFramePath.split("/");
     RuntimeNode curr = root;
@@ -566,15 +552,17 @@ public class EcmaScriptDebugger extends AbstractEcmascriptService implements
   }
 
   public String executeJavascript(String using, Integer windowId) {
-    // FIXME workaround for frame issues when executing in a specific window
+    // TODO: Workaround for frame issues when executing in a specific window
     String tmp = currentFramePath;
     currentFramePath = "_top";
     RuntimeInfo runtime = findRuntime(windowId);
     currentFramePath = tmp;
-    if (runtime == null) // speed dial doesnt have a runtime
-    {
+
+    // Speed Dial doesn't have a runtime
+    if (runtime == null) {
       return "";
     }
+
     return (String) executeScript(using, true, runtime.getRuntimeID());
   }
 

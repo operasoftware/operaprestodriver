@@ -74,7 +74,7 @@ public class OperaWebElement extends RemoteWebElement {
   }
 
   /**
-   * @param parent driver that this element belongs to
+   * @param parent   driver that this element belongs to
    * @param objectId the Ecmascript object id of this element
    */
   public OperaWebElement(OperaDriver parent, int objectId) {
@@ -127,8 +127,7 @@ public class OperaWebElement extends RemoteWebElement {
   }
 
   /**
-   * Moves the mouse to the top left of this element, generating a mouseOver
-   * event.
+   * Moves the mouse to the top left of this element, generating a mouseOver event.
    */
   public void mouseOver() {
     Point point = coordinates.getLocationInViewPort();
@@ -305,11 +304,10 @@ public class OperaWebElement extends RemoteWebElement {
     ArrayList<String> heldKeys = new ArrayList<String>();
 
     if (OperaFlags.ENABLE_CHECKS) {
-
       long start = System.currentTimeMillis();
-      boolean isDisplayed = false;
+      boolean isDisplayed;
 
-      do {
+      while (true) {
         isDisplayed = isDisplayed();
 
         if (!isDisplayed && parent.hasTimeRemaining(start)) {
@@ -317,16 +315,13 @@ public class OperaWebElement extends RemoteWebElement {
         } else {
           break;
         }
-
-      } while (true);
+      }
 
       if (!isDisplayed()) {
-        throw new ElementNotVisibleException(
-            "You can't type on an element that is not displayed");
+        throw new ElementNotVisibleException("You can't type on an element that is not displayed");
       }
       if (!isEnabled()) {
-        throw new InvalidElementStateException(
-            "You can't type on an element that is disabled");
+        throw new InvalidElementStateException("You can't type on an element that is disabled");
       }
     }
 
@@ -335,10 +330,9 @@ public class OperaWebElement extends RemoteWebElement {
       click();
     } else {
       executeMethod("locator.focus()");
-      // When focused textareas return the cursor to the last position it
-      // was at. Inputs place the cursor at the beginning, and so we need
-      // to move it to the end. We do this by pre-pending an "End" key to
-      // the keys to send (in a round-about way)
+      // When focused textareas return the cursor to the last position it was at.  Inputs place the
+      // cursor at the beginning, and so we need to move it to the end. We do this by pre-pending an
+      // "End" key to the keys to send (in a round-about way).
       if (getTagName().equalsIgnoreCase("input")) {
         // Javascript from webdriver_session.cc in ChromeDriver
         executeMethod(
@@ -359,22 +353,20 @@ public class OperaWebElement extends RemoteWebElement {
       }
     }
 
-    // This code is a bit ugly. Because "special" keys can be sent either as
-    // an individual argument, or in the middle of a string of "normal"
-    // characters, we have to loop through the string and check each against
-    // a list of special keys.
+    // This code is a bit ugly.  Because "special" keys can be sent either as an individual
+    // argument, or in the middle of a string of "normal" characters, we have to loop through the
+    // string and check each against a list of special keys.
 
     parent.getScopeServices().captureOperaIdle();
     for (CharSequence seq : keysToSend) {
       if (seq instanceof Keys) {
         String key = OperaKeys.get(((Keys) seq).name());
-        // Check if this is a key we hold down, and haven't already pressed,
-        // and press, but don't release it. That's done at the end of this
-        // method.
+        // Check if this is a key we hold down, and haven't already pressed, and press, but don't
+        // release it. That's done at the end of this method.
         if (holdKeys.contains(key) && !heldKeys.contains(key) && !execService.keyIsPressed(key)) {
           execService.key(key, false);
           heldKeys.add(key);
-        } else if (key == "null") {
+        } else if (key.equals("null")) {
           for (String hkey : heldKeys) {
             execService.key(hkey, true);
           }
@@ -394,12 +386,12 @@ public class OperaWebElement extends RemoteWebElement {
             execService.type(c.toString());
           } else {
             String key = OperaKeys.get(keyName);
-            // FIXME: Code repeated from above.
+            // TODO: Code repeated from above.
             if (holdKeys.contains(key) && !heldKeys.contains(key) && !execService
                 .keyIsPressed(key)) {
               execService.key(key, false);
               heldKeys.add(key);
-            } else if (key == "null") {
+            } else if (key.equals("null")) {
               for (String hkey : heldKeys) {
                 execService.key(hkey, true);
               }
@@ -422,8 +414,8 @@ public class OperaWebElement extends RemoteWebElement {
   }
 
   /**
-   * Stores a map of special character codes to the string representation.
-   * For example "\uE00E" maps to "page_up"
+   * Stores a map of special character codes to the string representation.  For example "\uE00E"
+   * maps to "page_up".
    */
   private static final HashMap<Character, String> keysLookup = new HashMap<Character, String>();
 
@@ -611,7 +603,7 @@ public class OperaWebElement extends RemoteWebElement {
    * and returns the MD5 hash.
    *
    * @param timeout the number of milliseconds to wait before taking the screenshot
-   * @param hashes optional hashes to compare the hashes with
+   * @param hashes  optional hashes to compare the hashes with
    * @return an MD5 hash as a string
    */
   public String getImageHash(long timeout, String... hashes) {
@@ -642,9 +634,10 @@ public class OperaWebElement extends RemoteWebElement {
   }
 
   /**
-   * Take a screenshot of the area this element covers. If the hash of the image
-   * matches any of the given hashes then no image is saved, otherwise it saves
-   * a copy of the image to the given filename.
+   * Take a screenshot of the area this element covers. If the hash of the image matches any of the
+   * given hashes then no image is saved, otherwise it saves a copy of the image to the given
+   * filename.
+   *
    * @param filename     The location to save the screenshot.
    * @param timeout      The number of milliseconds to wait before taking the screenshot.
    * @param includeImage Whether to get the image data. Disable if you just need the MD5 hash.
@@ -682,8 +675,9 @@ public class OperaWebElement extends RemoteWebElement {
   }
 
   /**
-   * Check if the current webpage contains any of the given colors. Used
-   * on tests that use red to show a failure.
+   * Check if the current webpage contains any of the given colors. Used on tests that use red to
+   * show a failure.
+   *
    * @param colors list of colors to check for.
    * @return true if the page contains any of the given colors, false otherwise.
    */
@@ -702,8 +696,8 @@ public class OperaWebElement extends RemoteWebElement {
   }
 
   /**
-   * Create a "canvas", which is an object that specifies a rectangle to take
-   * a screenshot of.
+   * Create a "canvas", which is an object that specifies a rectangle to take a screenshot of.
+   *
    * @return a canvas representing the size and position of this element.
    */
   private Canvas buildCanvas() {

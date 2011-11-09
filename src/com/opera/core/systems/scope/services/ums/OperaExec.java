@@ -43,6 +43,7 @@ import com.opera.core.systems.scope.services.IOperaExec;
 import com.opera.core.systems.util.CaseInsensitiveStringSet;
 import com.opera.core.systems.util.VersionUtil;
 
+import org.openqa.selenium.UnsupportedCommandException;
 import org.openqa.selenium.WebDriverException;
 
 import java.util.ArrayList;
@@ -56,7 +57,7 @@ import java.util.logging.Logger;
  * The exec service handles user interactions such as key presses, mouse clicks, screenshot grabbing
  * and executing actions on Opera.
  *
- * @author Deniz Turkoglu <denizt@opera.com>, Andreas Tolf Tolfsen <andreastt@opera.com>
+ * @author Deniz Turkoglu <dturkoglu@opera.com>, Andreas Tolf Tolfsen <andreastt@opera.com>
  */
 public class OperaExec extends AbstractService implements IOperaExec {
 
@@ -121,6 +122,7 @@ public class OperaExec extends AbstractService implements IOperaExec {
     if (using == null) {
       throw new NullPointerException("You must provide something to type");
     }
+
     if (using.length() == 0) {
       throw new IllegalArgumentException("Can't type empty string");
     }
@@ -132,10 +134,9 @@ public class OperaExec extends AbstractService implements IOperaExec {
     for (int i = 0; i < using.length(); ++i) {
       char ch = using.charAt(i);
       if (Character.isUpperCase(ch)) {
-        // If shift is already pressed down, we don't need to press it for
-        // capitals. We don't release it if we're typing lower-case, because
-        // if the user has pressed shift and then types lower-case presumably
-        // they want to type upper-case characters.
+        // If shift is already pressed down, we don't need to press it for capitals.  We don't
+        // release it if we're typing lower-case, because if the user has pressed shift and then
+        // types lower-case presumably they want to type upper-case characters.
         boolean releaseShift = false;
 
         if (!keyIsPressed(OperaKeys.SHIFT.getValue())) {
@@ -192,15 +193,16 @@ public class OperaExec extends AbstractService implements IOperaExec {
     }
     /*}*/
 
-    // If double-clicking, wait some time after executing the mouse action
-    // so that Opera doesn't consider two consecutive doubleClick()'s a
-    // quadruple-click.
+    // If double-clicking, wait some time after executing the mouse action so that Opera doesn't
+    // consider two consecutive doubleClick()'s a quadruple-click.
     //
-    // TODO: Also a problem if single-clicking multiple times in a row?
+    // TODO(andreastt): Also a problem if single-clicking multiple times in a row?
+    // TODO(andreastt): Introduce actionBuilder.setCount(y) instead
     if (count > 1) {
       try {
         Thread.sleep(OperaIntervals.MULTIPLE_CLICK_SLEEP.getValue());
       } catch (InterruptedException e) {
+        // nothing
       }
     }
   }
@@ -233,13 +235,13 @@ public class OperaExec extends AbstractService implements IOperaExec {
     // type.setSpace("preserve");
     builder.addActionList(actionBuilder);
     if (executeCommand(ExecCommand.EXEC, builder) == null) {
-      throw new WebDriverException("Unexpected error while calling action : " + using);
+      throw new WebDriverException("Unexpected error while calling action: " + using);
     }
   }
 
   public void action(String using, int data, String dataString, String dataStringParam) {
     if (!actions.contains(using)) {
-      throw new WebDriverException("The requested action is not supported : " + using);
+      throw new UnsupportedCommandException("The requested action is not supported: " + using);
     }
 
     ActionList.Builder builder = ActionList.newBuilder();
@@ -252,11 +254,11 @@ public class OperaExec extends AbstractService implements IOperaExec {
     // type.setSpace("preserve");
     builder.addActionList(actionBuilder);
     if (executeCommand(ExecCommand.EXEC, builder) == null) {
-      throw new WebDriverException("Unexpected error while calling action : " + using);
+      throw new WebDriverException("Unexpected error while calling action: " + using);
     }
   }
 
-  // FIXME sending params, we have commas, space, what?
+  // TODO: Sending params, we have commas, spaces, what?
   public void action(String using, String... params) {
     action(using, services.getWindowManager().getActiveWindowId(), params);
   }
@@ -287,8 +289,6 @@ public class OperaExec extends AbstractService implements IOperaExec {
   }
 
   public ScreenShotReply containsColor(Canvas canvas, long timeout, OperaColors... colors) {
-    // command SetupScreenWatcher(ScreenWatcher) returns (ScreenWatcherResult) = 3
-
     ScreenWatcher.Builder builder = ScreenWatcher.newBuilder();
     Area.Builder areaBuilder = Area.newBuilder();
 
@@ -318,7 +318,7 @@ public class OperaExec extends AbstractService implements IOperaExec {
   }
 
   /**
-   * Executes a screenwatcher with the given timeout and returns the result
+   * Executes a screenwatcher with the given timeout and returns the result.
    */
   private ScreenWatcherResult executeScreenWatcher(ScreenWatcher.Builder builder, int timeout) {
     if (timeout <= 0) {

@@ -21,7 +21,9 @@ import com.opera.core.systems.settings.OperaDriverSettings;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.junit.runner.RunWith;
 import org.openqa.selenium.Capabilities;
+import org.openqa.selenium.Platform;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.io.File;
@@ -29,31 +31,71 @@ import java.io.File;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-abstract public class TestBase {
+/**
+ * You can extend OperaDriverTestCase in your test case to gain access to convenience methods
+ * related to finding the current product used, auto-starting Opera before the test, quitting Opera
+ * after the test, and gaining access to the fixtures directory.
+ *
+ * It also holds an extension of {@link OperaDriver}, called {@link TestOperaDriver}, that exposes
+ * the {@link OperaRunner} and a method for determining whether the constructor and
+ * {@link OperaDriver#quit()} methods has been called, {@link TestOperaDriver#isRunning()}.
+ */
+@RunWith(OperaDriverTestRunner.class)
+public abstract class OperaDriverTestCase {
 
   protected static TestOperaDriver driver;
+  protected static OperaProduct currentProduct = OperaProduct.CORE;
+  protected static Platform currentPlatform = Platform.getCurrent();
 
   private static String fixtureDirectory;
 
   @BeforeClass
   public static void setUpBeforeClass() throws Exception {
+    if (driver != null && driver.isRunning()) {
+      return;
+    }
+
     DesiredCapabilities caps = new DesiredCapabilities();
     caps.setCapability(OperaDriver.LOGGING_LEVEL, "FINE");
+
     driver = new TestOperaDriver(caps);
     assertNotNull(driver);
 
+    initProduct();
     initFixtures();
   }
 
   @AfterClass
   public static void tearDownAfterClass() throws Exception {
-    driver.quit();
+    if (driver.isRunning()) {
+      driver.quit();
+    }
   }
 
-  // Easy access to fixtures
+  /**
+   * Fetch the product from the connected driver.
+   */
+  protected static void initProduct() {
+    if (driver == null || !driver.isRunning()) {
+      return;
+    }
+
+    String requestedProduct = System.getenv("OPERA_PRODUCT");
+    if (requestedProduct == null || requestedProduct.isEmpty()) {
+      requestedProduct = driver.utils().getProduct();
+    }
+
+    if (requestedProduct != null && !requestedProduct.isEmpty()) {
+      try {
+        currentProduct = OperaProduct.valueOf(requestedProduct);
+      } catch (IllegalArgumentException e) {
+        // product not found, defaulting to CORE
+      }
+    }
+  }
 
   /**
-   * Setup the fixture directory
+   * Setup the fixture directory.
    */
   protected static void initFixtures() {
     String separator = System.getProperty("file.separator");
@@ -64,34 +106,63 @@ abstract public class TestBase {
     assertTrue(new File(fixtureDirectory).isDirectory());
   }
 
-  // / Get the URL of the given fixture file
+  /**
+   * Get the URL of the given fixture file.
+   *
+   * @param file the filename to get
+   * @return the URL to the fixture file
+   */
   protected String fixture(String file) {
     return "file://localhost" + fixtureDirectory + file;
   }
 
-  // / Navigate to the given fixture file
+  /**
+   * Navigate to the given fixture file.
+   *
+   * @param file the filename from the fixture directory to navigate to
+   */
   protected void getFixture(String file) {
     driver.get(fixture(file));
   }
+
+  private static boolean isDriverRunning() {
+    return (driver != null) && driver.isRunning();
+  }
+
 }
 
-// Provides access to the Opera Runner, so we can detect crashes
+/**
+ * Provides access to the {@link OperaRunner}, so we can detect crashes.
+ */
 class TestOperaDriver extends OperaDriver {
+
+  private boolean isRunning = false;
 
   public TestOperaDriver() {
     super();
   }
 
+  @Deprecated
   public TestOperaDriver(OperaDriverSettings settings) {
     this(settings.getCapabilities());
   }
 
   public TestOperaDriver(Capabilities capabilities) {
     super(capabilities);
+    isRunning = true;
   }
 
   public OperaRunner getRunner() {
-    return operaRunner;
+    return runner;
+  }
+
+  public void quit() {
+    super.quit();
+    isRunning = false;
+  }
+
+  public boolean isRunning() {
+    return isRunning;
   }
 
 }

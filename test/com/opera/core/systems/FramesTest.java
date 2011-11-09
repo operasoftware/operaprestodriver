@@ -24,7 +24,7 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-public class FramesTest extends TestBase {
+public class FramesTest extends OperaDriverTestCase {
   List<String> frames;
 
   @Before

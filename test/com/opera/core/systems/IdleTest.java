@@ -21,7 +21,6 @@ import com.opera.core.systems.scope.internal.OperaIntervals;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.MethodRule;
@@ -29,10 +28,11 @@ import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.Statement;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
+import static com.opera.core.systems.OperaProduct.DESKTOP;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-public class IdleTest extends TestBase {
+public class IdleTest extends OperaDriverTestCase {
 
   // Timeout vars for every test
   private static long start, end;
@@ -65,6 +65,7 @@ public class IdleTest extends TestBase {
     caps.setCapability("opera.idle", true);
 
     driver = new TestOperaDriver(caps);
+    initProduct();
     initFixtures();
   }
 
@@ -75,8 +76,7 @@ public class IdleTest extends TestBase {
 
   @After
   public void tearDown() {
-    // Make sure the test hasn't passed because we hit the page load
-    // timeout instead of using OperaIdle
+    // Make sure the test hasn't passed because we hit the page load timeout instead of using idle
     assertTrue("Took less than Idle timeout", end - start < timeout);
   }
 
@@ -130,7 +130,7 @@ public class IdleTest extends TestBase {
   @Ignore
   public void testRefresh() throws Exception {
     getFixture("test.html");
-    ((OperaWebElement) driver.findElementById("input_email")).sendKeys("before refresh");
+    driver.findElementById("input_email").sendKeys("before refresh");
 
     start();
     driver.navigate().refresh();
@@ -184,7 +184,7 @@ public class IdleTest extends TestBase {
 
     // Focus textbox
     start();
-    ((OperaWebElement) driver.findElementById("one")).sendKeys("\n");
+    driver.findElementById("one").sendKeys("\n");
     stop();
 
     // +"?" for submitted query string
@@ -197,7 +197,7 @@ public class IdleTest extends TestBase {
 
     // Check checkbox, fires a submit even on the form
     start();
-    ((OperaWebElement) driver.findElementById("check")).click();
+    driver.findElementById("check").click();
     stop();
 
     // +"?" for submitted query string
@@ -210,7 +210,7 @@ public class IdleTest extends TestBase {
 
     // Check checkbox, fires a submit even on the form
     start();
-    ((OperaWebElement) driver.findElementById("test_form")).submit();
+    driver.findElementById("test_form").submit();
     stop();
 
     // +"?" for submitted query string
@@ -220,6 +220,8 @@ public class IdleTest extends TestBase {
   /* Begin testing OperaIdle conditions */
 
   @Test
+  @Ignore
+  //@Ignore(products = DESKTOP, value = "DSK-347592")  // TODO(andreastt): Not working because desktop returns "CORE"
   public void testEcmascriptLoop() throws Exception {
     start();
     getFixture("idle/ecmascript-loop.html");

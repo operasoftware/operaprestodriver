@@ -17,10 +17,10 @@ limitations under the License.
 package com.opera.core.systems.model;
 
 /**
- * A scope command that is assigned by an id (int) and a service name (string), as specified by the
+ * A Scope command that is assigned by an id (int) and a service name (string), as specified by the
  * scope protocol.
  *
- * @author Deniz Turkoglu <denizt@opera.com>
+ * @author Deniz Turkoglu <dturkoglu@opera.com>
  */
 public interface ICommand {
 

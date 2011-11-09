@@ -16,24 +16,6 @@ limitations under the License.
 
 package com.opera.core.systems.scope.services.ums;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Queue;
-import java.util.Map.Entry;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.atomic.AtomicStampedReference;
-
-import org.apache.commons.jxpath.Pointer;
-import org.openqa.selenium.NoSuchFrameException;
-import org.openqa.selenium.WebDriverException;
-import org.openqa.selenium.WebElement;
-
 import com.opera.core.systems.OperaWebElement;
 import com.opera.core.systems.ScopeServices;
 import com.opera.core.systems.model.RuntimeNode;
@@ -42,40 +24,56 @@ import com.opera.core.systems.scope.AbstractEcmascriptService;
 import com.opera.core.systems.scope.ESCommand;
 import com.opera.core.systems.scope.internal.OperaIntervals;
 import com.opera.core.systems.scope.protos.EcmascriptProtos;
-//Highlight when we're using EsdbgProtos, instead of importing them directly.
-import com.opera.core.systems.scope.protos.EsdbgProtos;
 import com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg;
+import com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg.Variable;
 import com.opera.core.systems.scope.protos.EcmascriptProtos.EvalResult;
+import com.opera.core.systems.scope.protos.EcmascriptProtos.EvalResult.Status;
 import com.opera.core.systems.scope.protos.EcmascriptProtos.ExamineObjectsArg;
 import com.opera.core.systems.scope.protos.EcmascriptProtos.ListRuntimesArg;
+import com.opera.core.systems.scope.protos.EcmascriptProtos.Object.Property;
 import com.opera.core.systems.scope.protos.EcmascriptProtos.ObjectList;
 import com.opera.core.systems.scope.protos.EcmascriptProtos.ReadyStateChange;
 import com.opera.core.systems.scope.protos.EcmascriptProtos.ReleaseObjectsArg;
 import com.opera.core.systems.scope.protos.EcmascriptProtos.Runtime;
 import com.opera.core.systems.scope.protos.EcmascriptProtos.RuntimeList;
 import com.opera.core.systems.scope.protos.EcmascriptProtos.Value;
-import com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg.Variable;
-import com.opera.core.systems.scope.protos.EcmascriptProtos.EvalResult.Status;
-import com.opera.core.systems.scope.protos.EcmascriptProtos.Object.Property;
 import com.opera.core.systems.scope.protos.EcmascriptProtos.Value.Type;
-// We can't import this, because of the java "Object" class.
-// Leaving this commented out to help in the future!
-//import com.opera.core.systems.scope.protos.EcmascriptProtos.Object;
+import com.opera.core.systems.scope.protos.EsdbgProtos;
 import com.opera.core.systems.scope.protos.UmsProtos.Response;
 import com.opera.core.systems.scope.services.IEcmaScriptDebugger;
 
+import org.apache.commons.jxpath.Pointer;
+import org.openqa.selenium.NoSuchFrameException;
+import org.openqa.selenium.WebDriverException;
+import org.openqa.selenium.WebElement;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.atomic.AtomicStampedReference;
+
+// Highlight when we're using EsdbgProtos, instead of importing them directly.  We can't import
+// this, because of the java "Object" class.  Leaving this commented out to help in the future!
+//import com.opera.core.systems.scope.protos.EcmascriptProtos.Object;
+
 /**
- * Ecmascript service is a lightweight service to enable javascript injection
- * (incomplete)
+ * EcmascriptService is a lightweight service to enable JavaScript injection.  Unlike
+ * {@link EcmaScriptDebugger} it does not disable JIT.
  *
- * @author Deniz Turkoglu <denizt@opera.com>
- *
+ * @author Deniz Turkoglu <dturkoglu@opera.com>
  */
 public class EcmascriptService extends AbstractEcmascriptService implements
-    IEcmaScriptDebugger {
+                                                                 IEcmaScriptDebugger {
 
-  private AtomicStampedReference<Runtime> runtime = new AtomicStampedReference<Runtime>(
-      null, 0);
+  private AtomicStampedReference<Runtime> runtime = new AtomicStampedReference<Runtime>(null, 0);
   private ConcurrentMap<Integer, Runtime> runtimesList = new ConcurrentHashMap<Integer, Runtime>();
 
   private Queue<Integer> runtimesQueue = new LinkedList<Integer>();
@@ -95,8 +93,7 @@ public class EcmascriptService extends AbstractEcmascriptService implements
   }
 
   public void setRuntime(EsdbgProtos.RuntimeInfo runtime) {
-    throw new UnsupportedOperationException(
-        "Not suppported without ecmascript-debugger");
+    throw new UnsupportedOperationException("Not suppported without ecmascript-debugger");
   }
 
   public void addRuntime(EsdbgProtos.RuntimeInfo info) {
@@ -117,8 +114,7 @@ public class EcmascriptService extends AbstractEcmascriptService implements
 
   private List<Runtime> getRuntimesList() {
     int windowId = services.getWindowManager().getActiveWindowId();
-    Iterator<?> iterator = xpathIterator(runtimesList.values(), "/.[windowID='"
-        + windowId + "']");
+    Iterator<?> iterator = xpathIterator(runtimesList.values(), "/.[windowID='" + windowId + "']");
     List<Runtime> runtimes = new ArrayList<Runtime>();
     while (iterator.hasNext()) {
       runtimes.add((Runtime) ((Pointer) iterator.next()).getNode());
@@ -127,25 +123,27 @@ public class EcmascriptService extends AbstractEcmascriptService implements
   }
 
   public void init() {
-    // we no longer need the configuration
-    if (!updateRuntime()) throw new WebDriverException(
-        "Could not find a runtime for script injection");
-    // nor the dialog hack
+    // We no longer need the configuration
+    if (!updateRuntime()) {
+      throw new WebDriverException("Could not find a runtime for script injection");
+    }
+    // Nor the dialogue hack
   }
 
   public boolean updateRuntime() {
     Runtime activeRuntime = findRuntime();
+
     if (activeRuntime != null) {
       setRuntime(activeRuntime);
       return true;
     }
+
     return false;
   }
 
   /**
-   * Gets a list of runtimes and keeps the list, create runtimes for all pages
-   * so even if the pages dont have script we can still inject to a 'fake'
-   * runtime
+   * Gets a list of runtimes and keeps the list, create runtimes for all pages so even if the pages
+   * don't have script we can still inject to a 'fake' runtime.
    */
   protected void createAllRuntimes() {
     ListRuntimesArg.Builder selection = ListRuntimesArg.newBuilder();
@@ -172,14 +170,15 @@ public class EcmascriptService extends AbstractEcmascriptService implements
 
     for (WebElement webElement : elements) {
       Variable variable = buildVariable(webElement.toString(),
-          ((OperaWebElement) webElement).getObjectId());
+                                        ((OperaWebElement) webElement).getObjectId());
       evalBuilder.addVariableList(variable);
     }
 
     Response response = executeCommand(ESCommand.EVAL, evalBuilder);
 
-    if (response == null) throw new WebDriverException(
-        "Internal error while executing script");
+    if (response == null) {
+      throw new WebDriverException("Internal error while executing script");
+    }
 
     EvalResult result = parseEvalData(response);
 
@@ -187,7 +186,9 @@ public class EcmascriptService extends AbstractEcmascriptService implements
     if (parsed instanceof EcmascriptProtos.Object) {
       EcmascriptProtos.Object data = (EcmascriptProtos.Object) parsed;
       return new ScriptResult(data.getObjectID(), data.getClassName());
-    } else return parsed;
+    } else {
+      return parsed;
+    }
   }
 
   private EvalResult parseEvalData(Response response) {
@@ -211,17 +212,16 @@ public class EcmascriptService extends AbstractEcmascriptService implements
   }
 
   private Response eval(String using, int runtimeId, Variable... variables) {
-    // This call causes us to release objects, which allows them to be garbage
-    // collected, and sometimes causes this method to fail. So I've commented
-    // it out. But I reckon it might cause high memory usage in Opera, so
-    // the method might need to be updated in the future.
+    // This call causes us to release objects, which allows them to be garbage collected, and
+    // sometimes causes this method to fail.  So I've commented it out.  But I reckon it might cause
+    // high memory usage in Opera, so the method might need to be updated in the future.
     //processQueues();
 
     EvalArg.Builder builder = buildEval(using, runtimeId);
     builder.addAllVariableList(Arrays.asList(variables));
 
     Response response = executeCommand(ESCommand.EVAL, builder,
-        OperaIntervals.SCRIPT_TIMEOUT.getValue());
+                                       OperaIntervals.SCRIPT_TIMEOUT.getValue());
 
     if (response == null && retries < OperaIntervals.SCRIPT_RETRY.getValue()) {
       retries++;
@@ -231,7 +231,7 @@ public class EcmascriptService extends AbstractEcmascriptService implements
       return eval(using, variables);
     } else if (retries >= OperaIntervals.SCRIPT_RETRY.getValue()) {
       resetCounters();
-      throw new WebDriverException("Internal error");
+      throw new WebDriverException("No response on executing JS command");
     }
 
     resetCounters();
@@ -255,8 +255,8 @@ public class EcmascriptService extends AbstractEcmascriptService implements
 
   public Integer getObject(String using) {
     EvalResult reply = parseEvalData(eval(using));
-    return (reply.getValue().getType().equals(Type.OBJECT)) ? reply.getValue().getObject().getObjectID()
-        : null;
+    return (reply.getValue().getType().equals(Type.OBJECT)) ? reply.getValue().getObject()
+        .getObjectID() : null;
   }
 
 
@@ -266,7 +266,7 @@ public class EcmascriptService extends AbstractEcmascriptService implements
   }
 
   public Object callFunctionOnObject(String using, int objectId,
-      boolean responseExpected) {
+                                     boolean responseExpected) {
     Variable variable = buildVariable("locator", objectId);
 
     Response response = eval(using, variable);
@@ -285,52 +285,52 @@ public class EcmascriptService extends AbstractEcmascriptService implements
   }
 
   private Object parseEvalReply(EvalResult result) {
-
     Status status = result.getStatus();
 
     switch (status) {
-    case CANCELLED:
-      return null;
-    case EXCEPTION:
-      throw new WebDriverException("Ecmascript exception");
-    case NO_MEMORY:
-      // releaseObjects();
-      throw new WebDriverException("Out of memory");
-    case FAILURE:
-      throw new WebDriverException("Could not execute script");
-    default:
-      break;
+      case CANCELLED:
+        return null;
+      case EXCEPTION:
+        throw new WebDriverException("EcmaScript exception");
+      case NO_MEMORY:
+        // releaseObjects();
+        throw new WebDriverException("Out of memory");
+      case FAILURE:
+        throw new WebDriverException("Could not execute script");
+      default:
+        break;
     }
 
     Value value = result.getValue();
     Type type = value.getType();
+
     switch (type) {
-    case STRING:
-      return value.getStr();
-    case FALSE:
-      return false;
-    case TRUE:
-      return true;
-    case OBJECT:
-      return value.getObject();
-    case NUMBER:
-      return parseNumber(String.valueOf(value.getNumber()));
-    case NAN:
-      return Float.NaN;
-    case MINUS_INFINITY:
-      return Float.NEGATIVE_INFINITY;
-    case PLUS_INFINITY:
-      return Float.POSITIVE_INFINITY;
-    case UNDEFINED:
-    case NULL:
-    default:
-      return null;
+      case STRING:
+        return value.getStr();
+      case FALSE:
+        return false;
+      case TRUE:
+        return true;
+      case OBJECT:
+        return value.getObject();
+      case NUMBER:
+        return parseNumber(String.valueOf(value.getNumber()));
+      case NAN:
+        return Float.NaN;
+      case MINUS_INFINITY:
+        return Float.NEGATIVE_INFINITY;
+      case PLUS_INFINITY:
+        return Float.POSITIVE_INFINITY;
+      case UNDEFINED:
+      case NULL:
+      default:
+        return null;
     }
   }
 
   /**
-   * Find the runtime for injection (default) Typically this is _top runtime with the active window
-   * that has focus
+   * Find the runtime for injection (default).  Typically this is _top runtime with the active
+   * window that has focus.
    */
   protected Runtime findRuntime() {
     return findRuntime(windowManager.getActiveWindowId());
@@ -339,16 +339,16 @@ public class EcmascriptService extends AbstractEcmascriptService implements
   protected Runtime findRuntime(int windowId) {
     createAllRuntimes();
     Runtime runtime = (Runtime) xpathPointer(runtimesList.values(),
-        "/.[htmlFramePath='" + currentFramePath + "' and windowID='" + windowId
-        + "']").getValue();
+                                             "/.[htmlFramePath='" + currentFramePath
+                                             + "' and windowID='" + windowId
+                                             + "']").getValue();
     return runtime;
   }
 
   /**
    * Updates the runtimes list to most recent version
-   * TODO this has to be kept up to date with events and as failover we should
-   * update
-   * It builds a tree to find the frame we are looking for
+   *
+   * TODO this has to be kept up to date with events and as failover we should update It builds a tree to find the frame we are looking for
    * TODO tree also must be kept up to date
    */
   private void buildRuntimeTree() {
@@ -387,9 +387,11 @@ public class EcmascriptService extends AbstractEcmascriptService implements
     String[] values = frameName.split("\\.");
     RuntimeNode curr = root;
 
-    for (int i = 0; i < values.length; i++) {
-      curr = findNodeByName(values[i], curr);
-      if (curr == null) break;
+    for (String value : values) {
+      curr = findNodeByName(value, curr);
+      if (curr == null) {
+        break;
+      }
     }
 
     if (curr == null) {
@@ -400,7 +402,7 @@ public class EcmascriptService extends AbstractEcmascriptService implements
 
     // We should only find frames underneath the current one.
     if (!info.getHtmlFramePath().startsWith(currentFramePath)) {
-      throw new NoSuchFrameException("No such frame "+frameName+" in " + currentFramePath);
+      throw new NoSuchFrameException("No such frame " + frameName + " in " + currentFramePath);
     }
 
     currentFramePath = info.getHtmlFramePath();
@@ -410,14 +412,18 @@ public class EcmascriptService extends AbstractEcmascriptService implements
   private RuntimeNode findNodeByName(String name, RuntimeNode rootNode) {
     for (Entry<Integer, RuntimeNode> entry : rootNode.getNodes().entrySet()) {
       // check if the name is a number
-      if (isNumber(name) && entry.getKey().equals(Integer.valueOf(name) + 1)) return entry.getValue();
+      if (isNumber(name) && entry.getKey().equals(Integer.valueOf(name) + 1)) {
+        return entry.getValue();
+      }
       // check if it is really the name
-      else if (entry.getValue().getFrameName().equals(name)) return entry.getValue();
+      else if (entry.getValue().getFrameName().equals(name)) {
+        return entry.getValue();
+      }
       // last resort is id
       else {
         try {
           if (executeScript("frameElement ? frameElement.id : ''", true,
-              entry.getValue().getRuntimeID()).equals(name)) {
+                            entry.getValue().getRuntimeID()).equals(name)) {
             return entry.getValue();
           }
         } catch (WebDriverException e) {
@@ -431,6 +437,7 @@ public class EcmascriptService extends AbstractEcmascriptService implements
   private void addNode(Runtime info, RuntimeNode root) {
     String[] values = info.getHtmlFramePath().split("/");
     RuntimeNode curr = root;
+
     // first frame is always _top, so we skip it
     for (int i = 1; i < values.length; ++i) {
       int index = framePathToIndex(values[i]);
@@ -457,8 +464,8 @@ public class EcmascriptService extends AbstractEcmascriptService implements
   }
 
   public void cleanUpRuntimes(int windowId) {
-    // if we already have a runtime listed as _top with that window id,
-    // clean all runtimes with that window id
+    // if we already have a runtime listed as _top with that window id, clean all runtimes with that
+    // window id
     for (Runtime runtime : runtimesList.values()) {
       if (runtime.getWindowID() == windowId) {
         runtimesList.remove(runtime.getRuntimeID());
@@ -470,9 +477,13 @@ public class EcmascriptService extends AbstractEcmascriptService implements
     List<Integer> ids = new ArrayList<Integer>();
 
     ObjectList list = getObjectList(id);
-    List<Property> objects = list.getPrototypeListList().get(0).getObjectListList().get(0).getPropertyListList();
+    List<Property>
+        objects =
+        list.getPrototypeListList().get(0).getObjectListList().get(0).getPropertyListList();
     for (Property obj : objects) {
-      if (obj.getValue().getType().equals(Value.Type.OBJECT)) ids.add(obj.getValue().getObject().getObjectID());
+      if (obj.getValue().getType().equals(Value.Type.OBJECT)) {
+        ids.add(obj.getValue().getObject().getObjectID());
+      }
     }
 
     return ids;
@@ -497,11 +508,10 @@ public class EcmascriptService extends AbstractEcmascriptService implements
   }
 
   public void readyStateChanged(ReadyStateChange change) {
-    // we should probably wait for AFTER_LOAD but it is reported to
-    // be broken, so we will just wait until DOM_CONTENT_LOADED
-    // so we can interact with the page as soon as possible
+    // We should probably wait for AFTER_LOAD but it is reported to be broken, so we will just wait
+    // until DOM_CONTENT_LOADED so we can interact with the page as soon as possible.
     if (!runtimesList.containsKey(change.getRuntimeID())) {
-      // a new runtime that we dont know about has been loaded
+      // A new runtime that we don't know about has been loaded
       runtimesQueue.add(change.getRuntimeID());
     }
   }
@@ -516,7 +526,7 @@ public class EcmascriptService extends AbstractEcmascriptService implements
   }
 
   public String executeJavascript(String using, Integer windowId) {
-    // FIXME workaround for frame issues when executing in a specific window
+    // TODO: Workaround for frame issues when executing in a specific window
     String tmp = currentFramePath;
     currentFramePath = "_top";
     Runtime runtime = findRuntime(windowId);
@@ -559,7 +569,7 @@ public class EcmascriptService extends AbstractEcmascriptService implements
           // ignore ?!?
         } else {
           result.put(property.getName(), parseValue(type,
-              property.getValue()));
+                                                    property.getValue()));
         }
       }
       return result;
@@ -568,35 +578,41 @@ public class EcmascriptService extends AbstractEcmascriptService implements
 
   private Object parseValue(Type type, Value value) {
     switch (type) {
-    case TRUE:
-      return new Boolean(true);
-    case FALSE:
-      return new Boolean(false);
-    case PLUS_INFINITY:
-      return Double.POSITIVE_INFINITY;
-    case MINUS_INFINITY:
-      return Double.NEGATIVE_INFINITY;
-    case NUMBER:
-      return value.getNumber();
-    case STRING:
-      return value.getStr();
-    case OBJECT:
-      return examineScriptResult(value.getObject().getObjectID());
+      case TRUE:
+        return new Boolean(true);
+      case FALSE:
+        return new Boolean(false);
+      case PLUS_INFINITY:
+        return Double.POSITIVE_INFINITY;
+      case MINUS_INFINITY:
+        return Double.NEGATIVE_INFINITY;
+      case NUMBER:
+        return value.getNumber();
+      case STRING:
+        return value.getStr();
+      case OBJECT:
+        return examineScriptResult(value.getObject().getObjectID());
 
-    case UNDEFINED:
-    case NULL:
-    case NAN:
-    default:
-      return null;
+      case UNDEFINED:
+      case NULL:
+      case NAN:
+      default:
+        return null;
     }
   }
 
   private void processQueues() {
-    if (!garbageQueue.isEmpty()) processGcObjects();
+    if (!garbageQueue.isEmpty()) {
+      processGcObjects();
+    }
 
-    if (!runtimesQueue.isEmpty()) processNewRuntimes();
+    if (!runtimesQueue.isEmpty()) {
+      processNewRuntimes();
+    }
 
-    if (runtimesList.isEmpty()) updateRuntime();
+    if (runtimesList.isEmpty()) {
+      updateRuntime();
+    }
   }
 
   private void processNewRuntimes() {

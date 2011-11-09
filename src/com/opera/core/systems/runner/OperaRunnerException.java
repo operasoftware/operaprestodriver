@@ -17,14 +17,12 @@ limitations under the License.
 package com.opera.core.systems.runner;
 
 /**
- * User whenever runner has problems. We are NOT supposed to fix launcher problems.  Just pass them
- * upwards.
+ * Used whenever the runner implementation has problems.  We are _not_ supposed to fix launcher
+ * problems.  Just pass them upwards.
  *
  * @author Anders Oredsson <anderso@opera.com>
  */
 public class OperaRunnerException extends RuntimeException {
-
-  private static final long serialVersionUID = -2379934570244878775L;
 
   public OperaRunnerException() {
     super();

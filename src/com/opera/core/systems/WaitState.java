@@ -431,9 +431,9 @@ public class WaitState {
 
     if (result == null) {
       if (idle) {
-        throw new ResponseNotReceivedException("No OperaIdle response in a timely fashion.");
+        throw new ResponseNotReceivedException("No idle response in a timely fashion");
       } else {
-        throw new ResponseNotReceivedException("No response in a timely fashion.");
+        throw new ResponseNotReceivedException("No response in a timely fashion");
       }
     }
 
@@ -692,7 +692,7 @@ public class WaitState {
    * @param timeout time in milliseconds to wait before aborting
    */
   public void waitForOperaIdle(long timeout) {
-    if (captureIdleEvents == true && capturedIdleEvents > 0) {
+    if (captureIdleEvents && capturedIdleEvents > 0) {
       logger.finer("Captured " + capturedIdleEvents + " OperaIdle event(s)");
       // reset
       captureIdleEvents = false;
@@ -700,11 +700,10 @@ public class WaitState {
       return;
     }
 
-    // If we're waiting for an Idle event, then we don't need to capture
-    // them anymore. If we've reached this far then capturedIdleEvents is
-    // already 0
+    // If we're waiting for an Idle event, then we don't need to capture them anymore.  If we've
+    // reached this far then capturedIdleEvents is already 0.
     captureIdleEvents = false;
-    waitAndParseResult(timeout, 0/*0 = no window id!*/, null, ResponseType.OPERA_IDLE);
+    waitAndParseResult(timeout, 0 /*0 = no window id!*/, null, ResponseType.OPERA_IDLE);
   }
 
   public Response waitFor(int tag, long timeout) {
@@ -818,4 +817,5 @@ public class WaitState {
   public void setProfile(String profile) {
     this.profile = profile;
   }
+
 }

@@ -21,7 +21,7 @@ package com.opera.core.systems.model;
  * for each object retrieved through the protocol, this id can also be used later on to release the
  * object.
  *
- * @author Deniz Turkoglu <denizt@opera.com>
+ * @author Deniz Turkoglu <dturkoglu@opera.com>
  */
 public class ScriptResult {
 

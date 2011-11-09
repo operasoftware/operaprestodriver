@@ -24,7 +24,7 @@ import org.openqa.selenium.WebElement;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-public class JavascriptTest extends TestBase {
+public class JavascriptTest extends OperaDriverTestCase {
 
   @Before
   public void setUp() {

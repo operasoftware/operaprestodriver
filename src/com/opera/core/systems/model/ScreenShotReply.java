@@ -19,10 +19,10 @@ package com.opera.core.systems.model;
 import java.util.List;
 
 /**
- * A wrapper object for screenshot reply, is used to overcome the problem of 2 different protocols
- * (xml/pb)
+ * A wrapper object for screenshot reply, is used to overcome the problem of two different protocols
+ * (XML/PB)
  *
- * @author Deniz Turkoglu <denizt@opera.com>
+ * @author Deniz Turkoglu <dturkoglu@opera.com>
  */
 public class ScreenShotReply {
 

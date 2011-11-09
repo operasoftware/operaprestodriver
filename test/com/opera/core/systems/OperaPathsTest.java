@@ -14,6 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
+/*
 package com.opera.core.systems;
 
 import junit.framework.Assert;
@@ -71,7 +72,7 @@ public class OperaPathsTest {
 
   /**
    * Test that the launcher is extracted correctly.
-   */
+   *
   @Test
   public void testNoLauncher() throws Exception {
     File launcher = new File(paths.launcherPath());
@@ -84,7 +85,7 @@ public class OperaPathsTest {
 
   /**
    * Test that the launcher is re-extracted when the hashes differ.
-   */
+   *
   @Test
   public void testNoMatch() throws Exception {
     File launcher = new File(paths.launcherPath());
@@ -101,7 +102,7 @@ public class OperaPathsTest {
 
   /**
    * Test that the launcher isn't extracted when it is the same.
-   */
+   *
   @Test
   public void testExists() throws Exception {
     File launcher = new File(paths.launcherPath());
@@ -114,7 +115,7 @@ public class OperaPathsTest {
   /**
    * Test that Opera is started.  We're restoring the old OPERA_PATH here, although it might not be
    * set.  This could potentially break on some non-standard sytems.
-   */
+   *
   @Test
   public void testStart() throws Exception {
     setEnvVar("OPERA_PATH", oldOperaPath);
@@ -179,7 +180,7 @@ public class OperaPathsTest {
    *
    * @param key   the new environment variable's identifier
    * @param value the new environment variable's value
-   */
+   *
   @SuppressWarnings("unchecked")
   private static void setEnvVar(String key, String value) throws Exception {
     Class<?>[] classes = Collections.class.getDeclaredClasses();
@@ -196,3 +197,4 @@ public class OperaPathsTest {
   }
 
 }
+   */

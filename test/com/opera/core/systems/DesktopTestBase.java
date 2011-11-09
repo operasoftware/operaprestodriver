@@ -19,7 +19,7 @@ package com.opera.core.systems;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 
-public class DesktopTestBase extends TestBase {
+public class DesktopTestBase extends OperaDriverTestCase {
 
   protected static OperaDesktopDriver driver;
 

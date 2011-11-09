@@ -18,7 +18,8 @@ package com.opera.core.systems.runner.launcher;
 
 import com.google.protobuf.GeneratedMessage;
 
-import com.opera.core.systems.OperaDriver;
+import com.opera.core.systems.OperaPaths;
+import com.opera.core.systems.arguments.OperaArgument;
 import com.opera.core.systems.model.ScreenShotReply;
 import com.opera.core.systems.runner.OperaRunner;
 import com.opera.core.systems.runner.OperaRunnerException;
@@ -33,141 +34,88 @@ import com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStatus
 import com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStatusResponse.StatusType;
 import com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStopRequest;
 import com.opera.core.systems.scope.internal.OperaIntervals;
-import com.opera.core.systems.settings.OperaDriverSettings;
 
-import org.openqa.selenium.WebDriverException;
-import org.openqa.selenium.io.TemporaryFilesystem;
 import org.openqa.selenium.net.PortProber;
-import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class OperaLauncherRunner implements OperaRunner {
+/**
+ * OperaLauncherRunner implements an interface in C++ with a Java API for controlling the Opera
+ * binary.
+ */
+public class OperaLauncherRunner extends OperaRunner
+    implements com.opera.core.systems.runner.interfaces.OperaRunner {
 
   private static Logger logger = Logger.getLogger(OperaLauncherRunner.class.getName());
 
   private OperaLauncherBinary launcherRunner = null;
-
-  private DesiredCapabilities capabilities;
   private OperaLauncherProtocol launcherProtocol = null;
   private String crashlog = null;
 
-  @Deprecated
-  public OperaLauncherRunner(OperaDriverSettings settings) {
-    this((DesiredCapabilities) settings.getCapabilities());
+  public OperaLauncherRunner() {
+    this(OperaLauncherRunnerSettings.getDefaultSettings());
   }
 
-  public OperaLauncherRunner(DesiredCapabilities capabilities) {
-    this.capabilities = capabilities;
+  public OperaLauncherRunner(OperaLauncherRunnerSettings settings) {
+    // Rely on OperaRunner to parse most of the settings
+    super(settings);
 
-    if (this.capabilities.getCapability(OperaDriver.LAUNCHER) == null) {
-      throw new WebDriverException("launcher path not set");
-    }
-
-    if (this.capabilities.getCapability(OperaDriver.BINARY) == null) {
-      throw new WebDriverException("You need to set Opera's path to use the launcher");
-    }
-
+    // Parse remaining launcher-related settings
     Integer launcherPort = PortProber.findFreePort();
-
-    List<String> stringArray = new ArrayList<String>();
-    stringArray.add("-host");
-    stringArray.add("127.0.0.1");
-    stringArray.add("-port");
-    stringArray.add(launcherPort.toString());
-    if (this.capabilities.getCapability(OperaDriver.DISPLAY) != null) {
-      stringArray.add("-display");
-      stringArray.add(
-          ":" + Integer.toString((Integer) this.capabilities.getCapability(OperaDriver.DISPLAY)));
+    Integer display = settings.getDisplay();
+    String product = settings.getProduct();
+    String profile = settings.getProfile();
+    String binary;
+    if (settings.getBinary() == null) {
+      binary = OperaPaths.operaPath();
+    } else {
+      binary = settings.getBinary().getAbsolutePath();
     }
 
-    if (logger.isLoggable(Level.FINEST)) {
-      stringArray.add("-console");
-      stringArray.add("-verbosity");
-      stringArray.add("FINEST");
+    List<String> launcherArguments = new ArrayList<String>();
+    launcherArguments.add("-host");
+    launcherArguments.add("127.0.0.1");
+    launcherArguments.add("-port");
+    launcherArguments.add(launcherPort.toString());
+    if (display != null && display > 0) {
+      launcherArguments.add("-display");
+      launcherArguments.add(":" + display.toString());
     }
-
-    String product = (String) capabilities.getCapability(OperaDriver.PRODUCT);
+    if (settings.getLoggingLevel() == Level.FINEST) {
+      launcherArguments.add("-console");  // TODO(andreastt): Allow for file logging
+      launcherArguments.add("-verbosity");
+      launcherArguments.add(Level.FINEST.toString());
+    }
     if (product != null && !product.isEmpty()) {
-      stringArray.add("-profile");
-      stringArray.add(product);
+      launcherArguments.add("-profile");
+      launcherArguments.add(product);
+    }
+    if (settings.getNoQuit()) {
+      launcherArguments.add("-noquit");
+    }
+    launcherArguments.add("-bin");
+    launcherArguments.add(binary);
+
+    // The launcher will pass on any extra arguments after -bin to Opera
+    for (OperaArgument argument : super.settings.getArguments().getArguments()) {
+      launcherArguments.add(super.settings.getArguments().sign() + argument.getArgument());
+      if (argument.getValue() != null && !argument.getValue().isEmpty()) {
+        launcherArguments.add(argument.getValue());
+      }
     }
 
-    if ((Boolean) this.capabilities.getCapability(OperaDriver.NO_QUIT)) {
-      stringArray.add("-noquit");
-    }
-    stringArray.add("-bin");
-    stringArray.add((String) this.capabilities.getCapability(OperaDriver.BINARY));
+    logger.config("launcher arguments: " + launcherArguments.toString());
 
-    // Note any launcher arguments must be before this line!  Any arguments appended to the launcher
-    // binary will be sent directly to Opera.
-
-    // This can't be last, otherwise it might get interpreted as the page to open, and the file
-    // listing page doesn't have a JS context to inject into.
-    String profile = (String) this.capabilities.getCapability(OperaDriver.PROFILE);
-    // If null, generate a temp directory, if not empty use the given directory.
-    if (profile == null) {
-      profile = TemporaryFilesystem.getDefaultTmpFS().createTempDir("opera-profile", "")
-          .getAbsolutePath();
-      capabilities.setCapability(OperaDriver.PROFILE, profile);
-      stringArray.add("-pd");
-      stringArray.add(profile);
-    } else if (!profile.isEmpty()) {
-      stringArray.add("-pd");
-      stringArray.add(profile);
-    }
-
-    // Enable auto test mode, always starts Opera on opera:debug and prevents interrupting dialogues
-    // appearing.
-    //
-    // This must come after the -pd argument since that is not recognized by the internal Opera core
-    // builds, gogi.  For some reason this argument will not make the value of the -pd argument
-    // considered the URL to start on.  Since that value is typically a folder located on the
-    // system and Opera disables script injection in local file listings, that would break testing
-    // on these internal builds.
-    if (!stringArray.contains("-autotestmode")) {
-      stringArray.add("-autotestmode");
-    }
-
-    int port = (Integer) this.capabilities.getCapability(OperaDriver.PORT);
-    if (port != -1) {
-      // Provide defaults if one hasn't been set
-      String host = (String) this.capabilities.getCapability(OperaDriver.HOST);
-      stringArray.add("-debugproxy");
-      stringArray.add(host + ":" + port);
-    }
-
-    // We read in environmental variable OPERA_ARGS in addition to existing arguments passed down
-    // from requested Capabilities.  These are combined and sent to the browser.
-    //
-    // Note that this is a deviation from the principle of arguments normally overwriting
-    // environmental variables.
-    String binaryArguments = (String) this.capabilities.getCapability(OperaDriver.ARGUMENTS);
-    if (binaryArguments == null) {
-      binaryArguments = "";
-    }
-    String environmentArguments = System.getenv("OPERA_ARGS");
-    if (environmentArguments != null && environmentArguments.length() > 0) {
-      binaryArguments = environmentArguments + " " + binaryArguments;
-    }
-
-    // Arguments are split by single space.
-    StringTokenizer tokenizer = new StringTokenizer(binaryArguments, " ");
-    while (tokenizer.hasMoreTokens()) {
-      stringArray.add(tokenizer.nextToken());
-    }
-
-    logger.config("launcher arguments: " + stringArray.toString());
+    // Setup the launcher binary
     launcherRunner = new OperaLauncherBinary(
-        (String) this.capabilities.getCapability(OperaDriver.LAUNCHER),
-        stringArray.toArray(new String[stringArray.size()])
+        settings.getLauncher().getAbsolutePath(),
+        launcherArguments.toArray(new String[launcherArguments.size()])
     );
 
     logger.fine("Waiting for launcher connection on port " + launcherPort);

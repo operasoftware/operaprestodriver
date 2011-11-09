@@ -19,13 +19,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Holds a tree of references to runtimes. Used in EcmaScriptDebugger and
- * EcmascriptService.
+ * Holds a tree of references to runtimes.  Used in EcmaScriptDebugger and EcmascriptService.
  *
- * @author Deniz Turkoglu <denizt@opera.com>
- *
+ * @author Deniz Turkoglu <dturkoglu@opera.com>
  */
 public class RuntimeNode {
+
   private String frameName;
   private int runtimeID;
 
@@ -50,4 +49,5 @@ public class RuntimeNode {
   public Map<Integer, RuntimeNode> getNodes() {
     return nodes;
   }
+
 }

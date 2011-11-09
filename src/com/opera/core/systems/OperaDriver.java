@@ -25,7 +25,9 @@ import com.opera.core.systems.model.ScopeActions;
 import com.opera.core.systems.model.ScreenShotReply;
 import com.opera.core.systems.model.ScriptResult;
 import com.opera.core.systems.runner.OperaRunner;
+import com.opera.core.systems.runner.interfaces.OperaRunnerSettings;
 import com.opera.core.systems.runner.launcher.OperaLauncherRunner;
+import com.opera.core.systems.runner.launcher.OperaLauncherRunnerSettings;
 import com.opera.core.systems.scope.exceptions.CommunicationException;
 import com.opera.core.systems.scope.handlers.PbActionHandler;
 import com.opera.core.systems.scope.internal.OperaFlags;
@@ -59,13 +61,11 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.io.TemporaryFilesystem;
-import org.openqa.selenium.net.PortProber;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
@@ -189,7 +189,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
    * and add methods to access these variable in tests.
    */
   protected DesiredCapabilities capabilities;
-  protected OperaRunner operaRunner;
+  protected OperaRunner runner;
 
   protected IEcmaScriptDebugger debugger;
   protected IOperaExec exec;
@@ -263,39 +263,41 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     }
 
     if ((Boolean) capabilities.getCapability(AUTOSTART)) {
-      OperaPaths paths = new OperaPaths();
-
       if (((Boolean) capabilities.getCapability(GUESS_BINARY_PATH)) &&
           capabilities.getCapability(BINARY) == null) {
-        capabilities.setCapability(BINARY, paths.operaPath());
+        capabilities.setCapability(BINARY, OperaPaths.operaPath());
       } else if (capabilities.getCapability(BINARY) == null) {
         // Don't guess, only check environment variable
         String path = System.getenv("OPERA_PATH");
-
-        if (path != null && path.length() > 0) {
+        if (path != null && !path.isEmpty()) {
           capabilities.setCapability(BINARY, path);
         }
       }
 
-      if (capabilities.getCapability(LAUNCHER) == null) {
-        capabilities.setCapability(LAUNCHER, paths.launcherPath());
-      }
+      OperaArguments arguments = new OperaArguments();
+      OperaArguments parsed = OperaArguments.parse((String) capabilities.getCapability(ARGUMENTS));
+      arguments.merge(parsed);
 
-      // If port is 0, try to find a random port.
-      if ((Integer) capabilities.getCapability(PORT) == 0) {
-        capabilities.setCapability(PORT, PortProber.findFreePort());
-      }
+      // Synchronize settings for runner and capabilities
+      OperaRunnerSettings settings = new OperaLauncherRunnerSettings();
+      settings.setBinary((String) capabilities.getCapability(BINARY));
+      settings.setArguments(arguments);
+      settings.setPort((Integer) capabilities.getCapability(PORT));
+      settings.setProfile((String) capabilities.getCapability(PROFILE));
+      capabilities.setCapability(ARGUMENTS, settings.getArguments().toString());
+      capabilities.setCapability(PORT, settings.getPort());
+      capabilities.setCapability(PROFILE, settings.getProfile());
+      capabilities.setCapability(PRODUCT, settings.getProduct());
 
       if (capabilities.getCapability(BINARY) != null) {
-        this.operaRunner = new OperaLauncherRunner(capabilities);
+        runner = new OperaLauncherRunner((OperaLauncherRunnerSettings) settings);
       }
     } else {
       // If we're not autostarting then we don't want to randomise the port.
-      capabilities.setCapability(PORT, -1);
+      capabilities.setCapability(PORT, (int) OperaIntervals.SERVER_PORT.getValue());
     }
 
     logger.config(capabilities.toString());
-
     start();
   }
 
@@ -362,8 +364,8 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     createScopeServices();
 
     // Launch Opera if the runner has been setup
-    if (operaRunner != null) {
-      operaRunner.startOpera();
+    if (runner != null) {
+      runner.startOpera();
     }
 
     services.init();
@@ -406,11 +408,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
         manualStart = false;
       }
 
-      int port = (Integer) capabilities.getCapability(PORT);
-      if (port == -1) {
-        port = 7001;
-      }
-      services = new ScopeServices(versions, port, manualStart);
+      services = new ScopeServices(versions, (Integer) capabilities.getCapability(PORT), manualStart);
       // for profile-specific workarounds inside ScopeServives, WaitState ...
       services.setProduct((String) capabilities.getCapability(PRODUCT));
       services.startStpThread();
@@ -424,7 +422,8 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
   }
 
   public void quit() {
-    logger.fine("Opera Driver shutting down");
+    logger.fine("OperaDriver shutting down");
+
     // This will only delete the profile directory if we created it
     TemporaryFilesystem.getDefaultTmpFS().deleteTempDir(
         new File((String) capabilities.getCapability(PROFILE)));
@@ -433,8 +432,8 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     if (services != null) {
       services.shutdown();
     }
-    if (operaRunner != null) {
-      operaRunner.shutdown();
+    if (runner != null) {
+      runner.shutdown();
     }
     if (logFile != null) {
       logFile.close();
@@ -455,8 +454,9 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     }
 
     gc();
-    // As this is an artificial page load we release all the held keys.
-    // Is the user click()s a link, any keys remain held.
+
+    // As this is an artificial page load we release all the held keys.  If the user clicks a link,
+    // any keys remain held.
     exec.releaseKeys();
 
     int activeWindowId = windowManager.getActiveWindowId();
@@ -893,23 +893,13 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     return toReturn;
   }
 
-  // FIXME when timeout has completed, send 'stop' command?
   public void waitForLoadToComplete() {
     if (useOperaIdle()) {
-      // new opera wait for page
-      services.waitForOperaIdle(OperaIntervals.PAGE_LOAD_TIMEOUT.getValue());
+      services.waitForOperaIdle(OperaIntervals.OPERA_IDLE_TIMEOUT.getValue());
     } else {
-
-      /*
-       * Sometimes we get here before the next page has even *started*
-       * loading, and so return too quickly. This sleep is enough to make
-       * sure readyState has been set to "loading".
-       */
-      try {
-        Thread.sleep(5);
-      } catch (InterruptedException e) {
-        Thread.currentThread().interrupt();
-      }
+      // Sometimes we get here before the next page has even *started* loading, and so return too
+      // quickly. This sleep is enough to make sure readyState has been set to "loading".
+      sleep(5);
 
       long endTime = System.currentTimeMillis() + OperaIntervals.PAGE_LOAD_TIMEOUT.getValue();
 
@@ -1099,9 +1089,9 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     return exec.getActionList();
   }
 
-  private static void sleep(long timeInMillis) {
+  private static void sleep(long ms) {
     try {
-      Thread.sleep(timeInMillis);
+      Thread.sleep(ms);
     } catch (InterruptedException e) {
       Thread.currentThread().interrupt();
     }
@@ -1184,7 +1174,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
    * @return a ScreenShotReply object
    */
   public ScreenShotReply saveScreenshot(long timeout, String... hashes) {
-    return operaRunner.saveScreenshot(timeout, hashes);
+    return runner.saveScreenshot(timeout, hashes);
   }
 
   // FIXME: CORE-39436 areas outside of the current viewport are black. This is
@@ -1470,8 +1460,8 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
    * @deprecated
    */
   @Deprecated
-  public OperaRunner getOperaRunner() {
-    return operaRunner;
+  public OperaRunner getRunner() {
+    return runner;
   }
 
 }

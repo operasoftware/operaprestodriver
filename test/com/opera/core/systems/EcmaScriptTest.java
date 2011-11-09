@@ -26,7 +26,7 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
-public class EcmaScriptTest extends TestBase {
+public class EcmaScriptTest extends OperaDriverTestCase {
 
   String xpath =
     ".//input[(not(@type) or (@type!=\"file\" and @type!=\"radio\" and @typ" +

@@ -17,11 +17,11 @@ limitations under the License.
 package com.opera.core.systems;
 
 import com.opera.core.systems.settings.OperaDriverSettings;
+import com.opera.core.systems.Ignore;
 
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriverException;
@@ -30,11 +30,12 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.io.File;
 
+import static com.opera.core.systems.OperaProduct.CORE;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-public class OperaDriverTest extends TestBase {
+public class OperaDriverTest extends OperaDriverTestCase {
 
   // Replace the TestBase setup and teardown so that we don't launch Opera
   @BeforeClass
@@ -141,6 +142,7 @@ public class OperaDriverTest extends TestBase {
   }
 
   @Test
+  @Ignore(products = CORE, value = "core does not reset port number if -debugproxy is ommitted")
   public void testDefaultPort() throws Exception {
     DesiredCapabilities c = new DesiredCapabilities();
     c.setCapability(OperaDriver.PORT, -1);
@@ -171,7 +173,7 @@ public class OperaDriverTest extends TestBase {
   }
 
   @Test
-  @Ignore(value="Once this is set the autotestmode profile no longer connects on 7001, breaking future tests")
+  @Ignore(products = CORE, value = "Once this is set the autotestmode profile no longer connects on 7001, breaking future tests")
   public void testSetPort() throws Exception {
     DesiredCapabilities c = new DesiredCapabilities();
     c.setCapability(OperaDriver.PORT, 9876);
@@ -206,6 +208,7 @@ public class OperaDriverTest extends TestBase {
   }
 
   @Test
+  @Ignore(products = CORE, value = "core does not support -pd")
   public void testSetProfile() throws Exception {
     if (Platform.getCurrent() != Platform.LINUX) return;
 
@@ -231,6 +234,7 @@ public class OperaDriverTest extends TestBase {
   }
 
   @Test
+  @Ignore(products = CORE, value = "core does not support -pd")
   public void testRandomProfile() throws Exception {
     DesiredCapabilities c = new DesiredCapabilities();
     c.setCapability(OperaDriver.PROFILE, (String) null);
@@ -252,8 +256,8 @@ public class OperaDriverTest extends TestBase {
     a.quit();
   }
 
-  @Ignore
   @Test
+  @Ignore // TODO(andreastt): No good reason why we're ignoring this, investigate
   public void testProfileDeleted() throws Exception {
     DesiredCapabilities c = new DesiredCapabilities();
     c.setCapability(OperaDriver.PROFILE, (String) null);
