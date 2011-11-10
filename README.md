@@ -189,3 +189,4 @@ Known issues
 * Problems with Operas with IME feature enabled (Opera Mobile, Android)
 * No support for Opera Mini
 * No support for JavaScript alert/popup dialogues
+* Not possible to save screenshot of entire page using `OperaWebElement.saveScreenshot()`
