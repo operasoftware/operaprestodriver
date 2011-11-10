@@ -120,7 +120,7 @@ To use capabilities:
 
     DesiredCapabilities capabilities = new DesiredCapabilities();
     capabilities.setCapability("opera.logging.level", "CONFIG");
-    capabilities.setCapability("opera.loggin.file", "/var/log/operadriver.log");
+    capabilities.setCapability("opera.logging.file", "/var/log/operadriver.log");
     capabilities.setCapability("opera.display", 8);
     capabilities.setCapability("opera.profile", "/home/andreastt/my-own-opera-profile");
 
