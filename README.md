@@ -189,4 +189,5 @@ Known issues
 * Problems with Operas with IME feature enabled (Opera Mobile, Android)
 * No support for Opera Mini
 * No support for JavaScript alert/popup dialogues
-* Not possible to save screenshot of entire page using `OperaWebElement.saveScreenshot()`
+* getScreenshotAs() only returns image data of the current viewport, other parts of the image will be black.
+* Requires Administrator privileges on Windows Vista and 7 when Opera 11.5x is installed in the default location (Program Files).
