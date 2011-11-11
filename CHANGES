@@ -1,8 +1,139 @@
+v0.8    (not released yet)
+
+  [API CHANGES]
+
+  * OperaDriver now uses temporary profile and random port by default.
+    This breaks backwards-compatibility with Opera < 11.60.  Please set
+    capabilities opera.profile to "" (empty string) and opera.port to -1
+    for it to not use a temporary profile and the default port (7001).
+    (stuartk)
+
+  * Updated Selenium dependency to 2.12.0.  (andreastt)
+
+  * Throwing UnsupportedCommandException rather than a
+    WebDriverException in OperaExec, so that it can be recovered.
+    (andreastt)
+
+  [NEW FEATURES]
+
+  * EcmascriptService is now used by default in OperaDriver, instead of
+    EcmaScriptDebugger.  This means any injected JavaScript now
+    potentially goes through JIT, enabling the JIT compiler inside the
+    browser.  (stuartk)
+
+  * Added "compile_protos" target to Ant build file for compiling proto
+    files to Java classes.  (stuartk)
+
+  * Added support for frame switching.  (stuartk)
+
+  * Introducing OperaArguments (with accompanying OperaArgument,
+    OperaCoreArgument and OperaDesktopArgument) which defines a joint
+    interface for interacting with arguments to various kinds of Opera
+    products.  (andreastt)
+
+  * OperaProduct keeps a list of all Opera products.  (andreastt)
+
+  [ENHANCEMENTS]
+
+  * Update EcmascriptService to be more similar to EcmaScriptDebugger.
+    (stuartk)
+
+  * Abstracted RuntimeNode from EcmaScriptDebugger into its own class so
+    that it can be reused in EcmascriptService.  (stuartk)
+
+  * Move methods common to EcmaScriptDebugger and EcmascriptService to a
+    new class, AbstractEcmascriptService.
+
+  * Replacing Apache Commons IO library calls with Guava (Simon Stewart,
+    andreastt)
+
+  * Upgraded from using OperaDriverSettings to using DesiredCapabilities
+    in OperaDesktopDriver.  (andreastt)
+
+  * The launchers have now been moved to a separate JAR,
+    operalaunchers-*.jar, effectively removing the need to traverse the
+    repo when running from source in SpartanRunner.  (andreastt)
+
+  * OperaLauncherRunner made separate from OperaRunner.  OperaRunner now
+    implements a Java native way of launching Opera.  (andreastt)
+
+  [BUG FIXES]
+
+  * Use the passed idle argument, not forcing idle to be true when
+    calling setUseOperaIdle().  (danielb)
+
+  * Since -pd is ignored by core builds, we must for some reason send
+    -autotestmode last so that it doesn't consider the temporary profile
+    to be the starting URL.  (andreastt)
+
+  * Fix for making sure we create runtimes when we try to find them,
+    instead of when we try to update the runtimes in EcmascriptService.
+    (stuartk)
+
+  * getWindowHandles() now gives names to windows without names.
+    (stuartk)
+
+  * Fix for NullPointerException if both window name and title are null
+    in OperaDriver.window().  (stuartk)
+
+  * Fix for a better way to verify whether EcmascriptService is
+    available.  (stuartk)
+
+  * Catch invalid runtime exception for EcmascriptService.  (stuartk)
+
+  * Now logging which status we receive from the launcher.  (andreastt)
+
+  * Doing all port guessing in OperaRunnerSettings since it's specific
+    to launching Opera.  (andreastt)
+
+  * Making sure Capabilities and OperaRunnerSettings are synchronized on
+    launch.  (andreastt)
+
+  [TESTS]
+
+  * Added tests for VersionUtils comparison.  (dturkoglu)
+
+  * Removed irrelevant tests, corrected misleading pass conditions.
+    (andreastt, stuartk)
+
+  * Logging level when running tests is now set to FINE.  (stuartK)
+
+  * Assert.assert* calls have now been replaced by static imports for
+    JUnit tests.  (ajay, andreastt)
+
+  * Added tests for all new code added in this version.  (andreastt)
+
+  * Added method for setting the launcher manually to
+    OperaLauncherRunnerSettings.  This should never be used for other
+    purposes than testing.  (andreastt)
+
+  * Added new @Ignore annotation which lets you ignore a test based on
+    product and/or platform.  (andreastt)
+
+  * Corrected ignores for core- and desktop-specific tests.  (andreastt)
+
+  * Reworked tests to use OperaDriverTestCase as a base.  (andreastt)
+
+  [OTHER]
+
+  * Added descriptions for all packages.  (stuartk)
+
+  * A lot of documentation added to various places.  (stuartk,
+    andreastt)
+
+  * Fixes for documentation in OperaDesktopDriver.  (andreastt)
+
+  * Added IntelliJ run configurations for various tests.  (andreastt)
+
+  * Removed reference to pkg/ as a library in IntelliJ configuration.
+    (andreastt)
+
+
 v0.7.3    2011-09-19
 
   [API CHANGES]
 
-  * Update Selenium jar to 2.6.0.  (Ajay Kemparaj)
+  * Update Selenium JAR to 2.6.0.  (Ajay Kemparaj)
 
   * Update the protobuf library from 2.3.0 to 2.4.1 and regenerating all
     Proto files.  (stuartk)
