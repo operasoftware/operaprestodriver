@@ -16,7 +16,7 @@ class RemoteWebDriverExample {
     DesiredCapabilities capabilities = new DesiredCapabilities();
     capabilities.setBrowserName("opera");
 
-    System.out.println("Connecting to "+server);
+    System.out.println("Connecting to " + server);
 
     WebDriver driver = new RemoteWebDriver(server, capabilities);
 

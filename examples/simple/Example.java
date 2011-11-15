@@ -11,16 +11,19 @@ class Example {
     If you want to override the Opera or launcher location you can either
     use these environment variables:
 
-      OPERA_PATH - absolute path to your Opera binary
-      OPERA_LAUNCHER - absolute path to the Opera launcher binary
+      OPERA_PATH      absolute path to your Opera binary
+      OPERA_LAUNCHER  absolute path to the Opera launcher binary
 
     or create a DesiredCapabilities object:
 
       import org.openqa.selenium.remote.DesiredCapabilities;
+
       ...
+
       DesiredCapabilities capabilities = new DesiredCapabilities();
-      capabilities.setCapability(OperaDriver.BINARY, ...);
-      capabilities.setCapability(OperaDriver.LAUNCHER, ...);
+      capabilities.setCapability("opera.binary", "/path/to/my/opera");
+      capabilities.setCapability("opera.arguments", "-nowindow");
+      capabilities.setCapability("opera.logging.level", "FINE");
 
       OperaDriver driver = new OperaDriver(capabilities);
 
@@ -32,7 +35,7 @@ class Example {
     OperaDriver supports all of the WebDriver methods. This one navigates to
     the given webpage
     */
-    driver.get("http://www.opera.com/");
+    driver.navigate().to("http://www.opera.com/");
     System.out.println("Current url: "+ driver.getCurrentUrl());
 
     /*
