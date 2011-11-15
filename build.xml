@@ -183,7 +183,7 @@
   </target>
 
   <target name="example" description="Run the simple example" depends="jar">
-    <javac source="1.5" target="1.5" debug="true">
+    <javac source="1.5" target="1.5" debug="true" includeantruntime="false">
       <classpath refid="test.classpath.path" />
       <src path="examples/simple" />
     </javac>
