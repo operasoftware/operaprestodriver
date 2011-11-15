@@ -14,6 +14,13 @@ v0.8    (not released yet)
     WebDriverException in OperaExec, so that it can be recovered.
     (andreastt)
 
+  * Throwing UnsupportedOperationException for Options.ime().
+    (andreastt)
+
+  * Added Options.window() as a beta feature.  Currently not
+    implemented, and will throw UnsupportedOperationException.
+    (andreastt)
+
   [NEW FEATURES]
 
   * EcmascriptService is now used by default in OperaDriver, instead of
@@ -56,6 +63,9 @@ v0.8    (not released yet)
 
   * OperaLauncherRunner made separate from OperaRunner.  OperaRunner now
     implements a Java native way of launching Opera.  (andreastt)
+
+  * Logging all ES implementations used to FINE rather than INFO.
+    (andreastt)
 
   [BUG FIXES]
 
