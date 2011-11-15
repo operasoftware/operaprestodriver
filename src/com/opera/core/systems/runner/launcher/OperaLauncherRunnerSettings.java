@@ -104,7 +104,6 @@ public class OperaLauncherRunnerSettings extends OperaRunnerSettings {
    */
   private static String extractLauncher(File launcherPath) {
     String launcherName = getLauncherNameForOS();
-    File sourceLauncher = null;
     File
         targetLauncher =
         new File(launcherPath.getAbsolutePath() + File.separatorChar + launcherName);
@@ -114,25 +113,23 @@ public class OperaLauncherRunnerSettings extends OperaRunnerSettings {
     boolean copy;
 
     // Get the launcher resource from JAR.
-    URL res = OperaLaunchers.class.getClassLoader().getResource("launchers/" + launcherName);
+    URL
+        sourceLauncher =
+        OperaLaunchers.class.getClassLoader().getResource("launchers/" + launcherName);
 
     // Does launcher exist among our resources?
-    if (res != null) {
-      String url = res.toExternalForm();
-
-      if (url.startsWith("jar:") || url.startsWith("wsjar:")) {
-        sourceLauncher = new File(url);
-      }
-    } else {
-      throw new OperaRunnerException("Unknown file: " + res);
+    if (sourceLauncher == null) {
+      throw new OperaRunnerException("Unknown file: " + sourceLauncher);
     }
 
     // Copy the launcher if it doesn't exist or if the current launcher on the system doesn't match
     // the one bundled with OperaDriver (launcher needs to be upgraded).
     if (targetLauncher.exists()) {
-      logger.fine("Old launcher detected, upgrading");
       try {
-        copy = !Arrays.equals(md5(targetLauncher), md5(res.openStream()));
+        copy = !Arrays.equals(md5(targetLauncher), md5(sourceLauncher.openStream()));
+        if (copy) {
+          logger.fine("Old launcher detected, upgrading");
+        }
       } catch (NoSuchAlgorithmException e) {
         throw new OperaRunnerException("Algorithm is not available in your environment: " + e);
       } catch (IOException e) {
@@ -153,12 +150,15 @@ public class OperaLauncherRunnerSettings extends OperaRunnerSettings {
           Files.touch(targetLauncher);
         }
 
-        is = res.openStream();
+        is = sourceLauncher.openStream();
         os = new FileOutputStream(targetLauncher);
 
         ByteStreams.copy(is, os);
 
-        targetLauncher.setLastModified(targetLauncher.lastModified());
+        if (!targetLauncher.setLastModified(targetLauncher.lastModified())) {
+          throw new OperaRunnerException(
+              "Unable to set modification time for file: " + targetLauncher);
+        }
       } catch (IOException e) {
         throw new WebDriverException("Cannot write file to disk: " + e.getMessage());
       } finally {
