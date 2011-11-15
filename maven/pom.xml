@@ -14,7 +14,7 @@
     <version>0.7.4-SNAPSHOT</version>
     <name>OperaDriver</name>
     <description>OperaDriver is a vendor-supported WebDriver implementation developed by Opera Software and volunteers that implements WebDriver's wire protocol.</description>
-    <url>http://www.opera.com/developer/tools/operadriver/</url>
+    <url>http://opera.com/developer/tools/operadriver/</url>
     <licenses>
         <license>
             <name>The Apache Software License, Version 2.0</name>
@@ -29,18 +29,12 @@
     </scm>
     <developers>
         <developer>
-            <id>stuartk</id>
-            <email>stuartk@opera.com</email>
-            <url>http://stuartk.com/</url>
-            <organization>Opera Software</organization>
-            <organizationUrl>http://www.opera.com/</organizationUrl>
-        </developer>
-        <developer>
             <id>andreastt</id>
+            <name>Andreas Tolf Tolfsen</name>
             <email>andreastt@opera.com</email>
             <url>http://sny.no/</url>
             <organization>Opera Software</organization>
-            <organizationUrl>http://www.opera.com/</organizationUrl>
+            <organizationUrl>http://opera.com/</organizationUrl>
         </developer>
     </developers>
 
