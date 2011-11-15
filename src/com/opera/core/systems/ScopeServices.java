@@ -599,7 +599,7 @@ public class ScopeServices implements IConnectionHandler {
   }
 
   public void onOperaIdle() {
-    logger.finest("Got idle event");
+    logger.finest("idle: Got idle event");
     waitState.onOperaIdle();
   }
 
@@ -657,7 +657,7 @@ public class ScopeServices implements IConnectionHandler {
    * then waitForOperaIdle() will return immediately.
    */
   public void captureOperaIdle() {
-    logger.fine("Capturing idle event");
+    logger.finer("idle: Capturing idle event");
     waitState.captureOperaIdle();
   }
 
@@ -673,9 +673,9 @@ public class ScopeServices implements IConnectionHandler {
    * @param timeout Time in milliseconds to wait before aborting
    */
   public void waitForOperaIdle(long timeout) {
-    logger.finer("idle: Waiting for (timeout = " + timeout + ")");
+    logger.finest("idle: Waiting for (timeout = " + timeout + ")");
     waitState.waitForOperaIdle(timeout);
-    logger.finer("idle: Finished waiting");
+    logger.finest("idle: Finished waiting");
   }
 
   public void waitStart() {
@@ -842,7 +842,7 @@ public class ScopeServices implements IConnectionHandler {
   }
 
   public void onRequest(int windowId) {
-    logger.info("Window closed: windowId=" + windowId);
+    logger.fine("Window closed: windowId=" + windowId);
     waitState.onRequest(windowId);
   }
 
