@@ -45,6 +45,7 @@ import com.opera.core.systems.settings.OperaDriverSettings;
 import com.opera.core.systems.util.CapabilitiesSanitizer;
 
 import org.openqa.selenium.Alert;
+import org.openqa.selenium.Beta;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.Cookie;
@@ -1053,8 +1054,12 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     }
 
     public ImeHandler ime() {
-      // TODO Auto-generated method stub
-      return null;
+      throw new UnsupportedOperationException("Not supported in OperaDriver yet");
+    }
+
+    @Beta
+    public Window window() {
+      throw new UnsupportedOperationException("Not supported in OperaDriver yet");
     }
 
   }
