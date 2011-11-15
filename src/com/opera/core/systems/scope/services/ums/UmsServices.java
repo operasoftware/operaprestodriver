@@ -16,9 +16,6 @@
 
 package com.opera.core.systems.scope.services.ums;
 
-import java.util.List;
-import java.util.logging.Logger;
-
 import com.opera.core.systems.ScopeServices;
 import com.opera.core.systems.scope.protos.ScopeProtos.HostInfo;
 import com.opera.core.systems.scope.protos.ScopeProtos.Service;
@@ -33,10 +30,14 @@ import com.opera.core.systems.scope.services.ISelftest;
 import com.opera.core.systems.scope.services.IWindowManager;
 import com.opera.core.systems.util.VersionUtil;
 
+import java.util.List;
+import java.util.logging.Logger;
+
 /**
  * @author Deniz Turkoglu <dturkoglu@opera.com>, Andreas Tolf Tolfsen <andreastt@opera.com>
  */
 public class UmsServices {
+
   protected final Logger logger = Logger.getLogger(this.getClass().getName());
 
   protected final IEcmaScriptDebugger debugger;
@@ -112,10 +113,7 @@ public class UmsServices {
       selftest = null;
     }
 
-    /*
-    * Check both the client and the Driver being created support the
-    * desktop-window-manager
-    */
+    // Check both the client and the Driver being created support the desktop-window-manager
     if (findServiceNamed(serviceList, "desktop-window-manager") != null
         && services.getVersions().containsKey("desktop-window-manager")) {
       desktopWindowManager = new DesktopWindowManager(desktopUtils, systemInputManager, services,
@@ -126,18 +124,18 @@ public class UmsServices {
     }
 
     if (findServiceNamed(serviceList, "ecmascript") != null) {
-      logger.info("Using Ecmascript Service");
       String ecmascriptVersion = getVersionForService(serviceList, "ecmascript");
       debugger = new EcmascriptService(services, ecmascriptVersion);
-
     } else {
-      String esdbgVersion = getVersionForService(serviceList,
-          "ecmascript-debugger");
-      if (VersionUtil.compare(esdbgVersion, "6.0") >= 0) debugger = new EcmaScriptDebugger6(
-          services, esdbgVersion);
-      else debugger = new EcmaScriptDebugger(services, esdbgVersion);
-
+      String esdbgVersion = getVersionForService(serviceList, "ecmascript-debugger");
+      if (VersionUtil.compare(esdbgVersion, "6.0") >= 0) {
+        debugger = new EcmaScriptDebugger6(services, esdbgVersion);
+      } else {
+        debugger = new EcmaScriptDebugger(services, esdbgVersion);
+      }
     }
+
+    logger.fine("Using " + debugger.getClass().getSimpleName());
 
     exec = new OperaExec(services, getVersionForService(serviceList, "exec"));
 
