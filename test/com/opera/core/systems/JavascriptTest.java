@@ -55,7 +55,7 @@ public class JavascriptTest extends OperaDriverTestCase {
   }
 
   @Test
-  public void testDoubleClick() {
+  public void testlDoubleClick() {
     WebElement one = driver.findElementById("one");
     one.click();
     one.click();

@@ -18,8 +18,6 @@ package com.opera.core.systems;
 
 /**
  * A list of all Opera products.  Use the {@link #is(OperaProduct)} to compare and check products.
- *
- * @see {@link OperaCoreProfile}
  */
 public enum OperaProduct {
 

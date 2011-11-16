@@ -93,10 +93,13 @@ public class OperaLauncherRunner extends OperaRunner
       launcherArguments.add("-verbosity");
       launcherArguments.add(Level.FINEST.toString());
     }
+    // TODO(andreastt): Disabled due to current launcher not having -profile
+    /*
     if (product != OperaProduct.ALL) {
       launcherArguments.add("-profile");
       launcherArguments.add(product.toString());
     }
+    */
     if (settings.getNoQuit()) {
       launcherArguments.add("-noquit");
     }

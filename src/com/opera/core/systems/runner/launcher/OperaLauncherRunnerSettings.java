@@ -5,6 +5,7 @@ import com.google.common.io.Closeables;
 import com.google.common.io.Files;
 
 import com.opera.core.systems.OperaPaths;
+import com.opera.core.systems.OperaProduct;
 import com.opera.core.systems.arguments.OperaCoreArguments;
 import com.opera.core.systems.arguments.OperaDesktopArguments;
 import com.opera.core.systems.arguments.interfaces.OperaArguments;
@@ -56,7 +57,7 @@ public class OperaLauncherRunnerSettings extends OperaRunnerSettings {
     OperaLauncherRunnerSettings settings = new OperaLauncherRunnerSettings();
 
     OperaArguments arguments;
-    if (settings.getProduct() != null && settings.getProduct().equals("desktop")) {
+    if (settings.getProduct().is(OperaProduct.DESKTOP)) {
       arguments = new OperaDesktopArguments();
     } else {
       arguments = new OperaCoreArguments();

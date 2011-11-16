@@ -116,12 +116,6 @@ public class OperaRunnerSettingsTest {
   }
 
   @Test
-  public void testCoreProfile() {
-    settings.setCoreProfile(OperaCoreProfile.MINI);
-    assertEquals(OperaCoreProfile.MINI, settings.getCoreProfile());
-  }
-
-  @Test
   public void testProfile() {
     String profile = "/path/that/does/not/exist";
     settings.setProfile(profile);
@@ -209,7 +203,7 @@ public class OperaRunnerSettingsTest {
   public void testDefaultSettings() {
     OperaRunnerSettings defaultSettings = OperaRunnerSettings.getDefaultSettings();
     assertNotNull(defaultSettings);
-    assertNull(defaultSettings.getProduct());
+    assertEquals(OperaProduct.CORE, defaultSettings.getProduct());
     assertTrue("default port should be greater than 0", defaultSettings.getPort() > 0);
     assertTrue(defaultSettings.getArguments() instanceof OperaCoreArguments);
   }

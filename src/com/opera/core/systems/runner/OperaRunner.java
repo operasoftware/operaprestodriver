@@ -16,6 +16,7 @@ limitations under the License.
 
 package com.opera.core.systems.runner;
 
+import com.opera.core.systems.OperaProduct;
 import com.opera.core.systems.arguments.OperaCoreArguments;
 import com.opera.core.systems.arguments.OperaDesktopArguments;
 import com.opera.core.systems.arguments.interfaces.OperaArguments;
@@ -64,7 +65,7 @@ public class OperaRunner implements com.opera.core.systems.runner.interfaces.Ope
 
     // Use arguments provided by user if set
     OperaArguments arguments;
-    if (settings.getProduct() != null && settings.getProduct().equals("desktop")) {
+    if (settings.getProduct().is(OperaProduct.DESKTOP)) {
       arguments = new OperaDesktopArguments();
     } else {
       arguments = new OperaCoreArguments();
