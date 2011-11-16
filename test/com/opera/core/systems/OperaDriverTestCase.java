@@ -73,7 +73,8 @@ public abstract class OperaDriverTestCase {
   }
 
   /**
-   * Fetch the product from the connected driver.
+   * Fetch the product from the connected driver or override it using the OPERA_PRODUCT
+   * environmental variable.
    */
   protected static void initProduct() {
     if (driver == null || !driver.isRunning()) {
@@ -82,7 +83,7 @@ public abstract class OperaDriverTestCase {
 
     String requestedProduct = System.getenv("OPERA_PRODUCT");
     if (requestedProduct == null || requestedProduct.isEmpty()) {
-      requestedProduct = driver.utils().getProduct();
+      requestedProduct = driver.getCapabilities().getCapability(OperaDriver.PRODUCT).toString();
     }
 
     if (requestedProduct != null && !requestedProduct.isEmpty()) {
@@ -154,6 +155,10 @@ class TestOperaDriver extends OperaDriver {
 
   public OperaRunner getRunner() {
     return runner;
+  }
+
+  public Capabilities getCapabilities() {
+    return capabilities;
   }
 
   public void quit() {
