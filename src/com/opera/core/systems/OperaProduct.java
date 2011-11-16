@@ -17,31 +17,17 @@ limitations under the License.
 package com.opera.core.systems;
 
 /**
- * A list of all Opera products.  Use the {@link #is(OperaProduct)} to compare and check products.  Some
- * of the products, such as the general definition CORE might map to several sub-products; in this
- * case CORE_DESKTOP, CORE_SMARTPHONE and CORE_TV.
+ * A list of all Opera products.  Use the {@link #is(OperaProduct)} to compare and check products.
+ *
+ * @see {@link OperaCoreProfile}
  */
 public enum OperaProduct {
 
-  CORE_DESKTOP("core-desktop"),
-  CORE_SMARTPHONE("core-smartphone"),
-  CORE_TV("core-tv"),
+  CORE("core"),
   DESKTOP("desktop"),
   SDK("sdk"),
   MOBILE("mobile"),
   MINI("mini"),
-
-  /**
-   * Most core products are quite similar.  <code>CORE</code> will match <code>CORE_DESKTOP</code>,
-   * <code>CORE_SMARTPHONE</code> and <code>CORE_TV</code>.
-   */
-  CORE("core") {
-    @Override
-    public boolean is(OperaProduct compareWith) {
-      return compareWith == CORE || compareWith == CORE_DESKTOP || compareWith == CORE_SMARTPHONE
-             || compareWith == CORE_TV;
-    }
-  },
 
   /**
    * Never returned, but can be used to request any product.
