@@ -23,7 +23,7 @@ package com.opera.core.systems;
  */
 public enum OperaProduct {
 
-  CORE("core"),
+  CORE("core-gogi"),
   DESKTOP("desktop"),
   SDK("sdk"),
   MOBILE("mobile"),
@@ -39,7 +39,14 @@ public enum OperaProduct {
     }
   };
 
-  OperaProduct(String a) {
+  private String product;
+
+  OperaProduct(String product) {
+    this.product = product;
+  }
+
+  public String toString() {
+    return product;
   }
 
   /**
