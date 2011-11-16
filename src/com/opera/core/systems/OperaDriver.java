@@ -181,7 +181,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
   public static final String GUESS_BINARY_PATH = "opera.guess_binary_path";
 
   /**
-   * (String) The profile configuration we are using, for example "desktop" or "core-gogi".
+   * (String) The product we are using, for example "desktop" or "core".
    */
   public static final String PRODUCT = "opera.product";
 
@@ -288,7 +288,6 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
       capabilities.setCapability(ARGUMENTS, settings.getArguments().toString());
       capabilities.setCapability(PORT, settings.getPort());
       capabilities.setCapability(PROFILE, settings.getProfile());
-      capabilities.setCapability(PRODUCT, settings.getProduct());
 
       if (capabilities.getCapability(BINARY) != null) {
         runner = new OperaLauncherRunner((OperaLauncherRunnerSettings) settings);
@@ -316,6 +315,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     capabilities.setCapability(LOGGING_FILE, (String) null);
 
     capabilities.setCapability(BINARY, (String) null);
+    capabilities.setCapability(ARGUMENTS, "");
 
     // Default = 127.0.0.1, but need to set to null for backwards compat.
     // with Opera versions that don't support -autotestmode host:port
@@ -323,19 +323,15 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     // 0 = Random, -1 = Opera default (7001). See above.
     capabilities.setCapability(PORT, 0);
 
-    capabilities.setCapability(ARGUMENTS, "");
-
     capabilities.setCapability(LAUNCHER, (String) null);
-
     capabilities.setCapability(DISPLAY, (Integer) null);
-
     capabilities.setCapability(PROFILE, (String) null);
+    capabilities.setCapability(PRODUCT, OperaProduct.CORE.toString());
 
     capabilities.setCapability(AUTOSTART, true);
     capabilities.setCapability(NO_RESTART, false);
     capabilities.setCapability(NO_QUIT, false);
     capabilities.setCapability(GUESS_BINARY_PATH, true);
-
     capabilities.setCapability(OPERAIDLE, false);
 
     return capabilities;
@@ -380,6 +376,9 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     cookieManager = services.getCookieManager();
     //cookieManager.updateCookieSettings();
     prefs = services.getPrefs();
+
+    // Get product from Opera
+    capabilities.setCapability(PRODUCT, utils().getProduct());
   }
 
   /**
@@ -1166,7 +1165,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     }
   }
 
-  boolean hasTimeRemaining(long start) {
+  protected boolean hasTimeRemaining(long start) {
     return System.currentTimeMillis() - start < OperaIntervals.WAIT_FOR_ELEMENT.getValue();
   }
 
