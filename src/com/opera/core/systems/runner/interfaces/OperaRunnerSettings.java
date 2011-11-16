@@ -16,6 +16,8 @@ limitations under the License.
 
 package com.opera.core.systems.runner.interfaces;
 
+import com.opera.core.systems.OperaCoreProfile;
+import com.opera.core.systems.OperaProduct;
 import com.opera.core.systems.arguments.interfaces.OperaArguments;
 
 import java.io.File;
@@ -59,18 +61,32 @@ public interface OperaRunnerSettings {
   public void setDisplay(Integer display) throws UnsupportedOperationException;
 
   /**
-   * Returns the profile configuration specified, for example "desktop" or "core-gogi".
+   * Returns the product currently used, for example desktop or core.
    *
    * @return the profile configuration set
    */
-  public String getProduct();
+  public OperaProduct getProduct();
 
   /**
-   * Sets the profile configuration, for example "desktop" or "core-gogi".
+   * Sets the product currently used, for example desktop or core.
    *
    * @param product the profile configuration to use
    */
-  public void setProduct(String product);
+  public void setProduct(OperaProduct product);
+
+  /**
+   * Returns the product profile currently used, for example smartphone, tv, desktop, or mini.
+   *
+   * @return the product's profile
+   */
+  public OperaCoreProfile getCoreProfile();
+
+  /**
+   * Sets the currently used product profile, for example smartphone, tv, desktop, or mini.
+   *
+   * @param profile the product profile to use
+   */
+  public void setCoreProfile(OperaCoreProfile profile);
 
   /**
    * Sets the directory to use for the Opera profile.  If null, generate a temporary directory.  If

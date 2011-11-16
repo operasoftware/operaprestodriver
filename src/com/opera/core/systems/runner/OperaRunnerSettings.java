@@ -1,5 +1,7 @@
 package com.opera.core.systems.runner;
 
+import com.opera.core.systems.OperaCoreProfile;
+import com.opera.core.systems.OperaProduct;
 import com.opera.core.systems.arguments.OperaCoreArguments;
 import com.opera.core.systems.arguments.OperaDesktopArguments;
 import com.opera.core.systems.arguments.interfaces.OperaArguments;
@@ -23,7 +25,8 @@ public class OperaRunnerSettings
 
   private File operaBinary = null;
   private Integer display = null;
-  private String product = null;
+  private OperaProduct product = OperaProduct.CORE;
+  private OperaCoreProfile coreProfile = OperaCoreProfile.DESKTOP;
   private String profile = null;  // "" for Opera < 12
   private boolean noQuit = false;
   private String host = "127.0.0.1";
@@ -89,12 +92,20 @@ public class OperaRunnerSettings
     this.display = display;
   }
 
-  public String getProduct() {
+  public OperaProduct getProduct() {
     return product;
   }
 
-  public void setProduct(String product) {
+  public void setProduct(OperaProduct product) {
     this.product = product;
+  }
+
+  public OperaCoreProfile getCoreProfile() {
+    return coreProfile;
+  }
+
+  public void setCoreProfile(OperaCoreProfile profile) {
+    coreProfile = profile;
   }
 
   public String getProfile() {
