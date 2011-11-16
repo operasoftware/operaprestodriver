@@ -566,8 +566,6 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
       }
     } while (!isAvailable && hasTimeRemaining(start));
 
-    OperaIntervals.WAIT_FOR_ELEMENT.setValue(0L);
-
     if (isAvailable) {
       String
           error =
@@ -653,8 +651,6 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
       }
 
     } while (true);
-
-    OperaIntervals.WAIT_FOR_ELEMENT.setValue(0L);
 
     if (id != null) {
       return elements;
@@ -1125,8 +1121,6 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
     } while (true);
 
-    OperaIntervals.WAIT_FOR_ELEMENT.setValue(0L);
-
     if (id != null) {
       return elements;
     } else {
@@ -1147,8 +1141,6 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
         sleep(OperaIntervals.EXEC_SLEEP.getValue());
       }
     } while (!isAvailable && hasTimeRemaining(start));
-
-    OperaIntervals.WAIT_FOR_ELEMENT.setValue(0L);
 
     if (isAvailable) {
       Boolean
