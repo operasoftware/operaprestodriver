@@ -19,6 +19,7 @@ package com.opera.core.systems.runner.launcher;
 import com.google.protobuf.GeneratedMessage;
 
 import com.opera.core.systems.OperaPaths;
+import com.opera.core.systems.OperaProduct;
 import com.opera.core.systems.arguments.OperaArgument;
 import com.opera.core.systems.model.ScreenShotReply;
 import com.opera.core.systems.runner.OperaRunner;
@@ -69,7 +70,7 @@ public class OperaLauncherRunner extends OperaRunner
     // Parse remaining launcher-related settings
     Integer launcherPort = PortProber.findFreePort();
     Integer display = settings.getDisplay();
-    String product = settings.getProduct();
+    OperaProduct product = settings.getProduct();
     String profile = settings.getProfile();
     String binary;
     if (settings.getBinary() == null) {
@@ -92,9 +93,9 @@ public class OperaLauncherRunner extends OperaRunner
       launcherArguments.add("-verbosity");
       launcherArguments.add(Level.FINEST.toString());
     }
-    if (product != null && !product.isEmpty()) {
+    if (product != OperaProduct.ALL) {
       launcherArguments.add("-profile");
-      launcherArguments.add(product);
+      launcherArguments.add(product.toString());
     }
     if (settings.getNoQuit()) {
       launcherArguments.add("-noquit");
