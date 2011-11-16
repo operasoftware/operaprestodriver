@@ -40,7 +40,14 @@ public enum OperaCoreProfile {
     }
   };
 
-  OperaCoreProfile(String a) {
+  private String coreProfile;
+
+  OperaCoreProfile(String profile) {
+    coreProfile = profile;
+  }
+
+  public String toString() {
+    return coreProfile;
   }
 
   /**
