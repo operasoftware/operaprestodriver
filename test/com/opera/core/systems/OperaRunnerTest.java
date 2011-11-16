@@ -43,7 +43,7 @@ public class OperaRunnerTest {
 
   @Test
   public void testConstructionWithProductCore() {
-    settings.setProduct("core-desktop");
+    settings.setProduct(OperaProduct.CORE);
     runner = new OperaRunner(settings);
     assertNotNull(runner);
     assertTrue(runner.settings.getArguments() instanceof OperaCoreArguments);
@@ -51,7 +51,7 @@ public class OperaRunnerTest {
 
   @Test
   public void testConstructionWithProductDesktop() {
-    settings.setProduct("desktop");
+    settings.setProduct(OperaProduct.DESKTOP);
     runner = new OperaRunner(settings);
     assertNotNull(runner);
     assertTrue(runner.settings.getArguments() instanceof OperaDesktopArguments);

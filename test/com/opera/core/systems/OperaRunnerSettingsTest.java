@@ -111,9 +111,14 @@ public class OperaRunnerSettingsTest {
 
   @Test
   public void testProduct() {
-    String product = "core-desktop";
-    settings.setProduct(product);
-    assertEquals(product, settings.getProduct());
+    settings.setProduct(OperaProduct.CORE);
+    assertEquals(OperaProduct.CORE, settings.getProduct());
+  }
+
+  @Test
+  public void testCoreProfile() {
+    settings.setCoreProfile(OperaCoreProfile.MINI);
+    assertEquals(OperaCoreProfile.MINI, settings.getCoreProfile());
   }
 
   @Test
