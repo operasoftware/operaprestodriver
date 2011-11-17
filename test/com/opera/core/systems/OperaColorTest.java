@@ -34,6 +34,18 @@ public class OperaColorTest {
   }
 
   @Test
+  public void testToHexWithBlack() {
+    assertEquals("#00FFFF", OperaColor.toHex(0,255,255));
+    assertEquals("#FF00FF", OperaColor.toHex(255,0,255));
+    assertEquals("#FFFF00", OperaColor.toHex(255,255,0));
+  }
+
+  @Test
+  public void testToHexWithComplexColour() {
+    assertEquals("#00FF96", OperaColor.toHex(0,255,150));
+  }
+
+  @Test
   public void testGetHex() {
     OperaColor color = new OperaColor("rgb(120, 110, 100");
     String hex = color.getHex();
