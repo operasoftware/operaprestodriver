@@ -118,7 +118,7 @@ class to specify settings for OperaDriver.  The capabilities we support are:
 
 To use capabilities:
 
-    DesiredCapabilities capabilities = new DesiredCapabilities();
+    DesiredCapabilities capabilities = DesiredCapabilities.opera();
     capabilities.setCapability("opera.logging.level", "CONFIG");
     capabilities.setCapability("opera.logging.file", "/var/log/operadriver.log");
     capabilities.setCapability("opera.display", 8);
