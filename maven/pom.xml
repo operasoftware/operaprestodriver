@@ -11,7 +11,7 @@
     <groupId>com.opera</groupId>
     <artifactId>operadriver</artifactId>
     <packaging>jar</packaging>
-    <version>0.7.4-SNAPSHOT</version>
+    <version>0.8-SNAPSHOT</version>
     <name>OperaDriver</name>
     <description>OperaDriver is a vendor-supported WebDriver implementation developed by Opera Software and volunteers that implements WebDriver's wire protocol.</description>
     <url>http://opera.com/developer/tools/operadriver/</url>
@@ -46,7 +46,7 @@
         </dependency>
         <dependency>
             <groupId>com.google.guava</groupId>
-            <artifactid>guava</artifactId>
+            <artifactId>guava</artifactId>
             <version>10.0.1</version>
         </dependency>
         <dependency>
