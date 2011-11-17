@@ -18,6 +18,7 @@ package com.opera.core.systems;
 
 import com.opera.core.systems.model.Canvas;
 import com.opera.core.systems.model.ColorResult;
+import com.opera.core.systems.model.OperaColor;
 import com.opera.core.systems.model.ScreenShotReply;
 import com.opera.core.systems.scope.internal.OperaColors;
 import com.opera.core.systems.scope.internal.OperaFlags;
@@ -846,8 +847,16 @@ public class OperaWebElement extends RemoteWebElement {
   };
 
   public String getCssValue(String property) {
-    return callMethod(
+    String value = callMethod(
         "return " + OperaAtoms.GET_EFFECTIVE_STYLE.getValue() + "(locator, '" + property + "')");
+
+    // Opera returns a colour in RGB format.  WebDriver specifies that the output from getCssValue()
+    // must be in HEX format.
+    if (property.contains("color")) {
+      return new OperaColor(value).getHex();
+    }
+
+    return value;
   }
 
   public WebDriver getWrappedDriver() {

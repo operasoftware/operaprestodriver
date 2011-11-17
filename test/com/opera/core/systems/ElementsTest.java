@@ -19,6 +19,7 @@ package com.opera.core.systems;
 import org.junit.Test;
 import org.openqa.selenium.WebElement;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertTrue;
 
@@ -61,6 +62,12 @@ public class ElementsTest extends OperaDriverTestCase {
     WebElement el = driver.findElementById("dog");
     el.click();
     assertTrue(el.isSelected());
+  }
+
+  @Test
+  public void testGetCssValue() {
+    driver.navigate().to(fixture("test.html"));
+    assertEquals("#000000", driver.findElementByClassName("invert").getCssValue("background-color"));
   }
 
 }

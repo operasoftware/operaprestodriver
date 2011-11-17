@@ -19,7 +19,7 @@ package com.opera.core.systems.scope.internal;
 import com.opera.core.systems.model.OperaColor;
 
 /**
- * Enumerator for contains colour API (RGB values for standard web colors).
+ * Enumerator for contains colour API (RGB values for standard web colours).
  *
  * @author Deniz Turkoglu <denizt@opera.com>
  */
@@ -43,13 +43,7 @@ public enum OperaColors {
   YELLOW  (255, 255, 0);
 
   private OperaColors(int r, int g, int b) {
-    this.operaColor = new OperaColor();
-    operaColor.setLowRed(r);
-    operaColor.setHighRed(r);
-    operaColor.setLowGreen(g);
-    operaColor.setHighGreen(g);
-    operaColor.setLowBlue(b);
-    operaColor.setHighBlue(b);
+    this.operaColor = new OperaColor(r,g,b);
   }
 
   private OperaColor operaColor;

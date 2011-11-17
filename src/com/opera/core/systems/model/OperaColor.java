@@ -16,12 +16,22 @@ limitations under the License.
 
 package com.opera.core.systems.model;
 
+import java.awt.*;
+
 /**
  * A simple pojo file to hold the colour values.
  *
- * @author Deniz Turkoglu <dturkoglu@opera.com>
+ * The OperaColor class is used to encapsulate colours in the default sRGB colour space.
+ * Specifically OperaColor extends {@link Color} and adds the functionality of parsing internal
+ * Opera RGB strings to the {@link Color} object.
+ *
+ * It also holds colour values.
+ *
+ * It accepts a string for the format "rgb(120, 120, 120)" as a constructor argument.
+ *
+ * @author Deniz Turkoglu <dturkoglu@opera.com>, Andreas Tolf Tolfsen <andreastt@opera.com>
  */
-public class OperaColor {
+public class OperaColor extends Color {
 
   protected int id;
   protected Integer lowRed;
@@ -29,6 +39,27 @@ public class OperaColor {
   protected Integer lowGreen;
   protected Integer highGreen;
   protected Integer lowBlue;
+  protected Integer highBlue;
+
+  public OperaColor(int r, int g, int b) {
+    super(r,g,b);
+
+    setLowRed(r);
+    setHighRed(r);
+    setLowGreen(g);
+    setHighGreen(g);
+    setLowBlue(b);
+    setHighBlue(b);
+  }
+
+  /**
+   * @param rgb string of the format "rgb(120, 120, 120)"
+   */
+  public OperaColor(String rgb) {
+    this(Integer.valueOf(rgb.replace("rgb(", "").replace(")", "").split(",")[0].trim()),
+         Integer.valueOf(rgb.replace("rgb(", "").replace(")", "").split(",")[1].trim()),
+         Integer.valueOf(rgb.replace("rgb(", "").replace(")", "").split(",")[2].trim()));
+  }
 
   public int getId() {
     return id;
@@ -86,6 +117,34 @@ public class OperaColor {
     this.highBlue = highBlue;
   }
 
-  protected Integer highBlue;
+  /**
+   * Returns the HEX value representing the colour in the default sRGB ColorModel.
+   *
+   * @return the HEX value of the colour in the default SRGB ColorModel
+   */
+  public String getHex() {
+    return toHex(getRed(), getGreen(), getBlue());
+  }
+
+  /**
+   * Returns a web browser-friendly HEX value representing the colour in the default sRGB
+   * ColorModel.
+   *
+   * @param r red
+   * @param g green
+   * @param b blue
+   * @return a browser-friendly HEX value
+   */
+  public static String toHex(int r, int g, int b) {
+    return "#" + toBrowserHexValue(r) + toBrowserHexValue(g) + toBrowserHexValue(b);
+  }
+
+  private static String toBrowserHexValue(int number) {
+    StringBuilder builder = new StringBuilder(Integer.toHexString(number & 0x00ff));
+    while (builder.length() < 2) {
+      builder.append("0");
+    }
+    return builder.toString().toUpperCase();
+  }
 
 }
