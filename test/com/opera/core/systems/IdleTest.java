@@ -179,6 +179,7 @@ public class IdleTest extends OperaDriverTestCase {
   }
 
   @Test
+  @Ignore(products = DESKTOP)
   public void testSendKeysNewline() throws Exception {
     getFixture("javascript.html");
 
