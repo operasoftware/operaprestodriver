@@ -46,6 +46,13 @@ Other libraries required by OperaDriver:
   * JUnit 4.10
   * Selenium 2.12.0
 
+### OperaDriver on 11.52 or older
+
+To use OperaDriver on Opera < 11.52, make sure you set `opera.port` to
+`-1` and `opera.profile` to `""` (empty string) to disable `-debugproxy`
+and `-pd` command-line arguments which older versions of Opera do not
+support.
+
 
 Getting started
 ---------------
@@ -163,7 +170,8 @@ This is a list of the official Opera Desktop versions supported by OperaDriver:
 |-------------|-----------------------------------------------------------------------------------------------------------------------------|
 | 12.00       | *(Not released yet)*                                                                                                        |
 | 11.60       |                                                                                                                             |
-| 11.51       | Set `opera.port` to `-1` and `opera.profile` to "" (empty string) to disable `-debugproxy` and `-pd` command-line arguments |
+| 11.52       | Set `opera.port` to `-1` and `opera.profile` to "" (empty string) to disable `-debugproxy` and `-pd` command-line arguments |
+| 11.51       |                                                                                                                             |
 | 11.50       |                                                                                                                             |
 | 11.11       |                                                                                                                             |
 | 11.10       |                                                                                                                             |
