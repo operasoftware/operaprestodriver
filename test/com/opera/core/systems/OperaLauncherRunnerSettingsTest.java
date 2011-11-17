@@ -71,7 +71,7 @@ public class OperaLauncherRunnerSettingsTest {
   @Test
   public void testDefaultOperaBinaryLocation() {
     // the opera binary location should default to null
-    Assert.assertNull(settings.getOperaBinaryLocation());
+    Assert.assertEquals("", settings.getOperaBinaryLocation());
   }
 
   @Test
@@ -83,7 +83,7 @@ public class OperaLauncherRunnerSettingsTest {
   @Test
   public void testDefaultOperaBinaryArguments() {
     // the opera binary arguments should default to null
-    Assert.assertEquals(settings.getOperaBinaryArguments(), "");
+    Assert.assertEquals("", settings.getOperaBinaryArguments());
   }
 
   @Test

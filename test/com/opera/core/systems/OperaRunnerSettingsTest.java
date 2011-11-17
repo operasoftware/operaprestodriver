@@ -17,13 +17,11 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.logging.Level;
 
-import static com.google.common.collect.Ranges.greaterThan;
-import static org.hamcrest.core.Is.is;
+import static org.openqa.selenium.Platform.WINDOWS;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 public class OperaRunnerSettingsTest {
@@ -56,6 +54,7 @@ public class OperaRunnerSettingsTest {
   }
 
   @Test
+  @Ignore(platforms = WINDOWS)
   public void testConstructionWithEnvironmentalVariable() throws Exception {
     setEnvVar("OPERA_ARGS", "-foo -bar baz -bah=abc");
     OperaRunnerSettings envVarSettings = new OperaRunnerSettings();

@@ -67,6 +67,7 @@ public class DriverKeysTest extends OperaDriverTestCase {
 
   @Test
   public void testMultiByte() {
+    // Note that this test will fail if you have the wrong charset setup on Windows.
     driver.key("ル");
     driver.key("ビ");
     driver.key("ー");
