@@ -186,8 +186,14 @@ to its absolute path:
 Known issues 
 ------------
 
+* Modifier keys' states are not preserved across multiple `.sendKeys()` calls in `Actions`
 * Problems with Operas with IME feature enabled (Opera Mobile, Android)
 * No support for Opera Mini
 * No support for JavaScript alert/popup dialogues
 * getScreenshotAs() only returns image data of the current viewport, other parts of the image will be black.
 * Requires Administrator privileges on Windows Vista and 7 when Opera 11.5x is installed in the default location (Program Files).
+* Not possible to move into an image enclosed in a link
+* Failing the test for clicking a button that closes an open window does not cause the browser to hang
+* Failing test for getting window handles after closing a window
+* Problems with coordinates on moving mouse back and forth past view port
+* Closing the final browser window causes an exception
