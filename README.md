@@ -48,10 +48,10 @@ Other libraries required by OperaDriver:
 
 ### OperaDriver on 11.52 or older
 
-To use OperaDriver on Opera < 11.52, make sure you set `opera.port` to
-`-1` and `opera.profile` to `""` (empty string) to disable `-debugproxy`
-and `-pd` command-line arguments which older versions of Opera do not
-support.
+To use OperaDriver on Opera < 11.52, make sure you set the capabilities
+`opera.port` to `-1` and `opera.profile` to `""` (empty string) to
+disable `-debugproxy` and `-pd` command-line arguments which older
+versions of Opera do not support.
 
 
 Getting started
