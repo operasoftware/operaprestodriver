@@ -16,11 +16,9 @@ limitations under the License.
 
 package com.opera.core.systems.model;
 
-import java.awt.*;
+import java.awt.Color;
 
 /**
- * A simple pojo file to hold the colour values.
- *
  * The OperaColor class is used to encapsulate colours in the default sRGB colour space.
  * Specifically OperaColor extends {@link Color} and adds the functionality of parsing internal
  * Opera RGB strings to the {@link Color} object.
@@ -120,7 +118,7 @@ public class OperaColor extends Color {
   /**
    * Returns the HEX value representing the colour in the default sRGB ColorModel.
    *
-   * @return the HEX value of the colour in the default SRGB ColorModel
+   * @return the HEX value of the colour in the default sRGB ColorModel
    */
   public String getHex() {
     return toHex(getRed(), getGreen(), getBlue());
