@@ -110,7 +110,7 @@
                             <tasks>
                                 <copy todir="target/classes">
                                     <fileset dir="../src" includes="**/*.properties" />
-                                    <fileset dir=".." includes="launcher/*" />
+                                    <zipgroupfileset dir="../lib" includes="operalaunchers*.jar" />
                                 </copy>
                             </tasks>
                         </configuration>
