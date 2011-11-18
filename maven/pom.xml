@@ -40,6 +40,11 @@
 
   <dependencies>
     <dependency>
+      <groupId>com.opera</groupId>
+      <artifactId>operalaunchers</artifactId>
+      <version>0.3</version>
+    </dependency>
+    <dependency>
       <groupId>com.google.protobuf</groupId>
       <artifactId>protobuf-java</artifactId>
       <version>2.4.1</version>
@@ -110,7 +115,6 @@
               <tasks>
                 <copy todir="target/classes">
                   <fileset dir="../src" includes="**/*.properties" />
-                  <zipgroupfileset dir="../lib" includes="operalaunchers*.jar" />
                 </copy>
               </tasks>
             </configuration>
