@@ -91,7 +91,7 @@ public class WaitState {
     WebDriverException exception;
     Response response;
     boolean seen;
-    long remaining_idle_timeout;
+    long remainingIdleTimeout;
     DesktopWindowInfo desktopWindowInfo;  // No idea if this is right but it will
     private QuickMenuInfo quickMenuInfo;
     private QuickMenuID quickMenuId;
@@ -415,7 +415,7 @@ public class WaitState {
   private final ResultItem pollResultItem(long timeout, boolean idle) {
     ResultItem result = getResult();
     if (result != null) {
-      result.remaining_idle_timeout = timeout;
+      result.remainingIdleTimeout = timeout;
     }
 
     if (result == null && timeout > 0) {
@@ -424,8 +424,8 @@ public class WaitState {
       long end = System.currentTimeMillis();
       result = getResult();
       if (result != null) {
-        result.remaining_idle_timeout = timeout - (end - start);
-        logger.finest("Remaining timeout:" + result.remaining_idle_timeout);
+        result.remainingIdleTimeout = timeout - (end - start);
+        logger.finest("Remaining timeout: " + result.remainingIdleTimeout);
       }
     }
 
@@ -463,7 +463,7 @@ public class WaitState {
       while (true) {
 
         ResultItem result = pollResultItem(timeout, type == ResponseType.OPERA_IDLE);
-        timeout = result.remaining_idle_timeout;
+        timeout = result.remainingIdleTimeout;
         WaitResult waitResult = result.waitResult;
 
         switch (waitResult) {
