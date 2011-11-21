@@ -358,4 +358,46 @@ public class OperaLauncherRunner extends OperaRunner
     return screenshotreply;
   }
 
+  /**
+   * The launcher allows for the following logging levels: "FINEST", "FINE", "INFO", "WARNING",
+   * "SEVERE".  Since the launcher is unusually chatty, we don't want it to use the same logging
+   * level as OperaDriver.  Besides, it doesn't have the same logging levels as Java.  This method
+   * accepts a Java logging level and converts it to something sensible to pass on to the launcher.
+   *
+   * @param level the Java logging level
+   * @return a sensible, non-chatty logging level
+   */
+  public static Level toLauncherLoggingLevel(Level level) {
+    // ALL -2147483648
+    // FINEST 300
+    // FINER 400
+    // FINE 500
+    // CONFIG 700
+    // INFO 800
+    // WARNING 900
+    // SEVERE 1000
+    // OFF 2147483647
+
+    switch (level.intValue()) {
+      case 1000: // SEVERE
+        return Level.SEVERE;
+
+      case 900: // WARNING
+        return Level.WARNING;
+
+      case 800: // INFO
+      case 700: // CONFIG
+      case 500: // FINE
+      case 400: // FINER
+        return Level.FINE;
+
+      case 300: // FINEST
+      case -2147483648: // ALL
+        return Level.FINEST;
+
+      default:  // OFF
+        return Level.OFF;
+    }
+  }
+
 }

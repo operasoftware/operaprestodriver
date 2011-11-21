@@ -19,7 +19,6 @@ package com.opera.core.systems.runner.launcher;
 import com.opera.core.systems.runner.OperaRunnerException;
 
 import org.openqa.selenium.Platform;
-import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.os.ProcessUtils;
 
 import java.io.IOException;
@@ -28,9 +27,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class OperaLauncherBinary extends Thread {
+
+  private static final String LAUNCHER_LOGGING_OUTPUT_EXPRESSION = "^\\[(\\w+)\\]";
 
   private Process process;
   private OutputWatcher watcher;
@@ -114,6 +118,8 @@ public class OperaLauncherBinary extends Thread {
       logger.finer("Running launcher: " + running.get());
 
       InputStream stream = process.getInputStream();
+      Level level;
+      Pattern pattern = Pattern.compile(LAUNCHER_LOGGING_OUTPUT_EXPRESSION);
       String buffer = "";
 
       while (running.get()) {
@@ -122,8 +128,20 @@ public class OperaLauncherBinary extends Thread {
           if (r == -1) {
             return;
           } else if (r == '\n') {
-            // Log any messages from launcher's stdout to INFO
-            logger.info("launcher: " + buffer);
+            // Log any messages from launcher's stdout
+            level = Level.FINE;
+            Matcher matcher = pattern.matcher(buffer);
+
+            if (matcher.find()) {
+              level = OperaLauncherRunner.toLauncherLoggingLevel(Level.parse(matcher.group(1)));
+              buffer = "launcher: " + buffer.replaceFirst(LAUNCHER_LOGGING_OUTPUT_EXPRESSION, "").trim();
+            } else {
+              buffer = "opera: " + buffer;
+            }
+
+            logger.log(level, buffer);
+
+            // Empty buffer
             buffer = "";
           } else {
             buffer += (char) r;

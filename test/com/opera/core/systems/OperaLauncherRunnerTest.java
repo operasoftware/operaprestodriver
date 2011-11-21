@@ -26,6 +26,7 @@ import org.junit.Test;
 import org.openqa.selenium.Platform;
 
 import java.io.File;
+import java.util.logging.Level;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -41,6 +42,7 @@ public class OperaLauncherRunnerTest {
   @Before
   public void beforeEach() {
     settings = new OperaLauncherRunnerSettings();
+    settings.setLoggingLevel(Level.FINEST);
   }
 
   @Test
