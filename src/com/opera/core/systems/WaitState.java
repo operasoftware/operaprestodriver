@@ -58,7 +58,7 @@ public class WaitState {
    */
   private int capturedIdleEvents = 0;
 
-  private Object lock = new Object();
+  private final Object lock = new Object();
 
   // Used for profile specific workarounds
   private String profile;
