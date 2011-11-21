@@ -16,84 +16,132 @@ limitations under the License.
 
 package com.opera.core.systems;
 
+import com.opera.core.systems.arguments.OperaCoreArguments;
+import com.opera.core.systems.runner.OperaRunnerException;
+import com.opera.core.systems.runner.launcher.OperaLauncherRunnerSettings;
+
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.openqa.selenium.Platform;
+
+import java.io.File;
+import java.util.logging.Level;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import java.io.File;
-
-import org.junit.Assert;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
-import org.openqa.selenium.Platform;
-
-import com.opera.core.systems.runner.OperaRunnerException;
-import com.opera.core.systems.runner.launcher.OperaLauncherRunner;
-import com.opera.core.systems.settings.OperaDriverSettings;
-
 public class OperaLauncherRunnerSettingsTest {
 
-  private static OperaDriverSettings settings;
-  private static OperaLauncherRunner runner;
+  private TestOperaLauncherRunnerSettings settings;
+  private static
+  File
+      launcherOnSystem =
+      new File(System.getProperty("user.home") + File.separator + ".launcher" + File.separator
+               + TestOperaLauncherRunnerSettings.getLauncherNameForOS2());
+  private static File fakeBinary;
 
-  @Rule
-  public ExpectedException exception = ExpectedException.none();
+  @BeforeClass
+  public static void beforeAll() {
+    if (Platform.getCurrent().is(Platform.WINDOWS)) {
+      fakeBinary = new File("C:\\WINDOWS\\system32\\find.exe");
+    } else {
+      fakeBinary = new File("/bin/echo");
+    }
+  }
 
-  @Test
-  public void testOperaDriverSettings() {
-    settings = new OperaDriverSettings();
-    assertNotNull(settings);
+  @Before
+  public void setUp() {
+    settings = new TestOperaLauncherRunnerSettings();
   }
 
   @Test
-  public void testDefaultDoRunOperaLauncherFromOperaDriver() {
-    // default is to run launcher from the driver, so this should always be true
-    assertTrue(settings.doRunOperaLauncherFromOperaDriver());
+  public void testDefaultSettings() {
+    OperaLauncherRunnerSettings
+        defaultSettings =
+        TestOperaLauncherRunnerSettings.getDefaultSettings();
+    assertNotNull(defaultSettings);
+    assertEquals(OperaProduct.CORE, defaultSettings.getProduct());
+    assertTrue("default port should be greater than 0", defaultSettings.getPort() > 0);
+    assertTrue(defaultSettings.getArguments() instanceof OperaCoreArguments);
   }
 
   @Test
-  public void testSetRunOperaLauncherFromOperaDriver() {
-    exception.expect(UnsupportedOperationException.class);
-    settings.setRunOperaLauncherFromOperaDriver(false);
+  public void testSetLoggingLevel() {
+    settings.setLoggingLevel(Level.SEVERE);
+    assertEquals(Level.SEVERE, settings.getLoggingLevel());
   }
 
   @Test
-  public void testDefaultLauncherListeningPort() {
-    // the listening port should default to 9999
-    assertEquals(9999, settings.getOperaLauncherListeningPort());
+  public void testSetLoggingLevelToAll() {
+    settings.setLoggingLevel(Level.ALL);
+    assertEquals(Level.FINEST, settings.getLoggingLevel());
   }
 
   @Test
-  public void testSetLauncherListeningPort() {
-    exception.expect(UnsupportedOperationException.class);
-    settings.setOperaLauncherListeningPort(5555);
+  public void testSetLoggingLevelToConfig() {
+    settings.setLoggingLevel(Level.CONFIG);
+    assertEquals(Level.INFO, settings.getLoggingLevel());
   }
 
   @Test
-  public void testDefaultOperaBinaryLocation() {
-    // the opera binary location should default to null
-    assertNull("", settings.getOperaBinaryLocation());
+  public void testSetLoggingLevelToFiner() {
+    settings.setLoggingLevel(Level.FINER);
+    assertEquals(Level.FINE, settings.getLoggingLevel());
   }
 
   @Test
-  public void testSetOperaBinaryLocation() {
-    settings.setOperaBinaryLocation("/spartan/ramdisk/launcher");
-    assertEquals("/spartan/ramdisk/launcher", settings.getOperaBinaryLocation());
+  public void testSetLoggingLevelToOff() {
+    settings.setLoggingLevel(Level.OFF);
+    assertEquals(Level.OFF, settings.getLoggingLevel());
   }
 
   @Test
-  public void testDefaultOperaBinaryArguments() {
-    // the opera binary arguments should default to null
-    assertEquals("", settings.getOperaBinaryArguments());
+  public void testGetLoggingLevel() {
+    assertEquals(Level.INFO, settings.getLoggingLevel());
   }
 
   @Test
-  public void testSetOperaBinaryArguments() {
-    settings.setOperaBinaryArguments("-host 127.0.0.1 -port 12199 -bin /spartan/ramdisk/install/launcher");
-    assertEquals("-host 127.0.0.1 -port 12199 -bin /spartan/ramdisk/install/launcher", settings.getOperaBinaryArguments());
+  public void testGetLauncherWithNoLauncherOnSystem() {
+    // Delete launcher
+    if (!launcherOnSystem.delete()) {
+      fail("Unable to delete launcher on system");
+    }
+
+    assertNotNull("getLauncher() should never be null", settings.getLauncher());
+    assertTrue("extracted launcher should exist", settings.getLauncher().exists());
+    assertTrue("launcher on system should exist", launcherOnSystem.exists());
+  }
+
+  @Test
+  public void testGetLauncherWithLauncherOnSystem() {
+    assertTrue("extracted launcher should exist", settings.getLauncher().exists());
+    assertTrue("launcher on system should exist", launcherOnSystem.exists());
+  }
+
+  @Test
+  public void testSetLauncher() {
+    settings.setLauncher(fakeBinary);
+    assertEquals(fakeBinary, settings.getLauncher());
+  }
+
+  @Test(expected = OperaRunnerException.class)
+  public void testSetLauncherWithInvalidLauncher() {
+    settings.setLauncher(new File("/path/to/invalid/launcher"));
+  }
+
+  public static class TestOperaLauncherRunnerSettings extends OperaLauncherRunnerSettings {
+
+    public TestOperaLauncherRunnerSettings() {
+      super();
+    }
+
+    public static String getLauncherNameForOS2() {
+      return getLauncherNameForOS();
+    }
+
   }
 
 }

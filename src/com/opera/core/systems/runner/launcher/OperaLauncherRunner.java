@@ -88,10 +88,10 @@ public class OperaLauncherRunner extends OperaRunner
       launcherArguments.add("-display");
       launcherArguments.add(":" + display.toString());
     }
-    if (settings.getLoggingLevel() == Level.FINEST) {
+    if (settings.getLoggingLevel() != null && settings.getLoggingLevel() != Level.OFF) {
       launcherArguments.add("-console");  // TODO(andreastt): Allow for file logging
       launcherArguments.add("-verbosity");
-      launcherArguments.add(Level.FINEST.toString());
+      launcherArguments.add(settings.getLoggingLevel().toString());
     }
     // TODO(andreastt): Disabled due to current launcher not having -profile
     /*

@@ -26,6 +26,7 @@ import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class OperaLauncherRunnerSettings extends OperaRunnerSettings {
@@ -35,6 +36,33 @@ public class OperaLauncherRunnerSettings extends OperaRunnerSettings {
 
   public OperaLauncherRunnerSettings() {
     super();
+  }
+
+  /**
+   * The launcher allows for the following logging levels: "FINEST", "FINE", "INFO", "WARNING",
+   * "SEVERE".  Since we want the launcher to use the same logging level as OperaDriver and the Java
+   * logger used there have more logging levels, this function uses a heuristic to figure out a
+   * sensible logging level based on the Java logger for the launcher.
+   *
+   * @param level the Java logging level
+   */
+  public void setLoggingLevel(Level level) {
+    if (level == Level.FINEST ||
+        level == Level.ALL) {
+      loggingLevel = Level.FINEST;
+    } else if (level == Level.FINER ||
+               level == Level.FINE) {
+      loggingLevel = Level.FINE;
+    } else if (level == Level.WARNING) {
+      loggingLevel = Level.WARNING;
+    } else if (level == Level.SEVERE) {
+      loggingLevel = Level.SEVERE;
+    } else if (level == Level.INFO ||
+               level == Level.CONFIG) {
+      loggingLevel = Level.INFO;
+    } else {
+      loggingLevel = Level.OFF;
+    }
   }
 
   public File getLauncher() {
@@ -201,7 +229,7 @@ public class OperaLauncherRunnerSettings extends OperaRunnerSettings {
    *
    * @return the launcher's binary file name
    */
-  private static String getLauncherNameForOS() {
+  protected static String getLauncherNameForOS() {
     boolean is64 = "64".equals(System.getProperty("sun.arch.data.model"));
     Platform currentPlatform = Platform.getCurrent();
 
