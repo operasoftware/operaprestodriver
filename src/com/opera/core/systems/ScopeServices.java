@@ -16,23 +16,31 @@ limitations under the License.
 
 package com.opera.core.systems;
 
-import com.google.protobuf.AbstractMessage.Builder;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.logging.Logger;
+
+import org.openqa.selenium.WebDriverException;
+
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
-
+import com.google.protobuf.AbstractMessage.Builder;
 import com.opera.core.systems.model.ICommand;
 import com.opera.core.systems.runner.OperaRunner;
 import com.opera.core.systems.scope.ScopeCommand;
 import com.opera.core.systems.scope.exceptions.CommunicationException;
 import com.opera.core.systems.scope.handlers.IConnectionHandler;
 import com.opera.core.systems.scope.internal.OperaIntervals;
+import com.opera.core.systems.scope.protos.ScopeProtos;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemID;
 import com.opera.core.systems.scope.protos.EcmascriptProtos.ReadyStateChange;
 import com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeInfo;
-import com.opera.core.systems.scope.protos.ScopeProtos;
 import com.opera.core.systems.scope.protos.ScopeProtos.ClientInfo;
 import com.opera.core.systems.scope.protos.ScopeProtos.HostInfo;
 import com.opera.core.systems.scope.protos.ScopeProtos.Service;
@@ -55,15 +63,6 @@ import com.opera.core.systems.scope.services.ums.UmsServices;
 import com.opera.core.systems.scope.stp.StpConnection;
 import com.opera.core.systems.scope.stp.StpThread;
 import com.opera.core.systems.util.VersionUtil;
-
-import org.openqa.selenium.WebDriverException;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.logging.Logger;
 
 /**
  * Implements the interface to the Scope protocol.
@@ -202,7 +201,8 @@ public class ScopeServices implements IConnectionHandler {
   }
 
   /**
-   * Gets the supported services from Opera and calls methods to enable the ones we requested.
+   * Gets the supported services from Opera and calls methods to enable the
+   * ones we requested .
    */
   public void init() {
     waitState.setProfile(product);
@@ -223,11 +223,10 @@ public class ScopeServices implements IConnectionHandler {
         break;
       }
     }
-    if (ecmascriptService) {
+    if (ecmascriptService)
       wantedServices.add("ecmascript");
-    } else {
+    else
       wantedServices.add("ecmascript-debugger");
-    }
 
     wantedServices.add("exec");
     wantedServices.add("window-manager");
@@ -264,6 +263,7 @@ public class ScopeServices implements IConnectionHandler {
 
   /**
    * Initialises the services that are available.
+   * @param enableDebugger
    */
   private void initializeServices(boolean enableDebugger) {
     exec.init();
@@ -323,6 +323,7 @@ public class ScopeServices implements IConnectionHandler {
 
   /**
    * Gets information on available services and their versions from Opera.
+   * @return
    */
   private HostInfo getHostInfo() {
     Response response = executeCommand(ScopeCommand.HOST_INFO, null);
@@ -335,8 +336,11 @@ public class ScopeServices implements IConnectionHandler {
   }
 
   /**
-   * Creates all of the services that we requested and are available. If the debugger is disabled
-   * (which currently never happens) then it creates a dummy class.
+   * Creates all of the services that we requested and are available. If the
+   * debugger is disabled (which currently never happens) then it creates
+   * a dummy class.
+   * @param enableDebugger
+   * @param info
    */
   private void createUmsServices(boolean enableDebugger, HostInfo info) {
     new UmsServices(this, info);
@@ -642,16 +646,15 @@ public class ScopeServices implements IConnectionHandler {
   }
 
   /**
-   * Enables the capturing on Opera's idle events.
+   * Enables the capturing on OperaIdle events.
    *
-   * Sometimes when executing a command idle events will fire before the response is received for
-   * the sent command.  This results in missing the idle events, and later probably hitting a
+   * Sometimes when executing a command OperaIdle events will fire before the response is received
+   * for the sent command. This results in missing the Idle events, and later probably hitting a
    * timeout.
    *
-   * To prevent this you can call this function which will enable the tracking of any idle events
-   * received between now and when you call {@link ScopeServices#waitForOperaIdle(long)}.  If idle
-   * events have been received then {@link ScopeServices#waitForOperaIdle(long)} will return
-   * immediately.
+   * To prevent this you can call this function which will enable the tracking of any Idle events
+   * received between now and when you call waitForOperaIdle(). If Idle events have been received
+   * then waitForOperaIdle() will return immediately.
    */
   public void captureOperaIdle() {
     logger.finer("idle: Capturing idle event");
@@ -659,18 +662,18 @@ public class ScopeServices implements IConnectionHandler {
   }
 
   /**
-   * Waits for one of Opera's idle event before continuing.
+   * Waits for an OperaIdle event before continuing.
    *
-   * If {@link ScopeServices#captureOperaIdle()} has been called since the last call of this method,
-   * and one or more idle events have occurred then this function will return immediately.
+   * If captureOperaIdle() has been called since the last call of waitForOperaIdle(), and one or
+   * more OperaIdle events have occurred then this function will return immediately.
    *
-   * After calling this function the capturing of idle events is disabled until the next call of
-   * {@link ScopeServices#captureOperaIdle()}.
+   * After calling this function the capturing of OperaIdle events is disabled until the next call
+   * of captureOperaIdle()
    *
-   * @param timeout time in milliseconds to wait before aborting
+   * @param timeout Time in milliseconds to wait before aborting
    */
   public void waitForOperaIdle(long timeout) {
-    logger.finest("idle: Waiting for idle event (timeout = " + timeout + ")");
+    logger.finest("idle: Waiting for (timeout = " + timeout + ")");
     waitState.waitForOperaIdle(timeout);
     logger.finest("idle: Finished waiting");
   }
@@ -773,7 +776,10 @@ public class ScopeServices implements IConnectionHandler {
   }
 
   /**
-   * Gets the minimum version for this service, as provided by OperaDriver in the constructor.
+   * Gets the minimum version for this service, as provided by OperaDriver in
+   * the constructor.
+   * @param service
+   * @return
    */
   public String getMinVersionFor(String service) {
     return versions.get(service);
