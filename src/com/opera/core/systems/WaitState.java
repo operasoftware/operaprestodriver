@@ -58,7 +58,7 @@ public class WaitState {
    */
   private int capturedIdleEvents = 0;
 
-  private Object lock = new Object();
+  private final Object lock = new Object();
 
   // Used for profile specific workarounds
   private String profile;
@@ -91,7 +91,7 @@ public class WaitState {
     WebDriverException exception;
     Response response;
     boolean seen;
-    long remaining_idle_timeout;
+    long remainingIdleTimeout;
     DesktopWindowInfo desktopWindowInfo;  // No idea if this is right but it will
     private QuickMenuInfo quickMenuInfo;
     private QuickMenuID quickMenuId;
@@ -415,7 +415,7 @@ public class WaitState {
   private final ResultItem pollResultItem(long timeout, boolean idle) {
     ResultItem result = getResult();
     if (result != null) {
-      result.remaining_idle_timeout = timeout;
+      result.remainingIdleTimeout = timeout;
     }
 
     if (result == null && timeout > 0) {
@@ -424,8 +424,8 @@ public class WaitState {
       long end = System.currentTimeMillis();
       result = getResult();
       if (result != null) {
-        result.remaining_idle_timeout = timeout - (end - start);
-        logger.finest("Remaining timeout:" + result.remaining_idle_timeout);
+        result.remainingIdleTimeout = timeout - (end - start);
+        logger.finest("Remaining timeout:" + result.remainingIdleTimeout);
       }
     }
 
@@ -463,7 +463,7 @@ public class WaitState {
       while (true) {
 
         ResultItem result = pollResultItem(timeout, type == ResponseType.OPERA_IDLE);
-        timeout = result.remaining_idle_timeout;
+        timeout = result.remainingIdleTimeout;
         WaitResult waitResult = result.waitResult;
 
         switch (waitResult) {
@@ -644,7 +644,7 @@ public class WaitState {
             break;
 
           case EVENT_OPERA_IDLE:
-            logger.finest("RECV EVENT_OPERA_IDLE!");
+            logger.finest("RECV EVENT_OPERA_IDLE");
             if (result.data == match && type == ResponseType.OPERA_IDLE) {
               return null;
             }
@@ -671,39 +671,45 @@ public class WaitState {
   }
 
   /**
-   * Enables the capturing on OperaIdle events. <p/> Sometimes when executing a command OperaIdle
-   * events will fire before the response is received for the sent command. This results in missing
-   * the Idle events, and later probably hitting a timeout. <p/> To prevent this you can call this
-   * method which will enable the tracking of any Idle events received between now and when you call
-   * waitForOperaIdle(). If Idle events have been received then waitForOperaIdle() will return
+   * Enables the capturing of idle events.
+   *
+   * Sometimes when executing a command idle events will fire before the response is received for
+   * the sent command.  This results in missing the idle events, and later probably hitting a
+   * timeout.
+   *
+   * To prevent this you can call this method which will enable the tracking of any idle events
+   * received between now and when you call {@link WaitState#waitForOperaIdle(long)}.  If idle
+   * events have been received then {@link WaitState#waitForOperaIdle(long)} will return
    * immediately.
    */
   public void captureOperaIdle() {
-    logger.finer("captureIdleEvents is now true!");
     captureIdleEvents = true;
   }
 
   /**
-   * Waits for an OperaIdle event before continuing. <p/> If captureOperaIdle() has been called
-   * since the last call of waitForOperaIdle(), and one or more OperaIdle events have occurred then
-   * this method will return immediately. <p/> After calling this method the capturing of OperaIdle
-   * events is disabled until the next call of captureOperaIdle()
+   * Waits for an OperaIdle event before continuing.
+   *
+   * If {@link WaitState#captureOperaIdle()} has been called since the last call of this method, and
+   * one or more idle events have occurred then this method will return immediately.
+   *
+   * After calling this method the capturing of idle events is disabled until the next call of
+   * {@link WaitState#captureOperaIdle()}.
    *
    * @param timeout time in milliseconds to wait before aborting
    */
   public void waitForOperaIdle(long timeout) {
     if (captureIdleEvents && capturedIdleEvents > 0) {
-      logger.finer("Captured " + capturedIdleEvents + " OperaIdle event(s)");
+      logger.finer("idle: Captured " + capturedIdleEvents + " idle event(s)");
       // reset
       captureIdleEvents = false;
       capturedIdleEvents = 0;
       return;
     }
 
-    // If we're waiting for an Idle event, then we don't need to capture them anymore.  If we've
+    // If we're waiting for an idle event, then we don't need to capture them anymore.  If we've
     // reached this far then capturedIdleEvents is already 0.
     captureIdleEvents = false;
-    waitAndParseResult(timeout, 0 /*0 = no window id!*/, null, ResponseType.OPERA_IDLE);
+    waitAndParseResult(timeout, 0 /* 0 = no window id */, null, ResponseType.OPERA_IDLE);
   }
 
   public Response waitFor(int tag, long timeout) {

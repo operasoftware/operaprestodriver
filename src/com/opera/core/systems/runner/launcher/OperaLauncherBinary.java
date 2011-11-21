@@ -120,7 +120,8 @@ public class OperaLauncherBinary extends Thread {
           if (r == -1) {
             return;
           } else if (r == '\n') {
-            logger.finest("line break: " + buffer);
+            // Log any messages from launcher's stdout to INFO.
+            logger.info("LAUNCHER: " + buffer);
             buffer = "";
           } else {
             buffer += (char) r;

@@ -29,6 +29,7 @@ import com.opera.core.systems.runner.interfaces.OperaRunnerSettings;
 import com.opera.core.systems.runner.launcher.OperaLauncherRunner;
 import com.opera.core.systems.runner.launcher.OperaLauncherRunnerSettings;
 import com.opera.core.systems.scope.exceptions.CommunicationException;
+import com.opera.core.systems.scope.exceptions.ResponseNotReceivedException;
 import com.opera.core.systems.scope.handlers.PbActionHandler;
 import com.opera.core.systems.scope.internal.OperaFlags;
 import com.opera.core.systems.scope.internal.OperaIntervals;
@@ -409,7 +410,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
       }
 
       services = new ScopeServices(versions, (Integer) capabilities.getCapability(PORT), manualStart);
-      // for profile-specific workarounds inside ScopeServives, WaitState ...
+      // for profile-specific workarounds inside ScopeServices, WaitState ...
       services.setProduct((String) capabilities.getCapability(PRODUCT));
       services.startStpThread();
     } catch (IOException e) {
@@ -475,12 +476,10 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
             timeout = OperaIntervals.OPERA_IDLE_TIMEOUT.getValue();
           }
           services.waitForOperaIdle(timeout);
-        } catch (WebDriverException e) {
-          /*
-           * This could for example be a gif animation, preventing idle from
-           * being passed.  Common case, and should not result in test error.
-           */
-          logger.warning("Opera Idle timed out, continue test... exception: " + e);
+        } catch (ResponseNotReceivedException e) {
+          // This could for example be a gif animation, preventing idle from being passed.  Common
+          // case, and should not result in test error.
+          logger.warning("idle: Caught idle timeout: " + e);
         }
       } else {
         // Wait for window is loaded
