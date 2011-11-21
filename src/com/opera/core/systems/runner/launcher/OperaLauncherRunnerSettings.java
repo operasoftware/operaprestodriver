@@ -209,6 +209,10 @@ public class OperaLauncherRunnerSettings extends OperaRunnerSettings {
     return targetLauncher.getAbsolutePath();
   }
 
+  public void makeLauncherExecutable() {
+    makeLauncherExecutable(getLauncher());
+  }
+
   /**
    * Makes the launcher executable by chmod'ing the file at given path (GNU/Linux and Mac only).
    *

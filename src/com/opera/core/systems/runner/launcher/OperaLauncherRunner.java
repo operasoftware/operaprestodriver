@@ -116,6 +116,9 @@ public class OperaLauncherRunner extends OperaRunner
 
     logger.config("launcher arguments: " + launcherArguments.toString());
 
+    // Make sure that the launcher is executable
+    settings.makeLauncherExecutable();
+
     // Setup the launcher binary
     launcherRunner = new OperaLauncherBinary(
         settings.getLauncher().getAbsolutePath(),
