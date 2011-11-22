@@ -75,7 +75,7 @@ public class OperaPaths {
 
       case MAC:
         paths.add("/Applications/Opera.app/Contents/MacOS/Opera");
-        paths.add("/Applications/OperaNext.app/Contents/MacOS/OperaNext");
+        paths.add("/Applications/Opera Next.app/Contents/MacOS/Opera");
         break;
 
       case WINDOWS:
