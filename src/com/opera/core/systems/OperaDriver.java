@@ -19,6 +19,7 @@ package com.opera.core.systems;
 import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
 
+import com.opera.core.systems.arguments.OperaCoreArguments;
 import com.opera.core.systems.interaction.OperaAction;
 import com.opera.core.systems.interaction.UserInteraction;
 import com.opera.core.systems.model.ScopeActions;
@@ -275,7 +276,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
         }
       }
 
-      OperaArguments arguments = new OperaArguments();
+      OperaArguments arguments = new OperaCoreArguments();
       OperaArguments parsed = OperaArguments.parse((String) capabilities.getCapability(ARGUMENTS));
       arguments.merge(parsed);
 
