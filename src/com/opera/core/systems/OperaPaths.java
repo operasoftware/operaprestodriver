@@ -58,7 +58,7 @@ public class OperaPaths {
 
     if (isPathValid(envPath)) {
       return envPath;
-    } else if (!isPathValid(envPath) && (envPath != null && envPath.length() > 0)) {
+    } else if (envPath != null && envPath.length() > 0) {
       throw new WebDriverException("Path \"" + envPath + "\" in OPERA_PATH does not exist");
     }
 
