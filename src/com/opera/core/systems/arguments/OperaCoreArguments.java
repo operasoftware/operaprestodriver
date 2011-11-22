@@ -42,8 +42,4 @@ public class OperaCoreArguments extends OperaArguments implements
     merge(parse(System.getenv("OPERA_ARGS")));
   }
 
-  public static OperaArguments parse(String string) {
-    return OperaArguments.parse(string);
-  }
-
 }

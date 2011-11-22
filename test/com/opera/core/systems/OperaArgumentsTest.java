@@ -90,7 +90,10 @@ public class OperaArgumentsTest {
 
   @Test
   public void testParsingComplexString() {
-    OperaArguments parsed = OperaArguments.parse("-foo bar -baz=bah -path /path/to/somewhere -anotherpath=C:\\another\\path -a==abc /b hei --c \"hei\"");
+    OperaArguments
+        parsed =
+        OperaArguments.parse(
+            "-foo bar -baz=bah -path /path/to/somewhere -anotherpath=C:\\another\\path -a==abc /b hei --c \"hei\"");
     assertEquals("foo", parsed.get(0).getArgument());
     assertEquals("bar", parsed.get(0).getValue());
     assertEquals("baz", parsed.get(1).getArgument());
@@ -105,6 +108,14 @@ public class OperaArgumentsTest {
     assertEquals("hei", parsed.get(5).getValue());
     assertEquals("c", parsed.get(6).getArgument());
     assertEquals("hei", parsed.get(6).getValue());
+  }
+
+  @Test
+  public void testParsingJustOneArgument() {
+    OperaArguments parsed = OperaArguments.parse("-foo");
+    assertEquals("foo", parsed.get(0).getArgument());
+    assertNull(parsed.get(0).getValue());
+    assertEquals(1, parsed.size());
   }
 
   @Test
@@ -131,7 +142,8 @@ public class OperaArgumentsTest {
   }
 
   @Test
-  @Ignore("Currently disabled due to bug in OperaCoreArguments, which this derives off")
+  @Ignore(
+      "Currently disabled due to bug in OperaCoreArguments, which OperaDesktopArguments extends")
   public void testConstructingOperaDesktopArguments() {
     OperaArguments arguments = new OperaDesktopArguments();
     assertNotNull(arguments);
