@@ -21,7 +21,12 @@ import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.os.CommandLine;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
+
+import static org.openqa.selenium.Platform.LINUX;
+import static org.openqa.selenium.Platform.UNIX;
 
 /**
  * This class tries to find the paths to Opera and the launcher on any system.  If it cannot find a
@@ -34,61 +39,68 @@ import java.util.logging.Logger;
 public class OperaPaths {
 
   private final Logger logger = Logger.getLogger(this.getClass().getName());
+  private static final Platform currentPlatform = Platform.getCurrent();
 
   /**
-   * This method will try and find Opera on any system.  It takes the following steps:
+   * This method will try and find Opera on any platform.  It performs the following steps:
    *
-   *   1. Check the environment variable "OPERA_PATH".  If it exists, and the file it points to
-   *      exists, then return
-   *   2. Check if Opera exists at the default location on the respective OS
-   *   3. (Unix) Call `which opera` to find the location
-   *   4. Give up and return null
+   * 1. Check the environment variable OPERA_PATH.  If it exists, and the file it points to exists,
+   *    then return
+   *
+   * 2. Check if Opera exists at the default location on the respective OS
+   *
+   * 3. (Unix) Call `which opera` to find the location 4. Give up and return null
    *
    * @return the path to Opera, or null
    */
   public static String operaPath() {
-    String path = System.getenv("OPERA_PATH");
+    String envPath = System.getenv("OPERA_PATH");
 
-    if (isPathValid(path)) {
-      return path;
-    } else if (!isPathValid(path) && (path != null && path.length() > 0)) {
-      throw new WebDriverException("Path \"" + path + "\" in OPERA_PATH does not exist");
+    if (isPathValid(envPath)) {
+      return envPath;
+    } else if (!isPathValid(envPath) && (envPath != null && envPath.length() > 0)) {
+      throw new WebDriverException("Path \"" + envPath + "\" in OPERA_PATH does not exist");
     }
 
-    Platform platform = Platform.getCurrent();
+    List<String> paths = new ArrayList<String>();
 
-    switch (platform) {
+    switch (currentPlatform) {
       case LINUX:
       case UNIX:
-        path = "/usr/bin/opera";
-        if (!isPathValid(path)) {
-          CommandLine line = new CommandLine("which", "opera");
-          line.execute();
-          path = line.getStdOut().trim();
-        }
+        paths.add(which("opera"));
+        paths.add(which("opera-next"));
+        paths.add("/usr/bin/opera");
+        paths.add("/usr/bin/opera-next");
         break;
+
       case MAC:
-        path = "/Applications/Opera.app/Contents/MacOS/Opera";
+        paths.add("/Applications/Opera.app/Contents/MacOS/Opera");
+        paths.add("/Applications/OperaNext.app/Contents/MacOS/OperaNext");
         break;
+
       case WINDOWS:
       case XP:
       case VISTA:
-        String x86 = System.getenv("ProgramFiles(x86)");
-        String progfiles = (x86 == null) ? System.getenv("PROGRAMFILES") : x86;
-        if (progfiles == null) {
-          progfiles = "\\Program Files";
-        }
-        path = progfiles + "\\Opera\\opera.exe";
+        String programFiles = getWindowsProgramFilesDirectory();
+        paths.add(programFiles + "\\Opera\\opera.exe");
+        paths.add(programFiles + "\\Opera Next\\opera.exe");
         break;
-      default:
-        throw new WebDriverException("Auto find is not support on this platform"); // android?
+
+      default:  // Android?
+        throw new WebDriverException("Unable to resolve the path to Opera on this platform");
     }
 
-    return (isPathValid(path)) ? path : null;
+    for (String path : paths) {
+      if (isPathValid(path)) {
+        return path;
+      }
+    }
+
+    return null;
   }
 
   /**
-   * Check that the given path is not null, and exists.
+   * Check that the given path is not null, not empty and that it exists.
    *
    * @param path the path to check
    * @return true if the path is valid, false otherwise
@@ -104,6 +116,40 @@ public class OperaPaths {
 
     File file = new File(path);
     return (file.exists());
+  }
+
+  /**
+   * Locates a specified program using the `which` program on UNIX or LINUX platforms.  If no
+   * program is found, it will return null.
+   *
+   * @param program the program binary to find
+   * @return the absolute path to the binary, or null if program is not found
+   */
+  private static String which(String program) {
+    if (!currentPlatform.is(UNIX) && !currentPlatform.is(LINUX)) {
+      throw new WebDriverException("Executing program `which` not possible on this platform");
+    }
+
+    CommandLine which = new CommandLine("which", program);
+    which.execute();
+    return which.getStdOut().trim();
+  }
+
+  /**
+   * Returns the Program Files directory on the Windows platform.  It looks for the 32-bit directory
+   * first, then the 64-bit directory.
+   *
+   * @return the Program Files directory on Windows
+   */
+  private static String getWindowsProgramFilesDirectory() {
+    String x86 = System.getenv("ProgramFiles(x86)");
+    String programFiles = (x86 == null) ? System.getenv("PROGRAMFILES") : x86;
+
+    if (programFiles == null) {
+      programFiles = "\\Program Files";
+    }
+
+    return programFiles;
   }
 
 }
