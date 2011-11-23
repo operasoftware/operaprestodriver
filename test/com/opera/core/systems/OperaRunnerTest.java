@@ -1,10 +1,10 @@
 package com.opera.core.systems;
 
-import com.opera.core.systems.runner.OperaRunner;
-import com.opera.core.systems.runner.OperaRunnerSettings;
 import com.opera.core.systems.arguments.OperaArgument;
 import com.opera.core.systems.arguments.OperaCoreArguments;
 import com.opera.core.systems.arguments.OperaDesktopArguments;
+import com.opera.core.systems.runner.OperaRunner;
+import com.opera.core.systems.runner.OperaRunnerSettings;
 
 import org.junit.Before;
 import org.junit.Ignore;
@@ -71,7 +71,8 @@ public class OperaRunnerTest {
     settings.setPort(0);
     runner = new OperaRunner(settings);
     assertNotNull(runner);
-    assertTrue(Integer.valueOf(runner.settings.getArguments().getArguments().get(1).getValue().split(":")[1]) > 0);  // 2
+    assertTrue(Integer.valueOf(
+        runner.settings.getArguments().getArguments().get(1).getValue().split(":")[1]) > 0);  // 2
   }
 
   @Test
@@ -84,7 +85,8 @@ public class OperaRunnerTest {
     settings.setArguments(arguments);
     runner = new OperaRunner(settings);
     assertNotNull(runner);
-    assertTrue(runner.settings.getArguments().getArguments().containsAll(arguments.getArguments()));
+    assertTrue("should contain all the arguments added",
+               runner.settings.getArguments().getArguments().containsAll(arguments.getArguments()));
   }
 
   @Test
