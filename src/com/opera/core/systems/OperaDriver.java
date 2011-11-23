@@ -30,6 +30,7 @@ import com.opera.core.systems.runner.interfaces.OperaRunnerSettings;
 import com.opera.core.systems.runner.launcher.OperaLauncherRunner;
 import com.opera.core.systems.runner.launcher.OperaLauncherRunnerSettings;
 import com.opera.core.systems.scope.exceptions.CommunicationException;
+import com.opera.core.systems.scope.exceptions.ResponseNotReceivedException;
 import com.opera.core.systems.scope.handlers.PbActionHandler;
 import com.opera.core.systems.scope.internal.OperaFlags;
 import com.opera.core.systems.scope.internal.OperaIntervals;
@@ -409,7 +410,8 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
         manualStart = false;
       }
 
-      services = new ScopeServices(versions, (Integer) capabilities.getCapability(PORT), manualStart);
+      services =
+          new ScopeServices(versions, (Integer) capabilities.getCapability(PORT), manualStart);
       // for profile-specific workarounds inside ScopeServives, WaitState ...
       services.setProduct((String) capabilities.getCapability(PRODUCT));
       services.startStpThread();
@@ -468,7 +470,6 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     windowManager.openUrl(activeWindowId, url);
 
     if (oldUrl == null || !url.replace(oldUrl, "").startsWith("#")) {
-
       if (useOperaIdle()) {
         try {
           // Wait for Opera to become idle
@@ -484,8 +485,11 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
           logger.warning("Opera Idle timed out, continue test... exception: " + e);
         }
       } else {
-        // Wait for window is loaded
-        services.waitForWindowLoaded(activeWindowId, timeout);
+        try {
+          services.waitForWindowLoaded(activeWindowId, timeout);
+        } catch (ResponseNotReceivedException e) {
+          // This might be expected
+        }
       }
 
     }
@@ -751,7 +755,9 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     }
 
     public WebDriver frame(int frameIndex) {
-      int framesLength = Integer.valueOf(debugger.executeJavascript("return document.frames.length"));
+      int
+          framesLength =
+          Integer.valueOf(debugger.executeJavascript("return document.frames.length"));
 
       if (frameIndex < 0 || frameIndex >= framesLength) {
         throw new NoSuchFrameException("Invalid frame index: " + frameIndex);
@@ -803,7 +809,10 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     // TODO: Implement need to find a way to link an element to a runtime
     public WebDriver frame(WebElement frameElement) {
       String script = "return " + OperaAtoms.GET_FRAME_INDEX.getValue() + "(locator)";
-      Long frameIndex = (Long) debugger.callFunctionOnObject(script, ((OperaWebElement) frameElement).getObjectId(), true);
+      Long
+          frameIndex =
+          (Long) debugger
+              .callFunctionOnObject(script, ((OperaWebElement) frameElement).getObjectId(), true);
 
       if (frameIndex == null) {
         throw new NoSuchFrameException("Non-frame element or frame not in current DOM");
@@ -953,6 +962,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
       exec.action("Reload");
       waitForLoadToComplete();
     }
+
   }
 
   public Options manage() {
@@ -1060,7 +1070,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
   }
 
-  private class OperaTimeouts implements Timeouts {
+  public class OperaTimeouts implements Timeouts {
 
     public Timeouts implicitlyWait(long time, TimeUnit unit) {
       OperaIntervals.WAIT_FOR_ELEMENT.setValue(TimeUnit.MILLISECONDS.convert(time, unit));
@@ -1069,6 +1079,11 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
     public Timeouts setScriptTimeout(long time, TimeUnit unit) {
       OperaIntervals.SCRIPT_TIMEOUT.setValue(TimeUnit.MILLISECONDS.convert(time, unit));
+      return this;
+    }
+
+    public Timeouts pageLoadTimeout(long time, TimeUnit unit) {
+      OperaIntervals.PAGE_LOAD_TIMEOUT.setValue(TimeUnit.MILLISECONDS.convert(time, unit));
       return this;
     }
 
