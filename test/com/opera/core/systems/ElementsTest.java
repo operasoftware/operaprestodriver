@@ -42,17 +42,6 @@ public class ElementsTest extends OperaDriverTestCase {
     assertNotSame(hash, test.getImageHash());
   }
 
-  // This test sometimes causes problems. So put it last
-  @Test
-  public void testRightClick() {
-    driver.get(fixture("mouse.html"));
-
-    // Cast as OperaWebElement to make rightClick available
-    ((OperaWebElement) driver.findElementById("test")).rightClick();
-    assertTrue(driver.findElementById("log").getAttribute("value").contains("mousedown 2"));
-    assertTrue(driver.findElementById("log").getAttribute("value").contains("mouseup 2"));
-  }
-
   @Test
   public void testSelect() throws Exception {
     getFixture("select.html");
@@ -66,6 +55,18 @@ public class ElementsTest extends OperaDriverTestCase {
     driver.navigate().to(fixture("test.html"));
     assertEquals("#000000",
                  driver.findElementByClassName("invert").getCssValue("background-color"));
+  }
+
+  // This test sometimes causes problems because a context menu is opened on Desktop, ensure that it
+  // is last.
+  @Test
+  public void testRightClick() {
+    driver.get(fixture("mouse.html"));
+
+    // Cast as OperaWebElement to make rightClick available
+    ((OperaWebElement) driver.findElementById("test")).rightClick();
+    assertTrue(driver.findElementById("log").getAttribute("value").contains("mousedown 2"));
+    assertTrue(driver.findElementById("log").getAttribute("value").contains("mouseup 2"));
   }
 
 }
