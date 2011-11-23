@@ -28,6 +28,7 @@ import org.openqa.selenium.Platform;
 import java.io.File;
 import java.util.logging.Level;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
@@ -268,6 +269,31 @@ public class OperaLauncherRunnerTest {
     ScreenShotReply screenshot = runner.saveScreenshot(0);
     assertNotNull(screenshot);
     runner.shutdown();
+  }
+
+    @Test
+  public void testLoggingLevel() {
+    assertEquals(Level.SEVERE, OperaLauncherRunner.toLauncherLoggingLevel(Level.SEVERE));
+  }
+
+  @Test
+  public void testLoggingLevelToAll() {
+    assertEquals(Level.FINEST, OperaLauncherRunner.toLauncherLoggingLevel(Level.ALL));
+  }
+
+  @Test
+  public void testLoggingLevelToConfig() {
+    assertEquals(Level.FINE, OperaLauncherRunner.toLauncherLoggingLevel(Level.CONFIG));
+  }
+
+  @Test
+  public void testLoggingLevelToFiner() {
+    assertEquals(Level.FINE, OperaLauncherRunner.toLauncherLoggingLevel(Level.FINER));
+  }
+
+  @Test
+  public void testLoggingLevelToOff() {
+    assertEquals(Level.OFF, OperaLauncherRunner.toLauncherLoggingLevel(Level.OFF));
   }
 
 }
