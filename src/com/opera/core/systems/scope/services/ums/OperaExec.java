@@ -213,6 +213,8 @@ public class OperaExec extends AbstractService implements IOperaExec {
   }
 
   public void action(String using, int windowID, String... params) {
+    using = using.toLowerCase();
+
     if (!actions.contains(using)) {
       throw new WebDriverException("The requested action is not supported: " + using);
     }
