@@ -29,8 +29,7 @@ public class ElementsTest extends OperaDriverTestCase {
   public void testClear() {
     driver.get(fixture("javascript.html"));
     driver.findElementById("input_email").clear();
-    assertTrue(driver.findElementById("log").getAttribute("value").contains(
-        "email changed"));
+    assertTrue(driver.findElementById("log").getAttribute("value").contains("email changed"));
   }
 
   @Test
@@ -50,10 +49,8 @@ public class ElementsTest extends OperaDriverTestCase {
 
     // Cast as OperaWebElement to make rightClick available
     ((OperaWebElement) driver.findElementById("test")).rightClick();
-    assertTrue(driver.findElementById("log").getAttribute("value").contains(
-        "mousedown 2"));
-    assertTrue(driver.findElementById("log").getAttribute("value").contains(
-        "mouseup 2"));
+    assertTrue(driver.findElementById("log").getAttribute("value").contains("mousedown 2"));
+    assertTrue(driver.findElementById("log").getAttribute("value").contains("mouseup 2"));
   }
 
   @Test
@@ -67,7 +64,8 @@ public class ElementsTest extends OperaDriverTestCase {
   @Test
   public void testGetCssValue() {
     driver.navigate().to(fixture("test.html"));
-    assertEquals("#000000", driver.findElementByClassName("invert").getCssValue("background-color"));
+    assertEquals("#000000",
+                 driver.findElementByClassName("invert").getCssValue("background-color"));
   }
 
 }
