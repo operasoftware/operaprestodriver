@@ -1,3 +1,64 @@
+v0.8.1    not released
+
+  [NEW FEATURES]
+
+  * Output from Opera and the launcher is now forwarded to the
+    appropriate logging level in OperaDriver.  (andreastt, danielb)
+
+  [ENHANCEMENTS]
+
+  * Upgraded Selenium dependency to 2.13.0.  (andreastt)
+
+  * Upgraded WebDriver atoms to match Selenium 2.13.0.  (andreastt)
+
+  * Refactored heuristic for figuring out a sensible logging level
+    between OperaDriver and launcher.  (andreastt)
+
+  * Refactored OperaPaths.operaPath() to look for Opera Next binaries on
+    all platforms.  Resolves OPDRV-104.  (andreastt)
+
+  [BUG FIXES]
+
+  * Ensuring that the launcher is executable on each run.  (andreastt)
+
+  * Fixed bug with synchronized locks ought to be on fields classified
+    as final in WaitState.  (andreastt)
+
+  * OperaArguments does not parse OPERA_ARGS, so calling
+    OperaCoreArguments on startup instead.  Fixes bug with OPERA_ARGS
+    not being parsed.  Addresses OPDRV-108.  (andreastt)
+
+  * Parsing a single argument failed due to a bug in regex, corrected.
+    Addresses OPDRV-108.  (andreastt)
+
+  * Removed superflous call to isPathValid() in OperaPaths when checking
+    whether a specified/set path is invalid.  (andreastt)
+
+  [TESTS]
+
+  * Removed superflous code in OperaLauncherRunnerTest, and made
+    assertions static.  (andreastt)
+
+  * Added deprecated OperaDriverSettings tests to a separate file.
+    (andreastt)
+
+  * Added test for single argument parsing to OperaArgumentsTest.
+    (andreastt)
+
+  * Added new run configuration for OperaLauncherRunnerTest.
+    (andreastt)
+
+  * Added tsts for OperaLauncherRunner.toLauncherLoggingLevel().
+    (andreastt)
+
+  [OTHER]
+
+  * Fixed classpath issues with previous release.  (ajayk)
+
+  * Added Apache Commons Exec 1.1 as dependency as
+    org.openqa.selenium.os.CommandLine now depends on it.  (andreastt)
+
+
 v0.8    2011-11-17
 
   [API CHANGES]
