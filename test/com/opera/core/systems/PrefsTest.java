@@ -37,14 +37,12 @@ import static org.junit.Assert.assertTrue;
 public class PrefsTest extends OperaDriverTestCase {
 
   /*
-  * Resets all used preferences to their defaults.  Remember
-  * to add preferences used in tests manually to their tear
-  * down method.
-  */
+   * Resets all used preferences to their defaults.  Remember to add preferences used in tests
+   * manually to their tear down method.
+   */
   @After
-  public void tearDown() throws Exception {
-    driver.setPref("File Types Section Info", "Version",
-                   driver.getDefaultPref("File Types Section Info", "Version"));
+  public void tearDown() {
+    driver.setPref("Disk Cache", "Buffer Size", driver.getDefaultPref("Disk Cache", "Buffer Size"));
     driver.setPref("User Display Mode", "Author CSS",
                    driver.getDefaultPref("User Display Mode", "Author CSS"));
     driver.setPref("Colors", "Background", driver.getDefaultPref("Colors", "Background"));
@@ -57,7 +55,7 @@ public class PrefsTest extends OperaDriverTestCase {
 
   @Test
   public void testGetValidPreferenceWithSpacesInSection() {
-    assertNotNull(driver.getPref("File Types Section Info", "Version"));
+    assertNotNull(driver.getPref("Disk Cache", "Buffer Size"));
   }
 
   @Test
@@ -117,7 +115,7 @@ public class PrefsTest extends OperaDriverTestCase {
 
   @Test
   public void testGetValidDefaultPreferenceWithSpacesInSection() {
-    assertNotNull(driver.getDefaultPref("File Types Section Info", "Version"));
+    assertNotNull(driver.getDefaultPref("Disk Cache", "Buffer Size"));
   }
 
   @Test
@@ -203,8 +201,8 @@ public class PrefsTest extends OperaDriverTestCase {
 
   @Test
   public void testSetValidPreferenceWithSpacesInSection() {
-    driver.setPref("File Types Section Info", "Version", "2");
-    assertEquals("2", driver.getPref("File Types Section Info", "Version"));
+    driver.setPref("Disk Cache", "Buffer Size", "2048");
+    assertEquals("2048", driver.getPref("Disk Cache", "Buffer Size"));
   }
 
   @Test
