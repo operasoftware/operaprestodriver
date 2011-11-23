@@ -165,7 +165,8 @@ public class OperaExec extends AbstractService implements IOperaExec {
 
   public void mouseAction(int x, int y, int count, OperaMouseKeys... keys) {
     if (x < 0 || y < 0) {
-      throw new IllegalArgumentException();
+      throw new IllegalArgumentException(
+          String.format("Element is located outside viewport (%s,%s)", x, y));
     }
 
     int keyValue = 0;
