@@ -214,7 +214,7 @@ public class OperaExec extends AbstractService implements IOperaExec {
 
   public void action(String using, int windowID, String... params) {
     if (!actions.contains(using)) {
-      throw new WebDriverException("The requested action is not supported : " + using);
+      throw new WebDriverException("The requested action is not supported: " + using);
     }
 
     ActionList.Builder builder = ActionList.newBuilder();
