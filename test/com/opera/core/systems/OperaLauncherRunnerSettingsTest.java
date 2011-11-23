@@ -82,8 +82,8 @@ public class OperaLauncherRunnerSettingsTest {
 
   @Test
   public void testSetLoggingLevelToConfig() {
-    settings.setLoggingLevel(Level.FINE);
-    assertEquals(Level.INFO, settings.getLoggingLevel());
+    settings.setLoggingLevel(Level.CONFIG);
+    assertEquals(Level.FINE, settings.getLoggingLevel());
   }
 
   @Test
