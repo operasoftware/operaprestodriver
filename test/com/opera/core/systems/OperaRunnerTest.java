@@ -18,7 +18,7 @@ import static org.junit.Assert.assertTrue;
 
 public class OperaRunnerTest {
 
-  private static OperaRunner runner;
+  private static TestOperaRunner runner;
   private OperaRunnerSettings settings;
 
   @Before
@@ -29,12 +29,12 @@ public class OperaRunnerTest {
 
   @Test
   public void testConstruction() {
-    runner = new OperaRunner();
-    List<OperaArgument> arguments = runner.settings.getArguments().getArguments();
+    runner = new TestOperaRunner();
+    List<OperaArgument> arguments = runner.getSettings().getArguments().getArguments();
 
     // TODO(andreastt): Problems with core-gogi disallows us to have -autotestmode as the first argument
     assertNotNull(runner);
-    assertNotNull(runner.settings.getProfile());
+    assertNotNull(runner.getSettings().getProfile());
     assertEquals("autotestmode", arguments.get(2).getArgument());  // 0
     assertEquals("pd", arguments.get(0).getArgument());  // 1
     assertEquals("debugproxy", arguments.get(1).getArgument());  // 2
@@ -44,35 +44,37 @@ public class OperaRunnerTest {
   @Test
   public void testConstructionWithProductCore() {
     settings.setProduct(OperaProduct.CORE);
-    runner = new OperaRunner(settings);
+    runner = new TestOperaRunner(settings);
     assertNotNull(runner);
-    assertTrue(runner.settings.getArguments() instanceof OperaCoreArguments);
+    assertTrue(runner.getSettings().getArguments() instanceof OperaCoreArguments);
   }
 
   @Test
   public void testConstructionWithProductDesktop() {
     settings.setProduct(OperaProduct.DESKTOP);
-    runner = new OperaRunner(settings);
+    runner = new TestOperaRunner(settings);
     assertNotNull(runner);
-    assertTrue(runner.settings.getArguments() instanceof OperaDesktopArguments);
+    assertTrue(runner.getSettings().getArguments() instanceof OperaDesktopArguments);
   }
 
   @Test
   public void testConstructionWithProfile() {
     String profile = "/my/profile";
     settings.setProfile(profile);
-    runner = new OperaRunner(settings);
+    runner = new TestOperaRunner(settings);
     assertNotNull(runner);
-    assertEquals(profile, runner.settings.getArguments().getArguments().get(0).getValue());  // 1
+    assertEquals(profile,
+                 runner.getSettings().getArguments().getArguments().get(0).getValue());  // 1
   }
 
   @Test
   public void testConstructionWithPort() {
     settings.setPort(0);
-    runner = new OperaRunner(settings);
+    runner = new TestOperaRunner(settings);
     assertNotNull(runner);
     assertTrue(Integer.valueOf(
-        runner.settings.getArguments().getArguments().get(1).getValue().split(":")[1]) > 0);  // 2
+        runner.getSettings().getArguments().getArguments().get(1).getValue().split(":")[1])
+               > 0);  // 2
   }
 
   @Test
@@ -83,10 +85,11 @@ public class OperaRunnerTest {
     arguments.add("baz", "abc");
 
     settings.setArguments(arguments);
-    runner = new OperaRunner(settings);
+    runner = new TestOperaRunner(settings);
     assertNotNull(runner);
     assertTrue("should contain all the arguments added",
-               runner.settings.getArguments().getArguments().containsAll(arguments.getArguments()));
+               runner.getSettings().getArguments().getArguments()
+                   .containsAll(arguments.getArguments()));
   }
 
   @Test
@@ -128,6 +131,22 @@ public class OperaRunnerTest {
   @Test
   @Ignore
   public void testSaveScreenshot() {
+
+  }
+
+  public class TestOperaRunner extends OperaRunner {
+
+    public TestOperaRunner() {
+      super();
+    }
+
+    public TestOperaRunner(OperaRunnerSettings settings) {
+      super(settings);
+    }
+
+    public OperaRunnerSettings getSettings() {
+      return this.settings;
+    }
 
   }
 

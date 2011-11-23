@@ -38,7 +38,7 @@ import java.util.logging.Logger;
 public class OperaRunner implements com.opera.core.systems.runner.interfaces.OperaRunner {
 
   protected static Logger logger = Logger.getLogger(OperaRunner.class.getName());
-  public OperaRunnerSettings settings;
+  protected OperaRunnerSettings settings;
 
   /**
    * Controls access to {@link #process}.
