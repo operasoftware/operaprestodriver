@@ -95,24 +95,6 @@ public class OperaRunner implements com.opera.core.systems.runner.interfaces.Ope
 
     arguments.add("autotestmode");
 
-    // We read in environmental variable OPERA_ARGS in addition to existing arguments passed down
-    // from OperaArguments.  These are combined and sent to the browser.
-    //
-    // Note that this is a deviation from the principle of arguments normally overwriting
-    // environmental variables.
-
-    // TODO(andreastt): WTF is going on here?
-    /*
-    OperaArguments userArguments = settings.getArguments();
-    for (OperaArgument argument : userArguments.getArguments()) {
-      if (argument.getValue() != null && !argument.getValue().isEmpty()) {
-        arguments.add(argument.getArgument(), argument.getValue());
-      } else {
-        arguments.add(argument.getArgument());
-      }
-    }
-    */
-
     arguments.merge(settings.getArguments());
     settings.setArguments(arguments);
 
