@@ -3,13 +3,16 @@ v0.8.1    not released
   [API CHANGES]
 
   * OperaDriver.get() and OperaNavigation().to() now catches
-    ResponseNotReceivedException is page load times out on very slow
-    pages, returning control of the browser instance to the user.
-    (andreastt)
+    ResponseNotReceivedException so that when a page load times out on
+    very slow-loading pages, the control of the browser instance to the
+    user.  (andreastt)
 
   * Added method pageLoadTimeout() to OperaTimeouts which allows you to
     control the default page load timeout, that is the timeout for when
-    control of the browser should be handed back to the user.
+    control of the browser should be handed back to the user.  Example:
+
+      driver.manage().timeouts().pageLoadTimeout(40, TimeUnit.SECONDS);
+
     (andreastt)
 
   [NEW FEATURES]
