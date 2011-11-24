@@ -60,8 +60,8 @@ public class OperaRunner implements com.opera.core.systems.runner.interfaces.Ope
     this(OperaRunnerSettings.getDefaultSettings());
   }
 
-  public OperaRunner(OperaRunnerSettings s) {
-    settings = s;
+  public OperaRunner(OperaRunnerSettings settings) {
+    this.settings = settings;
 
     // Use arguments provided by user if set
     OperaArguments arguments;
@@ -81,7 +81,7 @@ public class OperaRunner implements com.opera.core.systems.runner.interfaces.Ope
           .getDefaultTmpFS()
           .createTempDir("opera-profile", "")
           .getAbsolutePath();
-      settings.setProfile(profile);
+      this.settings.setProfile(profile);
       arguments.add("-pd", profile);
     } else if (!profile.isEmpty()) {
       arguments.add("-pd", profile);
@@ -89,14 +89,15 @@ public class OperaRunner implements com.opera.core.systems.runner.interfaces.Ope
 
     // If port is set to -1 it means we're in compatibility mode as Opera < 12 does not support the
     // -debugproxy command-line argument.  It will instead use the default port 7001.
-    if (settings.supportsDebugProxy()) {
-      arguments.add("debugproxy", settings.getHost() + ":" + settings.getPort());
+    if (this.settings.supportsDebugProxy()) {
+      arguments.add("debugproxy", this.settings.getHost() + ":" + this.settings.getPort());
     }
 
     arguments.add("autotestmode");
-    settings.setArguments(arguments);
+    arguments.merge(this.settings.getArguments());
+    this.settings.setArguments(arguments);
 
-    logger.config("Opera arguments: " + settings.getArguments().getArgumentsAsStringList());
+    logger.config("Opera arguments: " + this.settings.getArguments().getArgumentsAsStringList());
 
     // TODO(andreastt): Should this be abstracted into its own class?
     //processBuilder = new ProcessBuilder(settings.getArguments().getArgumentsAsStrings());
