@@ -1,5 +1,17 @@
 v0.8.1    not released
 
+  [API CHANGES]
+
+  * OperaDriver.get() and OperaNavigation().to() now catches
+    ResponseNotReceivedException is page load times out on very slow
+    pages, returning control of the browser instance to the user.
+    (andreastt)
+
+  * Added method pageLoadTimeout() to OperaTimeouts which allows you to
+    control the default page load timeout, that is the timeout for when
+    control of the browser should be handed back to the user.
+    (andreastt)
+
   [NEW FEATURES]
 
   * Output from Opera and the launcher is now forwarded to the
@@ -34,6 +46,13 @@ v0.8.1    not released
   * Removed superflous call to isPathValid() in OperaPaths when checking
     whether a specified/set path is invalid.  (andreastt)
 
+  * Arguments added in OperaCoreArgument's constructor were not merged
+    if OperaRunner received an OperaRunnerSettings object with the
+    arguments field set.  (andreastt)
+
+  * Actions sent to OperaDriver.operaAction() are now converted to lower
+    case in OperaExec.  (andreastt)
+
   [TESTS]
 
   * Removed superflous code in OperaLauncherRunnerTest, and made
@@ -45,10 +64,21 @@ v0.8.1    not released
   * Added test for single argument parsing to OperaArgumentsTest.
     (andreastt)
 
-  * Added new run configuration for OperaLauncherRunnerTest.
-    (andreastt)
+  * Added new run configuration for OperaLauncherRunnerTest and
+    OperaRunnerTest.  (andreastt)
 
   * Added tsts for OperaLauncherRunner.toLauncherLoggingLevel().
+    (andreastt)
+
+  * The "File Types Section Info" section does not exist on core-tv,
+    using "Disk Cache" instead for PrefsTest, resolves about five
+    failing tests on this configuration.  (andreastt)
+
+  * Moved context menu test to be run last in ElementsTest because it's
+    known to cause problems for consecutive tests.  (andreastt)
+
+  * OperaRunnerTest now uses a mocking OperaRunner instance,
+    TestOperaRunner, which exposes the settings field through a getter.
     (andreastt)
 
   [OTHER]
@@ -57,6 +87,9 @@ v0.8.1    not released
 
   * Added Apache Commons Exec 1.1 as dependency as
     org.openqa.selenium.os.CommandLine now depends on it.  (andreastt)
+
+  * Explanation for IllegalArgumentException for
+    OperaExec.mouseAction(), helps WTR-362.  (andreastt)
 
 
 v0.8    2011-11-17
