@@ -449,11 +449,11 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
   public int get(String url, long timeout) {
     if (url == null) {
-      throw new NullPointerException("Invalid url");
+      throw new NullPointerException("Invalid URL");
     }
 
     if (services.getConnection() == null) {
-      throw new CommunicationException("Unable to open URL because Opera is not connected.");
+      throw new CommunicationException("Unable to open URL because Opera is not connected");
     }
 
     gc();
@@ -472,17 +472,15 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     if (oldUrl == null || !url.replace(oldUrl, "").startsWith("#")) {
       if (useOperaIdle()) {
         try {
-          // Wait for Opera to become idle
+          // Use idle timeout (which is lower) if timeout has not been manually set.
           if (timeout == OperaIntervals.PAGE_LOAD_TIMEOUT.getValue()) {
             timeout = OperaIntervals.OPERA_IDLE_TIMEOUT.getValue();
           }
           services.waitForOperaIdle(timeout);
         } catch (WebDriverException e) {
-          /*
-           * This could for example be a gif animation, preventing idle from
-           * being passed.  Common case, and should not result in test error.
-           */
-          logger.warning("Opera Idle timed out, continue test... exception: " + e);
+          // This could for example be a gif animation, preventing idle from being passed.  Common
+          // case, and should not result in test error.
+          logger.warning("idle: Timed out with exception: " + e);
         }
       } else {
         try {
@@ -491,7 +489,6 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
           // This might be expected
         }
       }
-
     }
 
     if (OperaIntervals.ENABLE_DEBUGGER.getValue() == 1) {
