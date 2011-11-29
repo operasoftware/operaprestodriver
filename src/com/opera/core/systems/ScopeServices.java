@@ -203,7 +203,7 @@ public class ScopeServices implements IConnectionHandler {
   }
 
   /**
-   * Gets the supported services from Opera and calls methods to enable the ones we requested .
+   * Gets the supported services from Opera and calls methods to enable the ones we requested.
    */
   public void init() {
     waitState.setProfile(product);
