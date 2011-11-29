@@ -16,31 +16,24 @@ limitations under the License.
 
 package com.opera.core.systems;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.logging.Logger;
-
-import org.openqa.selenium.WebDriverException;
-
+import com.google.protobuf.AbstractMessage.Builder;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
-import com.google.protobuf.AbstractMessage.Builder;
+
 import com.opera.core.systems.model.ICommand;
 import com.opera.core.systems.runner.OperaRunner;
 import com.opera.core.systems.scope.ScopeCommand;
 import com.opera.core.systems.scope.exceptions.CommunicationException;
 import com.opera.core.systems.scope.handlers.IConnectionHandler;
+import com.opera.core.systems.scope.internal.OperaFlags;
 import com.opera.core.systems.scope.internal.OperaIntervals;
-import com.opera.core.systems.scope.protos.ScopeProtos;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemID;
 import com.opera.core.systems.scope.protos.EcmascriptProtos.ReadyStateChange;
 import com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeInfo;
+import com.opera.core.systems.scope.protos.ScopeProtos;
 import com.opera.core.systems.scope.protos.ScopeProtos.ClientInfo;
 import com.opera.core.systems.scope.protos.ScopeProtos.HostInfo;
 import com.opera.core.systems.scope.protos.ScopeProtos.Service;
@@ -63,6 +56,15 @@ import com.opera.core.systems.scope.services.ums.UmsServices;
 import com.opera.core.systems.scope.stp.StpConnection;
 import com.opera.core.systems.scope.stp.StpThread;
 import com.opera.core.systems.util.VersionUtil;
+
+import org.openqa.selenium.WebDriverException;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.logging.Logger;
 
 /**
  * Implements the interface to the Scope protocol.
@@ -201,16 +203,14 @@ public class ScopeServices implements IConnectionHandler {
   }
 
   /**
-   * Gets the supported services from Opera and calls methods to enable the
-   * ones we requested .
+   * Gets the supported services from Opera and calls methods to enable the ones we requested .
    */
   public void init() {
     waitState.setProfile(product);
     waitForHandshake();
 
-    boolean enableDebugger = (OperaIntervals.ENABLE_DEBUGGER.getValue() != 0);
     hostInfo = getHostInfo();
-    createUmsServices(enableDebugger, hostInfo);
+    createUmsServices(OperaFlags.ENABLE_DEBUGGER, hostInfo);
 
     connect();
 
@@ -223,10 +223,11 @@ public class ScopeServices implements IConnectionHandler {
         break;
       }
     }
-    if (ecmascriptService)
+    if (ecmascriptService) {
       wantedServices.add("ecmascript");
-    else
+    } else {
       wantedServices.add("ecmascript-debugger");
+    }
 
     wantedServices.add("exec");
     wantedServices.add("window-manager");
@@ -258,16 +259,18 @@ public class ScopeServices implements IConnectionHandler {
 
     enableServices(wantedServices);
 
-    initializeServices(enableDebugger);
+    initializeServices(OperaFlags.ENABLE_DEBUGGER);
   }
 
   /**
-   * Initialises the services that are available.
-   * @param enableDebugger
+   * Initializes the services that are available.
+   *
+   * @param enableDebugger whether or not to enable the ecmascript-debugger service
    */
   private void initializeServices(boolean enableDebugger) {
     exec.init();
     windowManager.init();
+
     if (versions.containsKey("core") && coreUtils != null) {
       coreUtils.init();
     }
@@ -275,12 +278,15 @@ public class ScopeServices implements IConnectionHandler {
     if (versions.containsKey("prefs") && prefs != null) {
       prefs.init();
     }
+
     if (versions.containsKey("desktop-window-manager") && desktopWindowManager != null) {
       desktopWindowManager.init();
     }
+
     if (versions.containsKey("system-input") && systemInputManager != null) {
       systemInputManager.init();
     }
+
     if (versions.containsKey("desktop-utils") && desktopUtils != null) {
       desktopUtils.init();
     }
@@ -323,7 +329,6 @@ public class ScopeServices implements IConnectionHandler {
 
   /**
    * Gets information on available services and their versions from Opera.
-   * @return
    */
   private HostInfo getHostInfo() {
     Response response = executeCommand(ScopeCommand.HOST_INFO, null);
@@ -336,11 +341,8 @@ public class ScopeServices implements IConnectionHandler {
   }
 
   /**
-   * Creates all of the services that we requested and are available. If the
-   * debugger is disabled (which currently never happens) then it creates
-   * a dummy class.
-   * @param enableDebugger
-   * @param info
+   * Creates all of the services that we requested and are available. If the debugger is disabled
+   * (which currently never happens) then it creates a dummy class.
    */
   private void createUmsServices(boolean enableDebugger, HostInfo info) {
     new UmsServices(this, info);
@@ -776,10 +778,7 @@ public class ScopeServices implements IConnectionHandler {
   }
 
   /**
-   * Gets the minimum version for this service, as provided by OperaDriver in
-   * the constructor.
-   * @param service
-   * @return
+   * Gets the minimum version for this service, as provided by OperaDriver in the constructor.
    */
   public String getMinVersionFor(String service) {
     return versions.get(service);

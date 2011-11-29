@@ -491,7 +491,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
       }
     }
 
-    if (OperaIntervals.ENABLE_DEBUGGER.getValue() == 1) {
+    if (OperaFlags.ENABLE_DEBUGGER) {
       switchTo().defaultContent();
     }
 
@@ -686,7 +686,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     List<Integer> windowIds = windowManager.getWindowHandles();
     Set<String> handles = new TreeSet<String>();
 
-    if (OperaIntervals.ENABLE_DEBUGGER.getValue() != 1) {
+    if (!OperaFlags.ENABLE_DEBUGGER) {
       for (Integer windowId : windowIds) {
         handles.add(windowId.toString());
       }
@@ -1236,7 +1236,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
    * @return true if JavaScript is enabled
    */
   public boolean isJavascriptEnabled() {
-    return (OperaIntervals.ENABLE_DEBUGGER.getValue() == 1);
+    return OperaFlags.ENABLE_DEBUGGER;
   }
 
   /**

@@ -19,6 +19,11 @@ package com.opera.core.systems.scope.internal;
 public class OperaFlags {
 
   /**
+   * Whether the ecmascript-debugger should be enabled or not.
+   */
+  public static boolean ENABLE_DEBUGGER = true;
+
+  /**
    * Enable checks for accessing web elements that are disabled.  This allows clicking on disabled
    * elements, &c.
    */
