@@ -229,7 +229,8 @@ public class OperaLauncherRunner extends OperaRunner
 
       return handleStatusMessage(res.getResponse()) == StatusType.RUNNING;
     } catch (IOException e) {
-      throw new OperaRunnerException("Could not get state of Opera", e);
+      logger.fine("Could not get state of Opera, assuming launcher has shut down");
+      return false;
     }
   }
 
