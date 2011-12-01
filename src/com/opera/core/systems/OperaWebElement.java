@@ -20,6 +20,7 @@ import com.opera.core.systems.model.Canvas;
 import com.opera.core.systems.model.ColorResult;
 import com.opera.core.systems.model.OperaColor;
 import com.opera.core.systems.model.ScreenShotReply;
+import com.opera.core.systems.scope.exceptions.ResponseNotReceivedException;
 import com.opera.core.systems.scope.internal.OperaColors;
 import com.opera.core.systems.scope.internal.OperaFlags;
 import com.opera.core.systems.scope.internal.OperaIntervals;
@@ -204,7 +205,13 @@ public class OperaWebElement extends RemoteWebElement {
     } else {
       parent.actionHandler.click(this, "");
     }
-    parent.waitForLoadToComplete();
+
+    try {
+      parent.waitForLoadToComplete();
+    } catch (ResponseNotReceivedException e) {
+      // This might be expected
+      logger.fine("Response not received, returning control to user");
+    }
   }
 
   /**
@@ -216,7 +223,13 @@ public class OperaWebElement extends RemoteWebElement {
   public void click(int x, int y) {
     parent.getScopeServices().captureOperaIdle();
     parent.actionHandler.click(this, x, y);
-    parent.waitForLoadToComplete();
+
+    try {
+      parent.waitForLoadToComplete();
+    } catch (ResponseNotReceivedException e) {
+      // This might be expected
+      logger.fine("Response not received, returning control to user");
+    }
   }
 
   public WebElement findElement(By by) {
@@ -410,7 +423,13 @@ public class OperaWebElement extends RemoteWebElement {
       }
     }
 
-    parent.waitForLoadToComplete();
+    try {
+      parent.waitForLoadToComplete();
+    } catch (ResponseNotReceivedException e) {
+      // This might be expected
+      logger.fine("Response not received, returning control to user");
+    }
+
     // executeMethod("locator.blur()");
   }
 
@@ -470,7 +489,12 @@ public class OperaWebElement extends RemoteWebElement {
 
     evaluateMethod("return " + OperaAtoms.SUBMIT.getValue() + "(locator)");
 
-    parent.waitForLoadToComplete();
+    try {
+      parent.waitForLoadToComplete();
+    } catch (ResponseNotReceivedException e) {
+      // This might be expected
+      logger.fine("Response not received, returning control to user");
+    }
   }
 
   // FIXME revise with javascript guys

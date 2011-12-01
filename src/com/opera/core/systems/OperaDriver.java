@@ -487,6 +487,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
           services.waitForWindowLoaded(activeWindowId, timeout);
         } catch (ResponseNotReceivedException e) {
           // This might be expected
+          logger.fine("Response not received, returning control to user");
         }
       }
     }
@@ -896,7 +897,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     return toReturn;
   }
 
-  public void waitForLoadToComplete() {
+  protected void waitForLoadToComplete() throws ResponseNotReceivedException {
     if (useOperaIdle()) {
       services.waitForOperaIdle(OperaIntervals.OPERA_IDLE_TIMEOUT.getValue());
     } else {
@@ -910,7 +911,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
         if (System.currentTimeMillis() < endTime) {
           sleep(OperaIntervals.POLL_INVERVAL.getValue());
         } else {
-          throw new WebDriverException("Timeout while loading page");
+          throw new ResponseNotReceivedException("No response in a timely fashion");
         }
       }
     }
@@ -937,13 +938,21 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     public void back() {
       services.captureOperaIdle();
       exec.action("Back");
-      waitForLoadToComplete();
+      try {
+        waitForLoadToComplete();
+      } catch (ResponseNotReceivedException e) {
+        logger.fine("Response not received, returning control to user");
+      }
     }
 
     public void forward() {
       services.captureOperaIdle();
       exec.action("Forward");
-      waitForLoadToComplete();
+      try {
+        waitForLoadToComplete();
+      } catch (ResponseNotReceivedException e) {
+        logger.fine("Response not received, returning control to user");
+      }
     }
 
     public void to(String url) {
@@ -957,7 +966,11 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     public void refresh() {
       services.captureOperaIdle();
       exec.action("Reload");
-      waitForLoadToComplete();
+      try {
+        waitForLoadToComplete();
+      } catch (ResponseNotReceivedException e) {
+        logger.fine("Response not received, returning control to user");
+      }
     }
 
   }
@@ -1247,10 +1260,16 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
   public void executeActions(OperaAction action) {
     services.captureOperaIdle();
     List<UserInteraction> actions = action.getActions();
+
     for (UserInteraction userInteraction : actions) {
       userInteraction.execute(this);
     }
-    waitForLoadToComplete();
+
+    try {
+      waitForLoadToComplete();
+    } catch (ResponseNotReceivedException e) {
+      logger.fine("Response not received, returning control to user");
+    }
   }
 
   /**
@@ -1270,7 +1289,11 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     keyUp(key);
 
     if (key.equalsIgnoreCase("enter")) {
-      waitForLoadToComplete();
+      try {
+        waitForLoadToComplete();
+      } catch (ResponseNotReceivedException e) {
+        logger.fine("Response not received, returning control to user");
+      }
     }
   }
 
