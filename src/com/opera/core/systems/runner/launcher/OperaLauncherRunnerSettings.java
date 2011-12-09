@@ -161,7 +161,10 @@ public class OperaLauncherRunnerSettings extends OperaRunnerSettings {
 
         ByteStreams.copy(is, os);
 
-        targetLauncher.setLastModified(targetLauncher.lastModified());
+        if (!targetLauncher.setLastModified(targetLauncher.lastModified())) {
+          throw new OperaRunnerException(
+              "Unable to set modification time for file: " + targetLauncher);
+        }
       } catch (IOException e) {
         throw new WebDriverException("Cannot write file to disk: " + e.getMessage());
       } finally {
