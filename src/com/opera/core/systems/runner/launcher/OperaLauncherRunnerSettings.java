@@ -94,7 +94,7 @@ public class OperaLauncherRunnerSettings extends OperaRunnerSettings {
         String userHome = System.getProperty("user.home");
         path = extractLauncher(new File(userHome + File.separator + ".launcher"));
       } catch (OperaRunnerException e) {
-        throw new WebDriverException("Unable to extract bundled launcher: " + e.getMessage());
+        throw new WebDriverException("Unable to extract bundled launcher", e);
       }
     }
 
@@ -121,11 +121,11 @@ public class OperaLauncherRunnerSettings extends OperaRunnerSettings {
     // Get the launcher resource from JAR.
     URL
         sourceLauncher =
-        OperaLaunchers.class.getClassLoader().getResource("launchers/" + launcherName);
+        OperaLaunchers.class.getClassLoader().getResource(launcherName);
 
     // Does launcher exist among our resources?
     if (sourceLauncher == null) {
-      throw new OperaRunnerException("Unknown file: " + sourceLauncher);
+      throw new OperaRunnerException("Unknown file: " + launcherName);
     }
 
     // Copy the launcher if it doesn't exist or if the current launcher on the system doesn't match
