@@ -17,6 +17,7 @@ limitations under the License.
 package com.opera.core.systems;
 
 import org.openqa.selenium.io.TemporaryFilesystem;
+import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.io.File;
 import java.util.logging.Logger;
@@ -130,6 +131,18 @@ public class OperaProfile {
    */
   public File getDirectory() {
     return directory;
+  }
+
+  /**
+   * Returns a new {@link DesiredCapabilities} object with OperaDriver defaults and this profile set
+   * on the <code>opera.profile</code> capability.
+   *
+   * @return capabilities with this profile set
+   */
+  public DesiredCapabilities getCapabilities() {
+    DesiredCapabilities capabilities = (DesiredCapabilities) OperaDriver.getDefaultCapabilities();
+    capabilities.setCapability(OperaDriver.PROFILE, this);
+    return capabilities;
   }
 
 }
