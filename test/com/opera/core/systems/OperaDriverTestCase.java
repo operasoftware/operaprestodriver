@@ -116,6 +116,10 @@ public abstract class OperaDriverTestCase {
   protected String fixture(String file) {
     return "file://localhost" + fixtureDirectory + file;
   }
+  
+  protected File fixtureFile(String file) {
+    return new File(fixtureDirectory + file);
+  }
 
   /**
    * Navigate to the given fixture file.
