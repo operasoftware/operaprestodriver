@@ -1470,6 +1470,10 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
   public String selftest(List<String> modules, long timeout) {
     return services.selftest(modules, timeout);
   }
+  
+  public OperaPreferences preferences() {
+    return preferences;
+  }
 
   public Utils utils() {
     return new OperaUtils();
