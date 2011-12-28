@@ -22,6 +22,7 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.io.TemporaryFilesystem;
 
 import java.io.File;
@@ -75,7 +76,7 @@ public class OperaPreferencesTest extends OperaDriverTestCase {
     assertEquals(46, p.getAll().size());
   }
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test(expected = WebDriverException.class)
   public void testConstructionWithInvalidFile() {
     OperaPreferences p = new OperaPreferences(new File("foo"));
   }
