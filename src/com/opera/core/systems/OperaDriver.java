@@ -129,7 +129,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
   /**
    * (Integer) The port to Opera should connect to.  0 = Random, -1 = Opera default (for use with
-   * Opera < 12).
+   * Opera < 11.60).
    */
   public static final String PORT = "opera.port";
 
@@ -141,8 +141,10 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
   public static final String LAUNCHER = "opera.launcher";
 
   /**
-   * (String) Directory to use for the Opera profile. If null a random temporary directory is used.
-   * If "", an empty string, then the default autotest profile directory is used.
+   * (Object) Directory to use for the Opera profile.  If an {@link OperaProfile} object that will
+   * be used when starting opera.  If null a random temporary directory is used.   If "", an empty
+   * string, then the default <code>.autotest</code> profile directory will be used (for backwards
+   * compatibility with Opera < 11.60).
    */
   public static final String PROFILE = "opera.profile";
 
