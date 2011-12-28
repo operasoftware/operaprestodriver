@@ -20,6 +20,8 @@ import org.openqa.selenium.io.TemporaryFilesystem;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.io.File;
+import java.util.Collection;
+import java.util.LinkedHashSet;
 import java.util.logging.Logger;
 
 import static com.google.common.base.Preconditions.checkArgument;
@@ -28,19 +30,19 @@ import static com.google.common.base.Preconditions.checkArgument;
  * OperaProfile is an interface representing a profile (commonly a profile directory) for the Opera
  * web browser.  It's typically used by passing in an instance object of this class to the
  * "opera.profile" capability at construction of {@link OperaDriver}, like this:
- * 
+ *
  * <pre>
  * {@code
  *   DesiredCapabilities capabilities = DesiredCapabilities.opera();
  *   OperaProfile profile = new OperaProfile();
- *   
+ *
  *   profile.preferences().set("foo", "bar", "baz");
  *   capabilities.setCapability("opera.profile", profile);
- *   
+ *
  *   WebDriver driver = new OperaDriver(capabilities);
  * }
  * </pre>
- * 
+ *
  * Or by passing it in as an object directly to {@link OperaDriver}'s constructor:
  *
  * <pre>
@@ -75,7 +77,7 @@ public class OperaProfile {
    * Creates a representation of the profile in the given directory path.  If you specify a profile
    * directory that does not exist Opera will generate a new, fresh profile in the same location
    * when it is started.
-   * 
+   *
    * @param profileDirectoryPath the path to the profile directory to use
    */
   public OperaProfile(String profileDirectoryPath) {
@@ -86,7 +88,7 @@ public class OperaProfile {
    * Creates a representation of the profile in the given directory.  If you specify a profile
    * directory that does not exist Opera will generate a new, fresh profile in the same location
    * when it is started.
-   * 
+   *
    * @param profileDirectory the profile to use
    * @throws IllegalArgumentException if <code>profileDirectory</code> is not set
    */
@@ -96,12 +98,12 @@ public class OperaProfile {
     checkArgument(!profileDirectory.getPath().isEmpty(), "Profile directory path is empty");
 
     directory = profileDirectory;
-    File preferenceFile = new File(directory.getAbsolutePath() + File.separator + "operaprefs.ini");
-    
+    File preferenceFile = getPreferenceFile(directory);
+
     // Log whether directory exists or not for convenience
     if (directory.exists()) {
       logger.fine("Profile directory exists: " + directory.getAbsolutePath());
-      
+
       // Load preferences from profile if preference file exists
       if (preferenceFile.exists()) {
         setPreferences(new OperaPreferences(preferenceFile));
@@ -113,7 +115,7 @@ public class OperaProfile {
 
   /**
    * Allows access to the preferences in the current profile.
-   * 
+   *
    * @return an {@link OperaPreferences} object representing preferences in the current profile
    */
   public OperaPreferences preferences() {
@@ -122,7 +124,7 @@ public class OperaProfile {
 
   /**
    * Replaces the preferences in the profile with the given preferences.
-   * 
+   *
    * @param newPreferences the new preferences to populate the profile with
    */
   public void setPreferences(OperaPreferences newPreferences) {
@@ -148,6 +150,32 @@ public class OperaProfile {
     DesiredCapabilities capabilities = (DesiredCapabilities) OperaDriver.getDefaultCapabilities();
     capabilities.setCapability(OperaDriver.PROFILE, this);
     return capabilities;
+  }
+
+  /**
+   * Opera preference files can be named either <code>opera.ini</code> or
+   * <code>operaprefs.ini</code> depending on the product.  This method will look in the specified
+   * directory for either of the files and return the one that exists.  <code>operaprefs.ini</code>
+   * has priority.
+   *
+   * @param directory the directory to look for a preference file
+   * @return a preference file
+   */
+  private static File getPreferenceFile(File directory) {
+    final String directoryPath = directory.getAbsolutePath() + File.separator;
+
+    Collection<File> candidates = new LinkedHashSet<File>() {{
+      add(new File(directoryPath + "operaprefs.ini"));
+      add(new File(directoryPath + "opera.ini"));
+    }};
+
+    for (File candidate : candidates) {
+      if (candidate.exists()) {
+        return candidate;
+      }
+    }
+
+    return new File("");
   }
 
 }

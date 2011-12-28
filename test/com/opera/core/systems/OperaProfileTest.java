@@ -59,7 +59,7 @@ public class OperaProfileTest extends OperaDriverTestCase {
         TemporaryFilesystem.getDefaultTmpFS().createTempDir("opera", "profile");
 
     try {
-      Files.copy(fixtureFile("profile/opera.ini"),
+      Files.copy(fixtureFile("profile" + File.separator + "opera.ini"),
                  new File(existingProfile.getPath() + File.separator + "opera.ini"));
     } catch (IOException e) {
       fail("Unable to prepare new profile");
