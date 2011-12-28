@@ -288,16 +288,22 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
         }
       }
 
+      OperaRunnerSettings settings = new OperaLauncherRunnerSettings();
+      settings.setBinary((String) capabilities.getCapability(BINARY));
+      settings.setPort((Integer) capabilities.getCapability(PORT));
+
       OperaArguments arguments = new OperaCoreArguments();
       OperaArguments parsed = OperaArguments.parse((String) capabilities.getCapability(ARGUMENTS));
       arguments.merge(parsed);
+      settings.setArguments(arguments);
+
+      if (capabilities.getCapability(PROFILE) instanceof String) {
+        settings.setProfile((String) capabilities.getCapability(PROFILE));
+      } else if (capabilities.getCapability(PROFILE) instanceof OperaProfile) {
+        settings.setProfile((OperaProfile) capabilities.getCapability(PROFILE));
+      }
 
       // Synchronize settings for runner and capabilities
-      OperaRunnerSettings settings = new OperaLauncherRunnerSettings();
-      settings.setBinary((String) capabilities.getCapability(BINARY));
-      settings.setArguments(arguments);
-      settings.setPort((Integer) capabilities.getCapability(PORT));
-      settings.setProfile((String) capabilities.getCapability(PROFILE));
       capabilities.setCapability(ARGUMENTS, settings.getArguments().toString());
       capabilities.setCapability(PORT, settings.getPort());
       capabilities.setCapability(PROFILE, settings.getProfile());
