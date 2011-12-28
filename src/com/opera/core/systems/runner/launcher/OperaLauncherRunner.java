@@ -71,7 +71,6 @@ public class OperaLauncherRunner extends OperaRunner
     Integer launcherPort = PortProber.findFreePort();
     Integer display = settings.getDisplay();
     OperaProduct product = settings.getProduct();
-    String profile = settings.getProfile();
     String binary;
     if (settings.getBinary() == null) {
       binary = OperaPaths.operaPath();
