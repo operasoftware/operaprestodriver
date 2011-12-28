@@ -52,6 +52,9 @@ import static com.google.common.base.Preconditions.checkArgument;
  * }
  * </pre>
  *
+ * Among Opera's command-line arguments the profile may be referred to as "pd", short for "personal
+ * directory".
+ *
  * @see OperaPreferences
  */
 public class OperaProfile {
