@@ -55,7 +55,7 @@ public class OperaPreferencesTest extends OperaDriverTestCase {
     iniFile = new File(temporaryProfile + File.separator + "opera.ini");
 
     try {
-      Files.copy(fixtureFile("opera.ini"), iniFile);
+      Files.copy(fixtureFile("profile" + File.separator + "opera.ini"), iniFile);
     } catch (IOException e) {
       fail("Unable to copy preference fixture: " + e.getMessage());
     }
