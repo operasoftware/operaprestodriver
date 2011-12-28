@@ -93,14 +93,16 @@ public class OperaProfile {
     checkArgument(!profileDirectory.getPath().isEmpty(), "Profile directory path is empty");
 
     directory = profileDirectory;
+    File preferenceFile = new File(directory.getAbsolutePath() + File.separator + "operaprefs.ini");
     
     // Log whether directory exists or not for convenience
     if (directory.exists()) {
       logger.fine("Profile directory exists: " + directory.getAbsolutePath());
       
-      // Load preferences from profile
-      setPreferences(new OperaPreferences(
-          new File(directory.getAbsolutePath() + File.separator + "operaprefs.ini")));
+      // Load preferences from profile if preference file exists
+      if (preferenceFile.exists()) {
+        setPreferences(new OperaPreferences(preferenceFile));
+      }
     } else {
       logger.fine("Profile does not exist, will be created: " + directory.getAbsolutePath());
     }
