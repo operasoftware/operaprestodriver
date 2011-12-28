@@ -1,13 +1,13 @@
 package com.opera.core.systems.runner;
 
 import com.opera.core.systems.OperaProduct;
+import com.opera.core.systems.OperaProfile;
 import com.opera.core.systems.arguments.OperaCoreArguments;
 import com.opera.core.systems.arguments.OperaDesktopArguments;
 import com.opera.core.systems.arguments.interfaces.OperaArguments;
 import com.opera.core.systems.scope.internal.OperaIntervals;
 
 import org.openqa.selenium.Platform;
-import org.openqa.selenium.io.TemporaryFilesystem;
 import org.openqa.selenium.net.PortProber;
 
 import java.io.File;
@@ -16,8 +16,6 @@ import java.util.logging.Level;
 /**
  * Defines a settings object which impacts OperaRunner, the interface for controlling the Opera
  * binary.
- *
- * @author Andreas Tolf Tolfsen <andreastt@opera.com>
  */
 public class OperaRunnerSettings
     implements com.opera.core.systems.runner.interfaces.OperaRunnerSettings {
@@ -25,12 +23,14 @@ public class OperaRunnerSettings
   protected File operaBinary = null;
   protected Integer display = null;
   protected OperaProduct product = OperaProduct.CORE;
-  protected String profile = null;  // "" for Opera < 12
+  protected OperaProfile profile = null;
   protected boolean noQuit = false;
   protected String host = "127.0.0.1";
   protected Integer port = 0;  // -1 for Opera < 12
   protected Level loggingLevel = Level.INFO;
   protected com.opera.core.systems.arguments.interfaces.OperaArguments arguments;
+
+  private boolean supportsPd = true;
 
   public OperaRunnerSettings() {
     // We read in environmental variable OPERA_ARGS in addition to existing arguments passed down
@@ -98,16 +98,28 @@ public class OperaRunnerSettings
     this.product = product;
   }
 
-  public String getProfile() {
+  public OperaProfile getProfile() {
     if (profile == null) {
-      profile = TemporaryFilesystem.getDefaultTmpFS().createTempDir("opera-profile", "")
-          .getAbsolutePath();
+      profile = new OperaProfile();  // random profile
     }
 
     return profile;
   }
 
-  public void setProfile(String profile) {
+  public void setProfile(String profileDirectory) {
+    if (profileDirectory != null && !profileDirectory.isEmpty()) {
+      profile = new OperaProfile(profileDirectory);  // use this profile
+    } else if (profileDirectory == null) {
+      profile = new OperaProfile();  // random profile
+    } else {  // "" (empty string), use ~/.autotest
+      // TODO(andreastt): What are the autotest directories on Windows and Mac?
+      supportsPd = true;
+      profile =
+          new OperaProfile(new File(System.getenv("user.dir") + File.separator + ".autotest"));
+    }
+  }
+
+  public void setProfile(OperaProfile profile) {
     this.profile = profile;
   }
 
@@ -155,6 +167,10 @@ public class OperaRunnerSettings
 
   public boolean supportsDebugProxy() {
     return port != OperaIntervals.SERVER_PORT.getValue();
+  }
+
+  public boolean supportsPd() {
+    return supportsPd;
   }
 
   public OperaArguments getArguments() {
