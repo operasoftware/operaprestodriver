@@ -121,7 +121,11 @@ public class OperaFilePreferences extends AbstractOperaPreferences {
   }
 
   public void set(OperaPreference preference) {
-    super.set(FilePreference.convert(this, preference));
+    if (!(preference instanceof FilePreference)) {
+      super.set(FilePreference.convert(this, preference));
+    } else {
+      super.set(preference);
+    }
   }
 
   /**
@@ -130,8 +134,6 @@ public class OperaFilePreferences extends AbstractOperaPreferences {
    * method separately unless you wish to perform a forced write of the cache to disk.
    */
   protected void write() {
-    //throw new UnsupportedOperationException("Not implemented yet");
-
     try {
       Wini ini = new Wini(preferenceFile);
 
