@@ -542,7 +542,7 @@ public class StpConnection implements SocketListener {
           (service.equals("ecmascript") && status == Status.BAD_REQUEST.getNumber())) {
           signalResponse(error.getTag(), null);
         } else {
-          logger.log(Level.SEVERE, "Error : {0}", error.toString());
+          logger.log(Level.SEVERE, "Error: {0}", error.toString());
           connectionHandler.onException(new WebDriverException(
               "Error on command: " + error.toString()));
         }
