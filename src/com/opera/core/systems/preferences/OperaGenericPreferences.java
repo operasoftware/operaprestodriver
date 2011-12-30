@@ -34,7 +34,7 @@ public class OperaGenericPreferences extends AbstractOperaPreferences {
    *
    * @see ScopePreference, FilePreference
    */
-  public static class GenericPreference extends AbstractOperaPreference {
+  public static class GenericPreference extends AbstractPreference {
 
     public GenericPreference(String section, String key, Object value) {
       super(section, key, value);

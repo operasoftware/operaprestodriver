@@ -21,14 +21,14 @@ package com.opera.core.systems.preferences;
  * <code>operaprefs.ini</code>) as well as keeping the local individual preference cache
  * up-to-date.
  */
-public class FilePreference extends AbstractOperaPreference {
+public class FilePreference extends AbstractPreference {
 
   private OperaFilePreferences parent;
 
   public FilePreference(OperaFilePreferences parent, String section, String key, Object value) {
     super(section, key, value);
     this.parent = parent;
-    setValue(value);
+    super.setValue(value);
   }
 
   /**
@@ -41,7 +41,7 @@ public class FilePreference extends AbstractOperaPreference {
     super.setValue(value);
     parent.write();
   }
-
+  
   public static FilePreference convert(OperaFilePreferences parent, OperaPreferences.OperaPreference convertee) {
     return new FilePreference(parent,
                               convertee.getSection(),

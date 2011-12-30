@@ -25,9 +25,10 @@ import com.opera.core.systems.preferences.OperaPreferences;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 import org.openqa.selenium.WebDriverException;
-import org.openqa.selenium.io.TemporaryFilesystem;
 
 import java.io.File;
 import java.io.IOException;
@@ -41,8 +42,10 @@ public class OperaFilePreferencesTest extends OperaDriverTestCase {
 
   public OperaPreferences preferences;
   public int prefCountBefore = 0;
-  public File temporaryProfile;
   public File iniFile;
+
+  @Rule
+  public TemporaryFolder temporaryProfile = new TemporaryFolder();
 
   // Replace OperaDriverTestCase setup and teardown so that we don't launch Opera
   @BeforeClass
@@ -55,10 +58,8 @@ public class OperaFilePreferencesTest extends OperaDriverTestCase {
   }
 
   @Before
-  public void setUp() {
-    temporaryProfile =
-        TemporaryFilesystem.getDefaultTmpFS().createTempDir("operadriver", "profile");
-    iniFile = new File(temporaryProfile + File.separator + "opera.ini");
+  public void setUp() throws IOException {
+    iniFile = temporaryProfile.newFile("opera.ini");
 
     // Make a new copy in a temporary filesystem so we don't overwrite our fixture
     // TODO(andreastt): This should be done more elegantly in OperaDriverTestCase

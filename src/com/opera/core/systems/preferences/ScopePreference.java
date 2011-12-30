@@ -27,7 +27,7 @@ import java.lang.reflect.Type;
  * Allows setting Opera preferences in Opera in addition to keeping the local cache of preferences
  * up to date.
  */
-public class ScopePreference extends AbstractOperaPreference {
+public class ScopePreference extends AbstractPreference {
 
   private OperaScopePreferences parent;
   private PrefsProtos.Pref pref;
@@ -104,11 +104,6 @@ public class ScopePreference extends AbstractOperaPreference {
    */
   public boolean isEnabled() {
     return pref.getEnabled();
-  }
-
-  private boolean isTruthy(Object o) {
-    String s = o.toString();
-    return s.equals("0") || s.equals("1");
   }
 
 }

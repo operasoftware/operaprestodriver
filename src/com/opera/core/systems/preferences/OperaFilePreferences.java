@@ -20,6 +20,7 @@ import com.opera.core.systems.common.lang.OperaStrings;
 
 import org.ini4j.Ini;
 import org.ini4j.Profile;
+import org.ini4j.Wini;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.io.TemporaryFilesystem;
 
@@ -39,12 +40,16 @@ import java.util.Map;
  */
 public class OperaFilePreferences extends AbstractOperaPreferences {
 
+  private File preferenceFile;
+
   /**
    * Constructs a new representation of Opera's preferences based on the given preference file.
    *
    * @param preferenceFile an INI style preference file
    */
   public OperaFilePreferences(File preferenceFile) {
+    this.preferenceFile = preferenceFile;
+
     // Due to the sucky nature of Opera's invalid preference files, we are forced to remove the
     // first line of the file.
     //
@@ -100,7 +105,7 @@ public class OperaFilePreferences extends AbstractOperaPreferences {
     for (Map.Entry<String, Profile.Section> section : ini.entrySet()) {
       for (Map.Entry<String, String> entry : section.getValue().entrySet()) {
         // We typically don't care about boolean values, they can be stored as integers.
-        String value = (String) entry.getValue();
+        String value = entry.getValue();
 
         if (OperaStrings.isNumeric(value)) {
           set(section.getValue().getName(), entry.getKey(), Integer.valueOf(value));
@@ -125,7 +130,19 @@ public class OperaFilePreferences extends AbstractOperaPreferences {
    * method separately unless you wish to perform a forced write of the cache to disk.
    */
   protected void write() {
-    throw new UnsupportedOperationException("Not implemented yet");
+    //throw new UnsupportedOperationException("Not implemented yet");
+
+    try {
+      Wini ini = new Wini(preferenceFile);
+
+      for (OperaPreference p : this) {
+        ini.put(p.getSection(), p.getKey(), ((AbstractPreference) p).getValue(true));
+      }
+
+      ini.store(preferenceFile);
+    } catch (IOException e) {
+      throw new WebDriverException("Unable to write to preference file: " + e.getMessage());
+    }
   }
 
 }

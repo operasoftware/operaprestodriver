@@ -21,9 +21,7 @@ import com.opera.core.systems.preferences.OperaGenericPreferences.GenericPrefere
 import com.opera.core.systems.preferences.OperaPreferences;
 import com.opera.core.systems.preferences.OperaScopePreferences;
 
-import org.junit.After;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
