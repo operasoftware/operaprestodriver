@@ -1,5 +1,5 @@
 /*
-Copyright 2008-2011 Opera Software ASA
+Copyright 2011 Opera Software ASA
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,25 +16,87 @@ limitations under the License.
 
 package com.opera.core.systems.preferences;
 
+import com.opera.core.systems.scope.protos.PrefsProtos;
 import com.opera.core.systems.scope.services.IPrefs;
 
+import org.openqa.selenium.WebDriverException;
+
+import java.util.List;
+
 /**
+ * OperaScopePreferences allows updating preferences inside Opera using the Scope protocol using the
+ * common {@link OperaPreferences} interface.  The prefs service will be written to upon alteration
+ * of any preference.
  *
+ * @see OperaFilePreferences
  */
 public class OperaScopePreferences extends AbstractOperaPreferences {
 
   protected IPrefs service;
-  
+
   public OperaScopePreferences(IPrefs prefsService) {
     service = prefsService;
-  }
-
-  public void set(String section, String key, Object value) {
-    set(new ScopePreference(this, section, key, value));
+    updatePreferenceCache();  // might be slow on cores without speed patch
   }
 
   public void set(OperaPreference preference) {
-    super.set(ScopePreference.convert(this, preference));
+    // Update locally stored value if given value is different from cache's.  We don't care about
+    // whether the preference passed into this method is a different type, e.g. GenericPreference,
+    // since we have all preferences stored locally.
+
+    for (OperaPreference p : this) {
+      if (p.getSection().equalsIgnoreCase(preference.getSection()) &&
+          p.getKey().equalsIgnoreCase(preference.getKey())) {
+        if (!p.getValue().equals(preference.getValue())) {
+          p.setValue(preference.getValue());
+        }
+        return;
+      }
+    }
+
+    throw new WebDriverException("Unknown preference: [section: '" +
+                                 preference.getSection() +"', key: '" +
+                                 preference.getKey() + "']");
+  }
+
+  public void set(String section, String key, Object value) {
+    for (OperaPreference p : this) {
+      if (p.getSection().equalsIgnoreCase(section) &&
+          p.getKey().equalsIgnoreCase(key)) {
+        p.setValue(value);
+        break;
+      }
+    }
+  }
+
+  /**
+   * Resets all preferences values to their default value.
+   */
+  public void resetAll() {
+    for (OperaPreference p : this) {
+      p.setValue(p.getDefaultValue());
+    }
+  }
+
+  /**
+   * Invalidates the preferences cache stored locally in the driver and requests a new list of all
+   * preferences from Opera.  This should typically only be called the first time
+   * {@link OperaScopePreferences} is instantiated.
+   *
+   * Following that, whenever a preference is updated the driver will be responsible for keeping the
+   * local cache up-to-date.  The drawback of this is that if the user manually updates a preference
+   * in Opera, this will not be reflected when {@link ScopePreference#getValue()} is run.  We
+   * circumvent that issue by fetching the value individually.
+   *
+   * The reason for this is that we cannot fetch a single message "Pref" through Scope, but only
+   * individual values.
+   */
+  private void updatePreferenceCache() {
+    List<PrefsProtos.Pref> allPrefs = service.listPrefs(true, null);
+
+    for (PrefsProtos.Pref pref : allPrefs) {
+      preferences.add(new ScopePreference(this, pref));
+    }
   }
 
 }

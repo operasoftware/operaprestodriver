@@ -1,5 +1,5 @@
 /*
-Copyright 2008-2011 Opera Software ASA
+Copyright 2011 Opera Software ASA
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -28,6 +28,7 @@ public class FilePreference extends AbstractOperaPreference {
   public FilePreference(OperaFilePreferences parent, String section, String key, Object value) {
     super(section, key, value);
     this.parent = parent;
+    setValue(value);
   }
 
   /**
@@ -41,7 +42,7 @@ public class FilePreference extends AbstractOperaPreference {
     parent.write();
   }
 
-  public static FilePreference convert(OperaFilePreferences parent, OperaPreference convertee) {
+  public static FilePreference convert(OperaFilePreferences parent, OperaPreferences.OperaPreference convertee) {
     return new FilePreference(parent,
                               convertee.getSection(),
                               convertee.getKey(),

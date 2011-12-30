@@ -1,5 +1,5 @@
 /*
-Copyright 2008-2011 Opera Software ASA
+Copyright 2011 Opera Software ASA
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -33,7 +33,9 @@ import java.io.IOException;
 import java.util.Map;
 
 /**
- *
+ * OperaFilePreferences allows updating preferences in an Opera preference file such as
+ * <code>opera.ini</code> or <code>operaprefs.ini</code>.  The file will be written to upon each
+ * alteration to any preference.
  */
 public class OperaFilePreferences extends AbstractOperaPreferences {
 
@@ -43,8 +45,6 @@ public class OperaFilePreferences extends AbstractOperaPreferences {
    * @param preferenceFile an INI style preference file
    */
   public OperaFilePreferences(File preferenceFile) {
-    //checkArgument(preferenceFile.exists(), "Unknown file: " + preferenceFile.getPath());
-
     // Due to the sucky nature of Opera's invalid preference files, we are forced to remove the
     // first line of the file.
     //
@@ -96,7 +96,7 @@ public class OperaFilePreferences extends AbstractOperaPreferences {
       }
     }
 
-    // Add each preference entry.
+    // Add each preference entry
     for (Map.Entry<String, Profile.Section> section : ini.entrySet()) {
       for (Map.Entry<String, String> entry : section.getValue().entrySet()) {
         // We typically don't care about boolean values, they can be stored as integers.
@@ -110,11 +110,11 @@ public class OperaFilePreferences extends AbstractOperaPreferences {
       }
     }
   }
-  
+
   public void set(String section, String key, Object value) {
     super.set(new FilePreference(this, section, key, value));
   }
-  
+
   public void set(OperaPreference preference) {
     super.set(FilePreference.convert(this, preference));
   }

@@ -1,5 +1,5 @@
 /*
-Copyright 2008-2011 Opera Software ASA
+Copyright 2011 Opera Software ASA
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -17,43 +17,56 @@ limitations under the License.
 package com.opera.core.systems.preferences;
 
 /**
- * Shared methods for the {@link OperaPreference} interface for keeping the local cache of
- * individual preference up to date.
- * 
+ * Shared methods for the {@link OperaPreferences.OperaPreference} interface for keeping the local
+ * cache of individual preference up to date.
+ *
  * @see ScopePreference, FilePreference
  */
-public abstract class AbstractOperaPreference implements OperaPreference {
+public abstract class AbstractOperaPreference implements OperaPreferences.OperaPreference {
 
   protected Object defaultValue;
 
   private String section;
   private String key;
   private Object value;
-  
+
   public AbstractOperaPreference(String section, String key, Object value) {
     this.section = section;
     this.key = key;
-    setValue(value);
+    //setValue(value);
+    this.value = value;
   }
-  
+
   public String getSection() {
     return section;
   }
-  
+
   public String getKey() {
     return key;
   }
-  
+
   public Object getValue() {
     return value;
-  }   
-  
+  }
+
   public void setValue(Object value) {
+    if (value == null) {
+      throw new IllegalArgumentException("Value cannot be null");
+    }
+
+    if (value instanceof Boolean) {
+      value = Boolean.parseBoolean(value.toString()) ? "1" : "0";
+    }
+
     this.value = value;
   }
-  
+
   public Object getDefaultValue() {
     return defaultValue;
+  }
+  
+  public String toString() {
+    return getValue().toString();
   }
 
 }

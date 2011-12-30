@@ -1,5 +1,5 @@
 /*
-Copyright 2008-2011 Opera Software ASA
+Copyright 2011 Opera Software ASA
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -17,70 +17,64 @@ limitations under the License.
 package com.opera.core.systems.preferences;
 
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
 
 /**
+ * Shared functionality between various {@link OperaPreferences} implementations.
  *
+ * @see OperaScopePreferences, OperaFilePreferences
  */
-public class AbstractOperaPreferences implements OperaPreferences {
-  
-  protected Map<String, List<OperaPreference>> preferences;
-  
-  public void clear() {
-    preferences.clear();
-  }
-  
-  public boolean containsKey(String key) {
-    return preferences.containsKey(key);
-  }
-  
-  public boolean containsValue(Object value) {
-    return preferences.containsValue(value);
-  }
-  
-  public Set<Map.Entry<String, Object>> entrySet() {
-    List<Map<String, Object>> set = new LinkedList<Map<String, Object>>();
+public abstract class AbstractOperaPreferences implements OperaPreferences {
 
-    for (Map.Entry<String, List<OperaPreference>> section : preferences.entrySet()) {
-      String sectionName = section.getKey();
-      List<OperaPreference> preferences = section.getValue();
-      
-      for (OperaPreference preference : preferences) {
-        HashMap<String, Object> pref = new HashMap<String, Object>();
-        pref.put(preference.getKey(), preference.getValue());
-        set.add(sectionName, pref);
-      }
-    }
+  protected Collection<OperaPreference> preferences = new LinkedHashSet<OperaPreference>();
+
+  public Iterator<OperaPreference> iterator() {
+    return preferences.iterator();
   }
-  
+
+  public Iterable<OperaPreference> all() {
+    return preferences;
+  }
+
   public void set(OperaPreference preference) {
     // Does this preference already exist in our collection?
-    for (List<OperaPreference> prefList : preferences.values()) {
-      for (OperaPreference p : prefList) {
-        if (p.getSection().equalsIgnoreCase(preference.getSection()) &&
-            p.getKey().equalsIgnoreCase(preference.getKey())) {
-          // Pref exists, replace with given pref
-          p.setValue(preference.getValue());
-          return;
-        }
+    for (OperaPreference p : this) {
+      if (p.getSection().equalsIgnoreCase(preference.getSection()) &&
+          p.getKey().equalsIgnoreCase(preference.getKey())) {
+        // Pref exists, replace with given pref
+        p.setValue(preference.getValue());
+        return;
       }
     }
+    
+    // Given pref does not exist, add it to our collection
+    preferences.add(preference);
+  }
+
+  public void set(String section, String key, Object value) {
+    set(new OperaGenericPreferences.GenericPreference(section, key, value));
   }
   
-  public void set(String section, String key, Object value) {
-    set(new OperaPreference(section, key, value));
+  public OperaPreference get(String section, String key) {
+    for (OperaPreference p : this) {
+      if (p.getSection().equalsIgnoreCase(section) &&
+          p.getKey().equalsIgnoreCase(key)) {
+        return p;
+      }
+    }
+
+    return null;
+  }
+
+  public void merge(OperaPreferences newPreferences) {
+    for (OperaPreference preference : newPreferences) {
+      set(preference);
+    }
   }
 
   public int size() {
     return preferences.size();
   }
-  
-  public Collection<OperaPreference> values() {
-    return preferences;
-  }
-  
+
 }
