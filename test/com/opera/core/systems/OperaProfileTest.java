@@ -70,7 +70,7 @@ public class OperaProfileTest extends OperaDriverTestCase {
   public void testConstructionWithNoArguments() {  // new temporary profile
     profile = new OperaProfile();
     assertNotNull(profile);
-    assertEquals(0, profile.preferences().getAll().size());
+    assertEquals(0, profile.preferences().size());
   }
 
   @Test
@@ -83,7 +83,7 @@ public class OperaProfileTest extends OperaDriverTestCase {
   public void testConstructionWithExistingProfileString() {  // use specified profile
     profile = new OperaProfile(existingProfile.getPath());
     assertNotNull(profile);
-    assertEquals(46, profile.preferences().getAll().size());
+    assertEquals(46, profile.preferences().size());
   }
 
   @Test(expected = IllegalArgumentException.class)
@@ -101,7 +101,7 @@ public class OperaProfileTest extends OperaDriverTestCase {
   public void testConstructionWithExistingProfileDirectory() {  // use specified profile
     profile = new OperaProfile(existingProfile);
     assertNotNull(profile);
-    assertEquals(46, profile.preferences().getAll().size());
+    assertEquals(46, profile.preferences().size());
   }
 
   @Test
