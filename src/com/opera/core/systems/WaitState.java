@@ -250,7 +250,6 @@ public class WaitState {
 
   void onException(Exception e) {
     synchronized (lock) {
-      logger.warning("Got exception");
       events.add(new ResultItem(new WebDriverException(e)));
       connected = false;
       lock.notify();
