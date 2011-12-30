@@ -140,4 +140,39 @@ public class OperaFilePreferences extends AbstractOperaPreferences {
     }
   }
 
+  /**
+   * Allows setting Opera preferences in a preference file (typically <code>opera.ini</code> or
+   * <code>operaprefs.ini</code>) as well as keeping the local individual preference cache
+   * up-to-date.
+   */
+  public static class FilePreference extends AbstractPreference {
+
+    private OperaFilePreferences parent;
+
+    public FilePreference(OperaFilePreferences parent, String section, String key, Object value) {
+      super(section, key, value);
+      this.parent = parent;
+      parent.write();
+    }
+
+    /**
+     * Sets the value of this preference to the given value.  Writes the preference to file
+     * immediately after updating the local cache.
+     *
+     * @param value the new value
+     */
+    public void setValue(Object value) {
+      super.setValue(value);
+      parent.write();
+    }
+
+    public static FilePreference convert(OperaFilePreferences parent, OperaPreferences.OperaPreference convertee) {
+      return new FilePreference(parent,
+                                convertee.getSection(),
+                                convertee.getKey(),
+                                convertee.getValue());
+    }
+
+  }
+
 }

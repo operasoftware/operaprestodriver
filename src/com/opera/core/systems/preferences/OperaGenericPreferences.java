@@ -30,9 +30,9 @@ public class OperaGenericPreferences extends AbstractOperaPreferences {
 
   /**
    * Instantiatable generic preference that does not do any special treatment a preferences like
-   * {@link ScopePreference} or {@link FilePreference}.
+   * {@link OperaScopePreferences.ScopePreference} or {@link OperaFilePreferences.FilePreference}.
    *
-   * @see ScopePreference, FilePreference
+   * @see OperaScopePreferences.ScopePreference, OperaFilePreferences.FilePreference
    */
   public static class GenericPreference extends AbstractPreference {
 
