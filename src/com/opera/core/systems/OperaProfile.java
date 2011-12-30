@@ -16,6 +16,9 @@ limitations under the License.
 
 package com.opera.core.systems;
 
+import com.opera.core.systems.preferences.OperaFilePreferences;
+import com.opera.core.systems.preferences.OperaPreferences;
+
 import org.openqa.selenium.io.TemporaryFilesystem;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
@@ -62,7 +65,8 @@ import static com.google.common.base.Preconditions.checkArgument;
 public class OperaProfile {
 
   private File directory;
-  private OperaPreferences preferences = new OperaPreferences();
+  private boolean randomProfile = false;
+  private OperaPreferences preferences;
   private final Logger logger = Logger.getLogger(getClass().getName());
 
   /**
@@ -71,6 +75,7 @@ public class OperaProfile {
    */
   public OperaProfile() {
     this(TemporaryFilesystem.getDefaultTmpFS().createTempDir("opera", "profile"));
+    randomProfile = true;
   }
 
   /**
@@ -106,7 +111,7 @@ public class OperaProfile {
 
       // Load preferences from profile if preference file exists
       if (preferenceFile.exists()) {
-        setPreferences(new OperaPreferences(preferenceFile));
+        setPreferences(new OperaFilePreferences(preferenceFile));
       }
     } else {
       logger.fine("Profile does not exist, will be created: " + directory.getAbsolutePath());
@@ -138,6 +143,16 @@ public class OperaProfile {
    */
   public File getDirectory() {
     return directory;
+  }
+
+  /**
+   * Cleans up the profile.  If the profile was random, it will be deleted.  This method should
+   * typically be called when Opera is shut down.
+   */
+  public void cleanUp() {
+    if (randomProfile) {
+      TemporaryFilesystem.getDefaultTmpFS().deleteTempDir(getDirectory());
+    }
   }
 
   /**
