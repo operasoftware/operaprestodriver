@@ -67,7 +67,7 @@ public abstract class OperaDriverTestCase {
 
   @AfterClass
   public static void tearDownAfterClass() throws Exception {
-    if (driver.isRunning()) {
+    if (driver != null && driver.isRunning()) {
       driver.quit();
     }
   }
