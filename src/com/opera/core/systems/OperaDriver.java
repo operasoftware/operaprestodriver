@@ -25,6 +25,8 @@ import com.opera.core.systems.interaction.UserInteraction;
 import com.opera.core.systems.model.ScopeActions;
 import com.opera.core.systems.model.ScreenShotReply;
 import com.opera.core.systems.model.ScriptResult;
+import com.opera.core.systems.preferences.OperaPreferences;
+import com.opera.core.systems.preferences.OperaScopePreferences;
 import com.opera.core.systems.runner.OperaRunner;
 import com.opera.core.systems.runner.interfaces.OperaRunnerSettings;
 import com.opera.core.systems.runner.launcher.OperaLauncherRunner;
@@ -35,13 +37,10 @@ import com.opera.core.systems.scope.handlers.PbActionHandler;
 import com.opera.core.systems.scope.internal.OperaFlags;
 import com.opera.core.systems.scope.internal.OperaIntervals;
 import com.opera.core.systems.scope.internal.OperaKeys;
-import com.opera.core.systems.scope.protos.PrefsProtos.GetPrefArg.Mode;
-import com.opera.core.systems.scope.protos.PrefsProtos.Pref;
 import com.opera.core.systems.scope.services.ICookieManager;
 import com.opera.core.systems.scope.services.ICoreUtils;
 import com.opera.core.systems.scope.services.IEcmaScriptDebugger;
 import com.opera.core.systems.scope.services.IOperaExec;
-import com.opera.core.systems.scope.services.IPrefs;
 import com.opera.core.systems.scope.services.IWindowManager;
 import com.opera.core.systems.settings.OperaDriverSettings;
 import com.opera.core.systems.util.CapabilitiesSanitizer;
@@ -63,11 +62,9 @@ import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.io.TemporaryFilesystem;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -198,13 +195,14 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
   protected IEcmaScriptDebugger debugger;
   protected IOperaExec exec;
-  protected IPrefs prefs;
   protected IWindowManager windowManager;
   protected ICoreUtils coreUtils;
   protected ICookieManager cookieManager;
 
   protected ScopeServices services;
   protected ScopeActions actionHandler;
+
+  private OperaPreferences preferences;
 
   protected final Logger logger = Logger.getLogger(this.getClass().getName());
   private FileHandler logFile = null;
@@ -393,7 +391,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     actionHandler = new PbActionHandler(services);
     cookieManager = services.getCookieManager();
     //cookieManager.updateCookieSettings();
-    prefs = services.getPrefs();
+    preferences = new OperaScopePreferences(services.getPrefs());
 
     // Get product from Opera
     capabilities.setCapability(PRODUCT, utils().getProduct());
@@ -444,8 +442,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     logger.fine("OperaDriver shutting down");
 
     // This will only delete the profile directory if we created it
-    TemporaryFilesystem.getDefaultTmpFS().deleteTempDir(
-        new File((String) capabilities.getCapability(PROFILE)));
+    ((OperaProfile) capabilities.getCapability(PROFILE)).cleanUp();
 
     // This method can be called from start(), before services are created
     if (services != null) {
@@ -1382,79 +1379,6 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     return services;
   }
 
-  /**
-   * Get the value of the requested preference.
-   *
-   * @param section the section the preference is in
-   * @param key     the key name of the preference to get
-   * @return the value of the preference
-   */
-  public String getPref(String section, String key) {
-    return services.getPrefs().getPref(section, key, Mode.CURRENT);
-  }
-
-  /**
-   * Gets the default value of the requested preference.
-   *
-   * @param section the section the preference is in
-   * @param key     the key name of the preference
-   * @return the default string value of the preference
-   */
-  public String getDefaultPref(String section, String key) {
-    return services.getPrefs().getPref(section, key, Mode.DEFAULT);
-  }
-
-  /**
-   * Returns a Map of preference names to preferences in the requested section.
-   *
-   * @param sort    whether to alphabetically sort the preference keys
-   * @param section the section to retrieve the preferences from
-   * @return a Map of preference names to preferences.
-   */
-  public Map<String, Pref> listPrefs(boolean sort, String section) {
-    Map<String, Pref> map = new HashMap<String, Pref>();
-
-    for (Pref p : prefs.listPrefs(sort, section)) {
-      map.put(p.getKey(), p);
-    }
-    return map;
-  }
-
-  /**
-   * Returns a Map of sections names mapping to a Map of preference names mapping to Pref objects.
-   *
-   * @return a map of preference objects
-   */
-  public Map<String, Map<String, Pref>> listAllPrefs() {
-    List<Pref> allPrefs = prefs.listPrefs(true, null);
-
-    HashMap<String, Map<String, Pref>> result = new HashMap<String, Map<String, Pref>>();
-
-    for (Pref pref : allPrefs) {
-      String section = pref.getSection();
-      String key = pref.getKey();
-
-      if (!result.containsKey(section)) {
-        result.put(section, new HashMap<String, Pref>());
-      }
-
-      result.get(section).put(key, pref);
-    }
-
-    return result;
-  }
-
-  /**
-   * Set the value of a preference using section and key as locators.
-   *
-   * @param section the section the preference is in
-   * @param key     the key name of the preference to set
-   * @param value   the value to set the preference to
-   */
-  public void setPref(String section, String key, String value) {
-    services.getPrefs().setPrefs(section, key, value);
-  }
-
   public Object executeAsyncScript(String script, Object... args) {
     throw new UnsupportedOperationException();
   }
@@ -1470,7 +1394,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
   public String selftest(List<String> modules, long timeout) {
     return services.selftest(modules, timeout);
   }
-  
+
   public OperaPreferences preferences() {
     return preferences;
   }
