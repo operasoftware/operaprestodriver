@@ -16,9 +16,6 @@ limitations under the License.
 
 package com.opera.core.systems.preferences;
 
-import java.util.Map;
-import java.util.Set;
-
 /**
  * Interface for reading and interacting with preferences in the Opera web browser.
  */
