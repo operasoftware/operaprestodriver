@@ -202,7 +202,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
   protected ScopeServices services;
   protected ScopeActions actionHandler;
 
-  private OperaPreferences preferences;
+  private OperaScopePreferences preferences;
 
   protected final Logger logger = Logger.getLogger(this.getClass().getName());
   private FileHandler logFile = null;
@@ -1395,7 +1395,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     return services.selftest(modules, timeout);
   }
 
-  public OperaPreferences preferences() {
+  public OperaScopePreferences preferences() {
     return preferences;
   }
 
