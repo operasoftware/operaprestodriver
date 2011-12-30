@@ -104,14 +104,7 @@ public class OperaFilePreferences extends AbstractOperaPreferences {
     // Add each preference entry
     for (Map.Entry<String, Profile.Section> section : ini.entrySet()) {
       for (Map.Entry<String, String> entry : section.getValue().entrySet()) {
-        // We typically don't care about boolean values, they can be stored as integers.
-        String value = entry.getValue();
-
-        if (OperaStrings.isNumeric(value)) {
-          set(section.getValue().getName(), entry.getKey(), Integer.valueOf(value));
-        } else {
-          set(section.getValue().getName(), entry.getKey(), value);
-        }
+        set(section.getValue().getName(), entry.getKey(), entry.getValue());
       }
     }
   }
