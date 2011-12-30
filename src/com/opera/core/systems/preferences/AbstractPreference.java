@@ -83,7 +83,7 @@ public abstract class AbstractPreference implements OperaPreferences.OperaPrefer
   }
   
   public String toString() {
-    return getValue().toString();
+    return getValue(true).toString();
   }
 
   /**
