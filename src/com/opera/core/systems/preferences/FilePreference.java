@@ -28,7 +28,7 @@ public class FilePreference extends AbstractPreference {
   public FilePreference(OperaFilePreferences parent, String section, String key, Object value) {
     super(section, key, value);
     this.parent = parent;
-    super.setValue(value);
+    parent.write();
   }
 
   /**
