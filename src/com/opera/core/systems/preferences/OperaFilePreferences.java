@@ -16,8 +16,6 @@ limitations under the License.
 
 package com.opera.core.systems.preferences;
 
-import com.opera.core.systems.common.lang.OperaStrings;
-
 import org.ini4j.Ini;
 import org.ini4j.Profile;
 import org.ini4j.Wini;
@@ -119,6 +117,7 @@ public class OperaFilePreferences extends AbstractOperaPreferences {
     } else {
       super.set(preference);
     }
+    write();
   }
 
   /**
@@ -152,7 +151,6 @@ public class OperaFilePreferences extends AbstractOperaPreferences {
     public FilePreference(OperaFilePreferences parent, String section, String key, Object value) {
       super(section, key, value);
       this.parent = parent;
-      parent.write();
     }
 
     /**
