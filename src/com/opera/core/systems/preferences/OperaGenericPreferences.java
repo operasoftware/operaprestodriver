@@ -1,5 +1,5 @@
 /*
-Copyright 2008-2011 Opera Software ASA
+Copyright 2011 Opera Software ASA
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -17,7 +17,8 @@ limitations under the License.
 package com.opera.core.systems.preferences;
 
 /**
- *
+ * Instantiatable generic preference collection for preferences that require no special treatment
+ * such as is the case fo {@link OperaScopePreferences} and {@link OperaFilePreferences}.
  */
 public class OperaGenericPreferences extends AbstractOperaPreferences {
 
