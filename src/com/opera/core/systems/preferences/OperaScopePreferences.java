@@ -16,7 +16,6 @@ limitations under the License.
 
 package com.opera.core.systems.preferences;
 
-import com.opera.core.systems.common.lang.OperaStrings;
 import com.opera.core.systems.model.OperaColor;
 import com.opera.core.systems.scope.protos.PrefsProtos;
 import com.opera.core.systems.scope.services.IPrefs;
@@ -116,37 +115,11 @@ public class OperaScopePreferences extends AbstractOperaPreferences {
       super(pref.getSection(), pref.getKey(), pref.getValue());
       this.parent = parent;
       this.pref = pref;
-      setValue(getValue());
-    }
-
-    /**
-     * Preferences in Opera is a messy business.  Some boolean values are stored as integers and
-     * everything will be returned as strings due to the nature of Google protobuffers.  This is an
-     * attempt at making sense of it all because we want the user-facing API to be nice:  If the user
-     * queries a pref's value and the value is _similar_ to a boolean value, we will return it as a
-     * boolean.
-     *
-     * Values stored as strings with a truthy value ("0" or "1") are considered boolean.  Values
-     * stored as integers will always be returned as integers.  Other values will be returned as
-     * objects and will rely on Java autoboxing.
-     *
-     * @return object, integer, or boolean depending on the nature of the value
-     */
-    public Object getValue() {
-      Object value = super.getValue();
-
-      if (getType() == Boolean.class && isTruthy(value)) {
-        return value.equals("1");
-      } else if (getType() == Integer.class && OperaStrings.isNumeric(value.toString())) {
-        return Integer.valueOf(value.toString());
-      }
-
-      return value;
     }
 
     public void setValue(Object value) {
       super.setValue(value);  // update cache
-      parent.service.setPrefs(getSection(), getKey(), super.getValue().toString());
+      parent.service.setPrefs(getSection(), getKey(), super.getValue(true).toString());
     }
 
     public Object getDefaultValue() {

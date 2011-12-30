@@ -116,6 +116,15 @@ public abstract class AbstractOperaPreferences implements OperaPreferences {
      * saved in the cache, meaning we won't try to figure out whether the object is /actually/ a
      * boolean or an integer.
      *
+     * Preferences in Opera is a messy business.  Some boolean values are stored as integers and
+     * everything will be returned as strings.  This is an attempt at making sense of it all because
+     * we want the user-facing API to be nice:  If the user queries a pref's value and the value is
+     * <em>similar</em> to a boolean value, we will return it as a boolean.
+     *
+     * Values stored as strings with a truthy value ("0" or "1") are considered boolean.  Values
+     * stored as integers will always be returned as integers.  Other values will be returned as
+     * objects and will rely on Java autoboxing.
+     *
      * @param raw set to true to return the raw data in cache
      * @return value of the preference
      */
