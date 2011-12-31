@@ -58,18 +58,12 @@ public class OperaScopePreferences extends AbstractOperaPreferences {
     }
 
     throw new WebDriverException("Unknown preference: [section: '" +
-                                 preference.getSection() +"', key: '" +
+                                 preference.getSection() + "', key: '" +
                                  preference.getKey() + "']");
   }
 
   public void set(String section, String key, Object value) {
-    for (OperaPreference p : this) {
-      if (p.getSection().equalsIgnoreCase(section) &&
-          p.getKey().equalsIgnoreCase(key)) {
-        p.setValue(value);
-        break;
-      }
-    }
+    set(new OperaGenericPreferences.GenericPreference(section, key, value));
   }
 
   /**
@@ -83,8 +77,8 @@ public class OperaScopePreferences extends AbstractOperaPreferences {
 
   /**
    * Invalidates the preferences cache stored locally in the driver and requests a new list of all
-   * preferences from Opera.  This should typically only be called the first time
-   * {@link OperaScopePreferences} is instantiated.
+   * preferences from Opera.  This should typically only be called the first time {@link
+   * OperaScopePreferences} is instantiated.
    *
    * Following that, whenever a preference is updated the driver will be responsible for keeping the
    * local cache up-to-date.  The drawback of this is that if the user manually updates a preference
