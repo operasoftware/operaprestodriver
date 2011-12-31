@@ -29,7 +29,10 @@ import static org.junit.Assert.assertTrue;
 
 public class OperaScopePreferencesTest extends OperaDriverTestCase {
 
-  public static final OperaScopePreferences preferences = (OperaScopePreferences) driver.preferences();
+  public static final
+  OperaScopePreferences
+      preferences =
+      (OperaScopePreferences) driver.preferences();
   public static int prefCountBefore = 0;
 
   @Before
@@ -41,18 +44,18 @@ public class OperaScopePreferencesTest extends OperaDriverTestCase {
   public void testPrefetchedPreferences() {
     assertTrue(preferences.size() > 0);
   }
-  
+
   @Test
   public void testGet() {
     assertEquals("127.0.0.1", preferences.get("Developer Tools", "Proxy Host").getValue());
   }
-  
+
   @Test
   public void testSetWithPreference() {
     preferences.set(new GenericPreference("Developer Tools", "Proxy Host", "1.2.3.4"));
     assertEquals("1.2.3.4", preferences.get("Developer Tools", "Proxy Host").getValue());
   }
-  
+
   @Test
   public void testSetWithSectionAndKey() {
     preferences.set("Developer Tools", "Proxy Host", "1.2.3.4");
@@ -70,8 +73,10 @@ public class OperaScopePreferencesTest extends OperaDriverTestCase {
   @Test
   public void testSetWithBoolean() {
     preferences.set("Developer Tools", "Proxy Auto Connect", true);
-    assertEquals("Developer Tools", preferences.get("Developer Tools", "Proxy Auto Connect").getSection());
-    assertEquals("Proxy Auto Connect", preferences.get("Developer Tools", "Proxy Auto Connect").getKey());
+    assertEquals("Developer Tools",
+                 preferences.get("Developer Tools", "Proxy Auto Connect").getSection());
+    assertEquals("Proxy Auto Connect",
+                 preferences.get("Developer Tools", "Proxy Auto Connect").getKey());
     assertEquals(true, preferences.get("Developer Tools", "Proxy Auto Connect").getValue());
   }
 
@@ -108,7 +113,25 @@ public class OperaScopePreferencesTest extends OperaDriverTestCase {
 
   @Test
   public void testResetAll() {
-
+    preferences.set("Developer Tools", "Proxy Host", "4.3.2.1");
+    preferences.resetAll();
+    assertEquals("127.0.0.1", preferences.get("Developer Tools", "Proxy Host").getDefaultValue());
   }
-  
+
+  @Test
+  public void testScopePreferenceGetType() {
+    assertEquals(String.class, ((OperaScopePreferences.ScopePreference) preferences
+        .get("Developer Tools", "Proxy Host")).getType());
+    assertEquals(Integer.class, ((OperaScopePreferences.ScopePreference) preferences
+        .get("Developer Tools", "Proxy Port")).getType());
+    assertEquals(Boolean.class, ((OperaScopePreferences.ScopePreference) preferences
+        .get("Developer Tools", "Proxy Auto Connect")).getType());
+  }
+
+  @Test
+  public void testScopePreferenceIsEnabled() {
+    assertTrue(((OperaScopePreferences.ScopePreference) preferences
+        .get("Developer Tools", "Proxy Auto Connect")).isEnabled());
+  }
+
 }
