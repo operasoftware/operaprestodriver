@@ -117,7 +117,7 @@ public class OperaScopePreferences extends AbstractOperaPreferences {
     }
 
     public Object getDefaultValue() {
-      return pref.getDefaultInstanceForType().getValue();
+      return parent.service.getPref(getSection(), getKey(), PrefsProtos.GetPrefArg.Mode.DEFAULT);
     }
 
     /**
