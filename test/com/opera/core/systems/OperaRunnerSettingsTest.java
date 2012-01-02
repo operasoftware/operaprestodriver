@@ -293,6 +293,8 @@ public class OperaRunnerSettingsTest extends OperaDriverTestCase {
    *
    * @param key   the new environment variable's identifier
    * @param value the new environment variable's value
+   * @throws IllegalAccessException foo
+   * @throws NoSuchFieldException foo
    */
   @SuppressWarnings("unchecked")
   private static void setEnvVar(String key, String value)
