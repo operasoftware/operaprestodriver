@@ -81,7 +81,7 @@ public class OperaFilePreferencesTest extends OperaDriverTestCase {
 
   @Test(expected = WebDriverException.class)
   public void testConstructionWithInvalidFile() {
-    new OperaFilePreferences(new File("foo"));
+    new OperaFilePreferences(new File("/path/does/not/exist"));
   }
 
   @Test
