@@ -34,7 +34,7 @@ public class OperaScopePreferencesTest extends OperaDriverTestCase {
   public static int prefCountBefore = 0;
 
   @BeforeClass
-  public void beforeAll() {
+  public static void beforeAll() {
     preferences = driver.preferences();
   }
 
