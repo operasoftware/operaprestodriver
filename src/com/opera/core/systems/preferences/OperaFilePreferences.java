@@ -48,6 +48,19 @@ public class OperaFilePreferences extends AbstractOperaPreferences {
   public OperaFilePreferences(File preferenceFile) {
     this.preferenceFile = preferenceFile;
 
+    // Create new preference file if it doesn't exist
+    if (!preferenceFile.exists()) {
+      try {
+        if (!preferenceFile.createNewFile()) {
+          throw new IOException("File exists");
+        }
+      } catch (IOException e) {
+        throw new WebDriverException("Unable to create new preference file: " + e.getMessage());
+      }
+
+      return;
+    }
+
     // Due to the sucky nature of Opera's invalid preference files, we are forced to remove the
     // first line of the file.
     //

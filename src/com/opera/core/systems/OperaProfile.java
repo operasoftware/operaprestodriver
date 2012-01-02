@@ -17,6 +17,7 @@ limitations under the License.
 package com.opera.core.systems;
 
 import com.opera.core.systems.preferences.OperaFilePreferences;
+import com.opera.core.systems.preferences.OperaGenericPreferences;
 import com.opera.core.systems.preferences.OperaPreferences;
 
 import org.openqa.selenium.io.TemporaryFilesystem;
@@ -108,14 +109,12 @@ public class OperaProfile {
     // Log whether directory exists or not for convenience
     if (directory.exists()) {
       logger.fine("Profile directory exists: " + directory.getAbsolutePath());
-
-      // Load preferences from profile if preference file exists
-      if (preferenceFile.exists()) {
-        setPreferences(new OperaFilePreferences(preferenceFile));
-      }
     } else {
       logger.fine("Profile does not exist, will be created: " + directory.getAbsolutePath());
     }
+
+    // Load preferences from profile if preference file exists, or create a new preference file
+    setPreferences(new OperaFilePreferences(preferenceFile));
   }
 
   /**
@@ -190,7 +189,7 @@ public class OperaProfile {
       }
     }
 
-    return new File("");
+    return new File(directoryPath + "operaprefs.ini");
   }
 
 }
