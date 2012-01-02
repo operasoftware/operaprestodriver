@@ -22,6 +22,7 @@ import com.opera.core.systems.preferences.OperaFilePreferences;
 import com.opera.core.systems.preferences.OperaGenericPreferences;
 import com.opera.core.systems.preferences.OperaPreferences;
 
+import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -29,11 +30,13 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.openqa.selenium.WebDriverException;
+import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.io.File;
 import java.io.IOException;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.fail;
@@ -43,9 +46,10 @@ public class OperaFilePreferencesTest extends OperaDriverTestCase {
   public OperaPreferences preferences;
   public int prefCountBefore = 0;
   public File iniFile;
+  public OperaProfile temporaryProfile;
 
   @Rule
-  public TemporaryFolder temporaryProfile = new TemporaryFolder();
+  public TemporaryFolder temporaryProfileDirectory = new TemporaryFolder();
 
   // Replace OperaDriverTestCase setup and teardown so that we don't launch Opera
   @BeforeClass
@@ -59,7 +63,7 @@ public class OperaFilePreferencesTest extends OperaDriverTestCase {
 
   @Before
   public void setUp() throws IOException {
-    iniFile = temporaryProfile.newFile("opera.ini");
+    iniFile = temporaryProfileDirectory.newFile("operaprefs.ini");
 
     // Make a new copy in a temporary filesystem so we don't overwrite our fixture
     // TODO(andreastt): This should be done more elegantly in OperaDriverTestCase
@@ -70,7 +74,15 @@ public class OperaFilePreferencesTest extends OperaDriverTestCase {
     }
 
     preferences = new OperaFilePreferences(iniFile);
+    temporaryProfile = new OperaProfile(temporaryProfileDirectory.getRoot());
     prefCountBefore = preferences.size();
+  }
+
+  @After
+  public void afterEach() {
+    if (driver != null && driver.isRunning()) {
+      driver.quit();
+    }
   }
 
   @Test
@@ -102,7 +114,7 @@ public class OperaFilePreferencesTest extends OperaDriverTestCase {
   @Test
   public void testSetWithString() {
     preferences.set("Developer Tools", "Proxy Host", "1.2.3.4");
-    
+
     OperaPreferences verifier = new OperaFilePreferences(iniFile);
     assertEquals("Developer Tools", verifier.get("Developer Tools", "Proxy Host").getSection());
     assertEquals("Proxy Host", verifier.get("Developer Tools", "Proxy Host").getKey());
@@ -114,8 +126,10 @@ public class OperaFilePreferencesTest extends OperaDriverTestCase {
     preferences.set("Developer Tools", "Proxy Auto Connect", true);
 
     OperaPreferences verifier = new OperaFilePreferences(iniFile);
-    assertEquals("Developer Tools", verifier.get("Developer Tools", "Proxy Auto Connect").getSection());
-    assertEquals("Proxy Auto Connect", verifier.get("Developer Tools", "Proxy Auto Connect").getKey());
+    assertEquals("Developer Tools",
+                 verifier.get("Developer Tools", "Proxy Auto Connect").getSection());
+    assertEquals("Proxy Auto Connect",
+                 verifier.get("Developer Tools", "Proxy Auto Connect").getKey());
     assertEquals(true, verifier.get("Developer Tools", "Proxy Auto Connect").getValue());
   }
 
@@ -136,7 +150,7 @@ public class OperaFilePreferencesTest extends OperaDriverTestCase {
     OperaPreferences verifier = new OperaFilePreferences(iniFile);
     assertNotSame(prefCountBefore, preferences.size());
     assertNotSame(prefCountBefore, verifier.size());
-    
+
     assertEquals("foo", verifier.get("foo", "bar").getSection());
     assertEquals("bar", verifier.get("foo", "bar").getKey());
     assertEquals("baz", verifier.get("foo", "bar").getValue());
@@ -144,13 +158,49 @@ public class OperaFilePreferencesTest extends OperaDriverTestCase {
 
   @Test
   public void testSetWithKnownPreference() {
-    preferences.set(new OperaGenericPreferences.GenericPreference("Developer Tools", "Proxy Host", "1.2.3.4"));
+    preferences.set(
+        new OperaGenericPreferences.GenericPreference("Developer Tools", "Proxy Host", "1.2.3.4"));
 
     OperaPreferences verifier = new OperaFilePreferences(iniFile);
     assertEquals(prefCountBefore, verifier.size());
     assertEquals("Developer Tools", verifier.get("Developer Tools", "Proxy Host").getSection());
     assertEquals("Proxy Host", verifier.get("Developer Tools", "Proxy Host").getKey());
     assertEquals("1.2.3.4", verifier.get("Developer Tools", "Proxy Host").getValue());
+  }
+
+  @Test
+  public void testPreferencesAreSet() {
+    temporaryProfile.preferences().set("User Prefs", "Ignore Unrequested Popups", false);
+    DesiredCapabilities capabilities = DesiredCapabilities.opera();
+    capabilities.setCapability("opera.profile", temporaryProfile);
+    driver = new TestOperaDriver(capabilities);
+    assertFalse(
+        (Boolean) driver.preferences().get("User Prefs", "Ignore Unrequested Popups").getValue());
+  }
+
+  @Test
+  public void testPreferencesAreSetWithExistingObject() {
+    preferences.set("User Prefs", "Ignore Unrequested Popups", false);
+    temporaryProfile.setPreferences(preferences);
+    DesiredCapabilities capabilities = DesiredCapabilities.opera();
+    capabilities.setCapability("opera.profile", temporaryProfile);
+    driver = new TestOperaDriver(capabilities);
+    assertFalse(
+        (Boolean) driver.preferences().get("User Prefs", "Ignore Unrequested Popups").getValue());
+  }
+
+  // If we have an existing OperaGenericPreferences object this will not write the preferences to
+  // disk, so in this test we will check whether OperaProfile.setPreferences() does that for us.
+  @Test
+  public void testPreferencesAreSetWithGenericPreferenceObject() {
+    OperaPreferences preferences = new OperaGenericPreferences();
+    preferences.set("User Prefs", "Ignore Unrequested Popups", false);
+    temporaryProfile.setPreferences(preferences);
+    DesiredCapabilities capabilities = DesiredCapabilities.opera();
+    capabilities.setCapability("opera.profile", temporaryProfile);
+    driver = new TestOperaDriver(capabilities);
+    assertFalse(
+        (Boolean) driver.preferences().get("User Prefs", "Ignore Unrequested Popups").getValue());
   }
 
 }

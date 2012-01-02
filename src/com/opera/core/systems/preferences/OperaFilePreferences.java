@@ -121,7 +121,7 @@ public class OperaFilePreferences extends AbstractOperaPreferences {
   }
 
   public void set(String section, String key, Object value) {
-    super.set(new FilePreference(this, section, key, value));
+    set(new FilePreference(this, section, key, value));
   }
 
   public void set(OperaPreference preference) {
@@ -130,6 +130,7 @@ public class OperaFilePreferences extends AbstractOperaPreferences {
     } else {
       super.set(preference);
     }
+
     write();
   }
 
@@ -138,7 +139,7 @@ public class OperaFilePreferences extends AbstractOperaPreferences {
    * is called by {@link FilePreference#setValue(Object)} and it is thus not necessary to call this
    * method separately unless you wish to perform a forced write of the cache to disk.
    */
-  protected void write() {
+  public void write() {
     try {
       Wini ini = new Wini(preferenceFile);
 

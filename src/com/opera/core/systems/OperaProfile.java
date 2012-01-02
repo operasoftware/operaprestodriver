@@ -67,6 +67,7 @@ import static com.google.common.base.Preconditions.checkArgument;
 public class OperaProfile {
 
   private File directory;
+  private File preferenceFile;
   private boolean randomProfile = false;
   private OperaPreferences preferences;
   private final Logger logger = Logger.getLogger(getClass().getName());
@@ -105,7 +106,7 @@ public class OperaProfile {
     checkArgument(!profileDirectory.getPath().isEmpty(), "Profile directory path is empty");
 
     directory = profileDirectory;
-    File preferenceFile = getPreferenceFile(directory);
+    preferenceFile = getPreferenceFile(directory);
 
     // Log whether directory exists or not for convenience
     if (directory.exists()) {
@@ -136,7 +137,13 @@ public class OperaProfile {
    * @param newPreferences the new preferences to populate the profile with
    */
   public void setPreferences(OperaPreferences newPreferences) {
-    preferences = newPreferences;
+    if (!(newPreferences instanceof OperaFilePreferences)) {
+      OperaFilePreferences convertedPreferences = new OperaFilePreferences(preferenceFile);
+      convertedPreferences.merge(newPreferences);
+      preferences = convertedPreferences;
+    } else {
+      preferences = newPreferences;
+    }
   }
 
   /**
