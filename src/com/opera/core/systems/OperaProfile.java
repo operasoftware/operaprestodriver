@@ -78,6 +78,7 @@ public class OperaProfile {
    */
   public OperaProfile() {
     this(TemporaryFilesystem.getDefaultTmpFS().createTempDir("opera", "profile"));
+    logger.warning("Using a random profile from TemporaryFilesystem, this is likely to cause issues with JUnit");
     randomProfile = true;
   }
 
