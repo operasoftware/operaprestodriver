@@ -23,7 +23,6 @@ import com.opera.core.systems.preferences.OperaGenericPreferences;
 import com.opera.core.systems.preferences.OperaPreferences;
 
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Rule;
@@ -55,10 +54,6 @@ public class OperaFilePreferencesTest extends OperaDriverTestCase {
   @BeforeClass
   public static void setUpBeforeClass() {
     initFixtures();
-  }
-
-  @AfterClass
-  public static void tearDownAfterClass() {
   }
 
   @Before

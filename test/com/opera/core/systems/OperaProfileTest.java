@@ -21,8 +21,9 @@ import com.google.common.io.Files;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Rule;
 import org.junit.Test;
-import org.openqa.selenium.io.TemporaryFilesystem;
+import org.junit.rules.TemporaryFolder;
 
 import java.io.File;
 import java.io.IOException;
@@ -37,6 +38,12 @@ public class OperaProfileTest extends OperaDriverTestCase {
   public File temporaryProfile;
   public File existingProfile;
 
+  @Rule
+  public TemporaryFolder existingProfileDirectory = new TemporaryFolder();
+
+  @Rule
+  public TemporaryFolder temporaryProfileDirectory = new TemporaryFolder();
+
   @BeforeClass
   public static void setUpBeforeClass() {
     initFixtures();
@@ -48,19 +55,16 @@ public class OperaProfileTest extends OperaDriverTestCase {
 
   @Before
   public void setUp() {
-    temporaryProfile =
-        TemporaryFilesystem.getDefaultTmpFS().createTempDir("opera", "profile");
+    existingProfile = existingProfileDirectory.getRoot();
+    temporaryProfile = temporaryProfileDirectory.getRoot();
 
     // Prepare an existing profile.  Because we are afraid to overwrite any test fixtures, we'll
     // copy the existing profile from the fixtures directory into a new temporary file system.
     //
     // TODO(andreastt): Abstract this out into OperaDriverTestCase
-    existingProfile =
-        TemporaryFilesystem.getDefaultTmpFS().createTempDir("opera", "profile");
-
     try {
       Files.copy(fixtureFile("profile" + File.separator + "opera.ini"),
-                 new File(existingProfile.getPath() + File.separator + "opera.ini"));
+                 new File(existingProfile.getPath() + File.separator + "operaprefs.ini"));
     } catch (IOException e) {
       fail("Unable to prepare new profile");
     }
