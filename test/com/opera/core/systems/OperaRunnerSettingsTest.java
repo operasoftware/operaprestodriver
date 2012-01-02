@@ -185,6 +185,7 @@ public class OperaRunnerSettingsTest extends OperaDriverTestCase {
     settings.setProfile("");
     runner = new TestOperaRunner(settings);
     assertTrue(runner.getSettings().getProfile().getDirectory().exists());
+    assertTrue(!runner.getSettings().getProfile().getDirectory().toString().contains("null"));
     // TODO(andreastt): Is there a good way to check that .autotest is used?
   }
 
