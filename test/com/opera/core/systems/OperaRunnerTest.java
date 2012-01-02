@@ -31,7 +31,6 @@ import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
-import org.openqa.selenium.WebDriverException;
 
 import java.io.File;
 import java.io.IOException;
@@ -109,49 +108,12 @@ public class OperaRunnerTest extends OperaDriverTestCase {
     assertTrue(runner.getSettings().getArguments() instanceof OperaDesktopArguments);
   }
 
-  // use this profile
   @Test
-  public void testSetProfileWithValidString() {
+  public void testConstructionWithProfile() {
     settings.setProfile(profile);
     runner = new TestOperaRunner(settings);
     assertEquals(profile,
                  runner.getSettings().getArguments().getArguments().get(0).getValue());  // 1
-    assertTrue(runner.getSettings().getProfile().getDirectory().exists());
-    assertEquals(46, runner.getSettings().getProfile().preferences().size());
-  }
-
-  // use this profile, but check for invalid directory
-  @Test(expected = WebDriverException.class)
-  public void testSetProfileWithInvalidString() {
-    settings.setProfile("/path/does/not/exist");
-    runner = new TestOperaRunner(settings);
-  }
-
-  // null, use random profile
-  @Test
-  public void testSetProfileRandom() {
-    settings.setProfile((String) null);
-    runner = new TestOperaRunner(settings);
-    assertTrue(runner.getSettings().getProfile().getDirectory().exists());
-  }
-
-  // "" (empty string), use ~/.autotest
-  @Test
-  public void testSetProfileWithEmptyString() {
-    settings.setProfile("");
-    runner = new TestOperaRunner(settings);
-    assertTrue(runner.getSettings().getProfile().getDirectory().exists());
-    // TODO(andreastt): Is there a good way to check that .autotest is used?
-  }
-
-  // use provided profile
-  @Test
-  public void testSetProfileWithProfile() {
-    OperaProfile newProfile = new OperaProfile(profile);
-    settings.setProfile(newProfile);
-    runner = new TestOperaRunner(settings);
-    assertTrue(runner.getSettings().getProfile().getDirectory().exists());
-    assertEquals(46, runner.getSettings().getProfile().preferences().size());
   }
 
   @Test
