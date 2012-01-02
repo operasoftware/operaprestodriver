@@ -22,6 +22,7 @@ import com.opera.core.systems.preferences.OperaPreferences;
 import com.opera.core.systems.preferences.OperaScopePreferences;
 
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -29,11 +30,13 @@ import static org.junit.Assert.assertTrue;
 
 public class OperaScopePreferencesTest extends OperaDriverTestCase {
 
-  public static final
-  OperaScopePreferences
-      preferences =
-      (OperaScopePreferences) driver.preferences();
+  public static OperaScopePreferences preferences;
   public static int prefCountBefore = 0;
+
+  @BeforeClass
+  public void beforeAll() {
+    preferences = driver.preferences();
+  }
 
   @Before
   public void beforeEach() {
