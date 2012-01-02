@@ -10,6 +10,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openqa.selenium.Platform;
+import org.openqa.selenium.WebDriverException;
 
 import java.io.File;
 import java.lang.reflect.Field;
@@ -114,11 +115,10 @@ public class OperaRunnerSettingsTest {
     assertEquals(OperaProduct.CORE, settings.getProduct());
   }
 
-  @Test
+  @Test(expected = WebDriverException.class)
   public void testProfile() {
     String profile = "/path/that/does/not/exist";
     settings.setProfile(profile);
-    assertEquals(profile, settings.getProfile());
   }
 
   @Test

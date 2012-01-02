@@ -20,6 +20,7 @@ import com.opera.core.systems.preferences.OperaFilePreferences;
 import com.opera.core.systems.preferences.OperaGenericPreferences;
 import com.opera.core.systems.preferences.OperaPreferences;
 
+import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.io.TemporaryFilesystem;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
@@ -111,6 +112,9 @@ public class OperaProfile {
       logger.fine("Profile directory exists: " + directory.getAbsolutePath());
     } else {
       logger.fine("Profile does not exist, will be created: " + directory.getAbsolutePath());
+      if (!directory.mkdirs()) {
+        throw new WebDriverException("Unable to create directory path: " + directory.getPath());
+      }
     }
 
     // Load preferences from profile if preference file exists, or create a new preference file
