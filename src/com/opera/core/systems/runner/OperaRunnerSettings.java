@@ -113,7 +113,7 @@ public class OperaRunnerSettings
       profile = new OperaProfile();  // random profile
     } else {  // "" (empty string), use ~/.autotest
       // TODO(andreastt): What are the autotest directories on Windows and Mac?
-      supportsPd = true;
+      supportsPd = false;
       profile =
           new OperaProfile(new File(System.getenv("user.dir") + File.separator + ".autotest"));
     }
