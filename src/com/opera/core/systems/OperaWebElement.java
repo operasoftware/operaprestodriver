@@ -514,18 +514,15 @@ public class OperaWebElement extends RemoteWebElement {
   }
 
   public Dimension getSize() {
-    if (!parent.objectIds.contains(objectId)) {
-      throw new StaleElementReferenceException(
-          "You cant interact with stale elements");
-    }
+    assertElementNotStale();
 
     String widthAndHeight = debugger.callFunctionOnObject(
         "var s=" + OperaAtoms.GET_SIZE.getValue() + "(locator);return s.width+','+s.height;",
         objectId
     );
+
     String[] dimension = widthAndHeight.split(",");
-    return new Dimension(Integer.valueOf(dimension[0]),
-                         Integer.valueOf(dimension[1]));
+    return new Dimension(Integer.valueOf(dimension[0]),  Integer.valueOf(dimension[1]));
   }
 
   /**
