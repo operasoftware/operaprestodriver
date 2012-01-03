@@ -598,16 +598,16 @@ public class OperaWebElement extends RemoteWebElement {
    */
   @SuppressWarnings("unused")
   public boolean containsColor(OperaColors... colors) {
-    // List<String> keys = Arrays.asList(hashes);
-
     Canvas canvas = buildCanvas();
     ScreenShotReply reply = execService.containsColor(canvas, 100L, colors);
+
     List<ColorResult> results = reply.getColorResult();
     for (ColorResult result : results) {
       if (result.getCount() > 0) {
         return true;
       }
     }
+
     return false;
   }
 
@@ -620,25 +620,19 @@ public class OperaWebElement extends RemoteWebElement {
     Canvas canvas = new Canvas();
     Dimension dimension = getSize();
     Point point = coordinates.getLocationInViewPort();
-    /*
-    String[] areaCoordinates = callMethod("var oElement = locator;\n" +
-          "var posX = 0, posY = 0;\n" +
-          "do{\n" +
-          "posX += oElement.offsetLeft;\n" +
-          "posY += oElement.offsetTop;\n" +
-          "} while(oElement = oElement.offsetParent );\n" +
-          "return (posX + ',' + posY + ',' + locator.offsetWidth + ',' + locator.offsetHeight);\n").split(",");
-          */
     int x = point.x;
     int y = point.y;
+
     // Avoid internal error by making sure we have some width and height
     int w = Math.max(dimension.width, 1);
     int h = Math.max(dimension.height, 1);
+
     canvas.setX(x);
     canvas.setY(y);
     canvas.setHeight(h);
     canvas.setWidth(w);
     canvas.setViewPortRelative(true);
+
     return canvas;
   }
 
@@ -647,8 +641,7 @@ public class OperaWebElement extends RemoteWebElement {
     return callMethod("return (locator.tagName);");
   }
 
-  // TODO we only return location on screen when scrolled?
-  // isnt this a duplicate method?
+  // TODO: We only return location on screen when scrolled?  Isn't this a duplicate method?
   public Point getLocationOnScreenOnceScrolledIntoView() {
     if (isDisplayed()) {
       return getLocation();
