@@ -245,14 +245,6 @@ public class OperaWebElement extends RemoteWebElement {
     return (Boolean) evaluateMethod("return " + OperaAtoms.IS_SELECTED.getValue() + "(locator)");
   }
 
-  /**
-   * @deprecated Use {@link #isDisplayed()} instead
-   */
-  @Deprecated
-  public boolean isVisible() {
-    return isDisplayed();
-  }
-
   public void clear() {
     if (isEnabled()) {
       if (!Boolean.valueOf(getAttribute("readonly"))) {
