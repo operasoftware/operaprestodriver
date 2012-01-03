@@ -157,7 +157,7 @@ public class OperaRunnerSettings
 
   public Integer getPort() {
     // The port Opera should connect to.  0 = Random, -1 = Opera default (7001) (for use with Opera
-    // < 12).
+    // < 11.60).
     if (port == 0) {
       port = PortProber.findFreePort();
     } else if (port == -1) {
@@ -169,7 +169,7 @@ public class OperaRunnerSettings
 
   public void setPort(Integer port) {
     // The port Opera should connect to.  0 = Random, -1 = Opera default (7001) (for use with Opera
-    // < 12).
+    // < 11.60).
     if (port == 0) {
       this.port = PortProber.findFreePort();
     } else if (port == -1) {
