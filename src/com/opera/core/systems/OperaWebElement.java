@@ -206,15 +206,6 @@ public class OperaWebElement extends RemoteWebElement {
     }
   }
 
-  /**
-   * Get the tag name of this element.
-   *
-   * @return the tag name in upper-case
-   */
-  public String getElementName() {
-    return callMethod("locator.nodeName");
-  }
-
   public String getText() {
     return callMethod("return " + OperaAtoms.GET_TEXT.getValue() + "(locator)");
   }
