@@ -58,14 +58,19 @@ import java.util.logging.Logger;
  */
 public class OperaWebElement extends RemoteWebElement {
 
+  protected final Logger logger = Logger.getLogger(this.getClass().getName());
+
   private final int objectId;
   private final IEcmaScriptDebugger debugger;
   private final OperaDriver parent;
   private final int runtimeId;
-
   private final IOperaExec execService;
 
-  protected final Logger logger = Logger.getLogger(this.getClass().getName());
+  /**
+   * Stores a map of special character codes to the string representation.  For example "\uE00E"
+   * maps to "page_up".
+   */
+  private static final HashMap<Character, String> keysLookup = new HashMap<Character, String>();
 
   /**
    * @param parent   driver that this element belongs to
@@ -379,12 +384,6 @@ public class OperaWebElement extends RemoteWebElement {
 
     // executeMethod("locator.blur()");
   }
-
-  /**
-   * Stores a map of special character codes to the string representation.  For example "\uE00E"
-   * maps to "page_up".
-   */
-  private static final HashMap<Character, String> keysLookup = new HashMap<Character, String>();
 
   /**
    * Converts a character in the PUA to the name of the key, as given by {@link
