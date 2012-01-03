@@ -52,7 +52,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 /**
- * Implements WebDriver's {@link WebElement}, but also extends itt with Opera specific methods.
+ * Implements WebDriver's {@link WebElement}, but also extends it with Opera specific methods.
  */
 public class OperaWebElement extends RemoteWebElement {
 
