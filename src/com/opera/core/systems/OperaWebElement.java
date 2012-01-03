@@ -68,6 +68,8 @@ public class OperaWebElement extends RemoteWebElement {
   /**
    * Stores a map of special character codes to the string representation.  For example "\uE00E"
    * maps to "page_up".
+   *
+   * TODO(andreastt): Move this to OperaKeyboard?
    */
   private static final HashMap<Character, String> keysLookup = new HashMap<Character, String>();
 
@@ -203,6 +205,10 @@ public class OperaWebElement extends RemoteWebElement {
     }
   }
 
+  private boolean hasAttribute(String attr) {
+    return getAttribute(attr) != null;
+  }
+
   public String getText() {
     assertElementNotStale();
     return callMethod("return " + OperaAtoms.GET_TEXT.getValue() + "(locator)");
@@ -326,7 +332,7 @@ public class OperaWebElement extends RemoteWebElement {
             execService.type(c.toString());
           } else {
             String key = OperaKeys.get(keyName);
-            // TODO: Code repeated from above.
+            // TODO: Code repeated from above
             if (holdKeys.contains(key) && !heldKeys.contains(key) && !execService
                 .keyIsPressed(key)) {
               execService.key(key, false);
@@ -361,13 +367,13 @@ public class OperaWebElement extends RemoteWebElement {
 
   /**
    * Converts a character in the PUA to the name of the key, as given by {@link
-   * org.openqa.selenium.Keys}. If the character doesn't appear in that class then null is
+   * org.openqa.selenium.Keys}.  If the character doesn't appear in that class then null is
    * returned.
    *
-   * @param c The character that may be a special key.
-   * @return A string containing the name of the "special" key or null.
+   * @param c the character that may be a special key
+   * @return a string containing the name of the "special" key or null
    */
-  private static String charToKeyName(char c) {
+  private static String charToKeyName(char c) {  // TODO(andreastt): Move this to OperaKeyboard?
     if (keysLookup.isEmpty()) {
       for (Keys k : Keys.values()) {
         keysLookup.put(k.charAt(0), k.name());
@@ -376,12 +382,8 @@ public class OperaWebElement extends RemoteWebElement {
     return keysLookup.get(c);
   }
 
-  private boolean hasAttribute(String attr) {
-    return getAttribute(attr) != null;
-  }
-
   /**
-   * @deprecated Please use "click" instead
+   * @deprecated Please use {@link OperaWebElement#click()} instead
    */
   @Deprecated
   public void setSelected() {
@@ -417,7 +419,7 @@ public class OperaWebElement extends RemoteWebElement {
     }
   }
 
-  // FIXME revise with javascript guys
+  // TODO: revise with javascript guys
 
   /**
    * @deprecated To be removed. Determine the current state using {@link #isSelected()}
