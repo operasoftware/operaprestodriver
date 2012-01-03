@@ -667,6 +667,7 @@ public class OperaWebElement extends RemoteWebElement {
   }
 
   public String getTagName() {
+    assertElementNotStale();
     return callMethod("return (locator.tagName);");
   }
 
