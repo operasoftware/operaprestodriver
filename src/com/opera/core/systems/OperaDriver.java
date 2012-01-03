@@ -536,6 +536,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
    * @param by    how to find the element, strings defined in RemoteWebDriver
    * @param using the value to use to find the element
    * @param el    the element to search within
+   * @return an element
    */
   protected WebElement findElement(String by, String using, OperaWebElement el) {
     if (using == null) {
@@ -668,10 +669,11 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
   }
 
   /**
-   * Get the source of the last loaded page. <p/> The source will be of the modified DOM,
-   * <em>not</em> the original HTML.  The page source returned is a representation of the underlying
-   * DOM: do not expect it to be formatted or escaped in the same way as the response sent from the
-   * web server.
+   * Get the source of the last loaded page.  The source will be of the modified DOM, <em>not</em>
+   * the original HTML.  The page source returned is a representation of the underlying DOM: do not
+   * expect it to be formatted or escaped in the same way as the response sent from the web server.
+   *
+   * @return source code of document
    */
   public String getPageSource() {
     return debugger.executeJavascript(
@@ -1107,9 +1109,10 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
   /**
    * Performs a special action, such as setting an Opera preference.
    *
-   * @param using  The action to perform. For a list of actions call {@link #getOperaActionList()}
-   *               at run time
-   * @param params Parameters to pass to the action call
+   * For a list of actions call {@link #getOperaActionList()}.
+   *
+   * @param using  the action to perform.
+   * @param params parameters to pass to the action call
    */
   public void operaAction(String using, String... params) {
     exec.action(using, params);
@@ -1218,6 +1221,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     return (((Boolean) capabilities.getCapability(OPERAIDLE)) && isOperaIdleAvailable());
   }
 
+  @SuppressWarnings("unused")
   public void setUseOperaIdle(boolean useIdle) {
     capabilities.setCapability(OPERAIDLE, useIdle);
   }
@@ -1421,14 +1425,6 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
       return coreUtils.getProcessID();
     }
 
-  }
-
-  /**
-   * @deprecated
-   */
-  @Deprecated
-  public OperaRunner getRunner() {
-    return runner;
   }
 
 }

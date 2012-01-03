@@ -68,6 +68,8 @@ public class OperaWebElement extends RemoteWebElement {
   /**
    * Stores a map of special character codes to the string representation.  For example "\uE00E"
    * maps to "page_up".
+   *
+   * TODO(andreastt): Move this to OperaKeyboard?
    */
   private static final HashMap<Character, String> keysLookup = new HashMap<Character, String>();
 
@@ -203,6 +205,10 @@ public class OperaWebElement extends RemoteWebElement {
     }
   }
 
+  private boolean hasAttribute(String attr) {
+    return getAttribute(attr) != null;
+  }
+
   public String getText() {
     assertElementNotStale();
     return callMethod("return " + OperaAtoms.GET_TEXT.getValue() + "(locator)");
@@ -326,7 +332,7 @@ public class OperaWebElement extends RemoteWebElement {
             execService.type(c.toString());
           } else {
             String key = OperaKeys.get(keyName);
-            // TODO: Code repeated from above.
+            // TODO: Code repeated from above
             if (holdKeys.contains(key) && !heldKeys.contains(key) && !execService
                 .keyIsPressed(key)) {
               execService.key(key, false);
@@ -361,13 +367,13 @@ public class OperaWebElement extends RemoteWebElement {
 
   /**
    * Converts a character in the PUA to the name of the key, as given by {@link
-   * org.openqa.selenium.Keys}. If the character doesn't appear in that class then null is
+   * org.openqa.selenium.Keys}.  If the character doesn't appear in that class then null is
    * returned.
    *
-   * @param c The character that may be a special key.
-   * @return A string containing the name of the "special" key or null.
+   * @param c the character that may be a special key
+   * @return a string containing the name of the "special" key or null
    */
-  private static String charToKeyName(char c) {
+  private static String charToKeyName(char c) {  // TODO(andreastt): Move this to OperaKeyboard?
     if (keysLookup.isEmpty()) {
       for (Keys k : Keys.values()) {
         keysLookup.put(k.charAt(0), k.name());
@@ -376,12 +382,8 @@ public class OperaWebElement extends RemoteWebElement {
     return keysLookup.get(c);
   }
 
-  private boolean hasAttribute(String attr) {
-    return getAttribute(attr) != null;
-  }
-
   /**
-   * @deprecated Please use "click" instead
+   * @deprecated Please use {@link OperaWebElement#click()} instead
    */
   @Deprecated
   public void setSelected() {
@@ -417,7 +419,7 @@ public class OperaWebElement extends RemoteWebElement {
     }
   }
 
-  // FIXME revise with javascript guys
+  // TODO: revise with javascript guys
 
   /**
    * @deprecated To be removed. Determine the current state using {@link #isSelected()}
@@ -460,36 +462,6 @@ public class OperaWebElement extends RemoteWebElement {
     } catch (InterruptedException e) {
       Thread.currentThread().interrupt();
     }
-  }
-
-  /**
-   * To be replaced by the advanced interactions API.
-   *
-   * @deprecated
-   */
-  @Deprecated
-  public void dragAndDropBy(int x, int y) {
-    Point point = this.getLocation();
-    execService.mouseAction(point.x, point.y, OperaMouseKeys.LEFT_DOWN);
-    x = (x + point.x < 0) ? 0 : x + point.x;
-    y = (y + point.y < 0) ? 0 : y + point.y;
-    execService.mouseAction(x, y);
-    execService.mouseAction(x, y, OperaMouseKeys.LEFT_UP);
-  }
-
-  /**
-   * To be replaced by the advanced interactions API.
-   *
-   * @deprecated
-   */
-  @Deprecated
-  public void dragAndDropOn(WebElement element) {
-    Point currentLocation = this.getLocation();
-    Point dragPoint = element.getLocation();
-    execService.mouseAction(currentLocation.x, currentLocation.y,
-                            OperaMouseKeys.LEFT_DOWN);
-    execService.mouseAction(dragPoint.x, dragPoint.y);
-    execService.mouseAction(dragPoint.x, dragPoint.y, OperaMouseKeys.LEFT_UP);
   }
 
   /**
@@ -624,17 +596,18 @@ public class OperaWebElement extends RemoteWebElement {
    * @param colors list of colors to check for.
    * @return true if the page contains any of the given colors, false otherwise.
    */
+  @SuppressWarnings("unused")
   public boolean containsColor(OperaColors... colors) {
-    // List<String> keys = Arrays.asList(hashes);
-
     Canvas canvas = buildCanvas();
     ScreenShotReply reply = execService.containsColor(canvas, 100L, colors);
+
     List<ColorResult> results = reply.getColorResult();
     for (ColorResult result : results) {
       if (result.getCount() > 0) {
         return true;
       }
     }
+
     return false;
   }
 
@@ -647,25 +620,19 @@ public class OperaWebElement extends RemoteWebElement {
     Canvas canvas = new Canvas();
     Dimension dimension = getSize();
     Point point = coordinates.getLocationInViewPort();
-    /*
-    String[] areaCoordinates = callMethod("var oElement = locator;\n" +
-          "var posX = 0, posY = 0;\n" +
-          "do{\n" +
-          "posX += oElement.offsetLeft;\n" +
-          "posY += oElement.offsetTop;\n" +
-          "} while(oElement = oElement.offsetParent );\n" +
-          "return (posX + ',' + posY + ',' + locator.offsetWidth + ',' + locator.offsetHeight);\n").split(",");
-          */
     int x = point.x;
     int y = point.y;
+
     // Avoid internal error by making sure we have some width and height
     int w = Math.max(dimension.width, 1);
     int h = Math.max(dimension.height, 1);
+
     canvas.setX(x);
     canvas.setY(y);
     canvas.setHeight(h);
     canvas.setWidth(w);
     canvas.setViewPortRelative(true);
+
     return canvas;
   }
 
@@ -674,8 +641,7 @@ public class OperaWebElement extends RemoteWebElement {
     return callMethod("return (locator.tagName);");
   }
 
-  // TODO we only return location on screen when scrolled?
-  // isnt this a duplicate method?
+  // TODO: We only return location on screen when scrolled?  Isn't this a duplicate method?
   public Point getLocationOnScreenOnceScrolledIntoView() {
     if (isDisplayed()) {
       return getLocation();
