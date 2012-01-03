@@ -204,6 +204,7 @@ public class OperaWebElement extends RemoteWebElement {
   }
 
   public String getText() {
+    assertElementNotStale();
     return callMethod("return " + OperaAtoms.GET_TEXT.getValue() + "(locator)");
   }
 
@@ -495,6 +496,8 @@ public class OperaWebElement extends RemoteWebElement {
    * Click top left, can be modified to click in the middle
    */
   public Point getLocation() {
+    assertElementNotStale();
+
     String coordinates = debugger.callFunctionOnObject(
         "var coords = " + OperaAtoms.GET_LOCATION.getValue() +
         "(locator); return coords.x + ',' + coords.y;", objectId
