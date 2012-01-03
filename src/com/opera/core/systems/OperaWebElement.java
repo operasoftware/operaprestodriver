@@ -58,22 +58,19 @@ import java.util.logging.Logger;
  */
 public class OperaWebElement extends RemoteWebElement {
 
+  protected final Logger logger = Logger.getLogger(this.getClass().getName());
+
   private final int objectId;
   private final IEcmaScriptDebugger debugger;
   private final OperaDriver parent;
   private final int runtimeId;
-
   private final IOperaExec execService;
 
-  protected final Logger logger = Logger.getLogger(this.getClass().getName());
-
-  public int getObjectId() {
-    return objectId;
-  }
-
-  public int getRuntimeId() {
-    return runtimeId;
-  }
+  /**
+   * Stores a map of special character codes to the string representation.  For example "\uE00E"
+   * maps to "page_up".
+   */
+  private static final HashMap<Character, String> keysLookup = new HashMap<Character, String>();
 
   /**
    * @param parent   driver that this element belongs to
@@ -114,13 +111,6 @@ public class OperaWebElement extends RemoteWebElement {
   }
 
   /**
-   * Right clicks on the element.
-   */
-  public void rightClick() {
-    parent.actionHandler.rightClick(this);
-  }
-
-  /**
    * Click this element many times in the top left corner of the element.
    *
    * @param times the number of times to click
@@ -128,14 +118,6 @@ public class OperaWebElement extends RemoteWebElement {
   public void click(int times) {
     Point point = coordinates.getLocationInViewPort();
     execService.mouseAction(point.x, point.y, times, OperaMouseKeys.LEFT);
-  }
-
-  /**
-   * Click the middle mouse button at the top left corner of the element.
-   */
-  public void middleClick() {
-    Point point = coordinates.getLocationInViewPort();
-    execService.mouseAction(point.x, point.y, OperaMouseKeys.MIDDLE);
   }
 
   public void click() {
@@ -147,7 +129,7 @@ public class OperaWebElement extends RemoteWebElement {
 
     parent.getScopeServices().captureOperaIdle();
 
-    // FIXME: temporary fix for toggle and setSelected deprecation
+    // TODO: temporary fix for toggle and setSelected deprecation
     Integer id = debugger.executeScriptOnObject("return locator.parentNode", objectId);
     OperaWebElement parentNode = new OperaWebElement(this.parent, id);
 
@@ -170,10 +152,10 @@ public class OperaWebElement extends RemoteWebElement {
   }
 
   /**
-   * Click the element at the given x, y offset from the top left.
+   * Click the element at the given X,Y offset from the top left.
    *
-   * @param x The distance from the left to click
-   * @param y The distance from the top to click
+   * @param x the distance from the left border of the element to click
+   * @param y the distance from the top border of the element to click
    */
   public void click(int x, int y) {
     parent.getScopeServices().captureOperaIdle();
@@ -185,6 +167,14 @@ public class OperaWebElement extends RemoteWebElement {
       // This might be expected
       logger.fine("Response not received, returning control to user");
     }
+  }
+
+  /**
+   * Click the middle mouse button at the top left corner of the element.
+   */
+  public void middleClick() {
+    Point point = coordinates.getLocationInViewPort();
+    execService.mouseAction(point.x, point.y, OperaMouseKeys.MIDDLE);
   }
 
   public WebElement findElement(By by) {
@@ -209,28 +199,8 @@ public class OperaWebElement extends RemoteWebElement {
     }
   }
 
-  /**
-   * Get the tag name of this element.
-   *
-   * @return the tag name in upper-case
-   */
-  public String getElementName() {
-    return callMethod("locator.nodeName");
-  }
-
   public String getText() {
     return callMethod("return " + OperaAtoms.GET_TEXT.getValue() + "(locator)");
-  }
-
-  @Deprecated
-  /**
-   * @deprecated Use {@link #getAttribute('value')} instead
-   */
-  public String getValue() {
-    return callMethod("if(/^input|select|option|textarea$/i.test(locator.nodeName)){" +
-                      "return locator.value;" +
-                      "}" +
-                      "return locator.textContent;");
   }
 
   public boolean isDisplayed() {
@@ -246,14 +216,6 @@ public class OperaWebElement extends RemoteWebElement {
   public boolean isSelected() {
     throwIfStale();
     return (Boolean) evaluateMethod("return " + OperaAtoms.IS_SELECTED.getValue() + "(locator)");
-  }
-
-  /**
-   * @deprecated Use {@link #isDisplayed()} instead
-   */
-  @Deprecated
-  public boolean isVisible() {
-    return isDisplayed();
   }
 
   public void clear() {
@@ -387,12 +349,6 @@ public class OperaWebElement extends RemoteWebElement {
 
     // executeMethod("locator.blur()");
   }
-
-  /**
-   * Stores a map of special character codes to the string representation.  For example "\uE00E"
-   * maps to "page_up".
-   */
-  private static final HashMap<Character, String> keysLookup = new HashMap<Character, String>();
 
   /**
    * Converts a character in the PUA to the name of the key, as given by {@link
@@ -717,6 +673,14 @@ public class OperaWebElement extends RemoteWebElement {
       return getLocation();
     }
     return null;
+  }
+
+  public int getObjectId() {
+    return objectId;
+  }
+
+  public int getRuntimeId() {
+    return runtimeId;
   }
 
   @Override
