@@ -25,7 +25,6 @@ import com.opera.core.systems.interaction.UserInteraction;
 import com.opera.core.systems.model.ScopeActions;
 import com.opera.core.systems.model.ScreenShotReply;
 import com.opera.core.systems.model.ScriptResult;
-import com.opera.core.systems.preferences.OperaPreferences;
 import com.opera.core.systems.preferences.OperaScopePreferences;
 import com.opera.core.systems.runner.OperaRunner;
 import com.opera.core.systems.runner.interfaces.OperaRunnerSettings;
@@ -42,7 +41,6 @@ import com.opera.core.systems.scope.services.ICoreUtils;
 import com.opera.core.systems.scope.services.IEcmaScriptDebugger;
 import com.opera.core.systems.scope.services.IOperaExec;
 import com.opera.core.systems.scope.services.IWindowManager;
-import com.opera.core.systems.settings.OperaDriverSettings;
 import com.opera.core.systems.util.CapabilitiesSanitizer;
 
 import org.openqa.selenium.Alert;
@@ -219,11 +217,6 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     this((Capabilities) null);
   }
 
-  @Deprecated
-  public OperaDriver(OperaDriverSettings settings) {
-    this(settings.getCapabilities());
-  }
-
   /**
    * Starts Opera with the given profile.
    *
@@ -323,8 +316,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
    *
    * @return a DesiredCapabilities object with default settings
    */
-  // TODO: Make this private when not needed in OperaDriverSettings
-  public static Capabilities getDefaultCapabilities() {
+  private static Capabilities getDefaultCapabilities() {
     DesiredCapabilities capabilities = DesiredCapabilities.opera();
     capabilities.setJavascriptEnabled(true);
 
