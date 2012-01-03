@@ -165,9 +165,9 @@ public class OperaWebElement extends RemoteWebElement {
   }
 
   /**
-   * Click this element many times.
+   * Click this element many times in the top left corner of the element.
    *
-   * @param times The number of times to click
+   * @param times the number of times to click
    */
   public void click(int times) {
     Point point = coordinates.getLocationInViewPort();
@@ -175,7 +175,7 @@ public class OperaWebElement extends RemoteWebElement {
   }
 
   /**
-   * Click the middle mouse button at the top left of the element.
+   * Click the middle mouse button at the top left corner of the element.
    */
   public void middleClick() {
     Point point = coordinates.getLocationInViewPort();
@@ -185,8 +185,7 @@ public class OperaWebElement extends RemoteWebElement {
   public void click() {
     if (OperaFlags.ENABLE_CHECKS) {
       if (!isDisplayed()) {
-        throw new ElementNotVisibleException(
-            "You can't click an element that is not displayed");
+        throw new ElementNotVisibleException("You cannot click an element that is not displayed");
       }
     }
 
