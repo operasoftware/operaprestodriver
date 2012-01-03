@@ -17,7 +17,6 @@ limitations under the License.
 package com.opera.core.systems;
 
 import com.opera.core.systems.runner.OperaRunner;
-import com.opera.core.systems.settings.OperaDriverSettings;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -149,11 +148,6 @@ class TestOperaDriver extends OperaDriver {
     super();
   }
 
-  @Deprecated
-  public TestOperaDriver(OperaDriverSettings settings) {
-    this(settings.getCapabilities());
-  }
-
   public TestOperaDriver(Capabilities capabilities) {
     super(capabilities);
     isRunning = true;
@@ -165,6 +159,10 @@ class TestOperaDriver extends OperaDriver {
 
   public Capabilities getCapabilities() {
     return capabilities;
+  }
+  
+  public static Capabilities getDefaultCapabilities() {
+    return OperaDriver.getDefaultCapabilities();
   }
 
   public void quit() {

@@ -316,7 +316,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
    *
    * @return a DesiredCapabilities object with default settings
    */
-  private static Capabilities getDefaultCapabilities() {
+  protected static Capabilities getDefaultCapabilities() {
     DesiredCapabilities capabilities = DesiredCapabilities.opera();
     capabilities.setJavascriptEnabled(true);
 

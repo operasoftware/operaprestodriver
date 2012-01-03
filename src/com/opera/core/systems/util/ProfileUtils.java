@@ -19,7 +19,6 @@ package com.opera.core.systems.util;
 import com.google.common.io.Files;
 
 import com.opera.core.systems.OperaDriver;
-import com.opera.core.systems.settings.OperaDriverSettings;
 
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.io.FileHandler;
@@ -36,12 +35,6 @@ public class ProfileUtils {
   private String smallPrefsFolder;
   private String cachePrefsFolder;
   private Capabilities capabilities;
-
-  @Deprecated
-  public ProfileUtils(String largePrefsFolder, String smallPrefsFolder, String cachePrefsFolder,
-                      OperaDriverSettings settings) {
-    this(largePrefsFolder, smallPrefsFolder, cachePrefsFolder, settings.getCapabilities());
-  }
 
   public ProfileUtils(String largePrefsFolder, String smallPrefsFolder, String cachePrefsFolder,
                       Capabilities capabilities) {

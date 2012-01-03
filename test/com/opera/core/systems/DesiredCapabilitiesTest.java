@@ -63,7 +63,7 @@ public class DesiredCapabilitiesTest extends OperaDriverTestCase {
 
   @Before
   public void setUp() {
-    capabilities = (DesiredCapabilities) OperaDriver.getDefaultCapabilities();
+    capabilities = (DesiredCapabilities) TestOperaDriver.getDefaultCapabilities();
   }
 
   @After
