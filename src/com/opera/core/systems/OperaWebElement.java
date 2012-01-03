@@ -144,7 +144,7 @@ public class OperaWebElement extends RemoteWebElement {
 
     parent.getScopeServices().captureOperaIdle();
 
-    // FIXME: temporary fix for toggle and setSelected deprecation
+    // TODO: temporary fix for toggle and setSelected deprecation
     Integer id = debugger.executeScriptOnObject("return locator.parentNode", objectId);
     OperaWebElement parentNode = new OperaWebElement(this.parent, id);
 
