@@ -769,10 +769,10 @@ public class ScopeServices implements IConnectionHandler {
     }
   }
 
-  public void onException(Exception ex) {
+  public void onException(Exception exception) {
     logger.finest("Got exception");
     if (connection != null) {
-      waitState.onException(ex);
+      waitState.onException(exception);
       connection = null;
     }
   }

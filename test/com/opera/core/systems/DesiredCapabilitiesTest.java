@@ -98,7 +98,7 @@ public class DesiredCapabilitiesTest extends OperaDriverTestCase {
   public void testSettingLogFile() throws IOException {
     File log = tmpFolder.newFile("operadriver.log");
     capabilities.setCapability(OperaDriver.LOGGING_FILE, log.getCanonicalPath());
-    capabilities.setCapability(OperaDriver.LOGGING_LEVEL, "ALL");  // up the level to get some ompf
+    capabilities.setCapability(OperaDriver.LOGGING_LEVEL, "FINER");  // up the level to get some ompf
     driver = new TestOperaDriver(capabilities);
 
     assertTrue(log.length() > 0);

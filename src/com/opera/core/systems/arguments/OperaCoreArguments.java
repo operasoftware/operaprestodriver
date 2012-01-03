@@ -23,8 +23,7 @@ import com.opera.core.systems.OperaArguments;
  *
  * @author Andreas Tolf Tolfsen <andreastt@opera.com>
  */
-public class OperaCoreArguments extends OperaArguments implements
-                                                       com.opera.core.systems.arguments.interfaces.OperaArguments {
+public class OperaCoreArguments extends OperaArguments {
 
   /**
    * The -autotestmode argument is always added to the arguments list passed to the browser.  This

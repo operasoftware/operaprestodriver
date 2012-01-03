@@ -67,7 +67,7 @@ public abstract class OperaDriverTestCase {
 
   @AfterClass
   public static void tearDownAfterClass() throws Exception {
-    if (driver.isRunning()) {
+    if (driver != null && driver.isRunning()) {
       driver.quit();
     }
   }
@@ -115,6 +115,10 @@ public abstract class OperaDriverTestCase {
    */
   protected String fixture(String file) {
     return "file://localhost" + fixtureDirectory + file;
+  }
+  
+  protected File fixtureFile(String file) {
+    return new File(fixtureDirectory + file);
   }
 
   /**

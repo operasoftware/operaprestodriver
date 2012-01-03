@@ -1,22 +1,30 @@
 package com.opera.core.systems;
 
+import com.google.common.io.Files;
+
 import com.opera.core.systems.arguments.OperaCoreArguments;
+import com.opera.core.systems.runner.OperaRunner;
 import com.opera.core.systems.runner.OperaRunnerException;
 import com.opera.core.systems.runner.OperaRunnerSettings;
 import com.opera.core.systems.scope.internal.OperaIntervals;
 
-import org.junit.Assert;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 import org.openqa.selenium.Platform;
+import org.openqa.selenium.WebDriverException;
 
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.Collections;
 import java.util.Map;
 import java.util.logging.Level;
 
+import static org.junit.Assert.fail;
 import static org.openqa.selenium.Platform.WINDOWS;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -24,13 +32,22 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-public class OperaRunnerSettingsTest {
+public class OperaRunnerSettingsTest extends OperaDriverTestCase {
 
-  private OperaRunnerSettings settings;
-  private static File fakeBinary;
+  public OperaRunnerSettings settings;
+  public TestOperaRunner runner;
+  public static File fakeBinary;
+  public File iniFile;
+  public String profile;
 
+  @Rule
+  public TemporaryFolder temporaryProfile = new TemporaryFolder();
+
+  // Replace OperaDriverTestCase setup and tear down so that we don't launch Opera
   @BeforeClass
-  public static void beforeAll() {
+  public static void setUpBeforeClass() {
+    initFixtures();
+
     if (Platform.getCurrent().is(Platform.WINDOWS)) {
       fakeBinary = new File("C:\\WINDOWS\\system32\\find.exe");
     } else {
@@ -38,12 +55,34 @@ public class OperaRunnerSettingsTest {
     }
   }
 
+  @AfterClass
+  public static void tearDownAfterClass() {
+  }
+
   @Before
-  public void beforeEach() throws Exception {
+  public void beforeEach() {
+    settings = new OperaRunnerSettings();
+
+    // Make a new copy in a temporary file system so we don't overwrite our fixture
+    // TODO(andreastt): This should be done more elegantly in OperaDriverTestCase
+    try {
+      iniFile = temporaryProfile.newFile("operaprefs.ini");
+      Files.copy(fixtureFile("profile" + File.separator + "opera.ini"), iniFile);
+    } catch (IOException e) {
+      fail("Unable to copy preference fixture: " + e.getMessage());
+    }
+
+    profile = temporaryProfile.getRoot().getAbsolutePath();
+
     // Make sure we always reset OPERA_ARGS.  Since the constructor of OperaRunnerSettings has
     // different behaviour depending on whether its set, it is going to impact the outcome of our
     // tests.
-    setEnvVar("OPERA_ARGS", "");
+    try {
+      setEnvVar("OPERA_ARGS", "");
+    } catch (IllegalAccessException e) {
+    } catch (NoSuchFieldException e) {
+    }
+
     settings = new OperaRunnerSettings();
   }
 
@@ -114,11 +153,50 @@ public class OperaRunnerSettingsTest {
     assertEquals(OperaProduct.CORE, settings.getProduct());
   }
 
+  // use this profile
   @Test
-  public void testProfile() {
-    String profile = "/path/that/does/not/exist";
+  public void testSetProfileWithValidString() {
     settings.setProfile(profile);
-    assertEquals(profile, settings.getProfile());
+    runner = new TestOperaRunner(settings);
+    assertEquals(profile,
+                 runner.getSettings().getArguments().getArguments().get(0).getValue());  // 1
+    assertTrue(runner.getSettings().getProfile().getDirectory().exists());
+    assertEquals(46, runner.getSettings().getProfile().preferences().size());
+  }
+
+  // use this profile, but check for invalid directory
+  @Test(expected = WebDriverException.class)
+  public void testSetProfileWithInvalidString() {
+    settings.setProfile("/path/does/not/exist");
+    runner = new TestOperaRunner(settings);
+  }
+
+  // null, use random profile
+  @Test
+  public void testSetProfileRandom() {
+    settings.setProfile((String) null);
+    runner = new TestOperaRunner(settings);
+    assertTrue(runner.getSettings().getProfile().getDirectory().exists());
+  }
+
+  // "" (empty string), use ~/.autotest
+  @Test
+  public void testSetProfileWithEmptyString() {
+    settings.setProfile("");
+    runner = new TestOperaRunner(settings);
+    assertTrue(runner.getSettings().getProfile().getDirectory().exists());
+    assertTrue(!runner.getSettings().getProfile().getDirectory().toString().contains("null"));
+    // TODO(andreastt): Is there a good way to check that .autotest is used?
+  }
+
+  // use provided profile
+  @Test
+  public void testSetProfileWithProfile() {
+    OperaProfile newProfile = new OperaProfile(profile);
+    settings.setProfile(newProfile);
+    runner = new TestOperaRunner(settings);
+    assertTrue(runner.getSettings().getProfile().getDirectory().exists());
+    assertEquals(46, runner.getSettings().getProfile().preferences().size());
   }
 
   @Test
@@ -202,7 +280,7 @@ public class OperaRunnerSettingsTest {
   public void testDefaultSettings() {
     OperaRunnerSettings defaultSettings = OperaRunnerSettings.getDefaultSettings();
     assertNotNull(defaultSettings);
-    assertEquals(OperaProduct.CORE, defaultSettings.getProduct());
+    assertEquals(OperaProduct.DESKTOP, defaultSettings.getProduct());
     assertTrue("default port should be greater than 0", defaultSettings.getPort() > 0);
     assertTrue(defaultSettings.getArguments() instanceof OperaCoreArguments);
   }
@@ -215,6 +293,8 @@ public class OperaRunnerSettingsTest {
    *
    * @param key   the new environment variable's identifier
    * @param value the new environment variable's value
+   * @throws IllegalAccessException foo
+   * @throws NoSuchFieldException foo
    */
   @SuppressWarnings("unchecked")
   private static void setEnvVar(String key, String value)
@@ -230,6 +310,22 @@ public class OperaRunnerSettingsTest {
         map.put(key, value);
       }
     }
+  }
+
+  public class TestOperaRunner extends OperaRunner {
+
+    public TestOperaRunner() {
+      super();
+    }
+
+    public TestOperaRunner(OperaRunnerSettings settings) {
+      super(settings);
+    }
+
+    public OperaRunnerSettings getSettings() {
+      return this.settings;
+    }
+
   }
 
 }

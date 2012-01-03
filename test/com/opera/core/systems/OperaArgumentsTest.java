@@ -26,6 +26,7 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 public class OperaArgumentsTest {
 
@@ -58,10 +59,15 @@ public class OperaArgumentsTest {
     assertEquals("hooba", arguments.get(2).getArgument());
     assertEquals("flooba", arguments.get(2).getValue());
   }
+  
+  @Test
+  public void testSize() {
+    assertEquals(3, arguments.size());
+  }
 
   @Test
   public void testGettingArgumentsAsObjectList() {
-    assertEquals(3, arguments.size());
+    assertTrue(arguments.iterator().hasNext());
   }
 
   @Test
@@ -90,10 +96,8 @@ public class OperaArgumentsTest {
 
   @Test
   public void testParsingComplexString() {
-    OperaArguments
-        parsed =
-        OperaArguments.parse(
-            "-foo bar -baz=bah -path /path/to/somewhere -anotherpath=C:\\another\\path -a==abc /b hei --c \"hei\"");
+    OperaArguments parsed = OperaArguments.parse(
+        "-foo bar -baz=bah -path /path/to/somewhere -anotherpath=C:\\another\\path -a==abc /b hei --c \"hei\"");
     assertEquals("foo", parsed.get(0).getArgument());
     assertEquals("bar", parsed.get(0).getValue());
     assertEquals("baz", parsed.get(1).getArgument());

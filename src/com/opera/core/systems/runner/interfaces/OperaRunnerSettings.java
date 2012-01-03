@@ -17,6 +17,7 @@ limitations under the License.
 package com.opera.core.systems.runner.interfaces;
 
 import com.opera.core.systems.OperaProduct;
+import com.opera.core.systems.OperaProfile;
 import com.opera.core.systems.arguments.interfaces.OperaArguments;
 
 import java.io.File;
@@ -74,22 +75,30 @@ public interface OperaRunnerSettings {
   public void setProduct(OperaProduct product);
 
   /**
+   * Returns an {@link OperaProfile} object containing all settings related to the Opera profile to
+   * be used.  This  might be anything from the path to the profile directory, to preferences used
+   * in Opera.
+   *
+   * @return Opera's currently used profile
+   */
+  public OperaProfile getProfile();
+
+
+  /**
    * Sets the directory to use for the Opera profile.  If null, generate a temporary directory.  If
    * not empty use the given directory.  To not create a temporary directory for backwards
    * compatibility reasons, set it to an empty string (""), such as for Opera < 12.
    *
-   * @return the absolute path to the profile directory
-   */
-  public String getProfile();
-
-  /**
-   * Returns the path to the directory to use for the Opera profile.  If null a random temporary
-   * directory is used.  If "", an empty string, then the default autotest profile directory is
-   * used.
-   *
    * @param profile the absolute path to the profile directory
    */
   public void setProfile(String profile);
+
+  /**
+   * Sets the profile to use as an Opera profile represented as an object.
+   *
+   * @param profile the Opera profile to use
+   */
+  public void setProfile(OperaProfile profile);
 
   /**
    * Returns the whether Opera should quit when OperaRunner is shut down.  If enabled, it will keep
@@ -140,6 +149,25 @@ public interface OperaRunnerSettings {
    * @param port the port Opera should connect to
    */
   public void setPort(Integer port);
+
+  /**
+   * Whether or not the currently specified Opera configuration supports the
+   * <code>-debugproxy</code> command-line argument.  If the specified port <em>is not equal</em> to
+   * the default proxy server port specified in {@link com.opera.core.systems.scope.internal.OperaIntervals#SERVER_PORT},
+   * this will be true.
+   *
+   * @return true if this configuration supports the <code>-debugproxy</code> command-line argument,
+   *         false otherwise
+   */
+  public boolean supportsDebugProxy();
+
+  /**
+   * Whether or not the currently specified Opera configuration supports the <code>-pd</code>
+   * command-line argument.
+   *
+   * @return true if this configuration supports the <code>-pd</code> command-line argument.
+   */
+  public boolean supportsPd();
 
   /**
    * Gets the arguments passed on to Opera.

@@ -148,7 +148,7 @@ public class OperaDriverTest extends OperaDriverTestCase {
     c.setCapability(OperaDriver.PORT, -1);
 
     OperaDriver a = new OperaDriver(c);
-    assertEquals("7001", a.getPref("Developer Tools", "Proxy Port"));
+    assertEquals("7001", a.preferences().get("Developer Tools", "Proxy Port").toString());
     a.quit();
   }
 
@@ -168,7 +168,7 @@ public class OperaDriverTest extends OperaDriverTestCase {
         throw e;
       }
     }
-    Assert.assertNotSame("7001", a.getPref("Developer Tools", "Proxy Port"));
+    Assert.assertNotSame("7001", a.preferences().get("Developer Tools", "Proxy Port").toString());
     a.quit();
   }
 
@@ -189,7 +189,7 @@ public class OperaDriverTest extends OperaDriverTestCase {
         throw e;
       }
     }
-    assertEquals("9876", a.getPref("Developer Tools", "Proxy Port"));
+    assertEquals("9876", a.preferences().get("Developer Tools", "Proxy Port").toString());
     a.quit();
   }
 
@@ -199,8 +199,8 @@ public class OperaDriverTest extends OperaDriverTestCase {
     c.setCapability(OperaDriver.PROFILE, "");
 
     OperaDriver a = new OperaDriver(c);
-    String profile = a.getPref("User Prefs", "Opera Directory");
-    String defaultProfile = a.getDefaultPref("User Prefs", "Opera Directory");
+    String profile = a.preferences().get("User Prefs", "Opera Directory").toString();
+    String defaultProfile = a.preferences().get("User Prefs", "Opera Directory").getDefaultValue().toString();
     assertTrue("'" + profile + "' contains '" + defaultProfile + "'",
                profile.contains(defaultProfile)
     );
@@ -228,7 +228,7 @@ public class OperaDriverTest extends OperaDriverTestCase {
         throw e;
       }
     }
-    String profile = a.getPref("User Prefs", "Opera Directory");
+    String profile = a.preferences().get("User Prefs", "Opera Directory").toString();
     assertEquals("/tmp/opera-test-profile/", profile);
     a.quit();
   }
@@ -250,7 +250,7 @@ public class OperaDriverTest extends OperaDriverTestCase {
         throw e;
       }
     }
-    String profile = a.getPref("User Prefs", "Opera Directory");
+    String profile = a.preferences().get("User Prefs", "Opera Directory").toString();
     assertTrue("'" + profile + "' (case insensitively) should contain 'tmp' or 'temp'",
                profile.toLowerCase().contains("tmp") || profile.toLowerCase().contains("temp"));
     a.quit();
@@ -273,7 +273,7 @@ public class OperaDriverTest extends OperaDriverTestCase {
         throw e;
       }
     }
-    String profile = a.getPref("User Prefs", "Opera Directory");
+    String profile = a.preferences().get("User Prefs", "Opera Directory").toString();
     assertTrue("Temporary directory exists", (new File(profile)).exists());
     a.quit();
     assertFalse("Temporary directory does not exist after quit",
