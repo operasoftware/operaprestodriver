@@ -38,7 +38,7 @@ public class OperaRunnerSettings
 
   protected File operaBinary = null;
   protected Integer display = null;
-  protected OperaProduct product = OperaProduct.CORE;
+  protected OperaProduct product = OperaProduct.DESKTOP;
   protected OperaProfile profile = null;
   protected boolean noQuit = false;
   protected String host = "127.0.0.1";
@@ -186,7 +186,7 @@ public class OperaRunnerSettings
   }
 
   public boolean supportsPd() {
-    return supportsPd;
+    return !getProduct().is(OperaProduct.CORE) && supportsPd;
   }
 
   public OperaArguments getArguments() {
