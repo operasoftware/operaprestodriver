@@ -17,7 +17,6 @@ limitations under the License.
 package com.opera.core.systems;
 
 import com.opera.core.systems.preferences.OperaFilePreferences;
-import com.opera.core.systems.preferences.OperaGenericPreferences;
 import com.opera.core.systems.preferences.OperaPreferences;
 
 import org.openqa.selenium.WebDriverException;
@@ -75,6 +74,9 @@ public class OperaProfile {
   /**
    * Creates a new, fresh random profile for Opera to use.  The actual profile directory will not be
    * generated until Opera is started.
+   *
+   * This is supported on all products that have the <code>-pd</code> command-line argument, such as
+   * Opera Desktop.  core-gogi and Opera Mobile is not supported.
    */
   public OperaProfile() {
     this(TemporaryFilesystem.getDefaultTmpFS().createTempDir("opera", "profile"));
