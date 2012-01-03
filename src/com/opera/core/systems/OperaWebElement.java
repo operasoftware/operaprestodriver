@@ -118,6 +118,14 @@ public class OperaWebElement extends RemoteWebElement {
   }
 
   /**
+   * Click the middle mouse button at the top left corner of the element.
+   */
+  public void middleClick() {
+    Point point = coordinates.getLocationInViewPort();
+    execService.mouseAction(point.x, point.y, OperaMouseKeys.MIDDLE);
+  }
+
+  /**
    * Click this element many times in the top left corner of the element.
    *
    * @param times the number of times to click
@@ -125,14 +133,6 @@ public class OperaWebElement extends RemoteWebElement {
   public void click(int times) {
     Point point = coordinates.getLocationInViewPort();
     execService.mouseAction(point.x, point.y, times, OperaMouseKeys.LEFT);
-  }
-
-  /**
-   * Click the middle mouse button at the top left corner of the element.
-   */
-  public void middleClick() {
-    Point point = coordinates.getLocationInViewPort();
-    execService.mouseAction(point.x, point.y, OperaMouseKeys.MIDDLE);
   }
 
   public void click() {
