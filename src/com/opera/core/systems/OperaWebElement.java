@@ -1,5 +1,5 @@
 /*
-Copyright 2008-2011 Opera Software ASA
+Copyright 2008-2012 Opera Software ASA
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -52,9 +52,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 /**
- * Extends the default WebElement with Opera specific methods.
- *
- * @author Deniz Turkoglu <dturkoglu@opera.com>
+ * Implements WebDriver's {@link WebElement}, but also extends itt with Opera specific methods.
  */
 public class OperaWebElement extends RemoteWebElement {
 
@@ -74,13 +72,12 @@ public class OperaWebElement extends RemoteWebElement {
 
   /**
    * @param parent   driver that this element belongs to
-   * @param objectId the Ecmascript object id of this element
+   * @param objectId the EcmaScript object ID of this element
    */
   public OperaWebElement(OperaDriver parent, int objectId) {
     this.parent = parent;
     this.objectId = objectId;
     parent.objectIds.add(objectId);
-
     debugger = parent.getScriptDebugger();
     execService = parent.getExecService();
     this.runtimeId = debugger.getRuntimeId();
