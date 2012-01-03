@@ -219,17 +219,6 @@ public class OperaWebElement extends RemoteWebElement {
     return callMethod("return " + OperaAtoms.GET_TEXT.getValue() + "(locator)");
   }
 
-  @Deprecated
-  /**
-   * @deprecated Use {@link #getAttribute('value')} instead
-   */
-  public String getValue() {
-    return callMethod("if(/^input|select|option|textarea$/i.test(locator.nodeName)){" +
-                      "return locator.value;" +
-                      "}" +
-                      "return locator.textContent;");
-  }
-
   public boolean isDisplayed() {
     throwIfStale();
     return (Boolean) evaluateMethod("return " + OperaAtoms.IS_DISPLAYED.getValue() + "(locator)");
