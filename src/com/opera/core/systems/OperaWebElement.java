@@ -170,13 +170,6 @@ public class OperaWebElement extends RemoteWebElement {
   }
 
   /**
-   * Click the right mouse button at the top left corner of the element.
-   */
-  public void rightClick() {
-    parent.actionHandler.rightClick(this);
-  }
-
-  /**
    * Click the middle mouse button at the top left corner of the element.
    */
   public void middleClick() {

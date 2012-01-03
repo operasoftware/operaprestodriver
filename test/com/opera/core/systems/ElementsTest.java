@@ -60,6 +60,9 @@ public class ElementsTest extends OperaDriverTestCase {
                  driver.findElementByClassName("invert").getCssValue("background-color"));
   }
 
+  /*
+  TODO(andreastt): Convert it to an Actions or OperaMouse test
+
   // This test sometimes causes problems because a context menu is opened on Desktop, ensure that it
   // is last.
   @Test
@@ -71,5 +74,6 @@ public class ElementsTest extends OperaDriverTestCase {
     assertTrue(driver.findElementById("log").getAttribute("value").contains("mousedown 2"));
     assertTrue(driver.findElementById("log").getAttribute("value").contains("mouseup 2"));
   }
+  */
 
 }
