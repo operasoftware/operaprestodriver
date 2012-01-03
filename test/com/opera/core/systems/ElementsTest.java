@@ -32,8 +32,9 @@ public class ElementsTest extends OperaDriverTestCase {
     assertTrue(driver.findElementById("log").getAttribute("value").contains("email changed"));
   }
 
+  /*
+  // TODO(andreastt): Should be converted to an OperaMouse test
   @Test
-  @Ignore("Should be converted to an OperaMouse test")
   public void testMouseOver() {
     driver.get(fixture("mouse.html"));
 
@@ -42,6 +43,7 @@ public class ElementsTest extends OperaDriverTestCase {
     test.mouseOver();
     assertNotSame(hash, test.getImageHash());
   }
+  */
 
   @Test
   public void testSelect() throws Exception {
