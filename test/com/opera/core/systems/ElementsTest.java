@@ -33,6 +33,7 @@ public class ElementsTest extends OperaDriverTestCase {
   }
 
   @Test
+  @Ignore("Should be converted to an OperaMouse test")
   public void testMouseOver() {
     driver.get(fixture("mouse.html"));
 
