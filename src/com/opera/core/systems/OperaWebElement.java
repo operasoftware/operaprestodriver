@@ -121,14 +121,6 @@ public class OperaWebElement extends RemoteWebElement {
   }
 
   /**
-   * @deprecated Use {@link #mouseOver()}
-   */
-  @Deprecated
-  public void hover() {
-    mouseOver();
-  }
-
-  /**
    * Moves the mouse to the top left of this element, generating a mouseOver event.
    */
   public void mouseOver() {
