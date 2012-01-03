@@ -24,7 +24,6 @@ import com.opera.core.systems.preferences.OperaPreferences;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -42,23 +41,33 @@ import static org.junit.Assert.fail;
 
 public class OperaFilePreferencesTest extends OperaDriverTestCase {
 
+  public static TestOperaDriver newDriver;
   public OperaPreferences preferences;
   public int prefCountBefore = 0;
   public File iniFile;
-  public OperaProfile temporaryProfile;
+  public OperaProfile profile;
+  public File profileDirectory;
 
   @Rule
-  public TemporaryFolder temporaryProfileDirectory = new TemporaryFolder();
+  public TemporaryFolder temporaryFolder = new TemporaryFolder();
 
+  /*
   // Replace OperaDriverTestCase setup and teardown so that we don't launch Opera
   @BeforeClass
   public static void setUpBeforeClass() {
     initFixtures();
   }
+  */
 
   @Before
   public void setUp() throws IOException {
-    iniFile = temporaryProfileDirectory.newFile("operaprefs.ini");
+    if (driver.utils().getProduct().contains("desktop")) {
+      iniFile = temporaryFolder.newFile("operaprefs.ini");
+      profileDirectory = temporaryFolder.getRoot();
+    } else {
+      profileDirectory = new File(driver.utils().getBinaryPath()).getParentFile();
+      iniFile = new File(profileDirectory + File.separator + "opera.ini");
+    }
 
     // Make a new copy in a temporary filesystem so we don't overwrite our fixture
     // TODO(andreastt): This should be done more elegantly in OperaDriverTestCase
@@ -69,7 +78,7 @@ public class OperaFilePreferencesTest extends OperaDriverTestCase {
     }
 
     preferences = new OperaFilePreferences(iniFile);
-    temporaryProfile = new OperaProfile(temporaryProfileDirectory.getRoot());
+    profile = new OperaProfile(profileDirectory);
     prefCountBefore = preferences.size();
   }
 
@@ -77,6 +86,10 @@ public class OperaFilePreferencesTest extends OperaDriverTestCase {
   public void afterEach() {
     if (driver != null && driver.isRunning()) {
       driver.quit();
+    }
+
+    if (newDriver != null && newDriver.isRunning()) {
+      newDriver.quit();
     }
   }
 
@@ -165,23 +178,25 @@ public class OperaFilePreferencesTest extends OperaDriverTestCase {
 
   @Test
   public void testPreferencesAreSet() {
-    temporaryProfile.preferences().set("User Prefs", "Ignore Unrequested Popups", false);
+    profile.preferences().set("User Prefs", "Ignore Unrequested Popups", false);
     DesiredCapabilities capabilities = DesiredCapabilities.opera();
-    capabilities.setCapability(OperaDriver.PROFILE, temporaryProfile);
-    driver = new TestOperaDriver(capabilities);
+    capabilities.setCapability(OperaDriver.PROFILE, profile);
+    newDriver = new TestOperaDriver(capabilities);
     assertFalse(
-        (Boolean) driver.preferences().get("User Prefs", "Ignore Unrequested Popups").getValue());
+        (Boolean) newDriver.preferences().get("User Prefs", "Ignore Unrequested Popups")
+            .getValue());
   }
 
   @Test
   public void testPreferencesAreSetWithExistingObject() {
     preferences.set("User Prefs", "Ignore Unrequested Popups", false);
-    temporaryProfile.setPreferences(preferences);
+    profile.setPreferences(preferences);
     DesiredCapabilities capabilities = DesiredCapabilities.opera();
-    capabilities.setCapability(OperaDriver.PROFILE, temporaryProfile);
-    driver = new TestOperaDriver(capabilities);
+    capabilities.setCapability(OperaDriver.PROFILE, profile);
+    newDriver = new TestOperaDriver(capabilities);
     assertFalse(
-        (Boolean) driver.preferences().get("User Prefs", "Ignore Unrequested Popups").getValue());
+        (Boolean) newDriver.preferences().get("User Prefs", "Ignore Unrequested Popups")
+            .getValue());
   }
 
   // If we have an existing OperaGenericPreferences object this will not write the preferences to
@@ -190,12 +205,13 @@ public class OperaFilePreferencesTest extends OperaDriverTestCase {
   public void testPreferencesAreSetWithGenericPreferenceObject() {
     OperaPreferences preferences = new OperaGenericPreferences();
     preferences.set("User Prefs", "Ignore Unrequested Popups", false);
-    temporaryProfile.setPreferences(preferences);
+    profile.setPreferences(preferences);
     DesiredCapabilities capabilities = DesiredCapabilities.opera();
-    capabilities.setCapability(OperaDriver.PROFILE, temporaryProfile);
-    driver = new TestOperaDriver(capabilities);
+    capabilities.setCapability(OperaDriver.PROFILE, profile);
+    newDriver = new TestOperaDriver(capabilities);
     assertFalse(
-        (Boolean) driver.preferences().get("User Prefs", "Ignore Unrequested Popups").getValue());
+        (Boolean) newDriver.preferences().get("User Prefs", "Ignore Unrequested Popups")
+            .getValue());
   }
 
 }
