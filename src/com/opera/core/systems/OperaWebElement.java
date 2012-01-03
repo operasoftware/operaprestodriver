@@ -67,14 +67,6 @@ public class OperaWebElement extends RemoteWebElement {
 
   protected final Logger logger = Logger.getLogger(this.getClass().getName());
 
-  public int getObjectId() {
-    return objectId;
-  }
-
-  public int getRuntimeId() {
-    return runtimeId;
-  }
-
   /**
    * @param parent   driver that this element belongs to
    * @param objectId the Ecmascript object id of this element
@@ -717,6 +709,14 @@ public class OperaWebElement extends RemoteWebElement {
       return getLocation();
     }
     return null;
+  }
+
+  public int getObjectId() {
+    return objectId;
+  }
+
+  public int getRuntimeId() {
+    return runtimeId;
   }
 
   @Override
