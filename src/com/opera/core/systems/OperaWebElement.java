@@ -167,10 +167,10 @@ public class OperaWebElement extends RemoteWebElement {
   }
 
   /**
-   * Click the element at the given x, y offset from the top left.
+   * Click the element at the given X,Y offset from the top left.
    *
-   * @param x The distance from the left to click
-   * @param y The distance from the top to click
+   * @param x the distance from the left border of the element to click
+   * @param y the distance from the top border of the element to click
    */
   public void click(int x, int y) {
     parent.getScopeServices().captureOperaIdle();
