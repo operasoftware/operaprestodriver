@@ -596,6 +596,7 @@ public class OperaWebElement extends RemoteWebElement {
    * @param colors list of colors to check for.
    * @return true if the page contains any of the given colors, false otherwise.
    */
+  @SuppressWarnings("unused")
   public boolean containsColor(OperaColors... colors) {
     // List<String> keys = Arrays.asList(hashes);
 
