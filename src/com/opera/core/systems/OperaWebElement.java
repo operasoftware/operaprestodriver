@@ -223,6 +223,10 @@ public class OperaWebElement extends RemoteWebElement {
   }
 
   public void clear() {
+    assertElementNotStale();
+
+    // TODO(andreastt): Throw InvalidElementStateException
+
     if (isEnabled()) {
       if (!Boolean.valueOf(getAttribute("readonly"))) {
         executeMethod("return " + OperaAtoms.CLEAR.getValue() + "(locator)");
