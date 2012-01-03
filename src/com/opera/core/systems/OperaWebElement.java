@@ -94,14 +94,19 @@ public class OperaWebElement extends RemoteWebElement {
   }
 
   /**
-   * Executes the given script with the element's object ID doesn't parse the response
+   * Executes the given script with the element's object ID, but does not parse the response.
+   *
+   * @param script the script to execute
    */
   private void executeMethod(String script) {
     debugger.callFunctionOnObject(script, objectId, false);
   }
 
   /**
-   * Evaluates the given script with object ID and parses the result and returns the result object.
+   * Evaluates the given script with object ID, parses the result and returns the result object.
+   *
+   * @param script the script to execute
+   * @return a parsed result object from the executor
    */
   private Object evaluateMethod(String script) {
     return debugger.callFunctionOnObject(script, objectId, true);
