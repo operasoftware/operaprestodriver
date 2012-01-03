@@ -1,4 +1,22 @@
+/*
+Copyright 2011-2012 Opera Software ASA
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
 package com.opera.core.systems;
+
+import com.google.common.io.Files;
 
 import com.opera.core.systems.arguments.OperaArgument;
 import com.opera.core.systems.arguments.OperaCoreArguments;
@@ -6,25 +24,58 @@ import com.opera.core.systems.arguments.OperaDesktopArguments;
 import com.opera.core.systems.runner.OperaRunner;
 import com.opera.core.systems.runner.OperaRunnerSettings;
 
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Ignore;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
-public class OperaRunnerTest {
+public class OperaRunnerTest extends OperaDriverTestCase {
 
-  private static TestOperaRunner runner;
-  private OperaRunnerSettings settings;
+  public static TestOperaRunner runner;
+  public OperaRunnerSettings settings;
+  public File iniFile;
+  public String profile;
+
+  @Rule
+  public TemporaryFolder temporaryProfile = new TemporaryFolder();
+
+  // Replace OperaDriverTestCase setup and tear down so that we don't launch Opera
+  @BeforeClass
+  public static void setUpBeforeClass() {
+    initFixtures();
+  }
+
+  @AfterClass
+  public static void tearDownAfterClass() {
+  }
 
   @Before
   public void beforeEach() {
     settings = new OperaRunnerSettings();
     runner = null;
+
+    // Make a new copy in a temporary file system so we don't overwrite our fixture
+    // TODO(andreastt): This should be done more elegantly in OperaDriverTestCase
+    try {
+      iniFile = temporaryProfile.newFile("operaprefs.ini");
+      Files.copy(fixtureFile("profile" + File.separator + "opera.ini"), iniFile);
+    } catch (IOException e) {
+      fail("Unable to copy preference fixture: " + e.getMessage());
+    }
+
+    profile = temporaryProfile.getRoot().getAbsolutePath();
   }
 
   @Test
@@ -59,10 +110,8 @@ public class OperaRunnerTest {
 
   @Test
   public void testConstructionWithProfile() {
-    String profile = "/my/profile";
     settings.setProfile(profile);
     runner = new TestOperaRunner(settings);
-    assertNotNull(runner);
     assertEquals(profile,
                  runner.getSettings().getArguments().getArguments().get(0).getValue());  // 1
   }

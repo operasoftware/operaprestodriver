@@ -1,5 +1,5 @@
 /*
-Copyright 2008-2011 Opera Software ASA
+Copyright 2008-2012 Opera Software ASA
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -542,7 +542,7 @@ public class StpConnection implements SocketListener {
           (service.equals("ecmascript") && status == Status.BAD_REQUEST.getNumber())) {
           signalResponse(error.getTag(), null);
         } else {
-          logger.log(Level.SEVERE, "Error : {0}", error.toString());
+          logger.log(Level.SEVERE, "Error: {0}", error.toString());
           connectionHandler.onException(new WebDriverException(
               "Error on command: " + error.toString()));
         }

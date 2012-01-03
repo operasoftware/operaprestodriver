@@ -1,5 +1,5 @@
 /*
-Copyright 2008-2011 Opera Software ASA
+Copyright 2008-2012 Opera Software ASA
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -13,6 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+
 package com.opera.core.systems;
 
 import com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessage;
@@ -23,7 +24,6 @@ import com.opera.core.systems.scope.protos.WmProtos.WindowInfo;
  * Provided support for an alternate protocol. To be removed.
  *
  * @author Deniz Turkoglu
- *
  */
 public class UmsEventHandler extends EventHandler {
 

@@ -1,5 +1,5 @@
 /*
-Copyright 2008-2011 Opera Software ASA
+Copyright 2008-2012 Opera Software ASA
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -71,7 +71,6 @@ public class OperaLauncherRunner extends OperaRunner
     Integer launcherPort = PortProber.findFreePort();
     Integer display = settings.getDisplay();
     OperaProduct product = settings.getProduct();
-    String profile = settings.getProfile();
     String binary;
     if (settings.getBinary() == null) {
       binary = OperaPaths.operaPath();

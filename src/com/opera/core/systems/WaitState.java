@@ -1,5 +1,5 @@
 /*
-Copyright 2008-2011 Opera Software ASA
+Copyright 2008-2012 Opera Software ASA
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -250,7 +250,6 @@ public class WaitState {
 
   void onException(Exception e) {
     synchronized (lock) {
-      logger.warning("Got exception");
       events.add(new ResultItem(new WebDriverException(e)));
       connected = false;
       lock.notify();

@@ -1,5 +1,5 @@
 /*
-Copyright 2011 Opera Software ASA
+Copyright 2011-2012 Opera Software ASA
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -63,7 +63,7 @@ public class DesiredCapabilitiesTest extends OperaDriverTestCase {
 
   @Before
   public void setUp() {
-    capabilities = (DesiredCapabilities) OperaDriver.getDefaultCapabilities();
+    capabilities = (DesiredCapabilities) TestOperaDriver.getDefaultCapabilities();
   }
 
   @After
@@ -98,7 +98,7 @@ public class DesiredCapabilitiesTest extends OperaDriverTestCase {
   public void testSettingLogFile() throws IOException {
     File log = tmpFolder.newFile("operadriver.log");
     capabilities.setCapability(OperaDriver.LOGGING_FILE, log.getCanonicalPath());
-    capabilities.setCapability(OperaDriver.LOGGING_LEVEL, "ALL");  // up the level to get some ompf
+    capabilities.setCapability(OperaDriver.LOGGING_LEVEL, "FINER");  // up the level to get some ompf
     driver = new TestOperaDriver(capabilities);
 
     assertTrue(log.length() > 0);

@@ -1,5 +1,5 @@
 /*
-Copyright 2011 Opera Software ASA
+Copyright 2011-2012 Opera Software ASA
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -23,8 +23,7 @@ import com.opera.core.systems.OperaArguments;
  *
  * @author Andreas Tolf Tolfsen <andreastt@opera.com>
  */
-public class OperaCoreArguments extends OperaArguments implements
-                                                       com.opera.core.systems.arguments.interfaces.OperaArguments {
+public class OperaCoreArguments extends OperaArguments {
 
   /**
    * The -autotestmode argument is always added to the arguments list passed to the browser.  This

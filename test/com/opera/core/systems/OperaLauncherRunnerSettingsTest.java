@@ -1,5 +1,5 @@
 /*
-Copyright 2011 Opera Software ASA
+Copyright 2011-2012 Opera Software ASA
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -63,7 +63,7 @@ public class OperaLauncherRunnerSettingsTest {
         defaultSettings =
         TestOperaLauncherRunnerSettings.getDefaultSettings();
     assertNotNull(defaultSettings);
-    assertEquals(OperaProduct.CORE, defaultSettings.getProduct());
+    assertEquals(OperaProduct.DESKTOP, defaultSettings.getProduct());
     assertTrue("default port should be greater than 0", defaultSettings.getPort() > 0);
     assertTrue(defaultSettings.getArguments() instanceof OperaCoreArguments);
   }

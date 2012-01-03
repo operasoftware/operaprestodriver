@@ -1,5 +1,5 @@
 /*
-Copyright 2008-2011 Opera Software ASA
+Copyright 2008-2012 Opera Software ASA
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -769,10 +769,10 @@ public class ScopeServices implements IConnectionHandler {
     }
   }
 
-  public void onException(Exception ex) {
+  public void onException(Exception exception) {
     logger.finest("Got exception");
     if (connection != null) {
-      waitState.onException(ex);
+      waitState.onException(exception);
       connection = null;
     }
   }

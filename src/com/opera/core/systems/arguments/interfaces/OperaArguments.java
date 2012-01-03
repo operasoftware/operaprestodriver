@@ -1,5 +1,5 @@
 /*
-Copyright 2011 Opera Software ASA
+Copyright 2011-2012 Opera Software ASA
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -17,7 +17,9 @@ limitations under the License.
 package com.opera.core.systems.arguments.interfaces;
 
 import com.opera.core.systems.arguments.OperaArgument;
+import com.opera.core.systems.preferences.OperaPreferences;
 
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -29,7 +31,7 @@ import java.util.List;
  * @see com.opera.core.systems.arguments.OperaDesktopArguments , com.opera.core.systems.runner.arguments.OperaCoreArguments,
  *      OperaArgument
  */
-public interface OperaArguments {
+public interface OperaArguments extends Iterable<OperaArgument> {
 
   /**
    * Adds a new argument to the command-line argument list representation.  A new {@link
@@ -71,6 +73,13 @@ public interface OperaArguments {
    * @return list of all arguments
    */
   public List<OperaArgument> getArguments();
+
+  /**
+   * Gets an iterator for all arguments present in this collection.
+   *
+   * @return iterator of all arguments
+   */
+  public Iterator<OperaArgument> iterator();
 
   /**
    * Gets all arguments as a string list, including the argument's values.

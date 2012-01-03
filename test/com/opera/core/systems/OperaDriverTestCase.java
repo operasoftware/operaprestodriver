@@ -1,5 +1,5 @@
 /*
-Copyright 2011 Opera Software ASA
+Copyright 2011-2012 Opera Software ASA
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -17,7 +17,6 @@ limitations under the License.
 package com.opera.core.systems;
 
 import com.opera.core.systems.runner.OperaRunner;
-import com.opera.core.systems.settings.OperaDriverSettings;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -39,6 +38,8 @@ import static org.junit.Assert.assertTrue;
  * It also holds an extension of {@link OperaDriver}, called {@link TestOperaDriver}, that exposes
  * the {@link OperaRunner} and a method for determining whether the constructor and
  * {@link OperaDriver#quit()} methods has been called, {@link TestOperaDriver#isRunning()}.
+ *
+ * @author Andreas Tolf Tolfsen <andreastt@opera.com>7
  */
 @RunWith(OperaDriverTestRunner.class)
 public abstract class OperaDriverTestCase {
@@ -67,7 +68,7 @@ public abstract class OperaDriverTestCase {
 
   @AfterClass
   public static void tearDownAfterClass() throws Exception {
-    if (driver.isRunning()) {
+    if (driver != null && driver.isRunning()) {
       driver.quit();
     }
   }
@@ -116,6 +117,10 @@ public abstract class OperaDriverTestCase {
   protected String fixture(String file) {
     return "file://localhost" + fixtureDirectory + file;
   }
+  
+  protected File fixtureFile(String file) {
+    return new File(fixtureDirectory + file);
+  }
 
   /**
    * Navigate to the given fixture file.
@@ -143,11 +148,6 @@ class TestOperaDriver extends OperaDriver {
     super();
   }
 
-  @Deprecated
-  public TestOperaDriver(OperaDriverSettings settings) {
-    this(settings.getCapabilities());
-  }
-
   public TestOperaDriver(Capabilities capabilities) {
     super(capabilities);
     isRunning = true;
@@ -159,6 +159,10 @@ class TestOperaDriver extends OperaDriver {
 
   public Capabilities getCapabilities() {
     return capabilities;
+  }
+  
+  public static Capabilities getDefaultCapabilities() {
+    return OperaDriver.getDefaultCapabilities();
   }
 
   public void quit() {

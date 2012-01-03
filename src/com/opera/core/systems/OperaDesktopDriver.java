@@ -1,5 +1,5 @@
 /*
-Copyright 2008-2011 Opera Software ASA
+Copyright 2008-2012 Opera Software ASA
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -13,6 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+
 package com.opera.core.systems;
 
 import com.opera.core.systems.runner.launcher.OperaLauncherRunner;
@@ -25,7 +26,6 @@ import com.opera.core.systems.scope.protos.SystemInputProtos.ModifierPressed;
 import com.opera.core.systems.scope.services.IDesktopUtils;
 import com.opera.core.systems.scope.services.IDesktopWindowManager;
 import com.opera.core.systems.scope.services.ISystemInput;
-import com.opera.core.systems.settings.OperaDriverSettings;
 import com.opera.core.systems.util.ProfileUtils;
 
 import org.openqa.selenium.Capabilities;
@@ -57,16 +57,6 @@ public class OperaDesktopDriver extends OperaDriver {
   public OperaDesktopDriver() {
     super();
     initDesktopDriver();
-  }
-
-  /**
-   * Constructor that starts Opera if it's not running.
-   *
-   * @param settings settings for binary path to Opera, prefs directory, and arguments
-   */
-  @Deprecated
-  public OperaDesktopDriver(OperaDriverSettings settings) {
-    this(settings.getCapabilities());
   }
 
   /**
