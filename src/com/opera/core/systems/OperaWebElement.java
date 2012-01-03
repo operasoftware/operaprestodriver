@@ -59,10 +59,11 @@ public class OperaWebElement extends RemoteWebElement {
   protected final Logger logger = Logger.getLogger(this.getClass().getName());
 
   private final int objectId;
-  private final IEcmaScriptDebugger debugger;
-  private final OperaDriver parent;
   private final int runtimeId;
+  private final OperaDriver parent;
   private final IOperaExec execService;
+  private final IEcmaScriptDebugger debugger;
+  private final String pageUrl;
 
   /**
    * Stores a map of special character codes to the string representation.  For example "\uE00E"
@@ -80,7 +81,8 @@ public class OperaWebElement extends RemoteWebElement {
     parent.objectIds.add(objectId);
     debugger = parent.getScriptDebugger();
     execService = parent.getExecService();
-    this.runtimeId = debugger.getRuntimeId();
+    runtimeId = debugger.getRuntimeId();
+    pageUrl = parent.getCurrentUrl();
   }
 
   /**
@@ -188,7 +190,7 @@ public class OperaWebElement extends RemoteWebElement {
   }
 
   public String getAttribute(String attribute) {
-    throwIfStale();
+    assertElementNotStale();
 
     if (attribute.toLowerCase().equals("value")) {
       return callMethod("if(/^input|select|option|textarea$/i.test(locator.nodeName)){" +
@@ -206,17 +208,17 @@ public class OperaWebElement extends RemoteWebElement {
   }
 
   public boolean isDisplayed() {
-    throwIfStale();
+    assertElementNotStale();
     return (Boolean) evaluateMethod("return " + OperaAtoms.IS_DISPLAYED.getValue() + "(locator)");
   }
 
   public boolean isEnabled() {
-    throwIfStale();
+    assertElementNotStale();
     return (Boolean) evaluateMethod("return " + OperaAtoms.IS_ENABLED.getValue() + "(locator)");
   }
 
   public boolean isSelected() {
-    throwIfStale();
+    assertElementNotStale();
     return (Boolean) evaluateMethod("return " + OperaAtoms.IS_SELECTED.getValue() + "(locator)");
   }
 
@@ -808,11 +810,20 @@ public class OperaWebElement extends RemoteWebElement {
     return parent;
   }
 
-  private void throwIfStale() {
+  private void assertElementNotStale() {
+    // Has the user navigated away from the page this object belongs to?
+    if (!parent.getCurrentUrl().equals(pageUrl)) {
+      throw new StaleElementReferenceException(
+          "Element appears to be stale.  Did you navigate away from the page that contained it?  " +
+          "And is the current window focussed the same as the one holding this element?");
+    }
+
+    // Check if current document contains this element
     if (!parent.objectIds.contains(objectId) ||
-        Boolean
-            .valueOf(debugger.callFunctionOnObject("locator.parentNode == undefined", objectId))) {
-      throw new StaleElementReferenceException("You cant interact with stale elements");
+        Boolean.valueOf(callMethod("locator.parentNode == undefined"))) {
+      throw new StaleElementReferenceException(
+          "The element seems to be disconnected from the DOM.  This means that the user cannot " +
+          "interact with it.");
     }
   }
 
