@@ -111,21 +111,6 @@ public class OperaWebElement extends RemoteWebElement {
   }
 
   /**
-   * Right clicks on the element.
-   */
-  public void rightClick() {
-    parent.actionHandler.rightClick(this);
-  }
-
-  /**
-   * Click the middle mouse button at the top left corner of the element.
-   */
-  public void middleClick() {
-    Point point = coordinates.getLocationInViewPort();
-    execService.mouseAction(point.x, point.y, OperaMouseKeys.MIDDLE);
-  }
-
-  /**
    * Click this element many times in the top left corner of the element.
    *
    * @param times the number of times to click
@@ -182,6 +167,21 @@ public class OperaWebElement extends RemoteWebElement {
       // This might be expected
       logger.fine("Response not received, returning control to user");
     }
+  }
+
+  /**
+   * Click the right mouse button at the top left corner of the element.
+   */
+  public void rightClick() {
+    parent.actionHandler.rightClick(this);
+  }
+
+  /**
+   * Click the middle mouse button at the top left corner of the element.
+   */
+  public void middleClick() {
+    Point point = coordinates.getLocationInViewPort();
+    execService.mouseAction(point.x, point.y, OperaMouseKeys.MIDDLE);
   }
 
   public WebElement findElement(By by) {
