@@ -121,53 +121,9 @@ public class OperaWebElement extends RemoteWebElement {
   }
 
   /**
-   * @deprecated Use {@link #mouseOver()}
-   */
-  @Deprecated
-  public void hover() {
-    mouseOver();
-  }
-
-  /**
-   * Moves the mouse to the top left of this element, generating a mouseOver event.
-   */
-  public void mouseOver() {
-    Point point = coordinates.getLocationInViewPort();
-    execService.mouseAction(point.x, point.y);
-  }
-
-  /**
-   * Moves the mouse from the top left of the element to the top left of the page, generating a
-   * mouseOut event.
-   */
-  public void mouseOut() {
-    Point point = coordinates.getLocationInViewPort();
-    execService.mouseAction(point.x, point.y);
-    execService.mouseAction(0, 0);
-  }
-
-  /**
-   * Presses the left mouse button down on the top left of the element.
-   */
-  public void mouseDown() {
-    Point point = coordinates.getLocationInViewPort();
-    execService.mouseAction(point.x, point.y, OperaMouseKeys.LEFT_DOWN);
-  }
-
-  // TODO add check if mouse not down?
-
-  /**
-   * Releases the left mouse button at the top left of the element.
-   */
-  public void mouseUp() {
-    Point point = coordinates.getLocationInViewPort();
-    execService.mouseAction(point.x, point.y, OperaMouseKeys.LEFT_DOWN);
-  }
-
-  /**
-   * Click this element many times.
+   * Click this element many times in the top left corner of the element.
    *
-   * @param times The number of times to click
+   * @param times the number of times to click
    */
   public void click(int times) {
     Point point = coordinates.getLocationInViewPort();
@@ -175,7 +131,7 @@ public class OperaWebElement extends RemoteWebElement {
   }
 
   /**
-   * Click the middle mouse button at the top left of the element.
+   * Click the middle mouse button at the top left corner of the element.
    */
   public void middleClick() {
     Point point = coordinates.getLocationInViewPort();
@@ -185,8 +141,7 @@ public class OperaWebElement extends RemoteWebElement {
   public void click() {
     if (OperaFlags.ENABLE_CHECKS) {
       if (!isDisplayed()) {
-        throw new ElementNotVisibleException(
-            "You can't click an element that is not displayed");
+        throw new ElementNotVisibleException("You cannot click an element that is not displayed");
       }
     }
 
