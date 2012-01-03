@@ -44,6 +44,7 @@ Other libraries required by OperaDriver:
   * Apache Commons JXPath 1.3
   * Google Guava 10.0.1
   * Google protobuf 2.4.1
+  * ini4j 0.5.2
   * JUnit 4.10
   * Selenium 2.13.0
 
