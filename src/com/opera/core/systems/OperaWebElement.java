@@ -1,5 +1,5 @@
 /*
-Copyright 2008-2011 Opera Software ASA
+Copyright 2008-2012 Opera Software ASA
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -52,19 +52,18 @@ import java.util.List;
 import java.util.logging.Logger;
 
 /**
- * Extends the default WebElement with Opera specific methods.
- *
- * @author Deniz Turkoglu <dturkoglu@opera.com>
+ * Implements WebDriver's {@link WebElement}, but also extends it with Opera specific methods.
  */
 public class OperaWebElement extends RemoteWebElement {
 
   protected final Logger logger = Logger.getLogger(this.getClass().getName());
 
   private final int objectId;
-  private final IEcmaScriptDebugger debugger;
-  private final OperaDriver parent;
   private final int runtimeId;
+  private final OperaDriver parent;
   private final IOperaExec execService;
+  private final IEcmaScriptDebugger debugger;
+  private final String pageUrl;
 
   /**
    * Stores a map of special character codes to the string representation.  For example "\uE00E"
@@ -74,16 +73,16 @@ public class OperaWebElement extends RemoteWebElement {
 
   /**
    * @param parent   driver that this element belongs to
-   * @param objectId the Ecmascript object id of this element
+   * @param objectId the EcmaScript object ID of this element
    */
   public OperaWebElement(OperaDriver parent, int objectId) {
     this.parent = parent;
     this.objectId = objectId;
     parent.objectIds.add(objectId);
-
     debugger = parent.getScriptDebugger();
     execService = parent.getExecService();
-    this.runtimeId = debugger.getRuntimeId();
+    runtimeId = debugger.getRuntimeId();
+    pageUrl = parent.getCurrentUrl();
   }
 
   /**
@@ -97,14 +96,19 @@ public class OperaWebElement extends RemoteWebElement {
   }
 
   /**
-   * Executes the given script with the element's object ID doesn't parse the response
+   * Executes the given script with the element's object ID, but does not parse the response.
+   *
+   * @param script the script to execute
    */
   private void executeMethod(String script) {
     debugger.callFunctionOnObject(script, objectId, false);
   }
 
   /**
-   * Evaluates the given script with object ID and parses the result and returns the result object.
+   * Evaluates the given script with object ID, parses the result and returns the result object.
+   *
+   * @param script the script to execute
+   * @return a parsed result object from the executor
    */
   private Object evaluateMethod(String script) {
     return debugger.callFunctionOnObject(script, objectId, true);
@@ -186,7 +190,7 @@ public class OperaWebElement extends RemoteWebElement {
   }
 
   public String getAttribute(String attribute) {
-    throwIfStale();
+    assertElementNotStale();
 
     if (attribute.toLowerCase().equals("value")) {
       return callMethod("if(/^input|select|option|textarea$/i.test(locator.nodeName)){" +
@@ -200,25 +204,30 @@ public class OperaWebElement extends RemoteWebElement {
   }
 
   public String getText() {
+    assertElementNotStale();
     return callMethod("return " + OperaAtoms.GET_TEXT.getValue() + "(locator)");
   }
 
   public boolean isDisplayed() {
-    throwIfStale();
+    assertElementNotStale();
     return (Boolean) evaluateMethod("return " + OperaAtoms.IS_DISPLAYED.getValue() + "(locator)");
   }
 
   public boolean isEnabled() {
-    throwIfStale();
+    assertElementNotStale();
     return (Boolean) evaluateMethod("return " + OperaAtoms.IS_ENABLED.getValue() + "(locator)");
   }
 
   public boolean isSelected() {
-    throwIfStale();
+    assertElementNotStale();
     return (Boolean) evaluateMethod("return " + OperaAtoms.IS_SELECTED.getValue() + "(locator)");
   }
 
   public void clear() {
+    assertElementNotStale();
+
+    // TODO(andreastt): Throw InvalidElementStateException
+
     if (isEnabled()) {
       if (!Boolean.valueOf(getAttribute("readonly"))) {
         executeMethod("return " + OperaAtoms.CLEAR.getValue() + "(locator)");
@@ -487,16 +496,17 @@ public class OperaWebElement extends RemoteWebElement {
    * Click top left, can be modified to click in the middle
    */
   public Point getLocation() {
+    assertElementNotStale();
+
     String coordinates = debugger.callFunctionOnObject(
         "var coords = " + OperaAtoms.GET_LOCATION.getValue() +
         "(locator); return coords.x + ',' + coords.y;", objectId
     );
 
-    // FIXME: the goog.dom.getDocumentScrollElement_() function the Google
-    // closure library doesn't return the document for SVG documents. This
-    // is used by the above atom. In this case the coordinates string will be
-    // empty, so we use this fallback to get the coordinates. Hopefully a fix
-    // will be forthcoming in the closure library.
+    // TODO: The goog.dom.getDocumentScrollElement_() function the Google closure library doesn't
+    // return the document for SVG documents.  This is used by the above atom. In this case the
+    // coordinates string will be empty, so we use this fallback to get the coordinates.  Hopefully
+    // a fix  will be forthcoming in the closure library.
     if (coordinates.isEmpty()) {
       logger.warning("Falling back to non-atom positioning code in getLocation");
       coordinates = debugger.callFunctionOnObject(
@@ -511,18 +521,15 @@ public class OperaWebElement extends RemoteWebElement {
   }
 
   public Dimension getSize() {
-    if (!parent.objectIds.contains(objectId)) {
-      throw new StaleElementReferenceException(
-          "You cant interact with stale elements");
-    }
+    assertElementNotStale();
 
     String widthAndHeight = debugger.callFunctionOnObject(
         "var s=" + OperaAtoms.GET_SIZE.getValue() + "(locator);return s.width+','+s.height;",
         objectId
     );
+
     String[] dimension = widthAndHeight.split(",");
-    return new Dimension(Integer.valueOf(dimension[0]),
-                         Integer.valueOf(dimension[1]));
+    return new Dimension(Integer.valueOf(dimension[0]),  Integer.valueOf(dimension[1]));
   }
 
   /**
@@ -663,6 +670,7 @@ public class OperaWebElement extends RemoteWebElement {
   }
 
   public String getTagName() {
+    assertElementNotStale();
     return callMethod("return (locator.tagName);");
   }
 
@@ -806,11 +814,20 @@ public class OperaWebElement extends RemoteWebElement {
     return parent;
   }
 
-  private void throwIfStale() {
+  private void assertElementNotStale() {
+    // Has the user navigated away from the page this object belongs to?
+    if (!parent.getCurrentUrl().equals(pageUrl)) {
+      throw new StaleElementReferenceException(
+          "Element appears to be stale.  Did you navigate away from the page that contained it?  " +
+          "And is the current window focussed the same as the one holding this element?");
+    }
+
+    // Check if current document contains this element
     if (!parent.objectIds.contains(objectId) ||
-        Boolean
-            .valueOf(debugger.callFunctionOnObject("locator.parentNode == undefined", objectId))) {
-      throw new StaleElementReferenceException("You cant interact with stale elements");
+        Boolean.valueOf(callMethod("locator.parentNode == undefined"))) {
+      throw new StaleElementReferenceException(
+          "The element seems to be disconnected from the DOM.  This means that the user cannot " +
+          "interact with it.");
     }
   }
 
