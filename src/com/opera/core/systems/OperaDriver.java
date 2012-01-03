@@ -1427,12 +1427,4 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
   }
 
-  /**
-   * @deprecated
-   */
-  @Deprecated
-  public OperaRunner getRunner() {
-    return runner;
-  }
-
 }
