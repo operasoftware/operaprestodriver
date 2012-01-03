@@ -89,9 +89,10 @@ public class OperaFilePreferencesTest extends OperaDriverTestCase {
     }
 
     if (newDriver != null && newDriver.isRunning()) {
-      if (newDriver.utils().getProduct().contains("core")) {
+      if (!newDriver.utils().getProduct().contains("desktop")) {
         newDriver.preferences().resetAll();
       }
+
       newDriver.quit();
     }
   }
