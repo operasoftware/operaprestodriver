@@ -1,5 +1,5 @@
 /*
-Copyright 2008-2011 Opera Software ASA
+Copyright 2008-2012 Opera Software ASA
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -34,11 +34,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 /**
- * This library handles actions for Core 2.5+
+ * This library handles actions for Core 2.5+.
  *
- * Core 2.5 uses a different (binary) protocol and different serializers
+ * Core 2.5 uses a different (binary) protocol and different serializers.
  *
- * @author Deniz Turkoglu <denizt@opera.com>
+ * @author Deniz Turkoglu <dturkoglu@opera.com>
  */
 // TODO Support for < Core 2.5 is deprecated, merge
 public class PbActionHandler extends ScopeActions {

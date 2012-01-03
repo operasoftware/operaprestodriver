@@ -1,5 +1,5 @@
 /*
-Copyright 2011 Opera Software ASA
+Copyright 2011-2012 Opera Software ASA
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -17,7 +17,6 @@ limitations under the License.
 package com.opera.core.systems;
 
 import com.opera.core.systems.settings.OperaDriverSettings;
-import com.opera.core.systems.Ignore;
 
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -173,7 +172,8 @@ public class OperaDriverTest extends OperaDriverTestCase {
   }
 
   @Test
-  @Ignore(products = CORE, value = "Once this is set the autotestmode profile no longer connects on 7001, breaking future tests")
+  @Ignore(products = CORE,
+          value = "Once this is set the autotestmode profile no longer connects on 7001, breaking future tests")
   public void testSetPort() throws Exception {
     DesiredCapabilities c = new DesiredCapabilities();
     c.setCapability(OperaDriver.PORT, 9876);
@@ -200,7 +200,9 @@ public class OperaDriverTest extends OperaDriverTestCase {
 
     OperaDriver a = new OperaDriver(c);
     String profile = a.preferences().get("User Prefs", "Opera Directory").toString();
-    String defaultProfile = a.preferences().get("User Prefs", "Opera Directory").getDefaultValue().toString();
+    String
+        defaultProfile =
+        a.preferences().get("User Prefs", "Opera Directory").getDefaultValue().toString();
     assertTrue("'" + profile + "' contains '" + defaultProfile + "'",
                profile.contains(defaultProfile)
     );
@@ -210,7 +212,9 @@ public class OperaDriverTest extends OperaDriverTestCase {
   @Test
   @Ignore(products = CORE, value = "core does not support -pd")
   public void testSetProfile() throws Exception {
-    if (Platform.getCurrent() != Platform.LINUX) return;
+    if (Platform.getCurrent() != Platform.LINUX) {
+      return;
+    }
 
     FileHandler.delete(new File("/tmp/opera-test-profile/"));
 
@@ -316,4 +320,5 @@ public class OperaDriverTest extends OperaDriverTestCase {
     b.quit();
     c.quit();
   }
+
 }

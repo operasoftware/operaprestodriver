@@ -1,5 +1,5 @@
 /*
-Copyright 2008-2011 Opera Software ASA
+Copyright 2008-2012 Opera Software ASA
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ import com.opera.core.systems.model.OperaColor;
 /**
  * Enumerator for contains colour API (RGB values for standard web colours).
  *
- * @author Deniz Turkoglu <denizt@opera.com>
+ * @author Deniz Turkoglu <dturkoglu@opera.com>
  */
 public enum OperaColors {
 

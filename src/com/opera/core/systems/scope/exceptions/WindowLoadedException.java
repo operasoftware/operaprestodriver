@@ -1,5 +1,5 @@
 /*
-Copyright 2008-2011 Opera Software ASA
+Copyright 2008-2012 Opera Software ASA
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -19,9 +19,9 @@ package com.opera.core.systems.scope.exceptions;
 import org.openqa.selenium.WebDriverException;
 
 /**
- * Thrown when window-loaded event is not received in the given amount of time
+ * Thrown when window-loaded event is not received in the given amount of time.
  *
- * @author Deniz Turkoglu <denizt@opera.com>
+ * @author Deniz Turkoglu <dturkoglu@opera.com>
  */
 public class WindowLoadedException extends WebDriverException {
 
@@ -42,4 +42,5 @@ public class WindowLoadedException extends WebDriverException {
   public WindowLoadedException(String message, Throwable cause) {
     super(message, cause);
   }
+
 }

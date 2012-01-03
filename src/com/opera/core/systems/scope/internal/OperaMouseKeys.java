@@ -1,5 +1,5 @@
 /*
-Copyright 2008-2011 Opera Software ASA
+Copyright 2008-2012 Opera Software ASA
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@ package com.opera.core.systems.scope.internal;
 /**
  * Enumerator for native mouse key events
  *
- * @author Deniz Turkoglu
+ * @author Deniz Turkoglu <dturkoglu@opera.com>
  */
 public enum OperaMouseKeys {
 

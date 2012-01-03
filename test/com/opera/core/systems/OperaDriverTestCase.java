@@ -1,5 +1,5 @@
 /*
-Copyright 2011 Opera Software ASA
+Copyright 2011-2012 Opera Software ASA
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -39,6 +39,8 @@ import static org.junit.Assert.assertTrue;
  * It also holds an extension of {@link OperaDriver}, called {@link TestOperaDriver}, that exposes
  * the {@link OperaRunner} and a method for determining whether the constructor and
  * {@link OperaDriver#quit()} methods has been called, {@link TestOperaDriver#isRunning()}.
+ *
+ * @author Andreas Tolf Tolfsen <andreastt@opera.com>7
  */
 @RunWith(OperaDriverTestRunner.class)
 public abstract class OperaDriverTestCase {

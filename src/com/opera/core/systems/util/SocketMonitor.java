@@ -1,5 +1,5 @@
 /*
-Copyright 2008-2011 Opera Software ASA
+Copyright 2008-2012 Opera Software ASA
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -13,6 +13,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
+
 package com.opera.core.systems.util;
 
 import java.io.IOException;
@@ -32,7 +33,7 @@ import java.util.logging.Logger;
  * ServerSocketChannel and fire canWrite() or canRead() events when such events
  * are detected by poll().
  *
- * @author Jan Vidar Krey (janv@opera.com)
+ * @author Jan Vidar Krey <janv@opera.com>
  */
 public class SocketMonitor {
 
@@ -278,4 +279,5 @@ public class SocketMonitor {
     builder.append("}");
     return builder.toString();
   }
+
 }
