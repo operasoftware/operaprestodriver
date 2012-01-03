@@ -496,11 +496,10 @@ public class OperaWebElement extends RemoteWebElement {
         "(locator); return coords.x + ',' + coords.y;", objectId
     );
 
-    // FIXME: the goog.dom.getDocumentScrollElement_() function the Google
-    // closure library doesn't return the document for SVG documents. This
-    // is used by the above atom. In this case the coordinates string will be
-    // empty, so we use this fallback to get the coordinates. Hopefully a fix
-    // will be forthcoming in the closure library.
+    // TODO: The goog.dom.getDocumentScrollElement_() function the Google closure library doesn't
+    // return the document for SVG documents.  This is used by the above atom. In this case the
+    // coordinates string will be empty, so we use this fallback to get the coordinates.  Hopefully
+    // a fix  will be forthcoming in the closure library.
     if (coordinates.isEmpty()) {
       logger.warning("Falling back to non-atom positioning code in getLocation");
       coordinates = debugger.callFunctionOnObject(
