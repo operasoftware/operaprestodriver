@@ -247,25 +247,6 @@ public class OperaLauncherRunnerSettings extends OperaRunnerSettings {
   }
 
   /**
-   * Check that the given path is not null, and exists.
-   *
-   * @param path the path to check
-   * @return true if the path is valid, false otherwise
-   */
-  private boolean isPathValid(String path) {
-    if (path == null) {
-      return false;
-    }
-
-    if (path.length() == 0) {
-      return false;
-    }
-
-    File file = new File(path);
-    return (file.exists());
-  }
-
-  /**
    * Get the MD5 hash of the given stream.
    *
    * @param fis the input stream to use

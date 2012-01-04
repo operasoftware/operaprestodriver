@@ -84,8 +84,8 @@ import java.util.regex.Pattern;
 
 /**
  * OperaDriver is an implementation of the WebDriver interface that allows you to drive the Opera
- * web browser.  The driver uses the Scope protocol to communicate with Opera directly from Java.
- *
+ * web browser. The driver uses the Scope protocol to communicate with Opera directly from Java.
+ * 
  * The implementation is vendor-supported and developed by Opera Software and volunteers.
  */
 public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
@@ -93,72 +93,72 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
   // Want to thin some of these out, but will need some re-thinking.
 
   /**
-   * (String) How verbose the logging should be.  Available levels are: SEVERE (highest value),
-   * WARNING, INFO, CONFIG, FINE, FINER, FINEST (lowest value), ALL.  Default is INFO.
+   * (String) How verbose the logging should be. Available levels are: SEVERE (highest value),
+   * WARNING, INFO, CONFIG, FINE, FINER, FINEST (lowest value), ALL. Default is INFO.
    */
   public static final String LOGGING_LEVEL = "opera.logging.level";
 
   /**
-   * (String) Where to send the output of the logging.  Default is to not write to file.
+   * (String) Where to send the output of the logging. Default is to not write to file.
    */
   public static final String LOGGING_FILE = "opera.logging.file";
 
   /**
-   * (String) Path to the Opera binary to use.  If not specified, OperaDriver will guess the path to
+   * (String) Path to the Opera binary to use. If not specified, OperaDriver will guess the path to
    * your Opera installation (typically <code>/usr/bin/opera</code> or <code>C:\Program
    * Files\Opera\opera.exe</code>).
    */
   public static final String BINARY = "opera.binary";
 
   /**
-   * (String) Arguments to pass to Opera, separated by spaces.  See <code>opera -help</code> for
+   * (String) Arguments to pass to Opera, separated by spaces. See <code>opera -help</code> for
    * available command-line switches.
    */
   public static final String ARGUMENTS = "opera.arguments";
 
   /**
-   * (String) The host Opera should connect to.  Unless you're starting Opera manually you won't
-   * need this.
+   * (String) The host Opera should connect to. Unless you're starting Opera manually you won't need
+   * this.
    */
   public static final String HOST = "opera.host";
 
   /**
-   * (Integer) The port to Opera should connect to.  0 = Random, -1 = Opera default (for use with
+   * (Integer) The port to Opera should connect to. 0 = Random, -1 = Opera default (for use with
    * Opera < 11.60).
    */
   public static final String PORT = "opera.port";
 
   /**
-   * (String) Path to the launcher binary to use.  The launcher is a gateway between OperaDriver and
+   * (String) Path to the launcher binary to use. The launcher is a gateway between OperaDriver and
    * the Opera browser, and is being used for controlling the binary and taking external
-   * screenshots.  If left blank, OperaDriver will use the launcher supplied with the package.
+   * screenshots. If left blank, OperaDriver will use the launcher supplied with the package.
    */
   public static final String LAUNCHER = "opera.launcher";
 
   /**
-   * (Object) Directory to use for the Opera profile.  If an {@link OperaProfile} object that will
-   * be used when starting opera.  If null a random temporary directory is used.   If "", an empty
-   * string, then the default <code>.autotest</code> profile directory will be used (for backwards
+   * (Object) Directory to use for the Opera profile. If an {@link OperaProfile} object that will be
+   * used when starting opera. If null a random temporary directory is used. If "", an empty string,
+   * then the default <code>.autotest</code> profile directory will be used (for backwards
    * compatibility with Opera < 11.60).
    */
   public static final String PROFILE = "opera.profile";
 
   /**
-   * (Boolean) Whether to use Opera's alternative implicit wait implementation.  It will use an
+   * (Boolean) Whether to use Opera's alternative implicit wait implementation. It will use an
    * in-browser heuristic to guess when a page has finished loading, allowing us with great accuracy
-   * tell whether there are any planned events in the document.  This functionality is useful for
-   * very simple test cases, but not designed for real-world testing.  It is disabled by default.
+   * tell whether there are any planned events in the document. This functionality is useful for
+   * very simple test cases, but not designed for real-world testing. It is disabled by default.
    */
   public static final String OPERAIDLE = "opera.idle";
 
   /**
-   * (Integer) The X display to use.  (Only works on *nix OSes.)
+   * (Integer) The X display to use. (Only works on *nix OSes.)
    */
   public static final String DISPLAY = "opera.display";
 
   /**
-   * (Boolean) Whether to auto-start the Opera binary.  If false, OperaDriver will wait for a
-   * connection from the browser.  Go to "opera:debug", enter the correct port number, and hit
+   * (Boolean) Whether to auto-start the Opera binary. If false, OperaDriver will wait for a
+   * connection from the browser. Go to "opera:debug", enter the correct port number, and hit
    * "Connect" to connect manually.
    */
   public static final String AUTOSTART = "opera.autostart";
@@ -169,7 +169,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
   public static final String NO_RESTART = "opera.no_restart";
 
   /**
-   * (Boolean) Whether to quit Opera when OperaDriver is shut down.  If enabled, it will keep the
+   * (Boolean) Whether to quit Opera when OperaDriver is shut down. If enabled, it will keep the
    * browser running after the driver is shut down.
    */
   public static final String NO_QUIT = "opera.no_quit";
@@ -185,8 +185,8 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
   public static final String PRODUCT = "opera.product";
 
   /*
-   * These are "protected" and not "private" so that we can extend this class
-   * and add methods to access these variable in tests.
+   * These are "protected" and not "private" so that we can extend this class and add methods to
+   * access these variable in tests.
    */
   protected DesiredCapabilities capabilities;
   protected OperaRunner runner;
@@ -219,7 +219,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
   /**
    * Starts Opera with the given profile.
-   *
+   * 
    * @param profile the profile to start Opera with
    */
   public OperaDriver(OperaProfile profile) {
@@ -228,9 +228,9 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
   /**
    * Starts Opera with the given set of desired capabilities.
-   *
+   * 
    * @param c a {@link DesiredCapabilities} object containing various settings for the driver and
-   *          the browser
+   *        the browser
    */
   public OperaDriver(Capabilities c) {
     capabilities = (DesiredCapabilities) getDefaultCapabilities();
@@ -240,8 +240,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     }
 
     // Set the logging level for main logger instance
-    Level
-        logLevel =
+    Level logLevel =
         Level.parse(((String) capabilities.getCapability(LOGGING_LEVEL)).toUpperCase());
     Logger root = Logger.getLogger("");
     root.setLevel(logLevel);
@@ -251,7 +250,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
       try {
         logFile =
             new FileHandler((String) capabilities.getCapability(LOGGING_FILE),
-                            OperaFlags.APPEND_TO_LOGFILE);
+                OperaFlags.APPEND_TO_LOGFILE);
         logFile.setFormatter(new SimpleFormatter());
       } catch (IOException e) {
         throw new WebDriverException("Unable to write to file: " + e);
@@ -268,8 +267,8 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     }
 
     if ((Boolean) capabilities.getCapability(AUTOSTART)) {
-      if (((Boolean) capabilities.getCapability(GUESS_BINARY_PATH)) &&
-          capabilities.getCapability(BINARY) == null) {
+      if (((Boolean) capabilities.getCapability(GUESS_BINARY_PATH))
+          && capabilities.getCapability(BINARY) == null) {
         capabilities.setCapability(BINARY, OperaPaths.operaPath());
       } else if (capabilities.getCapability(BINARY) == null) {
         // Don't guess, only check environment variable
@@ -313,7 +312,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
   /**
    * Gets the default capabilities of OperaDriver.
-   *
+   * 
    * @return a DesiredCapabilities object with default settings
    */
   protected static Capabilities getDefaultCapabilities() {
@@ -329,7 +328,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     // Default = 127.0.0.1, but need to set to null for backwards compatibility with Opera versions
     // (Opera < 11.60) that don't support -autotestmode host:port
     capabilities.setCapability(HOST, "127.0.0.1");
-    capabilities.setCapability(PORT, 0);  // 0 = Random, -1 = Opera default (7001)
+    capabilities.setCapability(PORT, 0); // 0 = Random, -1 = Opera default (7001)
 
     capabilities.setCapability(LAUNCHER, (String) null);
     capabilities.setCapability(DISPLAY, (Integer) null);
@@ -362,7 +361,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
   /**
    * Initialise all the Scope services that we need.
-   *
+   * 
    * For testing override this method.
    */
   protected void init() {
@@ -382,7 +381,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     coreUtils = services.getCoreUtils();
     actionHandler = new PbActionHandler(services);
     cookieManager = services.getCookieManager();
-    //cookieManager.updateCookieSettings();
+    // cookieManager.updateCookieSettings();
     preferences = new OperaScopePreferences(services.getPrefs());
 
     // Get product from Opera
@@ -463,7 +462,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
     gc();
 
-    // As this is an artificial page load we release all the held keys.  If the user clicks a link,
+    // As this is an artificial page load we release all the held keys. If the user clicks a link,
     // any keys remain held.
     exec.releaseKeys();
 
@@ -483,7 +482,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
           }
           services.waitForOperaIdle(timeout);
         } catch (WebDriverException e) {
-          // This could for example be a gif animation, preventing idle from being passed.  Common
+          // This could for example be a gif animation, preventing idle from being passed. Common
           // case, and should not result in test error.
           logger.warning("idle: Timed out with exception: " + e);
         }
@@ -532,10 +531,10 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
   /**
    * Find a single element using the selenium atoms.
-   *
-   * @param by    how to find the element, strings defined in RemoteWebDriver
+   * 
+   * @param by how to find the element, strings defined in RemoteWebDriver
    * @param using the value to use to find the element
-   * @param el    the element to search within
+   * @param el the element to search within
    * @return an element
    */
   protected WebElement findElement(String by, String using, OperaWebElement el) {
@@ -558,7 +557,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
       // Search within an element
       script =
           "return " + OperaAtoms.FIND_ELEMENT.getValue() + "({\"" + by + "\": \"" + using
-          + "\"}, locator)";
+              + "\"}, locator)";
     }
 
     do {
@@ -576,16 +575,14 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     } while (!isAvailable && hasTimeRemaining(start));
 
     if (isAvailable) {
-      String
-          error =
-          debugger
-              .callFunctionOnObject("return (locator instanceof Error) ? locator.message : ''", id);
+      String error =
+          debugger.callFunctionOnObject("return (locator instanceof Error) ? locator.message : ''",
+              id);
       if (!error.isEmpty()) {
         throw new InvalidSelectorException(error);
       }
 
-      Boolean
-          isStale =
+      Boolean isStale =
           Boolean.valueOf(debugger.callFunctionOnObject("locator.parentNode == undefined", id));
 
       if (isStale) {
@@ -629,7 +626,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
       // Search within an element
       script =
           "return " + OperaAtoms.FIND_ELEMENTS.getValue() + "({\"" + by + "\": \"" + using
-          + "\"}, locator)";
+              + "\"}, locator)";
     }
 
     do {
@@ -639,10 +636,9 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
         id = debugger.executeScriptOnObject(script, el.getObjectId());
       }
 
-      String
-          error =
-          debugger
-              .callFunctionOnObject("return (locator instanceof Error) ? locator.message : ''", id);
+      String error =
+          debugger.callFunctionOnObject("return (locator instanceof Error) ? locator.message : ''",
+              id);
       if (!error.isEmpty()) {
         throw new InvalidSelectorException(error);
       }
@@ -669,16 +665,15 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
   }
 
   /**
-   * Get the source of the last loaded page.  The source will be of the modified DOM, <em>not</em>
-   * the original HTML.  The page source returned is a representation of the underlying DOM: do not
+   * Get the source of the last loaded page. The source will be of the modified DOM, <em>not</em>
+   * the original HTML. The page source returned is a representation of the underlying DOM: do not
    * expect it to be formatted or escaped in the same way as the response sent from the web server.
-   *
+   * 
    * @return source code of document
    */
   public String getPageSource() {
-    return debugger.executeJavascript(
-        "return document.documentElement.outerHTML || (typeof window.XMLSerializer != 'undefined') ? (new window.XMLSerializer()).serializeToString(document) : ''"
-    );
+    return debugger
+        .executeJavascript("return document.documentElement.outerHTML || (typeof window.XMLSerializer != 'undefined') ? (new window.XMLSerializer()).serializeToString(document) : ''");
   }
 
   public String getTitle() {
@@ -760,8 +755,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     }
 
     public WebDriver frame(int frameIndex) {
-      int
-          framesLength =
+      int framesLength =
           Integer.valueOf(debugger.executeJavascript("return document.frames.length"));
 
       if (frameIndex < 0 || frameIndex >= framesLength) {
@@ -785,10 +779,9 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
       Integer id = 0;
 
       for (Integer windowId : windowIds) {
-        String name = debugger.executeJavascript(
-            "return top.window.name || top.document.title || null",
-            windowId
-        );
+        String name =
+            debugger.executeJavascript("return top.window.name || top.document.title || null",
+                windowId);
 
         if (name != null && name.equals(windowName)) {
           id = windowId;
@@ -805,8 +798,8 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
       windowManager.filterActiveWindow();
       debugger.resetRuntimesList();
 
-      defaultContent();  // set runtime to _top
-      debugger.executeJavascript("window.focus()", false);  // steal focus
+      defaultContent(); // set runtime to _top
+      debugger.executeJavascript("window.focus()", false); // steal focus
 
       return OperaDriver.this;
     }
@@ -814,10 +807,9 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     // TODO: Implement need to find a way to link an element to a runtime
     public WebDriver frame(WebElement frameElement) {
       String script = "return " + OperaAtoms.GET_FRAME_INDEX.getValue() + "(locator)";
-      Long
-          frameIndex =
-          (Long) debugger
-              .callFunctionOnObject(script, ((OperaWebElement) frameElement).getObjectId(), true);
+      Long frameIndex =
+          (Long) debugger.callFunctionOnObject(script,
+              ((OperaWebElement) frameElement).getObjectId(), true);
 
       if (frameIndex == null) {
         throw new NoSuchFrameException("Non-frame element or frame not in current DOM");
@@ -829,8 +821,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     }
 
     /*
-     * This and more functionality will be provided natively in near future, in
-     * progress.
+     * This and more functionality will be provided natively in near future, in progress.
      */
     public Alert alert() {
       throw new UnsupportedOperationException();
@@ -847,7 +838,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
   /**
    * Escape characters for safe insertion in a Javascript string contained by double quotes (").
-   *
+   * 
    * @param string the string to escape
    * @return an escaped string
    */
@@ -857,30 +848,29 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
   /**
    * Escape characters for safe insertion in a JavaScript string.
-   *
+   * 
    * @param string the string to escape
-   * @param quote  the type of quote to escape. Either " or '
+   * @param quote the type of quote to escape. Either " or '
    * @return the escaped string
    */
   private String escapeJsString(String string, String quote) {
 
     /*
-     * This should be expanded to match all invalid characters (e.g. newlines)
-     * but for the moment we'll trust we'll only get quotes.
+     * This should be expanded to match all invalid characters (e.g. newlines) but for the moment
+     * we'll trust we'll only get quotes.
      */
     Pattern escapePattern = Pattern.compile("([^\\\\])" + quote);
 
     /*
-     * Prepend a space so that the regex can match quotes at the beginning of
-     * the string.
+     * Prepend a space so that the regex can match quotes at the beginning of the string.
      */
     Matcher m = escapePattern.matcher(" " + string);
     StringBuffer sb = new StringBuffer();
 
     while (m.find()) {
       /*
-       * $1 -> inserts the character before the quote
-       * \\\\\" -> \\", apparently just \" isn't treated literally.
+       * $1 -> inserts the character before the quote \\\\\" -> \\", apparently just \" isn't
+       * treated literally.
        */
       m.appendReplacement(sb, "$1\\\\" + quote);
     }
@@ -926,14 +916,12 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
   public WebElement findElementByName(String using) {
     return findSingleElement(
-        "document.getElementsByName('" + escapeJsString(using, "'") + "')[0];", "name"
-    );
+        "document.getElementsByName('" + escapeJsString(using, "'") + "')[0];", "name");
   }
 
   public List<WebElement> findElementsByName(String using) {
     return findMultipleElements(
-        "document.getElementsByName('" + escapeJsString(using, "'") + "');", "name"
-    );
+        "document.getElementsByName('" + escapeJsString(using, "'") + "');", "name");
   }
 
   public Navigation navigate() {
@@ -993,10 +981,9 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
       // TODO: Numeric overflow
 
       if (cookie.getExpiry() == null) {
-        cookie = new Cookie(
-            cookie.getName(), cookie.getValue(), cookie.getDomain(), cookie.getPath(),
-            new Date(new Date().getTime() + (10 * 365 * 24 * 60 * 60 * 1000)), false
-        );
+        cookie =
+            new Cookie(cookie.getName(), cookie.getValue(), cookie.getDomain(), cookie.getPath(),
+                new Date(new Date().getTime() + (10 * 365 * 24 * 60 * 60 * 1000)), false);
       }
 
       debugger.executeJavascript("document.cookie='" + cookie.toString() + "'", false);
@@ -1013,16 +1000,15 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
             "Deleting cookies are not supported without the cookie-manager service");
       }
 
-      cookieManager.removeCookie(cookie.getDomain(), cookie.getPath(),
-                                 cookie.getName());
+      cookieManager.removeCookie(cookie.getDomain(), cookie.getPath(), cookie.getName());
 
       gc();
 
       /*
-      Date dateInPast = new Date(0);
-      Cookie toDelete = new Cookie(cookie.getName(), cookie.getValue(), cookie.getDomain(), cookie.getPath(), dateInPast, false);
-      addCookie(toDelete);
-      */
+       * Date dateInPast = new Date(0); Cookie toDelete = new Cookie(cookie.getName(),
+       * cookie.getValue(), cookie.getDomain(), cookie.getPath(), dateInPast, false);
+       * addCookie(toDelete);
+       */
     }
 
     public void deleteAllCookies() {
@@ -1034,11 +1020,8 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
       cookieManager.removeAllCookies();
 
       /*
-      Set<Cookie> cookies = getCookies();
-      for (Cookie cookie : cookies) {
-        deleteCookie(cookie);
-      }
-      */
+       * Set<Cookie> cookies = getCookies(); for (Cookie cookie : cookies) { deleteCookie(cookie); }
+       */
     }
 
     public Set<Cookie> getCookies() {
@@ -1062,14 +1045,11 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
       return null;
 
       /*
-      String value = debugger.executeJavascript("var getCookieNamed = function(key)\n"+
-                              "{"+
-                              "var value = new RegExp(key + \"=([^;]*)\").exec(document.cookie);"+
-                              "return value && decodeURIComponent(value[1]);"+
-                              "}\n"+
-                              "return getCookieNamed('" + name + "')");
-      return (value == null) ? null : new Cookie(name, value);
-      */
+       * String value = debugger.executeJavascript("var getCookieNamed = function(key)\n"+ "{"+
+       * "var value = new RegExp(key + \"=([^;]*)\").exec(document.cookie);"+
+       * "return value && decodeURIComponent(value[1]);"+ "}\n"+ "return getCookieNamed('" + name +
+       * "')"); return (value == null) ? null : new Cookie(name, value);
+       */
     }
 
     public Timeouts timeouts() {
@@ -1108,10 +1088,10 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
   /**
    * Performs a special action, such as setting an Opera preference.
-   *
+   * 
    * For a list of actions call {@link #getOperaActionList()}.
-   *
-   * @param using  the action to perform.
+   * 
+   * @param using the action to perform.
    * @param params parameters to pass to the action call
    */
   public void operaAction(String using, String... params) {
@@ -1177,8 +1157,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     } while (!isAvailable && hasTimeRemaining(start));
 
     if (isAvailable) {
-      Boolean
-          isStale =
+      Boolean isStale =
           Boolean.valueOf(debugger.callFunctionOnObject("locator.parentNode == undefined", id));
 
       if (isStale) {
@@ -1197,17 +1176,18 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
   /**
    * Takes a screenshot of the whole screen, including areas outside of the Opera browser window.
-   *
+   * 
    * @param timeout the number of milliseconds to wait before taking the screenshot
-   * @param hashes  A previous screenshot MD5 hash.  If it matches the hash of this screenshot then
-   *                no image data is returned.
+   * @param hashes A previous screenshot MD5 hash. If it matches the hash of this screenshot then no
+   *        image data is returned.
    * @return a ScreenShotReply object
    */
   public ScreenShotReply saveScreenshot(long timeout, String... hashes) {
     return runner.saveScreenshot(timeout, hashes);
   }
 
-  // TODO: CORE-39436 areas outside of the current viewport is black.  This is a problem with Opera, not OperaDriver.
+  // TODO: CORE-39436 areas outside of the current viewport is black. This is a problem with Opera,
+  // not OperaDriver.
   public <X> X getScreenshotAs(OutputType<X> target) throws WebDriverException {
     OperaWebElement body = (OperaWebElement) findElementByTagName("body");
     return target.convertFromPngBytes(body.saveScreenshot(0).getPng());
@@ -1243,8 +1223,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
       if (result.getClassName().equals("NodeList")) {
         return processElements(objectId);
       }
-      if (result.getClassName().equals("Array")
-          || result.getClassName().equals("Object")) {
+      if (result.getClassName().equals("Array") || result.getClassName().equals("Object")) {
         return debugger.examineScriptResult(objectId);
       }
     }
@@ -1254,7 +1233,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
   /**
    * Is JavaScript enables in this driver?
-   *
+   * 
    * @return true if JavaScript is enabled
    */
   public boolean isJavascriptEnabled() {
@@ -1282,12 +1261,12 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
   }
 
   /**
-   * Presses and releases the given key.  If the key is "enter" then OperaDriver waits for the page
+   * Presses and releases the given key. If the key is "enter" then OperaDriver waits for the page
    * to finish loading.
-   *
+   * 
    * @param key A string containing the key to press. This can be a single character (e.g. "a") or a
-   *            special key (e.g. "left"), and is matched case insensitively.  For a list of keys
-   *            see {@link OperaKeys}.
+   *        special key (e.g. "left"), and is matched case insensitively. For a list of keys see
+   *        {@link OperaKeys}.
    */
   public void key(String key) {
     if (key.equalsIgnoreCase("enter")) {
@@ -1308,7 +1287,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
   /**
    * Presses and holds the given key. You cannot press a key that is already down.
-   *
+   * 
    * @param key the key to press, see {@link #key(String)} for more information.
    */
   public void keyDown(String key) {
@@ -1317,7 +1296,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
   /**
    * Releases the given key.
-   *
+   * 
    * @param key the key to release, see {@link #key(String)} for more information.
    */
   public void keyUp(String key) {
@@ -1332,9 +1311,9 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
   }
 
   /**
-   * Types the given string as-is in to the browser window.  To press special keys use {@link
-   * #key(String)}.
-   *
+   * Types the given string as-is in to the browser window. To press special keys use
+   * {@link #key(String)}.
+   * 
    * @param using the string to type
    */
   public void type(String using) {
@@ -1343,7 +1322,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
   /**
    * Returns the version number of driver.
-   *
+   * 
    * @return version number
    */
   public String getVersion() {
