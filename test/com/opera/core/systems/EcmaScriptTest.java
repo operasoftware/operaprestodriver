@@ -61,7 +61,7 @@ public class EcmaScriptTest extends OperaDriverTestCase {
 
   @Test
   @SuppressWarnings("unchecked")
-  public void testObjectOfElements() throws Exception {
+  public void testObjectOfElements() {
     List<OperaWebElement> divs = (List<OperaWebElement>) driver
         .executeScript("return [document.createElement('div'), document.createElement('div')]");
     for (OperaWebElement el : divs) {

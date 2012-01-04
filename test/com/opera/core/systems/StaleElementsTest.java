@@ -32,47 +32,47 @@ public class StaleElementsTest extends OperaDriverTestCase {
   }
 
   @Test(expected = StaleElementReferenceException.class)
-  public void testGetAttribute() throws Exception {
+  public void testGetAttribute() {
     div.getAttribute("foo");
   }
 
   @Test(expected = StaleElementReferenceException.class)
-  public void testGetText() throws Exception {
+  public void testGetText() {
     div.getText();
   }
 
   @Test(expected = StaleElementReferenceException.class)
-  public void testIsDisplayed() throws Exception {
+  public void testIsDisplayed() {
     div.isDisplayed();
   }
 
   @Test(expected = StaleElementReferenceException.class)
-  public void testIsEnabled() throws Exception {
+  public void testIsEnabled() {
     div.isEnabled();
   }
 
   @Test(expected = StaleElementReferenceException.class)
-  public void testIsSelected() throws Exception {
+  public void testIsSelected() {
     div.isSelected();
   }
 
   @Test(expected = StaleElementReferenceException.class)
-  public void testClear() throws Exception {
+  public void testClear() {
     div.clear();
   }
 
   @Test(expected = StaleElementReferenceException.class)
-  public void testGetLocation() throws Exception {
+  public void testGetLocation() {
     div.getLocation();
   }
 
   @Test(expected = StaleElementReferenceException.class)
-  public void testGetSize() throws Exception {
+  public void testGetSize() {
     div.getSize();
   }
 
   @Test(expected = StaleElementReferenceException.class)
-  public void testTagName() throws Exception {
+  public void testTagName() {
     div.getTagName();
   }
   
