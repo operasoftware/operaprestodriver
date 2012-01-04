@@ -50,8 +50,8 @@ public class EcmaScriptDebugger6 extends EcmaScriptDebugger {
   public EcmaScriptDebugger6(ScopeServices services, String version) {
     super(services, version);
     if (VersionUtil.compare(version, "7.0") >= 0) {
-      throw new UnsupportedOperationException(
-          "ecmascript-debugger version " + version + " is not supported");
+      throw new UnsupportedOperationException("ecmascript-debugger version " + version
+          + " is not supported");
     }
 
   }
@@ -94,16 +94,15 @@ public class EcmaScriptDebugger6 extends EcmaScriptDebugger {
     EvalData.Builder evalBuilder = buildEval(toSend, getRuntimeId());
 
     for (WebElement webElement : elements) {
-      Variable variable = buildVariable(webElement.toString(),
-                                        ((OperaWebElement) webElement).getObjectId());
+      Variable variable =
+          buildVariable(webElement.toString(), ((OperaWebElement) webElement).getObjectId());
       evalBuilder.addVariableList(variable);
     }
 
     Response response = executeCommand(ESDebuggerCommand.EVAL, evalBuilder);
 
     if (response == null) {
-      throw new WebDriverException(
-          "Internal error while executing script");
+      throw new WebDriverException("Internal error while executing script");
     }
 
     EvalResult result = parseEvalData(response);
@@ -129,8 +128,7 @@ public class EcmaScriptDebugger6 extends EcmaScriptDebugger {
   }
 
   @Override
-  public Object executeScript(String using, boolean responseExpected,
-                              int runtimeId) {
+  public Object executeScript(String using, boolean responseExpected, int runtimeId) {
     Response reply = eval(using, runtimeId);
     return responseExpected ? parseEvalReply(parseEvalData(reply)) : null;
   }
@@ -138,15 +136,13 @@ public class EcmaScriptDebugger6 extends EcmaScriptDebugger {
   @Override
   public Integer getObject(String using) {
     EvalResult reply = parseEvalData(eval(using));
-    return (reply.getType().equals("object")) ? reply.getObjectValue().getObjectID()
-                                              : null;
+    return (reply.getType().equals("object")) ? reply.getObjectValue().getObjectID() : null;
   }
 
   @Override
   public Integer getObject(String using, int runtimeId) {
     EvalResult reply = parseEvalData(eval(using, runtimeId));
-    return (reply.getType().equals("object")) ? reply.getObjectValue().getObjectID()
-                                              : null;
+    return (reply.getType().equals("object")) ? reply.getObjectValue().getObjectID() : null;
   }
 
   @Override
@@ -158,8 +154,7 @@ public class EcmaScriptDebugger6 extends EcmaScriptDebugger {
   }
 
   @Override
-  public Object callFunctionOnObject(String using, int objectId,
-                                     boolean responseExpected) {
+  public Object callFunctionOnObject(String using, int objectId, boolean responseExpected) {
     Variable variable = buildVariable("locator", objectId);
 
     Response response = eval(using, variable);
@@ -187,8 +182,8 @@ public class EcmaScriptDebugger6 extends EcmaScriptDebugger {
         String message;
         try {
           message =
-              (String) callFunctionOnObject("return locator.name+': '+locator.message;",
-                                            result.getObjectValue().getObjectID(), true);
+              (String) callFunctionOnObject("return locator.name+': '+locator.message;", result
+                  .getObjectValue().getObjectID(), true);
         } catch (Exception e) {
           // If we get an exception while trying to get the message just throw
           // a generic Ecmascript exception.
@@ -228,8 +223,8 @@ public class EcmaScriptDebugger6 extends EcmaScriptDebugger {
     List<Integer> ids = new ArrayList<Integer>();
 
     ObjectChainList list = getChainList(id);
-    List<Property> properties = list.getObjectChainList(0).getObjectListList().get(
-        0).getPropertyListList();
+    List<Property> properties =
+        list.getObjectChainList(0).getObjectListList().get(0).getPropertyListList();
     for (Property property : properties) {
       if (property.getType().equals("object")) {
         ids.add(property.getObjectValue().getObjectID());
@@ -243,9 +238,11 @@ public class EcmaScriptDebugger6 extends EcmaScriptDebugger {
   @Override
   public Object examineScriptResult(Integer id) {
     ObjectChainList list = getChainList(id);
-    List<Property> properties = list.getObjectChainList(0).getObjectListList().get(0).getPropertyListList();
+    List<Property> properties =
+        list.getObjectChainList(0).getObjectListList().get(0).getPropertyListList();
 
-    String className = list.getObjectChainListList().get(0).getObjectList(0).getValue().getClassName();
+    String className =
+        list.getObjectChainListList().get(0).getObjectList(0).getValue().getClassName();
 
     if (className.endsWith("Element")) {
       return new OperaWebElement(driver, id);
@@ -253,8 +250,7 @@ public class EcmaScriptDebugger6 extends EcmaScriptDebugger {
       List<Object> result = new ArrayList<Object>();
 
       for (Property property : properties) {
-        if (property.getType().equals("number")
-            && property.getName().equals("length")) {
+        if (property.getType().equals("number") && property.getName().equals("length")) {
           // ignore ?!?
         } else if (property.getType().equals("object")) {
           result.add(examineScriptResult(property.getObjectValue().getObjectID()));
@@ -268,15 +264,13 @@ public class EcmaScriptDebugger6 extends EcmaScriptDebugger {
       Map<String, Object> result = new HashMap<String, Object>();
 
       for (Property property : properties) {
-        if (property.getType().equals("number")
-            && property.getName().equals("length")) {
+        if (property.getType().equals("number") && property.getName().equals("length")) {
           // ignore ?!?
         } else if (property.getType().equals("object")) {
-          result.put(property.getName(),
-                     examineScriptResult(property.getObjectValue().getObjectID()));
+          result.put(property.getName(), examineScriptResult(property.getObjectValue()
+              .getObjectID()));
         } else {
-          result.put(property.getName(), parseValue(property.getType(),
-                                                    property.getValue()));
+          result.put(property.getName(), parseValue(property.getType(), property.getValue()));
         }
       }
       return result;
@@ -288,8 +282,7 @@ public class EcmaScriptDebugger6 extends EcmaScriptDebugger {
     examine.setExaminePrototypes(false);
     examine.setRuntimeID(getRuntimeId());
     examine.addObjectList(id);
-    Response response = executeCommand(ESDebuggerCommand.EXAMINE_OBJECTS,
-                                       examine);
+    Response response = executeCommand(ESDebuggerCommand.EXAMINE_OBJECTS, examine);
 
     ObjectChainList.Builder builder = ObjectChainList.newBuilder();
     buildPayload(response, builder);

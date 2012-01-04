@@ -29,7 +29,7 @@ public class OperaStrings {
    * @return true if string holds a numeric value, false otherwise
    */
   public static boolean isNumeric(String string) {
-    if(string == null) return false;
+    if (string == null) return false;
     try {
       double d = Double.parseDouble(string);
     } catch (NumberFormatException e) {
