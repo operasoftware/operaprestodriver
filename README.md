@@ -45,8 +45,9 @@ Other libraries required by OperaDriver:
   * Google Guava 10.0.1
   * Google protobuf 2.4.1
   * ini4j 0.5.2
+  * json-20080701.jar
   * JUnit 4.10
-  * Selenium 2.13.0
+  * Selenium 2.15.0
 
 ### OperaDriver on 11.52 or older
 
