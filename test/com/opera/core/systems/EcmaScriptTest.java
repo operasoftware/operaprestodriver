@@ -19,7 +19,6 @@ package com.opera.core.systems;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.WebDriverException;
-import org.openqa.selenium.WebElement;
 
 import java.util.List;
 
@@ -28,8 +27,8 @@ import static org.junit.Assert.assertNull;
 
 public class EcmaScriptTest extends OperaDriverTestCase {
 
-  String xpath =
-    ".//input[(not(@type) or (@type!=\"file\" and @type!=\"radio\" and @typ" +
+  public final String xpath =
+      ".//input[(not(@type) or (@type!=\"file\" and @type!=\"radio\" and @typ" +
       "e!=\"checkbox\" and @type!=\"submit\" and @type!=\"reset\" and @type!=\"" +
       "image\" and @type!=\"button\" and @type!=\"hidden\" and @type!=\"url\" " +
       "and @type!=\"datetime\" and @type!=\"date\" and @type!=\"month\" and @" +
@@ -37,13 +36,14 @@ public class EcmaScriptTest extends OperaDriverTestCase {
       "type!=\"range\" and @type!=\"color\")) and @class='foo'] | .//textarea" +
       "[@class='foo']";
 
+  public final String testPage =
+      "data:text/html;charset=utf-8,%3Cinput%20id%3D%22wrong%22%20class%3" +
+      "D%22foo%22%20%2F%3E%3Cinput%20id%3D%22correct%22%20class%3D%22foo%" +
+      "22%20%2F%3E";
+
   @Before
   public void setUp() {
-    driver.navigate().to(
-      "data:text/html;charset=utf-8,%3Cinput%20id%3D%22wrong%22%20class%3" +
-        "D%22foo%22%20%2F%3E%3Cinput%20id%3D%22correct%22%20class%3D%22foo%" +
-        "22%20%2F%3E"
-    );
+    driver.navigate().to(testPage);
   }
 
   @Test
@@ -59,12 +59,13 @@ public class EcmaScriptTest extends OperaDriverTestCase {
     assertNull(exception);
   }
 
-  @SuppressWarnings("unchecked")
   @Test
+  @SuppressWarnings("unchecked")
   public void testObjectOfElements() throws Exception {
-    List<WebElement> divs = (List<WebElement>) driver.executeScript("return [document.createElement('div'), document.createElement('div')]");
-    for (WebElement el : divs) {
-      assertEquals("DIV", el.getTagName());
+    List<OperaWebElement> divs = (List<OperaWebElement>) driver
+        .executeScript("return [document.createElement('div'), document.createElement('div')]");
+    for (OperaWebElement el : divs) {
+      assertEquals("DIV", el.callMethod("locator.tagName"));
     }
   }
 
