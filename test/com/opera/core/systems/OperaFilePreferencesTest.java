@@ -120,7 +120,7 @@ public class OperaFilePreferencesTest extends OperaDriverTestCase {
     assertEquals("1.2.3.4", preferences.get("Developer Tools", "Proxy Host").getValue());
     assertEquals(1234, preferences.get("Developer Tools", "Proxy Port").getValue());
     assertEquals(true, preferences.get("Developer Tools", "Proxy Auto Connect").getValue());
-    assertEquals(prefCountBefore, preferences.size());  // make sure it didn't add more prefs
+    assertEquals(prefCountBefore, preferences.size()); // make sure it didn't add more prefs
   }
 
   @Test
@@ -138,10 +138,10 @@ public class OperaFilePreferencesTest extends OperaDriverTestCase {
     preferences.set("Developer Tools", "Proxy Auto Connect", true);
 
     OperaPreferences verifier = new OperaFilePreferences(iniFile);
-    assertEquals("Developer Tools",
-                 verifier.get("Developer Tools", "Proxy Auto Connect").getSection());
-    assertEquals("Proxy Auto Connect",
-                 verifier.get("Developer Tools", "Proxy Auto Connect").getKey());
+    assertEquals("Developer Tools", verifier.get("Developer Tools", "Proxy Auto Connect")
+        .getSection());
+    assertEquals("Proxy Auto Connect", verifier.get("Developer Tools", "Proxy Auto Connect")
+        .getKey());
     assertEquals(true, verifier.get("Developer Tools", "Proxy Auto Connect").getValue());
   }
 
@@ -170,8 +170,8 @@ public class OperaFilePreferencesTest extends OperaDriverTestCase {
 
   @Test
   public void testSetWithKnownPreference() {
-    preferences.set(
-        new OperaGenericPreferences.GenericPreference("Developer Tools", "Proxy Host", "1.2.3.4"));
+    preferences.set(new OperaGenericPreferences.GenericPreference("Developer Tools", "Proxy Host",
+        "1.2.3.4"));
 
     OperaPreferences verifier = new OperaFilePreferences(iniFile);
     assertEquals(prefCountBefore, verifier.size());
@@ -186,9 +186,8 @@ public class OperaFilePreferencesTest extends OperaDriverTestCase {
     DesiredCapabilities capabilities = DesiredCapabilities.opera();
     capabilities.setCapability(OperaDriver.PROFILE, profile);
     newDriver = new TestOperaDriver(capabilities);
-    assertFalse(
-        (Boolean) newDriver.preferences().get("User Prefs", "Ignore Unrequested Popups")
-            .getValue());
+    assertFalse((Boolean) newDriver.preferences().get("User Prefs", "Ignore Unrequested Popups")
+        .getValue());
   }
 
   @Test
@@ -198,9 +197,8 @@ public class OperaFilePreferencesTest extends OperaDriverTestCase {
     DesiredCapabilities capabilities = DesiredCapabilities.opera();
     capabilities.setCapability(OperaDriver.PROFILE, profile);
     newDriver = new TestOperaDriver(capabilities);
-    assertFalse(
-        (Boolean) newDriver.preferences().get("User Prefs", "Ignore Unrequested Popups")
-            .getValue());
+    assertFalse((Boolean) newDriver.preferences().get("User Prefs", "Ignore Unrequested Popups")
+        .getValue());
   }
 
   // If we have an existing OperaGenericPreferences object this will not write the preferences to
@@ -213,9 +211,8 @@ public class OperaFilePreferencesTest extends OperaDriverTestCase {
     DesiredCapabilities capabilities = DesiredCapabilities.opera();
     capabilities.setCapability(OperaDriver.PROFILE, profile);
     newDriver = new TestOperaDriver(capabilities);
-    assertFalse(
-        (Boolean) newDriver.preferences().get("User Prefs", "Ignore Unrequested Popups")
-            .getValue());
+    assertFalse((Boolean) newDriver.preferences().get("User Prefs", "Ignore Unrequested Popups")
+        .getValue());
   }
 
 }
