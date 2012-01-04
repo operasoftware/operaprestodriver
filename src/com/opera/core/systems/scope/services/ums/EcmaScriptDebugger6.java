@@ -210,13 +210,13 @@ public class EcmaScriptDebugger6 extends EcmaScriptDebugger {
 
     if ("string".equals(dataType)) {
       return result.getValue();
-    } else if (dataType.equals("number")) {
+    } else if ("number".equals(dataType)) {
       return parseNumber(result.getValue());
-    } else if (dataType.equals("boolean")) {
+    } else if ("boolean".equals(dataType)) {
       return Boolean.valueOf(result.getValue());
-    } else if (dataType.equals("undefined")) {
+    } else if ("undefined".equals(dataType)) {
       return null;
-    } else if (dataType.equals("object")) {
+    } else if ("object".equals(dataType)) {
       return result.getObjectValue();
     }
     // return null if none

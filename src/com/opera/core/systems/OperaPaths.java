@@ -29,10 +29,10 @@ import static org.openqa.selenium.Platform.LINUX;
 import static org.openqa.selenium.Platform.UNIX;
 
 /**
- * This class tries to find the paths to Opera and the launcher on any system.  If it cannot find a
+ * This class tries to find the paths to Opera and the launcher on any system. If it cannot find a
  * launcher it will extract the appropriate one from the JAR it is in or attempt to copy it from the
  * source directory.
- *
+ * 
  * @author Stuart Knightley <stuartk@opera.com>, Andreas Tolf Tolfsen <andreastt@opera.com>, Deniz
  *         Turkoglu <dturkoglu@opera.com>
  */
@@ -42,15 +42,15 @@ public class OperaPaths {
   private static final Platform currentPlatform = Platform.getCurrent();
 
   /**
-   * This method will try and find Opera on any platform.  It performs the following steps:
-   *
-   * 1. Check the environment variable OPERA_PATH.  If it exists, and the file it points to exists,
-   *    then return
-   *
+   * This method will try and find Opera on any platform. It performs the following steps:
+   * 
+   * 1. Check the environment variable OPERA_PATH. If it exists, and the file it points to exists,
+   * then return
+   * 
    * 2. Check if Opera exists at the default location on the respective OS
-   *
+   * 
    * 3. (Unix) Call `which opera` to find the location 4. Give up and return null
-   *
+   * 
    * @return the path to Opera, or null
    */
   public static String operaPath() {
@@ -86,7 +86,7 @@ public class OperaPaths {
         paths.add(programFiles + "\\Opera Next\\opera.exe");
         break;
 
-      default:  // Android?
+      default: // Android?
         throw new WebDriverException("Unable to resolve the path to Opera on this platform");
     }
 
@@ -101,7 +101,7 @@ public class OperaPaths {
 
   /**
    * Check that the given path is not null, not empty and that it exists.
-   *
+   * 
    * @param path the path to check
    * @return true if the path is valid, false otherwise
    */
@@ -119,9 +119,9 @@ public class OperaPaths {
   }
 
   /**
-   * Locates a specified program using the `which` program on UNIX or LINUX platforms.  If no
-   * program is found, it will return null.
-   *
+   * Locates a specified program using the `which` program on UNIX or LINUX platforms. If no program
+   * is found, it will return null.
+   * 
    * @param program the program binary to find
    * @return the absolute path to the binary, or null if program is not found
    */
@@ -136,9 +136,9 @@ public class OperaPaths {
   }
 
   /**
-   * Returns the Program Files directory on the Windows platform.  It looks for the 32-bit directory
+   * Returns the Program Files directory on the Windows platform. It looks for the 32-bit directory
    * first, then the 64-bit directory.
-   *
+   * 
    * @return the Program Files directory on Windows
    */
   private static String getWindowsProgramFilesDirectory() {

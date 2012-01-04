@@ -16,12 +16,11 @@ limitations under the License.
 
 package com.opera.core.systems;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import org.junit.Test;
 import org.openqa.selenium.WebElement;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.assertTrue;
 
 public class ElementsTest extends OperaDriverTestCase {
 
