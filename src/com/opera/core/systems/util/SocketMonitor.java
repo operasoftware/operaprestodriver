@@ -190,7 +190,7 @@ public class SocketMonitor {
 
   protected void applyChanges() {
     synchronized (changes) {
-      if (changes.size() == 0) return;
+      if (changes.isEmpty()) return;
 
       Iterator<SocketMonitor.SelectorChangeRequest> it = changes.iterator();
       while (it.hasNext()) {

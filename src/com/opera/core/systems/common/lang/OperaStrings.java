@@ -23,12 +23,13 @@ package com.opera.core.systems.common.lang;
 public class OperaStrings {
 
   /**
-   * Checks whether given string has a numeric value.  A numeric value may be "0", "1" or "1234".
-   *
+   * Checks whether given string has a numeric value. A numeric value may be "0", "1" or "1234".
+   * 
    * @param string the string to check
    * @return true if string holds a numeric value, false otherwise
    */
   public static boolean isNumeric(String string) {
+    if (string == null) return false;
     try {
       double d = Double.parseDouble(string);
     } catch (NumberFormatException e) {

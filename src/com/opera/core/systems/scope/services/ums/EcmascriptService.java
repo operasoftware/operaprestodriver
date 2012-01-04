@@ -69,7 +69,7 @@ import java.util.concurrent.atomic.AtomicStampedReference;
  * {@link EcmaScriptDebugger} it does not disable JIT.
  */
 public class EcmascriptService extends AbstractEcmascriptService implements
-                                                                 IEcmaScriptDebugger {
+ IEcmaScriptDebugger {
 
   private AtomicStampedReference<Runtime> runtime = new AtomicStampedReference<Runtime>(null, 0);
   private ConcurrentMap<Integer, Runtime> runtimesList = new ConcurrentHashMap<Integer, Runtime>();
@@ -167,8 +167,8 @@ public class EcmascriptService extends AbstractEcmascriptService implements
     EvalArg.Builder evalBuilder = buildEval(toSend, getRuntimeId());
 
     for (WebElement webElement : elements) {
-      Variable variable = buildVariable(webElement.toString(),
-                                        ((OperaWebElement) webElement).getObjectId());
+      Variable variable =
+          buildVariable(webElement.toString(), ((OperaWebElement) webElement).getObjectId());
       evalBuilder.addVariableList(variable);
     }
 
@@ -211,15 +211,15 @@ public class EcmascriptService extends AbstractEcmascriptService implements
 
   private Response eval(String using, int runtimeId, Variable... variables) {
     // This call causes us to release objects, which allows them to be garbage collected, and
-    // sometimes causes this method to fail.  So I've commented it out.  But I reckon it might cause
+    // sometimes causes this method to fail. So I've commented it out. But I reckon it might cause
     // high memory usage in Opera, so the method might need to be updated in the future.
-    //processQueues();
+    // processQueues();
 
     EvalArg.Builder builder = buildEval(using, runtimeId);
     builder.addAllVariableList(Arrays.asList(variables));
 
-    Response response = executeCommand(ESCommand.EVAL, builder,
-                                       OperaIntervals.SCRIPT_TIMEOUT.getValue());
+    Response response =
+        executeCommand(ESCommand.EVAL, builder, OperaIntervals.SCRIPT_TIMEOUT.getValue());
 
     if (response == null && retries < OperaIntervals.SCRIPT_RETRY.getValue()) {
       retries++;
@@ -263,8 +263,7 @@ public class EcmascriptService extends AbstractEcmascriptService implements
     return (result == null) ? null : String.valueOf(result);
   }
 
-  public Object callFunctionOnObject(String using, int objectId,
-                                     boolean responseExpected) {
+  public Object callFunctionOnObject(String using, int objectId, boolean responseExpected) {
     Variable variable = buildVariable("locator", objectId);
 
     Response response = eval(using, variable);
@@ -327,8 +326,8 @@ public class EcmascriptService extends AbstractEcmascriptService implements
   }
 
   /**
-   * Find the runtime for injection (default).  Typically this is _top runtime with the active
-   * window that has focus.
+   * Find the runtime for injection (default). Typically this is _top runtime with the active window
+   * that has focus.
    */
   protected Runtime findRuntime() {
     return findRuntime(windowManager.getActiveWindowId());
@@ -336,18 +335,18 @@ public class EcmascriptService extends AbstractEcmascriptService implements
 
   protected Runtime findRuntime(int windowId) {
     createAllRuntimes();
-    Runtime runtime = (Runtime) xpathPointer(runtimesList.values(),
-                                             "/.[htmlFramePath='" + currentFramePath
-                                             + "' and windowID='" + windowId
-                                             + "']").getValue();
+    Runtime runtime =
+        (Runtime) xpathPointer(runtimesList.values(),
+            "/.[htmlFramePath='" + currentFramePath + "' and windowID='" + windowId + "']")
+            .getValue();
     return runtime;
   }
 
   /**
    * Updates the runtimes list to most recent version
-   *
-   * TODO this has to be kept up to date with events and as failover we should update It builds a tree to find the frame we are looking for
-   * TODO tree also must be kept up to date
+   * 
+   * TODO this has to be kept up to date with events and as failover we should update It builds a
+   * tree to find the frame we are looking for TODO tree also must be kept up to date
    */
   private void buildRuntimeTree() {
     updateRuntime();
@@ -356,8 +355,7 @@ public class EcmascriptService extends AbstractEcmascriptService implements
     root.setFrameName("_top");
     root.setRuntimeID(rootInfo.getRuntimeID());
 
-    List<Runtime> runtimesInfos = new ArrayList<Runtime>(
-        runtimesList.values());
+    List<Runtime> runtimesInfos = new ArrayList<Runtime>(runtimesList.values());
     runtimesInfos.remove(rootInfo);
 
     for (Runtime runtimeInfo : runtimesInfos) {
@@ -421,7 +419,7 @@ public class EcmascriptService extends AbstractEcmascriptService implements
       else {
         try {
           if (executeScript("frameElement ? frameElement.id : ''", true,
-                            entry.getValue().getRuntimeID()).equals(name)) {
+              entry.getValue().getRuntimeID()).equals(name)) {
             return entry.getValue();
           }
         } catch (WebDriverException e) {
@@ -475,8 +473,7 @@ public class EcmascriptService extends AbstractEcmascriptService implements
     List<Integer> ids = new ArrayList<Integer>();
 
     ObjectList list = getObjectList(id);
-    List<Property>
-        objects =
+    List<Property> objects =
         list.getPrototypeListList().get(0).getObjectListList().get(0).getPropertyListList();
     for (Property obj : objects) {
       if (obj.getValue().getType().equals(Value.Type.OBJECT)) {
@@ -566,8 +563,7 @@ public class EcmascriptService extends AbstractEcmascriptService implements
         if (type == Type.NUMBER && property.getName().equals("length")) {
           // ignore ?!?
         } else {
-          result.put(property.getName(), parseValue(type,
-                                                    property.getValue()));
+          result.put(property.getName(), parseValue(type, property.getValue()));
         }
       }
       return result;
@@ -577,9 +573,9 @@ public class EcmascriptService extends AbstractEcmascriptService implements
   private Object parseValue(Type type, Value value) {
     switch (type) {
       case TRUE:
-        return new Boolean(true);
+        return Boolean.valueOf(true);
       case FALSE:
-        return new Boolean(false);
+        return Boolean.valueOf(false);
       case PLUS_INFINITY:
         return Double.POSITIVE_INFINITY;
       case MINUS_INFINITY:
@@ -635,7 +631,7 @@ public class EcmascriptService extends AbstractEcmascriptService implements
 
   /**
    * Queries for the given runtime ID
-   *
+   * 
    * @param runtimeID The runtime id to query for
    * @return {@link Runtime} object if found, <code>null</code> otherwise
    */
