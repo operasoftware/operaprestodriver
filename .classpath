@@ -7,7 +7,8 @@
 	<classpathentry kind="lib" path="lib/operalaunchers-0.3.jar"/>
 	<classpathentry kind="lib" path="lib/commons-exec-1.1.jar"/>
 	<classpathentry kind="lib" path="lib/commons-jxpath-1.3.jar"/>
-	<classpathentry kind="lib" path="lib/junit-4.10.jar"/>
+  <classpathentry kind="lib" path="lib/junit-4.10.jar"/>
+  <classpathentry kind="lib" path="lib/json-20080701.jar"/>
 	<classpathentry kind="lib" path="lib/guava-10.0.1.jar"/>
 	<classpathentry kind="lib" path="lib/ini4j-0.5.2.jar"/>
 	<classpathentry kind="lib" path="lib/protobuf-java-2.4.1.jar"/>
