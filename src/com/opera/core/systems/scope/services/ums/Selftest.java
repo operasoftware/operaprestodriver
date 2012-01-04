@@ -85,11 +85,11 @@ public class Selftest extends AbstractService implements ISelftest {
       String description = otherPieces[1];
 
       ResultType result;
-      if (resultString.equals("PASS")) {
+      if ("PASS".equals(resultString)) {
         result = ResultType.PASS;
-      } else if (resultString.equals("FAIL")) {
+      } else if ("FAIL".equals(resultString)) {
         result = ResultType.FAIL;
-      } else if (resultString.equals("SKIP")) {
+      } else if ("SKIP".equals(resultString)) {
         result = ResultType.SKIP;
       } else {
         throw new RuntimeException(String.format("Unknown test result %s", resultString));

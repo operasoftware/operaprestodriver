@@ -66,15 +66,15 @@ public class OperaWebElement extends RemoteWebElement {
   private final String pageUrl;
 
   /**
-   * Stores a map of special character codes to the string representation.  For example "\uE00E"
-   * maps to "page_up".
-   *
+   * Stores a map of special character codes to the string representation. For example "\uE00E" maps
+   * to "page_up".
+   * 
    * TODO(andreastt): Move this to OperaKeyboard?
    */
   private static final HashMap<Character, String> keysLookup = new HashMap<Character, String>();
 
   /**
-   * @param parent   driver that this element belongs to
+   * @param parent driver that this element belongs to
    * @param objectId the EcmaScript object ID of this element
    */
   public OperaWebElement(OperaDriver parent, int objectId) {
@@ -89,7 +89,7 @@ public class OperaWebElement extends RemoteWebElement {
 
   /**
    * Calls the method and parses the result, the result must be a string
-   *
+   * 
    * @param method the method to call
    * @return response of EcmaScript in string presentation
    */
@@ -99,7 +99,7 @@ public class OperaWebElement extends RemoteWebElement {
 
   /**
    * Executes the given script with the element's object ID, but does not parse the response.
-   *
+   * 
    * @param script the script to execute
    */
   private void executeMethod(String script) {
@@ -108,7 +108,7 @@ public class OperaWebElement extends RemoteWebElement {
 
   /**
    * Evaluates the given script with object ID, parses the result and returns the result object.
-   *
+   * 
    * @param script the script to execute
    * @return a parsed result object from the executor
    */
@@ -118,7 +118,7 @@ public class OperaWebElement extends RemoteWebElement {
 
   /**
    * Click this element many times in the top left corner of the element.
-   *
+   * 
    * @param times the number of times to click
    */
   public void click(int times) {
@@ -140,8 +140,8 @@ public class OperaWebElement extends RemoteWebElement {
     OperaWebElement parentNode = new OperaWebElement(this.parent, id);
 
     String multiple = parentNode.getAttribute("multiple");
-    if (parentNode.getTagName().equalsIgnoreCase("SELECT") &&
-        multiple != null && !multiple.equals("false")) {
+    if (parentNode.getTagName().equalsIgnoreCase("SELECT") && multiple != null
+        && !multiple.equals("false")) {
       toggle();
     } else if (this.getTagName().equals("OPTION")) {
       setSelected();
@@ -159,7 +159,7 @@ public class OperaWebElement extends RemoteWebElement {
 
   /**
    * Click the element at the given X,Y offset from the top left.
-   *
+   * 
    * @param x the distance from the left border of the element to click
    * @param y the distance from the top border of the element to click
    */
@@ -195,13 +195,11 @@ public class OperaWebElement extends RemoteWebElement {
     assertElementNotStale();
 
     if (attribute.toLowerCase().equals("value")) {
-      return callMethod("if(/^input|select|option|textarea$/i.test(locator.nodeName)){" +
-                        "return locator.value;" +
-                        "}" +
-                        "return locator.textContent;");
+      return callMethod("if(/^input|select|option|textarea$/i.test(locator.nodeName)){"
+          + "return locator.value;" + "}" + "return locator.textContent;");
     } else {
-      return callMethod(
-          "return " + OperaAtoms.GET_ATTRIBUTE.getValue() + "(locator, '" + attribute + "')");
+      return callMethod("return " + OperaAtoms.GET_ATTRIBUTE.getValue() + "(locator, '" + attribute
+          + "')");
     }
   }
 
@@ -276,30 +274,25 @@ public class OperaWebElement extends RemoteWebElement {
       click();
     } else {
       executeMethod("locator.focus()");
-      // When focused textareas return the cursor to the last position it was at.  Inputs place the
+      // When focused textareas return the cursor to the last position it was at. Inputs place the
       // cursor at the beginning, and so we need to move it to the end. We do this by pre-pending an
       // "End" key to the keys to send (in a round-about way).
       if (getTagName().equalsIgnoreCase("input")) {
         // Javascript from webdriver_session.cc in ChromeDriver
-        executeMethod(
-            "function(elem) {"
-            + "  var doc = elem.ownerDocument || elem;"
+        executeMethod("function(elem) {" + "  var doc = elem.ownerDocument || elem;"
             + "  var prevActiveElem = doc.activeElement;"
-            + "  if (elem != prevActiveElem && prevActiveElem)"
-            + "    prevActiveElem.blur();"
+            + "  if (elem != prevActiveElem && prevActiveElem)" + "    prevActiveElem.blur();"
             + "  elem.focus();"
             + "  if (elem != prevActiveElem && elem.value && elem.value.length &&"
             + "      elem.setSelectionRange) {"
-            + "    elem.setSelectionRange(elem.value.length, elem.value.length);"
-            + "  }"
+            + "    elem.setSelectionRange(elem.value.length, elem.value.length);" + "  }"
             + "  if (elem != doc.activeElement)"
             + "    throw new Error('Failed to send keys because cannot focus element');"
-            + "}(locator)"
-        );
+            + "}(locator)");
       }
     }
 
-    // This code is a bit ugly.  Because "special" keys can be sent either as an individual
+    // This code is a bit ugly. Because "special" keys can be sent either as an individual
     // argument, or in the middle of a string of "normal" characters, we have to loop through the
     // string and check each against a list of special keys.
 
@@ -333,8 +326,7 @@ public class OperaWebElement extends RemoteWebElement {
           } else {
             String key = OperaKeys.get(keyName);
             // TODO: Code repeated from above
-            if (holdKeys.contains(key) && !heldKeys.contains(key) && !execService
-                .keyIsPressed(key)) {
+            if (holdKeys.contains(key) && !heldKeys.contains(key) && !execService.keyIsPressed(key)) {
               execService.key(key, false);
               heldKeys.add(key);
             } else if (key.equals("null")) {
@@ -366,14 +358,14 @@ public class OperaWebElement extends RemoteWebElement {
   }
 
   /**
-   * Converts a character in the PUA to the name of the key, as given by {@link
-   * org.openqa.selenium.Keys}.  If the character doesn't appear in that class then null is
+   * Converts a character in the PUA to the name of the key, as given by
+   * {@link org.openqa.selenium.Keys}. If the character doesn't appear in that class then null is
    * returned.
-   *
+   * 
    * @param c the character that may be a special key
    * @return a string containing the name of the "special" key or null
    */
-  private static String charToKeyName(char c) {  // TODO(andreastt): Move this to OperaKeyboard?
+  private static String charToKeyName(char c) { // TODO(andreastt): Move this to OperaKeyboard?
     if (keysLookup.isEmpty()) {
       for (Keys k : Keys.values()) {
         keysLookup.put(k.charAt(0), k.name());
@@ -435,8 +427,7 @@ public class OperaWebElement extends RemoteWebElement {
       throw new InvalidElementStateException("You can't toggle an radio element");
     }
 
-    Integer id = debugger.executeScriptOnObject("return locator.parentNode",
-                                                objectId);
+    Integer id = debugger.executeScriptOnObject("return locator.parentNode", objectId);
     OperaWebElement parentNode = new OperaWebElement(this.parent, id);
     if (parentNode.getTagName().equalsIgnoreCase("SELECT")
         && parentNode.getAttribute("multiple") == null) {
@@ -452,8 +443,8 @@ public class OperaWebElement extends RemoteWebElement {
       }
     }
 
-    return (Boolean) debugger.callFunctionOnObject(
-        "return " + OperaAtoms.TOGGLE.getValue() + "(locator)", objectId, true);
+    return (Boolean) debugger.callFunctionOnObject("return " + OperaAtoms.TOGGLE.getValue()
+        + "(locator)", objectId, true);
   }
 
   private static void sleep(long ms) {
@@ -470,22 +461,20 @@ public class OperaWebElement extends RemoteWebElement {
   public Point getLocation() {
     assertElementNotStale();
 
-    String coordinates = debugger.callFunctionOnObject(
-        "var coords = " + OperaAtoms.GET_LOCATION.getValue() +
-        "(locator); return coords.x + ',' + coords.y;", objectId
-    );
+    String coordinates =
+        debugger.callFunctionOnObject("var coords = " + OperaAtoms.GET_LOCATION.getValue()
+            + "(locator); return coords.x + ',' + coords.y;", objectId);
 
     // TODO: The goog.dom.getDocumentScrollElement_() function the Google closure library doesn't
-    // return the document for SVG documents.  This is used by the above atom. In this case the
-    // coordinates string will be empty, so we use this fallback to get the coordinates.  Hopefully
-    // a fix  will be forthcoming in the closure library.
+    // return the document for SVG documents. This is used by the above atom. In this case the
+    // coordinates string will be empty, so we use this fallback to get the coordinates. Hopefully
+    // a fix will be forthcoming in the closure library.
     if (coordinates.isEmpty()) {
       logger.warning("Falling back to non-atom positioning code in getLocation");
-      coordinates = debugger.callFunctionOnObject(
-          "var coords = locator.getBoundingClientRect();" +
-          "return (coords.left-window.pageXOffset)+','+(coords.top-window.pageYOffset)",
-          objectId
-      );
+      coordinates =
+          debugger.callFunctionOnObject("var coords = locator.getBoundingClientRect();"
+              + "return (coords.left-window.pageXOffset)+','+(coords.top-window.pageYOffset)",
+              objectId);
     }
 
     String[] location = coordinates.split(",");
@@ -495,18 +484,17 @@ public class OperaWebElement extends RemoteWebElement {
   public Dimension getSize() {
     assertElementNotStale();
 
-    String widthAndHeight = debugger.callFunctionOnObject(
-        "var s=" + OperaAtoms.GET_SIZE.getValue() + "(locator);return s.width+','+s.height;",
-        objectId
-    );
+    String widthAndHeight =
+        debugger.callFunctionOnObject("var s=" + OperaAtoms.GET_SIZE.getValue()
+            + "(locator);return s.width+','+s.height;", objectId);
 
     String[] dimension = widthAndHeight.split(",");
-    return new Dimension(Integer.valueOf(dimension[0]),  Integer.valueOf(dimension[1]));
+    return new Dimension(Integer.valueOf(dimension[0]), Integer.valueOf(dimension[1]));
   }
 
   /**
    * Takes a screenshot of the area this element's bounding-box covers and returns the MD5 hash.
-   *
+   * 
    * @return an MD5 hash as a string
    */
   public String getImageHash() {
@@ -516,9 +504,9 @@ public class OperaWebElement extends RemoteWebElement {
   /**
    * Takes a screenshot after timeout milliseconds of the area this element's bounding-box covers
    * and returns the MD5 hash.
-   *
+   * 
    * @param timeout the number of milliseconds to wait before taking the screenshot
-   * @param hashes  optional hashes to compare the hashes with
+   * @param hashes optional hashes to compare the hashes with
    * @return an MD5 hash as a string
    */
   public String getImageHash(long timeout, String... hashes) {
@@ -528,7 +516,7 @@ public class OperaWebElement extends RemoteWebElement {
   /**
    * Take a screenshot of the area this element's bounding-box covers. Saves a copy of the image to
    * the given filename, and returns an MD5 hash of the image.
-   *
+   * 
    * @param filename The location to save the screenshot
    * @return The MD5 hash of the screenshot
    */
@@ -539,9 +527,9 @@ public class OperaWebElement extends RemoteWebElement {
   /**
    * Take a screenshot of the area this element covers. Saves a copy of the image to the given
    * filename.
-   *
+   * 
    * @param filename The location to save the screenshot
-   * @param timeout  The number of milliseconds to wait before taking the screenshot
+   * @param timeout The number of milliseconds to wait before taking the screenshot
    * @return The MD5 hash of the screenshot
    */
   public String saveScreenshot(String filename, long timeout) {
@@ -552,18 +540,17 @@ public class OperaWebElement extends RemoteWebElement {
    * Take a screenshot of the area this element covers. If the hash of the image matches any of the
    * given hashes then no image is saved, otherwise it saves a copy of the image to the given
    * filename.
-   *
-   * @param filename     The location to save the screenshot.
-   * @param timeout      The number of milliseconds to wait before taking the screenshot.
+   * 
+   * @param filename The location to save the screenshot.
+   * @param timeout The number of milliseconds to wait before taking the screenshot.
    * @param includeImage Whether to get the image data. Disable if you just need the MD5 hash.
-   * @param hashes       Known image hashes.
+   * @param hashes Known image hashes.
    * @return The MD5 hash of the screenshot.
    */
-  public String saveScreenshot(String filename, long timeout,
-                               boolean includeImage, String... hashes) {
+  public String saveScreenshot(String filename, long timeout, boolean includeImage,
+      String... hashes) {
     Canvas canvas = buildCanvas();
-    ScreenShotReply reply = execService.screenWatcher(canvas, timeout,
-                                                      includeImage, hashes);
+    ScreenShotReply reply = execService.screenWatcher(canvas, timeout, includeImage, hashes);
     if (includeImage && reply.getPng() != null) {
       FileChannel stream;
       try {
@@ -579,10 +566,10 @@ public class OperaWebElement extends RemoteWebElement {
 
   /**
    * Take a screenshot of the area this element's bounding-box covers.
-   *
+   * 
    * @param timeout The number of milliseconds to wait before taking the screenshot
-   * @param hashes  A previous screenshot MD5 hash. If it matches the hash of this screenshot then
-   *                no image data is returned.
+   * @param hashes A previous screenshot MD5 hash. If it matches the hash of this screenshot then no
+   *        image data is returned.
    */
   public ScreenShotReply saveScreenshot(long timeout, String... hashes) {
     Canvas canvas = buildCanvas();
@@ -592,7 +579,7 @@ public class OperaWebElement extends RemoteWebElement {
   /**
    * Check if the current webpage contains any of the given colors. Used on tests that use red to
    * show a failure.
-   *
+   * 
    * @param colors list of colors to check for.
    * @return true if the page contains any of the given colors, false otherwise.
    */
@@ -613,7 +600,7 @@ public class OperaWebElement extends RemoteWebElement {
 
   /**
    * Create a "canvas", which is an object that specifies a rectangle to take a screenshot of.
-   *
+   * 
    * @return a canvas representing the size and position of this element.
    */
   private Canvas buildCanvas() {
@@ -641,7 +628,7 @@ public class OperaWebElement extends RemoteWebElement {
     return callMethod("return (locator.tagName);");
   }
 
-  // TODO: We only return location on screen when scrolled?  Isn't this a duplicate method?
+  // TODO: We only return location on screen when scrolled? Isn't this a duplicate method?
   public Point getLocationOnScreenOnceScrolledIntoView() {
     if (isDisplayed()) {
       return getLocation();
@@ -707,22 +694,17 @@ public class OperaWebElement extends RemoteWebElement {
   }
 
   public WebElement findElementByName(String using) {
-    return findSingleElement(
-        "document.evaluate(\"descendant-or-self::*[@name='"
-        + using
-        + "']\",locator,null,XPathResult.ORDERED_NODE_ITERATOR_TYPE,null).iterateNext()",
-        "name");
+    return findSingleElement("document.evaluate(\"descendant-or-self::*[@name='" + using
+        + "']\",locator,null,XPathResult.ORDERED_NODE_ITERATOR_TYPE,null).iterateNext()", "name");
   }
 
   public List<WebElement> findElementsByName(String using) {
     return findMultipleElements("var result = document.evaluate"
-                                + "(\"descendant-or-self::*[@name='" + using + "']\""
-                                + ", locator, null, XPathResult.ORDERED_NODE_ITERATOR_TYPE,  null);\n"
-                                + "var elements = new Array();\n"
-                                + "var element = result.iterateNext();\n" + "while (element) {\n"
-                                + "  elements.push(element);\n"
-                                + "  element = result.iterateNext();\n"
-                                + "}\n" + "return elements", "XPath");
+        + "(\"descendant-or-self::*[@name='" + using + "']\""
+        + ", locator, null, XPathResult.ORDERED_NODE_ITERATOR_TYPE,  null);\n"
+        + "var elements = new Array();\n" + "var element = result.iterateNext();\n"
+        + "while (element) {\n" + "  elements.push(element);\n"
+        + "  element = result.iterateNext();\n" + "}\n" + "return elements", "XPath");
   }
 
   @Override
@@ -741,15 +723,17 @@ public class OperaWebElement extends RemoteWebElement {
     }
 
     public Point getLocationInViewPort() {
-      String coordinates = debugger.callFunctionOnObject(
-          "locator.scrollIntoView();\n"
-          + "var x = 0, y = 0;\n"
-          + "if(window.top !== window.self) {\n"
-          + "x = (window.screenLeft - window.top.screenLeft) + window.scrollX;\n"
-          + "y = (window.screenTop - window.top.screenTop) + window.scrollY;\n"
-          + "}\n"
-          + "return (( x + locator.getBoundingClientRect().left) + ',' + ( y + locator.getBoundingClientRect().top));\n",
-          objectId);
+      String coordinates =
+          debugger
+              .callFunctionOnObject(
+                  "locator.scrollIntoView();\n"
+                      + "var x = 0, y = 0;\n"
+                      + "if(window.top !== window.self) {\n"
+                      + "x = (window.screenLeft - window.top.screenLeft) + window.scrollX;\n"
+                      + "y = (window.screenTop - window.top.screenTop) + window.scrollY;\n"
+                      + "}\n"
+                      + "return (( x + locator.getBoundingClientRect().left) + ',' + ( y + locator.getBoundingClientRect().top));\n",
+                  objectId);
       String[] location = coordinates.split(",");
       return new Point(Integer.valueOf(location[0]), Integer.valueOf(location[1]));
     }
@@ -764,10 +748,11 @@ public class OperaWebElement extends RemoteWebElement {
   };
 
   public String getCssValue(String property) {
-    String value = callMethod(
-        "return " + OperaAtoms.GET_EFFECTIVE_STYLE.getValue() + "(locator, '" + property + "')");
+    String value =
+        callMethod("return " + OperaAtoms.GET_EFFECTIVE_STYLE.getValue() + "(locator, '" + property
+            + "')");
 
-    // Opera returns a colour in RGB format.  WebDriver specifies that the output from getCssValue()
+    // Opera returns a colour in RGB format. WebDriver specifies that the output from getCssValue()
     // must be in HEX format.
     if (property.contains("color")) {
       return new OperaColor(value).getHex();
@@ -784,16 +769,16 @@ public class OperaWebElement extends RemoteWebElement {
     // Has the user navigated away from the page this object belongs to?
     if (!parent.getCurrentUrl().equals(pageUrl)) {
       throw new StaleElementReferenceException(
-          "Element appears to be stale.  Did you navigate away from the page that contained it?  " +
-          "And is the current window focussed the same as the one holding this element?");
+          "Element appears to be stale.  Did you navigate away from the page that contained it?  "
+              + "And is the current window focussed the same as the one holding this element?");
     }
 
     // Check if current document contains this element
-    if (!parent.objectIds.contains(objectId) ||
-        Boolean.valueOf(callMethod("locator.parentNode == undefined"))) {
+    if (!parent.objectIds.contains(objectId)
+        || Boolean.valueOf(callMethod("locator.parentNode == undefined"))) {
       throw new StaleElementReferenceException(
-          "The element seems to be disconnected from the DOM.  This means that the user cannot " +
-          "interact with it.");
+          "The element seems to be disconnected from the DOM.  This means that the user cannot "
+              + "interact with it.");
     }
   }
 

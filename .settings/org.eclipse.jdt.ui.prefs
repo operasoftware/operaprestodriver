@@ -1,4 +1,4 @@
-#Wed Jun 10 13:18:46 CEST 2009
+#Wed Jan 04 10:11:35 IST 2012
 cleanup.add_default_serial_version_id=false
 cleanup.add_generated_serial_version_id=true
 cleanup.add_missing_annotations=true
@@ -52,3 +52,5 @@ cleanup.use_this_for_non_static_method_access_only_if_necessary=false
 cleanup_profile=_Complete
 cleanup_settings_version=2
 eclipse.preferences.version=1
+formatter_profile=_GoogleStyle
+formatter_settings_version=11
