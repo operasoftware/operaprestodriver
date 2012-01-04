@@ -45,7 +45,7 @@ public class ElementsTest extends OperaDriverTestCase {
   */
 
   @Test
-  public void testSelect() throws Exception {
+  public void testSelect() {
     getFixture("select.html");
     WebElement el = driver.findElementById("dog");
     el.click();
