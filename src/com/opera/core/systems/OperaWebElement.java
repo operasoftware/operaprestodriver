@@ -63,7 +63,6 @@ public class OperaWebElement extends RemoteWebElement {
   private final OperaDriver parent;
   private final IOperaExec execService;
   private final IEcmaScriptDebugger debugger;
-  private final String pageUrl;
 
   /**
    * Stores a map of special character codes to the string representation. For example "\uE00E" maps
@@ -84,7 +83,6 @@ public class OperaWebElement extends RemoteWebElement {
     debugger = parent.getScriptDebugger();
     execService = parent.getExecService();
     runtimeId = debugger.getRuntimeId();
-    pageUrl = parent.getCurrentUrl();
   }
 
   /**
@@ -767,15 +765,14 @@ public class OperaWebElement extends RemoteWebElement {
 
   private void assertElementNotStale() {
     // Has the user navigated away from the page this object belongs to?
-    if (!parent.getCurrentUrl().equals(pageUrl)) {
+    if (!parent.objectIds.contains(objectId)) {
       throw new StaleElementReferenceException(
           "Element appears to be stale.  Did you navigate away from the page that contained it?  "
               + "And is the current window focussed the same as the one holding this element?");
     }
 
     // Check if current document contains this element
-    if (!parent.objectIds.contains(objectId)
-        || Boolean.valueOf(callMethod("locator.parentNode == undefined"))) {
+    if (Boolean.valueOf(callMethod("locator.parentNode == undefined"))) {
       throw new StaleElementReferenceException(
           "The element seems to be disconnected from the DOM.  This means that the user cannot "
               + "interact with it.");
