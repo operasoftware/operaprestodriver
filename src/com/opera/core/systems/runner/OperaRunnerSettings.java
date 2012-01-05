@@ -64,16 +64,16 @@ public class OperaRunnerSettings
       if (binary.exists() && binary.isFile() && binary.canExecute()) {
         operaBinary = binary;
       } else {
-        throw new OperaRunnerException("No such file or not executable: " + binary);
+        throw new OperaRunnerException("No such file or not executable: '" + binary + "'");
       }
     } else {
-      throw new OperaRunnerException("Invalid file path: " + path);
+      throw new OperaRunnerException("Invalid file path: '" + path + "'");
     }
   }
 
   public void setBinary(File binary) {
     if (binary == null) {
-      throw new OperaRunnerException("Invalid file: " + binary);
+      throw new OperaRunnerException("Invalid file: '" + binary + "'");
     }
     operaBinary = binary;
   }

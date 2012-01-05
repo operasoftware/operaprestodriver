@@ -265,17 +265,44 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
       h.setLevel(logLevel);
     }
 
-    if ((Boolean) capabilities.getCapability(AUTOSTART)) {
-      if (((Boolean) capabilities.getCapability(GUESS_BINARY_PATH)) &&
-          capabilities.getCapability(BINARY) == null) {
-        capabilities.setCapability(BINARY, OperaPaths.operaPath());
-      } else if (capabilities.getCapability(BINARY) == null) {
+    String cap_binary = (String)capabilities.getCapability(BINARY);
+
+    if (cap_binary == null)
+    {
+      if (((Boolean) capabilities.getCapability(GUESS_BINARY_PATH)))
+      {
+        logger.fine("Guessing binary path");
+        cap_binary = OperaPaths.operaPath();
+      }
+      else
+      {
+        logger.fine("Setting binary path from OPERA_PATH");
         // Don't guess, only check environment variable
-        String path = System.getenv("OPERA_PATH");
-        if (path != null && !path.isEmpty()) {
-          capabilities.setCapability(BINARY, path);
+        cap_binary = System.getenv("OPERA_PATH");
+
+        if (cap_binary != null)
+        {
+          if (cap_binary.matches("^\".*\"$"))
+          {
+            logger.fine("Stripping surrounding quotation marks from OPERA_PATH");
+            cap_binary = cap_binary.substring(1, cap_binary.length() - 1);
+          }
         }
       }
+
+      if (cap_binary != null && !cap_binary.isEmpty())
+      {
+        logger.finest("Setting binary capability to '" + cap_binary + "'");
+        capabilities.setCapability(BINARY, cap_binary);
+      }
+      else
+      {
+        logger.finest("Could not pick a nonempty value for the binary capability");
+      }
+    }
+
+    if ((Boolean) capabilities.getCapability(AUTOSTART) && capabilities.getCapability(BINARY) != null) {
+      logger.info("Autostarting with binary set to '" + capabilities.getCapability(BINARY) + "'");
 
       OperaArguments arguments = new OperaCoreArguments();
       OperaArguments parsed = OperaArguments.parse((String) capabilities.getCapability(ARGUMENTS));
@@ -296,6 +323,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
       }
     } else {
       // If we're not autostarting then we don't want to randomise the port.
+      logger.info("Waiting for connection, no autostart");
       capabilities.setCapability(PORT, (int) OperaIntervals.SERVER_PORT.getValue());
     }
 
