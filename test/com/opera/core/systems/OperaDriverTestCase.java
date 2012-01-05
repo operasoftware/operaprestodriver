@@ -26,6 +26,7 @@ import org.openqa.selenium.Platform;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.io.File;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import static org.junit.Assert.assertNotNull;
@@ -58,10 +59,7 @@ public abstract class OperaDriverTestCase {
       return;
     }
 
-    DesiredCapabilities caps = new DesiredCapabilities();
-    caps.setCapability(OperaDriver.LOGGING_LEVEL, "FINE");
-
-    driver = new TestOperaDriver(caps);
+    driver = new TestOperaDriver(getDefaultCapabilities());
     assertNotNull(driver);
 
     initProduct();
@@ -73,6 +71,27 @@ public abstract class OperaDriverTestCase {
     if (driver != null && driver.isRunning()) {
       driver.quit();
     }
+  }
+
+  /**
+   * Return the default capabilities we use when running tests.  This typically ups the logging
+   * level a bit.
+   *
+   * @return the default capabilities for the OperaDriver tests
+   */
+  public static DesiredCapabilities getDefaultCapabilities() {
+    DesiredCapabilities capabilities = DesiredCapabilities.opera();
+    capabilities.setCapability(OperaDriver.LOGGING_LEVEL, Level.FINE);
+    return capabilities;
+  }
+
+  /**
+   * Runs all the initialization methods, including {@link OperaDriverTestCase#initProduct()} and
+   * {@link OperaDriverTestCase#initFixtures()}.
+   */
+  protected static void init() {
+    initProduct();
+    initFixtures();
   }
 
   /**

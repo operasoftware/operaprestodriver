@@ -61,13 +61,11 @@ public class IdleTest extends OperaDriverTestCase {
 
   @BeforeClass
   public static void setUpBeforeClass() {
-    DesiredCapabilities capabilities = new DesiredCapabilities();
+    DesiredCapabilities capabilities = OperaDriverTestCase.getDefaultCapabilities();
     capabilities.setCapability(OperaDriver.OPERAIDLE, true);
 
     driver = new TestOperaDriver(capabilities);
-
-    initProduct();
-    initFixtures();
+    init();
   }
 
   @Before
