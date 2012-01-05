@@ -53,7 +53,7 @@ public class OperaArgumentsTest {
   }
 
   @Test
-  public void testAddArgumentWithOperaArgument() {
+  public void testAddArgumentWithObject() {
     OperaArgument argument = new OperaArgument("hooba", "flooba");
     arguments.add(argument);
     assertEquals("hooba", arguments.get(2).getArgument());
