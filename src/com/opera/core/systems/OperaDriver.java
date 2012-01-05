@@ -978,11 +978,11 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
   }
 
-  public Options manage() {
+  public OperaOptions manage() {
     return new OperaOptions();
   }
 
-  private class OperaOptions implements Options {
+  public class OperaOptions implements Options {
 
     public void addCookie(Cookie cookie) {
 
@@ -1060,7 +1060,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
        */
     }
 
-    public Timeouts timeouts() {
+    public OperaTimeouts timeouts() {
       return new OperaTimeouts();
     }
 
