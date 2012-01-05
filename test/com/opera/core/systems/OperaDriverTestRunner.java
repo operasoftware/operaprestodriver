@@ -90,7 +90,7 @@ public class OperaDriverTestRunner extends BlockJUnit4ClassRunner {
 
     for (OperaProduct product : ignoreAnnotation.products()) {
       if (product.is(OperaProduct.ALL)) {
-        return false;
+        break;
       } else if (product.is(OperaDriverTestCase.currentProduct)) {
         return true;
       }
@@ -98,7 +98,7 @@ public class OperaDriverTestRunner extends BlockJUnit4ClassRunner {
 
     for (Platform platform : ignoreAnnotation.platforms()) {
       if (platform.is(Platform.ANY)) {
-        return false;
+        break;
       //} else if (OperaDriverTestCase.currentPlatform.is(platform)) {
       } else if (platform.is(OperaDriverTestCase.currentPlatform)) {
         return true;
