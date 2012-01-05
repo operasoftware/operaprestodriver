@@ -45,7 +45,7 @@ public class NavigationTest extends OperaDriverTestCase {
 
   @Test
   public void testForward() {
-    driver.navigate().back();
+    testBack();
     driver.navigate().forward();
     assertTrue(driver.getCurrentUrl().endsWith("keys.html"));
   }
@@ -59,8 +59,7 @@ public class NavigationTest extends OperaDriverTestCase {
 
   @Test
   public void testForward2() {
-    driver.navigate().back();
-    driver.navigate().back();
+    testBack2();
     driver.navigate().forward();
     driver.navigate().forward();
     assertTrue(driver.getCurrentUrl().endsWith("keys.html"));
