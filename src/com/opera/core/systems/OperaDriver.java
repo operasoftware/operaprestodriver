@@ -86,7 +86,7 @@ import com.opera.core.systems.util.CapabilitiesSanitizer;
 /**
  * OperaDriver is an implementation of the WebDriver interface that allows you to drive the Opera
  * web browser. The driver uses the Scope protocol to communicate with Opera directly from Java.
- * 
+ *
  * The implementation is vendor-supported and developed by Opera Software and volunteers.
  */
 public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
@@ -220,7 +220,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
   /**
    * Starts Opera with the given profile.
-   * 
+   *
    * @param profile the profile to start Opera with
    */
   public OperaDriver(OperaProfile profile) {
@@ -229,9 +229,9 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
   /**
    * Starts Opera with the given set of desired capabilities.
-   * 
+   *
    * @param c a {@link DesiredCapabilities} object containing various settings for the driver and
-   *        the browser
+   *          the browser
    */
   public OperaDriver(Capabilities c) {
     capabilities = (DesiredCapabilities) getDefaultCapabilities();
@@ -256,9 +256,8 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     // Write log to file?
     if (capabilities.getCapability(LOGGING_FILE) != null) {
       try {
-        logFile =
-            new FileHandler((String) capabilities.getCapability(LOGGING_FILE),
-                OperaFlags.APPEND_TO_LOGFILE);
+        logFile = new FileHandler((String) capabilities.getCapability(LOGGING_FILE),
+                                  OperaFlags.APPEND_TO_LOGFILE);
         logFile.setFormatter(new SimpleFormatter());
       } catch (IOException e) {
         throw new WebDriverException("Unable to write to file: " + e);
@@ -320,7 +319,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
   /**
    * Gets the default capabilities of OperaDriver.
-   * 
+   *
    * @return a DesiredCapabilities object with default settings
    */
   protected static Capabilities getDefaultCapabilities() {
@@ -369,7 +368,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
   /**
    * Initialise all the Scope services that we need.
-   * 
+   *
    * For testing override this method.
    */
   protected void init() {
@@ -539,10 +538,10 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
   /**
    * Find a single element using the selenium atoms.
-   * 
-   * @param by how to find the element, strings defined in RemoteWebDriver
+   *
+   * @param by    how to find the element, strings defined in RemoteWebDriver
    * @param using the value to use to find the element
-   * @param el the element to search within
+   * @param el    the element to search within
    * @return an element
    */
   protected WebElement findElement(String by, String using, OperaWebElement el) {
@@ -565,7 +564,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
       // Search within an element
       script =
           "return " + OperaAtoms.FIND_ELEMENT.getValue() + "({\"" + by + "\": \"" + using
-              + "\"}, locator)";
+          + "\"}, locator)";
     }
 
     do {
@@ -585,7 +584,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     if (isAvailable) {
       String error =
           debugger.callFunctionOnObject("return (locator instanceof Error) ? locator.message : ''",
-              id);
+                                        id);
       if (!error.isEmpty()) {
         throw new InvalidSelectorException(error);
       }
@@ -634,7 +633,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
       // Search within an element
       script =
           "return " + OperaAtoms.FIND_ELEMENTS.getValue() + "({\"" + by + "\": \"" + using
-              + "\"}, locator)";
+          + "\"}, locator)";
     }
 
     do {
@@ -646,7 +645,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
       String error =
           debugger.callFunctionOnObject("return (locator instanceof Error) ? locator.message : ''",
-              id);
+                                        id);
       if (!error.isEmpty()) {
         throw new InvalidSelectorException(error);
       }
@@ -676,12 +675,13 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
    * Get the source of the last loaded page. The source will be of the modified DOM, <em>not</em>
    * the original HTML. The page source returned is a representation of the underlying DOM: do not
    * expect it to be formatted or escaped in the same way as the response sent from the web server.
-   * 
+   *
    * @return source code of document
    */
   public String getPageSource() {
     return debugger
-        .executeJavascript("return document.documentElement.outerHTML || (typeof window.XMLSerializer != 'undefined') ? (new window.XMLSerializer()).serializeToString(document) : ''");
+        .executeJavascript(
+            "return document.documentElement.outerHTML || (typeof window.XMLSerializer != 'undefined') ? (new window.XMLSerializer()).serializeToString(document) : ''");
   }
 
   public String getTitle() {
@@ -789,7 +789,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
       for (Integer windowId : windowIds) {
         String name =
             debugger.executeJavascript("return top.window.name || top.document.title || null",
-                windowId);
+                                       windowId);
 
         if (name != null && name.equals(windowName)) {
           id = windowId;
@@ -817,7 +817,8 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
       String script = "return " + OperaAtoms.GET_FRAME_INDEX.getValue() + "(locator)";
       Long frameIndex =
           (Long) debugger.callFunctionOnObject(script,
-              ((OperaWebElement) frameElement).getObjectId(), true);
+                                               ((OperaWebElement) frameElement).getObjectId(),
+                                               true);
 
       if (frameIndex == null) {
         throw new NoSuchFrameException("Non-frame element or frame not in current DOM");
@@ -846,7 +847,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
   /**
    * Escape characters for safe insertion in a Javascript string contained by double quotes (").
-   * 
+   *
    * @param string the string to escape
    * @return an escaped string
    */
@@ -856,9 +857,9 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
   /**
    * Escape characters for safe insertion in a JavaScript string.
-   * 
+   *
    * @param string the string to escape
-   * @param quote the type of quote to escape. Either " or '
+   * @param quote  the type of quote to escape. Either " or '
    * @return the escaped string
    */
   private String escapeJsString(String string, String quote) {
@@ -991,7 +992,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
       if (cookie.getExpiry() == null) {
         cookie =
             new Cookie(cookie.getName(), cookie.getValue(), cookie.getDomain(), cookie.getPath(),
-                new Date(new Date().getTime() + (10 * 365 * 24 * 60 * 60 * 1000)), false);
+                       new Date(new Date().getTime() + (10 * 365 * 24 * 60 * 60 * 1000)), false);
       }
 
       debugger.executeJavascript("document.cookie='" + cookie.toString() + "'", false);
@@ -1100,10 +1101,10 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
   /**
    * Performs a special action, such as setting an Opera preference.
-   * 
+   *
    * For a list of actions call {@link #getOperaActionList()}.
-   * 
-   * @param using the action to perform.
+   *
+   * @param using  the action to perform.
    * @param params parameters to pass to the action call
    */
   public void operaAction(String using, String... params) {
@@ -1188,10 +1189,10 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
   /**
    * Takes a screenshot of the whole screen, including areas outside of the Opera browser window.
-   * 
+   *
    * @param timeout the number of milliseconds to wait before taking the screenshot
-   * @param hashes A previous screenshot MD5 hash. If it matches the hash of this screenshot then no
-   *        image data is returned.
+   * @param hashes  A previous screenshot MD5 hash. If it matches the hash of this screenshot then
+   *                no image data is returned.
    * @return a ScreenShotReply object
    */
   public ScreenShotReply saveScreenshot(long timeout, String... hashes) {
@@ -1245,7 +1246,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
   /**
    * Is JavaScript enables in this driver?
-   * 
+   *
    * @return true if JavaScript is enabled
    */
   public boolean isJavascriptEnabled() {
@@ -1275,10 +1276,10 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
   /**
    * Presses and releases the given key. If the key is "enter" then OperaDriver waits for the page
    * to finish loading.
-   * 
+   *
    * @param key A string containing the key to press. This can be a single character (e.g. "a") or a
-   *        special key (e.g. "left"), and is matched case insensitively. For a list of keys see
-   *        {@link OperaKeys}.
+   *            special key (e.g. "left"), and is matched case insensitively. For a list of keys see
+   *            {@link OperaKeys}.
    */
   public void key(String key) {
     if (key.equalsIgnoreCase("enter")) {
@@ -1299,7 +1300,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
   /**
    * Presses and holds the given key. You cannot press a key that is already down.
-   * 
+   *
    * @param key the key to press, see {@link #key(String)} for more information.
    */
   public void keyDown(String key) {
@@ -1308,7 +1309,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
   /**
    * Releases the given key.
-   * 
+   *
    * @param key the key to release, see {@link #key(String)} for more information.
    */
   public void keyUp(String key) {
@@ -1323,9 +1324,9 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
   }
 
   /**
-   * Types the given string as-is in to the browser window. To press special keys use
-   * {@link #key(String)}.
-   * 
+   * Types the given string as-is in to the browser window. To press special keys use {@link
+   * #key(String)}.
+   *
    * @param using the string to type
    */
   public void type(String using) {
@@ -1334,7 +1335,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
   /**
    * Returns the version number of driver.
-   * 
+   *
    * @return version number
    */
   public String getVersion() {
@@ -1388,6 +1389,35 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
   
   public Logs getLogs(){
     return new RemoteLogs(this.getExecuteMethod());
+  }
+
+  /**
+   * Sets the given preference information.  If a previous preference with the same section and key
+   * names exist, it will be replaced by the given preference.
+   *
+   * @param section the section name, can be case-insensitive
+   * @param key     the key name, can be case-insensitive
+   * @param value   the new value (will be treated as a {@link String} in Opera
+   * @deprecated Please use {@link OperaDriver#preferences()} instead
+   */
+  @Deprecated
+  @SuppressWarnings("unused")
+  public void setPref(String section, String key, String value) {
+    preferences().set(section, key, value);
+  }
+
+  /**
+   * Returns the preference with the given section and key values.
+   *
+   * @param section the section name, can be case-insensitive
+   * @param key     the key name, can be case-insensitive
+   * @return the preference requested
+   * @deprecated Please use {@link OperaDriver#preferences()} instead
+   */
+  @Deprecated
+  @SuppressWarnings("unused")
+  public String getPref(String section, String key) {
+    return preferences().get(section, key).toString();
   }
 
   public Utils utils() {
