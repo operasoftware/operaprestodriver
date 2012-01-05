@@ -18,6 +18,7 @@ package com.opera.core.systems;
 
 import com.opera.core.systems.scope.internal.OperaIntervals;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedCondition;
@@ -29,18 +30,22 @@ import static org.junit.Assert.assertTrue;
 
 public class NavigationTest extends OperaDriverTestCase {
 
-  @Test
-  public void testBack() {
+  @Before
+  public void beforeEach() {
     getFixture("javascript.html");
     getFixture("test.html");
     getFixture("keys.html");
+  }
 
+  @Test
+  public void testBack() {
     driver.navigate().back();
     assertTrue(driver.getCurrentUrl().endsWith("test.html"));
   }
 
   @Test
   public void testForward() {
+    driver.navigate().back();
     driver.navigate().forward();
     assertTrue(driver.getCurrentUrl().endsWith("keys.html"));
   }
@@ -54,6 +59,8 @@ public class NavigationTest extends OperaDriverTestCase {
 
   @Test
   public void testForward2() {
+    driver.navigate().back();
+    driver.navigate().back();
     driver.navigate().forward();
     driver.navigate().forward();
     assertTrue(driver.getCurrentUrl().endsWith("keys.html"));
