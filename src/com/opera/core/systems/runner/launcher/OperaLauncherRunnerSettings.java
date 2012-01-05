@@ -152,6 +152,7 @@ public class OperaLauncherRunnerSettings extends OperaRunnerSettings {
 
       try {
         if (!targetLauncher.exists()) {
+          logger.warning("No launcher available at '" + targetLauncher.getAbsolutePath() + "', copying the bundled launcher");
           launcherPath.mkdirs();
           Files.touch(targetLauncher);
         }
@@ -160,6 +161,13 @@ public class OperaLauncherRunnerSettings extends OperaRunnerSettings {
         os = new FileOutputStream(targetLauncher);
 
         ByteStreams.copy(is, os);
+
+	    /*
+	    It is not possible to set the modification time on an open file, this causes problems on Win7 if the launcher
+	    is upgraded. We need to close the target file, we close both just in case.
+	    */
+	    is.close();
+	    os.close();
 
         if (!targetLauncher.setLastModified(targetLauncher.lastModified())) {
           throw new OperaRunnerException(
