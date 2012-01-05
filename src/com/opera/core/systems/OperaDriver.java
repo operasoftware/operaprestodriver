@@ -240,8 +240,15 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     }
 
     // Set the logging level for main logger instance
-    Level logLevel =
-        Level.parse(((String) capabilities.getCapability(LOGGING_LEVEL)).toUpperCase());
+    Level logLevel;
+    Object typelessLevel = capabilities.getCapability(LOGGING_LEVEL);
+    if (typelessLevel instanceof String) {
+      logLevel = Level.parse(((String) typelessLevel).toUpperCase());
+    } else if (typelessLevel instanceof Level) {
+      logLevel = (Level) typelessLevel;
+    } else {
+      throw new WebDriverException("Unknown logging level: " + typelessLevel.toString());
+    }
     Logger root = Logger.getLogger("");
     root.setLevel(logLevel);
 
