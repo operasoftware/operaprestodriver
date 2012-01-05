@@ -246,12 +246,13 @@ public class OperaLauncherRunner extends OperaRunner
 
     try {
       // Send a shutdown command to the launcher
-      try {
-        launcherProtocol.sendRequestWithoutResponse(MessageType.MSG_SHUTDOWN, null);
-      } catch (Exception e) {
-        e.printStackTrace();
-      }
+      launcherProtocol.sendRequestWithoutResponse(MessageType.MSG_SHUTDOWN, null);
+    } catch (IOException e) {
+      // If launcher has already been shutdown, this shouldn't create an exception, all we want to
+      // do is to make sure the protocol is down
+    }
 
+    try {
       // Then shutdown the protocol connection
       launcherProtocol.shutdown();
     } catch (IOException e) {
