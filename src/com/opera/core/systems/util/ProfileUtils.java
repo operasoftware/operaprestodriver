@@ -15,14 +15,10 @@ limitations under the License.
 */
 package com.opera.core.systems.util;
 
-import com.google.common.io.Files;
-
 import java.io.File;
-import java.io.IOException;
-
+import java.util.logging.Logger;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.io.FileHandler;
-
 import com.opera.core.systems.OperaDriver;
 import com.opera.core.systems.settings.OperaDriverSettings;
 
@@ -35,6 +31,8 @@ public class ProfileUtils {
 	private String smallPrefsFolder;
 	private String cachePrefsFolder;
 	private Capabilities capabilities;
+
+	protected final Logger logger = Logger.getLogger(this.getClass().getName());
 
 	@Deprecated
 	public ProfileUtils(String largePrefsFolder, String smallPrefsFolder, String cachePrefsFolder, OperaDriverSettings settings) {
@@ -132,6 +130,7 @@ public class ProfileUtils {
 				isMainProfile(largePrefsFolder) ||
 				isMainProfile(cachePrefsFolder))
 		{
+			logger.finest("ProfileUtils::deleteProfile: Skipping profile deletion since one of the profile folders is the main profile");
 			return false;
 		}
 
@@ -142,8 +141,11 @@ public class ProfileUtils {
 		if (deleted && !smallPrefsFolder.equals(cachePrefsFolder) && !largePrefsFolder.equals(cachePrefsFolder)) {
 			deleted = deleteFolder(cachePrefsFolder);
 		}
+
+		if (!deleted)
+			logger.warning("ProfileUtils::deleteProfile: Could not delete profile");
+
 		return deleted;
-		// TODO: logger.warning("Could not delete profile");
 	}
 
 	/**
@@ -156,14 +158,7 @@ public class ProfileUtils {
 			return false;
 		}
 
-		try {
-      Files.copy(new File(newPrefs), new File(smallPrefsFolder));
-		} catch (IOException e) {
-			// Ignore
-			// e.printStackTrace();
-			return false;
-		}
-		return true;
+		return WatirUtils.CopyDirAndFiles(newPrefs, smallPrefsFolder);
 	}
 
 	/**
