@@ -16,6 +16,9 @@ limitations under the License.
 
 package com.opera.core.systems;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * A list of all Opera products.  Use the {@link #is(OperaProduct)} to compare and check products.
  */
@@ -37,7 +40,14 @@ public enum OperaProduct {
     }
   };
 
-  private String product;
+  private final String product;
+  private static final Map<String, OperaProduct> lookup = new HashMap<String, OperaProduct>();
+
+  static {
+    for (OperaProduct p : OperaProduct.values()) {
+      lookup.put(p.toString(), p);
+    }
+  }
 
   OperaProduct(String product) {
     this.product = product;
@@ -45,6 +55,10 @@ public enum OperaProduct {
 
   public String toString() {
     return product;
+  }
+
+  public static OperaProduct get(String product) {
+    return lookup.get(product);
   }
 
   /**

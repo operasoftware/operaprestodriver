@@ -16,9 +16,7 @@ limitations under the License.
 
 package com.opera.core.systems;
 
-import org.junit.AfterClass;
 import org.junit.Assert;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriverException;
@@ -34,23 +32,9 @@ import static org.junit.Assert.assertTrue;
 
 public class OperaDriverTest extends OperaDriverTestCase {
 
-  // Replace the TestBase setup and teardown so that we don't launch Opera
-  @BeforeClass
-  public static void setUpBeforeClass() throws Exception {
-    initFixtures();
-  }
-
-  @AfterClass
-  public static void tearDownAfterClass() throws Exception {
-  }
-
   @Test
   public void testWithoutSettingsObject() {
-    driver = new TestOperaDriver();
-
     Assert.assertNotNull(driver);
-
-    driver.quit();
   }
 
   @Test
@@ -58,14 +42,13 @@ public class OperaDriverTest extends OperaDriverTestCase {
     DesiredCapabilities caps = new DesiredCapabilities();
     caps.setCapability(OperaDriver.ARGUMENTS, (String) null);
 
-    OperaDriver driver = new TestOperaDriver(caps);
+    TestOperaDriver a = new TestOperaDriver(caps);
     Assert.assertNotNull(driver);
-    driver.quit();
+    a.quit();
   }
 
   @Test
   public void testDefaultWindowCount() {
-    driver = new TestOperaDriver();
     assertTrue(driver.getWindowCount() >= 1);
   }
 
@@ -125,7 +108,6 @@ public class OperaDriverTest extends OperaDriverTestCase {
   public void testOperaDriverShutdown() {
     // leave with a fast loading page
     driver.get("about:blank");
-    driver.quit();
   }
 
   @Test
@@ -134,7 +116,7 @@ public class OperaDriverTest extends OperaDriverTestCase {
     DesiredCapabilities c = new DesiredCapabilities();
     c.setCapability(OperaDriver.PORT, -1);
 
-    OperaDriver a = new OperaDriver(c);
+    TestOperaDriver a = new TestOperaDriver(c);
     assertEquals("7001", a.preferences().get("Developer Tools", "Proxy Port").toString());
     a.quit();
   }
@@ -144,9 +126,9 @@ public class OperaDriverTest extends OperaDriverTestCase {
     DesiredCapabilities c = new DesiredCapabilities();
     c.setCapability(OperaDriver.PORT, 0);
 
-    OperaDriver a;
+    TestOperaDriver a;
     try {
-      a = new OperaDriver(c);
+      a = new TestOperaDriver(c);
     } catch (Exception e) {
       // If immediately exited, then it doesn't support the flags
       if (e.getMessage().contains("Opera exited immediately")) {
@@ -166,9 +148,9 @@ public class OperaDriverTest extends OperaDriverTestCase {
     DesiredCapabilities c = new DesiredCapabilities();
     c.setCapability(OperaDriver.PORT, 9876);
 
-    OperaDriver a;
+    TestOperaDriver a;
     try {
-      a = new OperaDriver(c);
+      a = new TestOperaDriver(c);
     } catch (Exception e) {
       // If immediately exited, then it doesn't support the flags
       if (e.getMessage().contains("Opera exited immediately")) {
@@ -177,6 +159,7 @@ public class OperaDriverTest extends OperaDriverTestCase {
         throw e;
       }
     }
+
     assertEquals("9876", a.preferences().get("Developer Tools", "Proxy Port").toString());
     a.quit();
   }
@@ -186,21 +169,20 @@ public class OperaDriverTest extends OperaDriverTestCase {
     DesiredCapabilities c = new DesiredCapabilities();
     c.setCapability(OperaDriver.PROFILE, "");
 
-    OperaDriver a = new OperaDriver(c);
+    TestOperaDriver a = new TestOperaDriver(c);
     String profile = a.preferences().get("User Prefs", "Opera Directory").toString();
     String
         defaultProfile =
         a.preferences().get("User Prefs", "Opera Directory").getDefaultValue().toString();
     assertTrue("'" + profile + "' contains '" + defaultProfile + "'",
-               profile.contains(defaultProfile)
-    );
+               profile.contains(defaultProfile));
     a.quit();
   }
 
   @Test
   @Ignore(products = CORE, value = "core does not support -pd")
   public void testSetProfile() throws Exception {
-    if (Platform.getCurrent() != Platform.LINUX) {
+    if (!Platform.getCurrent().is(Platform.LINUX)) {
       return;
     }
 
@@ -209,9 +191,9 @@ public class OperaDriverTest extends OperaDriverTestCase {
     DesiredCapabilities c = new DesiredCapabilities();
     c.setCapability(OperaDriver.PROFILE, "/tmp/opera-test-profile/");
 
-    OperaDriver a;
+    TestOperaDriver a;
     try {
-      a = new OperaDriver(c);
+      a = new TestOperaDriver(c);
     } catch (Exception e) {
       // If immediately exited, then it doesn't support the flags
       if (e.getMessage().contains("Opera exited immediately")) {
@@ -220,6 +202,7 @@ public class OperaDriverTest extends OperaDriverTestCase {
         throw e;
       }
     }
+
     String profile = a.preferences().get("User Prefs", "Opera Directory").toString();
     assertEquals("/tmp/opera-test-profile/", profile);
     a.quit();
@@ -231,9 +214,9 @@ public class OperaDriverTest extends OperaDriverTestCase {
     DesiredCapabilities c = new DesiredCapabilities();
     c.setCapability(OperaDriver.PROFILE, (String) null);
 
-    OperaDriver a;
+    TestOperaDriver a;
     try {
-      a = new OperaDriver(c);
+      a = new TestOperaDriver(c);
     } catch (Exception e) {
       // If immediately exited, then it doesn't support the flags
       if (e.getMessage().contains("Opera exited immediately")) {
@@ -254,9 +237,9 @@ public class OperaDriverTest extends OperaDriverTestCase {
     DesiredCapabilities c = new DesiredCapabilities();
     c.setCapability(OperaDriver.PROFILE, (String) null);
 
-    OperaDriver a;
+    TestOperaDriver a;
     try {
-      a = new OperaDriver(c);
+      a = new TestOperaDriver(c);
     } catch (Exception e) {
       // If immediately exited, then it doesn't support the flags
       if (e.getMessage().contains("Opera exited immediately")) {
@@ -268,10 +251,7 @@ public class OperaDriverTest extends OperaDriverTestCase {
     String profile = a.preferences().get("User Prefs", "Opera Directory").toString();
     assertTrue("Temporary directory exists", (new File(profile)).exists());
     a.quit();
-    assertFalse("Temporary directory does not exist after quit",
-                (new File(profile)).exists()
-    );
-    a.quit();
+    assertFalse("Temporary directory does not exist after quit", (new File(profile)).exists());
   }
 
   @Test

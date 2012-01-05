@@ -111,10 +111,7 @@ public class OperaProfile {
     preferenceFile = getPreferenceFile(directory);
 
     // Log whether directory exists or not for convenience
-    if (directory.exists()) {
-      logger.fine("Profile directory exists: " + directory.getAbsolutePath());
-    } else {
-      logger.fine("Profile does not exist, will be created: " + directory.getAbsolutePath());
+    if (!directory.exists()) {
       if (!directory.mkdirs()) {
         throw new WebDriverException("Unable to create directory path: " + directory.getPath());
       }
