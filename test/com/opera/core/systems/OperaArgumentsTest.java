@@ -20,6 +20,7 @@ import com.opera.core.systems.arguments.OperaArgument;
 import com.opera.core.systems.arguments.OperaCoreArguments;
 import com.opera.core.systems.arguments.OperaDesktopArguments;
 
+import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -30,11 +31,15 @@ import static org.junit.Assert.assertTrue;
 
 public class OperaArgumentsTest {
 
-  private static OperaArguments arguments;
+  private OperaArguments arguments;
+
+  @Before
+  public void beforeEach() {
+    arguments = new OperaArguments();
+  }
 
   @Test
   public void testConstructingOperaArguments() {
-    arguments = new OperaArguments();
     assertNotNull(arguments);
   }
 
@@ -48,30 +53,37 @@ public class OperaArgumentsTest {
   @Test
   public void testAddArgumentWithKeyAndValue() {
     arguments.add("foo", "bar");
-    assertEquals("foo", arguments.get(1).getArgument());
-    assertEquals("bar", arguments.get(1).getValue());
+    assertEquals("foo", arguments.get(0).getArgument());
+    assertEquals("bar", arguments.get(0).getValue());
   }
 
   @Test
   public void testAddArgumentWithObject() {
     OperaArgument argument = new OperaArgument("hooba", "flooba");
     arguments.add(argument);
-    assertEquals("hooba", arguments.get(2).getArgument());
-    assertEquals("flooba", arguments.get(2).getValue());
+    assertEquals(argument.getArgument(), arguments.get(0).getArgument());
+    assertEquals(argument.getValue(), arguments.get(0).getValue());
   }
-  
+
   @Test
   public void testSize() {
+    arguments.add("foo");
+    arguments.add("foo", "bar");
+    arguments.add(new OperaArgument("hooba", "flooba"));
     assertEquals(3, arguments.size());
   }
 
   @Test
-  public void testGettingArgumentsAsObjectList() {
+  public void testIterator() {
+    arguments.add("foo");
     assertTrue(arguments.iterator().hasNext());
   }
 
   @Test
   public void testGettingArgumentsAsStringList() {
+    arguments.add("foo");
+    arguments.add("foo", "bar");
+    arguments.add(new OperaArgument("hooba", "flooba"));
     assertEquals(5, arguments.getArgumentsAsStringList().size());
     assertEquals("-hooba", arguments.getArgumentsAsStringList().get(3));
   }
@@ -124,15 +136,15 @@ public class OperaArgumentsTest {
 
   @Test
   public void testMerge() {
+    arguments.add("foo");
     OperaArguments extraArguments = new OperaArguments();
     extraArguments.add("abc", "def");
     extraArguments.add("ghi");
     arguments.merge(extraArguments);
     assertEquals("foo", arguments.get(0).getArgument());
-    assertEquals("abc", arguments.get(3).getArgument());
-    assertEquals("def", arguments.get(3).getValue());
-    assertEquals("ghi", arguments.get(4).getArgument());
-    assertNull(arguments.get(4).getValue());
+    assertEquals("abc", arguments.get(1).getArgument());
+    assertEquals("def", arguments.get(1).getValue());
+    assertEquals("ghi", arguments.get(2).getArgument());
   }
 
   // Extensions follow.
