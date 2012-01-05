@@ -32,7 +32,6 @@ import java.util.logging.Level;
 
 import static org.openqa.selenium.Platform.WINDOWS;
 import static com.opera.core.systems.OperaProduct.DESKTOP;
-import static com.opera.core.systems.OperaProduct.CORE;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -107,6 +106,7 @@ public class IdleTest extends OperaDriverTestCase {
   }
 
   @Test
+  @Ignore(platforms = WINDOWS)
   public void testBack() {
     getFixture("javascript.html");
 
