@@ -78,10 +78,10 @@ public class OperaLauncherBinary extends Thread {
       running.set(true);
       outputWatcherThread.start();
     } catch (IOException e) {
-      if (Platform.getCurrent() == Platform.WINDOWS) {
+      if (Platform.getCurrent().is(Platform.WINDOWS)) {
         throw new OperaRunnerException(
-            "Could not start the launcher process, make sure you have the Microsoft Visual C++ 2008 Redistributable Package installed on your system: "
-            + e.getMessage());
+            "Could not start the launcher process, make sure you have the Microsoft Visual C++ " +
+            "2008 Redistributable Package installed on your system: " + e.getMessage());
       } else {
         throw new OperaRunnerException("Could not start the launcher process: " + e.getMessage());
       }
@@ -134,7 +134,8 @@ public class OperaLauncherBinary extends Thread {
 
             if (matcher.find()) {
               level = OperaLauncherRunner.toLauncherLoggingLevel(Level.parse(matcher.group(1)));
-              buffer = "launcher: " + buffer.replaceFirst(LAUNCHER_LOGGING_OUTPUT_EXPRESSION, "").trim();
+              buffer =
+                  "launcher: " + buffer.replaceFirst(LAUNCHER_LOGGING_OUTPUT_EXPRESSION, "").trim();
             } else {
               buffer = "opera: " + buffer;
             }
