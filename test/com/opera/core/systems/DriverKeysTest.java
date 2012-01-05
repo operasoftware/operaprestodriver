@@ -73,7 +73,8 @@ public class DriverKeysTest extends OperaDriverTestCase {
     driver.key("ー");
     driver.key(" ");
     driver.key("水");
-    assertEquals("ルビー 水", fieldOne.getAttribute("value"));
+    assertEquals("ルビー 水", fieldOne.getAttribute("value"),
+                 "Are you sure you have the right charset setup if you're on Windows?");
   }
 
   @Test
