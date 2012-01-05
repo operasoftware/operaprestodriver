@@ -131,7 +131,7 @@ public class OperaWebElement extends RemoteWebElement {
 
     if (getTagName().equals("OPTION")) {
       assertElementEnabled("Cannot select disabled element");
-      callMethod("return " + OperaAtoms.CLICK.getValue() + "(locator)");
+      callMethod("return " + OperaAtoms.CLICK + "(locator)");
     } else {
       parent.actionHandler.click(this, "");
     }
@@ -185,7 +185,7 @@ public class OperaWebElement extends RemoteWebElement {
       return callMethod("if(/^input|select|option|textarea$/i.test(locator.nodeName)){"
                         + "return locator.value;" + "}" + "return locator.textContent;");
     } else {
-      return callMethod("return " + OperaAtoms.GET_ATTRIBUTE.getValue() + "(locator, '" + attribute
+      return callMethod("return " + OperaAtoms.GET_ATTRIBUTE + "(locator, '" + attribute
                         + "')");
     }
   }
@@ -196,22 +196,22 @@ public class OperaWebElement extends RemoteWebElement {
 
   public String getText() {
     assertElementNotStale();
-    return callMethod("return " + OperaAtoms.GET_TEXT.getValue() + "(locator)");
+    return callMethod("return " + OperaAtoms.GET_TEXT + "(locator)");
   }
 
   public boolean isDisplayed() {
     assertElementNotStale();
-    return (Boolean) evaluateMethod("return " + OperaAtoms.IS_DISPLAYED.getValue() + "(locator)");
+    return (Boolean) evaluateMethod("return " + OperaAtoms.IS_DISPLAYED + "(locator)");
   }
 
   public boolean isEnabled() {
     assertElementNotStale();
-    return (Boolean) evaluateMethod("return " + OperaAtoms.IS_ENABLED.getValue() + "(locator)");
+    return (Boolean) evaluateMethod("return " + OperaAtoms.IS_ENABLED + "(locator)");
   }
 
   public boolean isSelected() {
     assertElementNotStale();
-    return (Boolean) evaluateMethod("return " + OperaAtoms.IS_SELECTED.getValue() + "(locator)");
+    return (Boolean) evaluateMethod("return " + OperaAtoms.IS_SELECTED + "(locator)");
   }
 
   public void clear() {
@@ -221,7 +221,7 @@ public class OperaWebElement extends RemoteWebElement {
 
     if (isEnabled()) {
       if (!Boolean.valueOf(getAttribute("readonly"))) {
-        executeMethod("return " + OperaAtoms.CLEAR.getValue() + "(locator)");
+        executeMethod("return " + OperaAtoms.CLEAR + "(locator)");
       }
     }
   }
@@ -362,7 +362,7 @@ public class OperaWebElement extends RemoteWebElement {
   public void submit() {
     parent.getScopeServices().captureOperaIdle();
 
-    evaluateMethod("return " + OperaAtoms.SUBMIT.getValue() + "(locator)");
+    evaluateMethod("return " + OperaAtoms.SUBMIT + "(locator)");
 
     try {
       parent.waitForLoadToComplete();
@@ -387,7 +387,7 @@ public class OperaWebElement extends RemoteWebElement {
     assertElementNotStale();
 
     String coordinates =
-        debugger.callFunctionOnObject("var coords = " + OperaAtoms.GET_LOCATION.getValue()
+        debugger.callFunctionOnObject("var coords = " + OperaAtoms.GET_LOCATION
                                       + "(locator); return coords.x + ',' + coords.y;", objectId);
 
     // TODO: The goog.dom.getDocumentScrollElement_() function the Google closure library doesn't
@@ -410,7 +410,7 @@ public class OperaWebElement extends RemoteWebElement {
     assertElementNotStale();
 
     String widthAndHeight =
-        debugger.callFunctionOnObject("var s=" + OperaAtoms.GET_SIZE.getValue()
+        debugger.callFunctionOnObject("var s=" + OperaAtoms.GET_SIZE
                                       + "(locator);return s.width+','+s.height;", objectId);
 
     String[] dimension = widthAndHeight.split(",");
@@ -677,8 +677,7 @@ public class OperaWebElement extends RemoteWebElement {
 
   public String getCssValue(String property) {
     String value =
-        callMethod("return " + OperaAtoms.GET_EFFECTIVE_STYLE.getValue() + "(locator, '" + property
-                   + "')");
+        callMethod("return " + OperaAtoms.GET_EFFECTIVE_STYLE + "(locator, '" + property + "')");
 
     // Opera returns a colour in RGB format. WebDriver specifies that the output from getCssValue()
     // must be in HEX format.
