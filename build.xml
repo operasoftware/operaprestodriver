@@ -18,8 +18,8 @@
 
   <!-- Variables  -->
 
-  <property name="jar.filename" value="operadriver-${version}.jar" />
-  <property name="jar.path" value="pkg/${jar.filename}" />
+  <property name="webdriver.jar.filename" value="operadriver-${version}.jar" />
+  <property name="webdriver.jar.path" value="pkg/${webdriver.jar.filename}" />
 
   <path id="classpath.path">
     <pathelement location="bin" />
@@ -27,7 +27,7 @@
   </path>
   <path id="test.classpath.path">
     <pathelement location="bin" />
-    <fileset file="${jar.path}"/>
+    <fileset file="${webdriver.jar.path}"/>
     <fileset dir="lib" includes="**/*.jar" />
   </path>
 
@@ -75,7 +75,7 @@
   <target name="jar" description="Make a JAR file including launchers" depends="compile">
     <mkdir dir="pkg" />
 
-    <jar destfile="${jar.path}">
+    <jar destfile="${webdriver.jar.path}">
       <fileset dir="bin" includes="**/*.class" />
       <fileset dir="bin" includes="**/*.properties" />
       <fileset file="VERSION" />
