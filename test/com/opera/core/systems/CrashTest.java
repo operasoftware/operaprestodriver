@@ -23,6 +23,7 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.openqa.selenium.os.CommandLine;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -30,28 +31,22 @@ import static org.junit.Assert.assertTrue;
 // TODO(stuartk): Make tests pass
 public class CrashTest extends OperaDriverTestCase {
 
-  @BeforeClass
-  public static void setUpBeforeClass() throws Exception {
-  }
-
-  @AfterClass
-  public static void tearDownAfterClass() throws Exception {
-  }
-
   @Before
   public void setUp() throws Exception {
-    setUpBeforeClass();
+    super.setUpBeforeClass();
   }
 
   @After
   public void tearDown() throws Exception {
-    tearDownAfterClass();
+    super.tearDownAfterClass();
+
     // Make sure Opera is gone
-    Runtime.getRuntime().exec("kill `pgrep opera").waitFor();
+    CommandLine line = new CommandLine("kill", "`pgrep opera`");
+    line.execute();
   }
 
-  @Ignore
   @Test
+  @Ignore
   public void testCore34284() {
     assertTrue(driver.getRunner().isOperaRunning());
 
@@ -64,8 +59,8 @@ public class CrashTest extends OperaDriverTestCase {
     assertFalse(driver.getRunner().isOperaRunning());
   }
 
-  @Ignore
   @Test
+  @Ignore
   public void testCore32224() {
     assertTrue(driver.getRunner().isOperaRunning());
 
