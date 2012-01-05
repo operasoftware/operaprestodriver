@@ -15,9 +15,7 @@
     <option name="TEST_SEARCH_SCOPE">
       <value defaultName="moduleWithDependencies" />
     </option>
-    <envs>
-      <env name="OPERA_PATH" value="$USER_HOME$/gogilauncher/builds/opera-next-12.00-1076.i386.linux/opera-next" />
-    </envs>
+    <envs />
     <patterns />
     <RunnerSettings RunnerId="Debug">
       <option name="DEBUG_PORT" value="47164" />

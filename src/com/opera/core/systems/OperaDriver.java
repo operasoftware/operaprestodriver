@@ -1193,7 +1193,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     return target.convertFromPngBytes(body.saveScreenshot(0).getPng());
   }
 
-  public boolean isOperaIdleAvailable() {
+  protected boolean isOperaIdleAvailable() {
     return services.isOperaIdleAvailable();
   }
 

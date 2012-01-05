@@ -176,4 +176,8 @@ class TestOperaDriver extends OperaDriver {
     return isRunning;
   }
 
+  public boolean isOperaIdleAvailable() {
+    return super.isOperaIdleAvailable();
+  }
+
 }
