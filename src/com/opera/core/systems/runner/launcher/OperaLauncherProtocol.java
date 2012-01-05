@@ -34,13 +34,13 @@ import java.util.TreeMap;
 import java.util.logging.Logger;
 
 /**
- * Implements the Opera launcher protocol.
+ * Implements the launcher protocol.
  *
  * @author Jan Vidar Krey <janv@opera.com>
  */
 public class OperaLauncherProtocol {
 
-  private static Logger logger = Logger.getLogger(OperaLauncherProtocol.class.getName());
+  private Logger logger = Logger.getLogger(getClass().getName());
   private Socket socket;
 
   public enum MessageType {
@@ -72,8 +72,7 @@ public class OperaLauncherProtocol {
     }
 
     public static MessageType get(byte code) {
-      MessageType type = lookup.get(code);
-      return type;
+      return lookup.get(code);
     }
 
   }
@@ -103,11 +102,16 @@ public class OperaLauncherProtocol {
     // Just to make sure we don't block forever if something goes wrong
     this.socket.setSoTimeout(180000);
     logger.finer("Setting launcher protocol timeout to " + this.socket.getSoTimeout() + " ms");
-    logger.fine("Got launcher connection from " + socket.getRemoteSocketAddress().toString());
+    logger.fine("Got launcher connection from " + this.socket.getRemoteSocketAddress().toString());
   }
 
+  /**
+   * Shuts down the connection to the launcher.
+   *
+   * @throws IOException if the socket is already closed
+   */
   public void shutdown() throws IOException {
-    this.socket.close();
+    socket.close();
   }
 
   /**
@@ -115,7 +119,7 @@ public class OperaLauncherProtocol {
    *
    * @param type the payload type to be sent after
    * @param size size of the payload following the header
-   * @throws java.io.IOException if sending failed
+   * @throws java.io.IOException if socket send error or protocol parse error
    */
   private void sendRequestHeader(MessageType type, int size) throws IOException {
     ByteBuffer buf = ByteBuffer.allocate(8);
@@ -136,9 +140,9 @@ public class OperaLauncherProtocol {
    * @param type the request type to be sent
    * @param body the serialized request payload
    * @return the response
+   * @throws IOException if socket read error or protocol parse error
    */
-  public ResponseEncapsulation sendRequest(MessageType type, byte[] body)
-      throws IOException {
+  public ResponseEncapsulation sendRequest(MessageType type, byte[] body) throws IOException {
     int size = (body != null) ? size = body.length : 0;
     sendRequestHeader(type, size);
     if (body != null) {
@@ -152,9 +156,9 @@ public class OperaLauncherProtocol {
    *
    * @param type the request type to be sent
    * @param body the serialized request payload
+   * @throws IOException if socket read error or protocol parse error
    */
-  public void sendRequestWithoutResponse(MessageType type, byte[] body)
-      throws IOException {
+  public void sendRequestWithoutResponse(MessageType type, byte[] body) throws IOException {
     int size = (body != null) ? size = body.length : 0;
     sendRequestHeader(type, size);
     if (body != null) {
@@ -167,7 +171,7 @@ public class OperaLauncherProtocol {
    *
    * @param buffer Target buffer to fill
    * @param length Desired length
-   * @throws java.io.IOException if socket receive error
+   * @throws java.io.IOException if socket read error or protocol parse error
    */
   private void recv(byte[] buffer, int length) throws IOException {
     int bytes = 0;

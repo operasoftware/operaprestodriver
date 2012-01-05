@@ -28,6 +28,9 @@ import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.Statement;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
+import java.util.logging.Level;
+
+import static org.openqa.selenium.Platform.WINDOWS;
 import static com.opera.core.systems.OperaProduct.DESKTOP;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -37,18 +40,18 @@ public class IdleTest extends OperaDriverTestCase {
   // Timeout vars for every test
   private static long start, end;
 
-  // Make sure we're actually using Idle, and not hitting the timeout
+  // Make sure we're actually using idle, and not hitting the timeout
   private static long timeout = OperaIntervals.OPERA_IDLE_TIMEOUT.getValue();
 
-  // Make sure these tests only run if OperaIdle is available
+  // Make sure these tests only run if idle is available
   @Rule
   public MethodRule random = new MethodRule() {
     public Statement apply(Statement base, FrameworkMethod method, Object target) {
-      // If Idle available return the test
+      // If idle available return the test
       if (driver.isOperaIdleAvailable()) {
         return base;
       }
-      // otherwise return an empty statement -> test doesn't run
+      // otherwise return an empty statement, meaning test doesn't run
       else {
         return new Statement() {
           @Override
@@ -60,24 +63,24 @@ public class IdleTest extends OperaDriverTestCase {
   };
 
   @BeforeClass
-  public static void setUpBeforeClass() throws Exception {
-    DesiredCapabilities caps = new DesiredCapabilities();
-    caps.setCapability("opera.idle", true);
+  public static void setUpBeforeClass() {
+    DesiredCapabilities capabilities = OperaDriverTestCase.getDefaultCapabilities();
+    capabilities.setCapability(OperaDriver.OPERAIDLE, true);
+    capabilities.setCapability(OperaDriver.LOGGING_LEVEL, Level.FINER);
 
-    driver = new TestOperaDriver(caps);
-    initProduct();
-    initFixtures();
+    driver = new TestOperaDriver(capabilities);
+    init();
   }
 
   @Before
   public void setUp() {
-    start = end = 0;
+    reset();
   }
 
   @After
   public void tearDown() {
     // Make sure the test hasn't passed because we hit the page load timeout instead of using idle
-    assertTrue("Took less than Idle timeout", end - start < timeout);
+    assertTrue("Took less than idle timeout", end - start < timeout);
   }
 
   private void start() {
@@ -88,8 +91,13 @@ public class IdleTest extends OperaDriverTestCase {
     end = System.currentTimeMillis();
   }
 
+  private void reset() {
+    start = end = 0;
+  }
+
   @Test
-  public void testGet() throws Exception {
+  @Ignore(platforms = WINDOWS)
+  public void testGet() {
     start();
     getFixture("test.html");
     stop();
@@ -98,7 +106,8 @@ public class IdleTest extends OperaDriverTestCase {
   }
 
   @Test
-  public void testBack() throws Exception {
+  @Ignore(platforms = WINDOWS)
+  public void testBack() {
     getFixture("javascript.html");
 
     start();
@@ -109,7 +118,8 @@ public class IdleTest extends OperaDriverTestCase {
   }
 
   @Test
-  public void testForward() throws Exception {
+  @Ignore(platforms = WINDOWS)
+  public void testForward() {
     start();
     driver.navigate().forward();
     stop();
@@ -118,7 +128,8 @@ public class IdleTest extends OperaDriverTestCase {
   }
 
   @Test
-  public void testBack2() throws Exception {
+  @Ignore(platforms = WINDOWS)
+  public void testBack2() {
     start();
     driver.navigate().back();
     stop();
@@ -127,8 +138,8 @@ public class IdleTest extends OperaDriverTestCase {
   }
 
   @Test
-  @Ignore
-  public void testRefresh() throws Exception {
+  //@Ignore
+  public void testRefresh() {
     getFixture("test.html");
     driver.findElementById("input_email").sendKeys("before refresh");
 
@@ -140,7 +151,7 @@ public class IdleTest extends OperaDriverTestCase {
   }
 
   @Test
-  public void testClick() throws Exception {
+  public void testClick() {
     getFixture("test.html");
 
     start();
@@ -151,7 +162,7 @@ public class IdleTest extends OperaDriverTestCase {
   }
 
   @Test
-  public void testClickXY() throws Exception {
+  public void testClickXY() {
     getFixture("test.html");
 
     start();
@@ -163,7 +174,7 @@ public class IdleTest extends OperaDriverTestCase {
 
   @Test
   @Ignore
-  public void testKeyEnter() throws Exception {
+  public void testKeyEnter() {
     getFixture("javascript.html");
 
     // Focus textbox
@@ -179,8 +190,8 @@ public class IdleTest extends OperaDriverTestCase {
   }
 
   @Test
-  @Ignore(products = DESKTOP)
-  public void testSendKeysNewline() throws Exception {
+  @Ignore(platforms = WINDOWS)
+  public void testSendKeysNewline() {
     getFixture("javascript.html");
 
     // Focus textbox
@@ -193,7 +204,7 @@ public class IdleTest extends OperaDriverTestCase {
   }
 
   @Test
-  public void testSetSelected() throws Exception {
+  public void testSetSelected() {
     getFixture("javascript.html");
 
     // Check checkbox, fires a submit even on the form
@@ -206,7 +217,7 @@ public class IdleTest extends OperaDriverTestCase {
   }
 
   @Test
-  public void testSubmit() throws Exception {
+  public void testSubmit() {
     getFixture("javascript.html");
 
     // Check checkbox, fires a submit even on the form
@@ -221,9 +232,8 @@ public class IdleTest extends OperaDriverTestCase {
   /* Begin testing OperaIdle conditions */
 
   @Test
-  @Ignore
-  //@Ignore(products = DESKTOP, value = "DSK-347592")  // TODO(andreastt): Not working because desktop returns "CORE"
-  public void testEcmascriptLoop() throws Exception {
+  @Ignore(products = DESKTOP, value = "DSK-347592")
+  public void testEcmascriptLoop() {
     start();
     getFixture("idle/ecmascript-loop.html");
     stop();
@@ -232,7 +242,8 @@ public class IdleTest extends OperaDriverTestCase {
   }
 
   @Test
-  public void testEcmascriptTimeout() throws Exception {
+  @Ignore(platforms = WINDOWS)
+  public void testEcmascriptTimeout() {
     start();
     getFixture("idle/ecmascript-timeout.html");
     stop();
@@ -241,7 +252,8 @@ public class IdleTest extends OperaDriverTestCase {
   }
 
   @Test
-  public void testEcmascriptTimeoutLoop() throws Exception {
+  @Ignore(platforms = WINDOWS)
+  public void testEcmascriptTimeoutLoop() {
     start();
     getFixture("idle/ecmascript-timeout-loop.html");
     stop();
@@ -250,14 +262,15 @@ public class IdleTest extends OperaDriverTestCase {
   }
 
   @Test
-  public void testMetarefresh() throws Exception {
+  @Ignore(platforms = WINDOWS)
+  public void testMetarefresh() {
     getFixture("idle/metarefresh.html");
 
     assertTrue(driver.getCurrentUrl().endsWith("test.html"));
   }
 
   @Test
-  public void testCustomTimeout() throws Exception {
+  public void testCustomTimeout() {
     start = System.currentTimeMillis();
     driver.get(fixture("http://nytimes.com"), 500);
     end = System.currentTimeMillis();
@@ -267,7 +280,7 @@ public class IdleTest extends OperaDriverTestCase {
   }
 
   @Test
-  public void testIdleOff() throws Exception {
+  public void testIdleOff() {
     driver.quit();
     DesiredCapabilities caps = new DesiredCapabilities();
     caps.setCapability("opera.idle", false);

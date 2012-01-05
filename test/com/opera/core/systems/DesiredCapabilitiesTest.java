@@ -30,35 +30,29 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.logging.Level;
 
 import static com.opera.core.systems.OperaProduct.CORE;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-/**
- * @author Andreas Tolf Tolfsen <andreastt@opera.com>
- */
 public class DesiredCapabilitiesTest extends OperaDriverTestCase {
 
   public DesiredCapabilities capabilities;
 
   /**
    * Overrides {@link OperaDriverTestCase#setUpBeforeClass();)}
-   *
-   * @throws Exception these things happen
    */
   @BeforeClass
-  public static void setUpBeforeClass() throws Exception {
+  public static void setUpBeforeClass() {
   }
 
   /**
    * Overrides {@link OperaDriverTestCase#tearDownAfterClass()} ();)}
-   *
-   * @throws Exception these things happen
    */
   @AfterClass
-  public static void tearDownAfterClass() throws Exception {
+  public static void tearDownAfterClass() {
   }
 
   @Before
@@ -91,6 +85,15 @@ public class DesiredCapabilitiesTest extends OperaDriverTestCase {
     driver = new TestOperaDriver(capabilities);
 
     assertEquals("info", capabilities.getCapability(OperaDriver.LOGGING_LEVEL));
+    assertNotNull(driver);
+  }
+
+  @Test
+  public void testSettingLoggingLevelWithObject() {
+    capabilities.setCapability(OperaDriver.LOGGING_LEVEL, Level.FINER);
+    driver = new TestOperaDriver(capabilities);
+
+    assertEquals(Level.FINER, capabilities.getCapability(OperaDriver.LOGGING_LEVEL));
     assertNotNull(driver);
   }
 

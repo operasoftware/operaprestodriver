@@ -89,17 +89,23 @@ public class OperaDriverTestRunner extends BlockJUnit4ClassRunner {
     }
 
     for (OperaProduct product : ignoreAnnotation.products()) {
-      if (product.is(OperaDriverTestCase.currentProduct)) {
+      if (product.is(OperaProduct.ALL)) {
+        break;
+      } else if (product.is(OperaDriverTestCase.currentProduct)) {
         return true;
       }
     }
 
     for (Platform platform : ignoreAnnotation.platforms()) {
-      if (OperaDriverTestCase.currentPlatform.is(platform)) {
+      if (platform.is(Platform.ANY)) {
+        break;
+      //} else if (OperaDriverTestCase.currentPlatform.is(platform)) {
+      } else if (platform.is(OperaDriverTestCase.currentPlatform)) {
         return true;
       }
     }
 
+    // Should not be ignored, none of the rules apply
     return false;
   }
 

@@ -256,17 +256,17 @@ public class OperaDriverTest extends OperaDriverTestCase {
 
   @Test
   public void testMultipleOperas() throws Exception {
-    DesiredCapabilities cap = new DesiredCapabilities();
-    cap.setCapability(OperaDriver.PROFILE, (String) null);
-    cap.setCapability(OperaDriver.PORT, 0);
+    DesiredCapabilities capabilities = OperaDriverTestCase.getDefaultCapabilities();
+    capabilities.setCapability(OperaDriver.PROFILE, (String) null);  // random profile
+    capabilities.setCapability(OperaDriver.PORT, 0);  // random port
 
     OperaDriver a;
     OperaDriver b;
     OperaDriver c;
     try {
-      a = new OperaDriver(cap);
-      b = new OperaDriver(cap);
-      c = new OperaDriver(cap);
+      a = new OperaDriver(capabilities);
+      b = new OperaDriver(capabilities);
+      c = new OperaDriver(capabilities);
     } catch (WebDriverException e) {
       // If immediately exited, then it doesn't support the flags
       if (e.getMessage().contains("Opera exited immediately")) {
