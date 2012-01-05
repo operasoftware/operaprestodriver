@@ -59,6 +59,8 @@ public class OperaLauncherRunner extends OperaRunner
   private OperaLauncherProtocol launcherProtocol = null;
   private String crashlog = null;
 
+    private boolean was_shut_down = false;
+
   public OperaLauncherRunner() {
     this(OperaLauncherRunnerSettings.getDefaultSettings());
   }
@@ -151,6 +153,7 @@ public class OperaLauncherRunner extends OperaRunner
         throw new OperaRunnerException(
             "Did not get launcher handshake: " + res.getResponse().toString());
       }
+
     } catch (SocketTimeoutException e) {
       throw new OperaRunnerException("Timeout waiting for launcher to connect on port " +
                                      launcherPort, e);
@@ -160,6 +163,7 @@ public class OperaLauncherRunner extends OperaRunner
   }
 
   public void startOpera() {
+
     logger.fine("Instructing launcher to start Opera...");
 
     try {
@@ -245,9 +249,19 @@ public class OperaLauncherRunner extends OperaRunner
   public void shutdown() {
     logger.fine("Shutting down launcher");
 
+    /*
+    It might happen that the driver is being shut down more than once, and since we have already lost connection
+    to the launcher, we can't proceed without throwing an exception that is completely unnecessary here.
+    */
+    if (was_shut_down) {
+      logger.fine("The launcher was shutdown already! Ignoring.");
+      return;
+    }
+
     try {
       // Send a shutdown command to the launcher
       try {
+        was_shut_down = true;
         launcherProtocol.sendRequestWithoutResponse(MessageType.MSG_SHUTDOWN, null);
       } catch (Exception e) {
         e.printStackTrace();
@@ -258,9 +272,14 @@ public class OperaLauncherRunner extends OperaRunner
     } catch (IOException e) {
       throw new OperaRunnerException("Unable to shut down launcher", e);
     }
-
     if (launcherRunner != null) {
-      launcherRunner.shutdown();
+      try {
+        launcherRunner.shutdown();
+      }
+      catch (Exception e)
+      {
+        logger.warning("Could not shutdown launcher runner!");
+      }
       launcherRunner = null;
     }
   }
