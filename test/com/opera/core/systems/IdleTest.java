@@ -182,7 +182,6 @@ public class IdleTest extends OperaDriverTestCase {
   }
 
   @Test
-  @Ignore(products = DESKTOP)
   public void testSendKeysNewline() {
     getFixture("javascript.html");
 
@@ -224,8 +223,7 @@ public class IdleTest extends OperaDriverTestCase {
   /* Begin testing OperaIdle conditions */
 
   @Test
-  @Ignore
-  //@Ignore(products = DESKTOP, value = "DSK-347592")  // TODO(andreastt): Not working because desktop returns "CORE"
+  @Ignore(products = DESKTOP, value = "DSK-347592")
   public void testEcmascriptLoop() {
     start();
     getFixture("idle/ecmascript-loop.html");
