@@ -26,6 +26,7 @@ import org.openqa.selenium.Platform;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.io.File;
+import java.util.logging.Logger;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -36,8 +37,8 @@ import static org.junit.Assert.assertTrue;
  * after the test, and gaining access to the fixtures directory.
  *
  * It also holds an extension of {@link OperaDriver}, called {@link TestOperaDriver}, that exposes
- * the {@link OperaRunner} and a method for determining whether the constructor and
- * {@link OperaDriver#quit()} methods has been called, {@link TestOperaDriver#isRunning()}.
+ * the {@link OperaRunner} and a method for determining whether the constructor and {@link
+ * OperaDriver#quit()} methods has been called, {@link TestOperaDriver#isRunning()}.
  *
  * @author Andreas Tolf Tolfsen <andreastt@opera.com>7
  */
@@ -49,6 +50,7 @@ public abstract class OperaDriverTestCase {
   protected static Platform currentPlatform = Platform.getCurrent();
 
   private static String fixtureDirectory;
+  private static final Logger logger = Logger.getLogger(OperaDriverTestCase.class.getName());
 
   @BeforeClass
   public static void setUpBeforeClass() throws Exception {
@@ -78,20 +80,20 @@ public abstract class OperaDriverTestCase {
    * environmental variable.
    */
   protected static void initProduct() {
-    if (driver == null || !driver.isRunning()) {
+    if (!isDriverRunning()) {
       return;
     }
 
     String requestedProduct = System.getenv("OPERA_PRODUCT");
     if (requestedProduct == null || requestedProduct.isEmpty()) {
-      requestedProduct = driver.getCapabilities().getCapability(OperaDriver.PRODUCT).toString();
+      requestedProduct = driver.utils().getProduct();
     }
 
     if (requestedProduct != null && !requestedProduct.isEmpty()) {
       try {
-        currentProduct = OperaProduct.valueOf(requestedProduct);
+        currentProduct = OperaProduct.get(requestedProduct);
       } catch (IllegalArgumentException e) {
-        // product not found, defaulting to CORE
+        logger.warning("Product not found, defaulting to " + currentProduct.toString());
       }
     }
   }
@@ -117,7 +119,7 @@ public abstract class OperaDriverTestCase {
   protected String fixture(String file) {
     return "file://localhost" + fixtureDirectory + file;
   }
-  
+
   protected File fixtureFile(String file) {
     return new File(fixtureDirectory + file);
   }
@@ -145,7 +147,7 @@ class TestOperaDriver extends OperaDriver {
   private boolean isRunning = false;
 
   public TestOperaDriver() {
-    super();
+    this(OperaDriver.getDefaultCapabilities());
   }
 
   public TestOperaDriver(Capabilities capabilities) {
@@ -160,7 +162,7 @@ class TestOperaDriver extends OperaDriver {
   public Capabilities getCapabilities() {
     return capabilities;
   }
-  
+
   public static Capabilities getDefaultCapabilities() {
     return OperaDriver.getDefaultCapabilities();
   }
