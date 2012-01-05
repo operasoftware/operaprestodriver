@@ -28,7 +28,11 @@ import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.Statement;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
+import java.util.logging.Level;
+
+import static org.openqa.selenium.Platform.WINDOWS;
 import static com.opera.core.systems.OperaProduct.DESKTOP;
+import static com.opera.core.systems.OperaProduct.CORE;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -63,6 +67,7 @@ public class IdleTest extends OperaDriverTestCase {
   public static void setUpBeforeClass() {
     DesiredCapabilities capabilities = OperaDriverTestCase.getDefaultCapabilities();
     capabilities.setCapability(OperaDriver.OPERAIDLE, true);
+    capabilities.setCapability(OperaDriver.LOGGING_LEVEL, Level.FINER);
 
     driver = new TestOperaDriver(capabilities);
     init();
@@ -92,6 +97,7 @@ public class IdleTest extends OperaDriverTestCase {
   }
 
   @Test
+  @Ignore(platforms = WINDOWS)
   public void testGet() {
     start();
     getFixture("test.html");
@@ -112,6 +118,7 @@ public class IdleTest extends OperaDriverTestCase {
   }
 
   @Test
+  @Ignore(platforms = WINDOWS)
   public void testForward() {
     start();
     driver.navigate().forward();
@@ -121,6 +128,7 @@ public class IdleTest extends OperaDriverTestCase {
   }
 
   @Test
+  @Ignore(platforms = WINDOWS)
   public void testBack2() {
     start();
     driver.navigate().back();
@@ -182,6 +190,7 @@ public class IdleTest extends OperaDriverTestCase {
   }
 
   @Test
+  @Ignore(platforms = WINDOWS)
   public void testSendKeysNewline() {
     getFixture("javascript.html");
 
@@ -233,6 +242,7 @@ public class IdleTest extends OperaDriverTestCase {
   }
 
   @Test
+  @Ignore(platforms = WINDOWS)
   public void testEcmascriptTimeout() {
     start();
     getFixture("idle/ecmascript-timeout.html");
@@ -242,6 +252,7 @@ public class IdleTest extends OperaDriverTestCase {
   }
 
   @Test
+  @Ignore(platforms = WINDOWS)
   public void testEcmascriptTimeoutLoop() {
     start();
     getFixture("idle/ecmascript-timeout-loop.html");
@@ -251,6 +262,7 @@ public class IdleTest extends OperaDriverTestCase {
   }
 
   @Test
+  @Ignore(platforms = WINDOWS)
   public void testMetarefresh() {
     getFixture("idle/metarefresh.html");
 
