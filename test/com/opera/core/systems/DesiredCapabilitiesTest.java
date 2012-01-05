@@ -37,29 +37,22 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-/**
- * @author Andreas Tolf Tolfsen <andreastt@opera.com>
- */
 public class DesiredCapabilitiesTest extends OperaDriverTestCase {
 
   public DesiredCapabilities capabilities;
 
   /**
    * Overrides {@link OperaDriverTestCase#setUpBeforeClass();)}
-   *
-   * @throws Exception these things happen
    */
   @BeforeClass
-  public static void setUpBeforeClass() throws Exception {
+  public static void setUpBeforeClass() {
   }
 
   /**
    * Overrides {@link OperaDriverTestCase#tearDownAfterClass()} ();)}
-   *
-   * @throws Exception these things happen
    */
   @AfterClass
-  public static void tearDownAfterClass() throws Exception {
+  public static void tearDownAfterClass() {
   }
 
   @Before
