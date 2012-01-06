@@ -27,8 +27,8 @@ directly with Opera from Java.  Consequently, it is only compatible
 out-ofthe-box with Opera version 11.6 or newer, although it works for
 older versions with some tweaks.
 
-The OperaDriver server expects you to have Opera installed in the
-default location for each system:
+The OperaDriver server expects you to have Opera or Opera Next
+installed in the default location for each system:
 
 | __OS__    | __Expected Location of Opera__                                                                      |
 |-----------|-----------------------------------------------------------------------------------------------------|
@@ -70,10 +70,25 @@ To get set up [please
 download](http://code.google.com/p/selenium/downloads/list) either
 *selenium-server-standalone* or *selenium-server* and make sure you
 have a fairly recent version of Opera installed.  All you do is to
-create a new `OperaDriver` instance:
+create a new
+`[WebDriver](http://selenium.googlecode.com/svn/trunk/docs/api/java/org/openqa/selenium/WebDriver.html)`
+instance:
 
     WebDriver driver = new OperaDriver();
     driver.navigate().to("http://opera.com/");
+
+Since WebDriver provides APIs (called *bindings*) for several
+languages, you can do the same in Ruby (using
+[selenium-webdriver](http://rubygems.org/gems/selenium-webdriver)) by
+setting the environmental variable `SELENIUM_SERVER_JAR` to the full
+path of the *selenium-server-standalone* JAR you just downloaded:
+
+    export SELENIUM_SERVER_JAR=/path/to/selenium-server-standalone.jar
+
+And then do the following in Ruby:
+
+    driver = Selenium::WebDriver.for :opera
+    driver.navigate.to('http://opera.com/');
 
 
 ### Running the server as a standalone process
