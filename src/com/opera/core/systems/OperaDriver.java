@@ -88,8 +88,6 @@ import java.util.logging.SimpleFormatter;
  */
 public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
-  // Want to thin some of these out, but will need some re-thinking.
-
   /**
    * (String) How verbose the logging should be. Available levels are: SEVERE (highest value),
    * WARNING, INFO, CONFIG, FINE, FINER, FINEST (lowest value), ALL. Default is INFO.
