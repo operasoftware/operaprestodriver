@@ -183,7 +183,11 @@ public class OperaRunnerSettingsTest extends OperaDriverTestCase {
   // use this profile, but check for invalid directory
   @Test(expected = WebDriverException.class)
   public void testSetProfileWithInvalidString() {
-    settings.setProfile("Ø:/this/does/not/exist");
+    if (Platform.getCurrent().is(Platform.WINDOWS)) {
+      settings.setProfile("Ø:/this/does/not/exist");
+    } else {
+      settings.setProfile("/this/does/not/exist");
+    }
     runner = new TestOperaRunner(settings);
   }
 
