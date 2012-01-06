@@ -1294,18 +1294,6 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     return version;
   }
 
-  protected IEcmaScriptDebugger getScriptDebugger() {
-    return debugger;
-  }
-
-  protected IOperaExec getExecService() {
-    return exec;
-  }
-
-  protected ScopeServices getScopeServices() {
-    return services;
-  }
-
   public Object executeAsyncScript(String script, Object... args) {
     throw new UnsupportedOperationException();
   }
@@ -1430,6 +1418,20 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
       return coreUtils.getProcessID();
     }
 
+  }
+
+  // Following methods are used in OperaWebElement:
+
+  protected IEcmaScriptDebugger getScriptDebugger() {
+    return debugger;
+  }
+
+  protected IOperaExec getExecService() {
+    return exec;
+  }
+
+  protected ScopeServices getScopeServices() {
+    return services;
   }
 
 }
