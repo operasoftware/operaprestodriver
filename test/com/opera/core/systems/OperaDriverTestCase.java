@@ -105,7 +105,7 @@ public abstract class OperaDriverTestCase {
 
     String requestedProduct = System.getenv("OPERA_PRODUCT");
     if (requestedProduct == null || requestedProduct.isEmpty()) {
-      requestedProduct = driver.utils().getProduct();
+      requestedProduct = driver.utils().getProduct().toString();
     }
 
     if (requestedProduct != null && !requestedProduct.isEmpty()) {
