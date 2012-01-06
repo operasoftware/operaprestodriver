@@ -50,7 +50,7 @@ Other libraries required by OperaDriver:
   * ini4j 0.5.2
   * json-20080701.jar
   * JUnit 4.10
-  * Selenium 2.16.0
+  * Selenium 2.16.1
 
 ### OperaDriver on 11.52 or older
 
