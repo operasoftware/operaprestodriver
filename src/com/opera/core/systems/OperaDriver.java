@@ -1241,19 +1241,11 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
   }
 
   /**
-   * Is JavaScript enables in this driver?
-   *
-   * @return true if JavaScript is enabled
-   */
-  public boolean isJavascriptEnabled() {
-    return OperaFlags.ENABLE_DEBUGGER;
-  }
-
-  /**
    * @param action a string identifying the Opera Action to use.
    * @deprecated
    */
   @Deprecated
+  @SuppressWarnings("unused")
   public void executeActions(OperaAction action) {
     services.captureOperaIdle();
     List<UserInteraction> actions = action.getActions();
