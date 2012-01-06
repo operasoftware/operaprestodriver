@@ -135,14 +135,14 @@ support are:
 
 | __Capability__              | __Type__ | __Default__ | __Description__             |
 |-----------------------------|----------|-------------|-----------------------------|
-| __opera.logging.level__     | String   | "INFO"      | How verbose the logging should be.  Available levels are: SEVERE (highest value), WARNING, INFO, CONFIG, FINE, FINER, FINEST (lowest value), ALL.  Default is INFO.
+| __opera.logging.level__     | String/[Level](http://docs.oracle.com/javase/1.4.2/docs/api/java/util/logging/Level.html) | "INFO" | How verbose the logging should be.  Available levels are: SEVERE (highest value), WARNING, INFO, CONFIG, FINE, FINER, FINEST (lowest value), ALL.  Default is INFO.
 | __opera.logging.file__      | String   | null        | Where to send the output of the logging.  Default is to not write to file.
 | __opera.binary__            | String   | null        | Path to the Opera binary to use.  If not specified, OperaDriver will guess the path to your Opera installation.
 | __opera.arguments__         | String   | null        | Arguments to pass on to Opera, separated by spaces.  See `opera -help` for available command-line arguments.
 | __opera.host__              | String   | "127.0.0.1" | The host Opera should connect to.  Unless you're starting Opera manually you won't need this.
 | __opera.port__              | Integer  | 7001        | The port Opera should connect to.  0 = Random port, -1 = Opera default (port 7001) (for use with Opera < 12).
 | __opera.launcher__          | String   | null        | Absolute path to the launcher binary to use.  The launcher is a gateway between OperaDriver and the Opera browser, and is being used for controlling and monitoring the binary, and taking external screenshots.  If left blank, OperaDriver will use the launcher supplied with the package.
-| __opera.profile__           | String   | null        | Directory to use for the Opera profile.  If null a random temporary directory is used.  If "", an empty string, then the default autotest profile directory is used.
+| __opera.profile__           | String/OperaProfile | `new OperaProfile()` | Directory string for the Opera profile to use.  If left empty, a new random profile will be used.  If "", an empty string, then the default autotest profile directory is used.
 | __opera.idle__              | Boolean  | false       | Whether to use Opera's alternative implicit wait implementation.  It will use an in-browser heuristic to guess when a page has finished loading,allowing us to determine with great accuracy whether there are any planned events in the document.  This functionality is useful for very simple test cases, but not designed for real-world testing.  It is disabled by default.
 | __opera.display__           | Integer  | null        | The X display to use.  (Only works on UNIX-like OSes.)
 | __opera.autostart__         | Boolean  | true        | Whether to auto-start the Opera binary.  If false, OperaDriver will wait for a connection from the browser.  Go to "opera:debug", enter the correct port number and hit "Connect" to connect manually.
@@ -154,7 +154,8 @@ support are:
 To use capabilities:
 
     DesiredCapabilities capabilities = DesiredCapabilities.opera();
-    capabilities.setCapability("opera.logging.level", "CONFIG");
+    capabilities.setCapability("opera.profile", new OperaProfile("/path/to/existing/profile"));
+    capabilities.setCapability("opera.logging.level", Level.CONFIG);
     capabilities.setCapability("opera.logging.file", "/var/log/operadriver.log");
     capabilities.setCapability("opera.display", 8);
     capabilities.setCapability("opera.profile", "/home/andreastt/my-own-opera-profile");
@@ -164,8 +165,20 @@ To use capabilities:
     driver.navigate().to("http://opera.com/");
 
 See also the information available on the
-[RemoteWebDriver](http://code.google.com/p/selenium/wiki/RemoteWebDriver) at
-the Selenium wiki.
+[RemoteWebDriver](http://code.google.com/p/selenium/wiki/RemoteWebDriver)
+at the Selenium wiki.
+
+You can also provide an `OperaProfile` object to use a new, fresh
+random profile (default) or specifying an existing profile on your
+system.  You can manipulate the profile before Opera is started to
+i.e. set preferences you wish to use:
+
+    DesiredCapabiltiies capabilities = DesiredCapabilities.opera();
+    OperaProfile profile = new OperaProfile();  // fresh, random profile
+    profile.preferences().set("User Prefs", "Ignore Unrequested Popups", false);
+    capabilities.setCapability("opera.profile", profile);
+
+    WebDriver driver = new OperaDriver(capabilities);
 
 
 ### Environment variables
@@ -233,3 +246,4 @@ Known issues
 * Failing test for getting window handles after closing a window
 * Problems with coordinates on moving mouse back and forth past view port
 * Closing the final browser window causes an exception
+* Tests for typing multibyte characters will fail on Windows unless you have the correct charset
