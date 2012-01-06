@@ -26,6 +26,8 @@ import org.junit.Test;
 import org.junit.rules.MethodRule;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.Statement;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.util.logging.Level;
@@ -182,7 +184,7 @@ public class IdleTest extends OperaDriverTestCase {
 
     // submit form
     start();
-    driver.key("Enter");
+    new Actions(driver).sendKeys(Keys.ENTER).build().perform();
     stop();
 
     // +"?" for submitted query string

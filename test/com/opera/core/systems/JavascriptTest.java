@@ -20,6 +20,7 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -36,7 +37,7 @@ public class JavascriptTest extends OperaDriverTestCase {
     String text = "Hello, world!";
 
     driver.executeScript("document.getElementById('one').focus()");
-    driver.type(text);
+    new Actions(driver).sendKeys(text).perform();
 
     assertEquals(text, driver.findElementById("one").getAttribute("value"));
   }
@@ -47,7 +48,7 @@ public class JavascriptTest extends OperaDriverTestCase {
   public void testTypingKeyEvents() {
     driver.get(fixture("keys.html"));
 
-    driver.type("hi");
+    new Actions(driver).sendKeys("hi").perform();
 
     String log = driver.findElementById("log").getAttribute("value");
     assertTrue(log.contains("press, 104, h,"));
@@ -55,7 +56,7 @@ public class JavascriptTest extends OperaDriverTestCase {
   }
 
   @Test
-  public void testlDoubleClick() {
+  public void testDoubleClick() {
     WebElement one = driver.findElementById("one");
     one.click();
     one.click();

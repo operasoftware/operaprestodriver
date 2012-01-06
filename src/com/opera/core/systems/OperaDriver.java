@@ -21,8 +21,6 @@ import com.google.common.io.Resources;
 
 import com.opera.core.systems.arguments.OperaCoreArguments;
 import com.opera.core.systems.common.lang.OperaStrings;
-import com.opera.core.systems.interaction.OperaAction;
-import com.opera.core.systems.interaction.UserInteraction;
 import com.opera.core.systems.model.ScopeActions;
 import com.opera.core.systems.model.ScreenShotReply;
 import com.opera.core.systems.model.ScriptResult;
@@ -1207,27 +1205,6 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
    */
   public String selftest(List<String> modules, long timeout) {
     return services.selftest(modules, timeout);
-  }
-
-  /**
-   * @param action a string identifying the Opera Action to use.
-   * @deprecated
-   */
-  @Deprecated
-  @SuppressWarnings("unused")
-  public void executeActions(OperaAction action) {
-    services.captureOperaIdle();
-    List<UserInteraction> actions = action.getActions();
-
-    for (UserInteraction userInteraction : actions) {
-      userInteraction.execute(this);
-    }
-
-    try {
-      waitForLoadToComplete();
-    } catch (ResponseNotReceivedException e) {
-      logger.fine("Response not received, returning control to user");
-    }
   }
 
   /**
