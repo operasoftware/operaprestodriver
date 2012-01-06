@@ -38,8 +38,7 @@ public class SelftestTest extends OperaDriverTestCase {
       try {
         results = driver.selftest(Arrays.asList("about"), 30000);
       } catch (UnsupportedOperationException e) {
-        // This service isn't available everywhere. Don't fail if we get that
-        // exception.
+        // This service isn't available everywhere, don't fail if we get that exception
         if (e.getMessage().contains("selftest is not supported")) {
           return;
         } else {
