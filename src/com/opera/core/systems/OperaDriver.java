@@ -36,7 +36,6 @@ import com.opera.core.systems.scope.exceptions.ResponseNotReceivedException;
 import com.opera.core.systems.scope.handlers.PbActionHandler;
 import com.opera.core.systems.scope.internal.OperaFlags;
 import com.opera.core.systems.scope.internal.OperaIntervals;
-import com.opera.core.systems.scope.internal.OperaKeys;
 import com.opera.core.systems.scope.services.ICookieManager;
 import com.opera.core.systems.scope.services.ICoreUtils;
 import com.opera.core.systems.scope.services.IEcmaScriptDebugger;
@@ -83,7 +82,7 @@ import java.util.logging.SimpleFormatter;
 
 /**
  * OperaDriver is an implementation of the WebDriver interface that allows you to drive the Opera
- * web browser. The driver uses the Scope protocol to communicate with Opera directly from Java.
+ * web browser.  The driver uses the Scope protocol to communicate with Opera directly from Java.
  *
  * The implementation is vendor-supported and developed by Opera Software and volunteers.
  */
@@ -422,7 +421,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
       services =
           new ScopeServices(versions, (Integer) capabilities.getCapability(PORT), manualStart);
-      // for profile-specific workarounds inside ScopeServives, WaitState ...
+      // for profile-specific workarounds inside ScopeServices, WaitState ...
       services.setProduct((String) capabilities.getCapability(PRODUCT));
       services.startStpThread();
     } catch (IOException e) {
@@ -512,18 +511,9 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     return debugger.executeJavascript("return document.location.href");
   }
 
-  private void gc() {
-    debugger.releaseObjects();
-    objectIds.clear();
-  }
-
   public void close() {
     closeWindow();
     windowManager.filterActiveWindow();
-  }
-
-  private void closeWindow() {
-    windowManager.closeWindow(windowManager.getActiveWindowId());
   }
 
   public WebElement findElement(By by) {
@@ -836,47 +826,6 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
   }
 
-  /**
-   * @return list of frames
-   */
-  public List<String> listFrames() {
-    return debugger.listFramePaths();
-  }
-
-
-  private WebElement findActiveElement() {
-    return findSingleElement("document.activeElement;", "active element");
-  }
-
-  protected List<WebElement> processElements(Integer id) {
-    List<Integer> ids = debugger.examineObjects(id);
-    List<WebElement> toReturn = new ArrayList<WebElement>();
-    for (Integer objectId : ids) {
-      toReturn.add(new OperaWebElement(this, objectId));
-    }
-    return toReturn;
-  }
-
-  protected void waitForLoadToComplete() throws ResponseNotReceivedException {
-    if (useOperaIdle()) {
-      services.waitForOperaIdle(OperaIntervals.OPERA_IDLE_TIMEOUT.getValue());
-    } else {
-      // Sometimes we get here before the next page has even *started* loading, and so return too
-      // quickly. This sleep is enough to make sure readyState has been set to "loading".
-      sleep(5);
-
-      long endTime = System.currentTimeMillis() + OperaIntervals.PAGE_LOAD_TIMEOUT.getValue();
-
-      while (!"complete".equals(debugger.executeJavascript("return document.readyState"))) {
-        if (System.currentTimeMillis() < endTime) {
-          sleep(OperaIntervals.POLL_INVERVAL.getValue());
-        } else {
-          throw new ResponseNotReceivedException("No response in a timely fashion");
-        }
-      }
-    }
-  }
-
   public WebElement findElementByName(String using) {
     return findSingleElement(
         "document.getElementsByName('" + OperaStrings.escapeJsString(using, "'") + "')[0];",
@@ -1050,124 +999,10 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
   }
 
-  /**
-   * Performs a special action, such as setting an Opera preference.
-   *
-   * For a list of actions call {@link #getOperaActionList()}.
-   *
-   * @param using  the action to perform.
-   * @param params parameters to pass to the action call
-   */
-  public void operaAction(String using, String... params) {
-    exec.action(using, params);
-  }
-
-  @SuppressWarnings("unused")
-  private Set<String> getOperaActionList() {
-    return exec.getActionList();
-  }
-
-  private static void sleep(long ms) {
-    try {
-      Thread.sleep(ms);
-    } catch (InterruptedException e) {
-      Thread.currentThread().interrupt();
-    }
-  }
-
-  private List<WebElement> findMultipleElements(String script, String type) {
-    Integer id;
-
-    long start = System.currentTimeMillis();
-    int count = 0;
-
-    List<WebElement> elements;
-
-    do {
-      id = debugger.getObject(script);
-      elements = processElements(id);
-
-      if (elements != null) {
-        count = elements.size();
-      }
-
-      if (count == 0 && hasTimeRemaining(start)) {
-        sleep(OperaIntervals.EXEC_SLEEP.getValue());
-      } else {
-        break;
-      }
-
-    } while (true);
-
-    if (id != null) {
-      return elements;
-    } else {
-      throw new NoSuchElementException("Cannot find element(s) with " + type);
-    }
-  }
-
-  private WebElement findSingleElement(String script, String type) {
-    long start = System.currentTimeMillis();
-    boolean isAvailable;
-    Integer id;
-
-    do {
-      id = debugger.getObject(script);
-      isAvailable = (id != null);
-
-      if (!isAvailable) {
-        sleep(OperaIntervals.EXEC_SLEEP.getValue());
-      }
-    } while (!isAvailable && hasTimeRemaining(start));
-
-    if (isAvailable) {
-      Boolean isStale =
-          Boolean.valueOf(debugger.callFunctionOnObject("locator.parentNode == undefined", id));
-
-      if (isStale) {
-        throw new StaleElementReferenceException("This element is no longer part of DOM");
-      }
-
-      return new OperaWebElement(this, id);
-    } else {
-      throw new NoSuchElementException("Cannot find element(s) with " + type);
-    }
-  }
-
-  protected boolean hasTimeRemaining(long start) {
-    return System.currentTimeMillis() - start < OperaIntervals.WAIT_FOR_ELEMENT.getValue();
-  }
-
-  /**
-   * Takes a screenshot of the whole screen, including areas outside of the Opera browser window.
-   *
-   * @param timeout the number of milliseconds to wait before taking the screenshot
-   * @param hashes  A previous screenshot MD5 hash. If it matches the hash of this screenshot then
-   *                no image data is returned.
-   * @return a ScreenShotReply object
-   */
-  public ScreenShotReply saveScreenshot(long timeout, String... hashes) {
-    return runner.saveScreenshot(timeout, hashes);
-  }
-
-  // TODO: CORE-39436 areas outside of the current viewport is black. This is a problem with Opera,
-  // not OperaDriver.
+  // TODO: CORE-39436 areas outside of the current viewport is black, this is a problem with Opera not OperaDriver
   public <X> X getScreenshotAs(OutputType<X> target) throws WebDriverException {
     OperaWebElement body = (OperaWebElement) findElementByTagName("body");
     return target.convertFromPngBytes(body.saveScreenshot(0).getPng());
-  }
-
-  protected boolean isOperaIdleAvailable() {
-    return services.isOperaIdleAvailable();
-  }
-
-  private boolean useOperaIdle() {
-    return (((Boolean) capabilities.getCapability(OPERAIDLE)) && isOperaIdleAvailable());
-  }
-
-  @SuppressWarnings("unused")
-  public void setUseOperaIdle(boolean useIdle) {
-    capabilities.setCapability(OPERAIDLE, useIdle);
   }
 
   public Object executeScript(String script, Object... args) {
@@ -1195,27 +1030,6 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     return object;
   }
 
-  /**
-   * @param action a string identifying the Opera Action to use.
-   * @deprecated
-   */
-  @Deprecated
-  @SuppressWarnings("unused")
-  public void executeActions(OperaAction action) {
-    services.captureOperaIdle();
-    List<UserInteraction> actions = action.getActions();
-
-    for (UserInteraction userInteraction : actions) {
-      userInteraction.execute(this);
-    }
-
-    try {
-      waitForLoadToComplete();
-    } catch (ResponseNotReceivedException e) {
-      logger.fine("Response not received, returning control to user");
-    }
-  }
-
   public Object executeAsyncScript(String script, Object... args) {
     throw new UnsupportedOperationException();
   }
@@ -1226,6 +1040,29 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
   public Mouse getMouse() {
     return new OperaMouse(this);
+  }
+
+  // Following methods are Opera-specific extensions to the WebDriver interface:
+
+  /**
+   * Gets a list of frames.
+   *
+   * @return list of frames
+   */
+  public List<String> listFrames() {
+    return debugger.listFramePaths();
+  }
+
+  /**
+   * Takes a screenshot of the whole screen, including areas outside of the Opera browser window.
+   *
+   * @param timeout the number of milliseconds to wait before taking the screenshot
+   * @param hashes  A previous screenshot MD5 hash. If it matches the hash of this screenshot then
+   *                no image data is returned.
+   * @return a ScreenShotReply object
+   */
+  public ScreenShotReply saveScreenshot(long timeout, String... hashes) {
+    return runner.saveScreenshot(timeout, hashes);
   }
 
   /**
@@ -1246,10 +1083,13 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     return version;
   }
 
-  public String selftest(List<String> modules, long timeout) {
-    return services.selftest(modules, timeout);
-  }
-
+  /**
+   * Returns an interface for manipulating the preferences in the currently attached Opera
+   * programmatically.  Some changes might require Opera to restart before the changes take affect.
+   * The available preferences are found in <code>opera:config</code>.
+   *
+   * @return methods for interacting with preferences
+   */
   public OperaScopePreferences preferences() {
     return preferences;
   }
@@ -1360,6 +1200,58 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
   }
 
+  /**
+   * Executes selftests for the given module.
+   *
+   * @param modules the list of modules to run selftests for
+   * @param timeout the time out before aborting the operation
+   * @return results of the selftests
+   */
+  public String selftest(List<String> modules, long timeout) {
+    return services.selftest(modules, timeout);
+  }
+
+  /**
+   * @param action a string identifying the Opera Action to use.
+   * @deprecated
+   */
+  @Deprecated
+  @SuppressWarnings("unused")
+  public void executeActions(OperaAction action) {
+    services.captureOperaIdle();
+    List<UserInteraction> actions = action.getActions();
+
+    for (UserInteraction userInteraction : actions) {
+      userInteraction.execute(this);
+    }
+
+    try {
+      waitForLoadToComplete();
+    } catch (ResponseNotReceivedException e) {
+      logger.fine("Response not received, returning control to user");
+    }
+  }
+
+  /**
+   * Performs a special action, such as setting an Opera preference.
+   *
+   * For a list of actions call {@link #getOperaActionList()}.
+   *
+   * @param using  the action to perform.
+   * @param params parameters to pass to the action call
+   * @deprecated
+   */
+  @Deprecated
+  public void operaAction(String using, String... params) {
+    exec.action(using, params);
+  }
+
+  @Deprecated
+  @SuppressWarnings("unused")
+  public Set<String> getOperaActionList() {
+    return exec.getActionList();
+  }
+
   // Following methods are used in OperaWebElement:
 
   protected IEcmaScriptDebugger getScriptDebugger() {
@@ -1372,6 +1264,147 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
   protected ScopeServices getScopeServices() {
     return services;
+  }
+
+  protected boolean hasTimeRemaining(long start) {
+    return System.currentTimeMillis() - start < OperaIntervals.WAIT_FOR_ELEMENT.getValue();
+  }
+
+  protected List<WebElement> processElements(Integer id) {
+    List<Integer> ids = debugger.examineObjects(id);
+    List<WebElement> toReturn = new ArrayList<WebElement>();
+    for (Integer objectId : ids) {
+      toReturn.add(new OperaWebElement(this, objectId));
+    }
+    return toReturn;
+  }
+
+  protected void waitForLoadToComplete() throws ResponseNotReceivedException {
+    if (useOperaIdle()) {
+      services.waitForOperaIdle(OperaIntervals.OPERA_IDLE_TIMEOUT.getValue());
+    } else {
+      // Sometimes we get here before the next page has even *started* loading, and so return too
+      // quickly. This sleep is enough to make sure readyState has been set to "loading".
+      sleep(5);
+
+      long endTime = System.currentTimeMillis() + OperaIntervals.PAGE_LOAD_TIMEOUT.getValue();
+
+      while (!"complete".equals(debugger.executeJavascript("return document.readyState"))) {
+        if (System.currentTimeMillis() < endTime) {
+          sleep(OperaIntervals.POLL_INVERVAL.getValue());
+        } else {
+          throw new ResponseNotReceivedException("No response in a timely fashion");
+        }
+      }
+    }
+  }
+
+  /**
+   * Whether idle functionality is available.  Note that this is not the same as whether the idle
+   * functionality is enabled.
+   *
+   * @return true if idle is available, false otherwise
+   */
+  protected boolean isOperaIdleAvailable() {
+    return services.isOperaIdleAvailable();
+  }
+
+  // Following methods are used in SpartanRunner:
+
+  /**
+   * Enable or disable idle functionality during runtime.
+   *
+   * @param useIdle true if idle should be switched on, false if it should be switched off
+   */
+  @SuppressWarnings("unused")
+  protected void setUseOperaIdle(boolean useIdle) {
+    capabilities.setCapability(OPERAIDLE, useIdle);
+  }
+
+  // Following methods are used internally:
+
+  private void gc() {
+    debugger.releaseObjects();
+    objectIds.clear();
+  }
+
+  private void closeWindow() {
+    windowManager.closeWindow(windowManager.getActiveWindowId());
+  }
+
+  private WebElement findActiveElement() {
+    return findSingleElement("document.activeElement;", "active element");
+  }
+
+  private List<WebElement> findMultipleElements(String script, String type) {
+    Integer id;
+
+    long start = System.currentTimeMillis();
+    int count = 0;
+
+    List<WebElement> elements;
+
+    do {
+      id = debugger.getObject(script);
+      elements = processElements(id);
+
+      if (elements != null) {
+        count = elements.size();
+      }
+
+      if (count == 0 && hasTimeRemaining(start)) {
+        sleep(OperaIntervals.EXEC_SLEEP.getValue());
+      } else {
+        break;
+      }
+
+    } while (true);
+
+    if (id != null) {
+      return elements;
+    } else {
+      throw new NoSuchElementException("Cannot find element(s) with " + type);
+    }
+  }
+
+  private WebElement findSingleElement(String script, String type) {
+    long start = System.currentTimeMillis();
+    boolean isAvailable;
+    Integer id;
+
+    do {
+      id = debugger.getObject(script);
+      isAvailable = (id != null);
+
+      if (!isAvailable) {
+        sleep(OperaIntervals.EXEC_SLEEP.getValue());
+      }
+    } while (!isAvailable && hasTimeRemaining(start));
+
+    if (isAvailable) {
+      Boolean isStale =
+          Boolean.valueOf(debugger.callFunctionOnObject("locator.parentNode == undefined", id));
+
+      if (isStale) {
+        throw new StaleElementReferenceException("This element is no longer part of DOM");
+      }
+
+      return new OperaWebElement(this, id);
+    } else {
+      throw new NoSuchElementException("Cannot find element(s) with " + type);
+    }
+  }
+
+  private boolean useOperaIdle() {
+    return (((Boolean) capabilities.getCapability(OPERAIDLE)) && isOperaIdleAvailable());
+  }
+
+  private static void sleep(long ms) {
+    try {
+      Thread.sleep(ms);
+    } catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+    }
   }
 
 }
