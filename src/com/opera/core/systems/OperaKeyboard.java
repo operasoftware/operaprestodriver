@@ -17,14 +17,24 @@ limitations under the License.
 package com.opera.core.systems;
 
 import com.opera.core.systems.scope.internal.OperaKeys;
+import com.opera.core.systems.scope.services.IOperaExec;
+
 import org.openqa.selenium.Keyboard;
 import org.openqa.selenium.Keys;
 
+/**
+ * Opera uses the "exec" Scope service to trigger key events in Opera.  This service is available on
+ * all Opera products, on all devices and follows the same code paths as a user would when pressing
+ * a key.
+ */
 public class OperaKeyboard implements Keyboard {
+
   private final OperaDriver parent;
+  private final IOperaExec exec;
 
   public OperaKeyboard(OperaDriver parent) {
     this.parent = parent;
+    this.exec = parent.getExecService();
   }
 
   public void sendKeys(CharSequence... keysToSend) {
@@ -32,11 +42,11 @@ public class OperaKeyboard implements Keyboard {
   }
 
   public void pressKey(Keys keyToPress) {
-    parent.keyDown(OperaKeys.get(((Keys) keyToPress).name()));
+    exec.key(OperaKeys.get(((Keys) keyToPress).name()), false);
   }
 
   public void releaseKey(Keys keyToRelease) {
-    parent.keyUp(OperaKeys.get(((Keys) keyToRelease).name()));
+    exec.key(OperaKeys.get(((Keys) keyToRelease).name()), true);
   }
 
 }

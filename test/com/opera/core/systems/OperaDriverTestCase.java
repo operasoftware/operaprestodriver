@@ -17,6 +17,7 @@ limitations under the License.
 package com.opera.core.systems;
 
 import com.opera.core.systems.runner.OperaRunner;
+import com.opera.core.systems.scope.services.IOperaExec;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -197,6 +198,10 @@ class TestOperaDriver extends OperaDriver {
 
   public boolean isOperaIdleAvailable() {
     return super.isOperaIdleAvailable();
+  }
+  
+  public IOperaExec getExecService() {
+    return super.getExecService();
   }
 
 }

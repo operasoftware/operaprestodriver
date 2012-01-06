@@ -1216,64 +1216,16 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     }
   }
 
-  /**
-   * Presses and releases the given key. If the key is "enter" then OperaDriver waits for the page
-   * to finish loading.
-   *
-   * @param key A string containing the key to press. This can be a single character (e.g. "a") or a
-   *            special key (e.g. "left"), and is matched case insensitively. For a list of keys see
-   *            {@link OperaKeys}.
-   */
-  public void key(String key) {
-    if (key.equalsIgnoreCase("enter")) {
-      services.captureOperaIdle();
-    }
-
-    keyDown(key);
-    keyUp(key);
-
-    if (key.equalsIgnoreCase("enter")) {
-      try {
-        waitForLoadToComplete();
-      } catch (ResponseNotReceivedException e) {
-        logger.fine("Response not received, returning control to user");
-      }
-    }
+  public Object executeAsyncScript(String script, Object... args) {
+    throw new UnsupportedOperationException();
   }
 
-  /**
-   * Presses and holds the given key. You cannot press a key that is already down.
-   *
-   * @param key the key to press, see {@link #key(String)} for more information.
-   */
-  public void keyDown(String key) {
-    exec.key(key, false);
+  public Keyboard getKeyboard() {
+    return new OperaKeyboard(this);
   }
 
-  /**
-   * Releases the given key.
-   *
-   * @param key the key to release, see {@link #key(String)} for more information.
-   */
-  public void keyUp(String key) {
-    exec.key(key, true);
-  }
-
-  /**
-   * Releases all the currently pressed keys.
-   */
-  public void releaseKeys() {
-    exec.releaseKeys();
-  }
-
-  /**
-   * Types the given string as-is in to the browser window. To press special keys use {@link
-   * #key(String)}.
-   *
-   * @param using the string to type
-   */
-  public void type(String using) {
-    exec.type(using);
+  public Mouse getMouse() {
+    return new OperaMouse(this);
   }
 
   /**
@@ -1292,18 +1244,6 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
       }
     }
     return version;
-  }
-
-  public Object executeAsyncScript(String script, Object... args) {
-    throw new UnsupportedOperationException();
-  }
-
-  public Keyboard getKeyboard() {
-    return new OperaKeyboard(this);
-  }
-
-  public Mouse getMouse() {
-    return new OperaMouse(this);
   }
 
   public String selftest(List<String> modules, long timeout) {

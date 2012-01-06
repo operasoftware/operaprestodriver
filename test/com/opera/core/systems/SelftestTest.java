@@ -33,8 +33,7 @@ public class SelftestTest extends OperaDriverTestCase {
 
   @Test
   public void testSelftests() {
-    String product = driver.utils().getProduct();
-    if ("core-gogi".equals(product)) {
+    if (currentProduct.is(OperaProduct.CORE)) {
       String results;
       try {
         results = driver.selftest(Arrays.asList("about"), 30000);
