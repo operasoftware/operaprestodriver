@@ -1302,10 +1302,6 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     return exec;
   }
 
-  protected IWindowManager getWindowManager() {
-    return windowManager;
-  }
-
   protected ScopeServices getScopeServices() {
     return services;
   }
