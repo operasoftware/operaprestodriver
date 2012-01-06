@@ -20,6 +20,7 @@ import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
 
 import com.opera.core.systems.arguments.OperaCoreArguments;
+import com.opera.core.systems.common.lang.OperaStrings;
 import com.opera.core.systems.interaction.OperaAction;
 import com.opera.core.systems.interaction.UserInteraction;
 import com.opera.core.systems.model.ScopeActions;
@@ -55,7 +56,6 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.NoSuchFrameException;
 import org.openqa.selenium.NoSuchWindowException;
 import org.openqa.selenium.OutputType;
-import org.openqa.selenium.Platform;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
@@ -80,8 +80,6 @@ import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * OperaDriver is an implementation of the WebDriver interface that allows you to drive the Opera
@@ -549,7 +547,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
       throw new IllegalArgumentException("Cannot find elements when the selector is null");
     }
 
-    using = escapeJsString(using);
+    using = OperaStrings.escapeJsString(using);
 
     long start = System.currentTimeMillis();
     boolean isAvailable;
@@ -615,7 +613,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
       throw new IllegalArgumentException("Cannot find elements when the selector is null");
     }
 
-    using = escapeJsString(using);
+    using = OperaStrings.escapeJsString(using);
 
     Integer id;
 
@@ -845,50 +843,6 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     return debugger.listFramePaths();
   }
 
-  /**
-   * Escape characters for safe insertion in a Javascript string contained by double quotes (").
-   *
-   * @param string the string to escape
-   * @return an escaped string
-   */
-  protected String escapeJsString(String string) {
-    return escapeJsString(string, "\"");
-  }
-
-  /**
-   * Escape characters for safe insertion in a JavaScript string.
-   *
-   * @param string the string to escape
-   * @param quote  the type of quote to escape. Either " or '
-   * @return the escaped string
-   */
-  private String escapeJsString(String string, String quote) {
-
-    /*
-     * This should be expanded to match all invalid characters (e.g. newlines) but for the moment
-     * we'll trust we'll only get quotes.
-     */
-    Pattern escapePattern = Pattern.compile("([^\\\\])" + quote);
-
-    /*
-     * Prepend a space so that the regex can match quotes at the beginning of the string.
-     */
-    Matcher m = escapePattern.matcher(" " + string);
-    StringBuffer sb = new StringBuffer();
-
-    while (m.find()) {
-      /*
-       * $1 -> inserts the character before the quote \\\\\" -> \\", apparently just \" isn't
-       * treated literally.
-       */
-      m.appendReplacement(sb, "$1\\\\" + quote);
-    }
-
-    m.appendTail(sb);
-
-    // Remove the prepended space.
-    return sb.substring(1);
-  }
 
   private WebElement findActiveElement() {
     return findSingleElement("document.activeElement;", "active element");
@@ -925,12 +879,13 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
   public WebElement findElementByName(String using) {
     return findSingleElement(
-        "document.getElementsByName('" + escapeJsString(using, "'") + "')[0];", "name");
+        "document.getElementsByName('" + OperaStrings.escapeJsString(using, "'") + "')[0];",
+        "name");
   }
 
   public List<WebElement> findElementsByName(String using) {
     return findMultipleElements(
-        "document.getElementsByName('" + escapeJsString(using, "'") + "');", "name");
+        "document.getElementsByName('" + OperaStrings.escapeJsString(using, "'") + "');", "name");
   }
 
   public Navigation navigate() {
