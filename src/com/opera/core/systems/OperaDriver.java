@@ -58,7 +58,9 @@ import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.logging.Logs;
 import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.RemoteLogs;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
 import java.io.IOException;
@@ -972,6 +974,11 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     @Beta
     public Window window() {
       throw new UnsupportedOperationException("Not supported in OperaDriver yet");
+    }
+
+    @Beta
+    public Logs logs() {
+      return new RemoteLogs(getExecuteMethod());
     }
 
   }

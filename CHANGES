@@ -49,6 +49,9 @@ v0.9      (not released yet)
   * Removed methods OperaDriver.key(), keyDown(), keyUp(),
     releaseKeys() and type().  (andreastt)
 
+  * Added OperaDriver.manage().logs() to support Selenium 2.16.1.
+    (andreastt)
+
 
   [NEW FEATURES]
 
