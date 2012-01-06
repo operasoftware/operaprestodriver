@@ -30,14 +30,11 @@ older versions with some tweaks.
 The OperaDriver server expects you to have Opera installed in the
 default location for each system:
 
-| __OS__    | __Expected Location of Opera__                    |
-|-----------|---------------------------------------------------|
-| GNU/Linux | /usr/bin/opera
-              /usr/bin/opera-next                               |
-| Mac       | /Applications/Opera.app/Contents/MacOS/Opera
-              /Applications/Opera Next.app/Contents/MacOS/Opera |
-| Windows   | \%PROGRAMFILES%\Opera\opera.exe
-              \%PROGRAMFILES%\Opera Next\opera.exe              |
+| __OS__    | __Expected Location of Opera__                                                                      |
+|-----------|-----------------------------------------------------------------------------------------------------|
+| GNU/Linux | /usr/bin/opera<br />/usr/bin/opera-next                                                             |
+| Mac       | /Applications/Opera.app/Contents/MacOS/Opera<br />/Applications/Opera Next.app/Contents/MacOS/Opera |
+| Windows   | %PROGRAMFILES%\Opera\opera.exe<br />%PROGRAMFILES%\Opera Next\opera.exe                             |
 
 However, you can override this and specify a custom location to Opera
 by setting the capability `opera.path` or environmnetal variable
