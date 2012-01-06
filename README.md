@@ -78,10 +78,12 @@ instance:
     driver.navigate().to("http://opera.com/");
 
 Since WebDriver provides APIs (called *bindings*) for several
-languages, you can do the same in Ruby (using
-[selenium-webdriver](http://rubygems.org/gems/selenium-webdriver)) by
-setting the environmental variable `SELENIUM_SERVER_JAR` to the full
-path of the *selenium-server-standalone* JAR you just downloaded:
+languages, you can do the same in
+[Ruby](http://selenium.googlecode.com/svn/trunk/docs/api/rb/index.html)
+(using the
+[selenium-webdriver](http://rubygems.org/gems/selenium-webdriver) gem)
+by setting the environmental variable `SELENIUM_SERVER_JAR` to the
+full path of the *selenium-server-standalone* JAR you just downloaded:
 
     export SELENIUM_SERVER_JAR=/path/to/selenium-server-standalone.jar
 
@@ -96,8 +98,8 @@ And then do the following in Ruby:
 Since OperaDriver implements the wire protocol, it is fully compatibly
 with any
 [RemoteWebDriver](http://code.google.com/p/selenium/wiki/RemoteWebDriver)
-client.  Simply start up your server, create a client, and away you
-go:
+client.  Simply start up your server, create a remote client, and away
+you go:
 
     WebDriver driver = new RemoteWebDriver("http://localhost:9515", DesiredCapabilities.opera());
     driver.navigate().to("http://opera.com/");
@@ -111,8 +113,8 @@ section](https://github.com/operasoftware/operadriver/downloads) and
 extract it to a location of your choice.  To see some examples look at
 the
 [examples/](https://github.com/operasoftware/operadriver/tree/master/examples)
-directory.  For your own projects include the lib/* directory on your
-classpath, for example:
+directory.  For your own projects include the `lib/*` directory on
+your classpath, for example:
 
     javac -classpath "lib/*:." Example.java
 
