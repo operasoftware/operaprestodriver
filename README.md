@@ -1,42 +1,48 @@
 OperaDriver
 ===========
 
-OperaDriver is a vendor-supported WebDriver implementation developed by [Opera
-Software](http://opera.com/) and volunteers that implements [WebDriver's wire
-protocol](http://selenium.googlecode.com/svn/trunk/docs/api/java/index.html).
+OperaDriver is a vendor-supported WebDriver implementation developed
+by [Opera Software](http://opera.com/) and volunteers that implements
+[WebDriver](http://code.google.com/p/selenium/) for Opera.
 
-OperaDriver can drive the browser running various tests on your web pages, just
-as if a real user was navigating through them.  It can simulate actions like
-clicking links, entering text and submitting forms, and reports results back to
-you so you know that your website works as intended.
+OperaDriver can drive the browser running various tests on your web
+pages, just as if a real user was navigating through them.  It can
+emulate actions like clicking links, entering text and submitting
+forms, and reports results back to you so you know that your website
+works as intended.
 
-OperaDriver's end-user emulation ensures that your entire stack (HTML, scripts,
-styling, embedded resources and backend setup) is functioning correctly, and
-this without tedious manual testing routines.
+OperaDriver's end-user emulation ensures that your entire stack (HTML,
+scripts, styling, embedded resources and backend setup) is functioning
+correctly, and this without tedious manual testing routines.
 
 
 Requirements
 ------------
 
-You will need Oracle's Java Runtime Environment 1.5 or newer to use
-OperaDriver.  It uses the [Scope
-interface](http://dragonfly.opera.com/app/scope-interface/) (same as for
-[Dragonfly](http://www.opera.com/dragonfly/)) to communicate directly with
-Opera from Java.  Consequently, it is only compatible with Opera version 11.5
-or newer.
+You will need a Java Runtime Environment 1.5 or newer (Oracle or
+OpenJDK) to use OperaDriver.  It uses the [Scope
+interface](http://dragonfly.opera.com/app/scope-interface/) (same as
+for [Dragonfly](http://www.opera.com/dragonfly/)) to communicate
+directly with Opera from Java.  Consequently, it is only compatible
+out-ofthe-box with Opera version 11.6 or newer, although it works for
+older versions with some tweaks.
 
-The OperaDriver server expects you to have Opera installed in the default
-location for each system:
+The OperaDriver server expects you to have Opera installed in the
+default location for each system:
 
-| __OS__    | __Expected Location of Opera__               |
-|-----------|----------------------------------------------|
-| GNU/Linux | /usr/bin/opera                               |
-| Mac       | /Applications/Opera.app/Contents/MacOS/Opera |
-| WIndows   | \%PROGRAMFILES%\Opera\opera.exe              |
+| __OS__    | __Expected Location of Opera__                    |
+|-----------|---------------------------------------------------|
+| GNU/Linux | /usr/bin/opera
+              /usr/bin/opera-next                               |
+| Mac       | /Applications/Opera.app/Contents/MacOS/Opera
+              /Applications/Opera Next.app/Contents/MacOS/Opera |
+| Windows   | \%PROGRAMFILES%\Opera\opera.exe
+              \%PROGRAMFILES%\Opera Next\opera.exe              |
 
-However, you can override this and specify a custom location to Opera by
-setting the capability `opera.path` or environmnetal variable `OPERA_PATH`.
-You can read more about configuring WebDriver under Advanced Usage.
+However, you can override this and specify a custom location to Opera
+by setting the capability `opera.path` or environmnetal variable
+`OPERA_PATH`.  You can read more about configuring WebDriver under
+Advanced Usage.
 
 Other libraries required by OperaDriver:
 
@@ -47,14 +53,15 @@ Other libraries required by OperaDriver:
   * ini4j 0.5.2
   * json-20080701.jar
   * JUnit 4.10
-  * Selenium 2.15.0
+  * Selenium 2.16.0
 
 ### OperaDriver on 11.52 or older
 
-To use OperaDriver on Opera < 11.52, make sure you set the capabilities
-`opera.port` to `-1` and `opera.profile` to `""` (empty string) to
-disable `-debugproxy` and `-pd` command-line arguments which older
-versions of Opera do not support.
+To use OperaDriver on Opera < 11.52, make sure you set the
+capabilities `opera.port` to `-1` and `opera.profile` to `""` (empty
+string) to disable `-debugproxy` and `-pd` command-line arguments
+which older versions of Opera do not support.  For even older versions
+(11.01 or older) you might need a wrapper script (see below).
 
 
 Getting started
@@ -64,9 +71,9 @@ Getting started
 
 To get set up [please
 download](http://code.google.com/p/selenium/downloads/list) either
-*selenium-server-standalone* or *selenium-server* and make sure you have a
-fairly recent version of Opera installed.  All you do is to create a new
-`OperaDriver` instance:
+*selenium-server-standalone* or *selenium-server* and make sure you
+have a fairly recent version of Opera installed.  All you do is to
+create a new `OperaDriver` instance:
 
     WebDriver driver = new OperaDriver();
     driver.navigate().to("http://opera.com/");
@@ -74,9 +81,11 @@ fairly recent version of Opera installed.  All you do is to create a new
 
 ### Running the server as a standalone process
 
-Since OperaDriver implements the wire protocol, it is fully compatibly with any
+Since OperaDriver implements the wire protocol, it is fully compatibly
+with any
 [RemoteWebDriver](http://code.google.com/p/selenium/wiki/RemoteWebDriver)
-client.  Simply start up your server, create a client, and away you go:
+client.  Simply start up your server, create a client, and away you
+go:
 
     WebDriver driver = new RemoteWebDriver("http://localhost:9515", DesiredCapabilities.opera());
     driver.navigate().to("http://opera.com/");
@@ -84,19 +93,20 @@ client.  Simply start up your server, create a client, and away you go:
 
 ### Separate OperaDriver
 
-You can also use OperaDriver as a standalone dependency in your project.
-Download the package from the [Github project's download
-section](https://github.com/operasoftware/operadriver/downloads) and extract it
-to a location of your choice.  To see some examples look at the
+You can also use OperaDriver as a standalone dependency in your
+project.  Download the package from the [Github project's download
+section](https://github.com/operasoftware/operadriver/downloads) and
+extract it to a location of your choice.  To see some examples look at
+the
 [examples/](https://github.com/operasoftware/operadriver/tree/master/examples)
 directory.  For your own projects include the lib/* directory on your
 classpath, for example:
 
     javac -classpath "lib/*:." Example.java
 
-In Eclipse this can be done under _Project_ → _Properties_ → _Java Build Path_
-and then *"Add JARs..."* or *"Add External JARs..."* depending on the layout of
-your project.
+In Eclipse this can be done under _Project_ → _Properties_ → _Java
+Build Path_ and then *"Add JARs..."* or *"Add External JARs..."*
+depending on the layout of your project.
 
 
 Advanced Usage
@@ -106,7 +116,8 @@ Advanced Usage
 
 You can use the
 [DesiredCapabilities](http://selenium.googlecode.com/svn/trunk/docs/api/java/org/openqa/selenium/remote/DesiredCapabilities.html)
-class to specify settings for OperaDriver.  The capabilities we support are:
+class to specify settings for OperaDriver.  The capabilities we
+support are:
 
 | __Capability__              | __Type__ | __Default__ | __Description__             |
 |-----------------------------|----------|-------------|-----------------------------|
