@@ -559,11 +559,11 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     if (el == null) {
       // Search the document
       script =
-          "return " + OperaAtoms.FIND_ELEMENT.getValue() + "({\"" + by + "\": \"" + using + "\"})";
+          "return " + OperaAtoms.FIND_ELEMENT + "({\"" + by + "\": \"" + using + "\"})";
     } else {
       // Search within an element
       script =
-          "return " + OperaAtoms.FIND_ELEMENT.getValue() + "({\"" + by + "\": \"" + using
+          "return " + OperaAtoms.FIND_ELEMENT + "({\"" + by + "\": \"" + using
           + "\"}, locator)";
     }
 
@@ -628,11 +628,11 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     if (el == null) {
       // Search in document
       script =
-          "return " + OperaAtoms.FIND_ELEMENTS.getValue() + "({\"" + by + "\": \"" + using + "\"})";
+          "return " + OperaAtoms.FIND_ELEMENTS + "({\"" + by + "\": \"" + using + "\"})";
     } else {
       // Search within an element
       script =
-          "return " + OperaAtoms.FIND_ELEMENTS.getValue() + "({\"" + by + "\": \"" + using
+          "return " + OperaAtoms.FIND_ELEMENTS + "({\"" + by + "\": \"" + using
           + "\"}, locator)";
     }
 
@@ -814,7 +814,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
     // TODO: Implement need to find a way to link an element to a runtime
     public WebDriver frame(WebElement frameElement) {
-      String script = "return " + OperaAtoms.GET_FRAME_INDEX.getValue() + "(locator)";
+      String script = "return " + OperaAtoms.GET_FRAME_INDEX + "(locator)";
       Long frameIndex =
           (Long) debugger.callFunctionOnObject(script,
                                                ((OperaWebElement) frameElement).getObjectId(),
@@ -979,11 +979,11 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
   }
 
-  public Options manage() {
+  public OperaOptions manage() {
     return new OperaOptions();
   }
 
-  private class OperaOptions implements Options {
+  public class OperaOptions implements Options {
 
     public void addCookie(Cookie cookie) {
 
@@ -1061,7 +1061,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
        */
     }
 
-    public Timeouts timeouts() {
+    public OperaTimeouts timeouts() {
       return new OperaTimeouts();
     }
 

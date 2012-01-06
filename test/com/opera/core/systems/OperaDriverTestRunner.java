@@ -98,7 +98,7 @@ public class OperaDriverTestRunner extends BlockJUnit4ClassRunner {
 
     for (Platform platform : ignoreAnnotation.platforms()) {
       if (platform.is(Platform.ANY)) {
-        break;
+        return true;
       //} else if (OperaDriverTestCase.currentPlatform.is(platform)) {
       } else if (platform.is(OperaDriverTestCase.currentPlatform)) {
         return true;

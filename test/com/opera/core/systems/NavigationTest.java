@@ -18,12 +18,15 @@ package com.opera.core.systems;
 
 import com.opera.core.systems.scope.internal.OperaIntervals;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -35,6 +38,14 @@ public class NavigationTest extends OperaDriverTestCase {
     getFixture("javascript.html");
     getFixture("test.html");
     getFixture("keys.html");
+  }
+
+  @After
+  public void afterEach() {
+    // Make sure page load timeout is reset after each test, if one happens to fail
+    driver.manage().timeouts().pageLoadTimeout(OperaIntervals.PAGE_LOAD_TIMEOUT.getValue(),
+                                               TimeUnit.MILLISECONDS);
+
   }
 
   @Test
@@ -66,7 +77,7 @@ public class NavigationTest extends OperaDriverTestCase {
   }
 
   @Test
-  public void testHttpRedirect() throws Exception {
+  public void testHttpRedirect() {
     final String fetchedUrl = "http://t/core/bts/javascript/CORE-26410/003-2.php";
     driver.navigate().to(fetchedUrl);
 
@@ -79,6 +90,31 @@ public class NavigationTest extends OperaDriverTestCase {
     });
 
     assertEquals("http://t/core/bts/javascript/CORE-26410/001-3.php", driver.getCurrentUrl());
+  }
+
+  @Test
+  public void testHandBackControlAfterPageLoadTimeout() {
+    driver.manage().timeouts().pageLoadTimeout(100, TimeUnit.MILLISECONDS);
+    getFixture("idle/ecmascript-timeout.html");
+    assertEquals("Waiting", driver.findElementById("out").getText());
+    sleep(1000);
+    assertEquals("done", driver.findElementById("out").getText());
+  }
+
+  @Test
+  public void testHandBackControlAfterPageLoadTimeoutByOverload() {
+    driver.get(fixture("idle/ecmascript-timeout.html"), 100);
+    assertEquals("Waiting", driver.findElementById("out").getText());
+    sleep(1000);
+    assertEquals("done", driver.findElementById("out").getText());
+  }
+
+  private void sleep(long ms) {
+    try {
+      Thread.sleep(ms);
+    } catch (Exception e) {
+      // do nothing
+    }
   }
 
 }
