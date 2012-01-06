@@ -83,7 +83,7 @@ public interface ICoreUtils {
    * Gets the process ID of connected Opera instance.  Might not be present if the build does not
    * support retrieving process ID's.
    *
-   * @return pid
+   * @return pid, or null if not available
    */
   Integer getProcessID();
 

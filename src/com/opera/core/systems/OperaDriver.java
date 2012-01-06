@@ -55,6 +55,7 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.NoSuchFrameException;
 import org.openqa.selenium.NoSuchWindowException;
 import org.openqa.selenium.OutputType;
+import org.openqa.selenium.Platform;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
@@ -1411,32 +1412,77 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     return preferences().get(section, key).toString();
   }
 
-  public Utils utils() {
+  /**
+   * Gets the {@link OperaDriver.OperaUtils} interface which is used for accessing the browser's
+   * meta- and utility information, such as the operating system it's running on, its user agent
+   * string, &c.
+   *
+   * @return utility methods for Opera
+   */
+  public OperaUtils utils() {
     return new OperaUtils();
   }
 
-  public class OperaUtils implements Utils {
+  /**
+   * Interface for accessing the browser's meta- and utility information.
+   */
+  public class OperaUtils {
 
+    /**
+     * Which Core version this instance of the browser is using, e.g. "2.8.119".
+     *
+     * @return version number
+     */
     public String getCoreVersion() {
       return coreUtils.getCoreVersion();
     }
 
+    /**
+     * A string which describes the operating system, e.g. "Windows NT 6.1".
+     *
+     * @return operating system identifier
+     */
+    // TODO(andreastt): Use Platform
     public String getOS() {
       return coreUtils.getOperatingSystem();
     }
 
-    public String getProduct() {
-      return coreUtils.getProduct();
+    /**
+     * Gets the current product.  For regular desktop builds this will be {@link
+     * OperaProduct#DESKTOP} Other examples are {@link OperaProduct#MOBILE} and {@link
+     * OperaProduct#CORE}.
+     *
+     * @return browser's product type
+     */
+    public OperaProduct getProduct() {
+      return OperaProduct.get(coreUtils.getProduct());
     }
 
+    /**
+     * The full path to the currently running binary.
+     *
+     * @return full path to browser
+     */
     public String getBinaryPath() {
       return coreUtils.getBinaryPath();
     }
 
+    /**
+     * The User-Agent string.  Typically something like <code>Opera/9.80 (Windows NT 6.1; U; en)
+     * Presto/2.7.62 Version/11.01</code>.
+     *
+     * @return User-Agent string
+     */
     public String getUserAgent() {
       return coreUtils.getUserAgent();
     }
 
+    /**
+     * The ID of the process we're currently talking to.  Might not be present if the build does not
+     * support retrieving process IDs.
+     *
+     * @return process ID, or null if not available
+     */
     public int getPID() {
       return coreUtils.getProcessID();
     }
