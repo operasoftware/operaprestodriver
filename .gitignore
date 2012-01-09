@@ -16,6 +16,7 @@ maven/target
 pkg/*
 out/*
 probedata/
+protos/temp.proto
 release/
 src/com/opera/core/systems/test/**/*
 test_apc.txt
