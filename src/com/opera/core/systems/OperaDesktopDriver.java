@@ -42,7 +42,7 @@ import java.util.Map;
  */
 public class OperaDesktopDriver extends OperaDriver {
 
-  private OperaLauncherRunnerSettings settings;
+  private OperaLauncherRunnerSettings launcher_runner_settings;
 
   private IDesktopWindowManager desktopWindowManager;
   private ISystemInput systemInputManager;
@@ -78,6 +78,9 @@ public class OperaDesktopDriver extends OperaDriver {
     // OperaDriver constructor will initialize services and start Opera
     // if the binaryPath is set in settings (by calling init in OperaDriver)
     super(c);
+
+    launcher_runner_settings = new OperaLauncherRunnerSettings();
+
     initDesktopDriver();
   }
 
@@ -132,13 +135,13 @@ public class OperaDesktopDriver extends OperaDriver {
       if (operaPath.length() > 0) {
 
         capabilities.setCapability(OperaDriver.BINARY, operaPath);
-        settings.setBinary(operaPath);
+        launcher_runner_settings.setBinary(operaPath);
 
         // Get pid of Opera, needed to wait for it to quit
         int pid = desktopUtils.getOperaPid();
 
         // Now create the OperaLauncherRunner that we have the binary path
-        runner = new OperaLauncherRunner(settings);
+        runner = new OperaLauncherRunner(launcher_runner_settings);
 
         // Quit and wait for opera to quit properly
         services.quit(runner, pid);
@@ -198,13 +201,13 @@ public class OperaDesktopDriver extends OperaDriver {
       int pid = 0;
       if (operaPath.length() > 0) {
         capabilities.setCapability(OperaDriver.BINARY, operaPath);
-        settings.setBinary(operaPath);
+        launcher_runner_settings.setBinary(operaPath);
         pid = desktopUtils.getOperaPid();
       }
 
       // Now create the OperaLauncherRunner that we have the binary path
       // So we can control the shutdown
-      runner = new OperaLauncherRunner(settings);
+      runner = new OperaLauncherRunner(launcher_runner_settings);
 
       // Quit and wait for opera to quit properly (calls services.shutdown)
       services.quit(runner, pid);
