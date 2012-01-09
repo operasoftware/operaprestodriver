@@ -16,22 +16,19 @@ limitations under the License.
 
 package com.opera.core.systems;
 
+import com.opera.core.systems.scope.exceptions.ResponseNotReceivedException;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.WebElement;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class KeyEventsTest extends OperaDriverTestCase {
 
   private WebElement logEl;
-
-  private boolean logContains(CharSequence s) {
-    return logEl.getAttribute("value").contains(s);
-  }
 
   @Before
   public void setUp() {
@@ -41,12 +38,12 @@ public class KeyEventsTest extends OperaDriverTestCase {
 
   @After
   public void tearDown() {
-    driver.releaseKeys();
+    releaseKeys();
   }
 
   @Test
-  public void testKey() throws Exception {
-    driver.key("a");
+  public void testKey() {
+    key("a");
 
     assertTrue("keyDown event fired", logContains("down, 65, A"));
     assertTrue("keyPress event fired", logContains("press"));
@@ -54,25 +51,25 @@ public class KeyEventsTest extends OperaDriverTestCase {
   }
 
   @Test
-  public void testKeyDown() throws Exception {
-    driver.keyDown("a");
+  public void testKeyDown() {
+    keyDown("a");
 
     assertTrue("keyDown event fired", logContains("down, 65, A"));
   }
 
   @Test
-  public void testKeyUp() throws Exception {
-    driver.keyDown("a");
-    driver.keyUp("a");
+  public void testKeyUp() {
+    keyDown("a");
+    keyUp("a");
 
     assertTrue("keyUp event fired", logContains("up, 65, A"));
   }
 
   @Test
-  public void testMultipleKeys() throws Exception {
-    driver.keyDown("control");
-    driver.keyDown("shift");
-    driver.keyUp("control");
+  public void testMultipleKeys() {
+    keyDown("control");
+    keyDown("shift");
+    keyUp("control");
 
     assertTrue("control down", logContains("down, 17"));
     assertTrue("shift down", logContains("down, 16"));
@@ -82,63 +79,93 @@ public class KeyEventsTest extends OperaDriverTestCase {
   }
 
   @Test
-  public void testSpecialKeys() throws Exception {
-    driver.key("f5");
+  public void testSpecialKeys() {
+    key("f5");
     assertTrue("F5", logContains("press, 116"));
 
-    driver.key("home");
+    key("home");
     assertTrue("Home", logContains("press, 36"));
 
-    driver.key("pagedown");
+    key("pagedown");
     assertTrue("page down", logContains("press, 34"));
 
-    driver.key("del");
+    key("del");
     assertTrue("delete", logContains("press, 46"));
 
-    driver.key("backspace");
+    key("backspace");
     assertTrue("backspace", logContains("press, 8"));
   }
 
   @Test
-  public void testAffectsOpera() throws Exception {
-    // Fixture that doesn't preventDefault
-    getFixture("test.html");
-    ((OperaWebElement) driver.findElementById("input_email")).sendKeys("before refresh");
+  public void testReleaseKeys() {
+    keyDown("control");
+    keyDown("shift");
 
-    driver.key("f5");
-    //driver.waitForLoadToComplete();
-    assertEquals("", driver.findElementById("input_email").getAttribute("value"));
-  }
-
-  @Test
-  public void testReleaseKeys() throws Exception {
-    driver.keyDown("control");
-    driver.keyDown("shift");
-
-    driver.releaseKeys();
+    releaseKeys();
 
     assertTrue("released", logContains("up, 16"));
     assertTrue("released", logContains("up, 17"));
   }
 
   @Test
-  public void testReleaseAndPressKey() throws Exception {
-    driver.keyDown("control");
-    driver.releaseKeys();
+  public void testReleaseAndPressKey() {
+    keyDown("control");
+    releaseKeys();
 
     assertTrue("released", logContains("down, 17"));
     assertTrue("released", logContains("up, 17"));
 
-    driver.keyDown("control");
+    keyDown("control");
 
     assertTrue("released", logEl.getAttribute("value").endsWith("down, 17, , ctrl\n"));
   }
 
   // Pressing enter will wait for a page to load, check what happens when it doesn't
   @Test
-  public void testEnter() throws Exception {
-    driver.key("Enter");
+  public void testEnter() {
+    key("Enter");
     assertTrue("released", logContains("up, 13"));
+  }
+
+  // Methods that access the exec service directly:
+
+  private void key(String key) {
+    if (key.equalsIgnoreCase("enter")) {
+      driver.getScopeServices().captureOperaIdle();
+    }
+
+    keyDown(key);
+    keyUp(key);
+
+    if (key.equalsIgnoreCase("enter")) {
+      try {
+        driver.waitForLoadToComplete();
+      } catch (ResponseNotReceivedException e) {
+        // These things happen
+      }
+    }
+  }
+
+  private void keyDown(String key) {
+    driver.getExecService().key(key, false);
+  }
+
+  public void keyUp(String key) {
+    driver.getExecService().key(key, true);
+  }
+
+  public void releaseKeys() {
+    driver.getExecService().releaseKeys();
+  }
+
+  public void type(String using) {
+    driver.getExecService().type(using);
+  }
+
+  // For verifying test outcome:
+
+  private boolean logContains(CharSequence s) {
+    return logEl.getAttribute("value").contains(s);
   }
 
 }

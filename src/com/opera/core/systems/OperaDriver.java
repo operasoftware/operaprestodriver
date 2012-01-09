@@ -60,8 +60,7 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
 import com.opera.core.systems.arguments.OperaCoreArguments;
-import com.opera.core.systems.interaction.OperaAction;
-import com.opera.core.systems.interaction.UserInteraction;
+import com.opera.core.systems.common.lang.OperaStrings;
 import com.opera.core.systems.model.ScopeActions;
 import com.opera.core.systems.model.ScreenShotReply;
 import com.opera.core.systems.model.ScriptResult;
@@ -75,7 +74,6 @@ import com.opera.core.systems.scope.exceptions.ResponseNotReceivedException;
 import com.opera.core.systems.scope.handlers.PbActionHandler;
 import com.opera.core.systems.scope.internal.OperaFlags;
 import com.opera.core.systems.scope.internal.OperaIntervals;
-import com.opera.core.systems.scope.internal.OperaKeys;
 import com.opera.core.systems.scope.services.ICookieManager;
 import com.opera.core.systems.scope.services.ICoreUtils;
 import com.opera.core.systems.scope.services.IEcmaScriptDebugger;
@@ -83,15 +81,55 @@ import com.opera.core.systems.scope.services.IOperaExec;
 import com.opera.core.systems.scope.services.IWindowManager;
 import com.opera.core.systems.util.CapabilitiesSanitizer;
 
+<<<<<<< HEAD
+=======
+import org.openqa.selenium.Alert;
+import org.openqa.selenium.Beta;
+import org.openqa.selenium.By;
+import org.openqa.selenium.Capabilities;
+import org.openqa.selenium.Cookie;
+import org.openqa.selenium.InvalidSelectorException;
+import org.openqa.selenium.Keyboard;
+import org.openqa.selenium.Mouse;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.NoSuchFrameException;
+import org.openqa.selenium.NoSuchWindowException;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.StaleElementReferenceException;
+import org.openqa.selenium.TakesScreenshot;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebDriverException;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.logging.Logs;
+import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.RemoteLogs;
+import org.openqa.selenium.remote.RemoteWebDriver;
+
+import java.io.IOException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.FileHandler;
+import java.util.logging.Handler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
+
+>>>>>>> upstream/master
 /**
  * OperaDriver is an implementation of the WebDriver interface that allows you to drive the Opera
- * web browser. The driver uses the Scope protocol to communicate with Opera directly from Java.
+ * web browser.  The driver uses the Scope protocol to communicate with Opera directly from Java.
  *
  * The implementation is vendor-supported and developed by Opera Software and volunteers.
  */
 public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
-
-  // Want to thin some of these out, but will need some re-thinking.
 
   /**
    * (String) How verbose the logging should be. Available levels are: SEVERE (highest value),
@@ -424,7 +462,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
       services =
           new ScopeServices(versions, (Integer) capabilities.getCapability(PORT), manualStart);
-      // for profile-specific workarounds inside ScopeServives, WaitState ...
+      // for profile-specific workarounds inside ScopeServices, WaitState ...
       services.setProduct((String) capabilities.getCapability(PRODUCT));
       services.startStpThread();
     } catch (IOException e) {
@@ -514,18 +552,9 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     return debugger.executeJavascript("return document.location.href");
   }
 
-  private void gc() {
-    debugger.releaseObjects();
-    objectIds.clear();
-  }
-
   public void close() {
     closeWindow();
     windowManager.filterActiveWindow();
-  }
-
-  private void closeWindow() {
-    windowManager.closeWindow(windowManager.getActiveWindowId());
   }
 
   public WebElement findElement(By by) {
@@ -549,7 +578,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
       throw new IllegalArgumentException("Cannot find elements when the selector is null");
     }
 
-    using = escapeJsString(using);
+    using = OperaStrings.escapeJsString(using);
 
     long start = System.currentTimeMillis();
     boolean isAvailable;
@@ -615,7 +644,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
       throw new IllegalArgumentException("Cannot find elements when the selector is null");
     }
 
-    using = escapeJsString(using);
+    using = OperaStrings.escapeJsString(using);
 
     Integer id;
 
@@ -838,99 +867,15 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
   }
 
-  /**
-   * @return list of frames
-   */
-  public List<String> listFrames() {
-    return debugger.listFramePaths();
-  }
-
-  /**
-   * Escape characters for safe insertion in a Javascript string contained by double quotes (").
-   *
-   * @param string the string to escape
-   * @return an escaped string
-   */
-  protected String escapeJsString(String string) {
-    return escapeJsString(string, "\"");
-  }
-
-  /**
-   * Escape characters for safe insertion in a JavaScript string.
-   *
-   * @param string the string to escape
-   * @param quote  the type of quote to escape. Either " or '
-   * @return the escaped string
-   */
-  private String escapeJsString(String string, String quote) {
-
-    /*
-     * This should be expanded to match all invalid characters (e.g. newlines) but for the moment
-     * we'll trust we'll only get quotes.
-     */
-    Pattern escapePattern = Pattern.compile("([^\\\\])" + quote);
-
-    /*
-     * Prepend a space so that the regex can match quotes at the beginning of the string.
-     */
-    Matcher m = escapePattern.matcher(" " + string);
-    StringBuffer sb = new StringBuffer();
-
-    while (m.find()) {
-      /*
-       * $1 -> inserts the character before the quote \\\\\" -> \\", apparently just \" isn't
-       * treated literally.
-       */
-      m.appendReplacement(sb, "$1\\\\" + quote);
-    }
-
-    m.appendTail(sb);
-
-    // Remove the prepended space.
-    return sb.substring(1);
-  }
-
-  private WebElement findActiveElement() {
-    return findSingleElement("document.activeElement;", "active element");
-  }
-
-  protected List<WebElement> processElements(Integer id) {
-    List<Integer> ids = debugger.examineObjects(id);
-    List<WebElement> toReturn = new ArrayList<WebElement>();
-    for (Integer objectId : ids) {
-      toReturn.add(new OperaWebElement(this, objectId));
-    }
-    return toReturn;
-  }
-
-  protected void waitForLoadToComplete() throws ResponseNotReceivedException {
-    if (useOperaIdle()) {
-      services.waitForOperaIdle(OperaIntervals.OPERA_IDLE_TIMEOUT.getValue());
-    } else {
-      // Sometimes we get here before the next page has even *started* loading, and so return too
-      // quickly. This sleep is enough to make sure readyState has been set to "loading".
-      sleep(5);
-
-      long endTime = System.currentTimeMillis() + OperaIntervals.PAGE_LOAD_TIMEOUT.getValue();
-
-      while (!"complete".equals(debugger.executeJavascript("return document.readyState"))) {
-        if (System.currentTimeMillis() < endTime) {
-          sleep(OperaIntervals.POLL_INVERVAL.getValue());
-        } else {
-          throw new ResponseNotReceivedException("No response in a timely fashion");
-        }
-      }
-    }
-  }
-
   public WebElement findElementByName(String using) {
     return findSingleElement(
-        "document.getElementsByName('" + escapeJsString(using, "'") + "')[0];", "name");
+        "document.getElementsByName('" + OperaStrings.escapeJsString(using, "'") + "')[0];",
+        "name");
   }
 
   public List<WebElement> findElementsByName(String using) {
     return findMultipleElements(
-        "document.getElementsByName('" + escapeJsString(using, "'") + "');", "name");
+        "document.getElementsByName('" + OperaStrings.escapeJsString(using, "'") + "');", "name");
   }
 
   public Navigation navigate() {
@@ -1074,8 +1019,14 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
       throw new UnsupportedOperationException("Not supported in OperaDriver yet");
     }
 
+<<<<<<< HEAD
     public Logs logs() {
       return getLogs();
+=======
+    @Beta
+    public Logs logs() {
+      return new RemoteLogs(getExecuteMethod());
+>>>>>>> upstream/master
     }
 
   }
@@ -1099,6 +1050,225 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
   }
 
+  // TODO: CORE-39436 areas outside of the current viewport is black, this is a problem with Opera not OperaDriver
+  public <X> X getScreenshotAs(OutputType<X> target) throws WebDriverException {
+    OperaWebElement body = (OperaWebElement) findElementByTagName("body");
+    return target.convertFromPngBytes(body.saveScreenshot(0).getPng());
+  }
+
+  public Object executeScript(String script, Object... args) {
+    Object object = debugger.scriptExecutor(script, args);
+
+    // We probably have an element _or_ a list.
+    if (object instanceof ScriptResult) {
+      ScriptResult result = (ScriptResult) object;
+      Integer objectId = result.getObjectId();
+
+      if (objectId == null) {
+        return null;
+      }
+      if (result.getClassName().endsWith("Element")) {
+        return new OperaWebElement(this, objectId);
+      }
+      if (result.getClassName().equals("NodeList")) {
+        return processElements(objectId);
+      }
+      if (result.getClassName().equals("Array") || result.getClassName().equals("Object")) {
+        return debugger.examineScriptResult(objectId);
+      }
+    }
+
+    return object;
+  }
+
+  public Object executeAsyncScript(String script, Object... args) {
+    throw new UnsupportedOperationException();
+  }
+
+  public Keyboard getKeyboard() {
+    return new OperaKeyboard(this);
+  }
+
+  public Mouse getMouse() {
+    return new OperaMouse(this);
+  }
+
+  // Following methods are Opera-specific extensions to the WebDriver interface:
+
+  /**
+   * Gets a list of frames.
+   *
+   * @return list of frames
+   */
+  public List<String> listFrames() {
+    return debugger.listFramePaths();
+  }
+
+  /**
+   * Takes a screenshot of the whole screen, including areas outside of the Opera browser window.
+   *
+   * @param timeout the number of milliseconds to wait before taking the screenshot
+   * @param hashes  A previous screenshot MD5 hash. If it matches the hash of this screenshot then
+   *                no image data is returned.
+   * @return a ScreenShotReply object
+   */
+  public ScreenShotReply saveScreenshot(long timeout, String... hashes) {
+    return runner.saveScreenshot(timeout, hashes);
+  }
+
+  /**
+   * Returns the version number of driver.
+   *
+   * @return version number
+   */
+  public String getVersion() {
+    if (version == null) {
+      URL res = OperaDriver.class.getClassLoader().getResource("VERSION");
+
+      try {
+        version = Resources.toString(res, Charsets.UTF_8);
+      } catch (Exception e) {
+        version = "(Unknown)";
+      }
+    }
+    return version;
+  }
+
+  /**
+   * Returns an interface for manipulating the preferences in the currently attached Opera
+   * programmatically.  Some changes might require Opera to restart before the changes take affect.
+   * The available preferences are found in <code>opera:config</code>.
+   *
+   * @return methods for interacting with preferences
+   */
+  public OperaScopePreferences preferences() {
+    return preferences;
+  }
+  
+  public Logs getLogs(){
+    return new RemoteLogs(this.getExecuteMethod());
+  }
+
+  /**
+   * Sets the given preference information.  If a previous preference with the same section and key
+   * names exist, it will be replaced by the given preference.
+   *
+   * @param section the section name, can be case-insensitive
+   * @param key     the key name, can be case-insensitive
+   * @param value   the new value (will be treated as a {@link String} in Opera
+   * @deprecated Please use {@link OperaDriver#preferences()} instead
+   */
+  @Deprecated
+  @SuppressWarnings("unused")
+  public void setPref(String section, String key, String value) {
+    preferences().set(section, key, value);
+  }
+
+  /**
+   * Returns the preference with the given section and key values.
+   *
+   * @param section the section name, can be case-insensitive
+   * @param key     the key name, can be case-insensitive
+   * @return the preference requested
+   * @deprecated Please use {@link OperaDriver#preferences()} instead
+   */
+  @Deprecated
+  @SuppressWarnings("unused")
+  public String getPref(String section, String key) {
+    return preferences().get(section, key).toString();
+  }
+
+  /**
+   * Gets the {@link OperaDriver.OperaUtils} interface which is used for accessing the browser's
+   * meta- and utility information, such as the operating system it's running on, its user agent
+   * string, &c.
+   *
+   * @return utility methods for Opera
+   */
+  public OperaUtils utils() {
+    return new OperaUtils();
+  }
+
+  /**
+   * Interface for accessing the browser's meta- and utility information.
+   */
+  public class OperaUtils {
+
+    /**
+     * Which Core version this instance of the browser is using, e.g. "2.8.119".
+     *
+     * @return version number
+     */
+    public String getCoreVersion() {
+      return coreUtils.getCoreVersion();
+    }
+
+    /**
+     * A string which describes the operating system, e.g. "Windows NT 6.1".
+     *
+     * @return operating system identifier
+     */
+    // TODO(andreastt): Use Platform
+    public String getOS() {
+      return coreUtils.getOperatingSystem();
+    }
+
+    /**
+     * Gets the current product.  For regular desktop builds this will be {@link
+     * OperaProduct#DESKTOP} Other examples are {@link OperaProduct#MOBILE} and {@link
+     * OperaProduct#CORE}.
+     *
+     * @return browser's product type
+     */
+    public OperaProduct getProduct() {
+      return OperaProduct.get(coreUtils.getProduct());
+    }
+
+    /**
+     * The full path to the currently running binary.
+     *
+     * @return full path to browser
+     */
+    public String getBinaryPath() {
+      return coreUtils.getBinaryPath();
+    }
+
+    /**
+     * The User-Agent string.  Typically something like <code>Opera/9.80 (Windows NT 6.1; U; en)
+     * Presto/2.7.62 Version/11.01</code>.
+     *
+     * @return User-Agent string
+     */
+    public String getUserAgent() {
+      return coreUtils.getUserAgent();
+    }
+
+    /**
+     * The ID of the process we're currently talking to.  Might not be present if the build does not
+     * support retrieving process IDs.
+     *
+     * @return process ID, or null if not available
+     */
+    public int getPID() {
+      return coreUtils.getProcessID();
+    }
+
+  }
+
+<<<<<<< HEAD
+}
+=======
+  /**
+   * Executes selftests for the given module.
+   *
+   * @param modules the list of modules to run selftests for
+   * @param timeout the time out before aborting the operation
+   * @return results of the selftests
+   */
+  public String selftest(List<String> modules, long timeout) {
+    return services.selftest(modules, timeout);
+  }
+
   /**
    * Performs a special action, such as setting an Opera preference.
    *
@@ -1106,22 +1276,101 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
    *
    * @param using  the action to perform.
    * @param params parameters to pass to the action call
+   * @deprecated
    */
+  @Deprecated
   public void operaAction(String using, String... params) {
     exec.action(using, params);
   }
 
+  @Deprecated
   @SuppressWarnings("unused")
-  private Set<String> getOperaActionList() {
+  public Set<String> getOperaActionList() {
     return exec.getActionList();
   }
 
-  private static void sleep(long ms) {
-    try {
-      Thread.sleep(ms);
-    } catch (InterruptedException e) {
-      Thread.currentThread().interrupt();
+  // Following methods are used in OperaWebElement:
+
+  protected IEcmaScriptDebugger getScriptDebugger() {
+    return debugger;
+  }
+
+  protected IOperaExec getExecService() {
+    return exec;
+  }
+
+  protected ScopeServices getScopeServices() {
+    return services;
+  }
+
+  protected boolean hasTimeRemaining(long start) {
+    return System.currentTimeMillis() - start < OperaIntervals.WAIT_FOR_ELEMENT.getValue();
+  }
+
+  protected List<WebElement> processElements(Integer id) {
+    List<Integer> ids = debugger.examineObjects(id);
+    List<WebElement> toReturn = new ArrayList<WebElement>();
+    for (Integer objectId : ids) {
+      toReturn.add(new OperaWebElement(this, objectId));
     }
+    return toReturn;
+  }
+
+  protected void waitForLoadToComplete() throws ResponseNotReceivedException {
+    if (useOperaIdle()) {
+      services.waitForOperaIdle(OperaIntervals.OPERA_IDLE_TIMEOUT.getValue());
+    } else {
+      // Sometimes we get here before the next page has even *started* loading, and so return too
+      // quickly. This sleep is enough to make sure readyState has been set to "loading".
+      sleep(5);
+
+      long endTime = System.currentTimeMillis() + OperaIntervals.PAGE_LOAD_TIMEOUT.getValue();
+
+      while (!"complete".equals(debugger.executeJavascript("return document.readyState"))) {
+        if (System.currentTimeMillis() < endTime) {
+          sleep(OperaIntervals.POLL_INVERVAL.getValue());
+        } else {
+          throw new ResponseNotReceivedException("No response in a timely fashion");
+        }
+      }
+    }
+  }
+
+  /**
+   * Whether idle functionality is available.  Note that this is not the same as whether the idle
+   * functionality is enabled.
+   *
+   * @return true if idle is available, false otherwise
+   */
+  protected boolean isOperaIdleAvailable() {
+    return services.isOperaIdleAvailable();
+  }
+
+  // Following methods are used in SpartanRunner:
+
+  /**
+   * Enable or disable idle functionality during runtime.
+   *
+   * @param useIdle true if idle should be switched on, false if it should be switched off
+   */
+  @SuppressWarnings("unused")
+  protected void setUseOperaIdle(boolean useIdle) {
+    capabilities.setCapability(OPERAIDLE, useIdle);
+  }
+
+  // Following methods are used internally:
+
+  private void gc() {
+    debugger.releaseObjects();
+    objectIds.clear();
+  }
+
+  private void closeWindow() {
+    windowManager.closeWindow(windowManager.getActiveWindowId());
+  }
+
+  private WebElement findActiveElement() {
+    return findSingleElement("document.activeElement;", "active element");
   }
 
   private List<WebElement> findMultipleElements(String script, String type) {
@@ -1183,273 +1432,17 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     }
   }
 
-  protected boolean hasTimeRemaining(long start) {
-    return System.currentTimeMillis() - start < OperaIntervals.WAIT_FOR_ELEMENT.getValue();
-  }
-
-  /**
-   * Takes a screenshot of the whole screen, including areas outside of the Opera browser window.
-   *
-   * @param timeout the number of milliseconds to wait before taking the screenshot
-   * @param hashes  A previous screenshot MD5 hash. If it matches the hash of this screenshot then
-   *                no image data is returned.
-   * @return a ScreenShotReply object
-   */
-  public ScreenShotReply saveScreenshot(long timeout, String... hashes) {
-    return runner.saveScreenshot(timeout, hashes);
-  }
-
-  // TODO: CORE-39436 areas outside of the current viewport is black. This is a problem with Opera,
-  // not OperaDriver.
-  public <X> X getScreenshotAs(OutputType<X> target) throws WebDriverException {
-    OperaWebElement body = (OperaWebElement) findElementByTagName("body");
-    return target.convertFromPngBytes(body.saveScreenshot(0).getPng());
-  }
-
-  protected boolean isOperaIdleAvailable() {
-    return services.isOperaIdleAvailable();
-  }
-
   private boolean useOperaIdle() {
     return (((Boolean) capabilities.getCapability(OPERAIDLE)) && isOperaIdleAvailable());
   }
 
-  @SuppressWarnings("unused")
-  public void setUseOperaIdle(boolean useIdle) {
-    capabilities.setCapability(OPERAIDLE, useIdle);
-  }
-
-  public Object executeScript(String script, Object... args) {
-    Object object = debugger.scriptExecutor(script, args);
-
-    // We probably have an element _or_ a list.
-    if (object instanceof ScriptResult) {
-      ScriptResult result = (ScriptResult) object;
-      Integer objectId = result.getObjectId();
-
-      if (objectId == null) {
-        return null;
-      }
-      if (result.getClassName().endsWith("Element")) {
-        return new OperaWebElement(this, objectId);
-      }
-      if (result.getClassName().equals("NodeList")) {
-        return processElements(objectId);
-      }
-      if (result.getClassName().equals("Array") || result.getClassName().equals("Object")) {
-        return debugger.examineScriptResult(objectId);
-      }
-    }
-
-    return object;
-  }
-
-  /**
-   * Is JavaScript enables in this driver?
-   *
-   * @return true if JavaScript is enabled
-   */
-  public boolean isJavascriptEnabled() {
-    return OperaFlags.ENABLE_DEBUGGER;
-  }
-
-  /**
-   * @param action a string identifying the Opera Action to use.
-   * @deprecated
-   */
-  @Deprecated
-  public void executeActions(OperaAction action) {
-    services.captureOperaIdle();
-    List<UserInteraction> actions = action.getActions();
-
-    for (UserInteraction userInteraction : actions) {
-      userInteraction.execute(this);
-    }
-
+  private static void sleep(long ms) {
     try {
-      waitForLoadToComplete();
-    } catch (ResponseNotReceivedException e) {
-      logger.fine("Response not received, returning control to user");
+      Thread.sleep(ms);
+    } catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
     }
-  }
-
-  /**
-   * Presses and releases the given key. If the key is "enter" then OperaDriver waits for the page
-   * to finish loading.
-   *
-   * @param key A string containing the key to press. This can be a single character (e.g. "a") or a
-   *            special key (e.g. "left"), and is matched case insensitively. For a list of keys see
-   *            {@link OperaKeys}.
-   */
-  public void key(String key) {
-    if (key.equalsIgnoreCase("enter")) {
-      services.captureOperaIdle();
-    }
-
-    keyDown(key);
-    keyUp(key);
-
-    if (key.equalsIgnoreCase("enter")) {
-      try {
-        waitForLoadToComplete();
-      } catch (ResponseNotReceivedException e) {
-        logger.fine("Response not received, returning control to user");
-      }
-    }
-  }
-
-  /**
-   * Presses and holds the given key. You cannot press a key that is already down.
-   *
-   * @param key the key to press, see {@link #key(String)} for more information.
-   */
-  public void keyDown(String key) {
-    exec.key(key, false);
-  }
-
-  /**
-   * Releases the given key.
-   *
-   * @param key the key to release, see {@link #key(String)} for more information.
-   */
-  public void keyUp(String key) {
-    exec.key(key, true);
-  }
-
-  /**
-   * Releases all the currently pressed keys.
-   */
-  public void releaseKeys() {
-    exec.releaseKeys();
-  }
-
-  /**
-   * Types the given string as-is in to the browser window. To press special keys use {@link
-   * #key(String)}.
-   *
-   * @param using the string to type
-   */
-  public void type(String using) {
-    exec.type(using);
-  }
-
-  /**
-   * Returns the version number of driver.
-   *
-   * @return version number
-   */
-  public String getVersion() {
-    if (version == null) {
-      URL res = OperaDriver.class.getClassLoader().getResource("VERSION");
-
-      try {
-        version = Resources.toString(res, Charsets.UTF_8);
-      } catch (Exception e) {
-        version = "(Unknown)";
-      }
-    }
-    return version;
-  }
-
-  protected IEcmaScriptDebugger getScriptDebugger() {
-    return debugger;
-  }
-
-  protected IOperaExec getExecService() {
-    return exec;
-  }
-
-  protected IWindowManager getWindowManager() {
-    return windowManager;
-  }
-
-  protected ScopeServices getScopeServices() {
-    return services;
-  }
-
-  public Object executeAsyncScript(String script, Object... args) {
-    throw new UnsupportedOperationException();
-  }
-
-  public Keyboard getKeyboard() {
-    return new OperaKeyboard(this);
-  }
-
-  public Mouse getMouse() {
-    return new OperaMouse(this);
-  }
-
-  public String selftest(List<String> modules, long timeout) {
-    return services.selftest(modules, timeout);
-  }
-
-  public OperaScopePreferences preferences() {
-    return preferences;
-  }
-  
-  public Logs getLogs(){
-    return new RemoteLogs(this.getExecuteMethod());
-  }
-
-  /**
-   * Sets the given preference information.  If a previous preference with the same section and key
-   * names exist, it will be replaced by the given preference.
-   *
-   * @param section the section name, can be case-insensitive
-   * @param key     the key name, can be case-insensitive
-   * @param value   the new value (will be treated as a {@link String} in Opera
-   * @deprecated Please use {@link OperaDriver#preferences()} instead
-   */
-  @Deprecated
-  @SuppressWarnings("unused")
-  public void setPref(String section, String key, String value) {
-    preferences().set(section, key, value);
-  }
-
-  /**
-   * Returns the preference with the given section and key values.
-   *
-   * @param section the section name, can be case-insensitive
-   * @param key     the key name, can be case-insensitive
-   * @return the preference requested
-   * @deprecated Please use {@link OperaDriver#preferences()} instead
-   */
-  @Deprecated
-  @SuppressWarnings("unused")
-  public String getPref(String section, String key) {
-    return preferences().get(section, key).toString();
-  }
-
-  public Utils utils() {
-    return new OperaUtils();
-  }
-
-  public class OperaUtils implements Utils {
-
-    public String getCoreVersion() {
-      return coreUtils.getCoreVersion();
-    }
-
-    public String getOS() {
-      return coreUtils.getOperatingSystem();
-    }
-
-    public String getProduct() {
-      return coreUtils.getProduct();
-    }
-
-    public String getBinaryPath() {
-      return coreUtils.getBinaryPath();
-    }
-
-    public String getUserAgent() {
-      return coreUtils.getUserAgent();
-    }
-
-    public int getPID() {
-      return coreUtils.getProcessID();
-    }
-
   }
 
 }
+>>>>>>> upstream/master

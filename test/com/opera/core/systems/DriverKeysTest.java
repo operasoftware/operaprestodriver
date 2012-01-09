@@ -34,182 +34,133 @@ public class DriverKeysTest extends OperaDriverTestCase {
     getFixture("two_input_fields.html");
     fieldOne = driver.findElementByName("one");
     fieldTwo = driver.findElementByName("two");
-
     fieldOne.click();
   }
 
   @Test
   public void testSingleCharacter() {
-    driver.key("a");
+    new Actions(driver).sendKeys("a").build().perform();
     assertEquals("a", fieldOne.getAttribute("value"));
   }
 
   @Test
   public void testSequence() {
-    driver.key("a");
-    driver.key("b");
-    driver.key("c");
-    driver.key("d");
-    driver.key("e");
-    driver.key("f");
+    new Actions(driver).sendKeys("a")
+        .sendKeys("b")
+        .sendKeys("c")
+        .sendKeys("d")
+        .sendKeys("e")
+        .sendKeys("f")
+        .build().perform();
     assertEquals("abcdef", fieldOne.getAttribute("value"));
-  }
-
-  @Test
-  public void testUpDown() {
-    driver.keyDown("a");
-    driver.keyUp("a");
-    driver.keyDown("b");
-    driver.keyUp("b");
-    assertEquals("ab", fieldOne.getAttribute("value"));
-
   }
 
   @Test
   public void testMultiByte() {
     // Note that this test will fail if you have the wrong charset setup on Windows.
-    driver.key("ル");
-    driver.key("ビ");
-    driver.key("ー");
-    driver.key(" ");
-    driver.key("水");
+    new Actions(driver).sendKeys("ル")
+        .sendKeys("ビ")
+        .sendKeys("ー")
+        .sendKeys(" ")
+        .sendKeys("水")
+        .build().perform();
     assertEquals("Are you sure you have the right charset setup if you're on Windows?",
                  "ルビー 水", fieldOne.getAttribute("value"));
   }
 
   @Test
   public void testTypeSingle() {
-    driver.type("a");
+    new Actions(driver).sendKeys("a").build().perform();
     assertEquals("a", fieldOne.getAttribute("value"));
   }
 
   @Test
   public void testTypeMulti() {
-    driver.type("abcdef");
+    new Actions(driver).sendKeys("abcdef").build().perform();
     assertEquals("abcdef", fieldOne.getAttribute("value"));
   }
 
   @Test
   public void testTypeMultiByte() {
-    driver.type("ルビー 水");
+    new Actions(driver).sendKeys("ルビー 水").build().perform();
     assertEquals("ルビー 水", fieldOne.getAttribute("value"));
   }
 
   @Test
   public void testTypeNotModify() throws Exception {
-    driver.type("ac");
-    driver.type("left");
-    driver.type("b");
+    new Actions(driver).sendKeys("ac" + "left" + "b").build().perform();
     assertEquals("acleftb", fieldOne.getAttribute("value"));
   }
 
   @Test
   public void testLeftArrow() {
-    driver.type("ac");
-    driver.key("Left");
-    driver.type("b");
+    new Actions(driver).sendKeys("ac" + Keys.LEFT + "b").build().perform();
     assertEquals("abc", fieldOne.getAttribute("value"));
   }
 
   @Test
-  public void testname() throws Exception {
-    driver.type("ac");
-    driver.keyDown("Left");
-    driver.keyUp("Left");
-    driver.type("b");
-    assertEquals("abc", fieldOne.getAttribute("value"));
-  }
-
-  @Test
-  public void testCaseInsensitveLeftArrow() {
-    driver.type("ac");
-    driver.key("left");
-    driver.key("b");
+  public void testCaseInsensitiveLeftArrow() {
+    new Actions(driver).sendKeys("ac" + Keys.LEFT + "b").build().perform();
     assertEquals("abc", fieldOne.getAttribute("value"));
   }
 
   @Test
   public void testTab() {
-    driver.type("ab");
-    driver.key("tab");
-    driver.type("c");
+    new Actions(driver).sendKeys("ab" + Keys.TAB + "c").build().perform();
     assertEquals("ab", fieldOne.getAttribute("value"));
     assertEquals("c", fieldTwo.getAttribute("value"));
   }
 
   @Test
-  public void testHoldShift2() throws Exception {
-    driver.key("a");
-    driver.key("c");
-    driver.key("d");
-    driver.keyDown("shift");
-    driver.key("left");
-    driver.key("left");
-    driver.keyUp("shift");
-    driver.key("b");
-
+  public void testHoldShift() {
+    new Actions(driver).sendKeys("acd")
+        .sendKeys(Keys.LEFT_SHIFT + "" + Keys.LEFT + Keys.LEFT)
+        .sendKeys("b")
+        .build().perform();
     assertEquals("ab", fieldOne.getAttribute("value"));
   }
 
   @Test
-  public void testShiftCapitals() throws Exception {
-    driver.type("a");
-    driver.keyDown("shift");
-    driver.type("b");
-    driver.type("c");
-    driver.keyUp("shift");
-    driver.type("d");
-
+  public void testShiftCapitals() {
+    new Actions(driver).sendKeys("a").sendKeys(Keys.SHIFT + "bc").sendKeys("d").build().perform();
     assertEquals("aBCd", fieldOne.getAttribute("value"));
   }
 
   @Test
   public void testHoldControl() {
-    driver.key("a");
-    // Ctrl+A, select all
-    driver.keyDown("control");
-    driver.type("a");
-    driver.keyUp("control");
-    driver.key("b");
-    driver.key("c");
+    // Control + A
+    new Actions(driver).sendKeys("a" + Keys.CONTROL + "a" + Keys.CONTROL + "bc").build().perform();
     assertEquals("bc", fieldOne.getAttribute("value"));
   }
 
   @Test
   public void testMultipleModifiers() throws Exception {
-    driver.type("abc defghij");
-    driver.keyDown("control");
-    driver.keyDown("shift");
-    driver.key("left");
-    driver.keyUp("control");
-    driver.keyUp("shift");
-    driver.key("backspace");
+    new Actions(driver).sendKeys("abc defghij")
+        .sendKeys(Keys.CONTROL + "" + Keys.LEFT_SHIFT + Keys.LEFT)
+        .sendKeys(Keys.BACK_SPACE)
+        .build().perform();
 
     assertEquals("abc ", fieldOne.getAttribute("value"));
   }
 
   @Test
   public void testCopyPaste() throws Exception {
-    driver.type("hello world");
-    Actions action = new Actions(driver);
-    action.sendKeys(Keys.CONTROL + "a");
-    action.sendKeys(Keys.CONTROL + "c");
-    action.sendKeys(fieldTwo, Keys.CONTROL + "v");
-
-    action.perform();
+    new Actions(driver).sendKeys("hello world")
+        .sendKeys(Keys.CONTROL + "a")
+        .sendKeys(Keys.CONTROL + "c")
+        .sendKeys(fieldTwo, Keys.CONTROL + "v")
+        .build().perform();
 
     assertEquals("hello world", fieldTwo.getAttribute("value"));
   }
 
   @Test
   public void testCopyPasteLeftControl() throws Exception {
-    driver.type("hello world");
-    Actions action = new Actions(driver);
-    action.sendKeys(Keys.LEFT_CONTROL + "a");
-    action.sendKeys(Keys.LEFT_CONTROL + "c");
-    action.sendKeys(fieldTwo, Keys.LEFT_CONTROL + "v");
-
-    action.perform();
+    new Actions(driver).sendKeys("hello world")
+        .sendKeys(Keys.LEFT_CONTROL + "a")
+        .sendKeys(Keys.LEFT_CONTROL + "c")
+        .sendKeys(fieldTwo, Keys.LEFT_CONTROL + "v")
+        .build().perform();
 
     assertEquals("hello world", fieldTwo.getAttribute("value"));
   }

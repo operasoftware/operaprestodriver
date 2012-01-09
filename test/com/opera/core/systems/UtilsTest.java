@@ -23,7 +23,6 @@ import org.junit.rules.MethodRule;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.Statement;
 
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.openqa.selenium.Platform.WINDOWS;
 
@@ -61,13 +60,9 @@ public class UtilsTest extends OperaDriverTestCase {
   }
 
   @Test
-  public void testProductIsNotUnknown() {
-    assertFalse(driver.utils().getProduct().contains("unknown"));
-  }
-
-  @Test
   public void testProductIsKnown() {
-    assertTrue(driver.utils().getProduct().matches("core-gogi|desktop"));
+    OperaProduct product = driver.utils().getProduct();
+    assertTrue(product.is(OperaProduct.CORE) || product.is(OperaProduct.DESKTOP));
   }
 
   @Test

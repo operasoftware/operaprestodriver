@@ -1,3 +1,160 @@
+v0.9      (not released yet)
+
+  [API CHANGES]
+
+  * Removed deprecated interface OperaDriverSettings.  (andreastt)
+
+  * Removed deprecated method OperaWebElement.hover().  (andreastt)
+
+  * Removed methods OperaWebElement.mouseOver(), mouseOut(),
+    mouseDown() and mosueUp().  (andreastt)
+
+  * Removed deprecated methods OperaWebElement.getValue() and
+    isVisible().  (andreastt)
+
+  * Removed unknown, unused method OperaWebElement.getElementName().
+    (andreastt)
+
+  * Removed method OperaWebElement.rightClick().  (andreastt)
+
+  * Removed deprecated methods OperaWebElement.dragAndDropBy() and
+    dragAndDropOn().  (andreastt)
+
+  * Removed deprecated method OperaDriver.getRunner().  (andreastt)
+
+  * OperaDriver's constructor now also takes OperaProfile as an
+    argument. (andreastt)
+
+  * OperaRunnerSettings.setProfile() now accepts an OperaProfile
+    object as argument.  (andreastt)
+
+  * The capabilities for Opera now accepts an OperaProfile object for
+    "opera.profile".  (andreastt)
+
+  * The capabilities for Opera now accepts a Level object for
+    "opera.logging.level".  (andreastt)
+
+  * OperaIntervals.ENABLE_DEBUGGER has been moved to
+    OperaFlags.ENABLE_DEBUGGER.  (andreastt)
+
+  * Upgraded Selenium dependency to 2.16.1.  (andreastt)
+
+  * Removed interface Utils.  (andreastt)
+
+  * OperaUtils.getProduct() now returns OperaProduct instead of
+    String.  (andreastt)
+
+  * Removed OperaDriver.isJavascriptEnabled().  (andreastt)
+
+  * Removed methods OperaDriver.key(), keyDown(), keyUp(),
+    releaseKeys() and type().  (andreastt)
+
+  * Added OperaDriver.manage().logs() to support Selenium 2.16.1.
+    (andreastt)
+
+
+  [NEW FEATURES]
+
+  * New interface OperaProfile for interacting with the profile for
+    Opera.  You can for example modify or set new preferences on
+    profile before Opera is started:
+
+       OperaProfile profile = new OperaProfile();  // fresh profile
+       profile.preferences().set("User Prefs",
+                                 "Ignore Unrequested Popups", false);
+       WebDriver driver = new OperaDriver(profile);
+
+    You can also interact with existing profiles by passing in the
+    directory to OperaProfile's constructor.
+
+    (andreastt)
+
+  * New interface OperaPreferences for managing preferences in
+    preference files (like operaprefs.ini) and during runtime through
+    Scope.
+
+    Calls to preference may be done like this:
+
+       driver.preferences().set("User Prefs",
+                                "Ignore Unrequested Popups", false);
+
+    OperaScopePreferences replaces OperaDriver.getPref() and
+    OperaDriver.setPref() which are now deprecated.
+
+    (andreastt)
+
+  [ENHANCEMENTS]
+
+  * Reduced much code duplication.  (andreastt)
+
+  * Default product for OperaRunnerSettings is now DESKTOP.
+    (andreastt)
+
+  * Upgraded WebDriver atoms.  (andreastt)
+
+  * Upgraded OperaWebElement.click() to use new atoms for selecting an
+    OPTION element.  (andreastt)
+
+  [BUG FIXES]
+
+  * Asserting if element is stale on OperaWebElement.getText(),
+    getLocation(), getTagName() and clear().  (andreastt)
+
+  * If a page load times out we now return control of the browser _in
+    all_ situations.  (andreastt)
+
+  * Reverted check for setLastModified on newly copied launcher as it
+    seems to be failing on Windows.  (andreastt)
+
+  * OperaLauncherRunner.isOperaRunning() no longer throws exception if
+    launcher has shut down, but returns false instead.  (andreastt)
+
+  * Object IDs are being garbage collected on each new page load, no
+    need to store and verify URL when checking for stale elements.
+    (andreastt)
+
+  * OperaLauncherBinary is now using Platform.is() (from Selenium) for
+    platform comparison.  Will output nicer warning when failing on
+    Windows without VS C++ 2008 redistributable package.  (andreastt)
+
+  * Fixed issue with SocketException for double shutdown call in
+    OperaLauncherRunnerProtocol, fixes tests for Windows.  (andreastt)
+
+  [TESTS]
+
+  * Added many new test run configurations for IntelliJ.  (andreastt)
+
+  * Fixed NullPointerException in the case something went wrong during
+    initialization of OperaDriver in OperaDriverTestCase.  (andreastt)
+
+  * Added tests for OperaStrings.  (ajayk)
+
+  * Tests for circumstances where StaleElementReferenceException
+    should be thrown.  (andreastt)
+
+  * Refactored many tests so that they pass on Windows, where JUnit
+    test order is not guaranteed.  (andreastt)
+
+  * Tests for handing back control to user after reaching
+    PAGE_LOAD_TIMEOUT.  (andreastt)
+
+  [OTHER]
+
+  * Documented many methods.  (andreastt)
+
+  * Updated Eclipse configuration.  (ajayk)
+
+  * Updated IntelliJ configuration for version 11.  (andreastt)
+
+  * Compile target “compile_tests” now requires “jar”.  (andreastt)
+
+  * Added more examples to the README.  (andreastt)
+
+  * Removed old interactions implementation in
+    com.opera.core.systems.interaction since it was never used.
+    (andreastt)
+
+
 v0.8.1    2011-11-24
 
   [API CHANGES]
