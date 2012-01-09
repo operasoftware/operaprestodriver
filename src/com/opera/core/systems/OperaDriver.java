@@ -16,49 +16,9 @@ limitations under the License.
 
 package com.opera.core.systems;
 
-import java.io.IOException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
-import java.util.concurrent.TimeUnit;
-import java.util.logging.FileHandler;
-import java.util.logging.Handler;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.logging.SimpleFormatter;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import org.openqa.selenium.Alert;
-import org.openqa.selenium.Beta;
-import org.openqa.selenium.By;
-import org.openqa.selenium.Capabilities;
-import org.openqa.selenium.Cookie;
-import org.openqa.selenium.InvalidSelectorException;
-import org.openqa.selenium.Keyboard;
-import org.openqa.selenium.Mouse;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.NoSuchFrameException;
-import org.openqa.selenium.NoSuchWindowException;
-import org.openqa.selenium.OutputType;
-import org.openqa.selenium.StaleElementReferenceException;
-import org.openqa.selenium.TakesScreenshot;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebDriverException;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.logging.Logs;
-import org.openqa.selenium.remote.DesiredCapabilities;
-import org.openqa.selenium.remote.RemoteLogs;
-import org.openqa.selenium.remote.RemoteWebDriver;
-
 import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
+
 import com.opera.core.systems.arguments.OperaCoreArguments;
 import com.opera.core.systems.common.lang.OperaStrings;
 import com.opera.core.systems.model.ScopeActions;
@@ -81,8 +41,6 @@ import com.opera.core.systems.scope.services.IOperaExec;
 import com.opera.core.systems.scope.services.IWindowManager;
 import com.opera.core.systems.util.CapabilitiesSanitizer;
 
-<<<<<<< HEAD
-=======
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.Beta;
 import org.openqa.selenium.By;
@@ -122,7 +80,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
->>>>>>> upstream/master
 /**
  * OperaDriver is an implementation of the WebDriver interface that allows you to drive the Opera
  * web browser.  The driver uses the Scope protocol to communicate with Opera directly from Java.
@@ -1019,14 +976,9 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
       throw new UnsupportedOperationException("Not supported in OperaDriver yet");
     }
 
-<<<<<<< HEAD
-    public Logs logs() {
-      return getLogs();
-=======
     @Beta
     public Logs logs() {
       return new RemoteLogs(getExecuteMethod());
->>>>>>> upstream/master
     }
 
   }
@@ -1144,10 +1096,6 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
   public OperaScopePreferences preferences() {
     return preferences;
   }
-  
-  public Logs getLogs(){
-    return new RemoteLogs(this.getExecuteMethod());
-  }
 
   /**
    * Sets the given preference information.  If a previous preference with the same section and key
@@ -1255,9 +1203,6 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
   }
 
-<<<<<<< HEAD
-}
-=======
   /**
    * Executes selftests for the given module.
    *
@@ -1445,4 +1390,3 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
   }
 
 }
->>>>>>> upstream/master
