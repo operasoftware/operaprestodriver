@@ -289,4 +289,11 @@ public class OperaDriverTest extends OperaDriverTestCase {
     c.quit();
   }
 
+  @Test
+  public void testCloseShouldQuitBrowserIfLastWindow() {
+    TestOperaDriver driver = new TestOperaDriver();
+    driver.close();
+    assertFalse(driver.isRunning());
+  }
+
 }

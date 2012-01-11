@@ -511,7 +511,11 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
   public void close() {
     closeWindow();
-    windowManager.filterActiveWindow();
+    if (windowManager.getOpenWindowCount() == 0) {
+      quit();
+    } else {
+      windowManager.filterActiveWindow();
+    }
   }
 
   public WebElement findElement(By by) {
