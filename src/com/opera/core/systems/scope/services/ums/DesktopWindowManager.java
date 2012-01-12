@@ -37,12 +37,12 @@ import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearch.Qui
 import com.opera.core.systems.scope.protos.UmsProtos.Response;
 import com.opera.core.systems.scope.services.IDesktopUtils;
 import com.opera.core.systems.scope.services.IDesktopWindowManager;
+import com.opera.core.systems.util.WatirUtils;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-
-//import org.openqa.selenium.WebDriverException;
+import java.util.logging.Logger;
 
 /**
  * @author Adam Minchinton, Karianne Ekern
@@ -50,6 +50,7 @@ import java.util.List;
 
 public class DesktopWindowManager extends AbstractService implements IDesktopWindowManager {
 
+  protected final Logger logger = Logger.getLogger(this.getClass().getName());
   private int activeWindowId = 0;
   private final SystemInputManager systemInputManager;
   private final IDesktopUtils desktopUtils;
@@ -188,7 +189,7 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
           }
         } else if (property.equals(QuickWidgetSearchType.TEXT)) {
           if ((parentName.length() == 0 || widget.getParentName().equals(parentName))
-              && widget.getText().trim().equals(value.trim())) {
+              && WatirUtils.textMatchesWithANY(widget.getText(), value)) {
             return widget;
           }
         }
