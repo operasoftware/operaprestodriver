@@ -82,14 +82,14 @@ public class OperaDriverTest extends OperaDriverTestCase {
   }
 
   @Test
-  public void testGetVersion() throws Exception {
+  public void testGetVersion() {
     String version = driver.getVersion();
     Assert.assertNotNull(version);
     Assert.assertNotSame("(Unknown)", version);
   }
 
   @Test
-  public void testOperaAction() throws Exception {
+  public void testOperaAction() {
     getFixture("javascript.html");
     getFixture("test.html");
     getFixture("keys.html");
@@ -99,7 +99,7 @@ public class OperaDriverTest extends OperaDriverTestCase {
   }
 
   @Test
-  public void testOperaActionCaseInsensitive() throws Exception {
+  public void testOperaActionCaseInsensitive() {
     getFixture("javascript.html");
     getFixture("test.html");
     getFixture("keys.html");
@@ -169,7 +169,7 @@ public class OperaDriverTest extends OperaDriverTestCase {
   }
 
   @Test
-  public void testDefaultProfile() throws Exception {
+  public void testDefaultProfile() {
     DesiredCapabilities c = new DesiredCapabilities();
     c.setCapability(OperaDriver.PROFILE, "");
 
