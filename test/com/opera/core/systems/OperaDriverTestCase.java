@@ -187,6 +187,11 @@ class TestOperaDriver extends OperaDriver {
     return OperaDriver.getDefaultCapabilities();
   }
 
+  public void close() {
+    super.close();
+    isRunning = false;
+  }
+
   public void quit() {
     super.quit();
     isRunning = false;
@@ -199,7 +204,7 @@ class TestOperaDriver extends OperaDriver {
   public boolean isOperaIdleAvailable() {
     return super.isOperaIdleAvailable();
   }
-  
+
   public IOperaExec getExecService() {
     return super.getExecService();
   }
