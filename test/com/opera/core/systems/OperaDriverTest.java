@@ -294,7 +294,7 @@ public class OperaDriverTest extends OperaDriverTestCase {
   }
 
   @Test
-  @Ignore(products = CORE)
+  @Ignore(products = CORE, value = "window-manager service is not coupled to gogi tabs")
   public void testCloseShouldQuitBrowserIfLastWindow() {
     driver.close();
     assertFalse(driver.isRunning());
