@@ -357,6 +357,7 @@ public class OperaDesktopDriver extends OperaDriver {
    * @return QuickWidget or null if no matching widget found
    */
   public QuickWidget findWidgetByStringId(QuickWidgetType type, int windowId, String stringId) {
+
     String text = desktopUtils.getString(stringId, true);
     return findWidgetByText(type, windowId, text);
   }
@@ -369,8 +370,7 @@ public class OperaDesktopDriver extends OperaDriver {
    * @param parentName name of parent widget
    * @return QuickWidget, or null if no matching widget found
    */
-  public QuickWidget findWidgetByStringId(QuickWidgetType type, int windowId, String stringId,
-                                          String parentName) {
+  public QuickWidget findWidgetByStringId(QuickWidgetType type, int windowId, String stringId, String parentName) {
     String text = desktopUtils.getString(stringId, true);
     return findWidgetByText(type, windowId, text, parentName);
   }
@@ -534,6 +534,11 @@ public class OperaDesktopDriver extends OperaDriver {
    */
   public String getString(String enumText, boolean stripAmpersand) {
     return desktopUtils.getString(enumText, stripAmpersand);
+  }
+
+  public String getSubstitutedString(String[] arg, boolean stripAmpersand)
+  {
+    return desktopUtils.getSubstitutedString(arg, stripAmpersand);
   }
 
   /**
@@ -808,9 +813,9 @@ public class OperaDesktopDriver extends OperaDriver {
     // Always delete and copy over a test profile except for when running
     // the first test which doesn't have a profile to copy over
     if (!firstTestRun || new File(newPrefs).exists()) {
-      if (!profileUtils.isMainProfile(smallPreferencesPath)
-          && !profileUtils.isMainProfile(largePreferencesPath)
-          && !profileUtils.isMainProfile(cachePreferencesPath)) {
+      if (!profileUtils.isMainProfile(smallPreferencesPath) &&
+          !profileUtils.isMainProfile(largePreferencesPath) &&
+          !profileUtils.isMainProfile(cachePreferencesPath)) {
         // Quit and wait for opera to quit properly
         quitOpera();
 
