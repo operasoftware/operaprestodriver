@@ -53,12 +53,14 @@ public class OperaDriverTest extends OperaDriverTestCase {
   }
 
   @Test
+  // TODO(andreastt): Should be made local
   public void testGetTitle() {
     driver.get("http://t/core/standards/dom0/link/pathname/002.html");
     assertEquals("URL with explicit pathname and hash", driver.getTitle());
   }
 
   @Test
+  // TODO(andreastt): Should be made local
   public void testGetText() {
     driver.get("http://t/core/standards/quotes/none.html");
     assertEquals("you should see nothing below",
@@ -66,12 +68,14 @@ public class OperaDriverTest extends OperaDriverTestCase {
   }
 
   @Test
+  // TODO(andreastt): Should be made local
   public void testGetURL() {
     driver.get("www.ebay.co.uk");
     assertTrue(driver.getCurrentUrl().indexOf("www.ebay.co.uk") > 0);
   }
 
   @Test
+  // TODO(andreastt): Should be made local
   public void testGetURL2() {
     driver.get("www.nyt.com", 15000);
     assertTrue(driver.getCurrentUrl().indexOf("www.nytimes.com") > 0);
