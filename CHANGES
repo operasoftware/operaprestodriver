@@ -50,7 +50,7 @@ v0.9      (not released yet)
     releaseKeys() and type().  (andreastt)
 
   * Added OperaDriver.manage().logs() to support Selenium 2.16.1.
-    (andreastt)
+    (ajaykv)
 
 
   [NEW FEATURES]
