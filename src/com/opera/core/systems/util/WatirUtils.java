@@ -30,6 +30,7 @@ import com.google.common.io.Files;
 public class WatirUtils {
 
 	protected static final Logger logger = Logger.getLogger("WatirUtils");
+  public static final String ANY_MATCHER = "_ANY_";
 
 	/**
 	 * Returns the platform double click timeout, that is the time that separates two clicks
@@ -117,5 +118,30 @@ public class WatirUtils {
 		}
 		return true;
 	}
+
+  /**
+   * Compares haystack and needle taking into the account that the needle may contain
+   * any number of ANY_MATCHER occurrences, that will be matched to any substring in
+   * haystack, i.e. "Show _ANY_ more..." will match anything like "Show 1 more...", "Show 2 more..." and
+   * so on.
+   *
+   * @param haystack The text that will be compared, may not contain any ANY_MATCHER occurrence
+   * @param needle The text that will be used for comparision, may contain any number of ANY_MATCHER occurrences
+   * @return A boolean indicating whether needle matched haystack.
+   */
+  public static boolean textMatchesWithANY(String haystack, String needle)
+  {
+    haystack = haystack.trim();
+    needle = needle.trim();
+    String pattern = needle.replaceAll(ANY_MATCHER, "(?:.+)");
+
+    logger.finest("Looking for pattern '"+ pattern +"' in '" + haystack + "'");
+
+    if (haystack.matches(pattern))
+      return true;
+
+    return false;
+  }
+
 
 }

@@ -367,8 +367,7 @@ public class OperaDesktopDriver extends OperaDriver {
    */
   public QuickWidget findWidgetByText(QuickWidgetType type, int windowId, String text,
                                       String parentName) {
-    return desktopWindowManager
-        .getQuickWidget(type, windowId, QuickWidgetSearchType.TEXT, text, parentName);
+    return desktopWindowManager.getQuickWidget(type, windowId, QuickWidgetSearchType.TEXT, text, parentName);
   }
 
   /**
@@ -379,6 +378,7 @@ public class OperaDesktopDriver extends OperaDriver {
    * @return QuickWidget or null if no matching widget found
    */
   public QuickWidget findWidgetByStringId(QuickWidgetType type, int windowId, String stringId) {
+
     String text = desktopUtils.getString(stringId, true);
     return findWidgetByText(type, windowId, text);
   }
@@ -391,8 +391,7 @@ public class OperaDesktopDriver extends OperaDriver {
    * @param parentName name of parent widget
    * @return QuickWidget, or null if no matching widget found
    */
-  public QuickWidget findWidgetByStringId(QuickWidgetType type, int windowId, String stringId,
-                                          String parentName) {
+  public QuickWidget findWidgetByStringId(QuickWidgetType type, int windowId, String stringId, String parentName) {
     String text = desktopUtils.getString(stringId, true);
     return findWidgetByText(type, windowId, text, parentName);
   }
@@ -556,6 +555,11 @@ public class OperaDesktopDriver extends OperaDriver {
    */
   public String getString(String enumText, boolean stripAmpersand) {
     return desktopUtils.getString(enumText, stripAmpersand);
+  }
+
+  public String getSubstitutedString(String[] arg, boolean stripAmpersand)
+  {
+    return desktopUtils.getSubstitutedString(arg, stripAmpersand);
   }
 
   /**
