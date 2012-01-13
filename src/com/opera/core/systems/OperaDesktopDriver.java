@@ -130,7 +130,7 @@ public class OperaDesktopDriver extends OperaDriver {
 
       String operaPath = getOperaPath();
 
-      logger.info("OperaBinaryLocation retrieved from Opera: " + operaPath);
+      logger.fine("OperaBinaryLocation retrieved from Opera: " + operaPath);
 
       if (operaPath.length() > 0) {
 
