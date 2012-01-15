@@ -50,7 +50,7 @@ v0.9      (not released yet)
     releaseKeys() and type().  (andreastt)
 
   * Added OperaDriver.manage().logs() to support Selenium 2.16.1.
-    (andreastt)
+    (ajaykv)
 
 
   [NEW FEATURES]
@@ -119,6 +119,12 @@ v0.9      (not released yet)
 
   * Fixed issue with SocketException for double shutdown call in
     OperaLauncherRunnerProtocol, fixes tests for Windows.  (andreastt)
+
+  * Getting colours with non-RGB values (such as "transparent") now
+    works.  Resolves issue #49.  (andreastt)
+
+  * OperaDriver.close() should quit browser if it closes the last
+    window, resolves issue #48.  (andreastt)
 
   [TESTS]
 

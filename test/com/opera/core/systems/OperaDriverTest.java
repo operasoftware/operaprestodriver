@@ -53,12 +53,14 @@ public class OperaDriverTest extends OperaDriverTestCase {
   }
 
   @Test
+  // TODO(andreastt): Should be made local
   public void testGetTitle() {
     driver.get("http://t/core/standards/dom0/link/pathname/002.html");
     assertEquals("URL with explicit pathname and hash", driver.getTitle());
   }
 
   @Test
+  // TODO(andreastt): Should be made local
   public void testGetText() {
     driver.get("http://t/core/standards/quotes/none.html");
     assertEquals("you should see nothing below",
@@ -66,26 +68,28 @@ public class OperaDriverTest extends OperaDriverTestCase {
   }
 
   @Test
+  // TODO(andreastt): Should be made local
   public void testGetURL() {
     driver.get("www.ebay.co.uk");
     assertTrue(driver.getCurrentUrl().indexOf("www.ebay.co.uk") > 0);
   }
 
   @Test
+  // TODO(andreastt): Should be made local
   public void testGetURL2() {
     driver.get("www.nyt.com", 15000);
     assertTrue(driver.getCurrentUrl().indexOf("www.nytimes.com") > 0);
   }
 
   @Test
-  public void testGetVersion() throws Exception {
+  public void testGetVersion() {
     String version = driver.getVersion();
     Assert.assertNotNull(version);
     Assert.assertNotSame("(Unknown)", version);
   }
 
   @Test
-  public void testOperaAction() throws Exception {
+  public void testOperaAction() {
     getFixture("javascript.html");
     getFixture("test.html");
     getFixture("keys.html");
@@ -95,7 +99,7 @@ public class OperaDriverTest extends OperaDriverTestCase {
   }
 
   @Test
-  public void testOperaActionCaseInsensitive() throws Exception {
+  public void testOperaActionCaseInsensitive() {
     getFixture("javascript.html");
     getFixture("test.html");
     getFixture("keys.html");
@@ -165,7 +169,7 @@ public class OperaDriverTest extends OperaDriverTestCase {
   }
 
   @Test
-  public void testDefaultProfile() throws Exception {
+  public void testDefaultProfile() {
     DesiredCapabilities c = new DesiredCapabilities();
     c.setCapability(OperaDriver.PROFILE, "");
 
@@ -287,6 +291,13 @@ public class OperaDriverTest extends OperaDriverTestCase {
     a.quit();
     b.quit();
     c.quit();
+  }
+
+  @Test
+  @Ignore(products = CORE, value = "window-manager service is not coupled to gogi tabs")
+  public void testCloseShouldQuitBrowserIfLastWindow() {
+    driver.close();
+    assertFalse(driver.isRunning());
   }
 
 }

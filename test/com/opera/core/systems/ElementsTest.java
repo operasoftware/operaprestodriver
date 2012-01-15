@@ -16,11 +16,11 @@ limitations under the License.
 
 package com.opera.core.systems;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
 import org.junit.Test;
 import org.openqa.selenium.WebElement;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class ElementsTest extends OperaDriverTestCase {
 
@@ -57,6 +57,13 @@ public class ElementsTest extends OperaDriverTestCase {
     driver.navigate().to(fixture("test.html"));
     assertEquals("#000000",
                  driver.findElementByClassName("invert").getCssValue("background-color"));
+  }
+
+  @Test
+  public void testGetCssValueWithNonRGBValue() {
+    driver.navigate().to(fixture("test.html"));
+    assertEquals("transparent",
+                 driver.findElementById("transparent").getCssValue("background-color"));
   }
 
   /*

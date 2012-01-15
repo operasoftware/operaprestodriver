@@ -77,6 +77,7 @@ public class NavigationTest extends OperaDriverTestCase {
   }
 
   @Test
+  // TODO(andreastt): Should be made local
   public void testHttpRedirect() {
     final String fetchedUrl = "http://t/core/bts/javascript/CORE-26410/003-2.php";
     driver.navigate().to(fetchedUrl);

@@ -679,9 +679,9 @@ public class OperaWebElement extends RemoteWebElement {
     String value =
         callMethod("return " + OperaAtoms.GET_EFFECTIVE_STYLE + "(locator, '" + property + "')");
 
-    // Opera returns a colour in RGB format. WebDriver specifies that the output from getCssValue()
+    // Opera returns a colour in RGB format.  WebDriver specifies that the output from getCssValue()
     // must be in HEX format.
-    if (property.contains("color")) {
+    if (property.contains("color") && value.contains("rgb")) {
       return new OperaColor(value).getHex();
     }
 
