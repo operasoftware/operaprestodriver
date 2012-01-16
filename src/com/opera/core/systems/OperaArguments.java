@@ -20,7 +20,6 @@ import com.google.common.base.Joiner;
 
 import com.opera.core.systems.arguments.OperaArgument;
 import com.opera.core.systems.arguments.OperaArgument.OperaArgumentSign;
-import com.opera.core.systems.preferences.OperaPreferences;
 
 import java.util.ArrayList;
 import java.util.Iterator;

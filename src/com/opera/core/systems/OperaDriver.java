@@ -1111,7 +1111,6 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
    * @deprecated Please use {@link OperaDriver#preferences()} instead
    */
   @Deprecated
-  @SuppressWarnings("unused")
   public void setPref(String section, String key, String value) {
     preferences().set(section, key, value);
   }
@@ -1125,7 +1124,6 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
    * @deprecated Please use {@link OperaDriver#preferences()} instead
    */
   @Deprecated
-  @SuppressWarnings("unused")
   public String getPref(String section, String key) {
     return preferences().get(section, key).toString();
   }
@@ -1233,7 +1231,6 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
   }
 
   @Deprecated
-  @SuppressWarnings("unused")
   public Set<String> getOperaActionList() {
     return exec.getActionList();
   }
@@ -1277,7 +1274,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
       while (!"complete".equals(debugger.executeJavascript("return document.readyState"))) {
         if (System.currentTimeMillis() < endTime) {
-          sleep(OperaIntervals.POLL_INVERVAL.getValue());
+          sleep(OperaIntervals.POLL_INTERVAL.getValue());
         } else {
           throw new ResponseNotReceivedException("No response in a timely fashion");
         }
@@ -1302,7 +1299,6 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
    *
    * @param useIdle true if idle should be switched on, false if it should be switched off
    */
-  @SuppressWarnings("unused")
   protected void setUseOperaIdle(boolean useIdle) {
     capabilities.setCapability(OPERAIDLE, useIdle);
   }

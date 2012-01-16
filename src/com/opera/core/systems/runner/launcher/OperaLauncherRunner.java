@@ -19,7 +19,6 @@ package com.opera.core.systems.runner.launcher;
 import com.google.protobuf.GeneratedMessage;
 
 import com.opera.core.systems.OperaPaths;
-import com.opera.core.systems.OperaProduct;
 import com.opera.core.systems.arguments.OperaArgument;
 import com.opera.core.systems.model.ScreenShotReply;
 import com.opera.core.systems.runner.OperaRunner;
@@ -70,7 +69,7 @@ public class OperaLauncherRunner extends OperaRunner
     // Parse remaining launcher-related settings
     Integer launcherPort = PortProber.findFreePort();
     Integer display = settings.getDisplay();
-    OperaProduct product = settings.getProduct();
+    //OperaProduct product = settings.getProduct();
     String binary;
     if (settings.getBinary() == null) {
       binary = OperaPaths.operaPath();
@@ -119,10 +118,14 @@ public class OperaLauncherRunner extends OperaRunner
     settings.makeLauncherExecutable();
 
     // Setup the launcher binary
-    launcherRunner = new OperaLauncherBinary(
-        settings.getLauncher().getAbsolutePath(),
-        launcherArguments.toArray(new String[launcherArguments.size()])
-    );
+    try {
+      launcherRunner = new OperaLauncherBinary(
+          settings.getLauncher().getAbsolutePath(),
+          launcherArguments.toArray(new String[launcherArguments.size()])
+      );
+    } catch (IOException e) {
+      throw new OperaRunnerException("Unable to start launcher: " + e.getMessage());
+    }
 
     logger.fine("Waiting for launcher connection on port " + launcherPort);
 

@@ -17,7 +17,6 @@ limitations under the License.
 package com.opera.core.systems.arguments.interfaces;
 
 import com.opera.core.systems.arguments.OperaArgument;
-import com.opera.core.systems.preferences.OperaPreferences;
 
 import java.util.Iterator;
 import java.util.List;

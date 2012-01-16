@@ -37,7 +37,7 @@ v0.9      (not released yet)
   * OperaIntervals.ENABLE_DEBUGGER has been moved to
     OperaFlags.ENABLE_DEBUGGER.  (andreastt)
 
-  * Upgraded Selenium dependency to 2.16.1.  (andreastt)
+  * Upgraded Selenium dependency to 2.17.  (andreastt)
 
   * Removed interface Utils.  (andreastt)
 
@@ -94,6 +94,12 @@ v0.9      (not released yet)
 
   * Upgraded OperaWebElement.click() to use new atoms for selecting an
     OPTION element.  (andreastt)
+
+  * Check for whether launcher exists immediately.  (andreastt)
+
+  * Upgraded operalaunchers to 0.5.  Fixes issue with OperaDriver
+    through Maven not being able to find launchers.  (andreastt)
+
 
   [BUG FIXES]
 
