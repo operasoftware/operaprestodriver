@@ -69,7 +69,6 @@ public class OperaProfile {
   private File preferenceFile;
   private boolean randomProfile = false;
   private OperaPreferences preferences;
-  private final Logger logger = Logger.getLogger(getClass().getName());
 
   /**
    * Creates a new, fresh random profile for Opera to use.  The actual profile directory will not be

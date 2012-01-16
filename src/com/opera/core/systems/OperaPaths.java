@@ -38,7 +38,6 @@ import static org.openqa.selenium.Platform.UNIX;
  */
 public class OperaPaths {
 
-  private final Logger logger = Logger.getLogger(this.getClass().getName());
   private static final Platform currentPlatform = Platform.getCurrent();
 
   /**
