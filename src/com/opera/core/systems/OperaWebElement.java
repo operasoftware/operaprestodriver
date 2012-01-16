@@ -691,25 +691,12 @@ public class OperaWebElement extends RemoteWebElement {
     return parent;
   }
 
-  private OperaWebElement getParent() {
-    return new OperaWebElement(this.parent, debugger
-        .executeScriptOnObject("return locator.parentNode", objectId));
-  }
-
-  private void assertElementDisplayed() {
-    assertElementDisplayed("Cannot interact with an element that is not displayed");
-  }
-
   private void assertElementDisplayed(String message) {
     if (OperaFlags.ENABLE_CHECKS) {
       if (!isDisplayed()) {
         throw new ElementNotVisibleException(message);
       }
     }
-  }
-
-  private void assertElementEnabled() {
-    assertElementEnabled("Cannot interact with a disabled element");
   }
 
   private void assertElementEnabled(String message) {
