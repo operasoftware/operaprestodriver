@@ -1274,7 +1274,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
       while (!"complete".equals(debugger.executeJavascript("return document.readyState"))) {
         if (System.currentTimeMillis() < endTime) {
-          sleep(OperaIntervals.POLL_INVERVAL.getValue());
+          sleep(OperaIntervals.POLL_INTERVAL.getValue());
         } else {
           throw new ResponseNotReceivedException("No response in a timely fashion");
         }

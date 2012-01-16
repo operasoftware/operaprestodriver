@@ -95,6 +95,9 @@ v0.9      (not released yet)
   * Upgraded OperaWebElement.click() to use new atoms for selecting an
     OPTION element.  (andreastt)
 
+  * Check for whether launcher exists immediately.  (andreastt)
+
+
   [BUG FIXES]
 
   * Asserting if element is stale on OperaWebElement.getText(),

@@ -16,7 +16,7 @@ limitations under the License.
 
 package com.opera.core.systems.runner.launcher;
 
-import com.opera.core.systems.runner.OperaRunnerException;
+import com.opera.core.systems.scope.internal.OperaIntervals;
 
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.os.ProcessUtils;
@@ -43,7 +43,7 @@ public class OperaLauncherBinary extends Thread {
   private static Logger logger = Logger.getLogger(OperaLauncherBinary.class.getName());
   private AtomicBoolean running = new AtomicBoolean(false);
 
-  public OperaLauncherBinary(String location, String... args) {
+  public OperaLauncherBinary(String location, String... args) throws IOException {
     super(new ThreadGroup("run-process"), "launcher");
 
     commands.add(location);
@@ -67,11 +67,11 @@ public class OperaLauncherBinary extends Thread {
     kill();
   }
 
-  public void init() {
+  public void init() throws IOException {
     ProcessBuilder builder = new ProcessBuilder(commands);
+    builder.redirectErrorStream(true);
 
     try {
-      builder.redirectErrorStream(true);
       process = builder.start();
       watcher = new OutputWatcher(process);
       outputWatcherThread = new Thread(getThreadGroup(), watcher, "output-watcher");
@@ -79,12 +79,22 @@ public class OperaLauncherBinary extends Thread {
       outputWatcherThread.start();
     } catch (IOException e) {
       if (Platform.getCurrent().is(Platform.WINDOWS)) {
-        throw new OperaRunnerException(
+        throw new IOException(
             "Could not start the launcher process, make sure you have the Microsoft Visual C++ " +
             "2008 Redistributable Package installed on your system: " + e.getMessage());
       } else {
-        throw new OperaRunnerException("Could not start the launcher process: " + e.getMessage());
+        throw new IOException(e);
       }
+    }
+
+    try {
+      waitFor(OperaIntervals.PROCESS_START_SLEEP.getValue());
+      if (process.exitValue() > 0) {
+        throw new IOException("exited immediately; possibly incorrect command-line arguments?  " +
+                              "Commands: " + commands);
+      }
+    } catch (IllegalThreadStateException e) {
+      // process hasn't exited, soldier on!
     }
   }
 
@@ -163,6 +173,14 @@ public class OperaLauncherBinary extends Thread {
       }
     }
 
+  }
+
+  private void waitFor(long ms) {
+    try {
+      Thread.sleep(ms);
+    } catch (InterruptedException e) {
+      // fall through
+    }
   }
 
 }

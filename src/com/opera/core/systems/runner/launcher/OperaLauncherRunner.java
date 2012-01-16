@@ -118,10 +118,14 @@ public class OperaLauncherRunner extends OperaRunner
     settings.makeLauncherExecutable();
 
     // Setup the launcher binary
-    launcherRunner = new OperaLauncherBinary(
-        settings.getLauncher().getAbsolutePath(),
-        launcherArguments.toArray(new String[launcherArguments.size()])
-    );
+    try {
+      launcherRunner = new OperaLauncherBinary(
+          settings.getLauncher().getAbsolutePath(),
+          launcherArguments.toArray(new String[launcherArguments.size()])
+      );
+    } catch (IOException e) {
+      throw new OperaRunnerException("Unable to start launcher: " + e.getMessage());
+    }
 
     logger.fine("Waiting for launcher connection on port " + launcherPort);
 
@@ -154,6 +158,14 @@ public class OperaLauncherRunner extends OperaRunner
                                      launcherPort, e);
     } catch (IOException e) {
       throw new OperaRunnerException("Unable to listen to launcher port " + launcherPort, e);
+    }
+  }
+
+  private void sleep(long ms) {
+    try {
+      Thread.sleep(ms);
+    } catch (InterruptedException e) {
+      // fall through
     }
   }
 
