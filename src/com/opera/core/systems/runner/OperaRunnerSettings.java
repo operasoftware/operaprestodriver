@@ -39,6 +39,7 @@ public class OperaRunnerSettings
   protected File operaBinary = null;
   protected Integer display = null;
   protected OperaProduct product = OperaProduct.DESKTOP;
+  protected String backend = "software";
   protected OperaProfile profile = null;
   protected boolean noQuit = false;
   protected String host = "127.0.0.1";
@@ -203,6 +204,26 @@ public class OperaRunnerSettings
 
   public void setLoggingLevel(Level level) {
     loggingLevel = level;
+  }
+
+  /**
+   * Gets the rendering backend currently used.
+   *
+   * @return "software" or "hardware" depending on backend used
+   */
+  @Deprecated
+  public String getBackend() {
+    return backend;
+  }
+
+  /**
+   * Sets which rendering backend to use.  Available backends are "software" and "hardware".
+   *
+   * @param backend the rendering backend to use
+   */
+  @Deprecated
+  public void setBackend(String backend) {
+    this.backend = backend;
   }
 
   public static OperaRunnerSettings getDefaultSettings() {

@@ -98,6 +98,11 @@ public class OperaLauncherRunner extends OperaRunner
       launcherArguments.add(product.toString());
     }
     */
+    String backend = settings.getBackend();
+    if (backend != null && !backend.isEmpty()) {
+      launcherArguments.add("-backend");
+      launcherArguments.add(backend);
+    }
     if (settings.getNoQuit()) {
       launcherArguments.add("-noquit");
     }
