@@ -42,11 +42,11 @@ public class OperaKeyboard implements Keyboard {
   }
 
   public void pressKey(Keys keyToPress) {
-    exec.key(OperaKeys.get(((Keys) keyToPress).name()), false);
+    exec.key(OperaKeys.get((keyToPress).name()), false);
   }
 
   public void releaseKey(Keys keyToRelease) {
-    exec.key(OperaKeys.get(((Keys) keyToRelease).name()), true);
+    exec.key(OperaKeys.get((keyToRelease).name()), true);
   }
 
 }

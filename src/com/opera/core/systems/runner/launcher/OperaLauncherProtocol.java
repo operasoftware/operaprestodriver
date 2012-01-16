@@ -19,9 +19,9 @@ package com.opera.core.systems.runner.launcher;
 import com.google.protobuf.GeneratedMessage;
 import com.google.protobuf.InvalidProtocolBufferException;
 
-import com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherHandshakeResponse;
-import com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherScreenshotResponse;
-import com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStatusResponse;
+
+
+
 
 import java.io.IOException;
 import java.net.Socket;
