@@ -161,14 +161,6 @@ public class OperaLauncherRunner extends OperaRunner
     }
   }
 
-  private void sleep(long ms) {
-    try {
-      Thread.sleep(ms);
-    } catch (InterruptedException e) {
-      // fall through
-    }
-  }
-
   public void startOpera() {
     logger.fine("Instructing launcher to start Opera...");
 
