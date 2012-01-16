@@ -508,7 +508,6 @@ public class OperaWebElement extends RemoteWebElement {
    * @param colors list of colors to check for.
    * @return true if the page contains any of the given colors, false otherwise.
    */
-  @SuppressWarnings("unused")
   public boolean containsColor(OperaColors... colors) {
     Canvas canvas = buildCanvas();
     ScreenShotReply reply = execService.containsColor(canvas, 100L, colors);

@@ -34,6 +34,7 @@ public class OperaStrings {
   public static boolean isNumeric(String string) {
     if (string == null) return false;
     try {
+      @SuppressWarnings("unused")
       double d = Double.parseDouble(string);
     } catch (NumberFormatException e) {
       return false;

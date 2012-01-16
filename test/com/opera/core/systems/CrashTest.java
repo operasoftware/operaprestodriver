@@ -19,9 +19,7 @@ package com.opera.core.systems;
 import com.opera.core.systems.scope.exceptions.CommunicationException;
 
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openqa.selenium.os.CommandLine;
 

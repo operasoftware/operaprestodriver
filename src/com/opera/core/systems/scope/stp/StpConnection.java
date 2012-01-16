@@ -22,7 +22,6 @@ import com.google.protobuf.CodedOutputStream;
 import com.opera.core.systems.scope.handlers.AbstractEventHandler;
 import com.opera.core.systems.scope.handlers.IConnectionHandler;
 import com.opera.core.systems.scope.internal.OperaIntervals;
-import com.opera.core.systems.scope.protos.UmsProtos;
 import com.opera.core.systems.scope.protos.UmsProtos.Command;
 import com.opera.core.systems.scope.protos.UmsProtos.Error;
 import com.opera.core.systems.scope.protos.UmsProtos.Event;
