@@ -180,16 +180,6 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
    */
   public static final String PRODUCT = "opera.product";
 
-  /**
-   * (String) Rendering backend used by internal gogi builds of Opera.  If null or an empty string,
-   * "software" is used by default.
-   *
-   * <strong>Warning:</strong> This is a temporary workaround for launcher not taking external
-   * window-only screenshots on Windows.
-   */
-  @Deprecated
-  public static final String BACKEND = "opera.backend";
-
   /*
    * These are "protected" and not "private" so that we can extend this class and add methods to
    * access these variable in tests.
