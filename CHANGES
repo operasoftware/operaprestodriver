@@ -97,6 +97,9 @@ v0.9      (not released yet)
 
   * Check for whether launcher exists immediately.  (andreastt)
 
+  * Upgraded operalaunchers to 0.5.  Fixes issue with OperaDriver
+    through Maven not being able to find launchers.  (andreastt)
+
 
   [BUG FIXES]
 
