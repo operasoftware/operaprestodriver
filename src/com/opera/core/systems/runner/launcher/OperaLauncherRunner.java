@@ -16,8 +16,17 @@ limitations under the License.
 
 package com.opera.core.systems.runner.launcher;
 
-import com.google.protobuf.GeneratedMessage;
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.SocketTimeoutException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
+import org.openqa.selenium.net.PortProber;
+
+import com.google.protobuf.GeneratedMessage;
 import com.opera.core.systems.OperaPaths;
 import com.opera.core.systems.arguments.OperaArgument;
 import com.opera.core.systems.model.ScreenShotReply;
@@ -34,16 +43,6 @@ import com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStatus
 import com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStatusResponse.StatusType;
 import com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStopRequest;
 import com.opera.core.systems.scope.internal.OperaIntervals;
-
-import org.openqa.selenium.net.PortProber;
-
-import java.io.IOException;
-import java.net.ServerSocket;
-import java.net.SocketTimeoutException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * OperaLauncherRunner implements an interface in C++ with a Java API for controlling the Opera

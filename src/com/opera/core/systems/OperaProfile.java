@@ -26,7 +26,7 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import java.io.File;
 import java.util.Collection;
 import java.util.LinkedHashSet;
-import java.util.logging.Logger;
+
 
 import static com.google.common.base.Preconditions.checkArgument;
 
