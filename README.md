@@ -70,9 +70,9 @@ Getting started
 To get set up [please
 download](http://code.google.com/p/selenium/downloads/list) either
 *selenium-server-standalone* or *selenium-server* and make sure you
-have a fairly recent version of Opera installed.  All you do is to
-create a new
-`[WebDriver](http://selenium.googlecode.com/svn/trunk/docs/api/java/org/openqa/selenium/WebDriver.html)`
+have a fairly recent version of Opera installed.  All you need to do
+is create a new
+[`WebDriver`](http://selenium.googlecode.com/svn/trunk/docs/api/java/org/openqa/selenium/WebDriver.html)
 instance:
 
     WebDriver driver = new OperaDriver();
