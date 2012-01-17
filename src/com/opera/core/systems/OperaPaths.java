@@ -23,7 +23,7 @@ import org.openqa.selenium.os.CommandLine;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
+
 
 import static org.openqa.selenium.Platform.LINUX;
 import static org.openqa.selenium.Platform.UNIX;
