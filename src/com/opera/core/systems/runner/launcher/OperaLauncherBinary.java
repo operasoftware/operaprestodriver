@@ -75,6 +75,7 @@ public class OperaLauncherBinary extends Thread {
       process = builder.start();
       watcher = new OutputWatcher(process);
       outputWatcherThread = new Thread(getThreadGroup(), watcher, "output-watcher");
+      outputWatcherThread.setDaemon(true);
       running.set(true);
       outputWatcherThread.start();
     } catch (IOException e) {
