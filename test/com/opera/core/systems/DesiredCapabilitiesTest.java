@@ -62,7 +62,7 @@ public class DesiredCapabilitiesTest extends OperaDriverTestCase {
 
   @After
   public void tearDown() {
-    if (driver.isRunning()) {
+    if (driver != null && driver.isRunning()) {
       driver.quit();
     }
   }
