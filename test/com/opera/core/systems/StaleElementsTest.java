@@ -18,62 +18,185 @@ package com.opera.core.systems;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.experimental.runners.Enclosed;
+import org.junit.runner.RunWith;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebElement;
 
+@RunWith(Enclosed.class)
 public class StaleElementsTest extends OperaDriverTestCase {
-  
-  public WebElement div;
-  
-  @Before
-  public void beforeEach() {
-    driver.navigate().to("data:text/html;charset-utf8,<p>hoobaflooba</p>");
-    div = (WebElement) driver.executeScript("return document.createElement('div')");
+
+  public static class DynamicallyAddedElement {
+
+    public WebElement div;
+
+    @Before
+    public void beforeEach() {
+      driver.navigate().to("data:text/html;charset-utf8,<p>hoobaflooba</p>");
+      div = (WebElement) driver.executeScript("return document.createElement('div')");
+    }
+
+    @Test(expected = StaleElementReferenceException.class)
+    public void testGetAttribute() {
+      div.getAttribute("foo");
+    }
+
+    @Test(expected = StaleElementReferenceException.class)
+    public void testGetText() {
+      div.getText();
+    }
+
+    @Test(expected = StaleElementReferenceException.class)
+    public void testIsDisplayed() {
+      div.isDisplayed();
+    }
+
+    @Test(expected = StaleElementReferenceException.class)
+    public void testIsEnabled() {
+      div.isEnabled();
+    }
+
+    @Test(expected = StaleElementReferenceException.class)
+    public void testIsSelected() {
+      div.isSelected();
+    }
+
+    @Test(expected = StaleElementReferenceException.class)
+    public void testClear() {
+      div.clear();
+    }
+
+    @Test(expected = StaleElementReferenceException.class)
+    public void testGetLocation() {
+      div.getLocation();
+    }
+
+    @Test(expected = StaleElementReferenceException.class)
+    public void testGetSize() {
+      div.getSize();
+    }
+
+    @Test(expected = StaleElementReferenceException.class)
+    public void testTagName() {
+      div.getTagName();
+    }
+
   }
 
-  @Test(expected = StaleElementReferenceException.class)
-  public void testGetAttribute() {
-    div.getAttribute("foo");
+  public static class NavigatingBetweenSamePage {
+
+    public WebElement test;
+
+    @Before
+    public void beforeEach() {
+      driver.navigate().to(fixture("test.html"));
+      test = driver.findElementById("header");
+      driver.navigate().to(fixture("test.html"));
+    }
+
+    @Test(expected = StaleElementReferenceException.class)
+    public void testGetAttribute() {
+      test.getAttribute("foo");
+    }
+
+    @Test(expected = StaleElementReferenceException.class)
+    public void testGetText() {
+      test.getText();
+    }
+
+    @Test(expected = StaleElementReferenceException.class)
+    public void testIsDisplayed() {
+      test.isDisplayed();
+    }
+
+    @Test(expected = StaleElementReferenceException.class)
+    public void testIsEnabled() {
+      test.isEnabled();
+    }
+
+    @Test(expected = StaleElementReferenceException.class)
+    public void testIsSelected() {
+      test.isSelected();
+    }
+
+    @Test(expected = StaleElementReferenceException.class)
+    public void testClear() {
+      test.clear();
+    }
+
+    @Test(expected = StaleElementReferenceException.class)
+    public void testGetLocation() {
+      test.getLocation();
+    }
+
+    @Test(expected = StaleElementReferenceException.class)
+    public void testGetSize() {
+      test.getSize();
+    }
+
+    @Test(expected = StaleElementReferenceException.class)
+    public void testTagName() {
+      test.getTagName();
+    }
+
   }
 
-  @Test(expected = StaleElementReferenceException.class)
-  public void testGetText() {
-    div.getText();
+  public static class NavigatingBetweenDifferentPages {
+
+    public WebElement test;
+
+    @Before
+    public void beforeEach() {
+      driver.navigate().to(fixture("test.html"));
+      test = driver.findElementById("header");
+      driver.navigate().to(fixture("two_input_fields.html"));
+    }
+
+    @Test(expected = StaleElementReferenceException.class)
+    public void testGetAttribute() {
+      test.getAttribute("foo");
+    }
+
+    @Test(expected = StaleElementReferenceException.class)
+    public void testGetText() {
+      test.getText();
+    }
+
+    @Test(expected = StaleElementReferenceException.class)
+    public void testIsDisplayed() {
+      test.isDisplayed();
+    }
+
+    @Test(expected = StaleElementReferenceException.class)
+    public void testIsEnabled() {
+      test.isEnabled();
+    }
+
+    @Test(expected = StaleElementReferenceException.class)
+    public void testIsSelected() {
+      test.isSelected();
+    }
+
+    @Test(expected = StaleElementReferenceException.class)
+    public void testClear() {
+      test.clear();
+    }
+
+    @Test(expected = StaleElementReferenceException.class)
+    public void testGetLocation() {
+      test.getLocation();
+    }
+
+    @Test(expected = StaleElementReferenceException.class)
+    public void testGetSize() {
+      test.getSize();
+    }
+
+    @Test(expected = StaleElementReferenceException.class)
+    public void testTagName() {
+      test.getTagName();
+    }
+
   }
 
-  @Test(expected = StaleElementReferenceException.class)
-  public void testIsDisplayed() {
-    div.isDisplayed();
-  }
-
-  @Test(expected = StaleElementReferenceException.class)
-  public void testIsEnabled() {
-    div.isEnabled();
-  }
-
-  @Test(expected = StaleElementReferenceException.class)
-  public void testIsSelected() {
-    div.isSelected();
-  }
-
-  @Test(expected = StaleElementReferenceException.class)
-  public void testClear() {
-    div.clear();
-  }
-
-  @Test(expected = StaleElementReferenceException.class)
-  public void testGetLocation() {
-    div.getLocation();
-  }
-
-  @Test(expected = StaleElementReferenceException.class)
-  public void testGetSize() {
-    div.getSize();
-  }
-
-  @Test(expected = StaleElementReferenceException.class)
-  public void testTagName() {
-    div.getTagName();
-  }
-  
 }

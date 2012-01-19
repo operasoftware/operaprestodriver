@@ -136,10 +136,10 @@ public abstract class OperaDriverTestCase {
    * @param file the filename to get
    * @return the URL to the fixture file
    */
-  protected String fixture(String file) {
+  protected static String fixture(String file) {
     return "file://localhost" + fixtureDirectory + file;
   }
-
+  
   protected File fixtureFile(String file) {
     return new File(fixtureDirectory + file);
   }
