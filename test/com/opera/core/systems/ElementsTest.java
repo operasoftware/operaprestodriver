@@ -31,19 +31,6 @@ public class ElementsTest extends OperaDriverTestCase {
     assertTrue(driver.findElementById("log").getAttribute("value").contains("email changed"));
   }
 
-  /*
-  // TODO(andreastt): Should be converted to an OperaMouse test
-  @Test
-  public void testMouseOver() {
-    driver.get(fixture("mouse.html"));
-
-    OperaWebElement test = ((OperaWebElement) driver.findElementById("test"));
-    String hash = test.getImageHash();
-    test.mouseOver();
-    assertNotSame(hash, test.getImageHash());
-  }
-  */
-
   @Test
   public void testSelect() {
     getFixture("select.html");
@@ -65,21 +52,5 @@ public class ElementsTest extends OperaDriverTestCase {
     assertEquals("transparent",
                  driver.findElementById("transparent").getCssValue("background-color"));
   }
-
-  /*
-  TODO(andreastt): Convert it to an Actions or OperaMouse test
-
-  // This test sometimes causes problems because a context menu is opened on Desktop, ensure that it
-  // is last.
-  @Test
-  public void testRightClick() {
-    driver.get(fixture("mouse.html"));
-
-    // Cast as OperaWebElement to make rightClick available
-    ((OperaWebElement) driver.findElementById("test")).rightClick();
-    assertTrue(driver.findElementById("log").getAttribute("value").contains("mousedown 2"));
-    assertTrue(driver.findElementById("log").getAttribute("value").contains("mouseup 2"));
-  }
-  */
 
 }
