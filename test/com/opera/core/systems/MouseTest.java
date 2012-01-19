@@ -28,7 +28,7 @@ import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertTrue;
 
 public class MouseTest extends OperaDriverTestCase {
-  
+
   public static Mouse mouse;
   public OperaWebElement log;
   public OperaWebElement test;
@@ -66,9 +66,9 @@ public class MouseTest extends OperaDriverTestCase {
     assertTrue(log().contains("mousedown 2"));
     assertTrue(log().contains("mouseup 2"));
   }
-  
+
   private String log() {
     return log.getAttribute("value");
   }
-  
+
 }
