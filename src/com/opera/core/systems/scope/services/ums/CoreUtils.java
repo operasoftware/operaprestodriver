@@ -16,10 +16,13 @@ limitations under the License.
 
 package com.opera.core.systems.scope.services.ums;
 
+import java.util.List;
 import com.opera.core.systems.ScopeServices;
 import com.opera.core.systems.scope.AbstractService;
 import com.opera.core.systems.scope.CoreUtilsCommand;
+import com.opera.core.systems.scope.protos.CoreProtos;
 import com.opera.core.systems.scope.protos.CoreProtos.BrowserInformation;
+import com.opera.core.systems.scope.protos.CoreProtos.ClearPrivateDataArg;
 import com.opera.core.systems.scope.protos.UmsProtos.Response;
 import com.opera.core.systems.scope.services.ICoreUtils;
 
@@ -96,6 +99,12 @@ public class CoreUtils extends AbstractService implements ICoreUtils {
       throw new UnsupportedCommandException("not available in this product");
     }
     return browserInformation.getProcessID();
+  }
+
+  public void clearPrivateData(List<CoreProtos.ClearFlags> flags) {
+    ClearPrivateDataArg.Builder arg = ClearPrivateDataArg.newBuilder();
+    arg.addAllClearList(flags);
+    executeCommand(CoreUtilsCommand.CLEAR_PRIVATE_DATA, arg);
   }
 
   // Private methods follow

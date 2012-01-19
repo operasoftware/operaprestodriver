@@ -34,6 +34,8 @@ import com.opera.core.systems.scope.exceptions.ResponseNotReceivedException;
 import com.opera.core.systems.scope.handlers.PbActionHandler;
 import com.opera.core.systems.scope.internal.OperaFlags;
 import com.opera.core.systems.scope.internal.OperaIntervals;
+import com.opera.core.systems.scope.protos.CoreProtos;
+import com.opera.core.systems.scope.protos.CoreProtos.ClearFlags;
 import com.opera.core.systems.scope.services.ICookieManager;
 import com.opera.core.systems.scope.services.ICoreUtils;
 import com.opera.core.systems.scope.services.IEcmaScriptDebugger;
@@ -179,6 +181,29 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
    * (String) The product we are using, for example "desktop" or "core".
    */
   public static final String PRODUCT = "opera.product";
+
+  /**
+   * (enum) Different types of data stored by Opera
+   */
+  public enum PrivateData
+  {
+    ALL,
+    VISITED_LINKS,
+    DISK_CACHE,
+    IMAGE_CACHE,
+    MEMORY_CACHE,
+    SENSITIVE_DATA,
+    SESSION_COOKIES,
+    ALL_COOKIES,
+    GLOBAL_HISTORY,
+    CONSOLE,
+    THUMBNAILS,
+    WEBDATABASES,
+    WEBSTORAGE,
+    APPCACHE,
+    GEOLOCATION_PERMISSIONS,
+    SITE_PREFS
+  }
 
   /*
    * These are "protected" and not "private" so that we can extend this class and add methods to
@@ -1201,6 +1226,40 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
      */
     public int getPID() {
       return coreUtils.getProcessID();
+    }
+
+    /**
+     * Clear private data stored by Opera
+     * @param flags A comgination of flags can be used or the value ALL to clean all stored data.
+     */
+    public void clearPrivateData(PrivateData...flags) {
+      coreUtils.clearPrivateData(clearPrivateDataDriverEnumToCoreEnum(flags));
+    }
+
+    protected List<CoreProtos.ClearFlags> clearPrivateDataDriverEnumToCoreEnum(PrivateData...flags) {
+      List<CoreProtos.ClearFlags> clearFlags = new ArrayList<CoreProtos.ClearFlags>();
+      for(PrivateData flag : flags){
+        switch(flag) {
+          case ALL: clearFlags.add(ClearFlags.CLEAR_ALL); break;
+          case VISITED_LINKS: clearFlags.add(ClearFlags.CLEAR_VISITED_LINKS); break;
+          case DISK_CACHE: clearFlags.add(ClearFlags.CLEAR_DISK_CACHE); break;
+          case IMAGE_CACHE: clearFlags.add(ClearFlags.CLEAR_IMAGE_CACHE); break;
+          case MEMORY_CACHE: clearFlags.add(ClearFlags.CLEAR_MEMORY_CACHE); break;
+          case SENSITIVE_DATA: clearFlags.add(ClearFlags.CLEAR_SENSITIVE_DATA); break;
+          case SESSION_COOKIES: clearFlags.add(ClearFlags.CLEAR_SESSION_COOKIES); break;
+          case ALL_COOKIES: clearFlags.add(ClearFlags.CLEAR_ALL_COOKIES); break;
+          case GLOBAL_HISTORY: clearFlags.add(ClearFlags.CLEAR_GLOBAL_HISTORY); break;
+          case CONSOLE: clearFlags.add(ClearFlags.CLEAR_CONSOLE); break;
+          case THUMBNAILS: clearFlags.add(ClearFlags.CLEAR_THUMBNAILS); break;
+          case WEBDATABASES: clearFlags.add(ClearFlags.CLEAR_WEBDATABASES); break;
+          case WEBSTORAGE: clearFlags.add(ClearFlags.CLEAR_WEBSTORAGE); break;
+          case APPCACHE: clearFlags.add(ClearFlags.CLEAR_APPCACHE); break;
+          case GEOLOCATION_PERMISSIONS: clearFlags.add(ClearFlags.CLEAR_GEOLOCATION_PERMISSIONS); break;
+          case SITE_PREFS: clearFlags.add(ClearFlags.CLEAR_SITE_PREFS); break;
+          default: logger.warning("Unhandled PrivateData flag!"); break;
+        }
+      }
+      return clearFlags;
     }
 
   }

@@ -16,6 +16,10 @@
 
 package com.opera.core.systems.scope.services;
 
+import java.util.List;
+
+import com.opera.core.systems.scope.protos.CoreProtos;
+
 /**
  * Core utility service exposing metadata about the browser core in general, i.e. information which
  * can not be associated to any one window, document, or object.
@@ -87,4 +91,9 @@ public interface ICoreUtils {
    */
   Integer getProcessID();
 
+  /**
+   * Clears selected browser data
+   * @param flags All data types to be cleared
+   */
+  void clearPrivateData(List<CoreProtos.ClearFlags> flags);
 }
