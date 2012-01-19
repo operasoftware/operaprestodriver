@@ -65,9 +65,8 @@ public class OperaMouse implements Mouse {
   public void mouseMove(Coordinates where, long xOffset, long yOffset) {
     Point p = getPoint(where, "mouse move");
 
-    // We can't compare against Integer.MAX_VALUE and throw, because this
-    // method isn't defined as able to throw an Exception.  Weird things
-    // will just happen here...
+    // We can't compare against Integer.MAX_VALUE and throw because this method isn't defined as
+    // able to throw an Exception.  Weird things will just happen here...
     int xO = (int) xOffset;
     int yO = (int) yOffset;
 
@@ -76,8 +75,8 @@ public class OperaMouse implements Mouse {
   }
 
   private Point getPoint(Coordinates where, String action) {
-    // If coordinates exist then we want to update the last known mouse
-    // position and then use it in the action.
+    // If coordinates exist then we want to update the last known mouse position and then use it in
+    // the action.
     if (where != null) {
       lastMousePosition = where.getLocationInViewPort();
     }
