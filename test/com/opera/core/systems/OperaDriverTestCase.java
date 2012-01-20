@@ -149,7 +149,7 @@ public abstract class OperaDriverTestCase {
    *
    * @param file the filename from the fixture directory to navigate to
    */
-  protected void getFixture(String file) {
+  protected static void getFixture(String file) {
     driver.get(fixture(file));
   }
 

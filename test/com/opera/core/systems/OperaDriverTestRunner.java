@@ -98,8 +98,10 @@ public class OperaDriverTestRunner extends BlockJUnit4ClassRunner {
 
     for (Platform platform : ignoreAnnotation.platforms()) {
       if (platform.is(Platform.ANY)) {
-        return true;
-      //} else if (OperaDriverTestCase.currentPlatform.is(platform)) {
+        // While ANY really should ignore any platform, ANY is also the default value for our custom
+        // Ignore annotation, meaning it will ignore everything by default.  So this is an exception
+        // from the rule.
+        return false;
       } else if (platform.is(OperaDriverTestCase.currentPlatform)) {
         return true;
       }
