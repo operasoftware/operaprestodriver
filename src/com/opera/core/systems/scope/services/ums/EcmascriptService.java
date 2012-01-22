@@ -50,12 +50,14 @@ import org.openqa.selenium.WebElement;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Queue;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicStampedReference;
@@ -534,6 +536,15 @@ public class EcmascriptService extends AbstractEcmascriptService implements
   }
 
   public Object examineScriptResult(Integer id) {
+    return examineScriptResult(id, new HashSet<Integer>());
+  }
+
+  private Object examineScriptResult(Integer id, Set<Integer> visitedIDs) {
+    if (visitedIDs.contains(id)) {
+      // cyclic reference - returning null for the inner most reference
+      return null;
+    }
+    visitedIDs.add(id);
     ObjectList list = getObjectList(id);
     EcmascriptProtos.Object obj = list.getPrototypeList(0).getObjectList(0);
     String className = obj.getClassName();
@@ -550,7 +561,7 @@ public class EcmascriptService extends AbstractEcmascriptService implements
         if (type == Type.NUMBER && property.getName().equals("length")) {
           // ignore ?!?
         } else {
-          result.add(parseValue(type, property.getValue()));
+          result.add(parseValue(type, property.getValue(), visitedIDs));
         }
       }
       return result;
@@ -563,14 +574,14 @@ public class EcmascriptService extends AbstractEcmascriptService implements
         if (type == Type.NUMBER && property.getName().equals("length")) {
           // ignore ?!?
         } else {
-          result.put(property.getName(), parseValue(type, property.getValue()));
+          result.put(property.getName(), parseValue(type, property.getValue(), visitedIDs));
         }
       }
       return result;
     }
   }
 
-  private Object parseValue(Type type, Value value) {
+  private Object parseValue(Type type, Value value, Set<Integer> visitedIDs) {
     switch (type) {
       case TRUE:
         return Boolean.valueOf(true);
@@ -585,7 +596,7 @@ public class EcmascriptService extends AbstractEcmascriptService implements
       case STRING:
         return value.getStr();
       case OBJECT:
-        return examineScriptResult(value.getObject().getObjectID());
+        return examineScriptResult(value.getObject().getObjectID(), visitedIDs);
 
       case UNDEFINED:
       case NULL:

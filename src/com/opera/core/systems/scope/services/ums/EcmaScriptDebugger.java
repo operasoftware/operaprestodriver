@@ -45,10 +45,12 @@ import org.openqa.selenium.WebElement;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicStampedReference;
@@ -567,6 +569,15 @@ public class EcmaScriptDebugger extends AbstractEcmascriptService implements
   }
 
   public Object examineScriptResult(Integer id) {
+    return examineScriptResult(id, new HashSet<Integer>());
+  }
+
+  private Object examineScriptResult(Integer id, Set<Integer> visitedIDs) {
+    if (visitedIDs.contains(id)) {
+      // cyclic reference - returning null for the inner most reference
+      return null;
+    }
+    visitedIDs.add(id);
     ObjectList list = getObjectList(id);
     String className = list.getObjectList(0).getValue().getName();
 
@@ -582,7 +593,7 @@ public class EcmaScriptDebugger extends AbstractEcmascriptService implements
             && property.getName().equals("length")) {
           // ignore ?!?
         } else if (property.getType().equals("object")) {
-          result.add(examineScriptResult(property.getObjectValue().getObjectID()));
+          result.add(examineScriptResult(property.getObjectValue().getObjectID(), visitedIDs));
         } else {
           result.add(parseValue(property.getType(), property.getValue()));
         }
@@ -598,7 +609,7 @@ public class EcmaScriptDebugger extends AbstractEcmascriptService implements
           // ignore ?!?
         } else if (property.getType().equals("object")) {
           result.put(property.getName(),
-                     examineScriptResult(property.getObjectValue().getObjectID()));
+                     examineScriptResult(property.getObjectValue().getObjectID(), visitedIDs));
         } else {
           result.put(property.getName(), parseValue(property.getType(),
                                                     property.getValue()));
