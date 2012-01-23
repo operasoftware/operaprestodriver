@@ -84,7 +84,7 @@ public class OperaDriverTestRunner extends BlockJUnit4ClassRunner {
     }
 
     // If it's a plain old @Ignore without arguments
-    if (ignoreAnnotation.products().length == 0 && ignoreAnnotation.platforms().length == 0) {
+    if (isPlainIgnore(ignoreAnnotation)) {
       return true;
     }
 
@@ -109,6 +109,17 @@ public class OperaDriverTestRunner extends BlockJUnit4ClassRunner {
 
     // Should not be ignored, none of the rules apply
     return false;
+  }
+
+  /**
+   * Checks if provided ignore annotation is a plain old @Ignore without arguments.
+   *
+   * @param annotation the annotation to check
+   * @return true if annotation is without arguments, false otherwise
+   */
+  private boolean isPlainIgnore(Ignore annotation) {
+    return (annotation.products().length == 1 && annotation.products()[0].is(OperaProduct.ALL)) &&
+        (annotation.platforms().length == 1 && annotation.platforms()[0].is(Platform.ANY));
   }
 
   // copy of BlockJUnit4ClassRunner.runNotIgnored()
