@@ -27,12 +27,14 @@ public class OperaStrings {
 
   /**
    * Checks whether given string has a numeric value. A numeric value may be "0", "1" or "1234".
-   * 
+   *
    * @param string the string to check
    * @return true if string holds a numeric value, false otherwise
    */
   public static boolean isNumeric(String string) {
-    if (string == null) return false;
+    if (string == null) {
+      return false;
+    }
     try {
       @SuppressWarnings("unused")
       double d = Double.parseDouble(string);
@@ -60,24 +62,17 @@ public class OperaStrings {
    * @return the escaped string
    */
   public static String escapeJsString(String string, String quote) {
-
-    /*
-     * This should be expanded to match all invalid characters (e.g. newlines) but for the moment
-     * we'll trust we'll only get quotes.
-     */
+    // This should be expanded to match all invalid characters (e.g. newlines) but for the moment
+    // we'll trust we'll only get quotes.
     Pattern escapePattern = Pattern.compile("([^\\\\])" + quote);
 
-    /*
-     * Prepend a space so that the regex can match quotes at the beginning of the string.
-     */
+    // Prepend a space so that the regex can match quotes at the beginning of the string
     Matcher m = escapePattern.matcher(" " + string);
     StringBuffer sb = new StringBuffer();
 
     while (m.find()) {
-      /*
-       * $1 -> inserts the character before the quote \\\\\" -> \\", apparently just \" isn't
-       * treated literally.
-       */
+      // $1 -> inserts the character before the quote \\\\\" -> \\", apparently just \" isn't
+      // treated literally.
       m.appendReplacement(sb, "$1\\\\" + quote);
     }
 
