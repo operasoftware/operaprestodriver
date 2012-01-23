@@ -36,8 +36,10 @@ import org.openqa.selenium.WebElement;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * EcmaScript debugger 6.0 implementation handles injection and runtime management to the new
@@ -237,6 +239,15 @@ public class EcmaScriptDebugger6 extends EcmaScriptDebugger {
 
   @Override
   public Object examineScriptResult(Integer id) {
+    return examineScriptResult(id, new HashSet<Integer>());
+  }
+
+  private Object examineScriptResult(Integer id, Set<Integer> visitedIDs) {
+    if (visitedIDs.contains(id)) {
+      // cyclic reference - returning null for the inner most reference
+      return null;
+    }
+    visitedIDs.add(id);
     ObjectChainList list = getChainList(id);
     List<Property> properties =
         list.getObjectChainList(0).getObjectListList().get(0).getPropertyListList();
@@ -253,7 +264,7 @@ public class EcmaScriptDebugger6 extends EcmaScriptDebugger {
         if (property.getType().equals("number") && property.getName().equals("length")) {
           // ignore ?!?
         } else if (property.getType().equals("object")) {
-          result.add(examineScriptResult(property.getObjectValue().getObjectID()));
+          result.add(examineScriptResult(property.getObjectValue().getObjectID(), visitedIDs));
         } else {
           result.add(parseValue(property.getType(), property.getValue()));
         }
@@ -267,8 +278,7 @@ public class EcmaScriptDebugger6 extends EcmaScriptDebugger {
         if (property.getType().equals("number") && property.getName().equals("length")) {
           // ignore ?!?
         } else if (property.getType().equals("object")) {
-          result.put(property.getName(), examineScriptResult(property.getObjectValue()
-              .getObjectID()));
+          result.put(property.getName(), examineScriptResult(property.getObjectValue().getObjectID(), visitedIDs));
         } else {
           result.put(property.getName(), parseValue(property.getType(), property.getValue()));
         }
