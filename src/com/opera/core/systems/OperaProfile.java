@@ -200,5 +200,9 @@ public class OperaProfile {
 
     return new File(directoryPath + "operaprefs.ini");
   }
+  
+  public String toJson() {
+    return getDirectory().getPath();
+  }
 
 }
