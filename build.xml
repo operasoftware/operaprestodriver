@@ -1,35 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project basedir="." default="compile" name="OperaDriver">
 
-  <!-- Location of the selenium source. Used to generate docs and inherit
-  the javadoc -->
+  <!-- Location of the Selenium source.  Used to generate docs and
+       inherit the JavaDoc -->
   <property name="selenium.src" value="../selenium/java/client/src" />
 
-  <!-- Get version from Git, and output it to the VERSION file.
-       This file is later copied to other locations. -->
-  <exec executable="git" outputproperty="version" failifexecutionfails="false">
-    <arg value="describe" />
-    <arg value="--dirty" />
-    <arg value="--always" />
-  </exec>
-  <!-- If we can't get the version from git, set a default  -->
-  <property name="version" value="UNKNOWN-VERSION" />
-  <echo message="${version}" file="VERSION" />
 
   <!-- Variables  -->
-
-  <property name="jar.filename" value="operadriver-${version}.jar" />
-  <property name="jar.path" value="pkg/${jar.filename}" />
-
-  <path id="classpath.path">
-    <pathelement location="bin" />
-    <fileset dir="lib" includes="**/*.jar" />
-  </path>
-  <path id="test.classpath.path">
-    <pathelement location="bin" />
-    <fileset file="${jar.path}"/>
-    <fileset dir="lib" includes="**/*.jar" />
-  </path>
 
   <property name="test.dir.path" value="bin" />
   <property name="test.output.path" value="test-output" />
@@ -37,6 +14,34 @@
 
 
   <!--  Targets  -->
+
+  <target name="init" description="Generates VERSION file, sets properties and classpaths">
+    <!-- Get version from Git, and output it to the VERSION file.  This
+         is later copied to other locations. -->
+    <exec executable="git" outputproperty="version" failifexecutionfails="false">
+      <arg value="describe" />
+      <arg value="--dirty" />
+      <arg value="--always" />
+    </exec>
+    <!-- If we can't get the version from Git, set a default  -->
+    <property name="version" value="UNKNOWN-VERSION" />
+    <echo message="${version}" file="VERSION" />
+
+    <!-- What to call and where to put the JAR -->
+    <property name="jar.filename" value="operadriver-${version}.jar" />
+    <property name="jar.path" value="pkg/${jar.filename}" />
+
+    <!-- Classpaths for compilation and tests -->
+    <path id="classpath.path">
+      <pathelement location="bin" />
+      <fileset dir="lib" includes="**/*.jar" />
+    </path>
+    <path id="test.classpath.path">
+      <pathelement location="bin" />
+      <fileset file="${jar.path}"/>
+      <fileset dir="lib" includes="**/*.jar" />
+    </path>
+  </target>
 
   <!-- Delete the bin and pkg dirs -->
   <target name="clean" description="Delete all generated files">
@@ -54,7 +59,7 @@
   </target>
 
   <!-- Compile all classes after cleaning -->
-  <target name="compile" description="Compile all the source files">
+  <target name="compile" description="Compile all the source files" depends="init">
     <fileset dir="bin" />
     <mkdir dir="bin" />
     <copy file="VERSION" todir="bin" />
