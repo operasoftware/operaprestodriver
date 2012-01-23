@@ -176,8 +176,6 @@ public class OperaLauncherRunnerSettings extends OperaRunnerSettings {
         os = new FileOutputStream(targetLauncher);
 
         ByteStreams.copy(is, os);
-
-        targetLauncher.setLastModified(targetLauncher.lastModified());
       } catch (IOException e) {
         throw new WebDriverException("Cannot write file to disk: " + e.getMessage());
       } finally {
