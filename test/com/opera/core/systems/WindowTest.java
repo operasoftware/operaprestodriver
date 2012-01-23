@@ -30,9 +30,9 @@ import static org.junit.Assert.fail;
  * @author Andreas Tolf Tolfsen <andreastt@opera.com>
  */
 public class WindowTest extends OperaDriverTestCase {
-  
+
   public static String defaultWindowHandle;
-  
+
   @BeforeClass
   public static void beforeAll() {
     getFixture("windows.html");
@@ -54,11 +54,11 @@ public class WindowTest extends OperaDriverTestCase {
           driver.close();
         }
       }
-      
+
       assertEquals("Should have " + (windowCountBeforeClosing - 1) + " less window(s)",
                    1, driver.getWindowCount());
     }
-    
+
     // Make sure we're in the control window before continuing
     assertEquals(defaultWindowHandle, driver.getWindowHandle());
   }
@@ -69,7 +69,7 @@ public class WindowTest extends OperaDriverTestCase {
 
     int windowCount = driver.getWindowCount();
     assertEquals(newWindows(1), windowCount);
-    
+
     driver.switchTo().window("targetted");
     assertEquals("Window 2", driver.getTitle());
   }
@@ -79,26 +79,26 @@ public class WindowTest extends OperaDriverTestCase {
     for (int i = 1; i <= 2; i++) {
       openNewTargettedWindow();
     }
-    
+
     assertEquals(newWindows(1), driver.getWindowCount());
   }
 
   @Test
   public void testOpenNewAnonymousWindow() {
     openNewAnonymousWindow();
-    
+
     int windowCount = driver.getWindowCount();
     assertEquals(newWindows(1), windowCount);
   }
-  
+
   @Test
   public void testOpenMultipleWindows() {
     int windowsToOpen = 3;
-    
+
     for (int i = 1; i <= windowsToOpen; i++) {
       openNewAnonymousWindow();
     }
-    
+
     assertEquals(newWindows(windowsToOpen), driver.getWindowCount());
   }
 
@@ -132,26 +132,27 @@ public class WindowTest extends OperaDriverTestCase {
    * Opens a new window by link text.  It will navigate to the window control page, attempt to find
    * the web element with the specified link text, click that and wait for a new window to appear.
    * If the new window failed to appear, it will cause the test to fail.  It will then switch back
-   * to the window you were in when performing this call, so that the current state is not modified.
+   * to the window you were in when performing this call, so that the current state is not
+   * modified.
    *
    * @param linkText the link text to click
    */
   private void openNewWindow(String linkText) {
     String currentWindow = driver.getWindowHandle();
-    
+
     // Switch window if we're not on the default window
     if (!currentWindow.equals(defaultWindowHandle)) {
       driver.switchTo().window(defaultWindowHandle);
     }
-    
+
     // Trigger new window load and wait for window to open
     driver.findElement(By.linkText(linkText)).click();
     try {
-      Thread.sleep(1000);      
+      Thread.sleep(1000);
     } catch (InterruptedException e) {
       fail("Interrupted");
     }
-    
+
     // Switch back to the page we were on
     driver.switchTo().window(currentWindow);
     assertEquals("Window control", driver.getTitle());
