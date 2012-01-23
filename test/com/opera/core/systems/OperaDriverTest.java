@@ -68,20 +68,6 @@ public class OperaDriverTest extends OperaDriverTestCase {
   }
 
   @Test
-  // TODO(andreastt): Should be made local
-  public void testGetURL() {
-    driver.get("www.ebay.co.uk");
-    assertTrue(driver.getCurrentUrl().indexOf("www.ebay.co.uk") > 0);
-  }
-
-  @Test
-  // TODO(andreastt): Should be made local
-  public void testGetURL2() {
-    driver.get("www.nyt.com", 15000);
-    assertTrue(driver.getCurrentUrl().indexOf("www.nytimes.com") > 0);
-  }
-
-  @Test
   public void testGetVersion() {
     String version = driver.getVersion();
     Assert.assertNotNull(version);
