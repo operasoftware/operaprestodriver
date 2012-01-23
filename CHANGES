@@ -1,3 +1,67 @@
+v0.10     (not released)
+
+  [API CHANGES]
+
+  * Added short-hand ScopePreference.reset() method for resetting a
+    single preference.  (andreastt)
+
+  * OperaDriver.preferences().* now returns a ScopePreference so that
+    it won't have to be casted.  (andreastt)
+
+  [ENHANCEMENTS]
+
+  * Upgraded WebDriver atoms.  (andreastt)
+
+  * Cleaning VERSION file on build target "clean".  (danielb)
+
+  [BUG FIXES]
+
+  * Handle cyclic references in JavaScript results to avoid stack
+    overflow.  (rjatkins)
+
+  * Fix for proxied WebElement not being wrapped in OperaDriver.
+    (rjatkins)
+
+  * setLastModified() check fails on Windows, resolves issue #38.
+    (andreastt)
+
+  * Fix for NullPointerException in DesiredCapabilitiesTest.
+    (andreastt)
+
+  * Fix for SpartanRunner not exiting, resolves SPARTAN-1026.
+    (danielb)
+
+  * Escape quotes in JavaScript parameters.  (rjatkins)
+
+  [TESTS]
+
+  * Converted ignored mouse tests to a low-level OperaMouse test,
+    MouseTest.  (andreastt)
+
+  * Added stale element exception tests for navigating between same
+    page and two different pages.  (andreastt)
+
+  * Added window switching tests.  (andreastt)
+
+  * Tests for WebElements being proxied in PageFactory.  (rjatkins)
+
+  * Check for whether @Ignore annotation is empty, fixes a few failing
+    Windows tests.  (andreastt)
+
+  * Removed or refactored tests relying on external resources.
+    (andreastt)
+
+  [OTHER]
+
+  * Fix code quotes in README.  (stuk)
+
+  * Upgraded Guava to 11.0.1.  (ajayk)
+
+  * Added more IntelliJ run configurations.  (andreastt)
+
+  * Added Richard Atkins to the AUTHORS file.  (andreastt)
+
+
 v0.9      (2011-01-16)
 
   [API CHANGES]
