@@ -50,6 +50,7 @@
     <delete dir="${test.output.path}" />
     <delete dir="${test.report.path}" />
     <delete dir="release" />
+    <delete file="VERSION" />
   </target>
 
   <!-- Compile all classes after cleaning -->
