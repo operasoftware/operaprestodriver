@@ -55,15 +55,14 @@ public class OperaDriverTest extends OperaDriverTestCase {
   @Test
   // TODO(andreastt): Should be made local
   public void testGetTitle() {
-    driver.get("http://t/core/standards/dom0/link/pathname/002.html");
-    assertEquals("URL with explicit pathname and hash", driver.getTitle());
+    getFixture("test.html");
+    assertEquals("Generic fixture", driver.getTitle());
   }
 
   @Test
-  // TODO(andreastt): Should be made local
   public void testGetText() {
-    driver.get("http://t/core/standards/quotes/none.html");
-    assertEquals("you should see nothing below",
+    getFixture("none.html");
+    assertEquals("You should see nothing below.",
                  driver.findElementByTagName("body").getText().trim());
   }
 
