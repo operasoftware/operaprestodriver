@@ -133,7 +133,7 @@ public abstract class AbstractEcmascriptService extends AbstractService
       elements.add((WebElement) object);
       builder.append(String.valueOf(object));
     } else if (object instanceof String) {
-      builder.append("'").append(String.valueOf(object)).append("'");
+      builder.append("'").append(escapeQuotes(String.valueOf(object))).append("'");
     } else if (object instanceof Integer || object instanceof Long
                || object instanceof Boolean || object instanceof Float
                || object instanceof Double) {
@@ -141,6 +141,10 @@ public abstract class AbstractEcmascriptService extends AbstractService
     } else {
       throw new IllegalArgumentException("The argument type is not supported");
     }
+  }
+
+  private String escapeQuotes(String s) {
+    return s.replace("'", "\\'");
   }
 
   public String executeJavascript(String using) {
