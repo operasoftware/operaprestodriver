@@ -58,6 +58,7 @@ import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.internal.WrapsElement;
 import org.openqa.selenium.logging.Logs;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteLogs;
@@ -805,6 +806,10 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     // TODO: Implement need to find a way to link an element to a runtime
     public WebDriver frame(WebElement frameElement) {
       String script = "return " + OperaAtoms.GET_FRAME_INDEX + "(locator)";
+      // PageObject fields are wrapped by PageFactory
+      while (frameElement instanceof WrapsElement) {
+        frameElement = ((WrapsElement) frameElement).getWrappedElement();
+      }
       Long frameIndex =
           (Long) debugger.callFunctionOnObject(script,
                                                ((OperaWebElement) frameElement).getObjectId(),
