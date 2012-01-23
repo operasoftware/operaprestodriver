@@ -45,6 +45,7 @@ public class CrashTest extends OperaDriverTestCase {
 
   @Test
   @Ignore
+  // TODO(andreastt): Should be made local
   public void testCore34284() {
     assertTrue(driver.getRunner().isOperaRunning());
 
