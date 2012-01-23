@@ -66,12 +66,16 @@ public class OperaScopePreferences extends AbstractOperaPreferences {
     set(new OperaGenericPreferences.GenericPreference(section, key, value));
   }
 
+  public ScopePreference get(String section, String key) {
+    return (ScopePreference) super.get(section, key);
+  }
+
   /**
    * Resets all preferences values to their default value.
    */
   public void resetAll() {
     for (OperaPreference p : this) {
-      p.setValue(p.getDefaultValue());
+      ((ScopePreference) p).reset();
     }
   }
 
@@ -151,6 +155,14 @@ public class OperaScopePreferences extends AbstractOperaPreferences {
      */
     public boolean isEnabled() {
       return pref.getEnabled();
+    }
+
+    /**
+     * Resets preference's value to its default value.  This method is a short-hand method for doing
+     * <code>preference.setValue(preference.getDefaultValue)</code>.
+     */
+    public void reset() {
+      setValue(getDefaultValue());
     }
 
   }
