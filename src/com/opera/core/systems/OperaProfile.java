@@ -176,6 +176,16 @@ public class OperaProfile {
   }
 
   /**
+   * Converts this instance to its JSON representation.
+   *
+   * @return the JSON representation of this profile
+   */
+  @SuppressWarnings("unused")
+  public String toJson() {
+    return getDirectory().getPath();
+  }
+
+  /**
    * Opera preference files can be named either <code>opera.ini</code> or
    * <code>operaprefs.ini</code> depending on the product.  This method will look in the specified
    * directory for either of the files and return the one that exists.  <code>operaprefs.ini</code>
@@ -199,10 +209,6 @@ public class OperaProfile {
     }
 
     return new File(directoryPath + "operaprefs.ini");
-  }
-  
-  public String toJson() {
-    return getDirectory().getPath();
   }
 
 }
