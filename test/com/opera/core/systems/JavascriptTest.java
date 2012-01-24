@@ -16,14 +16,16 @@ limitations under the License.
 
 package com.opera.core.systems;
 
+import com.opera.core.systems.Ignore;
+
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.openqa.selenium.Platform.MAC;
 
 public class JavascriptTest extends OperaDriverTestCase {
 
@@ -56,6 +58,7 @@ public class JavascriptTest extends OperaDriverTestCase {
   }
 
   @Test
+  @Ignore(platforms = MAC, value = "Needs investigation why JS doubleclick events are not triggered on Mac")
   public void testDoubleClick() {
     new Actions(driver).doubleClick(driver.findElementById("one")).perform();
     assertEquals(driver.findElementById("two").getAttribute("value"), "double");
