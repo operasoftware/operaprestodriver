@@ -638,7 +638,7 @@ public class ScopeServices implements IConnectionHandler {
         // Version 1.1 introduced some important fixes, and we don't want to use idle detection
         // without this.
         boolean ok = VersionUtil.compare(version, "1.1") >= 0;
-        logger.finer("core service version check: " + ok + " (" + version + ")");
+        logger.finest("core service version check: " + ok + " (" + version + ")");
         return ok;
       }
     }
