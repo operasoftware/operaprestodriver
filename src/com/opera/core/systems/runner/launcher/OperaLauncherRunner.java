@@ -28,6 +28,7 @@ import org.openqa.selenium.net.PortProber;
 
 import com.google.protobuf.GeneratedMessage;
 import com.opera.core.systems.OperaPaths;
+import com.opera.core.systems.OperaProduct;
 import com.opera.core.systems.arguments.OperaArgument;
 import com.opera.core.systems.model.ScreenShotReply;
 import com.opera.core.systems.runner.OperaRunner;
@@ -68,7 +69,6 @@ public class OperaLauncherRunner extends OperaRunner
     // Parse remaining launcher-related settings
     Integer launcherPort = PortProber.findFreePort();
     Integer display = settings.getDisplay();
-    //OperaProduct product = settings.getProduct();
     String binary;
     if (settings.getBinary() == null) {
       binary = OperaPaths.operaPath();
@@ -90,13 +90,10 @@ public class OperaLauncherRunner extends OperaRunner
       launcherArguments.add("-verbosity");
       launcherArguments.add(settings.getLoggingLevel().toString());
     }
-    // TODO(andreastt): Disabled due to current launcher not having -profile
-    /*
-    if (product != OperaProduct.ALL) {
+    if (!settings.getProduct().is(OperaProduct.ALL)) {
       launcherArguments.add("-profile");
-      launcherArguments.add(product.toString());
+      launcherArguments.add(settings.getProduct().toString());
     }
-    */
     if (settings.getNoQuit()) {
       launcherArguments.add("-noquit");
     }
