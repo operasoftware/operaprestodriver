@@ -49,6 +49,7 @@ public class OperaLauncherRunnerSettings extends OperaRunnerSettings {
 
   public static final Logger logger = Logger.getLogger(OperaLauncherRunnerSettings.class.getName());
   protected File launcher;
+  protected String backend = "software";
 
   public OperaLauncherRunnerSettings() {
     super();
@@ -73,6 +74,28 @@ public class OperaLauncherRunnerSettings extends OperaRunnerSettings {
     } else {
       throw new OperaRunnerException("Invalid launcher: " + launcher);
     }
+  }
+
+  /**
+   * Gets the rendering backend currently used.
+   *
+   * @return "software" or "hardware" depending on backend used
+   */
+  @Deprecated
+  @SuppressWarnings("unused")
+  public String getBackend() {
+    return backend;
+  }
+
+  /**
+   * Sets which rendering backend to use.  Available backends are "software" and "hardware".
+   *
+   * @param backend the rendering backend to use
+   */
+  @Deprecated
+  @SuppressWarnings("unused")
+  public void setBackend(String backend) {
+    this.backend = backend;
   }
 
   public static OperaLauncherRunnerSettings getDefaultSettings() {

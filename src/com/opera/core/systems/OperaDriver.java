@@ -26,7 +26,6 @@ import com.opera.core.systems.model.ScreenShotReply;
 import com.opera.core.systems.model.ScriptResult;
 import com.opera.core.systems.preferences.OperaScopePreferences;
 import com.opera.core.systems.runner.OperaRunner;
-import com.opera.core.systems.runner.interfaces.OperaRunnerSettings;
 import com.opera.core.systems.runner.launcher.OperaLauncherRunner;
 import com.opera.core.systems.runner.launcher.OperaLauncherRunnerSettings;
 import com.opera.core.systems.scope.exceptions.CommunicationException;
@@ -181,6 +180,17 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
    */
   public static final String PRODUCT = "opera.product";
 
+  /**
+   * (String) Rendering backend used by internal gogi builds of Opera.  If null or an empty string,
+   * "software" is used by default.
+   *
+   * <strong>Warning:</strong> This is a temporary workaround for launcher not taking external
+   * window-only screenshots on Windows.
+   */
+  @Deprecated
+  @SuppressWarnings("unused")
+  public static final String BACKEND = "opera.backend";
+
   /*
    * These are "protected" and not "private" so that we can extend this class and add methods to
    * access these variable in tests.
@@ -281,7 +291,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
         }
       }
 
-      OperaRunnerSettings settings = new OperaLauncherRunnerSettings();
+      OperaLauncherRunnerSettings settings = new OperaLauncherRunnerSettings();
       settings.setBinary((String) capabilities.getCapability(BINARY));
       settings.setPort((Integer) capabilities.getCapability(PORT));
       settings.setLoggingLevel(OperaLauncherRunner.toLauncherLoggingLevel(logLevel));
@@ -297,10 +307,16 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
         settings.setProfile((OperaProfile) capabilities.getCapability(PROFILE));
       }
 
+      String backend = (String) capabilities.getCapability(BACKEND);
+      if (backend != null && !backend.isEmpty()) {
+        settings.setBackend(backend);
+      }
+
       // Synchronize settings for runner and capabilities
       capabilities.setCapability(ARGUMENTS, settings.getArguments().toString());
       capabilities.setCapability(PORT, settings.getPort());
       capabilities.setCapability(PROFILE, settings.getProfile());
+      capabilities.setCapability(BACKEND, settings.getBackend());
 
       if (capabilities.getCapability(BINARY) != null) {
         runner = new OperaLauncherRunner((OperaLauncherRunnerSettings) settings);
@@ -344,6 +360,9 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     capabilities.setCapability(NO_QUIT, false);
     capabilities.setCapability(GUESS_BINARY_PATH, true);
     capabilities.setCapability(OPERAIDLE, false);
+
+    capabilities.setCapability(BACKEND,
+                               OperaLauncherRunnerSettings.getDefaultSettings().getBackend());
 
     return capabilities;
   }
@@ -477,7 +496,8 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     services.captureOperaIdle();
     windowManager.openUrl(activeWindowId, url);
 
-    if (oldUrl == null || (url.replace(oldUrl, "").length() == 0 || url.replace(oldUrl, "").charAt(0) != '#')) {
+    if (oldUrl == null || (url.replace(oldUrl, "").length() == 0
+                           || url.replace(oldUrl, "").charAt(0) != '#')) {
       if (useOperaIdle()) {
         try {
           // Use idle timeout (which is lower) if timeout has not been manually set.

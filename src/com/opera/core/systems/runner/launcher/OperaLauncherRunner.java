@@ -75,6 +75,8 @@ public class OperaLauncherRunner extends OperaRunner
     } else {
       binary = settings.getBinary().getAbsolutePath();
     }
+    OperaProduct product = settings.getProduct();
+    String backend = settings.getBackend();
 
     List<String> launcherArguments = new ArrayList<String>();
     launcherArguments.add("-host");
@@ -90,9 +92,13 @@ public class OperaLauncherRunner extends OperaRunner
       launcherArguments.add("-verbosity");
       launcherArguments.add(settings.getLoggingLevel().toString());
     }
-    if (!settings.getProduct().is(OperaProduct.ALL)) {
+    if (!product.is(OperaProduct.ALL)) {
       launcherArguments.add("-profile");
-      launcherArguments.add(settings.getProduct().toString());
+      launcherArguments.add(product.toString());
+    }
+    if (backend != null && !backend.isEmpty()) {
+      launcherArguments.add("-backend");
+      launcherArguments.add(backend);
     }
     if (settings.getNoQuit()) {
       launcherArguments.add("-noquit");
