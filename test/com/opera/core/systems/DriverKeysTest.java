@@ -134,7 +134,7 @@ public class DriverKeysTest extends OperaDriverTestCase {
   }
 
   @Test
-  public void testMultipleModifiers() throws Exception {
+  public void testMultipleModifiers() {
     new Actions(driver).sendKeys("abc defghij")
         .sendKeys(Keys.CONTROL + "" + Keys.LEFT_SHIFT + Keys.LEFT)
         .sendKeys(Keys.BACK_SPACE)
