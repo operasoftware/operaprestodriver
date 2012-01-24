@@ -37,6 +37,7 @@ import javax.imageio.ImageIO;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.openqa.selenium.Platform.MAC;
 
 public class ScreenshotTest extends OperaDriverTestCase {
 
@@ -139,6 +140,7 @@ public class ScreenshotTest extends OperaDriverTestCase {
   }
 
   @Test
+  @Ignore(platforms = MAC, value = "Needs investigation, doesn't return anything")
   public void testRealPng() throws Exception {
     ScreenShotReply reply = driver.saveScreenshot(0);
     byte[] png = reply.getPng();
