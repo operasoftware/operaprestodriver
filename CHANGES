@@ -33,6 +33,9 @@ v0.10     (not released)
 
   * Escape quotes in JavaScript parameters.  (rjatkins)
 
+  * Added OperaProfile.toJson(), avoids StackOverflowException in
+    BeantoJsonConverter.  (dawagner)
+
   [TESTS]
 
   * Converted ignored mouse tests to a low-level OperaMouse test,
