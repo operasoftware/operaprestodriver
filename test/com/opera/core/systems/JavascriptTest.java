@@ -57,9 +57,7 @@ public class JavascriptTest extends OperaDriverTestCase {
 
   @Test
   public void testDoubleClick() {
-    WebElement one = driver.findElementById("one");
-    one.click();
-    one.click();
+    new Actions(driver).doubleClick(driver.findElementById("one")).perform();
     assertEquals(driver.findElementById("two").getAttribute("value"), "double");
   }
 
