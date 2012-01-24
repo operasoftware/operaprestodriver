@@ -138,17 +138,17 @@ public class DriverKeysTest extends OperaDriverTestCase {
   @Test
   @Ignore(platforms = MAC, value = "Needs investigation")
   public void testMultipleModifiers() {
-    Actions actions = new Actions(driver).sendKeys("abc defghij");
-
     if (Platform.getCurrent().is(Platform.MAC)) {
-      actions.sendKeys(Keys.ALT);
+      new Actions(driver).sendKeys("abc defghij")
+          .sendKeys(Keys.ALT + "" + Keys.LEFT_SHIFT + Keys.LEFT)
+          .sendKeys(Keys.BACK_SPACE)
+          .build().perform();
     } else {
-      actions.sendKeys(Keys.CONTROL);
+      new Actions(driver).sendKeys("abc defghij")
+          .sendKeys(Keys.CONTROL + "" + Keys.LEFT_SHIFT + Keys.LEFT)
+          .sendKeys(Keys.BACK_SPACE)
+          .build().perform();
     }
-
-    actions.sendKeys(Keys.LEFT_SHIFT + "" + Keys.LEFT)
-        .sendKeys(Keys.BACK_SPACE)
-        .build().perform();
 
     assertEquals("abc ", fieldOne.getAttribute("value"));
   }
