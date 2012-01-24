@@ -36,6 +36,9 @@ v0.10     (not released)
   * Added OperaProfile.toJson(), avoids StackOverflowException in
     BeantoJsonConverter.  (dawagner)
 
+  * Logging levle is now passed down to launcher on startup.
+    (andreastt)
+
   [TESTS]
 
   * Converted ignored mouse tests to a low-level OperaMouse test,

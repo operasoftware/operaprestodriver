@@ -381,14 +381,15 @@ public class OperaLauncherRunner extends OperaRunner
     // SEVERE 1000
     // OFF 2147483647
 
+    // TODO(andreastt): Move INFO down when "--> Entering LauncherRunner::run" messages are removed
     switch (level.intValue()) {
       case 1000: // SEVERE
         return Level.SEVERE;
 
       case 900: // WARNING
+      case 800: // INFO
         return Level.WARNING;
 
-      case 800: // INFO
       case 700: // CONFIG
       case 500: // FINE
       case 400: // FINER

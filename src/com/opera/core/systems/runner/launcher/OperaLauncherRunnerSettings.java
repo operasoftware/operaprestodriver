@@ -52,6 +52,7 @@ public class OperaLauncherRunnerSettings extends OperaRunnerSettings {
 
   public OperaLauncherRunnerSettings() {
     super();
+    loggingLevel = OperaLauncherRunner.toLauncherLoggingLevel(getLoggingLevel());
   }
 
   public void setLoggingLevel(Level level) {
