@@ -19,10 +19,12 @@ package com.opera.core.systems;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 
 import static org.junit.Assert.assertEquals;
+import static org.openqa.selenium.Platform.MAC;
 
 public class DriverKeysTest extends OperaDriverTestCase {
 
@@ -134,9 +136,17 @@ public class DriverKeysTest extends OperaDriverTestCase {
   }
 
   @Test
+  @Ignore(platforms = MAC, value = "Needs investigation")
   public void testMultipleModifiers() {
-    new Actions(driver).sendKeys("abc defghij")
-        .sendKeys(Keys.CONTROL + "" + Keys.LEFT_SHIFT + Keys.LEFT)
+    Actions actions = new Actions(driver).sendKeys("abc defghij");
+
+    if (Platform.getCurrent().is(Platform.MAC)) {
+      actions.sendKeys(Keys.ALT);
+    } else {
+      actions.sendKeys(Keys.CONTROL);
+    }
+
+    actions.sendKeys(Keys.LEFT_SHIFT + "" + Keys.LEFT)
         .sendKeys(Keys.BACK_SPACE)
         .build().perform();
 
