@@ -78,4 +78,20 @@ public enum OperaIntervals {
     return value;
   }
 
+  public String toString() {
+    return String.format("%s: %d", super.toString(), getValue());
+  }
+
+  @SuppressWarnings("unused")
+  public static String toList() {
+    StringBuilder intervals = new StringBuilder();
+    for (OperaIntervals item : values()) {
+      if (intervals.length() != 0) {
+        intervals.append(", ");
+      }
+      intervals.append(item.toString());
+    }
+    return String.format("Intervals [%s]", intervals.toString());
+  }
+
 }
