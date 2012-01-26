@@ -301,6 +301,11 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
       arguments.merge(parsed);
       settings.setArguments(arguments);
 
+      String launcher = (String) capabilities.getCapability(LAUNCHER);
+      if (launcher != null) {
+        settings.setLauncher(launcher);
+      }
+
       if (capabilities.getCapability(PROFILE) instanceof String) {
         settings.setProfile((String) capabilities.getCapability(PROFILE));
       } else if (capabilities.getCapability(PROFILE) instanceof OperaProfile) {
@@ -316,6 +321,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
       capabilities.setCapability(ARGUMENTS, settings.getArguments().toString());
       capabilities.setCapability(PORT, settings.getPort());
       capabilities.setCapability(PROFILE, settings.getProfile());
+      capabilities.setCapability(LAUNCHER, settings.getLauncher().getPath());
       capabilities.setCapability(BACKEND, settings.getBackend());
 
       if (capabilities.getCapability(BINARY) != null) {

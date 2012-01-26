@@ -16,7 +16,10 @@ limitations under the License.
 
 package com.opera.core.systems;
 
+import com.google.common.io.Files;
+
 import com.opera.core.systems.runner.OperaRunnerException;
+import com.opera.core.systems.runner.launcher.OperaLauncherRunnerSettings;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -25,6 +28,7 @@ import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
+import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
@@ -36,16 +40,23 @@ import static com.opera.core.systems.OperaProduct.CORE;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 public class DesiredCapabilitiesTest extends OperaDriverTestCase {
 
   public DesiredCapabilities capabilities;
+  private static File fakeBinary;
 
   /**
    * Overrides {@link OperaDriverTestCase#setUpBeforeClass();)}
    */
   @BeforeClass
   public static void setUpBeforeClass() {
+    if (Platform.getCurrent().is(Platform.WINDOWS)) {
+      fakeBinary = new File("C:\\WINDOWS\\system32\\find.exe");
+    } else {
+      fakeBinary = new File("/bin/echo");
+    }
   }
 
   /**
@@ -101,7 +112,8 @@ public class DesiredCapabilitiesTest extends OperaDriverTestCase {
   public void testSettingLogFile() throws IOException {
     File log = tmpFolder.newFile("operadriver.log");
     capabilities.setCapability(OperaDriver.LOGGING_FILE, log.getCanonicalPath());
-    capabilities.setCapability(OperaDriver.LOGGING_LEVEL, "FINER");  // up the level to get some ompf
+    capabilities
+        .setCapability(OperaDriver.LOGGING_LEVEL, "FINER");  // up the level to get some ompf
     driver = new TestOperaDriver(capabilities);
 
     assertTrue(log.length() > 0);
@@ -165,6 +177,34 @@ public class DesiredCapabilitiesTest extends OperaDriverTestCase {
     driver = new TestOperaDriver(capabilities);
     assertTrue(driver.runner.isOperaRunning());
     driver.quit();
+  }
+
+  @Test
+  public void testFakeLauncher() {
+    OperaLauncherRunnerSettings settings = new OperaLauncherRunnerSettings();
+
+    try {
+      TemporaryFolder tmp = new TemporaryFolder();
+      tmp.create();
+      File newLauncher = tmp.newFile("newLauncher");
+      Files.copy(settings.getLauncher(), newLauncher);
+      OperaLauncherRunnerSettingsTest.TestOperaLauncherRunnerSettings
+          .makeLauncherExecutable2(newLauncher);
+      capabilities.setCapability(OperaDriver.LAUNCHER, newLauncher.getPath());
+      driver = new TestOperaDriver(capabilities);
+      assertEquals(newLauncher.getPath(),
+                   driver.getCapabilities().getCapability(OperaDriver.LAUNCHER));
+    } catch (IOException e) {
+      fail("Problem copying launcher for testing: " + e.getMessage());
+    } finally {
+      tmpFolder.delete();
+    }
+  }
+
+  @Test(expected = OperaRunnerException.class)
+  public void testInvalidLauncher() {
+    capabilities.setCapability(OperaDriver.LAUNCHER, "/path/to/invalid/launcher");
+    driver = new TestOperaDriver(capabilities);
   }
 
 }
