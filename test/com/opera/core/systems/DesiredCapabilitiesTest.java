@@ -19,11 +19,8 @@ package com.opera.core.systems;
 import com.google.common.io.Files;
 
 import com.opera.core.systems.runner.OperaRunnerException;
-<<<<<<< HEAD
 import com.opera.core.systems.testing.drivers.TestOperaDriver;
-=======
 import com.opera.core.systems.runner.launcher.OperaLauncherRunnerSettings;
->>>>>>> 41d097811396b7d1a48e3263cf57aafd41dafc62
 
 import org.junit.After;
 import org.junit.AfterClass;
