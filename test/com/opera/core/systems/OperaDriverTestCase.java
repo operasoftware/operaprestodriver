@@ -71,7 +71,11 @@ public abstract class OperaDriverTestCase {
     if (driver != null && driver.isRunning()) {
       driver.quit();
     }
+
+    driver = null;
   }
+
+  // TODO(andreastt): All of the fixture-related methods below should be replaced by a page factory or something
 
   /**
    * Get the URL of the given fixture file.
@@ -103,10 +107,6 @@ public abstract class OperaDriverTestCase {
    */
   protected static void getFixture(String file) {
     driver.get(fixture(file));
-  }
-
-  private static boolean isDriverRunning() {
-    return (driver != null) && driver.isRunning();
   }
 
 }

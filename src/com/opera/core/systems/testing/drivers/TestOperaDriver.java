@@ -169,7 +169,7 @@ public class TestOperaDriver extends OperaDriver {
 
   }
 
-  public OperaUtils utils() {
+  public TestOperaUtils utils() {
     return new TestOperaUtils();
   }
 
@@ -177,7 +177,7 @@ public class TestOperaDriver extends OperaDriver {
 
     /**
      * Overrides the default {@link OperaDriver.OperaUtils#getProduct()} to also take the
-     * environmental variable OPERA_PRODUCT into account.
+     * environmental variable <code>OPERA_PRODUCT</code> into account, which can be used for
      *
      * @return browser's product type
      */
@@ -203,8 +203,8 @@ public class TestOperaDriver extends OperaDriver {
       return currentProduct;
     }
 
-    public String getOS() {
-      return currentPlatform.toString();
+    public Platform getPlatform() {
+      return currentPlatform;
     }
 
   }

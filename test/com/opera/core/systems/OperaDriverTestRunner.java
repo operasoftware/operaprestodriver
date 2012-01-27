@@ -104,7 +104,7 @@ public class OperaDriverTestRunner extends BlockJUnit4ClassRunner {
         // Ignore annotation, meaning it will ignore everything by default.  So this is an exception
         // from the rule.
         return false;
-      } else if (platform.is(Platform.valueOf(OperaDriverTestCase.driver.utils().getOS()))) {
+      } else if (platform.is(OperaDriverTestCase.driver.utils().getPlatform())) {
         return true;
       }
     }
