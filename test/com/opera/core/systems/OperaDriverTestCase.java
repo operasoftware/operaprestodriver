@@ -53,11 +53,11 @@ public abstract class OperaDriverTestCase {
   private static File fixtureDirectory;
 
   @BeforeClass
-  public static void setup() {
-    setup(new OperaDriverBuilder(new TestOperaDriverSupplier()));
+  public static void setUp() {
+    setUp(new OperaDriverBuilder(new TestOperaDriverSupplier()));
   }
 
-  public static void setup(OperaDriverBuilder builder) {
+  public static void setUp(OperaDriverBuilder builder) {
     if (driver != null && driver.isRunning()) {
       return;
     }
@@ -67,7 +67,7 @@ public abstract class OperaDriverTestCase {
   }
 
   @AfterClass
-  public static void teardown() {
+  public static void tearDown() {
     if (driver != null && driver.isRunning()) {
       driver.quit();
     }
@@ -83,14 +83,17 @@ public abstract class OperaDriverTestCase {
    * @param file the filename to get
    * @return the URL to the fixture file
    */
+  @Deprecated
   protected static String fixture(String file) {
     return "file://localhost" + getFixtureDirectory().getPath() + SEPARATOR + file;
   }
 
+  @Deprecated
   protected static File fixtureFile(String file) {
     return new File(getFixtureDirectory().getPath() + SEPARATOR +  file);
   }
 
+  @Deprecated
   protected static File getFixtureDirectory() {
     if (fixtureDirectory == null) {
       fixtureDirectory = new File(USER_HOME.getPath() + SEPARATOR + "test" + SEPARATOR +
@@ -105,6 +108,7 @@ public abstract class OperaDriverTestCase {
    *
    * @param file the filename from the fixture directory to navigate to
    */
+  @Deprecated
   protected static void getFixture(String file) {
     driver.get(fixture(file));
   }

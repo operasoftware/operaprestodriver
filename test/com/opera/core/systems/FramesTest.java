@@ -28,7 +28,7 @@ public class FramesTest extends OperaDriverTestCase {
   List<String> frames;
 
   @Before
-  public void setUp() throws Exception {
+  public void beforeEach() {
     getFixture("frames.html");
     frames = driver.listFrames();
   }

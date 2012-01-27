@@ -30,13 +30,13 @@ import static org.junit.Assert.assertTrue;
 public class CrashTest extends OperaDriverTestCase {
 
   @Before
-  public void setUp() {
-    super.setup();
+  public void beforeEach() {
+    super.setUp();
   }
 
   @After
-  public void tearDown() {
-    super.teardown();
+  public void afterEach() {
+    super.tearDown();
 
     // Make sure Opera is gone
     CommandLine line = new CommandLine("kill", "`pgrep opera`");

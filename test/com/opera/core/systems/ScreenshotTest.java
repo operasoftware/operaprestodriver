@@ -47,7 +47,7 @@ public class ScreenshotTest extends OperaDriverTestCase {
   private OperaWebElement radioLots;
 
   @Before
-  public void setUp() throws Exception {
+  public void beforeEach() {
     getFixture("test.html");
 
     text = (OperaWebElement) driver.findElement(By.id("input_email"));
@@ -57,7 +57,7 @@ public class ScreenshotTest extends OperaDriverTestCase {
   }
 
   @AfterClass
-  public static void tearDownAfterClass() throws Exception {
+  public static void tearDown() {
     new File("one.png").delete();
     new File("two.png").delete();
   }
