@@ -80,17 +80,17 @@ public abstract class OperaDriverTestCase {
    * @return the URL to the fixture file
    */
   protected static String fixture(String file) {
-    return "file://localhost" + getFixtureDirectory().getPath() + file;
+    return "file://localhost" + getFixtureDirectory().getPath() + SEPARATOR + file;
   }
 
   protected static File fixtureFile(String file) {
-    return new File(fixtureDirectory + file);
+    return new File(getFixtureDirectory().getPath() + SEPARATOR +  file);
   }
 
   protected static File getFixtureDirectory() {
     if (fixtureDirectory == null) {
-      fixtureDirectory = new File(SEPARATOR + USER_HOME.getPath() + SEPARATOR + SEPARATOR + "test" +
-                                  SEPARATOR + "fixtures" + SEPARATOR);
+      fixtureDirectory = new File(USER_HOME.getPath() + SEPARATOR + "test" + SEPARATOR +
+                                  "fixtures" + SEPARATOR);
     }
 
     return fixtureDirectory;
