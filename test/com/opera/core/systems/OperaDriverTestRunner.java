@@ -91,7 +91,7 @@ public class OperaDriverTestRunner extends BlockJUnit4ClassRunner {
     for (OperaProduct product : ignoreAnnotation.products()) {
       if (product.is(OperaProduct.ALL)) {
         break;
-      } else if (product.is(OperaDriverTestCase.currentProduct)) {
+      } else if (product.is(OperaDriverTestCase.getCurrentProduct())) {
         return true;
       }
     }
@@ -102,7 +102,7 @@ public class OperaDriverTestRunner extends BlockJUnit4ClassRunner {
         // Ignore annotation, meaning it will ignore everything by default.  So this is an exception
         // from the rule.
         return false;
-      } else if (platform.is(OperaDriverTestCase.currentPlatform)) {
+      } else if (platform.is(OperaDriverTestCase.getCurrentPlatform())) {
         return true;
       }
     }

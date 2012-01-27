@@ -46,7 +46,6 @@ public class OperaProfileTest extends OperaDriverTestCase {
 
   @BeforeClass
   public static void setUpBeforeClass() {
-    initFixtures();
   }
 
   @AfterClass

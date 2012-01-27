@@ -17,21 +17,19 @@ limitations under the License.
 package com.opera.core.systems;
 
 import com.opera.core.systems.runner.OperaRunner;
-import com.opera.core.systems.scope.services.IOperaExec;
+import com.opera.core.systems.testing.drivers.OperaDriverBuilder;
+import com.opera.core.systems.testing.drivers.TestOperaDriver;
+import com.opera.core.systems.testing.drivers.TestOperaDriverSupplier;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
-import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.Platform;
-import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.io.File;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 /**
  * You can extend OperaDriverTestCase in your test case to gain access to convenience methods
@@ -48,86 +46,70 @@ import static org.junit.Assert.assertTrue;
 public abstract class OperaDriverTestCase {
 
   protected static TestOperaDriver driver;
-  protected static OperaProduct currentProduct = OperaProduct.CORE;
-  protected static Platform currentPlatform = Platform.getCurrent();
 
-  private static String fixtureDirectory;
+  private static OperaProduct currentProduct;
+  private static Platform currentPlatform = Platform.getCurrent();
+  private static File fixtureDirectory;
+  private static final String separator = System.getProperty("file.separator");
+  private static final File userHome = new File(System.getProperty("user.dir"));
   private static final Logger logger = Logger.getLogger(OperaDriverTestCase.class.getName());
 
   @BeforeClass
-  public static void setUpBeforeClass() throws Exception {
+  public static void setup() {
+    setup(new OperaDriverBuilder(new TestOperaDriverSupplier()));
+  }
+
+  public static void setup(OperaDriverBuilder builder) {
     if (driver != null && driver.isRunning()) {
       return;
     }
 
-    driver = new TestOperaDriver(getDefaultCapabilities());
+    driver = (TestOperaDriver) builder.get();
     assertNotNull(driver);
-
-    initProduct();
-    initFixtures();
   }
 
   @AfterClass
-  public static void tearDownAfterClass() throws Exception {
+  public static void teardown() {
     if (driver != null && driver.isRunning()) {
       driver.quit();
     }
   }
 
   /**
-   * Return the default capabilities we use when running tests.  This typically ups the logging
-   * level a bit.
-   *
-   * @return the default capabilities for the OperaDriver tests
-   */
-  public static DesiredCapabilities getDefaultCapabilities() {
-    DesiredCapabilities capabilities = DesiredCapabilities.opera();
-    capabilities.setCapability(OperaDriver.LOGGING_LEVEL, Level.FINE);
-    return capabilities;
-  }
-
-  /**
-   * Runs all the initialization methods, including {@link OperaDriverTestCase#initProduct()} and
-   * {@link OperaDriverTestCase#initFixtures()}.
-   */
-  protected static void init() {
-    initProduct();
-    initFixtures();
-  }
-
-  /**
    * Fetch the product from the connected driver or override it using the OPERA_PRODUCT
    * environmental variable.
+   *
+   * @return the current product
    */
-  protected static void initProduct() {
-    if (!isDriverRunning()) {
-      return;
-    }
+  public static OperaProduct getCurrentProduct() {
+    if (currentProduct == null) {
+      currentProduct = OperaProduct.CORE;  // default
+      String requestedProduct = System.getenv("OPERA_PRODUCT");
 
-    String requestedProduct = System.getenv("OPERA_PRODUCT");
-    if (requestedProduct == null || requestedProduct.isEmpty()) {
-      requestedProduct = driver.utils().getProduct().toString();
-    }
+      //if (isDriverRunning() && (requestedProduct == null || requestedProduct.isEmpty())) {
+      if (isDriverRunning()) {
+        if (requestedProduct == null || requestedProduct.isEmpty()) {
+          requestedProduct = driver.utils().getProduct().toString();
+        }
+      }
 
-    if (requestedProduct != null && !requestedProduct.isEmpty()) {
       try {
         currentProduct = OperaProduct.get(requestedProduct);
       } catch (IllegalArgumentException e) {
-        logger.warning("Product not found, defaulting to " + currentProduct.toString());
+        logger.warning("Product not found, defaulting to " + currentPlatform);
       }
     }
+
+    return currentProduct;
   }
 
   /**
-   * Setup the fixture directory.
+   * Gets the current platform.
+   *
+   * @return the current platform
    */
-  protected static void initFixtures() {
-    String separator = System.getProperty("file.separator");
-    fixtureDirectory = System.getProperty("user.dir");
-    fixtureDirectory = separator + fixtureDirectory + separator + separator + "test" +
-                       separator + "fixtures" + separator;
-
-    assertTrue(new File(fixtureDirectory).isDirectory());
+  public static Platform getCurrentPlatform() {
+    return currentPlatform;
   }
 
   /**
@@ -137,11 +119,20 @@ public abstract class OperaDriverTestCase {
    * @return the URL to the fixture file
    */
   protected static String fixture(String file) {
-    return "file://localhost" + fixtureDirectory + file;
+    return "file://localhost" + getFixtureDirectory().getPath() + file;
   }
-  
-  protected File fixtureFile(String file) {
+
+  protected static File fixtureFile(String file) {
     return new File(fixtureDirectory + file);
+  }
+
+  protected static File getFixtureDirectory() {
+    if (fixtureDirectory == null) {
+      fixtureDirectory = new File(separator + userHome.getPath() + separator + separator + "test" +
+                                  separator + "fixtures" + separator);
+    }
+
+    return fixtureDirectory;
   }
 
   /**
@@ -155,58 +146,6 @@ public abstract class OperaDriverTestCase {
 
   private static boolean isDriverRunning() {
     return (driver != null) && driver.isRunning();
-  }
-
-}
-
-/**
- * Provides access to the {@link OperaRunner}, so we can detect crashes.
- */
-class TestOperaDriver extends OperaDriver {
-
-  private boolean isRunning = false;
-
-  public TestOperaDriver() {
-    this(OperaDriver.getDefaultCapabilities());
-  }
-
-  public TestOperaDriver(Capabilities capabilities) {
-    super(capabilities);
-    isRunning = true;
-  }
-
-  public OperaRunner getRunner() {
-    return runner;
-  }
-
-  public Capabilities getCapabilities() {
-    return capabilities;
-  }
-
-  public static Capabilities getDefaultCapabilities() {
-    return OperaDriver.getDefaultCapabilities();
-  }
-
-  public void close() {
-    super.close();
-    isRunning = false;
-  }
-
-  public void quit() {
-    super.quit();
-    isRunning = false;
-  }
-
-  public boolean isRunning() {
-    return isRunning;
-  }
-
-  public boolean isOperaIdleAvailable() {
-    return super.isOperaIdleAvailable();
-  }
-
-  public IOperaExec getExecService() {
-    return super.getExecService();
   }
 
 }

@@ -17,6 +17,7 @@ limitations under the License.
 package com.opera.core.systems;
 
 import com.opera.core.systems.scope.internal.OperaIntervals;
+import com.opera.core.systems.testing.drivers.TestOperaDriver;
 
 import org.junit.After;
 import org.junit.Before;
@@ -32,10 +33,10 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.util.logging.Level;
 
-import static org.openqa.selenium.Platform.WINDOWS;
 import static com.opera.core.systems.OperaProduct.DESKTOP;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.openqa.selenium.Platform.WINDOWS;
 
 public class IdleTest extends OperaDriverTestCase {
 
@@ -65,17 +66,16 @@ public class IdleTest extends OperaDriverTestCase {
   };
 
   @BeforeClass
-  public static void setUpBeforeClass() {
-    DesiredCapabilities capabilities = OperaDriverTestCase.getDefaultCapabilities();
+  public static void setup() {
+    DesiredCapabilities capabilities = DesiredCapabilities.opera();
     capabilities.setCapability(OperaDriver.OPERAIDLE, true);
     capabilities.setCapability(OperaDriver.LOGGING_LEVEL, Level.FINER);
 
     driver = new TestOperaDriver(capabilities);
-    init();
   }
 
   @Before
-  public void setUp() {
+  public void beforeEach() {
     reset();
   }
 

@@ -21,6 +21,7 @@ import com.google.common.io.Files;
 import com.opera.core.systems.preferences.OperaFilePreferences;
 import com.opera.core.systems.preferences.OperaGenericPreferences;
 import com.opera.core.systems.preferences.OperaPreferences;
+import com.opera.core.systems.testing.drivers.TestOperaDriver;
 
 import org.junit.After;
 import org.junit.Before;
@@ -61,7 +62,7 @@ public class OperaFilePreferencesTest extends OperaDriverTestCase {
 
   @Before
   public void setUp() throws IOException {
-    if (currentProduct.is(OperaProduct.DESKTOP)) {
+    if (OperaDriverTestCase.getCurrentProduct().is(OperaProduct.DESKTOP)) {
       iniFile = temporaryFolder.newFile("operaprefs.ini");
       profileDirectory = temporaryFolder.getRoot();
     } else {

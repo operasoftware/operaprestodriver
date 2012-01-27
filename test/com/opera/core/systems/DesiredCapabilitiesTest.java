@@ -17,6 +17,7 @@ limitations under the License.
 package com.opera.core.systems;
 
 import com.opera.core.systems.runner.OperaRunnerException;
+import com.opera.core.systems.testing.drivers.TestOperaDriver;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -42,17 +43,17 @@ public class DesiredCapabilitiesTest extends OperaDriverTestCase {
   public DesiredCapabilities capabilities;
 
   /**
-   * Overrides {@link OperaDriverTestCase#setUpBeforeClass();)}
+   * Overrides {@link OperaDriverTestCase#setup()}
    */
   @BeforeClass
-  public static void setUpBeforeClass() {
+  public static void setup() {
   }
 
   /**
-   * Overrides {@link OperaDriverTestCase#tearDownAfterClass()} ();)}
+   * Overrides {@link OperaDriverTestCase#teardown()}
    */
   @AfterClass
-  public static void tearDownAfterClass() {
+  public static void teardown() {
   }
 
   @Before

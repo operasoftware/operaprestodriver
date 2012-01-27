@@ -33,7 +33,7 @@ public class SelftestTest extends OperaDriverTestCase {
 
   @Test
   public void testSelftests() {
-    if (currentProduct.is(OperaProduct.CORE)) {
+    if (OperaDriverTestCase.getCurrentProduct().is(OperaProduct.CORE)) {
       String results;
       try {
         results = driver.selftest(Arrays.asList("about"), 30000);

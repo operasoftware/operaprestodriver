@@ -54,7 +54,6 @@ public class OperaRunnerTest extends OperaDriverTestCase {
   // Replace OperaDriverTestCase setup and tear down so that we don't launch Opera
   @BeforeClass
   public static void setUpBeforeClass() {
-    initFixtures();
   }
 
   @AfterClass

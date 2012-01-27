@@ -16,6 +16,8 @@ limitations under the License.
 
 package com.opera.core.systems;
 
+import com.opera.core.systems.testing.drivers.TestOperaDriver;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.openqa.selenium.Platform;
@@ -247,7 +249,7 @@ public class OperaDriverTest extends OperaDriverTestCase {
 
   @Test
   public void testMultipleOperas() throws Exception {
-    DesiredCapabilities capabilities = OperaDriverTestCase.getDefaultCapabilities();
+    DesiredCapabilities capabilities = DesiredCapabilities.opera();
     capabilities.setCapability(OperaDriver.PROFILE, (String) null);  // random profile
     capabilities.setCapability(OperaDriver.PORT, 0);  // random port
 
