@@ -62,7 +62,7 @@ public class OperaFilePreferencesTest extends OperaDriverTestCase {
 
   @Before
   public void setUp() throws IOException {
-    if (OperaDriverTestCase.getCurrentProduct().is(OperaProduct.DESKTOP)) {
+    if (driver.utils().getProduct().is(OperaProduct.DESKTOP)) {
       iniFile = temporaryFolder.newFile("operaprefs.ini");
       profileDirectory = temporaryFolder.getRoot();
     } else {

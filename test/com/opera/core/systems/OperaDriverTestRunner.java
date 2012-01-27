@@ -16,6 +16,8 @@ limitations under the License.
 
 package com.opera.core.systems;
 
+import com.opera.core.systems.testing.drivers.TestOperaDriver;
+
 import org.junit.internal.AssumptionViolatedException;
 import org.junit.internal.runners.model.EachTestNotifier;
 import org.junit.runner.Description;
@@ -91,7 +93,7 @@ public class OperaDriverTestRunner extends BlockJUnit4ClassRunner {
     for (OperaProduct product : ignoreAnnotation.products()) {
       if (product.is(OperaProduct.ALL)) {
         break;
-      } else if (product.is(OperaDriverTestCase.getCurrentProduct())) {
+      } else if (product.is(OperaDriverTestCase.driver.utils().getProduct())) {
         return true;
       }
     }
@@ -102,7 +104,7 @@ public class OperaDriverTestRunner extends BlockJUnit4ClassRunner {
         // Ignore annotation, meaning it will ignore everything by default.  So this is an exception
         // from the rule.
         return false;
-      } else if (platform.is(OperaDriverTestCase.getCurrentPlatform())) {
+      } else if (platform.is(Platform.valueOf(OperaDriverTestCase.driver.utils().getOS()))) {
         return true;
       }
     }

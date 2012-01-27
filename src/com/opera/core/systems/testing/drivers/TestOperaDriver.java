@@ -23,6 +23,7 @@ import com.opera.core.systems.scope.internal.OperaIntervals;
 import com.opera.core.systems.scope.services.IOperaExec;
 
 import org.openqa.selenium.Capabilities;
+import org.openqa.selenium.Platform;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.util.concurrent.TimeUnit;
@@ -33,11 +34,14 @@ import java.util.logging.Level;
  * crashes.
  */
 public class TestOperaDriver extends OperaDriver {
-  
-  public static enum ClosingStrategy { SWITCH_TO, ACTION }
+
+  public static enum ClosingStrategy {SWITCH_TO, ACTION}
+
+  private final String controlWindow;
+  private final Platform currentPlatform = Platform.getCurrent();
 
   private boolean isRunning = false;
-  private String controlWindow;
+  private OperaProduct currentProduct;
 
   /**
    * Creates a new TestOperaDriver with the given capabilities.
@@ -75,7 +79,7 @@ public class TestOperaDriver extends OperaDriver {
       isRunning = false;
     }
   }
-  
+
   public void quit() {
     super.quit();
     isRunning = false;
@@ -94,7 +98,8 @@ public class TestOperaDriver extends OperaDriver {
   }
 
   /**
-   * Get the window handle of the initial control window, that is, the first window that was opened.
+   * Get the window handle of the initial control window, that is, the first window that was
+   * opened.
    *
    * @return window handle of control window
    */
@@ -160,6 +165,46 @@ public class TestOperaDriver extends OperaDriver {
     public TestOperaTimeouts responseTimeout(long time, TimeUnit unit) {
       OperaIntervals.RESPONSE_TIMEOUT.setValue(TimeUnit.MILLISECONDS.convert(time, unit));
       return this;
+    }
+
+  }
+
+  public OperaUtils utils() {
+    return new TestOperaUtils();
+  }
+
+  public class TestOperaUtils extends OperaUtils {
+
+    /**
+     * Overrides the default {@link OperaDriver.OperaUtils#getProduct()} to also take the
+     * environmental variable OPERA_PRODUCT into account.
+     *
+     * @return browser's product type
+     */
+    public OperaProduct getProduct() {
+      if (currentProduct == null) {
+        currentProduct = OperaProduct.CORE;  // default
+        String requestedProduct = System.getenv("OPERA_PRODUCT");
+
+        if (isRunning() && (requestedProduct == null || requestedProduct.isEmpty())) {
+          requestedProduct = super.getProduct().toString();
+        } else {
+          logger.warning("Driver is not running, defaulting to " + currentProduct);
+        }
+
+        try {
+          currentProduct = OperaProduct.get(requestedProduct);
+        } catch (IllegalArgumentException e) {
+          logger.warning("Product '" + requestedProduct + "' not found, defaulting to " +
+                         currentProduct);
+        }
+      }
+
+      return currentProduct;
+    }
+
+    public String getOS() {
+      return currentPlatform.toString();
     }
 
   }

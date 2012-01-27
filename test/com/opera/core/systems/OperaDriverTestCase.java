@@ -47,12 +47,10 @@ public abstract class OperaDriverTestCase {
 
   protected static TestOperaDriver driver;
 
-  private static OperaProduct currentProduct;
-  private static Platform currentPlatform = Platform.getCurrent();
+  private static final String SEPARATOR = System.getProperty("file.separator");
+  private static final File USER_HOME = new File(System.getProperty("user.dir"));
+
   private static File fixtureDirectory;
-  private static final String separator = System.getProperty("file.separator");
-  private static final File userHome = new File(System.getProperty("user.dir"));
-  private static final Logger logger = Logger.getLogger(OperaDriverTestCase.class.getName());
 
   @BeforeClass
   public static void setup() {
@@ -76,43 +74,6 @@ public abstract class OperaDriverTestCase {
   }
 
   /**
-   * Fetch the product from the connected driver or override it using the OPERA_PRODUCT
-   * environmental variable.
-   *
-   * @return the current product
-   */
-  public static OperaProduct getCurrentProduct() {
-    if (currentProduct == null) {
-      currentProduct = OperaProduct.CORE;  // default
-      String requestedProduct = System.getenv("OPERA_PRODUCT");
-
-      //if (isDriverRunning() && (requestedProduct == null || requestedProduct.isEmpty())) {
-      if (isDriverRunning()) {
-        if (requestedProduct == null || requestedProduct.isEmpty()) {
-          requestedProduct = driver.utils().getProduct().toString();
-        }
-      }
-
-      try {
-        currentProduct = OperaProduct.get(requestedProduct);
-      } catch (IllegalArgumentException e) {
-        logger.warning("Product not found, defaulting to " + currentPlatform);
-      }
-    }
-
-    return currentProduct;
-  }
-
-  /**
-   * Gets the current platform.
-   *
-   * @return the current platform
-   */
-  public static Platform getCurrentPlatform() {
-    return currentPlatform;
-  }
-
-  /**
    * Get the URL of the given fixture file.
    *
    * @param file the filename to get
@@ -128,8 +89,8 @@ public abstract class OperaDriverTestCase {
 
   protected static File getFixtureDirectory() {
     if (fixtureDirectory == null) {
-      fixtureDirectory = new File(separator + userHome.getPath() + separator + separator + "test" +
-                                  separator + "fixtures" + separator);
+      fixtureDirectory = new File(SEPARATOR + USER_HOME.getPath() + SEPARATOR + SEPARATOR + "test" +
+                                  SEPARATOR + "fixtures" + SEPARATOR);
     }
 
     return fixtureDirectory;
