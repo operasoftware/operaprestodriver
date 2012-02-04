@@ -19,6 +19,7 @@ package com.opera.core.systems;
 import com.opera.core.systems.scope.services.ISelftest.ResultType;
 import com.opera.core.systems.scope.services.ISelftest.SelftestResult;
 import com.opera.core.systems.scope.services.ums.Selftest;
+import com.opera.core.systems.testing.OperaDriverTestCase;
 
 import org.junit.Test;
 

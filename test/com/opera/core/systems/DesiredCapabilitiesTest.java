@@ -19,6 +19,8 @@ package com.opera.core.systems;
 import com.google.common.io.Files;
 
 import com.opera.core.systems.runner.OperaRunnerException;
+import com.opera.core.systems.testing.Ignore;
+import com.opera.core.systems.testing.OperaDriverTestCase;
 import com.opera.core.systems.testing.drivers.TestOperaDriver;
 import com.opera.core.systems.runner.launcher.OperaLauncherRunnerSettings;
 
@@ -29,7 +31,6 @@ import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
-import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
@@ -48,14 +49,14 @@ public class DesiredCapabilitiesTest extends OperaDriverTestCase {
   public DesiredCapabilities capabilities;
 
   /**
-   * Overrides {@link OperaDriverTestCase#setup()}
+   * Overrides {@link com.opera.core.systems.testing.OperaDriverTestCase#setup()}
    */
   @BeforeClass
   public static void setup() {
   }
 
   /**
-   * Overrides {@link OperaDriverTestCase#teardown()}
+   * Overrides {@link com.opera.core.systems.testing.OperaDriverTestCase#teardown()}
    */
   @AfterClass
   public static void teardown() {

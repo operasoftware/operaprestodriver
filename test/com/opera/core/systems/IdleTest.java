@@ -17,6 +17,8 @@ limitations under the License.
 package com.opera.core.systems;
 
 import com.opera.core.systems.scope.internal.OperaIntervals;
+import com.opera.core.systems.testing.Ignore;
+import com.opera.core.systems.testing.OperaDriverTestCase;
 import com.opera.core.systems.testing.drivers.TestOperaDriver;
 
 import org.junit.After;

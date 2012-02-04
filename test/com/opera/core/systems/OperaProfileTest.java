@@ -18,6 +18,8 @@ package com.opera.core.systems;
 
 import com.google.common.io.Files;
 
+import com.opera.core.systems.testing.OperaDriverTestCase;
+
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;

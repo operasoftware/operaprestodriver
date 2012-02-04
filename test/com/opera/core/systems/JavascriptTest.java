@@ -16,11 +16,11 @@ limitations under the License.
 
 package com.opera.core.systems;
 
-import com.opera.core.systems.Ignore;
+import com.opera.core.systems.testing.Ignore;
+import com.opera.core.systems.testing.OperaDriverTestCase;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 
 import static org.junit.Assert.assertEquals;
