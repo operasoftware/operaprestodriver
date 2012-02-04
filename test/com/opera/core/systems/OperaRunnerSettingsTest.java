@@ -23,6 +23,8 @@ import com.opera.core.systems.runner.OperaRunner;
 import com.opera.core.systems.runner.OperaRunnerException;
 import com.opera.core.systems.runner.OperaRunnerSettings;
 import com.opera.core.systems.scope.internal.OperaIntervals;
+import com.opera.core.systems.testing.Ignore;
+import com.opera.core.systems.testing.OperaDriverTestCase;
 
 import org.junit.AfterClass;
 import org.junit.Before;

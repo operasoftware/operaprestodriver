@@ -1,5 +1,8 @@
 /*
-Copyright 2011-2012 Opera Software ASA
+Copyright 2012 Opera Software ASA
+Copyright 2007-2009 WebDriver committers
+Copyright 2007-2009 Google Inc.
+Portions copyright 2007 ThoughtWorks, Inc
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,26 +17,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package com.opera.core.systems;
+package com.opera.core.systems.environment;
 
-import com.opera.core.systems.testing.OperaDriverTestCase;
+public interface TestEnvironment {
 
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
+  WebServer getWebServer();
 
-public class DesktopTestBase extends OperaDriverTestCase {
-
-  protected static OperaDesktopDriver driver;
-
-  @BeforeClass
-  public static void setUpBeforeClass() throws Exception {
-    driver = new OperaDesktopDriver();
-  }
-
-
-  @AfterClass
-  public static void tearDownAfterClass() throws Exception {
-    driver.quit();
-  }
+  void stop();
 
 }

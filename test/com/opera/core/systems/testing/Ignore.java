@@ -14,7 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package com.opera.core.systems;
+package com.opera.core.systems.testing;
+
+import com.opera.core.systems.OperaProduct;
 
 import org.openqa.selenium.Platform;
 
