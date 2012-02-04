@@ -17,6 +17,8 @@ limitations under the License.
 package com.opera.core.systems;
 
 import com.opera.core.systems.scope.exceptions.CommunicationException;
+import com.opera.core.systems.testing.Ignore;
+import com.opera.core.systems.testing.OperaDriverTestCase;
 
 import org.junit.After;
 import org.junit.Before;
