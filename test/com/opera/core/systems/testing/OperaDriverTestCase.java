@@ -23,25 +23,22 @@ import com.opera.core.systems.environment.webserver.WebServer;
 import com.opera.core.systems.runner.OperaRunner;
 import com.opera.core.systems.testing.drivers.OperaDriverBuilder;
 import com.opera.core.systems.testing.drivers.TestOperaDriver;
-import com.opera.core.systems.testing.drivers.TestOperaDriverSupplier;
 
 import org.junit.ClassRule;
-import org.junit.Rule;
 import org.junit.rules.ExternalResource;
 import org.junit.runner.RunWith;
 
 import java.io.File;
-
-import static org.junit.Assert.assertNotNull;
 
 /**
  * You can extend OperaDriverTestCase in your test case to gain access to convenience methods
  * related to finding the current product used, auto-starting Opera before the test, quitting Opera
  * after the test, and gaining access to the fixtures directory.
  *
- * It also holds an extension of {@link com.opera.core.systems.OperaDriver}, called {@link TestOperaDriver}, that exposes
- * the {@link OperaRunner} and a method for determining whether the constructor and {@link
- * com.opera.core.systems.OperaDriver#quit()} methods has been called, {@link TestOperaDriver#isRunning()}.
+ * It also holds an extension of {@link com.opera.core.systems.OperaDriver}, called {@link
+ * TestOperaDriver}, that exposes the {@link OperaRunner} and a method for determining whether the
+ * constructor and {@link com.opera.core.systems.OperaDriver#quit()} methods has been called, {@link
+ * TestOperaDriver#isRunning()}.
  *
  * @author Andreas Tolf Tolfsen <andreastt@opera.com>
  */
@@ -67,7 +64,6 @@ public abstract class OperaDriverTestCase {
       environment = GlobalTestEnvironment.get(InProcessTestEnvironment.class);
       server = environment.getWebServer();
       pages = new Pages(server);
-      resources = new Resources();
     }
 
     @Override
@@ -78,14 +74,14 @@ public abstract class OperaDriverTestCase {
 
   @ClassRule
   public static ExternalResource driverResource = new ExternalResource() {
-    
+
     @Override
     protected void before() throws Throwable {
       if (driver != null) {
         return;
       }
 
-      driver = (TestOperaDriver) new OperaDriverBuilder(new TestOperaDriverSupplier()).get();
+      driver = (TestOperaDriver) new OperaDriverBuilder().get();
     }
 
     @Override
@@ -99,14 +95,11 @@ public abstract class OperaDriverTestCase {
       } catch (RuntimeException ignored) {
         // fall through
       }
-      
+
       driver = null;
     }
-    
-  };
 
-  //@Rule
-  //public FreshDriverRule freshDriverRule = new FreshDriverRule();
+  };
 
   // TODO(andreastt): All of the fixture-related methods below should be replaced by a page factory or something
 
@@ -123,7 +116,7 @@ public abstract class OperaDriverTestCase {
 
   @Deprecated
   protected static File fixtureFile(String file) {
-    return new File(getFixtureDirectory().getPath() + SEPARATOR +  file);
+    return new File(getFixtureDirectory().getPath() + SEPARATOR + file);
   }
 
   @Deprecated

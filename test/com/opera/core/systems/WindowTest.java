@@ -42,7 +42,7 @@ public class WindowTest extends OperaDriverTestCase {
   @BeforeClass
   public static void beforeAll() {
     windowPage = TestingPageFactory.initElements(driver, pages, WindowPage.class);
-    
+
     if (!driver.isRunning()) {
       driver = (TestOperaDriver) new OperaDriverBuilder(new TestOperaDriverSupplier()).get();
     }

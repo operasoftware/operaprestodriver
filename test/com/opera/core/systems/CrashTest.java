@@ -18,7 +18,6 @@ package com.opera.core.systems;
 
 import com.opera.core.systems.scope.exceptions.CommunicationException;
 import com.opera.core.systems.testing.Ignore;
-import com.opera.core.systems.testing.OperaDriverTestCase;
 import com.opera.core.systems.testing.drivers.OperaDriverBuilder;
 import com.opera.core.systems.testing.drivers.TestOperaDriver;
 import com.opera.core.systems.testing.drivers.TestOperaDriverSupplier;

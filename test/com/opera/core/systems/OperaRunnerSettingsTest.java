@@ -43,13 +43,13 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.logging.Level;
 
-import static org.junit.Assert.fail;
-import static org.openqa.selenium.Platform.WINDOWS;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+import static org.openqa.selenium.Platform.WINDOWS;
 
 @NoDriver
 public class OperaRunnerSettingsTest extends OperaDriverTestCase {
@@ -316,7 +316,7 @@ public class OperaRunnerSettingsTest extends OperaDriverTestCase {
    * @param key   the new environment variable's identifier
    * @param value the new environment variable's value
    * @throws IllegalAccessException foo
-   * @throws NoSuchFieldException foo
+   * @throws NoSuchFieldException   foo
    */
   @SuppressWarnings("unchecked")
   private static void setEnvVar(String key, String value)
