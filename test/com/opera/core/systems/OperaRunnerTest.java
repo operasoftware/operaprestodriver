@@ -23,6 +23,7 @@ import com.opera.core.systems.arguments.OperaCoreArguments;
 import com.opera.core.systems.arguments.OperaDesktopArguments;
 import com.opera.core.systems.runner.OperaRunner;
 import com.opera.core.systems.runner.OperaRunnerSettings;
+import com.opera.core.systems.testing.OperaDriverTestCase;
 
 import org.junit.AfterClass;
 import org.junit.Before;

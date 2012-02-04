@@ -22,6 +22,7 @@ import com.opera.core.systems.preferences.OperaGenericPreferences.GenericPrefere
 import com.opera.core.systems.preferences.OperaPreferences;
 import com.opera.core.systems.preferences.OperaScopePreferences;
 import com.opera.core.systems.preferences.OperaScopePreferences.ScopePreference;
+import com.opera.core.systems.testing.OperaDriverTestCase;
 
 import org.junit.After;
 import org.junit.Before;
