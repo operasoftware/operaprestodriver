@@ -210,7 +210,7 @@ public class OperaWebElement extends RemoteWebElement {
       parent.waitForLoadToComplete();
     } catch (ResponseNotReceivedException e) {
       // This might be expected
-      logger.fine("Response not received, returning control to user");
+      logger.severe("Response not received, returning control to user");
     }
   }
 
@@ -228,7 +228,7 @@ public class OperaWebElement extends RemoteWebElement {
       parent.waitForLoadToComplete();
     } catch (ResponseNotReceivedException e) {
       // This might be expected
-      logger.fine("Response not received, returning control to user");
+      logger.severe("Response not received, returning control to user");
     }
   }
 
@@ -427,7 +427,7 @@ public class OperaWebElement extends RemoteWebElement {
       parent.waitForLoadToComplete();
     } catch (ResponseNotReceivedException e) {
       // This might be expected
-      logger.fine("Response not received, returning control to user");
+      logger.severe("Response not received, returning control to user");
     }
 
     // executeMethod("locator.blur()");
@@ -493,7 +493,7 @@ public class OperaWebElement extends RemoteWebElement {
       parent.waitForLoadToComplete();
     } catch (ResponseNotReceivedException e) {
       // This might be expected
-      logger.fine("Response not received, returning control to user");
+      logger.severe("Response not received, returning control to user");
     }
   }
 

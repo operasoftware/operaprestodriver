@@ -939,7 +939,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
         if (System.currentTimeMillis() < endTime) {
           sleep(OperaIntervals.POLL_INVERVAL.getValue());
         } else {
-          throw new ResponseNotReceivedException("No response in a timely fashion");
+          throw new ResponseNotReceivedException("waitForLoadToComplete timed out");
         }
       }
     }
@@ -969,7 +969,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
       try {
         waitForLoadToComplete();
       } catch (ResponseNotReceivedException e) {
-        logger.fine("Response not received, returning control to user");
+        logger.severe("Response not received, returning control to user");
       }
     }
 
@@ -979,7 +979,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
       try {
         waitForLoadToComplete();
       } catch (ResponseNotReceivedException e) {
-        logger.fine("Response not received, returning control to user");
+        logger.severe("Response not received, returning control to user");
       }
     }
 
@@ -997,7 +997,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
       try {
         waitForLoadToComplete();
       } catch (ResponseNotReceivedException e) {
-        logger.fine("Response not received, returning control to user");
+        logger.severe("Response not received, returning control to user");
       }
     }
 
@@ -1296,7 +1296,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     try {
       waitForLoadToComplete();
     } catch (ResponseNotReceivedException e) {
-      logger.fine("Response not received, returning control to user");
+      logger.severe("Response not received, returning control to user");
     }
   }
 
@@ -1320,7 +1320,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
       try {
         waitForLoadToComplete();
       } catch (ResponseNotReceivedException e) {
-        logger.fine("Response not received, returning control to user");
+        logger.severe("Response not received, returning control to user");
       }
     }
   }
