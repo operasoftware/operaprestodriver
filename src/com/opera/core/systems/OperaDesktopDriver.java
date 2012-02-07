@@ -81,6 +81,20 @@ public class OperaDesktopDriver extends OperaDriver {
 
     launcher_runner_settings = new OperaLauncherRunnerSettings();
 
+    /**
+     * Set the no-quit runner setting basing on the capability.
+     * The capability may be null, since it doesn't have to be set
+     * and we can't control that. Beware.
+     */
+    Boolean no_quit_value = false;
+    if (c != null)
+    {
+      no_quit_value = (Boolean)c.getCapability(OperaDriver.NO_QUIT);
+      if (no_quit_value == null)
+        no_quit_value = false;
+    }
+    launcher_runner_settings.setNoQuit(no_quit_value);
+
     initDesktopDriver();
   }
 
