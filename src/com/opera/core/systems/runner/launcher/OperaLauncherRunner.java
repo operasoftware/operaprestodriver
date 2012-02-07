@@ -207,9 +207,11 @@ public class OperaLauncherRunner extends OperaRunner
       );
 
       if (handleStatusMessage(res.getResponse()) == StatusType.RUNNING) {
+        logger.severe("Could not stop Opera");
         throw new OperaRunnerException("Could not stop Opera");
       }
     } catch (IOException e) {
+      logger.severe("Could not stop Opera: " + e);
       throw new OperaRunnerException("Could not stop Opera", e);
     }
 
