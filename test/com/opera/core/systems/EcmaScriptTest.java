@@ -42,7 +42,7 @@ public class EcmaScriptTest extends OperaDriverTestCase {
       "22%20%2F%3E";
 
   @Before
-  public void setUp() {
+  public void beforeEach() {
     driver.navigate().to(testPage);
   }
 

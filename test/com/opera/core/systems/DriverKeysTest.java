@@ -32,7 +32,7 @@ public class DriverKeysTest extends OperaDriverTestCase {
   private WebElement fieldTwo;
 
   @Before
-  public void setUp() {
+  public void beforeEach() {
     getFixture("two_input_fields.html");
     fieldOne = driver.findElementByName("one");
     fieldTwo = driver.findElementByName("two");

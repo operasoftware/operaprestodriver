@@ -53,7 +53,7 @@ public class OperaProfileTest extends OperaDriverTestCase {
   }
 
   @Before
-  public void setUp() {
+  public void beforeEach() {
     existingProfile = existingProfileDirectory.getRoot();
     temporaryProfile = temporaryProfileDirectory.getRoot();
 

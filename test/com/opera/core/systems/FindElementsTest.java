@@ -32,7 +32,7 @@ import static org.junit.Assert.assertTrue;
 public class FindElementsTest extends OperaDriverTestCase {
 
   @Before
-  public void setUp() {
+  public void beforeEach() {
     getFixture("test.html");
   }
 

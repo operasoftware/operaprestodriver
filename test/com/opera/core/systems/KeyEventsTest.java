@@ -31,13 +31,13 @@ public class KeyEventsTest extends OperaDriverTestCase {
   private WebElement logEl;
 
   @Before
-  public void setUp() {
+  public void beforeEach() {
     getFixture("keys.html");
     logEl = driver.findElementById("log");
   }
 
   @After
-  public void tearDown() {
+  public void afterEach() {
     releaseKeys();
   }
 

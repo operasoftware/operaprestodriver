@@ -30,7 +30,7 @@ import static org.openqa.selenium.Platform.MAC;
 public class JavascriptTest extends OperaDriverTestCase {
 
   @Before
-  public void setUp() {
+  public void beforeEach() {
     driver.get(fixture("javascript.html"));
   }
 

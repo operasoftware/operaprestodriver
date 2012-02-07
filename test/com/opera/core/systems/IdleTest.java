@@ -80,7 +80,7 @@ public class IdleTest extends OperaDriverTestCase {
   }
 
   @After
-  public void tearDown() {
+  public void afterEach() {
     // Make sure the test hasn't passed because we hit the page load timeout instead of using idle
     assertTrue("Took less than idle timeout", end - start < timeout);
   }

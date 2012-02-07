@@ -62,12 +62,12 @@ public class DesiredCapabilitiesTest extends OperaDriverTestCase {
   }
 
   @Before
-  public void setUp() {
+  public void beforeEach() {
     capabilities = (DesiredCapabilities) TestOperaDriver.getDefaultCapabilities();
   }
 
   @After
-  public void tearDown() {
+  public void afterEach() {
     if (driver != null && driver.isRunning()) {
       driver.quit();
     }
