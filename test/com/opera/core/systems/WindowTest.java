@@ -16,14 +16,13 @@ limitations under the License.
 
 package com.opera.core.systems;
 
-import com.opera.core.systems.pages.WindowsPage;
+import com.opera.core.systems.pages.WindowPage;
 import com.opera.core.systems.testing.Ignore;
 import com.opera.core.systems.testing.OperaDriverTestCase;
 
 import org.junit.After;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.openqa.selenium.By;
 import org.openqa.selenium.support.PageFactory;
 
 import static com.opera.core.systems.OperaProduct.CORE;
@@ -36,11 +35,11 @@ import static org.junit.Assert.fail;
  */
 public class WindowTest extends OperaDriverTestCase {
 
-  public static WindowsPage windowsPage;
+  public static WindowPage windowPage;
 
   @BeforeClass
   public static void beforeAll() {
-    windowsPage = PageFactory.initElements(driver, WindowsPage.class);
+    windowPage = PageFactory.initElements(driver, WindowPage.class);
   }
 
   @After
@@ -50,7 +49,7 @@ public class WindowTest extends OperaDriverTestCase {
 
   @Test
   public void testOpenNewTargettedWindow() {
-    windowsPage.openNewTargettedWindow();
+    windowPage.openNewTargettedWindow();
 
     int windowCount = driver.getWindowCount();
     assertEquals(newWindows(1), windowCount);
@@ -62,7 +61,7 @@ public class WindowTest extends OperaDriverTestCase {
   @Test
   public void testOpenMultipleTargettedWindows() {
     for (int i = 1; i <= 2; i++) {
-      windowsPage.openNewTargettedWindow();
+      windowPage.openNewTargettedWindow();
     }
 
     assertEquals(newWindows(1), driver.getWindowCount());
@@ -70,7 +69,7 @@ public class WindowTest extends OperaDriverTestCase {
 
   @Test
   public void testOpenNewAnonymousWindow() {
-    windowsPage.openNewAnonymousWindow();
+    windowPage.openNewAnonymousWindow();
 
     int windowCount = driver.getWindowCount();
     assertEquals(newWindows(1), windowCount);
@@ -81,7 +80,7 @@ public class WindowTest extends OperaDriverTestCase {
     int windowsToOpen = 3;
 
     for (int i = 1; i <= windowsToOpen; i++) {
-      windowsPage.openNewAnonymousWindow();
+      windowPage.openNewAnonymousWindow();
     }
 
     assertEquals(newWindows(windowsToOpen), driver.getWindowCount());
