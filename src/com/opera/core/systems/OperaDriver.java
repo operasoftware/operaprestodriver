@@ -1331,6 +1331,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
    *
    * @param useIdle true if idle should be switched on, false if it should be switched off
    */
+  @SuppressWarnings("unused")
   protected void setUseOperaIdle(boolean useIdle) {
     capabilities.setCapability(OPERAIDLE, useIdle);
   }
