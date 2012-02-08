@@ -27,7 +27,6 @@ import com.opera.core.systems.testing.drivers.TestOperaDriverSupplier;
 import org.junit.After;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.openqa.selenium.support.PageFactory;
 
 import static com.opera.core.systems.OperaProduct.CORE;
 import static org.junit.Assert.assertEquals;
