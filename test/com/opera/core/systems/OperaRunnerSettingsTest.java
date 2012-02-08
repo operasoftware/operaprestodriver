@@ -50,7 +50,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-public class OperaRunnerSettingsTest { //extends OperaDriverTestCase {
+public class OperaRunnerSettingsTest extends OperaDriverTestCase {
 
   public OperaRunnerSettings settings;
   public TestOperaRunner runner;
@@ -83,7 +83,7 @@ public class OperaRunnerSettingsTest { //extends OperaDriverTestCase {
     // TODO(andreastt): This should be done more elegantly in OperaDriverTestCase
     try {
       iniFile = temporaryProfile.newFile("operaprefs.ini");
-      Files.copy(fixtureFile("profile" + File.separator + "opera.ini"), iniFile);
+      Files.copy(resources.locate("profile/opera.ini"), iniFile);
     } catch (IOException e) {
       fail("Unable to copy preference fixture: " + e.getMessage());
     }

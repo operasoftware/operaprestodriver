@@ -16,14 +16,14 @@ limitations under the License.
 
 package com.opera.core.systems.testing;
 
-import com.opera.core.systems.environment.webserver.WebServer;
+import java.io.File;
 
-public class Pages {
+public class Resources {
 
-  public String windows;
+  private static final File RESOURCES_DIRECTORY = InProject.locate("test/resources");
 
-  public Pages(WebServer server) {
-    windows = server.whereIs("windows.html");
+  public File locate(String filename) {
+    return new File(RESOURCES_DIRECTORY.getAbsolutePath() + File.separator + filename);
   }
 
 }

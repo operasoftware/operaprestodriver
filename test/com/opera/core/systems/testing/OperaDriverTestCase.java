@@ -53,6 +53,7 @@ public abstract class OperaDriverTestCase {
   protected static TestEnvironment environment;
   protected static WebServer server;
   protected static Pages pages;
+  protected static Resources resources;
   protected static TestOperaDriver driver;
 
   private static File fixtureDirectory;
@@ -65,6 +66,7 @@ public abstract class OperaDriverTestCase {
       environment = GlobalTestEnvironment.get(InProcessTestEnvironment.class);
       server = environment.getWebServer();
       pages = new Pages(server);
+      resources = new Resources();
     }
 
     @Override
