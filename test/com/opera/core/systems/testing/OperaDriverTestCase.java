@@ -19,6 +19,7 @@ package com.opera.core.systems.testing;
 import com.opera.core.systems.environment.GlobalTestEnvironment;
 import com.opera.core.systems.environment.InProcessTestEnvironment;
 import com.opera.core.systems.environment.TestEnvironment;
+import com.opera.core.systems.environment.webserver.WebServer;
 import com.opera.core.systems.runner.OperaRunner;
 import com.opera.core.systems.testing.drivers.OperaDriverBuilder;
 import com.opera.core.systems.testing.drivers.TestOperaDriver;
@@ -48,9 +49,9 @@ public abstract class OperaDriverTestCase {
   private static final String SEPARATOR = System.getProperty("file.separator");
   private static final File USER_HOME = new File(System.getProperty("user.dir"));
 
-  protected TestEnvironment environment;
-  protected WebServer server;
-  protected Pages pages;
+  protected static TestEnvironment environment;
+  protected static WebServer server;
+  protected static Pages pages;
   protected static TestOperaDriver driver;
 
   private static File fixtureDirectory;
@@ -69,7 +70,7 @@ public abstract class OperaDriverTestCase {
     protected void after() {
     }
 
-  }
+  };
 
   @ClassRule
   public static ExternalResource driverResource = new ExternalResource() {

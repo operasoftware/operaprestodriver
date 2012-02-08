@@ -18,20 +18,27 @@ limitations under the License.
 
 package com.opera.core.systems.environment.webserver;
 
-import junit.framework.Assert;
+import com.opera.core.systems.testing.InProject;
+
+import org.eclipse.jetty.server.Handler;
+import org.openqa.selenium.net.NetworkUtils;
+
+import org.eclipse.jetty.server.Connector;
+import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.handler.ContextHandlerCollection;
+import org.eclipse.jetty.server.nio.SelectChannelConnector;
+import org.eclipse.jetty.server.ssl.SslSocketConnector;
+import org.eclipse.jetty.servlet.ServletHolder;
+import org.eclipse.jetty.servlets.MultiPartFilter;
+import org.eclipse.jetty.webapp.WebAppContext;
+import org.openqa.selenium.net.PortProber;
 
 import java.io.File;
 
-import org.mortbay.jetty.Connector;
-import org.mortbay.jetty.Server;
-import org.mortbay.jetty.nio.SelectChannelConnector;
-import org.mortbay.jetty.webapp.WebAppContext;
-import org.openqa.selenium.net.NetworkUtils;
-import org.openqa.selenium.net.PortProber;
-
+import javax.servlet.Filter;
 import javax.servlet.Servlet;
 
-public class Jetty6WebServer implements WebServer {
+public class Jetty7WebServer implements WebServer {
 
   private static final String DEFAULT_CONTEXT_PATH = "/test/fixtures";
   private static final NetworkUtils NETWORK_UTILS = new NetworkUtils();
@@ -39,21 +46,26 @@ public class Jetty6WebServer implements WebServer {
   private int port;
   private File path;
   private final Server server;
-  private WebAppContext context;
+  private WebAppContext defaultContext;
+
+  private ContextHandlerCollection handlers;
   private final String hostName;
 
-  public Jetty6WebServer() {
-    this(NETWORK_UTILS.getNonLoopbackAddressOfThisMachine());
+  public Jetty7WebServer() {
+    this(getHostname());
   }
 
-  public Jetty6WebServer(String hostName) {
+  public Jetty7WebServer(String hostName) {
     this.hostName = hostName;
 
     server = new Server();
 
     path = findRootOfWebApp();
+    handlers = new ContextHandlerCollection();
 
-    context = addWebApplication(DEFAULT_CONTEXT_PATH, path);
+    defaultContext = addWebApplication(DEFAULT_CONTEXT_PATH, path);
+
+    server.setHandler(handlers);
 
     /*
     addServlet("Redirecter", "/redirect", RedirectServlet.class);
@@ -69,33 +81,7 @@ public class Jetty6WebServer implements WebServer {
   }
 
   protected File findRootOfWebApp() {
-    String[] possiblePaths = {
-        "test/fixtures",
-        "../test/fixtures",
-        "../../test/fixtures"
-    };
-
-    File current;
-    for (String potential : possiblePaths) {
-      current = new File(potential);
-      if (current.exists()) {
-        return current;
-      }
-    }
-
-    Assert.assertTrue("Unable to find common web files. These are located in the common directory",
-                      path.exists());
-    return null;
-  }
-
-  private static File findWebAppRoot(String[] possiblePaths) {
-    for (String potential : possiblePaths) {
-      File current = new File(potential);
-      if (current.exists()) {
-        return current;
-      }
-    }
-    return null;
+    return InProject.locate("test/fixtures");
   }
 
   public String getHostName() {
@@ -107,17 +93,20 @@ public class Jetty6WebServer implements WebServer {
   }
 
   public String whereIs(String relativeUrl) {
-    if (!relativeUrl.startsWith("/")) {
-      relativeUrl = DEFAULT_CONTEXT_PATH + "/" + relativeUrl;
-    }
+    relativeUrl = getCommonPath(relativeUrl);
     return "http://" + getHostName() + ":" + port + relativeUrl;
   }
 
   public String whereElseIs(String relativeUrl) {
+    relativeUrl = getCommonPath(relativeUrl);
+    return "http://" + getAlternateHostName() + ":" + port + relativeUrl;
+  }
+
+  private String getCommonPath(String relativeUrl) {
     if (!relativeUrl.startsWith("/")) {
       relativeUrl = DEFAULT_CONTEXT_PATH + "/" + relativeUrl;
     }
-    return "http://" + getAlternateHostName() + ":" + port + relativeUrl;
+    return relativeUrl;
   }
 
   public void start() {
@@ -136,10 +125,6 @@ public class Jetty6WebServer implements WebServer {
     this.port = port;
   }
 
-  protected void addListener(Connector listener) {
-    server.addConnector(listener);
-  }
-
   public void stop() {
     try {
       server.stop();
@@ -150,16 +135,11 @@ public class Jetty6WebServer implements WebServer {
 
   public void addServlet(String name, String url, Class<? extends Servlet> servletClass) {
     try {
-      context.addServlet(servletClass, url);
+      defaultContext.addServlet(servletClass, url);
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
   }
-
-  public void addFilter(Class<?> filter, String path, int dispatches) {
-    context.addFilter(filter, path, dispatches);
-  }
-
 
   public void addAdditionalWebApplication(String context, String absolutePath) {
     addWebApplication(context, absolutePath);
@@ -173,14 +153,19 @@ public class Jetty6WebServer implements WebServer {
     WebAppContext app = new WebAppContext();
     app.setContextPath(contextPath);
     app.setWar(absolutePath);
-    server.addHandler(app);
+    handlers.addHandler(app);
     return app;
   }
 
   public static void main(String[] args) {
-    Jetty6WebServer server = new Jetty6WebServer("localhost");
-    server.port = 2310;
+    Jetty7WebServer server = new Jetty7WebServer(getHostname());
+    server.listenOn(2310);
+    System.out.println("Starting server on port 2310");
     server.start();
+  }
+
+  private static String getHostname() {
+    return NETWORK_UTILS.getNonLoopbackAddressOfThisMachine();
   }
 
 }
