@@ -113,6 +113,14 @@ public class TestOperaDriver extends OperaDriver {
   }
 
   /**
+   * Closes all windows except the control window using the {@link ClosingStrategy#SWITCH_TO}
+   * strategy.
+   */
+  public void closeAll() {
+    closeAll(ClosingStrategy.SWITCH_TO);
+  }
+
+  /**
    * Allows you to specifying the strategy for closing all windows (apart from the control window).
    * Windows can either be closed using a {@link OperaDriver#switchTo()} and {@link
    * OperaDriver#close()} call, or by sending the action "Close all pages".  The latter method
