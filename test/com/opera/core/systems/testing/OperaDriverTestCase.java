@@ -66,6 +66,7 @@ public abstract class OperaDriverTestCase {
       environment = GlobalTestEnvironment.get(InProcessTestEnvironment.class);
       server = environment.getWebServer();
       pages = new Pages(server);
+      resources = new Resources();
     }
 
     @Override
