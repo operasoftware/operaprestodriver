@@ -19,12 +19,15 @@ limitations under the License.
 
 package com.opera.core.systems.environment;
 
+import com.opera.core.systems.environment.webserver.Jetty7WebServer;
+import com.opera.core.systems.environment.webserver.WebServer;
+
 public class InProcessTestEnvironment implements TestEnvironment {
 
   private WebServer server;
 
   public InProcessTestEnvironment() {
-    server = new Jetty7AppServer();
+    server = new Jetty7WebServer();
     server.start();
   }
 
