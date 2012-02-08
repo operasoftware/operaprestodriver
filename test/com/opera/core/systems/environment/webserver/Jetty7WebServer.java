@@ -20,22 +20,16 @@ package com.opera.core.systems.environment.webserver;
 
 import com.opera.core.systems.testing.InProject;
 
-import org.eclipse.jetty.server.Handler;
 import org.openqa.selenium.net.NetworkUtils;
 
-import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.ContextHandlerCollection;
 import org.eclipse.jetty.server.nio.SelectChannelConnector;
-import org.eclipse.jetty.server.ssl.SslSocketConnector;
-import org.eclipse.jetty.servlet.ServletHolder;
-import org.eclipse.jetty.servlets.MultiPartFilter;
 import org.eclipse.jetty.webapp.WebAppContext;
 import org.openqa.selenium.net.PortProber;
 
 import java.io.File;
 
-import javax.servlet.Filter;
 import javax.servlet.Servlet;
 
 public class Jetty7WebServer implements WebServer {
