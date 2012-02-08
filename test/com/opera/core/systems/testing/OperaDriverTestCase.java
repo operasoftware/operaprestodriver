@@ -102,33 +102,6 @@ public abstract class OperaDriverTestCase {
     
   };
 
-
-
-  /*
-  @BeforeClass
-  public static void setUp() {
-    setUp(new OperaDriverBuilder(new TestOperaDriverSupplier()));
-  }
-
-  public static void setUp(OperaDriverBuilder builder) {
-    if (driver != null && driver.isRunning()) {
-      return;
-    }
-
-    driver = (TestOperaDriver) builder.get();
-    assertNotNull(driver);
-  }
-
-  @AfterClass
-  public static void tearDown() {
-    if (driver != null && driver.isRunning()) {
-      driver.quit();
-    }
-
-    driver = null;
-  }
-  */
-
   // TODO(andreastt): All of the fixture-related methods below should be replaced by a page factory or something
 
   /**
