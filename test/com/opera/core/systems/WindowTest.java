@@ -19,11 +19,11 @@ package com.opera.core.systems;
 import com.opera.core.systems.pages.WindowPage;
 import com.opera.core.systems.testing.Ignore;
 import com.opera.core.systems.testing.OperaDriverTestCase;
+import com.opera.core.systems.testing.TestingPageFactory;
 
 import org.junit.After;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.openqa.selenium.support.PageFactory;
 
 import static com.opera.core.systems.OperaProduct.CORE;
 import static org.junit.Assert.assertEquals;
@@ -39,7 +39,7 @@ public class WindowTest extends OperaDriverTestCase {
 
   @BeforeClass
   public static void beforeAll() {
-    windowPage = PageFactory.initElements(driver, WindowPage.class);
+    windowPage = TestingPageFactory.initElements(driver, pages, WindowPage.class);
   }
 
   @After
