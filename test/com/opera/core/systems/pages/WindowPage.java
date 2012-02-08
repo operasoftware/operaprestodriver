@@ -25,10 +25,7 @@ import org.openqa.selenium.support.FindBy;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
-public class WindowPage {
-
-  public TestOperaDriver driver;
-  public Pages pages;
+public class WindowPage extends Page {
 
   @FindBy(linkText = "Open new targetted window")
   public WebElement targettedWindow;
@@ -36,7 +33,8 @@ public class WindowPage {
   @FindBy(linkText = "Open new anonymous window")
   public WebElement anonymousWindow;
 
-  public WindowPage() {
+  public WindowPage(TestOperaDriver driver, Pages pages) {
+    super(driver, pages);
     driver.navigate().to(pages.windows);
   }
 
