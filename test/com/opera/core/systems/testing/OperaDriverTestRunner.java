@@ -19,15 +19,21 @@ package com.opera.core.systems.testing;
 import com.opera.core.systems.OperaProduct;
 import com.opera.core.systems.testing.Ignore;
 import com.opera.core.systems.testing.OperaDriverTestCase;
+import com.opera.core.systems.testing.drivers.OperaDriverBuilder;
+import com.opera.core.systems.testing.drivers.TestOperaDriver;
+import com.opera.core.systems.testing.drivers.TestOperaDriverSupplier;
 
 import org.junit.internal.AssumptionViolatedException;
 import org.junit.internal.runners.model.EachTestNotifier;
 import org.junit.runner.Description;
+import org.junit.runner.RunWith;
 import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.BlockJUnit4ClassRunner;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.InitializationError;
 import org.openqa.selenium.Platform;
+
+import static com.opera.core.systems.testing.OperaDriverTestCase.driver;
 
 /**
  * The OperaDriverTestRunner can be used, amongst other things, for applying advanced ignores to
@@ -61,6 +67,8 @@ public class OperaDriverTestRunner extends BlockJUnit4ClassRunner {
   protected void runChild(FrameworkMethod method, RunNotifier notifier) {
     EachTestNotifier eachNotifier = makeNotifier(method, notifier);
 
+    // TODO(andreastt): Move annotations to separate classes
+
     if (method.getAnnotation(Ignore.class) != null) {
       Ignore customIgnore = method.getAnnotation(Ignore.class);
 
@@ -68,6 +76,14 @@ public class OperaDriverTestRunner extends BlockJUnit4ClassRunner {
         runIgnored(eachNotifier);
         return;
       }
+    }
+
+    if (method.getAnnotation(FreshDriver.class) != null) {
+      if (driver != null && driver.isRunning()) {
+        driver.quit();
+      }
+
+      driver = (TestOperaDriver) new OperaDriverBuilder(new TestOperaDriverSupplier()).get();
     }
 
     runNotIgnored(method, eachNotifier);
