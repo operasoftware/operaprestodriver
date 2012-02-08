@@ -41,7 +41,6 @@ public class TestOperaDriver extends OperaDriver {
   private final String controlWindow;
   private final Platform currentPlatform = Platform.getCurrent();
 
-  private boolean isRunning = false;
   private OperaProduct currentProduct;
 
   /**
@@ -51,7 +50,6 @@ public class TestOperaDriver extends OperaDriver {
    */
   public TestOperaDriver(Capabilities capabilities) {
     super(capabilities);
-    isRunning = true;
     controlWindow = getWindowHandle();
   }
 
@@ -73,21 +71,8 @@ public class TestOperaDriver extends OperaDriver {
     return capabilities;
   }
 
-  public void close() {
-    int windowCountBeforeClosing = getWindowCount();
-    super.close();
-    if ((windowCountBeforeClosing - 1) == 0) {
-      isRunning = false;
-    }
-  }
-
-  public void quit() {
-    super.quit();
-    isRunning = false;
-  }
-
   public boolean isRunning() {
-    return isRunning;
+    return runner.isOperaRunning();
   }
 
   public boolean isOperaIdleAvailable() {
@@ -126,11 +111,18 @@ public class TestOperaDriver extends OperaDriver {
    * OperaDriver#close()} call, or by sending the action "Close all pages".  The latter method
    * <strong>does not</strong> guarantee that all windows are in fact closed.
    *
+   * This method is failsafe, meaning that if there are no windows open it will not do anything.
+   *
    * @param strategy the strategy to use for closing windows; either {@link
    *                 ClosingStrategy#SWITCH_TO} or {@link ClosingStrategy#ACTION}
    */
   public void closeAll(ClosingStrategy strategy) {
-    int windowCountBeforeClosing = getWindowHandles().size();
+    int windowCountBeforeClosing = getWindowCount();
+
+    // Either control window (1) or no windows (0)
+    if (windowCountBeforeClosing <= 1) {
+      return;
+    }
 
     switch (strategy) {
       case SWITCH_TO:
@@ -142,14 +134,14 @@ public class TestOperaDriver extends OperaDriver {
     }
 
     // Were all windows closed?
-    if (getWindowHandles().size() != 1) {
+    if (getWindowCount() != 1) {
       logger.warning("Should have had " + (windowCountBeforeClosing - 1) + " fewer window(s)");
     }
 
     // Make sure we're in the control window before continuing
-    if (!controlWindow.equals(getWindowHandle())) {
+    if (!getControlWindow().equals(getWindowHandle())) {
       logger.warning("After closing windows, we were not in the default control window");
-      switchTo().window(controlWindow);
+      switchTo().window(getControlWindow());
     }
   }
 
@@ -238,13 +230,11 @@ public class TestOperaDriver extends OperaDriver {
    * default control window (first window) is closed, the browser will be quit.
    */
   private void closeAllUsingSwitchTo() {
-    if (getWindowHandles().size() > 1) {
-      // Close all windows apart from our first control window
-      for (String windowHandle : getWindowHandles()) {
-        if (!windowHandle.equals(controlWindow)) {
-          switchTo().window(windowHandle);
-          close();
-        }
+    // Close all windows apart from our first control window
+    for (String windowHandle : getWindowHandles()) {
+      if (!windowHandle.equals(getControlWindow())) {
+        switchTo().window(windowHandle);
+        close();
       }
     }
   }
