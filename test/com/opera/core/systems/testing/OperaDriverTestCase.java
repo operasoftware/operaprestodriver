@@ -23,6 +23,7 @@ import com.opera.core.systems.environment.webserver.WebServer;
 import com.opera.core.systems.runner.OperaRunner;
 import com.opera.core.systems.testing.drivers.OperaDriverBuilder;
 import com.opera.core.systems.testing.drivers.TestOperaDriver;
+import com.opera.core.systems.testing.drivers.TestOperaDriverSupplier;
 
 import org.junit.ClassRule;
 import org.junit.rules.ExternalResource;
@@ -81,7 +82,7 @@ public abstract class OperaDriverTestCase {
         return;
       }
 
-      driver = (TestOperaDriver) new OperaDriverBuilder().get();
+      driver = (TestOperaDriver) new OperaDriverBuilder(new TestOperaDriverSupplier()).get();
     }
 
     @Override
