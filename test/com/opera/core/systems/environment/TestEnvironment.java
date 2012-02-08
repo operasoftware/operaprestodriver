@@ -19,6 +19,8 @@ limitations under the License.
 
 package com.opera.core.systems.environment;
 
+import com.opera.core.systems.environment.webserver.WebServer;
+
 public interface TestEnvironment {
 
   WebServer getWebServer();
