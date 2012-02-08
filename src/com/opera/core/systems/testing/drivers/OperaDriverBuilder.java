@@ -35,7 +35,7 @@ import java.util.logging.Level;
  * You can either use it by specifying a {@link Supplier<OperaDriver>} class or the class it self as
  * a construction argument.  Call {@link #get()} to instantiate a new driver.
  *
- * The {@link Supplier} class supplies objects of a single type.  Semantically that could be,
+ * The {@link Supplier} class supplies objects of a single type.  Semantically that could be
  * factories, generators, builders, closures, or something else entirely.
  *
  * @author Andreas Tolf Tolfsen <andreastt@opera.com>
