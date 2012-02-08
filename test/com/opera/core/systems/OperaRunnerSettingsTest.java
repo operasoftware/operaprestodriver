@@ -50,7 +50,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-public class OperaRunnerSettingsTest extends OperaDriverTestCase {
+public class OperaRunnerSettingsTest { //extends OperaDriverTestCase {
 
   public OperaRunnerSettings settings;
   public TestOperaRunner runner;
@@ -64,7 +64,7 @@ public class OperaRunnerSettingsTest extends OperaDriverTestCase {
   // Replace OperaDriverTestCase setup and tear down so that we don't launch Opera
   @BeforeClass
   public static void setUpBeforeClass() {
-    if (Platform.valueOf(driver.utils().getOS()).is(Platform.WINDOWS)) {
+    if (Platform.getCurrent().is(Platform.WINDOWS)) {
       fakeBinary = new File("C:\\WINDOWS\\system32\\find.exe");
     } else {
       fakeBinary = new File("/bin/echo");
