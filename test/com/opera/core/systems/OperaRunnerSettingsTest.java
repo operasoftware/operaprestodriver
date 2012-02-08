@@ -24,6 +24,7 @@ import com.opera.core.systems.runner.OperaRunnerException;
 import com.opera.core.systems.runner.OperaRunnerSettings;
 import com.opera.core.systems.scope.internal.OperaIntervals;
 import com.opera.core.systems.testing.Ignore;
+import com.opera.core.systems.testing.NoDriver;
 import com.opera.core.systems.testing.OperaDriverTestCase;
 
 import org.junit.AfterClass;
@@ -50,6 +51,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+@NoDriver
 public class OperaRunnerSettingsTest extends OperaDriverTestCase {
 
   public OperaRunnerSettings settings;
