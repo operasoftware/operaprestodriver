@@ -19,10 +19,7 @@ package com.opera.core.systems.testing;
 import com.opera.core.systems.environment.GlobalTestEnvironment;
 import com.opera.core.systems.environment.InProcessTestEnvironment;
 import com.opera.core.systems.environment.TestEnvironment;
-<<<<<<< HEAD
-=======
 import com.opera.core.systems.environment.webserver.WebServer;
->>>>>>> 26ad4ab29550d1f9dcdbec256e7b142a4d81324c
 import com.opera.core.systems.runner.OperaRunner;
 import com.opera.core.systems.testing.drivers.OperaDriverBuilder;
 import com.opera.core.systems.testing.drivers.TestOperaDriver;
