@@ -51,6 +51,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.openqa.selenium.Platform.WINDOWS;
 
+
 @NoDriver
 public class OperaRunnerSettingsTest extends OperaDriverTestCase {
 
