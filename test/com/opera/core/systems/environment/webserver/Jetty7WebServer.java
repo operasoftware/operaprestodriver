@@ -20,12 +20,11 @@ package com.opera.core.systems.environment.webserver;
 
 import com.opera.core.systems.testing.InProject;
 
-import org.openqa.selenium.net.NetworkUtils;
-
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.ContextHandlerCollection;
 import org.eclipse.jetty.server.nio.SelectChannelConnector;
 import org.eclipse.jetty.webapp.WebAppContext;
+import org.openqa.selenium.net.NetworkUtils;
 import org.openqa.selenium.net.PortProber;
 
 import java.io.File;
