@@ -77,23 +77,24 @@ public class OperaRunnerSettings
     return operaBinary;
   }
 
+  /**
+   * Sets Opera's binary.
+   *
+   * @param path the absolute path to the binary to use
+   */
   public void setBinary(String path) {
     if (path != null && !path.isEmpty()) {
-      File binary = new File(path);
-      if (binary.exists() && binary.isFile() && binary.canExecute()) {
-        operaBinary = binary;
-      } else {
-        throw new OperaRunnerException("No such file or not executable: " + binary);
-      }
+      setBinary(new File(path));
     } else {
       throw new OperaRunnerException("Invalid file path: " + path);
     }
   }
 
   public void setBinary(File binary) {
-    if (binary == null) {
-      throw new OperaRunnerException("Invalid file: " + binary);
+    if (!binary.exists() || !binary.isFile() || !binary.canExecute()) {
+      throw new OperaRunnerException("No such file or not executable: " + binary);
     }
+
     operaBinary = binary;
   }
 

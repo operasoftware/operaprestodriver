@@ -43,9 +43,9 @@ public interface OperaRunnerSettings {
   /**
    * Sets Opera's location.
    *
-   * @param path the absolute path to the Opera binary
+   * @param binary the Opera binary
    */
-  public void setBinary(String path);
+  public void setBinary(File binary);
 
   /**
    * Gets the X display.  Only works on *nix operating systems.
