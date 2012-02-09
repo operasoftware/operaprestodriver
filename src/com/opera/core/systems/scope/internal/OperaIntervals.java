@@ -21,8 +21,19 @@ package com.opera.core.systems.scope.internal;
  */
 public enum OperaIntervals {
 
+  /**
+   * The response timeout specifies for how long OperaDriver should wait before timing out when it
+   * has not received a callback confirmation message from Scope after executing a command.  This
+   * typically happens when it looses connection to Opera.
+   */
   RESPONSE_TIMEOUT(5000),
+
+  /**
+   * The page load timeout specifies how long the driver waits for a page to finish loading before
+   * returning the control to the user.
+   */
   PAGE_LOAD_TIMEOUT(30000),
+
   WINDOW_EVENT_TIMEOUT(5000),
   OPERA_IDLE_TIMEOUT(5000),
   POLL_INTERVAL(10),
