@@ -80,7 +80,7 @@ public class OperaLauncherRunner extends OperaRunner
 
     List<String> launcherArguments = new ArrayList<String>();
     launcherArguments.add("-host");
-    launcherArguments.add("127.0.0.1");
+    launcherArguments.add(settings.getHost());
     launcherArguments.add("-port");
     launcherArguments.add(launcherPort.toString());
     if (display != null && display > 0) {
