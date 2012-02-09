@@ -152,8 +152,35 @@ public class ProfileUtils {
       boolean deleted = deleteFolder(current_dir);
       if (!deleted)
       {
-        logger.warning("Could not delete profile in '" + current_dir + "'. Skipping further deletion.");
-        return false;
+        int retry_interval_ms = 500;
+        int retry_max_count = 10;
+        int retry_count = 0;
+        boolean ok = false;
+
+        logger.warning("Profile could not be deleted, retrying...");
+
+        do
+        {
+          try {
+            Thread.sleep(retry_interval_ms);
+          } catch (InterruptedException e) {
+            e.printStackTrace();
+          }
+
+          ok = deleteFolder(current_dir);
+          retry_count++;
+          if (retry_count > retry_max_count)
+            break;
+
+        } while (!ok);
+
+        if (!ok)
+        {
+          logger.severe("Could not delete profile in '" + current_dir + "'. Skipping further deletion.");
+          return false;
+        }
+        else
+          logger.warning("Deleted profile, retry count = " + retry_count);
       }
       else
       {
