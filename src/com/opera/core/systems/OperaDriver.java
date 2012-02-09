@@ -277,31 +277,34 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
       h.setLevel(logLevel);
     }
 
-    if ((Boolean) capabilities.getCapability(AUTOSTART)) {
-      if (capabilities.getCapability(BINARY) == null) {
-        capabilities.setCapability(BINARY, OperaPaths.operaPath());
-      }
+    Boolean autostart = (Boolean) capabilities.getCapability(AUTOSTART);
+    settings = new OperaLauncherRunnerSettings();
+    settings.setLoggingLevel(OperaLauncherRunner.toLauncherLoggingLevel(logLevel));
 
-      settings = new OperaLauncherRunnerSettings();
-      settings.setBinary((String) capabilities.getCapability(BINARY));
+    if (autostart) {
+      String binaryPath = (String) capabilities.getCapability(BINARY);
+      if (binaryPath == null) {
+        binaryPath = OperaPaths.operaPath();
+      }
+      settings.setBinary(new File(binaryPath));
+
       settings.setHost((String) capabilities.getCapability(HOST));
       settings.setPort((Integer) capabilities.getCapability(PORT));
-      settings.setLoggingLevel(OperaLauncherRunner.toLauncherLoggingLevel(logLevel));
 
       OperaArguments arguments = new OperaCoreArguments();
       OperaArguments parsed = OperaArguments.parse((String) capabilities.getCapability(ARGUMENTS));
-      arguments.merge(parsed);
-      settings.setArguments(arguments);
+      settings.setArguments(arguments.merge(parsed));
 
       String launcher = (String) capabilities.getCapability(LAUNCHER);
       if (launcher != null) {
         settings.setLauncher(launcher);
       }
 
-      if (capabilities.getCapability(PROFILE) instanceof String) {
-        settings.setProfile((String) capabilities.getCapability(PROFILE));
-      } else if (capabilities.getCapability(PROFILE) instanceof OperaProfile) {
-        settings.setProfile((OperaProfile) capabilities.getCapability(PROFILE));
+      Object profile = capabilities.getCapability(PROFILE);
+      if (profile instanceof String) {
+        settings.setProfile((String) profile);
+      } else if (profile instanceof OperaProfile) {
+        settings.setProfile((OperaProfile) profile);
       }
 
       String backend = (String) capabilities.getCapability(BACKEND);
@@ -312,13 +315,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
       // Synchronize settings for runner and capabilities
       capabilities.merge(settings.toCapabilities());
 
-      if (capabilities.getCapability(BINARY) != null) {
-        runner = new OperaLauncherRunner(settings);
-      }
-    } else {
-      // If we're not autostarting then we don't want to randomise the port
-      settings.setPort(-1);
-      capabilities.setCapability(PORT, settings.getPort());
+      runner = new OperaLauncherRunner(settings);
     }
 
     logger.config(capabilities.toString());
