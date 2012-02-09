@@ -26,6 +26,7 @@ import com.opera.core.systems.model.ScreenShotReply;
 import com.opera.core.systems.model.ScriptResult;
 import com.opera.core.systems.preferences.OperaScopePreferences;
 import com.opera.core.systems.runner.OperaRunner;
+import com.opera.core.systems.runner.OperaRunnerSettings;
 import com.opera.core.systems.runner.launcher.OperaLauncherRunner;
 import com.opera.core.systems.runner.launcher.OperaLauncherRunnerSettings;
 import com.opera.core.systems.scope.exceptions.CommunicationException;
@@ -196,6 +197,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
    * access these variable in tests.
    */
   protected DesiredCapabilities capabilities;
+  protected OperaLauncherRunnerSettings settings;
   protected OperaRunner runner;
 
   protected IEcmaScriptDebugger debugger;
@@ -291,8 +293,9 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
         }
       }
 
-      OperaLauncherRunnerSettings settings = new OperaLauncherRunnerSettings();
+      settings = new OperaLauncherRunnerSettings();
       settings.setBinary((String) capabilities.getCapability(BINARY));
+      settings.setHost((String) capabilities.getCapability(HOST));
       settings.setPort((Integer) capabilities.getCapability(PORT));
       settings.setLoggingLevel(OperaLauncherRunner.toLauncherLoggingLevel(logLevel));
 
@@ -319,6 +322,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
       // Synchronize settings for runner and capabilities
       capabilities.setCapability(ARGUMENTS, settings.getArguments().toString());
+      capabilities.setCapability(HOST, settings.getHost());
       capabilities.setCapability(PORT, settings.getPort());
       capabilities.setCapability(PROFILE, settings.getProfile());
       capabilities.setCapability(LAUNCHER, settings.getLauncher().getPath());
@@ -342,19 +346,19 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
    * @return a DesiredCapabilities object with default settings
    */
   protected static Capabilities getDefaultCapabilities() {
+    OperaLauncherRunnerSettings defaultSettings = OperaLauncherRunnerSettings.getDefaultSettings();
+
     DesiredCapabilities capabilities = DesiredCapabilities.opera();
     capabilities.setJavascriptEnabled(true);
 
-    capabilities.setCapability(LOGGING_LEVEL, "INFO");
+    capabilities.setCapability(LOGGING_LEVEL, defaultSettings.getLoggingLevel());
     capabilities.setCapability(LOGGING_FILE, (String) null);
 
     capabilities.setCapability(BINARY, (String) null);
     capabilities.setCapability(ARGUMENTS, "");
 
-    // Default = 127.0.0.1, but need to set to null for backwards compatibility with Opera versions
-    // (Opera < 11.60) that don't support -autotestmode host:port
-    capabilities.setCapability(HOST, "127.0.0.1");
-    capabilities.setCapability(PORT, 0); // 0 = Random, -1 = Opera default (7001)
+    capabilities.setCapability(HOST, defaultSettings.getHost());
+    capabilities.setCapability(PORT, defaultSettings.getPort());
 
     capabilities.setCapability(LAUNCHER, (String) null);
     capabilities.setCapability(DISPLAY, (Integer) null);
@@ -367,8 +371,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     capabilities.setCapability(GUESS_BINARY_PATH, true);
     capabilities.setCapability(OPERAIDLE, false);
 
-    capabilities.setCapability(BACKEND,
-                               OperaLauncherRunnerSettings.getDefaultSettings().getBackend());
+    capabilities.setCapability(BACKEND, defaultSettings.getBackend());
 
     return capabilities;
   }

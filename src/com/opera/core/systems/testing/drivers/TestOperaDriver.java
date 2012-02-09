@@ -19,6 +19,7 @@ package com.opera.core.systems.testing.drivers;
 import com.opera.core.systems.OperaDriver;
 import com.opera.core.systems.OperaProduct;
 import com.opera.core.systems.runner.OperaRunner;
+import com.opera.core.systems.runner.launcher.OperaLauncherRunnerSettings;
 import com.opera.core.systems.scope.internal.OperaIntervals;
 import com.opera.core.systems.scope.services.IOperaExec;
 
@@ -95,6 +96,10 @@ public class TestOperaDriver extends OperaDriver {
 
   public IOperaExec getExecService() {
     return super.getExecService();
+  }
+
+  public OperaLauncherRunnerSettings getSettings() {
+    return super.settings;
   }
 
   /**
