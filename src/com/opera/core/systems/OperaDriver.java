@@ -64,6 +64,7 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteLogs;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -341,24 +342,25 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
    * @return a DesiredCapabilities object with default settings
    */
   protected static Capabilities getDefaultCapabilities() {
+    DesiredCapabilities capabilities = DesiredCapabilities.opera();
     OperaLauncherRunnerSettings defaultSettings = OperaLauncherRunnerSettings.getDefaultSettings();
 
-    DesiredCapabilities capabilities = DesiredCapabilities.opera();
     capabilities.setJavascriptEnabled(true);
 
     capabilities.setCapability(LOGGING_LEVEL, defaultSettings.getLoggingLevel());
     capabilities.setCapability(LOGGING_FILE, (String) null);
 
-    capabilities.setCapability(BINARY, (String) null);
-    capabilities.setCapability(ARGUMENTS, "");
+    File binary = defaultSettings.getBinary();
+    capabilities.setCapability(BINARY, (binary == null) ? (String) null : binary.getPath());
+    capabilities.setCapability(ARGUMENTS, defaultSettings.getArguments().toString());
 
     capabilities.setCapability(HOST, defaultSettings.getHost());
     capabilities.setCapability(PORT, defaultSettings.getPort());
 
-    capabilities.setCapability(LAUNCHER, (String) null);
-    capabilities.setCapability(DISPLAY, (Integer) null);
+    capabilities.setCapability(LAUNCHER, defaultSettings.getLauncher().getPath());
+    capabilities.setCapability(DISPLAY, defaultSettings.getDisplay());
     capabilities.setCapability(PROFILE, new OperaProfile());
-    capabilities.setCapability(PRODUCT, OperaProduct.CORE.toString());
+    capabilities.setCapability(PRODUCT, defaultSettings.getProduct().toString());
 
     capabilities.setCapability(AUTOSTART, true);
     capabilities.setCapability(NO_RESTART, false);
