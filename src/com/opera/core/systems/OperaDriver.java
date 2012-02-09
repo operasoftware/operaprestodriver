@@ -320,10 +320,10 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
       settings.setProfile((String) capabilities.getCapability(PROFILE));
       capabilities.setCapability(ARGUMENTS, settings.getArguments().toString());
       capabilities.setCapability(PORT, settings.getPort());
-      
+
       String profile_dir = settings.getProfile();
       capabilities.setCapability(PROFILE, profile_dir);
-      logger.info("Autostarting with binary set to '" + capabilities.getCapability(BINARY) + "', profile dir id '" + profile_dir + "'");
+      logger.info("Autostarting, binary is '" + capabilities.getCapability(BINARY) + "', profile dir is '" + profile_dir + "'");
 
       if (capabilities.getCapability(BINARY) != null) {
         runner = new OperaLauncherRunner((OperaLauncherRunnerSettings) settings);
