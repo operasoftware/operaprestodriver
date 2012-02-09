@@ -7909,11 +7909,15 @@ public final class EcmascriptProtos {
       DOM_ENVIRONMENT_CREATED(0, 1),
       DOM_CONTENT_LOADED(1, 2),
       AFTER_ONLOAD(2, 3),
+      AFTER_DOM_CONTENT_LOADED(3, 4),
+      BEFORE_ONLOAD(4, 5),
       ;
       
       public static final int DOM_ENVIRONMENT_CREATED_VALUE = 1;
       public static final int DOM_CONTENT_LOADED_VALUE = 2;
       public static final int AFTER_ONLOAD_VALUE = 3;
+      public static final int AFTER_DOM_CONTENT_LOADED_VALUE = 4;
+      public static final int BEFORE_ONLOAD_VALUE = 5;
       
       
       public final int getNumber() { return value; }
@@ -7923,6 +7927,8 @@ public final class EcmascriptProtos {
           case 1: return DOM_ENVIRONMENT_CREATED;
           case 2: return DOM_CONTENT_LOADED;
           case 3: return AFTER_ONLOAD;
+          case 4: return AFTER_DOM_CONTENT_LOADED;
+          case 5: return BEFORE_ONLOAD;
           default: return null;
         }
       }
@@ -7953,7 +7959,7 @@ public final class EcmascriptProtos {
       }
       
       private static final State[] VALUES = {
-        DOM_ENVIRONMENT_CREATED, DOM_CONTENT_LOADED, AFTER_ONLOAD, 
+        DOM_ENVIRONMENT_CREATED, DOM_CONTENT_LOADED, AFTER_ONLOAD, AFTER_DOM_CONTENT_LOADED, BEFORE_ONLOAD, 
       };
       
       public static State valueOf(
@@ -8469,12 +8475,13 @@ public final class EcmascriptProtos {
       "\007\n\003NAN\020\004\022\021\n\rPLUS_INFINITY\020\005\022\022\n\016MINUS_INF" +
       "INITY\020\006\022\n\n\006NUMBER\020\007\022\n\n\006STRING\020\010\022\n\n\006OBJEC" +
       "T\020\t\")\n\021ReleaseObjectsArg\022\024\n\014objectIDList" +
-      "\030\001 \003(\r\"\243\001\n\020ReadyStateChange\022\021\n\truntimeID" +
+      "\030\001 \003(\r\"\324\001\n\020ReadyStateChange\022\021\n\truntimeID" +
       "\030\001 \002(\r\022,\n\005state\030\002 \002(\0162\035.scope.ReadyState" +
-      "Change.State\"N\n\005State\022\033\n\027DOM_ENVIRONMENT" +
+      "Change.State\"\177\n\005State\022\033\n\027DOM_ENVIRONMENT" +
       "_CREATED\020\001\022\026\n\022DOM_CONTENT_LOADED\020\002\022\020\n\014AF" +
-      "TER_ONLOAD\020\003B9\n#com.opera.core.systems.s" +
-      "cope.protosB\020EcmascriptProtosH\001"
+      "TER_ONLOAD\020\003\022\034\n\030AFTER_DOM_CONTENT_LOADED" +
+      "\020\004\022\021\n\rBEFORE_ONLOAD\020\005B9\n#com.opera.core." +
+      "systems.scope.protosB\020EcmascriptProtosH\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
