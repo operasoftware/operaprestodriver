@@ -211,10 +211,18 @@ public class OperaRunnerSettings
   public Capabilities toCapabilities() {
     DesiredCapabilities capabilities = DesiredCapabilities.opera();
 
+    capabilities.setCapability(OperaDriver.LOGGING_LEVEL, getLoggingLevel());
+
+    capabilities.setCapability(OperaDriver.BINARY,
+                               (getBinary() == null) ? (String) null : getBinary().getPath());
     capabilities.setCapability(OperaDriver.ARGUMENTS, getArguments().toString());
+
     capabilities.setCapability(OperaDriver.HOST, getHost());
     capabilities.setCapability(OperaDriver.PORT, getPort());
+
+    capabilities.setCapability(OperaDriver.DISPLAY, getDisplay());
     capabilities.setCapability(OperaDriver.PROFILE, getProfile());
+    capabilities.setCapability(OperaDriver.PRODUCT, getProduct().toString());
 
     return capabilities;
   }
