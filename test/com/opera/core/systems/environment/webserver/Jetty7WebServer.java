@@ -38,7 +38,6 @@ public class Jetty7WebServer implements WebServer {
   private static final NetworkUtils NETWORK_UTILS = new NetworkUtils();
 
   private int port;
-  private File path;
   private final Server server;
   private WebAppContext defaultContext;
 
@@ -54,7 +53,7 @@ public class Jetty7WebServer implements WebServer {
 
     server = new Server();
 
-    path = findRootOfWebApp();
+    File path = findRootOfWebApp();
     handlers = new ContextHandlerCollection();
 
     defaultContext = addWebApplication(DEFAULT_CONTEXT_PATH, path);
