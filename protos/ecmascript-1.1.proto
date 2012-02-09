@@ -12,7 +12,7 @@ syntax = scope;
 service Ecmascript
 {
     option (cpp_hfile) = "modules/scope/src/scope_ecmascript.h";
-    option (version) = "1.0";
+    option (version) = "1.1";
     option (cpp_class) = OpScopeEcmascript;
 
     /**
@@ -453,16 +453,34 @@ message ReadyStateChange
 
         /**
          * This state indicates that the HTML tree is done (for now). The event
-         * happens immediately after the DOMContentLoaded event fires on the window 
+         * happens before the DOMContentLoaded event fires on the document
          * object. Useful for figuring out when we can inspect the DOM.
          */
         DOM_CONTENT_LOADED = 2;
 
         /**
-         * Occurs after onload is finished, and after external resources are loaded. 
+         * Occurs after onload is finished, and after external resources are loaded.
          * When this event is observed, it should be safe to take a screenshot.
          */
         AFTER_ONLOAD = 3;
+
+        /**
+         * Occurs after DOMContentLoaded event has been processed. If there was
+         * no DOMContentLoaded registered, occurs immediately after the matching
+         * "before" event.
+         *
+         * @since 1.1
+         */
+        AFTER_DOM_CONTENT_LOADED = 4;
+
+        /**
+         * Occurs before onload has fired, and after external resources
+         * are loaded.
+         *
+         * @since 1.1
+         */
+        BEFORE_ONLOAD = 5;
+
     }
 
     required uint32 runtimeID = 1;

@@ -28,7 +28,7 @@ SERVICES = {
   'core_1.3': ['com.opera.core.systems.scope.protos', 'CoreProtos'],
   'desktop_utils': ['com.opera.core.systems.scope.protos', 'DesktopUtilsProtos'],
   'desktop_window_manager': ['com.opera.core.systems.scope.protos', 'DesktopWmProtos'],
-  'ecmascript-1.0': ['com.opera.core.systems.scope.protos', 'EcmascriptProtos'],
+  'ecmascript-1.1': ['com.opera.core.systems.scope.protos', 'EcmascriptProtos'],
   'ecmascript_debugger-6.1': ['com.opera.core.systems.scope.protos', 'Esdbg6Protos'],
   'ecmascript_debugger-5.0': ['com.opera.core.systems.scope.protos', 'EsdbgProtos'],
   'exec-2.1': ['com.opera.core.systems.scope.protos', 'ExecProtos'],
