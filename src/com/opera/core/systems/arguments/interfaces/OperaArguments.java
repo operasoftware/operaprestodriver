@@ -108,8 +108,9 @@ public interface OperaArguments extends Iterable<OperaArgument> {
    * object.
    *
    * @param extraArguments the {@link OperaArguments} to merge into this
+   * @return a reference to self
    */
-  public void merge(OperaArguments extraArguments);
+  public OperaArguments merge(OperaArguments extraArguments);
 
   /**
    * Gets the command-line argument sign used by this implementation of {@link OperaArguments}.
