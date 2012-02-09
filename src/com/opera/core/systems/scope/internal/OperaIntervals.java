@@ -30,7 +30,26 @@ public enum OperaIntervals {
   SCRIPT_RETRY_INTERVAL(50),
   EXEC_SLEEP(100),
   HANDSHAKE_TIMEOUT(30000),
+
+  /**
+   * The default Opera debug proxy server port for OperaDriver to connect to.
+   */
   SERVER_PORT(7001),
+
+  /**
+   * For backwards compatibility with Operas without <code>-debugproxy</code> support, if the user
+   * specifies 0 as the port it will use a random port.
+   */
+  SERVER_RANDOM_PORT_IDENTIFIER(0),
+
+  /**
+   * For backwards compatibility with Operas without <code>-debugproxy</code> support, if the user
+   * specifies -1 as the port it will use the default server proxy port specified in
+   * {@link #SERVER_PORT}.
+   */
+  SERVER_DEFAULT_PORT_IDENTIFIER(-1),
+
+
   KILL_GRACE_TIMEOUT(1000),
   BACKWARDS_COMPATIBLE(1),
   DEFAULT_RESPONSE_TIMEOUT(10000),

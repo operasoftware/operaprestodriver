@@ -328,8 +328,9 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
         runner = new OperaLauncherRunner(settings);
       }
     } else {
-      // If we're not autostarting then we don't want to randomise the port.
-      capabilities.setCapability(PORT, (int) OperaIntervals.SERVER_PORT.getValue());
+      // If we're not autostarting then we don't want to randomise the port
+      settings.setPort(-1);
+      capabilities.setCapability(PORT, settings.getPort());
     }
 
     logger.config(capabilities.toString());
@@ -394,7 +395,8 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     preferences = new OperaScopePreferences(services.getPrefs());
 
     // Get product from Opera
-    capabilities.setCapability(PRODUCT, utils().getProduct());
+    settings.setProduct(utils().getProduct());
+    capabilities.setCapability(PRODUCT, settings.getProduct());
   }
 
   /**
@@ -420,14 +422,13 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
       Map<String, String> versions = getServicesList();
       boolean manualStart = true;
 
-      if (capabilities.getCapability(BINARY) != null) {
+      if (settings.getBinary() != null) {
         manualStart = false;
       }
 
-      services =
-          new ScopeServices(versions, (Integer) capabilities.getCapability(PORT), manualStart);
+      services = new ScopeServices(versions, settings.getPort(), manualStart);
       // for profile-specific workarounds inside ScopeServices, WaitState ...
-      services.setProduct((String) capabilities.getCapability(PRODUCT));
+      services.setProduct(settings.getProduct());
       services.startStpThread();
     } catch (IOException e) {
       throw new WebDriverException(e);
@@ -442,7 +443,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     logger.fine("OperaDriver shutting down");
 
     // This will only delete the profile directory if we created it
-    ((OperaProfile) capabilities.getCapability(PROFILE)).cleanUp();
+    settings.getProfile().cleanUp();
 
     // This method can be called from start(), before services are created
     if (services != null) {

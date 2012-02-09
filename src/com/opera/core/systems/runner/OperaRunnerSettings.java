@@ -45,7 +45,7 @@ public class OperaRunnerSettings
   protected OperaProfile profile = null;
   protected boolean noQuit = false;
   protected String host = "127.0.0.1";
-  protected Integer port = 0;  // -1 for Opera < 11.60
+  protected Integer port = (int) OperaIntervals.SERVER_RANDOM_PORT_IDENTIFIER.getValue();
   protected Level loggingLevel = Level.INFO;
   protected OperaArguments arguments = new OperaCoreArguments();
 
@@ -161,9 +161,9 @@ public class OperaRunnerSettings
   public Integer getPort() {
     // The port Opera should connect to.  0 = Random, -1 = Opera default (7001) (for use with Opera
     // < 11.60).
-    if (port == 0) {
+    if (port == OperaIntervals.SERVER_RANDOM_PORT_IDENTIFIER.getValue()) {
       port = PortProber.findFreePort();
-    } else if (port == -1) {
+    } else if (port == OperaIntervals.SERVER_DEFAULT_PORT_IDENTIFIER.getValue()) {
       port = (int) OperaIntervals.SERVER_PORT.getValue();
     }
 
