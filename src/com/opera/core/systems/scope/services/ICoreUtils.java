@@ -16,9 +16,7 @@
 
 package com.opera.core.systems.scope.services;
 
-import java.util.List;
-
-import com.opera.core.systems.scope.protos.CoreProtos;
+import com.opera.core.systems.OperaDriver;
 
 /**
  * Core utility service exposing metadata about the browser core in general, i.e. information which
@@ -50,8 +48,8 @@ public interface ICoreUtils {
   String getCoreVersion();
 
   /**
-   * Gets a string which describes the operating system the connected Opera instance is running
-   * on.  An example would be
+   * Gets a string which describes the operating system the connected Opera instance is running on.
+   * An example would be
    *
    * "Window NT 6.1"
    *
@@ -60,8 +58,8 @@ public interface ICoreUtils {
   String getOperatingSystem();
 
   /**
-   * A string which describes the product.  For regular desktop builds this will be "desktop".
-   * Other examples are "mobile" and "gogi".
+   * A string which describes the product.  For regular desktop builds this will be "desktop". Other
+   * examples are "mobile" and "gogi".
    *
    * @return product type
    */
@@ -92,8 +90,10 @@ public interface ICoreUtils {
   Integer getProcessID();
 
   /**
-   * Clears selected browser data
-   * @param flags All data types to be cleared
+   * Clears specified browser data.
+   *
+   * @param flags variable list of data types to be cleared
    */
-  void clearPrivateData(List<CoreProtos.ClearFlags> flags);
+  void clearPrivateData(OperaDriver.PrivateData... flags);
+
 }

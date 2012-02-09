@@ -16,7 +16,7 @@ limitations under the License.
 
 package com.opera.core.systems.scope.services.ums;
 
-import java.util.List;
+import com.opera.core.systems.OperaDriver;
 import com.opera.core.systems.ScopeServices;
 import com.opera.core.systems.scope.AbstractService;
 import com.opera.core.systems.scope.CoreUtilsCommand;
@@ -27,6 +27,10 @@ import com.opera.core.systems.scope.protos.UmsProtos.Response;
 import com.opera.core.systems.scope.services.ICoreUtils;
 
 import org.openqa.selenium.UnsupportedCommandException;
+import org.openqa.selenium.WebDriverException;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Andreas Tolf Tolfsen <andreastt@opera.com>
@@ -101,9 +105,9 @@ public class CoreUtils extends AbstractService implements ICoreUtils {
     return browserInformation.getProcessID();
   }
 
-  public void clearPrivateData(List<CoreProtos.ClearFlags> flags) {
+  public void clearPrivateData(OperaDriver.PrivateData... flags) {
     ClearPrivateDataArg.Builder arg = ClearPrivateDataArg.newBuilder();
-    arg.addAllClearList(flags);
+    arg.addAllClearList(convertDriverFlagToScopeFlag(flags));
     executeCommand(CoreUtilsCommand.CLEAR_PRIVATE_DATA, arg);
   }
 
@@ -114,6 +118,68 @@ public class CoreUtils extends AbstractService implements ICoreUtils {
     BrowserInformation.Builder builder = BrowserInformation.newBuilder();
     buildPayload(response, builder);
     return builder.build();
+  }
+
+  private List<CoreProtos.ClearFlags> convertDriverFlagToScopeFlag(
+      OperaDriver.PrivateData... flags) {
+    List<CoreProtos.ClearFlags> clearFlags = new ArrayList<CoreProtos.ClearFlags>();
+
+    for (OperaDriver.PrivateData flag : flags) {
+      switch (flag) {
+        case ALL:
+          clearFlags.add(CoreProtos.ClearFlags.CLEAR_ALL);
+          break;
+        case VISITED_LINKS:
+          clearFlags.add(CoreProtos.ClearFlags.CLEAR_VISITED_LINKS);
+          break;
+        case DISK_CACHE:
+          clearFlags.add(CoreProtos.ClearFlags.CLEAR_DISK_CACHE);
+          break;
+        case IMAGE_CACHE:
+          clearFlags.add(CoreProtos.ClearFlags.CLEAR_IMAGE_CACHE);
+          break;
+        case MEMORY_CACHE:
+          clearFlags.add(CoreProtos.ClearFlags.CLEAR_MEMORY_CACHE);
+          break;
+        case SENSITIVE_DATA:
+          clearFlags.add(CoreProtos.ClearFlags.CLEAR_SENSITIVE_DATA);
+          break;
+        case SESSION_COOKIES:
+          clearFlags.add(CoreProtos.ClearFlags.CLEAR_SESSION_COOKIES);
+          break;
+        case ALL_COOKIES:
+          clearFlags.add(CoreProtos.ClearFlags.CLEAR_ALL_COOKIES);
+          break;
+        case GLOBAL_HISTORY:
+          clearFlags.add(CoreProtos.ClearFlags.CLEAR_GLOBAL_HISTORY);
+          break;
+        case CONSOLE:
+          clearFlags.add(CoreProtos.ClearFlags.CLEAR_CONSOLE);
+          break;
+        case THUMBNAILS:
+          clearFlags.add(CoreProtos.ClearFlags.CLEAR_THUMBNAILS);
+          break;
+        case WEBDATABASES:
+          clearFlags.add(CoreProtos.ClearFlags.CLEAR_WEBDATABASES);
+          break;
+        case WEBSTORAGE:
+          clearFlags.add(CoreProtos.ClearFlags.CLEAR_WEBSTORAGE);
+          break;
+        case APPCACHE:
+          clearFlags.add(CoreProtos.ClearFlags.CLEAR_APPCACHE);
+          break;
+        case GEOLOCATION_PERMISSIONS:
+          clearFlags.add(CoreProtos.ClearFlags.CLEAR_GEOLOCATION_PERMISSIONS);
+          break;
+        case SITE_PREFS:
+          clearFlags.add(CoreProtos.ClearFlags.CLEAR_SITE_PREFS);
+          break;
+        default:
+          throw new WebDriverException("Unhandled private data flag: " + flag);
+      }
+    }
+
+    return clearFlags;
   }
 
 }
