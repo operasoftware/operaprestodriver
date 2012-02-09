@@ -468,7 +468,8 @@ public class WaitState {
         }
         catch (ResponseNotReceivedException e)
         {
-          logger.severe("ResponseNotReceivedException for type " + type + " \n\n" + e);
+          logger.warning("ResponseNotReceivedException for type " + type);
+          logger.fine(e.toString());
           throw e;
         };
 
