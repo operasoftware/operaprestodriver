@@ -16,6 +16,7 @@ limitations under the License.
 
 package com.opera.core.systems.runner;
 
+import com.opera.core.systems.OperaDriver;
 import com.opera.core.systems.OperaProduct;
 import com.opera.core.systems.OperaProfile;
 import com.opera.core.systems.arguments.OperaCoreArguments;
@@ -23,8 +24,10 @@ import com.opera.core.systems.arguments.OperaDesktopArguments;
 import com.opera.core.systems.arguments.interfaces.OperaArguments;
 import com.opera.core.systems.scope.internal.OperaIntervals;
 
+import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.net.PortProber;
+import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.io.File;
 import java.util.logging.Level;
@@ -203,6 +206,17 @@ public class OperaRunnerSettings
 
   public void setLoggingLevel(Level level) {
     loggingLevel = level;
+  }
+
+  public Capabilities toCapabilities() {
+    DesiredCapabilities capabilities = DesiredCapabilities.opera();
+
+    capabilities.setCapability(OperaDriver.ARGUMENTS, getArguments().toString());
+    capabilities.setCapability(OperaDriver.HOST, getHost());
+    capabilities.setCapability(OperaDriver.PORT, getPort());
+    capabilities.setCapability(OperaDriver.PROFILE, getProfile());
+
+    return capabilities;
   }
 
   public static OperaRunnerSettings getDefaultSettings() {
