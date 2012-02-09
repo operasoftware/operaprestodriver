@@ -324,7 +324,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
       capabilities.merge(settings.toCapabilities());
 
       if (capabilities.getCapability(BINARY) != null) {
-        runner = new OperaLauncherRunner((OperaLauncherRunnerSettings) settings);
+        runner = new OperaLauncherRunner(settings);
       }
     } else {
       // If we're not autostarting then we don't want to randomise the port.
