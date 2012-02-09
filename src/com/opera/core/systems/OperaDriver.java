@@ -381,20 +381,15 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
    */
   private void start() {
     try {
-      this.init();
+      init();
     } catch (Exception e) {
-      // Will make sure to kill any eventual launcher process that was started
-      this.quit();
+      quit();
       throw new WebDriverException(e);
     }
-
-    logger.finer("Initialization done");
   }
 
   /**
-   * Initialise all the Scope services that we need.
-   *
-   * For testing override this method.
+   * Initialise required Scope services.
    */
   protected void init() {
     createScopeServices();
