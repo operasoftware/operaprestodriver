@@ -47,7 +47,7 @@ public class OperaRunnerSettings
   protected String host = "127.0.0.1";
   protected Integer port = 0;  // -1 for Opera < 11.60
   protected Level loggingLevel = Level.INFO;
-  protected com.opera.core.systems.arguments.interfaces.OperaArguments arguments;
+  protected OperaArguments arguments = new OperaCoreArguments();
 
   private boolean supportsPd = true;
 
