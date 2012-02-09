@@ -200,6 +200,7 @@ public class ProfileUtils {
 			return false;
 		}
 
+		logger.info("Copying profile from " + newPrefs);
 		return WatirUtils.CopyDirAndFiles(newPrefs, smallPrefsFolder);
 	}
 
