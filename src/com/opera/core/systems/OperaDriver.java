@@ -344,31 +344,16 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
   protected static Capabilities getDefaultCapabilities() {
     DesiredCapabilities capabilities = DesiredCapabilities.opera();
     OperaLauncherRunnerSettings defaultSettings = OperaLauncherRunnerSettings.getDefaultSettings();
+    capabilities.merge(defaultSettings.toCapabilities());
 
     capabilities.setJavascriptEnabled(true);
 
-    capabilities.setCapability(LOGGING_LEVEL, defaultSettings.getLoggingLevel());
     capabilities.setCapability(LOGGING_FILE, (String) null);
-
-    File binary = defaultSettings.getBinary();
-    capabilities.setCapability(BINARY, (binary == null) ? (String) null : binary.getPath());
-    capabilities.setCapability(ARGUMENTS, defaultSettings.getArguments().toString());
-
-    capabilities.setCapability(HOST, defaultSettings.getHost());
-    capabilities.setCapability(PORT, defaultSettings.getPort());
-
-    capabilities.setCapability(LAUNCHER, defaultSettings.getLauncher().getPath());
-    capabilities.setCapability(DISPLAY, defaultSettings.getDisplay());
-    capabilities.setCapability(PROFILE, new OperaProfile());
-    capabilities.setCapability(PRODUCT, defaultSettings.getProduct().toString());
-
     capabilities.setCapability(AUTOSTART, true);
     capabilities.setCapability(NO_RESTART, false);
     capabilities.setCapability(NO_QUIT, false);
     capabilities.setCapability(GUESS_BINARY_PATH, true);
     capabilities.setCapability(OPERAIDLE, false);
-
-    capabilities.setCapability(BACKEND, defaultSettings.getBackend());
 
     return capabilities;
   }
