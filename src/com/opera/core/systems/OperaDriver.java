@@ -173,11 +173,6 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
   public static final String NO_QUIT = "opera.no_quit";
 
   /**
-   * (Boolean) Whether to guess the path to Opera if it isn't set in <code>opera.binary</code>.
-   */
-  public static final String GUESS_BINARY_PATH = "opera.guess_binary_path";
-
-  /**
    * (String) The product we are using, for example "desktop" or "core".
    */
   public static final String PRODUCT = "opera.product";
@@ -283,15 +278,8 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     }
 
     if ((Boolean) capabilities.getCapability(AUTOSTART)) {
-      if (((Boolean) capabilities.getCapability(GUESS_BINARY_PATH))
-          && capabilities.getCapability(BINARY) == null) {
+      if (capabilities.getCapability(BINARY) == null) {
         capabilities.setCapability(BINARY, OperaPaths.operaPath());
-      } else if (capabilities.getCapability(BINARY) == null) {
-        // Don't guess, only check environment variable
-        String path = System.getenv("OPERA_PATH");
-        if (path != null && !path.isEmpty()) {
-          capabilities.setCapability(BINARY, path);
-        }
       }
 
       settings = new OperaLauncherRunnerSettings();
@@ -353,7 +341,6 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     capabilities.setCapability(AUTOSTART, true);
     capabilities.setCapability(NO_RESTART, false);
     capabilities.setCapability(NO_QUIT, false);
-    capabilities.setCapability(GUESS_BINARY_PATH, true);
     capabilities.setCapability(OPERAIDLE, false);
 
     return capabilities;
@@ -372,7 +359,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
   }
 
   /**
-   * Initialise required Scope services.
+   * Initialize required Scope services.
    */
   protected void init() {
     createScopeServices();
