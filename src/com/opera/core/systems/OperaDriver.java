@@ -197,6 +197,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
    * access these variable in tests.
    */
   protected DesiredCapabilities capabilities;
+  protected OperaLauncherRunnerSettings settings;
   protected OperaRunner runner;
 
   protected IEcmaScriptDebugger debugger;
@@ -292,7 +293,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
         }
       }
 
-      OperaLauncherRunnerSettings settings = new OperaLauncherRunnerSettings();
+      settings = new OperaLauncherRunnerSettings();
       settings.setBinary((String) capabilities.getCapability(BINARY));
       settings.setHost((String) capabilities.getCapability(HOST));
       settings.setPort((Integer) capabilities.getCapability(PORT));

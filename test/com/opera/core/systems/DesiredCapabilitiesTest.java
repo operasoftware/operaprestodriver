@@ -31,6 +31,7 @@ import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriverException;
+import org.openqa.selenium.net.NetworkUtils;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.io.File;
@@ -45,6 +46,8 @@ import static org.junit.Assert.fail;
 
 public class DesiredCapabilitiesTest extends OperaDriverTestCase {
 
+  public static final NetworkUtils NETWORK_UTILS = new NetworkUtils();
+
   public DesiredCapabilities capabilities;
 
   /**
@@ -52,6 +55,8 @@ public class DesiredCapabilitiesTest extends OperaDriverTestCase {
    */
   @BeforeClass
   public static void setup() {
+    driver.quit();
+    driver = null;
   }
 
   /**
@@ -135,14 +140,17 @@ public class DesiredCapabilitiesTest extends OperaDriverTestCase {
 
   @Test
   public void testSettingHost() {
-    capabilities.setCapability(OperaDriver.HOST, "localhost");
+    String host = NETWORK_UTILS.getPrivateLocalAddress();  // 127.0.0.1
+    capabilities.setCapability(OperaDriver.HOST, host);
     driver = new TestOperaDriver(capabilities);
     assertNotNull(driver);
+    assertEquals(host, driver.getCapabilities().getCapability(OperaDriver.HOST));
+    assertEquals(host, driver.getSettings().getHost());
     driver.quit();
   }
 
   @Test
-  @Ignore(products = CORE, value = "core does not reset port number if -debugproxy is ommitted")
+  @Ignore(products = CORE, value = "core does not reset port number if -debugproxy is omitted")
   public void testSettingPort() {
     capabilities.setCapability(OperaDriver.PORT, -1);
     driver = new TestOperaDriver(capabilities);
