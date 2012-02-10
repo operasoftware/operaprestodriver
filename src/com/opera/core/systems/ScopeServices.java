@@ -25,6 +25,7 @@ import com.opera.core.systems.runner.OperaRunner;
 import com.opera.core.systems.scope.ScopeCommand;
 import com.opera.core.systems.scope.exceptions.CommunicationException;
 import com.opera.core.systems.scope.handlers.IConnectionHandler;
+import com.opera.core.systems.scope.handlers.ScopeEventHandler;
 import com.opera.core.systems.scope.internal.OperaFlags;
 import com.opera.core.systems.scope.internal.OperaIntervals;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo;
@@ -203,7 +204,7 @@ public class ScopeServices implements IConnectionHandler {
       throws IOException {
     this.versions = versions;
     tagCounter = new AtomicInteger();
-    stpThread = new StpThread(port, this, new UmsEventHandler(this), manualConnect);
+    stpThread = new StpThread(port, this, new ScopeEventHandler(this), manualConnect);
     selftestOutput = new StringBuilder();
   }
 

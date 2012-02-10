@@ -32,16 +32,16 @@ import com.opera.core.systems.scope.protos.WmProtos.WindowInfo;
  *
  * @author Deniz Turkoglu <dturkoglu@opera.com>
  */
-public class AbstractEventHandler implements EventHandler {
+public class ScopeEventHandler implements EventHandler {
 
   protected ScopeServices services;
 
-  public AbstractEventHandler(ScopeServices services) {
+  public ScopeEventHandler(ScopeServices services) {
     this.services = services;
   }
 
   /**
-   * Changes the window-manager's active window on active window event
+   * Changes the window-manager's active window on active window event.
    */
   public void onActiveWindow(Integer id) {
     services.getWindowManager().setActiveWindowId(id);
@@ -82,16 +82,16 @@ public class AbstractEventHandler implements EventHandler {
     services.onOperaIdle();
   }
 
-  public void onRuntimeStarted(RuntimeInfo started) {
-    throw new UnsupportedOperationException("Not supported in STP/0");
+  public void onRuntimeStarted(RuntimeInfo info) {
+    services.getDebugger().addRuntime(info);
   }
 
-  public void onUpdatedWindow(WindowInfo window) {
-    throw new UnsupportedOperationException("Not supported in STP/0");
+  public void onUpdatedWindow(WindowInfo info) {
+    services.getWindowManager().addWindow(info);
   }
 
   public void onMessage(ConsoleMessage message) {
-    throw new UnsupportedOperationException("Not supported in STP/0");
+    throw new UnsupportedOperationException();
   }
 
   public void onHttpResponse(int responseCode) {
