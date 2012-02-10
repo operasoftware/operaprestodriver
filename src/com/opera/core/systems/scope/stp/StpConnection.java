@@ -62,7 +62,7 @@ public class StpConnection implements SocketListener {
   private IConnectionHandler connectionHandler;
 
   public enum State {
-    SERVICELIST, HANDSHAKE, EMPTY, STP;
+    SERVICELIST, HANDSHAKE, EMPTY, STP
   }
 
   private State state = State.SERVICELIST;
@@ -530,15 +530,16 @@ public class StpConnection implements SocketListener {
         break;
       case 4: // error
         Error error = Error.parseFrom(payload);
-      logger.finest("RECV ERROR: " + error.toString());
+        logger.finest("RECV ERROR: " + error.toString());
 
-      String service = error.getService();
-      int status = error.getStatus();
+        String service = error.getService();
+        int status = error.getStatus();
 
-      // We get exceptions when, in the ecmascript services, we use a runtime
-      // that doesn't exist. We can ignore these exceptions and carry on.
-      if ((service.equals("ecmascript-debugger") && status == Status.INTERNAL_ERROR.getNumber()) ||
-          (service.equals("ecmascript") && status == Status.BAD_REQUEST.getNumber())) {
+        // We get exceptions when, in the ecmascript services, we use a runtime
+        // that doesn't exist. We can ignore these exceptions and carry on.
+        if ((service.equals("ecmascript-debugger") && status == Status.INTERNAL_ERROR.getNumber())
+            ||
+            (service.equals("ecmascript") && status == Status.BAD_REQUEST.getNumber())) {
           signalResponse(error.getTag(), null);
         } else {
           logger.log(Level.SEVERE, "Error: {0}", error.toString());
