@@ -28,7 +28,7 @@ import com.opera.core.systems.scope.protos.SelftestProtos.SelftestOutput;
 import com.opera.core.systems.scope.protos.WmProtos.WindowInfo;
 
 /**
- * Event handler for scope events and network exceptions
+ * Event handler for Scope events and network exceptions.
  *
  * @author Deniz Turkoglu <dturkoglu@opera.com>
  */
@@ -38,40 +38,38 @@ public abstract class AbstractEventHandler {
   }
 
   /**
-   * Fired when a new runtime started is received Runtime-started is needed for tracking ecmascript
-   * injections
+   * Fired when a new runtime started is received Runtime-started is needed for tracking EcmaScript
+   * injections.
    */
-
   public abstract void onRuntimeStarted(RuntimeInfo started);
 
   /**
-   * Fired on new console messages
+   * Fired on new console messages.
    */
-
   public abstract void onMessage(ConsoleMessage message);
 
   /**
-   * Fired when a runtime is stopped and no longer injectable
+   * Fired when a runtime is stopped and no longer injectable.
    */
   public abstract void onRuntimeStopped(Integer id);
 
   /**
-   * Fired when a new window is created or window has incoming changes (such as title change)
+   * Fired when a new window is created or window has incoming changes (such as title change).
    */
   public abstract void onUpdatedWindow(WindowInfo window);
 
   /**
-   * Fired when a window becomes active (steals focus)
+   * Fired when a window becomes active (steals focus).
    */
   public abstract void onActiveWindow(Integer id);
 
   /**
-   * Fired when a window instance is closed
+   * Fired when a window instance is closed.
    */
   public abstract void onWindowClosed(Integer id);
 
   /**
-   * Fired when a window load is complete
+   * Fired when a window load is complete.
    *
    * @param windowId Id of the window that is loaded
    */
@@ -79,47 +77,47 @@ public abstract class AbstractEventHandler {
 
   /**
    * Fired when a desktop window is shown at the last possible moment so the window should be fully
-   * visible
+   * visible.
    */
   public abstract void onDesktopWindowShown(DesktopWindowInfo info);
 
   /**
-   * Fired when opera is idle
+   * Fired when opera is idle.
    */
   public abstract void onOperaIdle();
 
   /**
-   * Fired when a new window is created or window has incoming changes (such as title change)
+   * Fired when a new window is created or window has incoming changes (such as title change).
    */
   public abstract void onDesktopWindowUpdated(DesktopWindowInfo info);
 
   /**
-   * Fired when a window becomes active (steals focus)
+   * Fired when a window becomes active (steals focus).
    */
   public abstract void onDesktopWindowActivated(DesktopWindowInfo info);
 
   /**
-   * Fired when a window instance is closed
+   * Fired when a window instance is closed.
    */
   public abstract void onDesktopWindowClosed(DesktopWindowInfo info);
 
   /**
-   * Fired when loading Finished event
+   * Fired when loading Finished event.
    */
   public abstract void onDesktopWindowLoaded(DesktopWindowInfo info);
 
   /**
-   * Fired when menu shown
+   * Fired when menu shown.
    */
   public abstract void onQuickMenuShown(QuickMenuInfo menuInfoShown);
 
   /**
-   * Fired when menu closed
+   * Fired when menu closed.
    */
   public abstract void onQuickMenuClosed(QuickMenuID menuId);
 
   /**
-   * Fired when menu item is pressed
+   * Fired when menu item is pressed.
    */
   public abstract void onQuickMenuItemPressed(QuickMenuItemID menuItemID);
 
@@ -133,11 +131,13 @@ public abstract class AbstractEventHandler {
 
   public int parseHeader(String header) {
     int responseCode = 0;
+
     try {
       responseCode = Integer.parseInt(header.split(" ")[1]);
     } catch (NumberFormatException e) {
       // ignore for now
     }
+
     return responseCode;
   }
 
