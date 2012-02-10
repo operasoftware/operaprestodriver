@@ -94,7 +94,7 @@ public class ScopeServices implements IConnectionHandler {
   private StpConnection connection = null;
 
   private StpThread stpThread;
-  boolean shuttingDown = false;
+  private boolean shuttingDown = false;
 
   private List<String> listedServices;
 
