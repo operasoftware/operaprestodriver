@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright 2011 Opera Software ASA
+# Copyright 2011-2012 Opera Software ASA
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -23,22 +23,22 @@ import re
 # Might be lower, but not tested. Definitely needs to be > 2.3.0
 MIN_PROTOC_VERSION = '2.4.1'
 SERVICES = {
-  'console_logger-2.0': ['com.opera.core.systems.scope.protos', 'ConsoleLoggerProtos'],
-  'cookie_manager-1.0': ['com.opera.core.systems.scope.protos', 'CookieMngProtos'],
-  'core_1.3': ['com.opera.core.systems.scope.protos', 'CoreProtos'],
+  'console_logger': ['com.opera.core.systems.scope.protos', 'ConsoleLoggerProtos'],
+  'cookie_manager': ['com.opera.core.systems.scope.protos', 'CookieMngProtos'],
+  'core': ['com.opera.core.systems.scope.protos', 'CoreProtos'],
   'desktop_utils': ['com.opera.core.systems.scope.protos', 'DesktopUtilsProtos'],
   'desktop_window_manager': ['com.opera.core.systems.scope.protos', 'DesktopWmProtos'],
-  'ecmascript-1.1': ['com.opera.core.systems.scope.protos', 'EcmascriptProtos'],
+  'ecmascript': ['com.opera.core.systems.scope.protos', 'EcmascriptProtos'],
   'ecmascript_debugger-6.1': ['com.opera.core.systems.scope.protos', 'Esdbg6Protos'],
   'ecmascript_debugger-5.0': ['com.opera.core.systems.scope.protos', 'EsdbgProtos'],
-  'exec-2.1': ['com.opera.core.systems.scope.protos', 'ExecProtos'],
-  'http_logger-2.0': ['com.opera.core.systems.scope.protos', 'HttpLoggerProtos'],
-  'prefs-1.0': ['com.opera.core.systems.scope.protos', 'PrefsProtos'],
-  'scope-1.0': ['com.opera.core.systems.scope.protos', 'ScopeProtos'],
+  'exec': ['com.opera.core.systems.scope.protos', 'ExecProtos'],
+  'http_logger': ['com.opera.core.systems.scope.protos', 'HttpLoggerProtos'],
+  'prefs': ['com.opera.core.systems.scope.protos', 'PrefsProtos'],
+  'scope': ['com.opera.core.systems.scope.protos', 'ScopeProtos'],
   'selftest': ['com.opera.core.systems.scope.protos', 'SelftestProtos'],
   'system_input': ['com.opera.core.systems.scope.protos', 'SystemInputProtos'],
   'ums': ['com.opera.core.systems.scope.protos', 'UmsProtos'],
-  'window_manager-2.1': ['com.opera.core.systems.scope.protos', 'WmProtos'],
+  'window_manager': ['com.opera.core.systems.scope.protos', 'WmProtos'],
 
   # NOTE: This is not a scope protocol and the generated Java must be moved
   # to src/com/opera/core/systems/runner/launcher/
