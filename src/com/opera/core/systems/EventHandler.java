@@ -28,10 +28,9 @@ import com.opera.core.systems.scope.protos.SelftestProtos.SelftestOutput;
 import com.opera.core.systems.scope.protos.WmProtos.WindowInfo;
 
 /**
- * Provides an interface to the Scope protocol.
+ * Provides an event handler to the Scope protocol.
  * 
  * @author Deniz Turkoglu
- * 
  */
 public class EventHandler extends AbstractEventHandler {
 
@@ -57,11 +56,10 @@ public class EventHandler extends AbstractEventHandler {
   @Override
   public void onRuntimeStopped(Integer id) {
     services.getDebugger().removeRuntime(id);
-    // FIXME this event is quite buggy, ignore
-    /*
-     * if(stopped.getRuntimeId() == services.getDebugger().getRuntimeId())
-     * services.getDebugger().setRuntimeId(0);
-     */
+
+    // TODO(dturkoglu): This event is quite buggy, ignore
+    // if(stopped.getRuntimeId() == services.getDebugger().getRuntimeId())
+    // services.getDebugger().setRuntimeId(0);
   }
 
   @Override
@@ -70,8 +68,8 @@ public class EventHandler extends AbstractEventHandler {
   }
 
   /**
-   * Handles windows that have been closed. Removes it from the list and removes the runtimes that
-   * are associated with it
+   * Handles windows that have been closed.  Removes it from the list and removes the runtimes that
+   * are associated with it.
    */
   @Override
   public void onWindowClosed(Integer id) {
@@ -80,20 +78,12 @@ public class EventHandler extends AbstractEventHandler {
     services.getDebugger().cleanUpRuntimes(id);
   }
 
-  /**
-   * Fired when a window is loaded
-   * 
-   * @param windowId ID of the window that fired the event
-   */
   @Override
   public void onWindowLoaded(int windowId) {
     services.getDebugger().cleanUpRuntimes(windowId);
     services.onWindowLoaded(windowId);
   }
 
-  /**
-   * Fired when opera is idle
-   */
   @Override
   public void onOperaIdle() {
     services.onOperaIdle();

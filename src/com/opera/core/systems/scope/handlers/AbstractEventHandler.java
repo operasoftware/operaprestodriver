@@ -71,7 +71,7 @@ public abstract class AbstractEventHandler {
   /**
    * Fired when a window load is complete.
    *
-   * @param windowId Id of the window that is loaded
+   * @param windowId ID of the window that is loaded
    */
   public abstract void onWindowLoaded(int windowId);
 
