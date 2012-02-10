@@ -55,7 +55,7 @@ public class CoreUtils extends AbstractService implements ICoreUtils {
   }
 
   public void init() {
-    if (supportsMeta) {
+    if (hasMetaInformation()) {
       browserInformation = getBrowserInformation();
     }
   }
@@ -65,44 +65,32 @@ public class CoreUtils extends AbstractService implements ICoreUtils {
   }
 
   public String getCoreVersion() {
-    if (!browserInformation.hasCoreVersion()) {
-      throw new UnsupportedCommandException("not available in this product");
-    }
+    assertHasMetaInformation();
     return browserInformation.getCoreVersion();
   }
 
   public String getOperatingSystem() {
-    if (!browserInformation.hasOperatingSystem()) {
-      throw new UnsupportedCommandException("not available in this product");
-    }
+    assertHasMetaInformation();
     return browserInformation.getOperatingSystem();
   }
 
   public String getProduct() {
-    if (!browserInformation.hasProduct()) {
-      throw new UnsupportedCommandException("not available in this product");
-    }
+    assertHasMetaInformation();
     return browserInformation.getProduct();
   }
 
   public String getBinaryPath() {
-    if (!browserInformation.hasBinaryPath()) {
-      throw new UnsupportedCommandException("not available in this product");
-    }
+    assertHasMetaInformation();
     return browserInformation.getBinaryPath();
   }
 
   public String getUserAgent() {
-    if (!browserInformation.hasUserAgent()) {
-      throw new UnsupportedCommandException("not available in this product");
-    }
+    assertHasMetaInformation();
     return browserInformation.getUserAgent();
   }
 
   public Integer getProcessID() {
-    if (!browserInformation.hasProcessID()) {
-      throw new UnsupportedCommandException("not available in this product");
-    }
+    assertHasMetaInformation();
     return browserInformation.getProcessID();
   }
 
@@ -184,6 +172,12 @@ public class CoreUtils extends AbstractService implements ICoreUtils {
     }
 
     return clearFlags;
+  }
+
+  private void assertHasMetaInformation() {
+    if (!hasMetaInformation()) {
+      throw new UnsupportedCommandException("not available in this product");
+    }
   }
 
 }
