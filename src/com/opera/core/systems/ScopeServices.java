@@ -103,94 +103,6 @@ public class ScopeServices implements IConnectionHandler {
   private StringBuilder selftestOutput;
   private String product;
 
-  public Map<String, String> getVersions() {
-    return versions;
-  }
-
-  public StpConnection getConnection() {
-    return connection;
-  }
-
-  public IEcmaScriptDebugger getDebugger() {
-    return debugger;
-  }
-
-  public void setDebugger(IEcmaScriptDebugger debugger) {
-    this.debugger = debugger;
-  }
-
-  public IOperaExec getExec() {
-    return exec;
-  }
-
-  public void setExec(IOperaExec exec) {
-    this.exec = exec;
-  }
-
-  public IWindowManager getWindowManager() {
-    return windowManager;
-  }
-
-  public void setWindowManager(IWindowManager windowManager) {
-    this.windowManager = windowManager;
-  }
-
-  public ICoreUtils getCoreUtils() {
-    return coreUtils;
-  }
-
-  public void setCoreUtils(ICoreUtils coreUtils) {
-    this.coreUtils = coreUtils;
-  }
-
-  public IPrefs getPrefs() {
-    return prefs;
-  }
-
-  public void setPrefs(IPrefs prefs) {
-    this.prefs = prefs;
-  }
-
-  public IDesktopWindowManager getDesktopWindowManager() {
-    return desktopWindowManager;
-  }
-
-  public void setDesktopWindowManager(IDesktopWindowManager desktopWindowManager) {
-    this.desktopWindowManager = desktopWindowManager;
-  }
-
-  public IDesktopUtils getDesktopUtils() {
-    return desktopUtils;
-  }
-
-  public void setDesktopUtils(IDesktopUtils desktopUtils) {
-    this.desktopUtils = desktopUtils;
-  }
-
-  public SystemInputManager getSystemInputManager() {
-    return systemInputManager;
-  }
-
-  public void setSystemInputManager(SystemInputManager manager) {
-    this.systemInputManager = manager;
-  }
-
-  public ICookieManager getCookieManager() {
-    return cookieManager;
-  }
-
-  public void setCookieManager(ICookieManager cookieManager) {
-    this.cookieManager = cookieManager;
-  }
-
-  public ISelftest getSelftest() {
-    return selftest;
-  }
-
-  public void setSelftest(ISelftest selftest) {
-    this.selftest = selftest;
-  }
-
   /**
    * Creates the Scope server on specified address and port, as well as enabling the required
    * services for OperaDriver.
@@ -853,6 +765,96 @@ public class ScopeServices implements IConnectionHandler {
 
   public void setProduct(String product) {
     this.product = product;
+  }
+
+  public Map<String, String> getVersions() {
+    return versions;
+  }
+
+  public StpConnection getConnection() {
+    return connection;
+  }
+
+  public IEcmaScriptDebugger getDebugger() {
+    return debugger;
+  }
+
+  public void setDebugger(IEcmaScriptDebugger debugger) {
+    this.debugger = debugger;
+  }
+
+  // Getters and setters for the different Scope services:
+
+  public IOperaExec getExec() {
+    return exec;
+  }
+
+  public void setExec(IOperaExec exec) {
+    this.exec = exec;
+  }
+
+  public IWindowManager getWindowManager() {
+    return windowManager;
+  }
+
+  public void setWindowManager(IWindowManager windowManager) {
+    this.windowManager = windowManager;
+  }
+
+  public ICoreUtils getCoreUtils() {
+    return coreUtils;
+  }
+
+  public void setCoreUtils(ICoreUtils coreUtils) {
+    this.coreUtils = coreUtils;
+  }
+
+  public IPrefs getPrefs() {
+    return prefs;
+  }
+
+  public void setPrefs(IPrefs prefs) {
+    this.prefs = prefs;
+  }
+
+  public IDesktopWindowManager getDesktopWindowManager() {
+    return desktopWindowManager;
+  }
+
+  public void setDesktopWindowManager(IDesktopWindowManager desktopWindowManager) {
+    this.desktopWindowManager = desktopWindowManager;
+  }
+
+  public IDesktopUtils getDesktopUtils() {
+    return desktopUtils;
+  }
+
+  public void setDesktopUtils(IDesktopUtils desktopUtils) {
+    this.desktopUtils = desktopUtils;
+  }
+
+  public SystemInputManager getSystemInputManager() {
+    return systemInputManager;
+  }
+
+  public void setSystemInputManager(SystemInputManager manager) {
+    this.systemInputManager = manager;
+  }
+
+  public ICookieManager getCookieManager() {
+    return cookieManager;
+  }
+
+  public void setCookieManager(ICookieManager cookieManager) {
+    this.cookieManager = cookieManager;
+  }
+
+  public ISelftest getSelftest() {
+    return selftest;
+  }
+
+  public void setSelftest(ISelftest selftest) {
+    this.selftest = selftest;
   }
 
 }
