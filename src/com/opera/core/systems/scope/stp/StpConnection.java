@@ -21,7 +21,6 @@ import com.google.protobuf.CodedOutputStream;
 
 import com.opera.core.systems.scope.handlers.EventHandler;
 import com.opera.core.systems.scope.handlers.IConnectionHandler;
-import com.opera.core.systems.scope.internal.OperaIntervals;
 import com.opera.core.systems.scope.protos.UmsProtos.Command;
 import com.opera.core.systems.scope.protos.UmsProtos.Error;
 import com.opera.core.systems.scope.protos.UmsProtos.Event;
@@ -316,11 +315,20 @@ public class StpConnection implements SocketListener {
 
   /**
    * Processes an incoming message and passes it to event handler if needed, the following events
-   * are to our interest: Runtime-Started : ecmascript runtime starts in Opera (that we can inject
-   * to) Runtime-Stopped : ecmascript runtime stops (not used, buggy) Message: fired from console
-   * log event Updated-Window: a window is updated OR created (opener-id=0) Active-Window: window
-   * focus changed Window-Closed: self explanatory If message matches none it is added to the
-   * response queue (probably response to command).
+   * are to our interest:
+   *
+   * Runtime-Started: ecmascript runtime starts in Opera (that we can inject to)
+   *
+   * Runtime-Stopped: ecmascript runtime stops (not used, buggy)
+   *
+   * Message: fired from console log event
+   *
+   * Updated-Window: a window is updated OR created (opener-id=0)
+   *
+   * Active-Window: window focus changed
+   *
+   * Window-Closed: self explanatory If message matches none it is added to the response queue
+   * (probably response to command).
    */
   public void parseServiceList(String message) {
     logger.finer("parseServiceList: \"" + message + "\"");
