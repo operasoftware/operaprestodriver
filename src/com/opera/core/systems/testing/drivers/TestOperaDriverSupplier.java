@@ -16,14 +16,18 @@ limitations under the License.
 
 package com.opera.core.systems.testing.drivers;
 
+import com.opera.core.systems.OperaDriver;
+
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.remote.DesiredCapabilities;
+
+import java.util.logging.Level;
 
 /**
  * @author Andreas Tolf Tolfsen <andreastt@opera.com>
  */
 public class TestOperaDriverSupplier extends DefaultOperaDriverSupplier {
-  
+
   public TestOperaDriverSupplier() {
     this(TestOperaDriver.getDefaultCapabilities());
   }
@@ -31,19 +35,21 @@ public class TestOperaDriverSupplier extends DefaultOperaDriverSupplier {
   public TestOperaDriverSupplier(Capabilities capabilities) {
     super(capabilities);
   }
-  
+
   public TestOperaDriver get() {
     if (capabilities == null) {
       return null;
     }
-    
+
     if (!DesiredCapabilities.opera().getBrowserName().equals(capabilities.getBrowserName())) {
       return null;
     }
-    
+
+    ((DesiredCapabilities) capabilities).setCapability(OperaDriver.LOGGING_LEVEL, Level.FINE);
+
     TestOperaDriver driver = new TestOperaDriver(capabilities);
     driver.preferences().set("User Prefs", "Ignore Unrequested Popups", false);
     return driver;
   }
-  
+
 }
