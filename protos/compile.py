@@ -19,6 +19,7 @@ import sys
 import argparse
 import subprocess
 import re
+import tempfile
 
 # Might be lower, but not tested. Definitely needs to be > 2.3.0
 MIN_PROTOC_VERSION = '2.4.1'
@@ -90,21 +91,28 @@ def main():
     content = remove_service_block(content)
     content = add_options(content, service_package, service_class)
 
-    # TODO: Create a proper temp file?
-    with open('temp.proto', 'w') as f:
-      f.write(content)
+    # Write preprocessed content to file and compile the files
+    t = tempfile.NamedTemporaryFile()
+    try:
+      t.write(content)
+      t.seek(0)  # make sure file is written properly
 
-    print "Compiling %s (as temp.proto)..." % fname
-    if not compile_proto(args.protoc, args.java_out, 'temp.proto'):
-      return RESULT['PROTOC_ERROR']
+      print "Compiling %s" % fname
+      if not compile_proto(args.protoc, args.java_out, t.name):
+        return RESULT['PROTOC_ERROR']
+    finally:
+      t.close()
 
   print "Successfully compiled %d files" % len(args.proto_file)
   return 0
 
-def compile_proto(protoc, out, fname):
-  retcode = subprocess.call([protoc, '--java_out', out, fname])
+def compile_proto(protoc, out, file):
+  proto_path = os.path.abspath(os.path.join(file, os.path.pardir))
+  fname = os.path.basename(file)
+
+  retcode = subprocess.call([protoc, '--proto_path', proto_path, '--java_out', out, file])
   if retcode != 0:
-    sys.stderr.write("Error: Protoc error when compiling %s\n" % fname)
+    sys.stderr.write("Error: protoc error when compiling %s\n" % fname)
     return False
   return True
 
