@@ -53,10 +53,6 @@ public class ScopeEventHandler implements EventHandler {
    */
   public void onRuntimeStopped(Integer id) {
     services.getDebugger().removeRuntime(id);
-
-    // TODO(dturkoglu): This event is quite buggy, ignore
-    // if(stopped.getRuntimeId() == services.getDebugger().getRuntimeId())
-    // services.getDebugger().setRuntimeId(0);
   }
 
   public void onRequest(int windowId) {
