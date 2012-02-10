@@ -193,6 +193,11 @@ public class ScopeServices implements IConnectionHandler {
   /**
    * Creates the Scope server on specified address and port, as well as enabling the required
    * services for OperaDriver.
+   *
+   * @param versions      list of required services and their version number
+   * @param port          the port on which to start the Scope server
+   * @param manualConnect whether to output ready message with port number when starting
+   * @throws IOException if an I/O error occurs
    */
   public ScopeServices(Map<String, String> versions, int port, boolean manualConnect)
       throws IOException {
