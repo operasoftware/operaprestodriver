@@ -29,6 +29,13 @@ public enum OperaIntervals {
   RESPONSE_TIMEOUT(5000),
 
   /**
+   * An implicit wait is to tell WebDriver to poll the DOM for a certain amount of time when trying
+   * to find an element or elements if they are not immediately available.  The default setting is
+   * 0.  Once set, the implicit wait is set for the life of the WebDriver object instance.
+   */
+  IMPLICIT_WAIT(0),
+
+  /**
    * The page load timeout specifies how long the driver waits for a page to finish loading before
    * returning the control to the user.
    */
@@ -39,13 +46,12 @@ public enum OperaIntervals {
   POLL_INTERVAL(10),
   SCRIPT_RETRY(5),
   SCRIPT_RETRY_INTERVAL(50),
-  EXEC_SLEEP(100),
   HANDSHAKE_TIMEOUT(30000),
   SERVER_PORT(7001),
   KILL_GRACE_TIMEOUT(1000),
   BACKWARDS_COMPATIBLE(1),
   DEFAULT_RESPONSE_TIMEOUT(10000),
-  WAIT_FOR_ELEMENT(0),
+
   QUIT_POLL_INTERVAL(100),
   QUIT_RESPONSE_TIMEOUT(10000),
   SCRIPT_TIMEOUT(10000),

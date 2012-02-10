@@ -615,7 +615,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
       isAvailable = (id != null);
 
       if (!isAvailable) {
-        sleep(OperaIntervals.EXEC_SLEEP.getValue());
+        sleep(OperaIntervals.IMPLICIT_WAIT.getValue());
       }
     } while (!isAvailable && hasTimeRemaining(start));
 
@@ -695,7 +695,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
       }
 
       if (count == 0 && hasTimeRemaining(start)) {
-        sleep(OperaIntervals.EXEC_SLEEP.getValue());
+        sleep(OperaIntervals.IMPLICIT_WAIT.getValue());
       } else {
         break;
       }
@@ -1042,7 +1042,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
   public class OperaTimeouts implements Timeouts {
 
     public Timeouts implicitlyWait(long time, TimeUnit unit) {
-      OperaIntervals.WAIT_FOR_ELEMENT.setValue(TimeUnit.MILLISECONDS.convert(time, unit));
+      OperaIntervals.IMPLICIT_WAIT.setValue(TimeUnit.MILLISECONDS.convert(time, unit));
       return this;
     }
 
@@ -1311,7 +1311,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
   }
 
   protected boolean hasTimeRemaining(long start) {
-    return System.currentTimeMillis() - start < OperaIntervals.WAIT_FOR_ELEMENT.getValue();
+    return System.currentTimeMillis() - start < OperaIntervals.IMPLICIT_WAIT.getValue();
   }
 
   protected List<WebElement> processElements(Integer id) {
@@ -1396,7 +1396,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
       }
 
       if (count == 0 && hasTimeRemaining(start)) {
-        sleep(OperaIntervals.EXEC_SLEEP.getValue());
+        sleep(OperaIntervals.IMPLICIT_WAIT.getValue());
       } else {
         break;
       }
@@ -1420,7 +1420,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
       isAvailable = (id != null);
 
       if (!isAvailable) {
-        sleep(OperaIntervals.EXEC_SLEEP.getValue());
+        sleep(OperaIntervals.IMPLICIT_WAIT.getValue());
       }
     } while (!isAvailable && hasTimeRemaining(start));
 
