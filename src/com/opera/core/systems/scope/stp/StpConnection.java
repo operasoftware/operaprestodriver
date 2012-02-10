@@ -149,12 +149,6 @@ public class StpConnection implements SocketListener {
   }
 
   public void sendEnableStp1() {
-    // Temporary fix for CORE-33057
-    try {
-      Thread.sleep(OperaIntervals.EXEC_SLEEP.getValue());
-    } catch (InterruptedException e) {
-      Thread.currentThread().interrupt();
-    }
     send("*enable stp-1");
   }
 
