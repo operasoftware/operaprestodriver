@@ -16,7 +16,7 @@ limitations under the License.
 
 package com.opera.core.systems.scope.stp;
 
-import com.opera.core.systems.scope.handlers.AbstractEventHandler;
+import com.opera.core.systems.scope.handlers.EventHandler;
 import com.opera.core.systems.scope.handlers.IConnectionHandler;
 import com.opera.core.systems.util.SocketMonitor;
 
@@ -40,7 +40,7 @@ public class StpThread extends Thread {
   private SocketMonitor monitor;
 
   public StpThread(int port, IConnectionHandler handler,
-                   AbstractEventHandler eventHandler, boolean manualConnect)
+                   EventHandler eventHandler, boolean manualConnect)
       throws IOException {
     monitor = new SocketMonitor();
     listener = new StpConnectionListener(port, handler, eventHandler, manualConnect, monitor);

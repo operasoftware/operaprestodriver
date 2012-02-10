@@ -19,7 +19,7 @@ package com.opera.core.systems.scope.stp;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.CodedOutputStream;
 
-import com.opera.core.systems.scope.handlers.AbstractEventHandler;
+import com.opera.core.systems.scope.handlers.EventHandler;
 import com.opera.core.systems.scope.handlers.IConnectionHandler;
 import com.opera.core.systems.scope.internal.OperaIntervals;
 import com.opera.core.systems.scope.protos.UmsProtos.Command;
@@ -57,7 +57,7 @@ public class StpConnection implements SocketListener {
   final byte[] prefix = {'S', 'T', 'P', 1};
   private ByteString stpPrefix = ByteString.copyFrom(prefix);
 
-  private AbstractEventHandler eventHandler;
+  private EventHandler eventHandler;
   private UmsEventParser stp1EventHandler;
   private IConnectionHandler connectionHandler;
 
@@ -92,7 +92,7 @@ public class StpConnection implements SocketListener {
    * Initializes variables in object scope, sets 'count known' to false to read byte count (STP/0).
    */
   public StpConnection(SocketChannel socket, IConnectionHandler handler,
-                       AbstractEventHandler eventHandler, SocketMonitor monitor)
+                       EventHandler eventHandler, SocketMonitor monitor)
       throws IOException {
     connectionHandler = handler;
     socketChannel = socket;

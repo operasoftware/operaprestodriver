@@ -16,7 +16,7 @@ limitations under the License.
 
 package com.opera.core.systems.scope.stp;
 
-import com.opera.core.systems.scope.handlers.AbstractEventHandler;
+import com.opera.core.systems.scope.handlers.EventHandler;
 import com.opera.core.systems.scope.handlers.IConnectionHandler;
 import com.opera.core.systems.util.SocketListener;
 import com.opera.core.systems.util.SocketMonitor;
@@ -40,13 +40,13 @@ public class StpConnectionListener implements SocketListener {
   private int port;
   private ServerSocketChannel server = null;
   private IConnectionHandler handler;
-  private AbstractEventHandler eventHandler;
+  private EventHandler eventHandler;
   private boolean manualConnect = false;
   private final Logger logger = Logger.getLogger(this.getClass().getName());
   private SocketMonitor monitor;
 
   public StpConnectionListener(int port, IConnectionHandler handler,
-                               AbstractEventHandler eventHandler, boolean manualConnect,
+                               EventHandler eventHandler, boolean manualConnect,
                                SocketMonitor monitor)
       throws IOException {
     this.port = port;

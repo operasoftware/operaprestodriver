@@ -16,6 +16,7 @@ limitations under the License.
 
 package com.opera.core.systems;
 
+import com.opera.core.systems.scope.handlers.AbstractEventHandler;
 import com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessage;
 import com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeInfo;
 import com.opera.core.systems.scope.protos.WmProtos.WindowInfo;
@@ -25,7 +26,7 @@ import com.opera.core.systems.scope.protos.WmProtos.WindowInfo;
  *
  * @author Deniz Turkoglu
  */
-public class UmsEventHandler extends EventHandler {
+public class UmsEventHandler extends AbstractEventHandler {
 
   public UmsEventHandler(ScopeServices services) {
     super(services);

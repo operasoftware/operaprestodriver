@@ -28,153 +28,118 @@ import com.opera.core.systems.scope.protos.SelftestProtos.SelftestOutput;
 import com.opera.core.systems.scope.protos.WmProtos.WindowInfo;
 
 /**
- * Event handler for Scope events and network exceptions.
+ * Provides an event handler to the Scope protocol.
  *
  * @author Deniz Turkoglu <dturkoglu@opera.com>
  */
-public abstract class AbstractEventHandler {
+public class AbstractEventHandler implements EventHandler {
+
+  protected ScopeServices services;
 
   public AbstractEventHandler(ScopeServices services) {
+    this.services = services;
   }
 
   /**
-   * Fired when a new runtime started is received Runtime-started is needed for tracking EcmaScript
-   * injections.
-   *
-   * @param started information on the runtime that was started
+   * Changes the window-manager's active window on active window event
    */
-  public abstract void onRuntimeStarted(RuntimeInfo started);
+  public void onActiveWindow(Integer id) {
+    services.getWindowManager().setActiveWindowId(id);
+  }
 
   /**
-   * Fired when a runtime is stopped and no longer injectable.
-   *
-   * @param id ID of the runtime is stopped
+   * Remove any runtime that has been stopped.  This call can be quite late and hence is resolved by
+   * cleanup method in onRuntimeStarted.
    */
-  public abstract void onRuntimeStopped(Integer id);
+  public void onRuntimeStopped(Integer id) {
+    services.getDebugger().removeRuntime(id);
+
+    // TODO(dturkoglu): This event is quite buggy, ignore
+    // if(stopped.getRuntimeId() == services.getDebugger().getRuntimeId())
+    // services.getDebugger().setRuntimeId(0);
+  }
+
+  public void onRequest(int windowId) {
+    services.onRequest(windowId);
+  }
 
   /**
-   * Fired on new console messages.
-   *
-   * @param message the incoming message
+   * Handles windows that have been closed.  Removes it from the list and removes the runtimes that
+   * are associated with it.
    */
-  public abstract void onMessage(ConsoleMessage message);
+  public void onWindowClosed(Integer id) {
+    services.onWindowClosed(id);
+    services.getWindowManager().removeWindow(id);
+    services.getDebugger().cleanUpRuntimes(id);
+  }
 
-  /**
-   * Fired when a new window is created or window has incoming changes (such as title change).
-   *
-   * @param window information about the window
-   */
-  public abstract void onUpdatedWindow(WindowInfo window);
+  public void onWindowLoaded(int windowId) {
+    services.getDebugger().cleanUpRuntimes(windowId);
+    services.onWindowLoaded(windowId);
+  }
 
-  /**
-   * Fired when a window becomes active (steals focus).
-   *
-   * @param id ID of the window that becomes active
-   */
-  public abstract void onActiveWindow(Integer id);
+  public void onOperaIdle() {
+    services.onOperaIdle();
+  }
 
-  /**
-   * Fired when a window instance is closed.
-   *
-   * @param id ID of the closed window
-   */
-  public abstract void onWindowClosed(Integer id);
+  public void onRuntimeStarted(RuntimeInfo started) {
+    throw new UnsupportedOperationException("Not supported in STP/0");
+  }
 
-  /**
-   * Fired when a window load is complete.
-   *
-   * @param windowId ID of the window that is loaded
-   */
-  public abstract void onWindowLoaded(int windowId);
+  public void onUpdatedWindow(WindowInfo window) {
+    throw new UnsupportedOperationException("Not supported in STP/0");
+  }
 
-  /**
-   * Fired when a desktop window is shown at the last possible moment so the window should be fully
-   * visible.
-   *
-   * @param window information about the window
-   */
-  public abstract void onDesktopWindowShown(DesktopWindowInfo window);
+  public void onMessage(ConsoleMessage message) {
+    throw new UnsupportedOperationException("Not supported in STP/0");
+  }
 
-  /**
-   * Fired when Opera is idle.
-   */
-  public abstract void onOperaIdle();
+  public void onHttpResponse(int responseCode) {
+    services.getWindowManager().getLastHttpResponseCode().compareAndSet(0, responseCode);
+  }
 
-  /**
-   * Fired when a new window is created or window has incoming changes (such as title change).
-   *
-   * @param window information about the window that is updated
-   */
-  public abstract void onDesktopWindowUpdated(DesktopWindowInfo window);
+  public void onReadyStateChange(ReadyStateChange change) {
+    services.getDebugger().readyStateChanged(change);
+  }
 
-  /**
-   * Fired when a window becomes active (steals focus).
-   *
-   * @param window information about the window that is activated
-   */
-  public abstract void onDesktopWindowActivated(DesktopWindowInfo window);
+  public void onDesktopWindowShown(DesktopWindowInfo info) {
+    services.onDesktopWindowShown(info);
+  }
 
-  /**
-   * Fired when a window instance is closed.
-   *
-   * @param window information about the window that is closed
-   */
-  public abstract void onDesktopWindowClosed(DesktopWindowInfo window);
+  public void onDesktopWindowUpdated(DesktopWindowInfo info) {
+    services.onDesktopWindowUpdated(info);
+  }
 
-  /**
-   * Fired when loading Finished event.
-   *
-   * @param window information about the window that is loaded
-   */
-  public abstract void onDesktopWindowLoaded(DesktopWindowInfo window);
+  public void onDesktopWindowActivated(DesktopWindowInfo info) {
+    services.onDesktopWindowActivated(info);
+  }
 
-  /**
-   * Fired when menu shown.
-   *
-   * @param menuInfoShown menu information of the recently appeared menu
-   */
-  public abstract void onQuickMenuShown(QuickMenuInfo menuInfoShown);
+  public void onDesktopWindowClosed(DesktopWindowInfo info) {
+    services.onDesktopWindowClosed(info);
+  }
 
-  /**
-   * Fired when menu closed.
-   *
-   * @param menuId ID of the recently closed menu
-   */
-  public abstract void onQuickMenuClosed(QuickMenuID menuId);
+  public void onDesktopWindowLoaded(DesktopWindowInfo info) {
+    services.onDesktopWindowLoaded(info);
+  }
 
-  /**
-   * Fired when menu item is pressed.
-   *
-   * @param menuItemID ID of the menu item that was pressed
-   */
-  public abstract void onQuickMenuItemPressed(QuickMenuItemID menuItemID);
+  public void onQuickMenuShown(QuickMenuInfo menuInfoShown) {
+    services.onQuickMenuShown(menuInfoShown);
+  }
 
-  /**
-   * Fired when receiving the output of a selftest.
-   *
-   * @param output the output of the selftest
-   */
-  public abstract void onSelftestOutput(SelftestOutput output);
+  public void onQuickMenuClosed(QuickMenuID menuId) {
+    services.onQuickMenuClosed(menuId);
+  }
 
-  /**
-   * Fired when all selftests are done.
-   */
-  public abstract void onSelftestDone();
+  public void onQuickMenuItemPressed(QuickMenuItemID menuItemID) {
+    services.onQuickMenuItemPressed(menuItemID);
+  }
 
-  /**
-   * Fired when an HTTP response code is received.
-   *
-   * @param responseCode the response code
-   */
-  public abstract void onHttpResponse(int responseCode);
+  public void onSelftestOutput(SelftestOutput output) {
+    services.onSelftestOutput(output);
+  }
 
-  /**
-   * Fired when the ready state of a document is communicated.
-   *
-   * @param change the ready state change
-   */
-  public abstract void onReadyStateChange(ReadyStateChange change);
-
-  public abstract void onRequest(int windowId);
+  public void onSelftestDone() {
+    services.onSelftestDone();
+  }
 
 }
