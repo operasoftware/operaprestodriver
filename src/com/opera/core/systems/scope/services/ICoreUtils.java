@@ -16,7 +16,9 @@
 
 package com.opera.core.systems.scope.services;
 
-import com.opera.core.systems.OperaDriver;
+import com.opera.core.systems.scope.protos.CoreProtos.ClearFlags;
+
+import java.util.List;
 
 /**
  * Core utility service exposing metadata about the browser core in general, i.e. information which
@@ -92,8 +94,8 @@ public interface ICoreUtils {
   /**
    * Clears specified browser data.
    *
-   * @param flags variable list of data types to be cleared
+   * @param flags list of private data to be cleared
    */
-  void clearPrivateData(OperaDriver.PrivateData... flags);
+  void clearPrivateData(List<ClearFlags> flags);
 
 }

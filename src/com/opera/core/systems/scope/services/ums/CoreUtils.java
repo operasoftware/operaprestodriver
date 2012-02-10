@@ -16,12 +16,13 @@ limitations under the License.
 
 package com.opera.core.systems.scope.services.ums;
 
-import com.opera.core.systems.OperaDriver;
+import com.opera.core.systems.OperaDriver.PrivateData;
 import com.opera.core.systems.ScopeServices;
 import com.opera.core.systems.scope.AbstractService;
 import com.opera.core.systems.scope.CoreUtilsCommand;
 import com.opera.core.systems.scope.protos.CoreProtos;
 import com.opera.core.systems.scope.protos.CoreProtos.BrowserInformation;
+import com.opera.core.systems.scope.protos.CoreProtos.ClearFlags;
 import com.opera.core.systems.scope.protos.CoreProtos.ClearPrivateDataArg;
 import com.opera.core.systems.scope.protos.UmsProtos.Response;
 import com.opera.core.systems.scope.services.ICoreUtils;
@@ -105,10 +106,14 @@ public class CoreUtils extends AbstractService implements ICoreUtils {
     return browserInformation.getProcessID();
   }
 
-  public void clearPrivateData(OperaDriver.PrivateData... flags) {
+  public void clearPrivateData(List<ClearFlags> flags) {
     ClearPrivateDataArg.Builder arg = ClearPrivateDataArg.newBuilder();
-    arg.addAllClearList(convertDriverFlagToScopeFlag(flags));
+    arg.addAllClearList(flags);
     executeCommand(CoreUtilsCommand.CLEAR_PRIVATE_DATA, arg);
+  }
+
+  public void clearPrivateData(PrivateData... flags) {
+    clearPrivateData(privateDataFlagsToScope(flags));
   }
 
   // Private methods follow
@@ -120,11 +125,10 @@ public class CoreUtils extends AbstractService implements ICoreUtils {
     return builder.build();
   }
 
-  private List<CoreProtos.ClearFlags> convertDriverFlagToScopeFlag(
-      OperaDriver.PrivateData... flags) {
-    List<CoreProtos.ClearFlags> clearFlags = new ArrayList<CoreProtos.ClearFlags>();
+  private List<CoreProtos.ClearFlags> privateDataFlagsToScope(PrivateData... flags) {
+    List<ClearFlags> clearFlags = new ArrayList<CoreProtos.ClearFlags>();
 
-    for (OperaDriver.PrivateData flag : flags) {
+    for (PrivateData flag : flags) {
       switch (flag) {
         case ALL:
           clearFlags.add(CoreProtos.ClearFlags.CLEAR_ALL);

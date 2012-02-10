@@ -38,6 +38,7 @@ import com.opera.core.systems.scope.services.ICoreUtils;
 import com.opera.core.systems.scope.services.IEcmaScriptDebugger;
 import com.opera.core.systems.scope.services.IOperaExec;
 import com.opera.core.systems.scope.services.IWindowManager;
+import com.opera.core.systems.scope.services.ums.CoreUtils;
 import com.opera.core.systems.util.CapabilitiesSanitizer;
 
 import org.openqa.selenium.Alert;
@@ -1255,12 +1256,12 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     }
 
     /**
-     * Clear private data stored by Opera.
+     * Clear private data stored by Opera by type of data or by all.
      *
-     * @param flags a variable list of private data to clear
+     * @param flags a variable list of flags can be used, or the value ALL to clean all stored data
      */
     public void clearPrivateData(PrivateData... flags) {
-      coreUtils.clearPrivateData(flags);
+      ((CoreUtils) coreUtils).clearPrivateData(flags);
     }
 
   }
