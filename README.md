@@ -124,6 +124,13 @@ Build Path_ and then *"Add JARs..."* or *"Add External JARs..."*
 depending on the layout of your project.
 
 
+Documentation
+-------------
+
+* [API documentation](http://operasoftware.github.com/operadriver/docs/)
+* [Selenium WebDriver documentation](http://seleniumhq.org/docs/03_webdriver.html)
+
+
 Advanced Usage
 --------------
 
