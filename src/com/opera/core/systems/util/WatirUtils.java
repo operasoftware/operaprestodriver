@@ -20,8 +20,6 @@ import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.logging.Logger;
-import java.util.regex.Matcher;
-
 import com.google.common.io.Files;
 
 /**
@@ -135,22 +133,8 @@ public class WatirUtils {
   {
     haystack = haystack.trim();
     needle = needle.trim();
-
-    /*
-    Make sure we escape every character that is considered to be a special character inside a regular expression.
-    Matcher.quoteReplacement() takes care of '\\' and '$'.
-     */
-    needle = Matcher.quoteReplacement(needle);
-    String chars_to_be_escaped = ".|*?+(){}[]^";
-
-    for (char c : chars_to_be_escaped.toCharArray())
-    {
-      String regex = "\\" + c;
-      String replacement = "\\\\" + c;
-      needle = needle.replaceAll(regex, replacement);
-    }
-
     String pattern = needle.replaceAll(ANY_MATCHER, "(?:.+)");
+
     logger.finest("Looking for pattern '"+ pattern +"' in '" + haystack + "'");
 
     if (haystack.matches(pattern))
@@ -158,4 +142,6 @@ public class WatirUtils {
 
     return false;
   }
+
+
 }
