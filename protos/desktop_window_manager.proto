@@ -114,26 +114,27 @@ message QuickWidgetInfo
     *
     */
 	enum QuickWidgetType {
-		UNKNOWN			= 0;
-		BUTTON			= 1;
-		CHECKBOX		= 2;
-		DIALOGTAB		= 3;
-		DROPDOWN		= 4;
-		DROPDOWNITEM	= 5;
-		EDITFIELD		= 6;
-		LABEL			= 7;
-		RADIOBUTTON		= 8;
-		ADDRESSFIELD	= 9;
-		SEARCH			= 10;
-		TOOLBAR			= 11;
-		TREEVIEW		= 12;
-		TREEITEM		= 13;
-		TABBUTTON		= 14;
-		THUMBNAIL		= 15;
-		GRIDLAYOUT		= 16;
-		GRIDITEM		= 17;
-		QUICKFIND		= 18;
-		LISTBOX			= 19;
+		UNKNOWN 	     = 0;
+		BUTTON 		     = 1;
+		CHECKBOX 	     = 2;
+		DIALOGTAB 	     = 3;
+		DROPDOWN	     = 4;
+		DROPDOWNITEM     = 5;
+		EDITFIELD 	     = 6;
+		LABEL 		     = 7;
+		RADIOBUTTON      = 8;
+		ADDRESSFIELD     = 9;
+		SEARCH           = 10;
+		TOOLBAR          = 11;
+		TREEVIEW         = 12;
+		TREEITEM         = 13;
+		TABBUTTON        = 14;
+		THUMBNAIL        = 15;
+		GRIDLAYOUT       = 16;
+		GRIDITEM         = 17;
+		QUICKFIND        = 18;
+		ICON        = 19;
+		PROGRESSBAR = 20;
 	}
     required QuickWidgetType type 	= 2;
     required bool visible	    	= 3;
