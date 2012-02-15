@@ -55,25 +55,33 @@ public class DesktopUtils extends AbstractService implements IDesktopUtils {
   }
 
   public String getString(String enumText, boolean stripAmpersand) {
+    String str = "";
+
     DesktopStringID.Builder stringBuilder = DesktopStringID.newBuilder();
     stringBuilder.setEnumText(enumText);
+    Response response = executeCommand(DesktopUtilsCommand.GET_STRING, stringBuilder);
 
-    Response response = executeCommand(DesktopUtilsCommand.GET_STRING,
-                                       stringBuilder);
-
-    DesktopStringText.Builder stringTextBuilder = DesktopStringText.newBuilder();
-    buildPayload(response, stringTextBuilder);
-    DesktopStringText stringText = stringTextBuilder.build();
-
-    // 	Remember to remove all CRLF
-    String str = removeCR(stringText.getText());
-
-    if (stripAmpersand && str.contains("(&")) {
-      return str.replaceAll("\\(&.\\)", "");
+    if (response == null)
+    {
+      logger.warning("Could not fetch string for ID '" + enumText + "', returning an empty string");
     }
-    if (stripAmpersand && str.contains("&")) {
-      return str.replace("&", "");
+    else
+    {
+      DesktopStringText.Builder stringTextBuilder = DesktopStringText.newBuilder();
+      buildPayload(response, stringTextBuilder);
+      DesktopStringText stringText = stringTextBuilder.build();
+
+      // Remember to remove all CRLF
+      str = removeCR(stringText.getText());
+
+      if (stripAmpersand && str.contains("(&")) {
+        return str.replaceAll("\\(&.\\)", "");
+      }
+      if (stripAmpersand && str.contains("&")) {
+        return str.replace("&", "");
+      }
     }
+
     return str;
   }
 
