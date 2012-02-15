@@ -19,6 +19,7 @@ package com.opera.core.systems.scope.stp;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.CodedOutputStream;
 
+import com.opera.core.systems.scope.DesktopUtilsCommand;
 import com.opera.core.systems.scope.exceptions.CommunicationException;
 import com.opera.core.systems.scope.handlers.EventHandler;
 import com.opera.core.systems.scope.handlers.IConnectionHandler;
@@ -542,7 +543,9 @@ public class StpConnection implements SocketListener {
         // We can ignore these exceptions and carry on.
         if ((service.equals("ecmascript-debugger") &&
              status == Status.INTERNAL_ERROR.getNumber()) ||
-            (service.equals("ecmascript") && status == Status.BAD_REQUEST.getNumber())) {
+            (service.equals("ecmascript") && status == Status.BAD_REQUEST.getNumber()) ||
+            (service.equals("desktop-utils") &&
+             error.getCommandID() == DesktopUtilsCommand.GET_STRING.getCommandID())) {
           signalResponse(error.getTag(), null);
         } else {
           connectionHandler.onException(
