@@ -1,0 +1,36 @@
+syntax = "proto2";
+import "opera/scope/scope_descriptor.proto";
+
+package scope;
+
+option optimize_for         = "SPEED";
+option java_outer_classname = "HttpLoggerProtos";
+option java_package         = "com.opera.core.systems.scope.protos";
+
+message Header
+{
+    /**
+     * An identifier for the request; it is not necessarily unique across
+     * time, as it is just the memory address of the request object.
+     */
+    required uint32 requestID = 1;
+    /**
+     * The window ID is shared across scope. Notably, it's the same as in the ecmascript debugger.
+     * INTERNAL: The value is from Window::id
+     */
+    required uint32 windowID  = 2;
+    /**
+     * Timestamp of the message, in milliseconds since `1970-01-01 00:00 UTC`
+     * (be sure not to rely on the time being correct - this is client time, and
+     * may be wildly different than the host time)
+     * 
+     * Note: Float encoded as string
+     */
+    required string time      = 3;
+    /**
+     * Header of the request/response, i.e. the `HTTP` data up until the first
+     * occurence of `CR+LF+CR+LF`, inclusive.
+     */
+    required string header    = 4;
+}
+

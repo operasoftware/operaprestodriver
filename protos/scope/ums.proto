@@ -5,6 +5,8 @@
  * It was not used to generate the UmsProtos.java file.
  */
 
+service Ums {}
+
 /**
  * STP1-TYPE represents which type of STP/1 message is found in the HEADERS
  * which is represented by the protocol buffer message TransportMessage. The

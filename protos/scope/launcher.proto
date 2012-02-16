@@ -2,6 +2,8 @@
  * Protocol buffer messages used by the Opera PlatformLauncher.
  */
 
+service Launcher {}
+
 /*
  * Empty request buffer for Handshake
  */
