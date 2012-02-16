@@ -568,6 +568,11 @@ public class ScopeServices implements IConnectionHandler {
     waitState.onDesktopWindowLoaded(info);
   }
 
+  public void onDesktopWindowPageChanged(DesktopWindowInfo info) {
+    logger.fine("DesktopWindow page changed: windowId=" + info.getWindowID());
+    waitState.onDesktopWindowPageChanged(info);
+  }
+
   public void onQuickMenuShown(QuickMenuInfo info) {
     logger.finest("QuickMenu shown: menuName=" + info.getMenuId().getMenuName());
     waitState.onQuickMenuShown(info);
@@ -724,6 +729,15 @@ public class ScopeServices implements IConnectionHandler {
     waitState.setWaitEvents(false);
     try {
       return waitState.waitForDesktopWindowClosed(win_name, timeout);
+    } catch (Exception e) {
+      return 0;
+    }
+  }
+
+  public int waitForDesktopWindowPageChanged(String windowName, long timeout) {
+    waitState.setWaitEvents(false);
+    try {
+      return waitState.waitForWindowPageChanged(windowName, timeout);
     } catch (Exception e) {
       return 0;
     }

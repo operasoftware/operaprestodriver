@@ -759,6 +759,22 @@ public class OperaDesktopDriver extends OperaDriver {
         .waitForDesktopWindowClosed(windowName, OperaIntervals.WINDOW_EVENT_TIMEOUT.getValue());
   }
 
+  // TODO: RETURN SOMETHING ELSE THAN WINDOW ID??
+  /**
+  * Waits until new page is shown in the window is shown,
+  * and then returns the window id of the window
+  *
+  * @param windowName - window to wait for shown event on
+  * @return id of window
+  * @throws CommuncationException if no connection
+  */
+    public int waitForWindowPageChanged(String windowName) {
+    if (services.getConnection() == null)
+      throw new CommunicationException("waiting for a window failed because Opera is not connected.");
+
+    return services.waitForDesktopWindowPageChanged(windowName, OperaIntervals.WINDOW_EVENT_TIMEOUT.getValue());
+  }
+
   /**
    * Waits until the window is loaded and then returns the window id of the window.
    *
