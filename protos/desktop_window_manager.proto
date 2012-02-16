@@ -234,6 +234,11 @@ service DesktopWindowManager
      *	getting coordinates of menu items
      **/
     event OnMenuItemPressed returns (QuickMenuItemID) = 14;
+
+	/**
+	*   Sent when new page in a dialog is shown
+	*/
+	event OnWindowPageChanged returns (DesktopWindowInfo) = 15;
 }
 
 message DesktopWindowID
