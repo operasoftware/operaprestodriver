@@ -109,6 +109,13 @@ public abstract class AbstractEventHandler {
   public abstract void onDesktopWindowLoaded(DesktopWindowInfo info);
 
   /**
+   * Fired when loading Finished event
+   *
+   * @param info
+   */
+  public abstract void onDesktopWindowPageChanged(DesktopWindowInfo info);
+
+  /**
    * Fired when menu shown
    */
   public abstract void onQuickMenuShown(QuickMenuInfo menuInfoShown);
