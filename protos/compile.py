@@ -95,7 +95,7 @@ def main():
     t = tempfile.NamedTemporaryFile()
     try:
       t.write(content)
-      t.seek(0)  # make sure file is written properly
+      t.flush()  # make sure file is written properly
 
       print "Compiling %s" % fname
       if not compile_proto(args.protoc, args.java_out, t.name):
