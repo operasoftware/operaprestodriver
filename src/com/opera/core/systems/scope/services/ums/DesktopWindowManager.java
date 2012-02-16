@@ -91,17 +91,20 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
 
   // Note: This grabs the first window with a matching name, there might be more
   public QuickWindow getQuickWindow(QuickWidgetSearchType property, String value) {
+    QuickWindow lastFound = null;
     List<QuickWindow> windows = getQuickWindowList();
 
     for (QuickWindow window : windows) {
       if (property.equals(QuickWidgetSearchType.NAME)) {
         if (window.getName().equals(value)) {
-          return window;
+          if (window.isOnScreen())
+            return window;
+          else
+            lastFound = window;
         }
       }
     }
-
-    return null;
+    return lastFound;
   }
 
   public List<QuickWindow> getQuickWindowList() {
@@ -141,6 +144,7 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
     }
   }
 
+  // TODO: Check diff between this and getQuickWindow(SearchProp, name) and remove this
   public QuickWindow getQuickWindowByName(String name) {
     List<DesktopWindowInfo> windowList = getDesktopWindowInfoList();
 
