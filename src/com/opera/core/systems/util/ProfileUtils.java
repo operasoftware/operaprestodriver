@@ -197,10 +197,11 @@ public class ProfileUtils {
 	 */
 	public boolean copyProfile(String newPrefs) {
 		if (new File(newPrefs).exists() == false) {
+      logger.warning("The directory '" + newPrefs + "' doesn't exist, failed to copy profile.");
 			return false;
 		}
 
-		logger.info("Copying profile from " + newPrefs);
+		logger.info("Copying profile from '" + newPrefs + "'");
 		return WatirUtils.CopyDirAndFiles(newPrefs, smallPrefsFolder);
 	}
 

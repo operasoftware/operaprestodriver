@@ -850,18 +850,23 @@ public class OperaDesktopDriver extends OperaDriver {
         try {
           Thread.sleep(2000);
         } catch (InterruptedException e) {
-          e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+          e.printStackTrace();
         }
 
         // Cleanup old profile
-        /*boolean deleted = */
         if (profileUtils.deleteProfile() == false)
           logger.severe("Could not delete profile");
 
-        // Copy in the profile for the test (only if it exists)
-        // returns true if copied, else false
-        /*deleted =*/
-        profileUtils.copyProfile(newPrefs);
+        /* Copy the profile for the test. This method will return false in case the copying fails or if there is no
+        profile to be copied, so we should check that first here.
+         */
+        if (new File(newPrefs).exists() == false)
+          logger.info("The '" + newPrefs + "' directory doesn't exist, omitting profile copying.");
+        else
+          if (profileUtils.copyProfile(newPrefs) == false)
+            logger.severe("Failed to copy profile from the '" + newPrefs + "' directory!");
+          else
+            logger.info("Profile from the '" + newPrefs +"' copied OK");
 
         // Relaunch Opera and the webdriver service connection
         startOpera();

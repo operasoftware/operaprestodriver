@@ -105,7 +105,12 @@ public class WatirUtils {
 			{
 				String this_src = src.getPath() + File.separator + items[i];
 				String this_dst = dst.getPath() + File.separator + items[i];
-				CopyDirAndFiles(this_src, this_dst);
+				boolean res = CopyDirAndFiles(this_src, this_dst);
+        if (res == false)
+        {
+          logger.severe("Could not copy '" + this_src + "' to '" + this_dst + "'!");
+          return false;
+        }
 			}
 		}
 		else
@@ -115,7 +120,7 @@ public class WatirUtils {
 				Files.copy(src, dst);
 			} catch (IOException e) {
 				logger.severe(String.format("Could not copy files from \"%s\" to \"%s\"", source, destination));
-				return false;
+        return false;
 			}
 		}
 		return true;
