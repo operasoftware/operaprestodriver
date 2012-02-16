@@ -104,9 +104,10 @@ def main():
       preprocessed_file = tempfile.NamedTemporaryFile().name
 
     # Write preprocessed content to file and compile the files
-    with open(preprocessed_file, 'w') as f:
-      f.write('syntax = "proto2";\n')
-      f.write(content)
+    t = tempfile.NamedTemporaryFile()
+    try:
+      t.write(content)
+      t.flush()  # make sure file is written properly
 
     if not args.preprocess_only:
       print "Compiling %s" % fname
