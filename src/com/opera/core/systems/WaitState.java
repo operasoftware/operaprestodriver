@@ -81,7 +81,8 @@ public class WaitState {
     EVENT_QUICK_MENU_SHOWN,          // Quick menu shown
     EVENT_QUICK_MENU_CLOSED,         // Quick menu was closed
     EVENT_QUICK_MENU_ITEM_PRESSED,   // Quick menu item was pressed
-    EVENT_SELFTEST_DONE              // Selftest service finishes testing
+    EVENT_SELFTEST_DONE,             // Selftest service finishes testing
+    EVENT_DESKTOP_WINDOW_PAGE_CHANGED /* new Page shown in a dialog/window */
   }
 
   private class ResultItem {
@@ -174,6 +175,7 @@ public class WaitState {
         case EVENT_QUICK_MENU_CLOSED:
         case EVENT_QUICK_MENU_ITEM_PRESSED:
         case EVENT_SELFTEST_DONE:
+        case EVENT_DESKTOP_WINDOW_PAGE_CHANGED:
           return true;
       }
       return false;
@@ -205,7 +207,8 @@ public class WaitState {
     QUICK_MENU_SHOWN,
     QUICK_MENU_CLOSED,
     QUICK_MENU_ITEM_PRESSED,
-    SELFTEST_DONE
+    SELFTEST_DONE,
+    DESKTOP_WINDOW_PAGE_CHANGED;
   }
 
   public WaitState() {
@@ -371,6 +374,14 @@ public class WaitState {
       logger.finest("Event: onSelftestDone");
       events.add(new ResultItem(results));
       lock.notifyAll();
+    }
+  }
+
+  void onDesktopWindowPageChanged(DesktopWindowInfo info) {
+    synchronized (lock) {
+      logger.fine("Event: onDesktopPageChanged");
+      events.add(new ResultItem(WaitResult.EVENT_DESKTOP_WINDOW_PAGE_CHANGED, info));
+      lock.notify();
     }
   }
 
@@ -617,6 +628,21 @@ public class WaitState {
             }
             break;
 
+          case EVENT_DESKTOP_WINDOW_PAGE_CHANGED:
+              if (type == ResponseType.DESKTOP_WINDOW_PAGE_CHANGED) {
+                if (stringMatch.length() == 0) return result;
+              else {
+                logger.fine("EVENT_DESKTOP_WINDOW_PAGE_CHANGED: Name: "
+                  + result.desktopWindowInfo.getName() + " ID: "
+                  + result.desktopWindowInfo.getWindowID() + " OnScreen: "
+                  + result.desktopWindowInfo.getOnScreen());
+
+                  if (result.desktopWindowInfo.getName().equals(stringMatch))
+                    return result;
+              }
+            }
+            break;
+
           case EVENT_REQUEST_FIRED:
             if (result.data == match && type == ResponseType.REQUEST_FIRED) {
               return null;
@@ -751,6 +777,14 @@ public class WaitState {
       return item.desktopWindowInfo.getWindowID();
     }
 
+    return 0;
+  }
+
+  public int waitForWindowPageChanged(String win_name, long timeout) {
+    ResultItem item = waitAndParseResult(timeout, 0, win_name, ResponseType.DESKTOP_WINDOW_PAGE_CHANGED);
+    if (item != null) {
+      return item.desktopWindowInfo.getWindowID();
+    }
     return 0;
   }
 
