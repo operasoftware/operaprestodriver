@@ -242,7 +242,7 @@ public class OperaWebElement extends RemoteWebElement {
         isDisplayed = isDisplayed();
 
         if (!isDisplayed && parent.hasTimeRemaining(start)) {
-          sleep(OperaIntervals.EXEC_SLEEP.getValue());
+          sleep(OperaIntervals.IMPLICIT_WAIT.getValue());
         } else {
           break;
         }
