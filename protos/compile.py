@@ -19,6 +19,7 @@ import sys
 import argparse
 import subprocess
 import re
+import tempfile
 
 # Might be lower, but not tested. Definitely needs to be > 2.3.0
 MIN_PROTOC_VERSION = '2.4.1'
@@ -54,15 +55,19 @@ RESULT = {
 def main():
   parser = argparse.ArgumentParser(description='Compile protobuf files with Opera-specific extensions')
   parser.add_argument('--protoc', metavar='path', type=str, default='protoc',
-                     help='Path to the protoc binary. Must be version > 2.4.1')
+                      help='Path to the protoc binary (must be version > 2.4.1)')
   parser.add_argument('--java_out', metavar='path', type=str, default='.',
-                     help='Directory to output the compiled .proto files')
+                      help='Directory to output the compiled .proto files')
   parser.add_argument('proto_file', type=str, default='protoc', nargs='+',
-                     help='.proto files to compile')
+                      help='.proto files to compile')
+  parser.add_argument('--preprocess_only', default=False, action='store_true',
+                      help='Only do the preprocessing step, do not call protoc')
+  parser.add_argument('--preprocess_out', metavar='path', type=str, default='./preprocess_out',
+                      help='Directory to output the preprocessed .proto files')
 
   args = parser.parse_args()
 
-  if not check_protoc_version(args.protoc):
+  if not args.preprocess_only and not check_protoc_version(args.protoc):
     return RESULT['INVALID_PROTOC']
 
   # Ant gives us a single argument with the paths separated by ":" on Linux
@@ -70,6 +75,9 @@ def main():
   # argument that looks like this, split it.
   if len(args.proto_file) == 1 and os.pathsep in args.proto_file[0]:
     args.proto_file = args.proto_file[0].split(os.pathsep)
+
+  if args.preprocess_only and not os.path.exists(args.preprocess_out):
+    os.mkdir(args.preprocess_out)
 
   for fname in args.proto_file:
     # Get the Java class name
@@ -90,21 +98,31 @@ def main():
     content = remove_service_block(content)
     content = add_options(content, service_package, service_class)
 
-    # TODO: Create a proper temp file?
-    with open('temp.proto', 'w') as f:
+    if args.preprocess_only:
+      preprocessed_file = os.path.join(args.preprocess_out, '%s.proto' % name)
+    else:
+      preprocessed_file = tempfile.NamedTemporaryFile().name
+
+    # Write preprocessed content to file and compile the files
+    with open(preprocessed_file, 'w') as f:
+      f.write('syntax = "proto2";\n')
       f.write(content)
 
-    print "Compiling %s (as temp.proto)..." % fname
-    if not compile_proto(args.protoc, args.java_out, 'temp.proto'):
-      return RESULT['PROTOC_ERROR']
+    if not args.preprocess_only:
+      print "Compiling %s" % fname
+      if not compile_proto(args.protoc, args.java_out, preprocessed_file):
+        return RESULT['PROTOC_ERROR']
 
   print "Successfully compiled %d files" % len(args.proto_file)
   return 0
 
-def compile_proto(protoc, out, fname):
-  retcode = subprocess.call([protoc, '--java_out', out, fname])
+def compile_proto(protoc, out, file):
+  proto_path = os.path.abspath(os.path.join(file, os.path.pardir))
+  fname = os.path.basename(file)
+
+  retcode = subprocess.call([protoc, '--proto_path', proto_path, '--java_out', out, file])
   if retcode != 0:
-    sys.stderr.write("Error: Protoc error when compiling %s\n" % fname)
+    sys.stderr.write("Error: protoc error when compiling %s\n" % fname)
     return False
   return True
 
