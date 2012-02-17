@@ -55,20 +55,20 @@ public class WindowTest extends OperaDriverTestCase {
   }
 
   @Test
-  public void testOpenNewTargettedWindow() {
-    windowPage.openNewTargettedWindow();
+  public void testOpenNewTargetedWindow() {
+    windowPage.openNewTargetedWindow();
 
     int windowCount = driver.getWindowCount();
     assertEquals(newWindows(1), windowCount);
 
-    driver.switchTo().window("targetted");
+    driver.switchTo().window("targeted");
     assertEquals("Window 2", driver.getTitle());
   }
 
   @Test
-  public void testOpenMultipleTargettedWindows() {
+  public void testOpenMultipleTargetedWindows() {
     for (int i = 1; i <= 2; i++) {
-      windowPage.openNewTargettedWindow();
+      windowPage.openNewTargetedWindow();
     }
 
     assertEquals(newWindows(1), driver.getWindowCount());

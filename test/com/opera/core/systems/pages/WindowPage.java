@@ -27,8 +27,8 @@ import static org.junit.Assert.fail;
 
 public class WindowPage extends Page {
 
-  @FindBy(linkText = "Open new targetted window")
-  public WebElement targettedWindow;
+  @FindBy(linkText = "Open new targeted window")
+  public WebElement targetedWindow;
 
   @FindBy(linkText = "Open new anonymous window")
   public WebElement anonymousWindow;
@@ -49,12 +49,12 @@ public class WindowPage extends Page {
   }
 
   /**
-   * Opens a new targetted window.  This means no new windows will be opened if the link is clicked
-   * several times.  By "targetted window" we refer to the DOMString specified in the attribute
+   * Opens a new targeted window.  This means no new windows will be opened if the link is clicked
+   * several times.  By "targeted window" we refer to the DOMString specified in the attribute
    * "target" on the element.
    */
-  public void openNewTargettedWindow() {
-    openNewWindow(targettedWindow);
+  public void openNewTargetedWindow() {
+    openNewWindow(targetedWindow);
   }
 
   /**
