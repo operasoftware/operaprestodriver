@@ -21,24 +21,77 @@ package com.opera.core.systems.environment.webserver;
 
 import javax.servlet.Servlet;
 
+/**
+ * Interface for a simple web server.
+ */
 public interface WebServer {
 
+  /**
+   * Gets the currently used hostname by the server.
+   *
+   * @return hostname
+   */
   String getHostName();
 
+  /**
+   * Gets the currently used alternative hostname, typically the private local address, used by the
+   * server.
+   *
+   * @return private local address
+   */
   String getAlternateHostName();
 
+  /**
+   * Gets the full URL on the installed server to a resource based on the given relative URL.
+   *
+   * @param relativeUrl the relative path on the server to the resource you're looking for, e.g.
+   *                    "/some/thing" might return "http://mymachine/some/thing"
+   * @return the full URL for the requested resource on the server
+   */
   String whereIs(String relativeUrl);
 
+  /**
+   * Gets the full URL with the alternate host name (see {@link #getAlternateHostName()} on the
+   * installed server to a resource based on the given relative URL.
+   *
+   * @param relativeUrl the relative path to the server to the resource you're looking for, e.g.
+   *                    "/some/thing" might reutrn "http://127.0.0.1/some/thing"
+   * @return the full URL to the requested resource on the server with the alternate hostname
+   */
   String whereElseIs(String relativeUrl);
 
+  /**
+   * Starts the server sockets.
+   */
   void start();
 
+  /**
+   * Stops the server sockets.
+   */
   void stop();
 
+  /**
+   * Adds an additional web application to the server.  Must be done before the server is started.
+   *
+   * @param context      the relative URL path/context you wish the application to be accessible at
+   * @param absolutePath the absolute path to the application WAR file
+   */
   void addAdditionalWebApplication(String context, String absolutePath);
 
+  /**
+   * Adds a new servlet to the server.  Must be done before the server is started.
+   *
+   * @param name         handle of the servlet
+   * @param url          the relative context URL
+   * @param servletClass the servlet class
+   */
   void addServlet(String name, String url, Class<? extends Servlet> servletClass);
 
+  /**
+   * Which port the web server should listen on.  Cannot be set after server has been started.
+   *
+   * @param port the port number to listen on
+   */
   void listenOn(int port);
 
 }
