@@ -28,7 +28,7 @@ public class InProject {
   /**
    * Locates a file in the current project.
    *
-   * @param path path to file to locate from root of project
+   * @param path complete/full path to locate from the root of the project
    * @return file being sought, if it exists
    * @throws WebDriverException wrapped FileNotFoundException if file could not be found
    */
