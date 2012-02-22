@@ -54,7 +54,6 @@ def java(ui, services, out, **kwargs):
                 extra_dir = os.path.normpath(os.path.join(out, extra_dir))
                 if not os.path.exists(extra_dir):
                     os.makedirs(extra_dir)
-                #root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
                 root = os.path.dirname(os.path.abspath(hob.cmd.__file__))
                 fname = os.path.join(extra_dir, os.path.basename(extra_file))
                 shutil.copyfile(os.path.join(root, 'templates', extra_file), fname)
