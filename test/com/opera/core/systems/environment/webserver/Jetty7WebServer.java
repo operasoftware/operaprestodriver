@@ -45,7 +45,7 @@ public class Jetty7WebServer implements WebServer {
   private final String hostName;
 
   public Jetty7WebServer() {
-    this(getHostname());
+    this(getCurrentHostname());
   }
 
   public Jetty7WebServer(String hostName) {
@@ -151,13 +151,13 @@ public class Jetty7WebServer implements WebServer {
   }
 
   public static void main(String[] args) {
-    Jetty7WebServer server = new Jetty7WebServer(getHostname());
+    Jetty7WebServer server = new Jetty7WebServer(getCurrentHostname());
     server.listenOn(2310);
     System.out.println("Starting server on port 2310");
     server.start();
   }
 
-  private static String getHostname() {
+  private static String getCurrentHostname() {
     return NETWORK_UTILS.getNonLoopbackAddressOfThisMachine();
   }
 
