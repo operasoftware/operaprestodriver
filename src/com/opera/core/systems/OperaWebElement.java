@@ -51,6 +51,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Logger;
 
+import com.opera.core.systems.util.FileSendKeys;
 /**
  * Implements WebDriver's {@link WebElement}, but also extends it with Opera specific methods.
  */
@@ -233,7 +234,7 @@ public class OperaWebElement extends RemoteWebElement {
     holdKeys.add(OperaKeys.CONTROL.getValue());
     // Keys that have been held down, and need to be released
     ArrayList<String> heldKeys = new ArrayList<String>();
-
+    
     if (OperaFlags.ENABLE_CHECKS) {
       long start = System.currentTimeMillis();
       boolean isDisplayed;
@@ -247,14 +248,20 @@ public class OperaWebElement extends RemoteWebElement {
           break;
         }
       }
-
+      
       assertElementDisplayed("Cannot type on an element that is not displayed");
-      assertElementEnabled("Cannot type on an element that is disabled");
+          assertElementEnabled("Cannot type on an element that is disabled");
     }
-
-    if (getTagName().equalsIgnoreCase("input")
-        && (hasAttribute("type") && getAttribute("type").equals("file"))) {
+    boolean fileInput = getTagName().equalsIgnoreCase("input")
+        && (hasAttribute("type") && getAttribute("type").equals("file"));
+    if (fileInput) {
       click();
+      StringBuffer buf = new StringBuffer();
+      for (CharSequence seq : keysToSend) {
+          buf.append(seq);
+      }
+      new FileSendKeys(parent).SendKeysFileDialog(buf.toString());
+      logger.warning("sendkeys() for file done");
     } else {
       executeMethod("locator.focus()");
       // When focused textareas return the cursor to the last position it was at. Inputs place the
@@ -276,6 +283,7 @@ public class OperaWebElement extends RemoteWebElement {
       }
     }
 
+    if (!fileInput){
     // This code is a bit ugly. Because "special" keys can be sent either as an individual
     // argument, or in the middle of a string of "normal" characters, we have to loop through the
     // string and check each against a list of special keys.
@@ -331,7 +339,7 @@ public class OperaWebElement extends RemoteWebElement {
         execService.key(key, true);
       }
     }
-
+    }
     try {
       parent.waitForLoadToComplete();
     } catch (ResponseNotReceivedException e) {
