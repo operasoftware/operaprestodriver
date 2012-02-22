@@ -29,12 +29,12 @@ import java.lang.annotation.Target;
  * @author Andreas Tolf Tolfsen <andreastt@opera.com>
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ ElementType.TYPE, ElementType.METHOD })
+@Target({ElementType.TYPE, ElementType.METHOD})
 public @interface Ignore {
 
-  OperaProduct[] products() default { OperaProduct.ALL };
+  OperaProduct[] products() default {};
 
-  Platform[] platforms() default { Platform.ANY };
+  Platform[] platforms() default {};
 
   String value() default ("Not supported by product yet");
 
