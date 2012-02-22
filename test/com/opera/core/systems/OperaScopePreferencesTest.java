@@ -147,12 +147,12 @@ public class OperaScopePreferencesTest extends OperaDriverTestCase {
   }
 
   @Test
-  public void testGetTypeColor() {
+  public void testGetTypeFile() {
     assertEquals(File.class, preferences.get("User Prefs", "Browser CSS File").getType());
   }
 
   @Test
-  public void testGetTypeFile() {
+  public void testGetTypeColor() {
     assertEquals(OperaColor.class, preferences.get("Colors", "Color.H1").getType());
   }
 
