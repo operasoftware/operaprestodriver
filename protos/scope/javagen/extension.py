@@ -13,6 +13,7 @@ from hob.template import TextGenerator
 from hob.utils import _
 import hob
 import os
+import re
 import shutil
 import sys
 
@@ -135,7 +136,12 @@ def applyOptions(package, config):
             updateOptions(config.get(service.name + '.options', element.__name__))
 
     for (item, value) in options.get('Package').iteritems():
-        package.options[item] = OptionValue(None, raw='"' + value + '"')
+        # hob doesn't encapsulate FooBar with quotes, forcing this behaviour.
+        # But it should not encapsulate enums, such as SPEED.
+        if re.match(r'^[A-Z]+$', value):
+            package.options[item] = OptionValue(value)
+        else:
+            package.options[item] = OptionValue(None, raw='"' + value + '"')
 
     if options.get('package_name'):
         package.name = options.get('package_name')
