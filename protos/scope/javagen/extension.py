@@ -60,6 +60,7 @@ def java(ui, services, out, **kwargs):
                 ui.outl('Copied %s to %s' % (extra_file, fname))
 
     text = ''
+
     for fname in services:
         try:
             if os.path.isfile(fname):
@@ -70,7 +71,7 @@ def java(ui, services, out, **kwargs):
         except IOError, e:
             raise ProgramError('Cannot open proto file %s: %s' % (fname, e.strerror))
 
-        package = applyOptions(package, java_config)
+        package = applyOptions(fname, package, java_config)
 
         gen = TextGenerator()
         text = gen.package(package, export=['package', 'message', 'enum'])
@@ -86,12 +87,12 @@ def readJavaConfig(java_config_file):
     """ Reads the Java config entries from the specified file and returns a
     ConfigParser object """
     import ConfigParser
-    java_config = ConfigParser.SafeConfigParser()
+    java_config = ConfigParser.RawConfigParser(dict_type=CaseInsensitiveDict)
     if os.path.exists(java_config_file):
         java_config.read([java_config_file])
     return java_config
 
-def applyOptions(package, config):
+def applyOptions(target, package, config):
     if package.services:
         service = package.services[0]
 
@@ -125,8 +126,8 @@ def applyOptions(package, config):
         # protoc related options are stored in _ (underscore) + fieldname
         if config.has_option('options', element.__name__):
             updateOptions(config.get('options', element.__name__))
-        if config.has_option(service.name + '.options', element.__name__):
-            updateOptions(config.get(service.name + '.options', element.__name__))
+        if config.has_option(target + '.options', element.__name__):
+            updateOptions(config.get(target + '.options', element.__name__))
 
     for (item, value) in options.get('Package').iteritems():
         # hob doesn't encapsulate FooBar with quotes, forcing this behaviour.
@@ -152,3 +153,10 @@ def packageName(package):
 
 def packageNameFromFileName(filename):
     return os.path.splitext(os.path.basename(filename))[0].title()
+
+class CaseInsensitiveDict(dict):
+    def __setitem__(self, key, value):
+        super(CaseInsensitiveDict, self).__setitem__(key.lower(), value)
+
+    def __getitem__(self, key):
+        return super(CaseInsensitiveDict, self).__getitem__(key.lower())
