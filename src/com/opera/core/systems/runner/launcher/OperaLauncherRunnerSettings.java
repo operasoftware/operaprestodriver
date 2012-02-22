@@ -20,6 +20,7 @@ import com.google.common.io.ByteStreams;
 import com.google.common.io.Closeables;
 import com.google.common.io.Files;
 
+import com.opera.core.systems.OperaDriver;
 import com.opera.core.systems.OperaPaths;
 import com.opera.core.systems.OperaProduct;
 import com.opera.core.systems.arguments.OperaCoreArguments;
@@ -29,9 +30,11 @@ import com.opera.core.systems.runner.OperaLaunchers;
 import com.opera.core.systems.runner.OperaRunnerException;
 import com.opera.core.systems.runner.OperaRunnerSettings;
 
+import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.os.CommandLine;
+import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -58,6 +61,15 @@ public class OperaLauncherRunnerSettings extends OperaRunnerSettings {
 
   public void setLoggingLevel(Level level) {
     loggingLevel = OperaLauncherRunner.toLauncherLoggingLevel(level);
+  }
+
+  public Capabilities toCapabilities() {
+    DesiredCapabilities capabilities = (DesiredCapabilities) super.toCapabilities();
+
+    capabilities.setCapability(OperaDriver.LAUNCHER, getLauncher().getPath());
+    capabilities.setCapability(OperaDriver.BACKEND, getBackend());
+
+    return capabilities;
   }
 
   public File getLauncher() {

@@ -101,7 +101,7 @@ public class ScopeServices implements IConnectionHandler {
   private AtomicInteger tagCounter;
 
   private StringBuilder selftestOutput;
-  private String product;
+  private OperaProduct product;
 
   /**
    * Creates the Scope server on specified address and port, as well as enabling the required
@@ -124,7 +124,7 @@ public class ScopeServices implements IConnectionHandler {
    * Gets the supported services from Opera and calls methods to enable the ones we requested.
    */
   public void init() {
-    waitState.setProfile(product);
+    waitState.setProfile(product.toString());
     waitForHandshake();
 
     hostInfo = getHostInfo();
@@ -763,7 +763,7 @@ public class ScopeServices implements IConnectionHandler {
     waitState.onRequest(windowId);
   }
 
-  public void setProduct(String product) {
+  public void setProduct(OperaProduct product) {
     this.product = product;
   }
 

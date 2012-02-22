@@ -99,11 +99,12 @@ public class OperaArguments implements com.opera.core.systems.arguments.interfac
     return parsed;
   }
 
-  public void merge(com.opera.core.systems.arguments.interfaces.OperaArguments extraArguments) {
-    if (extraArguments.getArguments() == null || extraArguments.getArguments().isEmpty()) {
-      return;
+  public OperaArguments merge(com.opera.core.systems.arguments.interfaces.OperaArguments extraArguments) {
+    if (extraArguments.getArguments() != null || !extraArguments.getArguments().isEmpty()) {
+      arguments.addAll(extraArguments.getArguments());
     }
-    arguments.addAll(extraArguments.getArguments());
+
+    return this;
   }
 
   public String sign() {

@@ -20,6 +20,8 @@ import com.opera.core.systems.OperaProduct;
 import com.opera.core.systems.OperaProfile;
 import com.opera.core.systems.arguments.interfaces.OperaArguments;
 
+import org.openqa.selenium.Capabilities;
+
 import java.io.File;
 import java.util.logging.Level;
 
@@ -41,9 +43,9 @@ public interface OperaRunnerSettings {
   /**
    * Sets Opera's location.
    *
-   * @param path the absolute path to the Opera binary
+   * @param binary the Opera binary
    */
-  public void setBinary(String path);
+  public void setBinary(File binary);
 
   /**
    * Gets the X display.  Only works on *nix operating systems.
@@ -196,5 +198,12 @@ public interface OperaRunnerSettings {
    * @param level the logging level to use
    */
   public void setLoggingLevel(Level level);
+
+  /**
+   * Converts the OperaRunner settings to capabilities for Opera.  This does not copy the settings.
+   *
+   * @return capabilities for Opera with these settings
+   */
+  public Capabilities toCapabilities();
 
 }
