@@ -3,8 +3,8 @@ import "opera/scope/scope_descriptor.proto";
 
 package scope;
 
-option optimize_for         = "SPEED";
-option java_outer_classname = "Ecmascript_Debugger-6.1Protos";
+option optimize_for         = SPEED;
+option java_outer_classname = "EsdbgProtos";
 option java_package         = "com.opera.core.systems.scope.protos";
 
 message CssStylesheetList
@@ -27,17 +27,14 @@ message CssStylesheetList
 
 message ExamineList
 {
-    required uint32 runtimeID          = 1;
-    repeated uint32 objectList         = 2;
-    optional bool   examinePrototypes  = 3;
-    optional bool   skipNonenumerables = 4;
-    optional bool   filterProperties   = 5;
+    required uint32 runtimeID  = 1;
+    repeated uint32 objectList = 2;
 }
 
 message BreakpointID
 {
     /**
-     * See Breakpoint.breakpointID.
+     * See BreakpointPosition.breakpointID.
      */
     required uint32 breakpointID = 1;
 }
@@ -59,7 +56,7 @@ message SpotlightObject
 {
     /**
      * Colors are encoded as RGBA with 8 bits for each channel.
-     * encoded_color = ( red << 24 ) + ( green << 16 ) + ( blue << 8 ) + ( alpha )
+     * encoded_color = ( red << 24 ) + ( green << 16 ) + ( blue << 8 ) + ( alpha ) 
      * with red, green, blue and alpha in a range of 0 - 255
      * e.g.:
      * 
@@ -201,12 +198,6 @@ message BacktraceFrame
     optional ObjectValue objectValue    = 5;
     optional uint32      scriptID       = 6;
     optional uint32      lineNumber     = 7;
-    /**
-     * The variable objects in the scope chain of the function. The first
-     * element in the list is the innermost scope (the scope of the function
-     * itself).
-     */
-    repeated uint32      scopeList      = 8;
 }
 
 message RuntimeID
@@ -348,36 +339,28 @@ message Configuration
     optional bool stopAtDebuggerStatement = 6 [default = false];
 }
 
-message Breakpoint
+message BreakpointPosition
 {
     /**
      * A nonzero ID chosen by the client.
      */
     required uint32 breakpointID = 1;
     /**
-     * ID of script where the breakpoint should be set.
+     * "line", "function", "event"
      */
-    required uint32 scriptID     = 2;
+    required string type         = 2;
     /**
-     * Line number to break on in script.
+     * Present when `type` is `"line"`
      */
-    required uint32 lineNumber   = 3;
-}
-
-message EventBreakpoint
-{
+    optional uint32 scriptID     = 3;
     /**
-     * A nonzero ID chosen by the client.
+     * Present when `type` is `"line"`
      */
-    required uint32 breakpointID = 1;
+    optional uint32 lineNumber   = 4;
     /**
-     * The name of the event to break on.
+     * Present when `type` is `"event"`
      */
-    required string eventType    = 2;
-    /**
-     * If specified the event will only break in this specific window.
-     */
-    optional uint32 windowID     = 3 [default = 0];
+    optional string eventType    = 5;
 }
 
 message CssStyleDeclarations
@@ -504,11 +487,6 @@ message ObjectList
     repeated ObjectInfo objectList = 1;
 }
 
-message ObjectChainList
-{
-    repeated ObjectList objectChainList = 1;
-}
-
 /**
  * Add an event handler. This will generate a HANDLE-EVENT event every time the XML event defined by the pair (NAMESPACE, EVENT-TYPE) reaches the object defined by OBJECT-ID in the capturing phase. XML events are defined in http://www.w3.org/TR/xml-events
  */
@@ -563,22 +541,18 @@ message EvalResult
 
 message ObjectValue
 {
-    required uint32 objectID     = 1;
-    required bool   isCallable   = 2;
+    required uint32 objectID    = 1;
+    required bool   isCallable  = 2;
+    required bool   isFunction  = 3;
     /**
      * type, function or object
      */
-    required string type         = 3;
-    optional uint32 prototypeID  = 4;
+    required string type        = 4;
+    optional uint32 prototypeID = 5;
     /**
-     * The class of the object.
+     * Name of class (object) or function
      */
-    optional string className    = 5;
-    /**
-     * If the object is a function, this is the name of
-     * the variable associated with that function (if any).
-     */
-    optional string functionName = 6;
+    optional string name        = 6;
 }
 
 message RuntimeList
@@ -602,12 +576,12 @@ message DomTraversal
 {
     required uint32 objectID  = 1;
     /**
-     * traversal on off:
+     * traversal on off:  
      * - `"parent-node-chain-with-children"`
      *     take the parent node chain for the target node.
-     *     add for each node in that chain all children,
+     *     add for each node in that chain all children, 
      *     and for all children there first child,
-     *     if that is a text node and the only node,
+     *     if that is a text node and the only node, 
      *     starting with the document node.
      * - `"children"`
      *     get node data for all children in their flow
@@ -728,165 +702,5 @@ message CssStylesheetSelection
 {
     required uint32 runtimeID    = 1;
     required uint32 stylesheetID = 2;
-}
-
-message ReadyStateInfo
-{
-    required uint32 runtimeID = 1;
-    /**
-     * 1 - DOMContentLoaded
-     * 2 - Load
-     */
-    required uint32 state     = 2;
-}
-
-message Position
-{
-    required uint32 scriptID   = 1;
-    required uint32 lineNumber = 2;
-}
-
-message ConsoleLogInfo
-{
-    message Value
-    {
-        optional string      value       = 1;
-        optional ObjectValue objectValue = 2;
-    }
-
-    required uint32   runtimeID = 1;
-    /**
-     * This value indicates which function was called:
-     * 
-     * 1 - console.log
-     * 2 - console.debug
-     * 3 - console.info
-     * 4 - console.warn
-     * 5 - console.error
-     * 6 - console.assert
-     * 7 - console.dir
-     * 8 - console.dirxml
-     * 9 - console.group
-     * 10 - console.groupCollapsed
-     * 11 - console.groupEnded
-     * 12 - console.count
-     * 13 - console.table
-     */
-    required uint32   type      = 2;
-    /**
-     * The list of values passed to the function as arguments.
-     */
-    repeated Value    valueList = 3;
-    /**
-     * The position the function was called.
-     */
-    optional Position position  = 4;
-}
-
-message ConsoleTimeInfo
-{
-    required uint32 runtimeID = 1;
-    /**
-     * Timers are identified by a string passed as the first argument
-     * to the function. For instance, console.time("MyTimer").
-     */
-    required string title     = 2;
-}
-
-message ConsoleTimeEndInfo
-{
-    required uint32 runtimeID = 1;
-    /**
-     * The title of the timer. See ConsoleTimeInfo.title.
-     */
-    required string title     = 2;
-    /**
-     * Elapsed time in microseconds.
-     */
-    required uint32 elapsed   = 3;
-}
-
-message ConsoleTraceInfo
-{
-    required uint32         runtimeID = 1;
-    /**
-     * The list of stack frames at the level console.trace was called.
-     */
-    repeated BacktraceFrame frameList = 2;
-}
-
-message ConsoleProfileInfo
-{
-    required uint32 runtimeID = 1;
-}
-
-message ConsoleProfileEndInfo
-{
-    required uint32 runtimeID = 1;
-}
-
-/**
- * Because we want different filters for different classes, a PropertyFilter consists
- * of several ClassMasks, and one ClassMask consists of several PropertyMasks. A PropertyMask
- * can be regarded as a 'rule' for filtering a property. If no rule is present, the property is
- * allowed through the filter. If a matching rule is present, the property is not included.
- */
-message PropertyFilter
-{
-    /**
-     * A ClassMask contains all the properties which should be considered for exclusion for a
-     * certain class.
-     */
-    message ClassMask
-    {
-        /**
-         * You can choose to filter a property based on name and, as an additional condition, type.
-         * For booleans, numbers and strings, you can also filter by value as a third additional
-         * condition.
-         * 
-         * If only 'name' is present, then a property with that name will be excluded, regardless
-         * of its value. If 'type' is also present, then the property with that name will be excluded
-         * only if its value is the specified type.
-         * 
-         * If 'type' indicates a boolean, number or string, you can assign a value in the corresponding
-         * optional field. The property will then be excluded only if the name, type and value all match.
-         */
-        message PropertyMask
-        {
-            required string name    = 1;
-            optional uint32 type    = 2;
-            optional bool   boolean = 3;
-            optional uint32 number  = 4;
-            optional string string  = 5;
-        }
-    
-        /**
-         * The name of the class this filter applies to. Examples are 'Object' and
-         * 'HTMLHtmlElement'.
-         */
-        required string       className        = 1;
-        /**
-         * The list of properties which could be filtered.
-         */
-        repeated PropertyMask propertyMaskList = 2;
-    }
-
-    /**
-     * The list of classes which should be filtered.
-     */
-    repeated ClassMask classMaskList = 1;
-}
-
-message SetPropertyFilterArg
-{
-    required PropertyFilter propertyFilter = 1;
-}
-
-/**
- * List of objects to release.
- */
-message ReleaseObjectsArg
-{
-    repeated uint32 objectList = 1;
 }
 
