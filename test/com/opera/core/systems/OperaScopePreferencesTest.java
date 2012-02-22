@@ -16,6 +16,7 @@ limitations under the License.
 
 package com.opera.core.systems;
 
+import com.opera.core.systems.model.OperaColor;
 import com.opera.core.systems.preferences.OperaGenericPreferences;
 import com.opera.core.systems.preferences.OperaGenericPreferences.GenericPreference;
 import com.opera.core.systems.preferences.OperaPreferences;
@@ -26,6 +27,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import java.io.File;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -77,35 +80,39 @@ public class OperaScopePreferencesTest extends OperaDriverTestCase {
   @Test
   public void testSetWithString() {
     preferences.set("Developer Tools", "Proxy Host", "1.2.3.4");
-    assertEquals("Developer Tools", preferences.get("Developer Tools", "Proxy Host").getSection());
-    assertEquals("Proxy Host", preferences.get("Developer Tools", "Proxy Host").getKey());
     assertEquals("1.2.3.4", preferences.get("Developer Tools", "Proxy Host").getValue());
   }
 
   @Test
   public void testSetWithBoolean() {
     preferences.set("Developer Tools", "Proxy Auto Connect", true);
-    assertEquals("Developer Tools",
-                 preferences.get("Developer Tools", "Proxy Auto Connect").getSection());
-    assertEquals("Proxy Auto Connect",
-                 preferences.get("Developer Tools", "Proxy Auto Connect").getKey());
     assertEquals(true, preferences.get("Developer Tools", "Proxy Auto Connect").getValue());
   }
 
   @Test
   public void testSetWithInteger() {
     preferences.set("Developer Tools", "Proxy Port", 1234);
-    assertEquals("Developer Tools", preferences.get("Developer Tools", "Proxy Port").getSection());
-    assertEquals("Proxy Port", preferences.get("Developer Tools", "Proxy Port").getKey());
     assertEquals(1234, preferences.get("Developer Tools", "Proxy Port").getValue());
+  }
+  
+  @Test
+  public void testSetWithColor() {
+    OperaColor color = new OperaColor(120,120,120);
+    preferences.set("Colors", "Color.Normal", color);
+    assertEquals(color, preferences.get("Colors", "Color.Normal").getValue());
+  }
+  
+  @Test
+  public void testSetWithFile() {
+    File cssFile = new File("/no/file");
+    preferences.set("User Prefs", "Browser CSS File", cssFile);
+    assertEquals(cssFile, preferences.get("User Prefs", "Browser CSS File").getValue());
   }
 
   @Test
-  public void testGetCaseInsensitive() {
+  public void testSetCaseInsensitive() {
     preferences.set("DEVELOPER TOOLS", "PROXY HOST", "BAZ");
-    assertEquals("Developer Tools", preferences.get("DEVELOPER TOOLS", "PROXY HOST").getSection());
-    assertEquals("Proxy Host", preferences.get("DEVELOPER TOOLS", "PROXY HOST").getKey());
-    assertEquals("BAZ", preferences.get("DEVELOPER TOOLS", "PROXY HOST").getValue());
+    assertEquals("BAZ", preferences.get("Developer Tools", "Proxy Host").getValue());
   }
 
   @Test
@@ -120,7 +127,46 @@ public class OperaScopePreferencesTest extends OperaDriverTestCase {
     assertEquals("1.2.3.4", preferences.get("Developer Tools", "Proxy Host").getValue());
     assertEquals(1234, preferences.get("Developer Tools", "Proxy Port").getValue());
     assertEquals(true, preferences.get("Developer Tools", "Proxy Auto Connect").getValue());
+
     assertEquals(prefCountBefore, preferences.size());
+  }
+
+  @Test
+  public void testGetTypeString() {
+    assertEquals(String.class, preferences.get("Developer Tools", "Proxy Host").getType());
+  }
+
+  @Test
+  public void testGetTypeInteger() {
+    assertEquals(Integer.class, preferences.get("Developer Tools", "Proxy Port").getType());
+  }
+
+  @Test
+  public void testGetTypeBoolean() {
+    assertEquals(Boolean.class, preferences.get("Developer Tools", "Proxy Auto Connect").getType());
+  }
+
+  @Test
+  public void testGetTypeColor() {
+    assertEquals(File.class, preferences.get("User Prefs", "Browser CSS File").getType());
+  }
+
+  @Test
+  public void testGetTypeFile() {
+    assertEquals(OperaColor.class, preferences.get("Colors", "Color.H1").getType());
+  }
+
+  @Test
+  public void testIsEnabled() {
+    assertTrue(preferences.get("Developer Tools", "Proxy Auto Connect").isEnabled());
+  }
+
+  @Test
+  public void testReset() {
+    ScopePreference preference = preferences.get("Developer Tools", "Proxy Host");
+    preference.setValue("4.3.2.1");
+    preference.reset();
+    assertEquals("127.0.0.1", preference.getValue());
   }
 
   @Test
@@ -128,26 +174,6 @@ public class OperaScopePreferencesTest extends OperaDriverTestCase {
     preferences.set("Developer Tools", "Proxy Host", "4.3.2.1");
     preferences.resetAll();
     assertEquals("127.0.0.1", preferences.get("Developer Tools", "Proxy Host").getDefaultValue());
-  }
-
-  @Test
-  public void testScopePreferenceGetType() {
-    assertEquals(String.class, preferences.get("Developer Tools", "Proxy Host").getType());
-    assertEquals(Integer.class, preferences.get("Developer Tools", "Proxy Port").getType());
-    assertEquals(Boolean.class, preferences.get("Developer Tools", "Proxy Auto Connect").getType());
-  }
-
-  @Test
-  public void testScopePreferenceIsEnabled() {
-    assertTrue(preferences.get("Developer Tools", "Proxy Auto Connect").isEnabled());
-  }
-
-  @Test
-  public void testScopePreferenceReset() {
-    ScopePreference preference = preferences.get("Developer Tools", "Proxy Host");
-    preference.setValue("4.3.2.1");
-    preference.reset();
-    assertEquals("127.0.0.1", preference.getValue());
   }
 
 }
