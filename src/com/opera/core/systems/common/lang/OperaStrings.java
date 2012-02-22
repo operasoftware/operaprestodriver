@@ -33,7 +33,7 @@ public class OperaStrings {
    * @return true if string holds a numeric value, false otherwise
    */
   public static boolean isNumeric(String string) {
-    return isDouble(string) || isInteger(string);
+    return isDouble(string);  // an integer is also recognized as a double
   }
 
   /**
