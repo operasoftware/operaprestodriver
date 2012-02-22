@@ -84,7 +84,7 @@ def java(ui, services, out, **kwargs):
                 out_name = fname
             fname = os.path.join(out, out_name + '.proto')
             outfile = open(fname, 'w').write(text)
-            ui.outl('Wrote service %s to %s' % (out_name, fname))
+            ui.outl('Wrote service %s to %s' % (package.services[0].name, fname))
         else:
             f.write(text)
 
