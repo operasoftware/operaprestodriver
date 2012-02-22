@@ -70,7 +70,7 @@ def java(ui, services, out, **kwargs):
         except IOError, e:
             raise ProgramError('Cannot open proto file %s: %s' % (fname, e.strerror))
 
-        package = applyOptions(package, java_config) #ui.config.parser)
+        package = applyOptions(package, java_config)
 
         gen = TextGenerator()
         text = gen.package(package, export=['package', 'message', 'enum'])
