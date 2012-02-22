@@ -1,7 +1,7 @@
 syntax = "proto2";
 import "opera/scope/scope_descriptor.proto";
 
-package scope;
+package ums;
 
 option optimize_for         = SPEED;
 option java_outer_classname = "UmsProtos";

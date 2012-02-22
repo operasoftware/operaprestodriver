@@ -139,6 +139,8 @@ def applyOptions(target, package, config):
 
     if options.get('package_name'):
         package.name = options.get('package_name')
+    if config.has_option(target + '.options', 'package_name'):
+        package.name = config.get(target + '.options', 'package_name')
 
     return package
 
