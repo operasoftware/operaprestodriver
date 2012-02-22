@@ -100,6 +100,11 @@ public class OperaDriverTestRunner extends BlockJUnit4ClassRunner {
       return false;
     }
 
+    // Plain old ignore
+    if (ignore.products().length == 0 && ignore.platforms().length == 0) {
+      return true;
+    }
+
     OperaProduct currentProduct = OperaDriverTestCase.driver.utils().getProduct();
     Platform currentPlatform = OperaDriverTestCase.driver.utils().getPlatform();
 
