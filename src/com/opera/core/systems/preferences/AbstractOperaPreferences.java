@@ -157,7 +157,7 @@ public abstract class AbstractOperaPreferences implements OperaPreferences {
     }
 
     public String toString() {
-      return "Preference [section: " + getSection() +
+      return "Preference [section: " + getSection() +
              ", key: " + getKey() +
              ", value: " + getValue().toString() + "]";
     }
