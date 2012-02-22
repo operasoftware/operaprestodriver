@@ -76,13 +76,7 @@ def java(ui, services, out, **kwargs):
         text = gen.package(package, export=['package', 'message', 'enum'])
 
         if out:
-            if package.services:
-                out_name = package.services[0].name
-            elif package.name:
-                out_name = package.name
-            else:
-                out_name = fname
-            fname = os.path.join(out, out_name + '.proto')
+            fname = os.path.join(out, os.path.basename(package.filename))
             outfile = open(fname, 'w').write(text)
             ui.outl('Wrote service %s to %s' % (package.services[0].name, fname))
         else:
