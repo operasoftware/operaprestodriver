@@ -28,7 +28,6 @@ import org.junit.After;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-
 import static com.opera.core.systems.OperaProduct.CORE;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;

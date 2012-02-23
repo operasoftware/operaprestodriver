@@ -26,10 +26,8 @@ import com.opera.core.systems.testing.drivers.TestOperaDriver;
 import com.opera.core.systems.testing.drivers.TestOperaDriverSupplier;
 
 import org.junit.ClassRule;
-import org.junit.Rule;
 import org.junit.rules.ExternalResource;
 import org.junit.runner.RunWith;
-
 
 import java.io.File;
 
@@ -102,7 +100,6 @@ public abstract class OperaDriverTestCase {
 
       driver = null;
     }
-
   };
 
   //@Rule
