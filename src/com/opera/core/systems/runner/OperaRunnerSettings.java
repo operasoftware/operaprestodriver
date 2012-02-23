@@ -51,28 +51,6 @@ public class OperaRunnerSettings
 
   private boolean supportsPd = true;
 
-  public OperaRunnerSettings() {
-    // We read in environmental variable OPERA_ARGS in addition to existing arguments passed down
-    // through OperaRunnerSettings/OperaArguments.  These are combined and can be retrieved using
-    // OperaDriverSettings.getArguments().
-    //
-    // Note that this is a deviation from the principle of arguments normally overwriting
-    // environmental variables.
-    String environmentArguments = System.getenv("OPERA_ARGS");
-    if (environmentArguments != null && !environmentArguments.isEmpty()) {
-      OperaArguments
-          parsedEnvironmentArguments =
-          com.opera.core.systems.OperaArguments.parse(environmentArguments);
-      if (arguments != null && !arguments.getArguments().isEmpty()) {
-        arguments.merge(parsedEnvironmentArguments);
-      } else {
-        arguments = parsedEnvironmentArguments;
-      }
-    } else {
-      arguments = new com.opera.core.systems.OperaArguments();
-    }
-  }
-
   public File getBinary() {
     return operaBinary;
   }

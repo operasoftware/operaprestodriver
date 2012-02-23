@@ -70,7 +70,7 @@ public class OperaRunnerTest extends OperaDriverTestCase {
     // TODO(andreastt): This should be done more elegantly in OperaDriverTestCase
     try {
       iniFile = temporaryProfile.newFile("operaprefs.ini");
-      Files.copy(fixtureFile("profile" + File.separator + "opera.ini"), iniFile);
+      Files.copy(resources.locate("profile/opera.ini"), iniFile);
     } catch (IOException e) {
       fail("Unable to copy preference fixture: " + e.getMessage());
     }
