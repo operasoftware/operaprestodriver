@@ -108,15 +108,6 @@ public class OperaArgument {
   }
 
   /**
-   * Returns the string representation of the combined argument and value.
-   *
-   * @return combined argument and value in a string
-   */
-  public String toString() {
-    return argument + " " + value;
-  }
-
-  /**
    * Sanitizes an argument that contains a sign.  By default we sanitize all added arguments,
    * meaning "-foo" will be sanitized to "foo".
    *
