@@ -104,7 +104,7 @@ public class OperaDriverTest extends OperaDriverTestCase {
   }
 
   @Test
-  @Ignore(products = CORE, value = "core does not reset port number if -debugproxy is ommitted")
+  @Ignore(products = CORE, value = "core does not reset port number if -debugproxy is omitted")
   public void testDefaultPort() throws Exception {
     DesiredCapabilities c = new DesiredCapabilities();
     c.setCapability(OperaDriver.PORT, -1);
