@@ -25,6 +25,8 @@ import org.junit.Test;
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.io.FileHandler;
+import org.hamcrest.*;
+import org.openqa.selenium.lift.Matchers;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.io.File;
@@ -32,6 +34,7 @@ import java.io.File;
 import static com.opera.core.systems.OperaProduct.CORE;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 public class OperaDriverTest extends OperaDriverTestCase {
@@ -110,7 +113,7 @@ public class OperaDriverTest extends OperaDriverTestCase {
     c.setCapability(OperaDriver.PORT, -1);
 
     TestOperaDriver a = new TestOperaDriver(c);
-    assertEquals("7001", a.preferences().get("Developer Tools", "Proxy Port").toString());
+    assertEquals(7001, a.preferences().get("Developer Tools", "Proxy Port").getValue());
     a.quit();
   }
 
@@ -153,7 +156,7 @@ public class OperaDriverTest extends OperaDriverTestCase {
       }
     }
 
-    assertEquals("9876", a.preferences().get("Developer Tools", "Proxy Port").toString());
+    assertEquals(9876, a.preferences().get("Developer Tools", "Proxy Port").getValue());
     a.quit();
   }
 
@@ -163,12 +166,11 @@ public class OperaDriverTest extends OperaDriverTestCase {
     c.setCapability(OperaDriver.PROFILE, "");
 
     TestOperaDriver a = new TestOperaDriver(c);
-    String profile = a.preferences().get("User Prefs", "Opera Directory").toString();
-    String
-        defaultProfile =
-        a.preferences().get("User Prefs", "Opera Directory").getDefaultValue().toString();
-    assertTrue("'" + profile + "' contains '" + defaultProfile + "'",
-               profile.contains(defaultProfile));
+    String profile = a.preferences().get("User Prefs", "Opera Directory").getValue().toString();
+    String defaultProfile = a.preferences().get("User Prefs", "Opera Directory")
+        .getDefaultValue().toString();
+    assertTrue("'" + defaultProfile + "' contains '" + profile + "'",
+               defaultProfile.contains(profile));
     a.quit();
   }
 
@@ -218,11 +220,12 @@ public class OperaDriverTest extends OperaDriverTestCase {
         throw e;
       }
     }
-    String profile = a.preferences().get("User Prefs", "Opera Directory").toString();
-    assertTrue("'" + profile + "' (case insensitively) should contain 'tmp', 'temp' or 'var/folders/ly'",
-               profile.toLowerCase().contains("tmp") ||
-               profile.toLowerCase().contains("temp") ||
-               profile.toLowerCase().contains("var/folders/ly"));
+    String profile = a.preferences().get("User Prefs", "Opera Directory").getValue().toString();
+    assertTrue(
+        "'" + profile + "' (case insensitively) should contain 'tmp', 'temp' or 'var/folders'",
+        profile.toLowerCase().contains("tmp") ||
+        profile.toLowerCase().contains("temp") ||
+        profile.toLowerCase().contains("var/folders"));
     a.quit();
   }
 
