@@ -64,7 +64,7 @@ public class OperaProfileTest extends OperaDriverTestCase {
     //
     // TODO(andreastt): Abstract this out into OperaDriverTestCase
     try {
-      Files.copy(fixtureFile("profile" + File.separator + "opera.ini"),
+      Files.copy(resources.locate("profile/opera.ini"),
                  new File(existingProfile.getPath() + File.separator + "operaprefs.ini"));
     } catch (IOException e) {
       fail("Unable to prepare new profile");
