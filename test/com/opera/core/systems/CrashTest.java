@@ -18,13 +18,13 @@ package com.opera.core.systems;
 
 
 import com.opera.core.systems.scope.exceptions.CommunicationException;
-import com.opera.core.systems.testing.Ignore;
 import com.opera.core.systems.testing.drivers.OperaDriverBuilder;
 import com.opera.core.systems.testing.drivers.TestOperaDriver;
 import com.opera.core.systems.testing.drivers.TestOperaDriverSupplier;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.openqa.selenium.os.CommandLine;
 
