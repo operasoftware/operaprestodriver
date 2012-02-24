@@ -15,14 +15,10 @@ limitations under the License.
 */
 package com.opera.core.systems.util;
 
-import com.google.common.io.Files;
-
 import java.io.File;
-import java.io.IOException;
-
+import java.util.logging.Logger;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.io.FileHandler;
-
 import com.opera.core.systems.OperaDriver;
 import com.opera.core.systems.settings.OperaDriverSettings;
 
@@ -35,6 +31,8 @@ public class ProfileUtils {
 	private String smallPrefsFolder;
 	private String cachePrefsFolder;
 	private Capabilities capabilities;
+
+	protected final Logger logger = Logger.getLogger(this.getClass().getName());
 
 	@Deprecated
 	public ProfileUtils(String largePrefsFolder, String smallPrefsFolder, String cachePrefsFolder, OperaDriverSettings settings) {
@@ -127,23 +125,69 @@ public class ProfileUtils {
 	 * Does nothing if prefs folders are default main user profile
 	 */
 	public boolean deleteProfile() {
-		// Assuming if any of those are main profile, skip the whole delete
-		if (isMainProfile(smallPrefsFolder) ||
-				isMainProfile(largePrefsFolder) ||
-				isMainProfile(cachePrefsFolder))
-		{
-			return false;
-		}
+    String[] profile_dirs = {smallPrefsFolder, largePrefsFolder, cachePrefsFolder};
 
-		boolean deleted = deleteFolder(smallPrefsFolder);
-		if (deleted && !smallPrefsFolder.equals(largePrefsFolder)) {
-			deleted = deleteFolder(largePrefsFolder);
-		}
-		if (deleted && !smallPrefsFolder.equals(cachePrefsFolder) && !largePrefsFolder.equals(cachePrefsFolder)) {
-			deleted = deleteFolder(cachePrefsFolder);
-		}
-		return deleted;
-		// TODO: logger.warning("Could not delete profile");
+    // Assuming if any of those are main profile, skip the whole delete
+    for (int i = 0; i < profile_dirs.length; i++)
+    {
+      if (isMainProfile(profile_dirs[i]))
+      {
+        logger.finer("Skipping profile deletion since '" + profile_dirs[i] + "' is the main profile.");
+        return false;
+      }
+    }
+
+    for (int i = 0; i < profile_dirs.length; i++)
+    {
+      String current_dir = profile_dirs[i];
+
+      File current_dir_handle = new File(current_dir);
+
+      if (!current_dir_handle.exists())
+      {
+        logger.finer("Skipping profile deletion for '" + current_dir + "' since it doesn't exist.");
+        continue;
+      }
+
+      boolean deleted = deleteFolder(current_dir);
+      if (!deleted)
+      {
+        int retry_interval_ms = 500;
+        int retry_max_count = 10;
+        int retry_count = 0;
+        boolean ok = false;
+
+        logger.warning("Profile could not be deleted, retrying...");
+
+        do
+        {
+          try {
+            Thread.sleep(retry_interval_ms);
+          } catch (InterruptedException e) {
+            e.printStackTrace();
+          }
+
+          ok = deleteFolder(current_dir);
+          retry_count++;
+          if (retry_count > retry_max_count)
+            break;
+
+        } while (!ok);
+
+        if (!ok)
+        {
+          logger.severe("Could not delete profile in '" + current_dir + "'. Skipping further deletion.");
+          return false;
+        }
+        else
+          logger.warning("Deleted profile, retry count = " + retry_count);
+      }
+      else
+      {
+        logger.finer("Deleted profile in '" + current_dir + "'");
+      }
+    }
+    return true;
 	}
 
 	/**
@@ -153,17 +197,12 @@ public class ProfileUtils {
 	 */
 	public boolean copyProfile(String newPrefs) {
 		if (new File(newPrefs).exists() == false) {
+      logger.warning("The directory '" + newPrefs + "' doesn't exist, failed to copy profile.");
 			return false;
 		}
 
-		try {
-      Files.copy(new File(newPrefs), new File(smallPrefsFolder));
-		} catch (IOException e) {
-			// Ignore
-			// e.printStackTrace();
-			return false;
-		}
-		return true;
+		logger.finer("Copying profile from '" + newPrefs + "'");
+		return WatirUtils.CopyDirAndFiles(newPrefs, smallPrefsFolder);
 	}
 
 	/**
