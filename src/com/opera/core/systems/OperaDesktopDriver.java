@@ -824,6 +824,12 @@ public class OperaDesktopDriver extends OperaDriver {
         // Quit and wait for opera to quit properly
         quitOpera();
 
+        try {
+          Thread.sleep(2000);
+        } catch (InterruptedException e) {
+          e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+
         // Cleanup old profile
         if (profileUtils.deleteProfile() == false)
           logger.severe("Could not delete profile");
