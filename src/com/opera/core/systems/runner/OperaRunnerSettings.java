@@ -28,7 +28,7 @@ public class OperaRunnerSettings
   protected String profile = null;  // "" for Opera < 12
   protected boolean noQuit = false;
   protected String host = "127.0.0.1";
-  protected Integer port = 0;  // -1 for Opera < 12
+  protected Integer port = -1;  // -1 for Opera < 12
   protected Level loggingLevel = Level.INFO;
   protected com.opera.core.systems.arguments.interfaces.OperaArguments arguments;
 
