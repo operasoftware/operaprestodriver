@@ -19,6 +19,8 @@ package com.opera.core.systems.preferences;
 import com.opera.core.systems.common.lang.OperaStrings;
 import com.opera.core.systems.model.OperaColor;
 
+import org.openqa.selenium.WebDriverException;
+
 import java.io.File;
 import java.util.Collection;
 import java.util.Iterator;
@@ -129,6 +131,8 @@ public abstract class AbstractOperaPreferences implements OperaPreferences {
           return ((OperaColor) value).getHex();
         } else if (value instanceof File) {
           return ((File) value).getPath();
+        } else if (value instanceof Boolean) {
+          return ((Boolean) value) ? "1" : "0";
         }
 
         return value.toString();

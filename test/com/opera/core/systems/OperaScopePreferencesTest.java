@@ -91,18 +91,24 @@ public class OperaScopePreferencesTest extends OperaDriverTestCase {
   }
 
   @Test
+  public void testSetWithIntegerOnBoolean() {
+    preferences.set("Developer Tools", "Proxy Auto Connect", 0);
+    assertEquals(false, preferences.get("Developer Tools", "Proxy Auto Connect").getValue());
+  }
+
+  @Test
   public void testSetWithInteger() {
     preferences.set("Developer Tools", "Proxy Port", 1234);
     assertEquals(1234, preferences.get("Developer Tools", "Proxy Port").getValue());
   }
-  
+
   @Test
   public void testSetWithColor() {
-    OperaColor color = new OperaColor(120,120,120);
+    OperaColor color = new OperaColor(120, 120, 120);
     preferences.set("Colors", "Color.Normal", color);
     assertEquals(color, preferences.get("Colors", "Color.Normal").getValue());
   }
-  
+
   @Test
   public void testSetWithFile() {
     File cssFile = new File("/no/file");

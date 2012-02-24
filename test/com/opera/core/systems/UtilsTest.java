@@ -110,6 +110,7 @@ public class UtilsTest extends OperaDriverTestCase {
     }
 
     @Test
+    @Ignore("This might time out due to no response from Opera for 30 seconds...")
     public void testClearAll() {
       utils.clearPrivateData(OperaDriver.PrivateData.ALL);
     }
