@@ -185,7 +185,7 @@ class ClickDelayer
 
             if (time_since_last_click < double_click_time)
             {
-              logger.warning(String.format("Delaying click in order to avoid double-click - check your test (last click was %d ms ago, OS double click timeout is %d ms)", time_since_last_click, double_click_time));
+              logger.fine(String.format("Delaying click in order to avoid double-click - check your test (last click was %d ms ago, OS double click timeout is %d ms)", time_since_last_click, double_click_time));
               try
               {
                 Thread.sleep(double_click_time);

@@ -422,6 +422,10 @@ public class ScopeServices implements IConnectionHandler {
         }
         timeout -= interval;
       }
+
+      if (runner.isOperaRunning()) {
+        logger.severe("Opera is still running!");
+      }
     }
   }
 
