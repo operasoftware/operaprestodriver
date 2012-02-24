@@ -260,7 +260,13 @@ public class OperaLauncherRunner extends OperaRunner
     }
 
     if (launcherRunner != null) {
-      launcherRunner.shutdown();
+      try {
+        launcherRunner.shutdown();
+      }
+      catch (Exception e)
+      {
+        logger.warning("Could not shutdown launcher runner!");
+      }
       launcherRunner = null;
     }
   }
