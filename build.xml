@@ -1,23 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project basedir="." default="compile" name="OperaDriver">
-
   <!-- Location of the selenium source. Used to generate docs and inherit
   the javadoc -->
   <property name="selenium.src" value="../selenium/java/client/src" />
 
   <!-- Get version from Git, and output it to the VERSION file.
        This file is later copied to other locations. -->
-  <exec executable="git" outputproperty="version" failifexecutionfails="false">
+  <exec executable="git" outputproperty="version-unescaped" failifexecutionfails="false">
     <arg value="describe" />
     <arg value="--dirty" />
     <arg value="--always" />
   </exec>
+
   <!-- If we can't get the version from git, set a default  -->
-  <property name="version" value="UNKNOWN-VERSION" />
-  <echo message="${version}" file="VERSION" />
+  <property name="version-unescaped" value="UNKNOWN-VERSION" />
+  <echo message="${version-unescaped}" file="VERSION"/>
+
+  <!--
+  The output of git describe may contain the slash character, that will
+  cause the output JAR file to be created in a subdirectory.
+  We therefore change every slash found in the version string to the
+  underscore character.
+  -->
+  <loadfile property="version" srcFile="VERSION">
+    <filterchain>
+      <tokenfilter>
+        <replaceregex pattern="\/" replace="_" flags="g"/>
+      </tokenfilter>
+    </filterchain>
+  </loadfile>
+  <echo message="Version is ${version}" />
+  <echo message="${version}" file="VERSION"/>
 
   <!-- Variables  -->
-
   <property name="jar.filename" value="operadriver-${version}.jar" />
   <property name="jar.path" value="pkg/${jar.filename}" />
 
