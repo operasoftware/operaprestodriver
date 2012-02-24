@@ -144,7 +144,7 @@ public class OperaDesktopDriver extends OperaDriver {
 
       String operaPath = getOperaPath();
 
-      logger.info("OperaBinaryLocation retrieved from Opera: " + operaPath);
+      logger.fine("OperaBinaryLocation retrieved from Opera: " + operaPath);
 
       if (operaPath.length() > 0) {
 
@@ -161,7 +161,8 @@ public class OperaDesktopDriver extends OperaDriver {
         services.quit(runner, pid);
 
         // Delete the profile to start the first test with a clean profile
-        profileUtils.deleteProfile();
+        if (profileUtils.deleteProfile() == false)
+          logger.severe("Could not delete profile");
 
         // Work around stop and restart Opera so the Launcher has control of it now
         // Initialising the services will start Opera if the OperaLauncherRunner is
@@ -207,7 +208,6 @@ public class OperaDesktopDriver extends OperaDriver {
         runner.stopOpera();
       }
     } else {
-
       // Quit with action as opera wasn't started with the launcher
       String operaPath = desktopUtils.getOperaPath();
       logger.info("OperaBinaryLocation retrieved from Opera: " + operaPath);
@@ -906,7 +906,8 @@ public class OperaDesktopDriver extends OperaDriver {
     // Don't delete in no-launcher mode
     if (runner != null && !runner.isOperaRunning()) {
       // Will only delete profile if it's not a default main profile
-      profileUtils.deleteProfile();
+      if (profileUtils.deleteProfile() == false)
+          logger.severe("Could not delete profile");
     } else {
       logger.warning("Cannot delete profile while Opera is running");
     }
