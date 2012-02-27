@@ -258,3 +258,4 @@ Known issues
 * Tests for typing multibyte characters will fail on Windows unless you have the correct charset
 * `OperaDriver.close()` does not close any windows in internal Opera core builds (gogi)
 * EcmaScript dblclick events are not triggered when double clicking an element on Mac
+* Opera requires full focus when testing on Mac
