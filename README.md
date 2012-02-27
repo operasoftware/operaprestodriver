@@ -256,4 +256,5 @@ Known issues
 * Problems with coordinates on moving mouse back and forth past view port
 * Closing the final browser window causes an exception
 * Tests for typing multibyte characters will fail on Windows unless you have the correct charset
-* `OperaDriver.close()` does not close any windows in internal Opera core builds (gogi).
+* `OperaDriver.close()` does not close any windows in internal Opera core builds (gogi)
+* EcmaScript dblclick events are not triggered when double clicking an element on Mac
