@@ -4,6 +4,7 @@ import com.opera.core.systems.OperaDriver;
 import com.sun.jna.Pointer;
 import com.sun.jna.platform.win32.User32;
 import com.sun.jna.Native;
+import com.sun.jna.Platform;
 import com.sun.jna.platform.win32.WinDef.HWND;
 import com.sun.jna.ptr.IntByReference;
 import com.sun.jna.win32.StdCallLibrary;
@@ -15,13 +16,12 @@ public class FileSendKeys {
         public static final int WM_LBUTTONDOWN= 0x201;        
         public static final int WM_LBUTTONUP = 0x202;
         public static final int IDOK = 1;
-        public final MyUser32 INSTANCE = (MyUser32) Native.loadLibrary("user32", MyUser32.class);
-        //public HWND GetLastActivePopup(HWND hwnd);
-        //public HWND  FindWindowExA(HWND hwndParent, HWND hwndChildAfter, String lpszClass, String lpszWindow);
+        public final MyUser32 INSTANCE = Platform.isWindows() ? ((MyUser32) Native.loadLibrary("user32", MyUser32.class)):null;
         public int SendMessageW(HWND hwnd, int i, int wparam, char[] lparam);
         public HWND GetDlgItem(HWND hDlg, int nIDDlgItem);
     }
     
+            
     private static String b2s(char b[]) {
         // Converts C string to Java String
         int len = 0;
@@ -63,6 +63,9 @@ public class FileSendKeys {
     }
 
     public void SendKeysFileDialog(String text) {
+        if (MyUser32.INSTANCE == null) {
+            return;
+        }
         HWND dialogHandle = FindOperaOpenDialog(operaPID);
         HWND editHandle = null;
         ArrayList<HWND> comboBoxes = GetChildWindowsByClass(dialogHandle, "ComboBox");

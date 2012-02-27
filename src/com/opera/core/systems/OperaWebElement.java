@@ -284,42 +284,17 @@ public class OperaWebElement extends RemoteWebElement {
     }
 
     if (!fileInput){
-    // This code is a bit ugly. Because "special" keys can be sent either as an individual
-    // argument, or in the middle of a string of "normal" characters, we have to loop through the
-    // string and check each against a list of special keys.
+        // This code is a bit ugly. Because "special" keys can be sent either as an individual
+        // argument, or in the middle of a string of "normal" characters, we have to loop through the
+        // string and check each against a list of special keys.
 
-    parent.getScopeServices().captureOperaIdle();
-    for (CharSequence seq : keysToSend) {
-      if (seq instanceof Keys) {
-        String key = OperaKeys.get(((Keys) seq).name());
-        // Check if this is a key we hold down, and haven't already pressed, and press, but don't
-        // release it. That's done at the end of this method.
-        if (holdKeys.contains(key) && !heldKeys.contains(key) && !execService.keyIsPressed(key)) {
-          execService.key(key, false);
-          heldKeys.add(key);
-        } else if (key.equals("null")) {
-          for (String hkey : heldKeys) {
-            execService.key(hkey, true);
-          }
-        } else {
-          execService.key(key);
-        }
-      } else if (seq.toString().equals("\n")) {
-        execService.key("enter");
-      } else {
-        // We need to check each character to see if it is a "special" key
-        for (int i = 0; i < seq.length(); i++) {
-          Character c = seq.charAt(i);
-          String keyName = charToKeyName(c);
-
-          // Buffer normal keys for a single type() call
-          if (keyName == null) {
-            execService.type(c.toString());
-          } else {
-            String key = OperaKeys.get(keyName);
-            // TODO: Code repeated from above
-            if (holdKeys.contains(key) && !heldKeys.contains(key) && !execService
-                .keyIsPressed(key)) {
+        parent.getScopeServices().captureOperaIdle();
+        for (CharSequence seq : keysToSend) {
+          if (seq instanceof Keys) {
+            String key = OperaKeys.get(((Keys) seq).name());
+            // Check if this is a key we hold down, and haven't already pressed, and press, but don't
+            // release it. That's done at the end of this method.
+            if (holdKeys.contains(key) && !heldKeys.contains(key) && !execService.keyIsPressed(key)) {
               execService.key(key, false);
               heldKeys.add(key);
             } else if (key.equals("null")) {
@@ -329,16 +304,41 @@ public class OperaWebElement extends RemoteWebElement {
             } else {
               execService.key(key);
             }
+          } else if (seq.toString().equals("\n")) {
+            execService.key("enter");
+          } else {
+            // We need to check each character to see if it is a "special" key
+            for (int i = 0; i < seq.length(); i++) {
+              Character c = seq.charAt(i);
+              String keyName = charToKeyName(c);
+
+              // Buffer normal keys for a single type() call
+              if (keyName == null) {
+                execService.type(c.toString());
+              } else {
+                String key = OperaKeys.get(keyName);
+                // TODO: Code repeated from above
+                if (holdKeys.contains(key) && !heldKeys.contains(key) && !execService
+                    .keyIsPressed(key)) {
+                  execService.key(key, false);
+                  heldKeys.add(key);
+                } else if (key.equals("null")) {
+                  for (String hkey : heldKeys) {
+                    execService.key(hkey, true);
+                  }
+                } else {
+                  execService.key(key);
+                }
+              }
+            }
           }
         }
-      }
-    }
 
-    if (heldKeys.size() > 0) {
-      for (String key : heldKeys) {
-        execService.key(key, true);
-      }
-    }
+        if (heldKeys.size() > 0) {
+          for (String key : heldKeys) {
+            execService.key(key, true);
+          }
+        }
     }
     try {
       parent.waitForLoadToComplete();
