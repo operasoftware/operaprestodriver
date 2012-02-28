@@ -1019,8 +1019,29 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
       return this;
     }
 
+    /**
+     * Sets the amount of time to wait for a page to finish loading before returning control of the
+     * browser to the user.
+     *
+     * @param time the amount of time to wait
+     * @param unit the unit of measure for {@code time}
+     * @return a self reference
+     */
     public Timeouts pageLoadTimeout(long time, TimeUnit unit) {
       OperaIntervals.PAGE_LOAD_TIMEOUT.setValue(TimeUnit.MILLISECONDS.convert(time, unit));
+      return this;
+    }
+
+    /**
+     * Sets the amount of time to wait for a response from Opera/the Scope client before throwing an
+     * error.
+     *
+     * @param time the amount of time to wait
+     * @param unit the unit of measure for {@code time}
+     * @return a self reference
+     */
+    public Timeouts responseTimeout(long time, TimeUnit unit) {
+      OperaIntervals.RESPONSE_TIMEOUT.setValue(TimeUnit.MILLISECONDS.convert(time, unit));
       return this;
     }
 

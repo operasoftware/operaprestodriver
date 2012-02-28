@@ -24,9 +24,10 @@ public enum OperaIntervals {
   /**
    * The response timeout specifies for how long OperaDriver should wait before timing out when it
    * has not received a callback confirmation message from Scope after executing a command.  This
-   * typically happens when it looses connection to Opera.
+   * typically happens when it looses connection to Opera or when a triggered command takes too long
+   * to finish.
    */
-  RESPONSE_TIMEOUT(5000),
+  RESPONSE_TIMEOUT(30000),
 
   /**
    * An implicit wait is to tell WebDriver to poll the DOM for a certain amount of time when trying
@@ -73,6 +74,11 @@ public enum OperaIntervals {
 
   QUIT_POLL_INTERVAL(100),
   QUIT_RESPONSE_TIMEOUT(10000),
+
+  /**
+   * Sets the amount of time to wait for an asynchronous script to finish execution before throwing
+   * an error.  If the timeout is negative, then the script will be allowed to run indefinitely.
+   */
   SCRIPT_TIMEOUT(10000),
 
   /**

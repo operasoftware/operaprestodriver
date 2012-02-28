@@ -145,35 +145,6 @@ public class TestOperaDriver extends OperaDriver {
     }
   }
 
-  public TestOperaOptions manage() {
-    return new TestOperaOptions();
-  }
-
-  public class TestOperaOptions extends OperaOptions {
-
-    public TestOperaTimeouts timeouts() {
-      return new TestOperaTimeouts();
-    }
-
-  }
-
-  public class TestOperaTimeouts extends OperaTimeouts {
-
-    /**
-     * Sets the response timeout, that how long the driver should wait for Opera to send a reply
-     * confirmation to a Scope command.
-     *
-     * @param time the amount of time to wait
-     * @param unit the unit of measure for {@code time}
-     * @return a self reference
-     */
-    public TestOperaTimeouts responseTimeout(long time, TimeUnit unit) {
-      OperaIntervals.RESPONSE_TIMEOUT.setValue(TimeUnit.MILLISECONDS.convert(time, unit));
-      return this;
-    }
-
-  }
-
   public TestOperaUtils utils() {
     return new TestOperaUtils();
   }
