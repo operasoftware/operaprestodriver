@@ -18,22 +18,27 @@ package com.opera.core.systems;
 
 import com.google.common.io.Files;
 
+import com.opera.core.systems.testing.NoDriver;
 import com.opera.core.systems.testing.OperaDriverTestCase;
 
-import org.junit.AfterClass;
+import org.hamcrest.BaseMatcher;
+import org.hamcrest.Description;
+import org.hamcrest.Matcher;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
+import org.openqa.selenium.io.Zip;
 
 import java.io.File;
 import java.io.IOException;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
+@NoDriver
 public class OperaProfileTest extends OperaDriverTestCase {
 
   public OperaProfile profile;
@@ -46,16 +51,8 @@ public class OperaProfileTest extends OperaDriverTestCase {
   @Rule
   public TemporaryFolder temporaryProfileDirectory = new TemporaryFolder();
 
-  @BeforeClass
-  public static void setUpBeforeClass() {
-  }
-
-  @AfterClass
-  public static void tearDownAfterClass() {
-  }
-
   @Before
-  public void beforeEach() {
+  public void beforeEach() throws IOException {
     existingProfile = existingProfileDirectory.getRoot();
     temporaryProfile = temporaryProfileDirectory.getRoot();
 
@@ -116,12 +113,52 @@ public class OperaProfileTest extends OperaDriverTestCase {
   }
 
   @Test
-  public void testToJson() {
+  public void testToJson() throws IOException {
+    profile = new OperaProfile(existingProfile);
 
+    new Zip().unzip(profile.toJson(), temporaryProfile);
+    OperaProfile extractedProfile = new OperaProfile(temporaryProfile.getPath());
+
+    assertThat(profile, matchesProfile(extractedProfile));
   }
 
   @Test
-  public void testFromJson() {
+  public void testFromJson() throws IOException {
+    OperaProfile data = new OperaProfile(existingProfile);
+    profile = TestOperaProfile.fromJson(temporaryProfile, data.toJson());
+
+    assertThat(profile, matchesProfile(data));
+  }
+
+  private Matcher matchesProfile(final OperaProfile expected) {
+    return new BaseMatcher() {
+      public boolean matches(Object o) {
+        OperaProfile actual = (OperaProfile) o;
+
+        try {
+          if ((expected.toJson().equals(actual.toJson())) &&
+              (expected.preferences().size() != actual.preferences().size())) {
+            return true;
+          }
+        } catch (IOException e) {
+          // fall through, caught by JUnit
+        }
+
+        return false;
+      }
+
+      public void describeTo(Description description) {
+        description.appendText(expected.toString());
+      }
+    };
+  }
+
+  private static class TestOperaProfile extends OperaProfile {
+
+    public static OperaProfile fromJson(File directory, String json) throws IOException {
+      new Zip().unzip(json, directory);
+      return new OperaProfile(directory);
+    }
 
   }
 

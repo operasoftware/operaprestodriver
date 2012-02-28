@@ -21,12 +21,13 @@ import com.opera.core.systems.preferences.OperaPreferences;
 
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.io.TemporaryFilesystem;
+import org.openqa.selenium.io.Zip;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Collection;
 import java.util.LinkedHashSet;
-
 
 import static com.google.common.base.Preconditions.checkArgument;
 
@@ -179,10 +180,25 @@ public class OperaProfile {
    * Converts this instance to its JSON representation.
    *
    * @return the JSON representation of this profile
+   * @throws IOException if an I/O error occurs
    */
-  @SuppressWarnings("unused")
-  public String toJson() {
-    return getDirectory().getPath();
+  public String toJson() throws IOException {
+    //return getDirectory().getPath();
+    return new Zip().zip(getDirectory());
+  }
+
+  /**
+   * Converts a JSON string object to a profile representation, returning a new instance of {@link
+   * OperaProfile}.  This is used by the JsonWireProtocol to transfer a profile.
+   *
+   * @param json a base64-encoded JSON string (archive) representing a profile
+   * @return a new profile representation
+   * @throws IOException if an I/O error occurs
+   */
+  public static OperaProfile fromJson(String json) throws IOException {
+    File directory = TemporaryFilesystem.getDefaultTmpFS().createTempDir("opera", "duplicate");
+    new Zip().unzip(json, directory);
+    return new OperaProfile(directory);
   }
 
   /**
