@@ -183,7 +183,6 @@ public class OperaProfile {
    * @throws IOException if an I/O error occurs
    */
   public String toJson() throws IOException {
-    //return getDirectory().getPath();
     return new Zip().zip(getDirectory());
   }
 
