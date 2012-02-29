@@ -21,11 +21,11 @@ Requirements
 
 You will need a Java Runtime Environment 1.5 or newer (Oracle or
 OpenJDK) to use OperaDriver.  It uses the [Scope
-interface](http://dragonfly.opera.com/app/scope-interface/) (same as
-for [Dragonfly](http://www.opera.com/dragonfly/)) to communicate
-directly with Opera from Java.  Consequently, it is only compatible
-out-of-the-box with Opera version 11.6 or newer, although it works for
-older versions with some tweaks.
+interface](http://dragonfly.opera.com/app/scope-interface/) (same as for
+[Dragonfly](http://www.opera.com/dragonfly/)) to communicate directly
+with Opera from Java.  Consequently, it is compatible out-of-the-box
+with Opera version 11.6 or newer, although it works for older versions
+with some tweaks.
 
 The OperaDriver server expects you to have Opera or Opera Next
 installed in the default location for each system:
