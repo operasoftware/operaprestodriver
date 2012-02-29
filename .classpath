@@ -11,7 +11,7 @@
 	<classpathentry kind="lib" path="lib/json-20080701.jar"/>
 	<classpathentry kind="lib" path="lib/ini4j-0.5.2.jar"/>
 	<classpathentry kind="lib" path="lib/protobuf-java-2.4.1.jar"/>
-	<classpathentry kind="lib" path="lib/selenium-java-2.18.jar"/>
-	<classpathentry kind="lib" path="lib/guava-11.0.1.jar"/>
+	<classpathentry kind="lib" path="lib/selenium-java-2.20.0.jar"/>
+        <classpathentry kind="lib" path="lib/guava-11.0.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
