@@ -143,7 +143,7 @@ support are:
 
 | __Capability__              | __Type__ | __Default__ | __Description__             |
 |-----------------------------|----------|-------------|-----------------------------|
-| __opera.logging.level__     | String/[Level](http://docs.oracle.com/javase/1.4.2/docs/api/java/util/logging/Level.html) | "INFO" | How verbose the logging should be.  Available levels are: SEVERE (highest value), WARNING, INFO, CONFIG, FINE, FINER, FINEST (lowest value), ALL.  Default is INFO.
+| __opera.logging.level__     | String/[Level](http://docs.oracle.com/javase/1.4.2/docs/api/java/util/logging/Level.html) | Level.INFO | How verbose the logging should be.  Available levels are: SEVERE (highest value), WARNING, INFO, CONFIG, FINE, FINER, FINEST (lowest value), ALL.  Default is INFO.
 | __opera.logging.file__      | String   | null        | Where to send the output of the logging.  Default is to not write to file.
 | __opera.binary__            | String   | null        | Path to the Opera binary to use.  If not specified, OperaDriver will guess the path to your Opera installation.
 | __opera.arguments__         | String   | null        | Arguments to pass on to Opera, separated by spaces.  See `opera -help` for available command-line arguments.
