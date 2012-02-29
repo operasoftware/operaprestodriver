@@ -22,11 +22,8 @@ import com.opera.core.systems.testing.drivers.TestOperaDriver;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.io.FileHandler;
-import org.hamcrest.*;
-import org.openqa.selenium.lift.Matchers;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.io.File;
@@ -34,8 +31,9 @@ import java.io.File;
 import static com.opera.core.systems.OperaProduct.CORE;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
+import static org.openqa.selenium.Platform.MAC;
+import static org.openqa.selenium.Platform.WINDOWS;
 
 public class OperaDriverTest extends OperaDriverTestCase {
 
@@ -175,12 +173,8 @@ public class OperaDriverTest extends OperaDriverTestCase {
   }
 
   @Test
-  @Ignore(products = CORE, value = "core does not support -pd")
+  @Ignore(platforms = {WINDOWS, MAC}, products = CORE, value = "core does not support -pd")
   public void testSetProfile() throws Exception {
-    if (!Platform.getCurrent().is(Platform.LINUX)) {
-      return;
-    }
-
     FileHandler.delete(new File("/tmp/opera-test-profile/"));
 
     DesiredCapabilities c = new DesiredCapabilities();
@@ -198,7 +192,7 @@ public class OperaDriverTest extends OperaDriverTestCase {
       }
     }
 
-    String profile = a.preferences().get("User Prefs", "Opera Directory").toString();
+    String profile = a.preferences().get("User Prefs", "Opera Directory").getValue().toString();
     assertEquals("/tmp/opera-test-profile/", profile);
     a.quit();
   }
