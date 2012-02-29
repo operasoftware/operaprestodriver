@@ -31,7 +31,9 @@ import java.io.File;
 import static com.opera.core.systems.OperaProduct.CORE;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
+import static org.junit.matchers.JUnitMatchers.containsString;
 import static org.openqa.selenium.Platform.MAC;
 import static org.openqa.selenium.Platform.WINDOWS;
 
@@ -167,8 +169,7 @@ public class OperaDriverTest extends OperaDriverTestCase {
     String profile = a.preferences().get("User Prefs", "Opera Directory").getValue().toString();
     String defaultProfile = a.preferences().get("User Prefs", "Opera Directory")
         .getDefaultValue().toString();
-    assertTrue("'" + defaultProfile + "' contains '" + profile + "'",
-               defaultProfile.contains(profile));
+    assertThat(defaultProfile, containsString(profile));
     a.quit();
   }
 
