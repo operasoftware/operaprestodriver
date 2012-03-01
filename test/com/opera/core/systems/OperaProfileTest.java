@@ -137,7 +137,7 @@ public class OperaProfileTest extends OperaDriverTestCase {
 
         try {
           if ((expected.toJson().equals(actual.toJson())) &&
-              (expected.preferences().size() != actual.preferences().size())) {
+              (expected.preferences().size() == actual.preferences().size())) {
             return true;
           }
         } catch (IOException e) {
