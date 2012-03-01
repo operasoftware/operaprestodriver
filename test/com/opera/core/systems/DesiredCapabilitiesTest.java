@@ -19,15 +19,13 @@ package com.opera.core.systems;
 import com.google.common.io.Files;
 
 import com.opera.core.systems.runner.OperaRunnerException;
+import com.opera.core.systems.runner.launcher.OperaLauncherRunnerSettings;
 import com.opera.core.systems.testing.Ignore;
 import com.opera.core.systems.testing.OperaDriverTestCase;
 import com.opera.core.systems.testing.drivers.TestOperaDriver;
-import com.opera.core.systems.runner.launcher.OperaLauncherRunnerSettings;
 
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -50,22 +48,6 @@ public class DesiredCapabilitiesTest extends OperaDriverTestCase {
   public static final NetworkUtils NETWORK_UTILS = new NetworkUtils();
 
   public DesiredCapabilities capabilities;
-
-  /**
-   * Overrides {@link com.opera.core.systems.testing.OperaDriverTestCase#setup()}
-   */
-  @BeforeClass
-  public static void setup() {
-    driver.quit();
-    driver = null;
-  }
-
-  /**
-   * Overrides {@link com.opera.core.systems.testing.OperaDriverTestCase#teardown()}
-   */
-  @AfterClass
-  public static void teardown() {
-  }
 
   @Before
   public void beforeEach() {
@@ -160,10 +142,16 @@ public class DesiredCapabilitiesTest extends OperaDriverTestCase {
   }
 
   @Test
+  @Ignore(products = CORE, value = "core does not support -pd")
   public void testSettingProfile() throws IOException {
-    capabilities.setCapability(OperaDriver.PROFILE, tmpFolder.newFolder().getCanonicalPath());
+    File profile = tmpFolder.newFolder();
+    capabilities.setCapability(OperaDriver.PROFILE, profile.getPath());
     driver = new TestOperaDriver(capabilities);
+
     assertNotNull(driver);
+    assertEquals(profile, driver.preferences().get("User Prefs", "Opera Directory").getValue());
+    assertEquals(profile, driver.settings.getProfile().getDirectory());
+
     driver.quit();
   }
 

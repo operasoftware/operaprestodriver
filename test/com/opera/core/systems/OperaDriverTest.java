@@ -21,23 +21,20 @@ import com.opera.core.systems.testing.OperaDriverTestCase;
 import com.opera.core.systems.testing.drivers.TestOperaDriver;
 
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 import org.openqa.selenium.WebDriverException;
-import org.openqa.selenium.io.FileHandler;
 import org.openqa.selenium.remote.DesiredCapabilities;
-
-import java.io.File;
 
 import static com.opera.core.systems.OperaProduct.CORE;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
-import static org.junit.matchers.JUnitMatchers.containsString;
-import static org.openqa.selenium.Platform.MAC;
-import static org.openqa.selenium.Platform.WINDOWS;
 
 public class OperaDriverTest extends OperaDriverTestCase {
+
+  @Rule
+  public TemporaryFolder temporaryProfile = new TemporaryFolder();
 
   @Test
   public void testWithoutSettingsObject() {
@@ -158,93 +155,6 @@ public class OperaDriverTest extends OperaDriverTestCase {
 
     assertEquals(9876, a.preferences().get("Developer Tools", "Proxy Port").getValue());
     a.quit();
-  }
-
-  @Test
-  public void testDefaultProfile() {
-    DesiredCapabilities c = new DesiredCapabilities();
-    c.setCapability(OperaDriver.PROFILE, "");
-
-    TestOperaDriver a = new TestOperaDriver(c);
-    String profile = a.preferences().get("User Prefs", "Opera Directory").getValue().toString();
-    String defaultProfile = a.preferences().get("User Prefs", "Opera Directory")
-        .getDefaultValue().toString();
-    assertThat(defaultProfile, containsString(profile));
-    a.quit();
-  }
-
-  @Test
-  @Ignore(platforms = {WINDOWS, MAC}, products = CORE, value = "core does not support -pd")
-  public void testSetProfile() throws Exception {
-    FileHandler.delete(new File("/tmp/opera-test-profile/"));
-
-    DesiredCapabilities c = new DesiredCapabilities();
-    c.setCapability(OperaDriver.PROFILE, "/tmp/opera-test-profile/");
-
-    TestOperaDriver a;
-    try {
-      a = new TestOperaDriver(c);
-    } catch (Exception e) {
-      // If immediately exited, then it doesn't support the flags
-      if (e.getMessage().contains("Opera exited immediately")) {
-        return;
-      } else {
-        throw e;
-      }
-    }
-
-    String profile = a.preferences().get("User Prefs", "Opera Directory").getValue().toString();
-    assertEquals("/tmp/opera-test-profile/", profile);
-    a.quit();
-  }
-
-  @Test
-  @Ignore(products = CORE, value = "core does not support -pd")
-  public void testRandomProfile() throws Exception {
-    DesiredCapabilities c = new DesiredCapabilities();
-    c.setCapability(OperaDriver.PROFILE, (String) null);
-
-    TestOperaDriver a;
-    try {
-      a = new TestOperaDriver(c);
-    } catch (Exception e) {
-      // If immediately exited, then it doesn't support the flags
-      if (e.getMessage().contains("Opera exited immediately")) {
-        return;
-      } else {
-        throw e;
-      }
-    }
-    String profile = a.preferences().get("User Prefs", "Opera Directory").getValue().toString();
-    assertTrue(
-        "'" + profile + "' (case insensitively) should contain 'tmp', 'temp' or 'var/folders'",
-        profile.toLowerCase().contains("tmp") ||
-        profile.toLowerCase().contains("temp") ||
-        profile.toLowerCase().contains("var/folders"));
-    a.quit();
-  }
-
-  @Test
-  @Ignore // TODO(andreastt): No good reason why we're ignoring this, investigate
-  public void testProfileDeleted() throws Exception {
-    DesiredCapabilities c = new DesiredCapabilities();
-    c.setCapability(OperaDriver.PROFILE, (String) null);
-
-    TestOperaDriver a;
-    try {
-      a = new TestOperaDriver(c);
-    } catch (Exception e) {
-      // If immediately exited, then it doesn't support the flags
-      if (e.getMessage().contains("Opera exited immediately")) {
-        return;
-      } else {
-        throw e;
-      }
-    }
-    String profile = a.preferences().get("User Prefs", "Opera Directory").toString();
-    assertTrue("Temporary directory exists", (new File(profile)).exists());
-    a.quit();
-    assertFalse("Temporary directory does not exist after quit", (new File(profile)).exists());
   }
 
   @Test

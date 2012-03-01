@@ -106,6 +106,31 @@ public class OperaProfileTest extends OperaDriverTestCase {
     assertEquals(46, profile.preferences().size());
   }
 
+  /*
+  @Test
+  @Ignore // TODO(andreastt): No good reason why we're ignoring this, investigate
+  public void testProfileDeleted() throws Exception {
+    DesiredCapabilities c = new DesiredCapabilities();
+    c.setCapability(OperaDriver.PROFILE, (String) null);
+
+    TestOperaDriver a;
+    try {
+      a = new TestOperaDriver(c);
+    } catch (Exception e) {
+      // If immediately exited, then it doesn't support the flags
+      if (e.getMessage().contains("Opera exited immediately")) {
+        return;
+      } else {
+        throw e;
+      }
+    }
+    String profile = a.preferences().get("User Prefs", "Opera Directory").toString();
+    assertTrue("Temporary directory exists", (new File(profile)).exists());
+    a.quit();
+    assertFalse("Temporary directory does not exist after quit", (new File(profile)).exists());
+  }
+  */
+
   @Test
   public void testPreferences() {
     OperaProfile profile = new OperaProfile();
