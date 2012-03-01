@@ -172,7 +172,7 @@ public class OperaLauncherRunner extends OperaRunner
       ResponseEncapsulation res = launcherProtocol.sendRequest(MessageType.MSG_START, request);
 
       if (handleStatusMessage(res.getResponse()) != StatusType.RUNNING) {
-        throw new OperaRunnerException("Could not start Opera");
+        throw new IOException("launcher unable to start binary");
       }
 
       // Check Opera hasn't immediately exited (e.g. due to unknown arguments)
@@ -190,7 +190,7 @@ public class OperaLauncherRunner extends OperaRunner
             launcherRunner.getCommand());
       }
     } catch (IOException e) {
-      throw new OperaRunnerException("Could not start Opera", e);
+      throw new OperaRunnerException("Could not start Opera: " + e.getMessage(), e);
     }
 
     logger.fine("Opera launched through launcher");
@@ -207,10 +207,10 @@ public class OperaLauncherRunner extends OperaRunner
       );
 
       if (handleStatusMessage(res.getResponse()) == StatusType.RUNNING) {
-        throw new OperaRunnerException("Could not stop Opera");
+        throw new IOException("launcher unable to stop binary");
       }
     } catch (IOException e) {
-      throw new OperaRunnerException("Could not stop Opera", e);
+      throw new OperaRunnerException("Could not stop Opera: " + e.getMessage(), e);
     }
 
     logger.fine("Opera stopped through launcher");
