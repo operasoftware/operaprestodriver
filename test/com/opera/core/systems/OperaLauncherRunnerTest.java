@@ -100,7 +100,7 @@ public class OperaLauncherRunnerTest {
 
   @Test
   public void testConstructorWithSettingsArguments() {
-    settings.setArguments(OperaArguments.parse("-geometry 1024x768"));
+    //settings.setArguments(OperaArguments.parse("-geometry 1024x768"));
     runner = new OperaLauncherRunner(settings);
     runner.startOpera();
     assertTrue(runner.isOperaRunning());
@@ -117,7 +117,8 @@ public class OperaLauncherRunnerTest {
 
   @Test
   public void testStartAndStopOperaTenTimes() {
-    settings.setArguments(OperaArguments.parse("-geometry 640x480"));
+    //settings.setArguments(OperaArguments.parse("-geometry 640x480"));
+    //runner = new OperaLauncherRunner(settings);
     runner = new OperaLauncherRunner(settings);
 
     for (int i = 0; i < 10; i++) {
