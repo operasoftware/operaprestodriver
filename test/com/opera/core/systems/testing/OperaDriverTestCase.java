@@ -115,7 +115,7 @@ public abstract class OperaDriverTestCase {
    */
   @Deprecated
   protected static String fixture(String file) {
-    return "file://localhost" + getFixtureDirectory().getPath() + SEPARATOR + file;
+    return "file://localhost/" + getFixtureDirectory().getPath() + SEPARATOR + file;
   }
 
   @Deprecated
