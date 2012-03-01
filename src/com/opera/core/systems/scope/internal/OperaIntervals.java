@@ -27,7 +27,7 @@ public enum OperaIntervals {
    * typically happens when it looses connection to Opera or when a triggered command takes too long
    * to finish.
    */
-  RESPONSE_TIMEOUT(300000),
+  RESPONSE_TIMEOUT(60000),
 
   /**
    * An implicit wait is to tell WebDriver to poll the DOM for a certain amount of time when trying
