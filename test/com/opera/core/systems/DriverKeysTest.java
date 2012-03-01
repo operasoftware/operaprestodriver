@@ -31,12 +31,13 @@ import static org.openqa.selenium.Platform.MAC;
 
 public class DriverKeysTest extends OperaDriverTestCase {
 
-  private WebElement fieldOne;
-  private WebElement fieldTwo;
+  public WebElement fieldOne;
+  public WebElement fieldTwo;
 
   @Before
   public void beforeEach() {
-    getFixture("two_input_fields.html");
+    driver.navigate().to(pages.twoInputFields);
+
     fieldOne = driver.findElementByName("one");
     fieldTwo = driver.findElementByName("two");
     fieldOne.click();

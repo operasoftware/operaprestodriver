@@ -21,9 +21,37 @@ import com.opera.core.systems.environment.webserver.WebServer;
 public class Pages {
 
   public String windows;
+  public String download;
+  public String flash;
+  public String iframes;
+  public String javascript;
+  public String keys;
+  public String mouse;
+  public String none;
+  public String select;
+  public String tall;
+  public String test;
+  public String timer;
+  public String twoInputFields;
+  public String zeroHeightQuirks;
+  public String zeroHeightStandards;
 
   public Pages(WebServer server) {
     windows = server.whereIs("windows.html");
+    download = server.whereIs("download.html");
+    flash = server.whereIs("flash.html");
+    iframes = server.whereIs("iframes.html");
+    javascript = server.whereIs("javascript.html");
+    keys = server.whereIs("keys.html");
+    mouse = server.whereIs("mouse.html");
+    none = server.whereIs("none.html");
+    select = server.whereIs("select.html");
+    tall = server.whereIs("tall.html");
+    test = server.whereIs("test.html");
+    timer = server.whereIs("timer.html");
+    twoInputFields = server.whereIs("two_input_fields.html");
+    zeroHeightQuirks = server.whereIs("zero-height-quirks.html");
+    zeroHeightStandards = server.whereIs("zero-height-standards.html");
   }
 
 }
