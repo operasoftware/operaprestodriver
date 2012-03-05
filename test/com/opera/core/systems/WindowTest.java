@@ -29,6 +29,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import static com.opera.core.systems.OperaProduct.CORE;
+import static org.openqa.selenium.Platform.WINDOWS;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
@@ -54,6 +55,7 @@ public class WindowTest extends OperaDriverTestCase {
   }
 
   @Test
+  @Ignore(platforms = WINDOWS)
   public void testOpenNewTargetedWindow() {
     windowPage.openNewTargetedWindow();
 
@@ -65,6 +67,7 @@ public class WindowTest extends OperaDriverTestCase {
   }
 
   @Test
+  @Ignore(platforms = WINDOWS)
   public void testOpenMultipleTargetedWindows() {
     for (int i = 1; i <= 2; i++) {
       windowPage.openNewTargetedWindow();
@@ -74,6 +77,7 @@ public class WindowTest extends OperaDriverTestCase {
   }
 
   @Test
+  @Ignore(platforms = WINDOWS)
   public void testOpenNewAnonymousWindow() {
     windowPage.openNewAnonymousWindow();
 
@@ -82,6 +86,7 @@ public class WindowTest extends OperaDriverTestCase {
   }
 
   @Test
+  @Ignore(platforms = WINDOWS)
   public void testOpenMultipleWindows() {
     int windowsToOpen = 3;
 
