@@ -9,6 +9,9 @@ v0.11     (2012-03-05)
 
   * Recognizing opera.launcher capability.  (andreastt)
 
+  * Deprecated OperaWebElement.click(int times), click(int x, int y)
+    and middleClick().  (andreastt)
+
   [NEW FEATURES]
 
   * Using new extension to hob, javagen, for generating Java classes
@@ -21,6 +24,8 @@ v0.11     (2012-03-05)
   * Upgraded to Selenium 2.20.  (andreastt)
 
   * Raising response timeout to 60 seconds.  (andreastt)
+
+  * Improved reliability of implicit waits.  (andreastt)
 
   * OperaProfile.toJson() now returns a proper JSON representation of
     the profile.  (andreastt)
@@ -41,6 +46,9 @@ v0.11     (2012-03-05)
 
   * OperaRunnerSettings.setBinary() now accepts java.io.File as the
     default argument.  (andreastt)
+
+  * If ENABLE_CHECKS is enabled, this is no longer applied to asserting
+    whether elements are displayed or not.  (andreastt)
 
   * Recompiled ecmascript service protocols to facilitate CORE-36517,
     fixes SPARTAN-1165.  (andreastt)
