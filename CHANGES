@@ -48,6 +48,9 @@ v0.11     (2012-03-05)
   * Facilitate connecting to a remote host, addresses OPDRV-152.
     (andreastt)
 
+  * Removed desktop-specific hardcoded response timeout to 30 seconds
+    when a window is loaded.  (andreastt)
+
   * Remove a redundant cast.  (hansd)
 
   * AbstractEventHandler turned into an interface, and EventHandler

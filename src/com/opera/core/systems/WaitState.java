@@ -441,23 +441,6 @@ public class WaitState {
 
   private final ResultItem waitAndParseResult(long timeout, int match,
                                               String stringMatch, final ResponseType type) {
-
-    // desktop-specific workaround which is _only_ triggered when variable
-    // "profile" is set by SpartanRunner.
-    //
-    // This essentially alters the timeout when running Desktop and overrides
-    // whatever the user has set before.
-    //
-    // TODO: Review timeout setters in SpartanRunner and remove this hack.
-    if (profile != null && profile.toLowerCase().equals("desktop")) {
-      if ((type == ResponseType.WINDOW_LOADED) && (timeout < 30000)) {
-        long newTimeout = 30000;
-        logger.warning("WARNING: desktop-specific workaround for waitAndParseResult.  " +
-                       "Changing timeout from " + timeout + " to " + newTimeout);
-        timeout = newTimeout;
-      }
-    }
-
     synchronized (lock) {
       while (true) {
 
