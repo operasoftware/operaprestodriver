@@ -75,12 +75,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.FileHandler;
 import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * OperaDriver is an implementation of the WebDriver interface that allows you to drive the Opera
@@ -538,8 +541,12 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     return by.findElement(this);
   }
 
-  protected WebElement findElement(String by, String using) {
-    return findElement(by, using, null);
+  protected WebElement findElement(final String by, final String using) {
+    return implicitlyWaitFor(new Callable<WebElement>() {
+      public WebElement call() throws Exception {
+        return findElement(by, using, null);
+      }
+    });
   }
 
   /**
@@ -551,17 +558,13 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
    * @return an element
    */
   protected WebElement findElement(String by, String using, OperaWebElement el) {
-    if (using == null) {
-      throw new IllegalArgumentException("Cannot find elements when the selector is null");
-    }
+    checkNotNull(using, "Cannot find elements when the selector is null");
 
     using = OperaStrings.escapeJsString(using);
-
-    long start = System.currentTimeMillis();
     boolean isAvailable;
     Integer id;
-
     String script;
+
     if (el == null) {
       // Search the document
       script =
@@ -573,19 +576,13 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
           + "\"}, locator)";
     }
 
-    do {
-      if (el == null) {
-        id = debugger.getObject(script);
-      } else {
-        id = debugger.executeScriptOnObject(script, el.getObjectId());
-      }
+    if (el == null) {
+      id = debugger.getObject(script);
+    } else {
+      id = debugger.executeScriptOnObject(script, el.getObjectId());
+    }
 
-      isAvailable = (id != null);
-
-      if (!isAvailable) {
-        sleep(OperaIntervals.IMPLICIT_WAIT.getValue());
-      }
-    } while (!isAvailable && hasTimeRemaining(start));
+    isAvailable = (id != null);
 
     if (isAvailable) {
       String error =
@@ -1299,10 +1296,6 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     return services;
   }
 
-  protected boolean hasTimeRemaining(long start) {
-    return System.currentTimeMillis() - start < OperaIntervals.IMPLICIT_WAIT.getValue();
-  }
-
   protected List<WebElement> processElements(Integer id) {
     List<Integer> ids = debugger.examineObjects(id);
     List<WebElement> toReturn = new ArrayList<WebElement>();
@@ -1333,6 +1326,51 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
   }
 
   /**
+   * Implicitly wait for an element to become visible.
+   *
+   * Essentially it polls the client every {@link OperaIntervals#POLL_INTERVAL} until {@link
+   * OperaIntervals#IMPLICIT_WAIT} is reached for callable <code>condition</code> to be true.
+   *
+   * @param condition a callable implementation
+   * @param <X>       computes a result, or throws an exception if unable to do so
+   * @return a non-null value if condition is met within implicit wait timeout, null otherwise
+   */
+  protected <X> X implicitlyWaitFor(Callable<X> condition) {
+    long end = System.currentTimeMillis() + OperaIntervals.IMPLICIT_WAIT.getValue();
+    Exception lastException = null;
+
+    do {
+      X toReturn = null;
+
+      try {
+        toReturn = condition.call();
+      } catch (Exception e) {
+        lastException = e;
+      }
+
+      if (toReturn instanceof Boolean && !(Boolean) toReturn) {
+        continue;
+      }
+
+      if (toReturn != null) {
+        return toReturn;
+      }
+
+      sleep(OperaIntervals.POLL_INTERVAL.getValue());
+    } while (System.currentTimeMillis() < end);
+
+    if (lastException != null) {
+      if (lastException instanceof RuntimeException) {
+        throw (RuntimeException) lastException;
+      }
+
+      throw new WebDriverException(lastException);
+    }
+
+    return null;
+  }
+
+  /**
    * Whether idle functionality is available.  Note that this is not the same as whether the idle
    * functionality is enabled.
    *
@@ -1355,6 +1393,10 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
   }
 
   // Following methods are used internally:
+
+  private boolean hasTimeRemaining(long start) {
+    return System.currentTimeMillis() - start < OperaIntervals.IMPLICIT_WAIT.getValue();
+  }
 
   private void gc() {
     debugger.releaseObjects();
@@ -1386,7 +1428,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
       }
 
       if (count == 0 && hasTimeRemaining(start)) {
-        sleep(OperaIntervals.IMPLICIT_WAIT.getValue());
+        sleep(OperaIntervals.POLL_INTERVAL.getValue());
       } else {
         break;
       }
@@ -1410,7 +1452,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
       isAvailable = (id != null);
 
       if (!isAvailable) {
-        sleep(OperaIntervals.IMPLICIT_WAIT.getValue());
+        sleep(OperaIntervals.POLL_INTERVAL.getValue());
       }
     } while (!isAvailable && hasTimeRemaining(start));
 
