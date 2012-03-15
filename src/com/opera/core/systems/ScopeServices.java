@@ -246,7 +246,11 @@ public class ScopeServices implements IConnectionHandler {
   }
 
   /**
-   * Gets information on available services and their versions from Opera.
+   * Gets information on available services and their versions from Opera.  This includes the STP
+   * version, core version, platform, operating system, user agent string and a list of available
+   * services.
+   *
+   * @return information about the connected browser's debug capabilities
    */
   private HostInfo getHostInfo() {
     Response response = executeCommand(ScopeCommand.HOST_INFO, null);
