@@ -20,14 +20,12 @@ import com.opera.core.systems.OperaDriver;
 import com.opera.core.systems.OperaProduct;
 import com.opera.core.systems.runner.OperaRunner;
 import com.opera.core.systems.runner.launcher.OperaLauncherRunnerSettings;
-import com.opera.core.systems.scope.internal.OperaIntervals;
 import com.opera.core.systems.scope.services.IOperaExec;
 
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
-import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 
 /**
@@ -72,7 +70,7 @@ public class TestOperaDriver extends OperaDriver {
   }
 
   public boolean isRunning() {
-    return runner.isOperaRunning();
+    return runner != null && runner.isOperaRunning();
   }
 
   public boolean isOperaIdleAvailable() {
