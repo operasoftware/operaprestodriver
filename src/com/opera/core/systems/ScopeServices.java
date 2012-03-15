@@ -101,20 +101,19 @@ public class ScopeServices implements IConnectionHandler {
   private AtomicInteger tagCounter;
 
   private StringBuilder selftestOutput;
-  private OperaProduct product;
 
   /**
-   * Creates the Scope server on specified address and port, as well as enabling the required
-   * services for OperaDriver.
+   * Creates the Scope server on specified address and port, as well as enabling the required Scope
+   * services.
    *
-   * @param versions      list of required services and their version number
-   * @param port          the port on which to start the Scope server
-   * @param manualConnect whether to output ready message with port number when starting
+   * @param requiredServices list of required services and their minimum required version
+   * @param port             the port on which to start the Scope server
+   * @param manualConnect    whether to output ready message with port number when starting
    * @throws IOException if an I/O error occurs
    */
-  public ScopeServices(Map<String, String> versions, int port, boolean manualConnect)
+  public ScopeServices(Map<String, String> requiredServices, int port, boolean manualConnect)
       throws IOException {
-    this.versions = versions;
+    versions = requiredServices;
     tagCounter = new AtomicInteger();
     stpThread = new StpThread(port, this, new ScopeEventHandler(this), manualConnect);
     selftestOutput = new StringBuilder();
@@ -124,7 +123,6 @@ public class ScopeServices implements IConnectionHandler {
    * Gets the supported services from Opera and calls methods to enable the ones we requested.
    */
   public void init() {
-    waitState.setProfile(product.toString());
     waitForHandshake();
 
     hostInfo = getHostInfo();
@@ -765,10 +763,6 @@ public class ScopeServices implements IConnectionHandler {
   public void onRequest(int windowId) {
     logger.fine("Window closed: windowId=" + windowId);
     waitState.onRequest(windowId);
-  }
-
-  public void setProduct(OperaProduct product) {
-    this.product = product;
   }
 
   public Map<String, String> getVersions() {

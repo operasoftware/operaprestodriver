@@ -429,16 +429,9 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
    */
   private void createScopeServices() {
     try {
-      Map<String, String> versions = getServicesList();
-      boolean manualStart = true;
-
-      if (settings.getBinary() != null) {
-        manualStart = false;
-      }
-
-      services = new ScopeServices(versions, settings.getPort(), manualStart);
-      // for profile-specific workarounds inside ScopeServices, WaitState ...
-      services.setProduct(settings.getProduct());
+      services = new ScopeServices(getServicesList(),
+                                   (Integer) capabilities.getCapability(PORT),
+                                   !(Boolean) capabilities.getCapability(AUTOSTART));
       services.startStpThread();
     } catch (IOException e) {
       throw new WebDriverException(e);

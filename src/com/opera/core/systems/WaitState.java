@@ -60,9 +60,6 @@ public class WaitState {
 
   private final Object lock = new Object();
 
-  // Used for profile specific workarounds
-  private String profile;
-
   enum WaitResult {
     RESPONSE,                        // Got a response
     ERROR,                           // Got an error response
@@ -794,10 +791,6 @@ public class WaitState {
     }
 
     return null;
-  }
-
-  public void setProfile(String profile) {
-    this.profile = profile;
   }
 
 }
