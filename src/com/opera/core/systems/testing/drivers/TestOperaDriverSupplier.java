@@ -29,11 +29,7 @@ import java.util.logging.Level;
 public class TestOperaDriverSupplier extends DefaultOperaDriverSupplier {
 
   public TestOperaDriverSupplier() {
-    this(TestOperaDriver.getDefaultCapabilities());
-  }
-
-  public TestOperaDriverSupplier(Capabilities capabilities) {
-    super(capabilities);
+    super();
   }
 
   public TestOperaDriver get() {
@@ -47,9 +43,7 @@ public class TestOperaDriverSupplier extends DefaultOperaDriverSupplier {
 
     ((DesiredCapabilities) capabilities).setCapability(OperaDriver.LOGGING_LEVEL, Level.FINE);
 
-    TestOperaDriver driver = new TestOperaDriver(capabilities);
-    driver.preferences().set("User Prefs", "Ignore Unrequested Popups", false);
-    return driver;
+    return new TestOperaDriver(capabilities);
   }
 
 }

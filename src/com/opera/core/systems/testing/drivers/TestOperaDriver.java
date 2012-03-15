@@ -184,17 +184,6 @@ public class TestOperaDriver extends OperaDriver {
   }
 
   /**
-   * Get the default set of capabilities used in OperaDriver and modifies them.
-   *
-   * @return capability defaults for {@link TestOperaDriver}
-   */
-  public static Capabilities getDefaultCapabilities() {
-    DesiredCapabilities c = (DesiredCapabilities) OperaDriver.getDefaultCapabilities();
-    c.setCapability(OperaDriver.LOGGING_LEVEL, Level.FINE);
-    return c;
-  }
-
-  /**
    * Iterates through windows and closes all of them apart from the controlling window.  If the
    * default control window (first window) is closed, the browser will be quit.
    */
