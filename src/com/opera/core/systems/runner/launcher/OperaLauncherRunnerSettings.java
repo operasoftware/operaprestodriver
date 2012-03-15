@@ -33,6 +33,7 @@ import com.opera.core.systems.runner.OperaRunnerSettings;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriverException;
+import org.openqa.selenium.io.FileHandler;
 import org.openqa.selenium.os.CommandLine;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
@@ -133,5 +134,6 @@ public class OperaLauncherRunnerSettings extends OperaRunnerSettings {
   public void makeLauncherExecutable() {
     makeLauncherExecutable(getLauncher());
   }
+
 
 }
