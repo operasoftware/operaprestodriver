@@ -22,6 +22,7 @@ package com.opera.core.systems.runner;
  *
  * @author Anders Oredsson <anderso@opera.com>
  */
+@SuppressWarnings("serial")
 public class OperaRunnerException extends RuntimeException {
 
   public OperaRunnerException() {

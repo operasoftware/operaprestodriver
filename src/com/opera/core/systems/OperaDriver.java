@@ -188,7 +188,6 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
    * window-only screenshots on Windows.
    */
   @Deprecated
-  @SuppressWarnings("unused")
   public static final String BACKEND = "opera.backend";
 
   /**
@@ -1149,6 +1148,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
    * @deprecated Please use {@link OperaDriver#preferences()} instead
    */
   @Deprecated
+  @SuppressWarnings("unused")
   public void setPref(String section, String key, String value) {
     preferences().set(section, key, value);
   }

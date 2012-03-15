@@ -212,6 +212,7 @@ public class OperaProfile {
   private static File getPreferenceFile(File directory) {
     final String directoryPath = directory.getAbsolutePath() + File.separator;
 
+    @SuppressWarnings("serial")
     Collection<File> candidates = new LinkedHashSet<File>() {{
       add(new File(directoryPath + "operaprefs.ini"));
       add(new File(directoryPath + "opera.ini"));

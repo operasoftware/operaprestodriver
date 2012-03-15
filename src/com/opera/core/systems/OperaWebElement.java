@@ -174,7 +174,7 @@ public class OperaWebElement extends RemoteWebElement {
    * Will not verify whether element is available for interaction first.
    */
   @Deprecated
-  @SuppressWarnings("unused")  // TODO(andreastt): Move to Selenium's Actions
+  @SuppressWarnings("unused")
   public void middleClick() {
     Point point = coordinates.getLocationInViewPort();
     execService.mouseAction(point.x, point.y, OperaMouseKeys.MIDDLE);
@@ -499,7 +499,6 @@ public class OperaWebElement extends RemoteWebElement {
    * @param colors list of colors to check for.
    * @return true if the page contains any of the given colors, false otherwise.
    */
-  @SuppressWarnings("unused")  // used in SpartanRunner
   public boolean containsColor(OperaColors... colors) {
     assertElementNotStale();
 

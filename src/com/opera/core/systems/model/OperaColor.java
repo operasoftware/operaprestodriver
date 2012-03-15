@@ -29,6 +29,7 @@ import java.awt.Color;
  *
  * @author Deniz Turkoglu <dturkoglu@opera.com>, Andreas Tolf Tolfsen <andreastt@opera.com>
  */
+@SuppressWarnings("serial")
 public class OperaColor extends Color {
 
   protected int id;
