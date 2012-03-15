@@ -22,7 +22,7 @@ package com.opera.core.systems.environment;
 import com.opera.core.systems.environment.webserver.Jetty7WebServer;
 import com.opera.core.systems.environment.webserver.WebServer;
 
-public class InProcessTestEnvironment implements TestEnvironment {
+public class InProcessTestEnvironment extends DefaultTestEnvironment implements TestEnvironment {
 
   private WebServer server;
 
