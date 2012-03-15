@@ -46,8 +46,8 @@ import java.io.File;
 @RunWith(OperaDriverTestRunner.class)
 public abstract class OperaDriverTestCase {
 
-  private static final String SEPARATOR = System.getProperty("file.separator");
-  private static final File USER_HOME = new File(System.getProperty("user.dir"));
+  private static final String separator = System.getProperty("file.separator");
+  private static final File userHome = new File(System.getProperty("user.dir"));
 
   protected static TestEnvironment environment;
   protected static WebServer server;
@@ -58,6 +58,7 @@ public abstract class OperaDriverTestCase {
   private static File fixtureDirectory;
 
   @ClassRule
+  @SuppressWarnings("unused")
   public static ExternalResource environmentResources = new ExternalResource() {
 
     @Override
@@ -75,6 +76,7 @@ public abstract class OperaDriverTestCase {
   };
 
   @ClassRule
+  @SuppressWarnings("unused")
   public static ExternalResource driverResource = new ExternalResource() {
 
     @Override
@@ -115,19 +117,14 @@ public abstract class OperaDriverTestCase {
    */
   @Deprecated
   protected static String fixture(String file) {
-    return "file://localhost/" + getFixtureDirectory().getPath() + SEPARATOR + file;
-  }
-
-  @Deprecated
-  protected static File fixtureFile(String file) {
-    return new File(getFixtureDirectory().getPath() + SEPARATOR + file);
+    return "file://localhost/" + getFixtureDirectory().getPath() + separator + file;
   }
 
   @Deprecated
   protected static File getFixtureDirectory() {
     if (fixtureDirectory == null) {
-      fixtureDirectory = new File(USER_HOME.getPath() + SEPARATOR + "test" + SEPARATOR +
-                                  "fixtures" + SEPARATOR);
+      fixtureDirectory = new File(userHome.getPath() + separator + "test" + separator +
+                                  "fixtures" + separator);
     }
 
     return fixtureDirectory;
