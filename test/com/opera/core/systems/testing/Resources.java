@@ -16,14 +16,32 @@ limitations under the License.
 
 package com.opera.core.systems.testing;
 
+import org.openqa.selenium.Platform;
+
 import java.io.File;
 
+/**
+ * @author Andreas Tolf Tolfsen <andreastt@opera.com>
+ */
 public class Resources {
 
-  private static final File RESOURCES_DIRECTORY = InProject.locate("test/resources");
+  private final File resourcesDirectory = InProject.locate("test/resources");
+  private final File fakeBinary;
+
+  public Resources() {
+    if (Platform.getCurrent().is(Platform.WINDOWS)) {
+      fakeBinary = new File("C:\\WINDOWS\\system32\\find.exe");
+    } else {
+      fakeBinary = new File("/bin/echo");
+    }
+  }
 
   public File locate(String filename) {
-    return new File(RESOURCES_DIRECTORY.getAbsolutePath() + File.separator + filename);
+    return new File(resourcesDirectory.getAbsolutePath() + File.separator + filename);
+  }
+
+  public File fakeBinary() {
+    return fakeBinary;
   }
 
 }

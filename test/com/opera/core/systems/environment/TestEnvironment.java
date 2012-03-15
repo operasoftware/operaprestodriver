@@ -23,8 +23,24 @@ import com.opera.core.systems.environment.webserver.WebServer;
 
 public interface TestEnvironment {
 
-  WebServer getWebServer();
+  /**
+   * Sets environmental variable during runtime.
+   *
+   * @param key   environmental variable identifier
+   * @param value value of the variable
+   */
+  void set(String key, String value);
 
+  /**
+   * Post-hook for shutting down the test environment.
+   */
   void stop();
+
+  /**
+   * Gets the web server serving testing files.
+   *
+   * @return a web server serving testing files
+   */
+  WebServer getWebServer();
 
 }
