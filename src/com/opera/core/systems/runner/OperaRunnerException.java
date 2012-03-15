@@ -25,10 +25,6 @@ package com.opera.core.systems.runner;
 @SuppressWarnings("serial")
 public class OperaRunnerException extends RuntimeException {
 
-  public OperaRunnerException() {
-    super();
-  }
-
   public OperaRunnerException(String message) {
     super(message);
   }
