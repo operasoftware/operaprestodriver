@@ -19,6 +19,8 @@ package com.opera.core.systems;
 import com.opera.core.systems.arguments.OperaCoreArguments;
 import com.opera.core.systems.runner.OperaRunnerException;
 import com.opera.core.systems.runner.launcher.OperaLauncherRunnerSettings;
+import com.opera.core.systems.testing.NoDriver;
+import com.opera.core.systems.testing.OperaDriverTestCase;
 
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -33,7 +35,8 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-public class OperaLauncherRunnerSettingsTest {
+@NoDriver
+public class OperaLauncherRunnerSettingsTest extends OperaDriverTestCase {
 
   private TestOperaLauncherRunnerSettings settings;
   private static
@@ -41,16 +44,6 @@ public class OperaLauncherRunnerSettingsTest {
       launcherOnSystem =
       new File(System.getProperty("user.home") + File.separator + ".launcher" + File.separator
                + TestOperaLauncherRunnerSettings.getLauncherNameForOS2());
-  private static File fakeBinary;
-
-  @BeforeClass
-  public static void beforeAll() {
-    if (Platform.getCurrent().is(Platform.WINDOWS)) {
-      fakeBinary = new File("C:\\WINDOWS\\system32\\find.exe");
-    } else {
-      fakeBinary = new File("/bin/echo");
-    }
-  }
 
   @Before
   public void setUp() {
@@ -122,9 +115,16 @@ public class OperaLauncherRunnerSettingsTest {
   }
 
   @Test
+  public void testGetLauncherDefaultValueWithEnvironmentalVariable() {
+    environment.set(OperaLauncherRunnerSettings.LAUNCHER_ENV_VAR, launcherOnSystem.getPath());
+    OperaLauncherRunnerSettings settings = new OperaLauncherRunnerSettings();
+    assertEquals(launcherOnSystem.getPath(), settings.getLauncher().getPath());
+  }
+
+  @Test
   public void testSetLauncher() {
-    settings.setLauncher(fakeBinary);
-    assertEquals(fakeBinary, settings.getLauncher());
+    settings.setLauncher(resources.fakeBinary());
+    assertEquals(resources.fakeBinary(), settings.getLauncher());
   }
 
   @Test(expected = OperaRunnerException.class)

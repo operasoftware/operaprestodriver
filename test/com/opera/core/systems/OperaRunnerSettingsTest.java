@@ -38,9 +38,6 @@ import org.openqa.selenium.WebDriverException;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Field;
-import java.util.Collections;
-import java.util.Map;
 import java.util.logging.Level;
 
 import static org.junit.Assert.assertEquals;
@@ -96,11 +93,7 @@ public class OperaRunnerSettingsTest extends OperaDriverTestCase {
     // Make sure we always reset OPERA_ARGS.  Since the constructor of OperaRunnerSettings has
     // different behaviour depending on whether its set, it is going to impact the outcome of our
     // tests.
-    try {
-      setEnvVar("OPERA_ARGS", "");
-    } catch (IllegalAccessException e) {
-    } catch (NoSuchFieldException e) {
-    }
+    environment.set("OPERA_ARGS", "");
 
     settings = new OperaRunnerSettings();
   }
@@ -114,7 +107,7 @@ public class OperaRunnerSettingsTest extends OperaDriverTestCase {
   @Test
   @Ignore(platforms = WINDOWS)
   public void testConstructionWithEnvironmentalVariable() throws Exception {
-    setEnvVar("OPERA_ARGS", "-foo -bar baz -bah=abc");
+    environment.set("OPERA_ARGS", "-foo -bar baz -bah=abc");
     OperaRunnerSettings envVarSettings = new OperaRunnerSettings();
     assertNotNull(envVarSettings);
     assertNotNull(envVarSettings.getArguments());
@@ -308,38 +301,7 @@ public class OperaRunnerSettingsTest extends OperaDriverTestCase {
     assertTrue(defaultSettings.getArguments() instanceof OperaCoreArguments);
   }
 
-  /**
-   * Massive hack to set the environment variables inside this JVM.  Used to test if OperaPaths is
-   * checking the environment variables.
-   *
-   * http://stackoverflow.com/questions/318239/how-do-i-set-environment-variables-from-java/496849#496849
-   *
-   * @param key   the new environment variable's identifier
-   * @param value the new environment variable's value
-   * @throws IllegalAccessException foo
-   * @throws NoSuchFieldException   foo
-   */
-  @SuppressWarnings("unchecked")
-  private static void setEnvVar(String key, String value)
-      throws IllegalAccessException, NoSuchFieldException {
-    Class<?>[] classes = Collections.class.getDeclaredClasses();
-    Map<String, String> env = System.getenv();
-    for (Class<?> cl : classes) {
-      if ("java.util.Collections$UnmodifiableMap".equals(cl.getName())) {
-        Field field = cl.getDeclaredField("m");
-        field.setAccessible(true);
-        Object obj = field.get(env);
-        Map<String, String> map = (Map<String, String>) obj;
-        map.put(key, value);
-      }
-    }
-  }
-
   public class TestOperaRunner extends OperaRunner {
-
-    public TestOperaRunner() {
-      super();
-    }
 
     public TestOperaRunner(OperaRunnerSettings settings) {
       super(settings);

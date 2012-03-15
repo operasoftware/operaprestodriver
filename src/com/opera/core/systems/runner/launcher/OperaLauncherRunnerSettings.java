@@ -21,7 +21,6 @@ import com.google.common.io.Closeables;
 import com.google.common.io.Files;
 
 import com.opera.core.systems.OperaDriver;
-import com.opera.core.systems.OperaPaths;
 import com.opera.core.systems.OperaProduct;
 import com.opera.core.systems.arguments.OperaCoreArguments;
 import com.opera.core.systems.arguments.OperaDesktopArguments;
@@ -51,13 +50,18 @@ import java.util.logging.Logger;
 
 public class OperaLauncherRunnerSettings extends OperaRunnerSettings {
 
-  public static final Logger logger = Logger.getLogger(OperaLauncherRunnerSettings.class.getName());
+  public static final String LAUNCHER_ENV_VAR = "OPERA_LAUNCHER";
+
   protected File launcher;
   protected String backend = "software";
 
+  private static final Logger logger = Logger.getLogger(OperaLauncherRunnerSettings.class.getName());
+
   public OperaLauncherRunnerSettings() {
     super();
+
     loggingLevel = OperaLauncherRunner.toLauncherLoggingLevel(getLoggingLevel());
+    setLauncher(System.getenv(LAUNCHER_ENV_VAR));
   }
 
   public void setLoggingLevel(Level level) {
@@ -75,16 +79,31 @@ public class OperaLauncherRunnerSettings extends OperaRunnerSettings {
 
   public File getLauncher() {
     if (launcher == null) {
-      launcher = new File(launcherPath());
+      setLauncher(provideLauncher());
     }
 
     return launcher;
   }
 
+  /**
+   * Specifies launcher to be used for controlling the Opera binary.  If <code>launcherPath</code>
+   * is null, no action will be taken.
+   *
+   * @param launcherPath the absolute path to the launcher binary
+   */
   public void setLauncher(String launcherPath) {
+    if (launcherPath == null) {
+      return;
+    }
+
     setLauncher(new File(launcherPath));
   }
 
+  /**
+   * Specifies launcher to be used for controlling the Opera binary.
+   *
+   * @param newLauncher launcher to be used
+   */
   public void setLauncher(File newLauncher) {
     try {
       assertLauncherGood(newLauncher);
