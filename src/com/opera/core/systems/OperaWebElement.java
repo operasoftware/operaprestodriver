@@ -254,7 +254,6 @@ public class OperaWebElement extends RemoteWebElement {
           buf.append(seq);
       }
       new FileSendKeys(parent).SendKeysFileDialog(buf.toString());
-      logger.warning("sendkeys() for file done");
     } else {
       executeMethod("locator.focus()");
       // When focused textareas return the cursor to the last position it was at. Inputs place the
