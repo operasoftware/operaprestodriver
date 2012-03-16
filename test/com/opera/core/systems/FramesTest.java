@@ -16,6 +16,8 @@ limitations under the License.
 
 package com.opera.core.systems;
 
+import com.opera.core.systems.testing.OperaDriverTestCase;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -28,7 +30,7 @@ public class FramesTest extends OperaDriverTestCase {
   List<String> frames;
 
   @Before
-  public void setUp() throws Exception {
+  public void beforeEach() {
     getFixture("frames.html");
     frames = driver.listFrames();
   }

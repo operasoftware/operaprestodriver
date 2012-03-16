@@ -72,6 +72,7 @@
     </copy>
 
     <javac source="1.5" target="1.5" debug="true" destdir="bin" includeantruntime="false">
+      <compilerarg value="-Xlint" />
       <src path="src" />
       <classpath refid="classpath.path" />
     </javac>

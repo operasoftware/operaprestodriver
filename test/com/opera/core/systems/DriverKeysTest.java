@@ -16,6 +16,9 @@ limitations under the License.
 
 package com.opera.core.systems;
 
+import com.opera.core.systems.testing.Ignore;
+import com.opera.core.systems.testing.OperaDriverTestCase;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.Keys;
@@ -28,12 +31,13 @@ import static org.openqa.selenium.Platform.MAC;
 
 public class DriverKeysTest extends OperaDriverTestCase {
 
-  private WebElement fieldOne;
-  private WebElement fieldTwo;
+  public WebElement fieldOne;
+  public WebElement fieldTwo;
 
   @Before
-  public void setUp() {
-    getFixture("two_input_fields.html");
+  public void beforeEach() {
+    driver.navigate().to(pages.twoInputFields);
+
     fieldOne = driver.findElementByName("one");
     fieldTwo = driver.findElementByName("two");
     fieldOne.click();

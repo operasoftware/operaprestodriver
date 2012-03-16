@@ -1,0 +1,66 @@
+syntax = "proto2";
+import "opera/scope/scope_descriptor.proto";
+
+package scope;
+
+option optimize_for         = SPEED;
+option java_outer_classname = "ConsoleLoggerProtos";
+option java_package         = "com.opera.core.systems.scope.protos";
+
+message ConsoleMessage
+{
+    /**
+     * The window ID is shared across scope. Notably, it's the same as in the ecmascript debugger.
+     * INTERNAL: The value is from Window::id
+     */
+    required uint32 windowID    = 1;
+    /**
+     * 
+     * The number of seconds since 1970-01-01T00:00:00Z.
+     */
+    required uint32 time        = 2;
+    /**
+     * Description of the error. Sometimes this message only makes sense when
+     * displayed in a monospace font.
+     */
+    required string description = 3;
+    /**
+     * The URL of the entity (document, script, style file, etc) that caused the
+     * message to be generated.
+     */
+    optional string uri         = 4;
+    /**
+     * The context in which the message was generated; it is intended for human
+     * consumption and provides additional information about the context for the
+     * message.
+     */
+    optional string context     = 5;
+    /**
+     * The component in Opera that generated the message
+     * One of:
+     * - "ecmascript"
+     * - "java"
+     * - "m2"
+     * - "network"
+     * - "xml"
+     * - "html"
+     * - "css"
+     * - "xslt"
+     * - "svg"
+     * - "bittorrent"
+     * - "voice"
+     * - "widget"
+     * - "selftest"
+     */
+    optional string source      = 6;
+    /**
+     * One of:
+     * - "debug"
+     * - "verbose"
+     * - "information"
+     * - "error"
+     * - "critical"
+     */
+    optional string severity    = 7;
+}
+

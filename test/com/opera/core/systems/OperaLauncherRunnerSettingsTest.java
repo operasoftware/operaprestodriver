@@ -142,6 +142,10 @@ public class OperaLauncherRunnerSettingsTest {
       return getLauncherNameForOS();
     }
 
+    public static void makeLauncherExecutable2(File launcher) {
+      makeLauncherExecutable(launcher);
+    }
+
   }
 
 }

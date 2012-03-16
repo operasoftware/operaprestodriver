@@ -1,4 +1,11 @@
-syntax = scope;
+syntax = "proto2";
+import "opera/scope/scope_descriptor.proto";
+
+package scope;
+
+option optimize_for         = SPEED;
+option java_outer_classname = "DesktopUtilsProtos";
+option java_package         = "com.opera.core.systems.scope.protos";
 
 message DesktopStringID
 {
@@ -19,49 +26,4 @@ message DesktopPid
 {
     required uint32 pid = 1;
 }
-
-/**
- */
-service DesktopUtils
-{
-    option (cpp_hfile) = "adjunct/desktop_scope/scope_desktop_utils.h";
-    option (core_release) = "2.5";
-    option (version) = "2.0";
-    option (cpp_class) = OpScopeDesktopUtils;
-
-    /**
-     * Gets a string based on a string ID (i.e. "S_PREFERENCES")
-     */
-    command GetString(DesktopStringID) returns (DesktopStringText) = 1;
-
-    /**
-     * Gets the full path to this Opera's binary executable
-     */
-    command GetOperaPath(Default) returns (DesktopPath) = 2;
-
-    /**
-     * Gets the full path to the large preferencese folder
-     * Typically this holds Mail and Widgets
-     */
-    command GetLargePreferencesPath(Default) returns (DesktopPath) = 3;
-
-    /**
-     * Gets the full path to the large preferencese folder
-     * Typically this holds most of the Opera preferences
-     */
-    command GetSmallPreferencesPath(Default) returns (DesktopPath) = 4;
-
-    /**
-     * Gets the full path to the large preferencese folder
-     * Typically this holds cache data
-     */
-    command GetCachePreferencesPath(Default) returns (DesktopPath) = 5;
-
-    /**
-     * Gets the pid 
-     */
-    command GetCurrentProcessId(Default) returns (DesktopPid) = 6;
-}
-
-
 

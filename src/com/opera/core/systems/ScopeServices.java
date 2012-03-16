@@ -25,6 +25,7 @@ import com.opera.core.systems.runner.OperaRunner;
 import com.opera.core.systems.scope.ScopeCommand;
 import com.opera.core.systems.scope.exceptions.CommunicationException;
 import com.opera.core.systems.scope.handlers.IConnectionHandler;
+import com.opera.core.systems.scope.handlers.ScopeEventHandler;
 import com.opera.core.systems.scope.internal.OperaFlags;
 import com.opera.core.systems.scope.internal.OperaIntervals;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo;
@@ -93,112 +94,29 @@ public class ScopeServices implements IConnectionHandler {
   private StpConnection connection = null;
 
   private StpThread stpThread;
-  boolean shuttingDown = false;
+  private boolean shuttingDown = false;
 
   private List<String> listedServices;
 
   private AtomicInteger tagCounter;
 
   private StringBuilder selftestOutput;
-  private String product;
-
-  public Map<String, String> getVersions() {
-    return versions;
-  }
-
-  public StpConnection getConnection() {
-    return connection;
-  }
-
-  public IEcmaScriptDebugger getDebugger() {
-    return debugger;
-  }
-
-  public void setDebugger(IEcmaScriptDebugger debugger) {
-    this.debugger = debugger;
-  }
-
-  public IOperaExec getExec() {
-    return exec;
-  }
-
-  public void setExec(IOperaExec exec) {
-    this.exec = exec;
-  }
-
-  public IWindowManager getWindowManager() {
-    return windowManager;
-  }
-
-  public void setWindowManager(IWindowManager windowManager) {
-    this.windowManager = windowManager;
-  }
-
-  public ICoreUtils getCoreUtils() {
-    return coreUtils;
-  }
-
-  public void setCoreUtils(ICoreUtils coreUtils) {
-    this.coreUtils = coreUtils;
-  }
-
-  public IPrefs getPrefs() {
-    return prefs;
-  }
-
-  public void setPrefs(IPrefs prefs) {
-    this.prefs = prefs;
-  }
-
-  public IDesktopWindowManager getDesktopWindowManager() {
-    return desktopWindowManager;
-  }
-
-  public void setDesktopWindowManager(IDesktopWindowManager desktopWindowManager) {
-    this.desktopWindowManager = desktopWindowManager;
-  }
-
-  public IDesktopUtils getDesktopUtils() {
-    return desktopUtils;
-  }
-
-  public void setDesktopUtils(IDesktopUtils desktopUtils) {
-    this.desktopUtils = desktopUtils;
-  }
-
-  public SystemInputManager getSystemInputManager() {
-    return systemInputManager;
-  }
-
-  public void setSystemInputManager(SystemInputManager manager) {
-    this.systemInputManager = manager;
-  }
-
-  public ICookieManager getCookieManager() {
-    return cookieManager;
-  }
-
-  public void setCookieManager(ICookieManager cookieManager) {
-    this.cookieManager = cookieManager;
-  }
-
-  public ISelftest getSelftest() {
-    return selftest;
-  }
-
-  public void setSelftest(ISelftest selftest) {
-    this.selftest = selftest;
-  }
+  private OperaProduct product;
 
   /**
    * Creates the Scope server on specified address and port, as well as enabling the required
    * services for OperaDriver.
+   *
+   * @param versions      list of required services and their version number
+   * @param port          the port on which to start the Scope server
+   * @param manualConnect whether to output ready message with port number when starting
+   * @throws IOException if an I/O error occurs
    */
   public ScopeServices(Map<String, String> versions, int port, boolean manualConnect)
       throws IOException {
     this.versions = versions;
     tagCounter = new AtomicInteger();
-    stpThread = new StpThread(port, this, new UmsEventHandler(this), manualConnect);
+    stpThread = new StpThread(port, this, new ScopeEventHandler(this), manualConnect);
     selftestOutput = new StringBuilder();
   }
 
@@ -206,7 +124,7 @@ public class ScopeServices implements IConnectionHandler {
    * Gets the supported services from Opera and calls methods to enable the ones we requested.
    */
   public void init() {
-    waitState.setProfile(product);
+    waitState.setProfile(product.toString());
     waitForHandshake();
 
     hostInfo = getHostInfo();
@@ -845,8 +763,98 @@ public class ScopeServices implements IConnectionHandler {
     waitState.onRequest(windowId);
   }
 
-  public void setProduct(String product) {
+  public void setProduct(OperaProduct product) {
     this.product = product;
+  }
+
+  public Map<String, String> getVersions() {
+    return versions;
+  }
+
+  public StpConnection getConnection() {
+    return connection;
+  }
+
+  public IEcmaScriptDebugger getDebugger() {
+    return debugger;
+  }
+
+  public void setDebugger(IEcmaScriptDebugger debugger) {
+    this.debugger = debugger;
+  }
+
+  // Getters and setters for the different Scope services:
+
+  public IOperaExec getExec() {
+    return exec;
+  }
+
+  public void setExec(IOperaExec exec) {
+    this.exec = exec;
+  }
+
+  public IWindowManager getWindowManager() {
+    return windowManager;
+  }
+
+  public void setWindowManager(IWindowManager windowManager) {
+    this.windowManager = windowManager;
+  }
+
+  public ICoreUtils getCoreUtils() {
+    return coreUtils;
+  }
+
+  public void setCoreUtils(ICoreUtils coreUtils) {
+    this.coreUtils = coreUtils;
+  }
+
+  public IPrefs getPrefs() {
+    return prefs;
+  }
+
+  public void setPrefs(IPrefs prefs) {
+    this.prefs = prefs;
+  }
+
+  public IDesktopWindowManager getDesktopWindowManager() {
+    return desktopWindowManager;
+  }
+
+  public void setDesktopWindowManager(IDesktopWindowManager desktopWindowManager) {
+    this.desktopWindowManager = desktopWindowManager;
+  }
+
+  public IDesktopUtils getDesktopUtils() {
+    return desktopUtils;
+  }
+
+  public void setDesktopUtils(IDesktopUtils desktopUtils) {
+    this.desktopUtils = desktopUtils;
+  }
+
+  public SystemInputManager getSystemInputManager() {
+    return systemInputManager;
+  }
+
+  public void setSystemInputManager(SystemInputManager manager) {
+    this.systemInputManager = manager;
+  }
+
+  public ICookieManager getCookieManager() {
+    return cookieManager;
+  }
+
+  public void setCookieManager(ICookieManager cookieManager) {
+    this.cookieManager = cookieManager;
+  }
+
+  public ISelftest getSelftest() {
+    return selftest;
+  }
+
+  public void setSelftest(ISelftest selftest) {
+    this.selftest = selftest;
   }
 
 }

@@ -23,7 +23,6 @@ import com.opera.core.systems.model.ScreenShotReply;
 import com.opera.core.systems.scope.exceptions.ResponseNotReceivedException;
 import com.opera.core.systems.scope.internal.OperaColors;
 import com.opera.core.systems.scope.internal.OperaFlags;
-import com.opera.core.systems.scope.internal.OperaIntervals;
 import com.opera.core.systems.scope.internal.OperaKeys;
 import com.opera.core.systems.scope.internal.OperaMouseKeys;
 import com.opera.core.systems.scope.services.IEcmaScriptDebugger;
@@ -49,6 +48,7 @@ import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.Callable;
 import java.util.logging.Logger;
 
 import com.opera.core.systems.util.FileSendKeys;
@@ -118,15 +118,18 @@ public class OperaWebElement extends RemoteWebElement {
   /**
    * Click this element many times in the top left corner of the element.
    *
+   * Will not check if element is available for interaction first.
+   *
    * @param times the number of times to click
    */
+  @Deprecated
   public void click(int times) {
     Point point = coordinates.getLocationInViewPort();
     execService.mouseAction(point.x, point.y, times, OperaMouseKeys.LEFT);
   }
 
   public void click() {
-    assertElementDisplayed("Cannot click an element that is not displayed");
+    verifyCanInteractWithElement();
 
     parent.getScopeServices().captureOperaIdle();
 
@@ -148,9 +151,12 @@ public class OperaWebElement extends RemoteWebElement {
   /**
    * Click the element at the given X,Y offset from the top left.
    *
+   * Will not verify whether element is available for interaction first.
+   *
    * @param x the distance from the left border of the element to click
    * @param y the distance from the top border of the element to click
    */
+  @Deprecated
   public void click(int x, int y) {
     parent.getScopeServices().captureOperaIdle();
     parent.actionHandler.click(this, x, y);
@@ -165,7 +171,11 @@ public class OperaWebElement extends RemoteWebElement {
 
   /**
    * Click the middle mouse button at the top left corner of the element.
+   *
+   * Will not verify whether element is available for interaction first.
    */
+  @Deprecated
+  @SuppressWarnings("unused")  // TODO(andreastt): Move to Selenium's Actions
   public void middleClick() {
     Point point = coordinates.getLocationInViewPort();
     execService.mouseAction(point.x, point.y, OperaMouseKeys.MIDDLE);
@@ -216,9 +226,7 @@ public class OperaWebElement extends RemoteWebElement {
   }
 
   public void clear() {
-    assertElementNotStale();
-
-    // TODO(andreastt): Throw InvalidElementStateException
+    verifyCanInteractWithElement();
 
     if (isEnabled()) {
       if (!Boolean.valueOf(getAttribute("readonly"))) {
@@ -228,30 +236,15 @@ public class OperaWebElement extends RemoteWebElement {
   }
 
   public void sendKeys(CharSequence... keysToSend) {
+    verifyCanInteractWithElement();
+
     // A list of keys that should be held down, instead of pressed
     ArrayList<String> holdKeys = new ArrayList<String>();
     holdKeys.add(OperaKeys.SHIFT.getValue());
     holdKeys.add(OperaKeys.CONTROL.getValue());
     // Keys that have been held down, and need to be released
     ArrayList<String> heldKeys = new ArrayList<String>();
-    
-    if (OperaFlags.ENABLE_CHECKS) {
-      long start = System.currentTimeMillis();
-      boolean isDisplayed;
 
-      while (true) {
-        isDisplayed = isDisplayed();
-
-        if (!isDisplayed && parent.hasTimeRemaining(start)) {
-          sleep(OperaIntervals.EXEC_SLEEP.getValue());
-        } else {
-          break;
-        }
-      }
-      
-      assertElementDisplayed("Cannot type on an element that is not displayed");
-          assertElementEnabled("Cannot type on an element that is disabled");
-    }
     boolean fileInput = getTagName().equalsIgnoreCase("input")
         && (hasAttribute("type") && getAttribute("type").equals("file"));
     if (fileInput) {
@@ -380,14 +373,6 @@ public class OperaWebElement extends RemoteWebElement {
     }
   }
 
-  private static void sleep(long ms) {
-    try {
-      Thread.sleep(ms);
-    } catch (InterruptedException e) {
-      Thread.currentThread().interrupt();
-    }
-  }
-
   /**
    * Click top left, can be modified to click in the middle
    */
@@ -450,8 +435,8 @@ public class OperaWebElement extends RemoteWebElement {
    * Take a screenshot of the area this element's bounding-box covers. Saves a copy of the image to
    * the given filename, and returns an MD5 hash of the image.
    *
-   * @param filename The location to save the screenshot
-   * @return The MD5 hash of the screenshot
+   * @param filename the location to save the screenshot
+   * @return the MD5 hash of the screenshot
    */
   public String saveScreenshot(String filename) {
     return this.saveScreenshot(filename, 10L, true);
@@ -461,9 +446,9 @@ public class OperaWebElement extends RemoteWebElement {
    * Take a screenshot of the area this element covers. Saves a copy of the image to the given
    * filename.
    *
-   * @param filename The location to save the screenshot
-   * @param timeout  The number of milliseconds to wait before taking the screenshot
-   * @return The MD5 hash of the screenshot
+   * @param filename the location to save the screenshot
+   * @param timeout  the number of milliseconds to wait before taking the screenshot
+   * @return the MD5 hash of the screenshot
    */
   public String saveScreenshot(String filename, long timeout) {
     return this.saveScreenshot(filename, timeout, true);
@@ -474,18 +459,22 @@ public class OperaWebElement extends RemoteWebElement {
    * given hashes then no image is saved, otherwise it saves a copy of the image to the given
    * filename.
    *
-   * @param filename     The location to save the screenshot.
-   * @param timeout      The number of milliseconds to wait before taking the screenshot.
-   * @param includeImage Whether to get the image data. Disable if you just need the MD5 hash.
-   * @param hashes       Known image hashes.
-   * @return The MD5 hash of the screenshot.
+   * @param filename     the location to save the screenshot
+   * @param timeout      the number of milliseconds to wait before taking the screenshot
+   * @param includeImage whether to get the image data. Disable if you just need the MD5 hash
+   * @param hashes       known image hashes
+   * @return the MD5 hash of the screenshot
    */
   public String saveScreenshot(String filename, long timeout, boolean includeImage,
                                String... hashes) {
+    assertElementNotStale();
+
     Canvas canvas = buildCanvas();
     ScreenShotReply reply = execService.screenWatcher(canvas, timeout, includeImage, hashes);
+
     if (includeImage && reply.getPng() != null) {
       FileChannel stream;
+
       try {
         stream = new FileOutputStream(filename).getChannel();
         stream.write(ByteBuffer.wrap(reply.getPng()));
@@ -494,6 +483,7 @@ public class OperaWebElement extends RemoteWebElement {
         throw new WebDriverException("Failed to write file: " + e.getMessage());
       }
     }
+
     return reply.getMd5();
   }
 
@@ -503,8 +493,10 @@ public class OperaWebElement extends RemoteWebElement {
    * @param timeout The number of milliseconds to wait before taking the screenshot
    * @param hashes  A previous screenshot MD5 hash. If it matches the hash of this screenshot then
    *                no image data is returned.
+   * @return a screenshot instance object
    */
   public ScreenShotReply saveScreenshot(long timeout, String... hashes) {
+    assertElementNotStale();
     Canvas canvas = buildCanvas();
     return execService.screenWatcher(canvas, timeout, true, hashes);
   }
@@ -516,11 +508,15 @@ public class OperaWebElement extends RemoteWebElement {
    * @param colors list of colors to check for.
    * @return true if the page contains any of the given colors, false otherwise.
    */
+  @SuppressWarnings("unused")  // used in SpartanRunner
   public boolean containsColor(OperaColors... colors) {
+    assertElementNotStale();
+
     Canvas canvas = buildCanvas();
     ScreenShotReply reply = execService.containsColor(canvas, 100L, colors);
 
     List<ColorResult> results = reply.getColorResult();
+
     for (ColorResult result : results) {
       if (result.getCount() > 0) {
         return true;
@@ -565,6 +561,7 @@ public class OperaWebElement extends RemoteWebElement {
     if (isDisplayed()) {
       return getLocation();
     }
+
     return null;
   }
 
@@ -607,8 +604,14 @@ public class OperaWebElement extends RemoteWebElement {
     throw new NoSuchElementException("Cannot find element with " + type);
   }
 
-  protected WebElement findElement(String by, String using) {
-    return parent.findElement(by, using, this);
+  protected WebElement findElement(final String by, final String using) {
+    final OperaWebElement el = this;
+
+    return parent.implicitlyWaitFor(new Callable<WebElement>() {
+      public WebElement call() throws Exception {
+        return parent.findElement(by, using, el);
+      }
+    });    
   }
 
   protected List<WebElement> findElements(String by, String using) {
@@ -683,6 +686,8 @@ public class OperaWebElement extends RemoteWebElement {
   };
 
   public String getCssValue(String property) {
+    assertElementNotStale();
+
     String value =
         callMethod("return " + OperaAtoms.GET_EFFECTIVE_STYLE + "(locator, '" + property + "')");
 
@@ -699,12 +704,30 @@ public class OperaWebElement extends RemoteWebElement {
     return parent;
   }
 
+  private void verifyCanInteractWithElement() {
+    assertElementNotStale();
+    assertElementDisplayed();
+    assertElementEnabled();
+  }
+
+  private void assertElementDisplayed() {
+    assertElementDisplayed("You may only interact with visible elements");
+  }
+
   private void assertElementDisplayed(String message) {
-    if (OperaFlags.ENABLE_CHECKS) {
-      if (!isDisplayed()) {
-        throw new ElementNotVisibleException(message);
+    Boolean displayed = parent.implicitlyWaitFor(new Callable<Boolean>() {
+      public Boolean call() throws Exception {
+        return isDisplayed();
       }
+    });
+
+    if (displayed == null || !displayed) {
+      throw new ElementNotVisibleException(message);
     }
+  }
+
+  private void assertElementEnabled() {
+    assertElementEnabled("You may only interact with enabled elements");
   }
 
   private void assertElementEnabled(String message) {

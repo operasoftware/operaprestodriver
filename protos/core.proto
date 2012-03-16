@@ -1,0 +1,66 @@
+syntax = "proto2";
+import "opera/scope/scope_descriptor.proto";
+
+package scope;
+
+option optimize_for         = SPEED;
+option java_outer_classname = "CoreProtos";
+option java_package         = "com.opera.core.systems.scope.protos";
+
+enum ClearFlags
+{
+    CLEAR_ALL = 0;
+    CLEAR_VISITED_LINKS = 1;
+    CLEAR_DISK_CACHE = 2;
+    CLEAR_IMAGE_CACHE = 3;
+    CLEAR_MEMORY_CACHE = 4;
+    CLEAR_SENSITIVE_DATA = 5;
+    CLEAR_SESSION_COOKIES = 6;
+    CLEAR_ALL_COOKIES = 7;
+    CLEAR_GLOBAL_HISTORY = 8;
+    CLEAR_CONSOLE = 9;
+    CLEAR_THUMBNAILS = 10;
+    CLEAR_WEBDATABASES = 11;
+    CLEAR_WEBSTORAGE = 12;
+    CLEAR_APPCACHE = 13;
+    CLEAR_GEOLOCATION_PERMISSIONS = 14;
+    CLEAR_SITE_PREFS = 15;
+}
+
+message ClearPrivateDataArg
+{
+    repeated ClearFlags clearList = 1;
+}
+
+message BrowserInformation
+{
+    /**
+     * Which Core version this instance is running, e.g. "2.8.119".
+     */
+    required string coreVersion     = 1;
+    /**
+     * A string which describes the OS, e.g. "Windows NT 6.1".
+     */
+    required string operatingSystem = 2;
+    /**
+     * A string which describes the product. For regular desktop bulds
+     * this will be "desktop". Other examples are "mobile" and "gogi".
+     */
+    required string product         = 3;
+    /**
+     * The full path the currently running binary.
+     */
+    required string binaryPath      = 4;
+    /**
+     * The User-Agent string. Typically something like:
+     * 
+     * Opera/9.80 (Windows NT 6.1; U; en) Presto/2.7.62 Version/11.01
+     */
+    required string userAgent       = 5;
+    /**
+     * The ID of the process we're currently talking to. Might not be present
+     * if the build does not support retrieving process IDs.
+     */
+    optional uint32 processID       = 6;
+}
+

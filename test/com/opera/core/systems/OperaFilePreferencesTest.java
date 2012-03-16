@@ -21,6 +21,8 @@ import com.google.common.io.Files;
 import com.opera.core.systems.preferences.OperaFilePreferences;
 import com.opera.core.systems.preferences.OperaGenericPreferences;
 import com.opera.core.systems.preferences.OperaPreferences;
+import com.opera.core.systems.testing.OperaDriverTestCase;
+import com.opera.core.systems.testing.drivers.TestOperaDriver;
 
 import org.junit.After;
 import org.junit.Before;
@@ -51,17 +53,9 @@ public class OperaFilePreferencesTest extends OperaDriverTestCase {
   @Rule
   public TemporaryFolder temporaryFolder = new TemporaryFolder();
 
-  /*
-  // Replace OperaDriverTestCase setup and teardown so that we don't launch Opera
-  @BeforeClass
-  public static void setUpBeforeClass() {
-    initFixtures();
-  }
-  */
-
   @Before
-  public void setUp() throws IOException {
-    if (currentProduct.is(OperaProduct.DESKTOP)) {
+  public void beforeEach() throws IOException {
+    if (driver.utils().getProduct().is(OperaProduct.DESKTOP)) {
       iniFile = temporaryFolder.newFile("operaprefs.ini");
       profileDirectory = temporaryFolder.getRoot();
     } else {
@@ -72,7 +66,7 @@ public class OperaFilePreferencesTest extends OperaDriverTestCase {
     // Make a new copy in a temporary filesystem so we don't overwrite our fixture
     // TODO(andreastt): This should be done more elegantly in OperaDriverTestCase
     try {
-      Files.copy(fixtureFile("profile" + File.separator + "opera.ini"), iniFile);
+      Files.copy(resources.locate("profile/opera.ini"), iniFile);
     } catch (IOException e) {
       fail("Unable to copy preference fixture: " + e.getMessage());
     }
@@ -171,7 +165,7 @@ public class OperaFilePreferencesTest extends OperaDriverTestCase {
   @Test
   public void testSetWithKnownPreference() {
     preferences.set(new OperaGenericPreferences.GenericPreference("Developer Tools", "Proxy Host",
-        "1.2.3.4"));
+                                                                  "1.2.3.4"));
 
     OperaPreferences verifier = new OperaFilePreferences(iniFile);
     assertEquals(prefCountBefore, verifier.size());

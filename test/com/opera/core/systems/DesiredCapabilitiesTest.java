@@ -16,16 +16,21 @@ limitations under the License.
 
 package com.opera.core.systems;
 
+import com.google.common.io.Files;
+
 import com.opera.core.systems.runner.OperaRunnerException;
+import com.opera.core.systems.runner.launcher.OperaLauncherRunnerSettings;
+import com.opera.core.systems.testing.Ignore;
+import com.opera.core.systems.testing.OperaDriverTestCase;
+import com.opera.core.systems.testing.drivers.TestOperaDriver;
 
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.openqa.selenium.WebDriverException;
+import org.openqa.selenium.net.NetworkUtils;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.io.File;
@@ -36,32 +41,21 @@ import static com.opera.core.systems.OperaProduct.CORE;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 public class DesiredCapabilitiesTest extends OperaDriverTestCase {
 
+  public static final NetworkUtils NETWORK_UTILS = new NetworkUtils();
+
   public DesiredCapabilities capabilities;
 
-  /**
-   * Overrides {@link OperaDriverTestCase#setUpBeforeClass();)}
-   */
-  @BeforeClass
-  public static void setUpBeforeClass() {
-  }
-
-  /**
-   * Overrides {@link OperaDriverTestCase#tearDownAfterClass()} ();)}
-   */
-  @AfterClass
-  public static void tearDownAfterClass() {
-  }
-
   @Before
-  public void setUp() {
+  public void beforeEach() {
     capabilities = (DesiredCapabilities) TestOperaDriver.getDefaultCapabilities();
   }
 
   @After
-  public void tearDown() {
+  public void afterEach() {
     if (driver != null && driver.isRunning()) {
       driver.quit();
     }
@@ -101,7 +95,8 @@ public class DesiredCapabilitiesTest extends OperaDriverTestCase {
   public void testSettingLogFile() throws IOException {
     File log = tmpFolder.newFile("operadriver.log");
     capabilities.setCapability(OperaDriver.LOGGING_FILE, log.getCanonicalPath());
-    capabilities.setCapability(OperaDriver.LOGGING_LEVEL, "FINER");  // up the level to get some ompf
+    capabilities
+        .setCapability(OperaDriver.LOGGING_LEVEL, "FINER");  // up the level to get some ompf
     driver = new TestOperaDriver(capabilities);
 
     assertTrue(log.length() > 0);
@@ -128,14 +123,17 @@ public class DesiredCapabilitiesTest extends OperaDriverTestCase {
 
   @Test
   public void testSettingHost() {
-    capabilities.setCapability(OperaDriver.HOST, "localhost");
+    String host = NETWORK_UTILS.getPrivateLocalAddress();  // 127.0.0.1
+    capabilities.setCapability(OperaDriver.HOST, host);
     driver = new TestOperaDriver(capabilities);
     assertNotNull(driver);
+    assertEquals(host, driver.getCapabilities().getCapability(OperaDriver.HOST));
+    assertEquals(host, driver.getSettings().getHost());
     driver.quit();
   }
 
   @Test
-  @Ignore(products = CORE, value = "core does not reset port number if -debugproxy is ommitted")
+  @Ignore(products = CORE, value = "core does not reset port number if -debugproxy is omitted")
   public void testSettingPort() {
     capabilities.setCapability(OperaDriver.PORT, -1);
     driver = new TestOperaDriver(capabilities);
@@ -144,10 +142,16 @@ public class DesiredCapabilitiesTest extends OperaDriverTestCase {
   }
 
   @Test
+  @Ignore(products = CORE, value = "core does not support -pd")
   public void testSettingProfile() throws IOException {
-    capabilities.setCapability(OperaDriver.PROFILE, tmpFolder.newFolder().getCanonicalPath());
+    File profile = tmpFolder.newFolder();
+    capabilities.setCapability(OperaDriver.PROFILE, profile.getPath());
     driver = new TestOperaDriver(capabilities);
+
     assertNotNull(driver);
+    assertEquals(profile, driver.preferences().get("User Prefs", "Opera Directory").getValue());
+    assertEquals(profile, driver.settings.getProfile().getDirectory());
+
     driver.quit();
   }
 
@@ -165,6 +169,34 @@ public class DesiredCapabilitiesTest extends OperaDriverTestCase {
     driver = new TestOperaDriver(capabilities);
     assertTrue(driver.runner.isOperaRunning());
     driver.quit();
+  }
+
+  @Test
+  public void testFakeLauncher() {
+    OperaLauncherRunnerSettings settings = new OperaLauncherRunnerSettings();
+
+    try {
+      TemporaryFolder tmp = new TemporaryFolder();
+      tmp.create();
+      File newLauncher = tmp.newFile("newLauncher");
+      Files.copy(settings.getLauncher(), newLauncher);
+      OperaLauncherRunnerSettingsTest.TestOperaLauncherRunnerSettings
+          .makeLauncherExecutable2(newLauncher);
+      capabilities.setCapability(OperaDriver.LAUNCHER, newLauncher.getPath());
+      driver = new TestOperaDriver(capabilities);
+      assertEquals(newLauncher.getPath(),
+                   driver.getCapabilities().getCapability(OperaDriver.LAUNCHER));
+    } catch (IOException e) {
+      fail("Problem copying launcher for testing: " + e.getMessage());
+    } finally {
+      tmpFolder.delete();
+    }
+  }
+
+  @Test(expected = OperaRunnerException.class)
+  public void testInvalidLauncher() {
+    capabilities.setCapability(OperaDriver.LAUNCHER, "/path/to/invalid/launcher");
+    driver = new TestOperaDriver(capabilities);
   }
 
 }

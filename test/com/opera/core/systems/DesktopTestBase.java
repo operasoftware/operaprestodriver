@@ -16,6 +16,8 @@ limitations under the License.
 
 package com.opera.core.systems;
 
+import com.opera.core.systems.testing.OperaDriverTestCase;
+
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 

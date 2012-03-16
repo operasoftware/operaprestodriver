@@ -20,6 +20,7 @@ import com.google.common.io.ByteStreams;
 import com.google.common.io.Closeables;
 import com.google.common.io.Files;
 
+import com.opera.core.systems.OperaDriver;
 import com.opera.core.systems.OperaPaths;
 import com.opera.core.systems.OperaProduct;
 import com.opera.core.systems.arguments.OperaCoreArguments;
@@ -29,9 +30,11 @@ import com.opera.core.systems.runner.OperaLaunchers;
 import com.opera.core.systems.runner.OperaRunnerException;
 import com.opera.core.systems.runner.OperaRunnerSettings;
 
+import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.os.CommandLine;
+import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -60,6 +63,15 @@ public class OperaLauncherRunnerSettings extends OperaRunnerSettings {
     loggingLevel = OperaLauncherRunner.toLauncherLoggingLevel(level);
   }
 
+  public Capabilities toCapabilities() {
+    DesiredCapabilities capabilities = (DesiredCapabilities) super.toCapabilities();
+
+    capabilities.setCapability(OperaDriver.LAUNCHER, getLauncher().getPath());
+    capabilities.setCapability(OperaDriver.BACKEND, getBackend());
+
+    return capabilities;
+  }
+
   public File getLauncher() {
     if (launcher == null) {
       launcher = new File(launcherPath());
@@ -68,12 +80,18 @@ public class OperaLauncherRunnerSettings extends OperaRunnerSettings {
     return launcher;
   }
 
-  public void setLauncher(File launcher) {
-    if (launcher.exists() && launcher.isFile() && launcher.canExecute()) {
-      this.launcher = launcher;
-    } else {
-      throw new OperaRunnerException("Invalid launcher: " + launcher);
+  public void setLauncher(String launcherPath) {
+    setLauncher(new File(launcherPath));
+  }
+
+  public void setLauncher(File newLauncher) {
+    try {
+      assertLauncherGood(newLauncher);
+    } catch (IOException e) {
+      throw new OperaRunnerException("Invalid launcher: " + e.getMessage());
     }
+
+    launcher = newLauncher;
   }
 
   /**
@@ -230,7 +248,7 @@ public class OperaLauncherRunnerSettings extends OperaRunnerSettings {
    *
    * @param launcher the file to make executable
    */
-  private static void makeLauncherExecutable(File launcher) {
+  protected static void makeLauncherExecutable(File launcher) {
     Platform current = Platform.getCurrent();
 
     if (current.is(Platform.UNIX) || current.is(Platform.MAC)) {
@@ -288,6 +306,26 @@ public class OperaLauncherRunnerSettings extends OperaRunnerSettings {
    */
   private static byte[] md5(File file) throws NoSuchAlgorithmException, IOException {
     return Files.getDigest(file, MessageDigest.getInstance("MD5"));
+  }
+
+  /**
+   * Asserts whether given launcher exists, is a file and that it's executable.
+   *
+   * @param launcher the launcher to assert
+   * @throws IOException if there is a problem with the provided launcher
+   */
+  private static void assertLauncherGood(File launcher) throws IOException {
+    if (!launcher.exists()) {
+      throw new IOException("Unknown file: " + launcher.getPath());
+    }
+
+    if (!launcher.isFile()) {
+      throw new IOException("Not a file: " + launcher.getPath());
+    }
+
+    if (!launcher.canExecute()) {
+      throw new IOException("Not executable: " + launcher.getPath());
+    }
   }
 
 }

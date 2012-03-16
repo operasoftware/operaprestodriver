@@ -16,6 +16,10 @@
 
 package com.opera.core.systems.scope.services;
 
+import com.opera.core.systems.scope.protos.CoreProtos.ClearFlags;
+
+import java.util.List;
+
 /**
  * Core utility service exposing metadata about the browser core in general, i.e. information which
  * can not be associated to any one window, document, or object.
@@ -46,8 +50,8 @@ public interface ICoreUtils {
   String getCoreVersion();
 
   /**
-   * Gets a string which describes the operating system the connected Opera instance is running
-   * on.  An example would be
+   * Gets a string which describes the operating system the connected Opera instance is running on.
+   * An example would be
    *
    * "Window NT 6.1"
    *
@@ -56,8 +60,8 @@ public interface ICoreUtils {
   String getOperatingSystem();
 
   /**
-   * A string which describes the product.  For regular desktop builds this will be "desktop".
-   * Other examples are "mobile" and "gogi".
+   * A string which describes the product.  For regular desktop builds this will be "desktop". Other
+   * examples are "mobile" and "gogi".
    *
    * @return product type
    */
@@ -86,5 +90,12 @@ public interface ICoreUtils {
    * @return pid, or null if not available
    */
   Integer getProcessID();
+
+  /**
+   * Clears specified browser data.
+   *
+   * @param flags list of private data to be cleared
+   */
+  void clearPrivateData(List<ClearFlags> flags);
 
 }

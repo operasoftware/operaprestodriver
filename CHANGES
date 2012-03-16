@@ -1,4 +1,112 @@
-v0.10     (2011-01-24)
+v0.11     (2012-03-05)
+
+  [API CHANGES]
+
+  * Introducing OperaTimeouts.responseTimeout() for customizing the
+    response timeout interval.  (andreastt)
+
+  * Removed opera.guess_binary_path capability.  (andreastt)
+
+  * Recognizing opera.launcher capability.  (andreastt)
+
+  * Deprecated OperaWebElement.click(int times), click(int x, int y)
+    and middleClick().  (andreastt)
+
+  [NEW FEATURES]
+
+  * Using new extension to hob, javagen, for generating Java classes
+    from Scope protocols.  (andreastt)
+
+  * Support for clearing private data.  (danielb/andreastt)
+
+  [ENHANCEMENTS]
+
+  * Upgraded to Selenium 2.20.  (andreastt)
+
+  * Raising response timeout to 60 seconds.  (andreastt)
+
+  * Improved reliability of implicit waits.  (andreastt)
+
+  * OperaProfile.toJson() now returns a proper JSON representation of
+    the profile.  (andreastt)
+
+  * Now relying more on the data types given by Opera for preferences.
+    (andreastt)
+
+  * Functionality for converting OperaDriver settings to capabilities.
+    (andreastt)
+
+  * Delegated more responsibilities during initialization to
+    OperaRunnerSettings.  (andreastt)
+
+  [BUG FIXES]
+
+  * OperaArguments.merge() will now return a reference to it self.
+    (andreastt)
+
+  * OperaRunnerSettings.setBinary() now accepts java.io.File as the
+    default argument.  (andreastt)
+
+  * If ENABLE_CHECKS is enabled, this is no longer applied to asserting
+    whether elements are displayed or not.  (andreastt)
+
+  * Recompiled ecmascript service protocols to facilitate CORE-36517,
+    fixes SPARTAN-1165.  (andreastt)
+
+  * Facilitate connecting to a remote host, addresses OPDRV-152.
+    (andreastt)
+
+  * Removed desktop-specific hardcoded response timeout to 30 seconds
+    when a window is loaded.  (andreastt)
+
+  * Remove a redundant cast.  (hansd)
+
+  * AbstractEventHandler turned into an interface, and EventHandler
+    into an actual abstract class.  Fixes inconsistencies.  (andreastt)
+
+  * Renamed AbstractEventHandler to ScopeEventHandler (implementation)
+    and removed STP/0 support.  (andreastt)
+
+  * Unspecified type for field shuttingDown in ScopeServices.
+    (andreastt)
+
+  * Removed temporary fix for CORE-33057.  (andreastt)
+
+  * We were not respecting implicit waits, removing unused EXEC_SLEEP
+    workaround.  (andreastt)
+
+  [TESTS]
+
+  * Major refactoring of test setup.  (andreastt)
+
+  * Introducing annotation FreshDriver for forcing a driver restart.
+    (andreastt)
+
+  * In-process web server for tests (much like Selenium's).
+    (andreastt)
+
+  * Introduced OperaDriverBuilder and various OperaDriverSuppliers
+    for use in SpartanRunner and for testing.  (andreastt)
+
+  * Added methods toString() and toList() to OperaIntervals for
+    debugging purposes.  (andreastt)
+
+  * Added test for specifying launcher from capabilities.  (andreastt)
+
+  [OTHER]
+
+  * Protocol files no longer have version numbers in filenames,
+    resolves OPDRV-154.  (andreastt)
+
+  * Printing warnings when compiling OperaDriver.  (hansd)
+
+  * Removed old getting started examples, relocated remote example.
+    (andreastt)
+
+  * Various fixes for documentation.  (andreastt)
+
+
+v0.10     (2012-01-24)
 
   [API CHANGES]
 

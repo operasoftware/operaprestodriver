@@ -25,7 +25,7 @@ import com.opera.core.systems.scope.DesktopWindowManagerCommand;
 import com.opera.core.systems.scope.ESDebuggerCommand;
 import com.opera.core.systems.scope.SelftestCommand;
 import com.opera.core.systems.scope.WindowManagerCommand;
-import com.opera.core.systems.scope.handlers.AbstractEventHandler;
+import com.opera.core.systems.scope.handlers.EventHandler;
 import com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessage;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID;
@@ -42,9 +42,9 @@ import com.opera.core.systems.scope.protos.WmProtos.WindowInfo;
 
 public class UmsEventParser {
 
-  private AbstractEventHandler eventHandler;
+  private EventHandler eventHandler;
 
-  public UmsEventParser(AbstractEventHandler eventHandler) {
+  public UmsEventParser(EventHandler eventHandler) {
     this.eventHandler = eventHandler;
   }
 

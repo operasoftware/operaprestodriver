@@ -1,94 +1,68 @@
-/**
- * Protocol buffer messages used by the Opera PlatformLauncher.
- */
+syntax = "proto2";
+import "opera/scope/scope_descriptor.proto";
 
-/*
- * Empty request buffer for Handshake
- */
+package scope;
+
+option optimize_for         = SPEED;
+option java_outer_classname = "OperaLauncherProtos";
+option java_package         = "com.opera.core.systems.runner.launcher";
+
 message LauncherHandshakeRequest
 {
-
 }
 
-/*
- * Empty request buffer for Start
- */
 message LauncherStartRequest
 {
-
 }
 
-/*
- * Empty request buffer for Status
- */
 message LauncherStatusRequest
 {
-	optional int32 processid = 1;
+    optional int32 processid = 1;
 }
 
-/*
- * Empty request buffer for Stop
- */
 message LauncherStopRequest
 {
-
 }
 
-/*
- * LauncherHandshakeResponse is a simple message telling what
- * system the Launcher is running on.
- */
 message LauncherHandshakeResponse
 {
-	required string identifier = 1;		/* Identify the device, if we have to of the same, they should have different names */
-	optional string device = 2;			/* Description of what device the launcher is running on, eg: BladeServer99 */
-	optional string platform = 3;			/* Description of what platform/os the launcher is running on, eg: Windows XP */
-	optional string configuration = 4;		/* Description opera configuration the lanucher is using, eg: Smartphone */
-	repeated string logmessages = 5;           /* Free description that will end up in log. Give as much information as possible */
+    required string identifier    = 1;
+    optional string device        = 2;
+    optional string platform      = 3;
+    optional string configuration = 4;
+    repeated string logmessages   = 5;
 }
 
-/*
- * LauncherStatusResponse is used by many commands, and give an
- * idea of what status opera is in.
- */
 message LauncherStatusResponse
 {
-	enum StatusType {
-		RUNNING = 0;	/* Opera is running */
-		STOPPED = 1;	/* Opera is not running */
-		CRASHED = 2;	/* Opera had crashed, and there could be a crashlog attached */
-		FROZEN  = 3;	/* Opera had frozen */
-	}
+    enum StatusType
+    {
+        RUNNING = 0;
+        STOPPED = 1;
+        CRASHED = 2;
+        FROZEN = 3;
+    }
 
-	required StatusType status = 1;		/* What happened to opera? Did it just crash, is it running ok? */
-	optional int32 exitcode = 2;			/* In case opera exited, here is the exitcode */
-	optional bytes crashlog = 3;			/* A crash-log containing crash information if available */
-	repeated string logmessages = 4;           /* Free description that will end up in log. Give as much information as possible
-								   Please tell what we did, what we tried to do, what wendt wrong etc...          */
+    required StatusType status      = 1;
+    optional int32      exitcode    = 2;
+    optional bytes      crashlog    = 3;
+    repeated string     logmessages = 4;
 }
 
-/*
- * LauncherScreenshotRequest is a request for a screenshot. This message contains a set of known MD5-sums that represent known
- * screenshot that we dont need to resubmit.
- */
 message LauncherScreenshotRequest
 {
-	repeated string knownMD5s = 1;			/* Set of MD5s we know from before, and that we dont need to send the whole imaga data back for */
-	optional int32 knownMD5sTimeoutMs = 2;	/* If set, the launcher will look for the known MD5s for X milliseconds */
+    repeated string knownMD5s          = 1;
+    optional int32  knownMD5sTimeoutMs = 2;
 }
 
-/*
- * LauncherScreenshotResponse either contains only a MD5, or an MD5 and the whole screenshot. In error, no screenshot is returned.
- * There is also a isBlank flag.
- */
 message LauncherScreenshotResponse
 {
-	optional string md5 = 1;				/* The MD5 of our screenshot, if we have any */
-	optional string format = 2;			/* The format of our screenshot if we have any, for example "png" or "r8g8b8" */
-	optional int32 width = 3;			/* The width of our screenshot if we have any */
-	optional int32 height = 4;			/* The height of our screenshot if we have any */
-	optional bytes imagedata = 5;			/* The image data in the given format */
-	optional bool blank = 6;				/* True if the taken/returned image is a blank */
-	repeated string logmessages = 7;           /* Free description that will end up in log. Give as much information as possible
-								   Please tell what we did, what we tried to do, what wendt wrong etc...          */
+    optional string md5         = 1;
+    optional string format      = 2;
+    optional int32  width       = 3;
+    optional int32  height      = 4;
+    optional bytes  imagedata   = 5;
+    optional bool   blank       = 6;
+    repeated string logmessages = 7;
 }
+

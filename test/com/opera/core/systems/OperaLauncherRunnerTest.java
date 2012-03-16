@@ -20,6 +20,7 @@ import com.opera.core.systems.model.ScreenShotReply;
 import com.opera.core.systems.runner.OperaRunnerException;
 import com.opera.core.systems.runner.launcher.OperaLauncherRunner;
 import com.opera.core.systems.runner.launcher.OperaLauncherRunnerSettings;
+import com.opera.core.systems.testing.Ignore;
 
 import org.junit.After;
 import org.junit.Before;
@@ -29,6 +30,7 @@ import org.openqa.selenium.Platform;
 import java.io.File;
 import java.util.logging.Level;
 
+import static com.opera.core.systems.OperaProduct.DESKTOP;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -100,7 +102,6 @@ public class OperaLauncherRunnerTest {
 
   @Test
   public void testConstructorWithSettingsArguments() {
-    settings.setArguments(OperaArguments.parse("-geometry 1024x768"));
     runner = new OperaLauncherRunner(settings);
     runner.startOpera();
     assertTrue(runner.isOperaRunning());
@@ -116,8 +117,8 @@ public class OperaLauncherRunnerTest {
   }
 
   @Test
+  @Ignore(products = DESKTOP, value = "mzajaczkowski_watir_1_cleaned contains fix for this")
   public void testStartAndStopOperaTenTimes() {
-    settings.setArguments(OperaArguments.parse("-geometry 640x480"));
     runner = new OperaLauncherRunner(settings);
 
     for (int i = 0; i < 10; i++) {

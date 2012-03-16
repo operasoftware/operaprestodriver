@@ -24,7 +24,6 @@ import org.openqa.selenium.WebDriverException;
 
 import java.io.File;
 import java.lang.reflect.Type;
-import java.util.List;
 
 /**
  * OperaScopePreferences allows updating preferences inside Opera using the Scope protocol using the
@@ -36,6 +35,34 @@ import java.util.List;
 public class OperaScopePreferences extends AbstractOperaPreferences {
 
   protected IPrefs service;
+
+  /**
+   * Opera stores preferences in more field types than what is considered idiomatic to Java.  This
+   * is a lookup enum for converting from Opera-specific field types to Java types.
+   */
+  private enum PrefType {
+
+    BOOLEAN, COLOR, FILE, INTEGER, STRING;
+
+    public static PrefType toJava(PrefsProtos.Pref.Type type) {
+      switch (type) {
+        case BOOLEAN:
+          return BOOLEAN;
+        case COLOR:
+          return COLOR;
+        case DIRECTORY:
+        case FILE:
+        case REQUIRED_FILE:
+          return FILE;
+        case INTEGER:
+          return INTEGER;
+        case STRING:
+        default:
+          return STRING;
+      }
+    }
+
+  }
 
   public OperaScopePreferences(IPrefs prefsService) {
     service = prefsService;
@@ -51,15 +78,13 @@ public class OperaScopePreferences extends AbstractOperaPreferences {
       if (p.getSection().equalsIgnoreCase(preference.getSection()) &&
           p.getKey().equalsIgnoreCase(preference.getKey())) {
         if (!p.getValue().equals(preference.getValue())) {
-          p.setValue(preference.getValue());
+          p.setValue(((OperaGenericPreferences.GenericPreference) preference).getValue(true));
         }
         return;
       }
     }
 
-    throw new WebDriverException("Unknown preference: [section: '" +
-                                 preference.getSection() + "', key: '" +
-                                 preference.getKey() + "']");
+    throw new WebDriverException("Unknown preference: " + preference.toString());
   }
 
   public void set(String section, String key, Object value) {
@@ -71,7 +96,7 @@ public class OperaScopePreferences extends AbstractOperaPreferences {
   }
 
   /**
-   * Resets all preferences values to their default value.
+   * Resets all preferences' values to their default value.
    */
   public void resetAll() {
     for (OperaPreference p : this) {
@@ -93,9 +118,7 @@ public class OperaScopePreferences extends AbstractOperaPreferences {
    * individual values.
    */
   private void updatePreferenceCache() {
-    List<PrefsProtos.Pref> allPrefs = service.listPrefs(true, null);
-
-    for (PrefsProtos.Pref pref : allPrefs) {
+    for (PrefsProtos.Pref pref : service.listPrefs(true, null)) {
       preferences.add(new ScopePreference(this, pref));
     }
   }
@@ -115,29 +138,62 @@ public class OperaScopePreferences extends AbstractOperaPreferences {
       this.pref = pref;
     }
 
+    /**
+     * Gets the value of the preference in an idiomatic type.  We fall back to {@link
+     * java.lang.String} if no type is specified for this preference.
+     *
+     * @return the value of the string, as an idiomatic Java type
+     */
+    @Override
+    public Object getValue() {
+      String value = super.getValue().toString();
+
+      switch (PrefType.toJava(pref.getType())) {
+        case BOOLEAN:
+          return Boolean.parseBoolean(value);
+        case COLOR:
+          return OperaColor.decode(value);
+        case FILE:
+          return new File(value);
+        case INTEGER:
+          // TODO(andreastt): Opera sometimes stores prefs as integers when they are in fact not integers, file core bug
+          try {
+            return Integer.parseInt(value);
+          } catch (NumberFormatException e) {
+            return value;
+          }
+        case STRING:
+        default:
+          return value;
+      }
+    }
+
+    @Override
     public void setValue(Object value) {
       super.setValue(value);  // update cache
       parent.service.setPrefs(getSection(), getKey(), super.getValue(true).toString());
     }
 
+    @Override
     public Object getDefaultValue() {
       return parent.service.getPref(getSection(), getKey(), PrefsProtos.GetPrefArg.Mode.DEFAULT);
     }
 
     /**
-     * Returns which type the preference is considered internally in Opera.
+     * Gets the type of the preference.  Since Opera uses more internal field types than what is
+     * accessible to Java, we reduce the type specified by Opera (in a lossy way) to one of either
+     * {@link java.lang.Boolean}, {@link OperaColor}, {@link java.io.File}, {@link
+     * java.lang.Integer} or {@link java.lang.String}.
      *
-     * @return Integer, String or Boolean type
+     * @return the idiomatic Java type for this preference
      */
     public Type getType() {
-      switch (pref.getType()) {
+      switch (PrefType.toJava(pref.getType())) {
         case BOOLEAN:
           return Boolean.class;
         case COLOR:
           return OperaColor.class;
-        case DIRECTORY:
         case FILE:
-        case REQUIRED_FILE:
           return File.class;
         case INTEGER:
           return Integer.class;

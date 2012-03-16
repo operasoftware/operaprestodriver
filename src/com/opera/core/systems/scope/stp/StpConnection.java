@@ -19,9 +19,8 @@ package com.opera.core.systems.scope.stp;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.CodedOutputStream;
 
-import com.opera.core.systems.scope.handlers.AbstractEventHandler;
+import com.opera.core.systems.scope.handlers.EventHandler;
 import com.opera.core.systems.scope.handlers.IConnectionHandler;
-import com.opera.core.systems.scope.internal.OperaIntervals;
 import com.opera.core.systems.scope.protos.UmsProtos.Command;
 import com.opera.core.systems.scope.protos.UmsProtos.Error;
 import com.opera.core.systems.scope.protos.UmsProtos.Event;
@@ -57,12 +56,12 @@ public class StpConnection implements SocketListener {
   final byte[] prefix = {'S', 'T', 'P', 1};
   private ByteString stpPrefix = ByteString.copyFrom(prefix);
 
-  private AbstractEventHandler eventHandler;
+  private EventHandler eventHandler;
   private UmsEventParser stp1EventHandler;
   private IConnectionHandler connectionHandler;
 
   public enum State {
-    SERVICELIST, HANDSHAKE, EMPTY, STP;
+    SERVICELIST, HANDSHAKE, EMPTY, STP
   }
 
   private State state = State.SERVICELIST;
@@ -92,7 +91,7 @@ public class StpConnection implements SocketListener {
    * Initializes variables in object scope, sets 'count known' to false to read byte count (STP/0).
    */
   public StpConnection(SocketChannel socket, IConnectionHandler handler,
-                       AbstractEventHandler eventHandler, SocketMonitor monitor)
+                       EventHandler eventHandler, SocketMonitor monitor)
       throws IOException {
     connectionHandler = handler;
     socketChannel = socket;
@@ -149,12 +148,6 @@ public class StpConnection implements SocketListener {
   }
 
   public void sendEnableStp1() {
-    // Temporary fix for CORE-33057
-    try {
-      Thread.sleep(OperaIntervals.EXEC_SLEEP.getValue());
-    } catch (InterruptedException e) {
-      Thread.currentThread().interrupt();
-    }
     send("*enable stp-1");
   }
 
@@ -322,11 +315,20 @@ public class StpConnection implements SocketListener {
 
   /**
    * Processes an incoming message and passes it to event handler if needed, the following events
-   * are to our interest: Runtime-Started : ecmascript runtime starts in Opera (that we can inject
-   * to) Runtime-Stopped : ecmascript runtime stops (not used, buggy) Message: fired from console
-   * log event Updated-Window: a window is updated OR created (opener-id=0) Active-Window: window
-   * focus changed Window-Closed: self explanatory If message matches none it is added to the
-   * response queue (probably response to command).
+   * are to our interest:
+   *
+   * Runtime-Started: ecmascript runtime starts in Opera (that we can inject to)
+   *
+   * Runtime-Stopped: ecmascript runtime stops (not used, buggy)
+   *
+   * Message: fired from console log event
+   *
+   * Updated-Window: a window is updated OR created (opener-id=0)
+   *
+   * Active-Window: window focus changed
+   *
+   * Window-Closed: self explanatory If message matches none it is added to the response queue
+   * (probably response to command).
    */
   public void parseServiceList(String message) {
     logger.finer("parseServiceList: \"" + message + "\"");
@@ -530,15 +532,16 @@ public class StpConnection implements SocketListener {
         break;
       case 4: // error
         Error error = Error.parseFrom(payload);
-      logger.finest("RECV ERROR: " + error.toString());
+        logger.finest("RECV ERROR: " + error.toString());
 
-      String service = error.getService();
-      int status = error.getStatus();
+        String service = error.getService();
+        int status = error.getStatus();
 
-      // We get exceptions when, in the ecmascript services, we use a runtime
-      // that doesn't exist. We can ignore these exceptions and carry on.
-      if ((service.equals("ecmascript-debugger") && status == Status.INTERNAL_ERROR.getNumber()) ||
-          (service.equals("ecmascript") && status == Status.BAD_REQUEST.getNumber())) {
+        // We get exceptions when, in the ecmascript services, we use a runtime
+        // that doesn't exist. We can ignore these exceptions and carry on.
+        if ((service.equals("ecmascript-debugger") && status == Status.INTERNAL_ERROR.getNumber())
+            ||
+            (service.equals("ecmascript") && status == Status.BAD_REQUEST.getNumber())) {
           signalResponse(error.getTag(), null);
         } else {
           logger.log(Level.SEVERE, "Error: {0}", error.toString());

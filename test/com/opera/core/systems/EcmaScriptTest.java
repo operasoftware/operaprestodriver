@@ -16,6 +16,8 @@ limitations under the License.
 
 package com.opera.core.systems;
 
+import com.opera.core.systems.testing.OperaDriverTestCase;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.WebDriverException;
@@ -42,7 +44,7 @@ public class EcmaScriptTest extends OperaDriverTestCase {
       "22%20%2F%3E";
 
   @Before
-  public void setUp() {
+  public void beforeEach() {
     driver.navigate().to(testPage);
   }
 

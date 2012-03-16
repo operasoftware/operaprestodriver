@@ -17,6 +17,7 @@ limitations under the License.
 package com.opera.core.systems;
 
 import com.opera.core.systems.scope.exceptions.ResponseNotReceivedException;
+import com.opera.core.systems.testing.OperaDriverTestCase;
 
 import org.junit.After;
 import org.junit.Before;
@@ -31,13 +32,13 @@ public class KeyEventsTest extends OperaDriverTestCase {
   private WebElement logEl;
 
   @Before
-  public void setUp() {
+  public void beforeEach() {
     getFixture("keys.html");
     logEl = driver.findElementById("log");
   }
 
   @After
-  public void tearDown() {
+  public void afterEach() {
     releaseKeys();
   }
 

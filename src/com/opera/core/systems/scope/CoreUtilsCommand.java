@@ -30,6 +30,7 @@ public enum CoreUtilsCommand implements ICommand {
   ONACTIVE                ( 1),
   ONIDLE                  ( 2),
   GET_BROWSER_INFORMATION ( 3),
+  CLEAR_PRIVATE_DATA      ( 4),
   DEFAULT                 (-1);
 
   private int code;

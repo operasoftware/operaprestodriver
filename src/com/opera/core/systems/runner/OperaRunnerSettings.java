@@ -16,6 +16,7 @@ limitations under the License.
 
 package com.opera.core.systems.runner;
 
+import com.opera.core.systems.OperaDriver;
 import com.opera.core.systems.OperaProduct;
 import com.opera.core.systems.OperaProfile;
 import com.opera.core.systems.arguments.OperaCoreArguments;
@@ -23,8 +24,10 @@ import com.opera.core.systems.arguments.OperaDesktopArguments;
 import com.opera.core.systems.arguments.interfaces.OperaArguments;
 import com.opera.core.systems.scope.internal.OperaIntervals;
 
+import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.net.PortProber;
+import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.io.File;
 import java.util.logging.Level;
@@ -42,55 +45,34 @@ public class OperaRunnerSettings
   protected OperaProfile profile = null;
   protected boolean noQuit = false;
   protected String host = "127.0.0.1";
-  protected Integer port = 0;  // -1 for Opera < 11.60
+  protected Integer port = (int) OperaIntervals.SERVER_RANDOM_PORT_IDENTIFIER.getValue();
   protected Level loggingLevel = Level.INFO;
-  protected com.opera.core.systems.arguments.interfaces.OperaArguments arguments;
+  protected OperaArguments arguments = new OperaCoreArguments();
 
   private boolean supportsPd = true;
-
-  public OperaRunnerSettings() {
-    // We read in environmental variable OPERA_ARGS in addition to existing arguments passed down
-    // through OperaRunnerSettings/OperaArguments.  These are combined and can be retrieved using
-    // OperaDriverSettings.getArguments().
-    //
-    // Note that this is a deviation from the principle of arguments normally overwriting
-    // environmental variables.
-    String environmentArguments = System.getenv("OPERA_ARGS");
-    if (environmentArguments != null && !environmentArguments.isEmpty()) {
-      OperaArguments
-          parsedEnvironmentArguments =
-          com.opera.core.systems.OperaArguments.parse(environmentArguments);
-      if (arguments != null && !arguments.getArguments().isEmpty()) {
-        arguments.merge(parsedEnvironmentArguments);
-      } else {
-        arguments = parsedEnvironmentArguments;
-      }
-    } else {
-      arguments = new com.opera.core.systems.OperaArguments();
-    }
-  }
 
   public File getBinary() {
     return operaBinary;
   }
 
+  /**
+   * Sets Opera's binary.
+   *
+   * @param path the absolute path to the binary to use
+   */
   public void setBinary(String path) {
     if (path != null && !path.isEmpty()) {
-      File binary = new File(path);
-      if (binary.exists() && binary.isFile() && binary.canExecute()) {
-        operaBinary = binary;
-      } else {
-        throw new OperaRunnerException("No such file or not executable: " + binary);
-      }
+      setBinary(new File(path));
     } else {
       throw new OperaRunnerException("Invalid file path: " + path);
     }
   }
 
   public void setBinary(File binary) {
-    if (binary == null) {
-      throw new OperaRunnerException("Invalid file: " + binary);
+    if (!binary.exists() || !binary.isFile() || !binary.canExecute()) {
+      throw new OperaRunnerException("No such file or not executable: " + binary);
     }
+
     operaBinary = binary;
   }
 
@@ -158,9 +140,9 @@ public class OperaRunnerSettings
   public Integer getPort() {
     // The port Opera should connect to.  0 = Random, -1 = Opera default (7001) (for use with Opera
     // < 11.60).
-    if (port == 0) {
+    if (port == OperaIntervals.SERVER_RANDOM_PORT_IDENTIFIER.getValue()) {
       port = PortProber.findFreePort();
-    } else if (port == -1) {
+    } else if (port == OperaIntervals.SERVER_DEFAULT_PORT_IDENTIFIER.getValue()) {
       port = (int) OperaIntervals.SERVER_PORT.getValue();
     }
 
@@ -203,6 +185,25 @@ public class OperaRunnerSettings
 
   public void setLoggingLevel(Level level) {
     loggingLevel = level;
+  }
+
+  public Capabilities toCapabilities() {
+    DesiredCapabilities capabilities = DesiredCapabilities.opera();
+
+    capabilities.setCapability(OperaDriver.LOGGING_LEVEL, getLoggingLevel());
+
+    capabilities.setCapability(OperaDriver.BINARY,
+                               (getBinary() == null) ? (String) null : getBinary().getPath());
+    capabilities.setCapability(OperaDriver.ARGUMENTS, getArguments().toString());
+
+    capabilities.setCapability(OperaDriver.HOST, getHost());
+    capabilities.setCapability(OperaDriver.PORT, getPort());
+
+    capabilities.setCapability(OperaDriver.DISPLAY, getDisplay());
+    capabilities.setCapability(OperaDriver.PROFILE, getProfile());
+    capabilities.setCapability(OperaDriver.PRODUCT, getProduct().toString());
+
+    return capabilities;
   }
 
   public static OperaRunnerSettings getDefaultSettings() {

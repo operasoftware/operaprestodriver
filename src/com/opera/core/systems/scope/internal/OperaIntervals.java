@@ -21,22 +21,64 @@ package com.opera.core.systems.scope.internal;
  */
 public enum OperaIntervals {
 
-  RESPONSE_TIMEOUT(5000),
+  /**
+   * The response timeout specifies for how long OperaDriver should wait before timing out when it
+   * has not received a callback confirmation message from Scope after executing a command.  This
+   * typically happens when it looses connection to Opera or when a triggered command takes too long
+   * to finish.
+   */
+  RESPONSE_TIMEOUT(60000),
+
+  /**
+   * An implicit wait is to tell WebDriver to poll the DOM for a certain amount of time when trying
+   * to find an element or elements if they are not immediately available.  The default setting is
+   * 0.  Once set, the implicit wait is set for the life of the WebDriver object instance.
+   */
+  IMPLICIT_WAIT(0),
+
+  /**
+   * The page load timeout specifies how long the driver waits for a page to finish loading before
+   * returning the control to the user.
+   */
   PAGE_LOAD_TIMEOUT(30000),
+
   WINDOW_EVENT_TIMEOUT(5000),
   OPERA_IDLE_TIMEOUT(5000),
   POLL_INTERVAL(10),
   SCRIPT_RETRY(5),
   SCRIPT_RETRY_INTERVAL(50),
-  EXEC_SLEEP(100),
   HANDSHAKE_TIMEOUT(30000),
+
+  /**
+   * The default Opera debug proxy server port for OperaDriver to connect to.
+   */
   SERVER_PORT(7001),
+
+  /**
+   * For backwards compatibility with Operas without <code>-debugproxy</code> support, if the user
+   * specifies 0 as the port it will use a random port.
+   */
+  SERVER_RANDOM_PORT_IDENTIFIER(0),
+
+  /**
+   * For backwards compatibility with Operas without <code>-debugproxy</code> support, if the user
+   * specifies -1 as the port it will use the default server proxy port specified in
+   * {@link #SERVER_PORT}.
+   */
+  SERVER_DEFAULT_PORT_IDENTIFIER(-1),
+
+
   KILL_GRACE_TIMEOUT(1000),
   BACKWARDS_COMPATIBLE(1),
   DEFAULT_RESPONSE_TIMEOUT(10000),
-  WAIT_FOR_ELEMENT(0),
+
   QUIT_POLL_INTERVAL(100),
   QUIT_RESPONSE_TIMEOUT(10000),
+
+  /**
+   * Sets the amount of time to wait for an asynchronous script to finish execution before throwing
+   * an error.  If the timeout is negative, then the script will be allowed to run indefinitely.
+   */
   SCRIPT_TIMEOUT(10000),
 
   /**
@@ -76,6 +118,22 @@ public enum OperaIntervals {
 
   public long getValue() {
     return value;
+  }
+
+  public String toString() {
+    return String.format("%s: %d", super.toString(), getValue());
+  }
+
+  @SuppressWarnings("unused")
+  public static String toList() {
+    StringBuilder intervals = new StringBuilder();
+    for (OperaIntervals item : values()) {
+      if (intervals.length() != 0) {
+        intervals.append(", ");
+      }
+      intervals.append(item.toString());
+    }
+    return String.format("Intervals [%s]", intervals.toString());
   }
 
 }

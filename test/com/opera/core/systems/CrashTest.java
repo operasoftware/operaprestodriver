@@ -16,10 +16,15 @@ limitations under the License.
 
 package com.opera.core.systems;
 
+
 import com.opera.core.systems.scope.exceptions.CommunicationException;
+import com.opera.core.systems.testing.drivers.OperaDriverBuilder;
+import com.opera.core.systems.testing.drivers.TestOperaDriver;
+import com.opera.core.systems.testing.drivers.TestOperaDriverSupplier;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.openqa.selenium.os.CommandLine;
 
@@ -27,16 +32,18 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 // TODO(stuartk): Make tests pass
-public class CrashTest extends OperaDriverTestCase {
+public class CrashTest {
+
+  public TestOperaDriver driver;
 
   @Before
-  public void setUp() throws Exception {
-    super.setUpBeforeClass();
+  public void beforeEach() {
+    driver = (TestOperaDriver) new OperaDriverBuilder(new TestOperaDriverSupplier()).get();
   }
 
   @After
-  public void tearDown() throws Exception {
-    super.tearDownAfterClass();
+  public void afterEach() {
+    driver.quit();
 
     // Make sure Opera is gone
     CommandLine line = new CommandLine("kill", "`pgrep opera`");

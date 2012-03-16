@@ -23,6 +23,9 @@ import com.opera.core.systems.runner.OperaRunner;
 import com.opera.core.systems.runner.OperaRunnerException;
 import com.opera.core.systems.runner.OperaRunnerSettings;
 import com.opera.core.systems.scope.internal.OperaIntervals;
+import com.opera.core.systems.testing.Ignore;
+import com.opera.core.systems.testing.NoDriver;
+import com.opera.core.systems.testing.OperaDriverTestCase;
 
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -40,14 +43,16 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.logging.Level;
 
-import static org.junit.Assert.fail;
-import static org.openqa.selenium.Platform.WINDOWS;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+import static org.openqa.selenium.Platform.WINDOWS;
 
+
+@NoDriver
 public class OperaRunnerSettingsTest extends OperaDriverTestCase {
 
   public OperaRunnerSettings settings;
@@ -62,8 +67,6 @@ public class OperaRunnerSettingsTest extends OperaDriverTestCase {
   // Replace OperaDriverTestCase setup and tear down so that we don't launch Opera
   @BeforeClass
   public static void setUpBeforeClass() {
-    initFixtures();
-
     if (Platform.getCurrent().is(Platform.WINDOWS)) {
       fakeBinary = new File("C:\\WINDOWS\\system32\\find.exe");
     } else {
@@ -83,7 +86,7 @@ public class OperaRunnerSettingsTest extends OperaDriverTestCase {
     // TODO(andreastt): This should be done more elegantly in OperaDriverTestCase
     try {
       iniFile = temporaryProfile.newFile("operaprefs.ini");
-      Files.copy(fixtureFile("profile" + File.separator + "opera.ini"), iniFile);
+      Files.copy(resources.locate("profile/opera.ini"), iniFile);
     } catch (IOException e) {
       fail("Unable to copy preference fixture: " + e.getMessage());
     }
@@ -314,7 +317,7 @@ public class OperaRunnerSettingsTest extends OperaDriverTestCase {
    * @param key   the new environment variable's identifier
    * @param value the new environment variable's value
    * @throws IllegalAccessException foo
-   * @throws NoSuchFieldException foo
+   * @throws NoSuchFieldException   foo
    */
   @SuppressWarnings("unchecked")
   private static void setEnvVar(String key, String value)

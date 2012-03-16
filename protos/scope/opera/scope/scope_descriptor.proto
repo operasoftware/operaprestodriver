@@ -1,0 +1,45 @@
+import "google/protobuf/descriptor.proto";
+
+extend google.protobuf.ServiceOptions
+{
+  // scope options
+  /**
+   * Sets the version for this service.
+   */
+  optional string version = 50000;
+
+  /**
+   * Sets the core release for this service.
+   * @deprecated
+   */
+  optional string core_release = 50001;
+
+  /**
+   * For documentation purposes. If set to true it will mark
+   * the service as a draft in the documentation.
+   */
+  optional bool draft = 50002 [default = false];
+
+  // cpp options
+  /**
+   * Defines the name of the class to use in C++.
+   */
+  optional string cpp_class = 50500;
+
+  /**
+   * Defines the name of the header file to use in C++.
+   */
+  optional string cpp_hfile = 50501;
+}
+
+extend google.protobuf.MethodOptions
+{
+  // cpp options
+  /**
+   * Controls how the cpp method handles responses,
+   * "direct" means filling in response object and responding after the call
+   * "deferred" means sending the response at a later time
+   * @deprecated
+   */
+  optional string cpp_response = 50502 [default = "direct"];
+}

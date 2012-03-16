@@ -16,6 +16,9 @@ limitations under the License.
 
 package com.opera.core.systems;
 
+import com.opera.core.systems.testing.Ignore;
+import com.opera.core.systems.testing.OperaDriverTestCase;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -25,7 +28,9 @@ import org.openqa.selenium.Mouse;
 import org.openqa.selenium.interactions.Actions;
 
 import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
+import static org.junit.matchers.JUnitMatchers.containsString;
 
 public class MouseTest extends OperaDriverTestCase {
 
@@ -57,6 +62,13 @@ public class MouseTest extends OperaDriverTestCase {
     String hash = test.getImageHash();
     mouse.mouseMove(test.getCoordinates());
     assertNotSame(hash, test.getImageHash());
+  }
+
+  @Test
+  @Ignore(value = "Unknown why we're not triggering dblclick ES events, investigate")
+  public void testDoubleClick() {
+    mouse.doubleClick(test.getCoordinates());
+    assertThat(log(), containsString("dblclick"));
   }
 
   @Test

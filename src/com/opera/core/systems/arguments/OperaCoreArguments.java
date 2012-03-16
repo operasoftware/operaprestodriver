@@ -38,6 +38,7 @@ public class OperaCoreArguments extends OperaArguments {
     // TODO(andreastt): gogi doesn't support -pd, and for some reason this must be sent last
     //OperaArgument argument = new OperaArgument("autotestmode");
     //super.arguments.add(argument);
+
     merge(parse(System.getenv("OPERA_ARGS")));
   }
 

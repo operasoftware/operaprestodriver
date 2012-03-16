@@ -19,6 +19,7 @@ package com.opera.core.systems;
 import com.opera.core.systems.scope.services.ISelftest.ResultType;
 import com.opera.core.systems.scope.services.ISelftest.SelftestResult;
 import com.opera.core.systems.scope.services.ums.Selftest;
+import com.opera.core.systems.testing.OperaDriverTestCase;
 
 import org.junit.Test;
 
@@ -33,7 +34,7 @@ public class SelftestTest extends OperaDriverTestCase {
 
   @Test
   public void testSelftests() {
-    if (currentProduct.is(OperaProduct.CORE)) {
+    if (driver.utils().getProduct().is(OperaProduct.CORE)) {
       String results;
       try {
         results = driver.selftest(Arrays.asList("about"), 30000);
