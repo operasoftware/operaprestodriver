@@ -35,4 +35,14 @@ public class OperaFlags {
    */
   public static final boolean APPEND_TO_LOGFILE = true;
 
+  /**
+   * Whether Opera Idle should be enabled by default.
+   */
+  public static final boolean ENABLE_IDLE = false;
+
+  /**
+   * Whether to enable autostart of the Opera browser by default.
+   */
+  public static final boolean ENABLE_AUTOSTART = true;
+
 }
