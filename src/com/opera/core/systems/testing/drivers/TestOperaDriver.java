@@ -25,9 +25,7 @@ import com.opera.core.systems.scope.services.IOperaExec;
 
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.Platform;
-import org.openqa.selenium.remote.DesiredCapabilities;
 
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -88,7 +86,7 @@ public class TestOperaDriver extends OperaDriver {
   public boolean isRunning() {
     return runner != null && runner.isOperaRunning();
   }
-  
+
   public ScopeServices getServices() {
     return services;
   }
@@ -194,9 +192,13 @@ public class TestOperaDriver extends OperaDriver {
     }
 
   }
-  
+
   public static Capabilities getDefaultCapabilities() {
     return new OperaSettings().toCapabilities();
+  }
+
+  public static OperaSettings getDefaultSettings() {
+    return new OperaSettings();
   }
 
   /**

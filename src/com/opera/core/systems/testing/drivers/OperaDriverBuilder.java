@@ -80,11 +80,11 @@ public class OperaDriverBuilder implements Supplier<OperaDriver> {
   /**
    * Allows you to specify using which capabilities you'd like the driver to be instantiated with.
    *
-   * @param s capabilities for the driver
+   * @param settings capabilities for the driver
    * @return a self reference
    */
-  public OperaDriverBuilder using(OperaSettings s) {
-    settings = s;
+  public OperaDriverBuilder using(OperaSettings settings) {
+    this.settings = settings;
     return this;
   }
 

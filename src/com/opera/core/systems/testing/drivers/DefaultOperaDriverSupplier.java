@@ -34,11 +34,11 @@ public class DefaultOperaDriverSupplier extends AbstractOperaDriverSupplier {
   }
 
   public DefaultOperaDriverSupplier(OperaSettings settings) {
-    this.settings = settings;
+    super(settings);
   }
 
   public OperaDriver get() {
-    OperaDriver driver = new OperaDriver(settings);
+    OperaDriver driver = new OperaDriver(getSettings());
     driver.preferences().set("User Prefs", "Ignore Unrequested Popups", false);
     return driver;
   }

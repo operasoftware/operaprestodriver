@@ -31,14 +31,18 @@ public abstract class AbstractOperaDriverSupplier implements OperaDriverSupplier
   protected OperaSettings settings;
   protected Capabilities capabilities;
 
+  public AbstractOperaDriverSupplier(OperaSettings settings) {
+    setSettings(settings);
+  }
+
   public void setSettings(OperaSettings settings) {
     this.settings = settings;
   }
-  
+
   public OperaSettings getSettings() {
     return settings;
   }
-  
+
   public void setCapabilities(Capabilities capabilities) {
     this.capabilities = capabilities;
   }
