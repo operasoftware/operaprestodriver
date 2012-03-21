@@ -29,7 +29,7 @@ public class TestOperaDriverSupplier extends DefaultOperaDriverSupplier {
 
   public TestOperaDriver get() {
     settings.logging().level(Level.FINE);
-    return new TestOperaDriver(getSettings());
+    return new TestOperaDriver(settings);
   }
 
 }

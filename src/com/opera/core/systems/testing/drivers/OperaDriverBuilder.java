@@ -22,7 +22,6 @@ import com.google.common.base.Throwables;
 import com.opera.core.systems.OperaDriver;
 import com.opera.core.systems.OperaSettings;
 
-import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.lang.reflect.InvocationTargetException;
@@ -114,7 +113,9 @@ public class OperaDriverBuilder implements Supplier<OperaDriver> {
 
     if (driverSupplier == null) {
       try {
-        Class constructor = driverClass.getClass().getConstructor(Class.class).newInstance(settings);
+        Class
+            constructor =
+            driverClass.getClass().getConstructor(Class.class).newInstance(settings);
         driver = (OperaDriver) constructor.newInstance();
       } catch (NoSuchMethodException e) {
         throw new RuntimeException("Unable to recognize implementation's constructor");

@@ -16,7 +16,11 @@ limitations under the License.
 
 package com.opera.core.systems;
 
+import com.opera.core.systems.testing.NoDriver;
+import com.opera.core.systems.testing.OperaDriverTestCase;
+
 import org.json.JSONException;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -25,29 +29,28 @@ import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.Platform;
-import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
 
-import static com.opera.core.systems.OperaOptions.Capability.ARGUMENTS;
-import static com.opera.core.systems.OperaOptions.Capability.AUTOSTART;
-import static com.opera.core.systems.OperaOptions.Capability.BACKEND;
-import static com.opera.core.systems.OperaOptions.Capability.BINARY;
-import static com.opera.core.systems.OperaOptions.Capability.DISPLAY;
-import static com.opera.core.systems.OperaOptions.Capability.HOST;
-import static com.opera.core.systems.OperaOptions.Capability.LAUNCHER;
-import static com.opera.core.systems.OperaOptions.Capability.LOGGING_FILE;
-import static com.opera.core.systems.OperaOptions.Capability.LOGGING_LEVEL;
-import static com.opera.core.systems.OperaOptions.Capability.NO_QUIT;
-import static com.opera.core.systems.OperaOptions.Capability.NO_RESTART;
-import static com.opera.core.systems.OperaOptions.Capability.OPERAIDLE;
-import static com.opera.core.systems.OperaOptions.Capability.PORT;
-import static com.opera.core.systems.OperaOptions.Capability.PRODUCT;
-import static com.opera.core.systems.OperaOptions.Capability.PROFILE;
 import static com.opera.core.systems.OperaProduct.CORE;
 import static com.opera.core.systems.OperaProduct.DESKTOP;
+import static com.opera.core.systems.OperaSettings.Capability.ARGUMENTS;
+import static com.opera.core.systems.OperaSettings.Capability.AUTOSTART;
+import static com.opera.core.systems.OperaSettings.Capability.BACKEND;
+import static com.opera.core.systems.OperaSettings.Capability.BINARY;
+import static com.opera.core.systems.OperaSettings.Capability.DISPLAY;
+import static com.opera.core.systems.OperaSettings.Capability.HOST;
+import static com.opera.core.systems.OperaSettings.Capability.LAUNCHER;
+import static com.opera.core.systems.OperaSettings.Capability.LOGGING_FILE;
+import static com.opera.core.systems.OperaSettings.Capability.LOGGING_LEVEL;
+import static com.opera.core.systems.OperaSettings.Capability.NO_QUIT;
+import static com.opera.core.systems.OperaSettings.Capability.NO_RESTART;
+import static com.opera.core.systems.OperaSettings.Capability.OPERAIDLE;
+import static com.opera.core.systems.OperaSettings.Capability.PORT;
+import static com.opera.core.systems.OperaSettings.Capability.PRODUCT;
+import static com.opera.core.systems.OperaSettings.Capability.PROFILE;
 import static com.opera.core.systems.scope.internal.OperaIntervals.SERVER_DEFAULT_PORT_IDENTIFIER;
 import static com.opera.core.systems.scope.internal.OperaIntervals.SERVER_PORT;
 import static com.opera.core.systems.scope.internal.OperaIntervals.SERVER_RANDOM_PORT_IDENTIFIER;
@@ -63,8 +66,9 @@ import static org.openqa.selenium.Platform.LINUX;
 /**
  * @author Andreas Tolf Tolfsen <andreastt@opera.com>
  */
+@NoDriver
 @RunWith(Enclosed.class)
-public class OperaOptionsTest {
+public class OperaSettingsTest extends OperaDriverTestCase {
 
   public static class Capability {
 
@@ -179,167 +183,191 @@ public class OperaOptionsTest {
   }
 
   public static class Options {
-    
+
     @Rule
     public TemporaryFolder tmp = new TemporaryFolder();
 
-    public OperaOptions options;
+    public OperaSettings settings;
 
     @Before
     public void beforeEach() {
-      options = new OperaOptions();
+      settings = new OperaSettings();
+    }
+
+    @After
+    public void afterEach() {
+      environment.set("OPERA_LAUNCHER", null);
     }
 
     @Test
     public void construction() {
-      assertNotNull(options);
+      assertNotNull(settings);
     }
 
     @Test
     public void loggingLevelIsInfo() {
-      assertEquals(Level.INFO, options.logging().level());
+      assertEquals(Level.INFO, settings.logging().level());
     }
 
     @Test
     public void loggingLevelCanBeSet() {
-      options.logging().level(Level.WARNING);
-      assertEquals(Level.WARNING, options.logging().level());
+      settings.logging().level(Level.WARNING);
+      assertEquals(Level.WARNING, settings.logging().level());
     }
 
     @Test
     public void loggingFileIsNull() {
-      assertNull(options.logging().file());
+      assertNull(settings.logging().file());
     }
 
     @Test
     public void loggingFileCanBeSet() throws IOException {
       // TODO(andreastt): Replace with fake binary from Resources
       File logFile = tmp.newFile("logfile");
-      options.logging().file(logFile);
-      assertEquals(logFile, options.logging().file());
+      settings.logging().file(logFile);
+      assertEquals(logFile, settings.logging().file());
     }
 
     @Test
     public void binaryIsNull() {
-      assertNull(options.getBinary());
+      assertNull(settings.getBinary());
     }
 
     @Test
     public void binaryCanBeSet() {
       // TODO(andreastt): Replace with fake binary from Resources
       File binary = new File("nonexistent");
-      options.setBinary(binary);
-      assertEquals(binary, options.getBinary());
+      settings.setBinary(binary);
+      assertEquals(binary, settings.getBinary());
     }
 
     @Test
     public void argumentsIsOperaArgumentsObject() {
-      assertNotNull(options.arguments());
+      assertNotNull(settings.arguments());
     }
 
     @Test
     public void hostIsNonLoopbackAddress() {
-      assertEquals("127.0.0.1", options.getHost());
+      assertEquals("127.0.0.1", settings.getHost());
     }
 
     @Test
     public void hostCanBeSet() {
-      options.setHost("1.2.3.4");
-      assertEquals("1.2.3.4", options.getHost());
+      settings.setHost("1.2.3.4");
+      assertEquals("1.2.3.4", settings.getHost());
     }
 
     @Test
     public void portIsRandom() {
       // Of course, it might still happen that it assigns it to 7001...
-      assertNotSame((int) SERVER_PORT.getValue(), options.getPort());
+      assertNotSame((int) SERVER_PORT.getValue(), settings.getPort());
     }
 
     @Test
     public void portCanBeSet() {
-      options.setPort(1234);
-      assertEquals(1234, options.getPort());
+      settings.setPort(1234);
+      assertEquals(1234, settings.getPort());
     }
 
     @Test
     public void portSetToRandomIdentifier() {
-      options.setPort((int) SERVER_RANDOM_PORT_IDENTIFIER.getValue());
-      assertNotSame((int) SERVER_PORT.getValue(), options.getPort());
+      settings.setPort((int) SERVER_RANDOM_PORT_IDENTIFIER.getValue());
+      assertNotSame((int) SERVER_PORT.getValue(), settings.getPort());
     }
 
     @Test
     public void portSetToDefaultIdentifier() {
-      options.setPort((int) SERVER_DEFAULT_PORT_IDENTIFIER.getValue());
-      assertEquals((int) SERVER_PORT.getValue(), options.getPort());
+      settings.setPort((int) SERVER_DEFAULT_PORT_IDENTIFIER.getValue());
+      assertEquals((int) SERVER_PORT.getValue(), settings.getPort());
     }
 
     @Test
-    public void launcherIsNull() {
-      assertNull(options.getLauncher());
+    public void launcherReturnsLauncherLocationByDefault() {
+      assertNull(settings.getLauncher());
+    }
+
+    @Test
+    public void launcherReturnsValueIfPreviouslySet() {
+      settings.setLauncher(resources.fakeBinary());
+      assertEquals(resources.fakeBinary(), settings.getLauncher());
+    }
+
+    @Test
+    public void launcherReturnsEnvironmentalLauncherIfSet() {
+      environment.set("OPERA_LAUNCHER", resources.fakeBinary().getPath());
+      assertEquals(resources.fakeBinary(), settings.getLauncher());
+    }
+
+    @Test
+    public void launcherPrioritizesEnvironmentalLauncher() {
+      environment.set("OPERA_LAUNCHER", resources.fakeBinary().getPath());
+      settings.setLauncher(new File("something/else"));
+      assertEquals(resources.fakeBinary(), settings.getLauncher());
     }
 
     @Test
     public void launcherCanBeSet() {
       // TODO(andreastt): Replace with fake binary from Resources
       File launcher = new File("nonexistent");
-      options.setLauncher(launcher);
-      assertEquals(launcher, options.getLauncher());
+      settings.setLauncher(launcher);
+      assertEquals(launcher, settings.getLauncher());
     }
 
     @Test
     public void profileIsOperaProfileObject() {
-      assertNotNull(options.profile());
+      assertNotNull(settings.profile());
     }
 
     @Test
     public void profileCanBeSet() {
       OperaProfile profile = new OperaProfile();
-      options.setProfile(profile);
-      assertEquals(profile, options.profile());
+      settings.setProfile(profile);
+      assertEquals(profile, settings.profile());
     }
 
     @Test
     public void profileCanBeSetUsingString() {
       File profileDirectory = tmp.newFolder("profile");
-      options.setProfile(profileDirectory.getPath());
-      assertEquals(profileDirectory.getPath(), options.profile().getDirectory().getPath());
+      settings.setProfile(profileDirectory.getPath());
+      assertEquals(profileDirectory.getPath(), settings.profile().getDirectory().getPath());
     }
 
     @Test
     public void profileCanBeSetUsingNull() {
-      options.setProfile((String) null);
-      assertNotNull(options.profile());
+      settings.setProfile((String) null);
+      assertNotNull(settings.profile());
     }
 
     @Test
     public void profileCanBeSetUsingEmptyString() {
-      options.setProfile("");
-      assertFalse(options.supportsPd());
-      assertNotNull(options.profile());
+      settings.setProfile("");
+      assertFalse(settings.supportsPd());
+      assertNotNull(settings.profile());
     }
 
     @Test
     public void idleIsFalse() {
-      assertEquals(false, options.useIdle());
+      assertEquals(false, settings.useIdle());
     }
 
     @Test
     public void idleCanBeSet() {
-      options.setIdle(true);
-      assertEquals(true, options.useIdle());
+      settings.setIdle(true);
+      assertEquals(true, settings.useIdle());
     }
 
     @Test
     public void displayIsNull() {
-      assertNull(options.getDisplay());
+      assertNull(settings.getDisplay());
     }
 
     @Test
     public void displayCanBeSetOnLinuxOnly() {
       if (Platform.getCurrent().is(LINUX)) {
-        options.setDisplay(7);
+        settings.setDisplay(7);
       } else {
         try {
-          options.setDisplay(7);
+          settings.setDisplay(7);
         } catch (UnsupportedOperationException e) {
           return;
         }
@@ -350,97 +378,97 @@ public class OperaOptionsTest {
 
     @Test
     public void autostartIsTrue() {
-      assertTrue(options.autostart());
+      assertTrue(settings.autostart());
     }
 
     @Test
     public void autostartCanBeSet() {
-      options.autostart(false);
-      assertFalse(options.autostart());
+      settings.autostart(false);
+      assertFalse(settings.autostart());
     }
 
     @Test
     public void noRestartIsFalse() {
-      assertFalse(options.noRestart());
+      assertFalse(settings.noRestart());
     }
 
     @Test
     public void noRestartCanBeSet() {
-      options.noRestart(true);
-      assertTrue(options.noRestart());
+      settings.noRestart(true);
+      assertTrue(settings.noRestart());
     }
 
     @Test
     public void noQuitIsFalse() {
-      assertFalse(options.noQuit());
+      assertFalse(settings.noQuit());
     }
 
     @Test
     public void noQuitCanBeSet() {
-      options.noQuit(true);
-      assertTrue(options.noQuit());
+      settings.noQuit(true);
+      assertTrue(settings.noQuit());
     }
 
     @Test
     public void productIsDesktop() {
-      assertEquals(DESKTOP, options.getProduct());
+      assertEquals(DESKTOP, settings.getProduct());
     }
 
     @Test
     public void productCanBeSet() {
-      options.setProduct(CORE);
-      assertEquals(CORE, options.getProduct());
+      settings.setProduct(CORE);
+      assertEquals(CORE, settings.getProduct());
     }
 
     @Test
     public void backendIsSoftware() {
-      assertEquals("software", options.getBackend());
+      assertEquals("software", settings.getBackend());
     }
 
     @Test
     public void backendCanBeSet() {
-      options.setBackend("hardware");
-      assertEquals("hardware", options.getBackend());
+      settings.setBackend("hardware");
+      assertEquals("hardware", settings.getBackend());
     }
 
     @Test
     public void supportsDebugProxyIsTrueByDefault() {
-      assertTrue(options.supportsDebugProxy());
+      assertTrue(settings.supportsDebugProxy());
     }
 
     @Test
     public void supportsDebugProxyIsFalseIfDefaultServerPort() {
-      options.setPort((int) SERVER_DEFAULT_PORT_IDENTIFIER.getValue());
-      assertFalse(options.supportsDebugProxy());
+      settings.setPort((int) SERVER_DEFAULT_PORT_IDENTIFIER.getValue());
+      assertFalse(settings.supportsDebugProxy());
     }
 
     @Test
     public void supportsPdIsTrueByDefault() {
-      assertTrue(options.supportsPd());
+      assertTrue(settings.supportsPd());
     }
 
     @Test
     public void supportsPdIsFalseIfProfileIsEmptyString() {
-      options.setProfile("");
-      assertFalse(options.supportsPd());
+      settings.setProfile("");
+      assertFalse(settings.supportsPd());
     }
 
     @Test
     public void supportsPdIsFalseIfProductIsCore() {
-      options.setProduct(CORE);
-      assertFalse(options.supportsPd());
+      settings.setProduct(CORE);
+      assertFalse(settings.supportsPd());
     }
 
     @Test
     public void supportsPdIsFalseIfProductIsCoreAndProfileIsSet() {
-      options.setProduct(CORE);
-      options.setProfile(new OperaProfile());
-      assertFalse(options.supportsPd());
+      settings.setProduct(CORE);
+      settings.setProfile(new OperaProfile());
+      assertFalse(settings.supportsPd());
     }
 
     @Test
     public void canBeConvertedToCapabilities() {
-      Capabilities capabilities = options.toCapabilities();
+      Capabilities capabilities = settings.toCapabilities();
 
       assertNotNull(capabilities);
       assertTrue(capabilities.asMap().size() > 0);
@@ -449,27 +477,27 @@ public class OperaOptionsTest {
 
     @Test
     public void toJsonConvertsBooleansToIntegers() throws IOException, JSONException {
-      assertEquals(1, options.toJson().get("autostart"));
+      assertEquals(1, settings.toJson().get("autostart"));
     }
 
     @Test
     public void toJsonConvertsProfileToJson() throws IOException, JSONException {
-      assertFalse(options.toJson().get("profile") instanceof OperaProfile);
+      assertFalse(settings.toJson().get("profile") instanceof OperaProfile);
     }
 
     @Test
     public void toJsonConvertsArgumentsToJson() throws IOException, JSONException {
-      assertFalse(options.toJson().get("arguments") instanceof OperaArguments);
+      assertFalse(settings.toJson().get("arguments") instanceof OperaArguments);
     }
 
     @Test
     public void toJsonConvertsEverythingElseToStrings() throws IOException, JSONException {
-      assertEquals("127.0.0.1", options.toJson().get("host"));
+      assertEquals("127.0.0.1", settings.toJson().get("host"));
     }
 
     @Test
     public void stringRepresentation() {
-      assertNotNull(options.toString());
+      assertNotNull(settings.toString());
     }
 
   }

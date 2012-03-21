@@ -20,7 +20,6 @@ import com.opera.core.systems.testing.NoDriver;
 import com.opera.core.systems.testing.OperaDriverTestCase;
 
 import org.json.JSONException;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -29,13 +28,12 @@ import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.Platform;
+import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
 
-import static com.opera.core.systems.OperaProduct.CORE;
-import static com.opera.core.systems.OperaProduct.DESKTOP;
 import static com.opera.core.systems.OperaSettings.Capability.ARGUMENTS;
 import static com.opera.core.systems.OperaSettings.Capability.AUTOSTART;
 import static com.opera.core.systems.OperaSettings.Capability.BACKEND;
@@ -51,6 +49,8 @@ import static com.opera.core.systems.OperaSettings.Capability.OPERAIDLE;
 import static com.opera.core.systems.OperaSettings.Capability.PORT;
 import static com.opera.core.systems.OperaSettings.Capability.PRODUCT;
 import static com.opera.core.systems.OperaSettings.Capability.PROFILE;
+import static com.opera.core.systems.OperaProduct.CORE;
+import static com.opera.core.systems.OperaProduct.DESKTOP;
 import static com.opera.core.systems.scope.internal.OperaIntervals.SERVER_DEFAULT_PORT_IDENTIFIER;
 import static com.opera.core.systems.scope.internal.OperaIntervals.SERVER_PORT;
 import static com.opera.core.systems.scope.internal.OperaIntervals.SERVER_RANDOM_PORT_IDENTIFIER;
@@ -183,7 +183,7 @@ public class OperaSettingsTest extends OperaDriverTestCase {
   }
 
   public static class Options {
-
+    
     @Rule
     public TemporaryFolder tmp = new TemporaryFolder();
 
@@ -192,11 +192,6 @@ public class OperaSettingsTest extends OperaDriverTestCase {
     @Before
     public void beforeEach() {
       settings = new OperaSettings();
-    }
-
-    @After
-    public void afterEach() {
-      environment.set("OPERA_LAUNCHER", null);
     }
 
     @Test
@@ -285,24 +280,17 @@ public class OperaSettingsTest extends OperaDriverTestCase {
     public void launcherReturnsLauncherLocationByDefault() {
       assertNull(settings.getLauncher());
     }
-
+    
     @Test
     public void launcherReturnsValueIfPreviouslySet() {
-      settings.setLauncher(resources.fakeBinary());
-      assertEquals(resources.fakeBinary(), settings.getLauncher());
+      File fakeBinary = new File("some/where");
+      settings.setLauncher(fakeBinary);
+      assertEquals(fakeBinary, settings.getLauncher());
     }
 
     @Test
     public void launcherReturnsEnvironmentalLauncherIfSet() {
-      environment.set("OPERA_LAUNCHER", resources.fakeBinary().getPath());
-      assertEquals(resources.fakeBinary(), settings.getLauncher());
-    }
-
-    @Test
-    public void launcherPrioritizesEnvironmentalLauncher() {
-      environment.set("OPERA_LAUNCHER", resources.fakeBinary().getPath());
-      settings.setLauncher(new File("something/else"));
-      assertEquals(resources.fakeBinary(), settings.getLauncher());
+      environment.
     }
 
     @Test
