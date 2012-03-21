@@ -68,13 +68,16 @@ public class OperaPaths {
       case UNIX:
         paths.add(which("opera"));
         paths.add(which("opera-next"));
+        paths.add(which("operamobile"));
         paths.add("/usr/bin/opera");
         paths.add("/usr/bin/opera-next");
+        paths.add("/usr/bin/operamobile");
         break;
 
       case MAC:
         paths.add("/Applications/Opera.app/Contents/MacOS/Opera");
         paths.add("/Applications/Opera Next.app/Contents/MacOS/Opera");
+        paths.add("/Applications/Opera Mobile Emulator.app/Contents/Resources/Opera Mobile.app/Contents/MacOS/operamobile");
         break;
 
       case WINDOWS:
@@ -83,6 +86,7 @@ public class OperaPaths {
         String programFiles = getWindowsProgramFilesDirectory();
         paths.add(programFiles + "\\Opera\\opera.exe");
         paths.add(programFiles + "\\Opera Next\\opera.exe");
+        paths.add(programFiles + "\\Opera Mobile Emulator\\OperaMobileEmu.exe");
         break;
 
       default: // Android?
