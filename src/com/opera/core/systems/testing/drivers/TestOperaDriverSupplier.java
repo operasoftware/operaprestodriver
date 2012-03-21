@@ -16,11 +16,6 @@ limitations under the License.
 
 package com.opera.core.systems.testing.drivers;
 
-import com.opera.core.systems.OperaDriver;
-
-import org.openqa.selenium.Capabilities;
-import org.openqa.selenium.remote.DesiredCapabilities;
-
 import java.util.logging.Level;
 
 /**
@@ -34,7 +29,7 @@ public class TestOperaDriverSupplier extends DefaultOperaDriverSupplier {
 
   public TestOperaDriver get() {
     settings.logging().level(Level.FINE);
-    return new TestOperaDriver(capabilities);
+    return new TestOperaDriver(getSettings());
   }
 
 }
