@@ -20,6 +20,7 @@ import com.google.common.base.Supplier;
 import com.google.common.base.Throwables;
 
 import com.opera.core.systems.OperaDriver;
+import com.opera.core.systems.OperaSettings;
 
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.remote.DesiredCapabilities;
@@ -44,7 +45,7 @@ public class OperaDriverBuilder implements Supplier<OperaDriver> {
 
   private Class driverClass;
   private OperaDriverSupplier driverSupplier;
-  private DesiredCapabilities capabilities;
+  private OperaSettings settings;
   private Level loggingLevel = null;
 
   /**
@@ -52,7 +53,7 @@ public class OperaDriverBuilder implements Supplier<OperaDriver> {
    * desired capabilities specified in Selenium's {@link DesiredCapabilities#opera()}.
    */
   public OperaDriverBuilder() {
-    this(new DefaultOperaDriverSupplier(DesiredCapabilities.opera()));
+    this(new DefaultOperaDriverSupplier());
   }
 
   /**
@@ -79,11 +80,11 @@ public class OperaDriverBuilder implements Supplier<OperaDriver> {
   /**
    * Allows you to specify using which capabilities you'd like the driver to be instantiated with.
    *
-   * @param c capabilities for the driver
+   * @param s capabilities for the driver
    * @return a self reference
    */
-  public OperaDriverBuilder using(Capabilities c) {
-    capabilities = (DesiredCapabilities) c;
+  public OperaDriverBuilder using(OperaSettings s) {
+    settings = s;
     return this;
   }
 
@@ -108,14 +109,12 @@ public class OperaDriverBuilder implements Supplier<OperaDriver> {
 
     // Custom modifications based on local methods
     if (loggingLevel != null) {
-      capabilities.setCapability(OperaDriver.LOGGING_LEVEL, loggingLevel);
+      settings.logging().level(loggingLevel);
     }
-
-    DesiredCapabilities c = new DesiredCapabilities(getDefaultCapabilities(), capabilities);
 
     if (driverSupplier == null) {
       try {
-        Class constructor = driverClass.getClass().getConstructor(Class.class).newInstance(c);
+        Class constructor = driverClass.getClass().getConstructor(Class.class).newInstance(settings);
         driver = (OperaDriver) constructor.newInstance();
       } catch (NoSuchMethodException e) {
         throw new RuntimeException("Unable to recognize implementation's constructor");
@@ -127,21 +126,21 @@ public class OperaDriverBuilder implements Supplier<OperaDriver> {
         throw new RuntimeException(e);
       }
     } else {
-      driverSupplier.setCapabilities(c);
+      driverSupplier.setSettings(settings);
       driver = driverSupplier.get();
     }
 
     return driver;
   }
 
-  private Capabilities getDefaultCapabilities() {
-    DesiredCapabilities c = DesiredCapabilities.opera();
+  private OperaSettings getDefaultSettings() {
+    OperaSettings s = new OperaSettings();
 
     if (driverSupplier == null) {
       try {
-        Method getDefaultCapabilities;
-        getDefaultCapabilities = driverClass.getClass().getMethod("getDefaultCapabilities");
-        c = (DesiredCapabilities) getDefaultCapabilities.invoke(driverClass.getClass());
+        Method getDefaultSettings;
+        getDefaultSettings = driverClass.getClass().getMethod("getDefaultSettings");
+        s = (OperaSettings) getDefaultSettings.invoke(driverClass.getClass());
       } catch (NoSuchMethodException e) {
         // fall through
       } catch (InvocationTargetException e) {
@@ -150,10 +149,10 @@ public class OperaDriverBuilder implements Supplier<OperaDriver> {
         throw Throwables.propagate(e);
       }
     } else {
-      c = (DesiredCapabilities) driverSupplier.getCapabilities();
+      s = driverSupplier.getSettings();
     }
 
-    return c;
+    return s;
   }
 
 }

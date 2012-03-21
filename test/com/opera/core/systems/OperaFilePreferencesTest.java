@@ -178,7 +178,7 @@ public class OperaFilePreferencesTest extends OperaDriverTestCase {
   public void testPreferencesAreSet() {
     profile.preferences().set("User Prefs", "Ignore Unrequested Popups", false);
     DesiredCapabilities capabilities = DesiredCapabilities.opera();
-    capabilities.setCapability(OperaDriver.PROFILE, profile);
+    capabilities.setCapability(OperaSettings.Capability.PROFILE.getCapability(), profile);
     newDriver = new TestOperaDriver(capabilities);
     assertFalse((Boolean) newDriver.preferences().get("User Prefs", "Ignore Unrequested Popups")
         .getValue());
@@ -189,7 +189,7 @@ public class OperaFilePreferencesTest extends OperaDriverTestCase {
     preferences.set("User Prefs", "Ignore Unrequested Popups", false);
     profile.setPreferences(preferences);
     DesiredCapabilities capabilities = DesiredCapabilities.opera();
-    capabilities.setCapability(OperaDriver.PROFILE, profile);
+    capabilities.setCapability(OperaSettings.Capability.PROFILE.getCapability(), profile);
     newDriver = new TestOperaDriver(capabilities);
     assertFalse((Boolean) newDriver.preferences().get("User Prefs", "Ignore Unrequested Popups")
         .getValue());
@@ -203,7 +203,7 @@ public class OperaFilePreferencesTest extends OperaDriverTestCase {
     preferences.set("User Prefs", "Ignore Unrequested Popups", false);
     profile.setPreferences(preferences);
     DesiredCapabilities capabilities = DesiredCapabilities.opera();
-    capabilities.setCapability(OperaDriver.PROFILE, profile);
+    capabilities.setCapability(OperaSettings.Capability.PROFILE.getCapability(), profile);
     newDriver = new TestOperaDriver(capabilities);
     assertFalse((Boolean) newDriver.preferences().get("User Prefs", "Ignore Unrequested Popups")
         .getValue());

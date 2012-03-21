@@ -33,16 +33,7 @@ public class TestOperaDriverSupplier extends DefaultOperaDriverSupplier {
   }
 
   public TestOperaDriver get() {
-    if (capabilities == null) {
-      return null;
-    }
-
-    if (!DesiredCapabilities.opera().getBrowserName().equals(capabilities.getBrowserName())) {
-      return null;
-    }
-
-    ((DesiredCapabilities) capabilities).setCapability(OperaDriver.LOGGING_LEVEL, Level.FINE);
-
+    settings.logging().level(Level.FINE);
     return new TestOperaDriver(capabilities);
   }
 
