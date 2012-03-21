@@ -192,7 +192,7 @@ public class TestOperaDriver extends OperaDriver {
     }
 
   }
-  
+
   public static Capabilities getDefaultCapabilities() {
     return new OperaSettings().toCapabilities();
   }
