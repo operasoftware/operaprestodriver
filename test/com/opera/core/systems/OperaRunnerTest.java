@@ -22,7 +22,6 @@ import com.opera.core.systems.arguments.OperaArgument;
 import com.opera.core.systems.arguments.OperaCoreArguments;
 import com.opera.core.systems.arguments.OperaDesktopArguments;
 import com.opera.core.systems.runner.OperaRunner;
-import com.opera.core.systems.runner.OperaRunnerSettings;
 import com.opera.core.systems.testing.OperaDriverTestCase;
 
 import org.junit.AfterClass;
@@ -45,7 +44,7 @@ import static org.junit.Assert.fail;
 public class OperaRunnerTest extends OperaDriverTestCase {
 
   public static TestOperaRunner runner;
-  public OperaRunnerSettings settings;
+  public OperaSettings settings;
   public File iniFile;
   public String profile;
 
@@ -63,7 +62,7 @@ public class OperaRunnerTest extends OperaDriverTestCase {
 
   @Before
   public void beforeEach() {
-    settings = new OperaRunnerSettings();
+    settings = new OperaSettings();
     runner = null;
 
     // Make a new copy in a temporary file system so we don't overwrite our fixture
@@ -81,11 +80,11 @@ public class OperaRunnerTest extends OperaDriverTestCase {
   @Test
   public void testConstruction() {
     runner = new TestOperaRunner();
-    List<OperaArgument> arguments = runner.getSettings().getArguments().getArguments();
+    List<OperaArgument> arguments = runner.getSettings().arguments().getArguments();
 
     // TODO(andreastt): Problems with core-gogi disallows us to have -autotestmode as the first argument
     assertNotNull(runner);
-    assertNotNull(runner.getSettings().getProfile());
+    assertNotNull(runner.getSettings().profile());
     assertEquals("autotestmode", arguments.get(2).getArgument());  // 0
     assertEquals("pd", arguments.get(0).getArgument());  // 1
     assertEquals("debugproxy", arguments.get(1).getArgument());  // 2
@@ -97,7 +96,7 @@ public class OperaRunnerTest extends OperaDriverTestCase {
     settings.setProduct(OperaProduct.CORE);
     runner = new TestOperaRunner(settings);
     assertNotNull(runner);
-    assertTrue(runner.getSettings().getArguments() instanceof OperaCoreArguments);
+    assertTrue(runner.getSettings().arguments() instanceof OperaCoreArguments);
   }
 
   @Test
@@ -105,15 +104,14 @@ public class OperaRunnerTest extends OperaDriverTestCase {
     settings.setProduct(OperaProduct.DESKTOP);
     runner = new TestOperaRunner(settings);
     assertNotNull(runner);
-    assertTrue(runner.getSettings().getArguments() instanceof OperaDesktopArguments);
+    assertTrue(runner.getSettings().arguments() instanceof OperaDesktopArguments);
   }
 
   @Test
   public void testConstructionWithProfile() {
     settings.setProfile(profile);
     runner = new TestOperaRunner(settings);
-    assertEquals(profile,
-                 runner.getSettings().getArguments().getArguments().get(0).getValue());  // 1
+    assertEquals(profile, runner.getSettings().arguments().getArguments().get(0).getValue());  // 1
   }
 
   @Test
@@ -122,8 +120,7 @@ public class OperaRunnerTest extends OperaDriverTestCase {
     runner = new TestOperaRunner(settings);
     assertNotNull(runner);
     assertTrue(Integer.valueOf(
-        runner.getSettings().getArguments().getArguments().get(1).getValue().split(":")[1])
-               > 0);  // 2
+        runner.getSettings().arguments().getArguments().get(1).getValue().split(":")[1]) > 0);  // 2
   }
 
   @Test
@@ -133,11 +130,11 @@ public class OperaRunnerTest extends OperaDriverTestCase {
     arguments.add("bar", "bah");
     arguments.add("baz", "abc");
 
-    settings.setArguments(arguments);
+    settings.arguments().merge(arguments);
     runner = new TestOperaRunner(settings);
     assertNotNull(runner);
     assertTrue("should contain all the arguments added",
-               runner.getSettings().getArguments().getArguments()
+               runner.getSettings().arguments().getArguments()
                    .containsAll(arguments.getArguments()));
   }
 
@@ -189,11 +186,11 @@ public class OperaRunnerTest extends OperaDriverTestCase {
       super();
     }
 
-    public TestOperaRunner(OperaRunnerSettings settings) {
+    public TestOperaRunner(OperaSettings settings) {
       super(settings);
     }
 
-    public OperaRunnerSettings getSettings() {
+    public OperaSettings getSettings() {
       return this.settings;
     }
 

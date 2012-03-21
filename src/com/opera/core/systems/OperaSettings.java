@@ -17,7 +17,9 @@ limitations under the License.
 package com.opera.core.systems;
 
 import com.google.common.base.CaseFormat;
+import com.google.common.collect.ImmutableMap;
 
+import com.opera.core.systems.runner.launcher.OperaLauncherRunner;
 import com.opera.core.systems.scope.internal.OperaFlags;
 
 import org.json.JSONException;
@@ -30,58 +32,58 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.logging.Level;
 
-import static com.opera.core.systems.OperaOptions.Capability.ARGUMENTS;
-import static com.opera.core.systems.OperaOptions.Capability.AUTOSTART;
-import static com.opera.core.systems.OperaOptions.Capability.BACKEND;
-import static com.opera.core.systems.OperaOptions.Capability.BINARY;
-import static com.opera.core.systems.OperaOptions.Capability.DISPLAY;
-import static com.opera.core.systems.OperaOptions.Capability.HOST;
-import static com.opera.core.systems.OperaOptions.Capability.LAUNCHER;
-import static com.opera.core.systems.OperaOptions.Capability.LOGGING_FILE;
-import static com.opera.core.systems.OperaOptions.Capability.LOGGING_LEVEL;
-import static com.opera.core.systems.OperaOptions.Capability.NO_QUIT;
-import static com.opera.core.systems.OperaOptions.Capability.NO_RESTART;
-import static com.opera.core.systems.OperaOptions.Capability.OPERAIDLE;
-import static com.opera.core.systems.OperaOptions.Capability.PORT;
-import static com.opera.core.systems.OperaOptions.Capability.PRODUCT;
-import static com.opera.core.systems.OperaOptions.Capability.PROFILE;
 import static com.opera.core.systems.OperaProduct.CORE;
 import static com.opera.core.systems.OperaProduct.DESKTOP;
+import static com.opera.core.systems.OperaSettings.Capability.ARGUMENTS;
+import static com.opera.core.systems.OperaSettings.Capability.AUTOSTART;
+import static com.opera.core.systems.OperaSettings.Capability.BACKEND;
+import static com.opera.core.systems.OperaSettings.Capability.BINARY;
+import static com.opera.core.systems.OperaSettings.Capability.DISPLAY;
+import static com.opera.core.systems.OperaSettings.Capability.HOST;
+import static com.opera.core.systems.OperaSettings.Capability.LAUNCHER;
+import static com.opera.core.systems.OperaSettings.Capability.LOGGING_FILE;
+import static com.opera.core.systems.OperaSettings.Capability.LOGGING_LEVEL;
+import static com.opera.core.systems.OperaSettings.Capability.NO_QUIT;
+import static com.opera.core.systems.OperaSettings.Capability.NO_RESTART;
+import static com.opera.core.systems.OperaSettings.Capability.OPERAIDLE;
+import static com.opera.core.systems.OperaSettings.Capability.PORT;
+import static com.opera.core.systems.OperaSettings.Capability.PRODUCT;
+import static com.opera.core.systems.OperaSettings.Capability.PROFILE;
 import static com.opera.core.systems.scope.internal.OperaIntervals.SERVER_DEFAULT_PORT_IDENTIFIER;
 import static com.opera.core.systems.scope.internal.OperaIntervals.SERVER_PORT;
 import static com.opera.core.systems.scope.internal.OperaIntervals.SERVER_RANDOM_PORT_IDENTIFIER;
 import static org.openqa.selenium.Platform.LINUX;
 
 /**
- * Manages options specific to {@link OperaDriver}.
+ * Manages settings specific to {@link OperaDriver}.
  *
- * OperaOptions serves as the internal storage for OperaDriver related options and as a converted
- * between {@link DesiredCapabilities} and other internal resources, such as {@link
- * com.opera.core.systems.runner.OperaRunnerSettings}.
+ * OperaSettings serves as the internal storage for OperaDriver related settings and as a converted
+ * between {@link DesiredCapabilities} and other internal resources.
  *
  * Example usage:
  *
  * <pre><code>
- *   OperaOptions options = new OperaOptions();
- *   options.setBinary(new File("/path/to/opera"));
- *   options.arguments().add("foo", "bar");
- *   options.logging().level(Level.FINE);
+ *   OperaSettings settings = new OperaSettings();
+ *   settings.setBinary(new File("/path/to/opera"));
+ *   settings.arguments().add("foo", "bar");
+ *   settings.logging().level(Level.FINE);
  * </code></pre>
  *
  * For use with {@link OperaDriver}:
  *
  * <pre><code>
- *   OperaDriver driver = new OperaDriver(options);
+ *   OperaDriver driver = new OperaDriver(settings);
  * </code></pre>
  *
  * For use with {@link org.openqa.selenium.remote.RemoteWebDriver}:
  *
  * <pre><code>
  *   DesiredCapabilities capabilities = DesiredCapabilities.opera();
- *   capabilities.merge(options.toCapabilities());
+ *   capabilities.merge(settings.toCapabilities());
  *   RemoteWebDriver driver = new RemoteWebDriver(new URL("http://localhost:4444/wd/hub"),
  *                                                capabilities);
  * </code></pre>
@@ -89,7 +91,7 @@ import static org.openqa.selenium.Platform.LINUX;
  * @author Andreas Tolf Tolfsen <andreastt@opera.com>
  * @since 0.12
  */
-public class OperaOptions {
+public class OperaSettings {
 
   /**
    * The capabilities specifically available to Opera.  The capabilities may be used with {@link
@@ -239,9 +241,17 @@ public class OperaOptions {
     };
 
     private static final String CAPABILITY = "opera.";
+    //private static final ImmutableMap<String, Capability> lookup = ImmutableMap.of();
+    private static final Map<String, Capability> lookup = new LinkedHashMap<String, Capability>();
 
     private final String identifier;
     private final String capability;
+    
+    static {
+      for (Capability capability : values()) {
+        lookup.put(capability.getCapability(), capability);
+      }
+    }
 
     private Capability() {
       identifier = CaseFormat.UPPER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, name());
@@ -284,6 +294,16 @@ public class OperaOptions {
       return getCapability();
     }
 
+    /**
+     * Looks up a capability by its capability name.
+     *
+     * @param capabilityName the string representation of the capability
+     * @return the corresponding capability
+     */
+    public static Capability findCapability(String capabilityName) {
+      return lookup.get(capabilityName);
+    }
+
   }
 
   private class CapabilityInstance {
@@ -321,14 +341,20 @@ public class OperaOptions {
 
   private final Map<Capability, CapabilityInstance> options =
       new HashMap<Capability, CapabilityInstance>();
+  private final DesiredCapabilities surplusCapabilities = new DesiredCapabilities();
   private final OperaLogging logging = new OperaLogging();
 
   private boolean supportsPd = true;
 
-  public OperaOptions() {
+  public OperaSettings() {
     for (Capability capability : Capability.values()) {
       options.put(capability, new CapabilityInstance(capability));
     }
+  }
+
+  public OperaSettings(OperaProfile profile) {
+    this();
+    setProfile(profile);
   }
 
   public OperaLogging logging() {
@@ -427,7 +453,16 @@ public class OperaOptions {
   }
 
   public File getLauncher() {
-    return (File) options.get(LAUNCHER).getValue();
+    File environmentLauncher = new File(System.getenv("OPERA_LAUNCHER"));
+    
+    if (environmentLauncher.isFile() || environmentLauncher.exists()) {
+      return environmentLauncher;
+    } else if (options.get(LAUNCHER).getValue() != null) {
+      return (File) options.get(LAUNCHER).getValue();
+    } else {
+      return new File(System.getProperty("user.home") + File.separator +
+                      OperaLauncherRunner.launcherNameForOS());
+    }
   }
 
   public void setLauncher(File launcherBinary) {
@@ -487,22 +522,6 @@ public class OperaOptions {
     options.get(AUTOSTART).setValue(enabled);
   }
 
-  public boolean noRestart() {
-    return (Boolean) options.get(NO_RESTART).getValue();
-  }
-
-  public void noRestart(boolean enabled) {
-    options.get(NO_RESTART).setValue(enabled);
-  }
-
-  public boolean noQuit() {
-    return (Boolean) options.get(NO_QUIT).getValue();
-  }
-
-  public void noQuit(boolean enabled) {
-    options.get(NO_QUIT).setValue(enabled);
-  }
-
   public OperaProduct getProduct() {
     return (OperaProduct) options.get(PRODUCT).getValue();
   }
@@ -511,10 +530,32 @@ public class OperaOptions {
     options.get(PRODUCT).setValue(product);
   }
 
+  @Deprecated
+  public boolean noRestart() {
+    return (Boolean) options.get(NO_RESTART).getValue();
+  }
+
+  @Deprecated
+  public void noRestart(boolean enabled) {
+    options.get(NO_RESTART).setValue(enabled);
+  }
+
+  @Deprecated
+  public boolean noQuit() {
+    return (Boolean) options.get(NO_QUIT).getValue();
+  }
+
+  @Deprecated
+  public void noQuit(boolean enabled) {
+    options.get(NO_QUIT).setValue(enabled);
+  }
+
+  @Deprecated
   public String getBackend() {
     return (String) options.get(BACKEND).getValue();
   }
 
+  @Deprecated
   public void setBackend(String backend) {
     options.get(BACKEND).setValue(backend);
   }
@@ -542,11 +583,27 @@ public class OperaOptions {
     return !getProduct().is(CORE) && supportsPd;
   }
 
+  public OperaSettings merge(Capabilities capabilities) {
+    for (Map.Entry<String, ?> capability : capabilities.asMap().entrySet()) {
+      Capability capabilityReference = Capability.findCapability(capability.getKey());
+      
+      if (options.containsKey(capabilityReference)) {
+        options.get(capabilityReference).setValue(capability.getValue());
+        continue;
+      }
+
+      // Store the rest as surplus capabilities
+      surplusCapabilities.setCapability(capability.getKey(), capability.getValue());
+    }
+
+    return this;
+  }
+
   /**
-   * Returns Capabilities for Opera with these options included as capabilities.  This does not copy
-   * the options.  Further changes will be reflected in the capabilities.
+   * Returns this as capabilities.  This does not copy the settings.  Further changes will be
+   * reflected in the capabilities.
    *
-   * @return Capabilities for Opera with these options
+   * @return Capabilities for Opera with these settings
    */
   public Capabilities toCapabilities() {
     DesiredCapabilities capabilities = DesiredCapabilities.opera();
@@ -561,9 +618,9 @@ public class OperaOptions {
   /**
    * Converts this instance to its JSON representation.
    *
-   * @return the JSON representation of these options
+   * @return the JSON representation of these settings
    * @throws IOException   if an I/O error occurs
-   * @throws JSONException if an error occurs while encoding these options as JSON
+   * @throws JSONException if an error occurs while encoding these settings as JSON
    */
   public JSONObject toJson() throws IOException, JSONException {
     JSONObject json = new JSONObject();
@@ -588,8 +645,43 @@ public class OperaOptions {
     return json;
   }
 
+  /**
+   * String representation of the Opera specific settings.
+   *
+   * @return string representation of this
+   */
   public String toString() {
-    return String.format("OperaOptions %s", options);
+    return String.format("OperaSettings %s", options);
+  }
+
+  /**
+   * Supplier of an {@link OperaSettings} instance with the ability to specify which {@link
+   * #usingProfile(OperaProfile)} to use.
+   */
+  public static class Builder {
+
+    private final OperaSettings settings = new OperaSettings();
+
+    /**
+     * Specify which profile to base the settings on.
+     *
+     * @param profile profile to base the settings on
+     * @return reference to self
+     */
+    public Builder usingProfile(OperaProfile profile) {
+      settings.setProfile(profile);
+      return this;
+    }
+
+    /**
+     * Get a new instance of {@link OperaSettings}.
+     *
+     * @return new settings instance
+     */
+    public OperaSettings get() {
+      return settings;
+    }
+
   }
 
 }

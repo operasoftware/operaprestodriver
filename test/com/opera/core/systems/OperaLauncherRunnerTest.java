@@ -19,7 +19,6 @@ package com.opera.core.systems;
 import com.opera.core.systems.model.ScreenShotReply;
 import com.opera.core.systems.runner.OperaRunnerException;
 import com.opera.core.systems.runner.launcher.OperaLauncherRunner;
-import com.opera.core.systems.runner.launcher.OperaLauncherRunnerSettings;
 import com.opera.core.systems.testing.Ignore;
 
 import org.junit.After;
@@ -40,13 +39,13 @@ import static org.junit.Assert.fail;
 
 public class OperaLauncherRunnerTest {
 
-  private OperaLauncherRunnerSettings settings;
+  private OperaSettings settings;
   private OperaLauncherRunner runner;
 
   @Before
   public void beforeEach() {
-    settings = new OperaLauncherRunnerSettings();
-    settings.setLoggingLevel(Level.FINE);
+    settings = new OperaSettings();
+    settings.logging().level(Level.FINE);
   }
 
   @After
@@ -66,7 +65,7 @@ public class OperaLauncherRunnerTest {
 
   @Test
   public void testConstructorWithSettingsBinary() {
-    settings.setBinary(OperaPaths.operaPath());
+    settings.setBinary(new File(OperaPaths.operaPath()));
     runner = new OperaLauncherRunner(settings);
     assertNotNull(runner);
   }

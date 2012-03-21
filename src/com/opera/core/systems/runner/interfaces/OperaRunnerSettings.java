@@ -77,32 +77,6 @@ public interface OperaRunnerSettings {
   public void setProduct(OperaProduct product);
 
   /**
-   * Returns an {@link OperaProfile} object containing all settings related to the Opera profile to
-   * be used.  This  might be anything from the path to the profile directory, to preferences used
-   * in Opera.
-   *
-   * @return Opera's currently used profile
-   */
-  public OperaProfile getProfile();
-
-
-  /**
-   * Sets the directory to use for the Opera profile.  If null, generate a temporary directory.  If
-   * not empty use the given directory.  To not create a temporary directory for backwards
-   * compatibility reasons, set it to an empty string (""), such as for Opera < 12.
-   *
-   * @param profile the absolute path to the profile directory
-   */
-  public void setProfile(String profile);
-
-  /**
-   * Sets the profile to use as an Opera profile represented as an object.
-   *
-   * @param profile the Opera profile to use
-   */
-  public void setProfile(OperaProfile profile);
-
-  /**
    * Returns the whether Opera should quit when OperaRunner is shut down.  If enabled, it will keep
    * the browser running after the runner is shut down.
    *

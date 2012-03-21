@@ -23,8 +23,8 @@ import org.openqa.selenium.os.ProcessUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Level;
@@ -32,42 +32,27 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static org.openqa.selenium.Platform.WINDOWS;
+
 public class OperaLauncherBinary extends Thread {
 
-  private static final String LAUNCHER_LOGGING_OUTPUT_EXPRESSION = "^\\[(\\w+)\\]";
+  private static final String launcherLoggingOutputExpression = "^\\[(\\w+)\\]";
 
-  private Process process;
-  private OutputWatcher watcher;
-  private Thread outputWatcherThread;
-  private List<String> commands = new ArrayList<String>();
-  private static Logger logger = Logger.getLogger(OperaLauncherBinary.class.getName());
-  private AtomicBoolean running = new AtomicBoolean(false);
+  private final Process process;
+  private final OutputWatcher watcher;
+  private final Thread outputWatcherThread;
+  private final List<String> commands = new LinkedList<String>();
+  private final Logger logger = Logger.getLogger(getClass().getName());
+  private final AtomicBoolean running = new AtomicBoolean(false);
 
   public OperaLauncherBinary(String location, String... args) throws IOException {
     super(new ThreadGroup("run-process"), "launcher");
 
     commands.add(location);
-
     if (args != null && args.length > 0) {
       commands.addAll(Arrays.asList(args));
     }
 
-    init();
-  }
-
-  public String getCommand() {
-    return commands.toString();
-  }
-
-  public void kill() {
-    watcher.kill();
-  }
-
-  public void shutdown() {
-    kill();
-  }
-
-  public void init() throws IOException {
     ProcessBuilder builder = new ProcessBuilder(commands);
     builder.redirectErrorStream(true);
 
@@ -79,7 +64,7 @@ public class OperaLauncherBinary extends Thread {
       running.set(true);
       outputWatcherThread.start();
     } catch (IOException e) {
-      if (Platform.getCurrent().is(Platform.WINDOWS)) {
+      if (Platform.getCurrent().is(WINDOWS)) {
         throw new IOException(
             "Could not start the launcher process, make sure you have the Microsoft Visual C++ " +
             "2008 Redistributable Package installed on your system: " + e.getMessage());
@@ -95,8 +80,20 @@ public class OperaLauncherBinary extends Thread {
                               "Commands: " + commands);
       }
     } catch (IllegalThreadStateException e) {
-      // process hasn't exited, soldier on!
+      // process didn't exited, but soldier on!
     }
+  }
+
+  public String getCommands() {
+    return commands.toString();
+  }
+
+  public void kill() {
+    watcher.kill();
+  }
+
+  public void shutdown() {
+    kill();
   }
 
   @Override
@@ -130,7 +127,7 @@ public class OperaLauncherBinary extends Thread {
 
       InputStream stream = process.getInputStream();
       Level level;
-      Pattern pattern = Pattern.compile(LAUNCHER_LOGGING_OUTPUT_EXPRESSION);
+      Pattern pattern = Pattern.compile(launcherLoggingOutputExpression);
       String buffer = "";
 
       while (running.get()) {
@@ -146,7 +143,7 @@ public class OperaLauncherBinary extends Thread {
             if (matcher.find()) {
               level = OperaLauncherRunner.toLauncherLoggingLevel(Level.parse(matcher.group(1)));
               buffer =
-                  "launcher: " + buffer.replaceFirst(LAUNCHER_LOGGING_OUTPUT_EXPRESSION, "").trim();
+                  "launcher: " + buffer.replaceFirst(launcherLoggingOutputExpression, "").trim();
             } else {
               buffer = "opera: " + buffer;
             }
@@ -176,7 +173,7 @@ public class OperaLauncherBinary extends Thread {
 
   }
 
-  private void waitFor(long ms) {
+  private static void waitFor(long ms) {
     try {
       Thread.sleep(ms);
     } catch (InterruptedException e) {

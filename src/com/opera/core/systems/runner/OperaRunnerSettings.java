@@ -35,14 +35,13 @@ import java.util.logging.Level;
 /**
  * Defines a settings object which impacts OperaRunner, the interface for controlling the Opera
  * binary.
- */
+ *
 public class OperaRunnerSettings
     implements com.opera.core.systems.runner.interfaces.OperaRunnerSettings {
 
   protected File operaBinary = null;
   protected Integer display = null;
   protected OperaProduct product = OperaProduct.DESKTOP;
-  protected OperaProfile profile = null;
   protected boolean noQuit = false;
   protected String host = "127.0.0.1";
   protected Integer port = (int) OperaIntervals.SERVER_RANDOM_PORT_IDENTIFIER.getValue();
@@ -59,7 +58,7 @@ public class OperaRunnerSettings
    * Sets Opera's binary.
    *
    * @param path the absolute path to the binary to use
-   */
+   *
   public void setBinary(String path) {
     if (path != null && !path.isEmpty()) {
       setBinary(new File(path));
@@ -94,31 +93,6 @@ public class OperaRunnerSettings
 
   public void setProduct(OperaProduct product) {
     this.product = product;
-  }
-
-  public OperaProfile getProfile() {
-    if (profile == null) {
-      profile = new OperaProfile();  // random profile
-    }
-
-    return profile;
-  }
-
-  public void setProfile(String profileDirectory) {
-    if (profileDirectory != null && !profileDirectory.isEmpty()) {
-      profile = new OperaProfile(profileDirectory);  // use this profile
-    } else if (profileDirectory == null) {
-      profile = new OperaProfile();  // random profile
-    } else {  // "" (empty string), use ~/.autotest
-      // TODO(andreastt): What are the autotest directories on Windows and Mac?
-      supportsPd = false;
-      profile = new OperaProfile(new File(System.getProperty("user.home") +
-                                          File.separator + ".autotest"));
-    }
-  }
-
-  public void setProfile(OperaProfile profile) {
-    this.profile = profile;
   }
 
   public boolean getNoQuit() {
@@ -221,3 +195,4 @@ public class OperaRunnerSettings
   }
 
 }
+*/

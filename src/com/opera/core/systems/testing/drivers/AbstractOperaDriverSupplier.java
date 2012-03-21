@@ -16,6 +16,8 @@ limitations under the License.
 
 package com.opera.core.systems.testing.drivers;
 
+import com.opera.core.systems.OperaSettings;
+
 import org.openqa.selenium.Capabilities;
 
 /**
@@ -26,8 +28,17 @@ import org.openqa.selenium.Capabilities;
  */
 public abstract class AbstractOperaDriverSupplier implements OperaDriverSupplier {
 
+  protected OperaSettings settings;
   protected Capabilities capabilities;
 
+  public void setSettings(OperaSettings settings) {
+    this.settings = settings;
+  }
+  
+  public OperaSettings getSettings() {
+    return settings;
+  }
+  
   public void setCapabilities(Capabilities capabilities) {
     this.capabilities = capabilities;
   }
