@@ -19,6 +19,7 @@ package com.opera.core.systems.testing.drivers;
 import com.google.common.base.Supplier;
 
 import com.opera.core.systems.OperaDriver;
+import com.opera.core.systems.OperaSettings;
 
 import org.openqa.selenium.Capabilities;
 
@@ -32,6 +33,20 @@ import org.openqa.selenium.Capabilities;
  * @see OperaDriverBuilder
  */
 public interface OperaDriverSupplier extends Supplier<OperaDriver> {
+
+  /**
+   * Changes the settings for this supplier.
+   *
+   * @param settings new settings
+   */
+  public void setSettings(OperaSettings settings);
+
+  /**
+   * Gets the settings of this supplier.
+   *
+   * @return a set of settings
+   */
+  public OperaSettings getSettings();
 
   /**
    * Changes the capabilities for this supplier.

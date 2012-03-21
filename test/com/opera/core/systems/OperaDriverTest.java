@@ -44,7 +44,7 @@ public class OperaDriverTest extends OperaDriverTestCase {
   @Test
   public void testNullOperaArguments() throws Exception {
     DesiredCapabilities caps = new DesiredCapabilities();
-    caps.setCapability(OperaDriver.ARGUMENTS, (String) null);
+    caps.setCapability(OperaSettings.Capability.ARGUMENTS.getCapability(), (String) null);
 
     TestOperaDriver a = new TestOperaDriver(caps);
     Assert.assertNotNull(driver);
@@ -107,7 +107,7 @@ public class OperaDriverTest extends OperaDriverTestCase {
   @Ignore(products = CORE, value = "core does not reset port number if -debugproxy is omitted")
   public void testDefaultPort() throws Exception {
     DesiredCapabilities c = new DesiredCapabilities();
-    c.setCapability(OperaDriver.PORT, -1);
+    c.setCapability(OperaSettings.Capability.PORT.getCapability(), -1);
 
     TestOperaDriver a = new TestOperaDriver(c);
     assertEquals(7001, a.preferences().get("Developer Tools", "Proxy Port").getValue());
@@ -117,7 +117,7 @@ public class OperaDriverTest extends OperaDriverTestCase {
   @Test
   public void testRandomPort() throws Exception {
     DesiredCapabilities c = new DesiredCapabilities();
-    c.setCapability(OperaDriver.PORT, 0);
+    c.setCapability(OperaSettings.Capability.PORT.getCapability(), 0);
 
     TestOperaDriver a;
     try {
@@ -138,12 +138,12 @@ public class OperaDriverTest extends OperaDriverTestCase {
   @Ignore(products = CORE,
           value = "Once this is set the autotestmode profile no longer connects on 7001, breaking future tests")
   public void testSetPort() throws Exception {
-    DesiredCapabilities c = new DesiredCapabilities();
-    c.setCapability(OperaDriver.PORT, 9876);
+    OperaSettings settings = new OperaSettings();
+    settings.setPort(9876);
 
     TestOperaDriver a;
     try {
-      a = new TestOperaDriver(c);
+      a = new TestOperaDriver(settings);
     } catch (Exception e) {
       // If immediately exited, then it doesn't support the flags
       if (e.getMessage().contains("Opera exited immediately")) {
@@ -160,8 +160,8 @@ public class OperaDriverTest extends OperaDriverTestCase {
   @Test
   public void testMultipleOperas() throws Exception {
     DesiredCapabilities capabilities = DesiredCapabilities.opera();
-    capabilities.setCapability(OperaDriver.PROFILE, (String) null);  // random profile
-    capabilities.setCapability(OperaDriver.PORT, 0);  // random port
+    capabilities.setCapability(OperaSettings.Capability.PROFILE.getCapability(), (String) null);  // random profile
+    capabilities.setCapability(OperaSettings.Capability.PORT.getCapability(), 0);  // random port
 
     OperaDriver a;
     OperaDriver b;

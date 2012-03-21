@@ -17,6 +17,7 @@ limitations under the License.
 package com.opera.core.systems.util;
 
 import com.opera.core.systems.OperaDriver;
+import com.opera.core.systems.OperaSettings;
 
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.remote.DesiredCapabilities;
@@ -38,8 +39,8 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 public class CapabilitiesSanitizer {
 
   private enum IntegerCapabilities {
-    PORT(OperaDriver.PORT),
-    DISPLAY(OperaDriver.DISPLAY);
+    PORT(OperaSettings.Capability.PORT.getCapability()),
+    DISPLAY(OperaSettings.Capability.DISPLAY.getCapability());
 
     private String value;
 

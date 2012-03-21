@@ -118,8 +118,8 @@ public class OperaArguments implements com.opera.core.systems.arguments.interfac
   /**
    * Converts this instance to its JSON representation.
    *
-   * @return the JSON representation of these options
-   * @throws JSONException if an error occurs while encoding these options as JSON
+   * @return the JSON representation of these settings
+   * @throws JSONException if an error occurs while encoding these settings as JSON
    */
   public JSONObject toJson() throws JSONException {
     JSONObject json = new JSONObject();

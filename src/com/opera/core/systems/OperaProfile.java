@@ -165,18 +165,6 @@ public class OperaProfile {
   }
 
   /**
-   * Returns a new {@link DesiredCapabilities} object with OperaDriver defaults and this profile set
-   * on the <code>opera.profile</code> capability.
-   *
-   * @return capabilities with this profile set
-   */
-  public DesiredCapabilities getCapabilities() {
-    DesiredCapabilities capabilities = (DesiredCapabilities) OperaDriver.getDefaultCapabilities();
-    capabilities.setCapability(OperaDriver.PROFILE, this);
-    return capabilities;
-  }
-
-  /**
    * Converts this instance to its JSON representation.
    *
    * @return the JSON representation of this profile
