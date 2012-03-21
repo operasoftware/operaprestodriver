@@ -133,8 +133,9 @@ message QuickWidgetInfo
 		GRIDLAYOUT       = 16;
 		GRIDITEM         = 17;
 		QUICKFIND        = 18;
-		ICON        = 19;
-		PROGRESSBAR = 20;
+		ICON             = 19;
+		PROGRESSBAR      = 20;
+		LISTBOX          = 21;
 	}
     required QuickWidgetType type 	= 2;
     required bool visible	    	= 3;
