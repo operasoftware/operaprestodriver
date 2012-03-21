@@ -109,7 +109,7 @@ public class OperaPaths {
       return false;
     }
 
-    if (path.length() == 0) {
+    if (path.isEmpty()) {
       return false;
     }
 
