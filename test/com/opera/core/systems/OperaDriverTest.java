@@ -42,16 +42,6 @@ public class OperaDriverTest extends OperaDriverTestCase {
   }
 
   @Test
-  public void testNullOperaArguments() throws Exception {
-    DesiredCapabilities caps = new DesiredCapabilities();
-    caps.setCapability(OperaSettings.Capability.ARGUMENTS.getCapability(), (String) null);
-
-    TestOperaDriver a = new TestOperaDriver(caps);
-    Assert.assertNotNull(driver);
-    a.quit();
-  }
-
-  @Test
   public void testDefaultWindowCount() {
     assertTrue(driver.getWindowCount() >= 1);
   }

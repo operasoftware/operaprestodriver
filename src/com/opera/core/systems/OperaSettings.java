@@ -505,6 +505,13 @@ public class OperaSettings {
    * @return local port number for the debugger to connect to
    */
   public int getPort() {
+    // If setting has been set thorugh a capability has been set, we need to parse its value
+    int port = (Integer) options.get(PORT).getValue();
+    if (port == SERVER_RANDOM_PORT_IDENTIFIER.getValue() ||
+        port == SERVER_DEFAULT_PORT_IDENTIFIER.getValue()) {
+      setPort(port);
+    }
+
     return (Integer) options.get(PORT).getValue();
   }
 
@@ -558,6 +565,12 @@ public class OperaSettings {
    * @return the Opera profile
    */
   public OperaProfile profile() {
+    // If setting has been set through a capability, we need to sanitize it
+    if (options.get(PROFILE).getValue() == null ||
+        options.get(PROFILE).getValue() instanceof String) {
+      setProfile((String) options.get(PROFILE).getValue());
+    }
+
     return (OperaProfile) options.get(PROFILE).getValue();
   }
 
