@@ -171,27 +171,34 @@ public class OperaLauncherRunnerTest {
 
   @Test
   public void testLoggingLevel() {
-    assertEquals(Level.SEVERE, OperaLauncherRunner.toLauncherLoggingLevel(Level.SEVERE));
+    assertEquals(Level.SEVERE, TestOperaLauncherRunner.toLauncherLoggingLevel(Level.SEVERE));
   }
 
   @Test
   public void testLoggingLevelToAll() {
-    assertEquals(Level.FINEST, OperaLauncherRunner.toLauncherLoggingLevel(Level.ALL));
+    assertEquals(Level.FINEST, TestOperaLauncherRunner.toLauncherLoggingLevel(Level.ALL));
   }
 
   @Test
   public void testLoggingLevelToConfig() {
-    assertEquals(Level.FINE, OperaLauncherRunner.toLauncherLoggingLevel(Level.CONFIG));
+    assertEquals(Level.FINE, TestOperaLauncherRunner.toLauncherLoggingLevel(Level.CONFIG));
   }
 
   @Test
   public void testLoggingLevelToFiner() {
-    assertEquals(Level.FINE, OperaLauncherRunner.toLauncherLoggingLevel(Level.FINER));
+    assertEquals(Level.FINE, TestOperaLauncherRunner.toLauncherLoggingLevel(Level.FINER));
   }
 
   @Test
   public void testLoggingLevelToOff() {
-    assertEquals(Level.OFF, OperaLauncherRunner.toLauncherLoggingLevel(Level.OFF));
+    assertEquals(Level.OFF, TestOperaLauncherRunner.toLauncherLoggingLevel(Level.OFF));
+  }
+
+  private static class TestOperaLauncherRunner extends OperaLauncherRunner {
+
+    public static Level toLauncherLoggingLevel(Level javaLevel) {
+      return OperaLauncherRunner.toLauncherLoggingLevel(javaLevel);
+    }
   }
 
 }
