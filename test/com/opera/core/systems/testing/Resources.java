@@ -26,18 +26,23 @@ import java.io.File;
 public class Resources {
 
   private final File resourcesDirectory = InProject.locate("test/resources");
-  private final File fakeBinary;
+  private final File executableBinary;
+  private final File fakeBinary = new File("does/not/exist");
 
   public Resources() {
     if (Platform.getCurrent().is(Platform.WINDOWS)) {
-      fakeBinary = new File("C:\\WINDOWS\\system32\\find.exe");
+      executableBinary = new File("C:\\WINDOWS\\system32\\find.exe");
     } else {
-      fakeBinary = new File("/bin/echo");
+      executableBinary = new File("/bin/echo");
     }
   }
 
   public File locate(String filename) {
     return new File(resourcesDirectory.getAbsolutePath() + File.separator + filename);
+  }
+
+  public File executableBinary() {
+    return executableBinary;
   }
 
   public File fakeBinary() {
