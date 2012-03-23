@@ -109,6 +109,10 @@ public class OperaSettings {
       Level getDefaultValue() {
         return Level.INFO;
       }
+
+      Level sanitize(Object value) {
+        return Level.parse(String.valueOf(value));
+      }
     },
 
     /**
@@ -151,6 +155,20 @@ public class OperaSettings {
       Integer getDefaultValue() {
         return PortProber.findFreePort();
       }
+
+      Integer sanitize(Object value) {
+        // 0 = random, -1 = Opera default (7001) (for use with Opera < 11.60)
+
+        int port = (Integer) value;
+
+        if (port == SERVER_RANDOM_PORT_IDENTIFIER.getValue()) {
+          return PortProber.findFreePort();
+        } else if (port == SERVER_DEFAULT_PORT_IDENTIFIER.getValue()) {
+          return (int) SERVER_PORT.getValue();
+        }
+
+        return port;
+      }
     },
 
     /**
@@ -177,6 +195,21 @@ public class OperaSettings {
     PROFILE() {
       OperaProfile getDefaultValue() {
         return new OperaProfile();
+      }
+
+      OperaProfile sanitize(Object value) {
+        String profileDirectory = String.valueOf(value);
+
+        if (profileDirectory != null && !profileDirectory.isEmpty()) {  // use this profile
+          return new OperaProfile(profileDirectory);
+        } else if (profileDirectory == null) {  // random profile
+          return new OperaProfile();
+        }
+
+        // "" (empty string), use ~/.autotest
+        return new OperaProfile(new File(System.getProperty("user.home") +
+                                         File.separator + ".autotest"));
+
       }
     },
 
@@ -302,6 +335,20 @@ public class OperaSettings {
      */
     Object getDefaultValue() {
       return null;
+    }
+
+    /**
+     * Sanitizes value set through {@link DesiredCapabilities} so that they become compatible with
+     * {@link OperaSettings} for use in {@link OperaDriver}.
+     *
+     * The input from {@link DesiredCapabilities} is always a string value.  The result of the
+     * sanitization could potentially be any object.
+     *
+     * @param value value to sanitize
+     * @return sanitized value
+     */
+    Object sanitize(Object value) {
+      return value;
     }
 
     /**
@@ -505,13 +552,6 @@ public class OperaSettings {
    * @return local port number for the debugger to connect to
    */
   public int getPort() {
-    // If setting has been set thorugh a capability has been set, we need to parse its value
-    int port = (Integer) options.get(PORT).getValue();
-    if (port == SERVER_RANDOM_PORT_IDENTIFIER.getValue() ||
-        port == SERVER_DEFAULT_PORT_IDENTIFIER.getValue()) {
-      setPort(port);
-    }
-
     return (Integer) options.get(PORT).getValue();
   }
 
@@ -521,14 +561,7 @@ public class OperaSettings {
    * @param port local port number for the debugger to connect to
    */
   public void setPort(int port) {
-    // 0 = random, -1 = Opera default (7001) (for use with Opera < 11.60)
-    if (port == SERVER_RANDOM_PORT_IDENTIFIER.getValue()) {
-      options.get(PORT).setValue(PortProber.findFreePort());
-    } else if (port == SERVER_DEFAULT_PORT_IDENTIFIER.getValue()) {
-      options.get(PORT).setValue((int) SERVER_PORT.getValue());
-    } else {
-      options.get(PORT).setValue(port);
-    }
+    options.get(PORT).setValue(PORT.sanitize(String.valueOf(port)));
   }
 
   /**
@@ -565,11 +598,6 @@ public class OperaSettings {
    * @return the Opera profile
    */
   public OperaProfile profile() {
-    // If setting has been set through a capability, we need to sanitize it
-    if (options.get(PROFILE).getValue() == null ||
-        options.get(PROFILE).getValue() instanceof String) {
-      setProfile((String) options.get(PROFILE).getValue());
-    }
 
     return (OperaProfile) options.get(PROFILE).getValue();
   }
@@ -582,20 +610,10 @@ public class OperaSettings {
    * @param profileDirectory the path to the profile directory
    */
   public void setProfile(String profileDirectory) {
-    OperaProfile profile;
-
-    if (profileDirectory != null && !profileDirectory.isEmpty()) {  // use this profile
-      profile = new OperaProfile(profileDirectory);
-    } else if (profileDirectory == null) {  // random profile
-      profile = new OperaProfile();
-    } else {  // "" (empty string), use ~/.autotest
-      // TODO(andreastt): What are the autotest directories on Windows and Mac?
+    options.get(PROFILE).setValue(PROFILE.sanitize(profileDirectory));
+    if (profileDirectory != null && profileDirectory.isEmpty()) {  // "" (empty string)
       supportsPd = false;
-      profile = new OperaProfile(new File(System.getProperty("user.home") +
-                                          File.separator + ".autotest"));
     }
-
-    options.get(PROFILE).setValue(profile);
   }
 
   /**
@@ -822,7 +840,8 @@ public class OperaSettings {
       Capability capabilityReference = Capability.findCapability(capability.getKey());
 
       if (options.containsKey(capabilityReference)) {
-        options.get(capabilityReference).setValue(capability.getValue());
+        options.get(capabilityReference)
+            .setValue(capabilityReference.sanitize(capability.getValue()));
         continue;
       }
 
