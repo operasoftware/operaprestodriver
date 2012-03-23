@@ -118,7 +118,11 @@ public class OperaSettings {
     /**
      * (String) Where to send the output of the logging.  Default is to not write to file.
      */
-    LOGGING_FILE("logging.file"),
+    LOGGING_FILE("logging.file") {
+      File sanitize(Object path) {
+        return new File(String.valueOf(path));
+      }
+    },
 
     /**
      * (String) Path to the Opera binary to use. If not specified, OperaDriver will guess the path
