@@ -32,6 +32,13 @@ public interface TestEnvironment {
   void set(String key, String value);
 
   /**
+   * Unsets environmental variable during runtime.
+   *
+   * @param key environmental variable identifier
+   */
+  void unset(String key);
+
+  /**
    * Post-hook for shutting down the test environment.
    */
   void stop();

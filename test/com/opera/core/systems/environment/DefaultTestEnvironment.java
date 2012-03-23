@@ -26,8 +26,7 @@ import java.util.Map;
 public abstract class DefaultTestEnvironment implements TestEnvironment {
 
   /**
-   * Massive hack to set the environment variables inside this JVM.  Used to test if OperaPaths is
-   * checking the environment variables.
+   * Set an environment variable inside the JVM.
    *
    * http://stackoverflow.com/questions/318239/how-do-i-set-environment-variables-from-java/496849#496849
    *
@@ -46,6 +45,33 @@ public abstract class DefaultTestEnvironment implements TestEnvironment {
           Object obj = field.get(env);
           Map<String, String> map = (Map<String, String>) obj;
           map.put(key, value);
+        }
+      }
+    } catch (IllegalAccessException e) {
+      // nothing we can do
+    } catch (NoSuchFieldException e) {
+      // nothing we can do
+    }
+  }
+
+  /**
+   * Clears an environmental variable from inside the JVM.
+   *
+   * @param key the environmental variable to remove
+   */
+  @SuppressWarnings("unchecked")
+  public void unset(String key) {
+    try {
+      Class<?>[] classes = Collections.class.getDeclaredClasses();
+      Map<String, String> env = System.getenv();
+      for (Class<?> cl : classes) {
+        if ("java.util.Collections$UnmodifiableMap".equals(cl.getName())) {
+          Field field = cl.getDeclaredField("m");
+          field.setAccessible(true);
+          Object obj = field.get(env);
+          Map<String, String> map = (Map<String, String>) obj;
+          //map.put(key, value);
+          map.remove(key);
         }
       }
     } catch (IllegalAccessException e) {
