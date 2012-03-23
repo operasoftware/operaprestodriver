@@ -16,6 +16,7 @@ limitations under the License.
 
 package com.opera.core.systems;
 
+import com.opera.core.systems.runner.launcher.OperaLauncherRunner;
 import com.opera.core.systems.testing.NoDriver;
 import com.opera.core.systems.testing.OperaDriverTestCase;
 
@@ -51,6 +52,7 @@ import static com.opera.core.systems.OperaSettings.Capability.OPERAIDLE;
 import static com.opera.core.systems.OperaSettings.Capability.PORT;
 import static com.opera.core.systems.OperaSettings.Capability.PRODUCT;
 import static com.opera.core.systems.OperaSettings.Capability.PROFILE;
+import static com.opera.core.systems.runner.launcher.OperaLauncherRunner.LAUNCHER_ENV_VAR;
 import static com.opera.core.systems.scope.internal.OperaIntervals.SERVER_DEFAULT_PORT_IDENTIFIER;
 import static com.opera.core.systems.scope.internal.OperaIntervals.SERVER_PORT;
 import static com.opera.core.systems.scope.internal.OperaIntervals.SERVER_RANDOM_PORT_IDENTIFIER;
@@ -99,12 +101,20 @@ public class OperaSettingsTest extends OperaDriverTestCase {
 
     @Test
     public void portHasRandomServerPortAsDefaultValue() {
-      assertEquals((int) SERVER_RANDOM_PORT_IDENTIFIER.getValue(), PORT.getDefaultValue());
+      int port = (Integer) PORT.getDefaultValue();
+
+      // In the highly unlikely case that it assigns the random port to 7001...
+      if (port == SERVER_PORT.getValue()) {
+        return;
+      }
+
+      assertNotSame((int) SERVER_PORT.getValue(), PORT.getDefaultValue());
     }
 
     @Test
-    public void launcherHasNullAsDefaultValue() {
-      assertNull(LAUNCHER.getDefaultValue());
+    public void launcherHasDefaultLocationAsDefaultValue() {
+      assertNotNull(LAUNCHER.getDefaultValue());
+      assertEquals(OperaLauncherRunner.launcherDefaultLocation(), LAUNCHER.getDefaultValue());
     }
 
     @Test
@@ -196,7 +206,7 @@ public class OperaSettingsTest extends OperaDriverTestCase {
 
     @After
     public void afterEach() {
-      environment.set("OPERA_LAUNCHER", null);
+      environment.unset(LAUNCHER_ENV_VAR);
     }
 
     @Test
@@ -283,34 +293,33 @@ public class OperaSettingsTest extends OperaDriverTestCase {
 
     @Test
     public void launcherReturnsLauncherLocationByDefault() {
-      assertNull(settings.getLauncher());
-    }
-
-    @Test
-    public void launcherReturnsValueIfPreviouslySet() {
-      settings.setLauncher(resources.fakeBinary());
-      assertEquals(resources.fakeBinary(), settings.getLauncher());
+      assertNotNull(settings.getLauncher());
+      assertEquals(OperaLauncherRunner.launcherDefaultLocation(), settings.getLauncher());
     }
 
     @Test
     public void launcherReturnsEnvironmentalLauncherIfSet() {
-      environment.set("OPERA_LAUNCHER", resources.fakeBinary().getPath());
+      environment.set(LAUNCHER_ENV_VAR, resources.fakeBinary().getPath());
+      assertEquals(resources.fakeBinary(), new OperaSettings().getLauncher());
+    }
+
+    @Test
+    public void launcherPrioritizesEnvironmentalLauncher() throws IOException {
+      environment.set(LAUNCHER_ENV_VAR, resources.fakeBinary().getPath());
+      OperaSettings settings = new OperaSettings();
+      settings.setLauncher(resources.executableBinary());
       assertEquals(resources.fakeBinary(), settings.getLauncher());
     }
 
     @Test
-    public void launcherPrioritizesEnvironmentalLauncher() {
-      environment.set("OPERA_LAUNCHER", resources.fakeBinary().getPath());
-      settings.setLauncher(new File("something/else"));
-      assertEquals(resources.fakeBinary(), settings.getLauncher());
+    public void launcherCanBeSet() throws IOException {
+      settings.setLauncher(resources.executableBinary());
+      assertEquals(resources.executableBinary(), settings.getLauncher());
     }
 
-    @Test
-    public void launcherCanBeSet() {
-      // TODO(andreastt): Replace with fake binary from Resources
-      File launcher = new File("nonexistent");
-      settings.setLauncher(launcher);
-      assertEquals(launcher, settings.getLauncher());
+    @Test(expected = IOException.class)
+    public void launcherThrowsExceptionIfInvalid() throws IOException {
+      settings.setLauncher(resources.fakeBinary());
     }
 
     @Test
