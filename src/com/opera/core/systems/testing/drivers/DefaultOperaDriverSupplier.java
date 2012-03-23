@@ -30,7 +30,7 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 public class DefaultOperaDriverSupplier extends AbstractOperaDriverSupplier {
 
   public DefaultOperaDriverSupplier() {
-    this(new OperaSettings());
+    super();
   }
 
   public DefaultOperaDriverSupplier(OperaSettings settings) {
