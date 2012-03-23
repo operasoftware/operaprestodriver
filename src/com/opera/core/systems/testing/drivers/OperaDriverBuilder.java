@@ -44,7 +44,7 @@ public class OperaDriverBuilder implements Supplier<OperaDriver> {
 
   private Class driverClass;
   private OperaDriverSupplier driverSupplier;
-  private OperaSettings settings;
+  private OperaSettings settings = new OperaSettings();
   private Level loggingLevel = null;
 
   /**
@@ -52,7 +52,7 @@ public class OperaDriverBuilder implements Supplier<OperaDriver> {
    * desired capabilities specified in Selenium's {@link DesiredCapabilities#opera()}.
    */
   public OperaDriverBuilder() {
-    this(new DefaultOperaDriverSupplier());
+    this(new DefaultOperaDriverSupplier(new OperaSettings()));
   }
 
   /**

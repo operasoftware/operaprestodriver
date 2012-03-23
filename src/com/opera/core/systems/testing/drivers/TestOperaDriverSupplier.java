@@ -16,6 +16,8 @@ limitations under the License.
 
 package com.opera.core.systems.testing.drivers;
 
+import com.opera.core.systems.OperaSettings;
+
 import java.util.logging.Level;
 
 /**
@@ -25,6 +27,10 @@ public class TestOperaDriverSupplier extends DefaultOperaDriverSupplier {
 
   public TestOperaDriverSupplier() {
     super();
+  }
+
+  public TestOperaDriverSupplier(OperaSettings settings) {
+    super(settings);
   }
 
   public TestOperaDriver get() {

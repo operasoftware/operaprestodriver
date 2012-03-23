@@ -19,6 +19,7 @@ package com.opera.core.systems.testing.drivers;
 import com.opera.core.systems.OperaSettings;
 
 import org.openqa.selenium.Capabilities;
+import org.openqa.selenium.remote.DesiredCapabilities;
 
 /**
  * Implements shared functionality across the various {@link OperaDriverSupplier} implementations.
@@ -30,6 +31,11 @@ public abstract class AbstractOperaDriverSupplier implements OperaDriverSupplier
 
   protected OperaSettings settings;
   protected Capabilities capabilities;
+
+  public AbstractOperaDriverSupplier() {
+    setSettings(new OperaSettings());
+    setCapabilities(DesiredCapabilities.opera());
+  }
 
   public AbstractOperaDriverSupplier(OperaSettings settings) {
     setSettings(settings);
