@@ -111,7 +111,7 @@ public class OperaSettings {
       }
 
       Level sanitize(Object value) {
-        return Level.parse(String.valueOf(value));
+        return Level.parse(String.valueOf(value).toUpperCase());
       }
     },
 
