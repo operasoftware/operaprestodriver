@@ -16,10 +16,7 @@ limitations under the License.
 
 package com.opera.core.systems;
 
-import com.google.common.io.Files;
-
 import com.opera.core.systems.runner.OperaRunnerException;
-//import com.opera.core.systems.runner.launcher.OperaLauncherRunnerSettings;
 import com.opera.core.systems.testing.Ignore;
 import com.opera.core.systems.testing.OperaDriverTestCase;
 import com.opera.core.systems.testing.drivers.TestOperaDriver;
@@ -38,26 +35,18 @@ import java.io.IOException;
 import java.util.logging.Level;
 
 import static com.opera.core.systems.OperaProduct.CORE;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
-import static com.opera.core.systems.OperaSettings.Capability.ARGUMENTS;
 import static com.opera.core.systems.OperaSettings.Capability.AUTOSTART;
-import static com.opera.core.systems.OperaSettings.Capability.BACKEND;
 import static com.opera.core.systems.OperaSettings.Capability.BINARY;
-import static com.opera.core.systems.OperaSettings.Capability.DISPLAY;
 import static com.opera.core.systems.OperaSettings.Capability.HOST;
 import static com.opera.core.systems.OperaSettings.Capability.LAUNCHER;
 import static com.opera.core.systems.OperaSettings.Capability.LOGGING_FILE;
 import static com.opera.core.systems.OperaSettings.Capability.LOGGING_LEVEL;
-import static com.opera.core.systems.OperaSettings.Capability.NO_QUIT;
-import static com.opera.core.systems.OperaSettings.Capability.NO_RESTART;
 import static com.opera.core.systems.OperaSettings.Capability.OPERAIDLE;
 import static com.opera.core.systems.OperaSettings.Capability.PORT;
-import static com.opera.core.systems.OperaSettings.Capability.PRODUCT;
 import static com.opera.core.systems.OperaSettings.Capability.PROFILE;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 public class DesiredCapabilitiesTest extends OperaDriverTestCase {
 
@@ -131,7 +120,7 @@ public class DesiredCapabilitiesTest extends OperaDriverTestCase {
     driver.navigate().to("about:blank");
   }
 
-  @Test(expected = OperaRunnerException.class)
+  @Test(expected = WebDriverException.class)
   public void testSettingInvalidBinary() {
     capabilities.setCapability(BINARY.getCapability(), "/invalid/path");
     driver = new TestOperaDriver(capabilities);

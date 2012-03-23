@@ -21,6 +21,7 @@ import com.google.common.collect.ImmutableMap;
 
 import com.opera.core.systems.arguments.OperaCoreArguments;
 import com.opera.core.systems.arguments.OperaDesktopArguments;
+import com.opera.core.systems.common.lang.OperaBoolean;
 import com.opera.core.systems.runner.launcher.OperaLauncherRunner;
 import com.opera.core.systems.scope.internal.OperaFlags;
 
@@ -129,7 +130,15 @@ public class OperaSettings {
      * to your Opera installation (typically <code>/usr/bin/opera</code> or <code>C:\Program
      * Files\Opera\opera.exe</code>).
      */
-    BINARY(),
+    BINARY() {
+      Object sanitize(Object path) {
+        if (path != null) {
+          return new File(String.valueOf(path));
+        }
+
+        return path;
+      }
+    },
 
     /**
      * (String) Arguments to pass to Opera, separated by spaces.  See <code>opera -help</code> for
@@ -188,6 +197,14 @@ public class OperaSettings {
 
         return OperaLauncherRunner.launcherDefaultLocation();
       }
+
+      Object sanitize(Object path) {
+        if (path != null) {
+          return new File(String.valueOf(path));
+        }
+
+        return path;
+      }
     },
 
     /**
@@ -227,6 +244,10 @@ public class OperaSettings {
     OPERAIDLE("idle") {
       Boolean getDefaultValue() {
         return OperaFlags.ENABLE_IDLE;
+      }
+
+      Boolean sanitize(Object enabled) {
+        return OperaBoolean.parseBoolean(String.valueOf(enabled));
       }
     },
 
