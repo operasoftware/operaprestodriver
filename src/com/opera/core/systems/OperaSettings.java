@@ -19,6 +19,8 @@ package com.opera.core.systems;
 import com.google.common.base.CaseFormat;
 import com.google.common.collect.ImmutableMap;
 
+import com.opera.core.systems.arguments.OperaCoreArguments;
+import com.opera.core.systems.arguments.OperaDesktopArguments;
 import com.opera.core.systems.runner.launcher.OperaLauncherRunner;
 import com.opera.core.systems.scope.internal.OperaFlags;
 
@@ -680,6 +682,17 @@ public class OperaSettings {
    */
   public void setProduct(OperaProduct product) {
     options.get(PRODUCT).setValue(product);
+
+    // Switch context of arguments
+    OperaArguments arguments;
+
+    if (getProduct().is(OperaProduct.DESKTOP)) {
+      arguments = new OperaDesktopArguments();
+    } else {
+      arguments = new OperaCoreArguments();
+    }
+
+    options.get(ARGUMENTS).setValue(arguments.merge(arguments()));
   }
 
   /**
