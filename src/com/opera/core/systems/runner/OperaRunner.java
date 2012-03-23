@@ -69,9 +69,6 @@ public class OperaRunner implements com.opera.core.systems.runner.interfaces.Ope
     settings.arguments().add("autotestmode");
 
     logger.config("Opera arguments: " + settings.arguments().getArgumentsAsStringList());
-
-    // TODO(andreastt): Should this be abstracted into its own class?
-    //processBuilder = new ProcessBuilder(settings.getArguments().getArgumentsAsStrings());
   }
 
   public void startOpera() {
@@ -82,9 +79,10 @@ public class OperaRunner implements com.opera.core.systems.runner.interfaces.Ope
         return;
       }
 
-      process = new CommandLine(settings.getLauncher().getPath(),
-                                settings.arguments().getArgumentsAsStringList()
-                                    .toArray(new String[]{}));
+      process = new CommandLine(
+          settings.getBinary().getPath(),
+          settings.arguments().getArgumentsAsStringList().toArray(new String[]{})
+      );
       //process.setEnvironmentVariables(environment);
       process.copyOutputTo(System.err);
       process.executeAsync();
