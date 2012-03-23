@@ -20,6 +20,8 @@ import com.opera.core.systems.model.ScreenShotReply;
 import com.opera.core.systems.runner.OperaRunnerException;
 import com.opera.core.systems.runner.launcher.OperaLauncherRunner;
 import com.opera.core.systems.testing.Ignore;
+import com.opera.core.systems.testing.NoDriver;
+import com.opera.core.systems.testing.OperaDriverTestCase;
 
 import org.junit.After;
 import org.junit.Before;
@@ -27,6 +29,7 @@ import org.junit.Test;
 import org.openqa.selenium.Platform;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.logging.Level;
 
 import static com.opera.core.systems.OperaProduct.DESKTOP;
@@ -37,7 +40,8 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-public class OperaLauncherRunnerTest {
+@NoDriver
+public class OperaLauncherRunnerTest extends OperaDriverTestCase {
 
   private OperaSettings settings;
   private OperaLauncherRunner runner;
@@ -131,18 +135,9 @@ public class OperaLauncherRunnerTest {
   }
 
   @Test
-  public void testBadLauncher() throws Exception {
-    File fakeLauncher;
-    // Programs that should be installed that have no side effects when run
-    if (Platform.getCurrent().is(Platform.WINDOWS)) {
-      fakeLauncher = new File("C:\\WINDOWS\\system32\\find.exe");
-    } else {
-      fakeLauncher = new File("/bin/echo");
-    }
-
-    assertTrue("Imposter launcher exists", fakeLauncher.exists());
-
-    settings.setLauncher(fakeLauncher.getCanonicalFile());
+  public void testBadLauncher() throws IOException {
+    assertTrue("Imposter launcher exists", resources.executableBinary().exists());
+    settings.setLauncher(resources.executableBinary());
 
     try {
       runner = new OperaLauncherRunner(settings);
