@@ -48,7 +48,8 @@ public class TestOperaDriver extends OperaDriver {
    * @param capabilities the set of capabilities to use
    */
   public TestOperaDriver(Capabilities capabilities) {
-    this(new OperaSettings().merge(capabilities));
+    super(capabilities);
+    controlWindow = getWindowHandle();
   }
 
   /**
@@ -195,10 +196,6 @@ public class TestOperaDriver extends OperaDriver {
 
   public static Capabilities getDefaultCapabilities() {
     return new OperaSettings().toCapabilities();
-  }
-
-  public static OperaSettings getDefaultSettings() {
-    return new OperaSettings();
   }
 
   /**
