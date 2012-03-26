@@ -16,17 +16,24 @@ limitations under the License.
 
 package com.opera.core.systems.pages;
 
-import org.openqa.selenium.WebDriver;
+import com.opera.core.systems.testing.Pages;
+import com.opera.core.systems.testing.drivers.TestOperaDriver;
+
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-public class IFramePage {
-  public WebDriver driver;
+public class IFramePage extends Page {
 
   @FindBy(name = "the-iframe")
   WebElement iFrame;
 
-  public WebElement getIFrame() {
+  public IFramePage(TestOperaDriver driver, Pages pages) {
+    super(driver, pages);
+    driver.navigate().to(pages.iframes);
+  }
+
+  public WebElement enterIFrame() {
     driver.switchTo().frame(iFrame);
     return driver.switchTo().activeElement();
   }
@@ -34,4 +41,12 @@ public class IFramePage {
   public void leaveIFrame() {
     driver.switchTo().defaultContent();
   }
+
+  public String clickButton() {
+    enterIFrame();
+    driver.findElement(By.id("test")).click();
+    leaveIFrame();
+    return driver.findElement(By.id("result")).getText();
+  }
+
 }

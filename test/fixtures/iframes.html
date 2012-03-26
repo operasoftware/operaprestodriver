@@ -1,11 +1,9 @@
-<!doctype HTML>
-<html>
-<head>
- <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
- <title>IFrames fixture</title>
-</head>
-<body>
-  <iframe name="the-iframe">This is the iframe</iframe>
-  <p>This is outside the iframe</p>
-</body>
-</html>
+<!DOCTYPE html>
+<meta charset="utf-8" />
+<title>IFrames fixture</title>
+
+<p>This is outside the IFRAME.</p>
+
+<p id="result">FAIL</p>
+
+<iframe name="the-iframe" src="./iframes_inner.html"></iframe>

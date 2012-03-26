@@ -18,25 +18,32 @@ package com.opera.core.systems;
 
 import com.opera.core.systems.pages.IFramePage;
 import com.opera.core.systems.testing.OperaDriverTestCase;
+import com.opera.core.systems.testing.TestingPageFactory;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.openqa.selenium.support.PageFactory;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 public class IFramesTest extends OperaDriverTestCase {
-  IFramePage iFramePage;
+
+  public IFramePage iFramePage;
+
   @Before
   public void bindPage() {
-    getFixture("iframes.html");
-    iFramePage = PageFactory.initElements(driver, IFramePage.class);
-    iFramePage.driver = driver;
+    iFramePage = TestingPageFactory.initElements(driver, pages, IFramePage.class);
   }
 
   @Test
   public void testIFrameFocus() {
-    assertNotNull(iFramePage.getIFrame());
+    assertNotNull(iFramePage.enterIFrame());
     iFramePage.leaveIFrame();
   }
+
+  @Test
+  public void clickElementInIFrame() {
+    assertEquals("PASS", iFramePage.clickButton());
+  }
+
 }
