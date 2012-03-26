@@ -139,8 +139,16 @@ public class OperaSettings {
      * Files\Opera\opera.exe</code>).
      */
     BINARY() {
+      File getDefaultValue() {
+        return new File(OperaPaths.operaPath());
+      }
+
       Object sanitize(Object path) {
         if (path == null) {
+          return getDefaultValue();
+        }
+
+        if (path instanceof String) {
           return new File(String.valueOf(path));
         }
 
@@ -898,6 +906,10 @@ public class OperaSettings {
     DesiredCapabilities capabilities = DesiredCapabilities.opera();
 
     for (CapabilityInstance option : options.values()) {
+      if (option.getValue() == null) {
+        continue;
+      }
+
       capabilities.setCapability(option.getCapability(), option.getValue());
     }
 
