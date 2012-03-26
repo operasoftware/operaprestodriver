@@ -913,7 +913,7 @@ public class OperaSettings {
       capabilities.setCapability(option.getCapability(), option.getValue());
     }
 
-    return capabilities;
+    return capabilities.merge(surplusCapabilities);
   }
 
   /**
