@@ -88,7 +88,7 @@ public class OperaSettingsTest extends OperaDriverTestCase {
 
     @Test
     public void binaryHasNullAsDefaultValue() {
-      assertNull(BINARY.getDefaultValue());
+      assertNotNull(BINARY.getDefaultValue());
     }
 
     @Test
@@ -241,8 +241,9 @@ public class OperaSettingsTest extends OperaDriverTestCase {
     }
 
     @Test
-    public void binaryIsNull() {
-      assertNull(settings.getBinary());
+    public void binaryDefaultOpera() {
+      assertNotNull(settings.getBinary());
+      assertTrue(settings.getBinary().exists());
     }
 
     @Test
