@@ -30,9 +30,11 @@ import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.Platform;
+import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Map;
 import java.util.logging.Level;
 
 import static com.opera.core.systems.OperaProduct.CORE;
@@ -482,6 +484,22 @@ public class OperaSettingsTest extends OperaDriverTestCase {
       assertNotNull(capabilities);
       assertTrue(capabilities.asMap().size() > 0);
       assertEquals(true, capabilities.getCapability(AUTOSTART.getCapability()));
+    }
+
+    @Test
+    public void surplusCapabilitiesAreIncludedWhenConvertedToCapabilities() {
+      DesiredCapabilities capabilities = new DesiredCapabilities();
+      capabilities.setCapability("foo", "bar");
+
+      settings.merge(capabilities);
+
+      for (Map.Entry<String, ?> capability : settings.toCapabilities().asMap().entrySet()) {
+        if (capability.getKey().equals("foo") && capability.getValue().equals("bar")) {
+          return;
+        }
+      }
+
+      fail("Surplus capabilities not included in OperaSettings#toCapabilities()");
     }
 
     @Test
