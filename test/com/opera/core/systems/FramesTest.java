@@ -27,11 +27,12 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 public class FramesTest extends OperaDriverTestCase {
-  List<String> frames;
+
+  public List<String> frames;
 
   @Before
   public void beforeEach() {
-    getFixture("frames.html");
+    driver.navigate().to(pages.iframes);
     frames = driver.listFrames();
   }
 
