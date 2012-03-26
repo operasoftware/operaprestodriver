@@ -111,7 +111,11 @@ public class OperaSettings {
         return Level.INFO;
       }
 
-      Level sanitize(Object value) {
+      Object sanitize(Object value) {
+        if (value == null) {
+          return value;
+        }
+
         return Level.parse(String.valueOf(value).toUpperCase());
       }
     },
@@ -120,8 +124,12 @@ public class OperaSettings {
      * (String) Where to send the output of the logging.  Default is to not write to file.
      */
     LOGGING_FILE("logging.file") {
-      File sanitize(Object path) {
-        return new File(String.valueOf(path));
+      Object sanitize(Object path) {
+        if (path != null) {
+          return new File(String.valueOf(path));
+        }
+
+        return path;
       }
     },
 
@@ -132,7 +140,7 @@ public class OperaSettings {
      */
     BINARY() {
       Object sanitize(Object path) {
-        if (path != null) {
+        if (path == null) {
           return new File(String.valueOf(path));
         }
 
@@ -172,7 +180,7 @@ public class OperaSettings {
       Integer sanitize(Object value) {
         // 0 = random, -1 = Opera default (7001) (for use with Opera < 11.60)
 
-        int port = (Integer) value;
+        int port = Integer.parseInt(value.toString());
 
         if (port == SERVER_RANDOM_PORT_IDENTIFIER.getValue()) {
           return PortProber.findFreePort();
@@ -218,7 +226,8 @@ public class OperaSettings {
         return new OperaProfile();
       }
 
-      OperaProfile sanitize(Object value) {
+      Object sanitize(Object value) {
+        //if (value instanceof String) {
         String profileDirectory = String.valueOf(value);
 
         if (profileDirectory != null && !profileDirectory.isEmpty()) {  // use this profile
@@ -230,7 +239,9 @@ public class OperaSettings {
         // "" (empty string), use ~/.autotest
         return new OperaProfile(new File(System.getProperty("user.home") +
                                          File.separator + ".autotest"));
+        //}
 
+        //return value;
       }
     },
 
