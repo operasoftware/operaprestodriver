@@ -34,32 +34,32 @@ public class OperaMouse implements Mouse {
 
   public void click(Coordinates where) {
     Point p = getPoint(where, "click");
-    parent.exec.mouseAction(p.x, p.y, OperaMouseKeys.LEFT);
+    parent.getExecService().mouseAction(p.x, p.y, OperaMouseKeys.LEFT);
   }
 
   public void contextClick(Coordinates where) {
     Point p = getPoint(where, "context click");
-    parent.exec.mouseAction(p.x, p.y, OperaMouseKeys.RIGHT);
+    parent.getExecService().mouseAction(p.x, p.y, OperaMouseKeys.RIGHT);
   }
 
   public void doubleClick(Coordinates where) {
     Point p = getPoint(where, "double click");
-    parent.exec.mouseAction(p.x, p.y, 2, OperaMouseKeys.LEFT);
+    parent.getExecService().mouseAction(p.x, p.y, 2, OperaMouseKeys.LEFT);
   }
 
   public void mouseDown(Coordinates where) {
     Point p = getPoint(where, "mouse down");
-    parent.exec.mouseAction(p.x, p.y, OperaMouseKeys.LEFT_DOWN);
+    parent.getExecService().mouseAction(p.x, p.y, OperaMouseKeys.LEFT_DOWN);
   }
 
   public void mouseUp(Coordinates where) {
     Point p = getPoint(where, "mouse up");
-    parent.exec.mouseAction(p.x, p.y, OperaMouseKeys.LEFT_DOWN);
+    parent.getExecService().mouseAction(p.x, p.y, OperaMouseKeys.LEFT_DOWN);
   }
 
   public void mouseMove(Coordinates where) {
     Point p = getPoint(where, "mouse move");
-    parent.exec.mouseAction(p.x, p.y);
+    parent.getExecService().mouseAction(p.x, p.y);
   }
 
   public void mouseMove(Coordinates where, long xOffset, long yOffset) {
@@ -71,7 +71,7 @@ public class OperaMouse implements Mouse {
     int yO = (int) yOffset;
 
     lastMousePosition = new Point(p.x + xO, p.y + yO);
-    parent.exec.mouseAction(p.x + xO, p.y + yO);
+    parent.getExecService().mouseAction(p.x + xO, p.y + yO);
   }
 
   private Point getPoint(Coordinates where, String action) {

@@ -89,7 +89,7 @@ public class TestOperaDriver extends OperaDriver {
   }
 
   public ScopeServices getServices() {
-    return services;
+    return getScopeServices();
   }
 
   public IOperaExec getExecService() {
@@ -222,7 +222,7 @@ public class TestOperaDriver extends OperaDriver {
                                               "product DESKTOP");
     }
 
-    services.getExec().action("Close all pages");
+    getScopeServices().getExec().action("Close all pages");
   }
 
 }

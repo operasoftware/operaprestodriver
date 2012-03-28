@@ -110,31 +110,26 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     SITE_PREFS
   }
 
-  /*
-   * These are "protected" and not "private" so that we can extend this class and add methods to
-   * access these variable in tests.
-   */
-  protected final OperaSettings settings;  // TODO: make final
+  protected final OperaSettings settings;
   protected OperaRunner runner = null;
 
-  protected IEcmaScriptDebugger debugger;
-  protected IOperaExec exec;
-  protected IWindowManager windowManager;
-  protected ICoreUtils coreUtils;
-  protected ICookieManager cookieManager;
+  private IEcmaScriptDebugger debugger;
+  private IOperaExec exec;
+  private IWindowManager windowManager;
+  private ICoreUtils coreUtils;
+  private ICookieManager cookieManager;
 
-  protected ScopeServices services;
+  private ScopeServices services;
   protected ScopeActions actionHandler;
 
   private OperaScopePreferences preferences;
 
-  private final Logger logger = Logger.getLogger(getClass().getName());
-  private FileHandler logFile;
-
   protected Set<Integer> objectIds = new HashSet<Integer>();
+  private int assignedWindowIds = 0;
   private String version;
 
-  private int assignedWindowIds = 0;
+  private final Logger logger = Logger.getLogger(getClass().getName());
+  private FileHandler logFile = null;
 
   /**
    * Constructor that starts Opera with the default set of capabilities.
@@ -151,101 +146,6 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
   public OperaDriver(OperaProfile profile) {
     this(new OperaSettings.Builder().usingProfile(profile).get());
   }
-
-  /**
-   * Starts Opera with the given set of desired capabilities.
-   *
-   * @param c a {@link DesiredCapabilities} object containing various settings for the driver and
-   *          the browser
-   *
-  public OperaDriver(Capabilities c) {
-  capabilities = (DesiredCapabilities) new com.opera.core.systems.OperaSettings().toCapabilities();
-
-  if (c != null) {
-  capabilities.merge(CapabilitiesSanitizer.sanitize(c));
-  }
-
-  // Set the logging level for main logger instance
-  Level logLevel;
-  Object typelessLevel = capabilities.getCapability(LOGGING_LEVEL);
-  if (typelessLevel instanceof String) {
-  logLevel = Level.parse(((String) typelessLevel).toUpperCase());
-  } else if (typelessLevel instanceof Level) {
-  logLevel = (Level) typelessLevel;
-  } else {
-  throw new WebDriverException("Unknown logging level: " + typelessLevel.toString());
-  }
-  Logger root = Logger.getLogger("");
-  root.setLevel(logLevel);
-
-  // Write log to file?
-  FileHandler logFile;
-
-  if (capabilities.getCapability(LOGGING_FILE) != null) {
-  try {
-  logFile = new FileHandler((String) capabilities.getCapability(LOGGING_FILE),
-  OperaFlags.APPEND_TO_LOGFILE);
-  logFile.setFormatter(new SimpleFormatter());
-  } catch (IOException e) {
-  throw new WebDriverException("Unable to write to file: " + e);
-  }
-  }
-
-  if (logFile != null) {
-  root.addHandler(logFile);
-  }
-
-  // Set logging levels on all handlers
-  for (Handler h : root.getHandlers()) {
-  h.setLevel(logLevel);
-  }
-
-  Boolean autostart = (Boolean) capabilities.getCapability(AUTOSTART);
-  settings = new OperaLauncherRunnerSettings();
-  settings.setLoggingLevel(OperaLauncherRunner.toLauncherLoggingLevel(logLevel));
-
-  if (autostart) {
-  String binaryPath = (String) capabilities.getCapability(BINARY);
-  if (binaryPath == null) {
-  binaryPath = OperaPaths.operaPath();
-  }
-  settings.setBinary(new File(binaryPath));
-
-  settings.setHost((String) capabilities.getCapability(HOST));
-  settings.setPort((Integer) capabilities.getCapability(PORT));
-
-  OperaArguments arguments = new OperaCoreArguments();
-  OperaArguments parsed = OperaArguments.parse((String) capabilities.getCapability(ARGUMENTS));
-  settings.setArguments(arguments.merge(parsed));
-
-  String launcher = (String) capabilities.getCapability(LAUNCHER);
-  if (launcher != null) {
-  settings.setLauncher(launcher);
-  }
-
-  Object profile = capabilities.getCapability(PROFILE);
-  if (profile instanceof String) {
-  settings.setProfile((String) profile);
-  } else if (profile instanceof OperaProfile) {
-  settings.setProfile((OperaProfile) profile);
-  }
-
-  String backend = (String) capabilities.getCapability(BACKEND);
-  if (backend != null && !backend.isEmpty()) {
-  settings.setBackend(backend);
-  }
-
-  capabilities.merge(settings.toCapabilities());
-  runner = new OperaLauncherRunner(settings);
-  } else {
-  settings.setPort((int) OperaIntervals.SERVER_DEFAULT_PORT_IDENTIFIER.getValue());
-  capabilities.merge(settings.toCapabilities());
-  }
-
-  logger.config(capabilities.toString());
-  start();
-  }
-   */
 
   /**
    * Starts Opera with the given set of desired capabilities.

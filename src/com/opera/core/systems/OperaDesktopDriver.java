@@ -83,9 +83,9 @@ public class OperaDesktopDriver extends OperaDriver {
   }
 
   private void setServices() {
-    desktopWindowManager = services.getDesktopWindowManager();
-    systemInputManager = services.getSystemInputManager();
-    desktopUtils = services.getDesktopUtils();
+    desktopWindowManager = getScopeServices().getDesktopWindowManager();
+    systemInputManager = getScopeServices().getSystemInputManager();
+    desktopUtils = getScopeServices().getDesktopUtils();
   }
 
   private void startOpera() {
@@ -128,7 +128,7 @@ public class OperaDesktopDriver extends OperaDriver {
         runner = new OperaLauncherRunner(settings);
 
         // Quit and wait for opera to quit properly
-        services.quit(runner, pid);
+        getScopeServices().quit(runner, pid);
 
         // Delete the profile to start the first test with a clean profile
         profileUtils.deleteProfile();
@@ -157,21 +157,21 @@ public class OperaDesktopDriver extends OperaDriver {
    */
   public void quitDriver() {
     logger.fine("Opera Desktop Driver shutting down");
-    services.shutdown();
+    getScopeServices().shutdown();
     if (runner != null) {
       runner.shutdown();
     }
   }
 
   /**
-   * Quits Opera, cuts the connection to free the port and shuts down the services.
+   * Quits Opera, cuts the connection to free the port and shuts down the getScopeServices().
    */
   public void quitOpera() {
     // running opera under the launcher
     if (runner != null) {
       if (runner.isOperaRunning() || runner.hasOperaCrashed()) {
         // Cut off the services connection to free the port
-        services.shutdown();
+        getScopeServices().shutdown();
 
         // Quit Opera
         runner.stopOpera();
@@ -192,8 +192,8 @@ public class OperaDesktopDriver extends OperaDriver {
       // So we can control the shutdown
       runner = new OperaLauncherRunner(settings);
 
-      // Quit and wait for opera to quit properly (calls services.shutdown)
-      services.quit(runner, pid);
+      // Quit and wait for opera to quit properly (calls getScopeServices().shutdown)
+      getScopeServices().quit(runner, pid);
 
     }
   }
@@ -620,7 +620,7 @@ public class OperaDesktopDriver extends OperaDriver {
    */
   public void operaDesktopAction(String using, int data, String dataString,
                                  String dataStringParam) {
-    exec.action(using, data, dataString, dataStringParam);
+    super.getExecService().action(using, data, dataString, dataStringParam);
   }
 
   /**
@@ -630,12 +630,12 @@ public class OperaDesktopDriver extends OperaDriver {
    * notification about window shown is not lost because of other events or messages
    */
   public void waitStart() {
-    if (services.getConnection() == null) {
+    if (getScopeServices().getConnection() == null) {
       throw new CommunicationException(
           "waiting for a window failed because Opera is not connected.");
     }
 
-    services.waitStart();
+    getScopeServices().waitStart();
   }
 
   /**
@@ -666,12 +666,12 @@ public class OperaDesktopDriver extends OperaDriver {
    * @return id of window
    */
   public int waitForWindowShown(String windowName) {
-    if (services.getConnection() == null) {
+    if (getScopeServices().getConnection() == null) {
       throw new CommunicationException(
           "waiting for a window failed because Opera is not connected.");
     }
 
-    return services.waitForDesktopWindowShown(windowName,
+    return getScopeServices().waitForDesktopWindowShown(windowName,
                                               OperaIntervals.WINDOW_EVENT_TIMEOUT.getValue());
   }
 
@@ -682,12 +682,12 @@ public class OperaDesktopDriver extends OperaDriver {
    * @return id of window
    */
   public int waitForWindowUpdated(String windowName) {
-    if (services.getConnection() == null) {
+    if (getScopeServices().getConnection() == null) {
       throw new CommunicationException(
           "waiting for a window failed because Opera is not connected.");
     }
 
-    return services.waitForDesktopWindowUpdated(windowName,
+    return getScopeServices().waitForDesktopWindowUpdated(windowName,
                                                 OperaIntervals.WINDOW_EVENT_TIMEOUT.getValue());
   }
 
@@ -698,12 +698,12 @@ public class OperaDesktopDriver extends OperaDriver {
    * @return id of window
    */
   public int waitForWindowActivated(String windowName) {
-    if (services.getConnection() == null) {
+    if (getScopeServices().getConnection() == null) {
       throw new CommunicationException(
           "waiting for a window failed because Opera is not connected.");
     }
 
-    return services.waitForDesktopWindowActivated(windowName,
+    return getScopeServices().waitForDesktopWindowActivated(windowName,
                                                   OperaIntervals.WINDOW_EVENT_TIMEOUT.getValue());
 
   }
@@ -715,12 +715,12 @@ public class OperaDesktopDriver extends OperaDriver {
    * @return id of window
    */
   public int waitForWindowClose(String windowName) {
-    if (services.getConnection() == null) {
+    if (getScopeServices().getConnection() == null) {
       throw new CommunicationException(
           "waiting for a window failed because Opera is not connected.");
     }
 
-    return services.waitForDesktopWindowClosed(windowName,
+    return getScopeServices().waitForDesktopWindowClosed(windowName,
                                                OperaIntervals.WINDOW_EVENT_TIMEOUT.getValue());
   }
 
@@ -731,12 +731,12 @@ public class OperaDesktopDriver extends OperaDriver {
    * @return id of window
    */
   public int waitForWindowLoaded(String windowName) {
-    if (services.getConnection() == null) {
+    if (getScopeServices().getConnection() == null) {
       throw new CommunicationException(
           "waiting for a window failed because Opera is not connected.");
     }
 
-    return services.waitForDesktopWindowLoaded(windowName,
+    return getScopeServices().waitForDesktopWindowLoaded(windowName,
                                                OperaIntervals.PAGE_LOAD_TIMEOUT.getValue());
   }
 
@@ -747,12 +747,12 @@ public class OperaDesktopDriver extends OperaDriver {
    * @return id of window
    */
   public String waitForMenuShown(String menuName) {
-    if (services.getConnection() == null) {
+    if (getScopeServices().getConnection() == null) {
       throw new CommunicationException(
           "waiting for a window failed because Opera is not connected.");
     }
 
-    return services.waitForMenuShown(menuName, OperaIntervals.MENU_EVENT_TIMEOUT.getValue());
+    return getScopeServices().waitForMenuShown(menuName, OperaIntervals.MENU_EVENT_TIMEOUT.getValue());
   }
 
   /**
@@ -762,12 +762,12 @@ public class OperaDesktopDriver extends OperaDriver {
    * @return id of window
    */
   public String waitForMenuClosed(String menuName) {
-    if (services.getConnection() == null) {
+    if (getScopeServices().getConnection() == null) {
       throw new CommunicationException(
           "waiting for a window failed because Opera is not connected.");
     }
 
-    return services.waitForMenuClosed(menuName, OperaIntervals.MENU_EVENT_TIMEOUT.getValue());
+    return getScopeServices().waitForMenuClosed(menuName, OperaIntervals.MENU_EVENT_TIMEOUT.getValue());
   }
 
 
@@ -778,12 +778,12 @@ public class OperaDesktopDriver extends OperaDriver {
    * @return text of the menu item
    */
   public String waitForMenuItemPressed(String menuItemText) {
-    if (services.getConnection() == null) {
+    if (getScopeServices().getConnection() == null) {
       throw new CommunicationException(
           "waiting for a menu item to be pressed failed because Opera is not connected.");
     }
 
-    return services.waitForMenuItemPressed(menuItemText,
+    return getScopeServices().waitForMenuItemPressed(menuItemText,
                                            OperaIntervals.MENU_EVENT_TIMEOUT.getValue());
   }
 
