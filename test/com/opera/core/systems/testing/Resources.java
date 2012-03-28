@@ -27,7 +27,7 @@ public class Resources {
 
   private final File resourcesDirectory = InProject.locate("test/resources");
   private final File executableBinary;
-  private final File fakeBinary = new File("does/not/exist");
+  private final File fakeFile = new File("does/not/exist");
 
   public Resources() {
     if (Platform.getCurrent().is(Platform.WINDOWS)) {
@@ -45,8 +45,8 @@ public class Resources {
     return executableBinary;
   }
 
-  public File fakeBinary() {
-    return fakeBinary;
+  public File fakeFile() {
+    return fakeFile;
   }
 
 }

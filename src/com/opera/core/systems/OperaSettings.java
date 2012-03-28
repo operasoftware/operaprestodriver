@@ -38,6 +38,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 
+import static com.google.common.base.Preconditions.checkNotNull;
 import static com.opera.core.systems.OperaProduct.CORE;
 import static com.opera.core.systems.OperaProduct.DESKTOP;
 import static com.opera.core.systems.OperaSettings.Capability.ARGUMENTS;
@@ -164,6 +165,16 @@ public class OperaSettings {
       OperaArguments getDefaultValue() {
         return new OperaArguments();
       }
+
+      OperaArguments sanitize(Object arguments) {
+        if (arguments instanceof String) {
+          return new OperaArguments(String.valueOf(arguments));
+        } else if (arguments instanceof OperaArguments) {
+          return (OperaArguments) arguments;
+        }
+
+        return new OperaArguments();
+      }
     },
 
     /**
@@ -173,6 +184,14 @@ public class OperaSettings {
     HOST() {
       String getDefaultValue() {
         return "127.0.0.1";
+      }
+
+      Object sanitize(Object host) {
+        if (host == null) {
+          return host;
+        }
+
+        return String.valueOf(host);
       }
     },
 
@@ -186,10 +205,9 @@ public class OperaSettings {
       }
 
       Integer sanitize(Object value) {
+        int port = Integer.parseInt(checkNotNull(value).toString());
+
         // 0 = random, -1 = Opera default (7001) (for use with Opera < 11.60)
-
-        int port = Integer.parseInt(value.toString());
-
         if (port == SERVER_RANDOM_PORT_IDENTIFIER.getValue()) {
           return PortProber.findFreePort();
         } else if (port == SERVER_DEFAULT_PORT_IDENTIFIER.getValue()) {
@@ -265,6 +283,7 @@ public class OperaSettings {
       }
 
       Boolean sanitize(Object enabled) {
+        checkNotNull(enabled);
         return OperaBoolean.parseBoolean(String.valueOf(enabled));
       }
     },
@@ -272,7 +291,12 @@ public class OperaSettings {
     /**
      * (Integer) The X display to use. (Only works on *nix OSes.)
      */
-    DISPLAY(),
+    DISPLAY() {
+      Integer sanitize(Object display) {
+        checkNotNull(display);
+        return Integer.parseInt(String.valueOf(display));
+      }
+    },
 
     /**
      * (Boolean) Whether to auto-start the Opera binary.  If false, OperaDriver will wait for a
@@ -283,6 +307,11 @@ public class OperaSettings {
       Boolean getDefaultValue() {
         return OperaFlags.ENABLE_AUTOSTART;
       }
+
+      Boolean sanitize(Object enabled) {
+        checkNotNull(enabled);
+        return OperaBoolean.parseBoolean(String.valueOf(enabled));
+      }
     },
 
     /**
@@ -291,6 +320,11 @@ public class OperaSettings {
     NO_RESTART() {
       Boolean getDefaultValue() {
         return false;
+      }
+
+      Boolean sanitize(Object enabled) {
+        checkNotNull(enabled);
+        return OperaBoolean.parseBoolean(String.valueOf(enabled));
       }
     },
 
@@ -302,6 +336,11 @@ public class OperaSettings {
       Boolean getDefaultValue() {
         return false;
       }
+
+      Boolean sanitize(Object enabled) {
+        checkNotNull(enabled);
+        return OperaBoolean.parseBoolean(String.valueOf(enabled));
+      }
     },
 
     /**
@@ -310,6 +349,16 @@ public class OperaSettings {
     PRODUCT() {
       OperaProduct getDefaultValue() {
         return DESKTOP;
+      }
+
+      OperaProduct sanitize(Object product) {
+        if (product == null) {
+          return null;
+        } else if (product instanceof OperaProduct) {
+          return (OperaProduct) product;
+        }
+
+        return OperaProduct.get(String.valueOf(product));
       }
     },
 
@@ -323,6 +372,10 @@ public class OperaSettings {
     BACKEND() {
       String getDefaultValue() {
         return "software";
+      }
+
+      Object sanitize(Object backend) {
+        return backend;
       }
     };
 
@@ -391,6 +444,7 @@ public class OperaSettings {
      * @return sanitized value
      */
     Object sanitize(Object value) {
+      checkNotNull(value);
       return value;
     }
 

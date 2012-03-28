@@ -30,6 +30,7 @@ import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.Platform;
+import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.io.File;
@@ -87,8 +88,44 @@ public class OperaSettingsTest extends OperaDriverTestCase {
     }
 
     @Test
+    public void loggingLevelSanitizeNull() {
+      assertNull(LOGGING_LEVEL.sanitize(null));
+    }
+
+    @Test
+    public void loggingLevelSanitizeValidStringLevelUpperCase() {
+      assertEquals(Level.WARNING, LOGGING_LEVEL.sanitize(Level.WARNING.toString()));
+    }
+
+    @Test
+    public void loggingLevelSanitizeValidStringLevelMixedCase() {
+      assertEquals(Level.WARNING, LOGGING_LEVEL.sanitize("wArNiNg"));
+    }
+
+    @Test
     public void loggingFileHasNullAsDefaultValue() {
       assertNull(LOGGING_FILE.getDefaultValue());
+    }
+
+    @Test
+    public void loggingFileSanitizeNull() {
+      assertNull(LOGGING_FILE.sanitize(null));
+    }
+
+    @Test
+    public void loggingFileSanitizeValidStringPath() throws IOException {
+      File logFile = tmp.newFile();
+      assertTrue(LOGGING_FILE.sanitize(logFile.getPath()) instanceof File);
+      assertEquals(logFile.getAbsolutePath(),
+                   ((File) LOGGING_FILE.sanitize(logFile.getAbsolutePath())).getAbsolutePath());
+    }
+
+    @Test
+    public void loggingFileSanitizeInvalidStringPath() throws IOException {
+      assertTrue(LOGGING_FILE.sanitize(resources.fakeFile().getPath()) instanceof File);
+      assertEquals(resources.fakeFile().getAbsolutePath(),
+                   ((File) LOGGING_FILE.sanitize(resources.fakeFile().getAbsolutePath()))
+                       .getAbsolutePath());
     }
 
     @Test
@@ -97,13 +134,73 @@ public class OperaSettingsTest extends OperaDriverTestCase {
     }
 
     @Test
+    public void binarySanitizeNull() {
+      assertEquals(new File(OperaPaths.operaPath()).getAbsolutePath(),
+                   ((File) BINARY.sanitize(null)).getAbsolutePath());
+    }
+
+    @Test
+    public void binarySanitizeValidStringPath() {
+      assertEquals(new File(OperaPaths.operaPath()).getAbsolutePath(),
+                   ((File) BINARY.sanitize(OperaPaths.operaPath())).getAbsolutePath());
+    }
+
+    @Test
+    public void binarySanitizeInvalidStringPath() {
+      assertEquals(resources.fakeFile().getAbsolutePath(),
+                   ((File) BINARY.sanitize(resources.fakeFile().getAbsolutePath()))
+                       .getAbsolutePath());
+    }
+
+    @Test
     public void argumentsHasOperaArgumentsObjectAsDefaultValue() {
       assertTrue(ARGUMENTS.getDefaultValue() instanceof OperaArguments);
     }
 
     @Test
+    public void argumentsSanitizeNull() {
+      Object arguments = ARGUMENTS.sanitize(null);
+      assertNotNull(arguments);
+      assertTrue(arguments instanceof OperaArguments);
+      assertEquals(new OperaArguments().size(), ((OperaArguments) arguments).size());
+    }
+
+    @Test
+    public void argumentsSanitizeStringList() {
+      OperaArguments reference = new OperaArguments("-foo bar -bah");
+      Object arguments = ARGUMENTS.sanitize(reference.toString());
+      assertTrue(arguments instanceof OperaArguments);
+      assertEquals(reference.size(), ((OperaArguments) arguments).size());
+      assertEquals(reference.getArgumentsAsStringList(),
+                   ((OperaArguments) arguments).getArgumentsAsStringList());
+    }
+
+    @Test
+    public void argumentsSanitizeOperaArgumentsObject() {
+      OperaArguments reference = new OperaArguments("-foo bar -bah");
+      Object arguments = ARGUMENTS.sanitize(reference);
+      assertTrue(arguments instanceof OperaArguments);
+      assertEquals(reference.size(), ((OperaArguments) arguments).size());
+    }
+
+    @Test
     public void hostHasNonLoopbackAddressAsDefaultValue() {
       assertEquals("127.0.0.1", HOST.getDefaultValue());
+    }
+
+    @Test
+    public void hostSanitizeNull() {
+      assertNull(HOST.sanitize(null));
+    }
+
+    @Test
+    public void hostSanitizeString() {
+      assertEquals("1.2.3.4", HOST.sanitize("1.2.3.4"));
+    }
+
+    @Test
+    public void hostSanitizeInteger() {
+      assertEquals("1234", HOST.sanitize(1234));
     }
 
     @Test
@@ -118,10 +215,55 @@ public class OperaSettingsTest extends OperaDriverTestCase {
       assertNotSame((int) SERVER_PORT.getValue(), PORT.getDefaultValue());
     }
 
+    @Test(expected = NullPointerException.class)
+    public void portSanitizeNull() {
+      PORT.sanitize(null);
+    }
+
+    @Test
+    public void portSanitizeString() {
+      assertEquals(1234, PORT.sanitize("1234"));
+    }
+
+    @Test
+    public void portSanitizeInteger() {
+      assertEquals(6543, PORT.sanitize(6543));
+    }
+
+    @Test
+    public void portSanitizeRandomPortIdentifier() {
+      assertNotSame((int) SERVER_RANDOM_PORT_IDENTIFIER.getValue(),
+                    PORT.sanitize(SERVER_RANDOM_PORT_IDENTIFIER.getValue()));
+    }
+
+    @Test
+    public void portSanitizeDefaultPortIdentifier() {
+      assertEquals((int) SERVER_PORT.getValue(),
+                   PORT.sanitize(SERVER_DEFAULT_PORT_IDENTIFIER.getValue()));
+    }
+
     @Test
     public void launcherHasDefaultLocationAsDefaultValue() {
       assertNotNull(LAUNCHER.getDefaultValue());
       assertEquals(OperaLauncherRunner.launcherDefaultLocation(), LAUNCHER.getDefaultValue());
+    }
+
+    @Test
+    public void launcherSanitizeNull() {
+      assertNull(LAUNCHER.sanitize(null));
+    }
+
+    @Test
+    public void launcherSanitizeStringPath() {
+      assertEquals(resources.executableBinary().getAbsolutePath(),
+                   ((File) LAUNCHER.sanitize(resources.executableBinary().getAbsolutePath()))
+                       .getAbsolutePath());
+    }
+
+    @Test
+    public void launcherSanitizeFile() {
+      assertEquals(resources.executableBinary().getAbsolutePath(),
+                   ((File) LAUNCHER.sanitize(resources.executableBinary())).getAbsolutePath());
     }
 
     @Test
@@ -165,9 +307,50 @@ public class OperaSettingsTest extends OperaDriverTestCase {
       assertFalse((Boolean) OPERAIDLE.getDefaultValue());
     }
 
+    @Test(expected = NullPointerException.class)
+    public void operaIdleSanitizeNull() {
+      OPERAIDLE.sanitize(null);
+    }
+
+    @Test
+    public void operaIdleSanitizeBoolean() {
+      assertTrue(OPERAIDLE.sanitize(true) instanceof Boolean);
+      assertTrue((Boolean) OPERAIDLE.sanitize(true));
+    }
+
+    @Test
+    public void operaIdleSanitizeStringTrue() {
+      assertTrue((Boolean) OPERAIDLE.sanitize("true"));
+    }
+
+    @Test
+    public void operaIdleSanitizeStringOne() {
+      assertTrue((Boolean) OPERAIDLE.sanitize("1"));
+    }
+
+    @Test
+    public void operaIdleSanitizeInteger() {
+      assertTrue((Boolean) OPERAIDLE.sanitize(1));
+    }
+
     @Test
     public void displayHasNullAsDefaultValue() {
       assertNull(DISPLAY.getDefaultValue());
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void displaySanitizeNull() {
+      DISPLAY.sanitize(null);
+    }
+
+    @Test
+    public void displaySanitizeString() {
+      assertEquals(7, DISPLAY.sanitize("7"));
+    }
+
+    @Test
+    public void displaySanitizeInteger() {
+      assertEquals(7, DISPLAY.sanitize(7));
     }
 
     @Test
@@ -176,10 +359,62 @@ public class OperaSettingsTest extends OperaDriverTestCase {
       assertTrue((Boolean) AUTOSTART.getDefaultValue());
     }
 
+    @Test(expected = NullPointerException.class)
+    public void autostartSanitizeNull() {
+      AUTOSTART.sanitize(null);
+    }
+
+    @Test
+    public void autostartSanitizeBoolean() {
+      assertTrue(AUTOSTART.sanitize(true) instanceof Boolean);
+      assertTrue((Boolean) AUTOSTART.sanitize(true));
+    }
+
+    @Test
+    public void autostartSanitizeStringTrue() {
+      assertTrue((Boolean) AUTOSTART.sanitize("true"));
+    }
+
+    @Test
+    public void autostartSanitizeStringOne() {
+      assertTrue((Boolean) AUTOSTART.sanitize("1"));
+    }
+
+    @Test
+    public void autostartSanitizeInteger() {
+      assertTrue((Boolean) AUTOSTART.sanitize(1));
+    }
+
     @Test
     public void noRestartHasFalseAsDefaultValue() {
       assertTrue(NO_RESTART.getDefaultValue() instanceof Boolean);
       assertFalse((Boolean) NO_RESTART.getDefaultValue());
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void noRestartSanitizeNull() {
+      NO_RESTART.sanitize(null);
+    }
+
+    @Test
+    public void noRestartSanitizeBoolean() {
+      assertTrue(NO_RESTART.sanitize(true) instanceof Boolean);
+      assertTrue((Boolean) NO_RESTART.sanitize(true));
+    }
+
+    @Test
+    public void noRestartSanitizeStringTrue() {
+      assertTrue((Boolean) NO_RESTART.sanitize("true"));
+    }
+
+    @Test
+    public void noRestartSanitizeStringOne() {
+      assertTrue((Boolean) NO_RESTART.sanitize("1"));
+    }
+
+    @Test
+    public void noRestartSanitizeInteger() {
+      assertTrue((Boolean) NO_RESTART.sanitize(1));
     }
 
     @Test
@@ -188,14 +423,72 @@ public class OperaSettingsTest extends OperaDriverTestCase {
       assertFalse((Boolean) NO_QUIT.getDefaultValue());
     }
 
+    @Test(expected = NullPointerException.class)
+    public void noQuitSanitizeNull() {
+      NO_QUIT.sanitize(null);
+    }
+
+    @Test
+    public void noQuitSanitizeBoolean() {
+      assertTrue(NO_QUIT.sanitize(true) instanceof Boolean);
+      assertTrue((Boolean) AUTOSTART.sanitize(true));
+    }
+
+    @Test
+    public void noQuitSanitizeStringTrue() {
+      assertTrue((Boolean) NO_QUIT.sanitize("true"));
+    }
+
+    @Test
+    public void noQuitSanitizeStringOne() {
+      assertTrue((Boolean) NO_QUIT.sanitize("1"));
+    }
+
+    @Test
+    public void noQuitSanitizeInteger() {
+      assertTrue((Boolean) NO_QUIT.sanitize(1));
+    }
+
     @Test
     public void productHasOperaProductDesktopAsDefaultValue() {
       assertEquals(DESKTOP, PRODUCT.getDefaultValue());
     }
 
     @Test
+    public void productSanitizeNull() {
+      assertNull(PRODUCT.sanitize(null));
+    }
+
+    @Test
+    public void productSanitizeValidString() {
+      Object product = PRODUCT.sanitize("mobile");
+      assertTrue(product instanceof OperaProduct);
+      assertEquals(OperaProduct.MOBILE, ((OperaProduct) product));
+    }
+
+    @Test(expected = WebDriverException.class)
+    public void productSanitizeInvalidString() {
+      PRODUCT.sanitize("hoobaflooba");
+    }
+
+    @Test
+    public void productSanitizeOperaProductObject() {
+      assertEquals(OperaProduct.MOBILE, PRODUCT.sanitize(OperaProduct.MOBILE));
+    }
+
+    @Test
     public void backendHasStringSoftwareAsDefaultValue() {
       assertEquals("software", BACKEND.getDefaultValue());
+    }
+
+    @Test
+    public void backendSanitizeNull() {
+      assertNull(BACKEND.sanitize(null));
+    }
+
+    @Test
+    public void backendSanitizeString() {
+      assertEquals("backend", BACKEND.sanitize("backend"));
     }
 
     @Test
@@ -337,16 +630,16 @@ public class OperaSettingsTest extends OperaDriverTestCase {
 
     @Test
     public void launcherReturnsEnvironmentalLauncherIfSet() {
-      environment.set(LAUNCHER_ENV_VAR, resources.fakeBinary().getPath());
-      assertEquals(resources.fakeBinary(), new OperaSettings().getLauncher());
+      environment.set(LAUNCHER_ENV_VAR, resources.fakeFile().getPath());
+      assertEquals(resources.fakeFile(), new OperaSettings().getLauncher());
     }
 
     @Test
     public void launcherPrioritizesEnvironmentalLauncher() throws IOException {
-      environment.set(LAUNCHER_ENV_VAR, resources.fakeBinary().getPath());
+      environment.set(LAUNCHER_ENV_VAR, resources.fakeFile().getPath());
       OperaSettings settings = new OperaSettings();
       settings.setLauncher(resources.executableBinary());
-      assertEquals(resources.fakeBinary(), settings.getLauncher());
+      assertEquals(resources.fakeFile(), settings.getLauncher());
     }
 
     @Test
@@ -357,7 +650,7 @@ public class OperaSettingsTest extends OperaDriverTestCase {
 
     @Test(expected = IOException.class)
     public void launcherThrowsExceptionIfInvalid() throws IOException {
-      settings.setLauncher(resources.fakeBinary());
+      settings.setLauncher(resources.fakeFile());
     }
 
     @Test
