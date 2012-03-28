@@ -63,8 +63,10 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+import static org.junit.matchers.JUnitMatchers.containsString;
 import static org.openqa.selenium.Platform.LINUX;
 
 /**
@@ -75,6 +77,9 @@ import static org.openqa.selenium.Platform.LINUX;
 public class OperaSettingsTest extends OperaDriverTestCase {
 
   public static class Capability {
+
+    @Rule
+    public TemporaryFolder tmp = new TemporaryFolder();
 
     @Test
     public void loggingLevelHasLoggingLevelInfoAsDefaultValue() {
@@ -122,6 +127,36 @@ public class OperaSettingsTest extends OperaDriverTestCase {
     @Test
     public void profileHasOperaProfileObjectAsDefaultValue() {
       assertTrue(PROFILE.getDefaultValue() instanceof OperaProfile);
+    }
+
+    @Test
+    public void profileSanitizeStringPath() throws IOException {
+      File path = tmp.newFolder();
+      Object profile = PROFILE.sanitize(path.getPath());
+      assertTrue(profile instanceof OperaProfile);
+      assertEquals(path.getAbsolutePath(),
+                   ((OperaProfile) profile).getDirectory().getAbsolutePath());
+    }
+
+    @Test
+    public void profileSanitizeOperaProfileInstance() {
+      OperaProfile reference = new OperaProfile();
+      Object profile = PROFILE.sanitize(reference);
+      assertTrue(profile instanceof OperaProfile);
+      assertEquals(reference.getDirectory().getAbsolutePath(),
+                   ((OperaProfile) profile).getDirectory().getAbsolutePath());
+    }
+
+    @Test
+    public void profileSanitizeNull() {
+      assertTrue(PROFILE.sanitize(null) instanceof OperaProfile);
+    }
+
+    @Test
+    public void profileSanitizeEmptyString() {
+      assertTrue(PROFILE.sanitize("") instanceof OperaProfile);
+      assertThat(((OperaProfile) PROFILE.sanitize("")).getDirectory().getPath(),
+                 containsString("autotest"));
     }
 
     @Test

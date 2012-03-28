@@ -235,21 +235,20 @@ public class OperaSettings {
       }
 
       Object sanitize(Object value) {
-        //if (value instanceof String) {
-        String profileDirectory = String.valueOf(value);
+        if (value instanceof String && String.valueOf(value) != null) {
+          String profileDirectory = String.valueOf(value);
 
-        if (profileDirectory != null && !profileDirectory.isEmpty()) {  // use this profile
-          return new OperaProfile(profileDirectory);
-        } else if (profileDirectory == null) {  // random profile
-          return new OperaProfile();
+          if (!profileDirectory.isEmpty()) {  // use this profile
+            return new OperaProfile(profileDirectory);
+          } else {  // "" (empty string), use ~/.autotest
+            return new OperaProfile(new File(System.getProperty("user.home") +
+                                             File.separator + ".autotest"));
+          }
+        } else if (value instanceof OperaProfile) {
+          return value;
         }
 
-        // "" (empty string), use ~/.autotest
-        return new OperaProfile(new File(System.getProperty("user.home") +
-                                         File.separator + ".autotest"));
-        //}
-
-        //return value;
+        return new OperaProfile();
       }
     },
 
