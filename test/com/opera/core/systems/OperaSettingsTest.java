@@ -463,7 +463,7 @@ public class OperaSettingsTest extends OperaDriverTestCase {
     public void productSanitizeValidString() {
       Object product = PRODUCT.sanitize("mobile");
       assertTrue(product instanceof OperaProduct);
-      assertEquals(OperaProduct.MOBILE, ((OperaProduct) product));
+      assertEquals(OperaProduct.MOBILE, product);
     }
 
     @Test(expected = WebDriverException.class)
@@ -562,10 +562,8 @@ public class OperaSettingsTest extends OperaDriverTestCase {
 
     @Test
     public void loggingFileCanBeSet() throws IOException {
-      // TODO(andreastt): Replace with fake binary from Resources
-      File logFile = tmp.newFile("logfile");
-      settings.logging().file(logFile);
-      assertEquals(logFile, settings.logging().file());
+      settings.logging().file(resources.fakeFile());
+      assertEquals(resources.fakeFile(), settings.logging().file());
     }
 
     @Test
@@ -576,10 +574,8 @@ public class OperaSettingsTest extends OperaDriverTestCase {
 
     @Test
     public void binaryCanBeSet() {
-      // TODO(andreastt): Replace with fake binary from Resources
-      File binary = new File("nonexistent");
-      settings.setBinary(binary);
-      assertEquals(binary, settings.getBinary());
+      settings.setBinary(resources.fakeFile());
+      assertEquals(resources.fakeFile(), settings.getBinary());
     }
 
     @Test
