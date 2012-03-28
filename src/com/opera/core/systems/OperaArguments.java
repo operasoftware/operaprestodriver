@@ -36,6 +36,22 @@ public class OperaArguments implements com.opera.core.systems.arguments.interfac
 
   protected List<OperaArgument> arguments = new ArrayList<OperaArgument>();
 
+  /**
+   * Provides a key/value storage of arguments related to the Opera product binary.
+   */
+  public OperaArguments() {
+  }
+
+  /**
+   * Provide a space delimited list of arguments as a string that will be parsed and used as the
+   * default values for this storage.
+   *
+   * @param spaceDelimitedArguments list of arguments, as they would appear in a terminal
+   */
+  public OperaArguments(String spaceDelimitedArguments) {
+    merge(parse(spaceDelimitedArguments));
+  }
+
   public void add(String key) {
     OperaArgument argument = new OperaArgument(key);
     arguments.add(argument);
