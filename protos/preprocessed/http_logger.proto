@@ -1,20 +1,11 @@
-syntax = scope;
+syntax = "proto2";
+import "opera/scope/scope_descriptor.proto";
 
-/**
- * The `http-logger` is a noninteractive tool used to log interactions between Opera and the web servers it accesses.
- */
-service HttpLogger
-{
-    option (cpp_hfile) = "modules/scope/src/scope_http_logger.h";
-    option (version) = "2.0";
-    option (cpp_class) = OpScopeHttpLogger;
- 
-    event OnRequest returns (Header) = 1;
-    /**
-     * Note: The response does not have its own id, but refers to the previous id from `OnRequest`.
-     */
-    event OnResponse returns (Header) = 2;
-}
+package scope;
+
+option optimize_for         = SPEED;
+option java_outer_classname = "HttpLoggerProtos";
+option java_package         = "com.opera.core.systems.scope.protos";
 
 message Header
 {
@@ -32,7 +23,7 @@ message Header
      * Timestamp of the message, in milliseconds since `1970-01-01 00:00 UTC`
      * (be sure not to rely on the time being correct - this is client time, and
      * may be wildly different than the host time)
-     *
+     * 
      * Note: Float encoded as string
      */
     required string time      = 3;

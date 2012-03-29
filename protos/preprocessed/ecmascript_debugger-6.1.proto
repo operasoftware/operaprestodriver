@@ -1,4 +1,11 @@
-syntax = scope;
+syntax = "proto2";
+import "opera/scope/scope_descriptor.proto";
+
+package scope.debugger;
+
+option optimize_for         = SPEED;
+option java_outer_classname = "Esdbg6Protos";
+option java_package         = "com.opera.core.systems.scope.protos";
 
 message CssStylesheetList
 {
@@ -20,14 +27,17 @@ message CssStylesheetList
 
 message ExamineList
 {
-    required uint32 runtimeID  = 1;
-    repeated uint32 objectList = 2;
+    required uint32 runtimeID          = 1;
+    repeated uint32 objectList         = 2;
+    optional bool   examinePrototypes  = 3;
+    optional bool   skipNonenumerables = 4;
+    optional bool   filterProperties   = 5;
 }
 
 message BreakpointID
 {
     /**
-     * See BreakpointPosition.breakpointID.
+     * See Breakpoint.breakpointID.
      */
     required uint32 breakpointID = 1;
 }
@@ -49,7 +59,7 @@ message SpotlightObject
 {
     /**
      * Colors are encoded as RGBA with 8 bits for each channel.
-     * encoded_color = ( red << 24 ) + ( green << 16 ) + ( blue << 8 ) + ( alpha ) 
+     * encoded_color = ( red << 24 ) + ( green << 16 ) + ( blue << 8 ) + ( alpha )
      * with red, green, blue and alpha in a range of 0 - 255
      * e.g.:
      * 
@@ -191,6 +201,12 @@ message BacktraceFrame
     optional ObjectValue objectValue    = 5;
     optional uint32      scriptID       = 6;
     optional uint32      lineNumber     = 7;
+    /**
+     * The variable objects in the scope chain of the function. The first
+     * element in the list is the innermost scope (the scope of the function
+     * itself).
+     */
+    repeated uint32      scopeList      = 8;
 }
 
 message RuntimeID
@@ -303,89 +319,6 @@ message FrameSelection
     required uint32 frameID   = 3;
 }
 
-
-/**
- *
- * Central data types and how they work:
- *
- * A "runtime" represents a document context in which threads execute.
- * There is a one-to-one mapping between runtimes and HTML documents.
- *
- * A "thread" represents a thread of execution in a runtime.  A "parent"
- * thread can be preempted by another "child" thread in order to respond
- * to a priority event; the parent thread will not run again until the
- * child thread has finished.
- *
- * A "script" is a pair (id, source code) where the id is globally
- * unique and the source code is Unicode text.
- *
- * An "object" is represented by a globally unique ID that is assigned by
- * the debugger.
- *
- * Globally unique means unique within a running Opera session; that is
- * from starting Opera to stopping it.
- *
- * The windowID is shared across scope. Notably, it's the same as in the console logger and window manager
- * INTERNAL: The value is from Window::id
- */ 
-service EcmascriptDebugger
-{
-    option (cpp_hfile) = "modules/scope/src/scope_ecmascript_debugger.h";
-    option (version) = "5.0";
-    option (cpp_class) = ES_ScopeDebugFrontend;
- 
-    command ListRuntimes(RuntimeSelection) returns (RuntimeList) = 1;
-    command ContinueThread(ThreadMode) returns (Default) = 2;
-    command Eval(EvalData) returns (EvalResult) = 3 {
-        option (cpp_response) = deferred;
-
-    };
-    command ExamineObjects(ExamineList) returns (ObjectList) = 4;
-    command SpotlightObject(SpotlightObjectSelection) returns (Default) = 5;
-    command AddBreakpoint(BreakpointPosition) returns (Default) = 6;
-    command RemoveBreakpoint(BreakpointID) returns (Default) = 7;
-    /**
-     * Add an event handler. This will generate a OnHandleEvent event every time the XML event defined
-     * by the pair (`namespace`, `eventType`) reaches the object defined by `objectID` in the capturing
-     * phase. XML events are defined in http://www.w3.org/TR/xml-events
-     */
-    command AddEventHandler(EventHandler) returns (Default) = 8;
-    command RemoveEventHandler(EventHandlerID) returns (Default) = 9;
-    command SetConfiguration(Configuration) returns (Default) = 10;
-    command GetBacktrace(BacktraceSelection) returns (BacktraceFrameList) = 11;
-    command Break(BreakSelection) returns (Default) = 12;
-    command InspectDom(DomTraversal) returns (NodeList) = 13;
-    command CssGetIndexMap(Default) returns (CssIndexMap) = 22;
-    command CssGetAllStylesheets(RuntimeID) returns (CssStylesheetList) = 23;
-    command CssGetStylesheet(CssStylesheetSelection) returns (CssStylesheetRules) = 24;
-    command CssGetStyleDeclarations(CssElementSelection) returns (CssStyleDeclarations) = 25;
-    command GetSelectedObject(Default) returns (ObjectSelection) = 26;
-    command SpotlightObjects(SpotlightSelection) returns (Default) = 27;
-    /**
-     * Release all objects (that is, object received through this protocol as objectIDs), so they can be garbage collected by the ecmascript engine. Note that garbage collection is not necessarily run at this point, so the memory for the given objects might not be freed immediately. IMPORTANT: After this call, no object IDs received earlier are valid! All objects needs to be requested again.
-     */
-    command ReleaseObjects(Default) returns (Default) = 29;
-    event OnRuntimeStarted returns (RuntimeInfo) = 14;
-    event OnRuntimeStopped returns (RuntimeID) = 15;
-    event OnNewScript returns (ScriptInfo) = 16;
-    event OnThreadStarted returns (ThreadInfo) = 17;
-    event OnThreadFinished returns (ThreadResult) = 18;
-    event OnThreadStoppedAt returns (ThreadStopInfo) = 19;
-    /**
-     * This event is issued for XML events on the host, if a corresponding
-     * `AddEventHandler` has been issued earlier by the client.
-     */
-    event OnHandleEvent returns (DomEvent) = 20;
-    /**
-     * Some hosts send this event to indicate that an object was selected for
-     * debugging, e.g., if the debugger was started by right-clicking an element
-     * and clicking "inspect" in the context menu, this event will be sent
-     * right after startup. A client may safely choose to ignore this event.
-     */
-    event OnObjectSelected returns (ObjectSelection) = 21;
-    event OnParseError returns (DomParseError) = 28;
-}
-
 message DomParseError
 {
     required uint32 runtimeID   = 1;
@@ -415,28 +348,36 @@ message Configuration
     optional bool stopAtDebuggerStatement = 6 [default = false];
 }
 
-message BreakpointPosition
+message Breakpoint
 {
     /**
-	 * A nonzero ID chosen by the client.
-	 */
+     * A nonzero ID chosen by the client.
+     */
     required uint32 breakpointID = 1;
     /**
-     * "line", "function", "event"
+     * ID of script where the breakpoint should be set.
      */
-    required string type         = 2;
+    required uint32 scriptID     = 2;
     /**
-     * Present when `type` is `"line"`
+     * Line number to break on in script.
      */
-    optional uint32 scriptID     = 3;
+    required uint32 lineNumber   = 3;
+}
+
+message EventBreakpoint
+{
     /**
-     * Present when `type` is `"line"`
+     * A nonzero ID chosen by the client.
      */
-    optional uint32 lineNumber   = 4;
+    required uint32 breakpointID = 1;
     /**
-     * Present when `type` is `"event"`
+     * The name of the event to break on.
      */
-    optional string eventType    = 5;
+    required string eventType    = 2;
+    /**
+     * If specified the event will only break in this specific window.
+     */
+    optional uint32 windowID     = 3 [default = 0];
 }
 
 message CssStyleDeclarations
@@ -449,11 +390,11 @@ message CssStyleDeclarations
          * - valueList
          * - priorityList
          * - statusList
-         *
+         * 
          * Common to AUTHOR and LOCAL
          * - selector
          * - specificity
-         *
+         * 
          * For AUTHOR
          * - stylesheetID
          * - ruleID
@@ -504,7 +445,7 @@ message ThreadStopInfo
      * - `"debugger statement"`
      * - `"breakpoint"`
      * - `"unknown"`
-     *
+     * 
      * `"broken"` is sent in response to a `Break` command.
      * `"breakpoint"` is sent when the script hits a debugger-set breakpoint.
      */
@@ -563,6 +504,11 @@ message ObjectList
     repeated ObjectInfo objectList = 1;
 }
 
+message ObjectChainList
+{
+    repeated ObjectList objectChainList = 1;
+}
+
 /**
  * Add an event handler. This will generate a HANDLE-EVENT event every time the XML event defined by the pair (NAMESPACE, EVENT-TYPE) reaches the object defined by OBJECT-ID in the capturing phase. XML events are defined in http://www.w3.org/TR/xml-events
  */
@@ -570,7 +516,7 @@ message EventHandler
 {
     /**
      * A nonzero ID chosen by the client. The host may also use this ID to refer to the
-	 * event handler.
+     * event handler.
      */
     required uint32 handlerID             = 1;
     required uint32 objectID              = 2;
@@ -617,18 +563,22 @@ message EvalResult
 
 message ObjectValue
 {
-    required uint32 objectID    = 1;
-    required bool   isCallable  = 2;
-    required bool   isFunction  = 3;
+    required uint32 objectID     = 1;
+    required bool   isCallable   = 2;
     /**
      * type, function or object
      */
-    required string type        = 4;
-    optional uint32 prototypeID = 5;
+    required string type         = 3;
+    optional uint32 prototypeID  = 4;
     /**
-     * Name of class (object) or function
+     * The class of the object.
      */
-    optional string name        = 6;
+    optional string className    = 5;
+    /**
+     * If the object is a function, this is the name of
+     * the variable associated with that function (if any).
+     */
+    optional string functionName = 6;
 }
 
 message RuntimeList
@@ -652,12 +602,12 @@ message DomTraversal
 {
     required uint32 objectID  = 1;
     /**
-     * traversal on off:  
+     * traversal on off:
      * - `"parent-node-chain-with-children"`
      *     take the parent node chain for the target node.
-     *     add for each node in that chain all children, 
+     *     add for each node in that chain all children,
      *     and for all children there first child,
-     *     if that is a text node and the only node, 
+     *     if that is a text node and the only node,
      *     starting with the document node.
      * - `"children"`
      *     get node data for all children in their flow
@@ -690,24 +640,24 @@ message CssStylesheetRules
      * - indexList
      * - valueList
      * - priorityList
-     *
+     * 
      * Common to STYLE and PAGE is:
      * - selectorList
      * - specificityList
-     *
+     * 
      * Common to MEDIA and IMPORT
      * - mediaList
-     *
+     * 
      * For MEDIA
      * - ruleList
-     *
+     * 
      * For IMPORT
      * - href
      * - importStylesheetID
-     *
+     * 
      * For PAGE
      * - pseudoClass
-     *
+     * 
      * For CHARSET
      * - charset
      */
@@ -724,26 +674,26 @@ message CssStylesheetRules
          * 6 - PAGE
          * 7 - NAMESPACE // Not supported
          */
-        required uint32         type               =  1;
-        required uint32         stylesheetID       =  2;
-        required uint32         ruleID             =  3;
-        repeated uint32         indexList          =  4;
-        repeated string         valueList          =  5;
-        repeated bool           priorityList       =  6;
+        required uint32                            type               =  1;
+        required uint32                            stylesheetID       =  2;
+        required uint32                            ruleID             =  3;
+        repeated uint32                            indexList          =  4;
+        repeated string                            valueList          =  5;
+        repeated bool                              priorityList       =  6;
         /**
          * 0..1 for PAGE and 0..* for STYLE
          */
-        repeated string         selectorList       =  7;
+        repeated string                            selectorList       =  7;
         /**
          * 1..1 for PAGE and 0..* for STYLE
          */
-        repeated uint32         specificityList    =  8;
-        repeated string         mediaList          =  9;
-        repeated StylesheetRule ruleList           = 10;
-        optional string         href               = 11;
-        optional uint32         importStylesheetID = 12;
-        optional uint32         pseudoClass        = 13;
-        optional string         charset            = 14;
+        repeated uint32                            specificityList    =  8;
+        repeated string                            mediaList          =  9;
+        repeated CssStylesheetRules.StylesheetRule ruleList           = 10;
+        optional string                            href               = 11;
+        optional uint32                            importStylesheetID = 12;
+        optional uint32                            pseudoClass        = 13;
+        optional string                            charset            = 14;
     }
 
     repeated StylesheetRule ruleList = 1;
@@ -778,5 +728,165 @@ message CssStylesheetSelection
 {
     required uint32 runtimeID    = 1;
     required uint32 stylesheetID = 2;
+}
+
+message ReadyStateInfo
+{
+    required uint32 runtimeID = 1;
+    /**
+     * 1 - DOMContentLoaded
+     * 2 - Load
+     */
+    required uint32 state     = 2;
+}
+
+message Position
+{
+    required uint32 scriptID   = 1;
+    required uint32 lineNumber = 2;
+}
+
+message ConsoleLogInfo
+{
+    message Value
+    {
+        optional string      value       = 1;
+        optional ObjectValue objectValue = 2;
+    }
+
+    required uint32   runtimeID = 1;
+    /**
+     * This value indicates which function was called:
+     * 
+     * 1 - console.log
+     * 2 - console.debug
+     * 3 - console.info
+     * 4 - console.warn
+     * 5 - console.error
+     * 6 - console.assert
+     * 7 - console.dir
+     * 8 - console.dirxml
+     * 9 - console.group
+     * 10 - console.groupCollapsed
+     * 11 - console.groupEnded
+     * 12 - console.count
+     * 13 - console.table
+     */
+    required uint32   type      = 2;
+    /**
+     * The list of values passed to the function as arguments.
+     */
+    repeated Value    valueList = 3;
+    /**
+     * The position the function was called.
+     */
+    optional Position position  = 4;
+}
+
+message ConsoleTimeInfo
+{
+    required uint32 runtimeID = 1;
+    /**
+     * Timers are identified by a string passed as the first argument
+     * to the function. For instance, console.time("MyTimer").
+     */
+    required string title     = 2;
+}
+
+message ConsoleTimeEndInfo
+{
+    required uint32 runtimeID = 1;
+    /**
+     * The title of the timer. See ConsoleTimeInfo.title.
+     */
+    required string title     = 2;
+    /**
+     * Elapsed time in microseconds.
+     */
+    required uint32 elapsed   = 3;
+}
+
+message ConsoleTraceInfo
+{
+    required uint32         runtimeID = 1;
+    /**
+     * The list of stack frames at the level console.trace was called.
+     */
+    repeated BacktraceFrame frameList = 2;
+}
+
+message ConsoleProfileInfo
+{
+    required uint32 runtimeID = 1;
+}
+
+message ConsoleProfileEndInfo
+{
+    required uint32 runtimeID = 1;
+}
+
+/**
+ * Because we want different filters for different classes, a PropertyFilter consists
+ * of several ClassMasks, and one ClassMask consists of several PropertyMasks. A PropertyMask
+ * can be regarded as a 'rule' for filtering a property. If no rule is present, the property is
+ * allowed through the filter. If a matching rule is present, the property is not included.
+ */
+message PropertyFilter
+{
+    /**
+     * A ClassMask contains all the properties which should be considered for exclusion for a
+     * certain class.
+     */
+    message ClassMask
+    {
+        /**
+         * You can choose to filter a property based on name and, as an additional condition, type.
+         * For booleans, numbers and strings, you can also filter by value as a third additional
+         * condition.
+         * 
+         * If only 'name' is present, then a property with that name will be excluded, regardless
+         * of its value. If 'type' is also present, then the property with that name will be excluded
+         * only if its value is the specified type.
+         * 
+         * If 'type' indicates a boolean, number or string, you can assign a value in the corresponding
+         * optional field. The property will then be excluded only if the name, type and value all match.
+         */
+        message PropertyMask
+        {
+            required string name    = 1;
+            optional uint32 type    = 2;
+            optional bool   boolean = 3;
+            optional uint32 number  = 4;
+            optional string string  = 5;
+        }
+    
+        /**
+         * The name of the class this filter applies to. Examples are 'Object' and
+         * 'HTMLHtmlElement'.
+         */
+        required string       className        = 1;
+        /**
+         * The list of properties which could be filtered.
+         */
+        repeated PropertyMask propertyMaskList = 2;
+    }
+
+    /**
+     * The list of classes which should be filtered.
+     */
+    repeated ClassMask classMaskList = 1;
+}
+
+message SetPropertyFilterArg
+{
+    required PropertyFilter propertyFilter = 1;
+}
+
+/**
+ * List of objects to release.
+ */
+message ReleaseObjectsArg
+{
+    repeated uint32 objectList = 1;
 }
 

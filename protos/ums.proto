@@ -1,18 +1,18 @@
-syntax = "proto2";
-import "opera/scope/scope_descriptor.proto";
+/**
+ * This file was created from this page:
+ * http://scope.bitbucket.org/scope/scope-transport-protocol.html#stp1-data
+ *
+ * It was not used to generate the UmsProtos.java file.
+ */
 
-package ums;
-
-option optimize_for         = SPEED;
-option java_outer_classname = "UmsProtos";
-option java_package         = "com.opera.core.systems.scope.protos";
+service Ums {}
 
 /**
  * STP1-TYPE represents which type of STP/1 message is found in the HEADERS
  * which is represented by the protocol buffer message TransportMessage. The
  * type tells what fields can be expected in the HEADERS, and maps to a
  * specific protocol buffer message.
- * 
+ *
  * The following types are defined:
  */
 enum STPType
@@ -26,21 +26,22 @@ enum STPType
 /**
  * Other types can be added in the future, so any unknown type should be
  * ignored by clients and passed on by proxies.
- * 
+ *
  * HEADERS is a PB encoded message containing all the remaining fields for the
  * header. Any decoder must ignore fields it does not understand. Proxies must
  * also ensure these fields are transported to the client/host.
  */
+
 enum Status
 {
-    OK = 0;
-    BAD_REQUEST = 3;
-    INTERNAL_ERROR = 4;
-    COMMAND_NOT_FOUND = 5;
-    SERVICE_NOT_FOUND = 6;
-    OUT_OF_MEMORY = 7;
-    SERVICE_NOT_ENABLED = 8;
-    SERVICE_ALREADY_ENABLED = 9;
+  OK = 0;
+  BAD_REQUEST = 3;
+  INTERNAL_ERROR = 4;
+  COMMAND_NOT_FOUND = 5;
+  SERVICE_NOT_FOUND = 6;
+  OUT_OF_MEMORY = 7;
+  SERVICE_NOT_ENABLED = 8;
+  SERVICE_ALREADY_ENABLED = 9;
 }
 
 message ErrorInfo
@@ -58,91 +59,100 @@ enum Format
     XML = 2;
 }
 
+/*
+ * The following comments apply to all the messages below
+ */
 message TransportMessage
 {
-    /**
-     * The field service is the name of the service on the host as reported in
-     * the initial *services message.
-     */
-    required string service   = 1;
-    /**
-     * The field commandID is a number in the range of 0 to 2^32-1 and
-     * corresponds to a given command in the specific service. The command value
-     * is unique only in the specific service, and is guaranteed to stay the same
-     * for all future releases.
-     */
-    required uint32 commandID = 2;
-    /**
-     * The field format is used to identify the format of the message body. This
-     * also determines the encoding used on the message body.
-     */
-    required uint32 format    = 3;
-    /**
-     * The field status is used to send information back to the client when
-     * errors occur. This field is optional and is only sent when the STP1-TYPE
-     * is an error message.
-     */
-    optional uint32 status    = 4;
-    /**
-     * The field tag represents a synchronization value which is sent by the
-     * client to bind the request to a response from the host. This field is
-     * only used when a previous tag was sent from the client, so any events
-     * will not have this field.
-     * 
-     * The tag system will be part of the protocol API and provides a
-     * standardized way of doing synchronization. The tag value can be read
-     * without knowledge of the underlying format. This allows the proxy to
-     * properly filter responses back to the correct client, and it also makes
-     * it easier for the clients to handle responses since it can map the tag
-     * value to a response handler.
-     * 
-     * TAG is an unsigned integer in the range 0 to 2^31-1. The client is free
-     * to reuse the Tag value as long as there is no current open requests using
-     * it.
-     */
-    optional uint32 tag       = 5;
-    /**
-     * The body (or payload) of the message depends on the format field but is
-     * always sent in the payload field. This means that the payload can only be
-     * decoded once the format has been found. Otherwise it must be treated as
-     * pure binary data.
-     */
-    required bytes  payload   = 8;
+  /**
+   * The field service is the name of the service on the host as reported in
+   * the initial *services message.
+   */
+  required string service = 1;
+
+  /**
+   * The field commandID is a number in the range of 0 to 2^32-1 and
+   * corresponds to a given command in the specific service. The command value
+   * is unique only in the specific service, and is guaranteed to stay the same
+   * for all future releases.
+   */
+  required uint32 commandID = 2;
+
+  /**
+   * The field format is used to identify the format of the message body. This
+   * also determines the encoding used on the message body.
+   */
+  required uint32 format = 3;
+
+  /**
+   * The field status is used to send information back to the client when
+   * errors occur. This field is optional and is only sent when the STP1-TYPE
+   * is an error message.
+   */
+  optional uint32 status = 4;
+
+  /**
+   * The field tag represents a synchronization value which is sent by the
+   * client to bind the request to a response from the host. This field is
+   * only used when a previous tag was sent from the client, so any events
+   * will not have this field.
+   *
+   * The tag system will be part of the protocol API and provides a
+   * standardized way of doing synchronization. The tag value can be read
+   * without knowledge of the underlying format. This allows the proxy to
+   * properly filter responses back to the correct client, and it also makes
+   * it easier for the clients to handle responses since it can map the tag
+   * value to a response handler.
+   *
+   * TAG is an unsigned integer in the range 0 to 2^31-1. The client is free
+   * to reuse the Tag value as long as there is no current open requests using
+   * it.
+   */
+  optional uint32 tag = 5;
+
+  /**
+   * The body (or payload) of the message depends on the format field but is
+   * always sent in the payload field. This means that the payload can only be
+   * decoded once the format has been found. Otherwise it must be treated as
+   * pure binary data.
+   */
+  required bytes payload = 8;
 }
 
 message Command
 {
-    required string service   = 1;
-    required uint32 commandID = 2;
-    required uint32 format    = 3;
-    required uint32 tag       = 5;
-    required bytes  payload   = 8;
+  required string service = 1;
+  required uint32 commandID = 2;
+  required uint32 format = 3;
+  required uint32 tag = 5;
+  required bytes  payload = 8;
 }
+
 
 message Response
 {
-    required string service   = 1;
-    required uint32 commandID = 2;
-    required uint32 format    = 3;
-    required uint32 tag       = 5;
-    required bytes  payload   = 8;
+  required string service = 1;
+  required uint32 commandID = 2;
+  required uint32 format = 3;
+  required uint32 tag = 5;
+  required bytes  payload = 8;
 }
+
 
 message Event
 {
-    required string service   = 1;
-    required uint32 commandID = 2;
-    required uint32 format    = 3;
-    required bytes  payload   = 8;
+  required string service = 1;
+  required uint32 commandID = 2;
+  required uint32 format = 3;
+  required bytes  payload = 8;
 }
 
 message Error
 {
-    required string service   = 1;
-    required uint32 commandID = 2;
-    required uint32 format    = 3;
-    optional uint32 status    = 4;
-    optional uint32 tag       = 5;
-    required bytes  payload   = 8;
+  required string service = 1;
+  required uint32 commandID = 2;
+  required uint32 format = 3;
+  optional uint32 status = 4;
+  optional uint32 tag = 5;
+  required bytes  payload = 8;
 }
-

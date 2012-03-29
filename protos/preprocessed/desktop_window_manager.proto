@@ -1,0 +1,207 @@
+syntax = "proto2";
+import "opera/scope/scope_descriptor.proto";
+
+package scope;
+
+option optimize_for         = SPEED;
+option java_outer_classname = "DesktopWmProtos";
+option java_package         = "com.opera.core.systems.scope.protos";
+
+/**
+ * Desktop Window Information
+ */
+message DesktopWindowInfo
+{
+    /**
+     * 
+     * Type of the window. (Only add types as we need them)
+     * 
+     */
+    enum DesktopWindowType
+    {
+        UNKNOWN = 0;
+        DIALOG = 1;
+        NORMAL = 2;
+    }
+
+    /**
+     * 
+     * State of the window (matching the enum in Opera at the time of creation)
+     * 
+     */
+    enum DesktopWindowState
+    {
+        RESTORED = 0;
+        MINIMIZED = 1;
+        MAXIMIZED = 2;
+        FULLSCREEN = 3;
+    }
+
+    required uint32             windowID   = 1;
+    required string             title      = 2;
+    /**
+     * 
+     * Name of the window (e.g. "Account Subscription Dialog")
+     * from dialog ini or quick-widget-names.h
+     */
+    required string             name       = 3;
+    required DesktopWindowType  windowType = 4;
+    /**
+     * 
+     * Set if the window is entirely on the screen
+     * 
+     */
+    required bool               onScreen   = 5;
+    required DesktopWindowState state      = 6;
+    required DesktopWindowRect  rect       = 7;
+    required bool               active     = 8;
+}
+
+message DesktopWindowRect
+{
+    required uint32 x      = 1;
+    required uint32 y      = 2;
+    required uint32 width  = 3;
+    required uint32 height = 4;
+}
+
+message QuickMenuID
+{
+    required string menuName = 1;
+}
+
+message QuickMenuList
+{
+    repeated QuickMenuInfo menuList = 1;
+}
+
+message QuickMenuInfo
+{
+    required QuickMenuID       menuId       = 1;
+    required DesktopWindowRect rect         = 2;
+    required DesktopWindowID   windowId     = 3;
+    repeated QuickMenuItemInfo menuItemList = 4;
+}
+
+message QuickMenuItemID
+{
+    required string menuText  = 1;
+    optional bool   popupMenu = 2;
+}
+
+message QuickMenuItemInfo
+{
+    required string            text           =  1;
+    optional string            action         =  2;
+    optional string            submenu        =  3;
+    optional string            actionParam    =  4;
+    required uint32            row            =  5;
+    optional string            shortcutLetter =  6;
+    optional string            shortcut       =  7;
+    required DesktopWindowRect rect           =  8;
+    required bool              enabled        =  9;
+    required bool              checked        = 10;
+    required bool              bold           = 11;
+    required bool              separator      = 12;
+}
+
+message QuickWidgetInfo
+{
+    /**
+     * TODO: Add the type names
+     * 
+     */
+    enum QuickWidgetType
+    {
+        UNKNOWN = 0;
+        BUTTON = 1;
+        CHECKBOX = 2;
+        DIALOGTAB = 3;
+        DROPDOWN = 4;
+        DROPDOWNITEM = 5;
+        EDITFIELD = 6;
+        LABEL = 7;
+        RADIOBUTTON = 8;
+        ADDRESSFIELD = 9;
+        SEARCH = 10;
+        TOOLBAR = 11;
+        TREEVIEW = 12;
+        TREEITEM = 13;
+        TABBUTTON = 14;
+        THUMBNAIL = 15;
+        GRIDLAYOUT = 16;
+        GRIDITEM = 17;
+        QUICKFIND = 18;
+    }
+
+    /**
+     * Name of the widget (e.g. "label_for_x")
+     * 
+     */
+    required string            name            =  1;
+    required QuickWidgetType   type            =  2;
+    required bool              visible         =  3;
+    required string            text            =  4;
+    /**
+     * value depends on the widget type
+     *   e.g. for checkboxes value = checked (1) or unchecked (0)
+     */
+    required uint32            value           =  5;
+    required bool              enabled         =  6;
+    /**
+     * Set on buttons when they are the default on a dialog/window
+     */
+    required bool              defaultLook     =  7;
+    /**
+     * Set when a widget has a forced focused look (e.g. speed dials)
+     */
+    required bool              focusedLook     =  8;
+    required DesktopWindowRect rect            =  9;
+    /**
+     * Name, text or other field to specify of the parent widget, used in treeviews, toolbars etc.
+     */
+    optional string            parent          = 10;
+    /**
+     * Row and column position of this item inside the parent widget
+     */
+    optional uint32            row             = 11;
+    optional uint32            col             = 12;
+    /**
+     * Text fields for additional text (e.g. for the address field)
+     */
+    optional string            visible_text    = 13;
+    optional string            additional_text = 14;
+}
+
+message DesktopWindowID
+{
+    required uint32 windowID = 1;
+}
+
+message DesktopWindowList
+{
+    repeated DesktopWindowInfo windowList = 1;
+}
+
+message QuickWidgetInfoList
+{
+    repeated QuickWidgetInfo quickwidgetList = 1;
+}
+
+message QuickWidgetSearch
+{
+    enum QuickWidgetSearchType
+    {
+        NAME = 0;
+        TEXT = 1;
+        POS = 2;
+    }
+
+    required DesktopWindowID       windowID   = 1;
+    required QuickWidgetSearchType searchType = 2;
+    /**
+     * Is the name of a widget (i.e. "label_for_x")
+     */
+    required string                data       = 3;
+}
+

@@ -1,0 +1,29 @@
+syntax = "proto2";
+import "opera/scope/scope_descriptor.proto";
+
+package scope;
+
+option optimize_for         = SPEED;
+option java_outer_classname = "DesktopUtilsProtos";
+option java_package         = "com.opera.core.systems.scope.protos";
+
+message DesktopStringID
+{
+    required string enumText = 1;
+}
+
+message DesktopStringText
+{
+    required string text = 1;
+}
+
+message DesktopPath
+{
+    required string path = 1;
+}
+
+message DesktopPid
+{
+    required uint32 pid = 1;
+}
+
