@@ -118,7 +118,7 @@ public class OperaPaths {
     }
 
     File file = new File(path);
-    return (file.exists());
+    return file.exists();
   }
 
   /**
