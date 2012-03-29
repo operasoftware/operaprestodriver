@@ -1133,34 +1133,6 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
   }
 
   /**
-   * Sets the given preference information.  If a previous preference with the same section and key
-   * names exist, it will be replaced by the given preference.
-   *
-   * @param section the section name, can be case-insensitive
-   * @param key     the key name, can be case-insensitive
-   * @param value   the new value (will be treated as a {@link String} in Opera
-   * @deprecated Please use {@link OperaDriver#preferences()} instead
-   */
-  @Deprecated
-  @SuppressWarnings("unused")
-  public void setPref(String section, String key, String value) {
-    preferences().set(section, key, value);
-  }
-
-  /**
-   * Returns the preference with the given section and key values.
-   *
-   * @param section the section name, can be case-insensitive
-   * @param key     the key name, can be case-insensitive
-   * @return the preference requested
-   * @deprecated Please use {@link OperaDriver#preferences()} instead
-   */
-  @Deprecated
-  public String getPref(String section, String key) {
-    return preferences().get(section, key).toString();
-  }
-
-  /**
    * Gets the {@link OperaDriver.OperaUtils} interface which is used for accessing the browser's
    * meta- and utility information, such as the operating system it's running on, its user agent
    * string, &c.
@@ -1271,6 +1243,12 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     exec.action(using, params);
   }
 
+  /**
+   * Gets list of available Opera actions.
+   *
+   * @return list of available actions
+   * @deprecated
+   */
   @Deprecated
   public Set<String> getOperaActionList() {
     return exec.getActionList();

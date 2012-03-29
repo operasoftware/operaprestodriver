@@ -114,19 +114,6 @@ public class OperaWebElement extends RemoteWebElement {
     return debugger.callFunctionOnObject(script, objectId, true);
   }
 
-  /**
-   * Click this element many times in the top left corner of the element.
-   *
-   * Will not check if element is available for interaction first.
-   *
-   * @param times the number of times to click
-   */
-  @Deprecated
-  public void click(int times) {
-    Point point = coordinates.getLocationInViewPort();
-    execService.mouseAction(point.x, point.y, times, OperaMouseKeys.LEFT);
-  }
-
   public void click() {
     verifyCanInteractWithElement();
 
@@ -148,34 +135,15 @@ public class OperaWebElement extends RemoteWebElement {
   }
 
   /**
-   * Click the element at the given X,Y offset from the top left.
-   *
-   * Will not verify whether element is available for interaction first.
-   *
-   * @param x the distance from the left border of the element to click
-   * @param y the distance from the top border of the element to click
-   */
-  @Deprecated
-  public void click(int x, int y) {
-    parent.getScopeServices().captureOperaIdle();
-    parent.actionHandler.click(this, x, y);
-
-    try {
-      parent.waitForLoadToComplete();
-    } catch (ResponseNotReceivedException e) {
-      // This might be expected
-      logger.fine("Response not received, returning control to user");
-    }
-  }
-
-  /**
    * Click the middle mouse button at the top left corner of the element.
    *
    * Will not verify whether element is available for interaction first.
+   *
+   * @deprecated
    */
   @Deprecated
   @SuppressWarnings("unused")
-  public void middleClick() {
+  public void middleClick() {  // TODO(andreastt): Add this to Actions
     Point point = coordinates.getLocationInViewPort();
     execService.mouseAction(point.x, point.y, OperaMouseKeys.MIDDLE);
   }
