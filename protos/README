@@ -13,7 +13,7 @@ The .proto files located in /protos/preprocessed are transformed
 Google Protobuffer-compatible files.  These can be compiled directly
 into Java classes using protoc:
 
-    protoc --java_out=../compiled/ *.proto
+    protoc --java_out=../src preprocessed/*.proto
 
 You must use protoc version >= 2.4.1.
 
@@ -50,5 +50,4 @@ protocols:
 
 Then to compile the files:
 
-    cd preprocessed
-    protoc --java_out=../compiled *.proto
+    protoc --java_out=../src preprocessed/*.proto
