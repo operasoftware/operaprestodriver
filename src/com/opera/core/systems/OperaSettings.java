@@ -210,7 +210,8 @@ public class OperaSettings {
       }
 
       Integer sanitize(Object value) {
-        int port = Integer.parseInt(checkNotNull(value).toString());
+        checkNotNull(value);
+        int port = Integer.parseInt(String.valueOf(value));
 
         // 0 = random, -1 = Opera default (7001) (for use with Opera < 11.60)
         if (port == SERVER_RANDOM_PORT_IDENTIFIER.getValue()) {
