@@ -319,13 +319,8 @@ public class OperaSettingsTest extends OperaDriverTestCase {
     }
 
     @Test
-    public void operaIdleSanitizeStringTrue() {
+    public void operaIdleSanitizeString() {
       assertTrue((Boolean) OPERAIDLE.sanitize("true"));
-    }
-
-    @Test
-    public void operaIdleSanitizeStringOne() {
-      assertTrue((Boolean) OPERAIDLE.sanitize("1"));
     }
 
     @Test
@@ -371,13 +366,8 @@ public class OperaSettingsTest extends OperaDriverTestCase {
     }
 
     @Test
-    public void autostartSanitizeStringTrue() {
+    public void autostartSanitizeString() {
       assertTrue((Boolean) AUTOSTART.sanitize("true"));
-    }
-
-    @Test
-    public void autostartSanitizeStringOne() {
-      assertTrue((Boolean) AUTOSTART.sanitize("1"));
     }
 
     @Test
@@ -403,13 +393,8 @@ public class OperaSettingsTest extends OperaDriverTestCase {
     }
 
     @Test
-    public void noRestartSanitizeStringTrue() {
+    public void noRestartSanitizeString() {
       assertTrue((Boolean) NO_RESTART.sanitize("true"));
-    }
-
-    @Test
-    public void noRestartSanitizeStringOne() {
-      assertTrue((Boolean) NO_RESTART.sanitize("1"));
     }
 
     @Test
@@ -435,13 +420,8 @@ public class OperaSettingsTest extends OperaDriverTestCase {
     }
 
     @Test
-    public void noQuitSanitizeStringTrue() {
+    public void noQuitSanitizeString() {
       assertTrue((Boolean) NO_QUIT.sanitize("true"));
-    }
-
-    @Test
-    public void noQuitSanitizeStringOne() {
-      assertTrue((Boolean) NO_QUIT.sanitize("1"));
     }
 
     @Test
