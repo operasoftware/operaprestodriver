@@ -922,7 +922,8 @@ public class OperaSettings {
 
   /**
    * Whether or not the currently specified Opera configuration supports the <code>-pd</code>
-   * command-line argument.
+   * command-line argument.  <em>PD</em> stands for <em>personal directory</em>, and refers to a
+   * profile for Opera.
    *
    * @return true if this configuration supports the <code>-pd</code> command-line argument.
    */
