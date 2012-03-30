@@ -104,7 +104,7 @@ public class OperaLauncherRunner extends OperaRunner
 
     makeLauncherExecutable(settings.getLauncher());
 
-    // Find available an available Opera if present
+    // Find an available Opera if present
     if (settings.getBinary() == null) {
       settings.setBinary(new File(OperaPaths.operaPath()));
     }
