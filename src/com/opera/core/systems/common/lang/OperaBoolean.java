@@ -17,6 +17,7 @@ limitations under the License.
 package com.opera.core.systems.common.lang;
 
 import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Extension to {@link java.lang.Boolean} which implements some convenience methods for interacting
@@ -32,20 +33,28 @@ public final class OperaBoolean {
    *
    * @param string string to parse
    * @return true if string is truthy, false otherwise
+   * @throws IllegalArgumentException if parameter is not a boolesque value ("1", "true", "0",
+   *                                  "false")
+   * @throws NullPointerException     if parameter is null
    */
   public static boolean parseBoolean(String string) {
+    checkNotNull(string);
     assertBoolesque(string);
     return isTruthy(string);
   }
 
   /**
-   * Whether string holds a boolean-like value.  It should equal "0", "1", "true" or "false". This
+   * Whether string holds a boolean-like value.  It should equal "0", "1", "true" or "false".  This
    * method says nothing about whether the object is true or false.
    *
    * @param string string to check
    * @return true if value is "boolesque", false otherwise
+   * @throws IllegalArgumentException if parameter is not a boolesque value ("1", "true", "0",
+   *                                  "false")
+   * @throws NullPointerException     if parameter is null
    */
   public static boolean isBoolesque(String string) {
+    checkNotNull(string);
     assertBoolesque(string);
     return isFalsy(string) || isTruthy(string);
   }
