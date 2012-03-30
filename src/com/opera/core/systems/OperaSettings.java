@@ -104,8 +104,13 @@ public class OperaSettings {
   public enum Capability {
 
     /**
-     * (String) How verbose the logging should be.  Available levels are: SEVERE (highest value),
-     * WARNING, INFO, CONFIG, FINE, FINER, FINEST (lowest value), ALL.  Default is INFO.
+     * (String/Level/Integer) How verbose the logging should be.  Available levels are: SEVERE
+     * (highest value), WARNING, INFO, CONFIG, FINE, FINER, FINEST (lowest value), ALL.  Default is
+     * INFO.
+     *
+     * The argument may consist of either a level name, an integer value, a {@link Level} reference,
+     * or null.  If the value is neither of a known name nor an integer, an {@link
+     * IllegalArgumentException} will be thrown.
      */
     LOGGING_LEVEL("logging.level") {
       Level getDefaultValue() {
@@ -113,7 +118,7 @@ public class OperaSettings {
       }
 
       Object sanitize(Object value) {
-        if (value == null) {
+        if (value == null || value instanceof Level) {
           return value;
         }
 
