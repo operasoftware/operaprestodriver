@@ -173,7 +173,7 @@ public class OperaLauncherRunner extends OperaRunner
     if (settings.getBackend() != null && !settings.getBackend().isEmpty()) {
       builder.add("-backend").add(settings.getBackend());
     }
-    if (settings.noQuit()) {
+    if (settings.hasDetach()) {
       builder.add("-noquit");
     }
     builder.add("-bin").add(settings.getBinary().getAbsolutePath());

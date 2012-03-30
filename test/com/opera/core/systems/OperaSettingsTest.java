@@ -44,6 +44,7 @@ import static com.opera.core.systems.OperaSettings.Capability.ARGUMENTS;
 import static com.opera.core.systems.OperaSettings.Capability.AUTOSTART;
 import static com.opera.core.systems.OperaSettings.Capability.BACKEND;
 import static com.opera.core.systems.OperaSettings.Capability.BINARY;
+import static com.opera.core.systems.OperaSettings.Capability.DETACH;
 import static com.opera.core.systems.OperaSettings.Capability.DISPLAY;
 import static com.opera.core.systems.OperaSettings.Capability.HOST;
 import static com.opera.core.systems.OperaSettings.Capability.LAUNCHER;
@@ -416,7 +417,7 @@ public class OperaSettingsTest extends OperaDriverTestCase {
     @Test
     public void noQuitSanitizeBoolean() {
       assertTrue(NO_QUIT.sanitize(true) instanceof Boolean);
-      assertTrue((Boolean) AUTOSTART.sanitize(true));
+      assertTrue((Boolean) NO_QUIT.sanitize(true));
     }
 
     @Test
@@ -427,6 +428,33 @@ public class OperaSettingsTest extends OperaDriverTestCase {
     @Test
     public void noQuitSanitizeInteger() {
       assertTrue((Boolean) NO_QUIT.sanitize(1));
+    }
+
+    @Test
+    public void detachHasFalseAsDefaultValue() {
+      assertTrue(DETACH.getDefaultValue() instanceof Boolean);
+      assertFalse((Boolean) DETACH.getDefaultValue());
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void detachSanitizeNull() {
+      DETACH.sanitize(null);
+    }
+
+    @Test
+    public void detachSanitizeBoolean() {
+      assertTrue(DETACH.sanitize(true) instanceof Boolean);
+      assertTrue((Boolean) DETACH.sanitize(true));
+    }
+
+    @Test
+    public void detachSanitizeString() {
+      assertTrue((Boolean) NO_QUIT.sanitize("true"));
+    }
+
+    @Test
+    public void detachSanitizeInteger() {
+      assertTrue((Boolean) NO_QUIT.sanitize("true"));
     }
 
     @Test
@@ -715,14 +743,14 @@ public class OperaSettingsTest extends OperaDriverTestCase {
     }
 
     @Test
-    public void noQuitIsFalse() {
-      assertFalse(settings.noQuit());
+    public void detachIsFalse() {
+      assertFalse(settings.hasDetach());
     }
 
     @Test
-    public void noQuitCanBeSet() {
-      settings.noQuit(true);
-      assertTrue(settings.noQuit());
+    public void detachCanBeSet() {
+      settings.setDetach(true);
+      assertTrue(settings.hasDetach());
     }
 
     @Test

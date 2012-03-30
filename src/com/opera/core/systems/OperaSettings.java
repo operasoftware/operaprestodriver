@@ -45,6 +45,7 @@ import static com.opera.core.systems.OperaSettings.Capability.ARGUMENTS;
 import static com.opera.core.systems.OperaSettings.Capability.AUTOSTART;
 import static com.opera.core.systems.OperaSettings.Capability.BACKEND;
 import static com.opera.core.systems.OperaSettings.Capability.BINARY;
+import static com.opera.core.systems.OperaSettings.Capability.DETACH;
 import static com.opera.core.systems.OperaSettings.Capability.DISPLAY;
 import static com.opera.core.systems.OperaSettings.Capability.HOST;
 import static com.opera.core.systems.OperaSettings.Capability.LAUNCHER;
@@ -321,7 +322,10 @@ public class OperaSettings {
     },
 
     /**
-     * (Boolean) Whether to restart.
+     * (Boolean) Whether to restart Opera on {@link OperaDesktopDriver} reinitialization.  This
+     * option only applies to the Desktop Driver.
+     *
+     * @deprecated
      */
     NO_RESTART() {
       Boolean getDefaultValue() {
@@ -337,8 +341,24 @@ public class OperaSettings {
     /**
      * (Boolean) Whether to quit Opera when OperaDriver is shut down.  If enabled, it will keep the
      * browser running after the driver is shut down.
+     *
+     * @deprecated replaced by {@link #DETACH}
      */
     NO_QUIT() {
+      Boolean getDefaultValue() {
+        return (Boolean) DETACH.getDefaultValue();
+      }
+
+      Boolean sanitize(Object enabled) {
+        return (Boolean) DETACH.sanitize(enabled);
+      }
+    },
+
+    /**
+     * (Boolean) Whether to detach the Opera browser when the driver shuts down.  This will leave
+     * Opera running.
+     */
+    DETACH() {
       Boolean getDefaultValue() {
         return false;
       }
@@ -852,27 +872,23 @@ public class OperaSettings {
   }
 
   /**
-   * Returns the whether Opera should quit when OperaRunner is shut down.  If enabled, it will keep
-   * the browser running after the runner is shut down.
+   * Whether to detach the Opera browser when the driver shuts down.  If true, this will leave Opera
+   * running.
    *
-   * @return true if browser should keep running, false otherwise
-   * @deprecated
+   * @return true if Opera should keep running, false if Opera should be shut down
    */
-  @Deprecated
-  public boolean noQuit() {
-    return (Boolean) options.get(NO_QUIT).getValue();
+  public boolean hasDetach() {
+    return (Boolean) options.get(DETACH).getValue();
   }
 
   /**
-   * Specifies whether Opera should keep running after OperaRunner is shut down.  If enabled, it
-   * will keep the browser running after the runner is shut down.
+   * Specifies whether to detach the Opera browser when the driver shuts down.  If true, this will
+   * leave Opera running.
    *
-   * @param enabled true if browser should keep running, false otherwise
-   * @deprecated
+   * @param enabled true will leave Opera running, false will shut down Opera along with driver
    */
-  @Deprecated
-  public void noQuit(boolean enabled) {
-    options.get(NO_QUIT).setValue(enabled);
+  public void setDetach(boolean enabled) {
+    options.get(DETACH).setValue(enabled);
   }
 
   /**
