@@ -45,8 +45,6 @@ public enum OperaIntervals {
   WINDOW_EVENT_TIMEOUT(5000),
   OPERA_IDLE_TIMEOUT(5000),
   POLL_INTERVAL(10),
-  SCRIPT_RETRY(5),
-  SCRIPT_RETRY_INTERVAL(50),
   HANDSHAKE_TIMEOUT(30000),
 
   /**
@@ -80,6 +78,12 @@ public enum OperaIntervals {
    * an error.  If the timeout is negative, then the script will be allowed to run indefinitely.
    */
   SCRIPT_TIMEOUT(10000),
+
+  /**
+   * The interval at which an ECMAScript should be attempted reevaluated in the case of it for some
+   * reason failing.  A script reevaluation will time out on {@link #SCRIPT_TIMEOUT}.
+   */
+  SCRIPT_RETRY_INTERVAL(50),
 
   /**
    * After starting the launcher we need to wait for the launcher to connect to our listener.  If
