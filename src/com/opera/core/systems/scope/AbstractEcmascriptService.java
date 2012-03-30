@@ -31,6 +31,8 @@ import java.text.ParseException;
 import java.util.Collection;
 import java.util.List;
 
+import static com.opera.core.systems.scope.internal.OperaIntervals.SCRIPT_RETRY_INTERVAL;
+
 public abstract class AbstractEcmascriptService extends AbstractService
     implements IEcmaScriptDebugger {
 
@@ -74,13 +76,17 @@ public abstract class AbstractEcmascriptService extends AbstractService
     currentFramePath = "_top";
   }
 
+  public void setDriver(OperaDriver driver) {
+    this.driver = driver;
+  }
+
   /**
    * Reset the timeout and retries.  It will use the {@link OperaIntervals#SCRIPT_RETRY_INTERVAL} as
    * the default value of the sleep interval {@link #sleepDuration}.
    */
   protected void resetCounters() {
     retries = 0;
-    sleepDuration = OperaIntervals.SCRIPT_RETRY_INTERVAL.getValue();
+    sleepDuration = SCRIPT_RETRY_INTERVAL.getValue();
   }
 
   /**
@@ -96,6 +102,7 @@ public abstract class AbstractEcmascriptService extends AbstractService
 
     if (params != null && params.length > 0) {
       StringBuilder builder = new StringBuilder();
+
       for (Object object : params) {
         if (builder.toString().length() > 0) {
           builder.append(",");
@@ -104,10 +111,12 @@ public abstract class AbstractEcmascriptService extends AbstractService
         if (object instanceof Collection<?>) {
           builder.append("[");
           Collection<?> collection = (Collection<?>) object;
+
           for (Object argument : collection) {
             processArgument(argument, builder, elements);
             builder.append(",");
           }
+
           int lastCharIndex = builder.length() - 1;
           if (builder.charAt(lastCharIndex) != '[') {
             builder.deleteCharAt(lastCharIndex);
@@ -120,7 +129,7 @@ public abstract class AbstractEcmascriptService extends AbstractService
       }
 
       String arguments = builder.toString();
-      toSend = "(function(){" + script + "})(" + arguments + ")";
+      toSend = String.format("(function(){%s})(%s)", script, arguments);
     } else {
       toSend = script;
     }
@@ -128,7 +137,7 @@ public abstract class AbstractEcmascriptService extends AbstractService
     return toSend;
   }
 
-  protected void processArgument(Object object, StringBuilder builder, List<WebElement> elements) {
+  private void processArgument(Object object, StringBuilder builder, List<WebElement> elements) {
     if (object instanceof WebElement) {
       elements.add((WebElement) object);
       builder.append(String.valueOf(object));
@@ -162,7 +171,6 @@ public abstract class AbstractEcmascriptService extends AbstractService
     updateRuntime();
   }
 
-
   protected Object parseNumber(String value) {
     Number number;
 
@@ -174,7 +182,8 @@ public abstract class AbstractEcmascriptService extends AbstractService
         return number.doubleValue();
       }
     } catch (ParseException e) {
-      throw new WebDriverException("The result from the script can not be parsed");
+      throw new WebDriverException("A number result from the script can not be parsed: " +
+                                   e.getMessage());
     }
   }
 
@@ -193,10 +202,6 @@ public abstract class AbstractEcmascriptService extends AbstractService
   public void cleanUpRuntimes() {
     int windowId = windowManager.getActiveWindowId();
     cleanUpRuntimes(windowId);
-  }
-
-  public void setDriver(OperaDriver driver) {
-    this.driver = driver;
   }
 
 }
