@@ -70,7 +70,6 @@ public abstract class DefaultTestEnvironment implements TestEnvironment {
           field.setAccessible(true);
           Object obj = field.get(env);
           Map<String, String> map = (Map<String, String>) obj;
-          //map.put(key, value);
           map.remove(key);
         }
       }
