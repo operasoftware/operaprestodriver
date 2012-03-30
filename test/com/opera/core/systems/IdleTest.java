@@ -166,17 +166,6 @@ public class IdleTest extends OperaDriverTestCase {
   }
 
   @Test
-  public void testClickXY() {
-    getFixture("test.html");
-
-    start();
-    ((OperaWebElement) driver.findElementById("local")).click(3, 5);
-    stop();
-
-    assertTrue(driver.getCurrentUrl().endsWith("two_input_fields.html"));
-  }
-
-  @Test
   @Ignore
   public void testKeyEnter() {
     getFixture("javascript.html");
