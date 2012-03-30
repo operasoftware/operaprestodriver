@@ -83,6 +83,7 @@ public class OperaRunner implements com.opera.core.systems.runner.interfaces.Ope
           settings.getBinary().getPath(),
           settings.arguments().getArgumentsAsStringList().toArray(new String[]{})
       );
+      // TODO(andreastt): Do we need to forward the environment to CommandLine?
       //process.setEnvironmentVariables(environment);
       process.copyOutputTo(System.err);
       process.executeAsync();
