@@ -573,7 +573,7 @@ public class OperaSettings {
      *
      * Note that the individual logging levels for sub-processes used within OperaDriver, such as
      * {@link com.opera.core.systems.runner.interfaces.OperaRunner} and for Opera itself, might
-     * differ due to an unspecified heuristic of what the general desired getLevel of chattiness the
+     * differ due to an unspecified heuristic of what the general desired level of chattiness the
      * user wants based on the value set here.
      *
      * @param level the logging level to use
