@@ -192,30 +192,6 @@ public class DesiredCapabilitiesTest extends OperaDriverTestCase {
     driver.quit();
   }
 
-  /*
-  @Test
-  public void testFakeLauncher() {
-    OperaSettings settings = new OperaSettings();
-
-    try {
-      TemporaryFolder tmp = new TemporaryFolder();
-      tmp.create();
-      File newLauncher = tmp.newFile("newLauncher");
-      Files.copy(settings.getLauncher(), newLauncher);
-      OperaLauncherRunnerSettingsTest.TestOperaLauncherRunnerSettings
-          .makeLauncherExecutable2(newLauncher);
-      capabilities.setCapability(LAUNCHER.getCapability(), newLauncher.getPath());
-      driver = new TestOperaDriver(capabilities);
-      assertEquals(newLauncher.getPath(),
-                   driver.getCapabilities().getCapability(LAUNCHER.getCapability()));
-    } catch (IOException e) {
-      fail("Problem copying launcher for testing: " + e.getMessage());
-    } finally {
-      tmpFolder.delete();
-    }
-  }
-  */
-
   @Test(expected = OperaRunnerException.class)
   public void testInvalidLauncher() {
     capabilities.setCapability(LAUNCHER.getCapability(), "/path/to/invalid/launcher");
