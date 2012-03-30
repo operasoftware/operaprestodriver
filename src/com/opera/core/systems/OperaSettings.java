@@ -65,7 +65,7 @@ import static org.openqa.selenium.Platform.LINUX;
 /**
  * Manages settings specific to {@link OperaDriver}.
  *
- * OperaSettings serves as the internal storage for OperaDriver related settings and as a converted
+ * OperaSettings serves as the internal storage for OperaDriver related settings and as a converter
  * between {@link DesiredCapabilities} and other internal resources.
  *
  * Example usage:
