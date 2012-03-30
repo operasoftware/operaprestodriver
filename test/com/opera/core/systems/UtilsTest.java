@@ -50,7 +50,7 @@ public class UtilsTest extends OperaDriverTestCase {
   @Rule
   public MethodRule random = new MethodRule() {
     public Statement apply(Statement base, FrameworkMethod method, Object target) {
-      if (driver.services.getCoreUtils().hasMetaInformation()) {
+      if (driver.getScopeServices().getCoreUtils().hasMetaInformation()) {
         // If meta info is exposed, return tests
         return base;
       } else {

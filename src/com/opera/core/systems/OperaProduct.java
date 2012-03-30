@@ -16,6 +16,8 @@ limitations under the License.
 
 package com.opera.core.systems;
 
+import org.openqa.selenium.WebDriverException;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -58,6 +60,10 @@ public enum OperaProduct {
   }
 
   public static OperaProduct get(String product) {
+    if (!lookup.containsKey(product)) {
+      throw new WebDriverException("Unknown product: " + product);
+    }
+
     return lookup.get(product);
   }
 

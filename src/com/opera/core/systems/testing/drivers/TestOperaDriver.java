@@ -18,15 +18,15 @@ package com.opera.core.systems.testing.drivers;
 
 import com.opera.core.systems.OperaDriver;
 import com.opera.core.systems.OperaProduct;
+import com.opera.core.systems.OperaSettings;
+import com.opera.core.systems.ScopeServices;
 import com.opera.core.systems.runner.OperaRunner;
-import com.opera.core.systems.runner.launcher.OperaLauncherRunnerSettings;
 import com.opera.core.systems.scope.services.IOperaExec;
 
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.Platform;
-import org.openqa.selenium.remote.DesiredCapabilities;
 
-import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Provides access to the {@link com.opera.core.systems.runner.OperaRunner}, so we can detect
@@ -36,6 +36,7 @@ public class TestOperaDriver extends OperaDriver {
 
   public static enum ClosingStrategy {SWITCH_TO, ACTION}
 
+  private final Logger logger = Logger.getLogger(getClass().getName());
   private final String controlWindow;
   private final Platform currentPlatform = Platform.getCurrent();
 
@@ -52,6 +53,16 @@ public class TestOperaDriver extends OperaDriver {
   }
 
   /**
+   * Creates a new TestOperaDriver with the given settings.
+   *
+   * @param settings the settings to use
+   */
+  public TestOperaDriver(OperaSettings settings) {
+    super(settings);
+    controlWindow = getWindowHandle();
+  }
+
+  /**
    * Provides access to {@link OperaRunner} which is used for monitoring the Opera process.
    *
    * @return instance of runner control interface for this driver instance
@@ -60,29 +71,29 @@ public class TestOperaDriver extends OperaDriver {
     return runner;
   }
 
+  public OperaSettings getSettings() {
+    return settings;
+  }
+
   /**
    * Return the currently used set of capabilities.
    *
    * @return currently used capabilities
    */
   public Capabilities getCapabilities() {
-    return capabilities;
+    return settings.toCapabilities();
   }
 
   public boolean isRunning() {
     return runner != null && runner.isOperaRunning();
   }
 
-  public boolean isOperaIdleAvailable() {
-    return super.isOperaIdleAvailable();
+  public ScopeServices getServices() {
+    return getScopeServices();
   }
 
   public IOperaExec getExecService() {
     return super.getExecService();
-  }
-
-  public OperaLauncherRunnerSettings getSettings() {
-    return super.settings;
   }
 
   /**
@@ -183,6 +194,10 @@ public class TestOperaDriver extends OperaDriver {
 
   }
 
+  public static Capabilities getDefaultCapabilities() {
+    return new OperaSettings().toCapabilities();
+  }
+
   /**
    * Iterates through windows and closes all of them apart from the controlling window.  If the
    * default control window (first window) is closed, the browser will be quit.
@@ -207,7 +222,7 @@ public class TestOperaDriver extends OperaDriver {
                                               "product DESKTOP");
     }
 
-    services.getExec().action("Close all pages");
+    getScopeServices().getExec().action("Close all pages");
   }
 
 }

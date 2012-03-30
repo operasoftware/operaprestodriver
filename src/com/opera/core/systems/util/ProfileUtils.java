@@ -19,6 +19,7 @@ package com.opera.core.systems.util;
 import com.google.common.io.Files;
 
 import com.opera.core.systems.OperaDriver;
+import com.opera.core.systems.OperaSettings;
 
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.io.FileHandler;
@@ -34,11 +35,11 @@ public class ProfileUtils {
   private String largePrefsFolder;
   private String smallPrefsFolder;
   private String cachePrefsFolder;
-  private Capabilities capabilities;
+  private OperaSettings settings;
 
   public ProfileUtils(String largePrefsFolder, String smallPrefsFolder, String cachePrefsFolder,
-                      Capabilities capabilities) {
-    this.capabilities = capabilities;
+                      OperaSettings settings) {
+    this.settings = settings;
     this.largePrefsFolder = largePrefsFolder;
     this.smallPrefsFolder = smallPrefsFolder;
     this.cachePrefsFolder = cachePrefsFolder;
@@ -101,9 +102,7 @@ public class ProfileUtils {
       }
 
       // On all Windows systems, <Installation Path>\profile:
-      File exeFile = new File((String) capabilities.getCapability(OperaDriver.BINARY));
-      String parentPath = exeFile.getParent();
-      File profileFolder = new File(parentPath + "\\profile");
+      File profileFolder = new File(settings.getBinary().getParent() + "\\profile");
 
       //a/b/c/exe
       //a/b/c/profile

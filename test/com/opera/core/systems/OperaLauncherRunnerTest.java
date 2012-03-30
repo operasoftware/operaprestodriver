@@ -19,15 +19,16 @@ package com.opera.core.systems;
 import com.opera.core.systems.model.ScreenShotReply;
 import com.opera.core.systems.runner.OperaRunnerException;
 import com.opera.core.systems.runner.launcher.OperaLauncherRunner;
-import com.opera.core.systems.runner.launcher.OperaLauncherRunnerSettings;
 import com.opera.core.systems.testing.Ignore;
+import com.opera.core.systems.testing.NoDriver;
+import com.opera.core.systems.testing.OperaDriverTestCase;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.openqa.selenium.Platform;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.logging.Level;
 
 import static com.opera.core.systems.OperaProduct.DESKTOP;
@@ -38,15 +39,16 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-public class OperaLauncherRunnerTest {
+@NoDriver
+public class OperaLauncherRunnerTest extends OperaDriverTestCase {
 
-  private OperaLauncherRunnerSettings settings;
+  private OperaSettings settings;
   private OperaLauncherRunner runner;
 
   @Before
   public void beforeEach() {
-    settings = new OperaLauncherRunnerSettings();
-    settings.setLoggingLevel(Level.FINE);
+    settings = new OperaSettings();
+    settings.logging().setLevel(Level.FINE);
   }
 
   @After
@@ -66,7 +68,7 @@ public class OperaLauncherRunnerTest {
 
   @Test
   public void testConstructorWithSettingsBinary() {
-    settings.setBinary(OperaPaths.operaPath());
+    settings.setBinary(new File(OperaPaths.operaPath()));
     runner = new OperaLauncherRunner(settings);
     assertNotNull(runner);
   }
@@ -132,18 +134,9 @@ public class OperaLauncherRunnerTest {
   }
 
   @Test
-  public void testBadLauncher() throws Exception {
-    File fakeLauncher;
-    // Programs that should be installed that have no side effects when run
-    if (Platform.getCurrent().is(Platform.WINDOWS)) {
-      fakeLauncher = new File("C:\\WINDOWS\\system32\\find.exe");
-    } else {
-      fakeLauncher = new File("/bin/echo");
-    }
-
-    assertTrue("Imposter launcher exists", fakeLauncher.exists());
-
-    settings.setLauncher(fakeLauncher.getCanonicalFile());
+  public void testBadLauncher() throws IOException {
+    assertTrue("Imposter launcher exists", resources.executableBinary().exists());
+    settings.setLauncher(resources.executableBinary());
 
     try {
       runner = new OperaLauncherRunner(settings);
@@ -172,27 +165,34 @@ public class OperaLauncherRunnerTest {
 
   @Test
   public void testLoggingLevel() {
-    assertEquals(Level.SEVERE, OperaLauncherRunner.toLauncherLoggingLevel(Level.SEVERE));
+    assertEquals(Level.SEVERE, TestOperaLauncherRunner.toLauncherLoggingLevel(Level.SEVERE));
   }
 
   @Test
   public void testLoggingLevelToAll() {
-    assertEquals(Level.FINEST, OperaLauncherRunner.toLauncherLoggingLevel(Level.ALL));
+    assertEquals(Level.FINEST, TestOperaLauncherRunner.toLauncherLoggingLevel(Level.ALL));
   }
 
   @Test
   public void testLoggingLevelToConfig() {
-    assertEquals(Level.FINE, OperaLauncherRunner.toLauncherLoggingLevel(Level.CONFIG));
+    assertEquals(Level.FINE, TestOperaLauncherRunner.toLauncherLoggingLevel(Level.CONFIG));
   }
 
   @Test
   public void testLoggingLevelToFiner() {
-    assertEquals(Level.FINE, OperaLauncherRunner.toLauncherLoggingLevel(Level.FINER));
+    assertEquals(Level.FINE, TestOperaLauncherRunner.toLauncherLoggingLevel(Level.FINER));
   }
 
   @Test
   public void testLoggingLevelToOff() {
-    assertEquals(Level.OFF, OperaLauncherRunner.toLauncherLoggingLevel(Level.OFF));
+    assertEquals(Level.OFF, TestOperaLauncherRunner.toLauncherLoggingLevel(Level.OFF));
+  }
+
+  private static class TestOperaLauncherRunner extends OperaLauncherRunner {
+
+    public static Level toLauncherLoggingLevel(Level javaLevel) {
+      return OperaLauncherRunner.toLauncherLoggingLevel(javaLevel);
+    }
   }
 
 }

@@ -19,7 +19,6 @@ package com.opera.core.systems;
 import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
 
-import com.opera.core.systems.arguments.OperaCoreArguments;
 import com.opera.core.systems.common.lang.OperaStrings;
 import com.opera.core.systems.model.ScopeActions;
 import com.opera.core.systems.model.ScreenShotReply;
@@ -27,7 +26,6 @@ import com.opera.core.systems.model.ScriptResult;
 import com.opera.core.systems.preferences.OperaScopePreferences;
 import com.opera.core.systems.runner.OperaRunner;
 import com.opera.core.systems.runner.launcher.OperaLauncherRunner;
-import com.opera.core.systems.runner.launcher.OperaLauncherRunnerSettings;
 import com.opera.core.systems.scope.exceptions.CommunicationException;
 import com.opera.core.systems.scope.exceptions.ResponseNotReceivedException;
 import com.opera.core.systems.scope.handlers.PbActionHandler;
@@ -39,7 +37,6 @@ import com.opera.core.systems.scope.services.IEcmaScriptDebugger;
 import com.opera.core.systems.scope.services.IOperaExec;
 import com.opera.core.systems.scope.services.IWindowManager;
 import com.opera.core.systems.scope.services.ums.CoreUtils;
-import com.opera.core.systems.util.CapabilitiesSanitizer;
 
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.Beta;
@@ -64,7 +61,6 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteLogs;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -79,7 +75,6 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.FileHandler;
 import java.util.logging.Handler;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
@@ -92,103 +87,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * The implementation is vendor-supported and developed by Opera Software and volunteers.
  */
 public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
-
-  /**
-   * (String) How verbose the logging should be. Available levels are: SEVERE (highest value),
-   * WARNING, INFO, CONFIG, FINE, FINER, FINEST (lowest value), ALL. Default is INFO.
-   */
-  public static final String LOGGING_LEVEL = "opera.logging.level";
-
-  /**
-   * (String) Where to send the output of the logging. Default is to not write to file.
-   */
-  public static final String LOGGING_FILE = "opera.logging.file";
-
-  /**
-   * (String) Path to the Opera binary to use. If not specified, OperaDriver will guess the path to
-   * your Opera installation (typically <code>/usr/bin/opera</code> or <code>C:\Program
-   * Files\Opera\opera.exe</code>).
-   */
-  public static final String BINARY = "opera.binary";
-
-  /**
-   * (String) Arguments to pass to Opera, separated by spaces. See <code>opera -help</code> for
-   * available command-line switches.
-   */
-  public static final String ARGUMENTS = "opera.arguments";
-
-  /**
-   * (String) The host Opera should connect to. Unless you're starting Opera manually you won't need
-   * this.
-   */
-  public static final String HOST = "opera.host";
-
-  /**
-   * (Integer) The port to Opera should connect to. 0 = Random, -1 = Opera default (for use with
-   * Opera < 11.60).
-   */
-  public static final String PORT = "opera.port";
-
-  /**
-   * (String) Path to the launcher binary to use. The launcher is a gateway between OperaDriver and
-   * the Opera browser, and is being used for controlling the binary and taking external
-   * screenshots. If left blank, OperaDriver will use the launcher supplied with the package.
-   */
-  public static final String LAUNCHER = "opera.launcher";
-
-  /**
-   * (Object) Directory to use for the Opera profile. If an {@link OperaProfile} object that will be
-   * used when starting opera. If null a random temporary directory is used. If "", an empty string,
-   * then the default <code>.autotest</code> profile directory will be used (for backwards
-   * compatibility with Opera < 11.60).
-   */
-  public static final String PROFILE = "opera.profile";
-
-  /**
-   * (Boolean) Whether to use Opera's alternative implicit wait implementation. It will use an
-   * in-browser heuristic to guess when a page has finished loading, allowing us with great accuracy
-   * tell whether there are any planned events in the document. This functionality is useful for
-   * very simple test cases, but not designed for real-world testing. It is disabled by default.
-   */
-  public static final String OPERAIDLE = "opera.idle";
-
-  /**
-   * (Integer) The X display to use. (Only works on *nix OSes.)
-   */
-  public static final String DISPLAY = "opera.display";
-
-  /**
-   * (Boolean) Whether to auto-start the Opera binary. If false, OperaDriver will wait for a
-   * connection from the browser. Go to "opera:debug", enter the correct port number, and hit
-   * "Connect" to connect manually.
-   */
-  public static final String AUTOSTART = "opera.autostart";
-
-  /**
-   * (Boolean) Whether to restart.
-   */
-  public static final String NO_RESTART = "opera.no_restart";
-
-  /**
-   * (Boolean) Whether to quit Opera when OperaDriver is shut down. If enabled, it will keep the
-   * browser running after the driver is shut down.
-   */
-  public static final String NO_QUIT = "opera.no_quit";
-
-  /**
-   * (String) The product we are using, for example "desktop" or "core".
-   */
-  public static final String PRODUCT = "opera.product";
-
-  /**
-   * (String) Rendering backend used by internal gogi builds of Opera.  If null or an empty string,
-   * "software" is used by default.
-   *
-   * <strong>Warning:</strong> This is a temporary workaround for launcher not taking external
-   * window-only screenshots on Windows.
-   */
-  @Deprecated
-  public static final String BACKEND = "opera.backend";
 
   /**
    * Different types of data stored by Opera.
@@ -212,38 +110,32 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     SITE_PREFS
   }
 
-  /*
-   * These are "protected" and not "private" so that we can extend this class and add methods to
-   * access these variable in tests.
-   */
-  protected DesiredCapabilities capabilities;
-  protected OperaLauncherRunnerSettings settings;
-  protected OperaRunner runner;
+  protected final OperaSettings settings;
+  protected OperaRunner runner = null;
 
-  protected IEcmaScriptDebugger debugger;
-  protected IOperaExec exec;
-  protected IWindowManager windowManager;
-  protected ICoreUtils coreUtils;
-  protected ICookieManager cookieManager;
+  private IEcmaScriptDebugger debugger;
+  private IOperaExec exec;
+  private IWindowManager windowManager;
+  private ICoreUtils coreUtils;
+  private ICookieManager cookieManager;
 
-  protected ScopeServices services;
+  private ScopeServices services;
   protected ScopeActions actionHandler;
 
   private OperaScopePreferences preferences;
 
-  protected final Logger logger = Logger.getLogger(this.getClass().getName());
-  private FileHandler logFile = null;
-
   protected Set<Integer> objectIds = new HashSet<Integer>();
+  private int assignedWindowIds = 0;
   private String version;
 
-  private int assignedWindowIds = 0;
+  private final Logger logger = Logger.getLogger(getClass().getName());
+  private FileHandler logFile = null;
 
   /**
    * Constructor that starts Opera with the default set of capabilities.
    */
   public OperaDriver() {
-    this((Capabilities) null);
+    this(new OperaSettings());
   }
 
   /**
@@ -252,121 +144,55 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
    * @param profile the profile to start Opera with
    */
   public OperaDriver(OperaProfile profile) {
-    this(profile.getCapabilities());
+    this(new OperaSettings.Builder().usingProfile(profile).get());
   }
 
   /**
    * Starts Opera with the given set of desired capabilities.
    *
-   * @param c a {@link DesiredCapabilities} object containing various settings for the driver and
-   *          the browser
+   * @param capabilities a {@link DesiredCapabilities} object containing various settings for the
+   *                     driver and the browser
    */
-  public OperaDriver(Capabilities c) {
-    capabilities = (DesiredCapabilities) getDefaultCapabilities();
+  public OperaDriver(Capabilities capabilities) {
+    this(new OperaSettings().merge(capabilities));
+  }
 
-    if (c != null) {
-      capabilities.merge(CapabilitiesSanitizer.sanitize(c));
-    }
+  /**
+   * Starts Opera with the given settings.
+   *
+   * @param s Opera specific settings
+   */
+  public OperaDriver(OperaSettings s) {
+    settings = s;
 
-    // Set the logging level for main logger instance
-    Level logLevel;
-    Object typelessLevel = capabilities.getCapability(LOGGING_LEVEL);
-    if (typelessLevel instanceof String) {
-      logLevel = Level.parse(((String) typelessLevel).toUpperCase());
-    } else if (typelessLevel instanceof Level) {
-      logLevel = (Level) typelessLevel;
-    } else {
-      throw new WebDriverException("Unknown logging level: " + typelessLevel.toString());
-    }
+    // Set the logging level for the main logging instance
     Logger root = Logger.getLogger("");
-    root.setLevel(logLevel);
+    root.setLevel(settings.logging().getLevel());
 
-    // Write log to file?
-    if (capabilities.getCapability(LOGGING_FILE) != null) {
+    // Write to log file?
+    if (settings.logging().getFile() != null) {
       try {
-        logFile = new FileHandler((String) capabilities.getCapability(LOGGING_FILE),
-                                  OperaFlags.APPEND_TO_LOGFILE);
+        logFile =
+            new FileHandler(settings.logging().getFile().getPath(), OperaFlags.APPEND_TO_LOGFILE);
         logFile.setFormatter(new SimpleFormatter());
       } catch (IOException e) {
-        throw new WebDriverException("Unable to write to file: " + e);
+        throw new WebDriverException("Unable to write to log file: " + e.getMessage());
       }
-    }
 
-    if (logFile != null) {
       root.addHandler(logFile);
     }
 
     // Set logging levels on all handlers
-    for (Handler h : root.getHandlers()) {
-      h.setLevel(logLevel);
+    for (Handler handler : root.getHandlers()) {
+      handler.setLevel(settings.logging().getLevel());
     }
 
-    Boolean autostart = (Boolean) capabilities.getCapability(AUTOSTART);
-    settings = new OperaLauncherRunnerSettings();
-    settings.setLoggingLevel(OperaLauncherRunner.toLauncherLoggingLevel(logLevel));
-
-    if (autostart) {
-      String binaryPath = (String) capabilities.getCapability(BINARY);
-      if (binaryPath == null) {
-        binaryPath = OperaPaths.operaPath();
-      }
-      settings.setBinary(new File(binaryPath));
-
-      settings.setHost((String) capabilities.getCapability(HOST));
-      settings.setPort((Integer) capabilities.getCapability(PORT));
-
-      OperaArguments arguments = new OperaCoreArguments();
-      OperaArguments parsed = OperaArguments.parse((String) capabilities.getCapability(ARGUMENTS));
-      settings.setArguments(arguments.merge(parsed));
-
-      String launcher = (String) capabilities.getCapability(LAUNCHER);
-      if (launcher != null) {
-        settings.setLauncher(launcher);
-      }
-
-      Object profile = capabilities.getCapability(PROFILE);
-      if (profile instanceof String) {
-        settings.setProfile((String) profile);
-      } else if (profile instanceof OperaProfile) {
-        settings.setProfile((OperaProfile) profile);
-      }
-
-      String backend = (String) capabilities.getCapability(BACKEND);
-      if (backend != null && !backend.isEmpty()) {
-        settings.setBackend(backend);
-      }
-
-      capabilities.merge(settings.toCapabilities());
+    if (settings.autostart()) {
       runner = new OperaLauncherRunner(settings);
-    } else {
-      settings.setPort((int) OperaIntervals.SERVER_DEFAULT_PORT_IDENTIFIER.getValue());
-      capabilities.merge(settings.toCapabilities());
     }
 
-    logger.config(capabilities.toString());
+    logger.config(settings.toString());
     start();
-  }
-
-  /**
-   * Gets the default capabilities of OperaDriver.
-   *
-   * @return a DesiredCapabilities object with default settings
-   */
-  protected static Capabilities getDefaultCapabilities() {
-    DesiredCapabilities capabilities = DesiredCapabilities.opera();
-    OperaLauncherRunnerSettings defaultSettings = OperaLauncherRunnerSettings.getDefaultSettings();
-    capabilities.merge(defaultSettings.toCapabilities());
-
-    capabilities.setJavascriptEnabled(true);
-
-    capabilities.setCapability(LOGGING_LEVEL, Level.INFO);
-    capabilities.setCapability(LOGGING_FILE, (String) null);
-    capabilities.setCapability(AUTOSTART, true);
-    capabilities.setCapability(NO_RESTART, false);
-    capabilities.setCapability(NO_QUIT, false);
-    capabilities.setCapability(OPERAIDLE, false);
-
-    return capabilities;
   }
 
   /**
@@ -406,7 +232,6 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
     // Get product from Opera
     settings.setProduct(utils().getProduct());
-    capabilities.setCapability(PRODUCT, settings.getProduct());
   }
 
   /**
@@ -429,9 +254,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
    */
   private void createScopeServices() {
     try {
-      services = new ScopeServices(getServicesList(),
-                                   (Integer) capabilities.getCapability(PORT),
-                                   !(Boolean) capabilities.getCapability(AUTOSTART));
+      services = new ScopeServices(getServicesList(), settings.getPort(), !settings.autostart());
       services.startStpThread();
     } catch (IOException e) {
       throw new WebDriverException(e);
@@ -439,14 +262,14 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
   }
 
   public Capabilities getCapabilities() {
-    return capabilities;
+    return settings.toCapabilities();
   }
 
   public void quit() {
     logger.fine("OperaDriver shutting down");
 
     // This will only delete the profile directory if we created it
-    settings.getProfile().cleanUp();
+    settings.profile().cleanUp();
 
     // This method can be called from start(), before services are created
     if (services != null) {
@@ -488,7 +311,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
     if (oldUrl == null || (url.replace(oldUrl, "").length() == 0
                            || url.replace(oldUrl, "").charAt(0) != '#')) {
-      if (useOperaIdle()) {
+      if (settings.useIdle() && services.isOperaIdleAvailable()) {
         try {
           // Use idle timeout (which is lower) if timeout has not been manually set.
           if (timeout == OperaIntervals.PAGE_LOAD_TIMEOUT.getValue()) {
@@ -1278,7 +1101,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
   }
 
   protected void waitForLoadToComplete() throws ResponseNotReceivedException {
-    if (useOperaIdle()) {
+    if (settings.useIdle() && services.isOperaIdleAvailable()) {
       services.waitForOperaIdle(OperaIntervals.OPERA_IDLE_TIMEOUT.getValue());
     } else {
       // Sometimes we get here before the next page has even *started* loading, and so return too
@@ -1342,26 +1165,16 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     return null;
   }
 
-  /**
-   * Whether idle functionality is available.  Note that this is not the same as whether the idle
-   * functionality is enabled.
-   *
-   * @return true if idle is available, false otherwise
-   */
-  protected boolean isOperaIdleAvailable() {
-    return services.isOperaIdleAvailable();
-  }
-
   // Following methods are used in SpartanRunner:
 
   /**
    * Enable or disable idle functionality during runtime.
    *
-   * @param useIdle true if idle should be switched on, false if it should be switched off
+   * @param enabled true if idle should be switched on, false if it should be switched off
    */
   @SuppressWarnings("unused")
-  protected void setUseOperaIdle(boolean useIdle) {
-    capabilities.setCapability(OPERAIDLE, useIdle);
+  protected void setUseOperaIdle(boolean enabled) {
+    settings.setIdle(enabled);
   }
 
   // Following methods are used internally:
@@ -1440,10 +1253,6 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     } else {
       throw new NoSuchElementException("Cannot find element(s) with " + type);
     }
-  }
-
-  private boolean useOperaIdle() {
-    return (((Boolean) capabilities.getCapability(OPERAIDLE)) && isOperaIdleAvailable());
   }
 
   private static void sleep(long ms) {

@@ -16,21 +16,18 @@ limitations under the License.
 
 package com.opera.core.systems.runner.launcher;
 
-import java.io.IOException;
-import java.net.ServerSocket;
-import java.net.SocketTimeoutException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import org.openqa.selenium.net.PortProber;
-
+import com.google.common.collect.ImmutableList;
+import com.google.common.io.ByteStreams;
+import com.google.common.io.Closeables;
+import com.google.common.io.Files;
 import com.google.protobuf.GeneratedMessage;
+
 import com.opera.core.systems.OperaPaths;
 import com.opera.core.systems.OperaProduct;
+import com.opera.core.systems.OperaSettings;
 import com.opera.core.systems.arguments.OperaArgument;
 import com.opera.core.systems.model.ScreenShotReply;
+import com.opera.core.systems.runner.OperaLaunchers;
 import com.opera.core.systems.runner.OperaRunner;
 import com.opera.core.systems.runner.OperaRunnerException;
 import com.opera.core.systems.runner.launcher.OperaLauncherProtocol.MessageType;
@@ -45,6 +42,28 @@ import com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStatus
 import com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStopRequest;
 import com.opera.core.systems.scope.internal.OperaIntervals;
 
+import org.openqa.selenium.Platform;
+import org.openqa.selenium.WebDriverException;
+import org.openqa.selenium.io.FileHandler;
+import org.openqa.selenium.net.PortProber;
+import org.openqa.selenium.os.CommandLine;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.ServerSocket;
+import java.net.SocketTimeoutException;
+import java.net.URL;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import static com.google.common.base.Preconditions.checkNotNull;
+
 /**
  * OperaLauncherRunner implements an interface in C++ with a Java API for controlling the Opera
  * binary.
@@ -52,79 +71,51 @@ import com.opera.core.systems.scope.internal.OperaIntervals;
 public class OperaLauncherRunner extends OperaRunner
     implements com.opera.core.systems.runner.interfaces.OperaRunner {
 
-  private static Logger logger = Logger.getLogger(OperaLauncherRunner.class.getName());
+  public static final String LAUNCHER_ENV_VAR = "OPERA_LAUNCHER";
+
+  private final Logger logger = Logger.getLogger(getClass().getName());
+  private final URL bundledLauncher;
+  private final int launcherPort = PortProber.findFreePort();
 
   private OperaLauncherBinary launcherRunner = null;
   private OperaLauncherProtocol launcherProtocol = null;
   private String crashlog = null;
 
   public OperaLauncherRunner() {
-    this(OperaLauncherRunnerSettings.getDefaultSettings());
+    this(new OperaSettings());
   }
 
-  public OperaLauncherRunner(OperaLauncherRunnerSettings settings) {
-    // Rely on OperaRunner to parse most of the settings
-    super(settings);
+  public OperaLauncherRunner(OperaSettings s) {
+    super(s);
 
-    // Parse remaining launcher-related settings
-    Integer launcherPort = PortProber.findFreePort();
-    Integer display = settings.getDisplay();
-    String binary;
+    // Locate the bundled launcher from OperaLaunchers project and copy it to its default location
+    // on users system if it's not there or outdated
+    bundledLauncher =
+        OperaLaunchers.class.getClassLoader().getResource("launchers/" + launcherNameForOS());
+
+    if (bundledLauncher == null) {
+      throw new OperaRunnerException("Not able to locate bundled launcher: " + bundledLauncher);
+    }
+
+    if (settings.getLauncher() == launcherDefaultLocation() &&
+        (!settings.getLauncher().exists() || isLauncherOutdated(settings.getLauncher()))) {
+      extractLauncher(bundledLauncher, settings.getLauncher());
+    }
+
+    makeLauncherExecutable(settings.getLauncher());
+
+    // Find an available Opera if present
     if (settings.getBinary() == null) {
-      binary = OperaPaths.operaPath();
-    } else {
-      binary = settings.getBinary().getAbsolutePath();
-    }
-    OperaProduct product = settings.getProduct();
-    String backend = settings.getBackend();
-
-    List<String> launcherArguments = new ArrayList<String>();
-    launcherArguments.add("-host");
-    launcherArguments.add(settings.getHost());
-    launcherArguments.add("-port");
-    launcherArguments.add(launcherPort.toString());
-    if (display != null && display > 0) {
-      launcherArguments.add("-display");
-      launcherArguments.add(":" + display.toString());
-    }
-    if (settings.getLoggingLevel() != null && settings.getLoggingLevel() != Level.OFF) {
-      launcherArguments.add("-console");  // TODO(andreastt): Allow for file logging
-      launcherArguments.add("-verbosity");
-      launcherArguments.add(settings.getLoggingLevel().toString());
-    }
-    if (!product.is(OperaProduct.ALL)) {
-      launcherArguments.add("-profile");
-      launcherArguments.add(product.toString());
-    }
-    if (backend != null && !backend.isEmpty()) {
-      launcherArguments.add("-backend");
-      launcherArguments.add(backend);
-    }
-    if (settings.getNoQuit()) {
-      launcherArguments.add("-noquit");
-    }
-    launcherArguments.add("-bin");
-    launcherArguments.add(binary);
-
-    // The launcher will pass on any extra arguments after -bin to Opera
-    for (OperaArgument argument : super.settings.getArguments().getArguments()) {
-      launcherArguments.add(super.settings.getArguments().sign() + argument.getArgument());
-      if (argument.getValue() != null && !argument.getValue().isEmpty()) {
-        launcherArguments.add(argument.getValue());
-      }
+      settings.setBinary(new File(OperaPaths.operaPath()));
     }
 
-    logger.config("launcher arguments: " + launcherArguments.toString());
+    // Create list of arguments for launcher binary
+    ImmutableList<String> arguments = buildArguments();
+    logger.config("launcher arguments: " + arguments);
 
-    // Make sure that the launcher is executable
-    settings.makeLauncherExecutable();
-
-    // Setup the launcher binary
     try {
-      launcherRunner = new OperaLauncherBinary(
-          settings.getLauncher().getAbsolutePath(),
-          launcherArguments.toArray(new String[launcherArguments.size()])
-      );
+      launcherRunner = new OperaLauncherBinary(settings.getLauncher().getPath(),
+                                               arguments.toArray(new String[]{}));
     } catch (IOException e) {
       throw new OperaRunnerException("Unable to start launcher: " + e.getMessage());
     }
@@ -163,6 +154,41 @@ public class OperaLauncherRunner extends OperaRunner
     }
   }
 
+  private ImmutableList<String> buildArguments() {
+    ImmutableList.Builder<String> builder = ImmutableList.builder();
+
+    builder.add("-host").add(settings.getHost());
+    builder.add("-port").add(String.format("%s", launcherPort));
+    if (settings.getDisplay() != null && settings.getDisplay() > 0) {
+      builder.add("-display").add(String.format(":%s", settings.getDisplay()));
+    }
+    if (settings.logging().getLevel() != Level.OFF) {
+      builder.add("-console");  // TODO(andreastt): Allow for file logging
+      builder.add("-verbosity")
+          .add(toLauncherLoggingLevel(settings.logging().getLevel()).toString());
+    }
+    if (settings.getProduct() != OperaProduct.ALL) {
+      builder.add("-profile").add(settings.getProduct().toString());
+    }
+    if (settings.getBackend() != null && !settings.getBackend().isEmpty()) {
+      builder.add("-backend").add(settings.getBackend());
+    }
+    if (settings.hasDetach()) {
+      builder.add("-noquit");
+    }
+    builder.add("-bin").add(settings.getBinary().getAbsolutePath());
+
+    // The launcher will pass on any extra arguments to Opera
+    for (OperaArgument argument : settings.arguments()) {
+      builder.add(settings.arguments().sign() + argument.getArgument());
+      if (argument.getValue() != null && !argument.getValue().isEmpty()) {
+        builder.add(argument.getValue());
+      }
+    }
+
+    return builder.build();
+  }
+
   public void startOpera() {
     logger.fine("Instructing launcher to start Opera...");
 
@@ -187,7 +213,7 @@ public class OperaLauncherRunner extends OperaRunner
       if (handleStatusMessage(res.getResponse()) != StatusType.RUNNING) {
         throw new OperaRunnerException(
             "Opera exited immediately; possibly incorrect arguments?  Command: " +
-            launcherRunner.getCommand());
+            launcherRunner.getCommands());
       }
     } catch (IOException e) {
       throw new OperaRunnerException("Could not start Opera: " + e.getMessage());
@@ -364,6 +390,139 @@ public class OperaLauncherRunner extends OperaRunner
     return screenshotreply;
   }
 
+  private void extractLauncher(URL sourceLauncher, File targetLauncher) {
+    checkNotNull(sourceLauncher);
+    checkNotNull(targetLauncher);
+
+    InputStream is = null;
+    OutputStream os = null;
+
+    try {
+      targetLauncher.getParentFile().mkdirs();
+
+      if (!targetLauncher.exists()) {
+        Files.touch(targetLauncher);
+      }
+
+      is = sourceLauncher.openStream();
+      os = new FileOutputStream(targetLauncher);
+
+      ByteStreams.copy(is, os);
+    } catch (IOException e) {
+      throw new OperaRunnerException("Cannot write file to disk: " + e.getMessage());
+    } finally {
+      if (is != null) {
+        Closeables.closeQuietly(is);
+      }
+      if (os != null) {
+        Closeables.closeQuietly(os);
+      }
+    }
+
+    logger.fine("New launcher copied to " + targetLauncher.getPath());
+  }
+
+  private boolean isLauncherOutdated(File launcher) {
+    try {
+      return !Arrays.equals(md5(bundledLauncher.openStream()), md5(launcher));
+    } catch (NoSuchAlgorithmException e) {
+      throw new OperaRunnerException(
+          "Algorithm is not available in your environment: " + e.getMessage());
+    } catch (IOException e) {
+      throw new OperaRunnerException("Unable to open stream or file: " + e.getMessage());
+    }
+  }
+
+  public static File launcherDefaultLocation() {
+    return new File(System.getProperty("user.home") + "/.launcher/" + launcherNameForOS());
+  }
+
+  /**
+   * Asserts whether given launcher exists, is a file and that it's executable.
+   *
+   * @param launcher the launcher to assert
+   * @throws IOException if there is a problem with the provided launcher
+   */
+  public static void assertLauncherGood(File launcher) throws IOException {
+    if (!launcher.exists()) {
+      throw new IOException("Unknown file: " + launcher.getPath());
+    }
+
+    if (!launcher.isFile()) {
+      throw new IOException("Not a file: " + launcher.getPath());
+    }
+
+    if (!FileHandler.canExecute(launcher)) {
+      throw new IOException("Not executable: " + launcher.getPath());
+    }
+  }
+
+  /**
+   * Makes the launcher executable by chmod'ing the file at given path (GNU/Linux and Mac only).
+   *
+   * @param launcher the file to make executable
+   */
+  private static void makeLauncherExecutable(File launcher) {
+    Platform current = Platform.getCurrent();
+
+    if (current.is(Platform.UNIX) || current.is(Platform.MAC)) {
+      CommandLine line = new CommandLine("chmod", "u+x", launcher.getAbsolutePath());
+      line.execute();
+    }
+  }
+
+  /**
+   * Get the launcher's binary file name based on what flavour of operating system and what kind of
+   * architecture the user is using.
+   *
+   * @return the launcher's binary file name
+   */
+  private static String launcherNameForOS() {
+    boolean is64 = "64".equals(System.getProperty("sun.arch.data.model"));
+    Platform currentPlatform = Platform.getCurrent();
+
+    switch (currentPlatform) {
+      case LINUX:
+      case UNIX:
+        return (is64 ? "launcher-linux-x86_64" : "launcher-linux-i686");
+      case MAC:
+        return "launcher-mac";
+      case WINDOWS:
+      case VISTA:
+      case XP:
+        return "launcher-win32-i86pc.exe";
+      default:
+        throw new WebDriverException(
+            "Could not find a platform that supports bundled launchers, please set it manually");
+    }
+  }
+
+  /**
+   * Get the MD5 hash of the given stream.
+   *
+   * @param fis the input stream to use
+   * @return a byte array of the MD5 hash
+   * @throws java.security.NoSuchAlgorithmException
+   *                     if MD5 is not available
+   * @throws IOException if an I/O error occurs
+   */
+  private static byte[] md5(InputStream fis) throws NoSuchAlgorithmException, IOException {
+    return ByteStreams.getDigest(ByteStreams.newInputStreamSupplier(ByteStreams.toByteArray(fis)),
+                                 MessageDigest.getInstance("MD5"));
+  }
+
+  /**
+   * Get the MD5 hash of the given file.
+   *
+   * @param file file to compute a hash on
+   * @return a byte array of the MD5 hash
+   * @throws IOException              if file cannot be found
+   * @throws NoSuchAlgorithmException if MD5 is not available
+   */
+  private static byte[] md5(File file) throws NoSuchAlgorithmException, IOException {
+    return Files.getDigest(file, MessageDigest.getInstance("MD5"));
+  }
+
   /**
    * The launcher allows for the following logging levels: "FINEST", "FINE", "INFO", "WARNING",
    * "SEVERE".  Since the launcher is unusually chatty, we don't want it to use the same logging
@@ -373,7 +532,7 @@ public class OperaLauncherRunner extends OperaRunner
    * @param level the Java logging level
    * @return a sensible, non-chatty logging level
    */
-  public static Level toLauncherLoggingLevel(Level level) {
+  protected static Level toLauncherLoggingLevel(Level level) {
     // ALL -2147483648
     // FINEST 300
     // FINER 400

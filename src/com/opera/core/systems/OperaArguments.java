@@ -21,6 +21,9 @@ import com.google.common.base.Joiner;
 import com.opera.core.systems.arguments.OperaArgument;
 import com.opera.core.systems.arguments.OperaArgument.OperaArgumentSign;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -32,6 +35,22 @@ public class OperaArguments implements com.opera.core.systems.arguments.interfac
   public static String DEFAULT_SIGN = OperaArgumentSign.POSIX_SIGN.getValue();
 
   protected List<OperaArgument> arguments = new ArrayList<OperaArgument>();
+
+  /**
+   * Provides a key/value storage of arguments related to the Opera product binary.
+   */
+  public OperaArguments() {
+  }
+
+  /**
+   * Provide a space delimited list of arguments as a string that will be parsed and used as the
+   * default values for this storage.
+   *
+   * @param spaceDelimitedArguments list of arguments, as they would appear in a terminal
+   */
+  public OperaArguments(String spaceDelimitedArguments) {
+    merge(parse(spaceDelimitedArguments));
+  }
 
   public void add(String key) {
     OperaArgument argument = new OperaArgument(key);
@@ -99,7 +118,8 @@ public class OperaArguments implements com.opera.core.systems.arguments.interfac
     return parsed;
   }
 
-  public OperaArguments merge(com.opera.core.systems.arguments.interfaces.OperaArguments extraArguments) {
+  public OperaArguments merge(
+      com.opera.core.systems.arguments.interfaces.OperaArguments extraArguments) {
     if (extraArguments.getArguments() != null || !extraArguments.getArguments().isEmpty()) {
       arguments.addAll(extraArguments.getArguments());
     }
@@ -109,6 +129,22 @@ public class OperaArguments implements com.opera.core.systems.arguments.interfac
 
   public String sign() {
     return DEFAULT_SIGN;
+  }
+
+  /**
+   * Converts this instance to its JSON representation.
+   *
+   * @return the JSON representation of these settings
+   * @throws JSONException if an error occurs while encoding these settings as JSON
+   */
+  public JSONObject toJson() throws JSONException {
+    JSONObject json = new JSONObject();
+
+    for (OperaArgument argument : this) {
+      json.put(argument.getArgument(), argument.getValue());
+    }
+
+    return json;
   }
 
 }

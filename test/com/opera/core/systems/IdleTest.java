@@ -53,7 +53,7 @@ public class IdleTest extends OperaDriverTestCase {
   public MethodRule random = new MethodRule() {
     public Statement apply(Statement base, FrameworkMethod method, Object target) {
       // If idle available return the test
-      if (driver.isOperaIdleAvailable()) {
+      if (driver.getSettings().useIdle() && driver.getServices().isOperaIdleAvailable()) {
         return base;
       }
       // otherwise return an empty statement, meaning test doesn't run
@@ -70,8 +70,8 @@ public class IdleTest extends OperaDriverTestCase {
   @BeforeClass
   public static void setup() {
     DesiredCapabilities capabilities = DesiredCapabilities.opera();
-    capabilities.setCapability(OperaDriver.OPERAIDLE, true);
-    capabilities.setCapability(OperaDriver.LOGGING_LEVEL, Level.FINER);
+    capabilities.setCapability(OperaSettings.Capability.OPERAIDLE.getCapability(), true);
+    capabilities.setCapability(OperaSettings.Capability.LOGGING_LEVEL.getCapability(), Level.FINER);
 
     driver = new TestOperaDriver(capabilities);
   }

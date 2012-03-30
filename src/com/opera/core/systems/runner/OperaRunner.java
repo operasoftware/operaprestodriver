@@ -16,16 +16,11 @@ limitations under the License.
 
 package com.opera.core.systems.runner;
 
-import com.opera.core.systems.OperaProduct;
-import com.opera.core.systems.OperaProfile;
-import com.opera.core.systems.arguments.OperaCoreArguments;
-import com.opera.core.systems.arguments.OperaDesktopArguments;
-import com.opera.core.systems.arguments.interfaces.OperaArguments;
+import com.opera.core.systems.OperaSettings;
 import com.opera.core.systems.model.ScreenShotReply;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.PrintStream;
+import org.openqa.selenium.os.CommandLine;
+
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.logging.Logger;
 
@@ -36,8 +31,8 @@ import java.util.logging.Logger;
  */
 public class OperaRunner implements com.opera.core.systems.runner.interfaces.OperaRunner {
 
-  protected static Logger logger = Logger.getLogger(OperaRunner.class.getName());
-  protected OperaRunnerSettings settings;
+  protected final Logger logger = Logger.getLogger(getClass().getName());
+  protected final OperaSettings settings;
 
   /**
    * Controls access to {@link #process}.
@@ -45,54 +40,35 @@ public class OperaRunner implements com.opera.core.systems.runner.interfaces.Ope
   private final ReentrantLock lock = new ReentrantLock();
 
   /**
-   * Used to spawn a new child process when this service is {@link #startOpera()} started}.
+   * A reference to the current child process. Will be {@code null} whenever this service is not
+   * running.  Protected by {@link #lock}.
    */
-  private ProcessBuilder processBuilder;  // TODO(andreastt): final
-
-  /**
-   * A reference to the current child process.  Will be <code>null</code> whenever this service is
-   * not running.
-   */
-  private Process process = null;
+  private CommandLine process = null;
 
   public OperaRunner() {
-    this(OperaRunnerSettings.getDefaultSettings());
+    this(new OperaSettings());
   }
 
-  public OperaRunner(OperaRunnerSettings s) {
+  public OperaRunner(OperaSettings s) {
     settings = s;
-
-    // Use arguments provided by user if set
-    OperaArguments arguments;
-    if (settings.getProduct().is(OperaProduct.DESKTOP)) {
-      arguments = new OperaDesktopArguments();
-    } else {
-      arguments = new OperaCoreArguments();
-    }
 
     // This can't be last, otherwise it might get interpreted as the page to open, and the file
     // listing page doesn't have a JS context to inject into.
-    OperaProfile profile = settings.getProfile();
 
     // Only append -pd if compatibility mode is enabled (for Opera < 11.60)
     if (settings.supportsPd()) {
-      arguments.add("-pd", profile.getDirectory().getAbsolutePath());
+      settings.arguments().add("-pd", settings.profile().getDirectory().getAbsolutePath());
     }
 
     // If port is set to -1 it means we're in compatibility mode as Opera < 11.60 does not support
     // the -debugproxy command-line argument.  It will instead use the default port 7001.
     if (settings.supportsDebugProxy()) {
-      arguments.add("debugproxy", settings.getHost() + ":" + settings.getPort());
+      settings.arguments().add("debugproxy", settings.getHost() + ":" + settings.getPort());
     }
 
-    arguments.add("autotestmode");
-    arguments.merge(settings.getArguments());
-    settings.setArguments(arguments);
+    settings.arguments().add("autotestmode");
 
-    logger.config("Opera arguments: " + this.settings.getArguments().getArgumentsAsStringList());
-
-    // TODO(andreastt): Should this be abstracted into its own class?
-    //processBuilder = new ProcessBuilder(settings.getArguments().getArgumentsAsStrings());
+    logger.config("Opera arguments: " + settings.arguments().getArgumentsAsStringList());
   }
 
   public void startOpera() {
@@ -102,11 +78,15 @@ public class OperaRunner implements com.opera.core.systems.runner.interfaces.Ope
       if (process != null) {
         return;
       }
-      process = processBuilder.start();
-      pipe(process.getErrorStream(), System.err);
-      pipe(process.getInputStream(), System.out);
-    } catch (IOException e) {
-      // TODO(andreastt): Can we check this earlier?
+
+      process = new CommandLine(
+          settings.getBinary().getPath(),
+          settings.arguments().getArgumentsAsStringList().toArray(new String[]{})
+      );
+      // TODO(andreastt): Do we need to forward the environment to CommandLine?
+      //process.setEnvironmentVariables(environment);
+      process.copyOutputTo(System.err);
+      process.executeAsync();
     } finally {
       lock.unlock();
     }
@@ -120,7 +100,7 @@ public class OperaRunner implements com.opera.core.systems.runner.interfaces.Ope
         return;
       }
 
-      // TODO(andreastt): Implement
+      process.destroy();
     } finally {
       process = null;
       lock.unlock();
@@ -138,7 +118,8 @@ public class OperaRunner implements com.opera.core.systems.runner.interfaces.Ope
       if (process == null) {
         return false;
       }
-      process.exitValue();
+
+      process.destroy();
       return false;
     } catch (IllegalThreadStateException e) {
       return true;
@@ -148,37 +129,22 @@ public class OperaRunner implements com.opera.core.systems.runner.interfaces.Ope
   }
 
   public boolean hasOperaCrashed() {
-    return false;
+    throw new UnsupportedOperationException("not implemented");
   }
 
   public String getOperaCrashlog() {
-    return "";
+    throw new UnsupportedOperationException("not implemented");
   }
 
   /**
    * Handles safe shutdown of the OperaRunner class.
    */
   public void shutdown() {
+    stopOpera();
   }
 
   public ScreenShotReply saveScreenshot(long timeout, String... hashes) {
     throw new UnsupportedOperationException("not implemented");
-  }
-
-  // http://stackoverflow.com/questions/60302
-  private static void pipe(final InputStream src, final PrintStream dest) {
-    new Thread(new Runnable() {
-      public void run() {
-        try {
-          byte[] buffer = new byte[1024];
-          for (int n = 0; n != -1; n = src.read(buffer)) {
-            dest.write(buffer, 0, n);
-          }
-        } catch (IOException e) {
-          // Do nothing.
-        }
-      }
-    }).start();
   }
 
 }
