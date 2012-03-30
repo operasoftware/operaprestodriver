@@ -160,16 +160,16 @@ public interface OperaRunnerSettings {
   public void setArguments(OperaArguments arguments);
 
   /**
-   * Returns the logging level of the started Opera process and the process handling mechanism.
+   * Returns the logging getLevel of the started Opera process and the process handling mechanism.
    *
-   * @return the logging level
+   * @return the logging getLevel
    */
   public Level getLoggingLevel();
 
   /**
-   * Specifies the logging level of the started Opera process and the process handling mechanism.
+   * Specifies the logging getLevel of the started Opera process and the process handling mechanism.
    *
-   * @param level the logging level to use
+   * @param level the logging getLevel to use
    */
   public void setLoggingLevel(Level level);
 

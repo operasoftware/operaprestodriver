@@ -546,24 +546,24 @@ public class OperaSettingsTest extends OperaDriverTestCase {
 
     @Test
     public void loggingLevelIsInfo() {
-      assertEquals(Level.INFO, settings.logging().level());
+      assertEquals(Level.INFO, settings.logging().getLevel());
     }
 
     @Test
     public void loggingLevelCanBeSet() {
-      settings.logging().level(Level.WARNING);
-      assertEquals(Level.WARNING, settings.logging().level());
+      settings.logging().setLevel(Level.WARNING);
+      assertEquals(Level.WARNING, settings.logging().getLevel());
     }
 
     @Test
     public void loggingFileIsNull() {
-      assertNull(settings.logging().file());
+      assertNull(settings.logging().getFile());
     }
 
     @Test
     public void loggingFileCanBeSet() throws IOException {
-      settings.logging().file(resources.fakeFile());
-      assertEquals(resources.fakeFile(), settings.logging().file());
+      settings.logging().setFile(resources.fakeFile());
+      assertEquals(resources.fakeFile(), settings.logging().getFile());
     }
 
     @Test

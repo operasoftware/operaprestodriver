@@ -74,7 +74,7 @@ import static org.openqa.selenium.Platform.LINUX;
  *   OperaSettings settings = new OperaSettings();
  *   settings.setBinary(new File("/path/to/opera"));
  *   settings.arguments().add("foo", "bar");
- *   settings.logging().level(Level.FINE);
+ *   settings.logging().getLevel(Level.FINE);
  * </code></pre>
  *
  * For use with {@link OperaDriver}:
@@ -563,7 +563,7 @@ public class OperaSettings {
      *
      * @return the logging level used
      */
-    public Level level() {
+    public Level getLevel() {
       return (Level) options.get(LOGGING_LEVEL).getValue();
     }
 
@@ -573,12 +573,12 @@ public class OperaSettings {
      *
      * Note that the individual logging levels for sub-processes used within OperaDriver, such as
      * {@link com.opera.core.systems.runner.interfaces.OperaRunner} and for Opera itself, might
-     * differ due to an unspecified heuristic of what the general desired level of chattiness the
+     * differ due to an unspecified heuristic of what the general desired getLevel of chattiness the
      * user wants based on the value set here.
      *
      * @param level the logging level to use
      */
-    public void level(Level level) {
+    public void setLevel(Level level) {
       options.get(LOGGING_LEVEL).setValue(level);
     }
 
@@ -588,7 +588,7 @@ public class OperaSettings {
      *
      * @return logging file used, or null
      */
-    public File file() {
+    public File getFile() {
       return (File) options.get(LOGGING_FILE).getValue();
     }
 
@@ -599,7 +599,7 @@ public class OperaSettings {
      *
      * @param file logging file to use
      */
-    public void file(File file) {
+    public void setFile(File file) {
       options.get(LOGGING_FILE).setValue(file);
     }
   }

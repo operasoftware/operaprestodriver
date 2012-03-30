@@ -26,7 +26,6 @@ import com.opera.core.systems.testing.OperaDriverTestCase;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.openqa.selenium.Platform;
 
 import java.io.File;
 import java.io.IOException;
@@ -49,7 +48,7 @@ public class OperaLauncherRunnerTest extends OperaDriverTestCase {
   @Before
   public void beforeEach() {
     settings = new OperaSettings();
-    settings.logging().level(Level.FINE);
+    settings.logging().setLevel(Level.FINE);
   }
 
   @After

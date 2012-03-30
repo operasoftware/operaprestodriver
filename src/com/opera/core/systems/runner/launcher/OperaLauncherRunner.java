@@ -162,9 +162,10 @@ public class OperaLauncherRunner extends OperaRunner
     if (settings.getDisplay() != null && settings.getDisplay() > 0) {
       builder.add("-display").add(String.format(":%s", settings.getDisplay()));
     }
-    if (settings.logging().level() != Level.OFF) {
+    if (settings.logging().getLevel() != Level.OFF) {
       builder.add("-console");  // TODO(andreastt): Allow for file logging
-      builder.add("-verbosity").add(toLauncherLoggingLevel(settings.logging().level()).toString());
+      builder.add("-verbosity")
+          .add(toLauncherLoggingLevel(settings.logging().getLevel()).toString());
     }
     if (settings.getProduct() != OperaProduct.ALL) {
       builder.add("-profile").add(settings.getProduct().toString());

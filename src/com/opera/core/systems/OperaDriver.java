@@ -167,13 +167,13 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
     // Set the logging level for the main logging instance
     Logger root = Logger.getLogger("");
-    root.setLevel(settings.logging().level());
+    root.setLevel(settings.logging().getLevel());
 
     // Write to log file?
-    if (settings.logging().file() != null) {
+    if (settings.logging().getFile() != null) {
       try {
         logFile =
-            new FileHandler(settings.logging().file().getPath(), OperaFlags.APPEND_TO_LOGFILE);
+            new FileHandler(settings.logging().getFile().getPath(), OperaFlags.APPEND_TO_LOGFILE);
         logFile.setFormatter(new SimpleFormatter());
       } catch (IOException e) {
         throw new WebDriverException("Unable to write to log file: " + e.getMessage());
@@ -184,7 +184,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
     // Set logging levels on all handlers
     for (Handler handler : root.getHandlers()) {
-      handler.setLevel(settings.logging().level());
+      handler.setLevel(settings.logging().getLevel());
     }
 
     if (settings.autostart()) {

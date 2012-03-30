@@ -90,7 +90,7 @@ public class OperaDriverBuilder implements Supplier<OperaDriver> {
   /**
    * Allows you to override the logging levels specified in the capabilities.
    *
-   * @param level the logging level you wish the driver to use
+   * @param level the logging getLevel you wish the driver to use
    * @return a self reference
    */
   public OperaDriverBuilder modifyLogLevel(Level level) {
@@ -108,7 +108,7 @@ public class OperaDriverBuilder implements Supplier<OperaDriver> {
 
     // Custom modifications based on local methods
     if (loggingLevel != null) {
-      settings.logging().level(loggingLevel);
+      settings.logging().setLevel(loggingLevel);
     }
 
     if (driverSupplier == null) {
