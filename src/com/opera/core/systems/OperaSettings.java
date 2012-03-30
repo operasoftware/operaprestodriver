@@ -369,8 +369,8 @@ public class OperaSettings {
     },
 
     /**
-     * (String) Rendering backend used by internal gogi builds of Opera.  If null or an empty
-     * string, "software" is used by default.
+     * (String) Rendering backend used by internal builds of Opera.  If null or an empty string,
+     * "software" is used by default.
      *
      * <strong>Warning:</strong> This is a temporary workaround for launcher not taking external
      * window-only screenshots on Windows.
