@@ -53,7 +53,6 @@ public class IdleTest extends OperaDriverTestCase {
   public MethodRule random = new MethodRule() {
     public Statement apply(Statement base, FrameworkMethod method, Object target) {
       // If idle available return the test
-      //if (driver.isOperaIdleAvailable()) {
       if (driver.getSettings().useIdle() && driver.getServices().isOperaIdleAvailable()) {
         return base;
       }
