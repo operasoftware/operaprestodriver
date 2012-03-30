@@ -37,7 +37,7 @@ installed in the default location for each system:
 | Windows   | %PROGRAMFILES%\Opera\opera.exe<br />%PROGRAMFILES%\Opera Next\opera.exe                             |
 
 However, you can override this and specify a custom location to Opera
-by setting the capability `opera.path` or environmnetal variable
+by setting the capability `opera.binary` or environmnetal variable
 `OPERA_PATH`.  You can read more about configuring WebDriver under
 Advanced Usage.
 
