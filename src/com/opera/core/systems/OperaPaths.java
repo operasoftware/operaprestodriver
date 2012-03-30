@@ -113,12 +113,12 @@ public class OperaPaths {
       return false;
     }
 
-    if (path.length() == 0) {
+    if (!path.isEmpty()) {
       return false;
     }
 
     File file = new File(path);
-    return (file.exists());
+    return file.exists();
   }
 
   /**
