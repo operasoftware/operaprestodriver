@@ -74,9 +74,7 @@ import java.util.TreeSet;
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.FileHandler;
-import java.util.logging.Handler;
 import java.util.logging.Logger;
-import java.util.logging.SimpleFormatter;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -164,28 +162,6 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
    */
   public OperaDriver(OperaSettings s) {
     settings = s;
-
-    // Set the logging level for the main logging instance
-    Logger root = Logger.getLogger("");
-    root.setLevel(settings.logging().getLevel());
-
-    // Write to log file?
-    if (settings.logging().getFile() != null) {
-      try {
-        logFile =
-            new FileHandler(settings.logging().getFile().getPath(), OperaFlags.APPEND_TO_LOGFILE);
-        logFile.setFormatter(new SimpleFormatter());
-      } catch (IOException e) {
-        throw new WebDriverException("Unable to write to log file: " + e.getMessage());
-      }
-
-      root.addHandler(logFile);
-    }
-
-    // Set logging levels on all handlers
-    for (Handler handler : root.getHandlers()) {
-      handler.setLevel(settings.logging().getLevel());
-    }
 
     if (settings.autostart()) {
       runner = new OperaLauncherRunner(settings);

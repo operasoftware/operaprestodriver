@@ -29,6 +29,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.Platform;
+import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.net.PortProber;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
@@ -36,7 +37,11 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.FileHandler;
+import java.util.logging.Handler;
 import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.opera.core.systems.OperaProduct.CORE;
@@ -51,7 +56,6 @@ import static com.opera.core.systems.OperaSettings.Capability.HOST;
 import static com.opera.core.systems.OperaSettings.Capability.LAUNCHER;
 import static com.opera.core.systems.OperaSettings.Capability.LOGGING_FILE;
 import static com.opera.core.systems.OperaSettings.Capability.LOGGING_LEVEL;
-import static com.opera.core.systems.OperaSettings.Capability.NO_QUIT;
 import static com.opera.core.systems.OperaSettings.Capability.NO_RESTART;
 import static com.opera.core.systems.OperaSettings.Capability.OPERAIDLE;
 import static com.opera.core.systems.OperaSettings.Capability.PORT;
@@ -544,6 +548,8 @@ public class OperaSettings {
     for (Capability capability : Capability.values()) {
       options.put(capability, new CapabilityInstance(capability));
     }
+
+    logging().setLevel(logging().getLevel());
   }
 
   /**
@@ -599,7 +605,16 @@ public class OperaSettings {
      * @param level the logging level to use
      */
     public void setLevel(Level level) {
+      checkNotNull(level);
       options.get(LOGGING_LEVEL).setValue(level);
+
+      Logger root = Logger.getLogger("");
+      root.setLevel(level);
+
+      // Set logging levels on all handlers
+      for (Handler handler : root.getHandlers()) {
+        handler.setLevel(level);
+      }
     }
 
     /**
@@ -621,6 +636,21 @@ public class OperaSettings {
      */
     public void setFile(File file) {
       options.get(LOGGING_FILE).setValue(file);
+
+      // Write to log file?
+      if (file != null) {
+        FileHandler logFile;
+
+        try {
+          logFile = new FileHandler(file.getPath(), OperaFlags.APPEND_TO_LOGFILE);
+          logFile.setFormatter(new SimpleFormatter());
+        } catch (IOException e) {
+          throw new WebDriverException("Unable to write to log file: " + e.getMessage());
+        }
+
+        logFile.setLevel(getLevel());
+        Logger.getLogger("").addHandler(logFile);
+      }
     }
   }
 
