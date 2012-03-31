@@ -23,71 +23,30 @@ import java.nio.channels.SelectableChannel;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.spi.SelectorProvider;
-import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * This will monitor any selectable channel, such as a SocketChannel or
- * ServerSocketChannel and fire canWrite() or canRead() events when such events
- * are detected by poll().
+ * This will monitor any selectable channel, such as a {@link java.nio.channels.SocketChannel} or
+ * {@link java.nio.channels.ServerSocketChannel} and fire {@link SocketListener#canWrite(java.nio.channels.SelectableChannel)}
+ * or {@link SocketListener#canRead(java.nio.channels.SelectableChannel)} events when such events
+ * are detected by {@link #poll()}.
  *
  * @author Jan Vidar Krey <janv@opera.com>
  */
 public class SocketMonitor {
 
-  private final Logger logger = Logger.getLogger(this.getClass().getName());
+  private final Logger logger = Logger.getLogger(getClass().getName());
+  private final ReentrantLock lock = new ReentrantLock();
+  private final List<SelectorChangeRequest> changes = new LinkedList<SelectorChangeRequest>();
   private Selector selector;
-  boolean locked = false;
 
   private enum Operation {
     ADD, MODIFY, REMOVE
   }
-
-  class SelectorChangeRequest {
-    protected SelectableChannel channel;
-    protected Operation op;
-    protected int mask;
-    protected SocketListener listener;
-
-    public SelectorChangeRequest(SelectableChannel channel, Operation op,
-        int mask, SocketListener listener) {
-      this.channel = channel;
-      this.op = op;
-      this.mask = mask;
-      this.listener = listener;
-    }
-
-    public SelectorChangeRequest(SelectableChannel channel, Operation op) {
-      this.channel = channel;
-      this.op = op;
-      this.mask = 0;
-      this.listener = null;
-    }
-
-    public void dump() {
-      switch (op) {
-      case ADD:
-        logger.finest("SelectorChangeRequest: Add socket=" + channel.toString()
-            + ", mask=" + mask);
-        break;
-
-      case MODIFY:
-        logger.finest("SelectorChangeRequest: Modify socket="
-            + channel.toString() + ", mask=" + mask);
-        break;
-
-      case REMOVE:
-        logger.finest("SelectorChangeRequest: Remove socket="
-            + channel.toString());
-        break;
-      }
-    }
-
-  }
-
-  private LinkedList<SelectorChangeRequest> changes = new LinkedList<SelectorChangeRequest>();
 
   public SocketMonitor() {
     try {
@@ -99,40 +58,42 @@ public class SocketMonitor {
     }
   }
 
-  public boolean add(SelectableChannel channel, SocketListener listener,
-      int selectMask) {
-    logger.info("Add channel: " + channel.toString() + ", mask="
-        + debugMask(selectMask));
+  public boolean add(SelectableChannel channel, SocketListener listener, int selectMask) {
+    logger.info(String.format("Add channel: %s, mask=%s", channel, debugMask(selectMask)));
 
     synchronized (changes) {
-      changes.add(new SocketMonitor.SelectorChangeRequest(channel,
-          Operation.ADD, selectMask, listener));
+      changes.add(new SelectorChangeRequest(channel, Operation.ADD, selectMask, listener));
       selector.wakeup();
     }
+
     return true;
   }
 
-  public boolean modify(SelectableChannel channel, SocketListener listener,
-      int selectMask) {
-    logger.info("Modify channel: "
-        + (channel != null ? channel.toString() : "null") + ", mask="
-        + debugMask(selectMask));
-    if (channel == null) return false;
+  public boolean modify(SelectableChannel channel, SocketListener listener, int selectMask) {
+    logger.info(String.format("Modify channel: %s, mask=%s",
+                              (channel != null) ? channel : null, debugMask(selectMask)));
+
+    if (channel == null) {
+      return false;
+    }
 
     synchronized (changes) {
-      changes.add(new SocketMonitor.SelectorChangeRequest(channel,
-          Operation.MODIFY, selectMask, listener));
+      changes.add(new SelectorChangeRequest(channel, Operation.MODIFY, selectMask, listener));
       selector.wakeup();
     }
+
     return true;
   }
 
   public void remove(SelectableChannel channel) {
-    if (channel == null) return;
-    logger.info("Remove channel: " + channel.toString());
+    logger.info(String.format("Remove channel: %s", channel));
+
+    if (channel == null) {
+      return;
+    }
+
     synchronized (changes) {
-      changes.add(new SocketMonitor.SelectorChangeRequest(channel,
-          Operation.REMOVE));
+      changes.add(new SelectorChangeRequest(channel, Operation.REMOVE));
       selector.wakeup();
     }
   }
@@ -142,7 +103,7 @@ public class SocketMonitor {
   }
 
   public boolean poll() {
-    return poll(java.lang.Long.MAX_VALUE);
+    return poll(Long.MAX_VALUE);
   }
 
   public boolean poll(long ms) {
@@ -151,13 +112,13 @@ public class SocketMonitor {
     return ok;
   }
 
-  protected boolean pollSockets(long ms) {
+  private boolean pollSockets(long ms) {
     if (selector.keys().isEmpty()) {
       return true;
     }
 
+    lock.lock();
     try {
-      locked = true;
       synchronized (selector) {
         selector.select(ms);
       }
@@ -165,54 +126,56 @@ public class SocketMonitor {
       e.printStackTrace();
       return false;
     } finally {
-      locked = false;
+      lock.unlock();
     }
 
-    locked = true;
-    Iterator<SelectionKey> iterator = selector.selectedKeys().iterator();
-    while (iterator.hasNext()) {
-      SelectionKey key = iterator.next();
-      iterator.remove();
+    lock.lock();
+    for (SelectionKey key : selector.selectedKeys()) {
       try {
         processSelectionKey(key);
       } catch (CancelledKeyException cke) {
         cke.printStackTrace();
       } catch (IOException e) {
         // what are you doing with the channel variable here?
-        // SelectableChannel channel = key.channel();
+        //SelectableChannel channel = key.channel();
         e.printStackTrace();
         key.cancel();
       }
     }
-    locked = false;
+    lock.unlock();
+
     return true;
   }
 
-  protected void applyChanges() {
+  private void applyChanges() {
     synchronized (changes) {
-      if (changes.isEmpty()) return;
+      if (changes.isEmpty()) {
+        return;
+      }
 
-      Iterator<SocketMonitor.SelectorChangeRequest> it = changes.iterator();
-      while (it.hasNext()) {
+      for (SelectorChangeRequest request : changes) {
         try {
-          SocketMonitor.SelectorChangeRequest req = it.next();
-          req.dump();
-          switch (req.op) {
-          case ADD:
-            try {
-              req.channel.register(selector, req.mask, req.listener);
-            } catch (ClosedChannelException e) {
-              e.printStackTrace();
-            }
-            break;
-          case MODIFY:
-            SelectionKey key = req.channel.keyFor(selector);
-            if (key != null) key.interestOps(req.mask);
-            break;
-          case REMOVE:
-            SelectionKey selKey = req.channel.keyFor(selector);
-            if (selKey != null) selKey.cancel();
-            break;
+          request.dump();
+          switch (request.operation) {
+            case ADD:
+              try {
+                request.channel.register(selector, request.mask, request.listener);
+              } catch (ClosedChannelException e) {
+                e.printStackTrace();
+              }
+              break;
+            case MODIFY:
+              SelectionKey key = request.channel.keyFor(selector);
+              if (key != null) {
+                key.interestOps(request.mask);
+              }
+              break;
+            case REMOVE:
+              SelectionKey selKey = request.channel.keyFor(selector);
+              if (selKey != null) {
+                selKey.cancel();
+              }
+              break;
           }
         } catch (CancelledKeyException e) {
           logger.finest("Key was cancelled - ignoring...");
@@ -223,10 +186,11 @@ public class SocketMonitor {
   }
 
   protected void processSelectionKey(SelectionKey key) throws IOException {
-
     SelectableChannel channel = key.channel();
 
-    if (!key.isValid()) return;
+    if (!key.isValid()) {
+      return;
+    }
 
     SocketListener listener = (SocketListener) key.attachment();
 
@@ -235,19 +199,27 @@ public class SocketMonitor {
     int wantedMask = 0;
 
     if (key.isValid() && key.isAcceptable()) {
-      if (listener.canRead(channel)) wantedMask |= SelectionKey.OP_ACCEPT;
+      if (listener.canRead(channel)) {
+        wantedMask |= SelectionKey.OP_ACCEPT;
+      }
     }
 
     if (key.isValid() && key.isConnectable()) {
-      if (listener.canRead(channel)) wantedMask |= SelectionKey.OP_CONNECT;
+      if (listener.canRead(channel)) {
+        wantedMask |= SelectionKey.OP_CONNECT;
+      }
     }
 
     if (key.isValid() && key.isReadable()) {
-      if (listener.canRead(channel)) wantedMask |= SelectionKey.OP_READ;
+      if (listener.canRead(channel)) {
+        wantedMask |= SelectionKey.OP_READ;
+      }
     }
 
     if (key.isValid() && key.isWritable()) {
-      if (listener.canWrite(channel)) wantedMask |= SelectionKey.OP_WRITE;
+      if (listener.canWrite(channel)) {
+        wantedMask |= SelectionKey.OP_WRITE;
+      }
     }
 
     // In case we did not trigger something we want to poll for
@@ -257,7 +229,9 @@ public class SocketMonitor {
     // Update the selection mask, if it now differs
     if (wantedMask != currentMask) {
       if (wantedMask != 0) {
-        if (key.isValid()) key.interestOps(wantedMask);
+        if (key.isValid()) {
+          key.interestOps(wantedMask);
+        }
       } else {
         key.cancel();
       }
@@ -268,16 +242,50 @@ public class SocketMonitor {
     StringBuilder builder = new StringBuilder();
     builder.append("{");
 
-    if ((mask & SelectionKey.OP_READ) == SelectionKey.OP_READ) builder.append(" READ");
+    if ((mask & SelectionKey.OP_READ) == SelectionKey.OP_READ) {
+      builder.append(" READ");
+    }
 
-    if ((mask & SelectionKey.OP_WRITE) == SelectionKey.OP_WRITE) builder.append(" WRITE");
+    if ((mask & SelectionKey.OP_WRITE) == SelectionKey.OP_WRITE) {
+      builder.append(" WRITE");
+    }
 
-    if ((mask & SelectionKey.OP_ACCEPT) == SelectionKey.OP_ACCEPT) builder.append(" ACCEPT");
+    if ((mask & SelectionKey.OP_ACCEPT) == SelectionKey.OP_ACCEPT) {
+      builder.append(" ACCEPT");
+    }
 
-    if ((mask & SelectionKey.OP_CONNECT) == SelectionKey.OP_CONNECT) builder.append(" CONNECT");
+    if ((mask & SelectionKey.OP_CONNECT) == SelectionKey.OP_CONNECT) {
+      builder.append(" CONNECT");
+    }
 
     builder.append("}");
     return builder.toString();
+  }
+
+  private class SelectorChangeRequest {
+
+    protected final SelectableChannel channel;
+    protected final Operation operation;
+    protected final int mask;
+    protected final SocketListener listener;
+
+    public SelectorChangeRequest(SelectableChannel channel, Operation operation) {
+      this(channel, operation, 0, null);
+    }
+
+    public SelectorChangeRequest(SelectableChannel channel, Operation operation,
+                                 int mask, SocketListener listener) {
+      this.channel = channel;
+      this.operation = operation;
+      this.mask = mask;
+      this.listener = listener;
+    }
+
+    public void dump() {
+      logger.finest(String.format("SelectorChangeRequest: %s socket=%s, mask=%d",
+                                  operation, channel, mask));
+    }
+
   }
 
 }
