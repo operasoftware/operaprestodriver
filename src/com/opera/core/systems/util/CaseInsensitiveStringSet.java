@@ -26,7 +26,6 @@ import java.util.Set;
  *
  * @author Stuart Knightley <stuartk@opera.com>
  */
-
 public class CaseInsensitiveStringSet implements Set<String> {
 
   HashSet<String> set = new HashSet<String>();
@@ -44,8 +43,7 @@ public class CaseInsensitiveStringSet implements Set<String> {
   }
 
   /**
-   * Returns true if this set contains the specified string, compared
-   * case-insensitively.
+   * Returns true if this set contains the specified string, compared case-insensitively.
    */
   public boolean contains(Object o) {
     if (o instanceof String) {
