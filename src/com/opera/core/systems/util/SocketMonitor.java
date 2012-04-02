@@ -70,8 +70,7 @@ public class SocketMonitor {
   }
 
   public boolean modify(SelectableChannel channel, SocketListener listener, int selectMask) {
-    logger.info(String.format("Modify channel: %s, mask=%s",
-                              (channel != null) ? channel : null, debugMask(selectMask)));
+    logger.info(String.format("Modify channel: %s, mask=%s", channel, debugMask(selectMask)));
 
     if (channel == null) {
       return false;
