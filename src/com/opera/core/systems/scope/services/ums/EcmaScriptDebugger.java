@@ -256,13 +256,13 @@ public class EcmaScriptDebugger extends AbstractEcmascriptService implements
     Response response = executeCommand(ESDebuggerCommand.EVAL, builder,
                                        OperaIntervals.SCRIPT_TIMEOUT.getValue());
 
-    if (response == null && retries < OperaIntervals.SCRIPT_RETRY.getValue()) {
+    if (response == null && retries < OperaIntervals.SCRIPT_RETRY_INTERVAL.getValue()) {
       retries++;
       sleepDuration += sleepDuration;
       sleep(sleepDuration);
       recover();
       return eval(using, variables);
-    } else if (retries >= OperaIntervals.SCRIPT_RETRY.getValue()) {
+    } else if (retries >= OperaIntervals.SCRIPT_RETRY_INTERVAL.getValue()) {
       resetCounters();
       throw new WebDriverException("No response on executing JS command");
     }
@@ -333,9 +333,8 @@ public class EcmaScriptDebugger extends AbstractEcmascriptService implements
         // Would be great give the JS error here, but it appears that by the
         // time we callFunctionOnObject the error object has gone...
         throw new WebDriverException("Ecmascript exception");
-      }
-      // FIXME what is the best approach here?
-      else if (status.equals("cancelled-by-scheduler")) {
+      } else if (status.equals("cancelled-by-scheduler")) {
+        // TODO: what is the best approach here?
         return null;
       } else if (status.equals("aborted")) {
 

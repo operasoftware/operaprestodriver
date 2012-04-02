@@ -22,7 +22,6 @@ import com.opera.core.systems.model.RuntimeNode;
 import com.opera.core.systems.model.ScriptResult;
 import com.opera.core.systems.scope.AbstractEcmascriptService;
 import com.opera.core.systems.scope.ESCommand;
-import com.opera.core.systems.scope.internal.OperaIntervals;
 import com.opera.core.systems.scope.protos.EcmascriptProtos;
 import com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg;
 import com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg.Variable;
@@ -62,16 +61,19 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicStampedReference;
 
+import static com.opera.core.systems.scope.internal.OperaIntervals.SCRIPT_RETRY_INTERVAL;
+import static com.opera.core.systems.scope.internal.OperaIntervals.SCRIPT_TIMEOUT;
+
 // Highlight when we're using EsdbgProtos, instead of importing them directly.  We can't import
 // this, because of the java "Object" class.  Leaving this commented out to help in the future!
 //import com.opera.core.systems.scope.protos.EcmascriptProtos.Object;
 
 /**
- * EcmascriptService is a lightweight service to enable JavaScript injection.  Unlike
- * {@link EcmaScriptDebugger} it does not disable JIT.
+ * EcmascriptService is a lightweight service to enable JavaScript injection.  Unlike {@link
+ * EcmaScriptDebugger} it does not disable JIT.
  */
 public class EcmascriptService extends AbstractEcmascriptService implements
- IEcmaScriptDebugger {
+                                                                 IEcmaScriptDebugger {
 
   private AtomicStampedReference<Runtime> runtime = new AtomicStampedReference<Runtime>(null, 0);
   private ConcurrentMap<Integer, Runtime> runtimesList = new ConcurrentHashMap<Integer, Runtime>();
@@ -93,7 +95,7 @@ public class EcmascriptService extends AbstractEcmascriptService implements
   }
 
   public void setRuntime(EsdbgProtos.RuntimeInfo runtime) {
-    throw new UnsupportedOperationException("Not suppported without ecmascript-debugger");
+    throw new UnsupportedOperationException("Not supported without ecmascript-debugger");
   }
 
   public void addRuntime(EsdbgProtos.RuntimeInfo info) {
@@ -123,11 +125,9 @@ public class EcmascriptService extends AbstractEcmascriptService implements
   }
 
   public void init() {
-    // We no longer need the configuration
     if (!updateRuntime()) {
-      throw new WebDriverException("Could not find a runtime for script injection");
+      throw new WebDriverException("Could not find a runtime for script evaluation");
     }
-    // Nor the dialogue hack
   }
 
   public boolean updateRuntime() {
@@ -204,61 +204,95 @@ public class EcmascriptService extends AbstractEcmascriptService implements
     return builder;
   }
 
-  protected final Variable buildVariable(String name, int objectId) {
+  private Variable buildVariable(String name, int objectId) {
     Variable.Builder variable = Variable.newBuilder();
     variable.setName(name);
     variable.setObjectID(objectId);
     return variable.build();
   }
 
-  private Response eval(String using, int runtimeId, Variable... variables) {
+  /**
+   * Evaluates ECMAScript in the global scope.  This method maps to {@link ESCommand#EVAL} in Scope.
+   * For instance to fetch information on the window object, one can do:
+   *
+   * <pre><code>
+   *   Object window = parseEvalReply(parseEvalData(eval("window", 1)));
+   * </code></pre>
+   *
+   * {@link EvalResult#getValue#getObject} will be set, note however that this will not include
+   * properties on the return object to conserve the amount of data that needs to be sent.  To get
+   * properties use {@link #examineObjects(Integer)}.
+   *
+   * @param using     piece of ECMAScript to evaluate
+   * @param variables a list of objects to place in the execution environment when evaluating
+   *                  <code>using</code>
+   * @return result of script execution
+   * @see ESCommand#EVAL
+   */
+  private EvalResult eval(String using, Variable... variables) {
+    return eval(using, getRuntimeId(), variables);
+  }
+
+  /**
+   * Evaluates ECMAScript in the global scope.  This method maps to {@link ESCommand#EVAL} in Scope.
+   * For instance to fetch information on the window object, one can do:
+   *
+   * <pre><code>
+   *   Object window = parseEvalReply(parseEvalData(eval("window", 1)));
+   * </code></pre>
+   *
+   * {@link EvalResult#getValue#getObject} will be set, note however that this will not include
+   * properties on the return object to conserve the amount of data that needs to be sent.  To get
+   * properties use {@link #examineObjects(Integer)}.
+   *
+   * @param using     piece of ECMAScript to evaluate
+   * @param runtimeId ID of the runtime to execute script in
+   * @param variables a list of objects to place in the execution environment when evaluating
+   *                  <code>using</code>
+   * @return result of script execution
+   * @see ESCommand#EVAL
+   */
+  private EvalResult eval(String using, int runtimeId, Variable... variables) {
     // This call causes us to release objects, which allows them to be garbage collected, and
-    // sometimes causes this method to fail. So I've commented it out. But I reckon it might cause
+    // sometimes causes this method to fail.  So I've commented it out.  But I reckon it might cause
     // high memory usage in Opera, so the method might need to be updated in the future.
-    // processQueues();
+    //processQueues();
 
     EvalArg.Builder builder = buildEval(using, runtimeId);
     builder.addAllVariableList(Arrays.asList(variables));
 
-    Response response =
-        executeCommand(ESCommand.EVAL, builder, OperaIntervals.SCRIPT_TIMEOUT.getValue());
+    Response response = executeCommand(ESCommand.EVAL, builder, SCRIPT_TIMEOUT.getValue());
 
-    if (response == null && retries < OperaIntervals.SCRIPT_RETRY.getValue()) {
+    if (response == null && retries < SCRIPT_RETRY_INTERVAL.getValue()) {
       retries++;
       sleepDuration += sleepDuration;
       sleep(sleepDuration);
       recover();
       return eval(using, variables);
-    } else if (retries >= OperaIntervals.SCRIPT_RETRY.getValue()) {
+    } else if (retries >= SCRIPT_RETRY_INTERVAL.getValue()) {
       resetCounters();
-      throw new WebDriverException("No response on executing JS command");
+      throw new WebDriverException("No response on executing ECMAScript evaluation command");
     }
 
     resetCounters();
 
-    return response;
+    return parseEvalData(response);
   }
-
-  private Response eval(String using, Variable... variables) {
-    return eval(using, getRuntimeId(), variables);
-  }
-
 
   public Object executeScript(String using, boolean responseExpected) {
     return executeScript(using, responseExpected, getRuntimeId());
   }
 
   private Object executeScript(String using, boolean responseExpected, int runtimeId) {
-    Response reply = eval(using, runtimeId);
-    return responseExpected ? parseEvalReply(parseEvalData(reply)) : null;
+    EvalResult reply = eval(using, runtimeId);
+    return responseExpected ? parseEvalReply(reply) : null;
   }
 
   public Integer getObject(String using) {
-    EvalResult reply = parseEvalData(eval(using));
+    EvalResult reply = eval(using);
     return (reply.getValue().getType().equals(Type.OBJECT)) ? reply.getValue().getObject()
         .getObjectID() : null;
   }
-
 
   public String callFunctionOnObject(String using, int objectId) {
     Object result = callFunctionOnObject(using, objectId, true);
@@ -268,21 +302,51 @@ public class EcmascriptService extends AbstractEcmascriptService implements
   public Object callFunctionOnObject(String using, int objectId, boolean responseExpected) {
     Variable variable = buildVariable("locator", objectId);
 
-    Response response = eval(using, variable);
-    return responseExpected ? parseEvalReply(parseEvalData(response)) : null;
+    EvalResult reply = eval(using, variable);
+    return responseExpected ? parseEvalReply(reply) : null;
   }
 
   public Integer executeScriptOnObject(String using, int objectId) {
     Variable variable = buildVariable("locator", objectId);
-
-    EvalResult reply = parseEvalData(eval(using, variable));
+    EvalResult reply = eval(using, variable);
     Object object = parseEvalReply(reply);
+
     if (object == null || !(object instanceof EcmascriptProtos.Object)) {
       return null;
     }
     return ((EcmascriptProtos.Object) object).getObjectID();
   }
 
+  /**
+   * Parses a reply and returns the result of the script execution.  The result from EcmaScript is
+   * converted based on the object types specified by Scope:
+   *
+   * <dl> <dt>undefined</dt> <dd> The undefined type, returned when no value was found or
+   * "undefined" was references.  Will return null. </dd>
+   *
+   * <dt>true</dt> <dd>Boolean true value.</dd>
+   *
+   * <dt>false</dt> <dd>Boolean false value.</dd>
+   *
+   * <dt>NaN</dt> <dd> NaN value (not a number) which cannot be exported to JSON directly.  Will be
+   * treated as a number, and returns a {@link Float#NaN} reference. </dd>
+   *
+   * <dt>Infinity</dt> <dd> Plus infinity value which cannot be exported to JSON directly.  Will be
+   * treated as a number, and returns a {@link Float#POSITIVE_INFINITY} reference. </dd>
+   *
+   * <dt>-Infinity</dt> <dd> Negative infinity value which cannot be exported to JSON directly. Will
+   * be treated as a number, and returns a {@link Float#NEGATIVE_INFINITY} reference. </dd>
+   *
+   * <dt>number</dt> <dd>A number, will return a long or double value depending on its value.</dd>
+   *
+   * <dt>string</dt> <dd>A string.</dd>
+   *
+   * <dt>object</dt> <dd> A non-primitive value in EcmaScript, typically a generic object.  This
+   * includes functions and arrays. </dd> </dl>
+   *
+   * @param result the result of a script execution
+   * @return the parsed result of a reply
+   */
   private Object parseEvalReply(EvalResult result) {
     Status status = result.getStatus();
 
@@ -292,12 +356,10 @@ public class EcmascriptService extends AbstractEcmascriptService implements
       case EXCEPTION:
         throw new WebDriverException("EcmaScript exception");
       case NO_MEMORY:
-        // releaseObjects();
+        //releaseObjects();
         throw new WebDriverException("Out of memory");
       case FAILURE:
         throw new WebDriverException("Could not execute script");
-      default:
-        break;
     }
 
     Value value = result.getValue();
@@ -339,14 +401,15 @@ public class EcmascriptService extends AbstractEcmascriptService implements
     createAllRuntimes();
     Runtime runtime =
         (Runtime) xpathPointer(runtimesList.values(),
-            "/.[htmlFramePath='" + currentFramePath + "' and windowID='" + windowId + "']")
+                               "/.[htmlFramePath='" + currentFramePath + "' and windowID='"
+                               + windowId + "']")
             .getValue();
     return runtime;
   }
 
   /**
    * Updates the runtimes list to most recent version
-   * 
+   *
    * TODO this has to be kept up to date with events and as failover we should update It builds a
    * tree to find the frame we are looking for TODO tree also must be kept up to date
    */
@@ -421,7 +484,7 @@ public class EcmascriptService extends AbstractEcmascriptService implements
       else {
         try {
           if (executeScript("frameElement ? frameElement.id : ''", true,
-              entry.getValue().getRuntimeID()).equals(name)) {
+                            entry.getValue().getRuntimeID()).equals(name)) {
             return entry.getValue();
           }
         } catch (WebDriverException e) {
@@ -642,7 +705,7 @@ public class EcmascriptService extends AbstractEcmascriptService implements
 
   /**
    * Queries for the given runtime ID
-   * 
+   *
    * @param runtimeID The runtime id to query for
    * @return {@link Runtime} object if found, <code>null</code> otherwise
    */

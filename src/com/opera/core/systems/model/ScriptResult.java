@@ -17,16 +17,16 @@ limitations under the License.
 package com.opera.core.systems.model;
 
 /**
- * Holds the result of a script execution, namely for an object, scope protocol assigns an object id
- * for each object retrieved through the protocol, this id can also be used later on to release the
- * object.
+ * Holds the result of a script execution, namely for an object.  The Scope protocol assigns an
+ * object ID for each object retrieved through the protocol, this ID can be used later to release
+ * the object.
  *
  * @author Deniz Turkoglu <dturkoglu@opera.com>
  */
 public class ScriptResult {
 
-  protected int objectId;
-  protected String className;
+  private final int objectId;
+  private final String className;
 
   public ScriptResult(int objectId, String className) {
     this.objectId = objectId;
@@ -37,16 +37,8 @@ public class ScriptResult {
     return objectId;
   }
 
-  public void setObjectId(int objectId) {
-    this.objectId = objectId;
-  }
-
   public String getClassName() {
     return className;
-  }
-
-  public void setClassName(String className) {
-    this.className = className;
   }
 
 }
