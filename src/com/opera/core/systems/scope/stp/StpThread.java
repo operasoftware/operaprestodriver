@@ -18,30 +18,30 @@ package com.opera.core.systems.scope.stp;
 
 import com.opera.core.systems.scope.handlers.EventHandler;
 import com.opera.core.systems.scope.handlers.IConnectionHandler;
+import com.opera.core.systems.scope.internal.OperaIntervals;
 import com.opera.core.systems.util.SocketMonitor;
 
 import java.io.IOException;
 import java.util.logging.Logger;
 
 /**
- * This thread starts the StpConnectionListener which listens for incoming connections and accepts
- * those connections.
+ * This thread starts the {@link StpConnectionListener} which listens for incoming connections and
+ * accepts those connections.
  *
- * This thread also owns the SocketMonitor instance - so all network traffic and communication is
- * happening on this thread.
+ * This thread also owns the {@link SocketMonitor} instances so all network traffic and
+ * communication is happening on this thread.
  *
  * @author Jan Vidar Krey <janv@opera.com>
  */
 public class StpThread extends Thread {
 
   private final Logger logger = Logger.getLogger(this.getClass().getName());
-  private StpConnectionListener listener;
+  private final StpConnectionListener listener;
+  private final SocketMonitor monitor;
   private volatile boolean cancelled;
-  private SocketMonitor monitor;
 
-  public StpThread(int port, IConnectionHandler handler,
-                   EventHandler eventHandler, boolean manualConnect)
-      throws IOException {
+  public StpThread(int port, IConnectionHandler handler, EventHandler eventHandler,
+                   boolean manualConnect) throws IOException {
     monitor = new SocketMonitor();
     listener = new StpConnectionListener(port, handler, eventHandler, manualConnect, monitor);
     setName("stp-thread");
@@ -57,7 +57,7 @@ public class StpThread extends Thread {
   public void run() {
     logger.finer("Started StpThread");
     while (!cancelled) {
-      monitor.poll(60000);
+      monitor.poll(OperaIntervals.RESPONSE_TIMEOUT.getValue());
     }
     logger.finer("Stopping StpThread");
   }

@@ -30,25 +30,25 @@ import java.nio.channels.SocketChannel;
 import java.util.logging.Logger;
 
 /**
- * This class handles accepting STP connections. STP connections are accepted in the canRead()
- * method, which then spawns an StpConnection.
+ * This class handles accepting STP connections. STP connections are accepted in the {@link
+ * SocketListener#canRead(java.nio.channels.SelectableChannel)} method, which then spawns an {@link
+ * StpConnection}.
  *
  * @author Jan Vidar Krey <janv@opera.com>
  */
 public class StpConnectionListener implements SocketListener {
 
-  private int port;
+  private final Logger logger = Logger.getLogger(getClass().getName());
+  private final int port;
+  private final IConnectionHandler handler;
+  private final EventHandler eventHandler;
+  private final boolean manualConnect;
+
   private ServerSocketChannel server = null;
-  private IConnectionHandler handler;
-  private EventHandler eventHandler;
-  private boolean manualConnect = false;
-  private final Logger logger = Logger.getLogger(this.getClass().getName());
   private SocketMonitor monitor;
 
-  public StpConnectionListener(int port, IConnectionHandler handler,
-                               EventHandler eventHandler, boolean manualConnect,
-                               SocketMonitor monitor)
-      throws IOException {
+  public StpConnectionListener(int port, IConnectionHandler handler, EventHandler eventHandler,
+                               boolean manualConnect, SocketMonitor monitor) throws IOException {
     this.port = port;
     this.handler = handler;
     this.eventHandler = eventHandler;
@@ -76,7 +76,7 @@ public class StpConnectionListener implements SocketListener {
     monitor.remove(server);
     try {
       server.close();
-    } catch (Exception ignored) { // IOException or NullPointerException
+    } catch (IOException e) {
       // ignored
     } finally {
       server = null;
@@ -113,10 +113,10 @@ public class StpConnectionListener implements SocketListener {
       socket.socket().setTcpNoDelay(true);
       new StpConnection(socket, handler, eventHandler, monitor);
     }
+
     return true;
   }
 
-  // TODO: Not implemented?
   public boolean canWrite(SelectableChannel ch) throws IOException {
     return false;
   }
