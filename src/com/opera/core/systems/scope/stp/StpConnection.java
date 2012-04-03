@@ -20,6 +20,7 @@ import com.google.protobuf.ByteString;
 import com.google.protobuf.CodedOutputStream;
 
 import com.opera.core.systems.scope.DesktopUtilsCommand;
+import com.opera.core.systems.scope.DesktopWindowManagerCommand;
 import com.opera.core.systems.scope.handlers.AbstractEventHandler;
 import com.opera.core.systems.scope.handlers.IConnectionHandler;
 import com.opera.core.systems.scope.internal.OperaIntervals;
@@ -549,6 +550,10 @@ public class StpConnection implements SocketListener {
           Instead we suppress the exception here, and return a null response, that will be recognized in DesktopUtils:getString().
            */
           logger.fine("Ignoring an error response for a non-existent string");
+          signalResponse(error.getTag(), null);
+        } else if (service.equals("desktop-window-manager") && error.getCommandID() == DesktopWindowManagerCommand.GET_ACTIVE_WINDOW.getCommandID())
+        {
+          logger.warning("Ignoring an error response for a non-existent active desktop window");
           signalResponse(error.getTag(), null);
         } else {
           logger.log(Level.SEVERE, "Error : {0}", error.toString());
