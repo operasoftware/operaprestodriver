@@ -137,7 +137,7 @@ public abstract class AbstractEcmascriptService extends AbstractService
     return toSend;
   }
 
-  private void processArgument(Object object, StringBuilder builder, List<WebElement> elements) {
+  protected void processArgument(Object object, StringBuilder builder, List<WebElement> elements) {
     if (object instanceof WebElement) {
       elements.add((WebElement) object);
       builder.append(String.valueOf(object));
