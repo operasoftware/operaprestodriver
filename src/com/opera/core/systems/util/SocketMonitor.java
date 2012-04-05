@@ -51,15 +51,13 @@ public class SocketMonitor {
   public SocketMonitor() {
     try {
       selector = SelectorProvider.provider().openSelector();
-      logger.setLevel(Level.OFF);
-      logger.severe("Starting up...");
     } catch (IOException e) {
       e.printStackTrace();
     }
   }
 
   public boolean add(SelectableChannel channel, SocketListener listener, int selectMask) {
-    logger.info(String.format("Add channel: %s, mask=%s", channel, debugMask(selectMask)));
+    logger.finer(String.format("Add channel: %s, mask=%s", channel, debugMask(selectMask)));
 
     synchronized (changes) {
       changes.add(new SelectorChangeRequest(channel, Operation.ADD, selectMask, listener));
@@ -70,7 +68,7 @@ public class SocketMonitor {
   }
 
   public boolean modify(SelectableChannel channel, SocketListener listener, int selectMask) {
-    logger.info(String.format("Modify channel: %s, mask=%s", channel, debugMask(selectMask)));
+    logger.finer(String.format("Modify channel: %s, mask=%s", channel, debugMask(selectMask)));
 
     if (channel == null) {
       return false;
@@ -85,7 +83,7 @@ public class SocketMonitor {
   }
 
   public void remove(SelectableChannel channel) {
-    logger.info(String.format("Remove channel: %s", channel));
+    logger.finer(String.format("Remove channel: %s", channel));
 
     if (channel == null) {
       return;
