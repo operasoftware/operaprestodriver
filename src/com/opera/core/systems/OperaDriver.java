@@ -165,6 +165,8 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
     if (settings.autostart()) {
       runner = new OperaLauncherRunner(settings);
+    } else {
+      settings.setPort((int) OperaIntervals.SERVER_DEFAULT_PORT_IDENTIFIER.getValue());
     }
 
     logger.config(settings.toString());

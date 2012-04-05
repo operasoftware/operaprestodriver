@@ -34,6 +34,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
 
+import static com.google.common.collect.Ranges.greaterThan;
 import static com.opera.core.systems.OperaProduct.CORE;
 import static com.opera.core.systems.OperaSettings.Capability.AUTOSTART;
 import static com.opera.core.systems.OperaSettings.Capability.BINARY;
@@ -44,8 +45,11 @@ import static com.opera.core.systems.OperaSettings.Capability.LOGGING_LEVEL;
 import static com.opera.core.systems.OperaSettings.Capability.OPERAIDLE;
 import static com.opera.core.systems.OperaSettings.Capability.PORT;
 import static com.opera.core.systems.OperaSettings.Capability.PROFILE;
+import static org.hamcrest.CoreMatchers.allOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 public class DesiredCapabilitiesTest extends OperaDriverTestCase {
@@ -104,11 +108,12 @@ public class DesiredCapabilitiesTest extends OperaDriverTestCase {
         .setCapability(LOGGING_LEVEL.getCapability(), "FINER");  // up the level to get some ompf
     driver = new TestOperaDriver(capabilities);
 
+    assertNotSame(0, log.length());
     assertTrue(log.length() > 0);
   }
 
   @Test(expected = WebDriverException.class)
-  public void testSettingInvalidLogFile() throws Exception {
+  public void testSettingInvalidLogFile() {
     capabilities.setCapability(LOGGING_FILE.getCapability(), "/an/invalid/path");
     driver = new TestOperaDriver(capabilities);
   }

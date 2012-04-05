@@ -50,7 +50,7 @@ public enum OperaIntervals {
   /**
    * The default Opera debug proxy server port for OperaDriver to connect to.
    */
-  SERVER_PORT(7001),
+  SERVER_DEFAULT_PORT(7001),
 
   /**
    * For backwards compatibility with Operas without <code>-debugproxy</code> support, if the user
@@ -61,7 +61,7 @@ public enum OperaIntervals {
   /**
    * For backwards compatibility with Operas without <code>-debugproxy</code> support, if the user
    * specifies -1 as the port it will use the default server proxy port specified in
-   * {@link #SERVER_PORT}.
+   * {@link #SERVER_DEFAULT_PORT}.
    */
   SERVER_DEFAULT_PORT_IDENTIFIER(-1),
 

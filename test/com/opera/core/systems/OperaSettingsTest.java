@@ -57,8 +57,8 @@ import static com.opera.core.systems.OperaSettings.Capability.PORT;
 import static com.opera.core.systems.OperaSettings.Capability.PRODUCT;
 import static com.opera.core.systems.OperaSettings.Capability.PROFILE;
 import static com.opera.core.systems.runner.launcher.OperaLauncherRunner.LAUNCHER_ENV_VAR;
+import static com.opera.core.systems.scope.internal.OperaIntervals.SERVER_DEFAULT_PORT;
 import static com.opera.core.systems.scope.internal.OperaIntervals.SERVER_DEFAULT_PORT_IDENTIFIER;
-import static com.opera.core.systems.scope.internal.OperaIntervals.SERVER_PORT;
 import static com.opera.core.systems.scope.internal.OperaIntervals.SERVER_RANDOM_PORT_IDENTIFIER;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -209,11 +209,11 @@ public class OperaSettingsTest extends OperaDriverTestCase {
       int port = (Integer) PORT.getDefaultValue();
 
       // In the highly unlikely case that it assigns the random port to 7001...
-      if (port == SERVER_PORT.getValue()) {
+      if (port == SERVER_DEFAULT_PORT.getValue()) {
         return;
       }
 
-      assertNotSame((int) SERVER_PORT.getValue(), PORT.getDefaultValue());
+      assertNotSame((int) SERVER_DEFAULT_PORT.getValue(), PORT.getDefaultValue());
     }
 
     @Test(expected = NullPointerException.class)
@@ -239,7 +239,7 @@ public class OperaSettingsTest extends OperaDriverTestCase {
 
     @Test
     public void portSanitizeDefaultPortIdentifier() {
-      assertEquals((int) SERVER_PORT.getValue(),
+      assertEquals((int) SERVER_DEFAULT_PORT.getValue(),
                    PORT.sanitize(SERVER_DEFAULT_PORT_IDENTIFIER.getValue()));
     }
 
@@ -570,8 +570,13 @@ public class OperaSettingsTest extends OperaDriverTestCase {
 
     @Test
     public void loggingFileCanBeSet() throws IOException {
+      settings.logging().setFile(resources.textFile());
+      assertEquals(resources.textFile(), settings.logging().getFile());
+    }
+
+    @Test(expected = WebDriverException.class)
+    public void loggingFileToInvalidFileThrowsException() {
       settings.logging().setFile(resources.fakeFile());
-      assertEquals(resources.fakeFile(), settings.logging().getFile());
     }
 
     @Test
@@ -605,7 +610,7 @@ public class OperaSettingsTest extends OperaDriverTestCase {
     @Test
     public void portIsRandom() {
       // Of course, it might still happen that it assigns it to 7001...
-      assertNotSame((int) SERVER_PORT.getValue(), settings.getPort());
+      assertNotSame((int) SERVER_DEFAULT_PORT.getValue(), settings.getPort());
     }
 
     @Test
@@ -617,13 +622,13 @@ public class OperaSettingsTest extends OperaDriverTestCase {
     @Test
     public void portSetToRandomIdentifier() {
       settings.setPort((int) SERVER_RANDOM_PORT_IDENTIFIER.getValue());
-      assertNotSame((int) SERVER_PORT.getValue(), settings.getPort());
+      assertNotSame((int) SERVER_DEFAULT_PORT.getValue(), settings.getPort());
     }
 
     @Test
     public void portSetToDefaultIdentifier() {
       settings.setPort((int) SERVER_DEFAULT_PORT_IDENTIFIER.getValue());
-      assertEquals((int) SERVER_PORT.getValue(), settings.getPort());
+      assertEquals((int) SERVER_DEFAULT_PORT.getValue(), settings.getPort());
     }
 
     @Test
@@ -729,6 +734,12 @@ public class OperaSettingsTest extends OperaDriverTestCase {
     public void autostartCanBeSet() {
       settings.autostart(false);
       assertFalse(settings.autostart());
+    }
+
+    @Test
+    public void autostartSetToFalseSetsPortToDefault() {
+      settings.autostart(false);
+      assertEquals(SERVER_DEFAULT_PORT.getValue(), settings.getPort());
     }
 
     @Test

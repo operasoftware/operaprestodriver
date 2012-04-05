@@ -16,25 +16,33 @@ limitations under the License.
 
 package com.opera.core.systems.testing;
 
+import org.junit.rules.TemporaryFolder;
 import org.openqa.selenium.Platform;
 
 import java.io.File;
+import java.io.IOException;
 
 /**
  * @author Andreas Tolf Tolfsen <andreastt@opera.com>
  */
 public class Resources {
 
+  private final TemporaryFolder temporaryFolder = new TemporaryFolder();
+
   private final File resourcesDirectory = InProject.locate("test/resources");
   private final File executableBinary;
   private final File fakeFile = new File("does/not/exist");
+  private final File textFile;
 
-  public Resources() {
+  public Resources() throws IOException {
     if (Platform.getCurrent().is(Platform.WINDOWS)) {
       executableBinary = new File("C:\\WINDOWS\\system32\\find.exe");
     } else {
       executableBinary = new File("/bin/echo");
     }
+
+    //temporaryFolder().newFolder();
+    textFile = temporaryFolder().newFile();
   }
 
   public File locate(String filename) {
@@ -47,6 +55,14 @@ public class Resources {
 
   public File fakeFile() {
     return fakeFile;
+  }
+
+  public TemporaryFolder temporaryFolder() {
+    return temporaryFolder;
+  }
+
+  public File textFile() {
+    return textFile;
   }
 
 }

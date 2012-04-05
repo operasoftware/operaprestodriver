@@ -62,8 +62,8 @@ import static com.opera.core.systems.OperaSettings.Capability.PORT;
 import static com.opera.core.systems.OperaSettings.Capability.PRODUCT;
 import static com.opera.core.systems.OperaSettings.Capability.PROFILE;
 import static com.opera.core.systems.runner.launcher.OperaLauncherRunner.LAUNCHER_ENV_VAR;
+import static com.opera.core.systems.scope.internal.OperaIntervals.SERVER_DEFAULT_PORT;
 import static com.opera.core.systems.scope.internal.OperaIntervals.SERVER_DEFAULT_PORT_IDENTIFIER;
-import static com.opera.core.systems.scope.internal.OperaIntervals.SERVER_PORT;
 import static com.opera.core.systems.scope.internal.OperaIntervals.SERVER_RANDOM_PORT_IDENTIFIER;
 import static org.openqa.selenium.Platform.LINUX;
 
@@ -132,11 +132,11 @@ public class OperaSettings {
     },
 
     /**
-     * (String) Where to send the output of the logging.  Default is to not write to file.
+     * (String/File) Where to send the output of the logging.  Default is to not write to file.
      */
     LOGGING_FILE("logging.file") {
       Object sanitize(Object path) {
-        if (path != null) {
+        if (path != null && path instanceof String) {
           return new File(String.valueOf(path));
         }
 
@@ -145,8 +145,8 @@ public class OperaSettings {
     },
 
     /**
-     * (String) Path to the Opera binary to use. If not specified, OperaDriver will guess the path
-     * to your Opera installation (typically <code>/usr/bin/opera</code> or <code>C:\Program
+     * (String/File) Path to the Opera binary to use. If not specified, OperaDriver will guess the
+     * path to your Opera installation (typically <code>/usr/bin/opera</code> or <code>C:\Program
      * Files\Opera\opera.exe</code>).
      */
     BINARY() {
@@ -222,7 +222,7 @@ public class OperaSettings {
         if (port == SERVER_RANDOM_PORT_IDENTIFIER.getValue()) {
           return PortProber.findFreePort();
         } else if (port == SERVER_DEFAULT_PORT_IDENTIFIER.getValue()) {
-          return (int) SERVER_PORT.getValue();
+          return (int) SERVER_DEFAULT_PORT.getValue();
         }
 
         return port;
@@ -483,6 +483,7 @@ public class OperaSettings {
      *
      * @return easy to read string representation
      */
+    @Override
     public String toString() {
       return getCapability();
     }
@@ -549,7 +550,7 @@ public class OperaSettings {
       options.put(capability, new CapabilityInstance(capability));
     }
 
-    logging().setLevel(logging().getLevel());
+    initializeLogging();
   }
 
   /**
@@ -645,7 +646,7 @@ public class OperaSettings {
           logFile = new FileHandler(file.getPath(), OperaFlags.APPEND_TO_LOGFILE);
           logFile.setFormatter(new SimpleFormatter());
         } catch (IOException e) {
-          throw new WebDriverException("Unable to write to log file: " + e.getMessage());
+          throw new WebDriverException("Unable to write to log file: " + e.getMessage(), e);
         }
 
         logFile.setLevel(getLevel());
@@ -847,6 +848,10 @@ public class OperaSettings {
    */
   public void autostart(boolean enabled) {
     options.get(AUTOSTART).setValue(enabled);
+
+    if (!enabled) {
+      setPort((int) SERVER_DEFAULT_PORT_IDENTIFIER.getValue());
+    }
   }
 
   /**
@@ -956,14 +961,14 @@ public class OperaSettings {
   /**
    * Whether or not the currently specified Opera configuration supports the
    * <code>-debugproxy</code> command-line argument.  If the specified port is not equal to the
-   * default proxy server port specified in {@link com.opera.core.systems.scope.internal.OperaIntervals#SERVER_PORT},
+   * default proxy server port specified in {@link com.opera.core.systems.scope.internal.OperaIntervals#SERVER_DEFAULT_PORT},
    * this will be true.
    *
    * @return true if this configuration supports the <code>-debugproxy</code> command-line argument,
    *         false otherwise
    */
   public boolean supportsDebugProxy() {
-    return getPort() != SERVER_PORT.getValue();
+    return getPort() != SERVER_DEFAULT_PORT.getValue();
   }
 
   /**
@@ -999,6 +1004,7 @@ public class OperaSettings {
       surplusCapabilities.setCapability(capability.getKey(), capability.getValue());
     }
 
+    initializeLogging();
     return this;
   }
 
@@ -1062,6 +1068,11 @@ public class OperaSettings {
    */
   public String toString() {
     return String.format("OperaSettings %s", options.values());
+  }
+
+  private void initializeLogging() {
+    logging().setLevel(logging().getLevel());
+    logging().setFile(logging().getFile());
   }
 
   /**
