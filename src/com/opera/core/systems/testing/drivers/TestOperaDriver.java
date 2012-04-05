@@ -85,7 +85,7 @@ public class TestOperaDriver extends OperaDriver {
   }
 
   public boolean isRunning() {
-    return runner != null && runner.isOperaRunning();
+    return !settings.autostart() || runner != null && runner.isOperaRunning();
   }
 
   public ScopeServices getServices() {
