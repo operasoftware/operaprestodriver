@@ -33,7 +33,7 @@ public class KeyEventsTest extends OperaDriverTestCase {
 
   @Before
   public void beforeEach() {
-    getFixture("keys.html");
+    driver.navigate().to(pages.keys);
     logEl = driver.findElementById("log");
   }
 
