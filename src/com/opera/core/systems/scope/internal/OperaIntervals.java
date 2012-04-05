@@ -45,7 +45,12 @@ public enum OperaIntervals {
   WINDOW_EVENT_TIMEOUT(5000),
   OPERA_IDLE_TIMEOUT(5000),
   POLL_INTERVAL(10),
-  HANDSHAKE_TIMEOUT(30000),
+
+  /**
+   * The handshake timeout defines how long the Scope server (OperaDriver) should wait for a
+   * connection from a client (Opera) before shutting down.  If set to 0, it will wait indefinitely.
+   */
+  HANDSHAKE_TIMEOUT(60000),
 
   /**
    * The default Opera debug proxy server port for OperaDriver to connect to.
@@ -60,11 +65,10 @@ public enum OperaIntervals {
 
   /**
    * For backwards compatibility with Operas without <code>-debugproxy</code> support, if the user
-   * specifies -1 as the port it will use the default server proxy port specified in
-   * {@link #SERVER_DEFAULT_PORT}.
+   * specifies -1 as the port it will use the default server proxy port specified in {@link
+   * #SERVER_DEFAULT_PORT}.
    */
   SERVER_DEFAULT_PORT_IDENTIFIER(-1),
-
 
   KILL_GRACE_TIMEOUT(1000),
   BACKWARDS_COMPATIBLE(1),

@@ -440,7 +440,6 @@ public class WaitState {
                                               String stringMatch, final ResponseType type) {
     synchronized (lock) {
       while (true) {
-
         ResultItem result = pollResultItem(timeout, type == ResponseType.OPERA_IDLE);
         timeout = result.remainingIdleTimeout;
         WaitResult waitResult = result.waitResult;
