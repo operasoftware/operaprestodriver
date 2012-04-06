@@ -56,7 +56,7 @@ public class SocketMonitor {
   }
 
   public boolean add(SelectableChannel channel, SocketListener listener, int selectMask) {
-    logger.finer(String.format("Add channel: %s, mask=%s", channel, debugMask(selectMask)));
+    logger.finest(String.format("Add channel: %s, mask=%s", channel, debugMask(selectMask)));
 
     synchronized (changes) {
       changes.add(new SelectorChangeRequest(channel, Operation.ADD, selectMask, listener));
@@ -67,7 +67,7 @@ public class SocketMonitor {
   }
 
   public boolean modify(SelectableChannel channel, SocketListener listener, int selectMask) {
-    logger.finer(String.format("Modify channel: %s, mask=%s", channel, debugMask(selectMask)));
+    logger.finest(String.format("Modify channel: %s, mask=%s", channel, debugMask(selectMask)));
 
     if (channel == null) {
       return false;
@@ -82,7 +82,7 @@ public class SocketMonitor {
   }
 
   public void remove(SelectableChannel channel) {
-    logger.finer(String.format("Remove channel: %s", channel));
+    logger.finest(String.format("Remove channel: %s", channel));
 
     if (channel == null) {
       return;
