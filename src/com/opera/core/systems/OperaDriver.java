@@ -194,20 +194,13 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
    * Initialize required Scope services.
    */
   protected void init() {
+
+    createScopeServices();
+
     // Launch Opera if the runner has been setup
     if (runner != null) {
       runner.startOpera();
     }
-
-    /*
-    DSK-360865: It is possible that the Opera binary will crash during startup. In that case startOpera() above will
-    throw an exception. Due to some mysterious circumstances, if the scope service will be created before that, any further
-    attempt to communicate with the Opera binary will fail right after the handshake. This is probably related to the
-    scope object not being released correctly in such a case.
-    The solution here is to move the createScopeServices() call below the startOpera() call, as you can see. This ensures
-    that the services won't be created if Opera did not run correctly.
-     */
-    createScopeServices();
 
     services.init();
     debugger = services.getDebugger();
