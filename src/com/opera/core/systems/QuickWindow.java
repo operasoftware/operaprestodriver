@@ -16,14 +16,10 @@ limitations under the License.
 
 import java.awt.Dimension;
 import java.awt.Point;
-import java.util.ArrayList;
-import java.util.logging.Logger;
 
 import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo.DesktopWindowType;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect;
-import com.opera.core.systems.scope.protos.SystemInputProtos;
-import com.opera.core.systems.scope.services.ums.SystemInputManager;
 
 /**
  * Represents a window in the Desktop UI. 
@@ -33,42 +29,15 @@ import com.opera.core.systems.scope.services.ums.SystemInputManager;
  */
 public class QuickWindow {
 
-  private SystemInputManager systemInputManager;
   private final DesktopWindowInfo info;
-
-  protected final Logger logger = Logger.getLogger(this.getClass().getName());
 
   /**
    * Constructor.
    *
    * @param info DesktopWindowInfo describing the window
    */
-  public QuickWindow(DesktopWindowInfo info, SystemInputManager systemInputManager) {
+  public QuickWindow(DesktopWindowInfo info) {
     this.info = info;
-    this.systemInputManager = systemInputManager;
-  }
-
-  public void giveFocus()
-  {
-    if (systemInputManager == null)
-      return;
-
-    int left = info.getRect().getX();
-    int right = info.getRect().getX() + info.getRect().getWidth();
-    int top = info.getRect().getY();
-
-    int middle = (left + right) / 2;
-    top += 4;
-
-    Point coords = new Point(middle, top);
-
-    logger.severe("(" + coords.getX() + ", " + coords.getY() + ")");
-
-    ArrayList mods = new ArrayList();
-    mods.add(SystemInputProtos.ModifierPressed.NONE);
-
-    SystemInputProtos.MouseInfo.MouseButton button = SystemInputProtos.MouseInfo.MouseButton.LEFT;
-    systemInputManager.click(coords, button, 1, mods);
   }
 
   /**
