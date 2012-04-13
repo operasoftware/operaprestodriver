@@ -62,8 +62,6 @@ public class QuickWindow {
 
     Point coords = new Point(middle, top);
 
-    logger.severe("(" + coords.getX() + ", " + coords.getY() + ")");
-
     ArrayList mods = new ArrayList();
     mods.add(SystemInputProtos.ModifierPressed.NONE);
 
