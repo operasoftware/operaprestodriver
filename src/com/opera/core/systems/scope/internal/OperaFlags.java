@@ -24,12 +24,6 @@ public class OperaFlags {
   public static boolean ENABLE_DEBUGGER = true;
 
   /**
-   * Enable checks for accessing web elements that are disabled.  This allows clicking on disabled
-   * elements, &c.
-   */
-  public static final boolean ENABLE_CHECKS = true;
-
-  /**
    * Whether or not to append to log file instead of overwriting contents.  If true the driver will
    * append, otherwise it will overwrite.  By default it overwrites the file.
    */

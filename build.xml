@@ -95,14 +95,6 @@
     </jar>
   </target>
 
-  <target name="jar_internal" description="Make an internal JAR allowing click of disabled elements">
-    <replace file="src/com/opera/core/systems/scope/internal/OperaFlags.java" token="ENABLE_CHECKS = true" value="ENABLE_CHECKS = false" />
-    <antcall target="jar" inheritAll="false">
-      <param  name="version" value="${version}-internal" />
-    </antcall>
-    <replace file="src/com/opera/core/systems/scope/internal/OperaFlags.java" token="ENABLE_CHECKS = false" value="ENABLE_CHECKS = true" />
-  </target>
-
   <!-- Compile any modified classes including test classes -->
   <target name="compile_tests" depends="jar">
     <javac source="1.5" target="1.5" debug="true" destdir="bin" includeantruntime="false">

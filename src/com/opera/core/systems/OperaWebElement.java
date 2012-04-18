@@ -115,12 +115,12 @@ public class OperaWebElement extends RemoteWebElement {
   }
 
   public void click() {
-    verifyCanInteractWithElement();
+    assertElementNotStale();
+    assertElementDisplayed();
 
     parent.getScopeServices().captureOperaIdle();
 
     if (getTagName().equals("OPTION")) {
-      assertElementEnabled("Cannot select disabled element");
       callMethod("return " + OperaAtoms.CLICK + "(locator)");
     } else {
       parent.actionHandler.click(this, "");
@@ -569,7 +569,7 @@ public class OperaWebElement extends RemoteWebElement {
       public WebElement call() throws Exception {
         return parent.findElement(by, using, el);
       }
-    });    
+    });
   }
 
   protected List<WebElement> findElements(String by, String using) {
@@ -689,10 +689,8 @@ public class OperaWebElement extends RemoteWebElement {
   }
 
   private void assertElementEnabled(String message) {
-    if (OperaFlags.ENABLE_CHECKS) {
-      if (!isEnabled()) {
-        throw new InvalidElementStateException(message);
-      }
+    if (!isEnabled()) {
+      throw new InvalidElementStateException(message);
     }
   }
 
