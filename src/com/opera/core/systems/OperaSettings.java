@@ -361,6 +361,8 @@ public class OperaSettings {
     /**
      * (Boolean) Whether to detach the Opera browser when the driver shuts down.  This will leave
      * Opera running.
+     *
+     * @since 0.12
      */
     DETACH() {
       Boolean getDefaultValue() {
@@ -374,7 +376,8 @@ public class OperaSettings {
     },
 
     /**
-     * (String) The product we are using, for example "desktop" or "core".
+     * (String) The product we are using, for example {@link OperaProduct#DESKTOP} or {@link
+     * OperaProduct#CORE}.
      */
     PRODUCT() {
       OperaProduct getDefaultValue() {
