@@ -46,7 +46,6 @@ To generate Google Protobuffer-compatible .proto files from the Scope
 protocols:
 
     cd scope
-    mkdir out
     hob -c hob.conf java --out=../
 
 Then to compile the files:
