@@ -40,7 +40,7 @@ correlated to a .proto file) by editing the file
 
 To install hob:
 
-    easy_install hob
+    pip install hob
 
 To generate Google Protobuffer-compatible .proto files from the Scope
 protocols:
