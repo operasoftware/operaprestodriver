@@ -1,11 +1,4 @@
-syntax = "proto2";
-import "opera/scope/scope_descriptor.proto";
-
-package scope;
-
-option optimize_for         = SPEED;
-option java_outer_classname = "ConsoleLoggerProtos";
-option java_package         = "com.opera.core.systems.scope.protos";
+syntax = scope;
 
 message ConsoleMessage
 {
@@ -64,3 +57,18 @@ message ConsoleMessage
     optional string severity    = 7;
 }
 
+/**
+ * The `console-logger` is a noninteractive tool used to log
+ * messages sent to Opera's console.
+ *
+ * All messages sent to the Opera console from the various
+ * modules in Opera are captured and displayed.
+ */
+service ConsoleLogger
+{
+    option (cpp_hfile) = "modules/scope/src/scope_console_logger.h";
+    option (version) = "2.0";
+    option (cpp_class) = OpScopeConsoleLogger;
+ 
+    event OnConsoleMessage returns (ConsoleMessage) = 1;
+}

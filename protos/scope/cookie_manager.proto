@@ -1,0 +1,106 @@
+syntax = "scope";
+
+/**
+ * This service can enumerate and remove cookies for a certain domain.
+ *
+ * It can currently not add cookies, but this can be achieved through
+ * ECMAScript (document.cookie).
+ *
+ * Changelog:
+ * 1.0 - First release
+ * 1.0.1 - Fixed a bug in RemoveCookie where it would remove all cookies,
+ *         not just in the specified domain.
+ */
+service CookieManager
+{
+    option (version) = "1.0.1";
+
+    /**
+     * Retrieve a list of cookies for a given domain.
+     *
+     * @param domain Name of domain to look for, e.g. "opera.com"
+     * @param path   Limit cookie list to specified path or subpath.
+     */
+    command GetCookie(GetCookieArg) returns (CookieList) = 1;
+
+    /**
+     * Removes selected cookies or all cookies in a domain.
+     *
+     * @param domain Name of domain to remove cookies from, e.g. "opera.com"
+     * @param path   If specified only removes cookies from specified path or subpath.
+     * @param name   Name of cookie to remove, if unspecified removes all cookies matching domain/path.
+     */
+    command RemoveCookie(RemoveCookieArg) returns (Default) = 2;
+
+    /**
+     * Removes all cookies.
+     */
+    command RemoveAllCookies(Default) returns (Default) = 3;
+
+    /**
+     * Get global settings regarding the allowed number of cookies,
+     * and the max allowed length a cookie.
+     */
+    command GetCookieSettings(Default) returns (CookieSettings) = 4;
+}
+
+message Cookie
+{
+    required string domain = 1;
+    required string path = 2;
+    required string name = 3;
+    required string value = 4;
+    // might want to use uint64 here, but requires 64bit support in opera
+    /**
+     * Expiry time for cookie specified in seconds from epoch (Unix timestamp).
+     * A value of 0 means the cookie is expired when the session ends (browser closes).
+     */
+    required uint32 expires = 5;
+    /**
+     * If true the cookie will only be transferred on secure connections (HTTPS).
+     */
+    required bool isSecure = 6;
+    /**
+     * If true then cookie is only accessible via HTTP.
+     */
+    required bool isHTTPOnly = 7;
+}
+
+message CookieList
+{
+    repeated Cookie cookieList = 1;
+}
+
+message GetCookieArg
+{
+    required string domain = 1;
+    optional string path = 2;
+}
+
+message RemoveCookieArg
+{
+    required string domain = 1;
+    optional string path = 2;
+    optional string name = 3;
+}
+
+/**
+ * The current settings for the cookie manager in the opera host, these settings are read-only and may vary depending on the platform or device used.
+ */
+message CookieSettings
+{
+    /**
+     * The maximum number of cookies the host can store in total.
+     * If there is no room for new cookies the host will remove the least recently used cookies to get enough space.
+     */
+    required uint32 maxCookies = 1;
+    /**
+     * The maximum number of cookies allowed in one domain.
+     * If there is no room for new cookies the host will remove the least recently used cookies in the domain to get enough space.
+     */
+    required uint32 maxCookiesPerDomain = 2;
+    /**
+     * The maxium byte length of a single cookie, if the cookie exceeds this length it will be discarded.
+     */
+    required uint32 maxCookieLength = 3;
+}

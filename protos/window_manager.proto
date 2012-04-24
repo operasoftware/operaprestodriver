@@ -1,4 +1,11 @@
-syntax = scope;
+syntax = "proto2";
+import "opera/scope/scope_descriptor.proto";
+
+package scope;
+
+option optimize_for         = SPEED;
+option java_outer_classname = "WmProtos";
+option java_package         = "com.opera.core.systems.scope.protos";
 
 /**
  * TODO: We probably want a lot more information about each window, like URL, shortcut
@@ -9,9 +16,9 @@ message WindowInfo
     required uint32 windowID   = 1;
     required string title      = 2;
     /**
-     *
+     * 
      * TODO: Some of these are obsolete, like "ad". Figure out which ones should really be present.
-     *
+     * 
      * Type is one of:
      * - "normal"
      * - "download"
@@ -42,97 +49,6 @@ message WindowInfo
      * or 0 if it was not opened by another window.
      */
     required uint32 openerID   = 4;
-}
-
-/**
- * We want to be able to work with windows on a higher level than before. One important goal is to opt-in on the messages you
- * get instead of being flooded.
- *
- * Discussion
- * ----------
- *
- * This protocol will prevent a lot of flooding from the other services, but it will on the other hand flood a bit itself.
- * There is no way to stop it from sending `OnWindowActivated` messages for example.
- *
- * When Opera Dragonfly is used to debug on the desktop, it probably doesn't want to use this service at all, but just have
- * the filters automatically set to include the active window. We might cater for this later. The way to do it with the current
- * protocol would be to retrieve the active window and put that in the include filter manually. However the active window might
- * have changed by the time Opera Dragonfly gets to do that. Additionally, we would like Opera Dragonfly to start with a certain
- * DOM node selected. I see no other way than adding some C++ hooks to do this when debugging locally.
- */
-service WindowManager
-{
-    option (cpp_hfile) = "modules/scope/src/scope_window_manager.h";
-    option (version) = "2.1";
-    option (cpp_class) = OpScopeWindowManager;
-
-    /**
-     * Request the currently active window.
-     */
-    command GetActiveWindow(Default) returns (WindowID) = 1;
-    command ListWindows(Default) returns (WindowList) = 2;
-    /**
-     * The default `WindowFilter` used to be `includePatternList` `"*"`.
-     * After this command was introduced, the default filter is `includeIDList` 0 (unknown).
-     *
-     * The filtering mechanism works by taking the appropriate window-id of the message and checks it:
-     *
-     *   If the INCLUDE filter contains the window-id, or a window that has opened the window,
-     *   and the window-id is not in the EXCLUDE filter,
-     *      then send the message.
-     *   Otherwise,
-     *      discard the message
-     *
-     * `includeIDList` and `excludeIDList` appends to the existing filter. This is true whether these occur in the
-     * same `ModifyFilter` command or occur in different `ModifyFilter` commands. If the `clearFilter` flag is present, the
-     * filter will cleared before the `includeIDList` and `excludeIDList` appends to the filter.
-     *
-     * TODO: Perhaps `WindowFilter` should work on window types as well?
-     */
-    command ModifyFilter(WindowFilter) returns (Default) = 3;
-    /**
-     * Sent every time there is a new window, or some window information changed.
-     */
-    event OnWindowUpdated returns (WindowInfo) = 4;
-    /**
-     * Sent when a window is closed.
-     */
-    event OnWindowClosed returns (WindowID) = 5;
-    /**
-     * Sent whenever the active window is changed.
-     */
-    event OnWindowActivated returns (WindowID) = 6;
-    /**
-     * Sent whenever a window has finished loading. This
-     * event happens after external resources are loaded.
-     * Note: if the page uses scripting to dynamically change the page or load more data, this event may occur
-     *       multiple times for the same window.
-     */
-    event OnWindowLoaded returns (WindowID) = 7;
-
-    /**
-     * Create a new window, and (if successful) return its ID.
-     */
-    command CreateWindow(CreateWindowArg) returns (WindowID) = 8;
-
-    /**
-     * Request the closing of a specific window. Window closing is asynchronous, and your
-     * request may be silently ignored or denied. If the Window actually was closed, then
-     * an OnWindowClosed event will fire.
-     *
-     * Attempting to close a non-existent window will trigger an error.
-     */
-    command CloseWindow(CloseWindowArg) returns (Default) = 9;
-
-    /**
-     * Open a URL in the the specified Window, and start loading.
-     */
-    command OpenURL(OpenURLArg) returns (Default) = 10;
-
-    /**
-     * The type filter lets you exclude certain window types completely.
-     */
-    command ModifyTypeFilter(ModifyTypeFilterArg) returns (Default) = 11;
 }
 
 message WindowID
@@ -204,28 +120,27 @@ message OpenURLArg
      * Start loading the URL in this Window.
      */
     required uint32 windowID = 1;
-
     /**
      * The URL to load.
      */
-    required string url = 2;
+    required string url      = 2;
 }
 
 message ModifyTypeFilterArg
 {
     /**
      * Possible values:
-     *
+     * 
      *  - "replace" clears the current filter, and replaces it with the input values.
      *  - "append" adds the input values to the current filter. It is acceptable to
      *    add a value already present in the filter (silent fail).
      *  - "default" resets the filter to its defaults. The input values are ignored.
      *    The default is ["normal_hidden", "devtools"].
      */
-    required string mode = 2;
-
+    required string mode     = 2;
     /**
      * A list of window types to exclude. For valid window types, see CreateWindowArg.
      */
     repeated string typeList = 1;
 }
+

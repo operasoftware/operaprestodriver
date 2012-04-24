@@ -1,12 +1,20 @@
-syntax = scope;
+syntax = "proto2";
+import "opera/scope/scope_descriptor.proto";
 
-enum ModifierPressed {
-	NONE 	= 0;
-	CTRL 	= 1;
-	SHIFT 	= 2;
-	ALT 	= 4;
-	META 	= 8;   // Ctrl key on Mac
-	SUPER 	= 16;  // The Windows key under X11
+package scope;
+
+option optimize_for         = SPEED;
+option java_outer_classname = "SystemInputProtos";
+option java_package         = "com.opera.core.systems.scope.protos";
+
+enum ModifierPressed
+{
+    NONE = 0;
+    CTRL = 1;
+    SHIFT = 2;
+    ALT = 4;
+    META = 8;
+    SUPER = 16;
 }
 
 /**
@@ -14,74 +22,38 @@ enum ModifierPressed {
  */
 message MouseInfo
 {
-	required uint32 x      				= 1;
-	required uint32 y      				= 2;
     /**
      * Button Pressed 
      * Use MouseButton from Opera
      * 
      */
-	enum MouseButton {
-		LEFT 	= 0;
-		RIGHT 	= 1;
-		MIDDLE 	= 2;
-	}
-	required MouseButton button 		= 3;
-	required uint32 numClicks			= 4;
+    enum MouseButton
+    {
+        LEFT = 0;
+        RIGHT = 1;
+        MIDDLE = 2;
+    }
 
+    required uint32      x         = 1;
+    required uint32      y         = 2;
+    required MouseButton button    = 3;
+    required uint32      numClicks = 4;
     /**
      * Combine flags to set the modifiers
      * Direct copy of the Opera modifiers
      * 
      */
-	required uint32 modifier	= 5;
+    required uint32      modifier  = 5;
 }
 
 message KeyPressInfo
 {
-	required string key 		= 1;
-	
+    required string key      = 1;
     /**
      * Combine flags to set the modifiers
      * Direct copy of the Opera modifiers
-     *
+     * 
      */
-	required uint32 modifier	= 2;
+    required uint32 modifier = 2;
 }
-
-/**
- */
-service SystemInput
-{
-    option (cpp_hfile) = "adjunct/desktop_scope/scope_system_input.h";
-    option (core_release) = "2.5";
-    option (version) = "1.1";
-    option (cpp_class) = OpScopeSystemInput;
-
-    /**
-     * Clicks the mouse
-     */
-    command Click(MouseInfo) returns (Default) 			= 1;
-
-    /**
-     * Presses a key (including modifiers)
-     */
-    command KeyPress(KeyPressInfo) returns (Default) 	= 2;
-
-    /**
-     * More advanced commands for more control of the keyboard
-     * and mouse
-     */
-     command KeyUp(KeyPressInfo) returns (Default) = 3;
-     command KeyDown(KeyPressInfo) returns (Default) = 4;
-     
-    /**
-     * More advanced mouse for controling up down and move
-     */
-    command MouseDown(MouseInfo) returns (Default) 		= 5;
-    command MouseUp(MouseInfo) returns (Default) 		= 6;
-    command MouseMove(MouseInfo) returns (Default) 		= 7;
-}
-
-
 
