@@ -24,6 +24,7 @@ import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.ContextHandlerCollection;
 import org.eclipse.jetty.server.nio.SelectChannelConnector;
 import org.eclipse.jetty.webapp.WebAppContext;
+import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.net.NetworkUtils;
 import org.openqa.selenium.net.PortProber;
 
@@ -33,6 +34,9 @@ import javax.servlet.Servlet;
 
 public class Jetty7WebServer implements WebServer {
 
+  private static final String HOSTNAME_FOR_TEST_ENV_NAME = "HOSTNAME";
+
+  private static final Integer DEFAULT_HTTP_PORT = 2310;
   private static final String DEFAULT_CONTEXT_PATH = "/test/fixtures";
   private static final NetworkUtils NETWORK_UTILS = new NetworkUtils();
 
@@ -44,7 +48,7 @@ public class Jetty7WebServer implements WebServer {
   private final String hostName;
 
   public Jetty7WebServer() {
-    this(getCurrentHostname());
+    this(detectHostname());
   }
 
   public Jetty7WebServer(String hostName) {
@@ -150,14 +154,34 @@ public class Jetty7WebServer implements WebServer {
   }
 
   public static void main(String[] args) {
-    Jetty7WebServer server = new Jetty7WebServer(getCurrentHostname());
-    server.listenOn(2310);
-    System.out.println("Starting server on port 2310");
+    Jetty7WebServer server = new Jetty7WebServer(detectHostname());
+    server.listenOn(DEFAULT_HTTP_PORT);
+    System.out.println(String.format("Starting server on port %d", DEFAULT_HTTP_PORT));
     server.start();
   }
 
-  private static String getCurrentHostname() {
-    return NETWORK_UTILS.getNonLoopbackAddressOfThisMachine();
+  /**
+   * Gets the hostname of this machine.  By default it will attempt to retrieve the non-loopback
+   * address so that remote browsers can connect to the web server, but in the event that this
+   * fails, we will fall back to the internal loopback address.
+   *
+   * The hostname can be overriden using the {@link #HOSTNAME_FOR_TEST_ENV_NAME} environmental
+   * variable.
+   *
+   * @return hostname to use for web server
+   */
+  private static String detectHostname() {
+    String hostnameFromProperty = System.getenv(HOSTNAME_FOR_TEST_ENV_NAME);
+
+    if (hostnameFromProperty != null) {
+      return hostnameFromProperty;
+    }
+
+    try {
+      return NETWORK_UTILS.getNonLoopbackAddressOfThisMachine();
+    } catch (WebDriverException e) {
+      return NETWORK_UTILS.getIpOfLoopBackIp4();
+    }
   }
 
 }
