@@ -1,0 +1,191 @@
+syntax = "proto2";
+import "opera/scope/scope_descriptor.proto";
+
+package scope;
+
+option optimize_for         = SPEED;
+option java_outer_classname = "ExecProtos";
+option java_package         = "com.opera.core.systems.scope.protos";
+
+/**
+ * List all valid `Action` `name`s
+ */
+message ActionInfoList
+{
+    /**
+     * Name of an action, to be used in the `Action` message.
+     */
+    message ActionInfo
+    {
+        required string name = 1;
+    }
+
+    repeated ActionInfo actionInfoList = 1;
+}
+
+message Area
+{
+    required int32 x = 1;
+    required int32 y = 2;
+    required int32 w = 3;
+    required int32 h = 4;
+}
+
+message ScreenWatcherResult
+{
+    message ColorMatch
+    {
+        /**
+         * The `ColorSpec.id` which matched a color
+         */
+        required uint32 id    = 1;
+        /**
+         * Number of pixels for the matching `id`
+         */
+        required uint32 count = 2;
+    }
+
+    /**
+     * The ID of the window that was triggered by a screen watch, or 0 if the screen watch failed or was cancelled
+     */
+    required uint32     windowID       = 1;
+    /**
+     * ``MD5`` sum of an image, in hexadecimal.
+     */
+    required string     md5            = 2;
+    optional bytes      png            = 3;
+    repeated ColorMatch colorMatchList = 4;
+}
+
+message MouseAction
+{
+    required uint32 windowID     = 1;
+    required int32  x            = 2;
+    required int32  y            = 3;
+    /**
+     * `buttonAction` specifies the buttons to press or release
+     * It is specifies as the sum of button actions:
+     *       1 - Button 1 down
+     *       2 - Button 1 up
+     * 
+     *       4 - Button 2 down
+     *       8 - Button 2 up
+     * 
+     *      16 - Button 3 down
+     *      32 - Button 3 up
+     * 
+     * For example, to press button 1 and release button 2, the value is 9 (1+8)
+     * 
+     * Buttons are clicked in the sequence listed above. Note that down actions are
+     * listed before up actions, thus allowing single-clicking with one command
+     * (e.g. using value 3)
+     */
+    required uint32 buttonAction = 4;
+}
+
+message ScreenWatcher
+{
+    /**
+     * Specifies a new color specification.
+     * The `id` is used when reporting back the results.
+     * You can have overlapping color specifications.
+     * Note: There can be a maximum of 16 color specifications!
+     * 
+     * Color values ranges from 0 (no color) to 255 (maximal saturation), other values are not allowed.
+     * Default (meaning field missing) is 0 for any low fields and 255 for any high fields.
+     */
+    message ColorSpec
+    {
+        required uint32 id        = 1;
+        optional uint32 redLow    = 2 [default = 0];
+        optional uint32 redHigh   = 3 [default = 255];
+        optional uint32 greenLow  = 4 [default = 0];
+        optional uint32 greenHigh = 5 [default = 255];
+        optional uint32 blueLow   = 6 [default = 0];
+        optional uint32 blueHigh  = 7 [default = 255];
+    }
+
+    /**
+     * Number of milliseconds to wait before capturing the screen area.
+     * 
+     * The default is 10 seconds.
+     */
+    required uint32    timeOut       = 1 [default = 10000];
+    /**
+     * Define an area on the page, relative to the page (not viewport).
+     * 
+     * The default area is {x=0, y=0, w=200, h=100}.
+     */
+    required Area      area          = 2;
+    /**
+     * ``MD5`` sum of an image, in hexadecimal.
+     */
+    repeated string    md5List       = 3;
+    /**
+     * The ID of the window to watch, the default (or 0) is to watch the current window
+     */
+    optional uint32    windowID      = 4 [default = 0];
+    repeated ColorSpec colorSpecList = 5;
+    /**
+     * If true then the image data will be sent in the response `WatcherResult.png`, otherwise the field will be omitted
+     * Can be used to reduce bandwith usage in applications where only hashes are needed.
+     */
+    optional bool      includeImage  = 6 [default = true];
+}
+
+message ActionList
+{
+    message Action
+    {
+        /**
+         * The name of the action to execute. 
+         * This is either a regular Opera action (e.g. "Page Down"),
+         * or a special exec-action. Both kinds can be found by 
+         * calling `GetActionInfoList`. The special cases are
+         * prefixed with underscore ("_"), and these require `value` 
+         * parameter to work, but always ignores `windowID`.
+         * 
+         * The special cases may include:
+         *     _keydown | _keyup: 
+         *         The `value` is either a key-name ("ctrl", "down", etc.)
+         *         or a single character ("a", "b", etc.)
+         *     _type: 
+         *         Types the text present in `value` 
+         *         (a different approach is the "Insert" action)
+         * 
+         * It is currently not possible to figure out which actions 
+         * take parameters (`value`), and which don't. Optimistically, 
+         * we have made the `Action` type extendable to include 
+         * such information later.
+         */
+        required string name        = 1;
+        /**
+         * String parameter for extra string data to be sent with the action
+         * E.g. "opera.com" to the command "go"
+         */
+        optional string value       = 2;
+        /**
+         * Window to send the action to, 0 for the currently active window
+         * 
+         * WARNING: Please be sure you want this is you use it as you
+         *          might not actually know the correct window and then
+         *          the action will fail. 0 is best if you are unsure
+         */
+        optional uint32 windowID    = 3;
+        /**
+         * Data parameter for extra integer data to be sent with the action
+         * 
+         * In some actions the data parameter is interpreted as a pointer
+         * rather than an integer. In these cases the action will fail.
+         */
+        optional int32  data        = 4;
+        /**
+         * Extra string parameter for action, sent in addition to the 'value'
+         * parameter for actions that need two strings
+         */
+        optional string stringParam = 5;
+    }
+
+    repeated Action actionList = 1;
+}
+
