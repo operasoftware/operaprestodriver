@@ -20,6 +20,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.io.ByteStreams;
 import com.google.common.io.Closeables;
 import com.google.common.io.Files;
+import com.google.common.hash.Hashing;
 import com.google.protobuf.GeneratedMessage;
 
 import com.opera.core.systems.OperaPaths;
@@ -56,7 +57,6 @@ import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.SocketTimeoutException;
 import java.net.URL;
-import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.logging.Level;
@@ -507,8 +507,8 @@ public class OperaLauncherRunner extends OperaRunner
    * @throws IOException if an I/O error occurs
    */
   private static byte[] md5(InputStream fis) throws NoSuchAlgorithmException, IOException {
-    return ByteStreams.getDigest(ByteStreams.newInputStreamSupplier(ByteStreams.toByteArray(fis)),
-                                 MessageDigest.getInstance("MD5"));
+    return ByteStreams.hash(ByteStreams.newInputStreamSupplier(ByteStreams.toByteArray(fis)),
+                            Hashing.md5()).asBytes();
   }
 
   /**
@@ -520,7 +520,7 @@ public class OperaLauncherRunner extends OperaRunner
    * @throws NoSuchAlgorithmException if MD5 is not available
    */
   private static byte[] md5(File file) throws NoSuchAlgorithmException, IOException {
-    return Files.getDigest(file, MessageDigest.getInstance("MD5"));
+    return Files.hash(file, Hashing.md5()).asBytes();
   }
 
   /**
