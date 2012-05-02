@@ -158,7 +158,8 @@ public class OperaWebElement extends RemoteWebElement {
   public String getAttribute(String attribute) {
     assertElementNotStale();
 
-    if (attribute.toLowerCase().equals("value")) {
+    // TODO(andreastt): Investigate whether this check is still needed
+    if (attribute.equalsIgnoreCase("value")) {
       return callMethod("if(/^input|select|option|textarea$/i.test(locator.nodeName)){"
                         + "return locator.value;" + "}" + "return locator.textContent;");
     } else {
@@ -211,8 +212,8 @@ public class OperaWebElement extends RemoteWebElement {
     // Keys that have been held down, and need to be released
     ArrayList<String> heldKeys = new ArrayList<String>();
 
-    if (getTagName().equalsIgnoreCase("input")
-        && (hasAttribute("type") && getAttribute("type").equals("file"))) {
+    if (getTagName().equals("INPUT")
+        && (hasAttribute("type") && getAttribute("type").equalsIgnoreCase("file"))) {
       click();
     } else {
       executeMethod("locator.focus()");
