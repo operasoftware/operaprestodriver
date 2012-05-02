@@ -122,6 +122,9 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
   private OperaScopePreferences preferences;
 
+  private OperaMouse mouse;
+  private OperaKeyboard keyboard;
+
   protected Set<Integer> objectIds = new HashSet<Integer>();
   private int assignedWindowIds = 0;
   private String version;
@@ -205,8 +208,11 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     coreUtils = services.getCoreUtils();
     actionHandler = new PbActionHandler(services);
     cookieManager = services.getCookieManager();
-    // cookieManager.updateCookieSettings();
+    //cookieManager.updateCookieSettings();
     preferences = new OperaScopePreferences(services.getPrefs());
+
+    mouse = new OperaMouse(this);
+    keyboard = new OperaKeyboard(this);
 
     // Get product from Opera
     settings.setProduct(utils().getProduct());
@@ -880,11 +886,11 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
   }
 
   public Keyboard getKeyboard() {
-    return new OperaKeyboard(this);
+    return keyboard;
   }
 
   public Mouse getMouse() {
-    return new OperaMouse(this);
+    return mouse;
   }
 
   // Following methods are Opera-specific extensions to the WebDriver interface:

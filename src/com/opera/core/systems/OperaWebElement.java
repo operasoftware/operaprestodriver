@@ -22,7 +22,6 @@ import com.opera.core.systems.model.OperaColor;
 import com.opera.core.systems.model.ScreenShotReply;
 import com.opera.core.systems.scope.exceptions.ResponseNotReceivedException;
 import com.opera.core.systems.scope.internal.OperaColors;
-import com.opera.core.systems.scope.internal.OperaFlags;
 import com.opera.core.systems.scope.internal.OperaKeys;
 import com.opera.core.systems.scope.internal.OperaMouseKeys;
 import com.opera.core.systems.scope.services.IEcmaScriptDebugger;
@@ -615,7 +614,7 @@ public class OperaWebElement extends RemoteWebElement {
 
   private Coordinates coordinates = new Coordinates() {
     public Point getLocationOnScreen() {
-      throw new UnsupportedOperationException("Not supported yet.");
+      throw new UnsupportedOperationException();
     }
 
     public Point getLocationInViewPort() {
@@ -639,7 +638,7 @@ public class OperaWebElement extends RemoteWebElement {
     }
 
     public Object getAuxiliry() {
-      throw new UnsupportedOperationException("Not supported yet");
+      throw new UnsupportedOperationException();
     }
   };
 
