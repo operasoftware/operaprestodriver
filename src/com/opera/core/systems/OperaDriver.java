@@ -299,8 +299,8 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     services.captureOperaIdle();
     windowManager.openUrl(activeWindowId, url);
 
-    if (oldUrl == null || (url.replace(oldUrl, "").length() == 0
-                           || url.replace(oldUrl, "").charAt(0) != '#')) {
+    if (oldUrl == null ||
+        (url.replace(oldUrl, "").isEmpty() || url.replace(oldUrl, "").charAt(0) != '#')) {
       if (settings.useIdle() && services.isOperaIdleAvailable()) {
         try {
           // Use idle timeout (which is lower) if timeout has not been manually set.
