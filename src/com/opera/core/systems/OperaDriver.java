@@ -715,9 +715,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
   public class OperaOptions implements Options {
 
     public void addCookie(Cookie cookie) {
-
       // TODO: Numeric overflow
-
       if (cookie.getExpiry() == null) {
         cookie =
             new Cookie(cookie.getName(), cookie.getValue(), cookie.getDomain(), cookie.getPath(),
@@ -742,11 +740,9 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
       gc();
 
-      /*
-       * Date dateInPast = new Date(0); Cookie toDelete = new Cookie(cookie.getName(),
-       * cookie.getValue(), cookie.getDomain(), cookie.getPath(), dateInPast, false);
-       * addCookie(toDelete);
-       */
+      //Date dateInPast = new Date(0); Cookie toDelete = new Cookie(cookie.getName(),
+      //cookie.getValue(), cookie.getDomain(), cookie.getPath(), dateInPast, false);
+      //addCookie(toDelete);
     }
 
     public void deleteAllCookies() {
@@ -782,12 +778,10 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
       return null;
 
-      /*
-       * String value = debugger.executeJavascript("var getCookieNamed = function(key)\n"+ "{"+
-       * "var value = new RegExp(key + \"=([^;]*)\").exec(document.cookie);"+
-       * "return value && decodeURIComponent(value[1]);"+ "}\n"+ "return getCookieNamed('" + name +
-       * "')"); return (value == null) ? null : new Cookie(name, value);
-       */
+      //String value = debugger.executeJavascript("var getCookieNamed = function(key)\n"+ "{"+
+      //"var value = new RegExp(key + \"=([^;]*)\").exec(document.cookie);"+
+      //"return value && decodeURIComponent(value[1]);"+ "}\n"+ "return getCookieNamed('" + name +
+      //"')"); return (value == null) ? null : new Cookie(name, value);
     }
 
     public OperaTimeouts timeouts() {
