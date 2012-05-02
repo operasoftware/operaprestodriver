@@ -4,11 +4,6 @@ Scope protocols for Java
 This directory contains various protocol definition files used in
 OperaDriver's Scope implementation for Java.
 
-The .proto files located in /protos/scope are the original Scope service
-files used in Opera.  They have a protobufesque syntax but are infact
-Scope protocols, and can therefore not be used for compiling Java
-classes directly using protoc.
-
 The .proto files located in /protos (this directory) are transformed
 Google Protobuffer-compatible files.  These can be compiled into Java
 classes using protoc:
@@ -17,12 +12,17 @@ classes using protoc:
 
 You must use protoc version >= 2.4.1.
 
+The .proto files located in /protos/scope are the original Scope service
+files used in Opera.  They have a protobufesque syntax but are infact
+Scope protocols, and can therefore not be used for compiling Java
+classes directly using protoc.
+
 The core Scope services .proto files in /protos/scope are from
 <URI:https://bitbucket.org/scope/scope-services>.  The desktop proto
 files (desktop_utils.proto, desktop_window_manager.proto and
 system_input.proto) are new here.
 
-These original file can be transformed into Google Protobuffer .proto
+The Scope protocols can be transformed into Google Protobuffer .proto
 files by using a tool called hob, which is a multi-language code
 generator for the Opera Scope protocol:
 
@@ -36,7 +36,8 @@ Scope-related “service { … }” section.
 
 You can customize the package options for each service (which is
 correlated to a .proto file) by editing the file
-/protos/scope/java.conf.
+/protos/scope/java.conf.  Also see the main hob configuration file,
+/protos/scope/hob.conf, for which services are enabled.
 
 To install hob:
 
