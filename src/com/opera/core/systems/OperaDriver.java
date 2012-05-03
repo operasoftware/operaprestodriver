@@ -311,7 +311,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
         } catch (WebDriverException e) {
           // This could for example be a gif animation, preventing idle from being passed. Common
           // case, and should not result in test error.
-          logger.warning("idle: Timed out with exception: " + e);
+          logger.warning("idle: Timed out with exception: " + e.getMessage());
         }
       } else {
         try {
