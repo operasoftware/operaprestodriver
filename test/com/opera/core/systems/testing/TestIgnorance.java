@@ -107,7 +107,7 @@ public class TestIgnorance {
     if (services != null) {
       if (!services.getListedServices().contains(annotation.service())) {
         return true;
-      } else if (!services.getListedServices().contains(annotation.service()) &&
+      } else if (services.getListedServices().contains(annotation.service()) &&
                  annotation.version() == null) {
         return false;
       }
