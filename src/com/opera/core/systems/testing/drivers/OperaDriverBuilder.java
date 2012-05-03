@@ -28,6 +28,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.logging.Level;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 /**
  * OperaDriverBuilder is a builder that supplies you with instances of {@link
  * com.opera.core.systems.OperaDriver} through the {@link #get()} method.
@@ -42,7 +44,7 @@ import java.util.logging.Level;
  */
 public class OperaDriverBuilder implements Supplier<OperaDriver> {
 
-  private Class driverClass;
+  private Class driverClass = null;
   private OperaDriverSupplier driverSupplier;
   private OperaSettings settings = new OperaSettings();
   private Level loggingLevel = null;
@@ -51,8 +53,9 @@ public class OperaDriverBuilder implements Supplier<OperaDriver> {
    * By default, this class provides a plain {@link OperaDriver} instance object with the default
    * desired capabilities specified in Selenium's {@link DesiredCapabilities#opera()}.
    */
+  @SuppressWarnings("unused")
   public OperaDriverBuilder() {
-    this(new DefaultOperaDriverSupplier(new OperaSettings()));
+    this(new DefaultOperaDriverSupplier());
   }
 
   /**
@@ -72,6 +75,7 @@ public class OperaDriverBuilder implements Supplier<OperaDriver> {
    *
    * @param driverImplementation class reference to driver implementation
    */
+  @SuppressWarnings("unused")
   public OperaDriverBuilder(Class<? extends OperaDriver> driverImplementation) {
     driverClass = driverImplementation;
   }
@@ -106,16 +110,17 @@ public class OperaDriverBuilder implements Supplier<OperaDriver> {
   public OperaDriver get() {
     OperaDriver driver;
 
-    // Custom modifications based on local methods
+    // Overrides defined by builder
     if (loggingLevel != null) {
       settings.logging().setLevel(loggingLevel);
     }
 
     if (driverSupplier == null) {
+      checkNotNull(driverClass, "No driver class specified");
+
       try {
-        Class
-            constructor =
-            driverClass.getClass().getConstructor(Class.class).newInstance(settings);
+        Class constructor = driverClass
+            .getClass().getConstructor(Class.class).newInstance(settings);
         driver = (OperaDriver) constructor.newInstance();
       } catch (NoSuchMethodException e) {
         throw new RuntimeException("Unable to recognize implementation's constructor");

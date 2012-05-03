@@ -17,11 +17,11 @@ limitations under the License.
 package com.opera.core.systems;
 
 import com.opera.core.systems.scope.internal.OperaIntervals;
+import com.opera.core.systems.testing.FreshDriver;
 import com.opera.core.systems.testing.IdleEnabled;
 import com.opera.core.systems.testing.Ignore;
 import com.opera.core.systems.testing.OperaDriverTestCase;
 import com.opera.core.systems.testing.Settings;
-import com.opera.core.systems.testing.drivers.TestOperaDriver;
 
 import org.junit.After;
 import org.junit.Before;
@@ -81,6 +81,7 @@ public class IdleTest extends OperaDriverTestCase {
   @Test
   @Ignore(platforms = WINDOWS)
   public void back() {
+    driver.navigate().to(pages.test);
     driver.navigate().to(pages.javascript);
 
     start();
@@ -93,6 +94,9 @@ public class IdleTest extends OperaDriverTestCase {
   @Test
   @Ignore(platforms = WINDOWS)
   public void forward() {
+    driver.navigate().to(pages.javascript);
+    driver.navigate().back();
+
     start();
     driver.navigate().forward();
     stop();
@@ -103,6 +107,11 @@ public class IdleTest extends OperaDriverTestCase {
   @Test
   @Ignore(platforms = WINDOWS)
   public void back2() {
+    driver.navigate().to(pages.test);
+    driver.navigate().to(pages.javascript);
+    driver.navigate().back();
+    driver.navigate().forward();
+
     start();
     driver.navigate().back();
     stop();
@@ -243,10 +252,11 @@ public class IdleTest extends OperaDriverTestCase {
   }
 
   @Test
+  @FreshDriver
   public void idleOff() {
-    OperaSettings settings = new OperaSettings();
-    settings.setIdle(false);
-    TestOperaDriver driver = new TestOperaDriver(settings);
+    //OperaSettings settings = new OperaSettings();
+    //settings.setIdle(false);
+    //TestOperaDriver driver = new TestOperaDriver(settings);
 
     assertTrue("Expecting idle to be available, but disabled",
                !driver.getSettings().useIdle() && driver.getServices().isOperaIdleAvailable());
@@ -255,7 +265,7 @@ public class IdleTest extends OperaDriverTestCase {
     // Idle will wait for timeout before firing
     assertEquals("default", driver.findElementById("one").getAttribute("value"));
 
-    driver.quit();
+    //driver.quit();
   }
 
 }

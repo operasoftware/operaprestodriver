@@ -106,6 +106,10 @@ public abstract class OperaDriverTestCase {
     return storedDriver.get();
   }
 
+  public static OperaSettings getSettings() {
+    return settings;
+  }
+
   public static void setSettings(OperaSettings newSettings) {
     settings = newSettings;
   }

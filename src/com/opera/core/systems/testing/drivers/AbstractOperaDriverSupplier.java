@@ -41,16 +41,16 @@ public abstract class AbstractOperaDriverSupplier implements OperaDriverSupplier
     setSettings(settings);
   }
 
-  public void setSettings(OperaSettings settings) {
-    this.settings = settings;
+  public void setSettings(OperaSettings newSettings) {
+    settings = newSettings;
   }
 
   public OperaSettings getSettings() {
     return settings;
   }
 
-  public void setCapabilities(Capabilities capabilities) {
-    this.capabilities = capabilities;
+  public void setCapabilities(Capabilities newCapabilities) {
+    capabilities = newCapabilities;
   }
 
   public Capabilities getCapabilities() {
