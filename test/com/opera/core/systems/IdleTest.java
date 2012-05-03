@@ -46,14 +46,22 @@ public class IdleTest extends OperaDriverTestCase {
   @Before
   public void beforeEach() {
     reset();
-    assertTrue("Expected idle to be available and enabled",
-               driver.getSettings().useIdle() && driver.getServices().isOperaIdleAvailable());
   }
 
   @After
   public void afterEach() {
     // Make sure the test hasn't passed because we hit the page load timeout instead of using idle
     assertTrue("Took less than idle timeout", end - start < timeout);
+  }
+
+  private void assertIdleEnabledAndAvailable() {
+    assertTrue("Expected idle to be available and enabled",
+               driver.getSettings().useIdle() && driver.getServices().isOperaIdleAvailable());
+  }
+
+  private void assertIdleDisabledButAvailable() {
+    assertTrue("Expecting idle to be available, but disabled",
+               !driver.getSettings().useIdle() && driver.getServices().isOperaIdleAvailable());
   }
 
   private void start() {
@@ -71,6 +79,8 @@ public class IdleTest extends OperaDriverTestCase {
   @Test
   @Ignore(platforms = WINDOWS)
   public void get() {
+    assertIdleEnabledAndAvailable();
+
     start();
     driver.navigate().to(pages.test);
     stop();
@@ -81,6 +91,8 @@ public class IdleTest extends OperaDriverTestCase {
   @Test
   @Ignore(platforms = WINDOWS)
   public void back() {
+    assertIdleEnabledAndAvailable();
+
     driver.navigate().to(pages.test);
     driver.navigate().to(pages.javascript);
 
@@ -94,6 +106,8 @@ public class IdleTest extends OperaDriverTestCase {
   @Test
   @Ignore(platforms = WINDOWS)
   public void forward() {
+    assertIdleEnabledAndAvailable();
+
     driver.navigate().to(pages.javascript);
     driver.navigate().back();
 
@@ -107,6 +121,8 @@ public class IdleTest extends OperaDriverTestCase {
   @Test
   @Ignore(platforms = WINDOWS)
   public void back2() {
+    assertIdleEnabledAndAvailable();
+
     driver.navigate().to(pages.test);
     driver.navigate().to(pages.javascript);
     driver.navigate().back();
@@ -120,8 +136,9 @@ public class IdleTest extends OperaDriverTestCase {
   }
 
   @Test
-  //@Ignore
   public void refresh() {
+    assertIdleEnabledAndAvailable();
+
     driver.navigate().to(pages.test);
     driver.findElementById("input_email").sendKeys("before refresh");
 
@@ -134,6 +151,8 @@ public class IdleTest extends OperaDriverTestCase {
 
   @Test
   public void click() {
+    assertIdleEnabledAndAvailable();
+
     driver.navigate().to(pages.test);
 
     start();
@@ -146,6 +165,8 @@ public class IdleTest extends OperaDriverTestCase {
   @Test
   //@Ignore
   public void keyEnter() {
+    assertIdleEnabledAndAvailable();
+
     driver.navigate().to(pages.javascript);
 
     // Focus textbox
@@ -163,6 +184,8 @@ public class IdleTest extends OperaDriverTestCase {
   @Test
   @Ignore(platforms = WINDOWS)
   public void sendKeysNewline() {
+    assertIdleEnabledAndAvailable();
+
     driver.navigate().to(pages.javascript);
 
     // Focus textbox
@@ -176,6 +199,8 @@ public class IdleTest extends OperaDriverTestCase {
 
   @Test
   public void setSelected() {
+    assertIdleEnabledAndAvailable();
+
     driver.navigate().to(pages.javascript);
 
     // Check checkbox, fires a submit even on the form
@@ -189,6 +214,8 @@ public class IdleTest extends OperaDriverTestCase {
 
   @Test
   public void submit() {
+    assertIdleEnabledAndAvailable();
+
     driver.navigate().to(pages.javascript);
 
     // Check checkbox, fires a submit even on the form
@@ -204,6 +231,8 @@ public class IdleTest extends OperaDriverTestCase {
 
   @Test
   public void ecmascriptLoop() {
+    assertIdleEnabledAndAvailable();
+
     start();
     driver.navigate().to(pages.ecmascriptLoop);
     stop();
@@ -214,6 +243,8 @@ public class IdleTest extends OperaDriverTestCase {
   @Test
   @Ignore(platforms = WINDOWS)
   public void ecmascriptTimeout() {
+    assertIdleEnabledAndAvailable();
+
     start();
     driver.navigate().to(pages.ecmascriptTimeout);
     stop();
@@ -224,6 +255,8 @@ public class IdleTest extends OperaDriverTestCase {
   @Test
   @Ignore(platforms = WINDOWS)
   public void ecmascriptTimeoutLoop() {
+    assertIdleEnabledAndAvailable();
+
     start();
     System.out.println(driver.getServices().isOperaIdleAvailable());
     driver.navigate().to(pages.ecmascriptTimeoutLoop);
@@ -235,14 +268,16 @@ public class IdleTest extends OperaDriverTestCase {
   @Test
   @Ignore(platforms = WINDOWS)
   public void metaRefresh() {
+    assertIdleEnabledAndAvailable();
     driver.navigate().to(pages.metaRefresh);
-
     assertTrue(driver.getCurrentUrl().endsWith("test.html"));
   }
 
   @Test
   @Ignore(value = "Should be made local")
   public void testCustomTimeout() {
+    assertIdleEnabledAndAvailable();
+
     start = System.currentTimeMillis();
     driver.get("http://nytimes.com/", 500);
     end = System.currentTimeMillis();
@@ -254,18 +289,11 @@ public class IdleTest extends OperaDriverTestCase {
   @Test
   @FreshDriver
   public void idleOff() {
-    //OperaSettings settings = new OperaSettings();
-    //settings.setIdle(false);
-    //TestOperaDriver driver = new TestOperaDriver(settings);
-
-    assertTrue("Expecting idle to be available, but disabled",
-               !driver.getSettings().useIdle() && driver.getServices().isOperaIdleAvailable());
+    assertIdleDisabledButAvailable();
 
     driver.navigate().to(pages.timer);
     // Idle will wait for timeout before firing
     assertEquals("default", driver.findElementById("one").getAttribute("value"));
-
-    //driver.quit();
   }
 
 }
