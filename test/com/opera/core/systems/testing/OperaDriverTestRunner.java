@@ -1,5 +1,7 @@
 /*
 Copyright 2011-2012 Opera Software ASA
+Copyright 2011 Software Freedom Conservancy
+Copyright 2011 WebDriver committers
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,137 +18,130 @@ limitations under the License.
 
 package com.opera.core.systems.testing;
 
-import com.opera.core.systems.OperaProduct;
-import com.opera.core.systems.testing.drivers.OperaDriverBuilder;
-import com.opera.core.systems.testing.drivers.TestOperaDriver;
-import com.opera.core.systems.testing.drivers.TestOperaDriverSupplier;
+import com.google.common.base.Throwables;
 
-import org.junit.internal.AssumptionViolatedException;
-import org.junit.internal.runners.model.EachTestNotifier;
+import com.opera.core.systems.OperaSettings;
+
+import org.junit.internal.runners.model.ReflectiveCallable;
+import org.junit.internal.runners.statements.Fail;
 import org.junit.runner.Description;
 import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.BlockJUnit4ClassRunner;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.InitializationError;
-import org.openqa.selenium.Platform;
+import org.junit.runners.model.Statement;
 
-import static com.opera.core.systems.testing.OperaDriverTestCase.driver;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.logging.Level;
 
-/**
- * The OperaDriverTestRunner can be used, amongst other things, for applying advanced ignores to
- * individual test cases (methods) or test suits (classes).
- *
- * Before a test run it will launch the default Opera using {@link com.opera.core.systems.OperaDriver}
- * to determine the current product's name.  You can then use <code>@Ignore(product =
- * Product.CORE_SMARTPHONE)</code> in your tests to ignore a certain product.  See {@link
- * com.opera.core.systems.OperaProduct} for a full list of products.
- *
- * You may also utilize Selenium's {@link Platform} enum to ignore platforms/operating systems.  To
- * combine this with ignoring a product, an ignore rule (annotation) might look like <code>@Ignore({
- * product = Product.CORE_SMARTPHONE, platform = Platform.LINUX })</code>.
- *
- * You can specify the current product manually by setting the <code>OPERA_PRODUCT</code>
- * environment variable to a value defined in {@link com.opera.core.systems.OperaProduct}.  This
- * will skip the step of creating a browser instance for determining the current product.
- *
- * To use this class, apply the <code>@RunWith(OperaDriverTestRunner.class)</code> annotation to
- * your class, or extend the {@link OperaDriverTestCase} class.
- *
- * @author Andreas Tolf Tolfsen <andreastt@opera.com>
- */
 public class OperaDriverTestRunner extends BlockJUnit4ClassRunner {
 
-  public OperaDriverTestRunner(Class<? extends OperaDriverTestCase> klass)
-      throws InitializationError {
+  private final TestIgnorance ignorance;
+
+  public OperaDriverTestRunner(Class<?> klass) throws InitializationError {
     super(klass);
+    ignorance = new TestIgnorance(OperaDriverTestCase.currentProduct(),
+                                  OperaDriverTestCase.currentPlatform());
   }
 
   @Override
-  protected void runChild(FrameworkMethod method, RunNotifier notifier) {
-    EachTestNotifier eachNotifier = makeNotifier(method, notifier);
-
-    // TODO(andreastt): Move annotations to separate classes
-
-    if (method.getAnnotation(Ignore.class) != null) {
-      Ignore customIgnore = method.getAnnotation(Ignore.class);
-
-      if (shouldIgnore(customIgnore)) {
-        runIgnored(eachNotifier);
-        return;
-      }
-    }
-
-    if (method.getAnnotation(FreshDriver.class) != null) {
-      if (driver != null && driver.isRunning()) {
-        driver.quit();
-      }
-
-      driver = (TestOperaDriver) new OperaDriverBuilder(new TestOperaDriverSupplier()).get();
-    }
-
-    runNotIgnored(method, eachNotifier);
-  }
-
-  /**
-   * Determines whether a test should be ignored or not based on a JUnit ignore annotation rule. The
-   * check for this is mutually exclusive, meaning that if <em>either</em> the product or the
-   * platform is true, the test will be ignored.
-   *
-   * @param ignore a custom ignore annotation
-   * @return true if test should be ignored, false otherwise
-   */
-  private boolean shouldIgnore(Ignore ignore) {
-    if (ignore == null) {
-      return false;
-    }
-
-    // Plain old ignore
-    if (ignore.products().length == 0 && ignore.platforms().length == 0) {
-      return true;
-    }
-
-    OperaProduct currentProduct = OperaDriverTestCase.driver.utils().getProduct();
-    Platform currentPlatform = OperaDriverTestCase.driver.utils().getPlatform();
-
-    for (OperaProduct product : ignore.products()) {
-      if (product.is(currentProduct)) {
-        return true;
-      }
-    }
-
-    for (Platform platform : ignore.platforms()) {
-      if (platform.is(currentPlatform)) {
-        return true;
-      }
-    }
-
-    return false;
-  }
-
-  // copy of BlockJUnit4ClassRunner.runNotIgnored()
-  private void runNotIgnored(FrameworkMethod method, EachTestNotifier eachNotifier) {
-    eachNotifier.fireTestStarted();
+  protected void runChild(final FrameworkMethod method, RunNotifier notifier) {
+    Object test = null;
+    Description description = describeChild(method);
 
     try {
-      methodBlock(method).evaluate();
-    } catch (AssumptionViolatedException e) {
-      eachNotifier.addFailedAssumption(e);
+      test = new ReflectiveCallable() {
+        @Override
+        protected Object runReflectiveCall() throws Throwable {
+          return createTest();
+        }
+      }.run();
     } catch (Throwable e) {
-      eachNotifier.addFailure(e);
-    } finally {
-      eachNotifier.fireTestFinished();
+      runLeaf(new Fail(e), description, notifier);
+    }
+
+    // There is a difference between ignore annotations and annotations performing an action.
+    // Ignore annotations are handled by the TestIgnorance, while other annotations will be handled
+    // by this file in methodBlock().
+    if (ignorance.isIgnored(method, test)) {
+      notifier.fireTestIgnored(description);
+    } else {
+      runLeaf(methodBlock(method, test), description, notifier);
     }
   }
 
-  // copy of BlockJUnit4ClassRunner.runIgnored()
-  private void runIgnored(EachTestNotifier eachNotifier) {
-    eachNotifier.fireTestIgnored();
+  @SuppressWarnings("deprecation")
+  private Statement methodBlock(FrameworkMethod method, Object test) {
+    Statement statement = methodInvoker(method, test);
+
+    statement = possiblyExpectingExceptions(method, test, statement);
+    statement = withPotentialTimeout(method, test, statement);
+    statement = withBefores(method, test, statement);
+    statement = withAfters(method, test, statement);
+    statement = withRules(method, test, statement);
+
+    if (test instanceof OperaDriverTestCase) {
+      OperaDriverTestCase base = (OperaDriverTestCase) test;
+      statement = withNoDriver(base, statement);
+      statement = withSettings(base, statement);
+    }
+
+    return statement;
   }
 
-  // copy of BlockJUnit4ClassRunner.makeNotifier()
-  private EachTestNotifier makeNotifier(FrameworkMethod method, RunNotifier notifier) {
-    Description description = describeChild(method);
-    return new EachTestNotifier(notifier, description);
+  private Statement withNoDriver(OperaDriverTestCase test, final Statement statement) {
+    final NoDriver annotation = test.getClass().getAnnotation(NoDriver.class);
+
+    if (annotation == null) {
+      OperaDriverTestCase.setCreateDriver(true);
+      return statement;
+    }
+
+    return new Statement() {
+      @Override
+      public void evaluate() throws Throwable {
+        OperaDriverTestCase.setCreateDriver(false);
+        OperaDriverTestCase.removeDriver();
+        statement.evaluate();
+      }
+    };
+  }
+
+  private Statement withSettings(OperaDriverTestCase test, final Statement statement) {
+    final Settings annotation = test.getClass().getAnnotation(Settings.class);
+
+    if (annotation == null) {
+      return statement;
+    }
+
+    return new Statement() {
+      @Override
+      public void evaluate() throws Throwable {
+        OperaSettings settings = new OperaSettings();
+        settings.setIdle(annotation.idle());
+        settings.logging().setLevel(Level.parse(annotation.logLevel().toString()));
+        OperaDriverTestCase.setSettings(settings);
+
+        statement.evaluate();
+      }
+    };
+  }
+
+  private Statement withRules(FrameworkMethod method, Object target, Statement statement) {
+    try {
+      Method withRules = BlockJUnit4ClassRunner.class.getDeclaredMethod(
+          "withRules", FrameworkMethod.class, Object.class, Statement.class);
+      withRules.setAccessible(true);
+
+      return (Statement) withRules.invoke(this, method, target, statement);
+    } catch (NoSuchMethodException e) {
+      throw Throwables.propagate(e);
+    } catch (InvocationTargetException e) {
+      throw Throwables.propagate(e);
+    } catch (IllegalAccessException e) {
+      throw Throwables.propagate(e);
+    }
   }
 
 }

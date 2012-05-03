@@ -16,38 +16,48 @@ limitations under the License.
 
 package com.opera.core.systems.testing;
 
+import com.opera.core.systems.OperaProduct;
+import com.opera.core.systems.OperaSettings;
 import com.opera.core.systems.environment.GlobalTestEnvironment;
 import com.opera.core.systems.environment.InProcessTestEnvironment;
 import com.opera.core.systems.environment.TestEnvironment;
 import com.opera.core.systems.environment.webserver.WebServer;
-import com.opera.core.systems.runner.OperaRunner;
 import com.opera.core.systems.testing.drivers.OperaDriverBuilder;
 import com.opera.core.systems.testing.drivers.TestOperaDriver;
 import com.opera.core.systems.testing.drivers.TestOperaDriverSupplier;
 
-import org.junit.ClassRule;
-import org.junit.rules.ExternalResource;
+import org.junit.Before;
 import org.junit.runner.RunWith;
+import org.openqa.selenium.Platform;
 
-import java.io.File;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.junit.Assert.assertThat;
 
 /**
- * You can extend OperaDriverTestCase in your test case to gain access to convenience methods
- * related to finding the current product used, auto-starting Opera before the test, quitting Opera
- * after the test, and gaining access to the fixtures directory.
+ * OperaDriverTestCase provides a test framework with various convenience methods for OperaDriver.
  *
- * It also holds an extension of {@link com.opera.core.systems.OperaDriver}, called {@link
- * TestOperaDriver}, that exposes the {@link OperaRunner} and a method for determining whether the
- * constructor and {@link com.opera.core.systems.OperaDriver#quit()} methods has been called, {@link
- * TestOperaDriver#isRunning()}.
+ * In particular it spawns an out-of-process web server holding fixture files, a storage of
+ * pages/fixtures that can be used in tests, various ad-hoc resources (such as fake files,
+ * executables, &c.), a storage for preserving OperaDriver instances cross test classes, and a set
+ * of annotations that provide ignore rules and special actions.
+ *
+ * To use these features, make sure that the JUnit test class extends this class as such:
+ *
+ * <pre><code>
+ *   public class MyTest extends OperaDriverTestCase {
+ *     …
+ *   }
+ * </code></pre>
+ *
+ * This test setup mimics the characteristics of the Selenium test framework making it easier to
+ * exchange tests.
  *
  * @author Andreas Tolf Tolfsen <andreastt@opera.com>
  */
 @RunWith(OperaDriverTestRunner.class)
 public abstract class OperaDriverTestCase {
-
-  private static final String separator = System.getProperty("file.separator");
-  private static final File userHome = new File(System.getProperty("user.dir"));
 
   protected static TestEnvironment environment;
   protected static WebServer server;
@@ -55,89 +65,95 @@ public abstract class OperaDriverTestCase {
   protected static Resources resources;
   protected static TestOperaDriver driver;
 
-  private static File fixtureDirectory;
+  private static OperaSettings settings = new OperaSettings();
+  private static boolean spawnDriver = true;
+  private static ThreadLocal<TestOperaDriver> storedDriver = new ThreadLocal<TestOperaDriver>();
+  private static OperaProduct currentProduct = OperaProduct.DESKTOP;
+  private static Platform currentPlatform = Platform.getCurrent();
 
-  @ClassRule
-  @SuppressWarnings("unused")
-  public static ExternalResource environmentResources = new ExternalResource() {
+  @Before
+  public void prepareEnvironment() throws Exception {
+    environment = GlobalTestEnvironment.get();
+    server = environment.getWebServer();
+    pages = new Pages(server);
+    resources = new Resources();
 
-    @Override
-    protected void before() throws Throwable {
-      environment = GlobalTestEnvironment.get(InProcessTestEnvironment.class);
-      server = environment.getWebServer();
-      pages = new Pages(server);
-      resources = new Resources();
-    }
+    String hostName = environment.getWebServer().getHostName();
+    String alternateHostName = environment.getWebServer().getAlternateHostName();
 
-    @Override
-    protected void after() {
-    }
-
-  };
-
-  @ClassRule
-  @SuppressWarnings("unused")
-  public static ExternalResource driverResource = new ExternalResource() {
-
-    @Override
-    protected void before() throws Throwable {
-      if (driver != null) {
-        return;
-      }
-
-      driver = (TestOperaDriver) new OperaDriverBuilder(new TestOperaDriverSupplier()).get();
-    }
-
-    @Override
-    protected void after() {
-      if (driver == null) {
-        return;
-      }
-
-      try {
-        driver.quit();
-      } catch (RuntimeException ignored) {
-        // fall through
-      }
-
-      driver = null;
-    }
-  };
-
-  //@Rule
-  //public FreshDriverRule freshDriverRule = new FreshDriverRule();
-
-  // TODO(andreastt): All of the fixture-related methods below should be replaced by a page factory or something
-
-  /**
-   * Get the URL of the given fixture file.
-   *
-   * @param file the filename to get
-   * @return the URL to the fixture file
-   */
-  @Deprecated
-  protected static String fixture(String file) {
-    return "file://localhost/" + getFixtureDirectory().getPath() + separator + file;
+    assertThat(hostName, is(not(equalTo(alternateHostName))));
   }
 
-  @Deprecated
-  protected static File getFixtureDirectory() {
-    if (fixtureDirectory == null) {
-      fixtureDirectory = new File(userHome.getPath() + separator + "test" + separator +
-                                  "fixtures" + separator);
+  @Before
+  public void createDriver() {
+    driver = storedDriver.get();
+
+    if (!spawnDriver || driver != null) {
+      return;
     }
 
-    return fixtureDirectory;
+    driver = (TestOperaDriver) new OperaDriverBuilder(new TestOperaDriverSupplier())
+        .using(settings).get();
+    storedDriver.set(driver);
+  }
+
+  @Before
+  public void createEnvironment() {
+    environment = GlobalTestEnvironment.get(InProcessTestEnvironment.class);
+  }
+
+  public static TestOperaDriver getWrappedDriver() {
+    return storedDriver.get();
+  }
+
+  public static void setSettings(OperaSettings newSettings) {
+    settings = newSettings;
   }
 
   /**
-   * Navigate to the given fixture file.
+   * Set this to true to disable spawning of new drivers.
    *
-   * @param file the filename from the fixture directory to navigate to
+   * @param enabled true will create new drivers when needed, false will disable creation of new
+   *                drivers
    */
-  @Deprecated
-  protected static void getFixture(String file) {
-    driver.get(fixture(file));
+  public static void setCreateDriver(boolean enabled) {
+    spawnDriver = enabled;
+  }
+
+  public static OperaProduct currentProduct() {
+    TestOperaDriver current = storedDriver.get();
+
+    if (current != null) {
+      currentProduct = current.utils().getProduct();
+    }
+
+    return currentProduct;
+  }
+
+  public static Platform currentPlatform() {
+    TestOperaDriver current = storedDriver.get();
+
+    if (current != null) {
+      currentPlatform = current.utils().getPlatform();
+    }
+
+    return currentPlatform;
+  }
+
+  public static void removeDriver() {
+    TestOperaDriver current = storedDriver.get();
+
+    if (current == null) {
+      return;
+    }
+
+    try {
+      current.quit();
+    } catch (RuntimeException ignored) {
+      // fall through
+    } finally {
+      storedDriver.remove();
+    }
   }
 
 }

@@ -8,8 +8,9 @@ import org.junit.rules.TestRule;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
 
-import static com.opera.core.systems.testing.OperaDriverTestCase.driver;
+//import static com.opera.core.systems.testing.OperaDriverTestCase.driver;
 
+/*
 public final class FreshDriverRule implements TestRule {
 
   public Statement apply(Statement statement, Description description) {
@@ -23,3 +24,4 @@ public final class FreshDriverRule implements TestRule {
   }
 
 }
+*/
