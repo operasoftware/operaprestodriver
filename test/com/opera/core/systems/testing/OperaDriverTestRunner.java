@@ -84,6 +84,7 @@ public class OperaDriverTestRunner extends BlockJUnit4ClassRunner {
     if (test instanceof OperaDriverTestCase) {
       OperaDriverTestCase base = (OperaDriverTestCase) test;
       statement = withNoDriver(base, statement);
+      statement = withFreshDriver(method, base, statement);
       statement = withSettings(base, statement);
     }
 
@@ -108,6 +109,23 @@ public class OperaDriverTestRunner extends BlockJUnit4ClassRunner {
     };
   }
 
+  private Statement withFreshDriver(FrameworkMethod method, final OperaDriverTestCase test,
+                                    final Statement statement) {
+    FreshDriver annotation = method.getAnnotation(FreshDriver.class);
+    if (annotation == null) {
+      return statement;
+    }
+
+    return new Statement() {
+      @Override
+      public void evaluate() throws Throwable {
+        OperaDriverTestCase.removeDriver();
+        test.createDriver();
+        statement.evaluate();
+      }
+    };
+  }
+
   private Statement withSettings(OperaDriverTestCase test, final Statement statement) {
     final Settings annotation = test.getClass().getAnnotation(Settings.class);
 
@@ -118,10 +136,18 @@ public class OperaDriverTestRunner extends BlockJUnit4ClassRunner {
     return new Statement() {
       @Override
       public void evaluate() throws Throwable {
-        OperaSettings settings = new OperaSettings();
-        settings.setIdle(annotation.idle());
-        settings.logging().setLevel(Level.parse(annotation.logLevel().toString()));
-        OperaDriverTestCase.setSettings(settings);
+        OperaSettings currentSettings = OperaDriverTestCase.getSettings();
+
+        OperaSettings newSettings = new OperaSettings();
+        newSettings.setIdle(annotation.idle());
+        newSettings.logging().setLevel(Level.parse(annotation.logLevel().toString()));
+
+        // We only need to restart the driver if the settings are different
+        if (currentSettings.useIdle() != newSettings.useIdle() ||
+            currentSettings.logging().getLevel() != newSettings.logging().getLevel()) {
+          OperaDriverTestCase.setSettings(newSettings);
+          OperaDriverTestCase.removeDriver();
+        }
 
         statement.evaluate();
       }
