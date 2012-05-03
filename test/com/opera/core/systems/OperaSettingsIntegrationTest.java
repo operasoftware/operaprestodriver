@@ -54,7 +54,7 @@ public class OperaSettingsIntegrationTest extends OperaDriverTestCase {
 
   @Before
   public void beforeEach() {
-    OperaIntervals.HANDSHAKE_TIMEOUT.setValue(1000);
+    OperaIntervals.HANDSHAKE_TIMEOUT.setValue(2000);
     settings = new OperaSettings();
   }
 
