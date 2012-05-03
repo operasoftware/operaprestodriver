@@ -19,12 +19,15 @@ limitations under the License.
 package com.opera.core.systems.testing;
 
 import com.opera.core.systems.OperaProduct;
+import com.opera.core.systems.ScopeServices;
 import com.opera.core.systems.testing.drivers.OperaDriverBuilder;
 import com.opera.core.systems.testing.drivers.TestOperaDriver;
 import com.opera.core.systems.testing.drivers.TestOperaDriverSupplier;
+import com.opera.core.systems.util.VersionUtil;
 
 import org.junit.runners.model.FrameworkMethod;
 import org.openqa.selenium.Platform;
+import org.openqa.selenium.WebDriverException;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -35,6 +38,7 @@ public class TestIgnorance {
 
   private final IgnoreComparator ignoreComparator = new IgnoreComparator();
   private Boolean idleEnabled = null;
+  private ScopeServices services = null;
 
   public TestIgnorance(OperaProduct product, Platform platform) {
     ignoreComparator.addProduct(checkNotNull(product, "Product must be set"));
@@ -52,6 +56,9 @@ public class TestIgnorance {
     ignored |= isIgnoredDueToIdle(test.getClass().getAnnotation(IdleEnabled.class));
     ignored |= isIgnoredDueToIdle(method.getMethod().getAnnotation(IdleEnabled.class));
 
+    ignored |= isIgnoredDueToLackingService(test.getClass().getAnnotation(RequiresService.class));
+    ignored |= isIgnoredDueToLackingService(method.getClass().getAnnotation(RequiresService.class));
+
     return ignored;
   }
 
@@ -59,7 +66,6 @@ public class TestIgnorance {
     return annotation != null;
   }
 
-  @SuppressWarnings("unused")
   private boolean isIgnoredDueToIdle(IdleEnabled enabled) {
     // If not specified, it should not be ignored
     if (enabled == null) {
@@ -91,6 +97,43 @@ public class TestIgnorance {
     }
 
     return isIgnoredDueToIdle(enabled);
+  }
+
+  private boolean isIgnoredDueToLackingService(RequiresService annotation) {
+    if (annotation == null) {
+      return false;
+    }
+
+    if (services != null) {
+      if (!services.getListedServices().contains(annotation.service())) {
+        return true;
+      } else if (!services.getListedServices().contains(annotation.service()) &&
+                 annotation.version() == null) {
+        return false;
+      }
+
+      return VersionUtil.compare(annotation.version(), "maxVersion") >= 0 ||
+          VersionUtil.compare(annotation.version(), services.getMinVersionFor(annotation.service())) < 0;
+    }
+
+    TestOperaDriver driver = null;
+    try {
+      driver = OperaDriverTestCase.getWrappedDriver();
+      if (driver == null) {
+        driver = (TestOperaDriver) new OperaDriverBuilder(new TestOperaDriverSupplier()).get();
+      }
+
+      services = driver.getServices();
+    } catch (RuntimeException e) {
+      throw new WebDriverException("Unknown error: " + e.getMessage());
+    } finally {
+      if (driver != null) {
+        driver.quit();
+      }
+      driver = null;
+    }
+
+    return isIgnoredDueToLackingService(annotation);
   }
 
 }
