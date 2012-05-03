@@ -38,6 +38,7 @@ import javax.imageio.ImageIO;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertTrue;
 import static org.openqa.selenium.Platform.MAC;
 
@@ -50,7 +51,7 @@ public class ScreenshotTest extends OperaDriverTestCase {
 
   @Before
   public void beforeEach() {
-    getFixture("test.html");
+    driver.navigate().to(pages.test);
 
     text = (OperaWebElement) driver.findElement(By.id("input_email"));
     radioSome = (OperaWebElement) driver.findElement(By.id("radio_some"));
@@ -82,7 +83,7 @@ public class ScreenshotTest extends OperaDriverTestCase {
   }
 
   @Test
-  public void testElementsSame() throws Exception {
+  public void elementsSame() throws Exception {
     String one = radioLittle.saveScreenshot("one.png");
     String two = radioSome.saveScreenshot("two.png");
 
@@ -90,7 +91,7 @@ public class ScreenshotTest extends OperaDriverTestCase {
   }
 
   @Test
-  public void testWrittenFilesSame() throws Exception {
+  public void writtenFilesSame() throws Exception {
     String one = "one.png", two = "two.png";
 
     radioLittle.saveScreenshot(one);
@@ -100,7 +101,7 @@ public class ScreenshotTest extends OperaDriverTestCase {
   }
 
   @Test
-  public void testElementsNotSame() throws Exception {
+  public void elementsNotSame() throws Exception {
     String one = radioLittle.saveScreenshot("one.png");
     String two = radioLots.saveScreenshot("two.png");
 
@@ -108,7 +109,7 @@ public class ScreenshotTest extends OperaDriverTestCase {
   }
 
   @Test
-  public void testWrittenFilesNotSame() throws Exception {
+  public void writtenFilesNotSame() throws Exception {
     String one = "one.png", two = "two.png";
 
     radioLittle.saveScreenshot(one);
@@ -118,18 +119,18 @@ public class ScreenshotTest extends OperaDriverTestCase {
   }
 
   @Test
-  public void testTimout() throws Exception {
-    getFixture("timer.html");
+  public void timeoutIsRespected() {
+    driver.navigate().to(pages.timer);
     OperaWebElement text = (OperaWebElement) driver.findElement(By.id("one"));
 
     String original = text.saveScreenshot("one.png");
     String changed = text.saveScreenshot("two.png", 2000);
 
-    Assert.assertNotSame(original, changed);
+    assertNotSame(original, changed);
   }
 
   @Test
-  public void testHashes() throws Exception {
+  public void hashesCanBeProvided() throws Exception {
     String md5 = text.saveScreenshot("one.png");
     text.saveScreenshot("two.png", 0, true, md5);
 
@@ -143,7 +144,7 @@ public class ScreenshotTest extends OperaDriverTestCase {
 
   @Test
   @Ignore(platforms = MAC, value = "Needs investigation, doesn't return anything")
-  public void testRealPng() throws Exception {
+  public void realPng() throws Exception {
     ScreenShotReply reply = driver.saveScreenshot(0);
     byte[] png = reply.getPng();
 
@@ -163,7 +164,7 @@ public class ScreenshotTest extends OperaDriverTestCase {
    * Tests the saveScreenshot method that returns a ScreenShotReply
    */
   @Test
-  public void testReply() throws Exception {
+  public void expectsScreenshotReply() throws Exception {
     ScreenShotReply one = radioLittle.saveScreenshot(0);
     ScreenShotReply two = radioSome.saveScreenshot(0);
 
@@ -175,21 +176,21 @@ public class ScreenshotTest extends OperaDriverTestCase {
   }
 
   @Test
-  public void testZeroHeight() throws Exception {
+  public void zeroHeight() throws Exception {
     // Shouldn't throw exceptions
 
-    getFixture("zero-height-standards.html");
+    driver.navigate().to(pages.zeroHeightStandards);
     ((OperaWebElement) driver.findElement(By.tagName("html"))).getImageHash();
 
-    getFixture("zero-height-quirks.html");
+    driver.navigate().to(pages.zeroHeightQuirks);
     ((OperaWebElement) driver.findElement(By.tagName("html"))).getImageHash();
   }
 
   // Can cause problems on Windows, so moved to last
   @Test
   @Ignore("We don't support taking single element screenshots of plugins")
-  public void testFlash() throws Exception {
-    getFixture("flash.html");
+  public void flash() throws Exception {
+    driver.navigate().to(pages.flash);
     OperaWebElement img = (OperaWebElement) driver.findElement(By.id("img_container"));
     OperaWebElement flash = (OperaWebElement) driver.findElement(By.id("flash_container"));
 
@@ -200,8 +201,8 @@ public class ScreenshotTest extends OperaDriverTestCase {
   }
 
   @Test
-  public void testTakesScreenshot() throws Exception {
-    getFixture("tall.html");
+  public void takesScreenshot() throws Exception {
+    driver.navigate().to(pages.tall);
     File file = driver.getScreenshotAs(OutputType.FILE);
 
     BufferedImage img = ImageIO.read(file);
@@ -214,8 +215,8 @@ public class ScreenshotTest extends OperaDriverTestCase {
 
   @Test
   @Ignore("Opera problem: Areas outside current viewport are black")
-  public void testFullScreenshot() throws Exception {
-    getFixture("tall.html");
+  public void fullScreenshot() throws Exception {
+    driver.navigate().to(pages.tall);
     File file = driver.getScreenshotAs(OutputType.FILE);
 
     BufferedImage img = ImageIO.read(file);

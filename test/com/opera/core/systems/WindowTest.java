@@ -20,33 +20,26 @@ import com.opera.core.systems.pages.WindowPage;
 import com.opera.core.systems.testing.Ignore;
 import com.opera.core.systems.testing.OperaDriverTestCase;
 import com.opera.core.systems.testing.TestingPageFactory;
-import com.opera.core.systems.testing.drivers.OperaDriverBuilder;
-import com.opera.core.systems.testing.drivers.TestOperaDriver;
-import com.opera.core.systems.testing.drivers.TestOperaDriverSupplier;
 
 import org.junit.After;
-import org.junit.BeforeClass;
+import org.junit.Before;
 import org.junit.Test;
 
 import static com.opera.core.systems.OperaProduct.CORE;
-import static org.openqa.selenium.Platform.WINDOWS;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.openqa.selenium.Platform.WINDOWS;
 
 /**
  * @author Andreas Tolf Tolfsen <andreastt@opera.com>
  */
 public class WindowTest extends OperaDriverTestCase {
 
-  public static WindowPage windowPage;
+  public WindowPage windowPage;
 
-  @BeforeClass
-  public static void beforeAll() {
+  @Before
+  public void bindPage() {
     windowPage = TestingPageFactory.initElements(driver, pages, WindowPage.class);
-
-    if (!driver.isRunning()) {
-      driver = (TestOperaDriver) new OperaDriverBuilder(new TestOperaDriverSupplier()).get();
-    }
   }
 
   @After

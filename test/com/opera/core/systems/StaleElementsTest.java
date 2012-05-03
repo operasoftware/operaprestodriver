@@ -91,9 +91,9 @@ public class StaleElementsTest extends OperaDriverTestCase {
 
     @Before
     public void beforeEach() {
-      driver.navigate().to(fixture("test.html"));
+      driver.navigate().to(pages.test);
       test = driver.findElementById("header");
-      driver.navigate().to(fixture("test.html"));
+      driver.navigate().to(pages.test);
     }
 
     @Test(expected = StaleElementReferenceException.class)
@@ -149,9 +149,9 @@ public class StaleElementsTest extends OperaDriverTestCase {
 
     @Before
     public void beforeEach() {
-      driver.navigate().to(fixture("test.html"));
+      driver.navigate().to(pages.test);
       test = driver.findElementById("header");
-      driver.navigate().to(fixture("two_input_fields.html"));
+      driver.navigate().to(pages.twoInputFields);
     }
 
     @Test(expected = StaleElementReferenceException.class)

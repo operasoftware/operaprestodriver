@@ -17,6 +17,7 @@ limitations under the License.
 package com.opera.core.systems;
 
 import com.opera.core.systems.pages.IFramePage;
+import com.opera.core.systems.testing.Ignore;
 import com.opera.core.systems.testing.OperaDriverTestCase;
 import com.opera.core.systems.testing.TestingPageFactory;
 
@@ -36,13 +37,14 @@ public class IFramesTest extends OperaDriverTestCase {
   }
 
   @Test
-  public void testIFrameFocus() {
+  public void iFrameFocus() {
     assertNotNull(iFramePage.enterIFrame());
     iFramePage.leaveIFrame();
   }
 
   @Test
-  public void clickElementInIFrame() {
+  @Ignore(value = "IFRAME's with borders are problematic", issues = "OPDRV-176")
+  public void clickingElementInIFrameWithBorder() {
     assertEquals("PASS", iFramePage.clickButton());
   }
 

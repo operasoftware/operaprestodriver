@@ -31,7 +31,7 @@ public class JavascriptTest extends OperaDriverTestCase {
 
   @Before
   public void beforeEach() {
-    driver.get(fixture("javascript.html"));
+    driver.navigate().to(pages.javascript);
   }
 
   @Test
@@ -48,7 +48,7 @@ public class JavascriptTest extends OperaDriverTestCase {
   // through typing we should continue typing on the other textbox.
   @Test
   public void testTypingKeyEvents() {
-    driver.get(fixture("keys.html"));
+    driver.navigate().to(pages.keys);
 
     new Actions(driver).sendKeys("hi").perform();
 
@@ -58,7 +58,8 @@ public class JavascriptTest extends OperaDriverTestCase {
   }
 
   @Test
-  @Ignore(platforms = MAC, value = "Needs investigation why JS doubleclick events are not triggered on Mac")
+  @Ignore(platforms = MAC,
+          value = "Needs investigation why JS doubleclick events are not triggered on Mac")
   public void testDoubleClick() {
     new Actions(driver).doubleClick(driver.findElementById("one")).perform();
     assertEquals(driver.findElementById("two").getAttribute("value"), "double");

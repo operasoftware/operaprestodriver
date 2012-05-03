@@ -47,15 +47,14 @@ public class OperaDriverTest extends OperaDriverTestCase {
   }
 
   @Test
-  // TODO(andreastt): Should be made local
   public void testGetTitle() {
-    getFixture("test.html");
+    driver.navigate().to(pages.test);
     assertEquals("Generic fixture", driver.getTitle());
   }
 
   @Test
   public void testGetText() {
-    getFixture("none.html");
+    driver.navigate().to(pages.none);
     assertEquals("You should see nothing below.",
                  driver.findElementByTagName("body").getText().trim());
   }
@@ -69,9 +68,9 @@ public class OperaDriverTest extends OperaDriverTestCase {
 
   @Test
   public void testOperaAction() {
-    getFixture("javascript.html");
-    getFixture("test.html");
-    getFixture("keys.html");
+    driver.navigate().to(pages.javascript);
+    driver.navigate().to(pages.test);
+    driver.navigate().to(pages.keys);
 
     driver.operaAction("Back");
     assertTrue(driver.getCurrentUrl().indexOf("test.html") > 0);
@@ -79,9 +78,9 @@ public class OperaDriverTest extends OperaDriverTestCase {
 
   @Test
   public void testOperaActionCaseInsensitive() {
-    getFixture("javascript.html");
-    getFixture("test.html");
-    getFixture("keys.html");
+    driver.navigate().to(pages.javascript);
+    driver.navigate().to(pages.test);
+    driver.navigate().to(pages.keys);
 
     driver.operaAction("bACk");
     assertTrue(driver.getCurrentUrl().indexOf("test.html") > 0);
@@ -150,7 +149,8 @@ public class OperaDriverTest extends OperaDriverTestCase {
   @Test
   public void testMultipleOperas() throws Exception {
     DesiredCapabilities capabilities = DesiredCapabilities.opera();
-    capabilities.setCapability(OperaSettings.Capability.PROFILE.getCapability(), (String) null);  // random profile
+    capabilities.setCapability(OperaSettings.Capability.PROFILE.getCapability(),
+                               (String) null);  // random profile
     capabilities.setCapability(OperaSettings.Capability.PORT.getCapability(), 0);  // random port
 
     OperaDriver a;
@@ -169,9 +169,9 @@ public class OperaDriverTest extends OperaDriverTestCase {
       }
     }
 
-    a.get(fixture("test.html"));
-    b.get(fixture("javascript.html"));
-    c.get(fixture("keys.html"));
+    a.navigate().to(pages.test);
+    b.navigate().to(pages.javascript);
+    c.navigate().to(pages.keys);
 
     assertTrue("Instance a has url test.html", a.getCurrentUrl().endsWith("test.html"));
     assertTrue("Instance a has url javascript.html", b.getCurrentUrl().endsWith("javascript.html"));

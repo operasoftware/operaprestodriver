@@ -21,56 +21,43 @@ import com.opera.core.systems.testing.OperaDriverTestCase;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.List;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 public class FramesTest extends OperaDriverTestCase {
 
-  public List<String> frames;
-
   @Before
   public void beforeEach() {
-    driver.navigate().to(pages.iframes);
-    frames = driver.listFrames();
+    driver.navigate().to(pages.frames);
   }
 
   @Test
-  public void testList() throws Exception {
+  public void listOfFrames() {
     // frameset page, and three frames
-    assertEquals(4, frames.size());
+    assertEquals(4, driver.listFrames().size());
   }
 
   @Test
-  public void testSwitchString() throws Exception {
+  public void switchById() throws Exception {
     driver.switchTo().frame("a");
-
-    // first frame
     assertNotNull(driver.findElementById("one"));
   }
 
   @Test
-  public void testSwitchString2() throws Exception {
+  public void switchById2() throws Exception {
     driver.switchTo().frame("b");
-
-    // second frame
     assertNotNull(driver.findElementById("radio_little"));
   }
 
   @Test
-  public void testSwitchInt() throws Exception {
+  public void switchByIndex() {
     driver.switchTo().frame(0);
-
-    // first frame
     assertNotNull(driver.findElementById("one"));
   }
 
   @Test
-  public void testSwitchIntUnnamed() throws Exception {
+  public void switchByIndex2() {
     driver.switchTo().frame(2);
-
-    // only exists in third frame
     assertNotNull(driver.findElementById("img_container"));
   }
 

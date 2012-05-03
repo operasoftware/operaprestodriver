@@ -28,14 +28,14 @@ public class ElementsTest extends OperaDriverTestCase {
 
   @Test
   public void testClear() {
-    driver.get(fixture("javascript.html"));
+    driver.get(pages.javascript);
     driver.findElementById("input_email").clear();
     assertTrue(driver.findElementById("log").getAttribute("value").contains("email changed"));
   }
 
   @Test
   public void testSelect() {
-    getFixture("select.html");
+    driver.get(pages.select);
     WebElement el = driver.findElementById("dog");
     el.click();
     assertTrue(el.isSelected());
@@ -43,14 +43,14 @@ public class ElementsTest extends OperaDriverTestCase {
 
   @Test
   public void testGetCssValue() {
-    driver.navigate().to(fixture("test.html"));
+    driver.get(pages.test);
     assertEquals("#000000",
                  driver.findElementByClassName("invert").getCssValue("background-color"));
   }
 
   @Test
   public void testGetCssValueWithNonRGBValue() {
-    driver.navigate().to(fixture("test.html"));
+    driver.get(pages.test);
     assertEquals("transparent",
                  driver.findElementById("transparent").getCssValue("background-color"));
   }
