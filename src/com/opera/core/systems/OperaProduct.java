@@ -59,14 +59,6 @@ public enum OperaProduct {
     return product;
   }
 
-  public static OperaProduct get(String product) {
-    if (!lookup.containsKey(product)) {
-      throw new WebDriverException("Unknown product: " + product);
-    }
-
-    return lookup.get(product);
-  }
-
   /**
    * Compares current product with given product.  Some products, such as the general product CORE,
    * might map to several different products, such as CORE_DESKTOP, CORE_SMARTPHONE and CORE_TV.
@@ -76,6 +68,14 @@ public enum OperaProduct {
    */
   public boolean is(OperaProduct compareWith) {
     return this.equals(compareWith);
+  }
+
+  public static OperaProduct get(String product) {
+    if (!lookup.containsKey(product)) {
+      throw new WebDriverException("Unknown product: " + product);
+    }
+
+    return lookup.get(product);
   }
 
 }
