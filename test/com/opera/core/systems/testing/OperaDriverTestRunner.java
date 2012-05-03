@@ -119,6 +119,7 @@ public class OperaDriverTestRunner extends BlockJUnit4ClassRunner {
     return new Statement() {
       @Override
       public void evaluate() throws Throwable {
+        OperaDriverTestCase.setSettings(new OperaSettings());
         OperaDriverTestCase.removeDriver();
         test.createDriver();
         statement.evaluate();
