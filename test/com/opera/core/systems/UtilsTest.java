@@ -49,7 +49,7 @@ public class UtilsTest extends OperaDriverTestCase {
 
   @Test
   public void testOS() {
-    Assert.assertNotNull(driver.utils().getOS());
+    assertNotNull(driver.utils().getOS());
   }
 
   @Test
