@@ -23,59 +23,60 @@ import org.junit.Test;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebElement;
 
-public class StaleElementsTest extends OperaDriverTestCase {
+public class StaleElementsSamePageTest extends OperaDriverTestCase {
 
-  public WebElement div;
+  public WebElement test;
 
   @Before
   public void beforeEach() {
-    driver.navigate().to("data:text/html;charset-utf8,<p>hoobaflooba</p>");
-    div = (WebElement) driver.executeScript("return document.createElement('div')");
+    driver.navigate().to(pages.test);
+    test = driver.findElementById("header");
+    driver.navigate().to(pages.test);
   }
 
   @Test(expected = StaleElementReferenceException.class)
   public void testGetAttribute() {
-    div.getAttribute("foo");
+    test.getAttribute("foo");
   }
 
   @Test(expected = StaleElementReferenceException.class)
   public void testGetText() {
-    div.getText();
+    test.getText();
   }
 
   @Test(expected = StaleElementReferenceException.class)
   public void testIsDisplayed() {
-    div.isDisplayed();
+    test.isDisplayed();
   }
 
   @Test(expected = StaleElementReferenceException.class)
   public void testIsEnabled() {
-    div.isEnabled();
+    test.isEnabled();
   }
 
   @Test(expected = StaleElementReferenceException.class)
   public void testIsSelected() {
-    div.isSelected();
+    test.isSelected();
   }
 
   @Test(expected = StaleElementReferenceException.class)
   public void testClear() {
-    div.clear();
+    test.clear();
   }
 
   @Test(expected = StaleElementReferenceException.class)
   public void testGetLocation() {
-    div.getLocation();
+    test.getLocation();
   }
 
   @Test(expected = StaleElementReferenceException.class)
   public void testGetSize() {
-    div.getSize();
+    test.getSize();
   }
 
   @Test(expected = StaleElementReferenceException.class)
   public void testTagName() {
-    div.getTagName();
+    test.getTagName();
   }
 
 }
