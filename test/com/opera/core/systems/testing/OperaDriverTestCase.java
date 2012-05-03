@@ -88,7 +88,7 @@ public abstract class OperaDriverTestCase {
   public void createDriver() {
     driver = storedDriver.get();
 
-    if (!spawnDriver || driver != null) {
+    if (!spawnDriver || (driver != null && driver.isRunning())) {
       return;
     }
 
