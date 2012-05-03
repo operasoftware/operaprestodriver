@@ -31,6 +31,7 @@ import org.openqa.selenium.interactions.Actions;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.openqa.selenium.Platform.LINUX;
 import static org.openqa.selenium.Platform.WINDOWS;
 
 @IdleEnabled
@@ -230,6 +231,7 @@ public class IdleTest extends OperaDriverTestCase {
   // Begin testing OperaIdle conditions
 
   @Test
+  @Ignore(platforms = LINUX)
   public void ecmascriptLoop() {
     assertIdleEnabledAndAvailable();
 
