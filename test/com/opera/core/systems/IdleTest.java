@@ -20,6 +20,7 @@ import com.opera.core.systems.scope.internal.OperaIntervals;
 import com.opera.core.systems.testing.FreshDriver;
 import com.opera.core.systems.testing.IdleEnabled;
 import com.opera.core.systems.testing.Ignore;
+import com.opera.core.systems.testing.NoDriverAfterTest;
 import com.opera.core.systems.testing.OperaDriverTestCase;
 import com.opera.core.systems.testing.Settings;
 
@@ -36,6 +37,7 @@ import static org.openqa.selenium.Platform.WINDOWS;
 
 @IdleEnabled
 @Settings(idle = true, logLevel = Settings.Level.FINER)
+@NoDriverAfterTest
 public class IdleTest extends OperaDriverTestCase {
 
   // Timeout vars for every test

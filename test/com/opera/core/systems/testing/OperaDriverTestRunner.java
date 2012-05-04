@@ -84,6 +84,7 @@ public class OperaDriverTestRunner extends BlockJUnit4ClassRunner {
     if (test instanceof OperaDriverTestCase) {
       OperaDriverTestCase base = (OperaDriverTestCase) test;
       statement = withNoDriver(base, statement);
+      statement = withNoDriverAfterTest(method, statement);
       statement = withFreshDriver(method, base, statement);
       statement = withSettings(base, statement);
     }
@@ -105,6 +106,24 @@ public class OperaDriverTestRunner extends BlockJUnit4ClassRunner {
         OperaDriverTestCase.setCreateDriver(false);
         OperaDriverTestCase.removeDriver();
         statement.evaluate();
+      }
+    };
+  }
+
+  private Statement withNoDriverAfterTest(FrameworkMethod method, final Statement statement) {
+    NoDriverAfterTest annotation = method.getAnnotation(NoDriverAfterTest.class);
+    if (annotation == null) {
+      return statement;
+    }
+
+    return new Statement() {
+      @Override
+      public void evaluate() throws Throwable {
+        try {
+          statement.evaluate();
+        } finally {
+          OperaDriverTestCase.removeDriver();
+        }
       }
     };
   }
