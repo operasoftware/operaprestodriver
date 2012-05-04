@@ -217,6 +217,9 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     // Get product from Opera
     settings.setProduct(utils().getProduct());
 
+    // Enable popups for testing purposes
+    preferences().set("User Prefs", "Ignore Unrequested Popups", false);
+
     // Mobile needs to be able to autofocus elements for form input currently.  This is an ugly
     // workaround which should get solved by implementing a standalone bream Scope service.
     if (utils().getProduct().is(OperaProduct.MOBILE)) {
