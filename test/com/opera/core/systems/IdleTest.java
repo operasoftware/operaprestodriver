@@ -25,6 +25,7 @@ import com.opera.core.systems.testing.OperaDriverTestCase;
 import com.opera.core.systems.testing.Settings;
 
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.Keys;
@@ -37,7 +38,6 @@ import static org.openqa.selenium.Platform.WINDOWS;
 
 @IdleEnabled
 @Settings(idle = true, logLevel = Settings.Level.FINER)
-@NoDriverAfterTest
 public class IdleTest extends OperaDriverTestCase {
 
   // Timeout vars for every test
@@ -55,6 +55,11 @@ public class IdleTest extends OperaDriverTestCase {
   public void afterEach() {
     // Make sure the test hasn't passed because we hit the page load timeout instead of using idle
     assertTrue("Took less than idle timeout", end - start < timeout);
+  }
+
+  @AfterClass
+  public static void afterAll() {
+    driver.quit();
   }
 
   private void assertIdleEnabledAndAvailable() {
