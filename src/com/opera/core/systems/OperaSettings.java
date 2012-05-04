@@ -110,11 +110,11 @@ public class OperaSettings {
 
     /**
      * (String/Level/Integer) How verbose the logging should be.  Available levels are: SEVERE
-     * (highest value), WARNING, INFO, CONFIG, FINE, FINER, FINEST (lowest value), ALL.  Default is
-     * INFO.
+     * (highest value), WARNING, INFO, CONFIG, FINE, FINER, FINEST (lowest value), ALL, OFF. Default
+     * is INFO.
      *
-     * The argument may consist of either a level name, an integer value, a {@link Level} reference,
-     * or null.  If the value is neither of a known name nor an integer, an {@link
+     * The argument may consist of either a level name as a string, an integer value, a {@link
+     * Level} reference, or null.  If the value is neither of a known name nor an integer, an {@link
      * IllegalArgumentException} will be thrown.
      */
     LOGGING_LEVEL("logging.level") {
@@ -145,9 +145,9 @@ public class OperaSettings {
     },
 
     /**
-     * (String/File) Path to the Opera binary to use. If not specified, OperaDriver will guess the
-     * path to your Opera installation (typically <code>/usr/bin/opera</code> or <code>C:\Program
-     * Files\Opera\opera.exe</code>).
+     * (String/File) Path to the Opera binary to use.  If not specified, OperaDriver will guess the
+     * path to your Opera installation (typically <code>/usr/bin/opera</code>, <code>C:\Program
+     * Files\Opera\opera.exe</code>, or similar).
      */
     BINARY() {
       File getDefaultValue() {
@@ -188,8 +188,9 @@ public class OperaSettings {
     },
 
     /**
-     * (String) The host Opera should connect to.  Unless you're starting Opera manually you won't
-     * need this.
+     * (String) The host Opera should connect to.  Since OperaDriver works in a client-server
+     * relationship to Opera (where Opera is the client, driver the server) you can also run remote
+     * instances of Opera on other devices; that be a phone, a TV or another computer.
      */
     HOST() {
       String getDefaultValue() {
@@ -206,8 +207,9 @@ public class OperaSettings {
     },
 
     /**
-     * (Integer) The port to Opera should connect to.  0 = Random, -1 = Opera default (for use with
-     * Opera < 11.60).
+     * (Integer) The port to Opera should connect to.  Setting this capability to 0 will probe for a
+     * free, random port, setting it to -1 will ensure compatibility mode using port the default
+     * port 7001 for Operas version 11.52 or older.
      */
     PORT() {
       Integer getDefaultValue() {
@@ -230,9 +232,9 @@ public class OperaSettings {
     },
 
     /**
-     * (String) Path to the launcher binary to use.  The launcher is a gateway between OperaDriver
-     * and the Opera browser, and is being used for controlling the binary and taking external
-     * screenshots.  If left blank, OperaDriver will use the launcher supplied with the package.
+     * (String) Path to the launcher binary to use.  The launcher is an external wrapper around the
+     * browser, and is used for controlling the binary and taking external screenshots.  If left
+     * blank, OperaDriver will use a launcher supplied with the package.
      */
     LAUNCHER() {
       File getDefaultValue() {
@@ -253,10 +255,10 @@ public class OperaSettings {
     },
 
     /**
-     * (Object) Directory to use for the Opera profile.  If an {@link OperaProfile} object that will
-     * be used when starting opera.  If null a random temporary directory is used. If "", an empty
-     * string, then the default <code>.autotest</code> profile directory will be used (for backwards
-     * compatibility with Opera < 11.60).
+     * (OperaProfile/String) Directory of the profile to use, or an {@link OperaProfile} instance
+     * object representing a profile.  If null is given, a random temporary directory is used.  If
+     * "", an empty string, then the default <code>~/.autotest</code> profile directory will be used
+     * (for backwards compatibility with Opera < 11.60).
      */
     PROFILE() {
       OperaProfile getDefaultValue() {
@@ -300,7 +302,8 @@ public class OperaSettings {
     },
 
     /**
-     * (Integer) The X display to use. (Only works on *nix OSes.)
+     * (Integer) The X display to use.  If set, Opera will be started on the specified display.
+     * (Only works on GNU/Linux.)
      */
     DISPLAY() {
       Integer sanitize(Object display) {
@@ -311,8 +314,8 @@ public class OperaSettings {
 
     /**
      * (Boolean) Whether to auto-start the Opera binary.  If false, OperaDriver will wait for a
-     * connection from the browser.  Go to "opera:debug", enter the correct port number, and hit
-     * "Connect" to connect manually.
+     * connection from the browser.  Go to "opera:debug", enter the correct host/port information,
+     * and hit "Connect" to connect manually.
      */
     AUTOSTART() {
       Boolean getDefaultValue() {
