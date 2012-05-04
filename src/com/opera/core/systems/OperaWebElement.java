@@ -212,9 +212,8 @@ public class OperaWebElement extends RemoteWebElement {
     // Keys that have been held down, and need to be released
     ArrayList<String> heldKeys = new ArrayList<String>();
 
-    if (hasAttribute("contentEditable") ||
-        (getTagName().equals("INPUT") &&
-         (hasAttribute("type") && getAttribute("type").equalsIgnoreCase("file")))) {
+    if (getTagName().equals("INPUT")
+        && (hasAttribute("type") && getAttribute("type").equalsIgnoreCase("file"))) {
       click();
     } else {
       executeMethod("locator.focus()");
