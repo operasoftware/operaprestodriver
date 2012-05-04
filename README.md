@@ -133,7 +133,7 @@ supported by OperaDriver are:
 | __opera.arguments__         | String   | null        | Arguments to pass to Opera, separated by spaces.  See `opera -help` for available command-line switches.
 | __opera.host__              | String   | Non-loopback IP if available, loopback otherwise | The host Opera should connect to.  Since OperaDriver works in a client-server relationship to Opera (where Opera is the client, driver the server) you can also run remote instances of Opera on other devices; that be a phone, a TV or another computer.
 | __opera.port__              | Integer  | Random port | The port to Opera should connect to.  Setting this capability to 0 will probe for a free, random port, setting it to -1 will ensure compatibility mode using port the default port 7001 for Operas version 11.52 or older.
-| __opera.profile__           | [OperaProfile](http://operasoftware.github.com/operadriver/docs/com/opera/core/systems/OperaProfile.html)/String | Temporary profile | Directory of the profile to use, or an {@link OperaProfile} instance object representing a profile.  If null is given, a random temporary directory is used.  If "", an empty string, then the default *~/.autotest<* profile directory will be used (for backwards compatibility with Opera < 11.60).
+| __opera.profile__           | [operaprofile](http://operasoftware.github.com/operadriver/docs/com/opera/core/systems/operaprofile.html)/string | temporary profile | directory of the profile to use, or an [operaprofile](http://operasoftware.github.com/operadriver/docs/com/opera/core/systems/operaprofile.html) instance object representing a profile.  if null is given, a random temporary directory is used.  if "", an empty string, then the default *~/.autotest* profile directory will be used (for backwards compatibility with opera < 11.60).
 | __opera.autostart__         | Boolean  | true        | Whether to auto-start the Opera binary.  If false, OperaDriver will wait for a connection from the browser.  Go to *"opera:debug"*, enter the correct host/port information, and hit _Connect_ to connect manually.
 | __opera.detach__            | Boolean  | false       | Whether to detach the Opera browser when the driver shuts down.  This will leave Opera running.
 | __opera.display__           | Integer  | null        | The X display to use.  If set, Opera will be started on the specified display.  (Only works on GNU/Linux.)
@@ -194,6 +194,7 @@ OperaDriver:
 | __Version__ | __Workaround/tweaks needed__                                                                                                |
 |-------------|-----------------------------------------------------------------------------------------------------------------------------|
 | 12.00       | *(Not released yet)*                                                                                                        |
+| 11.62       |                                                                                                                             |
 | 11.61       |                                                                                                                             |
 | 11.60       |                                                                                                                             |
 | 11.52       | Set `opera.port` to `-1` and `opera.profile` to "" (empty string) to disable `-debugproxy` and `-pd` command-line arguments |
@@ -222,8 +223,8 @@ Development
 -----------
 
 While OperaDriver is officially maintained by Opera, it is [free
-software](http://fsfe.org/about/basics/freesoftware.en.html) and can
-only ascribe its ... thanks to [many volunteer
+software](http://fsfe.org/about/basics/freesoftware.en.html) and would
+only be possible thanks to [many volunteer
 contributors](https://github.com/operasoftware/operadriver/blob/master/AUTHORS).
 If you come across a reproducible bug, please [open an
 issue](http://code.google.com/p/selenium/issues/list) to submit a bug
