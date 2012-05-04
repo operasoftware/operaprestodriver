@@ -1,3 +1,131 @@
+v0.12     (2012-05-04)
+
+  [API CHANGES]
+
+  * Removed deprecated methods OperaDriver.setPref() and getPref().
+    (andreastt)
+
+  * Removed deprecated methods OperaDriver.click(x,y) and
+    click(times).  (andreastt)
+
+  * Deprecated method OperaDriver.getOperaActionList().  (andreastt)
+
+  [NEW FEATURES]
+
+  * Added OperaSettings for managing options to OperaDriver
+    internally.  While this can be used for OperaDriver's constructor,
+    it's highly recommended to use Capabilities instead.  (andreastt)
+
+  * Added ready-transformed Google Protobuf compatible protocols in
+    /protos.  Original Scope protocols have been moved to
+    /protos/scope.  See /protos/README for detailed instructions on
+    compilation.  (andreastt)
+
+  [ENHANCEMENTS]
+
+  * Added default path lookup for Opera Mobile for Unix, Mac and
+    Windows.  (andreastt)
+
+  * Raised handshake timeout to 60 seconds.  (andreastt)
+
+  * By default we are now allowing popups to be opened when using
+    Opera through OperaDriver.
+
+    This can be disabled by doing:
+
+        preferences().set("User Prefs", "Ignore Unrequested Popups",
+	                  true);
+
+    (andreastt)
+
+  [BUG FIXES]
+
+  * Preserving mouse and keyboard state.
+
+    When running OperaDriver through a remote server stateless calls
+    are made through the JSON wire protocol.  When performing an
+    Actions chain like this:
+
+        new Actions(driver).sendKeys(element, "foo").perform();
+
+    … we need to make sure to preserve the mouse move coordinates for
+    the next click() call.
+
+    (andreastt)
+
+  * Enabling clicking of disabled elements by default.  Removed
+    jar_internal build target.  (andreastt)
+
+  * Workaround for letting Opera Mobile autofocus form elements
+    through ECMAScript.  (andreastt)
+
+  * Environment variable OPERA_LAUNCHER did not get recognized
+    properly.  Cleaned up some dubious code paths in
+    OperaLauncherRunnerSettings.  (andreastt)
+
+  * Made call to java.io.File.canExecute() in OperaLauncherRunner Java
+    1.5 safe.  (andreastt)
+
+  * Added class OperaBoolean containing utility methosd for doing C to
+    JVM conversions.  (andreastt)
+
+  * Implemented OperaArguments.toJson() for bean-to-JSON conversion.
+    (andreastt)
+
+  * Now using CommandLine from Selenium to launch Opera if using the
+    Java-based OperaRunner.  (andreastt)
+
+  * Using OperaIntervals.RESPONSE_TIMEOUT for connection monitoring in
+    StpThread instead of a hardcoded 60 second value.  (andreastt)
+
+  * Using correct interval for script retrying consistenly.  Removed
+    OperaIntervals.SCRIPT_RETRY, replaced by SCRIPT_RETRY_INTERVAL.
+    (andreastt)
+
+  * Switched on logging for SocketMonitor.  (andreastt)
+
+  * Removed PbActionHandler, and replaced by making calls directly to
+    OperaMouse.  (andreastt)
+
+  [TESTS]
+
+  * Mimicking Selenium test setup to more easily allow for test
+    sharing.  (andreastt)
+
+  * Added FreshDriver, NoDriverAfterTest, NoDriver, RequireService and
+    Settings annotations to improve test setup.  (andreastt)
+
+  * Added MockOperaDriver to allow testing of configuration parsing in
+    OperaSettingsTest.  (andreastt)
+
+  * Enabled test web server to use a non-loopback address for testing
+    so that remote Operas can connect.  (andreastt)
+
+  * Generalized environmental variables management to be included in
+    the generic test setup.  (andreastt)
+
+  * Made it possible to also unset environmental variables during
+    runtime.  (andreastt)
+
+  * Replaced TestOperaDriver.getDefaultCapabilities() with
+    TestOperaDriverSupplier instead.  (andreastt)
+
+  * If testing on a remote device, we might not be using a local
+    OperaRunner.  Added check for this.  (andreastt)
+
+  * Removed getFixture() and related methods.  Now relying completely
+    upon WebServer and Pages.  (andreastt)
+
+  [OTHER]
+
+  * Upgraded to Selenium 2.21.0.  (andreastt)
+
+  * Upgraded to Guava 12.0.  (dawagner)
+
+  * Upgraded launchers to 0.7, now with support for taking external
+    screenshots on Mac.  (andreastt)
+
+
 v0.11     (2012-03-05)
 
   [API CHANGES]
@@ -563,7 +691,7 @@ v0.8    2011-11-17
 
   * Logging for when launcher is copied was misplaced, now corrected to
     reflect reality.  (andreastt)
-  
+
   [TESTS]
 
   * Added tests for VersionUtils comparison.  (dturkoglu)
