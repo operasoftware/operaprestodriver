@@ -220,7 +220,7 @@ public class OperaWebElement extends RemoteWebElement {
       // When focused textareas return the cursor to the last position it was at. Inputs place the
       // cursor at the beginning, and so we need to move it to the end. We do this by pre-pending an
       // "End" key to the keys to send (in a round-about way).
-      if (getTagName().equalsIgnoreCase("input")) {
+      if (getTagName().equals("INPUT")) {
         // Javascript from webdriver_session.cc in ChromeDriver
         executeMethod("function(elem) {" + "  var doc = elem.ownerDocument || elem;"
                       + "  var prevActiveElem = doc.activeElement;"
