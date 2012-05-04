@@ -20,7 +20,6 @@ import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
 
 import com.opera.core.systems.common.lang.OperaStrings;
-import com.opera.core.systems.model.ScopeActions;
 import com.opera.core.systems.model.ScreenShotReply;
 import com.opera.core.systems.model.ScriptResult;
 import com.opera.core.systems.preferences.OperaScopePreferences;
@@ -28,7 +27,6 @@ import com.opera.core.systems.runner.OperaRunner;
 import com.opera.core.systems.runner.launcher.OperaLauncherRunner;
 import com.opera.core.systems.scope.exceptions.CommunicationException;
 import com.opera.core.systems.scope.exceptions.ResponseNotReceivedException;
-import com.opera.core.systems.scope.handlers.PbActionHandler;
 import com.opera.core.systems.scope.internal.OperaFlags;
 import com.opera.core.systems.scope.internal.OperaIntervals;
 import com.opera.core.systems.scope.services.ICookieManager;
@@ -111,14 +109,12 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
   protected final OperaSettings settings;
   protected OperaRunner runner = null;
 
+  private ScopeServices services;
   private IEcmaScriptDebugger debugger;
   private IOperaExec exec;
   private IWindowManager windowManager;
   private ICoreUtils coreUtils;
   private ICookieManager cookieManager;
-
-  private ScopeServices services;
-  protected ScopeActions actionHandler;
 
   private OperaScopePreferences preferences;
 
@@ -206,7 +202,6 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     windowManager = services.getWindowManager();
     exec = services.getExec();
     coreUtils = services.getCoreUtils();
-    actionHandler = new PbActionHandler(services);
     cookieManager = services.getCookieManager();
     //cookieManager.updateCookieSettings();
     preferences = new OperaScopePreferences(services.getPrefs());

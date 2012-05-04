@@ -122,7 +122,7 @@ public class OperaWebElement extends RemoteWebElement {
     if (getTagName().equals("OPTION")) {
       callMethod("return " + OperaAtoms.CLICK + "(locator)");
     } else {
-      parent.actionHandler.click(this, "");
+      parent.getMouse().click(getCoordinates());
     }
 
     try {
