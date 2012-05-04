@@ -215,7 +215,6 @@ public class OperaWebElement extends RemoteWebElement {
     if (hasAttribute("contentEditable") ||
         (getTagName().equals("INPUT") &&
          (hasAttribute("type") && getAttribute("type").equalsIgnoreCase("file")))) {
-      System.out.println("Clicking!");
       click();
     } else {
       executeMethod("locator.focus()");
