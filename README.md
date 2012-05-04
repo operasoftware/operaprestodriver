@@ -175,7 +175,7 @@ the available variables:
 | __Name__          | __Description__                                                                                                                                                                                                              |
 |-------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | __OPERA_PATH__    | The absolute path to the Opera binary you want to use.  If not set OperaDriver will try to locate Opera on your system.                                                                                                      |
-| __OPERA_ARGS__    | A space-delimited list of arguments to pass on to Opera, e.g. `-nowindow`, `-dimensions 1600x1200`, &c.  See `opera -help` to view available arguments.                                                                     |
+| __OPERA_ARGS__    | A space-delimited list of arguments to pass on to Opera, e.g. `-nowindow`, `-dimensions 1600x1200`, &c.  See `opera -help` to see the available arguments.                                                                     |
 
 To set environment variables:
 
