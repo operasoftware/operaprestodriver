@@ -42,6 +42,11 @@ public class WindowTest extends OperaDriverTestCase {
     windowPage = TestingPageFactory.initElements(driver, pages, WindowPage.class);
   }
 
+  @Before
+  public void beforeEach() {
+    driver.closeAll();
+  }
+
   @After
   public void afterEach() {
     driver.closeAll();
