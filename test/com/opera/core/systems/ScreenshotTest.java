@@ -83,7 +83,7 @@ public class ScreenshotTest extends OperaDriverTestCase {
   }
 
   @Test
-  public void elementsSame() throws Exception {
+  public void elementsMd5Same() throws Exception {
     String one = radioLittle.saveScreenshot("one.png");
     String two = radioSome.saveScreenshot("two.png");
 
@@ -92,7 +92,8 @@ public class ScreenshotTest extends OperaDriverTestCase {
 
   @Test
   public void writtenFilesSame() throws Exception {
-    String one = "one.png", two = "two.png";
+    String one = "one.png";
+    String two = "two.png";
 
     radioLittle.saveScreenshot(one);
     radioSome.saveScreenshot(two);
@@ -101,21 +102,22 @@ public class ScreenshotTest extends OperaDriverTestCase {
   }
 
   @Test
-  public void elementsNotSame() throws Exception {
+  public void elementsMd5NotSame() throws Exception {
     String one = radioLittle.saveScreenshot("one.png");
     String two = radioLots.saveScreenshot("two.png");
 
-    Assert.assertNotSame(one, two);
+    assertNotSame(one, two);
   }
 
   @Test
   public void writtenFilesNotSame() throws Exception {
-    String one = "one.png", two = "two.png";
+    String one = "one.png";
+    String two = "two.png";
 
     radioLittle.saveScreenshot(one);
     radioLots.saveScreenshot(two);
 
-    Assert.assertNotSame(digest(one), digest(two));
+    assertNotSame(digest(one), digest(two));
   }
 
   @Test

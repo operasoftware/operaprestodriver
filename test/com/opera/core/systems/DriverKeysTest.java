@@ -51,7 +51,8 @@ public class DriverKeysTest extends OperaDriverTestCase {
 
   @Test
   public void testSequence() {
-    new Actions(driver).sendKeys("a")
+    new Actions(driver)
+        .sendKeys("a")
         .sendKeys("b")
         .sendKeys("c")
         .sendKeys("d")
