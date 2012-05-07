@@ -406,7 +406,10 @@ public class OperaSettings {
      *
      * <strong>Warning:</strong> This is a temporary workaround for launcher not taking external
      * window-only screenshots on Windows.
+     *
+     * @deprecated
      */
+    @Deprecated
     BACKEND() {
       String getDefaultValue() {
         return "software";
