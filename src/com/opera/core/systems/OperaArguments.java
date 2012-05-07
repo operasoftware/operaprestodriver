@@ -120,7 +120,7 @@ public class OperaArguments implements com.opera.core.systems.arguments.interfac
     return parsed;
   }
 
-  public OperaArguments merge(
+  public final OperaArguments merge(
       com.opera.core.systems.arguments.interfaces.OperaArguments extraArguments) {
     checkNotNull(extraArguments);
 
