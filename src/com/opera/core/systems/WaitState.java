@@ -436,8 +436,8 @@ public class WaitState {
     return result;
   }
 
-  private final ResultItem waitAndParseResult(long timeout, int match,
-                                              String stringMatch, final ResponseType type) {
+  private ResultItem waitAndParseResult(long timeout, int match, String stringMatch,
+                                        final ResponseType type) {
     synchronized (lock) {
       while (true) {
         ResultItem result = pollResultItem(timeout, type == ResponseType.OPERA_IDLE);
