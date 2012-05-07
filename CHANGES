@@ -10,6 +10,13 @@ v0.12     (2012-05-04)
 
   * Deprecated method OperaDriver.getOperaActionList().  (andreastt)
 
+  * Deprecated method OperaWebElement.containsColor().  (andreastt)
+
+  * Deprecated capability opera.no_restart.  (andreastt)
+
+  * Deprecated capability opera.no_quit, replaced by new capability
+    opera.detach.  (andreastt)
+
   [NEW FEATURES]
 
   * Added OperaSettings for managing options to OperaDriver
@@ -86,6 +93,48 @@ v0.12     (2012-05-04)
 
   * Removed PbActionHandler, and replaced by making calls directly to
     OperaMouse.  (andreastt)
+
+  * Check for null in OperaArguments.merge().  (andreastt)
+
+  * Fixed infinite recursive loop in OperaDesktopDriver.isOperaRunning().
+    (andreastt)
+
+  * Fixed dead store field in OperaStrings.  (andreastt)
+
+  * In ScreenShotReply user-supplied byte array was stored directly, now
+    cloning it.  (andreastt)
+
+  * List array to string array conversion with size boundaries in
+    OperaRunner.  (andreastt)
+
+  * Correct lock release in OperaRunner under all exception
+    conditions.  (andreastt)
+
+  * Fixed dead store field in OperaLauncherProtocol.  (andreastt)
+
+  * SelfTestResult.hashCode() implemented to match equals().  (andreastt)
+
+  * Ensuring unlock on all exception paths in SocketMonitor.
+    (andreastt)
+
+  * All threads are now being notified in WaitState.  (andreastt)
+
+  * Fixed many statical analysis bugs in DesktopWindowManager.
+    (andreastt)
+
+  * Preserving stack traces and forcing UTF-8 in ScopeServices.
+    (andreastt)
+
+  * OperaArguments.merge() made final because it's used from
+    constructor.  (andreastt)
+
+  * Removed unused method OperaDriverBuilder.getDefaultSettings().
+    (andreastt)
+
+  * Using implied modifiers in many interfaces.  (andreastt)
+
+  * Reusing OperaIntervals.PROCESS_START_SLEEP in OperaLauncherRunner.
+    (andreastt)
 
   [TESTS]
 
