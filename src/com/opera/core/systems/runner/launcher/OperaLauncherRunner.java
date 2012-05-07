@@ -202,7 +202,7 @@ public class OperaLauncherRunner extends OperaRunner
 
       // Check Opera hasn't immediately exited (e.g. due to unknown arguments)
       try {
-        Thread.sleep(100);
+        Thread.sleep(OperaIntervals.PROCESS_START_SLEEP.getValue());
       } catch (InterruptedException e) {
         // nothing
       }

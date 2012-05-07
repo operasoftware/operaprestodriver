@@ -100,7 +100,7 @@ public enum OperaIntervals {
    * assume something went wrong during initialization.  We need to wait for a short period before
    * checking the exit value as it may take some time to start the program.
    */
-  PROCESS_START_SLEEP(10),
+  PROCESS_START_SLEEP(100),
 
   MENU_EVENT_TIMEOUT(1000),
 
