@@ -25,9 +25,13 @@ public interface ISelftest {
    *
    * @param modules the names of the modules to test
    */
-  public void runSelftests(List<String> modules);
+  void runSelftests(List<String> modules);
 
-  public class SelftestResult {
+  public enum ResultType {
+    PASS, FAIL, SKIP
+  }
+
+  class SelftestResult {
 
     private final String tag;
     private final String description;
@@ -96,10 +100,6 @@ public interface ISelftest {
       return super.hashCode();
     }
 
-  }
-
-  public enum ResultType {
-    PASS, FAIL, SKIP
   }
 
 }

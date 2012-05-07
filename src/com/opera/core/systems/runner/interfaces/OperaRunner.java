@@ -30,42 +30,42 @@ public interface OperaRunner {
   /**
    * Start Opera, does nothing if Opera is already started.
    */
-  public void startOpera();
+  void startOpera();
 
   /**
    * Stops Opera, does nothing if Opera isn't running.  Typically we'll use the exec service to stop
    * Opera, but this method will _ensure_ that Opera is quit from an external process controller.
    */
-  public void stopOpera();
+  void stopOpera();
 
   /**
    * Is Opera running?
    *
    * @return true if running, false if not running or crashed
    */
-  public boolean isOperaRunning();
+  boolean isOperaRunning();
 
-  public boolean isOperaRunning(int processId);
+  boolean isOperaRunning(int processId);
 
   /**
    * Did Opera crash?  This is reset on next call, so if you don't check you won't know.
    *
    * @return true if opera has crashed
    */
-  public boolean hasOperaCrashed();
+  boolean hasOperaCrashed();
 
   /**
    * If Opera crashed there should be a crashlog.
    *
    * @return the crashlog, or null if it does not exist
    */
-  public String getOperaCrashlog();
+  String getOperaCrashlog();
 
   /**
    * In case the com.opera.core.systems.runner.runner has sockets and stuff, it needs to be shut
    * down.
    */
-  public void shutdown();
+  void shutdown();
 
   /**
    * Take a screenshot of the full screen.
@@ -74,6 +74,6 @@ public interface OperaRunner {
    * @param hashes  an arbitrary list of hashes to compare with
    * @return a ScreenshotReply object containing MD5 hash sums and bytes
    */
-  public ScreenShotReply saveScreenshot(long timeout, String... hashes);
+  ScreenShotReply saveScreenshot(long timeout, String... hashes);
 
 }
