@@ -198,7 +198,7 @@ public class WaitState {
     QUICK_MENU_SHOWN,
     QUICK_MENU_CLOSED,
     QUICK_MENU_ITEM_PRESSED,
-    SELFTEST_DONE;
+    SELFTEST_DONE
   }
 
   public WaitState() {
@@ -588,12 +588,7 @@ public class WaitState {
               if (stringMatch != null && stringMatch.length() == 0) {
                 return result;
               } else {
-                //logger.fine("EVENT_QUICK_MENU_CLOSED: Name: "
-                //+ result.quickMenuId.getMenuName());
-
-                // match on name
                 if (result.quickMenuId.getMenuName().equals(stringMatch)) {
-                  stringMatch = "";
                   return result;
                 }
               }
@@ -694,9 +689,11 @@ public class WaitState {
     return null;
   }
 
+  /*
   public void waitForRequest(int windowId, long timeout) {
     waitAndParseResult(timeout, windowId, null, ResponseType.REQUEST_FIRED);
   }
+  */
 
   public int waitForDesktopWindowShown(String win_name, long timeout) {
     ResultItem item = waitAndParseResult(timeout, 0, win_name, ResponseType.DESKTOP_WINDOW_SHOWN);
