@@ -16,6 +16,13 @@ limitations under the License.
 
 package com.opera.core.systems.runner.launcher;
 
+import com.google.protobuf.GeneratedMessage;
+import com.google.protobuf.InvalidProtocolBufferException;
+
+import com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherHandshakeResponse;
+import com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherScreenshotResponse;
+import com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStatusResponse;
+
 import java.io.IOException;
 import java.net.Socket;
 import java.net.SocketException;
@@ -25,12 +32,6 @@ import java.util.EnumSet;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.logging.Logger;
-
-import com.google.protobuf.GeneratedMessage;
-import com.google.protobuf.InvalidProtocolBufferException;
-import com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherHandshakeResponse;
-import com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherScreenshotResponse;
-import com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStatusResponse;
 
 /**
  * Implements the launcher protocol.
@@ -118,7 +119,7 @@ public class OperaLauncherProtocol {
    *
    * @param type the payload type to be sent after
    * @param size size of the payload following the header
-   * @throws java.io.IOException if socket send error or protocol parse error
+   * @throws IOException if socket send error or protocol parse error
    */
   private void sendRequestHeader(MessageType type, int size) throws IOException {
     ByteBuffer buf = ByteBuffer.allocate(8);
@@ -142,8 +143,7 @@ public class OperaLauncherProtocol {
    * @throws IOException if socket read error or protocol parse error
    */
   public ResponseEncapsulation sendRequest(MessageType type, byte[] body) throws IOException {
-    int size = (body != null) ? size = body.length : 0;
-    sendRequestHeader(type, size);
+    sendRequestHeader(type, (body != null) ? body.length : 0);
     if (body != null) {
       socket.getOutputStream().write(body);
     }
@@ -158,8 +158,7 @@ public class OperaLauncherProtocol {
    * @throws IOException if socket read error or protocol parse error
    */
   public void sendRequestWithoutResponse(MessageType type, byte[] body) throws IOException {
-    int size = (body != null) ? size = body.length : 0;
-    sendRequestHeader(type, size);
+    sendRequestHeader(type, (body != null) ? body.length : 0);
     if (body != null) {
       socket.getOutputStream().write(body);
     }
@@ -170,7 +169,7 @@ public class OperaLauncherProtocol {
    *
    * @param buffer Target buffer to fill
    * @param length Desired length
-   * @throws java.io.IOException if socket read error or protocol parse error
+   * @throws IOException if socket read error or protocol parse error
    */
   private void recv(byte[] buffer, int length) throws IOException {
     int bytes = 0;
@@ -253,14 +252,14 @@ public class OperaLauncherProtocol {
     return new ResponseEncapsulation(success, msg);
   }
 
-  private final GeneratedMessage.Builder<?> buildMessage(
+  private GeneratedMessage.Builder<?> buildMessage(
       GeneratedMessage.Builder<?> builder, byte[] message) throws IOException {
     try {
       return builder.mergeFrom(message);
-    } catch (InvalidProtocolBufferException ex) {
+    } catch (InvalidProtocolBufferException e) {
       throw new IOException("Could not parse launcher message "
-                            + builder.getDescriptorForType().getFullName() + " : "
-                            + ex.getMessage());
+                            + builder.getDescriptorForType().getFullName() + ": "
+                            + e.getMessage());
     }
   }
 
