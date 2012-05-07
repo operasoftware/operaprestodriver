@@ -225,7 +225,7 @@ public class WaitState {
     synchronized (lock) {
       logger.finest("Event: onHandshake");
       events.add(new ResultItem(WaitResult.HANDSHAKE));
-      lock.notify();
+      lock.notifyAll();
     }
   }
 
@@ -233,7 +233,7 @@ public class WaitState {
     synchronized (lock) {
       logger.finest("Event: onResponse for " + tag);
       events.add(new ResultItem(response, tag));
-      lock.notify();
+      lock.notifyAll();
     }
   }
 
@@ -241,7 +241,7 @@ public class WaitState {
     synchronized (lock) {
       logger.fine("Got ERROR for " + tag);
       events.add(new ResultItem(WaitResult.ERROR, tag));
-      lock.notify();
+      lock.notifyAll();
     }
   }
 
@@ -249,7 +249,7 @@ public class WaitState {
     synchronized (lock) {
       events.add(new ResultItem(new WebDriverException(e)));
       connected = false;
-      lock.notify();
+      lock.notifyAll();
     }
   }
 
@@ -258,7 +258,7 @@ public class WaitState {
       logger.finest("Event: onDisconnected");
       events.add(new ResultItem(WaitResult.DISCONNECTED));
       connected = false;
-      lock.notify();
+      lock.notifyAll();
     }
   }
 
@@ -266,7 +266,7 @@ public class WaitState {
     synchronized (lock) {
       logger.finest("Event: onWindowLoaded");
       events.add(new ResultItem(WaitResult.EVENT_WINDOW_LOADED, windowId));
-      lock.notify();
+      lock.notifyAll();
     }
   }
 
@@ -274,7 +274,7 @@ public class WaitState {
     synchronized (lock) {
       logger.finest("Event: onRequest");
       events.add(new ResultItem(WaitResult.EVENT_REQUEST_FIRED, windowId));
-      lock.notify();
+      lock.notifyAll();
     }
   }
 
@@ -282,7 +282,7 @@ public class WaitState {
     synchronized (lock) {
       logger.finest("Event: onWindowClosed");
       events.add(new ResultItem(WaitResult.EVENT_WINDOW_CLOSED, windowId));
-      lock.notify();
+      lock.notifyAll();
     }
   }
 
@@ -291,7 +291,7 @@ public class WaitState {
       logger.finest("Event: onOperaIdle");
       events.add(new ResultItem(WaitResult.EVENT_OPERA_IDLE, 0));// 0 is
       // important to match later
-      lock.notify();
+      lock.notifyAll();
     }
   }
 
@@ -299,7 +299,7 @@ public class WaitState {
     synchronized (lock) {
       logger.finest("Event: onDesktopWindowClosed");
       events.add(new ResultItem(WaitResult.EVENT_DESKTOP_WINDOW_CLOSED, info));
-      lock.notify();
+      lock.notifyAll();
     }
   }
 
@@ -307,7 +307,7 @@ public class WaitState {
     synchronized (lock) {
       logger.finest("Event: onDesktopWindowActivated");
       events.add(new ResultItem(WaitResult.EVENT_DESKTOP_WINDOW_ACTIVATED, info));
-      lock.notify();
+      lock.notifyAll();
     }
   }
 
@@ -315,7 +315,7 @@ public class WaitState {
     synchronized (lock) {
       logger.finest("Event: onDesktopWindowShown");
       events.add(new ResultItem(WaitResult.EVENT_DESKTOP_WINDOW_SHOWN, info));
-      lock.notify();
+      lock.notifyAll();
     }
   }
 
@@ -323,7 +323,7 @@ public class WaitState {
     synchronized (lock) {
       logger.finest("Event: onDesktopWindowUpdated");
       events.add(new ResultItem(WaitResult.EVENT_DESKTOP_WINDOW_UPDATED, info));
-      lock.notify();
+      lock.notifyAll();
     }
   }
 
@@ -331,7 +331,7 @@ public class WaitState {
     synchronized (lock) {
       logger.finest("Event: onDesktopWindowLoaded");
       events.add(new ResultItem(WaitResult.EVENT_DESKTOP_WINDOW_LOADED, info));
-      lock.notify();
+      lock.notifyAll();
     }
   }
 
@@ -339,7 +339,7 @@ public class WaitState {
     synchronized (lock) {
       logger.finest("Event: onQuickMenuShown");
       events.add(new ResultItem(WaitResult.EVENT_QUICK_MENU_SHOWN, info));
-      lock.notify();
+      lock.notifyAll();
     }
   }
 
@@ -347,7 +347,7 @@ public class WaitState {
     synchronized (lock) {
       logger.finest("Event: onQuickMenuClosed");
       events.add(new ResultItem(WaitResult.EVENT_QUICK_MENU_CLOSED, id));
-      lock.notify();
+      lock.notifyAll();
     }
   }
 
@@ -355,7 +355,7 @@ public class WaitState {
     synchronized (lock) {
       logger.finest("Event: onQuickMenuItemPressed");
       events.add(new ResultItem(WaitResult.EVENT_QUICK_MENU_ITEM_PRESSED, menuItemID));
-      lock.notify();
+      lock.notifyAll();
     }
   }
 
@@ -363,7 +363,7 @@ public class WaitState {
     synchronized (lock) {
       logger.finest("Event: onSelftestDone");
       events.add(new ResultItem(results));
-      lock.notify();
+      lock.notifyAll();
     }
   }
 
@@ -408,7 +408,7 @@ public class WaitState {
    * @param idle    whether you are waiting for an Idle event. Changes error message.
    * @return the result
    */
-  private final ResultItem pollResultItem(long timeout, boolean idle) {
+  private ResultItem pollResultItem(long timeout, boolean idle) {
     ResultItem result = getResult();
     if (result != null) {
       result.remainingIdleTimeout = timeout;
