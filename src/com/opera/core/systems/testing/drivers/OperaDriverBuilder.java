@@ -139,26 +139,4 @@ public class OperaDriverBuilder implements Supplier<OperaDriver> {
     return driver;
   }
 
-  private OperaSettings getDefaultSettings() {
-    OperaSettings s = new OperaSettings();
-
-    if (driverSupplier == null) {
-      try {
-        Method getDefaultSettings;
-        getDefaultSettings = driverClass.getClass().getMethod("getDefaultSettings");
-        s = (OperaSettings) getDefaultSettings.invoke(driverClass.getClass());
-      } catch (NoSuchMethodException e) {
-        // fall through
-      } catch (InvocationTargetException e) {
-        throw Throwables.propagate(e);
-      } catch (IllegalAccessException e) {
-        throw Throwables.propagate(e);
-      }
-    } else {
-      s = driverSupplier.getSettings();
-    }
-
-    return s;
-  }
-
 }
