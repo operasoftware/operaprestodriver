@@ -802,7 +802,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
   }
 
-  public class OperaTimeouts implements Timeouts {
+  public static class OperaTimeouts implements Timeouts {
 
     public Timeouts implicitlyWait(long time, TimeUnit unit) {
       OperaIntervals.IMPLICIT_WAIT.setValue(TimeUnit.MILLISECONDS.convert(time, unit));
