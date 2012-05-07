@@ -259,7 +259,9 @@ public class EcmaScriptDebugger6 extends EcmaScriptDebugger {
       List<Object> result = new ArrayList<Object>();
 
       for (Property property : properties) {
-        if (property.getType().equals("object")) {
+        if (property.getType().equals("number") && property.getName().equals("length")) {
+          // ignore these, they just tell us about the length of the result
+        } else if (property.getType().equals("object")) {
           result.add(examineScriptResult(property.getObjectValue().getObjectID(), visitedIDs));
         } else {
           result.add(parseValue(property.getType(), property.getValue()));
