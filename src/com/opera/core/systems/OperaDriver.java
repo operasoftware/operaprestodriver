@@ -858,14 +858,11 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
       if (objectId == null) {
         return null;
-      }
-      if (result.getClassName().endsWith("Element")) {
+      } else if (result.getClassName().endsWith("Element")) {
         return new OperaWebElement(this, objectId);
-      }
-      if (result.getClassName().equals("NodeList")) {
+      } else if (result.getClassName().equals("NodeList")) {
         return processElements(objectId);
-      }
-      if (result.getClassName().equals("Array") || result.getClassName().equals("Object")) {
+      } else if (result.getClassName().equals("Array") || result.getClassName().equals("Object")) {
         return debugger.examineScriptResult(objectId);
       }
     }
