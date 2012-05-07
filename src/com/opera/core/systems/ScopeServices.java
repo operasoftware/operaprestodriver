@@ -844,6 +844,7 @@ public class ScopeServices implements IConnectionHandler {
     this.cookieManager = cookieManager;
   }
 
+  @SuppressWarnings("unused")
   public ISelftest getSelftest() {
     return selftest;
   }

@@ -464,6 +464,7 @@ public class OperaWebElement extends RemoteWebElement {
    *
    * @param colors list of colors to check for.
    * @return true if the page contains any of the given colors, false otherwise.
+   * @deprecated
    */
   public boolean containsColor(OperaColors... colors) {
     assertElementNotStale();
