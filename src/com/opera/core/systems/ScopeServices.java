@@ -510,12 +510,10 @@ public class ScopeServices implements IConnectionHandler {
 
   public void onDisconnect() {
     logger.fine("Disconnected, closing STP connection");
-    if (connection != null) {
-      if (!shuttingDown) {
-        waitState.onDisconnected();
-        logger.finest("Cleaning up...");
-        connection = null;
-      }
+    if (connection != null && !shuttingDown) {
+      waitState.onDisconnected();
+      logger.finest("Cleaning up...");
+      connection = null;
     }
   }
 
