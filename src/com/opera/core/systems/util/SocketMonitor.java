@@ -126,19 +126,22 @@ public class SocketMonitor {
     }
 
     lock.lock();
-    for (SelectionKey key : selector.selectedKeys()) {
-      try {
-        processSelectionKey(key);
-      } catch (CancelledKeyException cke) {
-        cke.printStackTrace();
-      } catch (IOException e) {
-        // what are you doing with the channel variable here?
-        //SelectableChannel channel = key.channel();
-        e.printStackTrace();
-        key.cancel();
+    try {
+      for (SelectionKey key : selector.selectedKeys()) {
+        try {
+          processSelectionKey(key);
+        } catch (CancelledKeyException cke) {
+          cke.printStackTrace();
+        } catch (IOException e) {
+          // what are you doing with the channel variable here?
+          //SelectableChannel channel = key.channel();
+          e.printStackTrace();
+          key.cancel();
+        }
       }
+    } finally {
+      lock.unlock();
     }
-    lock.unlock();
 
     return true;
   }
