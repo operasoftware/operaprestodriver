@@ -4,23 +4,23 @@ OperaDriver
 OperaDriver is a vendor-supported
 [WebDriver](http://dvcs.w3.org/hg/webdriver/raw-file/tip/webdriver-spec.html)
 implementation developed by [Opera](http://opera.com/) and volunteers
-that enables programmatic automation of different Opera products.  It
+that enable programmatic automation of different Opera products.  It
 is a part of the [Selenium](http://code.google.com/p/selenium)
 project.
 
 WebDriver is a general purpose library for automating web browsers.
 It can drive the browser running various tests on your web pages, just
 as if a real user was navigating through them.  It can emulate actions
-like clicking links, entering text and submitting forms, and reports
+like clicking links, enter text and submitting forms, and reporting
 results back to you so you know that your website works as intended.
 
 OperaDriver's end-user emulation ensures that your entire stack (HTML,
 scripts, styling, embedded resources and backend setup) is functioning
 correctly without tedious manual testing routines.
 
-OperaDriver is usable out of the box in the [default Selenium
-package](https://code.google.com/p/selenium/downloads/list), and can
-be used without any extra setup on any modern version of Opera.
+OperaDriver is usable out of the box from the [official Selenium
+packages](https://code.google.com/p/selenium/downloads/list), and can
+be used no extra setup on any modern version of Opera.
 
 
 Documentation
