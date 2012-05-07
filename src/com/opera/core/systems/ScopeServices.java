@@ -255,8 +255,8 @@ public class ScopeServices implements IConnectionHandler {
 
     try {
       return HostInfo.parseFrom(response.getPayload());
-    } catch (InvalidProtocolBufferException ex) {
-      throw new WebDriverException("Error while parsing host info");
+    } catch (InvalidProtocolBufferException e) {
+      throw new WebDriverException("Error while parsing host info", e);
     }
   }
 
@@ -269,7 +269,6 @@ public class ScopeServices implements IConnectionHandler {
 
     if (!enableDebugger) {
       debugger = new IEcmaScriptDebugger() {
-
         public void setRuntime(RuntimeInfo runtime) {
         }
 
@@ -387,7 +386,7 @@ public class ScopeServices implements IConnectionHandler {
           enable(requiredService);
         }
       } catch (InvalidProtocolBufferException e) {
-        throw new WebDriverException("Could not parse the message");
+        throw new WebDriverException("Could not parse the message", e);
       }
     }
   }
@@ -604,46 +603,46 @@ public class ScopeServices implements IConnectionHandler {
     waitState.setWaitEvents(true);
   }
 
-  public int waitForDesktopWindowLoaded(String win_name, long timeout) {
+  public int waitForDesktopWindowLoaded(String windowName, long timeout) {
     waitState.setWaitEvents(false);
     try {
-      return waitState.waitForDesktopWindowLoaded(win_name, timeout);
+      return waitState.waitForDesktopWindowLoaded(windowName, timeout);
     } catch (Exception e) {
       return 0;
     }
   }
 
-  public int waitForDesktopWindowShown(String win_name, long timeout) {
+  public int waitForDesktopWindowShown(String windowName, long timeout) {
     waitState.setWaitEvents(false);
     try {
-      return waitState.waitForDesktopWindowShown(win_name, timeout);
+      return waitState.waitForDesktopWindowShown(windowName, timeout);
     } catch (Exception e) {
       return 0;
     }
   }
 
-  public int waitForDesktopWindowUpdated(String win_name, long timeout) {
+  public int waitForDesktopWindowUpdated(String windowName, long timeout) {
     waitState.setWaitEvents(false);
     try {
-      return waitState.waitForDesktopWindowUpdated(win_name, timeout);
+      return waitState.waitForDesktopWindowUpdated(windowName, timeout);
     } catch (Exception e) {
       return 0;
     }
   }
 
-  public int waitForDesktopWindowActivated(String win_name, long timeout) {
+  public int waitForDesktopWindowActivated(String windowName, long timeout) {
     waitState.setWaitEvents(false);
     try {
-      return waitState.waitForDesktopWindowActivated(win_name, timeout);
+      return waitState.waitForDesktopWindowActivated(windowName, timeout);
     } catch (Exception e) {
       return 0;
     }
   }
 
-  public int waitForDesktopWindowClosed(String win_name, long timeout) {
+  public int waitForDesktopWindowClosed(String windowName, long timeout) {
     waitState.setWaitEvents(false);
     try {
-      return waitState.waitForDesktopWindowClosed(win_name, timeout);
+      return waitState.waitForDesktopWindowClosed(windowName, timeout);
     } catch (Exception e) {
       return 0;
     }
