@@ -53,7 +53,7 @@ public class EcmaScriptDebugger6 extends EcmaScriptDebugger {
     super(services, version);
     if (VersionUtil.compare(version, "7.0") >= 0) {
       throw new UnsupportedOperationException("ecmascript-debugger version " + version
-          + " is not supported");
+                                              + " is not supported");
     }
 
   }
@@ -197,10 +197,8 @@ public class EcmaScriptDebugger6 extends EcmaScriptDebugger {
       // FIXME what is the best approach here?
       else if (status.equals("cancelled-by-scheduler")) {
         return null;
-      } else if (status.equals("aborted")) {
-
-      }
-
+      } //else if (status.equals("aborted")) {
+      //}
     }
 
     String dataType = result.getType();
@@ -261,9 +259,7 @@ public class EcmaScriptDebugger6 extends EcmaScriptDebugger {
       List<Object> result = new ArrayList<Object>();
 
       for (Property property : properties) {
-        if (property.getType().equals("number") && property.getName().equals("length")) {
-          // ignore ?!?
-        } else if (property.getType().equals("object")) {
+        if (property.getType().equals("object")) {
           result.add(examineScriptResult(property.getObjectValue().getObjectID(), visitedIDs));
         } else {
           result.add(parseValue(property.getType(), property.getValue()));
@@ -275,14 +271,14 @@ public class EcmaScriptDebugger6 extends EcmaScriptDebugger {
       Map<String, Object> result = new HashMap<String, Object>();
 
       for (Property property : properties) {
-        if (property.getType().equals("number") && property.getName().equals("length")) {
-          // ignore ?!?
-        } else if (property.getType().equals("object")) {
-          result.put(property.getName(), examineScriptResult(property.getObjectValue().getObjectID(), visitedIDs));
+        if (property.getType().equals("object")) {
+          result.put(property.getName(),
+                     examineScriptResult(property.getObjectValue().getObjectID(), visitedIDs));
         } else {
           result.put(property.getName(), parseValue(property.getType(), property.getValue()));
         }
       }
+
       return result;
     }
   }

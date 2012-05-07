@@ -621,9 +621,7 @@ public class EcmascriptService extends AbstractEcmascriptService implements
 
       for (Property property : properties) {
         Type type = property.getValue().getType();
-        if (type == Type.NUMBER && property.getName().equals("length")) {
-          // ignore ?!?
-        } else {
+        if (type != Type.NUMBER && !property.getName().equals("length")) {
           result.add(parseValue(type, property.getValue(), visitedIDs));
         }
       }
@@ -634,9 +632,7 @@ public class EcmascriptService extends AbstractEcmascriptService implements
 
       for (Property property : properties) {
         Type type = property.getValue().getType();
-        if (type == Type.NUMBER && property.getName().equals("length")) {
-          // ignore ?!?
-        } else {
+        if (type != Type.NUMBER && !property.getName().equals("length")) {
           result.put(property.getName(), parseValue(type, property.getValue(), visitedIDs));
         }
       }
