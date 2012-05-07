@@ -111,7 +111,7 @@ public class OperaDriverTestRunner extends BlockJUnit4ClassRunner {
   }
 
   private Statement withNoDriverAfterTest(FrameworkMethod method, final Statement statement) {
-    NoDriverAfterTest annotation = method.getAnnotation(NoDriverAfterTest.class);
+    NoDriverAfter annotation = method.getAnnotation(NoDriverAfter.class);
     if (annotation == null) {
       return statement;
     }
