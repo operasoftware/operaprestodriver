@@ -29,10 +29,10 @@ public interface ISelftest {
 
   public class SelftestResult {
 
-    private String tag;
-    private String description;
-    private ResultType result;
-    private String more;
+    private final String tag;
+    private final String description;
+    private final ResultType result;
+    private final String more;
 
     public SelftestResult(String tag, String description, ResultType result) {
       this(tag, description, result, null);
@@ -61,9 +61,11 @@ public interface ISelftest {
       return more;
     }
 
+    @Override
     public String toString() {
       String format;
       Object[] args;
+
       if (more != null) {
         format = "%s:%s\t%s\t%s";
         args = new Object[]{tag, description, result, more};
@@ -75,6 +77,7 @@ public interface ISelftest {
       return String.format(format, args);
     }
 
+    @Override
     public boolean equals(Object other) {
       if (!(other instanceof SelftestResult)) {
         return false;
@@ -84,11 +87,19 @@ public interface ISelftest {
       return result.tag.equals(this.tag) &&
              result.description.equals(this.description) &&
              result.result == this.result &&
-             (result.more != null ? result.more.equals(this.more) : true);
+             (result.more == null || result.more.equals(this.more));
     }
+
+    // TODO(andreastt): Should match equals()
+    @Override
+    public int hashCode() {
+      return super.hashCode();
+    }
+
   }
 
   public enum ResultType {
     PASS, FAIL, SKIP
   }
+
 }
