@@ -672,7 +672,8 @@ public class OperaDesktopDriver extends OperaDriver {
     }
 
     return getScopeServices().waitForDesktopWindowShown(windowName,
-                                              OperaIntervals.WINDOW_EVENT_TIMEOUT.getValue());
+                                                        OperaIntervals.WINDOW_EVENT_TIMEOUT
+                                                            .getValue());
   }
 
   /**
@@ -688,7 +689,8 @@ public class OperaDesktopDriver extends OperaDriver {
     }
 
     return getScopeServices().waitForDesktopWindowUpdated(windowName,
-                                                OperaIntervals.WINDOW_EVENT_TIMEOUT.getValue());
+                                                          OperaIntervals.WINDOW_EVENT_TIMEOUT
+                                                              .getValue());
   }
 
   /**
@@ -704,7 +706,8 @@ public class OperaDesktopDriver extends OperaDriver {
     }
 
     return getScopeServices().waitForDesktopWindowActivated(windowName,
-                                                  OperaIntervals.WINDOW_EVENT_TIMEOUT.getValue());
+                                                            OperaIntervals.WINDOW_EVENT_TIMEOUT
+                                                                .getValue());
 
   }
 
@@ -721,7 +724,8 @@ public class OperaDesktopDriver extends OperaDriver {
     }
 
     return getScopeServices().waitForDesktopWindowClosed(windowName,
-                                               OperaIntervals.WINDOW_EVENT_TIMEOUT.getValue());
+                                                         OperaIntervals.WINDOW_EVENT_TIMEOUT
+                                                             .getValue());
   }
 
   /**
@@ -737,7 +741,8 @@ public class OperaDesktopDriver extends OperaDriver {
     }
 
     return getScopeServices().waitForDesktopWindowLoaded(windowName,
-                                               OperaIntervals.PAGE_LOAD_TIMEOUT.getValue());
+                                                         OperaIntervals.PAGE_LOAD_TIMEOUT
+                                                             .getValue());
   }
 
   /**
@@ -752,7 +757,8 @@ public class OperaDesktopDriver extends OperaDriver {
           "waiting for a window failed because Opera is not connected.");
     }
 
-    return getScopeServices().waitForMenuShown(menuName, OperaIntervals.MENU_EVENT_TIMEOUT.getValue());
+    return getScopeServices()
+        .waitForMenuShown(menuName, OperaIntervals.MENU_EVENT_TIMEOUT.getValue());
   }
 
   /**
@@ -767,7 +773,8 @@ public class OperaDesktopDriver extends OperaDriver {
           "waiting for a window failed because Opera is not connected.");
     }
 
-    return getScopeServices().waitForMenuClosed(menuName, OperaIntervals.MENU_EVENT_TIMEOUT.getValue());
+    return getScopeServices()
+        .waitForMenuClosed(menuName, OperaIntervals.MENU_EVENT_TIMEOUT.getValue());
   }
 
 
@@ -784,7 +791,7 @@ public class OperaDesktopDriver extends OperaDriver {
     }
 
     return getScopeServices().waitForMenuItemPressed(menuItemText,
-                                           OperaIntervals.MENU_EVENT_TIMEOUT.getValue());
+                                                     OperaIntervals.MENU_EVENT_TIMEOUT.getValue());
   }
 
   /**
@@ -860,9 +867,10 @@ public class OperaDesktopDriver extends OperaDriver {
 
   /**
    * @return true if Opera is running, and running under the launcher
+   * @deprecated
    */
   public boolean isOperaRunning() {
-    return runner != null && isOperaRunning();
+    return !settings.autostart() || runner != null && runner.isOperaRunning();
   }
 
 }
