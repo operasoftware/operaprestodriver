@@ -157,6 +157,7 @@ public class IdleTest extends OperaDriverTestCase {
   }
 
   @Test
+  @Ignore(platforms = WINDOWS)
   public void click() {
     assertIdleEnabledAndAvailable();
 
@@ -170,7 +171,7 @@ public class IdleTest extends OperaDriverTestCase {
   }
 
   @Test
-  //@Ignore
+  @Ignore(platforms = WINDOWS)
   public void keyEnter() {
     assertIdleEnabledAndAvailable();
 
