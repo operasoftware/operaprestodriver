@@ -142,7 +142,8 @@ public class OperaLauncherRunnerTest extends OperaDriverTestCase {
       runner = new OperaLauncherRunner(settings);
       fail("Did not throw OperaRunnerException");
     } catch (OperaRunnerException e) {
-      assertTrue("Throws timeout error", e.getMessage().toLowerCase().contains("timeout"));
+      assertTrue("Expected a timeout exception, got: " + e,
+                 e.getMessage().toLowerCase().contains("timeout"));
     }
   }
 
