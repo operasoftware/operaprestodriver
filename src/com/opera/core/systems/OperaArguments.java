@@ -30,6 +30,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 public class OperaArguments implements com.opera.core.systems.arguments.interfaces.OperaArguments {
 
   public static String DEFAULT_SIGN = OperaArgumentSign.POSIX_SIGN.getValue();
@@ -120,6 +122,8 @@ public class OperaArguments implements com.opera.core.systems.arguments.interfac
 
   public OperaArguments merge(
       com.opera.core.systems.arguments.interfaces.OperaArguments extraArguments) {
+    checkNotNull(extraArguments);
+
     if (extraArguments.getArguments() != null || !extraArguments.getArguments().isEmpty()) {
       arguments.addAll(extraArguments.getArguments());
     }
