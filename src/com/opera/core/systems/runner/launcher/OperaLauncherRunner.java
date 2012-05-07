@@ -73,7 +73,6 @@ public class OperaLauncherRunner extends OperaRunner
 
   public static final String LAUNCHER_ENV_VAR = "OPERA_LAUNCHER";
 
-  private final Logger logger = Logger.getLogger(getClass().getName());
   private final URL bundledLauncher;
   private final int launcherPort = PortProber.findFreePort();
 
