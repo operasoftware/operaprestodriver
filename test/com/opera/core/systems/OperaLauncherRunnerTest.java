@@ -26,6 +26,7 @@ import com.opera.core.systems.testing.OperaDriverTestCase;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.openqa.selenium.Platform;
 
 import java.io.File;
 import java.io.IOException;
@@ -142,8 +143,13 @@ public class OperaLauncherRunnerTest extends OperaDriverTestCase {
       runner = new OperaLauncherRunner(settings);
       fail("Did not throw OperaRunnerException");
     } catch (OperaRunnerException e) {
-      assertTrue("Expected a timeout exception, got: " + e,
-                 e.getMessage().toLowerCase().contains("timeout"));
+      if (Platform.getCurrent().is(Platform.WINDOWS)) {
+        assertTrue("Expected a immediate exit, got: " + e,
+                   e.getMessage().toLowerCase().contains("exited immediately"));
+      } else {
+        assertTrue("Expected a timeout exception, got: " + e,
+                   e.getMessage().toLowerCase().contains("timeout"));
+      }
     }
   }
 
