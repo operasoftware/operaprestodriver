@@ -1005,7 +1005,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
      *
      * @return process ID, or null if not available
      */
-    public int getPID() {
+    public Integer getPID() {
       return coreUtils.getProcessID();
     }
 
