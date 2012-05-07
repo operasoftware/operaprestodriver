@@ -467,6 +467,7 @@ public class OperaWebElement extends RemoteWebElement {
    * @deprecated
    */
   @SuppressWarnings("unused")
+  @Deprecated
   public boolean containsColor(OperaColors... colors) {
     assertElementNotStale();
 

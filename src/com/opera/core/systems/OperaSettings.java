@@ -334,6 +334,7 @@ public class OperaSettings {
      *
      * @deprecated
      */
+    @Deprecated
     NO_RESTART() {
       Boolean getDefaultValue() {
         return false;
@@ -351,6 +352,7 @@ public class OperaSettings {
      *
      * @deprecated replaced by {@link #DETACH}
      */
+    @Deprecated
     NO_QUIT() {
       Boolean getDefaultValue() {
         return (Boolean) DETACH.getDefaultValue();
