@@ -17,6 +17,7 @@ limitations under the License.
 package com.opera.core.systems;
 
 import com.opera.core.systems.runner.launcher.OperaLauncherRunner;
+import com.opera.core.systems.testing.Ignore;
 import com.opera.core.systems.testing.NoDriver;
 import com.opera.core.systems.testing.OperaDriverTestCase;
 
@@ -47,6 +48,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.openqa.selenium.Platform.LINUX;
+import static org.openqa.selenium.Platform.WINDOWS;
 
 /**
  * @author Andreas Tolf Tolfsen <andreastt@opera.com>
@@ -139,12 +141,14 @@ public class OperaSettingsTest extends OperaDriverTestCase {
   }
 
   @Test
+  @Ignore(platforms = WINDOWS, value = "Unable to set env vars on runtime on Windows")
   public void launcherReturnsEnvironmentalLauncherIfSet() {
     environment.set(LAUNCHER_ENV_VAR, resources.fakeFile().getPath());
     assertEquals(resources.fakeFile(), new OperaSettings().getLauncher());
   }
 
   @Test
+  @Ignore(platforms = WINDOWS, value = "Unable to set env vars on runtime on Windows")
   public void launcherPrioritizesEnvironmentalLauncher() throws IOException {
     environment.set(LAUNCHER_ENV_VAR, resources.fakeFile().getPath());
     OperaSettings settings = new OperaSettings();
