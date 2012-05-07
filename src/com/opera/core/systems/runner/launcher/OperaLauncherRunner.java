@@ -17,10 +17,10 @@ limitations under the License.
 package com.opera.core.systems.runner.launcher;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.hash.Hashing;
 import com.google.common.io.ByteStreams;
 import com.google.common.io.Closeables;
 import com.google.common.io.Files;
-import com.google.common.hash.Hashing;
 import com.google.protobuf.GeneratedMessage;
 
 import com.opera.core.systems.OperaPaths;
@@ -60,7 +60,6 @@ import java.net.URL;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -114,7 +113,7 @@ public class OperaLauncherRunner extends OperaRunner
 
     try {
       launcherRunner = new OperaLauncherBinary(settings.getLauncher().getPath(),
-                                               arguments.toArray(new String[]{}));
+                                               arguments.toArray(new String[arguments.size()]));
     } catch (IOException e) {
       throw new OperaRunnerException("Unable to start launcher: " + e.getMessage());
     }
@@ -348,8 +347,8 @@ public class OperaLauncherRunner extends OperaRunner
    * Take screenshots!
    */
   public ScreenShotReply saveScreenshot(long timeout, String... hashes) {
-    String resultMd5 = null;
-    byte[] resultBytes = null;
+    String resultMd5;
+    byte[] resultBytes;
     boolean blank = false;
 
     logger.fine("Instructing launcher to take screenshot");

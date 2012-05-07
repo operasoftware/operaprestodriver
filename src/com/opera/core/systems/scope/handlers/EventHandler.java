@@ -162,6 +162,7 @@ public interface EventHandler {
    *
    * @param responseCode the response code
    */
+  @SuppressWarnings("unused")
   void onHttpResponse(int responseCode);
 
   /**
