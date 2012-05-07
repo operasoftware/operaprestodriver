@@ -20,7 +20,6 @@ import com.opera.core.systems.model.Canvas;
 import com.opera.core.systems.model.ScreenShotReply;
 import com.opera.core.systems.scope.internal.OperaColors;
 import com.opera.core.systems.scope.internal.OperaMouseKeys;
-import com.opera.core.systems.scope.protos.ExecProtos.Area;
 
 import java.util.Set;
 
@@ -91,7 +90,8 @@ public interface IOperaExec {
   ScreenShotReply containsColor(Canvas canvas, long timeout, OperaColors... colors);
 
   /**
-   * Take a screenshot of specified {@link Area} and compare it with the given hashes (keys).
+   * Take a screenshot of specified {@link com.opera.core.systems.scope.protos.ExecProtos.Area} and
+   * compare it with the given hashes (keys).
    */
   ScreenShotReply screenWatcher(Canvas canvas, long timeout, boolean includeImage,
                                 String... hashes);

@@ -17,7 +17,6 @@ limitations under the License.
 package com.opera.core.systems.testing.drivers;
 
 import com.google.common.base.Supplier;
-import com.google.common.base.Throwables;
 
 import com.opera.core.systems.OperaDriver;
 import com.opera.core.systems.OperaSettings;
@@ -25,7 +24,6 @@ import com.opera.core.systems.OperaSettings;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.logging.Level;
 
 import static com.google.common.base.Preconditions.checkNotNull;
