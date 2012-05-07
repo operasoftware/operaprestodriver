@@ -195,10 +195,8 @@ public class OperaWebElement extends RemoteWebElement {
   public void clear() {
     verifyCanInteractWithElement();
 
-    if (isEnabled()) {
-      if (!Boolean.valueOf(getAttribute("readonly"))) {
-        executeMethod("return " + OperaAtoms.CLEAR + "(locator)");
-      }
+    if (isEnabled() && !Boolean.valueOf(getAttribute("readonly"))) {
+      executeMethod("return " + OperaAtoms.CLEAR + "(locator)");
     }
   }
 
