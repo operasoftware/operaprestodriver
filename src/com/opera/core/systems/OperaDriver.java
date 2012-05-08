@@ -906,24 +906,6 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
   }
 
   /**
-   * Returns the version number of driver.
-   *
-   * @return version number
-   */
-  public String getVersion() {
-    if (version == null) {
-      URL res = OperaDriver.class.getClassLoader().getResource("VERSION");
-
-      try {
-        version = Resources.toString(res, Charsets.UTF_8);
-      } catch (Exception e) {
-        version = "(Unknown)";
-      }
-    }
-    return version;
-  }
-
-  /**
    * Returns an interface for manipulating the preferences in the currently attached Opera
    * programmatically.  Some changes might require Opera to restart before the changes take affect.
    * The available preferences are found in <code>opera:config</code>.

@@ -60,13 +60,6 @@ public class OperaDriverTest extends OperaDriverTestCase {
   }
 
   @Test
-  public void testGetVersion() {
-    String version = driver.getVersion();
-    Assert.assertNotNull(version);
-    Assert.assertNotSame("(Unknown)", version);
-  }
-
-  @Test
   public void testOperaAction() {
     driver.navigate().to(pages.javascript);
     driver.navigate().to(pages.test);
