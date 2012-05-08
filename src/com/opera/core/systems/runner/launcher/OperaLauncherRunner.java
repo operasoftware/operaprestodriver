@@ -71,6 +71,7 @@ public class OperaLauncherRunner extends OperaRunner
     implements com.opera.core.systems.runner.interfaces.OperaRunner {
 
   public static final String LAUNCHER_ENV_VAR = "OPERA_LAUNCHER";
+
   private static final URL BUNDLED_LAUNCHER =
       OperaLaunchers.class.getClassLoader().getResource("launchers/" + launcherNameForOS());
 
