@@ -541,6 +541,11 @@ public class OperaDesktopDriver extends OperaDriver {
     return desktopUtils.getString(enumText, stripAmpersand);
   }
 
+  public String getSubstitutedString(String[] arg, boolean stripAmpersand)
+  {
+    return desktopUtils.getSubstitutedString(arg, stripAmpersand);
+  }
+
   /**
    * Gets the path to the connected Opera instance.
    *
