@@ -97,12 +97,13 @@ public class OperaLauncherRunnerTest extends OperaDriverTestCase {
   public void profileArgumentSetIfProductIsSpecified() {
     assertEquals(OperaProduct.ALL, settings.getProduct());
 
-    settings.setProduct(OperaProduct.DESKTOP);
+    OperaProduct product = OperaProduct.DESKTOP;
+    settings.setProduct(product);
     runner = new TestOperaLauncherRunner(settings);
 
     List<String> arguments = runner.buildArguments();
     assertThat(arguments, hasItem("-profile"));
-    assertThat(arguments, hasItem("desktop"));
+    assertThat(arguments, hasItem(product.toString()));
   }
 
   @Test
