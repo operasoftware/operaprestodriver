@@ -1,3 +1,30 @@
+v0.13     (2012-05-08)
+
+  [BUG FIXES]
+
+  * The default product in OperaSettings is now OperaProduct.ALL,
+    so that the command-line argument `-profile' is not appeneded
+    every time to the launcher.  (andreastt)
+
+  * OperaUtils.getPID() might return null, so changing return type
+    from primitive int to Integer.  (andreastt)
+
+  * Reverted patch to fixing useless control flows in
+    EcmaScriptDebugger since it caused issues for the
+    FrameSwitchingTest in Selenium.  (andreastt)
+
+  [TESTS]
+
+  * Tests for checking `-profile' command-line argument in
+    OperaLauncherRunnerTest.  (andreastt)
+
+  [OTHER]
+
+  * Upgraded operalaunchers to 0.8.  (andreastt)
+
+  * Added Sonar build target.  (danielb)
+
+
 v0.12     (2012-05-04)
 
   [API CHANGES]
