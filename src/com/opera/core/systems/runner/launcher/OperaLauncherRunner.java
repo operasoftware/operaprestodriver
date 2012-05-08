@@ -168,9 +168,6 @@ public class OperaLauncherRunner extends OperaRunner
     if (settings.getProduct() != OperaProduct.ALL) {
       builder.add("-profile").add(settings.getProduct().toString());
     }
-    if (settings.getBackend() != null && !settings.getBackend().isEmpty()) {
-      builder.add("-backend").add(settings.getBackend());
-    }
     if (settings.hasDetach()) {
       builder.add("-noquit");
     }
