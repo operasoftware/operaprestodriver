@@ -438,9 +438,9 @@ public class WaitState {
 
     if (result == null) {
       if (idle) {
-        throw new ResponseNotReceivedException("No idle response in a timely fashion");
+        throw new ResponseNotReceivedException("No idle response in a timely fashion (timeout = " + timeout + ")");
       } else {
-        throw new ResponseNotReceivedException("No response in a timely fashion");
+        throw new ResponseNotReceivedException("No response in a timely fashion (timeout = " + timeout + ")");
       }
     }
 
@@ -451,7 +451,18 @@ public class WaitState {
                                         final ResponseType type) {
     synchronized (lock) {
       while (true) {
-        ResultItem result = pollResultItem(timeout, type == ResponseType.OPERA_IDLE);
+        ResultItem result = null;
+        try
+        {
+          result = pollResultItem(timeout, type == ResponseType.OPERA_IDLE);
+        }
+        catch (ResponseNotReceivedException e)
+        {
+          logger.warning("ResponseNotReceivedException for type " + type);
+          logger.fine(e.toString());
+          throw e;
+        };
+
         timeout = result.remainingIdleTimeout;
         WaitResult waitResult = result.waitResult;
 

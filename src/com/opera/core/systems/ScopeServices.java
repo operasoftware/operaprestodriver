@@ -410,7 +410,7 @@ public class ScopeServices implements IConnectionHandler {
       // We expect a CommunicationException here, because as Opera is shutting
       // down the connection will be closed.
       if (!(e instanceof CommunicationException)) {
-        logger.info("Caught exception when trying to shut down: " + e.getMessage());
+        logger.severe("Caught exception when trying to shut down: " + e.getMessage());
       }
     }
 
@@ -424,6 +424,11 @@ public class ScopeServices implements IConnectionHandler {
           // ignore
         }
         timeout -= interval;
+      }
+
+      if (runner.isOperaRunning(pid))
+      {
+        logger.severe("Opera is still running!");
       }
     }
   }
