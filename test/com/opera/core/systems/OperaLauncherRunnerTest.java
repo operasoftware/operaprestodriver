@@ -16,6 +16,8 @@ limitations under the License.
 
 package com.opera.core.systems;
 
+import com.google.common.collect.ImmutableList;
+
 import com.opera.core.systems.model.ScreenShotReply;
 import com.opera.core.systems.runner.OperaRunnerException;
 import com.opera.core.systems.runner.launcher.OperaLauncherRunner;
@@ -30,21 +32,25 @@ import org.openqa.selenium.Platform;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.logging.Level;
 
 import static com.opera.core.systems.OperaProduct.DESKTOP;
+import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+import static org.junit.matchers.JUnitMatchers.hasItem;
 
 @NoDriver
 public class OperaLauncherRunnerTest extends OperaDriverTestCase {
 
   private OperaSettings settings;
-  private OperaLauncherRunner runner;
+  private TestOperaLauncherRunner runner;
 
   @Before
   public void beforeEach() {
@@ -54,41 +60,66 @@ public class OperaLauncherRunnerTest extends OperaDriverTestCase {
 
   @After
   public void afterEach() {
-    if (runner != null && runner.isOperaRunning()) {
-      runner.stopOpera();
-      runner.shutdown();
-      assertFalse(runner.isOperaRunning());
+    try {
+      if (runner != null && runner.isOperaRunning()) {
+        runner.stopOpera();
+        runner.shutdown();
+        assertFalse(runner.isOperaRunning());
+      }
+    } catch (Exception e) {
+      // ignore
+    } finally {
+      runner = null;
     }
   }
 
   @Test
   public void testConstructor() {
-    runner = new OperaLauncherRunner();
+    runner = new TestOperaLauncherRunner();
     assertNotNull(runner);
   }
 
   @Test
   public void testConstructorWithSettingsBinary() {
     settings.setBinary(new File(OperaPaths.operaPath()));
-    runner = new OperaLauncherRunner(settings);
+    runner = new TestOperaLauncherRunner(settings);
     assertNotNull(runner);
   }
 
   @Test
+  public void profileArgumentNotSetIfProductIsAll() {
+    assertEquals(OperaProduct.ALL, settings.getProduct());
+    runner = new TestOperaLauncherRunner(settings);
+    assertThat(runner.buildArguments(), hasItem(not("-profile")));
+  }
+
+  @Test
+  public void profileArgumentSetIfProductIsSpecified() {
+    assertEquals(OperaProduct.ALL, settings.getProduct());
+
+    settings.setProduct(OperaProduct.DESKTOP);
+    runner = new TestOperaLauncherRunner(settings);
+
+    List<String> arguments = runner.buildArguments();
+    assertThat(arguments, hasItem("-profile"));
+    assertThat(arguments, hasItem("desktop"));
+  }
+
+  @Test
   public void testDefaultCrashedState() {
-    runner = new OperaLauncherRunner(settings);
+    runner = new TestOperaLauncherRunner(settings);
     assertFalse(runner.hasOperaCrashed());
   }
 
   @Test
   public void testDefaultIsOperaRunning() {
-    runner = new OperaLauncherRunner(settings);
+    runner = new TestOperaLauncherRunner(settings);
     assertFalse(runner.isOperaRunning());
   }
 
   @Test
   public void testStartAndStopOpera() {
-    runner = new OperaLauncherRunner(settings);
+    runner = new TestOperaLauncherRunner(settings);
     runner.startOpera();
     assertTrue(runner.isOperaRunning());
     runner.stopOpera();
@@ -97,7 +128,7 @@ public class OperaLauncherRunnerTest extends OperaDriverTestCase {
 
   @Test(expected = OperaRunnerException.class)
   public void testShutdownLauncher() {
-    runner = new OperaLauncherRunner(settings);
+    runner = new TestOperaLauncherRunner(settings);
     runner.shutdown();
     // Expecting OperaRunnerException as we tried to start Opera when launcher isn't running
     runner.startOpera();
@@ -105,14 +136,14 @@ public class OperaLauncherRunnerTest extends OperaDriverTestCase {
 
   @Test
   public void testConstructorWithSettingsArguments() {
-    runner = new OperaLauncherRunner(settings);
+    runner = new TestOperaLauncherRunner(settings);
     runner.startOpera();
     assertTrue(runner.isOperaRunning());
   }
 
   @Test
   public void testDoubleShutdown() {
-    runner = new OperaLauncherRunner(settings);
+    runner = new TestOperaLauncherRunner(settings);
     runner.stopOpera();
     runner.shutdown();
     // verify that a second shutdown call doesn't do any harm (shouldn't)
@@ -122,7 +153,7 @@ public class OperaLauncherRunnerTest extends OperaDriverTestCase {
   @Test
   @Ignore(products = DESKTOP, value = "mzajaczkowski_watir_1_cleaned contains fix for this")
   public void testStartAndStopOperaTenTimes() {
-    runner = new OperaLauncherRunner(settings);
+    runner = new TestOperaLauncherRunner(settings);
 
     for (int i = 0; i < 10; i++) {
       runner.startOpera();
@@ -140,7 +171,7 @@ public class OperaLauncherRunnerTest extends OperaDriverTestCase {
     settings.setLauncher(resources.executableBinary());
 
     try {
-      runner = new OperaLauncherRunner(settings);
+      runner = new TestOperaLauncherRunner(settings);
       fail("Did not throw OperaRunnerException");
     } catch (OperaRunnerException e) {
       if (Platform.getCurrent().is(Platform.WINDOWS)) {
@@ -156,7 +187,7 @@ public class OperaLauncherRunnerTest extends OperaDriverTestCase {
   @Test
   // TODO(andreastt): Trigger something which actually generates a crashlog
   public void testGetOperaDefaultCrashlog() {
-    runner = new OperaLauncherRunner(settings);
+    runner = new TestOperaLauncherRunner(settings);
     runner.startOpera();
     String crashlog = runner.getOperaCrashlog();
     assertNull(crashlog);
@@ -164,7 +195,7 @@ public class OperaLauncherRunnerTest extends OperaDriverTestCase {
 
   @Test
   public void testSaveScreenshot() {
-    runner = new OperaLauncherRunner(settings);
+    runner = new TestOperaLauncherRunner(settings);
     ScreenShotReply screenshot = runner.saveScreenshot(0);
     assertNotNull(screenshot);
     runner.shutdown();
@@ -196,6 +227,18 @@ public class OperaLauncherRunnerTest extends OperaDriverTestCase {
   }
 
   private static class TestOperaLauncherRunner extends OperaLauncherRunner {
+
+    public TestOperaLauncherRunner() {
+      super();
+    }
+
+    public TestOperaLauncherRunner(OperaSettings settings) {
+      super(settings);
+    }
+
+    public ImmutableList<String> buildArguments() {
+      return super.buildArguments();
+    }
 
     public static Level toLauncherLoggingLevel(Level javaLevel) {
       return OperaLauncherRunner.toLauncherLoggingLevel(javaLevel);

@@ -44,8 +44,8 @@ import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.opera.core.systems.OperaProduct.ALL;
 import static com.opera.core.systems.OperaProduct.CORE;
-import static com.opera.core.systems.OperaProduct.DESKTOP;
 import static com.opera.core.systems.OperaSettings.Capability.ARGUMENTS;
 import static com.opera.core.systems.OperaSettings.Capability.AUTOSTART;
 import static com.opera.core.systems.OperaSettings.Capability.BACKEND;
@@ -386,7 +386,7 @@ public class OperaSettings {
      */
     PRODUCT() {
       OperaProduct getDefaultValue() {
-        return DESKTOP;
+        return ALL;
       }
 
       OperaProduct sanitize(Object product) {

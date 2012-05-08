@@ -152,7 +152,7 @@ public class OperaLauncherRunner extends OperaRunner
     }
   }
 
-  private ImmutableList<String> buildArguments() {
+  protected ImmutableList<String> buildArguments() {
     ImmutableList.Builder<String> builder = ImmutableList.builder();
 
     builder.add("-host").add(settings.getHost());
