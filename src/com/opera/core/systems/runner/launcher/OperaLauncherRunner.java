@@ -196,7 +196,7 @@ public class OperaLauncherRunner extends OperaRunner
       ResponseEncapsulation res = launcherProtocol.sendRequest(MessageType.MSG_START, request);
 
       if (handleStatusMessage(res.getResponse()) != StatusType.RUNNING) {
-        logger.warning("Could not start Opera, did it crash on startup?");
+        logger.fine("Could not start Opera, did it crash on startup?");
         throw new IOException("Could not start Opera, did it crash on startup?");
       }
 
