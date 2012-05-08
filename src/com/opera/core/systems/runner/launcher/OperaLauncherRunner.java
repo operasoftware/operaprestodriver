@@ -71,8 +71,9 @@ public class OperaLauncherRunner extends OperaRunner
     implements com.opera.core.systems.runner.interfaces.OperaRunner {
 
   public static final String LAUNCHER_ENV_VAR = "OPERA_LAUNCHER";
+  private static final URL BUNDLED_LAUNCHER =
+      OperaLaunchers.class.getClassLoader().getResource("launchers/" + launcherNameForOS());
 
-  private final URL bundledLauncher;
   private final int launcherPort = PortProber.findFreePort();
 
   private OperaLauncherBinary launcherRunner = null;
@@ -88,16 +89,14 @@ public class OperaLauncherRunner extends OperaRunner
 
     // Locate the bundled launcher from OperaLaunchers project and copy it to its default location
     // on users system if it's not there or outdated
-    bundledLauncher =
-        OperaLaunchers.class.getClassLoader().getResource("launchers/" + launcherNameForOS());
-
-    if (bundledLauncher == null) {
-      throw new OperaRunnerException("Not able to locate bundled launcher: " + bundledLauncher);
+    if (BUNDLED_LAUNCHER == null) {
+      throw new OperaRunnerException("Not able to locate bundled launcher: " + BUNDLED_LAUNCHER);
     }
 
     if (settings.getLauncher() == launcherDefaultLocation() &&
         (!settings.getLauncher().exists() || isLauncherOutdated(settings.getLauncher()))) {
-      extractLauncher(bundledLauncher, settings.getLauncher());
+      extractLauncher(BUNDLED_LAUNCHER, settings.getLauncher());
+      logger.fine("New launcher copied to " + settings.getLauncher().getPath());
     }
 
     makeLauncherExecutable(settings.getLauncher());
@@ -388,7 +387,17 @@ public class OperaLauncherRunner extends OperaRunner
     return screenshotreply;
   }
 
-  private void extractLauncher(URL sourceLauncher, File targetLauncher) {
+  /**
+   * Extracts the correct launcher for the current operating system to the specified location.  Will
+   * make no checks on whether the launcher exists or not.
+   *
+   * @param targetLauncher the location for where the extracted launcher should be put
+   */
+  public static void extractLauncher(File targetLauncher) {
+    extractLauncher(BUNDLED_LAUNCHER, targetLauncher);
+  }
+
+  private static void extractLauncher(URL sourceLauncher, File targetLauncher) {
     checkNotNull(sourceLauncher);
     checkNotNull(targetLauncher);
 
@@ -416,13 +425,11 @@ public class OperaLauncherRunner extends OperaRunner
         Closeables.closeQuietly(os);
       }
     }
-
-    logger.fine("New launcher copied to " + targetLauncher.getPath());
   }
 
   private boolean isLauncherOutdated(File launcher) {
     try {
-      return !Arrays.equals(md5(bundledLauncher.openStream()), md5(launcher));
+      return !Arrays.equals(md5(BUNDLED_LAUNCHER.openStream()), md5(launcher));
     } catch (NoSuchAlgorithmException e) {
       throw new OperaRunnerException(
           "Algorithm is not available in your environment: " + e.getMessage());
