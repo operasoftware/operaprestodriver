@@ -743,10 +743,10 @@ public class OperaDesktopDriver extends OperaDriver {
   * @throws CommuncationException if no connection
   */
     public int waitForWindowPageChanged(String windowName) {
-    if (services.getConnection() == null)
+    if (getScopeServices().getConnection() == null)
       throw new CommunicationException("waiting for a window failed because Opera is not connected.");
 
-    return services.waitForDesktopWindowPageChanged(windowName, OperaIntervals.WINDOW_EVENT_TIMEOUT.getValue());
+    return getScopeServices().waitForDesktopWindowPageChanged(windowName, OperaIntervals.WINDOW_EVENT_TIMEOUT.getValue());
   }
 
   /**
