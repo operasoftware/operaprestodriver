@@ -118,6 +118,13 @@ public interface EventHandler {
   void onDesktopWindowClosed(DesktopWindowInfo window);
 
   /**
+   * Fired when a window page is changed.
+   *
+   * @param window information about the window in question
+   */
+  void onDesktopWindowPageChanged(DesktopWindowInfo window);
+
+  /**
    * Fired when loading Finished event.
    *
    * @param window information about the window that is loaded
