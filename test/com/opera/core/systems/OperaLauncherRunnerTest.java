@@ -17,6 +17,8 @@ limitations under the License.
 package com.opera.core.systems;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.hash.Hashing;
+import com.google.common.io.Files;
 
 import com.opera.core.systems.model.ScreenShotReply;
 import com.opera.core.systems.runner.OperaRunnerException;
@@ -32,6 +34,8 @@ import org.openqa.selenium.Platform;
 
 import java.io.File;
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 
@@ -84,6 +88,24 @@ public class OperaLauncherRunnerTest extends OperaDriverTestCase {
     settings.setBinary(new File(OperaPaths.operaPath()));
     runner = new TestOperaLauncherRunner(settings);
     assertNotNull(runner);
+  }
+
+  @Test
+  public void launcherInDefaultLocationIsOverwritten()
+      throws IOException, NoSuchAlgorithmException {
+    File outdatedLauncher = resources.executableBinary();
+    Files.copy(outdatedLauncher, OperaLauncherRunner.launcherDefaultLocation());
+
+    try {
+      runner = new TestOperaLauncherRunner(settings);
+      assertFalse("launcher should have been replaced by extracted launcher",
+                  Arrays.equals(md5(outdatedLauncher),
+                                md5(OperaLauncherRunner.launcherDefaultLocation())));
+    } catch (OperaRunnerException e) {
+      if (e.getMessage().contains("Timeout")) {
+        fail("launcher was not replaced");
+      }
+    }
   }
 
   @Test
@@ -225,6 +247,18 @@ public class OperaLauncherRunnerTest extends OperaDriverTestCase {
   @Test
   public void testLoggingLevelToOff() {
     assertEquals(Level.OFF, TestOperaLauncherRunner.toLauncherLoggingLevel(Level.OFF));
+  }
+
+  /**
+   * Get the MD5 hash of the given file.
+   *
+   * @param file file to compute a hash on
+   * @return a byte array of the MD5 hash
+   * @throws IOException              if file cannot be found
+   * @throws NoSuchAlgorithmException if MD5 is not available
+   */
+  private static byte[] md5(File file) throws NoSuchAlgorithmException, IOException {
+    return Files.hash(file, Hashing.md5()).asBytes();
   }
 
   private static class TestOperaLauncherRunner extends OperaLauncherRunner {
