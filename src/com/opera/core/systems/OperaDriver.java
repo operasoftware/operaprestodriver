@@ -188,6 +188,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
    * Initialize required Scope services.
    */
   protected void init() {
+
     createScopeServices();
 
     // Launch Opera if the runner has been setup
@@ -242,6 +243,14 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
    */
   private void createScopeServices() {
     try {
+      /*
+      DSK-360865: It is possible that the Opera binary will crash during startup. In that case we'll ho through CreateScopeServices()
+      twice without shutting it down, which will result in a scope communication halt for any further attempt.
+      In order to avoid that, we make sure that the services has been shut down first.
+      */
+      if (services != null)
+        services.shutdown();
+
       services = new ScopeServices(getServicesList(), settings.getPort(), !settings.autostart());
       services.startStpThread();
     } catch (IOException e) {
