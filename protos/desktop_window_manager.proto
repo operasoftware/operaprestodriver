@@ -132,7 +132,9 @@ message QuickWidgetInfo
         GRIDLAYOUT = 16;
         GRIDITEM = 17;
         QUICKFIND = 18;
-        LISTBOX = 19;
+        ICON = 19;
+        PROGRESSBAR = 20;
+        LISTBOX = 21;
     }
 
     /**
