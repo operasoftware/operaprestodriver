@@ -336,8 +336,9 @@ public class EcmaScriptDebugger extends AbstractEcmascriptService implements
       } else if (status.equals("cancelled-by-scheduler")) {
         // TODO: what is the best approach here?
         return null;
-      } //else if (status.equals("aborted")) {
-      //}
+      } else if (status.equals("aborted")) {
+
+      }
 
     }
 
@@ -357,6 +358,8 @@ public class EcmaScriptDebugger extends AbstractEcmascriptService implements
       return parseNumber(value);
     } else if (dataType.equals("boolean")) {
       return Boolean.valueOf(value);
+    } else if (dataType.equals("undefined")) {
+      return null;
     }
     return null;
   }
@@ -585,7 +588,10 @@ public class EcmaScriptDebugger extends AbstractEcmascriptService implements
       List<Object> result = new ArrayList<Object>();
 
       for (Property property : properties) {
-        if (property.getType().equals("object")) {
+        if (property.getType().equals("number")
+            && property.getName().equals("length")) {
+          // ignore ?!?
+        } else if (property.getType().equals("object")) {
           result.add(examineScriptResult(property.getObjectValue().getObjectID(), visitedIDs));
         } else {
           result.add(parseValue(property.getType(), property.getValue()));
@@ -597,14 +603,17 @@ public class EcmaScriptDebugger extends AbstractEcmascriptService implements
       Map<String, Object> result = new HashMap<String, Object>();
 
       for (Property property : properties) {
-        if (property.getType().equals("object")) {
+        if (property.getType().equals("number")
+            && property.getName().equals("length")) {
+          // ignore ?!?
+        } else if (property.getType().equals("object")) {
           result.put(property.getName(),
                      examineScriptResult(property.getObjectValue().getObjectID(), visitedIDs));
         } else {
-          result.put(property.getName(), parseValue(property.getType(), property.getValue()));
+          result.put(property.getName(), parseValue(property.getType(),
+                                                    property.getValue()));
         }
       }
-
       return result;
     }
   }
