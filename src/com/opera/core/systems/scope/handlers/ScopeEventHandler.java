@@ -118,6 +118,10 @@ public class ScopeEventHandler implements EventHandler {
     services.onDesktopWindowLoaded(info);
   }
 
+  public void onDesktopWindowPageChanged(DesktopWindowInfo info) {
+    services.onDesktopWindowPageChanged(info);
+  }
+
   public void onQuickMenuShown(QuickMenuInfo menuInfoShown) {
     services.onQuickMenuShown(menuInfoShown);
   }
