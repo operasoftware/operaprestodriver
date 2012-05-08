@@ -21,6 +21,10 @@ import com.google.protobuf.CodedOutputStream;
 
 import com.opera.core.systems.scope.handlers.EventHandler;
 import com.opera.core.systems.scope.handlers.IConnectionHandler;
+import com.opera.core.systems.scope.DesktopUtilsCommand;
+import com.opera.core.systems.scope.handlers.AbstractEventHandler;
+import com.opera.core.systems.scope.handlers.IConnectionHandler;
+import com.opera.core.systems.scope.internal.OperaIntervals;
 import com.opera.core.systems.scope.protos.UmsProtos.Command;
 import com.opera.core.systems.scope.protos.UmsProtos.Error;
 import com.opera.core.systems.scope.protos.UmsProtos.Event;
@@ -537,11 +541,18 @@ public class StpConnection implements SocketListener {
         String service = error.getService();
         int status = error.getStatus();
 
-        // We get exceptions when, in the ecmascript services, we use a runtime
-        // that doesn't exist. We can ignore these exceptions and carry on.
-        if ((service.equals("ecmascript-debugger") && status == Status.INTERNAL_ERROR.getNumber())
-            ||
-            (service.equals("ecmascript") && status == Status.BAD_REQUEST.getNumber())) {
+        if ((service.equals("ecmascript-debugger") && status == Status.INTERNAL_ERROR.getNumber()) ||
+          (service.equals("ecmascript") && status == Status.BAD_REQUEST.getNumber())) {
+          // We get exceptions when, in the ecmascript services, we use a runtime
+          // that doesn't exist. We can ignore these exceptions and carry on.
+          signalResponse(error.getTag(), null);
+        } else if (service.equals("desktop-utils") && error.getCommandID() == DesktopUtilsCommand.GET_STRING.getCommandID()) {
+          /*
+          In case the test requests a non-existent string ID, we don't want to call onException(), since that
+          mysteriously breaks any further tests.
+          Instead we suppress the exception here, and return a null response, that will be recognized in DesktopUtils:getString().
+           */
+          logger.fine("Ignoring an error response for a non-existent string");
           signalResponse(error.getTag(), null);
         } else {
           logger.log(Level.SEVERE, "Error: {0}", error.toString());
