@@ -54,6 +54,10 @@ public class OperaPaths {
   public static String operaPath() {
     String envPath = System.getenv("OPERA_PATH");
 
+    // On Windows we need to strip the quotation marks that come from the env variable
+    if (envPath.matches("^\".*\"$"))
+      envPath = envPath.substring(1, envPath.length() - 1);
+
     if (isPathValid(envPath)) {
       return envPath;
     } else if (envPath != null && envPath.length() > 0) {
