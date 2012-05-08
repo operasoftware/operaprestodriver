@@ -1,10 +1,16 @@
 v0.13     (2012-05-08)
 
+  [API CHANGES]
+
+  * Removed OperaDriver.getVersion().  (andreastt)
+
   [BUG FIXES]
 
-  * The default product in OperaSettings is now OperaProduct.ALL,
-    so that the command-line argument `-profile' is not appeneded
-    every time to the launcher.  (andreastt)
+  * Fix for overwriting outdated launchers.  (andreastt)
+
+  * The default product in OperaSettings is now OperaProduct.ALL, so
+    that the command-line argument `-profile' is not appeneded every
+    time to the launcher.  (andreastt)
 
   * OperaUtils.getPID() might return null, so changing return type
     from primitive int to Integer.  (andreastt)
