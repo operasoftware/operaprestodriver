@@ -24,16 +24,18 @@ import org.openqa.selenium.io.FileHandler;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.logging.Logger;
 
 /**
  * Class to manage browser profile.
  */
 public class ProfileUtils {
-
   private String largePrefsFolder;
   private String smallPrefsFolder;
   private String cachePrefsFolder;
   private OperaSettings settings;
+
+  protected final Logger logger = Logger.getLogger(this.getClass().getName());
 
   public ProfileUtils(String largePrefsFolder, String smallPrefsFolder, String cachePrefsFolder,
                       OperaSettings settings) {
@@ -122,44 +124,83 @@ public class ProfileUtils {
   }
 
   /**
-   * Deletes prefs folders for Does nothing if prefs folders are default main user profile
+   * Deletes prefs folders for the browser session. Does nothing if prefs folders are default main user profile.
+   * This method will retry profile deletion if needed before proceeding, this is needed since the desktop
+   * Opera was having problems with exitting properly and might still be changing the profile while we are trying
+   * to delete it here.
    */
   public boolean deleteProfile() {
+    String[] profile_dirs = {smallPrefsFolder, largePrefsFolder, cachePrefsFolder};
+
     // Assuming if any of those are main profile, skip the whole delete
-    if (isMainProfile(smallPrefsFolder) ||
-        isMainProfile(largePrefsFolder) ||
-        isMainProfile(cachePrefsFolder)) {
-      return false;
+    for (int i = 0; i < profile_dirs.length; i++) {
+      if (isMainProfile(profile_dirs[i])) {
+        logger.finer("Skipping profile deletion since '" + profile_dirs[i] + "' is the main profile.");
+        return false;
+      }
     }
 
-    boolean deleted = deleteFolder(smallPrefsFolder);
-    if (deleted && !smallPrefsFolder.equals(largePrefsFolder)) {
-      deleted = deleteFolder(largePrefsFolder);
+    for (int i = 0; i < profile_dirs.length; i++) {
+      String current_dir = profile_dirs[i];
+
+      File current_dir_handle = new File(current_dir);
+
+      if (!current_dir_handle.exists()) {
+        logger.finer("Skipping profile deletion for '" + current_dir + "' since it doesn't exist.");
+        continue;
+      }
+
+      boolean deleted = deleteFolder(current_dir);
+      if (!deleted) {
+        int retry_interval_ms = 500;
+        int retry_max_count = 10;
+        int retry_count = 0;
+        boolean ok = false;
+
+        logger.warning("Profile could not be deleted, retrying...");
+
+        do {
+          try {
+            Thread.sleep(retry_interval_ms);
+          } catch (InterruptedException e) {
+            e.printStackTrace();
+          }
+
+          ok = deleteFolder(current_dir);
+          retry_count++;
+          if (retry_count > retry_max_count)
+            break;
+
+        } while (!ok);
+
+        if (!ok) {
+          logger.severe("Could not delete profile in '" + current_dir + "'. Skipping further deletion.");
+          return false;
+        }
+        else
+          logger.warning("Deleted profile, retry count = " + retry_count);
+      }
+      else {
+        logger.finer("Deleted profile in '" + current_dir + "'");
+      }
     }
-    if (deleted && !smallPrefsFolder.equals(cachePrefsFolder) && !largePrefsFolder
-        .equals(cachePrefsFolder)) {
-      deleted = deleteFolder(cachePrefsFolder);
-    }
-    return deleted;
-    // TODO: logger.warning("Could not delete profile");
+    return true;
   }
 
+
   /**
+   *
+   * @param newPrefs
    * @return true if profile was copied, else false
    */
   public boolean copyProfile(String newPrefs) {
     if (new File(newPrefs).exists() == false) {
+      logger.warning("The directory '" + newPrefs + "' doesn't exist, failed to copy profile.");
       return false;
     }
 
-    try {
-      Files.copy(new File(newPrefs), new File(smallPrefsFolder));
-    } catch (IOException e) {
-      // Ignore
-      // e.printStackTrace();
-      return false;
-    }
-    return true;
+    logger.finer("Copying profile from '" + newPrefs + "'");
+    return WatirUtils.CopyDirAndFiles(newPrefs, smallPrefsFolder);
   }
 
   /**
