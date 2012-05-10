@@ -2717,6 +2717,10 @@ public final class ExecProtos {
     // required uint32 buttonAction = 4;
     boolean hasButtonAction();
     int getButtonAction();
+    
+    // optional uint32 repeatCount = 5 [default = 1];
+    boolean hasRepeatCount();
+    int getRepeatCount();
   }
   public static final class MouseAction extends
       com.google.protobuf.GeneratedMessage
@@ -2787,11 +2791,22 @@ public final class ExecProtos {
       return buttonAction_;
     }
     
+    // optional uint32 repeatCount = 5 [default = 1];
+    public static final int REPEATCOUNT_FIELD_NUMBER = 5;
+    private int repeatCount_;
+    public boolean hasRepeatCount() {
+      return ((bitField0_ & 0x00000010) == 0x00000010);
+    }
+    public int getRepeatCount() {
+      return repeatCount_;
+    }
+    
     private void initFields() {
       windowID_ = 0;
       x_ = 0;
       y_ = 0;
       buttonAction_ = 0;
+      repeatCount_ = 1;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -2833,6 +2848,9 @@ public final class ExecProtos {
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
         output.writeUInt32(4, buttonAction_);
       }
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        output.writeUInt32(5, repeatCount_);
+      }
       getUnknownFields().writeTo(output);
     }
     
@@ -2857,6 +2875,10 @@ public final class ExecProtos {
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
         size += com.google.protobuf.CodedOutputStream
           .computeUInt32Size(4, buttonAction_);
+      }
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeUInt32Size(5, repeatCount_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -2990,6 +3012,8 @@ public final class ExecProtos {
         bitField0_ = (bitField0_ & ~0x00000004);
         buttonAction_ = 0;
         bitField0_ = (bitField0_ & ~0x00000008);
+        repeatCount_ = 1;
+        bitField0_ = (bitField0_ & ~0x00000010);
         return this;
       }
       
@@ -3044,6 +3068,10 @@ public final class ExecProtos {
           to_bitField0_ |= 0x00000008;
         }
         result.buttonAction_ = buttonAction_;
+        if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
+          to_bitField0_ |= 0x00000010;
+        }
+        result.repeatCount_ = repeatCount_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -3071,6 +3099,9 @@ public final class ExecProtos {
         }
         if (other.hasButtonAction()) {
           setButtonAction(other.getButtonAction());
+        }
+        if (other.hasRepeatCount()) {
+          setRepeatCount(other.getRepeatCount());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -3137,6 +3168,11 @@ public final class ExecProtos {
             case 32: {
               bitField0_ |= 0x00000008;
               buttonAction_ = input.readUInt32();
+              break;
+            }
+            case 40: {
+              bitField0_ |= 0x00000010;
+              repeatCount_ = input.readUInt32();
               break;
             }
           }
@@ -3225,6 +3261,27 @@ public final class ExecProtos {
       public Builder clearButtonAction() {
         bitField0_ = (bitField0_ & ~0x00000008);
         buttonAction_ = 0;
+        onChanged();
+        return this;
+      }
+      
+      // optional uint32 repeatCount = 5 [default = 1];
+      private int repeatCount_ = 1;
+      public boolean hasRepeatCount() {
+        return ((bitField0_ & 0x00000010) == 0x00000010);
+      }
+      public int getRepeatCount() {
+        return repeatCount_;
+      }
+      public Builder setRepeatCount(int value) {
+        bitField0_ |= 0x00000010;
+        repeatCount_ = value;
+        onChanged();
+        return this;
+      }
+      public Builder clearRepeatCount() {
+        bitField0_ = (bitField0_ & ~0x00000010);
+        repeatCount_ = 1;
         onChanged();
         return this;
       }
@@ -6259,23 +6316,23 @@ public final class ExecProtos {
       "indowID\030\001 \002(\r\022\013\n\003md5\030\002 \002(\t\022\013\n\003png\030\003 \001(\014\022" +
       "=\n\016colorMatchList\030\004 \003(\0132%.scope.ScreenWa" +
       "tcherResult.ColorMatch\032\'\n\nColorMatch\022\n\n\002" +
-      "id\030\001 \002(\r\022\r\n\005count\030\002 \002(\r\"K\n\013MouseAction\022\020",
+      "id\030\001 \002(\r\022\r\n\005count\030\002 \002(\r\"c\n\013MouseAction\022\020",
       "\n\010windowID\030\001 \002(\r\022\t\n\001x\030\002 \002(\005\022\t\n\001y\030\003 \002(\005\022\024" +
-      "\n\014buttonAction\030\004 \002(\r\"\326\002\n\rScreenWatcher\022\026" +
-      "\n\007timeOut\030\001 \002(\r:\00510000\022\031\n\004area\030\002 \002(\0132\013.s" +
-      "cope.Area\022\017\n\007md5List\030\003 \003(\t\022\023\n\010windowID\030\004" +
-      " \001(\r:\0010\0225\n\rcolorSpecList\030\005 \003(\0132\036.scope.S" +
-      "creenWatcher.ColorSpec\022\032\n\014includeImage\030\006" +
-      " \001(\010:\004true\032\230\001\n\tColorSpec\022\n\n\002id\030\001 \002(\r\022\021\n\006" +
-      "redLow\030\002 \001(\r:\0010\022\024\n\007redHigh\030\003 \001(\r:\003255\022\023\n" +
-      "\010greenLow\030\004 \001(\r:\0010\022\026\n\tgreenHigh\030\005 \001(\r:\0032" +
-      "55\022\022\n\007blueLow\030\006 \001(\r:\0010\022\025\n\010blueHigh\030\007 \001(\r",
-      ":\003255\"\226\001\n\nActionList\022,\n\nactionList\030\001 \003(\013" +
-      "2\030.scope.ActionList.Action\032Z\n\006Action\022\014\n\004" +
-      "name\030\001 \002(\t\022\r\n\005value\030\002 \001(\t\022\020\n\010windowID\030\003 " +
-      "\001(\r\022\014\n\004data\030\004 \001(\005\022\023\n\013stringParam\030\005 \001(\tB3" +
-      "\n#com.opera.core.systems.scope.protosB\nE" +
-      "xecProtosH\001"
+      "\n\014buttonAction\030\004 \002(\r\022\026\n\013repeatCount\030\005 \001(" +
+      "\r:\0011\"\326\002\n\rScreenWatcher\022\026\n\007timeOut\030\001 \002(\r:" +
+      "\00510000\022\031\n\004area\030\002 \002(\0132\013.scope.Area\022\017\n\007md5" +
+      "List\030\003 \003(\t\022\023\n\010windowID\030\004 \001(\r:\0010\0225\n\rcolor" +
+      "SpecList\030\005 \003(\0132\036.scope.ScreenWatcher.Col" +
+      "orSpec\022\032\n\014includeImage\030\006 \001(\010:\004true\032\230\001\n\tC" +
+      "olorSpec\022\n\n\002id\030\001 \002(\r\022\021\n\006redLow\030\002 \001(\r:\0010\022" +
+      "\024\n\007redHigh\030\003 \001(\r:\003255\022\023\n\010greenLow\030\004 \001(\r:" +
+      "\0010\022\026\n\tgreenHigh\030\005 \001(\r:\003255\022\022\n\007blueLow\030\006 ",
+      "\001(\r:\0010\022\025\n\010blueHigh\030\007 \001(\r:\003255\"\226\001\n\nAction" +
+      "List\022,\n\nactionList\030\001 \003(\0132\030.scope.ActionL" +
+      "ist.Action\032Z\n\006Action\022\014\n\004name\030\001 \002(\t\022\r\n\005va" +
+      "lue\030\002 \001(\t\022\020\n\010windowID\030\003 \001(\r\022\014\n\004data\030\004 \001(" +
+      "\005\022\023\n\013stringParam\030\005 \001(\tB3\n#com.opera.core" +
+      ".systems.scope.protosB\nExecProtosH\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -6327,7 +6384,7 @@ public final class ExecProtos {
           internal_static_scope_MouseAction_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_scope_MouseAction_descriptor,
-              new java.lang.String[] { "WindowID", "X", "Y", "ButtonAction", },
+              new java.lang.String[] { "WindowID", "X", "Y", "ButtonAction", "RepeatCount", },
               com.opera.core.systems.scope.protos.ExecProtos.MouseAction.class,
               com.opera.core.systems.scope.protos.ExecProtos.MouseAction.Builder.class);
           internal_static_scope_ScreenWatcher_descriptor =

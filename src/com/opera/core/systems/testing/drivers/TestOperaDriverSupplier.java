@@ -36,11 +36,13 @@ public class TestOperaDriverSupplier extends DefaultOperaDriverSupplier {
 
   public TestOperaDriver get() {
     // Only override logging level if it has the default value
-    if (new OperaSettings().logging().getLevel() == getSettings().logging().getLevel()) {
-      getSettings().logging().setLevel(Level.FINE);
+    if (new OperaSettings().logging().getLevel() == settings.logging().getLevel()) {
+      settings.logging().setLevel(Level.FINE);
     }
 
-    return new TestOperaDriver(getSettings());
+    //settings.autostart(false);
+
+    return new TestOperaDriver(settings);
   }
 
 }
