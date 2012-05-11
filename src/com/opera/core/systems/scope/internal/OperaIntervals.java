@@ -16,6 +16,8 @@ limitations under the License.
 
 package com.opera.core.systems.scope.internal;
 
+import java.awt.*;
+
 /**
  * Enumerator for delay values in milliseconds.
  */
@@ -48,7 +50,8 @@ public enum OperaIntervals {
 
   /**
    * The handshake timeout defines how long the Scope server (OperaDriver) should wait for a
-   * connection from a client (Opera) before shutting down.  If set to 0, it will wait indefinitely.
+   * connection from a client (Opera) before shutting down.  If set to 0, it will wait
+   * indefinitely.
    */
   HANDSHAKE_TIMEOUT(60000),
 
@@ -112,7 +115,7 @@ public enum OperaIntervals {
    * This should be removed when support is added to the exec service for setValue() so that we can
    * tell Opera to override this interval.
    */
-  MULTIPLE_CLICK_SLEEP(640);
+  MULTIPLE_CLICK_SLEEP(getSystemMultiClickTimeout());
 
   private long value;
 
@@ -142,6 +145,21 @@ public enum OperaIntervals {
       intervals.append(item.toString());
     }
     return String.format("Intervals [%s]", intervals.toString());
+  }
+
+  /**
+   * Returns the platform multi click interval, that is the time that separates two clicks treated
+   * as a double click from two clicks treated as two single clicks.
+   */
+  private static long getSystemMultiClickTimeout() {
+    long timeout = 640;
+
+    try {
+      Toolkit toolkit = Toolkit.getDefaultToolkit();
+      return ((Integer) toolkit.getDesktopProperty("awt.multiClickInterval")).longValue();
+    } catch (Exception e) {
+      return timeout;
+    }
   }
 
 }
