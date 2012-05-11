@@ -16,9 +16,6 @@ limitations under the License.
 
 package com.opera.core.systems;
 
-import com.google.common.base.Charsets;
-import com.google.common.io.Resources;
-
 import com.opera.core.systems.common.lang.OperaStrings;
 import com.opera.core.systems.model.ScreenShotReply;
 import com.opera.core.systems.model.ScriptResult;
@@ -77,10 +74,12 @@ import java.util.logging.Logger;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * OperaDriver is an implementation of the WebDriver interface that allows you to drive the Opera
- * web browser.  The driver uses the Scope protocol to communicate with Opera directly from Java.
+ * OperaDriver is a vendor-supported WebDriver implementation developed by Opera and volunteers that
+ * enables programmatic automation of different Opera products.  It is a part of the Selenium
+ * project.
  *
- * The implementation is vendor-supported and developed by Opera Software and volunteers.
+ * The driver implements the Scope protocol in Java to enable communication with Opera directly from
+ * Java.
  */
 public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
