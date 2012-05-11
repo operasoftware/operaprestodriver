@@ -399,7 +399,7 @@ public class ScopeServices implements IConnectionHandler {
     return ServiceResult.parseFrom(response.getPayload());
   }
 
-  public void quitOpera(OperaRunner runner, int pid) {
+  public void quitOpera(OperaRunner runner) {
     try {
       if (exec.getActionList().contains("Quit")) {
         exec.action("Quit");
@@ -414,10 +414,11 @@ public class ScopeServices implements IConnectionHandler {
       }
     }
 
-    if (runner != null && pid > 0) {
+    if (runner != null) {
       long interval = OperaIntervals.QUIT_POLL_INTERVAL.getValue();
       long timeout = OperaIntervals.QUIT_RESPONSE_TIMEOUT.getValue();
-      while (runner.isOperaRunning(pid) && timeout > 0) {
+
+      while (runner.isOperaRunning() && timeout > 0) {
         try {
           Thread.sleep(interval);
         } catch (InterruptedException e) {
@@ -429,11 +430,11 @@ public class ScopeServices implements IConnectionHandler {
   }
 
   public void quit() {
-    quit(null, 0);
+    quit(null);
   }
 
-  public void quit(OperaRunner runner, int pid) {
-    quitOpera(runner, pid);
+  public void quit(OperaRunner runner) {
+    quitOpera(runner);
     shutdown();
   }
 

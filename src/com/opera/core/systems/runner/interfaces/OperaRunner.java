@@ -17,6 +17,7 @@ limitations under the License.
 package com.opera.core.systems.runner.interfaces;
 
 import com.opera.core.systems.model.ScreenShotReply;
+import com.opera.core.systems.runner.OperaRunnerException;
 
 /**
  * OperaRunner is an interface for controlling the Opera browser binary.  It allows you to start,
@@ -29,14 +30,18 @@ public interface OperaRunner {
 
   /**
    * Start Opera, does nothing if Opera is already started.
+   *
+   * @throws OperaRunnerException if runner has been shut down
    */
-  void startOpera();
+  void startOpera() throws OperaRunnerException;
 
   /**
    * Stops Opera, does nothing if Opera isn't running.  Typically we'll use the exec service to stop
    * Opera, but this method will _ensure_ that Opera is quit from an external process controller.
+   *
+   * @throws OperaRunnerException if runner has been shut down
    */
-  void stopOpera();
+  void stopOpera() throws OperaRunnerException;
 
   /**
    * Is Opera running?
@@ -44,8 +49,6 @@ public interface OperaRunner {
    * @return true if running, false if not running or crashed
    */
   boolean isOperaRunning();
-
-  boolean isOperaRunning(int processId);
 
   /**
    * Did Opera crash?  This is reset on next call, so if you don't check you won't know.
@@ -62,8 +65,7 @@ public interface OperaRunner {
   String getOperaCrashlog();
 
   /**
-   * In case the com.opera.core.systems.runner.runner has sockets and stuff, it needs to be shut
-   * down.
+   * In case the com.opera.core.systems.runner.runner has open sockets, they need to be closed.
    */
   void shutdown();
 
@@ -73,7 +75,8 @@ public interface OperaRunner {
    * @param timeout attempt to take the screenshot until the timeout is reached
    * @param hashes  an arbitrary list of hashes to compare with
    * @return a ScreenshotReply object containing MD5 hash sums and bytes
+   * @throws OperaRunnerException if launcher is shutdown or not running
    */
-  ScreenShotReply saveScreenshot(long timeout, String... hashes);
+  ScreenShotReply saveScreenshot(long timeout, String... hashes) throws OperaRunnerException;
 
 }

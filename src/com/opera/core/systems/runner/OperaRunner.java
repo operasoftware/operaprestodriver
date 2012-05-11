@@ -72,7 +72,7 @@ public class OperaRunner implements com.opera.core.systems.runner.interfaces.Ope
     logger.config("Opera arguments: " + settings.arguments().getArgumentsAsStringList());
   }
 
-  public void startOpera() {
+  public void startOpera() throws OperaRunnerException {
     lock.lock();
 
     List<String> arguments = settings.arguments().getArgumentsAsStringList();
@@ -96,7 +96,7 @@ public class OperaRunner implements com.opera.core.systems.runner.interfaces.Ope
     }
   }
 
-  public void stopOpera() {
+  public void stopOpera() throws OperaRunnerException {
     lock.lock();
 
     try {
@@ -112,10 +112,6 @@ public class OperaRunner implements com.opera.core.systems.runner.interfaces.Ope
   }
 
   public boolean isOperaRunning() {
-    return isOperaRunning(0);
-  }
-
-  public boolean isOperaRunning(int processID) {
     lock.lock();
 
     try {

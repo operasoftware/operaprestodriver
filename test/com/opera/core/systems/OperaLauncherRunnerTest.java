@@ -16,7 +16,6 @@ limitations under the License.
 
 package com.opera.core.systems;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.hash.Hashing;
 import com.google.common.io.Files;
 
@@ -150,27 +149,40 @@ public class OperaLauncherRunnerTest extends OperaDriverTestCase {
   }
 
   @Test(expected = OperaRunnerException.class)
-  public void testShutdownLauncher() {
-    runner = new TestOperaLauncherRunner(settings);
-    runner.shutdown();
-    // Expecting OperaRunnerException as we tried to start Opera when launcher isn't running
-    runner.startOpera();
-  }
-
-  @Test
-  public void testConstructorWithSettingsArguments() {
+  public void startAfterShutdownShouldThrow() {
     runner = new TestOperaLauncherRunner(settings);
     runner.startOpera();
     assertTrue(runner.isOperaRunning());
+    runner.shutdown();
+    assertFalse(runner.isOperaRunning());
+    runner.startOpera();
+  }
+
+  @Test(expected = OperaRunnerException.class)
+  public void stopAfterShutdownShouldThrow() {
+    runner = new TestOperaLauncherRunner(settings);
+    runner.shutdown();
+    runner.stopOpera();
   }
 
   @Test
-  public void testDoubleShutdown() {
+  public void shutdownShouldNotThrow() {
     runner = new TestOperaLauncherRunner(settings);
-    runner.stopOpera();
     runner.shutdown();
-    // verify that a second shutdown call doesn't do any harm (shouldn't)
+  }
+
+  @Test
+  public void shutdownTwiceShouldNotThrow() {
+    runner = new TestOperaLauncherRunner(settings);
     runner.shutdown();
+    runner.shutdown();
+  }
+
+  @Test
+  public void constructorWithSettingsArguments() {
+    runner = new TestOperaLauncherRunner(settings);
+    runner.startOpera();
+    assertTrue(runner.isOperaRunning());
   }
 
   @Test
@@ -189,7 +201,7 @@ public class OperaLauncherRunnerTest extends OperaDriverTestCase {
   }
 
   @Test
-  public void testBadLauncher() throws IOException {
+  public void badLauncherShouldThrow() throws IOException {
     assertTrue("Imposter launcher exists", resources.executableBinary().exists());
     settings.setLauncher(resources.executableBinary());
 
@@ -208,6 +220,21 @@ public class OperaLauncherRunnerTest extends OperaDriverTestCase {
   }
 
   @Test
+  public void isOperaRunning() {
+    runner = new TestOperaLauncherRunner(settings);
+    assertFalse(runner.isOperaRunning());
+    runner.startOpera();
+    assertTrue(runner.isOperaRunning());
+  }
+
+  @Test
+  public void isOperaRunningShouldNotThrowAfterShutdown() {
+    runner = new TestOperaLauncherRunner(settings);
+    runner.shutdown();
+    assertFalse(runner.isOperaRunning());
+  }
+
+  @Test
   // TODO(andreastt): Trigger something which actually generates a crashlog
   public void testGetOperaDefaultCrashlog() {
     runner = new TestOperaLauncherRunner(settings);
@@ -217,11 +244,17 @@ public class OperaLauncherRunnerTest extends OperaDriverTestCase {
   }
 
   @Test
-  public void testSaveScreenshot() {
+  public void saveScreenshot() {
     runner = new TestOperaLauncherRunner(settings);
     ScreenShotReply screenshot = runner.saveScreenshot(0);
     assertNotNull(screenshot);
+  }
+
+  @Test(expected = OperaRunnerException.class)
+  public void saveScreenshotAfterShutdownShouldThrow() {
+    runner = new TestOperaLauncherRunner(settings);
     runner.shutdown();
+    runner.saveScreenshot(0);
   }
 
   @Test
@@ -271,7 +304,7 @@ public class OperaLauncherRunnerTest extends OperaDriverTestCase {
       super(settings);
     }
 
-    public ImmutableList<String> buildArguments() {
+    public List<String> buildArguments() {
       return super.buildArguments();
     }
 
