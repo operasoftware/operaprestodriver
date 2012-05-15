@@ -16,6 +16,7 @@ limitations under the License.
 
 package com.opera.core.systems;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.common.io.Files;
 
 import com.opera.core.systems.testing.NoDriver;
@@ -24,14 +25,18 @@ import com.opera.core.systems.testing.OperaDriverTestCase;
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.openqa.selenium.io.Zip;
+import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -41,6 +46,8 @@ import static org.junit.Assert.fail;
 @NoDriver
 public class OperaProfileTest extends OperaDriverTestCase {
 
+  private static final String VALID_BASE64_ENCODED_PROFILE =
+      "UEsDBBQACAAIAGWKr0AAAAAAAAAAAAAAAAAOAAAAb3BlcmFwcmVmcy5pbmmLDi1OLVIIKEpNK47l\n8kzPyy9KVQjNK0otLE0tLklNUQjILygtKFawVTDg4gIAUEsHCExnhFouAAAALAAAAFBLAQIUABQA\nCAAIAGWKr0BMZ4RaLgAAACwAAAAOAAAAAAAAAAAAAAAAAAAAAABvcGVyYXByZWZzLmluaVBLBQYA\nAAAAAQABADwAAABqAAAAAAA=";
   public OperaProfile profile;
   public File temporaryProfile;
   public File existingProfile;
@@ -138,21 +145,32 @@ public class OperaProfileTest extends OperaDriverTestCase {
   }
 
   @Test
-  public void testToJson() throws IOException {
+  public void testToJson() throws IOException, JSONException {
     profile = new OperaProfile(existingProfile);
 
-    new Zip().unzip(profile.toJson(), temporaryProfile);
+    String json = profile.toJson().getString(OperaProfile.BASE64_JSON_KEY);
+    new Zip().unzip(json, temporaryProfile);
     OperaProfile extractedProfile = new OperaProfile(temporaryProfile.getPath());
 
     assertThat(profile, matchesProfile(extractedProfile));
   }
 
   @Test
-  public void testFromJson() throws IOException {
+  public void testFromJson() throws IOException, JSONException {
     OperaProfile data = new OperaProfile(existingProfile);
-    profile = TestOperaProfile.fromJson(temporaryProfile, data.toJson());
+    profile = TestOperaProfile.fromJson(temporaryProfile, data.toJson().getString(OperaProfile.BASE64_JSON_KEY));
 
     assertThat(profile, matchesProfile(data));
+  }
+
+  @Test
+  public void fromCapabilitiesWithProfile() throws Throwable {
+    DesiredCapabilities caps = DesiredCapabilities.opera();
+    Map<String, String> profileMap = ImmutableMap.of(OperaProfile.BASE64_JSON_KEY, VALID_BASE64_ENCODED_PROFILE);
+    caps.setCapability("opera.profile", profileMap);
+
+    // Shouldn't throw
+    new OperaSettings().merge(caps);
   }
 
   private Matcher matchesProfile(final OperaProfile expected) {
@@ -161,7 +179,7 @@ public class OperaProfileTest extends OperaDriverTestCase {
         OperaProfile actual = (OperaProfile) o;
 
         try {
-          if ((expected.toJson().equals(actual.toJson())) &&
+          if ((expected.toJson().toString().equals(actual.toJson().toString())) &&
               (expected.preferences().size() == actual.preferences().size())) {
             return true;
           }

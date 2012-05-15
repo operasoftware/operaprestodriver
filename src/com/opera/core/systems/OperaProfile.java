@@ -16,17 +16,20 @@ limitations under the License.
 
 package com.opera.core.systems;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import com.opera.core.systems.preferences.OperaFilePreferences;
 import com.opera.core.systems.preferences.OperaPreferences;
 
+import org.json.JSONObject;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.io.TemporaryFilesystem;
 import org.openqa.selenium.io.Zip;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Collection;
-import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
@@ -65,6 +68,7 @@ import static com.google.common.base.Preconditions.checkArgument;
  */
 public class OperaProfile {
 
+  public static final String BASE64_JSON_KEY = "base64";
   private File directory;
   private File preferenceFile;
   private boolean randomProfile = false;
@@ -169,8 +173,13 @@ public class OperaProfile {
    * @return the JSON representation of this profile
    * @throws IOException if an I/O error occurs
    */
-  public String toJson() throws IOException {
-    return new Zip().zip(getDirectory());
+  public JSONObject toJson() throws IOException {
+    String base64 = new Zip().zip(getDirectory());
+    Map<String, String> map = ImmutableMap.of(
+      "className", this.getClass().getName(),
+      BASE64_JSON_KEY, base64);
+    
+    return new JSONObject(map);
   }
 
   /**
@@ -196,14 +205,10 @@ public class OperaProfile {
    * @param directory the directory to look for a preference file
    * @return a preference file
    */
-  private static File getPreferenceFile(File directory) {
-    final String directoryPath = directory.getAbsolutePath() + File.separator;
-
-    @SuppressWarnings("serial")
-    Collection<File> candidates = new LinkedHashSet<File>() {{
-      add(new File(directoryPath + "operaprefs.ini"));
-      add(new File(directoryPath + "opera.ini"));
-    }};
+  private static File getPreferenceFile(final File directory) {
+    List<File> candidates = ImmutableList.of(
+      new File(directory, "operaprefs.ini"),
+      new File(directory, "opera.ini"));
 
     for (File candidate : candidates) {
       if (candidate.exists()) {
@@ -211,7 +216,7 @@ public class OperaProfile {
       }
     }
 
-    return new File(directoryPath + "operaprefs.ini");
+    return candidates.get(0);
   }
 
 }

@@ -17,6 +17,7 @@ limitations under the License.
 package com.opera.core.systems;
 
 import com.google.common.base.CaseFormat;
+import com.google.common.base.Throwables;
 import com.google.common.collect.ImmutableMap;
 
 import com.opera.core.systems.arguments.OperaCoreArguments;
@@ -277,6 +278,16 @@ public class OperaSettings {
           }
         } else if (value instanceof OperaProfile) {
           return value;
+        } else if (value instanceof Map) {
+          @SuppressWarnings("rawtypes")
+          Map map = (Map)value;
+          if (map.containsKey("base64")) {
+            try {
+              return OperaProfile.fromJson((String)map.get("base64"));
+            } catch (IOException e) {
+              Throwables.propagate(e);
+            }
+          }
         }
 
         return new OperaProfile();
