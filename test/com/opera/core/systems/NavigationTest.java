@@ -36,9 +36,9 @@ public class NavigationTest extends OperaDriverTestCase {
 
   @Before
   public void beforeEach() {
-    getFixture("javascript.html");
-    getFixture("test.html");
-    getFixture("keys.html");
+    driver.navigate().to(pages.javascript);
+    driver.navigate().to(pages.test);
+    driver.navigate().to(pages.keys);
   }
 
   @After
@@ -97,7 +97,7 @@ public class NavigationTest extends OperaDriverTestCase {
   @Test
   public void testHandBackControlAfterPageLoadTimeout() {
     driver.manage().timeouts().pageLoadTimeout(100, TimeUnit.MILLISECONDS);
-    getFixture("idle/ecmascript-timeout.html");
+    driver.navigate().to(pages.ecmascriptTimeout);
     assertEquals("Waiting", driver.findElementById("out").getText());
     sleep(1000);
     assertEquals("done", driver.findElementById("out").getText());
@@ -105,7 +105,7 @@ public class NavigationTest extends OperaDriverTestCase {
 
   @Test
   public void testHandBackControlAfterPageLoadTimeoutByOverload() {
-    driver.get(fixture("idle/ecmascript-timeout.html"), 100);
+    driver.get(pages.ecmascriptTimeout, 100);
     assertEquals("Waiting", driver.findElementById("out").getText());
     sleep(1000);
     assertEquals("done", driver.findElementById("out").getText());

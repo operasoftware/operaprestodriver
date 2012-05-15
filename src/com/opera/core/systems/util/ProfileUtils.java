@@ -18,10 +18,8 @@ package com.opera.core.systems.util;
 
 import com.google.common.io.Files;
 
-import com.opera.core.systems.OperaDriver;
 import com.opera.core.systems.OperaSettings;
 
-import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.io.FileHandler;
 
 import java.io.File;

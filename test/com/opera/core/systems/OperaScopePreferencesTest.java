@@ -26,7 +26,6 @@ import com.opera.core.systems.testing.OperaDriverTestCase;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.io.File;
@@ -36,16 +35,12 @@ import static org.junit.Assert.assertTrue;
 
 public class OperaScopePreferencesTest extends OperaDriverTestCase {
 
-  public static OperaScopePreferences preferences;
-  public static int prefCountBefore = 0;
-
-  @BeforeClass
-  public static void beforeAll() {
-    preferences = driver.preferences();
-  }
+  public OperaScopePreferences preferences;
+  public int prefCountBefore = 0;
 
   @Before
   public void beforeEach() {
+    preferences = driver.preferences();
     prefCountBefore = preferences.size();
   }
 

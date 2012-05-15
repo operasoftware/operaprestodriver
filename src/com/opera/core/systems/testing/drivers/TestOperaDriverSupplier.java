@@ -29,13 +29,18 @@ public class TestOperaDriverSupplier extends DefaultOperaDriverSupplier {
     super();
   }
 
+  @SuppressWarnings("unused")
   public TestOperaDriverSupplier(OperaSettings settings) {
     super(settings);
   }
 
   public TestOperaDriver get() {
-    settings.logging().setLevel(Level.FINE);
-    return new TestOperaDriver(settings);
+    // Only override logging level if it has the default value
+    if (new OperaSettings().logging().getLevel() == getSettings().logging().getLevel()) {
+      getSettings().logging().setLevel(Level.FINE);
+    }
+
+    return new TestOperaDriver(getSettings());
   }
 
 }

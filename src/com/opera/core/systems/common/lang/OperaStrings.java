@@ -48,8 +48,7 @@ public class OperaStrings {
     }
 
     try {
-      @SuppressWarnings("unused")
-      double d = Double.parseDouble(string);
+      Double.parseDouble(string);
     } catch (NumberFormatException e) {
       return false;
     }
@@ -69,8 +68,7 @@ public class OperaStrings {
     }
 
     try {
-      @SuppressWarnings("unused")
-      int i = Integer.parseInt(string);
+      Integer.parseInt(string);
     } catch (NumberFormatException e) {
       return false;
     }

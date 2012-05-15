@@ -60,7 +60,6 @@ import java.net.URL;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -73,7 +72,6 @@ public class OperaLauncherRunner extends OperaRunner
 
   public static final String LAUNCHER_ENV_VAR = "OPERA_LAUNCHER";
 
-  private final Logger logger = Logger.getLogger(getClass().getName());
   private final URL bundledLauncher;
   private final int launcherPort = PortProber.findFreePort();
 
@@ -97,9 +95,14 @@ public class OperaLauncherRunner extends OperaRunner
       throw new OperaRunnerException("Not able to locate bundled launcher: " + bundledLauncher);
     }
 
-    if (settings.getLauncher() == launcherDefaultLocation() &&
-        (!settings.getLauncher().exists() || isLauncherOutdated(settings.getLauncher()))) {
-      extractLauncher(bundledLauncher, settings.getLauncher());
+    try {
+      if (settings.getLauncher().getCanonicalPath().equals(
+          launcherDefaultLocation().getCanonicalPath()) &&
+          (!settings.getLauncher().exists() || isLauncherOutdated(settings.getLauncher()))) {
+        extractLauncher(bundledLauncher, settings.getLauncher());
+      }
+    } catch (IOException e) {
+      throw new OperaRunnerException(e);
     }
 
     makeLauncherExecutable(settings.getLauncher());
@@ -115,7 +118,7 @@ public class OperaLauncherRunner extends OperaRunner
 
     try {
       launcherRunner = new OperaLauncherBinary(settings.getLauncher().getPath(),
-                                               arguments.toArray(new String[]{}));
+                                               arguments.toArray(new String[arguments.size()]));
     } catch (IOException e) {
       throw new OperaRunnerException("Unable to start launcher: " + e.getMessage());
     }
@@ -154,7 +157,7 @@ public class OperaLauncherRunner extends OperaRunner
     }
   }
 
-  private ImmutableList<String> buildArguments() {
+  protected ImmutableList<String> buildArguments() {
     ImmutableList.Builder<String> builder = ImmutableList.builder();
 
     builder.add("-host").add(settings.getHost());
@@ -203,7 +206,7 @@ public class OperaLauncherRunner extends OperaRunner
 
       // Check Opera hasn't immediately exited (e.g. due to unknown arguments)
       try {
-        Thread.sleep(100);
+        Thread.sleep(OperaIntervals.PROCESS_START_SLEEP.getValue());
       } catch (InterruptedException e) {
         // nothing
       }
@@ -349,8 +352,8 @@ public class OperaLauncherRunner extends OperaRunner
    * Take screenshots!
    */
   public ScreenShotReply saveScreenshot(long timeout, String... hashes) {
-    String resultMd5 = null;
-    byte[] resultBytes = null;
+    String resultMd5;
+    byte[] resultBytes;
     boolean blank = false;
 
     logger.fine("Instructing launcher to take screenshot");

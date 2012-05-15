@@ -19,9 +19,6 @@ package com.opera.core.systems.testing.drivers;
 import com.opera.core.systems.OperaDriver;
 import com.opera.core.systems.OperaSettings;
 
-import org.openqa.selenium.Capabilities;
-import org.openqa.selenium.remote.DesiredCapabilities;
-
 /**
  * Provides a plain, default {@link OperaDriver} with popup blocking disabled.
  *

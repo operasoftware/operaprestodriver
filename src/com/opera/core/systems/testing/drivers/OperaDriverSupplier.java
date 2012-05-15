@@ -39,21 +39,21 @@ public interface OperaDriverSupplier extends Supplier<OperaDriver> {
    *
    * @param settings new settings
    */
-  public void setSettings(OperaSettings settings);
+  void setSettings(OperaSettings settings);
 
   /**
    * Gets the settings of this supplier.
    *
    * @return a set of settings
    */
-  public OperaSettings getSettings();
+  OperaSettings getSettings();
 
   /**
    * Changes the capabilities for this supplier.
    *
    * @param capabilities new capabilities
    */
-  public void setCapabilities(Capabilities capabilities);
+  void setCapabilities(Capabilities capabilities);
 
   /**
    * Gets the capabilities of this supplier.
@@ -61,6 +61,6 @@ public interface OperaDriverSupplier extends Supplier<OperaDriver> {
    * @return a set of capabilities
    */
   @SuppressWarnings("unused")
-  public Capabilities getCapabilities();
+  Capabilities getCapabilities();
 
 }

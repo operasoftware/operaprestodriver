@@ -37,10 +37,10 @@ public class TestOperaDriver extends OperaDriver {
   public static enum ClosingStrategy {SWITCH_TO, ACTION}
 
   private final Logger logger = Logger.getLogger(getClass().getName());
-  private final String controlWindow;
   private final Platform currentPlatform = Platform.getCurrent();
 
-  private OperaProduct currentProduct;
+  private String controlWindow = null;
+  private OperaProduct currentProduct = null;
 
   /**
    * Creates a new TestOperaDriver with the given capabilities.

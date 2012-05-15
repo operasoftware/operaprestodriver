@@ -35,7 +35,7 @@ public class FindElementsTest extends OperaDriverTestCase {
 
   @Before
   public void beforeEach() {
-    getFixture("test.html");
+    driver.navigate().to(pages.test);
   }
 
   @Test

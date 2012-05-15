@@ -49,7 +49,7 @@ public class ScreenShotReply {
 
   public ScreenShotReply(String md5, byte[] png) {
     this.md5 = md5;
-    this.png = png;
+    this.png = png.clone();
   }
 
   public ScreenShotReply(String md5, List<ColorResult> colorResult) {
@@ -78,7 +78,7 @@ public class ScreenShotReply {
   }
 
   public void setPng(byte[] png) {
-    this.png = png;
+    this.png = png.clone();
   }
 
   public boolean isBlank() {

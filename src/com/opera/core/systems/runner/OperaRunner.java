@@ -21,6 +21,7 @@ import com.opera.core.systems.model.ScreenShotReply;
 
 import org.openqa.selenium.os.CommandLine;
 
+import java.util.List;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.logging.Logger;
 
@@ -74,6 +75,8 @@ public class OperaRunner implements com.opera.core.systems.runner.interfaces.Ope
   public void startOpera() {
     lock.lock();
 
+    List<String> arguments = settings.arguments().getArgumentsAsStringList();
+
     try {
       if (process != null) {
         return;
@@ -81,8 +84,9 @@ public class OperaRunner implements com.opera.core.systems.runner.interfaces.Ope
 
       process = new CommandLine(
           settings.getBinary().getPath(),
-          settings.arguments().getArgumentsAsStringList().toArray(new String[]{})
+          arguments.toArray(new String[arguments.size()])
       );
+
       // TODO(andreastt): Do we need to forward the environment to CommandLine?
       //process.setEnvironmentVariables(environment);
       process.copyOutputTo(System.err);
@@ -102,8 +106,8 @@ public class OperaRunner implements com.opera.core.systems.runner.interfaces.Ope
 
       process.destroy();
     } finally {
-      process = null;
       lock.unlock();
+      process = null;
     }
   }
 

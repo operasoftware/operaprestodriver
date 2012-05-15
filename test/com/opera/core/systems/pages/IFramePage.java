@@ -21,6 +21,7 @@ import com.opera.core.systems.testing.drivers.TestOperaDriver;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 
 public class IFramePage extends Page {
@@ -45,6 +46,7 @@ public class IFramePage extends Page {
   public String clickButton() {
     enterIFrame();
     driver.findElement(By.id("test")).click();
+    //new Actions(driver).moveToElement(driver.findElement(By.id("test"))).moveByOffset(5,5).click().perform();
     leaveIFrame();
     return driver.findElement(By.id("result")).getText();
   }

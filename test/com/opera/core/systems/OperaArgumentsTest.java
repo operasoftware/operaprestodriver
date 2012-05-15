@@ -19,6 +19,7 @@ package com.opera.core.systems;
 import com.opera.core.systems.arguments.OperaArgument;
 import com.opera.core.systems.arguments.OperaCoreArguments;
 import com.opera.core.systems.arguments.OperaDesktopArguments;
+import com.opera.core.systems.testing.NoDriver;
 
 import org.junit.Before;
 import org.junit.Ignore;
@@ -29,6 +30,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+@NoDriver
 public class OperaArgumentsTest {
 
   private OperaArguments arguments;

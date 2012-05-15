@@ -22,10 +22,16 @@ public class Pages {
 
   public String windows;
   public String download;
+  public String ecmascriptEvent;
+  public String ecmascriptLoop;
+  public String ecmascriptTimeout;
+  public String ecmascriptTimeoutLoop;
   public String flash;
+  public String frames;
   public String iframes;
   public String javascript;
   public String keys;
+  public String metaRefresh;
   public String mouse;
   public String none;
   public String select;
@@ -39,10 +45,16 @@ public class Pages {
   public Pages(WebServer server) {
     windows = server.whereIs("windows.html");
     download = server.whereIs("download.html");
+    ecmascriptEvent = server.whereIs("idle/ecmascript-event.html");
+    ecmascriptLoop = server.whereIs("idle/ecmascript-loop.html");
+    ecmascriptTimeout = server.whereIs("idle/ecmascript-timeout.html");
+    ecmascriptTimeoutLoop = server.whereIs("idle/ecmascript-timeout-loop.html");
     flash = server.whereIs("flash.html");
+    frames = server.whereIs("frames.html");
     iframes = server.whereIs("iframes.html");
     javascript = server.whereIs("javascript.html");
     keys = server.whereIs("keys.html");
+    metaRefresh = server.whereIs("idle/metarefresh.html");
     mouse = server.whereIs("mouse.html");
     none = server.whereIs("none.html");
     select = server.whereIs("select.html");

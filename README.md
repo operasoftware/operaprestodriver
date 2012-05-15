@@ -1,127 +1,26 @@
 OperaDriver
 ===========
 
-OperaDriver is a vendor-supported WebDriver implementation developed
-by [Opera Software](http://opera.com/) and volunteers that implements
-[WebDriver](http://code.google.com/p/selenium/) for Opera.
+OperaDriver is a vendor-supported
+[WebDriver](http://dvcs.w3.org/hg/webdriver/raw-file/tip/webdriver-spec.html)
+implementation developed by [Opera](http://opera.com/) and volunteers
+that enable programmatic automation of different Opera products.  It
+is a part of the [Selenium](http://code.google.com/p/selenium)
+project.
 
-OperaDriver can drive the browser running various tests on your web
-pages, just as if a real user was navigating through them.  It can
-emulate actions like clicking links, entering text and submitting
-forms, and reports results back to you so you know that your website
-works as intended.
+WebDriver is a general purpose library for automating web browsers.
+It can drive the browser running various tests on your web pages, just
+as if a real user was navigating through them.  It can emulate actions
+like clicking links, enter text and submitting forms, and reporting
+results back to you so you know that your website works as intended.
 
 OperaDriver's end-user emulation ensures that your entire stack (HTML,
 scripts, styling, embedded resources and backend setup) is functioning
-correctly, and this without tedious manual testing routines.
+correctly without tedious manual testing routines.
 
-
-Requirements
-------------
-
-You will need a Java Runtime Environment 1.5 or newer (Oracle or
-OpenJDK) to use OperaDriver.  It uses the [Scope
-interface](http://dragonfly.opera.com/app/scope-interface/) (same as for
-[Dragonfly](http://www.opera.com/dragonfly/)) to communicate directly
-with Opera from Java.  Consequently, it is compatible out-of-the-box
-with Opera version 11.6 or newer, although it works for older versions
-with some tweaks.
-
-The OperaDriver server expects you to have Opera or Opera Next
-installed in the default location for each system:
-
-| __OS__    | __Expected Location of Opera__                                                                      |
-|-----------|-----------------------------------------------------------------------------------------------------|
-| GNU/Linux | /usr/bin/opera<br />/usr/bin/opera-next                                                             |
-| Mac       | /Applications/Opera.app/Contents/MacOS/Opera<br />/Applications/Opera Next.app/Contents/MacOS/Opera |
-| Windows   | %PROGRAMFILES%\Opera\opera.exe<br />%PROGRAMFILES%\Opera Next\opera.exe                             |
-
-However, you can override this and specify a custom location to Opera
-by setting the capability `opera.binary` or environmnetal variable
-`OPERA_PATH`.  You can read more about configuring WebDriver under
-Advanced Usage.
-
-
-### OperaDriver on 11.52 or older
-
-To use OperaDriver on Opera < 11.52, make sure you set the
-capabilities `opera.port` to `-1` and `opera.profile` to `""` (empty
-string) to disable `-debugproxy` and `-pd` command-line arguments
-which older versions of Opera do not support.  For even older versions
-(11.01 or older) you might need a wrapper script (see below).
-
-
-Getting started
----------------
-
-### Remotely
-
-To get set up [please
-download](http://code.google.com/p/selenium/downloads/list) either
-*selenium-server-standalone* or *selenium-server* and make sure you
-have a fairly recent version of Opera installed.  All you need to do
-is create a new
-[`WebDriver`](http://selenium.googlecode.com/svn/trunk/docs/api/java/org/openqa/selenium/WebDriver.html)
-instance:
-
-    WebDriver driver = new OperaDriver();
-    driver.navigate().to("http://opera.com/");
-
-Since WebDriver provides APIs (called *bindings*) for several
-languages, you can do the same in
-[Ruby](http://selenium.googlecode.com/svn/trunk/docs/api/rb/index.html)
-(using the
-[selenium-webdriver](http://rubygems.org/gems/selenium-webdriver) gem)
-by setting the environmental variable `SELENIUM_SERVER_JAR` to the
-full path of the *selenium-server-standalone* JAR you just downloaded:
-
-    export SELENIUM_SERVER_JAR=/path/to/selenium-server-standalone.jar
-
-And then do the following in Ruby:
-
-    require 'selenium-webdriver'
-    driver = Selenium::WebDriver.for :opera
-    driver.navigate.to('http://opera.com/')
-
-In Python you'd set the same environmental variable and invoke Opera
-this way:
-
-    from selenium import webdriver
-    driver = webdriver.Opera()
-    driver.get('http://opera.com/')
-
-
-### Running the server as a standalone process
-
-Since OperaDriver implements the wire protocol, it is fully compatible
-with any
-[RemoteWebDriver](http://code.google.com/p/selenium/wiki/RemoteWebDriver)
-client.  Simply start up your server, create a remote client, and away
-you go:
-
-    WebDriver driver = new RemoteWebDriver("http://localhost:9515", DesiredCapabilities.opera());
-    driver.navigate().to("http://opera.com/");
-
-
-### Separate OperaDriver
-
-You can also use OperaDriver as a standalone dependency in your
-project.  Download the package from the [Github project's download
-section](https://github.com/operasoftware/operadriver/downloads) and
-extract it to a location of your choice.  To see some examples look at
-the
-[examples/](https://github.com/operasoftware/operadriver/tree/master/examples)
-directory.  For your own projects include the `lib/*` directory on
-your classpath, for example:
-
-    javac -classpath "lib/*:." Example.java
-
-In Eclipse this can be done under _Project_ → _Properties_ → _Java
-Build Path_ and then *"Add JARs..."* or *"Add External JARs..."*
-depending on the layout of your project.
-
-You can also use Maven.  The group ID is `com.opera` and the artifact
-ID is `operadriver`. 
+OperaDriver is usable out of the box from the [official Selenium
+packages](https://code.google.com/p/selenium/downloads/list), and can
+be used no extra setup on any modern version of Opera.
 
 
 Documentation
@@ -129,76 +28,154 @@ Documentation
 
 * [API documentation](http://operasoftware.github.com/operadriver/docs/)
 * [Selenium WebDriver documentation](http://seleniumhq.org/docs/03_webdriver.html)
+* [Java examples](https://github.com/operasoftware/operadriver/tree/master/examples)
+* [Python bindings API](http://selenium.googlecode.com/svn/trunk/docs/api/py/index.html)
+* [Ruby bindings API](http://selenium.googlecode.com/svn/trunk/docs/api/rb/index.html)
+* [Complete list of capabilities](https://code.google.com/p/selenium/wiki/DesiredCapabilities)
 
 
-Advanced Usage
---------------
+Getting started
+---------------
 
-### Capabilities
+To get set up, first
+[download](http://code.google.com/p/selenium/downloads/list) either
+the *selenium-server-standalone* or *selenium-server* package and make
+sure you have a fairly recent version of Opera installed in a default
+location.  Finally, all you need to do is create a new
+[`OperaDriver`](http://operasoftware.github.com/operadriver/docs/com/opera/core/systems/OperaDriver.html)
+instance:
+
+    WebDriver driver = new OperaDriver();
+    driver.get("http://opera.com/");
+
+If you prefer using a package management system, OperaDriver is also
+available through Maven; either as a part of the Selenium package, or
+as a separate package.  The group ID for Selenium is
+[`org.openqa.selenium.*`](http://search.maven.org/#search%7Cga%7C1%7Cg%3Aorg.openqa.*),
+and `com.opera` and artifact ID `operadriver` for OperaDriver
+specifically.
+
+
+### Other languages
+
+Since WebDriver provides bindings for several programming languages,
+you can follow the same approach as above in both
+[Python](http://selenium.googlecode.com/svn/trunk/docs/api/py/index.html)
+(using the [selenium](http://pypi.python.org/pypi/selenium) package)
+and in
+[Ruby](http://selenium.googlecode.com/svn/trunk/docs/api/rb/index.html)
+(using the
+[selenium-webdriver](http://rubygems.org/gems/selenium-webdriver)
+gem).
+
+The Python equivalent of the above example would be:
+
+    from selenium import webdriver
+    driver = webdriver.Opera()
+    driver.get('http://opera.com/')
+
+The same in Ruby:
+
+    require 'selenium-webdriver'
+    driver = Selenium::WebDriver.for :opera
+    driver.get('http://opera.com/')
+
+To execute the tests, please ensure that the environmental variable
+*SELENIUM_SERVER_JAR* contains the path to the
+*selenium-server-standalone* JAR you downloaded earlier.
+
+To execute the Python test:
+
+    SELENIUM_SERVER_JAR=/path/to/selenium-server-standalone.jar python test.py
+
+And for Ruby:
+
+    SELENIUM_SERVER_JAR=/path/to/selenium-server-standalone.jar ruby test.rb
+
+
+### Running the server as a standalone process
+
+OperaDriver is fully compatible with the
+[RemoteWebDriver](http://code.google.com/p/selenium/wiki/RemoteWebDriver)
+client.  This allows you to run tests on a remote computer which is
+typically very useful in a distributed environment.  First, ensure
+that your Selenium server is running, then create a remote client as
+usual:
+
+    WebDriver driver = new RemoteWebDriver("http://localhost:9515", DesiredCapabilities.opera());
+    driver.get("http://opera.com/");
+
+
+Capabilities
+------------
+
+To customize Opera and WebDriver in various ways you may request a
+certain configuration from the Selenium server.  Since not all server
+implementations supports every WebDriver feature, the client and
+server should use JSON objects with the properties when describing
+which features are desirable.
+
+In additon to the [general WebDriver
+capabilities](https://code.google.com/p/selenium/wiki/DesiredCapabilities)
+available, OperaDriver has a number of custom capabilities that may be
+requested.  To request a specific driver configuration you
 
 You can use the
 [DesiredCapabilities](http://selenium.googlecode.com/svn/trunk/docs/api/java/org/openqa/selenium/remote/DesiredCapabilities.html)
-class to specify settings for OperaDriver.  The capabilities we
-support are:
+class to request a specific driver configuration.  The capabilities
+supported by OperaDriver are:
 
-| __Capability__              | __Type__ | __Default__ | __Description__             |
-|-----------------------------|----------|-------------|-----------------------------|
-| __opera.logging.level__     | String/[Level](http://docs.oracle.com/javase/1.4.2/docs/api/java/util/logging/Level.html) | Level.INFO | How verbose the logging should be.  Available levels are: SEVERE (highest value), WARNING, INFO, CONFIG, FINE, FINER, FINEST (lowest value), ALL.
-| __opera.logging.file__      | String   | null        | Where to send the output of the logging.  Default is to not write to file.
-| __opera.binary__            | String   | null        | Path to the Opera binary to use.  If not specified, OperaDriver will guess the path to your Opera installation.
-| __opera.arguments__         | String   | null        | Arguments to pass on to Opera, separated by spaces.  See `opera -help` for available command-line arguments.
-| __opera.host__              | String   | "127.0.0.1" | The host Opera should connect to.  Unless you're starting Opera on another machine you won't need this.
-| __opera.port__              | Integer  | 7001        | The port Opera should connect to.  0 = Random port, -1 = Opera default (port 7001) (for use with Opera < 12).
-| __opera.launcher__          | String   | null        | Absolute path to the launcher binary to use.  The launcher is a gateway between OperaDriver and the Opera browser, and is being used for controlling and monitoring the binary, and taking external screenshots.  If left blank, OperaDriver will use the launcher supplied with the package.
-| __opera.profile__           | String/OperaProfile | OperaProfile | Directory string for the Opera profile to use.  If left empty, a new random profile will be used.  If "", an empty string, then the default autotest profile directory is used.
-| __opera.idle__              | Boolean  | false       | Whether to use Opera's alternative implicit wait implementation.  It will use an in-browser heuristic to guess when a page has finished loading,allowing us to determine with great accuracy whether there are any planned events in the document.  This functionality is useful for very simple test cases, but not designed for real-world testing.  It is disabled by default.
-| __opera.display__           | Integer  | null        | The X display to use, typically if you want to use Xvfb or tightvncserver.  (Only works on UNIX-like OSes.)
-| __opera.autostart__         | Boolean  | true        | Whether to auto-start the Opera binary.  If false, OperaDriver will wait for a connection from the browser.  Go to "opera:debug", enter the correct port number and hit "Connect" to connect manually.
-| __opera.no_restart__        | Boolean  | false       | Whether to restart.
-| __opera.no_quit__           | Boolean  | false       | Whether to quit Opera when OperaDriver is shut down.  If enabled, it will keep the browser running after the driver is shut down.
-| __opera.product__           | String   | null        | The product we are using, for example "desktop", "core-desktop" or "sdk".  See [OperaProduct](https://github.com/operasoftware/operadriver/blob/master/src/com/opera/core/systems/OperaProduct.java) for all available values.
+| __Capability__              | __Type__ | __Default__ | __Description__ |
+|-----------------------------|----------|-------------|-----------------|
+| __opera.logging.level__     | [Level](http://docs.oracle.com/javase/1.4.2/docs/api/java/util/logging/Level.html)/String/Integer | Level.INFO | (String/Level/Integer) How verbose the logging should be.  Available levels are: SEVERE (highest value), WARNING, INFO, CONFIG, FINE, FINER, FINEST (lowest value), ALL, OFF.<br /><br >The argument may consist of either a level name as a string, an integer value, a [Level reference](http://docs.oracle.com/javase/1.4.2/docs/api/java/util/logging/Level.html), or null.  If the value is neither of a known name nor an integer, an IllegalArgumentException will be thrown.
+| __opera.logging.file__      | [File](http://docs.oracle.com/javase/1.4.2/docs/api/java/io/File.html)/String | null     | Where to send the output of the logging.  Default is to not write to file.
+| __opera.binary__            | String   | Default location of Opera on system | Path to the Opera binary to use.  If not specified, OperaDriver will guess the path to your Opera installation (typically */usr/bin/opera*, *C:\Program Files\Opera\opera.exe*, or similar).
+| __opera.arguments__         | String   | null        | Arguments to pass to Opera, separated by spaces.  See `opera -help` for available command-line switches.
+| __opera.host__              | String   | Non-loopback IP if available, loopback otherwise | The host Opera should connect to.  Since OperaDriver works in a client-server relationship to Opera (where Opera is the client, driver the server) you can also run remote instances of Opera on other devices; that be a phone, a TV or another computer.
+| __opera.port__              | Integer  | Random port | The port to Opera should connect to.  Setting this capability to 0 will probe for a free, random port, setting it to -1 will ensure compatibility mode using port the default port 7001 for Operas version 11.52 or older.
+| __opera.profile__           | [OperaProfile](http://operasoftware.github.com/operadriver/docs/com/opera/core/systems/operaprofile.html)/string | temporary profile | directory of the profile to use, or an [OperaProfile](http://operasoftware.github.com/operadriver/docs/com/opera/core/systems/operaprofile.html) instance object representing a profile.  if null is given, a random temporary directory is used.  if "", an empty string, then the default *~/.autotest* profile directory will be used (for backwards compatibility with opera < 11.60).
+| __opera.autostart__         | Boolean  | true        | Whether to auto-start the Opera binary.  If false, OperaDriver will wait for a connection from the browser.  Go to *"opera:debug"*, enter the correct host/port information, and hit _Connect_ to connect manually.
+| __opera.detach__            | Boolean  | false       | Whether to detach the Opera browser when the driver shuts down.  This will leave Opera running.
+| __opera.display__           | Integer  | null        | The X display to use.  If set, Opera will be started on the specified display.  (Only works on GNU/Linux.)
+| __opera.idle__              | Boolean  | false       | Whether to use Opera's alternative implicit wait implementation.  It will use an in-browser heuristic to guess when a page has finished loading, allowing us with great accuracy tell whether there are any planned events in the document.  This functionality is useful for very simple test cases, but not designed for real-world testing.  It is disabled by default.
+| __opera.product__           | [OperaProduct](http://operasoftware.github.com/operadriver/docs/com/opera/core/systems/OperaProduct.html)/String   | Desktop | The product we are using, for example `OperaProduct#DESKTOP` or `OperaProduct#CORE`.
+| __opera.launcher__          | String   | null        | Path to the launcher binary to use.  The launcher is an external wrapper around the browser, and is used for controlling the binary and taking external screenshots.  If left blank, OperaDriver will use a launcher supplied with the package.
 
-To use capabilities:
+For instance the OperaDriver can be made to start the browser with
+specific command-line arguments using the `opera.arguments` key.  This
+key should define a list of a command-line arguments that should be
+passed to the browser on startup.  For example, to start Opera with a
+custom profile:
 
-    DesiredCapabilities capabilities = DesiredCapabilities.opera();
-    capabilities.setCapability("opera.profile", new OperaProfile("/path/to/existing/profile"));
-    capabilities.setCapability("opera.logging.level", Level.CONFIG);
-    capabilities.setCapability("opera.logging.file", "/var/log/operadriver.log");
-    capabilities.setCapability("opera.display", 8);
-
-    // Now use it
-    WebDriver driver = new OperaDriver(capabilities);
-    driver.navigate().to("http://opera.com/");
-
-
-### Custom profile
-
-You can also provide a profile for Opera to use.  You can use a new,
-fresh random profile (default) or specify an existing profile on your
-system.  You can manipulate the profile before Opera is started to
-i.e. set preferences you wish to use:
-
-    OperaProfile profile = new OperaProfile();  // fresh, random profile
+    OperaProfile profile = new OperaProfile();  // fresh, temporary profile
     profile.preferences().set("User Prefs", "Ignore Unrequested Popups", false);
 
     DesiredCapabilities capabilities = DesiredCapabilities.opera();
-    capabilities.setCapability("opera.profile", profile);
+    capabilities.setCapability("opera.profiel", profile);
+
+    WebDriver driver = new OperaDriver(capabilities);
+
+Similarly, to set up more detailed logging and, for GNU/Linux, send
+ask Opera to start on a different X display:
+
+    DesiredCapabilities capabilities = DesiredCapabilities.opera();
+    capabilities.setCapability("opera.logging.level", Level.CONFIG);
+    capabilities.setCapability("opera.logging.file", "/var/log/operadriver.log");
+    capabilities.setCapability("opera.display", 8);
 
     WebDriver driver = new OperaDriver(capabilities);
 
 
 ### Environment variables
 
-To specify such things as a custom location of the Opera binary and the
-command-line arguments to use, you may use environmental variables also.  This
-is a list of the environmental variables which can be set on any operating
-system:
+To specify a custom location of the Opera binary and the command-line
+arguments to use, you may also use environmental variables.  These are
+the available variables:
 
 | __Name__          | __Description__                                                                                                                                                                                                              |
 |-------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | __OPERA_PATH__    | The absolute path to the Opera binary you want to use.  If not set OperaDriver will try to locate Opera on your system.                                                                                                      |
-| __OPERA_ARGS__    | A space-delimited list of arguments to pass on to Opera, e.g. `-nowindow`, `-dimensions 1600x1200`, &c.  See `opera -help` to view available arguments.                                                                     |
-| __OPERA_PRODUCT__ | To override the product check when running the OperaDriver tests.  Set this to any value specified in [OperaProduct](https://github.com/operasoftware/operadriver/blob/master/src/com/opera/core/systems/OperaProduct.java). |
+| __OPERA_ARGS__    | A space-delimited list of arguments to pass on to Opera, e.g. `-nowindow`, `-dimensions 1600x1200`, &c.  See `opera -help` to see the available arguments.                                                                     |
 
 To set environment variables:
 
@@ -211,11 +188,13 @@ Supported Opera versions
 
 ### Desktop
 
-This is a list of the official Opera Desktop versions supported by OperaDriver:
+This is a list of the official Opera Desktop versions supported by
+OperaDriver:
 
 | __Version__ | __Workaround/tweaks needed__                                                                                                |
 |-------------|-----------------------------------------------------------------------------------------------------------------------------|
 | 12.00       | *(Not released yet)*                                                                                                        |
+| 11.62       |                                                                                                                             |
 | 11.61       |                                                                                                                             |
 | 11.60       |                                                                                                                             |
 | 11.52       | Set `opera.port` to `-1` and `opera.profile` to "" (empty string) to disable `-debugproxy` and `-pd` command-line arguments |
@@ -229,10 +208,10 @@ This is a list of the official Opera Desktop versions supported by OperaDriver:
 
 #### Wrapper script
 
-Some Opera versions don't support the `-autotestmode`, `-debugproxy` or `-pd`
-arguments sent by OperaDriver by default.  You can bypass this problem by
-creating a wrapper script like this and pointing the capability `opera.binary`
-to its absolute path:
+Some Opera versions don't support the `-autotestmode`, `-debugproxy`
+or `-pd` arguments sent by OperaDriver by default.  You can bypass
+this problem by creating a wrapper script like this and pointing the
+capability `opera.binary` to its absolute path:
 
     #!/bin/sh
     # Wrapper to prevent the -autotestmode argument reaching this version of Opera
@@ -240,17 +219,35 @@ to its absolute path:
     `dirname $0`/opera
 
 
-Known issues 
-------------
+Development
+-----------
 
-* Modifier keys' states are not preserved across multiple `.sendKeys()` calls in `Actions`
-* Problems with Operas with IME feature enabled (Opera Mobile, Android)
-* No support for Opera Mini
-* No support for JavaScript alert/popup dialogues
-* `getScreenshotAs()` only returns image data of the current viewport, other parts of the image will be black
-* Requires Administrator privileges on Windows Vista and 7 when Opera 11.5x is installed in the default location (Program Files)
-* Not possible to move into an image enclosed in a link
-* Problems with coordinates on moving mouse back and forth past view port
-* Tests for typing multibyte characters will fail on Windows unless you have the correct charset
-* EcmaScript dblclick events are not triggered when double clicking an element
-* Opera requires full focus when testing on Mac
+While OperaDriver is officially maintained by Opera, it is [free
+software](http://fsfe.org/about/basics/freesoftware.en.html) and would
+only be possible thanks to [many volunteer
+contributors](https://github.com/operasoftware/operadriver/blob/master/AUTHORS).
+If you come across a reproducible bug, please [open an
+issue](http://code.google.com/p/selenium/issues/list) to submit a bug
+report.
+
+Even better, you can send a pull request!  Any changes you make must
+follow the [Google Coding
+Standards](http://code.google.com/p/java-coding-standards/wiki/Introduction)
+and have test cases attached to them if you introduce a new feature.
+
+Much of OperaDriver's code is shared with the other WebDriver
+implementations, and for working on this code base you should also
+familiarize yourself with the [Selenium code
+base](http://code.google.com/p/selenium/source/checkout).  There are
+also a few tips available for [working on
+Selenium](http://code.google.com/p/selenium/wiki/DeveloperTips).
+
+
+Support
+-------
+
+If you have problems or questions regarding OperaDriver or Selenium,
+there are many channels in which you can seek help:
+
+* __IRC__: The *#selenium* channel on the *irc.freenode.org* network
+* __Mailing lists__: The [webdriver](http://groups.google.com/group/webdriver) or [selenium-users](http://groups.google.com/group/selenium-users) mailing list

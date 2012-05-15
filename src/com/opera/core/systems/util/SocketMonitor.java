@@ -126,19 +126,22 @@ public class SocketMonitor {
     }
 
     lock.lock();
-    for (SelectionKey key : selector.selectedKeys()) {
-      try {
-        processSelectionKey(key);
-      } catch (CancelledKeyException cke) {
-        cke.printStackTrace();
-      } catch (IOException e) {
-        // what are you doing with the channel variable here?
-        //SelectableChannel channel = key.channel();
-        e.printStackTrace();
-        key.cancel();
+    try {
+      for (SelectionKey key : selector.selectedKeys()) {
+        try {
+          processSelectionKey(key);
+        } catch (CancelledKeyException cke) {
+          cke.printStackTrace();
+        } catch (IOException e) {
+          // what are you doing with the channel variable here?
+          //SelectableChannel channel = key.channel();
+          e.printStackTrace();
+          key.cancel();
+        }
       }
+    } finally {
+      lock.unlock();
     }
-    lock.unlock();
 
     return true;
   }
@@ -194,28 +197,20 @@ public class SocketMonitor {
     int triggerMask = key.readyOps();
     int wantedMask = 0;
 
-    if (key.isValid() && key.isAcceptable()) {
-      if (listener.canRead(channel)) {
-        wantedMask |= SelectionKey.OP_ACCEPT;
-      }
+    if (key.isValid() && key.isAcceptable() && listener.canRead(channel)) {
+      wantedMask |= SelectionKey.OP_ACCEPT;
     }
 
-    if (key.isValid() && key.isConnectable()) {
-      if (listener.canRead(channel)) {
-        wantedMask |= SelectionKey.OP_CONNECT;
-      }
+    if (key.isValid() && key.isConnectable() && listener.canRead(channel)) {
+      wantedMask |= SelectionKey.OP_CONNECT;
     }
 
-    if (key.isValid() && key.isReadable()) {
-      if (listener.canRead(channel)) {
-        wantedMask |= SelectionKey.OP_READ;
-      }
+    if (key.isValid() && key.isReadable() && listener.canRead(channel)) {
+      wantedMask |= SelectionKey.OP_READ;
     }
 
-    if (key.isValid() && key.isWritable()) {
-      if (listener.canWrite(channel)) {
-        wantedMask |= SelectionKey.OP_WRITE;
-      }
+    if (key.isValid() && key.isWritable() && listener.canWrite(channel)) {
+      wantedMask |= SelectionKey.OP_WRITE;
     }
 
     // In case we did not trigger something we want to poll for

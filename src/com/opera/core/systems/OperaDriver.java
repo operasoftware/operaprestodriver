@@ -16,11 +16,7 @@ limitations under the License.
 
 package com.opera.core.systems;
 
-import com.google.common.base.Charsets;
-import com.google.common.io.Resources;
-
 import com.opera.core.systems.common.lang.OperaStrings;
-import com.opera.core.systems.model.ScopeActions;
 import com.opera.core.systems.model.ScreenShotReply;
 import com.opera.core.systems.model.ScriptResult;
 import com.opera.core.systems.preferences.OperaScopePreferences;
@@ -28,7 +24,6 @@ import com.opera.core.systems.runner.OperaRunner;
 import com.opera.core.systems.runner.launcher.OperaLauncherRunner;
 import com.opera.core.systems.scope.exceptions.CommunicationException;
 import com.opera.core.systems.scope.exceptions.ResponseNotReceivedException;
-import com.opera.core.systems.scope.handlers.PbActionHandler;
 import com.opera.core.systems.scope.internal.OperaFlags;
 import com.opera.core.systems.scope.internal.OperaIntervals;
 import com.opera.core.systems.scope.services.ICookieManager;
@@ -79,10 +74,12 @@ import java.util.logging.Logger;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * OperaDriver is an implementation of the WebDriver interface that allows you to drive the Opera
- * web browser.  The driver uses the Scope protocol to communicate with Opera directly from Java.
+ * OperaDriver is a vendor-supported WebDriver implementation developed by Opera and volunteers that
+ * enables programmatic automation of different Opera products.  It is a part of the Selenium
+ * project.
  *
- * The implementation is vendor-supported and developed by Opera Software and volunteers.
+ * The driver implements the Scope protocol in Java to enable communication with Opera directly from
+ * Java.
  */
 public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
@@ -111,16 +108,17 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
   protected final OperaSettings settings;
   protected OperaRunner runner = null;
 
+  private ScopeServices services;
   private IEcmaScriptDebugger debugger;
   private IOperaExec exec;
   private IWindowManager windowManager;
   private ICoreUtils coreUtils;
   private ICookieManager cookieManager;
 
-  private ScopeServices services;
-  protected ScopeActions actionHandler;
-
   private OperaScopePreferences preferences;
+
+  private OperaMouse mouse;
+  private OperaKeyboard keyboard;
 
   protected Set<Integer> objectIds = new HashSet<Integer>();
   private int assignedWindowIds = 0;
@@ -203,13 +201,18 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     windowManager = services.getWindowManager();
     exec = services.getExec();
     coreUtils = services.getCoreUtils();
-    actionHandler = new PbActionHandler(services);
     cookieManager = services.getCookieManager();
-    // cookieManager.updateCookieSettings();
+    //cookieManager.updateCookieSettings();
     preferences = new OperaScopePreferences(services.getPrefs());
+
+    mouse = new OperaMouse(this);
+    keyboard = new OperaKeyboard(this);
 
     // Get product from Opera
     settings.setProduct(utils().getProduct());
+
+    // Enable popups for testing purposes
+    preferences().set("User Prefs", "Ignore Unrequested Popups", false);
 
     // Mobile needs to be able to autofocus elements for form input currently.  This is an ugly
     // workaround which should get solved by implementing a standalone bream Scope service.
@@ -293,8 +296,8 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     services.captureOperaIdle();
     windowManager.openUrl(activeWindowId, url);
 
-    if (oldUrl == null || (url.replace(oldUrl, "").length() == 0
-                           || url.replace(oldUrl, "").charAt(0) != '#')) {
+    if (oldUrl == null ||
+        (url.replace(oldUrl, "").isEmpty() || url.replace(oldUrl, "").charAt(0) != '#')) {
       if (settings.useIdle() && services.isOperaIdleAvailable()) {
         try {
           // Use idle timeout (which is lower) if timeout has not been manually set.
@@ -305,7 +308,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
         } catch (WebDriverException e) {
           // This could for example be a gif animation, preventing idle from being passed. Common
           // case, and should not result in test error.
-          logger.warning("idle: Timed out with exception: " + e);
+          logger.warning("idle: Timed out with exception: " + e.getMessage());
         }
       } else {
         try {
@@ -709,9 +712,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
   public class OperaOptions implements Options {
 
     public void addCookie(Cookie cookie) {
-
       // TODO: Numeric overflow
-
       if (cookie.getExpiry() == null) {
         cookie =
             new Cookie(cookie.getName(), cookie.getValue(), cookie.getDomain(), cookie.getPath(),
@@ -736,11 +737,9 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
       gc();
 
-      /*
-       * Date dateInPast = new Date(0); Cookie toDelete = new Cookie(cookie.getName(),
-       * cookie.getValue(), cookie.getDomain(), cookie.getPath(), dateInPast, false);
-       * addCookie(toDelete);
-       */
+      //Date dateInPast = new Date(0); Cookie toDelete = new Cookie(cookie.getName(),
+      //cookie.getValue(), cookie.getDomain(), cookie.getPath(), dateInPast, false);
+      //addCookie(toDelete);
     }
 
     public void deleteAllCookies() {
@@ -776,12 +775,10 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
       return null;
 
-      /*
-       * String value = debugger.executeJavascript("var getCookieNamed = function(key)\n"+ "{"+
-       * "var value = new RegExp(key + \"=([^;]*)\").exec(document.cookie);"+
-       * "return value && decodeURIComponent(value[1]);"+ "}\n"+ "return getCookieNamed('" + name +
-       * "')"); return (value == null) ? null : new Cookie(name, value);
-       */
+      //String value = debugger.executeJavascript("var getCookieNamed = function(key)\n"+ "{"+
+      //"var value = new RegExp(key + \"=([^;]*)\").exec(document.cookie);"+
+      //"return value && decodeURIComponent(value[1]);"+ "}\n"+ "return getCookieNamed('" + name +
+      //"')"); return (value == null) ? null : new Cookie(name, value);
     }
 
     public OperaTimeouts timeouts() {
@@ -804,7 +801,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
   }
 
-  public class OperaTimeouts implements Timeouts {
+  public static class OperaTimeouts implements Timeouts {
 
     public Timeouts implicitlyWait(long time, TimeUnit unit) {
       OperaIntervals.IMPLICIT_WAIT.setValue(TimeUnit.MILLISECONDS.convert(time, unit));
@@ -860,14 +857,11 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
       if (objectId == null) {
         return null;
-      }
-      if (result.getClassName().endsWith("Element")) {
+      } else if (result.getClassName().endsWith("Element")) {
         return new OperaWebElement(this, objectId);
-      }
-      if (result.getClassName().equals("NodeList")) {
+      } else if (result.getClassName().equals("NodeList")) {
         return processElements(objectId);
-      }
-      if (result.getClassName().equals("Array") || result.getClassName().equals("Object")) {
+      } else if (result.getClassName().equals("Array") || result.getClassName().equals("Object")) {
         return debugger.examineScriptResult(objectId);
       }
     }
@@ -880,11 +874,11 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
   }
 
   public Keyboard getKeyboard() {
-    return new OperaKeyboard(this);
+    return keyboard;
   }
 
   public Mouse getMouse() {
-    return new OperaMouse(this);
+    return mouse;
   }
 
   // Following methods are Opera-specific extensions to the WebDriver interface:
@@ -908,24 +902,6 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
    */
   public ScreenShotReply saveScreenshot(long timeout, String... hashes) {
     return runner.saveScreenshot(timeout, hashes);
-  }
-
-  /**
-   * Returns the version number of driver.
-   *
-   * @return version number
-   */
-  public String getVersion() {
-    if (version == null) {
-      URL res = OperaDriver.class.getClassLoader().getResource("VERSION");
-
-      try {
-        version = Resources.toString(res, Charsets.UTF_8);
-      } catch (Exception e) {
-        version = "(Unknown)";
-      }
-    }
-    return version;
   }
 
   /**
@@ -1010,7 +986,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
      *
      * @return process ID, or null if not available
      */
-    public int getPID() {
+    public Integer getPID() {
       return coreUtils.getProcessID();
     }
 

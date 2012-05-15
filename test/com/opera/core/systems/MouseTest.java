@@ -21,7 +21,6 @@ import com.opera.core.systems.testing.OperaDriverTestCase;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.Mouse;
@@ -34,18 +33,14 @@ import static org.junit.matchers.JUnitMatchers.containsString;
 
 public class MouseTest extends OperaDriverTestCase {
 
-  public static Mouse mouse;
+  public Mouse mouse;
   public OperaWebElement log;
   public OperaWebElement test;
 
-  @BeforeClass
-  public static void beforeAll() {
-    mouse = driver.getMouse();
-  }
-
   @Before
   public void beforeEach() {
-    driver.get(fixture("mouse.html"));
+    mouse = driver.getMouse();
+    driver.navigate().to(pages.mouse);
     log = (OperaWebElement) driver.findElementById("log");
     test = (OperaWebElement) driver.findElementById("test");
   }
@@ -58,7 +53,7 @@ public class MouseTest extends OperaDriverTestCase {
   }
 
   @Test
-  public void testMouseOver() {
+  public void mouseOver() {
     String hash = test.getImageHash();
     mouse.mouseMove(test.getCoordinates());
     assertNotSame(hash, test.getImageHash());
@@ -66,13 +61,13 @@ public class MouseTest extends OperaDriverTestCase {
 
   @Test
   @Ignore(value = "Unknown why we're not triggering dblclick ES events, investigate")
-  public void testDoubleClick() {
+  public void doubleClick() {
     mouse.doubleClick(test.getCoordinates());
     assertThat(log(), containsString("dblclick"));
   }
 
   @Test
-  public void testContextClick() {
+  public void contextClick() {
     mouse.contextClick(test.getCoordinates());
 
     assertTrue(log().contains("mousedown 2"));

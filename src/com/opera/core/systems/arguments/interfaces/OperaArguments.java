@@ -38,7 +38,7 @@ public interface OperaArguments extends Iterable<OperaArgument> {
    *
    * @param argument the argument key to add
    */
-  public void add(String argument);
+  void add(String argument);
 
   /**
    * Adds a new argument with a value to the command-line argument list representation.  A new
@@ -47,7 +47,7 @@ public interface OperaArguments extends Iterable<OperaArgument> {
    * @param argument the argument key to add
    * @param value    the value the argument should hold
    */
-  public void add(String argument, String value);
+  void add(String argument, String value);
 
   /**
    * Adds a new argument to the command-line argument list representation.  The {@link
@@ -55,7 +55,7 @@ public interface OperaArguments extends Iterable<OperaArgument> {
    *
    * @param argument the argument to add
    */
-  public void add(OperaArgument argument);
+  void add(OperaArgument argument);
 
   /**
    * Convenience method to access the given indexed argument in the command-line list
@@ -64,35 +64,35 @@ public interface OperaArguments extends Iterable<OperaArgument> {
    * @param index the argument to fetch
    * @return an argument
    */
-  public OperaArgument get(int index);
+  OperaArgument get(int index);
 
   /**
    * Gets the list of all arguments, each represented by {@link OperaArgument}.
    *
    * @return list of all arguments
    */
-  public List<OperaArgument> getArguments();
+  List<OperaArgument> getArguments();
 
   /**
    * Gets an iterator for all arguments present in this collection.
    *
    * @return iterator of all arguments
    */
-  public Iterator<OperaArgument> iterator();
+  Iterator<OperaArgument> iterator();
 
   /**
    * Gets all arguments as a string list, including the argument's values.
    *
    * @return list of all arguments, including values
    */
-  public List<String> getArgumentsAsStringList();
+  List<String> getArgumentsAsStringList();
 
   /**
    * Gets the string representation of the command-line, as it would be used externally.
    *
    * @return full command-line including argument keys and values
    */
-  public String toString();
+  String toString();
 
   /**
    * Fetches the number of arguments in the command-line list representation.  Convenience method
@@ -100,7 +100,7 @@ public interface OperaArguments extends Iterable<OperaArgument> {
    *
    * @return number of arguments (not including values)
    */
-  public int size();
+  int size();
 
   /**
    * Merge this command-line list representation with another representation.  Note that this will
@@ -110,7 +110,7 @@ public interface OperaArguments extends Iterable<OperaArgument> {
    * @param extraArguments the {@link OperaArguments} to merge into this
    * @return a reference to self
    */
-  public OperaArguments merge(OperaArguments extraArguments);
+  OperaArguments merge(OperaArguments extraArguments);
 
   /**
    * Gets the command-line argument sign used by this implementation of {@link OperaArguments}.
@@ -121,6 +121,6 @@ public interface OperaArguments extends Iterable<OperaArgument> {
    * @return a command-line argument sign
    * @see com.opera.core.systems.arguments.OperaArgument.OperaArgumentSign
    */
-  public String sign();
+  String sign();
 
 }

@@ -22,7 +22,6 @@ import com.opera.core.systems.model.OperaColor;
 import com.opera.core.systems.model.ScreenShotReply;
 import com.opera.core.systems.scope.exceptions.ResponseNotReceivedException;
 import com.opera.core.systems.scope.internal.OperaColors;
-import com.opera.core.systems.scope.internal.OperaFlags;
 import com.opera.core.systems.scope.internal.OperaKeys;
 import com.opera.core.systems.scope.internal.OperaMouseKeys;
 import com.opera.core.systems.scope.services.IEcmaScriptDebugger;
@@ -123,7 +122,7 @@ public class OperaWebElement extends RemoteWebElement {
     if (getTagName().equals("OPTION")) {
       callMethod("return " + OperaAtoms.CLICK + "(locator)");
     } else {
-      parent.actionHandler.click(this, "");
+      parent.getMouse().click(getCoordinates());
     }
 
     try {
@@ -159,7 +158,8 @@ public class OperaWebElement extends RemoteWebElement {
   public String getAttribute(String attribute) {
     assertElementNotStale();
 
-    if (attribute.toLowerCase().equals("value")) {
+    // TODO(andreastt): Investigate whether this check is still needed
+    if (attribute.equalsIgnoreCase("value")) {
       return callMethod("if(/^input|select|option|textarea$/i.test(locator.nodeName)){"
                         + "return locator.value;" + "}" + "return locator.textContent;");
     } else {
@@ -195,10 +195,8 @@ public class OperaWebElement extends RemoteWebElement {
   public void clear() {
     verifyCanInteractWithElement();
 
-    if (isEnabled()) {
-      if (!Boolean.valueOf(getAttribute("readonly"))) {
-        executeMethod("return " + OperaAtoms.CLEAR + "(locator)");
-      }
+    if (isEnabled() && !Boolean.valueOf(getAttribute("readonly"))) {
+      executeMethod("return " + OperaAtoms.CLEAR + "(locator)");
     }
   }
 
@@ -212,15 +210,15 @@ public class OperaWebElement extends RemoteWebElement {
     // Keys that have been held down, and need to be released
     ArrayList<String> heldKeys = new ArrayList<String>();
 
-    if (getTagName().equalsIgnoreCase("input")
-        && (hasAttribute("type") && getAttribute("type").equals("file"))) {
+    if (getTagName().equals("INPUT")
+        && (hasAttribute("type") && getAttribute("type").equalsIgnoreCase("file"))) {
       click();
     } else {
       executeMethod("locator.focus()");
       // When focused textareas return the cursor to the last position it was at. Inputs place the
       // cursor at the beginning, and so we need to move it to the end. We do this by pre-pending an
       // "End" key to the keys to send (in a round-about way).
-      if (getTagName().equalsIgnoreCase("input")) {
+      if (getTagName().equals("INPUT")) {
         // Javascript from webdriver_session.cc in ChromeDriver
         executeMethod("function(elem) {" + "  var doc = elem.ownerDocument || elem;"
                       + "  var prevActiveElem = doc.activeElement;"
@@ -466,7 +464,10 @@ public class OperaWebElement extends RemoteWebElement {
    *
    * @param colors list of colors to check for.
    * @return true if the page contains any of the given colors, false otherwise.
+   * @deprecated
    */
+  @SuppressWarnings("unused")
+  @Deprecated
   public boolean containsColor(OperaColors... colors) {
     assertElementNotStale();
 
@@ -615,7 +616,7 @@ public class OperaWebElement extends RemoteWebElement {
 
   private Coordinates coordinates = new Coordinates() {
     public Point getLocationOnScreen() {
-      throw new UnsupportedOperationException("Not supported yet.");
+      throw new UnsupportedOperationException();
     }
 
     public Point getLocationInViewPort() {
@@ -639,7 +640,7 @@ public class OperaWebElement extends RemoteWebElement {
     }
 
     public Object getAuxiliry() {
-      throw new UnsupportedOperationException("Not supported yet");
+      throw new UnsupportedOperationException();
     }
   };
 

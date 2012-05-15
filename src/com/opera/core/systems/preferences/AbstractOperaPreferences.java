@@ -19,8 +19,6 @@ package com.opera.core.systems.preferences;
 import com.opera.core.systems.common.lang.OperaStrings;
 import com.opera.core.systems.model.OperaColor;
 
-import org.openqa.selenium.WebDriverException;
-
 import java.io.File;
 import java.util.Collection;
 import java.util.Iterator;

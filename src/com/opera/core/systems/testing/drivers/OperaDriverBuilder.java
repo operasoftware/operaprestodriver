@@ -17,7 +17,6 @@ limitations under the License.
 package com.opera.core.systems.testing.drivers;
 
 import com.google.common.base.Supplier;
-import com.google.common.base.Throwables;
 
 import com.opera.core.systems.OperaDriver;
 import com.opera.core.systems.OperaSettings;
@@ -25,8 +24,9 @@ import com.opera.core.systems.OperaSettings;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.logging.Level;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * OperaDriverBuilder is a builder that supplies you with instances of {@link
@@ -42,7 +42,7 @@ import java.util.logging.Level;
  */
 public class OperaDriverBuilder implements Supplier<OperaDriver> {
 
-  private Class driverClass;
+  private Class driverClass = null;
   private OperaDriverSupplier driverSupplier;
   private OperaSettings settings = new OperaSettings();
   private Level loggingLevel = null;
@@ -51,8 +51,9 @@ public class OperaDriverBuilder implements Supplier<OperaDriver> {
    * By default, this class provides a plain {@link OperaDriver} instance object with the default
    * desired capabilities specified in Selenium's {@link DesiredCapabilities#opera()}.
    */
+  @SuppressWarnings("unused")
   public OperaDriverBuilder() {
-    this(new DefaultOperaDriverSupplier(new OperaSettings()));
+    this(new DefaultOperaDriverSupplier());
   }
 
   /**
@@ -72,6 +73,7 @@ public class OperaDriverBuilder implements Supplier<OperaDriver> {
    *
    * @param driverImplementation class reference to driver implementation
    */
+  @SuppressWarnings("unused")
   public OperaDriverBuilder(Class<? extends OperaDriver> driverImplementation) {
     driverClass = driverImplementation;
   }
@@ -106,16 +108,17 @@ public class OperaDriverBuilder implements Supplier<OperaDriver> {
   public OperaDriver get() {
     OperaDriver driver;
 
-    // Custom modifications based on local methods
+    // Overrides defined by builder
     if (loggingLevel != null) {
       settings.logging().setLevel(loggingLevel);
     }
 
     if (driverSupplier == null) {
+      checkNotNull(driverClass, "No driver class specified");
+
       try {
-        Class
-            constructor =
-            driverClass.getClass().getConstructor(Class.class).newInstance(settings);
+        Class constructor = driverClass
+            .getClass().getConstructor(Class.class).newInstance(settings);
         driver = (OperaDriver) constructor.newInstance();
       } catch (NoSuchMethodException e) {
         throw new RuntimeException("Unable to recognize implementation's constructor");
@@ -132,28 +135,6 @@ public class OperaDriverBuilder implements Supplier<OperaDriver> {
     }
 
     return driver;
-  }
-
-  private OperaSettings getDefaultSettings() {
-    OperaSettings s = new OperaSettings();
-
-    if (driverSupplier == null) {
-      try {
-        Method getDefaultSettings;
-        getDefaultSettings = driverClass.getClass().getMethod("getDefaultSettings");
-        s = (OperaSettings) getDefaultSettings.invoke(driverClass.getClass());
-      } catch (NoSuchMethodException e) {
-        // fall through
-      } catch (InvocationTargetException e) {
-        throw Throwables.propagate(e);
-      } catch (IllegalAccessException e) {
-        throw Throwables.propagate(e);
-      }
-    } else {
-      s = driverSupplier.getSettings();
-    }
-
-    return s;
   }
 
 }

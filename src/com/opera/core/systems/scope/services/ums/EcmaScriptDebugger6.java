@@ -262,7 +262,7 @@ public class EcmaScriptDebugger6 extends EcmaScriptDebugger {
 
       for (Property property : properties) {
         if (property.getType().equals("number") && property.getName().equals("length")) {
-          // ignore ?!?
+          // ignore these, they just tell us about the length of the result
         } else if (property.getType().equals("object")) {
           result.add(examineScriptResult(property.getObjectValue().getObjectID(), visitedIDs));
         } else {
