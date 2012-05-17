@@ -542,7 +542,7 @@ public class OperaDesktopDriverTest extends OperaDesktopDriverTestCase {
   public void testKeyAPIKeyPress() {
     Integer startWindowCount = driver.getQuickWindowCount();
     driver.keyPress("t", ctrlModifier);
-
+    driver.waitForWindowActivated();
 
     assertEquals(startWindowCount + 1, driver.getQuickWindowCount());
   }
@@ -552,6 +552,7 @@ public class OperaDesktopDriverTest extends OperaDesktopDriverTestCase {
     Integer startWindowCount = driver.getQuickWindowCount();
     driver.keyDown("w", ctrlModifier);
     driver.keyUp("w", ctrlModifier);
+    driver.waitForWindowClose();
 
     assertEquals(startWindowCount - 1, driver.getQuickWindowCount());
   }
