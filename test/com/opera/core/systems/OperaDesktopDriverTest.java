@@ -536,6 +536,35 @@ public class OperaDesktopDriverTest extends OperaDesktopDriverTestCase {
   }
 
   @Test
+  public void testKeyAPIKeyPress() {
+    Integer startWindowCount = driver.getQuickWindowCount();
+    driver.keyPress("t", ctrlModifier);
+
+    assertEquals(startWindowCount + 1, driver.getQuickWindowCount());
+  }
+
+  @Test
+  public void testKeyAPIKeyDownKeyUp() {
+    Integer startWindowCount = driver.getQuickWindowCount();
+    driver.keyDown("w", ctrlModifier);
+    driver.keyUp("w", ctrlModifier);
+
+    assertEquals(startWindowCount - 1, driver.getQuickWindowCount());
+  }
+
+  // TODO: Some test to check if the modifiers don't "stick" would be appriopiate as well.
+
+  @Test
+  public void testOperaAction()
+  {
+    String expectedValue = "http://opera.fake/";
+    driver.operaDesktopAction("Set Preference", 0, "Auto Update|Autoupdate Server=" + expectedValue, "");
+    String newValue = driver.getPref("Auto Update", "Autoupdate Server");
+
+    assertEquals(newValue, expectedValue);
+  }
+
+  @Test
   public void testQuickMenuApiGetQuickMenuList()
   {
     // Show the top menu bar, right after a fresh start it is disabled in favor of
@@ -579,6 +608,13 @@ public class OperaDesktopDriverTest extends OperaDesktopDriverTestCase {
     else
       fileMenuItem.click(SystemInputProtos.MouseInfo.MouseButton.LEFT, 1, Collections.<SystemInputProtos.ModifierPressed>emptyList());
 
+    List<QuickMenuItem> lll = driver.getQuickMenuItemList();
+    
+    for (QuickMenuItem iii: lll)
+    {
+      System.out.printf("'%s' '%s' '%s' '%s'\n", iii.getName(), iii.getText(), iii.getShortcut(), iii.getShortcutLetter());
+    }
+    
     Integer quickMenuItemListAfter = driver.getQuickMenuItemList().size();
 
     assertTrue(quickMenuItemListBefore < quickMenuItemListAfter);
@@ -612,24 +648,80 @@ public class OperaDesktopDriverTest extends OperaDesktopDriverTestCase {
 
   @Test
   public void testQuickMenuApiGetQuickMenuItemByPosition() {
+    Integer desiredPosition = null;
+    if (Platform.getCurrent() == Platform.MAC)
+      desiredPosition = 10;
+    else
+      desiredPosition = 9;
+
     QuickMenuItem menuItemByName = driver.getQuickMenuItemByName("Show popup menu, Developer Menu");
-    QuickMenuItem menuItemByPosition = driver.getQuickMenuItemByPosition(10, "Browser View Menu");
+    QuickMenuItem menuItemByPosition = driver.getQuickMenuItemByPosition(desiredPosition, "Browser View Menu");
 
     assertEquals(menuItemByName.toFullString(), menuItemByPosition.toFullString());
   }
 
   @Test
   public void testQuickMenuApiGetQuickMenuItemByAccKey() {
-    QuickMenuItem menuItemByName = driver.getQuickMenuItemByName("Show popup menu, Developer Menu");
-    QuickMenuItem menuItemByAccKey = driver.getQuickMenuItemByAccKey("q", "Browser View Menu");
+    String itemName = null;
+    String accKey = null;
+    switch (Platform.getCurrent()) {
+      case MAC:
+        break;
+      case WINDOWS:
+      case XP:
+      case VISTA:
+        itemName = "Enter fullscreen";
+        accKey = "f";
+        break;
+      case UNIX:
+      case LINUX:
+        break;
+      case ANDROID:
+        break;
+      default:
+      case ANY:
+        assertNotNull("Unknown OS", null);
+        break;
+    }
+
+    assertNotNull(itemName);
+    assertNotNull(accKey);
+
+    QuickMenuItem menuItemByName = driver.getQuickMenuItemByName(itemName);
+    QuickMenuItem menuItemByAccKey = driver.getQuickMenuItemByAccKey(accKey, "Browser View Menu");
 
     assertEquals(menuItemByName.toFullString(), menuItemByAccKey.toFullString());
   }
 
   @Test
   public void testQuickMenuApiGetQuickMenuItemByShortcut() {
-    QuickMenuItem menuItemByName = driver.getQuickMenuItemByName("Show popup menu, Developer Menu");
-    QuickMenuItem menuItemByShortcut = driver.getQuickMenuItemByShortcut("F12");
+    String itemName = null;
+    String shortcutKey = null;
+    switch (Platform.getCurrent()) {
+      case MAC:
+        break;
+      case WINDOWS:
+      case XP:
+      case VISTA:
+        itemName = "Enter fullscreen";
+        shortcutKey = "F11";
+        break;
+      case UNIX:
+      case LINUX:
+        break;
+      case ANDROID:
+        break;
+      default:
+      case ANY:
+        assertNotNull("Unknown OS", null);
+        break;
+    }
+
+    assertNotNull(itemName);
+    assertNotNull(shortcutKey);
+
+    QuickMenuItem menuItemByName = driver.getQuickMenuItemByName(itemName);
+    QuickMenuItem menuItemByShortcut = driver.getQuickMenuItemByShortcut(shortcutKey);
 
     assertEquals(menuItemByName.toFullString(), menuItemByShortcut.toFullString());
   }
@@ -660,36 +752,4 @@ public class OperaDesktopDriverTest extends OperaDesktopDriverTestCase {
 
     assertTrue(quickMenuItemListBefore > quickMenuItemListAfter);
   }
-
-
-  @Test
-  public void testKeyAPIKeyPress() {
-    Integer startWindowCount = driver.getQuickWindowCount();
-    driver.keyPress("t", ctrlModifier);
-
-    assertEquals(startWindowCount + 1, driver.getQuickWindowCount());
-  }
-
-  @Test
-  public void testKeyAPIKeyDownKeyUp() {
-    Integer startWindowCount = driver.getQuickWindowCount();
-    driver.keyDown("w", ctrlModifier);
-    driver.keyUp("w", ctrlModifier);
-
-    assertEquals(startWindowCount - 1, driver.getQuickWindowCount());
-  }
-
-  // TODO: Some test to check if the modifiers don't "stick" would be appriopiate as well.
-
-  @Test
-  public void testOperaAction()
-  {
-    String expectedValue = "http://opera.fake/";
-    driver.operaDesktopAction("Set Preference", 0, "Auto Update|Autoupdate Server=" + expectedValue, "");
-    String newValue = driver.getPref("Auto Update", "Autoupdate Server");
-
-    assertEquals(newValue, expectedValue);
-  }
-
-
 }
