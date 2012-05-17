@@ -156,12 +156,14 @@ public class OperaDesktopDriverTest extends OperaDesktopDriverTestCase {
   }
 
   @Test
-  public void testSmokeAutoStartOperaPathReportedOK()
-  {
-    String binaryPath = setOperaPath();
-    String operaPathFromDriver = driver.getOperaPath();
+  public void testSmokeAutoStartOperaPathReportedOK() throws IOException {
+    String setPath = setOperaPath();
+    String readPath = driver.getOperaPath();
 
-    assertEquals(operaPathFromDriver, binaryPath);
+    File binaryFile = new File(setPath).getCanonicalFile();
+    File readFile = new File(readPath).getCanonicalFile();
+
+    assertEquals(binaryFile, readFile);
   }
 
   @Test
