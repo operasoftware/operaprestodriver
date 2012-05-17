@@ -38,6 +38,7 @@ import static org.openqa.selenium.Platform.UNIX;
 public class OperaPaths {
 
   private static final Platform currentPlatform = Platform.getCurrent();
+  private static String overridenOperaPath = null;
 
   /**
    * This method will try and find Opera on any platform. It performs the following steps:
@@ -52,7 +53,7 @@ public class OperaPaths {
    * @return the path to Opera, or null
    */
   public static String operaPath() {
-    String envPath = System.getenv("OPERA_PATH");
+    String envPath = getOperaPathEnvVar();
 
     if (isPathValid(envPath)) {
       return envPath;
@@ -60,6 +61,27 @@ public class OperaPaths {
       throw new WebDriverException("Path \"" + envPath + "\" in OPERA_PATH does not exist");
     }
     return findOperaInstallationPath();
+  }
+
+  public static void overrideOperaPathEnvVar(String overrideValue)
+  {
+    overridenOperaPath = overrideValue;
+  }
+
+
+  public static String getOperaPathEnvVar()
+  {
+    String retValue = null;
+
+    if (isPathValid(overridenOperaPath))
+      retValue = overridenOperaPath;
+    else
+    {
+      String envPath = System.getenv("OPERA_PATH");
+      if (isPathValid(envPath))
+        retValue = envPath;
+    }
+    return retValue;
   }
 
   /**
