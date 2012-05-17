@@ -275,7 +275,7 @@ public class OperaDesktopDriverTest extends OperaDesktopDriverTestCase {
       assertFalse("Driver doesn't report the Opera as stopped even thou it should.", driver.isOperaRunning());
       assertFalse("The browser process should NOT be running.", isPidRunning(browserPid));
 
-      driver.startOpera();
+      driver.resetOperaPrefs("");
       browserPid = driver.getPid();
       assertTrue("PID reported by browser should > 0", browserPid > 0);
       assertTrue("Driver doesn't report the Opera as running even thou it should.", driver.isOperaRunning());
