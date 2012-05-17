@@ -17,8 +17,10 @@ limitations under the License.
 package com.opera.core.systems;
 
 import com.opera.core.systems.scope.protos.DesktopWmProtos;
+import com.opera.core.systems.scope.protos.PrefsProtos;
 import com.opera.core.systems.scope.protos.SystemInputProtos;
 import org.junit.*;
+import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
@@ -63,7 +65,7 @@ public class OperaDesktopDriverTest extends OperaDesktopDriverTestCase {
   @Test(expected = WebDriverException.class)
   @Ignore
   public void testSmokeNoAutoStartThrows() {
-    setEnvVariable("OPERA_PATH", "");
+    OperaPaths.overrideOperaPathEnvVar(null);
     driver = new TestOperaDesktopDriver(getDefaultCaps());
     // The driver is supposed to wait for connection that never comes and throw
   }
@@ -564,10 +566,19 @@ public class OperaDesktopDriverTest extends OperaDesktopDriverTestCase {
   }
 
   @Test
-  public void testQuickMenuClickMenuItemToOpenMenu() {
-    QuickMenuItem fileMenuItem = driver.getQuickMenuItemByName("Browser Tools Menu");
+  //@Ignore
+  public void testQuickMenuClickMenuItemToOpenMenu() throws Exception {
+    QuickMenuItem fileMenuItem = driver.getQuickMenuItemByName("Browser View Menu");
+    assertNotNull(fileMenuItem);
     Integer quickMenuItemListBefore = driver.getQuickMenuItemList().size();
-    fileMenuItem.click(SystemInputProtos.MouseInfo.MouseButton.LEFT, 1, Collections.<SystemInputProtos.ModifierPressed>emptyList());
+
+    if (Platform.getCurrent() == Platform.MAC) {
+      driver.pressQuickMenuItem("View", false);
+      driver.waitForMenuItemPressed("View");
+    }
+    else
+      fileMenuItem.click(SystemInputProtos.MouseInfo.MouseButton.LEFT, 1, Collections.<SystemInputProtos.ModifierPressed>emptyList());
+
     Integer quickMenuItemListAfter = driver.getQuickMenuItemList().size();
 
     assertTrue(quickMenuItemListBefore < quickMenuItemListAfter);
@@ -575,47 +586,49 @@ public class OperaDesktopDriverTest extends OperaDesktopDriverTestCase {
 
   @Test
   public void testQuickMenuApiGetQuickMenuItemByAction() {
-    QuickMenuItem menuItemByName = driver.getQuickMenuItemByName("Show popup menu, Quick Preferences Menu");
+    QuickMenuItem menuItemByName = driver.getQuickMenuItemByName("Show popup menu, Developer Menu");
+    assertNotNull(menuItemByName);
     QuickMenuItem menuItemByAction = driver.getQuickMenuItemByAction("Show popup menu");
+    assertNotNull(menuItemByAction);
 
     assertEquals(menuItemByName.toFullString(), menuItemByAction.toFullString());
   }
 
   @Test
   public void testQuickMenuApiGetQuickMenuItemBySubmenu() {
-    QuickMenuItem menuItemByName = driver.getQuickMenuItemByName("Show popup menu, Quick Preferences Menu");
-    QuickMenuItem menuItemBySubmenu = driver.getQuickMenuItemBySubmenu("Quick Preferences Menu");
+    QuickMenuItem menuItemByName = driver.getQuickMenuItemByName("Show popup menu, Developer Menu");
+    QuickMenuItem menuItemBySubmenu = driver.getQuickMenuItemBySubmenu("Developer Menu");
 
     assertEquals(menuItemByName.toFullString(), menuItemBySubmenu.toFullString());
   }
 
   @Test
   public void testQuickMenuApiGetQuickMenuItemByText() {
-    QuickMenuItem menuItemByName = driver.getQuickMenuItemByName("Show popup menu, Quick Preferences Menu");
-    QuickMenuItem menuItemByText = driver.getQuickMenuItemByText("Quick Preferences");
+    QuickMenuItem menuItemByName = driver.getQuickMenuItemByName("Show popup menu, Developer Menu");
+    QuickMenuItem menuItemByText = driver.getQuickMenuItemByText("Developer Tools");
 
     assertEquals(menuItemByName.toFullString(), menuItemByText.toFullString());
   }
 
   @Test
   public void testQuickMenuApiGetQuickMenuItemByPosition() {
-    QuickMenuItem menuItemByName = driver.getQuickMenuItemByName("Show popup menu, Quick Preferences Menu");
-    QuickMenuItem menuItemByPosition = driver.getQuickMenuItemByPosition(13, "Browser Tools Menu");
+    QuickMenuItem menuItemByName = driver.getQuickMenuItemByName("Show popup menu, Developer Menu");
+    QuickMenuItem menuItemByPosition = driver.getQuickMenuItemByPosition(10, "Browser View Menu");
 
     assertEquals(menuItemByName.toFullString(), menuItemByPosition.toFullString());
   }
 
   @Test
   public void testQuickMenuApiGetQuickMenuItemByAccKey() {
-    QuickMenuItem menuItemByName = driver.getQuickMenuItemByName("Show popup menu, Quick Preferences Menu");
-    QuickMenuItem menuItemByAccKey = driver.getQuickMenuItemByAccKey("q", "Browser Tools Menu");
+    QuickMenuItem menuItemByName = driver.getQuickMenuItemByName("Show popup menu, Developer Menu");
+    QuickMenuItem menuItemByAccKey = driver.getQuickMenuItemByAccKey("q", "Browser View Menu");
 
     assertEquals(menuItemByName.toFullString(), menuItemByAccKey.toFullString());
   }
 
   @Test
   public void testQuickMenuApiGetQuickMenuItemByShortcut() {
-    QuickMenuItem menuItemByName = driver.getQuickMenuItemByName("Show popup menu, Quick Preferences Menu");
+    QuickMenuItem menuItemByName = driver.getQuickMenuItemByName("Show popup menu, Developer Menu");
     QuickMenuItem menuItemByShortcut = driver.getQuickMenuItemByShortcut("F12");
 
     assertEquals(menuItemByName.toFullString(), menuItemByShortcut.toFullString());
@@ -623,17 +636,26 @@ public class OperaDesktopDriverTest extends OperaDesktopDriverTestCase {
 
   @Test
   public void testQuickMenuApiGetQuickMenuItemByStringId() {
-    QuickMenuItem menuItemByName = driver.getQuickMenuItemByName("Show popup menu, Quick Preferences Menu");
-    QuickMenuItem menuItemByStringId = driver.getQuickMenuItemByStringId("MI_IDM_CONTROL_MENU_ACCEPT_POPUPS_PARENT");
+    QuickMenuItem menuItemByName = driver.getQuickMenuItemByName("Show popup menu, Developer Menu");
+    QuickMenuItem menuItemByStringId = driver.getQuickMenuItemByStringId("D_DEVTOOLS_TITLE");
 
     assertEquals(menuItemByName.toFullString(), menuItemByStringId.toFullString());
   }
 
   @Test
+  @Ignore
   public void testQuickMenuClickMenuItemToCloseMenu() {
-    QuickMenuItem fileMenuItem = driver.getQuickMenuItemByName("Browser Tools Menu");
+    QuickMenuItem fileMenuItem = driver.getQuickMenuItemByName("Browser View Menu");
+    assertNotNull(fileMenuItem);
     Integer quickMenuItemListBefore = driver.getQuickMenuItemList().size();
-    fileMenuItem.click(SystemInputProtos.MouseInfo.MouseButton.LEFT, 1, Collections.<SystemInputProtos.ModifierPressed>emptyList());
+
+    if (Platform.getCurrent() == Platform.MAC) {
+      driver.pressQuickMenuItem("View", false);
+      driver.waitForMenuItemPressed("View");
+    }
+    else
+      fileMenuItem.click(SystemInputProtos.MouseInfo.MouseButton.LEFT, 1, Collections.<SystemInputProtos.ModifierPressed>emptyList());
+
     Integer quickMenuItemListAfter = driver.getQuickMenuItemList().size();
 
     assertTrue(quickMenuItemListBefore > quickMenuItemListAfter);
