@@ -59,7 +59,22 @@ public class OperaPaths {
     } else if (envPath != null && envPath.length() > 0) {
       throw new WebDriverException("Path \"" + envPath + "\" in OPERA_PATH does not exist");
     }
+    return findOperaInstallationPath();
+  }
 
+  /**
+   * Searches for an existing Opera installation on the machine. Performs the
+   * following steps:
+   *
+   * 1. Checks if Opera exists at the default location on the respective OS;
+   * 2. (Unix) Call `which opera` to find the location;
+   * 3. Give up and return null.
+   *
+   * @return Path to the Opera executable or NULL if none was found.
+   */
+
+  public static String findOperaInstallationPath()
+  {
     List<String> paths = new ArrayList<String>();
 
     switch (currentPlatform) {
@@ -88,7 +103,7 @@ public class OperaPaths {
         paths.add(programFiles + "\\Opera Mobile Emulator\\OperaMobileEmu.exe");
         break;
 
-      default: // Android?
+      default:  // Android?
         throw new WebDriverException("Unable to resolve the path to Opera on this platform");
     }
 
