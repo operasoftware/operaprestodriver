@@ -77,7 +77,7 @@ public abstract class OperaDesktopDriverTestCase {
   }
 
   public String setOperaPath() {
-    String binaryPath = OperaPaths.operaPathNoEnv();
+    String binaryPath = OperaPaths.findOperaInstallationPath();
     assertNotNull("Could not find an Opera installation on this machine.", binaryPath);
     setEnvVariable("OPERA_PATH", binaryPath);
     return binaryPath;
