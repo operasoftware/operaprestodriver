@@ -47,6 +47,26 @@ public class OperaMouse implements Mouse {
     parent.getExecService().mouseAction(p.x, p.y, 2, OperaMouseKeys.LEFT);
   }
 
+  /**
+   * Triple click is an Opera specific way of selecting a sentence.
+   *
+   * @param where to click
+   */
+  public void tripleClick(Coordinates where) {
+    Point p = getPoint(where, "triple click");
+    parent.getExecService().mouseAction(p.x, p.y, 3, OperaMouseKeys.LEFT);
+  }
+
+  /**
+   * Quadruple click is an Opera specific way of selecting a paragraph.
+   *
+   * @param where to click
+   */
+  public void quadrupleClick(Coordinates where) {
+    Point p = getPoint(where, "quadruple click");
+    parent.getExecService().mouseAction(p.x, p.y, 4, OperaMouseKeys.LEFT);
+  }
+
   public void mouseDown(Coordinates where) {
     Point p = getPoint(where, "mouse down");
     parent.getExecService().mouseAction(p.x, p.y, OperaMouseKeys.LEFT_DOWN);
@@ -54,7 +74,7 @@ public class OperaMouse implements Mouse {
 
   public void mouseUp(Coordinates where) {
     Point p = getPoint(where, "mouse up");
-    parent.getExecService().mouseAction(p.x, p.y, OperaMouseKeys.LEFT_DOWN);
+    parent.getExecService().mouseAction(p.x, p.y, OperaMouseKeys.LEFT_UP);
   }
 
   public void mouseMove(Coordinates where) {

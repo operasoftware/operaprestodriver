@@ -1,58 +1,67 @@
-<!doctype HTML>
-<html>
-<head>
- <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
- <title>Mouse fixture</title>
-</head>
-<body>
+<!DOCTYPE html>
+<meta charset="utf-8"/>
+<title>Mouse fixture</title>
 
-  <h1>Mouse test</h1>
-  <div id="test" style="">
+<h1>Mouse test</h1>
+
+<p id="paragraph">This is a paragraph.  <span id="sentence">This is a sentence.</span></p>
+
+<div id="outside">
+    Outside area
+</div>
+
+<div id="test">
     Test area
-  </div>
-  <pre id="log"></pre>
+</div>
+
+<pre id="log"></pre>
 
 <style type="text/css">
-#test {
-  width: 100px;
-  height: 100px;
-  background: #CCC;
-}
+    #outside, #test { background-color: silver; color: white }
+    #outside:hover { background-color: gray }
+    #test:hover { background-color: blue }
 
-#test:hover {
-  background: #FAA;
-}
+    #outside {
+    width: 100px;
+    height: 100px;
+    }
+
+    #test {
+    width: 100px;
+    height: 100px;
+    margin-left: 100px;
+    }
 </style>
 
 <script type="text/javascript">
-logEl = document.getElementById("log");
+    log = [];
+    logEl = document.getElementById("log");
 
-function handler(e) {
-  e.preventDefault();
+    function handler(e) {
+    e.preventDefault();
 
-  var modifiers = []
-  if (e.altKey)  modifiers.push('alt');
-  if (e.ctrlKey) modifiers.push('ctrl');
-  if (e.metaKey) modifiers.push('meta');
-  if (e.shiftKey) modifiers.push('shift');
+    var modifiers = [];
+    if (e.altKey) modifiers.push("alt");
+    if (e.ctrlKey) modifiers.push("ctrl");
+    if (e.metaKey) modifiers.push("meta");
+    if (e.shiftKey) modifiers.push("shift");
 
-  logEl.innerHTML = logEl.innerHTML + [
-    e.type,
-    e.button,
-    modifiers
-  ].join(" ") +
-  "\n";
+    event = {type: e.type, button: e.button, modifiers: modifiers};
+    log.push(event);
 
-  console.log(e);
+    console.log(event);
 
-  return false;
-}
+    output = "[type: " + event.type +", button: " + event.button + ", modifiers: [" + event.modifiers + "]]";
+    logEl.innerHTML = logEl.innerHTML + output + "\n";
 
-document.getElementById("test");
-test.addEventListener('mousedown', handler, false);
-test.addEventListener('mouseup', handler, false);
-test.addEventListener('click', handler, false);
+    return false;
+    }
+
+    document.getElementById("test");
+    test.addEventListener("mouseover", handler, false);
+    test.addEventListener("mouseout", handler, false);
+    test.addEventListener("mousedown", handler, false);
+    test.addEventListener("mouseup", handler, false);
+    test.addEventListener("click", handler, false);
+    test.addEventListener("dblclick", handler, false);
 </script>
-
-</body>
-</html>

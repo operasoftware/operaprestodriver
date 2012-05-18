@@ -182,28 +182,25 @@ public class OperaExec extends AbstractService implements IOperaExec {
     actionBuilder.setY(y);
     actionBuilder.setButtonAction(keyValue);
 
-    // TODO: Investigate whether we should let Opera do iteration
-    /*
-    if(VersionUtil.compare(getVersion(), "2.2") >= 0) {
-      actionBuilder.setCount(count);
+    // exec 2.2 introduced the ability specify the number of iterations for a mouse click in case
+    // we wish to perform a multi-click event (1 and above clicks).  For backwards-compatibility
+    // we provide an iteration on number of clicks here.
+    if (VersionUtil.compare(getVersion(), "2.2") >= 0) {
+      actionBuilder.setRepeatCount(count);
       executeCommand(ExecCommand.SEND_MOUSE_ACTION, actionBuilder);
     } else {
-    */
-    for (int i = 0; i < count; i++) {
-      executeCommand(ExecCommand.SEND_MOUSE_ACTION, actionBuilder.clone());
-    }
-    /*}*/
+      for (int i = 0; i < count; i++) {
+        executeCommand(ExecCommand.SEND_MOUSE_ACTION, actionBuilder.clone());
+      }
 
-    // If double-clicking, wait some time after executing the mouse action so that Opera doesn't
-    // consider two consecutive doubleClick()'s a quadruple-click.
-    //
-    // TODO(andreastt): Also a problem if single-clicking multiple times in a row?
-    // TODO(andreastt): Introduce actionBuilder.setCount(y) instead
-    if (count > 1) {
-      try {
-        Thread.sleep(OperaIntervals.MULTIPLE_CLICK_SLEEP.getValue());
-      } catch (InterruptedException e) {
-        // nothing
+      // If multi-clicking, wait some time after executing the mouse action so that Opera doesn't
+      // consider two consecutive double click's a quadruple click.
+      if (count > 1) {
+        try {
+          Thread.sleep(OperaIntervals.MULTIPLE_CLICK_SLEEP.getValue());
+        } catch (InterruptedException e) {
+          // nothing
+        }
       }
     }
   }

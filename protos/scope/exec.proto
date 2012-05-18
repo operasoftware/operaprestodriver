@@ -76,7 +76,7 @@ service Exec
 {
     option (cpp_hfile) = "modules/scope/src/scope_exec.h";
     option (core_release) = "2.5";
-    option (version) = "2.1";
+    option (version) = "2.2";
     option (cpp_class) = OpScopeExec;
  
     /**
@@ -159,6 +159,12 @@ message MouseAction
      * (e.g. using value 3)
      */
     required uint32 buttonAction = 4;
+    /**
+     * `repeatCount` specifies the number of down clicks to report.
+     *
+     * @since 2.2
+     */
+    optional uint32 repeatCount = 5 [default = 1];
 }
 
 message ScreenWatcher

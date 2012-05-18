@@ -81,6 +81,12 @@ message MouseAction
      * (e.g. using value 3)
      */
     required uint32 buttonAction = 4;
+    /**
+     * `repeatCount` specifies the number of down clicks to report.
+     * 
+     * @since 2.2
+     */
+    optional uint32 repeatCount  = 5 [default = 1];
 }
 
 message ScreenWatcher

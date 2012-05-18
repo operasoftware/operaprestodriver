@@ -16,66 +16,272 @@ limitations under the License.
 
 package com.opera.core.systems;
 
-import com.opera.core.systems.testing.Ignore;
+import com.google.common.collect.Lists;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import com.opera.core.systems.testing.OperaDriverTestCase;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.Mouse;
-import org.openqa.selenium.interactions.Actions;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+
+import static com.google.common.base.Preconditions.checkNotNull;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
-import static org.junit.matchers.JUnitMatchers.containsString;
 
 public class MouseTest extends OperaDriverTestCase {
 
-  public Mouse mouse;
-  public OperaWebElement log;
+  public static final String SENTENCE_TEXT = "This is a sentence.";
+  public static final String PARAGRAPH_TEXT = "This is a paragraph." + " " + SENTENCE_TEXT;
+
+  public OperaWebElement paragraph;
+  public OperaWebElement sentence;
+  public OperaWebElement outside;
   public OperaWebElement test;
+  public String testHash;
 
   @Before
   public void beforeEach() {
-    mouse = driver.getMouse();
     driver.navigate().to(pages.mouse);
-    log = (OperaWebElement) driver.findElementById("log");
+
+    paragraph = (OperaWebElement) driver.findElementById("paragraph");
+    sentence = (OperaWebElement) driver.findElementById("sentence");
+    outside = (OperaWebElement) driver.findElementById("outside");
     test = (OperaWebElement) driver.findElementById("test");
-  }
+    testHash = test.getImageHash();
 
-  @After
-  public void afterEach() {
-    // Tests sometimes cause problems because a context menu is opened on Desktop, ensure that we
-    // cancel the context menu if any.
-    new Actions(driver).sendKeys(Keys.ESCAPE).perform();
-  }
-
-  @Test
-  public void mouseOver() {
-    String hash = test.getImageHash();
-    mouse.mouseMove(test.getCoordinates());
-    assertNotSame(hash, test.getImageHash());
+    assertEquals(0, getMonitor().outs());
+    assertEquals(0, getMonitor().overs());
+    assertEquals(0, getMonitor().downs());
   }
 
   @Test
-  @Ignore(value = "Unknown why we're not triggering dblclick ES events, investigate")
+  public void mouseMoveIsRecognizedVisually() {
+    getMouse().mouseMove(test.getCoordinates());
+    assertNotSame(testHash, test.getImageHash());
+  }
+
+  @Test
+  public void mouseMove() {
+    getMouse().mouseMove(test.getCoordinates());
+    assertEquals(1, getMonitor().overs());
+  }
+
+  @Test
+  public void mouseMoveByOffsetIsRecognizedVisually() {
+    getMouse().mouseMove(test.getCoordinates(), 105, 105);
+    assertTrue("Hashes to be same", test.getImageHash().equals(testHash));
+  }
+
+  @Test
+  public void mouseMoveOutIsRecognizedVisually() {
+    getMouse().mouseMove(test.getCoordinates());
+    getMouse().mouseMove(outside.getCoordinates());
+    assertTrue("Hashes to be same", test.getImageHash().equals(testHash));
+  }
+
+  @Test
+  public void mouseMoveOut() {
+    getMouse().mouseMove(test.getCoordinates());
+    getMouse().mouseMove(outside.getCoordinates());
+    assertEquals(1, getMonitor().overs());
+    assertEquals(1, getMonitor().outs());
+  }
+
+  @Test
+  public void mouseDown() {
+    getMouse().mouseDown(test.getCoordinates());
+    assertEquals(1, getMonitor().downs());
+    assertEquals(0, getMonitor().ups());
+    assertEquals(0, getMonitor().leftClicks());
+  }
+
+  @Test
+  public void mouseUp() {
+    getMouse().mouseDown(test.getCoordinates());
+    getMouse().mouseUp(test.getCoordinates());
+
+    assertEquals(1, getMonitor().downs());
+    assertEquals(1, getMonitor().ups());
+    assertEquals(1, getMonitor().leftClicks());
+  }
+
+  @Test
+  public void click() {
+    getMouse().click(test.getCoordinates());
+    assertEquals(1, getMonitor().downs());
+    assertEquals(1, getMonitor().ups());
+    assertEquals(1, getMonitor().leftClicks());
+  }
+
+  @Test
   public void doubleClick() {
-    mouse.doubleClick(test.getCoordinates());
-    assertThat(log(), containsString("dblclick"));
+    getMouse().doubleClick(test.getCoordinates());
+    assertEquals(2, getMonitor().downs());
+    assertEquals(2, getMonitor().ups());
+    assertEquals(2, getMonitor().leftClicks());
+    assertEquals(1, getMonitor().doubleClicks());
+  }
+
+  @Test
+  public void tripleClick() {
+    getMouse().tripleClick(test.getCoordinates());
+    assertEquals(3, getMonitor().downs());
+    assertEquals(3, getMonitor().ups());
+  }
+
+  @Test
+  public void tripleClickMarksSentence() {
+    getMouse().tripleClick(sentence.getCoordinates());
+    assertEquals(SENTENCE_TEXT, sentence.getText());
+  }
+
+  @Test
+  public void quadrupleClick() {
+    getMouse().quadrupleClick(test.getCoordinates());
+    assertEquals(4, getMonitor().downs());
+    assertEquals(4, getMonitor().ups());
+  }
+
+  @Test
+  public void quadrupleClickMarksParagraph() {
+    getMouse().quadrupleClick(paragraph.getCoordinates());
+    assertEquals(PARAGRAPH_TEXT, paragraph.getText());
   }
 
   @Test
   public void contextClick() {
-    mouse.contextClick(test.getCoordinates());
-
-    assertTrue(log().contains("mousedown 2"));
-    assertTrue(log().contains("mouseup 2"));
+    getMouse().contextClick(test.getCoordinates());
+    assertEquals(1, getMonitor().rightClicks());
   }
 
-  private String log() {
-    return log.getAttribute("value");
+  private OperaMouse getMouse() {
+    return (OperaMouse) driver.getMouse();
+  }
+
+  private MouseMonitor getMonitor() {
+    return new MouseMonitor();
+  }
+
+  private class MouseMonitor {
+
+    private final Gson gson = new Gson();
+
+    private List<MouseEvent> events = Lists.newLinkedList();
+
+    public MouseMonitor() {
+      sync();
+    }
+
+    public int overs() {
+      return Collections.frequency(events, new MouseEvent("mouseover"));
+    }
+
+    public int outs() {
+      return Collections.frequency(events, new MouseEvent("mouseout"));
+    }
+
+    public int downs() {
+      return Collections.frequency(events, new MouseEvent("mousedown"));
+    }
+
+    public int ups() {
+      return Collections.frequency(events, new MouseEvent("mouseup"));
+    }
+
+    public int leftClicks() {
+      return Collections.frequency(events, new MouseEvent("click", 0));
+    }
+
+    public int doubleClicks() {
+      return Collections.frequency(events, new MouseEvent("dblclick"));
+    }
+
+    private int rightClicks() {
+      int contextClicks = 0;
+
+      for (int i = 0; i <= events.size(); i++) {
+        MouseEvent event = events.get(i);
+        MouseEvent nextEvent;
+
+        if (events.size() == (i + 1)) {
+          break;
+        }
+
+        nextEvent = events.get(i + 1);
+
+        if (event.equals(new MouseEvent("mousedown", 2)) &&
+            nextEvent.equals(new MouseEvent("mouseup", 2))) {
+          contextClicks++;
+        }
+      }
+
+      return contextClicks;
+    }
+
+    private void sync() {
+      events = gson.fromJson(String.valueOf(driver.executeScript("return log")),
+                             new TypeToken<Collection<MouseEvent>>() {
+                             }.getType());
+    }
+
+    private class MouseEvent {
+
+      private final String type;
+      private final int button;
+      private final List<String> modifiers;
+
+      public MouseEvent(String type) {
+        this(type, 0);
+      }
+
+      public MouseEvent(String type, int button) {
+        this(type, button, new ArrayList<String>());
+      }
+
+      public MouseEvent(String type, int button, List<String> modifiers) {
+        this.type = checkNotNull(type);
+        this.button = checkNotNull(button);
+        this.modifiers = checkNotNull(modifiers);
+      }
+
+      public String getType() {
+        return type;
+      }
+
+      public int getButton() {
+        return button;
+      }
+
+      public Iterable<String> getModifiers() {
+        return modifiers;
+      }
+
+      @Override
+      public String toString() {
+        return String.format("%s [type=%s, button=%s, modifiers=%s]",
+                             getClass().getSimpleName(),
+                             type,
+                             button,
+                             modifiers);
+      }
+
+      @Override
+      public boolean equals(Object o) {
+        return o instanceof MouseEvent &&
+               getType().equals(((MouseEvent) o).getType()) &&
+               getButton() == ((MouseEvent) o).getButton() &&
+               getModifiers().equals(((MouseEvent) o).getModifiers());
+      }
+
+    }
+
   }
 
 }
