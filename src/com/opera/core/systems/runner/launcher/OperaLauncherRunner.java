@@ -202,7 +202,7 @@ public class OperaLauncherRunner extends OperaRunner
   /**
    * {@inheritDoc}
    *
-   * @throws OperaRunnerException if launcher is shutdown or not running
+   * @throws OperaRunnerException if launcher is shut down or not running
    */
   public void startOpera() throws OperaRunnerException {
     assertLauncherAlive();
@@ -242,7 +242,7 @@ public class OperaLauncherRunner extends OperaRunner
   /**
    * {@inheritDoc}
    *
-   * @throws OperaRunnerException if launcher is shutdown or not running
+   * @throws OperaRunnerException if launcher is shut down or not running
    */
   public void stopOpera() throws OperaRunnerException {
     assertLauncherAlive();
