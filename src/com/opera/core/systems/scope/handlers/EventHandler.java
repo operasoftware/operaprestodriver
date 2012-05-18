@@ -124,6 +124,8 @@ public interface EventHandler {
    */
   void onDesktopWindowLoaded(DesktopWindowInfo window);
 
+  void onDesktopWindowPageChanged(DesktopWindowInfo window);
+
   /**
    * Fired when menu shown.
    *

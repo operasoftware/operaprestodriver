@@ -16,6 +16,7 @@ limitations under the License.
 
 package com.opera.core.systems;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.openqa.selenium.WebDriverException;
 

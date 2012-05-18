@@ -56,7 +56,7 @@ public class OperaDesktopDriverApiTest extends OperaDesktopDriverTestCase {
    */
   @Test
   public void testVerifyLanguageFileIsEnLng() {
-    String languageFile = driver.getPref("User Prefs", "Language File");
+    String languageFile = (String) driver.preferences().get("User Prefs", "Language File").getValue();
 
     assertNotNull(languageFile);
     assertTrue("The language file should be 'en.lng'", languageFile.endsWith("en.lng"));
@@ -334,7 +334,7 @@ public class OperaDesktopDriverApiTest extends OperaDesktopDriverTestCase {
   {
     String expectedValue = "http://opera.fake/";
     driver.operaDesktopAction("Set Preference", 0, "Auto Update|Autoupdate Server=" + expectedValue, "");
-    String newValue = driver.getPref("Auto Update", "Autoupdate Server");
+    String newValue = (String) driver.preferences().get("Auto Update", "Autoupdate Server").getValue();
 
     assertEquals(newValue, expectedValue);
   }
@@ -344,7 +344,7 @@ public class OperaDesktopDriverApiTest extends OperaDesktopDriverTestCase {
   {
     // Show the top menu bar, right after a fresh start it is disabled in favor of
     // the "O-menu button".
-    driver.setPref("User Prefs", "Show Menu", "1");
+    driver.preferences().set("User Prefs", "Show Menu", 1);
 
     List<QuickMenu> menuList = driver.getQuickMenuList();
     assertTrue("Expected to only see the 'Main Menu'", menuList.size() == 1);
