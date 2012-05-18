@@ -16,12 +16,12 @@ limitations under the License.
 
 package com.opera.core.systems.util;
 
+import com.opera.core.systems.OperaSettings;
+
+import org.openqa.selenium.io.FileHandler;
+
 import java.io.File;
 import java.util.logging.Logger;
-import org.openqa.selenium.Capabilities;
-import org.openqa.selenium.io.FileHandler;
-import com.opera.core.systems.OperaDriver;
-import com.opera.core.systems.settings.OperaDriverSettings;
 
 /**
  * Class to manage browser profile.
@@ -30,17 +30,12 @@ public class ProfileUtils {
 	private String largePrefsFolder;
 	private String smallPrefsFolder;
 	private String cachePrefsFolder;
-	private Capabilities capabilities;
+	private OperaSettings settings;
 
 	protected final Logger logger = Logger.getLogger(this.getClass().getName());
 
-	@Deprecated
-	public ProfileUtils(String largePrefsFolder, String smallPrefsFolder, String cachePrefsFolder, OperaDriverSettings settings) {
-		this(largePrefsFolder, smallPrefsFolder, cachePrefsFolder, settings.getCapabilities());
-	}
-
-	public ProfileUtils(String largePrefsFolder, String smallPrefsFolder, String cachePrefsFolder, Capabilities capabilities) {
-		this.capabilities = capabilities;
+	public ProfileUtils(String largePrefsFolder, String smallPrefsFolder, String cachePrefsFolder, OperaSettings settings) {
+		this.settings = settings;
 		this.largePrefsFolder = largePrefsFolder;
 		this.smallPrefsFolder = smallPrefsFolder;
 		this.cachePrefsFolder = cachePrefsFolder;
@@ -99,7 +94,7 @@ public class ProfileUtils {
 				return true;
 
 			// On all Windows systems, <Installation Path>\profile:
-			File exeFile = new File((String) capabilities.getCapability(OperaDriver.BINARY));
+			File exeFile = settings.getBinary();
 			String parentPath = exeFile.getParent();
 			File profileFolder = new File(parentPath + "\\profile");
 
