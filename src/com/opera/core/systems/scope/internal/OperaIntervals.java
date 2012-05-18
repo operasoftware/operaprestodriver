@@ -152,7 +152,7 @@ public enum OperaIntervals {
    * as a double click from two clicks treated as two single clicks.
    */
   private static long getSystemMultiClickTimeout() {
-    long timeout = 640;
+    final long timeout = 640;
 
     try {
       Toolkit toolkit = Toolkit.getDefaultToolkit();
