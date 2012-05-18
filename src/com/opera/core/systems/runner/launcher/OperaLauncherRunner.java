@@ -373,9 +373,6 @@ public class OperaLauncherRunner extends OperaRunner
       throw new OperaRunnerException("Could not get screenshot from launcher", e);
     }
 
-    // This will make sure to check the status of Opera
-    isOperaRunning();
-
     ScreenShotReply screenshotreply = new ScreenShotReply(resultMd5, resultBytes);
     screenshotreply.setBlank(blank);
     screenshotreply.setCrashed(this.hasOperaCrashed());
