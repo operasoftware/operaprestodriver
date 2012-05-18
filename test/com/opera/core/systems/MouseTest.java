@@ -61,14 +61,6 @@ public class MouseTest extends OperaDriverTestCase {
     assertEquals(0, getMonitor().downs());
   }
 
-  /*
-  @After
-  public void afterEach() {
-    // Make sure we always release the mouse button after a test
-    getMouse().mouseUp(test.getCoordinates());
-  }
-  */
-
   @Test
   public void mouseMoveIsRecognizedVisually() {
     getMouse().mouseMove(test.getCoordinates());
