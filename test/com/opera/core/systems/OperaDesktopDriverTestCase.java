@@ -17,8 +17,9 @@ limitations under the License.
 package com.opera.core.systems;
 
 import com.opera.core.systems.runner.OperaRunner;
-
 import com.opera.core.systems.scope.protos.SystemInputProtos;
+import com.opera.core.systems.testing.OperaDriverTestRunner;
+
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.rules.TemporaryFolder;
@@ -31,19 +32,23 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.lang.reflect.Field;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 /**
  * You can extend OperaDriverTestCase in your test case to gain access to convenience methods
  * related to finding the current product used, auto-starting Opera before the test, quitting Opera
  * after the test, and gaining access to the fixtures directory.
  *
- * It also holds an extension of {@link OperaDriver}, called {@link TestOperaDriver}, that exposes
+ * It also holds an extension of {@link OperaDriver}, called {@link com.opera.core.systems.testing.drivers.TestOperaDriver}, that exposes
  * the {@link OperaRunner} and a method for determining whether the constructor and
- * {@link OperaDriver#quit()} methods has been called, {@link TestOperaDriver#isRunning()}.
+ * {@link OperaDriver#quit()} methods has been called, {@link com.opera.core.systems.testing.drivers.TestOperaDriver#isRunning()}.
  */
 @RunWith(OperaDriverTestRunner.class)
 public abstract class OperaDesktopDriverTestCase {
@@ -306,7 +311,7 @@ class TestOperaDesktopDriver extends OperaDesktopDriver {
   }
 
   public Capabilities getCapabilities() {
-    return capabilities;
+    return settings.toCapabilities();
   }
 
   public void quit() {
