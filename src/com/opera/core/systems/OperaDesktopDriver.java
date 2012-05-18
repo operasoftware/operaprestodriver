@@ -735,7 +735,6 @@ public class OperaDesktopDriver extends OperaDriver {
   *
   * @param windowName - window to wait for shown event on
   * @return id of window
-  * @throws CommuncationException if no connection
   */
     public int waitForWindowPageChanged(String windowName) {
     if (getScopeServices().getConnection() == null)
