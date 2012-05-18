@@ -68,23 +68,6 @@ public class OperaDesktopDriver extends OperaDriver {
     // OperaDriver constructor will initialize services and start Opera
     // if the binaryPath is set in settings (by calling init in OperaDriver)
     super(c);
-
-    launcher_runner_settings = new OperaLauncherRunnerSettings();
-
-    /**
-     * Set the no-quit runner setting basing on the capability.
-     * The capability may be null, since it doesn't have to be set
-     * and we can't control that. Beware.
-     */
-    Boolean no_quit_value = false;
-    if (c != null)
-    {
-      no_quit_value = (Boolean)c.getCapability(OperaDriver.NO_QUIT);
-      if (no_quit_value == null)
-        no_quit_value = false;
-    }
-    launcher_runner_settings.setNoQuit(no_quit_value);
-
     initDesktopDriver();
   }
 
@@ -139,7 +122,7 @@ public class OperaDesktopDriver extends OperaDriver {
         settings.setBinary(new File(operaPath));
 
         // Now create the OperaLauncherRunner that we have the binary path
-        runner = new OperaLauncherRunner(launcher_runner_settings);
+        runner = new OperaLauncherRunner(settings);
 
         // Quit and wait for opera to quit properly
         getScopeServices().quit(runner);
@@ -755,10 +738,10 @@ public class OperaDesktopDriver extends OperaDriver {
   * @throws CommuncationException if no connection
   */
     public int waitForWindowPageChanged(String windowName) {
-    if (services.getConnection() == null)
+    if (getScopeServices().getConnection() == null)
       throw new CommunicationException("waiting for a window failed because Opera is not connected.");
 
-    return services.waitForDesktopWindowPageChanged(windowName, OperaIntervals.WINDOW_EVENT_TIMEOUT.getValue());
+    return getScopeServices().waitForDesktopWindowPageChanged(windowName, OperaIntervals.WINDOW_EVENT_TIMEOUT.getValue());
   }
 
   /**
