@@ -20,15 +20,18 @@ import org.ini4j.Ini;
 import org.ini4j.Profile;
 import org.ini4j.Wini;
 import org.openqa.selenium.WebDriverException;
-import org.openqa.selenium.io.TemporaryFilesystem;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
+import com.google.common.base.Charsets;
+import com.google.common.base.Joiner;
+import com.google.common.base.Predicate;
+import com.google.common.base.Throwables;
+import com.google.common.collect.Iterables;
+import com.google.common.io.Files;
+
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
+import java.io.StringReader;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -61,6 +64,17 @@ public class OperaFilePreferences extends AbstractOperaPreferences {
       return;
     }
 
+    Ini ini = getIniForPreferenceFile(preferenceFile);
+
+    // Add each preference entry
+    for (Map.Entry<String, Profile.Section> section : ini.entrySet()) {
+      for (Map.Entry<String, String> entry : section.getValue().entrySet()) {
+        set(section.getValue().getName(), entry.getKey(), entry.getValue());
+      }
+    }
+  }
+
+  private Ini getIniForPreferenceFile(File preferenceFile) {
     // Due to the sucky nature of Opera's invalid preference files, we are forced to remove the
     // first line of the file.
     //
@@ -76,49 +90,17 @@ public class OperaFilePreferences extends AbstractOperaPreferences {
     //
     //     &c.
 
-    TemporaryFilesystem fs = null;
-    File temporaryPreferenceFile;
-    Ini ini;
-
     try {
-      fs = TemporaryFilesystem.getDefaultTmpFS();
-      temporaryPreferenceFile = new File(fs.createTempDir("operadriver", "preferences")
-                                             .getAbsolutePath() + File.separator + "opera.ini");
-
-      BufferedReader reader = new BufferedReader(new FileReader(preferenceFile));
-      BufferedWriter writer = new BufferedWriter(new FileWriter(temporaryPreferenceFile));
-
-      String newLine = System.getProperty("line.separator");
-      String currentLine;
-      while ((currentLine = reader.readLine()) != null) {
-        if (!currentLine.contains("Opera Preferences version")) {
-          writer.write(currentLine + newLine);
+      List<String> lines = Files.readLines(preferenceFile, Charsets.UTF_8);
+      Iterable<String> filteredLines = Iterables.filter(lines, new Predicate<String>() {
+        public boolean apply(String line) {
+          return !line.contains("Opera Preferences version");
         }
-      }
-
-      // Make sure channels are closed so that last line is flushed
-      reader.close();
-      writer.close();
-
-      // Read new preference file
-      ini = new Ini(temporaryPreferenceFile);
-    } catch (FileNotFoundException e) {
-      throw new WebDriverException("Unknown file: " + preferenceFile.getAbsolutePath());
+      });
+  
+      return new Ini(new StringReader(Joiner.on("\n").join(filteredLines)));
     } catch (IOException e) {
-      throw new WebDriverException(String.format("Unable to read file `%s': %s",
-                                                 preferenceFile.getPath(),
-                                                 e.getMessage()));
-    } finally {
-      if (fs != null) {
-        fs.deleteTemporaryFiles();
-      }
-    }
-
-    // Add each preference entry
-    for (Map.Entry<String, Profile.Section> section : ini.entrySet()) {
-      for (Map.Entry<String, String> entry : section.getValue().entrySet()) {
-        set(section.getValue().getName(), entry.getKey(), entry.getValue());
-      }
+      throw Throwables.propagate(e);
     }
   }
 
