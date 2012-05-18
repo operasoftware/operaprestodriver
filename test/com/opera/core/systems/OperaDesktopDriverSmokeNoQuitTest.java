@@ -119,7 +119,6 @@ public class OperaDesktopDriverSmokeNoQuitTest extends OperaDesktopDriverTestCas
   @Test
   public void testBrowserDoesNotQuit() throws IOException, InterruptedException {
     driver.quit();
-    driver = null;
 
     Boolean isPidRunning = isPidRunning(browserPid);
     assertTrue("The browser process should BE running.", isPidRunning);

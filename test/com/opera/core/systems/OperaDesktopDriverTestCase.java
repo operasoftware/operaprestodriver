@@ -71,8 +71,11 @@ public abstract class OperaDesktopDriverTestCase {
 
   @AfterClass
   public static void afterAll() throws Exception {
-    if (driver != null && driver.isRunning()) {
-      driver.quit();
+    if (driver != null) {
+      if (driver.isOperaRunning())
+        driver.quitOpera();
+      if (driver.isRunning())
+        driver.quit();
     }
 
     // Kill the browser process eventually if it's still alive so that it doesn't wander
@@ -114,16 +117,6 @@ public abstract class OperaDesktopDriverTestCase {
     Runtime runTime = Runtime.getRuntime();
     Process process = runTime.exec(commandLine);
     process.waitFor();
-
-    // Give the process a chance to quit (5 seconds at max)
-    for (int i=0; i<10; i++)
-    {
-      if (!isPidRunning(pidToKill))
-        break;
-      Thread.sleep(500);
-    }
-
-    assertFalse("Could not killPid()!", isPidRunning(pidToKill));
   }
 
   public static boolean isPidRunning(int pidToCheck) throws IOException, InterruptedException
