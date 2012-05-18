@@ -59,6 +59,7 @@ import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
+import java.util.List;
 import java.util.logging.Level;
 
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -74,9 +75,11 @@ public class OperaLauncherRunner extends OperaRunner
 
   private final URL bundledLauncher;
   private final int launcherPort = PortProber.findFreePort();
+  private final List<String> arguments;
 
-  private OperaLauncherBinary launcherRunner = null;
-  private OperaLauncherProtocol launcherProtocol = null;
+  private OperaLauncherBinary runner = null;
+  private OperaLauncherProtocol protocol = null;
+
   private String crashlog = null;
 
   public OperaLauncherRunner() {
@@ -113,12 +116,16 @@ public class OperaLauncherRunner extends OperaRunner
     }
 
     // Create list of arguments for launcher binary
-    ImmutableList<String> arguments = buildArguments();
+    arguments = buildArguments();
     logger.config("launcher arguments: " + arguments);
 
+    init();
+  }
+
+  private void init() {
     try {
-      launcherRunner = new OperaLauncherBinary(settings.getLauncher().getPath(),
-                                               arguments.toArray(new String[arguments.size()]));
+      runner = new OperaLauncherBinary(settings.getLauncher().getPath(),
+                                       arguments.toArray(new String[arguments.size()]));
     } catch (IOException e) {
       throw new OperaRunnerException("Unable to start launcher: " + e.getMessage());
     }
@@ -131,7 +138,7 @@ public class OperaLauncherRunner extends OperaRunner
       listenerServer.setSoTimeout((int) OperaIntervals.LAUNCHER_TIMEOUT.getValue());
 
       // Try to connect
-      launcherProtocol = new OperaLauncherProtocol(listenerServer.accept());
+      protocol = new OperaLauncherProtocol(listenerServer.accept());
 
       // We did it!
       logger.fine("Connected with launcher on port " + launcherPort);
@@ -139,7 +146,7 @@ public class OperaLauncherRunner extends OperaRunner
 
       // Do the handshake!
       LauncherHandshakeRequest.Builder request = LauncherHandshakeRequest.newBuilder();
-      ResponseEncapsulation res = launcherProtocol.sendRequest(
+      ResponseEncapsulation res = protocol.sendRequest(
           MessageType.MSG_HELLO, request.build().toByteArray());
 
       // Are we happy?
@@ -157,7 +164,7 @@ public class OperaLauncherRunner extends OperaRunner
     }
   }
 
-  protected ImmutableList<String> buildArguments() {
+  protected List<String> buildArguments() {
     ImmutableList.Builder<String> builder = ImmutableList.builder();
 
     builder.add("-host").add(settings.getHost());
@@ -192,13 +199,21 @@ public class OperaLauncherRunner extends OperaRunner
     return builder.build();
   }
 
-  public void startOpera() {
+  /**
+   * {@inheritDoc}
+   *
+   * @throws OperaRunnerException if launcher is shut down or not running
+   */
+  @Override
+  public void startOpera() throws OperaRunnerException {
+    assertLauncherAlive();
+
     logger.fine("Instructing launcher to start Opera...");
 
     try {
       byte[] request = LauncherStartRequest.newBuilder().build().toByteArray();
 
-      ResponseEncapsulation res = launcherProtocol.sendRequest(MessageType.MSG_START, request);
+      ResponseEncapsulation res = protocol.sendRequest(MessageType.MSG_START, request);
 
       if (handleStatusMessage(res.getResponse()) != StatusType.RUNNING) {
         throw new IOException("launcher unable to start binary");
@@ -211,12 +226,12 @@ public class OperaLauncherRunner extends OperaRunner
         // nothing
       }
 
-      res = launcherProtocol.sendRequest(MessageType.MSG_STATUS, request);
+      res = protocol.sendRequest(MessageType.MSG_STATUS, request);
 
       if (handleStatusMessage(res.getResponse()) != StatusType.RUNNING) {
         throw new OperaRunnerException(
             "Opera exited immediately; possibly incorrect arguments?  Command: " +
-            launcherRunner.getCommands());
+            runner.getCommands());
       }
     } catch (IOException e) {
       throw new OperaRunnerException("Could not start Opera: " + e.getMessage());
@@ -225,13 +240,21 @@ public class OperaLauncherRunner extends OperaRunner
     logger.fine("Opera launched through launcher");
   }
 
-  public void stopOpera() {
+  /**
+   * {@inheritDoc}
+   *
+   * @throws OperaRunnerException if launcher is shut down or not running
+   */
+  @Override
+  public void stopOpera() throws OperaRunnerException {
+    assertLauncherAlive();
+
     logger.fine("Instructing launcher to stop Opera...");
 
     try {
       LauncherStopRequest.Builder request = LauncherStopRequest.newBuilder();
 
-      ResponseEncapsulation res = launcherProtocol.sendRequest(
+      ResponseEncapsulation res = protocol.sendRequest(
           MessageType.MSG_STOP, request.build().toByteArray()
       );
 
@@ -245,18 +268,23 @@ public class OperaLauncherRunner extends OperaRunner
     logger.fine("Opera stopped through launcher");
   }
 
+  @Override
   public boolean isOperaRunning() {
     return isOperaRunning(0);
   }
 
   public boolean isOperaRunning(int processId) {
+    if (!isLauncherRunning()) {
+      return false;
+    }
+
     try {
       LauncherStatusRequest.Builder request = LauncherStatusRequest.newBuilder();
       if (processId > 0) {
         request.setProcessid(processId);
       }
 
-      ResponseEncapsulation res = launcherProtocol.sendRequest(
+      ResponseEncapsulation res = protocol.sendRequest(
           MessageType.MSG_STATUS, request.build().toByteArray());
       logger.finer("Getting Opera's status from launcher: " + res.getResponse().toString());
 
@@ -267,20 +295,27 @@ public class OperaLauncherRunner extends OperaRunner
     }
   }
 
+  @Override
   public boolean hasOperaCrashed() {
     return crashlog != null;
   }
 
+  @Override
   public String getOperaCrashlog() {
     return crashlog;
   }
 
+  @Override
   public void shutdown() {
+    if (!isLauncherRunning()) {
+      return;
+    }
+
     logger.fine("Shutting down launcher");
 
     try {
       // Send a shutdown command to the launcher
-      launcherProtocol.sendRequestWithoutResponse(MessageType.MSG_SHUTDOWN, null);
+      protocol.sendRequestWithoutResponse(MessageType.MSG_SHUTDOWN, null);
     } catch (IOException e) {
       // If launcher has already been shutdown, this shouldn't create an exception, all we want to
       // do is to make sure the protocol is down
@@ -288,15 +323,61 @@ public class OperaLauncherRunner extends OperaRunner
 
     try {
       // Then shutdown the protocol connection
-      launcherProtocol.shutdown();
+      protocol.shutdown();
     } catch (IOException e) {
       throw new OperaRunnerException("Unable to shut down launcher", e);
+    } finally {
+      runner.shutdown();
+      protocol = null;
+      runner = null;
+    }
+  }
+
+  /**
+   * Take screenshot using external program.  Will not trigger a screen repaint.
+   *
+   * @throws OperaRunnerException if launcher is shutdown or not running
+   */
+  @Override
+  public ScreenShotReply saveScreenshot(long timeout, String... hashes)
+      throws OperaRunnerException {
+    assertLauncherAlive();
+
+    String resultMd5;
+    byte[] resultBytes;
+    boolean blank = false;
+
+    logger.fine("Instructing launcher to take screenshot");
+
+    try {
+      LauncherScreenshotRequest.Builder request = LauncherScreenshotRequest.newBuilder();
+      for (String hash : hashes) {
+        request.addKnownMD5S(hash);
+      }
+      request.setKnownMD5STimeoutMs((int) timeout);
+
+      ResponseEncapsulation res = protocol.sendRequest(
+          MessageType.MSG_SCREENSHOT, request.build().toByteArray());
+      LauncherScreenshotResponse response = (LauncherScreenshotResponse) res.getResponse();
+
+      resultMd5 = response.getMd5();
+      resultBytes = response.getImagedata().toByteArray();
+
+      if (response.hasBlank()) {
+        blank = response.getBlank();
+      }
+
+    } catch (SocketTimeoutException e) {
+      throw new OperaRunnerException("Could not get screenshot from launcher", e);
+    } catch (IOException e) {
+      throw new OperaRunnerException("Could not get screenshot from launcher", e);
     }
 
-    if (launcherRunner != null) {
-      launcherRunner.shutdown();
-      launcherRunner = null;
-    }
+    ScreenShotReply screenshotreply = new ScreenShotReply(resultMd5, resultBytes);
+    screenshotreply.setBlank(blank);
+    screenshotreply.setCrashed(this.hasOperaCrashed());
+
+    return screenshotreply;
   }
 
   /**
@@ -348,51 +429,6 @@ public class OperaLauncherRunner extends OperaRunner
     return status;
   }
 
-  /**
-   * Take screenshots!
-   */
-  public ScreenShotReply saveScreenshot(long timeout, String... hashes) {
-    String resultMd5;
-    byte[] resultBytes;
-    boolean blank = false;
-
-    logger.fine("Instructing launcher to take screenshot");
-
-    try {
-      LauncherScreenshotRequest.Builder request = LauncherScreenshotRequest.newBuilder();
-      for (String hash : hashes) {
-        request.addKnownMD5S(hash);
-      }
-      request.setKnownMD5STimeoutMs((int) timeout);
-
-      ResponseEncapsulation res = launcherProtocol.sendRequest(
-          MessageType.MSG_SCREENSHOT, request.build().toByteArray());
-      LauncherScreenshotResponse response = (LauncherScreenshotResponse) res.getResponse();
-
-      resultMd5 = response.getMd5();
-      resultBytes = response.getImagedata().toByteArray();
-
-      if (response.hasBlank()) {
-        blank = response.getBlank();
-      }
-
-    } catch (SocketTimeoutException e) {
-      throw new OperaRunnerException("Could not get screenshot from launcher (Socket Timeout)", e);
-    } catch (IOException e) {
-      throw new OperaRunnerException("Could not get screenshot from launcher with exception: " + e,
-                                     e);
-    }
-
-    // This will make sure to check the status of Opera
-    isOperaRunning();
-
-    ScreenShotReply screenshotreply = new ScreenShotReply(resultMd5, resultBytes);
-    screenshotreply.setBlank(blank);
-    screenshotreply.setCrashed(this.hasOperaCrashed());
-
-    return screenshotreply;
-  }
-
   private void extractLauncher(URL sourceLauncher, File targetLauncher) {
     checkNotNull(sourceLauncher);
     checkNotNull(targetLauncher);
@@ -434,6 +470,16 @@ public class OperaLauncherRunner extends OperaRunner
     } catch (IOException e) {
       throw new OperaRunnerException("Unable to open stream or file: " + e.getMessage());
     }
+  }
+
+  private void assertLauncherAlive() {
+    if (!isLauncherRunning()) {
+      throw new OperaRunnerException("launcher was shutdown");
+    }
+  }
+
+  private boolean isLauncherRunning() {
+    return runner != null && runner.isRunning();
   }
 
   public static File launcherDefaultLocation() {

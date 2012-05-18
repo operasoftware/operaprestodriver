@@ -96,6 +96,10 @@ public class OperaLauncherBinary extends Thread {
     kill();
   }
 
+  public boolean isRunning() {
+    return running.get();
+  }
+
   @Override
   public void run() {
     logger.fine("Waiting for launcher binary to exit");

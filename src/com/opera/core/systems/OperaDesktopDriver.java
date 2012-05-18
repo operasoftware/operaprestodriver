@@ -121,14 +121,11 @@ public class OperaDesktopDriver extends OperaDriver {
       if (operaPath.length() > 0) {
         settings.setBinary(new File(operaPath));
 
-        // Get pid of Opera, needed to wait for it to quit
-        int pid = desktopUtils.getOperaPid();
-
         // Now create the OperaLauncherRunner that we have the binary path
         runner = new OperaLauncherRunner(settings);
 
         // Quit and wait for opera to quit properly
-        getScopeServices().quit(runner, pid);
+        getScopeServices().quit(runner);
 
         // Delete the profile to start the first test with a clean profile
         profileUtils.deleteProfile();
@@ -182,10 +179,8 @@ public class OperaDesktopDriver extends OperaDriver {
       String operaPath = desktopUtils.getOperaPath();
       logger.info("OperaBinaryLocation retrieved from Opera: " + operaPath);
 
-      int pid = 0;
       if (operaPath.length() > 0) {
         settings.setBinary(new File(operaPath));
-        pid = desktopUtils.getOperaPid();
       }
 
       // Now create the OperaLauncherRunner that we have the binary path
@@ -193,7 +188,7 @@ public class OperaDesktopDriver extends OperaDriver {
       runner = new OperaLauncherRunner(settings);
 
       // Quit and wait for opera to quit properly (calls getScopeServices().shutdown)
-      getScopeServices().quit(runner, pid);
+      getScopeServices().quit(runner);
 
     }
   }
