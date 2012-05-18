@@ -105,7 +105,9 @@ public class OperaFilePreferences extends AbstractOperaPreferences {
     } catch (FileNotFoundException e) {
       throw new WebDriverException("Unknown file: " + preferenceFile.getAbsolutePath());
     } catch (IOException e) {
-      throw new WebDriverException("Unable to read file: " + preferenceFile.getPath());
+      throw new WebDriverException(String.format("Unable to read file `%s': %s",
+                                                 preferenceFile.getPath(),
+                                                 e.getMessage()));
     } finally {
       if (fs != null) {
         fs.deleteTemporaryFiles();
@@ -178,7 +180,8 @@ public class OperaFilePreferences extends AbstractOperaPreferences {
       parent.write();
     }
 
-    public static FilePreference convert(OperaFilePreferences parent, OperaPreferences.OperaPreference convertee) {
+    public static FilePreference convert(OperaFilePreferences parent,
+                                         OperaPreferences.OperaPreference convertee) {
       return new FilePreference(parent,
                                 convertee.getSection(),
                                 convertee.getKey(),
