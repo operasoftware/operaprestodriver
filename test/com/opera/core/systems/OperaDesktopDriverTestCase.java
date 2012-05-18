@@ -54,6 +54,8 @@ public abstract class OperaDesktopDriverTestCase {
   protected static TemporaryFolder tmpFolder = new TemporaryFolder();
   protected static File profileTmpFolder = null;
   protected static List<SystemInputProtos.ModifierPressed> ctrlModifier = new ArrayList<SystemInputProtos.ModifierPressed>();
+  protected static Integer browserPid = null;
+  protected static String operaPath;
 
   private static String fixtureDirectory;
 
@@ -69,9 +71,15 @@ public abstract class OperaDesktopDriverTestCase {
 
   @AfterClass
   public static void afterAll() throws Exception {
-    if (driver.isRunning()) {
+    if (driver != null && driver.isRunning()) {
       driver.quit();
     }
+
+    // Kill the browser process eventually if it's still alive so that it doesn't wander
+    // around when the test is over. Note that some tests might not start Opera and there
+    // will be no PID available.
+    if (browserPid != null)
+      killPid(browserPid);
 
     tmpFolder.delete();
   }
@@ -80,10 +88,11 @@ public abstract class OperaDesktopDriverTestCase {
     String binaryPath = OperaPaths.findOperaInstallationPath();
     assertNotNull("Could not find an Opera installation on this machine.", binaryPath);
     OperaPaths.overrideOperaPathEnvVar(binaryPath);
+    operaPath = binaryPath;
     return binaryPath;
   }
 
-  public void killPid(int pidToKill) throws IOException, InterruptedException {
+  public static void killPid(int pidToKill) throws IOException, InterruptedException {
     Platform currentPlatform = Platform.getCurrent();
     String commandLine = null;
     switch (currentPlatform)
@@ -105,9 +114,19 @@ public abstract class OperaDesktopDriverTestCase {
     Runtime runTime = Runtime.getRuntime();
     Process process = runTime.exec(commandLine);
     process.waitFor();
+
+    // Give the process a chance to quit (5 seconds at max)
+    for (int i=0; i<10; i++)
+    {
+      if (!isPidRunning(pidToKill))
+        break;
+      Thread.sleep(500);
+    }
+
+    assertFalse("Could not killPid()!", isPidRunning(pidToKill));
   }
 
-  public boolean isPidRunning(int pidToCheck) throws IOException, InterruptedException
+  public static boolean isPidRunning(int pidToCheck) throws IOException, InterruptedException
   {
     Platform currentPlatform = Platform.getCurrent();
     String commandLine = null;
