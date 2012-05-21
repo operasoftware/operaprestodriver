@@ -95,7 +95,11 @@ public class SocketMonitor {
   }
 
   public void stop() {
-    selector.wakeup();
+    try {
+      selector.close();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
   }
 
   public boolean poll() {
