@@ -16,6 +16,7 @@ limitations under the License.
 
 package com.opera.core.systems;
 
+import com.google.common.collect.ImmutableMap;
 import com.opera.core.systems.common.lang.OperaStrings;
 import com.opera.core.systems.model.ScreenShotReply;
 import com.opera.core.systems.model.ScriptResult;
@@ -225,7 +226,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
    * @return a map of service names to the minimum versions we require.
    */
   protected Map<String, String> getServicesList() {
-    Map<String, String> versions = new HashMap<String, String>();
+    ImmutableMap.Builder<String, String> versions = ImmutableMap.builder();
     versions.put("ecmascript-debugger", "5.0");
     versions.put("window-manager", "2.0");
     versions.put("exec", "2.0");
@@ -233,7 +234,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     versions.put("cookie-manager", "1.0");
     versions.put("prefs", "1.0");
     versions.put("selftest", "1.1");
-    return versions;
+    return versions.build();
   }
 
   /**
