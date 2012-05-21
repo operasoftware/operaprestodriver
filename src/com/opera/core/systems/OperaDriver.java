@@ -16,6 +16,7 @@ limitations under the License.
 
 package com.opera.core.systems;
 
+import com.google.common.base.Throwables;
 import com.google.common.collect.ImmutableMap;
 import com.opera.core.systems.common.lang.OperaStrings;
 import com.opera.core.systems.model.ScreenShotReply;
@@ -245,7 +246,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
       services = new ScopeServices(getServicesList(), settings.getPort(), !settings.autostart());
       services.startStpThread();
     } catch (IOException e) {
-      throw new WebDriverException(e);
+      Throwables.propagate(e);
     }
   }
 
