@@ -132,9 +132,10 @@ public class OperaLauncherRunner extends OperaRunner
 
     logger.fine("Waiting for launcher connection on port " + launcherPort);
 
+    ServerSocket listenerServer = null;
     try {
       // Setup listener server
-      ServerSocket listenerServer = new ServerSocket(launcherPort);
+      listenerServer = new ServerSocket(launcherPort);
       listenerServer.setSoTimeout((int) OperaIntervals.LAUNCHER_TIMEOUT.getValue());
 
       // Try to connect
@@ -161,6 +162,12 @@ public class OperaLauncherRunner extends OperaRunner
                                      launcherPort, e);
     } catch (IOException e) {
       throw new OperaRunnerException("Unable to listen to launcher port " + launcherPort, e);
+    } finally {
+      if( listenerServer != null ) {
+        try {
+          listenerServer.close();
+        } catch (IOException e) {}
+      }
     }
   }
 
