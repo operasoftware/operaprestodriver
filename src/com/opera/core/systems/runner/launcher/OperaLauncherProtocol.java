@@ -24,6 +24,7 @@ import com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherScreen
 import com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStatusResponse;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.net.Socket;
 import java.net.SocketException;
 import java.nio.ByteBuffer;
@@ -42,6 +43,7 @@ public class OperaLauncherProtocol {
 
   private Logger logger = Logger.getLogger(getClass().getName());
   private Socket socket;
+  private OutputStream os;
 
   public enum MessageType {
 
@@ -97,8 +99,9 @@ public class OperaLauncherProtocol {
 
   }
 
-  public OperaLauncherProtocol(Socket socket) throws SocketException {
+  public OperaLauncherProtocol(Socket socket) throws IOException {
     this.socket = socket;
+    os = socket.getOutputStream();
     // Just to make sure we don't block forever if something goes wrong
     this.socket.setSoTimeout(180000);
     logger.finer("Setting launcher protocol timeout to " + this.socket.getSoTimeout() + " ms");
@@ -111,6 +114,7 @@ public class OperaLauncherProtocol {
    * @throws IOException if the socket is already closed
    */
   public void shutdown() throws IOException {
+    os.close();
     socket.close();
   }
 
@@ -131,7 +135,7 @@ public class OperaLauncherProtocol {
     buf.putInt(size);
     buf.flip();
     logger.finest("SEND: type=" + (0) + ", command=" + ((int) type.getValue()) + ", size=" + size);
-    socket.getOutputStream().write(buf.array());
+    os.write(buf.array());
   }
 
   /**
@@ -145,7 +149,7 @@ public class OperaLauncherProtocol {
   public ResponseEncapsulation sendRequest(MessageType type, byte[] body) throws IOException {
     sendRequestHeader(type, (body != null) ? body.length : 0);
     if (body != null) {
-      socket.getOutputStream().write(body);
+      os.write(body);
     }
     return recvMessage();
   }
@@ -160,7 +164,7 @@ public class OperaLauncherProtocol {
   public void sendRequestWithoutResponse(MessageType type, byte[] body) throws IOException {
     sendRequestHeader(type, (body != null) ? body.length : 0);
     if (body != null) {
-      socket.getOutputStream().write(body);
+      os.write(body);
     }
   }
 
