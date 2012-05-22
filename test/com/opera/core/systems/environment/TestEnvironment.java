@@ -19,7 +19,7 @@ limitations under the License.
 
 package com.opera.core.systems.environment;
 
-import com.opera.core.systems.environment.webserver.WebServer;
+import com.opera.core.systems.environment.webserver.AppServer;
 
 public interface TestEnvironment {
 
@@ -48,6 +48,6 @@ public interface TestEnvironment {
    *
    * @return a web server serving testing files
    */
-  WebServer getWebServer();
+  AppServer getWebServer();
 
 }
