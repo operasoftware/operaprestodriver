@@ -16,10 +16,11 @@ limitations under the License.
 
 package com.opera.core.systems.testing;
 
-import com.opera.core.systems.environment.webserver.WebServer;
+import com.opera.core.systems.environment.webserver.AppServer;
 
 public class Pages {
 
+  public String alert;
   public String windows;
   public String download;
   public String ecmascriptEvent;
@@ -42,7 +43,8 @@ public class Pages {
   public String zeroHeightQuirks;
   public String zeroHeightStandards;
 
-  public Pages(WebServer server) {
+  public Pages(AppServer server) {
+    alert = server.whereIs("alert.html");
     windows = server.whereIs("windows.html");
     download = server.whereIs("download.html");
     ecmascriptEvent = server.whereIs("idle/ecmascript-event.html");
