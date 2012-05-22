@@ -16,22 +16,23 @@ limitations under the License.
 
 package com.opera.core.systems.runner.launcher;
 
+import com.google.common.base.Function;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Maps;
 import com.google.protobuf.GeneratedMessage;
 import com.google.protobuf.InvalidProtocolBufferException;
 
 import com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherHandshakeResponse;
 import com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherScreenshotResponse;
 import com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherStatusResponse;
+import com.opera.core.systems.scope.internal.OperaIntervals;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.Socket;
-import java.net.SocketException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import java.util.EnumSet;
 import java.util.Map;
-import java.util.TreeMap;
 import java.util.logging.Logger;
 
 /**
@@ -41,9 +42,9 @@ import java.util.logging.Logger;
  */
 public class OperaLauncherProtocol {
 
-  private Logger logger = Logger.getLogger(getClass().getName());
-  private Socket socket;
-  private OutputStream os;
+  private final Logger logger = Logger.getLogger(getClass().getName());
+  private final Socket socket;
+  private final OutputStream os;
 
   public enum MessageType {
 
@@ -55,19 +56,18 @@ public class OperaLauncherProtocol {
     MSG_STOP((byte) 4),
     MSG_SHUTDOWN((byte) 5);
 
+    private static final Map<Byte, MessageType> lookup = Maps.uniqueIndex(
+        ImmutableList.copyOf(MessageType.values()), new Function<MessageType, Byte>() {
+      public Byte apply(MessageType type) {
+        return type.getValue();
+      }
+    });
+
+    private final byte code;
+
     MessageType(byte n) {
       code = n;
     }
-
-    private static final Map<Byte, MessageType> lookup = new TreeMap<Byte, MessageType>();
-
-    static {
-      for (MessageType command : EnumSet.allOf(MessageType.class)) {
-        lookup.put(command.getValue(), command);
-      }
-    }
-
-    private byte code;
 
     public byte getValue() {
       return code;
@@ -99,13 +99,13 @@ public class OperaLauncherProtocol {
 
   }
 
-  public OperaLauncherProtocol(Socket socket) throws IOException {
-    this.socket = socket;
+  public OperaLauncherProtocol(Socket client) throws IOException {
+    socket = client;
     os = socket.getOutputStream();
     // Just to make sure we don't block forever if something goes wrong
-    this.socket.setSoTimeout(180000);
-    logger.finer("Setting launcher protocol timeout to " + this.socket.getSoTimeout() + " ms");
-    logger.fine("Got launcher connection from " + this.socket.getRemoteSocketAddress().toString());
+    socket.setSoTimeout((int) OperaIntervals.LAUNCHER_RESPONSE_TIMEOUT.getValue());
+    logger.finer("Setting launcher protocol timeout to " + socket.getSoTimeout() + " ms");
+    logger.fine("Got launcher connection from " + socket.getRemoteSocketAddress().toString());
   }
 
   /**
@@ -192,7 +192,7 @@ public class OperaLauncherProtocol {
    * Receive a message response.
    *
    * @return Response body and request status code
-   * @throws java.io.IOException if socket read error or protocol parse error
+   * @throws IOException if socket read error or protocol parse error
    */
   private ResponseEncapsulation recvMessage() throws IOException {
     GeneratedMessage msg = null;
