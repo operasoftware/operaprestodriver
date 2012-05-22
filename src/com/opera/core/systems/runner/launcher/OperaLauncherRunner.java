@@ -16,12 +16,12 @@ limitations under the License.
 
 package com.opera.core.systems.runner.launcher;
 
-import com.google.protobuf.GeneratedMessage;
 import com.google.common.collect.ImmutableList;
 import com.google.common.hash.Hashing;
 import com.google.common.io.ByteStreams;
 import com.google.common.io.Closeables;
 import com.google.common.io.Files;
+import com.google.protobuf.GeneratedMessage;
 
 import com.opera.core.systems.OperaPaths;
 import com.opera.core.systems.OperaProduct;
@@ -49,6 +49,7 @@ import org.openqa.selenium.io.FileHandler;
 import org.openqa.selenium.net.PortProber;
 import org.openqa.selenium.os.CommandLine;
 
+import java.io.Closeable;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -136,14 +137,13 @@ public class OperaLauncherRunner extends OperaRunner
     try {
       // Setup listener server
       listenerServer = new ServerSocket(launcherPort);
-      listenerServer.setSoTimeout((int) OperaIntervals.LAUNCHER_TIMEOUT.getValue());
+      listenerServer.setSoTimeout((int) OperaIntervals.LAUNCHER_CONNECT_TIMEOUT.getValue());
 
       // Try to connect
       protocol = new OperaLauncherProtocol(listenerServer.accept());
 
       // We did it!
       logger.fine("Connected with launcher on port " + launcherPort);
-      listenerServer.close();
 
       // Do the handshake!
       LauncherHandshakeRequest.Builder request = LauncherHandshakeRequest.newBuilder();
@@ -163,11 +163,7 @@ public class OperaLauncherRunner extends OperaRunner
     } catch (IOException e) {
       throw new OperaRunnerException("Unable to listen to launcher port " + launcherPort, e);
     } finally {
-      if( listenerServer != null ) {
-        try {
-          listenerServer.close();
-        } catch (IOException e) {}
-      }
+      Closeables.closeQuietly((Closeable) listenerServer);
     }
   }
 

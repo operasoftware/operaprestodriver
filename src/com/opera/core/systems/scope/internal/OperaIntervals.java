@@ -96,7 +96,12 @@ public enum OperaIntervals {
    * After starting the launcher we need to wait for the launcher to connect to our listener.  If
    * the launcher does not connect within this timeout, we assume something has gone wrong.
    */
-  LAUNCHER_TIMEOUT(5000),
+  LAUNCHER_CONNECT_TIMEOUT(5000),
+
+  /**
+   * If anything goes wrong while connected to the launcher, don't block forever.
+   */
+  LAUNCHER_RESPONSE_TIMEOUT(180000),
 
   /**
    * If programs such as the launcher exits immediately with an improper exit value (> 0) we can
