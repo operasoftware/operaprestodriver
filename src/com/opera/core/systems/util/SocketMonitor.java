@@ -16,9 +16,6 @@ limitations under the License.
 
 package com.opera.core.systems.util;
 
-import com.google.common.io.Closeables;
-
-import java.io.Closeable;
 import java.io.IOException;
 import java.nio.channels.CancelledKeyException;
 import java.nio.channels.ClosedChannelException;
@@ -98,7 +95,13 @@ public class SocketMonitor {
   }
 
   public void stop() {
-    Closeables.closeQuietly((Closeable) selector);
+    try {
+      if (selector != null) {
+        selector.close();
+      }
+    } catch (IOException e) {
+      // fall through
+    }
   }
 
   public boolean poll() {

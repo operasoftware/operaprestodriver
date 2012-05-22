@@ -27,6 +27,7 @@ import com.opera.core.systems.OperaPaths;
 import com.opera.core.systems.OperaProduct;
 import com.opera.core.systems.OperaSettings;
 import com.opera.core.systems.arguments.OperaArgument;
+import com.opera.core.systems.common.net.CloseableServerSocket;
 import com.opera.core.systems.model.ScreenShotReply;
 import com.opera.core.systems.runner.OperaLaunchers;
 import com.opera.core.systems.runner.OperaRunner;
@@ -49,13 +50,11 @@ import org.openqa.selenium.io.FileHandler;
 import org.openqa.selenium.net.PortProber;
 import org.openqa.selenium.os.CommandLine;
 
-import java.io.Closeable;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.ServerSocket;
 import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.security.NoSuchAlgorithmException;
@@ -133,10 +132,10 @@ public class OperaLauncherRunner extends OperaRunner
 
     logger.fine("Waiting for launcher connection on port " + launcherPort);
 
-    ServerSocket listenerServer = null;
+    CloseableServerSocket listenerServer = null;
     try {
       // Setup listener server
-      listenerServer = new ServerSocket(launcherPort);
+      listenerServer = new CloseableServerSocket(launcherPort);
       listenerServer.setSoTimeout((int) OperaIntervals.LAUNCHER_CONNECT_TIMEOUT.getValue());
 
       // Try to connect
@@ -163,7 +162,7 @@ public class OperaLauncherRunner extends OperaRunner
     } catch (IOException e) {
       throw new OperaRunnerException("Unable to listen to launcher port " + launcherPort, e);
     } finally {
-      Closeables.closeQuietly((Closeable) listenerServer);
+      Closeables.closeQuietly(listenerServer);
     }
   }
 
