@@ -54,7 +54,7 @@ public class WindowTest extends OperaDriverTestCase {
 
   @Test
   @Ignore(platforms = WINDOWS)
-  public void testOpenNewTargetedWindow() {
+  public void openNewTargetedWindow() {
     windowPage.openNewTargetedWindow();
 
     int windowCount = driver.getWindowCount();
@@ -66,7 +66,7 @@ public class WindowTest extends OperaDriverTestCase {
 
   @Test
   @Ignore(platforms = WINDOWS)
-  public void testOpenMultipleTargetedWindows() {
+  public void openMultipleTargetedWindows() {
     for (int i = 1; i <= 2; i++) {
       windowPage.openNewTargetedWindow();
     }
@@ -76,7 +76,7 @@ public class WindowTest extends OperaDriverTestCase {
 
   @Test
   @Ignore(platforms = WINDOWS)
-  public void testOpenNewAnonymousWindow() {
+  public void openNewAnonymousWindow() {
     windowPage.openNewAnonymousWindow();
 
     int windowCount = driver.getWindowCount();
@@ -85,7 +85,7 @@ public class WindowTest extends OperaDriverTestCase {
 
   @Test
   @Ignore(platforms = WINDOWS)
-  public void testOpenMultipleWindows() {
+  public void openMultipleWindows() {
     int windowsToOpen = 3;
 
     for (int i = 1; i <= windowsToOpen; i++) {
@@ -96,9 +96,24 @@ public class WindowTest extends OperaDriverTestCase {
   }
 
   @Test
-  @Ignore(products = CORE, value = "gogi does not quit when closing last window")
-  public void testCloseShouldQuitBrowserIfLastWindow() {
+  public void closeLastWindowQuitsBrowser() {
     driver.close();
+    assertFalse(driver.isRunning());
+  }
+
+  @Test
+  public void twoClosesDoesNotThrow() {
+    driver.close();
+    driver.close();
+  }
+
+  @Test
+  @Ignore(products = CORE,
+          value = "Not able to differentiate between popup windows and actual windows on core-gogi")
+  public void closeLastWindowWithHTTPAuthQuitsBrowser() {
+    driver.navigate().to(pages.basic_auth);
+    driver.close();
+    assertEquals(0, driver.getWindowCount());
     assertFalse(driver.isRunning());
   }
 

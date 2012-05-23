@@ -16,13 +16,16 @@ limitations under the License.
 
 package com.opera.core.systems;
 
-import com.google.common.base.Throwables;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
+
+import com.opera.core.systems.common.io.Closeables;
 import com.opera.core.systems.common.lang.OperaStrings;
 import com.opera.core.systems.model.ScreenShotReply;
 import com.opera.core.systems.model.ScriptResult;
 import com.opera.core.systems.preferences.OperaScopePreferences;
 import com.opera.core.systems.runner.OperaRunner;
+import com.opera.core.systems.runner.OperaRunnerException;
 import com.opera.core.systems.runner.launcher.OperaLauncherRunner;
 import com.opera.core.systems.scope.exceptions.CommunicationException;
 import com.opera.core.systems.scope.exceptions.ResponseNotReceivedException;
@@ -47,6 +50,7 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.NoSuchFrameException;
 import org.openqa.selenium.NoSuchWindowException;
 import org.openqa.selenium.OutputType;
+import org.openqa.selenium.Platform;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
@@ -62,7 +66,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -74,6 +77,10 @@ import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.opera.core.systems.OperaProduct.CORE;
+import static com.opera.core.systems.OperaProduct.DESKTOP;
+import static com.opera.core.systems.OperaProduct.MOBILE;
+import static org.openqa.selenium.Platform.WINDOWS;
 
 /**
  * OperaDriver is a vendor-supported WebDriver implementation developed by Opera and volunteers that
@@ -124,9 +131,8 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
   protected Set<Integer> objectIds = new HashSet<Integer>();
   private int assignedWindowIds = 0;
-  private String version;
 
-  private final Logger logger = Logger.getLogger(getClass().getName());
+  protected final Logger logger = Logger.getLogger(getClass().getName());
   private FileHandler logFile = null;
 
   /**
@@ -218,7 +224,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
     // Mobile needs to be able to autofocus elements for form input currently.  This is an ugly
     // workaround which should get solved by implementing a standalone bream Scope service.
-    if (utils().getProduct().is(OperaProduct.MOBILE)) {
+    if (utils().getProduct().is(MOBILE)) {
       preferences().set("User Prefs", "Allow Autofocus Form Element", true);
     }
   }
@@ -246,7 +252,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
       services = new ScopeServices(getServicesList(), settings.getPort(), !settings.autostart());
       services.startStpThread();
     } catch (IOException e) {
-      Throwables.propagate(e);
+      throw new WebDriverException(e);
     }
   }
 
@@ -255,20 +261,21 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
   }
 
   public void quit() {
-    logger.fine("OperaDriver shutting down");
-
-    // This will only delete the profile directory if we created it
-    settings.profile().cleanUp();
-
-    // This method can be called from start(), before services are created
-    if (services != null) {
-      services.shutdown();
-    }
-    if (runner != null) {
-      runner.shutdown();
-    }
-    if (logFile != null) {
-      logFile.close();
+    try {
+      services.quit();
+      if (runner != null) {
+        runner.stopOpera();
+        runner.shutdown();
+      }
+      if (services != null) {
+        services.shutdown();
+      }
+    } catch (OperaRunnerException e) {
+      // nothing we can do
+    } finally {
+      settings.profile().cleanUp();
+      Closeables.closeQuietly(logFile);
+      gc();
     }
   }
 
@@ -334,8 +341,18 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
   }
 
   public void close() {
-    closeWindow();
-    if (windowManager.getOpenWindowCount() == 0) {
+    int windowCountBeforeClose = getWindowCount();
+    if (windowCountBeforeClose >= 1) {
+      closeWindow();
+    }
+
+    // Gogi and Desktop on Windows does not close its last window, but we need to follow the
+    // WebDriver spec
+    OperaProduct product = utils().getProduct();
+
+    if (getWindowCount() == 0 ||
+        ((product.is(CORE) || (product.is(DESKTOP) && Platform.getCurrent().is(WINDOWS)))
+         && windowCountBeforeClose == 1)) {
       quit();
     } else {
       windowManager.filterActiveWindow();
@@ -501,6 +518,9 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
   }
 
   public Set<String> getWindowHandles() {
+    if (!services.isConnected()) {
+      return ImmutableSet.of();
+    }
 
     List<Integer> windowIds = windowManager.getWindowHandles();
     Set<String> handles = new TreeSet<String>();

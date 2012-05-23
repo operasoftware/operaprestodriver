@@ -21,6 +21,7 @@ import com.opera.core.systems.environment.webserver.AppServer;
 public class Pages {
 
   public String alert;
+  public String basic_auth;
   public String windows;
   public String download;
   public String ecmascriptEvent;
@@ -45,6 +46,7 @@ public class Pages {
 
   public Pages(AppServer server) {
     alert = server.whereIs("alert.html");
+    basic_auth = server.whereIs("basic_auth.html");
     windows = server.whereIs("windows.html");
     download = server.whereIs("download.html");
     ecmascriptEvent = server.whereIs("idle/ecmascript-event.html");

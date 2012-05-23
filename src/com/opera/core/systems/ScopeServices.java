@@ -65,6 +65,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.logging.Logger;
 
 /**
@@ -75,6 +76,10 @@ import java.util.logging.Logger;
 public class ScopeServices implements IConnectionHandler {
 
   private final Logger logger = Logger.getLogger(this.getClass().getName());
+  private final ReentrantLock shutdown = new ReentrantLock();
+  private final Map<String, String> versions;
+  private final StpThread stpThread;
+  private final AtomicInteger tagCounter;
 
   private ICoreUtils coreUtils;
   private IEcmaScriptDebugger debugger;
@@ -87,19 +92,9 @@ public class ScopeServices implements IConnectionHandler {
   private HostInfo hostInfo;
   private ICookieManager cookieManager;
   private ISelftest selftest;
-
-  private Map<String, String> versions;
-
   private WaitState waitState = new WaitState();
   private StpConnection connection = null;
-
-  private StpThread stpThread;
-  private boolean shuttingDown = false;
-
   private List<String> listedServices;
-
-  private AtomicInteger tagCounter;
-
   private StringBuilder selftestOutput;
 
   /**
@@ -212,14 +207,12 @@ public class ScopeServices implements IConnectionHandler {
     }
   }
 
-  public void shutdown() {
-    // This can get called twice if we get a DISCONNECTED exception when closing down Opera.  Check
-    // if we're already shutting down and bail.
-    if (shuttingDown) {
-      return;
-    }
+  public boolean isConnected() {
+    return connection != null;
+  }
 
-    shuttingDown = true;
+  public void shutdown() {
+    shutdown.lock();  // don't unlock this
 
     if (connection != null) {
       connection.close();
@@ -400,6 +393,10 @@ public class ScopeServices implements IConnectionHandler {
   }
 
   public void quitOpera(OperaRunner runner) {
+    if (!isConnected()) {
+      return;
+    }
+
     try {
       if (exec.getActionList().contains("Quit")) {
         exec.action("Quit");
@@ -410,7 +407,7 @@ public class ScopeServices implements IConnectionHandler {
       // We expect a CommunicationException here, because as Opera is shutting
       // down the connection will be closed.
       if (!(e instanceof CommunicationException)) {
-        logger.info("Caught exception when trying to shut down: " + e.getMessage());
+        logger.warning("Caught exception on shut down: " + e.getMessage());
       }
     }
 
@@ -511,9 +508,8 @@ public class ScopeServices implements IConnectionHandler {
 
   public void onDisconnect() {
     logger.fine("Disconnected, closing STP connection");
-    if (connection != null && !shuttingDown) {
+    if (connection != null && !shutdown.isLocked()) {
       waitState.onDisconnected();
-      logger.finest("Cleaning up...");
       connection = null;
     }
   }
@@ -688,7 +684,6 @@ public class ScopeServices implements IConnectionHandler {
   }
 
   public void onException(Exception exception) {
-    logger.finest("Got exception");
     if (connection != null) {
       waitState.onException(exception);
       connection = null;

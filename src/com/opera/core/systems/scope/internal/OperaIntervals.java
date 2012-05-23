@@ -120,7 +120,13 @@ public enum OperaIntervals {
    * This should be removed when support is added to the exec service for setValue() so that we can
    * tell Opera to override this interval.
    */
-  MULTIPLE_CLICK_SLEEP(getSystemMultiClickTimeout());
+  MULTIPLE_CLICK_SLEEP(getSystemMultiClickTimeout()),
+
+  /**
+   * Different products have different animations when closing windows, and sometimes it might take
+   * a little while.  This is a bad hack for circumventing that issue.
+   */
+  WINDOW_CLOSE_SLEEP(100);
 
   private long value;
 

@@ -53,7 +53,7 @@ public interface AppServer {
    * installed server to a resource based on the given relative URL.
    *
    * @param relativeUrl the relative path to the server to the resource you're looking for, e.g.
-   *                    "/some/thing" might reutrn "http://127.0.0.1/some/thing"
+   *                    "/some/thing" might return "http://127.0.0.1/some/thing"
    * @return the full URL to the requested resource on the server with the alternate hostname
    */
   String whereElseIs(String relativeUrl);

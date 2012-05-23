@@ -21,7 +21,7 @@ import com.opera.core.systems.OperaSettings;
 import com.opera.core.systems.environment.GlobalTestEnvironment;
 import com.opera.core.systems.environment.InProcessTestEnvironment;
 import com.opera.core.systems.environment.TestEnvironment;
-import com.opera.core.systems.environment.webserver.WebServer;
+import com.opera.core.systems.environment.webserver.AppServer;
 import com.opera.core.systems.testing.drivers.OperaDriverBuilder;
 import com.opera.core.systems.testing.drivers.TestOperaDriver;
 import com.opera.core.systems.testing.drivers.TestOperaDriverSupplier;
@@ -60,7 +60,7 @@ import static org.junit.Assert.assertThat;
 public abstract class OperaDriverTestCase {
 
   protected static TestEnvironment environment;
-  protected static WebServer server;
+  protected static AppServer server;
   protected static Pages pages;
   protected static Resources resources;
   protected static TestOperaDriver driver;

@@ -26,8 +26,6 @@ import com.opera.core.systems.scope.services.IOperaExec;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.Platform;
 
-import java.util.logging.Logger;
-
 /**
  * Provides access to the {@link com.opera.core.systems.runner.OperaRunner}, so we can detect
  * crashes.
@@ -36,7 +34,6 @@ public class TestOperaDriver extends OperaDriver {
 
   public static enum ClosingStrategy {SWITCH_TO, ACTION}
 
-  private final Logger logger = Logger.getLogger(getClass().getName());
   private final Platform currentPlatform = Platform.getCurrent();
 
   private String controlWindow = null;
@@ -48,8 +45,7 @@ public class TestOperaDriver extends OperaDriver {
    * @param capabilities the set of capabilities to use
    */
   public TestOperaDriver(Capabilities capabilities) {
-    super(capabilities);
-    controlWindow = getWindowHandle();
+    this(new OperaSettings().merge(capabilities));
   }
 
   /**
@@ -80,20 +76,22 @@ public class TestOperaDriver extends OperaDriver {
    *
    * @return currently used capabilities
    */
+  @Override
   public Capabilities getCapabilities() {
     return settings.toCapabilities();
-  }
-
-  public boolean isRunning() {
-    return !settings.autostart() || runner != null && runner.isOperaRunning();
   }
 
   public ScopeServices getServices() {
     return getScopeServices();
   }
 
+  @Override
   public IOperaExec getExecService() {
     return super.getExecService();
+  }
+
+  public boolean isRunning() {
+    return runner != null ? runner.isOperaRunning() : getScopeServices().isConnected();
   }
 
   /**
@@ -171,7 +169,7 @@ public class TestOperaDriver extends OperaDriver {
         currentProduct = OperaProduct.CORE;  // default
         String requestedProduct = System.getenv("OPERA_PRODUCT");
 
-        if (isRunning() && (requestedProduct == null || requestedProduct.isEmpty())) {
+        if (requestedProduct == null || requestedProduct.isEmpty()) {
           requestedProduct = super.getProduct().toString();
         } else {
           logger.warning("Driver is not running, defaulting to " + currentProduct);
@@ -180,8 +178,8 @@ public class TestOperaDriver extends OperaDriver {
         try {
           currentProduct = OperaProduct.get(requestedProduct);
         } catch (IllegalArgumentException e) {
-          logger.warning("Product '" + requestedProduct + "' not found, defaulting to " +
-                         currentProduct);
+          logger.warning(String.format("Product `%s' not found, defaulting to %s",
+                                       requestedProduct, currentProduct));
         }
       }
 
@@ -192,10 +190,6 @@ public class TestOperaDriver extends OperaDriver {
       return currentPlatform;
     }
 
-  }
-
-  public static Capabilities getDefaultCapabilities() {
-    return new OperaSettings().toCapabilities();
   }
 
   /**
@@ -218,8 +212,8 @@ public class TestOperaDriver extends OperaDriver {
    */
   private void closeAllUsingAction() {
     if (utils().getProduct().is(OperaProduct.DESKTOP)) {
-      throw new UnsupportedOperationException("Closing pages by Opera action not supported on " +
-                                              "product DESKTOP");
+      throw new UnsupportedOperationException(
+          "Closing pages by Opera action not supported on product DESKTOP");
     }
 
     getScopeServices().getExec().action("Close all pages");

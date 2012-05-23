@@ -23,7 +23,6 @@ import com.opera.core.systems.testing.InProject;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.net.NetworkUtils;
-import org.webbitserver.HttpHandler;
 import org.webbitserver.WebServer;
 import org.webbitserver.WebServers;
 
@@ -42,7 +41,7 @@ public class WebbitAppServer implements AppServer {
   private static final String FIXED_HTTP_PORT_ENV_NAME = "TEST_HTTP_PORT";
 
   private static final int DEFAULT_HTTP_PORT = 2310;
-  private static final String DEFAULT_CONTEXT_PATH = "/test/fixtures";
+  private static final String DEFAULT_CONTEXT_PATH = "/";
 
   private final String hostname;
   private int httpPort;
@@ -87,7 +86,7 @@ public class WebbitAppServer implements AppServer {
 
   private String getCommonPath(String relativeUrl) {
     if (!relativeUrl.startsWith("/")) {
-      relativeUrl = DEFAULT_CONTEXT_PATH + "/" + relativeUrl;
+      relativeUrl = DEFAULT_CONTEXT_PATH + relativeUrl;
     }
     return relativeUrl;
   }
@@ -106,7 +105,7 @@ public class WebbitAppServer implements AppServer {
 
     // Note: Does first matching prefix matching, so /common/foo must be set up before /common
     // Delegating to a PathMatchHandler can be used to limit this
-    forwardPathToHandlerUnderCommon("/basicAuth", new BasicAuthHandler("test:test"), server);
+    server.add("/basicAuth", new BasicAuthHandler("test:test"));
     server.add(new PathAugmentingStaticFileHandler(InProject.locate("test/fixtures"),
                                                    DEFAULT_CONTEXT_PATH));
 
@@ -124,16 +123,6 @@ public class WebbitAppServer implements AppServer {
       }
     }
     throw new TimeoutException("Timed out waiting for server to start");
-  }
-
-  // Note: Does first matching prefix matching, so /common/foo must be set up before /common
-  // Delegating to a PathMatchHandler can be used to limit this
-  private void forwardPathToHandler(String path, HttpHandler handler, WebServer server) {
-    server.add(new PathForwardingHandler(path, handler));
-  }
-
-  private void forwardPathToHandlerUnderCommon(String path, HttpHandler handler, WebServer server) {
-    forwardPathToHandler("/common" + path, handler, server);
   }
 
   public void listenOn(int port) {
@@ -169,7 +158,7 @@ public class WebbitAppServer implements AppServer {
     WebbitAppServer server = new WebbitAppServer();
     server.listenOn(DEFAULT_HTTP_PORT);
     server.start();
-    System.out.printf("Started server on port %d", server.getHttpPort());
+    System.out.printf("Started server on port %d\n", server.getHttpPort());
   }
 
 }

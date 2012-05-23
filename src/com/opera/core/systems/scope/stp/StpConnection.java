@@ -19,6 +19,7 @@ package com.opera.core.systems.scope.stp;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.CodedOutputStream;
 
+import com.opera.core.systems.scope.exceptions.CommunicationException;
 import com.opera.core.systems.scope.handlers.EventHandler;
 import com.opera.core.systems.scope.handlers.IConnectionHandler;
 import com.opera.core.systems.scope.protos.UmsProtos.Command;
@@ -537,23 +538,22 @@ public class StpConnection implements SocketListener {
         String service = error.getService();
         int status = error.getStatus();
 
-        // We get exceptions when, in the ecmascript services, we use a runtime
-        // that doesn't exist. We can ignore these exceptions and carry on.
-        if ((service.equals("ecmascript-debugger") && status == Status.INTERNAL_ERROR.getNumber())
-            ||
+        // We get exceptions when, in the ECMAScript services, we use a runtime that doesn't exist.
+        // We can ignore these exceptions and carry on.
+        if ((service.equals("ecmascript-debugger") &&
+             status == Status.INTERNAL_ERROR.getNumber()) ||
             (service.equals("ecmascript") && status == Status.BAD_REQUEST.getNumber())) {
           signalResponse(error.getTag(), null);
         } else {
-          logger.log(Level.SEVERE, "Error: {0}", error.toString());
-          connectionHandler.onException(new WebDriverException(
-              "Error on command: " + error.toString()));
+          connectionHandler.onException(
+              new CommunicationException(String.format("Error on command: %s", error)));
         }
 
         break;
 
       default:
-        connectionHandler.onException(new WebDriverException(
-            "Unhandled STP type: " + stpType));
+        connectionHandler.onException(new CommunicationException(
+            String.format("Unhandled STP type: %d" + stpType)));
     }
   }
 
