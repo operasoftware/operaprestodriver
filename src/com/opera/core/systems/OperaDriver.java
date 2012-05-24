@@ -25,7 +25,6 @@ import com.opera.core.systems.model.ScreenShotReply;
 import com.opera.core.systems.model.ScriptResult;
 import com.opera.core.systems.preferences.OperaScopePreferences;
 import com.opera.core.systems.runner.OperaRunner;
-import com.opera.core.systems.runner.OperaRunnerException;
 import com.opera.core.systems.runner.launcher.OperaLauncherRunner;
 import com.opera.core.systems.scope.exceptions.CommunicationException;
 import com.opera.core.systems.scope.exceptions.ResponseNotReceivedException;
@@ -270,12 +269,12 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
       if (services != null) {
         services.shutdown();
       }
-    } catch (OperaRunnerException e) {
+      gc();
+    } catch (Exception e) {
       // nothing we can do
     } finally {
       settings.profile().cleanUp();
       Closeables.closeQuietly(logFile);
-      gc();
     }
   }
 
@@ -546,7 +545,6 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
   private String getWindowHandle(Integer windowId) {
     String windowName;
-
     String script = "return top.window.name;";
 
     if (windowId == null) {
@@ -554,6 +552,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     } else {
       windowName = debugger.executeJavascript(script, windowId);
     }
+
     if (windowName.isEmpty()) {
       windowName = "operadriver-window" + (assignedWindowIds++);
       script = "top.window.name = '" + windowName + "';";
@@ -963,13 +962,12 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     }
 
     /**
-     * A string which describes the operating system, e.g. "Windows NT 6.1".
+     * The platform currently used.
      *
      * @return operating system identifier
      */
-    // TODO(andreastt): Use Platform
-    public String getOS() {
-      return coreUtils.getOperatingSystem();
+    public Platform getPlatform() {
+      return Platform.extractFromSysProperty(coreUtils.getOperatingSystem());
     }
 
     /**
