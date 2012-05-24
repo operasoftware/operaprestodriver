@@ -42,6 +42,12 @@ message WindowInfo
      * or 0 if it was not opened by another window.
      */
     required uint32 openerID   = 4;
+    /**
+     * The name of the extension if window type is 'gadget'.
+     *
+     * @since 2.2
+     */
+    optional string extensionName = 5;
 }
 
 /**
@@ -63,14 +69,13 @@ message WindowInfo
 service WindowManager
 {
     option (cpp_hfile) = "modules/scope/src/scope_window_manager.h";
-    option (version) = "2.1";
+    option (version) = "2.2";
     option (cpp_class) = OpScopeWindowManager;
 
     /**
      * Request the currently active window.
      */
     command GetActiveWindow(Default) returns (WindowID) = 1;
-    command ListWindows(Default) returns (WindowList) = 2;
     /**
      * The default `WindowFilter` used to be `includePatternList` `"*"`.
      * After this command was introduced, the default filter is `includeIDList` 0 (unknown).

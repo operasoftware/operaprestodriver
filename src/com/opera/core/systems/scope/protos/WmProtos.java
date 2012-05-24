@@ -26,6 +26,10 @@ public final class WmProtos {
     // required uint32 openerID = 4;
     boolean hasOpenerID();
     int getOpenerID();
+    
+    // optional string extensionName = 5;
+    boolean hasExtensionName();
+    String getExtensionName();
   }
   public static final class WindowInfo extends
       com.google.protobuf.GeneratedMessage
@@ -140,11 +144,44 @@ public final class WmProtos {
       return openerID_;
     }
     
+    // optional string extensionName = 5;
+    public static final int EXTENSIONNAME_FIELD_NUMBER = 5;
+    private java.lang.Object extensionName_;
+    public boolean hasExtensionName() {
+      return ((bitField0_ & 0x00000010) == 0x00000010);
+    }
+    public String getExtensionName() {
+      java.lang.Object ref = extensionName_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
+          extensionName_ = s;
+        }
+        return s;
+      }
+    }
+    private com.google.protobuf.ByteString getExtensionNameBytes() {
+      java.lang.Object ref = extensionName_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
+        extensionName_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    
     private void initFields() {
       windowID_ = 0;
       title_ = "";
       windowType_ = "";
       openerID_ = 0;
+      extensionName_ = "";
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -186,6 +223,9 @@ public final class WmProtos {
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
         output.writeUInt32(4, openerID_);
       }
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        output.writeBytes(5, getExtensionNameBytes());
+      }
       getUnknownFields().writeTo(output);
     }
     
@@ -210,6 +250,10 @@ public final class WmProtos {
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
         size += com.google.protobuf.CodedOutputStream
           .computeUInt32Size(4, openerID_);
+      }
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(5, getExtensionNameBytes());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -343,6 +387,8 @@ public final class WmProtos {
         bitField0_ = (bitField0_ & ~0x00000004);
         openerID_ = 0;
         bitField0_ = (bitField0_ & ~0x00000008);
+        extensionName_ = "";
+        bitField0_ = (bitField0_ & ~0x00000010);
         return this;
       }
       
@@ -397,6 +443,10 @@ public final class WmProtos {
           to_bitField0_ |= 0x00000008;
         }
         result.openerID_ = openerID_;
+        if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
+          to_bitField0_ |= 0x00000010;
+        }
+        result.extensionName_ = extensionName_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -424,6 +474,9 @@ public final class WmProtos {
         }
         if (other.hasOpenerID()) {
           setOpenerID(other.getOpenerID());
+        }
+        if (other.hasExtensionName()) {
+          setExtensionName(other.getExtensionName());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -490,6 +543,11 @@ public final class WmProtos {
             case 32: {
               bitField0_ |= 0x00000008;
               openerID_ = input.readUInt32();
+              break;
+            }
+            case 42: {
+              bitField0_ |= 0x00000010;
+              extensionName_ = input.readBytes();
               break;
             }
           }
@@ -610,6 +668,42 @@ public final class WmProtos {
         openerID_ = 0;
         onChanged();
         return this;
+      }
+      
+      // optional string extensionName = 5;
+      private java.lang.Object extensionName_ = "";
+      public boolean hasExtensionName() {
+        return ((bitField0_ & 0x00000010) == 0x00000010);
+      }
+      public String getExtensionName() {
+        java.lang.Object ref = extensionName_;
+        if (!(ref instanceof String)) {
+          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
+          extensionName_ = s;
+          return s;
+        } else {
+          return (String) ref;
+        }
+      }
+      public Builder setExtensionName(String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000010;
+        extensionName_ = value;
+        onChanged();
+        return this;
+      }
+      public Builder clearExtensionName() {
+        bitField0_ = (bitField0_ & ~0x00000010);
+        extensionName_ = getDefaultInstance().getExtensionName();
+        onChanged();
+        return this;
+      }
+      void setExtensionName(com.google.protobuf.ByteString value) {
+        bitField0_ |= 0x00000010;
+        extensionName_ = value;
+        onChanged();
       }
       
       // @@protoc_insertion_point(builder_scope:scope.WindowInfo)
@@ -4029,21 +4123,21 @@ public final class WmProtos {
   static {
     java.lang.String[] descriptorData = {
       "\n\024window_manager.proto\022\005scope\032\"opera/sco" +
-      "pe/scope_descriptor.proto\"S\n\nWindowInfo\022" +
+      "pe/scope_descriptor.proto\"j\n\nWindowInfo\022" +
       "\020\n\010windowID\030\001 \002(\r\022\r\n\005title\030\002 \002(\t\022\022\n\nwind" +
-      "owType\030\003 \002(\t\022\020\n\010openerID\030\004 \002(\r\"\034\n\010Window" +
-      "ID\022\020\n\010windowID\030\001 \002(\r\"\220\001\n\014WindowFilter\022\032\n" +
-      "\013clearFilter\030\001 \002(\010:\005false\022\025\n\rincludeIDLi" +
-      "st\030\002 \003(\r\022\032\n\022includePatternList\030\003 \003(\t\022\025\n\r" +
-      "excludeIDList\030\004 \003(\r\022\032\n\022excludePatternLis" +
-      "t\030\005 \003(\t\"3\n\nWindowList\022%\n\nwindowList\030\001 \003(" +
-      "\0132\021.scope.WindowInfo\"%\n\017CreateWindowArg\022",
-      "\022\n\nwindowType\030\001 \001(\t\"\"\n\016CloseWindowArg\022\020\n" +
-      "\010windowID\030\001 \002(\r\"+\n\nOpenURLArg\022\020\n\010windowI" +
-      "D\030\001 \002(\r\022\013\n\003url\030\002 \002(\t\"5\n\023ModifyTypeFilter" +
-      "Arg\022\014\n\004mode\030\002 \002(\t\022\020\n\010typeList\030\001 \003(\tB1\n#c" +
-      "om.opera.core.systems.scope.protosB\010WmPr" +
-      "otosH\001"
+      "owType\030\003 \002(\t\022\020\n\010openerID\030\004 \002(\r\022\025\n\rextens" +
+      "ionName\030\005 \001(\t\"\034\n\010WindowID\022\020\n\010windowID\030\001 " +
+      "\002(\r\"\220\001\n\014WindowFilter\022\032\n\013clearFilter\030\001 \002(" +
+      "\010:\005false\022\025\n\rincludeIDList\030\002 \003(\r\022\032\n\022inclu" +
+      "dePatternList\030\003 \003(\t\022\025\n\rexcludeIDList\030\004 \003" +
+      "(\r\022\032\n\022excludePatternList\030\005 \003(\t\"3\n\nWindow" +
+      "List\022%\n\nwindowList\030\001 \003(\0132\021.scope.WindowI",
+      "nfo\"%\n\017CreateWindowArg\022\022\n\nwindowType\030\001 \001" +
+      "(\t\"\"\n\016CloseWindowArg\022\020\n\010windowID\030\001 \002(\r\"+" +
+      "\n\nOpenURLArg\022\020\n\010windowID\030\001 \002(\r\022\013\n\003url\030\002 " +
+      "\002(\t\"5\n\023ModifyTypeFilterArg\022\014\n\004mode\030\002 \002(\t" +
+      "\022\020\n\010typeList\030\001 \003(\tB1\n#com.opera.core.sys" +
+      "tems.scope.protosB\010WmProtosH\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -4055,7 +4149,7 @@ public final class WmProtos {
           internal_static_scope_WindowInfo_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_scope_WindowInfo_descriptor,
-              new java.lang.String[] { "WindowID", "Title", "WindowType", "OpenerID", },
+              new java.lang.String[] { "WindowID", "Title", "WindowType", "OpenerID", "ExtensionName", },
               com.opera.core.systems.scope.protos.WmProtos.WindowInfo.class,
               com.opera.core.systems.scope.protos.WmProtos.WindowInfo.Builder.class);
           internal_static_scope_WindowID_descriptor =
