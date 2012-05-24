@@ -21,7 +21,7 @@ import com.opera.core.systems.environment.webserver.AppServer;
 public class Pages {
 
   public String alert;
-  public String basic_auth;
+  public String basicAuth;
   public String windows;
   public String download;
   public String ecmascriptEvent;
@@ -36,6 +36,7 @@ public class Pages {
   public String metaRefresh;
   public String mouse;
   public String none;
+  public String result;
   public String select;
   public String tall;
   public String test;
@@ -46,7 +47,7 @@ public class Pages {
 
   public Pages(AppServer server) {
     alert = server.whereIs("alert.html");
-    basic_auth = server.whereIs("basic_auth.html");
+    basicAuth = server.whereIs("basic_auth.html");
     windows = server.whereIs("windows.html");
     download = server.whereIs("download.html");
     ecmascriptEvent = server.whereIs("idle/ecmascript-event.html");
@@ -61,6 +62,7 @@ public class Pages {
     metaRefresh = server.whereIs("idle/metarefresh.html");
     mouse = server.whereIs("mouse.html");
     none = server.whereIs("none.html");
+    result = server.whereIs("result_page.html");
     select = server.whereIs("select.html");
     tall = server.whereIs("tall.html");
     test = server.whereIs("test.html");

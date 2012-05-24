@@ -35,14 +35,14 @@ import static org.junit.Assert.assertTrue;
 public class NavigationTest extends OperaDriverTestCase {
 
   @Before
-  public void beforeEach() {
+  public void navigateToThreePages() {
     driver.navigate().to(pages.javascript);
     driver.navigate().to(pages.test);
     driver.navigate().to(pages.keys);
   }
 
   @After
-  public void afterEach() {
+  public void resetPageLoadTimeout() {
     // Make sure page load timeout is reset after each test, if one happens to fail
     driver.manage().timeouts().pageLoadTimeout(OperaIntervals.PAGE_LOAD_TIMEOUT.getValue(),
                                                TimeUnit.MILLISECONDS);
@@ -50,37 +50,36 @@ public class NavigationTest extends OperaDriverTestCase {
   }
 
   @Test
-  public void testBack() {
+  public void back() {
     driver.navigate().back();
     assertTrue(driver.getCurrentUrl().endsWith("test.html"));
   }
 
   @Test
-  public void testForward() {
-    testBack();
+  public void forward() {
+    back();
     driver.navigate().forward();
     assertTrue(driver.getCurrentUrl().endsWith("keys.html"));
   }
 
   @Test
-  public void testBack2() {
+  public void backTwice() {
     driver.navigate().back();
     driver.navigate().back();
     assertTrue(driver.getCurrentUrl().endsWith("javascript.html"));
   }
 
   @Test
-  public void testForward2() {
-    testBack2();
+  public void forwardTwice() {
+    backTwice();
     driver.navigate().forward();
     driver.navigate().forward();
     assertTrue(driver.getCurrentUrl().endsWith("keys.html"));
   }
 
   @Test
-  // TODO(andreastt): Should be made local
-  public void testHttpRedirect() {
-    final String fetchedUrl = "http://t/core/bts/javascript/CORE-26410/003-2.php";
+  public void httpRedirect() {
+    final String fetchedUrl = server.whereIs("redirect");
     driver.navigate().to(fetchedUrl);
 
     // Wait for redirect
@@ -91,11 +90,12 @@ public class NavigationTest extends OperaDriverTestCase {
       }
     });
 
-    assertEquals("http://t/core/bts/javascript/CORE-26410/001-3.php", driver.getCurrentUrl());
+    assertEquals(pages.result, driver.getCurrentUrl());
   }
 
+  // If this fails, there's a high likelihood that idle is enabled
   @Test
-  public void testHandBackControlAfterPageLoadTimeout() {
+  public void handBackControlAfterPageLoadTimeout() {
     driver.manage().timeouts().pageLoadTimeout(100, TimeUnit.MILLISECONDS);
     driver.navigate().to(pages.ecmascriptTimeout);
     assertEquals("Waiting", driver.findElementById("out").getText());
@@ -103,8 +103,9 @@ public class NavigationTest extends OperaDriverTestCase {
     assertEquals("done", driver.findElementById("out").getText());
   }
 
+  // If this fails, there's a high likelihood that idle is enabled
   @Test
-  public void testHandBackControlAfterPageLoadTimeoutByOverload() {
+  public void handBackControlAfterPageLoadTimeoutByOverload() {
     driver.get(pages.ecmascriptTimeout, 100);
     assertEquals("Waiting", driver.findElementById("out").getText());
     sleep(1000);
@@ -114,8 +115,8 @@ public class NavigationTest extends OperaDriverTestCase {
   private void sleep(long ms) {
     try {
       Thread.sleep(ms);
-    } catch (Exception e) {
-      // do nothing
+    } catch (InterruptedException e) {
+      // fall through
     }
   }
 

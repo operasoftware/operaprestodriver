@@ -105,6 +105,7 @@ public class WebbitAppServer implements AppServer {
 
     // Note: Does first matching prefix matching, so /common/foo must be set up before /common
     // Delegating to a PathMatchHandler can be used to limit this
+    server.add("/redirect", new RedirectHandler("result_page.html"));
     server.add("/basicAuth", new BasicAuthHandler("test:test"));
     server.add(new PathAugmentingStaticFileHandler(InProject.locate("test/fixtures"),
                                                    DEFAULT_CONTEXT_PATH));
