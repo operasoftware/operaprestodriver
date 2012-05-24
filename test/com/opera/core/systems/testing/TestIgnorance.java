@@ -39,21 +39,6 @@ public class TestIgnorance {
     ignoreComparator.setCurrentProduct(OperaDriverTestCase.currentProduct());
   }
 
-  /*
-  public TestIgnorance(OperaProduct product, Platform platform) {
-    ignoreComparator.setCurrentProduct(checkNotNull(product, "Product must be set"));
-    ignoreComparator.setCurrentPlatform(checkNotNull(platform, "Platform must be set"));
-  }
-  */
-
-  /*
-  public TestIgnorance(OperaDriver driver) {
-    //ignoreComparator.addProduct(driver.utils().getProduct());
-    ignoreComparator.setCurrentProduct(driver.utils().getProduct());
-    ignoreComparator.setCurrentPlatform(driver.utils().getPlatform());
-  }
-  */
-
   // JUnit 4
   public boolean isIgnored(FrameworkMethod method, Object test) {
     boolean ignored = ignoreComparator.shouldIgnore(test.getClass().getAnnotation(Ignore.class)) ||
@@ -76,80 +61,10 @@ public class TestIgnorance {
   }
 
   private boolean isIgnoredDueToIdle(IdleEnabled enabled) {
-    /*
-    // If not specified, it should not be ignored
-    if (enabled == null) {
-      return false;
-    }
-
-    // If enabled (true), it should not be ignored
-    if (idleEnabled != null) {
-      return !idleEnabled;
-    }
-
-    // Spawn a new driver to check if idle is available.  If that fails, assume idle is not
-    // available.
-    TestOperaDriver driver = null;
-    try {
-      driver = OperaDriverTestCase.getWrappedDriver();
-      if (driver == null) {
-        driver = OperaDriverTestCase.createDriverIfNecessary();
-      }
-
-      idleEnabled = driver.getServices().isOperaIdleAvailable();
-    } catch (RuntimeException e) {
-      idleEnabled = false;
-    } finally {
-      if (driver != null) {
-        driver.quit();
-      }
-      driver = null;
-    }
-
-    return isIgnoredDueToIdle(enabled);
-    */
-
     return enabled != null && !idleEnabled;
   }
 
   private boolean isIgnoredDueToLackingService(RequiresService annotation) {
-    /*
-    if (annotation == null) {
-      return false;
-    }
-
-    if (services != null) {
-      if (!services.getListedServices().contains(annotation.service())) {
-        return true;
-      } else if (services.getListedServices().contains(annotation.service()) &&
-                 annotation.version() == null) {
-        return false;
-      }
-
-      return VersionUtil.compare(annotation.version(), "maxVersion") >= 0 ||
-          VersionUtil.compare(annotation.version(), services.getMinVersionFor(annotation.service())) < 0;
-    }
-
-    TestOperaDriver driver = null;
-    try {
-      driver = OperaDriverTestCase.getWrappedDriver();
-      if (driver == null) {
-        driver = OperaDriverTestCase.createDriverIfNecessary();
-      }
-
-      services = driver.getServices();
-    } catch (RuntimeException e) {
-      throw new WebDriverException("Unknown error: " + e.getMessage());
-    } finally {
-      if (driver != null) {
-        driver.quit();
-      }
-      driver = null;
-    }
-
-    return isIgnoredDueToLackingService(annotation);
-    */
-
     if (annotation == null) {
       return false;
     }
