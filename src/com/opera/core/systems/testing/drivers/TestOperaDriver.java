@@ -22,9 +22,12 @@ import com.opera.core.systems.OperaSettings;
 import com.opera.core.systems.ScopeServices;
 import com.opera.core.systems.runner.OperaRunner;
 import com.opera.core.systems.scope.services.IOperaExec;
+import com.opera.core.systems.scope.services.IWindowManager;
 
 import org.openqa.selenium.Capabilities;
-import org.openqa.selenium.Platform;
+
+import static com.opera.core.systems.OperaProduct.CORE;
+import static com.opera.core.systems.OperaProduct.DESKTOP;
 
 /**
  * Provides access to the {@link com.opera.core.systems.runner.OperaRunner}, so we can detect
@@ -34,9 +37,7 @@ public class TestOperaDriver extends OperaDriver {
 
   public static enum ClosingStrategy {SWITCH_TO, ACTION}
 
-  private final Platform currentPlatform = Platform.getCurrent();
-
-  private String controlWindow = null;
+  private final IWindowManager windowManager;
   private OperaProduct currentProduct = null;
 
   /**
@@ -55,7 +56,7 @@ public class TestOperaDriver extends OperaDriver {
    */
   public TestOperaDriver(OperaSettings settings) {
     super(settings);
-    controlWindow = getWindowHandle();
+    windowManager = getScopeServices().getWindowManager();
   }
 
   /**
@@ -90,66 +91,36 @@ public class TestOperaDriver extends OperaDriver {
     return super.getExecService();
   }
 
+  /**
+   * Determines if Opera is running or not.  If Opera is not run locally using {@link OperaRunner}
+   * it will check for a Scope connection instead.
+   *
+   * @return true if Opera is running, false otherwise
+   */
   public boolean isRunning() {
     return runner != null ? runner.isOperaRunning() : getScopeServices().isConnected();
   }
 
   /**
-   * Get the window handle of the initial control window, that is, the first window that was
-   * opened.
-   *
-   * @return window handle of control window
+   * Creates a new window.
    */
-  public String getControlWindow() {
-    return controlWindow;
+  public void createWindow() {
+    windowManager.createWindow();
   }
 
   /**
-   * Closes all windows except the control window using the {@link ClosingStrategy#SWITCH_TO}
-   * strategy.
+   * Closes all windows consistently across all products and platforms.
    */
   public void closeAll() {
-    closeAll(ClosingStrategy.SWITCH_TO);
-  }
-
-  /**
-   * Allows you to specifying the strategy for closing all windows (apart from the control window).
-   * Windows can either be closed using a {@link OperaDriver#switchTo()} and {@link
-   * OperaDriver#close()} call, or by sending the action "Close all pages".  The latter method
-   * <strong>does not</strong> guarantee that all windows are in fact closed.
-   *
-   * This method is failsafe, meaning that if there are no windows open it will not do anything.
-   *
-   * @param strategy the strategy to use for closing windows; either {@link
-   *                 ClosingStrategy#SWITCH_TO} or {@link ClosingStrategy#ACTION}
-   */
-  public void closeAll(ClosingStrategy strategy) {
-    int windowCountBeforeClosing = getWindowCount();
-
-    // Either control window (1) or no windows (0)
-    if (windowCountBeforeClosing <= 1) {
+    if (!isRunning()) {
       return;
     }
 
-    switch (strategy) {
-      case SWITCH_TO:
-        closeAllUsingSwitchTo();
-        break;
-      case ACTION:
-        closeAllUsingAction();
-        break;
+    windowManager.closeAllWindows();
+    if (utils().getProduct().is(DESKTOP)) {
+      windowManager.createWindow();
     }
-
-    // Were all windows closed?
-    if (getWindowCount() != 1) {
-      logger.warning("Should have had " + (windowCountBeforeClosing - 1) + " fewer window(s)");
-    }
-
-    // Make sure we're in the control window before continuing
-    if (!getControlWindow().equals(getWindowHandle())) {
-      logger.warning("After closing windows, we were not in the default control window");
-      switchTo().window(getControlWindow());
-    }
+    switchTo().defaultContent();
   }
 
   public TestOperaUtils utils() {
@@ -166,7 +137,7 @@ public class TestOperaDriver extends OperaDriver {
      */
     public OperaProduct getProduct() {
       if (currentProduct == null) {
-        currentProduct = OperaProduct.CORE;  // default
+        currentProduct = CORE;  // default
         String requestedProduct = System.getenv("OPERA_PRODUCT");
 
         if (requestedProduct == null || requestedProduct.isEmpty()) {
@@ -186,37 +157,6 @@ public class TestOperaDriver extends OperaDriver {
       return currentProduct;
     }
 
-    public Platform getPlatform() {
-      return currentPlatform;
-    }
-
-  }
-
-  /**
-   * Iterates through windows and closes all of them apart from the controlling window.  If the
-   * default control window (first window) is closed, the browser will be quit.
-   */
-  private void closeAllUsingSwitchTo() {
-    // Close all windows apart from our first control window
-    for (String windowHandle : getWindowHandles()) {
-      if (!windowHandle.equals(getControlWindow())) {
-        switchTo().window(windowHandle);
-        close();
-      }
-    }
-  }
-
-  /**
-   * Uses an Opera action to close all open windows.  There is no guarantee that this call will
-   * succeed.
-   */
-  private void closeAllUsingAction() {
-    if (utils().getProduct().is(OperaProduct.DESKTOP)) {
-      throw new UnsupportedOperationException(
-          "Closing pages by Opera action not supported on product DESKTOP");
-    }
-
-    getScopeServices().getExec().action("Close all pages");
   }
 
 }
