@@ -123,7 +123,7 @@ public class MouseTest extends OperaDriverTestCase {
   }
 
   @Test
-  @Ignore(platforms = MAC)
+  @Ignore(platforms = MAC, value = "Need investigation, probably related to OS native events")
   public void doubleClick() {
     getMouse().doubleClick(test.getCoordinates());
     assertEquals(2, getMonitor().downs());
