@@ -65,7 +65,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.locks.ReentrantLock;
 import java.util.logging.Logger;
 
 /**
@@ -76,7 +75,6 @@ import java.util.logging.Logger;
 public class ScopeServices implements IConnectionHandler {
 
   private final Logger logger = Logger.getLogger(this.getClass().getName());
-  private final ReentrantLock shutdown = new ReentrantLock();
   private final Map<String, String> versions;
   private final StpThread stpThread;
   private final AtomicInteger tagCounter;
@@ -96,6 +94,7 @@ public class ScopeServices implements IConnectionHandler {
   private StpConnection connection = null;
   private List<String> listedServices;
   private StringBuilder selftestOutput;
+  private boolean shutdown = false;
 
   /**
    * Creates the Scope server on specified address and port, as well as enabling the required Scope
@@ -212,9 +211,9 @@ public class ScopeServices implements IConnectionHandler {
   }
 
   public void shutdown() {
-    shutdown.lock();  // don't unlock this
+    shutdown = true;  // don't unlock this
 
-    if (connection != null) {
+    if (isConnected()) {
       connection.close();
     }
 
@@ -508,7 +507,7 @@ public class ScopeServices implements IConnectionHandler {
 
   public void onDisconnect() {
     logger.fine("Disconnected, closing STP connection");
-    if (connection != null && !shutdown.isLocked()) {
+    if (isConnected() && !shutdown) {
       waitState.onDisconnected();
       connection = null;
     }
@@ -673,7 +672,7 @@ public class ScopeServices implements IConnectionHandler {
   }
 
   public void onResponseReceived(int tag, Response response) {
-    if (connection != null) {
+    if (isConnected()) {
       logger.finest("Got response");
       if (response != null) {
         waitState.onResponse(tag, response);
@@ -684,7 +683,7 @@ public class ScopeServices implements IConnectionHandler {
   }
 
   public void onException(Exception exception) {
-    if (connection != null) {
+    if (isConnected()) {
       waitState.onException(exception);
       connection = null;
     }
