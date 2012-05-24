@@ -49,7 +49,6 @@ public class WindowTest extends OperaDriverTestCase {
 
   @After
   public void prepareNextTest() {
-    //driver.closeAll();
     while (driver.getWindowHandles().size() > 1) {
       driver.close();
     }
@@ -80,7 +79,6 @@ public class WindowTest extends OperaDriverTestCase {
   @Ignore(platforms = WINDOWS)
   public void openNewAnonymousWindow() {
     windowPage.openNewAnonymousWindow();
-
     assertEquals(newWindows(1), driver.getWindowHandles().size());
   }
 
