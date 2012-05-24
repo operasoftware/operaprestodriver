@@ -267,7 +267,6 @@ public class IdleTest extends OperaDriverTestCase {
     assertIdleEnabledAndAvailable();
 
     start();
-    System.out.println(driver.getServices().isOperaIdleAvailable());
     driver.navigate().to(pages.ecmascriptTimeoutLoop);
     stop();
 

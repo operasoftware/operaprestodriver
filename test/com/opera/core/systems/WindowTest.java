@@ -113,7 +113,6 @@ public class WindowTest extends OperaDriverTestCase {
   public void closeLastWindowWithHTTPAuthQuitsBrowser() {
     driver.navigate().to(pages.basicAuth);
     driver.close();
-    System.out.println(driver.getWindowHandles());
     assertEquals(0, driver.getWindowCount());
     assertFalse(driver.isRunning());
   }
