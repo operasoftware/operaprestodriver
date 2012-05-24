@@ -19,7 +19,6 @@ package com.opera.core.systems.runner.launcher;
 import com.google.common.collect.ImmutableList;
 import com.google.common.hash.Hashing;
 import com.google.common.io.ByteStreams;
-import com.google.common.io.Closeables;
 import com.google.common.io.Files;
 import com.google.protobuf.GeneratedMessage;
 
@@ -27,7 +26,7 @@ import com.opera.core.systems.OperaPaths;
 import com.opera.core.systems.OperaProduct;
 import com.opera.core.systems.OperaSettings;
 import com.opera.core.systems.arguments.OperaArgument;
-import com.opera.core.systems.common.net.CloseableServerSocket;
+import com.opera.core.systems.common.io.Closeables;
 import com.opera.core.systems.model.ScreenShotReply;
 import com.opera.core.systems.runner.OperaLaunchers;
 import com.opera.core.systems.runner.OperaRunner;
@@ -55,6 +54,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.ServerSocket;
 import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.security.NoSuchAlgorithmException;
@@ -77,7 +77,7 @@ public class OperaLauncherRunner extends OperaRunner
   private final int launcherPort = PortProber.findFreePort();
   private final List<String> arguments;
 
-  private OperaLauncherBinary runner = null;
+  private OperaLauncherBinary binary = null;
   private OperaLauncherProtocol protocol = null;
 
   private String crashlog = null;
@@ -124,7 +124,7 @@ public class OperaLauncherRunner extends OperaRunner
 
   private void init() {
     try {
-      runner = new OperaLauncherBinary(settings.getLauncher().getPath(),
+      binary = new OperaLauncherBinary(settings.getLauncher().getPath(),
                                        arguments.toArray(new String[arguments.size()]));
     } catch (IOException e) {
       throw new OperaRunnerException("Unable to start launcher: " + e.getMessage());
@@ -132,10 +132,10 @@ public class OperaLauncherRunner extends OperaRunner
 
     logger.fine("Waiting for launcher connection on port " + launcherPort);
 
-    CloseableServerSocket listenerServer = null;
+    ServerSocket listenerServer = null;
     try {
       // Setup listener server
-      listenerServer = new CloseableServerSocket(launcherPort);
+      listenerServer = new ServerSocket(launcherPort);
       listenerServer.setSoTimeout((int) OperaIntervals.LAUNCHER_CONNECT_TIMEOUT.getValue());
 
       // Try to connect
@@ -233,7 +233,7 @@ public class OperaLauncherRunner extends OperaRunner
       if (handleStatusMessage(res.getResponse()) != StatusType.RUNNING) {
         throw new OperaRunnerException(
             "Opera exited immediately; possibly incorrect arguments?  Command: " +
-            runner.getCommands());
+            binary.getCommands());
       }
     } catch (IOException e) {
       throw new OperaRunnerException("Could not start Opera: " + e.getMessage());
@@ -250,6 +250,10 @@ public class OperaLauncherRunner extends OperaRunner
   @Override
   public void stopOpera() throws OperaRunnerException {
     assertLauncherAlive();
+
+    if (!isOperaRunning()) {
+      return;
+    }
 
     logger.fine("Instructing launcher to stop Opera...");
 
@@ -329,9 +333,9 @@ public class OperaLauncherRunner extends OperaRunner
     } catch (IOException e) {
       throw new OperaRunnerException("Unable to shut down launcher", e);
     } finally {
-      runner.shutdown();
+      binary.shutdown();
       protocol = null;
-      runner = null;
+      binary = null;
     }
   }
 
@@ -481,7 +485,7 @@ public class OperaLauncherRunner extends OperaRunner
   }
 
   private boolean isLauncherRunning() {
-    return runner != null && runner.isRunning();
+    return binary != null && binary.isRunning();
   }
 
   public static File launcherDefaultLocation() {

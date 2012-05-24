@@ -20,6 +20,7 @@ import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import com.opera.core.systems.testing.Ignore;
 import com.opera.core.systems.testing.OperaDriverTestCase;
 
 import org.junit.Before;
@@ -34,6 +35,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertTrue;
+import static org.openqa.selenium.Platform.MAC;
 
 public class MouseTest extends OperaDriverTestCase {
 
@@ -121,6 +123,7 @@ public class MouseTest extends OperaDriverTestCase {
   }
 
   @Test
+  @Ignore(platforms = MAC, value = "Need investigation, probably related to OS native events")
   public void doubleClick() {
     getMouse().doubleClick(test.getCoordinates());
     assertEquals(2, getMonitor().downs());

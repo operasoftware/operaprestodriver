@@ -18,18 +18,10 @@ limitations under the License.
 
 package com.opera.core.systems.testing;
 
-import com.opera.core.systems.OperaProduct;
 import com.opera.core.systems.ScopeServices;
-import com.opera.core.systems.testing.drivers.OperaDriverBuilder;
-import com.opera.core.systems.testing.drivers.TestOperaDriver;
-import com.opera.core.systems.testing.drivers.TestOperaDriverSupplier;
 import com.opera.core.systems.util.VersionUtil;
 
 import org.junit.runners.model.FrameworkMethod;
-import org.openqa.selenium.Platform;
-import org.openqa.selenium.WebDriverException;
-
-import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Decides whether a test class or a method should be ignored.
@@ -37,12 +29,14 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class TestIgnorance {
 
   private final IgnoreComparator ignoreComparator = new IgnoreComparator();
-  private Boolean idleEnabled = null;
-  private ScopeServices services = null;
+  private final ScopeServices services;
+  private final Boolean idleEnabled;
 
-  public TestIgnorance(OperaProduct product, Platform platform) {
-    ignoreComparator.addProduct(checkNotNull(product, "Product must be set"));
-    ignoreComparator.setCurrentPlatform(checkNotNull(platform, "Platform must be set"));
+  public TestIgnorance() {
+    services = OperaDriverTestCase.currentServices();
+    idleEnabled = OperaDriverTestCase.currentHasIdle();
+    ignoreComparator.setCurrentPlatform(OperaDriverTestCase.currentPlatform());
+    ignoreComparator.setCurrentProduct(OperaDriverTestCase.currentProduct());
   }
 
   // JUnit 4
@@ -67,36 +61,7 @@ public class TestIgnorance {
   }
 
   private boolean isIgnoredDueToIdle(IdleEnabled enabled) {
-    // If not specified, it should not be ignored
-    if (enabled == null) {
-      return false;
-    }
-
-    // If enabled (true), it should not be ignored
-    if (idleEnabled != null) {
-      return !idleEnabled;
-    }
-
-    // Spawn a new driver to check if idle is available.  If that fails, assume idle is not
-    // available.
-    TestOperaDriver driver = null;
-    try {
-      driver = OperaDriverTestCase.getWrappedDriver();
-      if (driver == null) {
-        driver = (TestOperaDriver) new OperaDriverBuilder(new TestOperaDriverSupplier()).get();
-      }
-
-      idleEnabled = driver.getServices().isOperaIdleAvailable();
-    } catch (RuntimeException e) {
-      idleEnabled = false;
-    } finally {
-      if (driver != null) {
-        driver.quit();
-      }
-      driver = null;
-    }
-
-    return isIgnoredDueToIdle(enabled);
+    return enabled != null && !idleEnabled;
   }
 
   private boolean isIgnoredDueToLackingService(RequiresService annotation) {
@@ -104,36 +69,15 @@ public class TestIgnorance {
       return false;
     }
 
-    if (services != null) {
-      if (!services.getListedServices().contains(annotation.service())) {
-        return true;
-      } else if (services.getListedServices().contains(annotation.service()) &&
-                 annotation.version() == null) {
-        return false;
-      }
-
-      return VersionUtil.compare(annotation.version(), "maxVersion") >= 0 ||
-          VersionUtil.compare(annotation.version(), services.getMinVersionFor(annotation.service())) < 0;
+    if (!services.getListedServices().contains(annotation.service())) {
+      return true;
+    } else if (services.getListedServices().contains(annotation.service()) &&
+               annotation.version() == null) {
+      return false;
     }
 
-    TestOperaDriver driver = null;
-    try {
-      driver = OperaDriverTestCase.getWrappedDriver();
-      if (driver == null) {
-        driver = (TestOperaDriver) new OperaDriverBuilder(new TestOperaDriverSupplier()).get();
-      }
-
-      services = driver.getServices();
-    } catch (RuntimeException e) {
-      throw new WebDriverException("Unknown error: " + e.getMessage());
-    } finally {
-      if (driver != null) {
-        driver.quit();
-      }
-      driver = null;
-    }
-
-    return isIgnoredDueToLackingService(annotation);
+    return VersionUtil.compare(annotation.version(), "maxVersion") >= 0 ||
+           VersionUtil.compare(annotation.version(), services.getMinVersionFor(annotation.service())) < 0;
   }
 
 }

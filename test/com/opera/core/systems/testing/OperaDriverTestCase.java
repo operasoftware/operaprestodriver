@@ -18,14 +18,16 @@ package com.opera.core.systems.testing;
 
 import com.opera.core.systems.OperaProduct;
 import com.opera.core.systems.OperaSettings;
+import com.opera.core.systems.ScopeServices;
 import com.opera.core.systems.environment.GlobalTestEnvironment;
 import com.opera.core.systems.environment.InProcessTestEnvironment;
 import com.opera.core.systems.environment.TestEnvironment;
-import com.opera.core.systems.environment.webserver.WebServer;
+import com.opera.core.systems.environment.webserver.AppServer;
 import com.opera.core.systems.testing.drivers.OperaDriverBuilder;
 import com.opera.core.systems.testing.drivers.TestOperaDriver;
 import com.opera.core.systems.testing.drivers.TestOperaDriverSupplier;
 
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.Platform;
@@ -60,7 +62,7 @@ import static org.junit.Assert.assertThat;
 public abstract class OperaDriverTestCase {
 
   protected static TestEnvironment environment;
-  protected static WebServer server;
+  protected static AppServer server;
   protected static Pages pages;
   protected static Resources resources;
   protected static TestOperaDriver driver;
@@ -68,8 +70,6 @@ public abstract class OperaDriverTestCase {
   private static OperaSettings settings = new OperaSettings();
   private static boolean spawnDriver = true;
   private static ThreadLocal<TestOperaDriver> storedDriver = new ThreadLocal<TestOperaDriver>();
-  private static OperaProduct currentProduct = OperaProduct.DESKTOP;
-  private static Platform currentPlatform = Platform.getCurrent();
 
   @Before
   public void prepareEnvironment() throws Exception {
@@ -86,24 +86,39 @@ public abstract class OperaDriverTestCase {
 
   @Before
   public void createDriver() {
-    driver = storedDriver.get();
+    driver = createDriverIfNecessary();
+    storedDriver.set(driver);
+  }
 
-    if (!spawnDriver || (driver != null && driver.isRunning())) {
-      return;
+  @AfterClass
+  public static void resetSettings() {
+    settings = new OperaSettings();
+  }
+
+  public static TestOperaDriver createFreshDriver() {
+    return (TestOperaDriver) new OperaDriverBuilder(
+        new TestOperaDriverSupplier()).using(getSettings()).get();
+  }
+
+  public static TestOperaDriver getWrappedDriver() {
+    createDriverIfNecessary();
+    return storedDriver.get();
+  }
+
+  public static TestOperaDriver createDriverIfNecessary() {
+    TestOperaDriver driver = storedDriver.get();
+
+    if (driver == null && spawnDriver || (driver != null && !driver.isRunning())) {
+      driver = createFreshDriver();
+      storedDriver.set(driver);
     }
 
-    driver = (TestOperaDriver) new OperaDriverBuilder(new TestOperaDriverSupplier())
-        .using(settings).get();
-    storedDriver.set(driver);
+    return storedDriver.get();
   }
 
   @Before
   public void createEnvironment() {
     environment = GlobalTestEnvironment.get(InProcessTestEnvironment.class);
-  }
-
-  public static TestOperaDriver getWrappedDriver() {
-    return storedDriver.get();
   }
 
   public static OperaSettings getSettings() {
@@ -124,26 +139,6 @@ public abstract class OperaDriverTestCase {
     spawnDriver = enabled;
   }
 
-  public static OperaProduct currentProduct() {
-    TestOperaDriver current = storedDriver.get();
-
-    if (current != null) {
-      currentProduct = current.utils().getProduct();
-    }
-
-    return currentProduct;
-  }
-
-  public static Platform currentPlatform() {
-    TestOperaDriver current = storedDriver.get();
-
-    if (current != null) {
-      currentPlatform = current.utils().getPlatform();
-    }
-
-    return currentPlatform;
-  }
-
   public static void removeDriver() {
     TestOperaDriver current = storedDriver.get();
 
@@ -158,6 +153,22 @@ public abstract class OperaDriverTestCase {
     } finally {
       storedDriver.remove();
     }
+  }
+
+  public static OperaProduct currentProduct() {
+    return getWrappedDriver().utils().getProduct();
+  }
+
+  public static Platform currentPlatform() {
+    return getWrappedDriver().utils().getPlatform();
+  }
+
+  public static boolean currentHasIdle() {
+    return currentServices().isOperaIdleAvailable();
+  }
+
+  public static ScopeServices currentServices() {
+    return getWrappedDriver().getServices();
   }
 
 }

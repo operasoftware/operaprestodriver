@@ -13,8 +13,8 @@ option java_package         = "com.opera.core.systems.scope.protos";
  */
 message WindowInfo
 {
-    required uint32 windowID   = 1;
-    required string title      = 2;
+    required uint32 windowID      = 1;
+    required string title         = 2;
     /**
      * 
      * TODO: Some of these are obsolete, like "ad". Figure out which ones should really be present.
@@ -43,12 +43,18 @@ message WindowInfo
      * - "normal_hidden"
      * - "devtools"
      */
-    required string windowType = 3;
+    required string windowType    = 3;
     /**
      * The `window-id` of the window who opened the window in question,
      * or 0 if it was not opened by another window.
      */
-    required uint32 openerID   = 4;
+    required uint32 openerID      = 4;
+    /**
+     * The name of the extension if window type is 'gadget'.
+     * 
+     * @since 2.2
+     */
+    optional string extensionName = 5;
 }
 
 message WindowID

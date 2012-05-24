@@ -17,6 +17,7 @@ limitations under the License.
 package com.opera.core.systems;
 
 import com.opera.core.systems.pages.WindowPage;
+import com.opera.core.systems.testing.FreshDriver;
 import com.opera.core.systems.testing.Ignore;
 import com.opera.core.systems.testing.OperaDriverTestCase;
 import com.opera.core.systems.testing.TestingPageFactory;
@@ -26,6 +27,10 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static com.opera.core.systems.OperaProduct.CORE;
+import static com.opera.core.systems.OperaProduct.DESKTOP;
+import static com.opera.core.systems.OperaProduct.MINI;
+import static com.opera.core.systems.OperaProduct.MOBILE;
+import static com.opera.core.systems.OperaProduct.SDK;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.openqa.selenium.Platform.WINDOWS;
@@ -42,23 +47,19 @@ public class WindowTest extends OperaDriverTestCase {
     windowPage = TestingPageFactory.initElements(driver, pages, WindowPage.class);
   }
 
-  @Before
-  public void beforeEach() {
-    driver.closeAll();
-  }
-
   @After
-  public void afterEach() {
-    driver.closeAll();
+  public void prepareNextTest() {
+    while (driver.getWindowHandles().size() > 1) {
+      driver.close();
+    }
   }
 
   @Test
   @Ignore(platforms = WINDOWS)
-  public void testOpenNewTargetedWindow() {
+  public void openNewTargetedWindow() {
     windowPage.openNewTargetedWindow();
 
-    int windowCount = driver.getWindowCount();
-    assertEquals(newWindows(1), windowCount);
+    assertEquals(newWindows(1), driver.getWindowHandles().size());
 
     driver.switchTo().window("targeted");
     assertEquals("Window 2", driver.getTitle());
@@ -66,7 +67,7 @@ public class WindowTest extends OperaDriverTestCase {
 
   @Test
   @Ignore(platforms = WINDOWS)
-  public void testOpenMultipleTargetedWindows() {
+  public void openMultipleTargetedWindows() {
     for (int i = 1; i <= 2; i++) {
       windowPage.openNewTargetedWindow();
     }
@@ -76,30 +77,75 @@ public class WindowTest extends OperaDriverTestCase {
 
   @Test
   @Ignore(platforms = WINDOWS)
-  public void testOpenNewAnonymousWindow() {
+  public void openNewAnonymousWindow() {
     windowPage.openNewAnonymousWindow();
-
-    int windowCount = driver.getWindowCount();
-    assertEquals(newWindows(1), windowCount);
+    assertEquals(newWindows(1), driver.getWindowHandles().size());
   }
 
   @Test
   @Ignore(platforms = WINDOWS)
-  public void testOpenMultipleWindows() {
+  public void openMultipleWindows() {
     int windowsToOpen = 3;
 
     for (int i = 1; i <= windowsToOpen; i++) {
       windowPage.openNewAnonymousWindow();
     }
 
-    assertEquals(newWindows(windowsToOpen), driver.getWindowCount());
+    assertEquals(newWindows(windowsToOpen), driver.getWindowHandles().size());
   }
 
   @Test
-  @Ignore(products = CORE, value = "gogi does not quit when closing last window")
-  public void testCloseShouldQuitBrowserIfLastWindow() {
+  public void closeLastWindowQuitsBrowser() {
     driver.close();
     assertFalse(driver.isRunning());
+  }
+
+  @Test
+  public void twoClosesDoesNotThrow() {
+    driver.close();
+    driver.close();
+  }
+
+  @Test
+  @FreshDriver
+  @Ignore(products = CORE,
+          value = "Not able to differentiate between popup windows and actual windows on core-gogi")
+  public void closeLastWindowWithHTTPAuthQuitsBrowser() {
+    driver.navigate().to(pages.basicAuth);
+    driver.close();
+    assertEquals(0, driver.getWindowCount());
+    assertFalse(driver.isRunning());
+  }
+
+  @Test
+  @FreshDriver
+  @Ignore(products = {CORE, MINI, MOBILE, SDK})
+  public void resetWindowStateOnDesktop() {
+    driver.createWindow();
+    assertEquals(2, driver.getWindowHandles().size());
+
+    driver.navigate().to(pages.basicAuth);
+    assertEquals(2, driver.getWindowHandles().size());
+
+    driver.getServices().getWindowManager().closeAllWindows();
+    driver.createWindow();
+
+    assertEquals(1, driver.getWindowHandles().size());
+  }
+
+  @Test
+  @FreshDriver
+  @Ignore(products = {DESKTOP, MINI, MOBILE, SDK})
+  public void resetWindowStateOnCore() {
+    driver.createWindow();
+    assertEquals(2, driver.getWindowHandles().size());
+
+    driver.navigate().to(pages.basicAuth);
+    assertEquals(3, driver.getWindowHandles().size());
+
+    driver.getServices().getWindowManager().closeAllWindows();
+
+    assertEquals(1, driver.getWindowHandles().size());
   }
 
   /**

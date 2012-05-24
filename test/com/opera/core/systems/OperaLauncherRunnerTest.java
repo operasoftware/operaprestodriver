@@ -108,16 +108,19 @@ public class OperaLauncherRunnerTest extends OperaDriverTestCase {
   }
 
   @Test
+  public void defaultProductIsDesktop() {
+    assertEquals(OperaProduct.DESKTOP, settings.getProduct());
+  }
+
+  @Test
   public void profileArgumentNotSetIfProductIsAll() {
-    assertEquals(OperaProduct.ALL, settings.getProduct());
+    settings.setProduct(OperaProduct.ALL);
     runner = new TestOperaLauncherRunner(settings);
     assertThat(runner.buildArguments(), hasItem(not("-profile")));
   }
 
   @Test
   public void profileArgumentSetIfProductIsSpecified() {
-    assertEquals(OperaProduct.ALL, settings.getProduct());
-
     OperaProduct product = OperaProduct.DESKTOP;
     settings.setProduct(product);
     runner = new TestOperaLauncherRunner(settings);
@@ -125,6 +128,13 @@ public class OperaLauncherRunnerTest extends OperaDriverTestCase {
     List<String> arguments = runner.buildArguments();
     assertThat(arguments, hasItem("-profile"));
     assertThat(arguments, hasItem(product.toString()));
+  }
+
+  @Test
+  public void profileArgumentNotSetIfProductIsCore() {
+    settings.setProduct(OperaProduct.CORE);
+    runner = new TestOperaLauncherRunner(settings);
+    assertThat(runner.buildArguments(), hasItem(not("-profile")));
   }
 
   @Test

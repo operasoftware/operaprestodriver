@@ -140,7 +140,6 @@ public class OperaRunner implements com.opera.core.systems.runner.interfaces.Ope
    * Handles safe shutdown of the OperaRunner class.
    */
   public void shutdown() {
-    stopOpera();
   }
 
   public ScreenShotReply saveScreenshot(long timeout, String... hashes) {

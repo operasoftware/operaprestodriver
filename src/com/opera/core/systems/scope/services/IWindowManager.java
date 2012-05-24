@@ -67,6 +67,8 @@ public interface IWindowManager {
 
   void openUrl(int windowId, String url);
 
+  void createWindow();
+
   void closeWindow(int windowId);
 
 }

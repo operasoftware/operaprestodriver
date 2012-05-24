@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<meta charset="utf-8" />
+<title>Authentication, XHR and username/password</title>
+
+<script>
+    window.onload = function() {
+        document.getElementsByTagName("p")[0].firstChild.data = "PASS if this page opens an authentication dialog";
+        var x = new XMLHttpRequest();
+        x.open("get", "basicAuth", true, null, null);
+        x.send(null);
+    };
+</script>
+
+<p>Not tested (script did not run)</p>

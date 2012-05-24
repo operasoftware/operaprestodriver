@@ -60,14 +60,14 @@ public interface EventHandler {
    *
    * @param window information about the window
    */
-  void onUpdatedWindow(WindowInfo window);
+  void onWindowUpdated(WindowInfo window);
 
   /**
    * Fired when a window becomes active (steals focus).
    *
    * @param id ID of the window that becomes active
    */
-  void onActiveWindow(Integer id);
+  void onWindowActivated(Integer id);
 
   /**
    * Fired when a window instance is closed.

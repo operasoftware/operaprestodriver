@@ -16,6 +16,8 @@ limitations under the License.
 
 package com.opera.core.systems;
 
+import com.google.common.base.Throwables;
+
 import com.opera.core.systems.scope.exceptions.CommunicationException;
 import com.opera.core.systems.scope.exceptions.ResponseNotReceivedException;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo;
@@ -66,6 +68,7 @@ public class WaitState {
     EXCEPTION,                       // An exception occurred (STP connection is not alive)
     DISCONNECTED,                    // STP connection is disconnected
     HANDSHAKE,                       // STP Handshake
+    EVENT_WINDOW_ACTIVATED,          // active window changed
     EVENT_WINDOW_LOADED,             // finished loaded
     EVENT_WINDOW_CLOSED,             // window closed
     EVENT_OPERA_IDLE,                // opera is now idle
@@ -83,24 +86,24 @@ public class WaitState {
 
   private class ResultItem {
 
-    int data;
-    WaitResult waitResult;
-    WebDriverException exception;
-    Response response;
-    boolean seen;
-    long remainingIdleTimeout;
-    DesktopWindowInfo desktopWindowInfo;  // No idea if this is right but it will
+    private int data;
+    private final WaitResult waitResult;
+    private Exception exception;
+    private Response response;
+    private boolean seen;
+    private long remainingIdleTimeout;
+    private DesktopWindowInfo desktopWindowInfo;
     private QuickMenuInfo quickMenuInfo;
     private QuickMenuID quickMenuId;
     private QuickMenuItemID quickMenuItemID;
 
     // Store the data for now, but it seems wasteful
-    String selftestResults;
+    private String selftestResults;
 
-    public ResultItem(WebDriverException ex) {
+    public ResultItem(Exception ex) {
       waitResult = WaitResult.EXCEPTION;
       exception = ex;
-      logger.finest("EVENT: " + waitResult.toString() + ", exception: " + ex.toString());
+      logger.finest(String.format("EVENT: %s, exception: %s", waitResult, exception));
     }
 
     public ResultItem(WaitResult result) {
@@ -179,10 +182,14 @@ public class WaitState {
     public boolean wasSeen() {
       return seen;
     }
+
+    public Exception getException() {
+      return exception;
+    }
   }
 
-  // Replace with BlockingQueue
-  LinkedList<ResultItem> events = new LinkedList<ResultItem>();
+  // TODO: Replace with BlockingQueue
+  private final LinkedList<ResultItem> events = new LinkedList<ResultItem>();
 
   enum ResponseType {
     HANDSHAKE,
@@ -210,7 +217,7 @@ public class WaitState {
     this.waitEvents = wait_events;
   }
 
-  private void internalWait(long timeout) throws WebDriverException {
+  private void internalWait(long timeout) {
     try {
       if (!connected) {
         throw new CommunicationException("Waiting aborted - not connected!");
@@ -247,7 +254,7 @@ public class WaitState {
 
   void onException(Exception e) {
     synchronized (lock) {
-      events.add(new ResultItem(new WebDriverException(e)));
+      events.add(new ResultItem(e));
       connected = false;
       lock.notifyAll();
     }
@@ -375,24 +382,24 @@ public class WaitState {
     // Test if we are listening to wait events
     // We don't want to remove them from the list while we are
     if (waitEvents) {
-      ResultItem result_item = events.getFirst();
+      ResultItem resultItem = events.getFirst();
       while (true) {
-        if (!result_item.isEventToWaitFor()) {
-          events.remove(result_item);
-          return result_item;
+        if (!resultItem.isEventToWaitFor()) {
+          events.remove(resultItem);
+          return resultItem;
         }
 
-        if (!result_item.wasSeen()) {
-          result_item.seen = true;
-          return result_item;
+        if (!resultItem.wasSeen()) {
+          resultItem.seen = true;
+          return resultItem;
         }
 
-        int index = events.indexOf(result_item);
+        int index = events.indexOf(resultItem);
         if (index + 1 >= events.size()) {
           return null;
         }
 
-        result_item = events.get(index + 1);
+        resultItem = events.get(index + 1);
       }
     }
 
@@ -455,7 +462,7 @@ public class WaitState {
             if (result.data == match && type == ResponseType.RESPONSE) {
               return result;
             } else if (type == ResponseType.HANDSHAKE) {
-              throw new CommunicationException("Expecting handshake");
+              throw new CommunicationException("Expected handshake, got response");
             }
             break;
 
@@ -463,16 +470,15 @@ public class WaitState {
             if (result.data == match && type == ResponseType.RESPONSE) {
               return null;
             } else if (type == ResponseType.HANDSHAKE) {
-              throw new CommunicationException("Expecting handshake");
+              throw new CommunicationException("Expected handshake, got error");
             }
             break;
 
           case EXCEPTION:
-            throw result.exception;
+            Throwables.propagate(result.getException());
 
           case DISCONNECTED:
-            throw new CommunicationException("Problem encountered : "
-                                             + waitResult.toString());
+            throw new CommunicationException(String.format("Problem encountered: %s", waitResult));
 
           case EVENT_WINDOW_LOADED:
             if (result.data == match && type == ResponseType.WINDOW_LOADED) {
@@ -666,7 +672,7 @@ public class WaitState {
    */
   public void waitForOperaIdle(long timeout) {
     if (captureIdleEvents && capturedIdleEvents > 0) {
-      logger.finer("Captured " + capturedIdleEvents + " OperaIdle event(s)");
+      logger.finer("Captured " + capturedIdleEvents + " idle event(s)");
       // reset
       captureIdleEvents = false;
       capturedIdleEvents = 0;

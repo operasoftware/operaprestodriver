@@ -21,7 +21,6 @@ import com.opera.core.systems.testing.Ignore;
 import com.opera.core.systems.testing.OperaDriverTestCase;
 import com.opera.core.systems.testing.RequiresService;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -49,7 +48,7 @@ public class UtilsTest extends OperaDriverTestCase {
 
   @Test
   public void testOS() {
-    assertNotNull(driver.utils().getOS());
+    assertNotNull(driver.utils().getPlatform());
   }
 
   @Test

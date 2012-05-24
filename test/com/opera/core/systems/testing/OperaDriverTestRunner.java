@@ -37,12 +37,10 @@ import java.util.logging.Level;
 
 public class OperaDriverTestRunner extends BlockJUnit4ClassRunner {
 
-  private final TestIgnorance ignorance;
+  private final TestIgnorance ignorance = new TestIgnorance();
 
-  public OperaDriverTestRunner(Class<?> klass) throws InitializationError {
-    super(klass);
-    ignorance = new TestIgnorance(OperaDriverTestCase.currentProduct(),
-                                  OperaDriverTestCase.currentPlatform());
+  public OperaDriverTestRunner(Class<?> testClass) throws InitializationError {
+    super(testClass);
   }
 
   @Override
@@ -131,6 +129,7 @@ public class OperaDriverTestRunner extends BlockJUnit4ClassRunner {
   private Statement withFreshDriver(FrameworkMethod method, final OperaDriverTestCase test,
                                     final Statement statement) {
     FreshDriver annotation = method.getAnnotation(FreshDriver.class);
+
     if (annotation == null) {
       return statement;
     }
@@ -140,7 +139,7 @@ public class OperaDriverTestRunner extends BlockJUnit4ClassRunner {
       public void evaluate() throws Throwable {
         OperaDriverTestCase.setSettings(new OperaSettings());
         OperaDriverTestCase.removeDriver();
-        test.createDriver();
+        test.createDriverIfNecessary();
         statement.evaluate();
       }
     };
