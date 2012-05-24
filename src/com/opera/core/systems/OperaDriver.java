@@ -18,6 +18,7 @@ package com.opera.core.systems;
 
 import com.google.common.base.Throwables;
 import com.google.common.collect.ImmutableMap;
+
 import com.opera.core.systems.common.lang.OperaStrings;
 import com.opera.core.systems.model.ScreenShotReply;
 import com.opera.core.systems.model.ScriptResult;
@@ -62,7 +63,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -373,11 +373,11 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     if (el == null) {
       // Search the document
       script =
-          "return " + OperaAtoms.FIND_ELEMENT + "({\"" + by + "\": \"" + using + "\"})";
+          "return " + OperaAtom.FIND_ELEMENT + "({\"" + by + "\": \"" + using + "\"})";
     } else {
       // Search within an element
       script =
-          "return " + OperaAtoms.FIND_ELEMENT + "({\"" + by + "\": \"" + using
+          "return " + OperaAtom.FIND_ELEMENT + "({\"" + by + "\": \"" + using
           + "\"}, locator)";
     }
 
@@ -436,11 +436,11 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     if (el == null) {
       // Search in document
       script =
-          "return " + OperaAtoms.FIND_ELEMENTS + "({\"" + by + "\": \"" + using + "\"})";
+          "return " + OperaAtom.FIND_ELEMENTS + "({\"" + by + "\": \"" + using + "\"})";
     } else {
       // Search within an element
       script =
-          "return " + OperaAtoms.FIND_ELEMENTS + "({\"" + by + "\": \"" + using
+          "return " + OperaAtom.FIND_ELEMENTS + "({\"" + by + "\": \"" + using
           + "\"}, locator)";
     }
 
@@ -622,7 +622,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
     // TODO: Implement need to find a way to link an element to a runtime
     public WebDriver frame(WebElement frameElement) {
-      String script = "return " + OperaAtoms.GET_FRAME_INDEX + "(locator)";
+      String script = "return " + OperaAtom.GET_FRAME_INDEX + "(locator)";
       // PageObject fields are wrapped by PageFactory
       while (frameElement instanceof WrapsElement) {
         frameElement = ((WrapsElement) frameElement).getWrappedElement();

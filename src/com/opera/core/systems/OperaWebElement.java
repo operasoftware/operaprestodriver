@@ -121,7 +121,7 @@ public class OperaWebElement extends RemoteWebElement {
     parent.getScopeServices().captureOperaIdle();
 
     if (getTagName().equals("OPTION")) {
-      callMethod("return " + OperaAtoms.CLICK + "(locator)");
+      callMethod("return " + OperaAtom.CLICK + "(locator)");
     } else {
       parent.getMouse().click(getCoordinates());
     }
@@ -164,7 +164,7 @@ public class OperaWebElement extends RemoteWebElement {
       return callMethod("if(/^input|select|option|textarea$/i.test(locator.nodeName)){"
                         + "return locator.value;" + "}" + "return locator.textContent;");
     } else {
-      return callMethod("return " + OperaAtoms.GET_ATTRIBUTE + "(locator, '" + attribute
+      return callMethod("return " + OperaAtom.GET_ATTRIBUTE + "(locator, '" + attribute
                         + "')");
     }
   }
@@ -175,29 +175,29 @@ public class OperaWebElement extends RemoteWebElement {
 
   public String getText() {
     assertElementNotStale();
-    return callMethod("return " + OperaAtoms.GET_TEXT + "(locator)");
+    return callMethod("return " + OperaAtom.GET_TEXT + "(locator)");
   }
 
   public boolean isDisplayed() {
     assertElementNotStale();
-    return (Boolean) evaluateMethod("return " + OperaAtoms.IS_DISPLAYED + "(locator)");
+    return (Boolean) evaluateMethod("return " + OperaAtom.IS_DISPLAYED + "(locator)");
   }
 
   public boolean isEnabled() {
     assertElementNotStale();
-    return (Boolean) evaluateMethod("return " + OperaAtoms.IS_ENABLED + "(locator)");
+    return (Boolean) evaluateMethod("return " + OperaAtom.IS_ENABLED + "(locator)");
   }
 
   public boolean isSelected() {
     assertElementNotStale();
-    return (Boolean) evaluateMethod("return " + OperaAtoms.IS_SELECTED + "(locator)");
+    return (Boolean) evaluateMethod("return " + OperaAtom.IS_SELECTED + "(locator)");
   }
 
   public void clear() {
     verifyCanInteractWithElement();
 
     if (isEnabled() && !Boolean.valueOf(getAttribute("readonly"))) {
-      executeMethod("return " + OperaAtoms.CLEAR + "(locator)");
+      executeMethod("return " + OperaAtom.CLEAR + "(locator)");
     }
   }
 
@@ -321,7 +321,7 @@ public class OperaWebElement extends RemoteWebElement {
   public void submit() {
     parent.getScopeServices().captureOperaIdle();
 
-    evaluateMethod("return " + OperaAtoms.SUBMIT + "(locator)");
+    evaluateMethod("return " + OperaAtom.SUBMIT + "(locator)");
 
     try {
       parent.waitForLoadToComplete();
@@ -338,7 +338,7 @@ public class OperaWebElement extends RemoteWebElement {
     assertElementNotStale();
 
     String coordinates =
-        debugger.callFunctionOnObject("var coords = " + OperaAtoms.GET_LOCATION
+        debugger.callFunctionOnObject("var coords = " + OperaAtom.GET_LOCATION
                                       + "(locator); return coords.x + ',' + coords.y;", objectId);
 
     // TODO: The goog.dom.getDocumentScrollElement_() function the Google closure library doesn't
@@ -361,7 +361,7 @@ public class OperaWebElement extends RemoteWebElement {
     assertElementNotStale();
 
     String widthAndHeight =
-        debugger.callFunctionOnObject("var s=" + OperaAtoms.GET_SIZE
+        debugger.callFunctionOnObject("var s=" + OperaAtom.GET_SIZE
                                       + "(locator);return s.width+','+s.height;", objectId);
 
     String[] dimension = widthAndHeight.split(",");
@@ -649,7 +649,7 @@ public class OperaWebElement extends RemoteWebElement {
     assertElementNotStale();
 
     String value =
-        callMethod("return " + OperaAtoms.GET_EFFECTIVE_STYLE + "(locator, '" + property + "')");
+        callMethod("return " + OperaAtom.GET_EFFECTIVE_STYLE + "(locator, '" + property + "')");
 
     // Opera returns a colour in RGB format.  WebDriver specifies that the output from getCssValue()
     // must be in HEX format.
