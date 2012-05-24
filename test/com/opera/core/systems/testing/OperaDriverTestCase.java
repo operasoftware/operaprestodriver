@@ -171,21 +171,4 @@ public abstract class OperaDriverTestCase {
     return getWrappedDriver().getServices();
   }
 
-  /*
-  public static OperaProduct currentProduct() {
-    createDriverIfNecessary();
-    return getWrappedDriver().utils().getProduct();
-  }
-
-  public static Platform currentPlatform() {
-    TestOperaDriver current = getWrappedDriver();
-
-    if (current != null) {
-      currentPlatform = current.utils().getPlatform();
-    }
-
-    return currentPlatform;
-  }
-  */
-
 }
