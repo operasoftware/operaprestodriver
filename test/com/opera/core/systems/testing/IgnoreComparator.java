@@ -27,15 +27,8 @@ import org.openqa.selenium.Platform;
  */
 public class IgnoreComparator {
 
-  //private final Set<OperaProduct> ignored = Sets.newHashSet();
   private OperaProduct currentProduct = OperaProduct.DESKTOP;
   private Platform currentPlatform = Platform.getCurrent();
-
-  /*
-  public void addProduct(OperaProduct productToIgnore) {
-    ignored.add(productToIgnore);
-  }
-  */
 
   public void setCurrentProduct(OperaProduct product) {
     currentProduct = product;
@@ -50,15 +43,7 @@ public class IgnoreComparator {
       return false;
     }
 
-    /*
-    if (ignoreAnnotation.products().length == 0) {
-      return true;
-    }
-    */
-
     for (OperaProduct product : ignoreAnnotation.products()) {
-      //if (ignored.contains(product) || product == OperaProduct.ALL) {
-      //if (currentProduct.is(product)) {
       if (product.is(currentProduct)) {
         for (Platform platform : ignoreAnnotation.platforms()) {
           if (platform.is(currentPlatform)) {
