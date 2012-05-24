@@ -19,8 +19,10 @@ import com.opera.core.systems.runner.launcher.OperaLauncherRunner;
 import com.opera.core.systems.runner.launcher.OperaLauncherRunnerSettings;
 import com.opera.core.systems.scope.exceptions.CommunicationException;
 import com.opera.core.systems.scope.internal.OperaIntervals;
+import com.opera.core.systems.scope.protos.DesktopWmProtos;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo.QuickWidgetType;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearch.QuickWidgetSearchType;
+import com.opera.core.systems.scope.protos.SystemInputProtos;
 import com.opera.core.systems.scope.protos.SystemInputProtos.ModifierPressed;
 import com.opera.core.systems.scope.services.IDesktopUtils;
 import com.opera.core.systems.scope.services.IDesktopWindowManager;
@@ -30,6 +32,7 @@ import com.opera.core.systems.util.ProfileUtils;
 
 import org.openqa.selenium.Capabilities;
 
+import java.awt.*;
 import java.io.File;
 import java.util.Collections;
 import java.util.List;
@@ -564,6 +567,24 @@ public class OperaDesktopDriver extends OperaDriver {
     return desktopWindowManager.getQuickWindowName(windowId);
   }
 
+  public void focusActiveWindowWithClick() {
+    int id = getActiveQuickWindowID();
+    QuickWindow win = findWindowById(id);
+    DesktopWmProtos.DesktopWindowRect rect = win.getRect();
+
+    int x = rect.getX();
+    int y = rect.getY();
+    int width = rect.getWidth();
+
+    int center = x + (width / 2);
+    
+    Point clickPoint = new Point();
+
+    clickPoint.setLocation(center, y + 3);
+
+    systemInputManager.click(clickPoint, SystemInputProtos.MouseInfo.MouseButton.LEFT, 1, Collections.<SystemInputProtos.ModifierPressed>emptyList());
+  }
+
   /**
    * @return the string specified by the id @param enum_text
    */
@@ -766,7 +787,6 @@ public class OperaDesktopDriver extends OperaDriver {
   *
   * @param windowName - window to wait for shown event on
   * @return id of window
-  * @throws CommuncationException if no connection
   */
     public int waitForWindowPageChanged(String windowName) {
     if (services.getConnection() == null)
