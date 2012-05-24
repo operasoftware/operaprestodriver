@@ -18,18 +18,10 @@ limitations under the License.
 
 package com.opera.core.systems.testing;
 
-import com.opera.core.systems.OperaProduct;
 import com.opera.core.systems.ScopeServices;
-import com.opera.core.systems.testing.drivers.OperaDriverBuilder;
-import com.opera.core.systems.testing.drivers.TestOperaDriver;
-import com.opera.core.systems.testing.drivers.TestOperaDriverSupplier;
 import com.opera.core.systems.util.VersionUtil;
 
 import org.junit.runners.model.FrameworkMethod;
-import org.openqa.selenium.Platform;
-import org.openqa.selenium.WebDriverException;
-
-import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Decides whether a test class or a method should be ignored.
@@ -37,13 +29,30 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class TestIgnorance {
 
   private final IgnoreComparator ignoreComparator = new IgnoreComparator();
-  private Boolean idleEnabled = null;
-  private ScopeServices services = null;
+  private final ScopeServices services;
+  private final Boolean idleEnabled;
 
+  public TestIgnorance() {
+    services = OperaDriverTestCase.currentServices();
+    idleEnabled = OperaDriverTestCase.currentHasIdle();
+    ignoreComparator.setCurrentPlatform(OperaDriverTestCase.currentPlatform());
+    ignoreComparator.setCurrentProduct(OperaDriverTestCase.currentProduct());
+  }
+
+  /*
   public TestIgnorance(OperaProduct product, Platform platform) {
-    ignoreComparator.addProduct(checkNotNull(product, "Product must be set"));
+    ignoreComparator.setCurrentProduct(checkNotNull(product, "Product must be set"));
     ignoreComparator.setCurrentPlatform(checkNotNull(platform, "Platform must be set"));
   }
+  */
+
+  /*
+  public TestIgnorance(OperaDriver driver) {
+    //ignoreComparator.addProduct(driver.utils().getProduct());
+    ignoreComparator.setCurrentProduct(driver.utils().getProduct());
+    ignoreComparator.setCurrentPlatform(driver.utils().getPlatform());
+  }
+  */
 
   // JUnit 4
   public boolean isIgnored(FrameworkMethod method, Object test) {
@@ -67,6 +76,7 @@ public class TestIgnorance {
   }
 
   private boolean isIgnoredDueToIdle(IdleEnabled enabled) {
+    /*
     // If not specified, it should not be ignored
     if (enabled == null) {
       return false;
@@ -83,7 +93,7 @@ public class TestIgnorance {
     try {
       driver = OperaDriverTestCase.getWrappedDriver();
       if (driver == null) {
-        driver = (TestOperaDriver) new OperaDriverBuilder(new TestOperaDriverSupplier()).get();
+        driver = OperaDriverTestCase.createDriverIfNecessary();
       }
 
       idleEnabled = driver.getServices().isOperaIdleAvailable();
@@ -97,9 +107,13 @@ public class TestIgnorance {
     }
 
     return isIgnoredDueToIdle(enabled);
+    */
+
+    return enabled != null && !idleEnabled;
   }
 
   private boolean isIgnoredDueToLackingService(RequiresService annotation) {
+    /*
     if (annotation == null) {
       return false;
     }
@@ -120,7 +134,7 @@ public class TestIgnorance {
     try {
       driver = OperaDriverTestCase.getWrappedDriver();
       if (driver == null) {
-        driver = (TestOperaDriver) new OperaDriverBuilder(new TestOperaDriverSupplier()).get();
+        driver = OperaDriverTestCase.createDriverIfNecessary();
       }
 
       services = driver.getServices();
@@ -134,6 +148,21 @@ public class TestIgnorance {
     }
 
     return isIgnoredDueToLackingService(annotation);
+    */
+
+    if (annotation == null) {
+      return false;
+    }
+
+    if (!services.getListedServices().contains(annotation.service())) {
+      return true;
+    } else if (services.getListedServices().contains(annotation.service()) &&
+               annotation.version() == null) {
+      return false;
+    }
+
+    return VersionUtil.compare(annotation.version(), "maxVersion") >= 0 ||
+           VersionUtil.compare(annotation.version(), services.getMinVersionFor(annotation.service())) < 0;
   }
 
 }

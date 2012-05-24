@@ -18,24 +18,27 @@ limitations under the License.
 
 package com.opera.core.systems.testing;
 
-import com.google.common.collect.Sets;
-
 import com.opera.core.systems.OperaProduct;
 
 import org.openqa.selenium.Platform;
-
-import java.util.Set;
 
 /**
  * @author Simon Stewart
  */
 public class IgnoreComparator {
 
-  private final Set<OperaProduct> ignored = Sets.newHashSet();
+  //private final Set<OperaProduct> ignored = Sets.newHashSet();
+  private OperaProduct currentProduct = OperaProduct.DESKTOP;
   private Platform currentPlatform = Platform.getCurrent();
 
+  /*
   public void addProduct(OperaProduct productToIgnore) {
     ignored.add(productToIgnore);
+  }
+  */
+
+  public void setCurrentProduct(OperaProduct product) {
+    currentProduct = product;
   }
 
   public void setCurrentPlatform(Platform platform) {
@@ -47,12 +50,16 @@ public class IgnoreComparator {
       return false;
     }
 
+    /*
     if (ignoreAnnotation.products().length == 0) {
       return true;
     }
+    */
 
     for (OperaProduct product : ignoreAnnotation.products()) {
-      if (ignored.contains(product) || product == OperaProduct.ALL) {
+      //if (ignored.contains(product) || product == OperaProduct.ALL) {
+      //if (currentProduct.is(product)) {
+      if (product.is(currentProduct)) {
         for (Platform platform : ignoreAnnotation.platforms()) {
           if (platform.is(currentPlatform)) {
             return true;
