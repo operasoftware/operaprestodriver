@@ -16,6 +16,7 @@ limitations under the License.
 
 package com.opera.core.systems.pages;
 
+import com.opera.core.systems.scope.internal.OperaIntervals;
 import com.opera.core.systems.testing.Pages;
 import com.opera.core.systems.testing.drivers.TestOperaDriver;
 
@@ -69,15 +70,10 @@ public class WindowPage extends Page {
   private void openNewWindow(WebElement windowLink) {
     String currentWindow = driver.getWindowHandle();
 
-    // Switch window if we're not on the default window
-    if (!currentWindow.equals(driver.getControlWindow())) {
-      driver.switchTo().window(driver.getControlWindow());
-    }
-
     // Trigger new window load and wait for window to open
     windowLink.click();
     try {
-      Thread.sleep(1000);
+      Thread.sleep(OperaIntervals.WINDOW_CLOSE_SLEEP.getValue());
     } catch (InterruptedException e) {
       fail("Interrupted");
     }
