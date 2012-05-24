@@ -261,15 +261,12 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
   public void quit() {
     try {
+      gc();
       services.quit();
       if (runner != null) {
         runner.stopOpera();
         runner.shutdown();
       }
-      if (services != null) {
-        services.shutdown();
-      }
-      gc();
     } catch (Exception e) {
       // nothing we can do
     } finally {
@@ -1163,6 +1160,11 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     return System.currentTimeMillis() - start < OperaIntervals.IMPLICIT_WAIT.getValue();
   }
 
+  /**
+   * Releases protected ECMAScript objects to make them garbage collectible.  Released objects are
+   * not necessarily freed immediately.  Releasing objects invalidates associated object ID's
+   * immediately.
+   */
   private void gc() {
     debugger.releaseObjects();
     objectIds.clear();
