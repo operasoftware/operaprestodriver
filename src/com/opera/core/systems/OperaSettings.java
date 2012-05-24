@@ -45,8 +45,8 @@ import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static com.opera.core.systems.OperaProduct.ALL;
 import static com.opera.core.systems.OperaProduct.CORE;
+import static com.opera.core.systems.OperaProduct.DESKTOP;
 import static com.opera.core.systems.OperaSettings.Capability.ARGUMENTS;
 import static com.opera.core.systems.OperaSettings.Capability.AUTOSTART;
 import static com.opera.core.systems.OperaSettings.Capability.BACKEND;
@@ -397,7 +397,7 @@ public class OperaSettings {
      */
     PRODUCT() {
       OperaProduct getDefaultValue() {
-        return ALL;
+        return DESKTOP;
       }
 
       OperaProduct sanitize(Object product) {
@@ -1083,11 +1083,36 @@ public class OperaSettings {
     return json;
   }
 
+  @Override
+  public boolean equals(Object o) {
+    if (o == null || !(o instanceof OperaSettings)) {
+      return false;
+    }
+
+    OperaSettings compareTo = (OperaSettings) o;
+
+    for (Map.Entry<Capability, CapabilityInstance> option : options.entrySet()) {
+      if (!compareTo.options.get(option.getKey()).equals(option.getValue())) {
+        return false;
+      }
+    }
+
+    for (Map.Entry<String, ?> capability : surplusCapabilities.asMap().entrySet()) {
+      if (!compareTo.surplusCapabilities.getCapability(capability.getKey())
+          .equals(capability.getValue())) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
   /**
    * String representation of the Opera specific settings.
    *
    * @return string representation of this
    */
+  @Override
   public String toString() {
     return String.format("OperaSettings %s", options.values());
   }
