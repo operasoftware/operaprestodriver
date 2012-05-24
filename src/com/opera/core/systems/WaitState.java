@@ -92,7 +92,7 @@ public class WaitState {
     private Response response;
     private boolean seen;
     private long remainingIdleTimeout;
-    private DesktopWindowInfo desktopWindowInfo;  // No idea if this is right but it will
+    private DesktopWindowInfo desktopWindowInfo;
     private QuickMenuInfo quickMenuInfo;
     private QuickMenuID quickMenuId;
     private QuickMenuItemID quickMenuItemID;
