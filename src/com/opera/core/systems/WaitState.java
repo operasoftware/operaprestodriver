@@ -68,6 +68,7 @@ public class WaitState {
     EXCEPTION,                       // An exception occurred (STP connection is not alive)
     DISCONNECTED,                    // STP connection is disconnected
     HANDSHAKE,                       // STP Handshake
+    EVENT_WINDOW_ACTIVATED,          // active window changed
     EVENT_WINDOW_LOADED,             // finished loaded
     EVENT_WINDOW_CLOSED,             // window closed
     EVENT_OPERA_IDLE,                // opera is now idle

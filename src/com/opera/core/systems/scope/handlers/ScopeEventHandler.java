@@ -41,13 +41,6 @@ public class ScopeEventHandler implements EventHandler {
   }
 
   /**
-   * Changes the window-manager's active window on active window event.
-   */
-  public void onActiveWindow(Integer id) {
-    services.getWindowManager().setActiveWindowId(id);
-  }
-
-  /**
    * Remove any runtime that has been stopped.  This call can be quite late and hence is resolved by
    * cleanup method in onRuntimeStarted.
    */
@@ -57,6 +50,13 @@ public class ScopeEventHandler implements EventHandler {
 
   public void onRequest(int windowId) {
     services.onRequest(windowId);
+  }
+
+  /**
+   * Changes the window-manager's active window on active window event.
+   */
+  public void onWindowActivated(Integer id) {
+    services.getWindowManager().setActiveWindowId(id);
   }
 
   /**
@@ -82,7 +82,7 @@ public class ScopeEventHandler implements EventHandler {
     services.getDebugger().addRuntime(info);
   }
 
-  public void onUpdatedWindow(WindowInfo info) {
+  public void onWindowUpdated(WindowInfo info) {
     services.getWindowManager().addWindow(info);
   }
 

@@ -124,7 +124,7 @@ public enum OperaIntervals {
 
   /**
    * Different products have different animations when closing windows, and sometimes it might take
-   * a little while.  This is a bad hack for circumventing that issue.
+   * a little while.
    */
   WINDOW_CLOSE_SLEEP(100);
 

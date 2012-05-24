@@ -171,6 +171,13 @@ public class WindowManager extends AbstractService implements IWindowManager {
     setActiveWindowId(windowId);
   }
 
+  public void createWindow() {
+    Response response = executeCommand(WindowManagerCommand.CREATE_WINDOW, null);
+    WindowID.Builder builder = WindowID.newBuilder();
+    buildPayload(response, builder);
+    openUrl(builder.build().getWindowID(), "opera:debug");
+  }
+
   public void closeAllWindows() {
     LinkedList<Integer> list = new LinkedList<Integer>(windows.asStack());
     boolean canCloseAll = services.getExec().getActionList().contains("Close all pages");
@@ -180,14 +187,14 @@ public class WindowManager extends AbstractService implements IWindowManager {
     } else {
       while (!list.isEmpty()) {
         closeWindow(list.removeFirst());
-
-        // BAD HACK! DELAYING CLOSE-WINDOW
-        try {
-          Thread.sleep(OperaIntervals.WINDOW_CLOSE_SLEEP.getValue());
-        } catch (InterruptedException e) {
-          // ignore
-        }
       }
+    }
+
+    // BAD HACK! DELAYING CLOSE-WINDOW
+    try {
+      Thread.sleep(OperaIntervals.WINDOW_CLOSE_SLEEP.getValue());
+    } catch (InterruptedException e) {
+      // ignore
     }
   }
 

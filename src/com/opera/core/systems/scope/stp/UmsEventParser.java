@@ -75,7 +75,7 @@ public class UmsEventParser {
           WindowID.Builder activeWindowIdBuilder = WindowID.newBuilder();
           buildPayload(event, activeWindowIdBuilder);
           Integer activeWindowID = activeWindowIdBuilder.build().getWindowID();
-          eventHandler.onActiveWindow(activeWindowID);
+          eventHandler.onWindowActivated(activeWindowID);
           break;
         case WINDOW_CLOSED:
           WindowID.Builder closedWindowBuilder = WindowID.newBuilder();
@@ -87,7 +87,7 @@ public class UmsEventParser {
           WindowInfo.Builder windowInfoBuilder = WindowInfo.newBuilder();
           buildPayload(event, windowInfoBuilder);
           WindowInfo info = windowInfoBuilder.build();
-          eventHandler.onUpdatedWindow(info);
+          eventHandler.onWindowUpdated(info);
           break;
         case WINDOW_LOADED:
           WindowID.Builder loadedWindowBuilder = WindowID.newBuilder();
