@@ -897,12 +897,12 @@ public class OperaDesktopDriver extends OperaDriver {
         profile to be copied, so we should check that first here.
          */
         if (new File(newPrefs).exists() == false)
-          logger.finer("The '" + newPrefs + "' directory doesn't exist, omitting profile copying.");
+          logger.severe("The '" + newPrefs + "' directory doesn't exist, omitting profile copying.");
         else
           if (profileUtils.copyProfile(newPrefs) == false)
             logger.severe("Failed to copy profile from '" + newPrefs);
           else
-            logger.finer("Profile from '" + newPrefs +"' copied OK");
+            logger.severe("Profile from '" + newPrefs +"' copied OK");
 
         // Relaunch Opera and the webdriver service connection
         startOpera();
