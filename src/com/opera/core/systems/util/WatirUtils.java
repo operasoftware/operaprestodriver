@@ -93,7 +93,7 @@ public class WatirUtils {
 	 */
 	public static boolean CopyDirAndFiles(String source, String destination)
 	{
-		logger.severe(String.format("WatirUtils::CopyDirAndFiles(%s, %s)", source, destination));
+		logger.finest(String.format("WatirUtils::CopyDirAndFiles(%s, %s)", source, destination));
 		File src = new File(source);
 		File dst = new File(destination);
 

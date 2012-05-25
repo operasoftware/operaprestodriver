@@ -132,7 +132,7 @@ public class ProfileUtils {
     {
       if (isMainProfile(profile_dirs[i]))
       {
-        logger.severe("Skipping profile deletion since '" + profile_dirs[i] + "' is the main profile.");
+        logger.finer("Skipping profile deletion since '" + profile_dirs[i] + "' is the main profile.");
         return false;
       }
     }
@@ -145,7 +145,7 @@ public class ProfileUtils {
 
       if (!current_dir_handle.exists())
       {
-        logger.severe("Skipping profile deletion for '" + current_dir + "' since it doesn't exist.");
+        logger.finer("Skipping profile deletion for '" + current_dir + "' since it doesn't exist.");
         continue;
       }
 
@@ -184,7 +184,7 @@ public class ProfileUtils {
       }
       else
       {
-        logger.severe("Deleted profile in '" + current_dir + "'");
+        logger.finer("Deleted profile in '" + current_dir + "'");
       }
     }
     return true;
@@ -201,7 +201,7 @@ public class ProfileUtils {
 			return false;
 		}
 
-		logger.severe("Copying profile from '" + newPrefs + "'");
+		logger.finer("Copying profile from '" + newPrefs + "'");
 		return WatirUtils.CopyDirAndFiles(newPrefs, smallPrefsFolder);
 	}
 
