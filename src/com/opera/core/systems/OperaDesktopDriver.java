@@ -856,10 +856,17 @@ public class OperaDesktopDriver extends OperaDriver {
   public void resetOperaPrefs(String newPrefs) {
     // Always delete and copy over a test profile except for when running
     // the first test which doesn't have a profile to copy over
-    if (!firstTestRun || new File(newPrefs).exists()) {
-      if (!profileUtils.isMainProfile(smallPreferencesPath) &&
-          !profileUtils.isMainProfile(largePreferencesPath) &&
-          !profileUtils.isMainProfile(cachePreferencesPath)) {
+
+    boolean isMainProfileDir = profileUtils.isMainProfile(smallPreferencesPath);
+    isMainProfileDir = isMainProfileDir || profileUtils.isMainProfile(largePreferencesPath);
+    isMainProfileDir = isMainProfileDir || profileUtils.isMainProfile(cachePreferencesPath);
+
+    boolean newPrefsDirExists = new File(newPrefs).exists();
+
+    boolean useAnyProfileDir = getCapabilities().getCapability(ANY_PROFILE) != null && getCapabilities().getCapability(ANY_PROFILE).equals(true);
+
+    if (!firstTestRun || newPrefsDirExists) {
+      if (useAnyProfileDir || !isMainProfileDir) {
         // Quit and wait for opera to quit properly
         quitOpera();
 

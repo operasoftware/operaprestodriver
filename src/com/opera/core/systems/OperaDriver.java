@@ -187,6 +187,12 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
    */
   public static final String PRODUCT = "opera.product";
 
+  /**
+   * (Boolean) Whether to allow using ANY directory as the test profile directory,
+   * including the "main profile" directories.
+   */
+  public static final String ANY_PROFILE = "opera.any_profile";
+
   /*
    * These are "protected" and not "private" so that we can extend this class
    * and add methods to access these variable in tests.
