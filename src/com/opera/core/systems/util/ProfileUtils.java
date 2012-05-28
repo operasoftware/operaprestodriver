@@ -127,13 +127,17 @@ public class ProfileUtils {
 	public boolean deleteProfile() {
     String[] profile_dirs = {smallPrefsFolder, largePrefsFolder, cachePrefsFolder};
 
-    // Assuming if any of those are main profile, skip the whole delete
-    for (int i = 0; i < profile_dirs.length; i++)
-    {
-      if (isMainProfile(profile_dirs[i]))
+    boolean useAnyProfileDir = capabilities.getCapability(OperaDriver.ANY_PROFILE) != null && capabilities.getCapability(OperaDriver.ANY_PROFILE).equals(true);
+
+    if (!useAnyProfileDir) {
+      // Assuming if any of those are main profile, skip the whole delete
+      for (int i = 0; i < profile_dirs.length; i++)
       {
-        logger.finer("Skipping profile deletion since '" + profile_dirs[i] + "' is the main profile.");
-        return false;
+        if (isMainProfile(profile_dirs[i]))
+        {
+          logger.finer("Skipping profile deletion since '" + profile_dirs[i] + "' is the main profile.");
+          return false;
+        }
       }
     }
 
