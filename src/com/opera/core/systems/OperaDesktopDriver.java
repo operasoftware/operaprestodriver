@@ -19,8 +19,10 @@ import com.opera.core.systems.runner.launcher.OperaLauncherRunner;
 import com.opera.core.systems.runner.launcher.OperaLauncherRunnerSettings;
 import com.opera.core.systems.scope.exceptions.CommunicationException;
 import com.opera.core.systems.scope.internal.OperaIntervals;
+import com.opera.core.systems.scope.protos.DesktopWmProtos;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo.QuickWidgetType;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearch.QuickWidgetSearchType;
+import com.opera.core.systems.scope.protos.SystemInputProtos;
 import com.opera.core.systems.scope.protos.SystemInputProtos.ModifierPressed;
 import com.opera.core.systems.scope.services.IDesktopUtils;
 import com.opera.core.systems.scope.services.IDesktopWindowManager;
@@ -30,6 +32,7 @@ import com.opera.core.systems.util.ProfileUtils;
 
 import org.openqa.selenium.Capabilities;
 
+import java.awt.*;
 import java.io.File;
 import java.util.Collections;
 import java.util.List;
@@ -236,6 +239,34 @@ public class OperaDesktopDriver extends OperaDriver {
    */
   public int getActiveQuickWindowID() {
     return desktopWindowManager.getActiveQuickWindowId();
+  }
+
+  /**
+   * Due to DSK-364451 we need a way to work around the focus problems
+   * when using the operawatir framework with a Cygwin shell and Windows.
+   * The best solution seems to be clicking the window title bar after
+   * launching Opera. This method is called by operawatir when needed.
+   */
+  public void focusActiveWindowWithClick() {
+    QuickWindow win = findWindowById(getActiveQuickWindowID());
+    if (win == null) {
+      logger.warning("Could not find an active window to click");
+      return;
+    }
+
+    DesktopWmProtos.DesktopWindowRect rect = win.getRect();
+    assert(rect != null);
+
+    // Find a clickable point on the browser title bar. The idea is to
+    // have a location that will focus the window after clicking on it,
+    // however no other actions should be done.
+    int x = rect.getX();
+    int y = rect.getY();
+    x += (rect.getWidth() / 2);
+    y += 3;
+
+    Point clickPoint = new Point(x, y);
+    systemInputManager.click(clickPoint, SystemInputProtos.MouseInfo.MouseButton.LEFT, 1, Collections.<SystemInputProtos.ModifierPressed>emptyList());
   }
 
   /**
