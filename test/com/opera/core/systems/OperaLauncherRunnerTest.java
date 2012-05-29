@@ -66,12 +66,14 @@ public class OperaLauncherRunnerTest extends OperaDriverTestCase {
     try {
       if (runner != null && runner.isOperaRunning()) {
         runner.stopOpera();
-        runner.shutdown();
         assertFalse(runner.isOperaRunning());
       }
     } catch (Exception e) {
       // ignore
     } finally {
+      if (runner != null) {
+        runner.shutdown();
+      }
       runner = null;
     }
   }
