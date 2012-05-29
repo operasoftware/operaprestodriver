@@ -476,6 +476,7 @@ public class WaitState {
 
           case EXCEPTION:
             Throwables.propagate(result.getException());
+            break;
 
           case DISCONNECTED:
             throw new CommunicationException(String.format("Problem encountered: %s", waitResult));
