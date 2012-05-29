@@ -1,3 +1,133 @@
+v0.14     (2012-05-29)
+
+  [API CHANGES]
+
+  * Added OperaMouse#tripleClick() and #quadrupleClick() which are
+    recognized by Opera.  (andreastt)
+
+  * OperaUtils#getOS() renamed to #getPlatform(), and now returns type
+    Platform.  (andreastt)
+
+  * Introduced ScopeServices#isConnected() to check for a connection
+    to Opera.  (andreastt)
+
+  [NEW FEATURES]
+
+  * OPDRV-121: Implemented window-manager's CreateWindow command.
+    (andreastt)
+
+  [ENHANCEMENTS]
+
+  * OPDRV-179: Upgraded exec service to 2.2.  (andreastt)
+
+  * Upgraded window-manager service to 2.2.  (andreastt)
+
+  * OPDRV-127: Retreiving multi-click interval from awt.
+    (mzajaczkowski)
+
+  * Implemented Closeables.  (andreastt)
+
+  * Abstracted hardcoded timeout for launcher response timeout to
+    OperaIntervals.  (andreastt)
+
+  * Window closing code now respects that core-gogi and Desktop on
+    Windows has different concepts of what a window is.  We cache the
+    number of open windows before WebDriver#close() call because they
+    will auto-open new windows when the last one is closed.  If the
+    user tries to close the last window, we will quit the browser
+    according to the WebDriver spec.  (andreastt)
+
+  * Cleaned up driver quit code: Opera is first closed, runner forces
+    an Opera shutdown, shuts down itself, then services are shut down.
+    Finally the profile and log files are cleaned up (after browser is
+    shut down), and then a garbage collection occurs.  The `runner'
+    field is not nulled because the user might want to query whether
+    browser is running or not.  (andreastt)
+
+  * No longer wrapping exceptions from Scope in WebDriverException's
+    as this obfuscates the real intent and since WebDriverException is
+    a final exception it will print twice since we catch it in
+    OperaDriver#init().  (andreastt)
+
+  * Generalized the sleep time between a window close in
+    OperaIntervals#WINDOW_CLOSE_SLEEP.  (andreastt)
+
+  * Implemented OperaSettings#equals().
+
+  [BUG FIXES]
+
+  * Made default product DESKTOP, fixes issue with reusing old
+    profiles.  (andreastt)
+
+  * OperaDriver#getWindowHandles() will return an empty set if we are
+    no longer connected to Opera.  (andreastt)
+
+  * Fix OperaProfile to work with RemoteWebDriver.  (dawagner)
+
+  * Close the socket output stream on
+    OperaLauncherProtocol#shutdown().  (danielb)
+
+  * Close the selector in SocketMonitor when done, otherwise we will
+    leak file descriptors.  (danielb)
+
+  * Close ServerSocket if an exception is thrown.  (danielb)
+
+  * OPDRV-125: Avoid sending double shutdown commands to launcher.
+    (mzajaczkowski)
+
+  * Logging file name and the actual IO issue when something goes bad
+    in OperaFilePreferences.  (andreastt)
+
+  * Using an immutable list to define services.  (andreastt)
+
+  * Propagating exception from OperaDriver#createScopeServices() since
+    we already catch everything and throw to WebDriverException in
+    OperaDriver#init().  (andreastt)
+
+  * Catching IOException explicitly in
+    OperaWebElement#saveScreenshot().  (andreastt)
+
+  * Not printing stack traces from SocketMonitor#stop() to stdout any
+    more.  (andreastt)
+
+  * OperaLauncherProtocol now uses an immutable map as a reverse
+    lookup.  (andreastt)
+
+  [TESTS]
+
+  * Replaced old window management code with CreateWindow from Scope.
+    (andreastt)
+
+  * Converted the HTTP redirect test to a local test.  (andreastt)
+
+  * OPDRV-121: Added tests for resetting windows on a running browser.
+    Used in SpartanRunner.  (andreastt)
+
+  * Refactored test framework to support probing of correct product.
+    (andreastt)
+
+  * Moved from Jetty to Webbit to match the Selenium project.
+    (andreastt)
+
+  * Misc. cleanup in WindowManager.  (andreastt)
+
+  * TestOperaDriver#isRunning() makes call to
+    ScopeServices#isConnected() if runner is not present rather than
+    relying on a local boolean value.  (andreastt)
+
+  * Removed unused method TestOperaDriver.getDefaultCapabilities().
+    (andreastt)
+
+  * Make sure runner is always shut down in OperaLauncherRunnerTest.
+    Fixes a test on GNU/Linux.  (andreastt)
+
+  [OTHER]
+
+  * Officially targetting Java 6/JDK 1.6.  (andreastt)
+
+  * Upgraded the WebDriver atoms.  (andreastt)
+
+
 v0.13     (2012-05-08)
 
   [API CHANGES]
