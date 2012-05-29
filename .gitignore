@@ -16,7 +16,6 @@ test-output/
 test-reports/
 doc/
 VERSION
-*.orig
 .idea/workspace.xml
 .idea/dictionaries/
 maven/src
