@@ -33,6 +33,7 @@ import org.openqa.selenium.interactions.Actions;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.openqa.selenium.Platform.LINUX;
+import static org.openqa.selenium.Platform.MAC;
 import static org.openqa.selenium.Platform.WINDOWS;
 
 @IdleEnabled
@@ -157,7 +158,7 @@ public class IdleTest extends OperaDriverTestCase {
   }
 
   @Test
-  @Ignore(platforms = WINDOWS)
+  @Ignore(platforms = {WINDOWS, MAC})
   public void click() {
     assertIdleEnabledAndAvailable();
 
