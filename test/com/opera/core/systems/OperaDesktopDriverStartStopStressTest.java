@@ -16,14 +16,7 @@ limitations under the License.
 
 package com.opera.core.systems;
 
-import org.junit.Ignore;
-import org.junit.Test;
-
-import java.io.IOException;
-
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
+/*
 public class OperaDesktopDriverStartStopStressTest extends OperaDesktopDriverTestCase {
 
   /**
@@ -34,7 +27,7 @@ public class OperaDesktopDriverStartStopStressTest extends OperaDesktopDriverTes
    *
    * NOTE: This test is known to fail you and this problem needs to be approached by the desktop. This test should
    * be ignored until the problem is fixed.
-   */
+   *
   @Test
   @Ignore
   public void testStartQuitOpera() throws IOException, InterruptedException {
@@ -62,3 +55,5 @@ public class OperaDesktopDriverStartStopStressTest extends OperaDesktopDriverTes
     driver.quit();
   }
 }
+
+*/

@@ -16,24 +16,13 @@ limitations under the License.
 
 package com.opera.core.systems;
 
-import org.junit.Test;
-import org.openqa.selenium.remote.DesiredCapabilities;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
+/*
 public class OperaDesktopDriverAutoStartTest extends OperaDesktopDriverTestCase {
 
   /**
    * Check that the driver reports Opera running after starting te driver with the default capabilities as
    * set by desktopwatir.
-   */
+   *
   @Test
   public void testBrowserStarts() {
     setOperaPath();
@@ -46,7 +35,7 @@ public class OperaDesktopDriverAutoStartTest extends OperaDesktopDriverTestCase 
 
   /**
    * Check that the PID reported by the driver looks fine.
-   */
+   *
   @Test
   public void testPidOK() {
     assertTrue("PID reported by browser should > 0", browserPid > 0);
@@ -56,7 +45,7 @@ public class OperaDesktopDriverAutoStartTest extends OperaDesktopDriverTestCase 
    * Check that the PID reported by the driver refers to an actually running process.
    * @throws java.io.IOException
    * @throws InterruptedException
-   */
+   *
   @Test
   public void testPidRunningOK() throws IOException, InterruptedException {
     Integer browserPid = driver.getPid();
@@ -73,7 +62,7 @@ public class OperaDesktopDriverAutoStartTest extends OperaDesktopDriverTestCase 
    * much we can do about, we'd have to parse the shell script to get the target path.
    * It was not verified how the test behaves with symlinks.
    * @throws IOException
-   */
+   *
   @Test
   public void testOperaPathReportedOK() throws IOException {
     String readPath = driver.getOperaPath();
@@ -88,7 +77,7 @@ public class OperaDesktopDriverAutoStartTest extends OperaDesktopDriverTestCase 
    * The actual values may probably change without hurting the general driver
    * functionality, however this test will detect any changes and allow
    * inspecting them.
-   */
+   *
   @Test
   public void testCapsOK() {
     Map<String, String> expectedValues = new HashMap<String, String>();
@@ -119,7 +108,7 @@ public class OperaDesktopDriverAutoStartTest extends OperaDesktopDriverTestCase 
    * after the driver has been quit.
    * @throws IOException
    * @throws InterruptedException
-   */
+   *
   @Test
   public void testBrowserQuitsOK() throws IOException, InterruptedException {
     Integer browserPid = driver.getPid();
@@ -128,3 +117,4 @@ public class OperaDesktopDriverAutoStartTest extends OperaDesktopDriverTestCase 
   }
 
 }
+         */
