@@ -16,6 +16,8 @@ limitations under the License.
 
 package com.opera.core.systems;
 
+import com.google.common.collect.ImmutableMap;
+
 import com.opera.core.systems.runner.launcher.OperaLauncherRunner;
 import com.opera.core.systems.scope.exceptions.CommunicationException;
 import com.opera.core.systems.scope.internal.OperaIntervals;
@@ -55,8 +57,7 @@ public class OperaDesktopDriver extends OperaDriver {
   private String cachePreferencesPath;
 
   public OperaDesktopDriver() {
-    super();
-    initDesktopDriver();
+    this(new OperaSettings());
   }
 
   /**
@@ -148,15 +149,20 @@ public class OperaDesktopDriver extends OperaDriver {
     }
   }
 
+  /**
+   * Required service dependencies mapped to minimum version for OperaDesktopDriver to work.
+   *
+   * @return required services and their minimum versions
+   */
   @Override
   protected Map<String, String> getServicesList() {
     Map<String, String> versions = super.getServicesList();
-    // This is the minimum versions of the services this version
-    // of the web-driver require work
-    versions.put("desktop-window-manager", "2.0");
-    versions.put("system-input", "1.0");
-    versions.put("desktop-utils", "2.0");
-    return versions;
+    ImmutableMap.Builder<String, String> builder = ImmutableMap.builder();
+    builder.putAll(versions);
+    builder.put("desktop-window-manager", "2.0");
+    builder.put("system-input", "1.0");
+    builder.put("desktop-utils", "2.0");
+    return builder.build();
   }
 
   /**
