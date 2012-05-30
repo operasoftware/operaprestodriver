@@ -16,23 +16,13 @@ limitations under the License.
 
 package com.opera.core.systems;
 
-import org.junit.Test;
-import org.openqa.selenium.remote.DesiredCapabilities;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
+/*
 public class OperaDesktopDriverSmokeNoQuitTest extends OperaDesktopDriverTestCase {
   /**
    * Attempt to start the driver with the 'opera.no_quit' capability set to true.
    * This is what happens when you pass the '-q' parameter to desktopwatir.
    * This test checks that the driver reports Opera running.
-   */
+   *
   @Test
   public void testStartsOK() {
     DesiredCapabilities caps = getDefaultCaps();
@@ -46,7 +36,7 @@ public class OperaDesktopDriverSmokeNoQuitTest extends OperaDesktopDriverTestCas
 
   /**
    * Check that the PID reported by the driver looks good.
-   */
+   *
   @Test
   public void testPidOK()
   {
@@ -57,7 +47,7 @@ public class OperaDesktopDriverSmokeNoQuitTest extends OperaDesktopDriverTestCas
    * Check that the PID reported by the driver refers to an actually running process.
    * @throws java.io.IOException
    * @throws InterruptedException
-   */
+   *
   @Test
   public void testBrowserIsRunning() throws IOException, InterruptedException {
     assertTrue("The browser process should BE running.", isPidRunning(browserPid));
@@ -72,7 +62,7 @@ public class OperaDesktopDriverSmokeNoQuitTest extends OperaDesktopDriverTestCas
    * much we can do about, we'd have to parse the shell script to get the target path.
    * It was not verified how the test behaves with symlinks.
    * @throws IOException
-   */
+   *
   @Test
   public void testOperaPathReportedOK() throws IOException {
     String readPath = driver.getOperaPath();
@@ -87,7 +77,7 @@ public class OperaDesktopDriverSmokeNoQuitTest extends OperaDesktopDriverTestCas
    * The actual values may probably change without hurting the general driver
    * functionality, however this test will detect any changes and allow
    * inspecting them.
-   */
+   *
   @Test
   public void testCapsOK() {
     Map<String, String> expectedValues = new HashMap<String, String>();
@@ -115,7 +105,7 @@ public class OperaDesktopDriverSmokeNoQuitTest extends OperaDesktopDriverTestCas
    * This allows to check if the 'opera.no_quit' capability is respected.
    * @throws IOException
    * @throws InterruptedException
-   */
+   *
   @Test
   public void testBrowserDoesNotQuit() throws IOException, InterruptedException {
     driver.quit();
@@ -124,3 +114,4 @@ public class OperaDesktopDriverSmokeNoQuitTest extends OperaDesktopDriverTestCas
     assertTrue("The browser process should BE running.", isPidRunning);
   }
 }
+*/

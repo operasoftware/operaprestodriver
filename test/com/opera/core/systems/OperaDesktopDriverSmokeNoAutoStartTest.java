@@ -16,17 +16,14 @@ limitations under the License.
 
 package com.opera.core.systems;
 
-import org.junit.Ignore;
-import org.junit.Test;
-import org.openqa.selenium.WebDriverException;
-
+/*
 public class OperaDesktopDriverSmokeNoAutoStartTest extends OperaDesktopDriverTestCase {
   /**
    * This test is supposed to start the driver in the "wait for connection" mode.
    * Opera should not be autostarted and since it will also not connect automatically,
    * the driver will timeout while waiting for a connection and throw an expected
    * exception.
-   */
+   *
   @Test(expected = WebDriverException.class)
   @Ignore
   public void testSmokeNoAutoStartThrows() {
@@ -35,3 +32,5 @@ public class OperaDesktopDriverSmokeNoAutoStartTest extends OperaDesktopDriverTe
     // The driver is supposed to wait for connection that never comes and throw
   }
 }
+
+*/

@@ -16,14 +16,6 @@ limitations under the License.
 
 package com.opera.core.systems;
 
-import com.opera.core.systems.scope.protos.DesktopWmProtos;
-import com.opera.core.systems.scope.protos.SystemInputProtos;
-import org.junit.*;
-import org.openqa.selenium.Platform;
-import java.util.*;
-
-import static org.junit.Assert.*;
-
 /*
 The OperaDesktopDriverTest* classes try hard to use the desktop driver in the very same way
 as the desktopwatir RSpec suite does. The goal is to try to test the behavior when
@@ -32,11 +24,11 @@ desktop driver that is not used as it is but rather via the desktopwatir framewo
 
 In order to be able to do that, you need to have a working Opera installation on the
 system that you are running the tests on. The binary is looked for by the OperaPaths class.
-*/
+*
 public class OperaDesktopDriverApiTest extends OperaDesktopDriverTestCase {
   /**
    * Start API tests, run a new browser, check that it is running.
-   */
+   *
   @Test
   public void testStartBrowser() {
     setOperaPath();
@@ -53,7 +45,7 @@ public class OperaDesktopDriverApiTest extends OperaDesktopDriverTestCase {
    * control the language or even check it, we use the prefs API to validate that
    * the language file in use is "en.lng". Not the best option, this should be
    * approached with some new language control API perhaps.
-   */
+   *
   @Test
   public void testVerifyLanguageFileIsEnLng() {
     String languageFile = (String) driver.preferences().get("User Prefs", "Language File").getValue();
@@ -68,11 +60,11 @@ public class OperaDesktopDriverApiTest extends OperaDesktopDriverTestCase {
    * The API seems a bit inconsistent.
    * The API should be redesigned and refactored by the desktop team.
    * The tests below should be adapted afterwards.
-   */
+   *
 
   /**
    * Check that getActiveQuickWindowID() returns SOME window.
-   */
+   *
   @Test
   public void testQuickWindowApiGetActiveQuickWindowID() {
     Integer activeQuickWindowId = driver.getActiveQuickWindowID();
@@ -82,7 +74,7 @@ public class OperaDesktopDriverApiTest extends OperaDesktopDriverTestCase {
 
   /**
    * Check that the window count reported by the driver looks fine.
-   */
+   *
   @Test
   public void testQuickWindowApiGetWindowCount() {
     Integer quickWindowCount = driver.getQuickWindowCount();
@@ -92,7 +84,7 @@ public class OperaDesktopDriverApiTest extends OperaDesktopDriverTestCase {
 
   /**
    * Check that getQuickWindowList() reports the same number of windows as getQuickWindowCount().
-   */
+   *
   @Test
   public void testQuickWindowApiGetQuickWindowListSize() {
     List<QuickWindow> quickWindowList = driver.getQuickWindowList();
@@ -104,7 +96,7 @@ public class OperaDesktopDriverApiTest extends OperaDesktopDriverTestCase {
 
   /**
    * Check that getQuickWindowName() works. Silently assumes that getQuickWindowList() returns sane data.
-   */
+   *
   @Test
   public void testQuickWindowApiGetQuickWindowName() {
     List<QuickWindow> quickWindowList = driver.getQuickWindowList();
@@ -118,7 +110,7 @@ public class OperaDesktopDriverApiTest extends OperaDesktopDriverTestCase {
 
   /**
    * Check that findWindowById() works. Silently assumes that getQuickWindowList() returns sane data.
-   */
+   *
   @Test
   public void testQuickWindowApiFindWindowById() {
     List<QuickWindow> quickWindowList = driver.getQuickWindowList();
@@ -145,11 +137,11 @@ public class OperaDesktopDriverApiTest extends OperaDesktopDriverTestCase {
    * Type: BUTTON
    * Text: Stop
    * Visible: true
-   */
+   *
 
   /**
    * Verify that findWidgetByName() works OK.
-   */
+   *
   @Test
   public void testQuickWidgetApiFindWidgetByName() {
     Integer activeQuickWindowId = driver.getActiveQuickWindowID();
@@ -161,7 +153,7 @@ public class OperaDesktopDriverApiTest extends OperaDesktopDriverTestCase {
 
   /**
    * Verify that findWidgetByText() works OK.
-   */
+   *
   @Test
   public void testQuickWidgetApiFindWidgetByText() {
     Integer activeQuickWindowId = driver.getActiveQuickWindowID();
@@ -173,7 +165,7 @@ public class OperaDesktopDriverApiTest extends OperaDesktopDriverTestCase {
 
   /**
    * Verify that findWidgetByStringId() works OK.
-   */
+   *
   @Test
   public void testQuickWidgetApiFindWidgetByStringId() {
     Integer activeQuickWindowId = driver.getActiveQuickWindowID();
@@ -186,7 +178,7 @@ public class OperaDesktopDriverApiTest extends OperaDesktopDriverTestCase {
   /**
    * Um, verify that findWidgetByPosition() works OK.
    * Will probably be possible in future Opera releases.
-   */
+   *
   @Test
   @Ignore
   public void testQuickWidgetApiFindWidgetByPosition() {
@@ -195,7 +187,7 @@ public class OperaDesktopDriverApiTest extends OperaDesktopDriverTestCase {
 
   /**
    * Verify that getQuickWidgetList() returns any widgets for the active window.
-   */
+   *
   @Test
   public void testQuickWidgetApiGetQuickWidgetListSize() {
     Integer activeQuickWindowId = driver.getActiveQuickWindowID();
@@ -209,7 +201,7 @@ public class OperaDesktopDriverApiTest extends OperaDesktopDriverTestCase {
    * same information when fetched by findWidgetByName().
    *
    * This test is known to fail, the API should be fixed by the desktop team.
-   */
+   *
   @Test
   @Ignore
   public void testQuickWidgetApiGetQuickWidgetList() {
@@ -230,7 +222,7 @@ public class OperaDesktopDriverApiTest extends OperaDesktopDriverTestCase {
 
   /**
    * Verify that getString() works fine for fetching a string with the ampersand.
-   */
+   *
   @Test
   public void testStringApiGetStringAmp() {
     String fetchedAmpStringAmp = driver.getString("SI_IDM_SEARCH_ENGINE6", false);
@@ -241,7 +233,7 @@ public class OperaDesktopDriverApiTest extends OperaDesktopDriverTestCase {
 
   /**
    * Verify that getString() works fine for stripping the ampersand.
-   */
+   *
   @Test
   public void testStringApiGetStringNoAmp() {
     String fetchedAmpStringAmp = driver.getString("SI_IDM_SEARCH_ENGINE6", true);
@@ -252,7 +244,7 @@ public class OperaDesktopDriverApiTest extends OperaDesktopDriverTestCase {
 
   /**
    * Verify that getSubstitutedString() behaves as expected when no subsitution arguments are given.
-   */
+   *
   @Test
   public void testStringApiGetSubstitutedStringNoParams() {
     String[] inputParam = {"S_PLUGIN_AUTO_INSTALL_DOWNLOAD_PROGRESS"};
@@ -264,7 +256,7 @@ public class OperaDesktopDriverApiTest extends OperaDesktopDriverTestCase {
 
   /**
    * Verify that getSubstitutedString() behaves as expected when all the substitution arguments are given.
-   */
+   *
   @Test
   public void testStringApiGetSubstitutedStringAllParams() {
     String[] inputParam = {"S_PLUGIN_AUTO_INSTALL_DOWNLOAD_PROGRESS", "one", "two", "three"};
@@ -276,7 +268,7 @@ public class OperaDesktopDriverApiTest extends OperaDesktopDriverTestCase {
 
   /**
    * Verify that getSubstitutedString() behaves as expected when all of the substitution arguments are empty.
-   */
+   *
   @Test
   public void testStringApiGetSubstitutedStringAllAnyParams() {
     String[] inputParam = {"S_PLUGIN_AUTO_INSTALL_DOWNLOAD_PROGRESS", "", "", ""};
@@ -288,7 +280,7 @@ public class OperaDesktopDriverApiTest extends OperaDesktopDriverTestCase {
 
   /**
    * Verify that getSubstitutedString() behaves as expected when some of the substitution arguments are empty.
-   */
+   *
   @Test
   public void testStringApiGetSubstitutedStringSomeAnyParams() {
     String[] inputParam = {"S_PLUGIN_AUTO_INSTALL_DOWNLOAD_PROGRESS", "one", "", "three"};
@@ -302,7 +294,7 @@ public class OperaDesktopDriverApiTest extends OperaDesktopDriverTestCase {
    * Verify that getSubstitutedString() behaves as expected for ordered substitution.
    * Not possible currently since there is no string in Opera that would have the orderred formatters not in order
    * (i.e. "Something %2 somethingelse %1").
-   */
+   *
   @Test
   public void testStringApiGetSubstitutedStringSubstitutionOrder() {
     // TODO: Implement.
@@ -516,3 +508,4 @@ public class OperaDesktopDriverApiTest extends OperaDesktopDriverTestCase {
     driver.waitForMenuClosed("Browser View Menu");
   }
 }
+*/

@@ -16,18 +16,11 @@ limitations under the License.
 
 package com.opera.core.systems;
 
-import org.junit.Test;
-
-import java.io.File;
-import java.io.IOException;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
+/*
 public class OperaDesktopDriverAutoProfileTest extends OperaDesktopDriverTestCase {
   /**
    * Start Opera with an empty 'opera.profile' capability (the default).
-   */
+   *
   @Test
   public void testAutoProfileStart()
   {
@@ -42,7 +35,7 @@ public class OperaDesktopDriverAutoProfileTest extends OperaDesktopDriverTestCas
    * Check that the large prefs path reported by the driver matches the one found in the 'opera.profile'
    * capability value.
    * @throws java.io.IOException
-   */
+   *
   @Test
   public void testAutoProfileLarge() throws IOException {
     File largePrefsFile = new File(driver.getLargePreferencesPath()).getCanonicalFile();
@@ -55,7 +48,7 @@ public class OperaDesktopDriverAutoProfileTest extends OperaDesktopDriverTestCas
    * Check that the small prefs path reported by the driver matches the one found in the 'opera.profile'
    * capability value.
    * @throws IOException
-   */
+   *
   @Test
   public void testAutoProfileSmall() throws IOException {
     File smallPrefsFile = new File(driver.getSmallPreferencesPath()).getCanonicalFile();
@@ -68,7 +61,7 @@ public class OperaDesktopDriverAutoProfileTest extends OperaDesktopDriverTestCas
    * Check that the cache prefs path reported by the driver matches the one found in the 'opera.profile'
    * capability value.
    * @throws IOException
-   */
+   *
   @Test
   public void testAutoProfileCache() throws IOException {
     File cachePrefsFile = new File(driver.getCachePreferencesPath()).getCanonicalFile();
@@ -81,7 +74,7 @@ public class OperaDesktopDriverAutoProfileTest extends OperaDesktopDriverTestCas
    * Check that the 'opera.profile' capability value contains the "opera-profile" string.
    * When the driver created a temporary test profile, it picks up a random name with this
    * string.
-   */
+   *
   @Test
   public void testAutoProfile() throws IOException, InterruptedException {
     String largePrefsPath = driver.getLargePreferencesPath();
@@ -89,3 +82,5 @@ public class OperaDesktopDriverAutoProfileTest extends OperaDesktopDriverTestCas
     assertTrue(String.format("The prefs folder reported by the browser should contain the 'opera-profile' string [%s].", largePrefsPath), largePrefsPath.matches(".*opera-profile.*"));
   }
 }
+
+*/
