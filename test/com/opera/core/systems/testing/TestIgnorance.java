@@ -18,10 +18,12 @@ limitations under the License.
 
 package com.opera.core.systems.testing;
 
-import com.opera.core.systems.ScopeServices;
-import com.opera.core.systems.util.VersionUtil;
+import com.opera.core.systems.OperaProduct;
 
 import org.junit.runners.model.FrameworkMethod;
+import org.openqa.selenium.Platform;
+
+import java.util.List;
 
 /**
  * Decides whether a test class or a method should be ignored.
@@ -29,14 +31,15 @@ import org.junit.runners.model.FrameworkMethod;
 public class TestIgnorance {
 
   private final IgnoreComparator ignoreComparator = new IgnoreComparator();
-  private final ScopeServices services;
+  private final List<String> services;
   private final Boolean idleEnabled;
 
-  public TestIgnorance() {
-    services = OperaDriverTestCase.currentServices();
-    idleEnabled = OperaDriverTestCase.currentHasIdle();
-    ignoreComparator.setCurrentPlatform(OperaDriverTestCase.currentPlatform());
-    ignoreComparator.setCurrentProduct(OperaDriverTestCase.currentProduct());
+  public TestIgnorance(List<String> services, boolean hasIdle, Platform platform,
+                       OperaProduct product) {
+    this.services = services;
+    this.idleEnabled = hasIdle;
+    ignoreComparator.setCurrentPlatform(platform);
+    ignoreComparator.setCurrentProduct(product);
   }
 
   // JUnit 4
@@ -69,15 +72,19 @@ public class TestIgnorance {
       return false;
     }
 
-    if (!services.getListedServices().contains(annotation.service())) {
+    if (!services.contains(annotation.service())) {
       return true;
-    } else if (services.getListedServices().contains(annotation.service()) &&
+    } else if (services.contains(annotation.service()) &&
                annotation.version() == null) {
       return false;
     }
 
+    /*
     return VersionUtil.compare(annotation.version(), "maxVersion") >= 0 ||
-           VersionUtil.compare(annotation.version(), services.getMinVersionFor(annotation.service())) < 0;
+           VersionUtil
+               .compare(annotation.version(), services.getMinVersionFor(annotation.service())) < 0;
+               */
+    return false;
   }
 
 }

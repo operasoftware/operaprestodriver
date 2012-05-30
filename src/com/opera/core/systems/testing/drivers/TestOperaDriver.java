@@ -33,7 +33,7 @@ import static com.opera.core.systems.OperaProduct.DESKTOP;
  * Provides access to the {@link com.opera.core.systems.runner.OperaRunner}, so we can detect
  * crashes.
  */
-public class TestOperaDriver extends OperaDriver {
+public class TestOperaDriver extends OperaDriver implements TestDriver {
 
   public static enum ClosingStrategy {SWITCH_TO, ACTION}
 

@@ -16,45 +16,44 @@ limitations under the License.
 
 package com.opera.core.systems.testing;
 
-import com.opera.core.systems.OperaProduct;
-import com.opera.core.systems.testing.drivers.TestOperaDriver;
-import com.opera.core.systems.testing.drivers.TestOperaDriverSupplier;
+import com.opera.core.systems.testing.drivers.TestOperaDesktopDriver;
+import com.opera.core.systems.testing.drivers.TestOperaDesktopDriverSupplier;
 
 /**
- * Test framework for {@link com.opera.core.systems.OperaDriver}.
+ * Test framework for {@link com.opera.core.systems.OperaDesktopDriver}.
  *
  * @author Andreas Tolf Tolfsen <andreastt@opera.com>
- * @see OperaDesktopDriverTestCase
+ * @see OperaDriverTestCase
  */
-public abstract class OperaDriverTestCase extends AbstractTestCase {
+public abstract class OperaDesktopDriverTestCase extends AbstractTestCase {
 
-  protected TestOperaDriver driver;
+  protected TestOperaDesktopDriver driver;
 
-  public OperaDriverTestCase() {
-    super(new TestOperaDriverSupplier());
+  public OperaDesktopDriverTestCase() {
+    super(new TestOperaDesktopDriverSupplier());
   }
 
   @Override
   public void createDriverIfNecessary() {
     super.createDriverIfNecessary();
-    driver = (TestOperaDriver) super.driver;
-  }
-
-  public OperaProduct currentProduct() {
-    return driver.utils().getProduct();
+    driver = (TestOperaDesktopDriver) super.driver;
   }
 
   /*
-  public Platform currentPlatform() {
+  public static OperaProduct currentProduct() {
+    return getWrappedDriver().utils().getProduct();
+  }
+
+  public static Platform currentPlatform() {
     return getWrappedDriver().utils().getPlatform();
   }
 
-  public boolean currentHasIdle() {
+  public static boolean currentHasIdle() {
     return currentServices().isOperaIdleAvailable();
   }
 
-  public ScopeServices currentServices() {
-    return driver.getServices();
+  public static ScopeServices currentServices() {
+    return getWrappedDriver().getServices();
   }
   */
 
