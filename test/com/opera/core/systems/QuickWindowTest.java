@@ -1,6 +1,7 @@
 package com.opera.core.systems;
 
 import com.opera.core.systems.testing.Ignore;
+import com.opera.core.systems.testing.OperaDesktopDriverTestCase;
 
 import org.junit.Test;
 

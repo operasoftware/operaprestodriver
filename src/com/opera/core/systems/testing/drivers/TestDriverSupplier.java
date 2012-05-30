@@ -16,28 +16,36 @@ limitations under the License.
 
 package com.opera.core.systems.testing.drivers;
 
+import com.google.common.base.Supplier;
+
 import com.opera.core.systems.OperaDriver;
 import com.opera.core.systems.OperaSettings;
 
 /**
- * Provides a plain, default {@link OperaDriver} with popup blocking disabled.
+ * TestDriverSupplier extends the Google Guava {@link Supplier<OperaDriver>} interface to make it
+ * possible to specify capabilities on a supplier.
+ *
+ * A driver supplier allows easy construction of differently configured drivers.
  *
  * @author Andreas Tolf Tolfsen <andreastt@opera.com>
+ * @see TestDriverBuilder
  */
-public class DefaultOperaDriverSupplier extends AbstractOperaDriverSupplier {
+public interface TestDriverSupplier extends Supplier<TestDriver> {
 
-  public DefaultOperaDriverSupplier() {
-    super();
-  }
+  /**
+   * Changes the settings for this supplier.
+   *
+   * @param settings new settings
+   */
+  void setSettings(OperaSettings settings);
 
-  public DefaultOperaDriverSupplier(OperaSettings settings) {
-    super(settings);
-  }
+  /**
+   * Gets the settings of this supplier.
+   *
+   * @return a set of settings
+   */
+  OperaSettings getSettings();
 
-  public OperaDriver get() {
-    OperaDriver driver = new OperaDriver(getSettings());
-    driver.preferences().set("User Prefs", "Ignore Unrequested Popups", false);
-    return driver;
-  }
+  boolean supplies(Class<? extends TestDriver> klass);
 
 }

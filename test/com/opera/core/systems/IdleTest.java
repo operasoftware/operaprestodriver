@@ -58,7 +58,7 @@ public class IdleTest extends OperaDriverTestCase {
 
   @AfterClass
   public static void afterAll() {
-    driver.quit();
+    //driver.quit();
   }
 
   private void assertIdleEnabledAndAvailable() {

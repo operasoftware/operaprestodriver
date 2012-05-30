@@ -29,7 +29,7 @@ import java.util.logging.Level;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * OperaDriverBuilder is a builder that supplies you with instances of {@link
+ * TestDriverBuilder is a builder that supplies you with instances of {@link
  * com.opera.core.systems.OperaDriver} through the {@link #get()} method.
  *
  * You can either use it by specifying a {@link Supplier<OperaDriver>} class or the class it self as
@@ -40,10 +40,10 @@ import static com.google.common.base.Preconditions.checkNotNull;
  *
  * @author Andreas Tolf Tolfsen <andreastt@opera.com>
  */
-public class OperaDriverBuilder implements Supplier<OperaDriver> {
+public class TestDriverBuilder implements Supplier<TestDriver> {
 
   private Class driverClass = null;
-  private OperaDriverSupplier driverSupplier;
+  private TestDriverSupplier driverSupplier;
   private OperaSettings settings = new OperaSettings();
   private Level loggingLevel = null;
 
@@ -52,8 +52,8 @@ public class OperaDriverBuilder implements Supplier<OperaDriver> {
    * desired capabilities specified in Selenium's {@link DesiredCapabilities#opera()}.
    */
   @SuppressWarnings("unused")
-  public OperaDriverBuilder() {
-    this(new DefaultOperaDriverSupplier());
+  public TestDriverBuilder() {
+    this(new TestOperaDriverSupplier());
   }
 
   /**
@@ -63,7 +63,7 @@ public class OperaDriverBuilder implements Supplier<OperaDriver> {
    *
    * @param supplier a supplier that implements {@link Supplier#get()}
    */
-  public OperaDriverBuilder(OperaDriverSupplier supplier) {
+  public TestDriverBuilder(TestDriverSupplier supplier) {
     driverSupplier = supplier;
   }
 
@@ -74,7 +74,7 @@ public class OperaDriverBuilder implements Supplier<OperaDriver> {
    * @param driverImplementation class reference to driver implementation
    */
   @SuppressWarnings("unused")
-  public OperaDriverBuilder(Class<? extends OperaDriver> driverImplementation) {
+  public TestDriverBuilder(Class<? extends TestDriver> driverImplementation) {
     driverClass = driverImplementation;
   }
 
@@ -84,7 +84,7 @@ public class OperaDriverBuilder implements Supplier<OperaDriver> {
    * @param settings capabilities for the driver
    * @return a self reference
    */
-  public OperaDriverBuilder using(OperaSettings settings) {
+  public TestDriverBuilder using(OperaSettings settings) {
     this.settings = settings;
     return this;
   }
@@ -95,7 +95,7 @@ public class OperaDriverBuilder implements Supplier<OperaDriver> {
    * @param level the logging level you wish the driver to use
    * @return a self reference
    */
-  public OperaDriverBuilder modifyLogLevel(Level level) {
+  public TestDriverBuilder modifyLogLevel(Level level) {
     loggingLevel = level;
     return this;
   }
@@ -105,8 +105,8 @@ public class OperaDriverBuilder implements Supplier<OperaDriver> {
    *
    * @return an instance of OperaDriver
    */
-  public OperaDriver get() {
-    OperaDriver driver;
+  public TestDriver get() {
+    TestDriver driver;
 
     // Overrides defined by builder
     if (loggingLevel != null) {
@@ -119,7 +119,7 @@ public class OperaDriverBuilder implements Supplier<OperaDriver> {
       try {
         Class constructor = driverClass
             .getClass().getConstructor(Class.class).newInstance(settings);
-        driver = (OperaDriver) constructor.newInstance();
+        driver = (TestDriver) constructor.newInstance();
       } catch (NoSuchMethodException e) {
         throw new RuntimeException("Unable to recognize implementation's constructor");
       } catch (IllegalAccessException e) {
