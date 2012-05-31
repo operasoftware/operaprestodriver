@@ -305,7 +305,7 @@ public class OperaLauncherRunner extends OperaRunner
     StatusType status = response.getStatus();
     if (status == StatusType.CRASHED) {
 
-      System.out.print("<CRASH>");
+      System.err.print("<CRASH>");
       logger.fine("Opera has crashed");
 
       if (response.hasCrashlog()) {
