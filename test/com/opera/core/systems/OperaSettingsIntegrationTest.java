@@ -77,13 +77,13 @@ public class OperaSettingsIntegrationTest extends OperaDriverTestCase {
   @Test(expected = WebDriverException.class)
   public void binaryInvalidThrowsException() {
     settings.setBinary(resources.fakeFile());
-    TestOperaDriver driver = new TestOperaDriver(settings);
+    new TestOperaDriver(settings);
   }
 
   @Test(expected = WebDriverException.class)
   public void autostartIsRespected() {
     settings.autostart(false);
-    TestOperaDriver driver = new TestOperaDriver(settings);
+    new TestOperaDriver(settings);
   }
 
   @Test
