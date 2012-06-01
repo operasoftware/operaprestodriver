@@ -24,7 +24,6 @@ import com.opera.core.systems.testing.drivers.TestOperaDesktopDriver;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.openqa.selenium.WebDriverException;
@@ -48,25 +47,25 @@ public class OperaDesktopDriverTest extends OperaDesktopDriverTestCase {
   public final long defaultHandshakeTimeout = OperaIntervals.HANDSHAKE_TIMEOUT.getValue();
 
   public TestOperaDesktopDriver driver;
-  public DesiredCapabilities capabilities;
+  public DesiredCapabilities capabilities = DesiredCapabilities.opera();
   public File profileDirectory;
 
-  @Rule
-  public TemporaryFolder tmp = new TemporaryFolder();
-
   @Before
-  public void beforeEach() throws IOException {
+  public void setup() throws IOException {
     OperaIntervals.HANDSHAKE_TIMEOUT.setValue(2000);
-    capabilities = (DesiredCapabilities) driver.getCapabilities();
-    profileDirectory = tmp.newFolder();
+    profileDirectory = new TemporaryFolder().newFolder();
     capabilities.setCapability(PROFILE.getCapability(), profileDirectory.getPath());
   }
 
   @After
-  public void afterEach() {
+  public void tearDownDriver() {
     if (driver != null && driver.isRunning()) {
       driver.quit();
     }
+  }
+
+  @After
+  public void reset() {
     OperaIntervals.HANDSHAKE_TIMEOUT.setValue(defaultHandshakeTimeout);
   }
 
@@ -81,12 +80,11 @@ public class OperaDesktopDriverTest extends OperaDesktopDriverTestCase {
 
   @Test
   public void startAndQuitOperaFourTimes() throws IOException {
-    assertTrue("Opera should be running", driver.isRunning());
-
     for (int i = 0; i < 5; i++) {
       driver = new TestOperaDesktopDriver();
       assertTrue("Opera should be running", driver.isRunning());
 
+      // TODO: What does this do?  Why is it here?
       driver.resetOperaPrefs("");
       assertTrue("Opera should be running", driver.isRunning());
 
