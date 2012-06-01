@@ -16,6 +16,7 @@ limitations under the License.
 
 package com.opera.core.systems.testing;
 
+import com.opera.core.systems.OperaProduct;
 import com.opera.core.systems.OperaSettings;
 import com.opera.core.systems.environment.GlobalTestEnvironment;
 import com.opera.core.systems.environment.InProcessTestEnvironment;
@@ -28,6 +29,7 @@ import com.opera.core.systems.testing.drivers.TestDriverSupplier;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.runner.RunWith;
+import org.openqa.selenium.Platform;
 
 import java.util.logging.Level;
 
@@ -57,6 +59,8 @@ public abstract class AbstractTestCase implements TestCase {
   private static boolean spawnDriver = true;
 
   private final TestDriverSupplier supplier;
+  private OperaProduct currentProduct;
+  private Platform currentPlatform;
 
   public AbstractTestCase(TestDriverSupplier supplier) {
     this.supplier = supplier;
@@ -137,6 +141,22 @@ public abstract class AbstractTestCase implements TestCase {
 
   public TestDriver getWrappedDriver() {
     return storedDriver.get();
+  }
+
+  public OperaProduct currentProduct() {
+    if (currentProduct == null) {
+      currentProduct = getWrappedDriver().utils().getProduct();
+    }
+
+    return currentProduct;
+  }
+
+  public Platform currentPlatform() {
+    if (currentPlatform == null) {
+      currentPlatform = getWrappedDriver().utils().getPlatform();
+    }
+
+    return currentPlatform;
   }
 
 }

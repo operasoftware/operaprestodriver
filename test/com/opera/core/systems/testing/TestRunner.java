@@ -41,11 +41,10 @@ import java.util.logging.Level;
 
 public class TestRunner extends BlockJUnit4ClassRunner {
 
-  private final TestIgnorance ignorance; // = new TestIgnorance();
+  private final TestIgnorance ignorance;
 
   private Object test;
   private Throwable testException;
-  private TestDriver driver;
 
   public TestRunner(Class<?> testClass) throws InitializationError {
     super(testClass);
@@ -58,13 +57,12 @@ public class TestRunner extends BlockJUnit4ClassRunner {
         }
       }.run();
     } catch (Throwable e) {
-      //runLeaf(new Fail(e), description, notifier);
       testException = e;
     }
 
     if (test instanceof TestCase) {
       TestCase base = (TestCase) test;
-      driver = base.getWrappedDriver();
+      TestDriver driver = base.getWrappedDriver();
 
       // If any driver is present we don't need a different supplier's driver to initialize
       // TestIgnorance.  This skips the supplies(klass) check in createDriverIfNecessary().
@@ -77,7 +75,10 @@ public class TestRunner extends BlockJUnit4ClassRunner {
                                     driver.getServices().isOperaIdleAvailable(),
                                     driver.utils().getPlatform(), driver.utils().getProduct());
     } else {
-      ignorance = new TestIgnorance(new ArrayList<String>(), false, Platform.getCurrent(), OperaProduct.ALL);
+      ignorance = new TestIgnorance(new ArrayList<String>(),
+                                    false,
+                                    Platform.getCurrent(),
+                                    OperaProduct.ALL);
     }
   }
 
@@ -124,7 +125,6 @@ public class TestRunner extends BlockJUnit4ClassRunner {
     final NoDriver annotation = test.getClass().getAnnotation(NoDriver.class);
 
     if (annotation == null) {
-      //OperaDriverTestCase.setCreateDriver(true);
       test.setCreateDriver(true);
 
       return statement;
@@ -133,8 +133,6 @@ public class TestRunner extends BlockJUnit4ClassRunner {
     return new Statement() {
       @Override
       public void evaluate() throws Throwable {
-        //OperaDriverTestCase.setCreateDriver(false);
-        //OperaDriverTestCase.removeDriver();
         test.setCreateDriver(false);
         test.removeDriver();
         statement.evaluate();

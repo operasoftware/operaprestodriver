@@ -16,7 +16,6 @@ limitations under the License.
 
 package com.opera.core.systems.testing;
 
-import com.opera.core.systems.OperaProduct;
 import com.opera.core.systems.testing.drivers.TestOperaDriver;
 import com.opera.core.systems.testing.drivers.TestOperaDriverSupplier;
 
@@ -39,23 +38,5 @@ public abstract class OperaDriverTestCase extends AbstractTestCase {
     super.createDriverIfNecessary();
     driver = (TestOperaDriver) super.driver;
   }
-
-  public OperaProduct currentProduct() {
-    return driver.utils().getProduct();
-  }
-
-  /*
-  public Platform currentPlatform() {
-    return getWrappedDriver().utils().getPlatform();
-  }
-
-  public boolean currentHasIdle() {
-    return currentServices().isOperaIdleAvailable();
-  }
-
-  public ScopeServices currentServices() {
-    return driver.getServices();
-  }
-  */
 
 }

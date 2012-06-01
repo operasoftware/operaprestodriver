@@ -1,5 +1,5 @@
 /*
-Copyright 2011-2012 Opera Software ASA
+Copyright 2012 Opera Software ASA
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -38,23 +38,5 @@ public abstract class OperaDesktopDriverTestCase extends AbstractTestCase {
     super.createDriverIfNecessary();
     driver = (TestOperaDesktopDriver) super.driver;
   }
-
-  /*
-  public static OperaProduct currentProduct() {
-    return getWrappedDriver().utils().getProduct();
-  }
-
-  public static Platform currentPlatform() {
-    return getWrappedDriver().utils().getPlatform();
-  }
-
-  public static boolean currentHasIdle() {
-    return currentServices().isOperaIdleAvailable();
-  }
-
-  public static ScopeServices currentServices() {
-    return getWrappedDriver().getServices();
-  }
-  */
 
 }
