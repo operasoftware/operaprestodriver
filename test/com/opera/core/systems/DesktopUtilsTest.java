@@ -17,23 +17,50 @@ limitations under the License.
 package com.opera.core.systems;
 
 import com.opera.core.systems.testing.Ignore;
+import com.opera.core.systems.testing.NoDriver;
 import com.opera.core.systems.testing.OperaDesktopDriverTestCase;
+import com.opera.core.systems.testing.drivers.TestOperaDesktopDriver;
 
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
+import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.io.File;
+import java.io.IOException;
 
 import static com.opera.core.systems.OperaProduct.CORE;
 import static com.opera.core.systems.OperaProduct.MINI;
 import static com.opera.core.systems.OperaProduct.MOBILE;
 import static com.opera.core.systems.OperaProduct.SDK;
+import static com.opera.core.systems.OperaSettings.Capability.PROFILE;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.junit.matchers.JUnitMatchers.containsString;
 
+@NoDriver
 @Ignore(products = {CORE, MINI, MOBILE, SDK})
 public class DesktopUtilsTest extends OperaDesktopDriverTestCase {
+
+  public static TestOperaDesktopDriver driver;
+  public static DesiredCapabilities capabilities = DesiredCapabilities.opera();
+  public static File profileDirectory;
+
+  @BeforeClass
+  public static void setupDriver() throws IOException {
+    profileDirectory = new TemporaryFolder().newFolder();
+    capabilities.setCapability(PROFILE.getCapability(), profileDirectory.getPath());
+    driver = new TestOperaDesktopDriver(capabilities);
+  }
+
+  @AfterClass
+  public static void teardownDriver() {
+    if (driver != null && driver.isRunning()) {
+      driver.quit();
+    }
+  }
 
   /**
    * The tests using the <code>text</code> property of anything, and also the string tests, depend
@@ -82,6 +109,24 @@ public class DesktopUtilsTest extends OperaDesktopDriverTestCase {
   public void getSubstitutedStringWithMixOfFilledAndEmptyArguments() {
     String[] inputParam = {"S_PLUGIN_AUTO_INSTALL_DOWNLOAD_PROGRESS", "one", "", "three"};
     assertEquals("Downloaded one of _ANY_ at three", driver.getSubstitutedString(inputParam, true));
+  }
+
+  @Test
+  public void largePreferencesDirectory() throws IOException {
+    assertEquals(profileDirectory.getCanonicalPath(),
+                 new File(driver.getLargePreferencesPath()).getCanonicalPath());
+  }
+
+  @Test
+  public void smallPreferencesDirectory() throws IOException {
+    assertEquals(profileDirectory.getCanonicalPath(),
+                 new File(driver.getSmallPreferencesPath()).getCanonicalPath());
+  }
+
+  @Test
+  public void cachePreferencesDirectory() throws IOException {
+    assertEquals(profileDirectory.getCanonicalPath(),
+                 new File(driver.getCachePreferencesPath()).getCanonicalPath());
   }
 
 }
