@@ -2,9 +2,11 @@ package com.opera.core.systems;
 
 import com.google.common.io.Files;
 
+import com.opera.core.systems.common.io.ProcessManager;
 import com.opera.core.systems.runner.launcher.OperaLauncherRunner;
 import com.opera.core.systems.scope.internal.OperaIntervals;
 import com.opera.core.systems.testing.Ignore;
+import com.opera.core.systems.testing.NeedsLocalEnvironment;
 import com.opera.core.systems.testing.NoDriver;
 import com.opera.core.systems.testing.OperaDriverTestCase;
 import com.opera.core.systems.testing.drivers.TestOperaDriver;
@@ -27,6 +29,7 @@ import static com.opera.core.systems.scope.internal.OperaIntervals.SERVER_DEFAUL
 import static com.opera.core.systems.scope.internal.OperaIntervals.SERVER_DEFAULT_PORT_IDENTIFIER;
 import static com.opera.core.systems.scope.internal.OperaIntervals.SERVER_RANDOM_PORT_IDENTIFIER;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertTrue;
@@ -43,23 +46,22 @@ public class OperaSettingsIntegrationTest extends OperaDriverTestCase {
 
   public OperaSettings settings;
 
-  private void assertDriverCreated(OperaSettings settings) {
-    TestOperaDriver driver = new TestOperaDriver(settings);
-    assertNotNull(driver);
-    driver.quit();
-  }
-
   @Rule
-  public TemporaryFolder tmp = new TemporaryFolder();
+  public TemporaryFolder tmp;
 
   @Before
   public void beforeEach() {
-    OperaIntervals.HANDSHAKE_TIMEOUT.setValue(2000);
+    tmp = new TemporaryFolder();
     settings = new OperaSettings();
   }
 
+  @Before
+  public void setup() {
+    OperaIntervals.HANDSHAKE_TIMEOUT.setValue(2000);
+  }
+
   @After
-  public void afterEach() {
+  public void reset() {
     OperaIntervals.HANDSHAKE_TIMEOUT.setValue(defaultHandshakeTimeout);
   }
 
@@ -88,6 +90,7 @@ public class OperaSettingsIntegrationTest extends OperaDriverTestCase {
 
   @Test
   public void launcherIsUsedWhenSet() throws IOException {
+    tmp.create();
     File newLauncher = tmp.newFile("newLauncher");
     Files.copy(OperaLauncherRunner.launcherDefaultLocation(), newLauncher);
     if (!Platform.getCurrent().is(WINDOWS)) {
@@ -105,6 +108,7 @@ public class OperaSettingsIntegrationTest extends OperaDriverTestCase {
 
   @Test
   public void loggingFileReceivesOutput() throws IOException {
+    tmp.create();
     File log = tmp.newFile("operadriver.log");
 
     settings.logging().setFile(log);
@@ -120,6 +124,7 @@ public class OperaSettingsIntegrationTest extends OperaDriverTestCase {
   @Test
   @Ignore(products = CORE, value = "core does not support -pd")
   public void profileIsRespected() throws IOException {
+    tmp.create();
     File profile = tmp.newFolder();
     settings.setProfile(profile.getPath());
     TestOperaDriver driver = new TestOperaDriver(settings);
@@ -132,7 +137,8 @@ public class OperaSettingsIntegrationTest extends OperaDriverTestCase {
   }
 
   @Test
-  public void profileCanBeSetUsingString() {
+  public void profileCanBeSetUsingString() throws IOException {
+    tmp.create();
     File profileDirectory = tmp.newFolder("profile");
     settings.setProfile(profileDirectory.getPath());
     assertEquals(profileDirectory.getPath(), settings.profile().getDirectory().getPath());
@@ -177,8 +183,50 @@ public class OperaSettingsIntegrationTest extends OperaDriverTestCase {
 
   @Test
   @Ignore(products = CORE, value = "core does not reset port number if -debugproxy is omitted")
-  public void testSettingPort() {
+  public void settingPort() {
     settings.setPort(-1);
+    TestOperaDriver driver = new TestOperaDriver(settings);
+    assertNotNull(driver);
+    driver.quit();
+  }
+
+  /**
+   * This test is known to fail if OPERA_PATH points to a shell script or a symlink, as is the case
+   * on Debian.
+   */
+  @Test
+  public void environmentalBinaryPathWorks() throws IOException {
+    File binary = new File(OperaPaths.findOperaInstallationPath());
+    environment.set(OperaPaths.OPERA_PATH_ENV_VAR, binary.getPath());
+
+    TestOperaDriver driver = new TestOperaDriver();
+
+    assertEquals(binary.getCanonicalPath(), driver.getSettings().getBinary().getCanonicalPath());
+    assertEquals(binary.getCanonicalPath(), driver.utils().getBinaryPath());
+
+    driver.quit();
+  }
+
+  @Test
+  @NeedsLocalEnvironment
+  public void detachBrowser() {
+    OperaSettings settings = new OperaSettings();
+    settings.setDetach(true);
+
+    TestOperaDriver driver = new TestOperaDriver(settings);
+    int processID = driver.utils().getPID();
+    driver.quit();
+
+    // Driver should be shut down, and there should be no connection to browser
+    assertFalse(driver.getServices().isConnected());
+
+    // But browser should be running
+    assertTrue(ProcessManager.isPidRunning(processID));
+
+    ProcessManager.killPID(processID);
+  }
+
+  private void assertDriverCreated(OperaSettings settings) {
     TestOperaDriver driver = new TestOperaDriver(settings);
     assertNotNull(driver);
     driver.quit();
