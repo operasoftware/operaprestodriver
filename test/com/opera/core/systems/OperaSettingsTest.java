@@ -34,6 +34,7 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.logging.Level;
 
+import static com.opera.core.systems.OperaPaths.OPERA_PATH_ENV_VAR;
 import static com.opera.core.systems.OperaProduct.CORE;
 import static com.opera.core.systems.OperaProduct.DESKTOP;
 import static com.opera.core.systems.OperaSettings.Capability.AUTOSTART;
@@ -66,6 +67,7 @@ public class OperaSettingsTest extends OperaDriverTestCase {
   @After
   public void afterEach() {
     environment.unset(LAUNCHER_ENV_VAR);
+    environment.unset(OPERA_PATH_ENV_VAR);
   }
 
   @Test
@@ -366,6 +368,14 @@ public class OperaSettingsTest extends OperaDriverTestCase {
   @Test
   public void stringRepresentation() {
     assertNotNull(settings.toString());
+  }
+
+  @Test
+  public void environmentalBinaryPathIsRespected() throws IOException {
+    environment.set(OPERA_PATH_ENV_VAR, resources.executableBinary().getPath());
+    OperaSettings settings = new OperaSettings();  // env var needs to be set before construction
+    assertEquals(resources.executableBinary().getCanonicalPath(),
+                 settings.getBinary().getCanonicalPath());
   }
 
 }
