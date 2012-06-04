@@ -16,8 +16,12 @@ limitations under the License.
 
 package com.opera.core.systems;
 
+import com.opera.core.systems.common.io.ProcessManager;
+import com.opera.core.systems.runner.OperaRunnerException;
+import com.opera.core.systems.scope.exceptions.ResponseNotReceivedException;
 import com.opera.core.systems.scope.internal.OperaIntervals;
 import com.opera.core.systems.testing.Ignore;
+import com.opera.core.systems.testing.NeedsLocalEnvironment;
 import com.opera.core.systems.testing.NoDriver;
 import com.opera.core.systems.testing.OperaDesktopDriverTestCase;
 import com.opera.core.systems.testing.drivers.TestOperaDesktopDriver;
@@ -26,6 +30,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
+import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
@@ -36,9 +41,18 @@ import static com.opera.core.systems.OperaProduct.CORE;
 import static com.opera.core.systems.OperaProduct.MINI;
 import static com.opera.core.systems.OperaProduct.MOBILE;
 import static com.opera.core.systems.OperaProduct.SDK;
+import static com.opera.core.systems.OperaSettings.Capability.AUTOSTART;
+import static com.opera.core.systems.OperaSettings.Capability.NO_QUIT;
+import static com.opera.core.systems.OperaSettings.Capability.NO_RESTART;
+import static com.opera.core.systems.OperaSettings.Capability.PRODUCT;
 import static com.opera.core.systems.OperaSettings.Capability.PROFILE;
+import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+import static org.junit.matchers.JUnitMatchers.containsString;
 
 @NoDriver
 @Ignore(products = {CORE, MINI, MOBILE, SDK})
@@ -67,6 +81,7 @@ public class OperaDesktopDriverTest extends OperaDesktopDriverTestCase {
   @After
   public void reset() {
     OperaIntervals.HANDSHAKE_TIMEOUT.setValue(defaultHandshakeTimeout);
+    environment.unset(OperaPaths.OPERA_PATH_ENV_VAR);
   }
 
   @Test
@@ -79,7 +94,7 @@ public class OperaDesktopDriverTest extends OperaDesktopDriverTestCase {
   }
 
   @Test
-  public void startAndQuitOperaFourTimes() throws IOException {
+  public void startAndQuitOperaFourTimes() {
     for (int i = 0; i < 5; i++) {
       driver = new TestOperaDesktopDriver();
       assertTrue("Opera should be running", driver.isRunning());
@@ -92,11 +107,79 @@ public class OperaDesktopDriverTest extends OperaDesktopDriverTestCase {
     }
   }
 
-  @Test(expected = WebDriverException.class)
+  @Test
   public void autostartDisabled() {
     OperaSettings settings = new OperaSettings();
     settings.autostart(false);
-    new TestOperaDesktopDriver(settings);
+
+    try {
+      new TestOperaDesktopDriver(settings);
+      fail("Expected exception");
+    } catch (WebDriverException e) {
+      assertThat(e.getCause(), instanceOf(ResponseNotReceivedException.class));
+      assertThat(e.getMessage(), containsString("No response in a timely fashion"));
+    }
+  }
+
+  @Test
+  public void environmentalBinaryPathIsRespected() {
+    environment.set(OperaPaths.OPERA_PATH_ENV_VAR, resources.executableBinary().getPath());
+
+    try {
+      new TestOperaDesktopDriver();
+      fail("Expected exception");
+    } catch (WebDriverException e) {
+      assertThat(e.getCause(), instanceOf(OperaRunnerException.class));
+      assertThat(e.getMessage(), containsString("Could not start Opera"));
+      assertThat(e.getMessage(), containsString("launcher unable to start binary"));
+    }
+  }
+
+  /**
+   * This test is known to fail if OPERA_PATH points to a shell script or a symlink, as is the case
+   * on Debian.
+   */
+  @Test
+  public void environmentalBinaryPathWorks() throws IOException {
+    File binary = new File(OperaPaths.findOperaInstallationPath());
+    environment.set(OperaPaths.OPERA_PATH_ENV_VAR, binary.getPath());
+
+    driver = new TestOperaDesktopDriver();
+    assertEquals(binary.getCanonicalPath(), driver.getSettings().getBinary().getCanonicalPath());
+    assertEquals(binary.getCanonicalPath(), new File(driver.getOperaPath()).getCanonicalPath());
+    assertEquals(binary.getCanonicalPath(), driver.utils().getBinaryPath());
+  }
+
+  @Test
+  public void capabilitiesForDesktopAreCorrect() {
+    capabilities.setCapability(NO_QUIT.getCapability(), true);
+
+    driver = new TestOperaDesktopDriver(capabilities);
+
+    Capabilities actual = driver.getSettings().toCapabilities();
+    assertEquals(actual.getCapability(AUTOSTART.getCapability()), true);
+    assertEquals(actual.getCapability(PRODUCT.getCapability()), OperaProduct.DESKTOP);
+    assertEquals(actual.getCapability(NO_QUIT.getCapability()), true);
+    assertEquals(actual.getCapability(NO_RESTART.getCapability()), false);
+  }
+
+  @Test
+  @NeedsLocalEnvironment
+  public void browserDoesNotQuit() throws InterruptedException {
+    OperaSettings settings = new OperaSettings();
+    settings.setDetach(true);
+
+    driver = new TestOperaDesktopDriver(settings);
+    int processID = driver.utils().getPID();
+    driver.quit();
+
+    // Driver should be shut down, and there should be no connection to browser
+    assertFalse(driver.getServices().isConnected());
+
+    // But browser should be running
+    assertTrue(ProcessManager.isPidRunning(processID));
+
+    ProcessManager.killPID(processID);
   }
 
 }
