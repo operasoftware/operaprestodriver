@@ -163,10 +163,10 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
   /**
    * Starts Opera with the given settings.
    *
-   * @param s Opera specific settings
+   * @param settings Opera specific settings
    */
-  public OperaDriver(OperaSettings s) {
-    settings = s;
+  public OperaDriver(OperaSettings settings) {
+    this.settings = settings;
 
     if (settings.autostart()) {
       runner = new OperaLauncherRunner(settings);
@@ -194,7 +194,6 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
    * Initialize required Scope services.
    */
   protected void init() {
-
     createScopeServices();
 
     // Launch Opera if the runner has been setup
@@ -263,15 +262,25 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
   public void quit() {
     try {
       gc();
-      services.quit();
+
+      if (!settings.hasDetach()) {
+        services.quit();
+      } else {
+        services.shutdown();
+      }
+
       if (runner != null) {
-        runner.stopOpera();
+        if (!settings.hasDetach()) {
+          runner.stopOpera();
+        }
         runner.shutdown();
       }
     } catch (Exception e) {
       // nothing we can do
     } finally {
-      settings.profile().cleanUp();
+      if (!settings.hasDetach()) {
+        settings.profile().cleanUp();
+      }
       Closeables.closeQuietly(logFile);
     }
   }
