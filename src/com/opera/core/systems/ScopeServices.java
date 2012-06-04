@@ -207,7 +207,7 @@ public class ScopeServices implements IConnectionHandler {
   }
 
   public boolean isConnected() {
-    return connection != null;
+    return connection != null && connection.isConnected();
   }
 
   public void shutdown() {
