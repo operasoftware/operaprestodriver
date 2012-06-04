@@ -445,9 +445,9 @@ public class WaitState {
 
     if (result == null) {
       if (idle) {
-        throw new ResponseNotReceivedException("No idle response in a timely fashion (timeout = " + timeout + ")");
+        throw new ResponseNotReceivedException("No idle response in a timely fashion");
       } else {
-        throw new ResponseNotReceivedException("No response in a timely fashion (timeout = " + timeout + ")");
+        throw new ResponseNotReceivedException("No response in a timely fashion");
       }
     }
 
