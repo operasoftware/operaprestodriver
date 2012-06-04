@@ -137,7 +137,7 @@ public class OperaDesktopDriver extends OperaDriver {
         getScopeServices().quit(runner);
 
         // Delete the profile to start the first test with a clean profile
-        if (profileUtils.deleteProfile() == false) {
+        if (!profileUtils.deleteProfile()) {
           logger.severe("Could not delete profile");
         }
 
@@ -861,16 +861,15 @@ public class OperaDesktopDriver extends OperaDriver {
         }
 
         // Cleanup old profile
-        if (profileUtils.deleteProfile() == false) {
+        if (!profileUtils.deleteProfile()) {
           logger.severe("Could not delete profile");
         }
 
-        /* Copy the profile for the test. This method will return false in case the copying fails or if there is no
-        profile to be copied, so we should check that first here.
-         */
-        if (new File(newPrefs).exists() == false) {
+        // Copy the profile for the test. This method will return false in case the copying fails or
+        // if there is no profile to be copied, so we should check that first here.
+        if (!new File(newPrefs).exists()) {
           logger.finer("The '" + newPrefs + "' directory doesn't exist, omitting profile copying.");
-        } else if (profileUtils.copyProfile(newPrefs) == false) {
+        } else if (!profileUtils.copyProfile(newPrefs)) {
           logger.severe("Failed to copy profile from '" + newPrefs);
         } else {
           logger.finer("Profile from '" + newPrefs + "' copied OK");
@@ -898,7 +897,7 @@ public class OperaDesktopDriver extends OperaDriver {
     // Don't delete in no-launcher mode
     if (runner != null && !runner.isOperaRunning()) {
       // Will only delete profile if it's not a default main profile
-      if (profileUtils.deleteProfile() == false) {
+      if (!profileUtils.deleteProfile()) {
         logger.severe("Could not delete profile");
       }
     } else {
