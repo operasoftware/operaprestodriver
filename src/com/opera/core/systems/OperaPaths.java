@@ -37,6 +37,8 @@ import static org.openqa.selenium.Platform.UNIX;
  */
 public class OperaPaths {
 
+  public static final String OPERA_PATH_ENV_VAR = "OPERA_PATH";
+
   private static final Platform currentPlatform = Platform.getCurrent();
   private static String overridenOperaPath = null;
 
@@ -58,45 +60,38 @@ public class OperaPaths {
     if (isPathValid(envPath)) {
       return envPath;
     } else if (envPath != null && envPath.length() > 0) {
-      throw new WebDriverException("Path \"" + envPath + "\" in OPERA_PATH does not exist");
+      throw new WebDriverException(String.format("Path in %s does not exist: %s",
+                                                 envPath, OPERA_PATH_ENV_VAR));
     }
+
     return findOperaInstallationPath();
   }
 
-  public static void overrideOperaPathEnvVar(String overrideValue)
-  {
-    overridenOperaPath = overrideValue;
-  }
-
-
-  public static String getOperaPathEnvVar()
-  {
+  public static String getOperaPathEnvVar() {
     String retValue = null;
 
-    if (isPathValid(overridenOperaPath))
+    if (isPathValid(overridenOperaPath)) {
       retValue = overridenOperaPath;
-    else
-    {
-      String envPath = System.getenv("OPERA_PATH");
-      if (isPathValid(envPath))
+    } else {
+      String envPath = System.getenv(OPERA_PATH_ENV_VAR);
+      if (isPathValid(envPath)) {
         retValue = envPath;
+      }
     }
+
     return retValue;
   }
 
   /**
-   * Searches for an existing Opera installation on the machine. Performs the
-   * following steps:
+   * Searches for an existing Opera installation on the machine. Performs the following steps:
    *
-   * 1. Checks if Opera exists at the default location on the respective OS;
-   * 2. (Unix) Call `which opera` to find the location;
-   * 3. Give up and return null.
+   * 1. Checks if Opera exists at the default location on the respective OS; 2. (Unix) Call `which
+   * opera` to find the location; 3. Give up and return null.
    *
    * @return Path to the Opera executable or NULL if none was found.
    */
 
-  public static String findOperaInstallationPath()
-  {
+  public static String findOperaInstallationPath() {
     List<String> paths = new ArrayList<String>();
 
     switch (currentPlatform) {
@@ -113,7 +108,8 @@ public class OperaPaths {
       case MAC:
         paths.add("/Applications/Opera.app/Contents/MacOS/Opera");
         paths.add("/Applications/Opera Next.app/Contents/MacOS/Opera");
-        paths.add("/Applications/Opera Mobile Emulator.app/Contents/Resources/Opera Mobile.app/Contents/MacOS/operamobile");
+        paths.add(
+            "/Applications/Opera Mobile Emulator.app/Contents/Resources/Opera Mobile.app/Contents/MacOS/operamobile");
         break;
 
       case WINDOWS:
