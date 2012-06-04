@@ -165,7 +165,7 @@ public class OperaDesktopDriverTest extends OperaDesktopDriverTestCase {
 
   @Test
   @NeedsLocalEnvironment
-  public void browserDoesNotQuit() throws InterruptedException {
+  public void browserDoesNotQuit() {
     OperaSettings settings = new OperaSettings();
     settings.setDetach(true);
 
