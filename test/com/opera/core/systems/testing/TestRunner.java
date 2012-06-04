@@ -72,10 +72,12 @@ public class TestRunner extends BlockJUnit4ClassRunner {
       }
 
       ignorance = new TestIgnorance(driver.getServices().getListedServices(),
+                                    driver.getRunner() != null,
                                     driver.getServices().isOperaIdleAvailable(),
                                     driver.utils().getPlatform(), driver.utils().getProduct());
     } else {
       ignorance = new TestIgnorance(new ArrayList<String>(),
+                                    false,
                                     false,
                                     Platform.getCurrent(),
                                     OperaProduct.ALL);

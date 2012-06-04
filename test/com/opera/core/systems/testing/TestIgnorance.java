@@ -32,12 +32,14 @@ public class TestIgnorance {
 
   private final IgnoreComparator ignoreComparator = new IgnoreComparator();
   private final List<String> services;
-  private final Boolean idleEnabled;
+  private final boolean hasLauncher;
+  private final boolean idleEnabled;
 
-  public TestIgnorance(List<String> services, boolean hasIdle, Platform platform,
-                       OperaProduct product) {
+  public TestIgnorance(List<String> services, boolean hasLauncher, boolean hasIdle,
+                       Platform platform, OperaProduct product) {
     this.services = services;
     this.idleEnabled = hasIdle;
+    this.hasLauncher = hasLauncher;
     ignoreComparator.setCurrentPlatform(platform);
     ignoreComparator.setCurrentProduct(product);
   }
@@ -47,14 +49,23 @@ public class TestIgnorance {
     boolean ignored = ignoreComparator.shouldIgnore(test.getClass().getAnnotation(Ignore.class)) ||
                       ignoreComparator.shouldIgnore(method.getMethod().getAnnotation(Ignore.class));
 
-    ignored |= isIgnoredBecauseOfJUnit4Ignore(test.getClass().getAnnotation(org.junit.Ignore.class));
-    ignored |= isIgnoredBecauseOfJUnit4Ignore(method.getMethod().getAnnotation(org.junit.Ignore.class));
+    ignored |=
+        isIgnoredBecauseOfJUnit4Ignore(test.getClass().getAnnotation(org.junit.Ignore.class));
+    ignored |=
+        isIgnoredBecauseOfJUnit4Ignore(method.getMethod().getAnnotation(org.junit.Ignore.class));
 
     ignored |= isIgnoredDueToIdle(test.getClass().getAnnotation(IdleEnabled.class));
     ignored |= isIgnoredDueToIdle(method.getMethod().getAnnotation(IdleEnabled.class));
 
     ignored |= isIgnoredDueToLackingService(test.getClass().getAnnotation(RequiresService.class));
     ignored |= isIgnoredDueToLackingService(method.getClass().getAnnotation(RequiresService.class));
+
+    ignored |=
+        isIgnoredBecauseOfLackingLocalEnvironment(
+            test.getClass().getAnnotation(NeedsLocalEnvironment.class));
+    ignored |=
+        isIgnoredBecauseOfLackingLocalEnvironment(
+            method.getClass().getAnnotation(NeedsLocalEnvironment.class));
 
     return ignored;
   }
@@ -85,6 +96,10 @@ public class TestIgnorance {
                .compare(annotation.version(), services.getMinVersionFor(annotation.service())) < 0;
                */
     return false;
+  }
+
+  private boolean isIgnoredBecauseOfLackingLocalEnvironment(NeedsLocalEnvironment annotation) {
+    return annotation != null && hasLauncher;
   }
 
 }
