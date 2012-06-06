@@ -39,7 +39,7 @@ public class WatirUtils {
 	 * treated as a double click from two clicks treated as two single clicks.
 	 *
 	 */
-	public static final Integer GetSystemDoubleClickTimeMs()
+	public static final Integer getSystemDoubleClickTimeMs()
 	{
 		final Integer DEFAULT_INTERVAL_MS = 500;
 		Toolkit t = Toolkit.getDefaultToolkit();

@@ -175,7 +175,7 @@ class ClickDelayer
         if (button.equals(lastClickMouseButton)) {
           if (location.equals(lastClickLocation)) {
             long currentTime = System.currentTimeMillis();
-            long doubleClickTime = WatirUtils.GetSystemDoubleClickTimeMs();
+            long doubleClickTime = WatirUtils.getSystemDoubleClickTimeMs();
             long timeSinceLastClick = currentTime - lastClickTime;
 
             if (timeSinceLastClick < doubleClickTime) {
