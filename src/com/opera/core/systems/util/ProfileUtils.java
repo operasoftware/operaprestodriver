@@ -27,99 +27,103 @@ import java.util.logging.Logger;
  * Class to manage browser profile.
  */
 public class ProfileUtils {
-	private String largePrefsFolder;
-	private String smallPrefsFolder;
-	private String cachePrefsFolder;
-	private OperaSettings settings;
+  private String largePrefsFolder;
+  private String smallPrefsFolder;
+  private String cachePrefsFolder;
+  private OperaSettings settings;
 
-	protected final Logger logger = Logger.getLogger(this.getClass().getName());
+  protected final Logger logger = Logger.getLogger(this.getClass().getName());
 
-	public ProfileUtils(String largePrefsFolder, String smallPrefsFolder, String cachePrefsFolder, OperaSettings settings) {
-		this.settings = settings;
-		this.largePrefsFolder = largePrefsFolder;
-		this.smallPrefsFolder = smallPrefsFolder;
-		this.cachePrefsFolder = cachePrefsFolder;
-	}
+  public ProfileUtils(String largePrefsFolder, String smallPrefsFolder, String cachePrefsFolder, OperaSettings settings) {
+    this.settings = settings;
+    this.largePrefsFolder = largePrefsFolder;
+    this.smallPrefsFolder = smallPrefsFolder;
+    this.cachePrefsFolder = cachePrefsFolder;
+   }
 
-	public boolean isMac() {
-		return System.getProperty("os.name").startsWith("Mac");
-	}
+  public boolean isMac() {
+    return System.getProperty("os.name").startsWith("Mac");
+  }
 
-	public boolean isWindows() {
-		return System.getProperty("os.name").startsWith("Windows");
-	}
+  public boolean isWindows() {
+    return System.getProperty("os.name").startsWith("Windows");
+  }
 
-	public boolean isMainProfile(String prefsPath) {
-		File prefsFile = new File(prefsPath);
-		String absolutePrefsPath = prefsFile.getAbsolutePath();
+  public boolean isMainProfile(String prefsPath) {
+    File prefsFile = new File(prefsPath);
+    String absolutePrefsPath = prefsFile.getAbsolutePath();
 
-		// Get user home
-		String path = System.getProperty("user.home");
+    // Get user home
+    String path = System.getProperty("user.home");
 
-		if (isMac()) {
-			/* Mac
-			 * ~/Library/Application Support/Opera
-			 * ~/Library/Caches/Opera
-			 * ~/Library/Preferences/Opera Preferences
-			 */
-			File appSupport = new File(path + "/Library/Application Support/Opera");
-			File cache = new File(path + "/Library/Caches/Opera");
-			File prefs = new File(path + "/Library/Preferences/Opera Preference");
+    if (isMac()) {
+      /* Mac
+       * ~/Library/Application Support/Opera
+       * ~/Library/Caches/Opera
+       * ~/Library/Preferences/Opera Preferences
+       */
+      File appSupport = new File(path + "/Library/Application Support/Opera");
+      File cache = new File(path + "/Library/Caches/Opera");
+      File prefs = new File(path + "/Library/Preferences/Opera Preference");
 
-			// Check if profiles start with this path
-			if (absolutePrefsPath.startsWith(appSupport.getAbsolutePath()) ||
-					absolutePrefsPath.startsWith(cache.getAbsolutePath()) ||
-					absolutePrefsPath.startsWith(prefs.getAbsolutePath()))
-				return true;
+      // Check if profiles start with this path
+      if (absolutePrefsPath.startsWith(appSupport.getAbsolutePath()) ||
+          absolutePrefsPath.startsWith(cache.getAbsolutePath()) ||
+          absolutePrefsPath.startsWith(prefs.getAbsolutePath())) {
+        return true;
+      }
 
-		} else if (isWindows()) {
+    } else if (isWindows()) {
 
-			// On XP and Vista/7:
-			String appData = System.getenv("APPDATA");
-			File appFile = new File(appData + "\\Opera");
-			if (absolutePrefsPath.startsWith(appFile.getAbsolutePath()))
-				return true;
+      // On XP and Vista/7:
+      String appData = System.getenv("APPDATA");
+      File appFile = new File(appData + "\\Opera");
+      if (absolutePrefsPath.startsWith(appFile.getAbsolutePath())) {
+        return true;
+      }
 
-			// On XP:
-			String homeDrive = System.getenv("HOMEDRIVE");
-			String homePath = System.getenv("HOMEPATH");
-			File homeOpera = new File(homeDrive + homePath + "\\Local Settings\\Application Data\\Opera");
-			if (absolutePrefsPath.startsWith(homeOpera.getAbsolutePath()))
-				return true;
+      // On XP:
+      String homeDrive = System.getenv("HOMEDRIVE");
+      String homePath = System.getenv("HOMEPATH");
+      File homeOpera = new File(homeDrive + homePath + "\\Local Settings\\Application Data\\Opera");
+      if (absolutePrefsPath.startsWith(homeOpera.getAbsolutePath())) {
+        return true;
+      }
 
-			// In Vista/7:
-			String localAppData = System.getenv("LOCALAPPDATA");
-			File localAppDataFile = new File(localAppData + "\\Opera");
-			if (absolutePrefsPath.startsWith(localAppDataFile.getAbsolutePath()))
-				return true;
+      // In Vista/7:
+      String localAppData = System.getenv("LOCALAPPDATA");
+      File localAppDataFile = new File(localAppData + "\\Opera");
+      if (absolutePrefsPath.startsWith(localAppDataFile.getAbsolutePath())) {
+        return true;
+      }
 
-			// On all Windows systems, <Installation Path>\profile:
-			File exeFile = settings.getBinary();
-			String parentPath = exeFile.getParent();
-			File profileFolder = new File(parentPath + "\\profile");
+      // On all Windows systems, <Installation Path>\profile:
+      File exeFile = settings.getBinary();
+      String parentPath = exeFile.getParent();
+      File profileFolder = new File(parentPath + "\\profile");
 
-			//a/b/c/exe
-			//a/b/c/profile
-			if (prefsFile.equals(profileFolder))
-				return true;
+      //a/b/c/exe
+      //a/b/c/profile
+      if (prefsFile.equals(profileFolder)) {
+        return true;
+      }
+    }
+    else {
+      /* *nix */
+      File dotOpera = new File(path + "/.opera");
+      if (/*platform nix && */ prefsFile.equals(dotOpera)) {
+        return true;
+      }
+    }
 
-		} else {
+    return false;
+  }
 
-			/* *nix */
-			File dotOpera = new File(path + "/.opera");
-			if (/*platform nix && */ prefsFile.equals(dotOpera))
-				return true;
-
-		}
-
-		return false;
-	}
-
-	/**
-	 * Deletes prefs folders for
-	 * Does nothing if prefs folders are default main user profile
-	 */
-	public boolean deleteProfile() {
+  /**
+   * Deletes prefs folders for
+   * Does nothing if prefs folders are default main user profile
+   */
+  public boolean deleteProfile() {
     String[] profileDirs = {smallPrefsFolder, largePrefsFolder, cachePrefsFolder};
 
     // Assuming if any of those are main profile, skip the whole delete
@@ -175,30 +179,29 @@ public class ProfileUtils {
       }
     }
     return true;
-	}
-
-	/**
-	 *
-	 * @param newPrefs
-	 * @return true if profile was copied, else false
-	 */
-	public boolean copyProfile(String newPrefs) {
-		if (new File(newPrefs).exists() == false) {
-      logger.warning("The directory '" + newPrefs + "' doesn't exist, failed to copy profile.");
-			return false;
-		}
-
-		logger.finer("Copying profile from '" + newPrefs + "'");
-		return WatirUtils.copyDirAndFiles(newPrefs, smallPrefsFolder);
-	}
-
-	/**
-	 *
-	 * @param folderPath
-	 * @return true if folder was deleted, else false
-	 */
-	private boolean deleteFolder(String folderPath) {
-    return FileHandler.delete(new File(folderPath));
   }
 
+  /**
+   *
+   * @param newPrefs
+   * @return true if profile was copied, else false
+   */
+  public boolean copyProfile(String newPrefs) {
+    if (new File(newPrefs).exists() == false) {
+      logger.warning("The directory '" + newPrefs + "' doesn't exist, failed to copy profile.");
+      return false;
+    }
+
+    logger.finer("Copying profile from '" + newPrefs + "'");
+    return WatirUtils.copyDirAndFiles(newPrefs, smallPrefsFolder);
+  }
+
+  /**
+   *
+   * @param folderPath
+   * @return true if folder was deleted, else false
+   */
+  private boolean deleteFolder(String folderPath) {
+    return FileHandler.delete(new File(folderPath));
+  }
 }
