@@ -90,28 +90,26 @@ public class WatirUtils {
    * @param source - The source path, may designate either a file or a directory
    * @param destination - The destination path
    */
-  public static boolean copyDirAndFiles(String source, String destination) {
-    logger.finest(String.format("WatirUtils::copyDirAndFiles(%s, %s)", source, destination));
-    File src = new File(source);
-    File dst = new File(destination);
+  public static boolean copyDirAndFiles(File source, File destination) {
+    logger.finest(String.format("WatirUtils::copyDirAndFiles(%s, %s)", source.getAbsolutePath(), destination.getAbsolutePath()));
 
-    if (src.isDirectory()) {
+    if (source.isDirectory()) {
       String[] items;
-      items = src.list();
+      items = source.list();
       for (String item: items) {
-        String this_src = src.getPath() + File.separator + item;
-        String this_dst = dst.getPath() + File.separator + item;
-        boolean res = copyDirAndFiles(this_src, this_dst);
+        File itemSource = new File(source.getPath() + File.separator + item);
+        File itemDestination = new File(destination.getPath() + File.separator + item);
+        boolean res = copyDirAndFiles(itemSource, itemDestination);
         if (res == false) {
-          logger.severe("Could not copy '" + this_src + "' to '" + this_dst + "'!");
+          logger.severe("Could not copy '" + itemSource.getAbsolutePath() + "' to '" + itemDestination.getAbsolutePath() + "'!");
           return false;
         }
       }
     }
     else {
       try {
-        Files.createParentDirs(dst);
-        Files.copy(src, dst);
+        Files.createParentDirs(destination);
+        Files.copy(source, destination);
       } catch (IOException e) {
         logger.severe(String.format("Could not copy files from \"%s\" to \"%s\"", source, destination));
         return false;

@@ -187,13 +187,16 @@ public class ProfileUtils {
    * @return true if profile was copied, else false
    */
   public boolean copyProfile(String newPrefs) {
-    if (new File(newPrefs).exists() == false) {
+    File newPrefsFile = new File(newPrefs);
+    if (!newPrefsFile.exists()) {
       logger.warning("The directory '" + newPrefs + "' doesn't exist, failed to copy profile.");
       return false;
     }
 
+    File smallPrefsFolderFile = new File(smallPrefsFolder);
+
     logger.finer("Copying profile from '" + newPrefs + "'");
-    return WatirUtils.copyDirAndFiles(newPrefs, smallPrefsFolder);
+    return WatirUtils.copyDirAndFiles(newPrefsFile, smallPrefsFolderFile);
   }
 
   /**
