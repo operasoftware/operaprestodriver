@@ -64,7 +64,7 @@ public class WatirUtils {
 	 * @param input - the input path
 	 * @return A StringBuffer containing the sanitized input path
 	 */
-	public static StringBuffer SanitizePath(String input)
+	public static StringBuffer sanitizePath(String input)
 	{
 		StringBuffer buf = new StringBuffer();
 
