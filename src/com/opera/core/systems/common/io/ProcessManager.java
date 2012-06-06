@@ -39,7 +39,7 @@ public final class ProcessManager {
     if (currentPlatform.is(WINDOWS)) {
       executeCommand("taskkill", "/pid", String.valueOf(processID));
     } else if (currentPlatform.is(UNIX) || currentPlatform.is(MAC)) {
-      executeCommand("kill", "-9", String.valueOf(processID));
+      executeCommand("kill", "-SIGKILL", String.valueOf(processID));
     } else {
       throw new WebDriverException("Unknown platform: " + currentPlatform);
     }

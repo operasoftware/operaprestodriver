@@ -27,15 +27,12 @@ import com.opera.core.systems.scope.services.IWindowManager;
 import org.openqa.selenium.Capabilities;
 
 import static com.opera.core.systems.OperaProduct.CORE;
-import static com.opera.core.systems.OperaProduct.DESKTOP;
 
 /**
  * Provides access to the {@link com.opera.core.systems.runner.OperaRunner}, so we can detect
  * crashes.
  */
 public class TestOperaDriver extends OperaDriver implements TestDriver {
-
-  public static enum ClosingStrategy {SWITCH_TO, ACTION}
 
   private final IWindowManager windowManager;
   private OperaProduct currentProduct = null;
@@ -103,22 +100,6 @@ public class TestOperaDriver extends OperaDriver implements TestDriver {
    */
   public void createWindow() {
     windowManager.createWindow();
-  }
-
-  /**
-   * Closes all windows consistently across all products and platforms.
-   */
-  @SuppressWarnings("unused")
-  public void closeAll() {
-    if (!isRunning()) {
-      return;
-    }
-
-    windowManager.closeAllWindows();
-    if (utils().getProduct().is(DESKTOP)) {
-      windowManager.createWindow();
-    }
-    switchTo().defaultContent();
   }
 
   public TestOperaUtils utils() {
