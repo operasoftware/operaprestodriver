@@ -147,8 +147,8 @@ public class ProfileUtils {
       boolean deleted = deleteFolder(current_dir);
       if (!deleted)
       {
-        int retry_interval_ms = 500;
-        int retry_max_count = 10;
+        final int retry_interval_ms = 500;
+        final int retry_max_count = 10;
         int retry_count = 0;
         boolean ok = false;
 
