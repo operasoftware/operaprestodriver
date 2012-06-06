@@ -18,10 +18,7 @@ package com.opera.core.systems.testing.drivers;
 
 import com.google.common.base.Supplier;
 
-import com.opera.core.systems.OperaDriver;
 import com.opera.core.systems.OperaSettings;
-
-import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.logging.Level;
@@ -29,10 +26,10 @@ import java.util.logging.Level;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
- * TestDriverBuilder is a builder that supplies you with instances of {@link
- * com.opera.core.systems.OperaDriver} through the {@link #get()} method.
+ * TestDriverBuilder is a builder that supplies you with instances of {@link TestDriver} through the
+ * {@link #get()} method.
  *
- * You can either use it by specifying a {@link Supplier<OperaDriver>} class or the class it self as
+ * You can either use it by specifying a {@link Supplier<TestDriver>} class or the class it self as
  * a construction argument.  Call {@link #get()} to instantiate a new driver.
  *
  * The {@link Supplier} class supplies objects of a single type.  Semantically that could be
@@ -42,14 +39,14 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 public class TestDriverBuilder implements Supplier<TestDriver> {
 
-  private Class driverClass = null;
+  private Class<? extends TestDriver> driverClass = null;
   private TestDriverSupplier driverSupplier;
   private OperaSettings settings = new OperaSettings();
   private Level loggingLevel = null;
 
   /**
-   * By default, this class provides a plain {@link OperaDriver} instance object with the default
-   * desired capabilities specified in Selenium's {@link DesiredCapabilities#opera()}.
+   * By default, this class provides a plain {@link TestOperaDriver} instance object with the
+   * default capabilities.
    */
   @SuppressWarnings("unused")
   public TestDriverBuilder() {
@@ -58,7 +55,7 @@ public class TestDriverBuilder implements Supplier<TestDriver> {
 
   /**
    * You may build a new Opera instance by specifying an implementation of the {@link
-   * Supplier<OperaDriver>} interface.  The supplier may, for instance, perform pre- or post startup
+   * Supplier<TestDriver>} interface.  The supplier may, for instance, perform pre- or post startup
    * steps needed for a custom driver configuration.
    *
    * @param supplier a supplier that implements {@link Supplier#get()}
@@ -69,7 +66,7 @@ public class TestDriverBuilder implements Supplier<TestDriver> {
 
   /**
    * You may build a new Opera instance by specifying a custom driver class.  The class must extend
-   * the OperaDriver implementation.
+   * the {@link TestDriver} interface.
    *
    * @param driverImplementation class reference to driver implementation
    */
@@ -101,9 +98,9 @@ public class TestDriverBuilder implements Supplier<TestDriver> {
   }
 
   /**
-   * Retrieves an instance of {@link OperaDriver}.
+   * Retrieves an instance.
    *
-   * @return an instance of OperaDriver
+   * @return an instance of TestDriver
    */
   public TestDriver get() {
     TestDriver driver;
