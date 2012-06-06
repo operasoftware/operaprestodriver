@@ -43,12 +43,14 @@ public class WatirUtils {
 	{
 		final Integer DEFAULT_INTERVAL_MS = 500;
 		Toolkit t = Toolkit.getDefaultToolkit();
-		if (t == null)
+		if (t == null) {
 			return DEFAULT_INTERVAL_MS;
+		}
 
 		Object o = t.getDesktopProperty("awt.multiClickInterval");
-		if (o == null)
+		if (o == null) {
 			return DEFAULT_INTERVAL_MS;
+		}
 
 		return (Integer)o;
 	}
