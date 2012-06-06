@@ -120,69 +120,58 @@ public class ProfileUtils {
 	 * Does nothing if prefs folders are default main user profile
 	 */
 	public boolean deleteProfile() {
-    String[] profile_dirs = {smallPrefsFolder, largePrefsFolder, cachePrefsFolder};
+    String[] profileDirs = {smallPrefsFolder, largePrefsFolder, cachePrefsFolder};
 
     // Assuming if any of those are main profile, skip the whole delete
-    for (int i = 0; i < profile_dirs.length; i++)
-    {
-      if (isMainProfile(profile_dirs[i]))
-      {
-        logger.finer("Skipping profile deletion since '" + profile_dirs[i] + "' is the main profile.");
+    for (String profileDir: profileDirs) {
+      if (isMainProfile(profileDir)) {
+        logger.finer("Skipping profile deletion since '" + profileDir + "' is the main profile.");
         return false;
       }
     }
 
-    for (int i = 0; i < profile_dirs.length; i++)
-    {
-      String current_dir = profile_dirs[i];
+    for (String profileDir: profileDirs) {
+      File currentDirHandle = new File(profileDir);
 
-      File current_dir_handle = new File(current_dir);
-
-      if (!current_dir_handle.exists())
-      {
-        logger.finer("Skipping profile deletion for '" + current_dir + "' since it doesn't exist.");
+      if (!currentDirHandle.exists()) {
+        logger.finer("Skipping profile deletion for '" + profileDir + "' since it doesn't exist.");
         continue;
       }
 
-      boolean deleted = deleteFolder(current_dir);
-      if (!deleted)
-      {
-        final int retry_interval_ms = 500;
-        final int retry_max_count = 10;
-        int retry_count = 0;
+      boolean deleted = deleteFolder(profileDir);
+      if (!deleted) {
+        final int retryIntervalMs = 500;
+        final int retryMaxCount = 10;
+        int retryCount = 0;
         boolean ok = false;
 
         logger.warning("Profile could not be deleted, retrying...");
 
-        do
-        {
+        do {
           try {
-            Thread.sleep(retry_interval_ms);
+            Thread.sleep(retryIntervalMs);
           } catch (InterruptedException e) {
             // fall through
           }
 
-          ok = deleteFolder(current_dir);
-          retry_count++;
-          if (retry_count > retry_max_count)
-          {
+          ok = deleteFolder(profileDir);
+          retryCount++;
+          if (retryCount > retryMaxCount) {
             break;
           }
 
         } while (!ok);
 
-        if (!ok)
-        {
-          logger.severe("Could not delete profile in '" + current_dir + "'. Skipping further deletion.");
+        if (!ok) {
+          logger.severe("Could not delete profile in '" + profileDir + "'. Skipping further deletion.");
           return false;
         }
         else {
-          logger.warning("Deleted profile, retry count = " + retry_count);
+          logger.warning("Deleted profile, retry count = " + retryCount);
         }
       }
-      else
-      {
-        logger.finer("Deleted profile in '" + current_dir + "'");
+      else {
+        logger.finer("Deleted profile in '" + profileDir + "'");
       }
     }
     return true;
