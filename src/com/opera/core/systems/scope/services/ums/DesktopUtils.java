@@ -61,12 +61,10 @@ public class DesktopUtils extends AbstractService implements IDesktopUtils {
     stringBuilder.setEnumText(enumText);
     Response response = executeCommand(DesktopUtilsCommand.GET_STRING, stringBuilder);
 
-    if (response == null)
-    {
+    if (response == null) {
       logger.warning("Could not fetch string for ID '" + enumText + "', returning an empty string");
     }
-    else
-    {
+    else {
       DesktopStringText.Builder stringTextBuilder = DesktopStringText.newBuilder();
       buildPayload(response, stringTextBuilder);
       DesktopStringText stringText = stringTextBuilder.build();
@@ -114,7 +112,7 @@ public class DesktopUtils extends AbstractService implements IDesktopUtils {
     StringBuffer buf = new StringBuffer();
     int curArg = 0;
     int formattersCount = 0;
-    boolean orderedMode = false;
+    boolean orderedMode;
     // Matches %1, %2, ...
     String orderedFormatterRegexp = "%(\\d+)";
     // Matches possibly all printf formatters, i.e. %s, %d, %1.3f
