@@ -101,10 +101,9 @@ public class WatirUtils {
 		{
 			String[] items;
 			items = src.list();
-			for (int i=0; i<items.length; i++)
-			{
-				String this_src = src.getPath() + File.separator + items[i];
-				String this_dst = dst.getPath() + File.separator + items[i];
+			for (String item: items) {
+				String this_src = src.getPath() + File.separator + item;
+				String this_dst = dst.getPath() + File.separator + item;
 				boolean res = CopyDirAndFiles(this_src, this_dst);
         if (res == false)
         {
