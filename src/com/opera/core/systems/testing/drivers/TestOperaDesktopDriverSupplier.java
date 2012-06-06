@@ -25,9 +25,7 @@ public class TestOperaDesktopDriverSupplier extends AbstractTestDriverSupplier {
     // Uncomment this if you wish to connect Opera manually:
     //settings.autostart(false);
 
-    TestOperaDesktopDriver driver = new TestOperaDesktopDriver(settings);
-    driver.preferences().set("User Prefs", "Ignore Unrequested Popups", false);
-    return driver;
+    return new TestOperaDesktopDriver(settings);
   }
 
   public boolean supplies(Class<? extends TestDriver> klass) {
