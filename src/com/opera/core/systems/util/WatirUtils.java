@@ -94,9 +94,9 @@ public class WatirUtils {
 	 * @param source - The source path, may designate either a file or a directory
 	 * @param destination - The destination path
 	 */
-	public static boolean CopyDirAndFiles(String source, String destination)
+	public static boolean copyDirAndFiles(String source, String destination)
 	{
-		logger.finest(String.format("WatirUtils::CopyDirAndFiles(%s, %s)", source, destination));
+		logger.finest(String.format("WatirUtils::copyDirAndFiles(%s, %s)", source, destination));
 		File src = new File(source);
 		File dst = new File(destination);
 
@@ -107,7 +107,7 @@ public class WatirUtils {
 			for (String item: items) {
 				String this_src = src.getPath() + File.separator + item;
 				String this_dst = dst.getPath() + File.separator + item;
-				boolean res = CopyDirAndFiles(this_src, this_dst);
+				boolean res = copyDirAndFiles(this_src, this_dst);
         if (res == false)
         {
           logger.severe("Could not copy '" + this_src + "' to '" + this_dst + "'!");

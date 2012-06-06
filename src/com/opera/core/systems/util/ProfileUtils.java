@@ -197,7 +197,7 @@ public class ProfileUtils {
 		}
 
 		logger.finer("Copying profile from '" + newPrefs + "'");
-		return WatirUtils.CopyDirAndFiles(newPrefs, smallPrefsFolder);
+		return WatirUtils.copyDirAndFiles(newPrefs, smallPrefsFolder);
 	}
 
 	/**
