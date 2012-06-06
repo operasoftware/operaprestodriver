@@ -159,7 +159,7 @@ public class ProfileUtils {
           try {
             Thread.sleep(retry_interval_ms);
           } catch (InterruptedException e) {
-            e.printStackTrace();
+            // fall through
           }
 
           ok = deleteFolder(current_dir);
