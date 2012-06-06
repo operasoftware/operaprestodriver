@@ -25,9 +25,7 @@ public class TestOperaDriverSupplier extends AbstractTestDriverSupplier {
     // Uncomment this if you wish to connect Opera manually:
     //settings.autostart(false);
 
-    TestOperaDriver driver = new TestOperaDriver(settings);
-    driver.preferences().set("User Prefs", "Ignore Unrequested Popups", false);
-    return driver;
+    return new TestOperaDriver(settings);
   }
 
   public boolean supplies(Class<? extends TestDriver> klass) {
