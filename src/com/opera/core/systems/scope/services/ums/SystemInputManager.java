@@ -68,7 +68,7 @@ public class SystemInputManager extends AbstractService implements ISystemInput 
     int modifier = ModifierPressed.NONE.getNumber();
     for (ModifierPressed mod : modifiers) {
       modifier |= mod.getNumber();
-	}
+    }
     actionBuilder.setModifier(modifier);
     executeCommand(SystemInputCommand.CLICK, actionBuilder.clone());
   }
