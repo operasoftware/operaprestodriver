@@ -206,7 +206,6 @@ public class ProfileUtils {
 	 * @return true if folder was deleted, else false
 	 */
 	private boolean deleteFolder(String folderPath) {
-		//true if the file or directory was deleted, otherwise false
     return FileHandler.delete(new File(folderPath));
   }
 
