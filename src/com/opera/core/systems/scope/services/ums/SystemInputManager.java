@@ -181,7 +181,10 @@ class ClickDelayer
             if (timeSinceLastClick < doubleClickTime) {
               logger.fine(String.format("Delaying click in order to avoid double-click - check your test (last click was %d ms ago, OS double click timeout is %d ms)", timeSinceLastClick, doubleClickTime));
               try {
-                Thread.sleep(doubleClickTime);
+                long remainingTime = doubleClickTime - timeSinceLastClick;
+                // 100 ms chosen as a safe value for avoiding the double click, this may need adapting.
+                long sleepTime = remainingTime + 100;
+                Thread.sleep(sleepTime);
               }
               catch (InterruptedException e) {
                 logger.warning("*** Delay was interrupted ***");
