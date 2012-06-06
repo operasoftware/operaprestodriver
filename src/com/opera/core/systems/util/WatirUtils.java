@@ -158,8 +158,9 @@ public class WatirUtils {
     String pattern = needle.replaceAll(ANY_MATCHER, "(?:.+)");
     logger.finest("Looking for pattern '"+ pattern +"' in '" + haystack + "'");
 
-    if (haystack.matches(pattern))
+    if (haystack.matches(pattern)) {
       return true;
+    }
 
     return false;
   }
