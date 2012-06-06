@@ -165,33 +165,25 @@ class ClickDelayer
 {
   protected final Logger logger = Logger.getLogger(this.getClass().getName());
 
-  protected long last_click_time = 0;
-  protected Point last_click_location = null;
-  protected MouseButton last_click_mouse_button = null;
+  protected long lastClickTime = 0;
+  protected Point lastClickLocation = null;
+  protected MouseButton lastClickMouseButton = null;
 
-  public final void delayClickIfNeeded(Point location, MouseButton button, int numClicks)
-  {
-    if (last_click_time > 0)
-    {
-      if (numClicks == 1)
-      {
-        if (button.equals(last_click_mouse_button))
-        {
-          if (location.equals(last_click_location))
-          {
-            long cur_time = System.currentTimeMillis();
-            long double_click_time = WatirUtils.GetSystemDoubleClickTimeMs();
-            long time_since_last_click = cur_time - last_click_time;
+  public final void delayClickIfNeeded(Point location, MouseButton button, int numClicks) {
+    if (lastClickTime > 0) {
+      if (numClicks == 1) {
+        if (button.equals(lastClickMouseButton)) {
+          if (location.equals(lastClickLocation)) {
+            long currentTime = System.currentTimeMillis();
+            long doubleClickTime = WatirUtils.GetSystemDoubleClickTimeMs();
+            long timeSinceLastClick = currentTime - lastClickTime;
 
-            if (time_since_last_click < double_click_time)
-            {
-              logger.fine(String.format("Delaying click in order to avoid double-click - check your test (last click was %d ms ago, OS double click timeout is %d ms)", time_since_last_click, double_click_time));
-              try
-              {
-                Thread.sleep(double_click_time);
+            if (timeSinceLastClick < doubleClickTime) {
+              logger.fine(String.format("Delaying click in order to avoid double-click - check your test (last click was %d ms ago, OS double click timeout is %d ms)", timeSinceLastClick, doubleClickTime));
+              try {
+                Thread.sleep(doubleClickTime);
               }
-              catch (InterruptedException e)
-              {
+              catch (InterruptedException e) {
                 logger.warning("*** Delay was interrupted ***");
               }
             }
@@ -200,8 +192,8 @@ class ClickDelayer
       }
     }
 
-    last_click_mouse_button = button;
-    last_click_location = location;
-    last_click_time = System.currentTimeMillis();
+    lastClickMouseButton = button;
+    lastClickLocation = location;
+    lastClickTime = System.currentTimeMillis();
   }
 }
