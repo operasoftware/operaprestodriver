@@ -629,16 +629,18 @@ public class WaitState {
             break;
 
           case EVENT_DESKTOP_WINDOW_PAGE_CHANGED:
-              if (type == ResponseType.DESKTOP_WINDOW_PAGE_CHANGED) {
-                if (stringMatch.length() == 0) return result;
-              else {
+            if (type == ResponseType.DESKTOP_WINDOW_PAGE_CHANGED) {
+              if (stringMatch.length() == 0) {
+                return result;
+              } else {
                 logger.fine("EVENT_DESKTOP_WINDOW_PAGE_CHANGED: Name: "
-                  + result.desktopWindowInfo.getName() + " ID: "
-                  + result.desktopWindowInfo.getWindowID() + " OnScreen: "
-                  + result.desktopWindowInfo.getOnScreen());
+                            + result.desktopWindowInfo.getName() + " ID: "
+                            + result.desktopWindowInfo.getWindowID() + " OnScreen: "
+                            + result.desktopWindowInfo.getOnScreen());
 
-                  if (result.desktopWindowInfo.getName().equals(stringMatch))
-                    return result;
+                if (result.desktopWindowInfo.getName().equals(stringMatch)) {
+                  return result;
+                }
               }
             }
             break;
