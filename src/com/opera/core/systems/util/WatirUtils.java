@@ -70,8 +70,9 @@ public class WatirUtils {
 		Strip any surrounding quotation marks, that might have came with the file name from
 		any external source like the Windows environment variable.
 		 */
-		if (input.matches("^\".+\"$"))
+		if (input.matches("^\".+\"$")) {
 			input = input.substring(1, input.length() - 1);
+		}
 
 		/*
 		Make sure we use "/" as the path separator, seems to be the best solution.
