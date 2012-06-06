@@ -174,8 +174,9 @@ public class ProfileUtils {
           logger.severe("Could not delete profile in '" + current_dir + "'. Skipping further deletion.");
           return false;
         }
-        else
+        else {
           logger.warning("Deleted profile, retry count = " + retry_count);
+        }
       }
       else
       {
