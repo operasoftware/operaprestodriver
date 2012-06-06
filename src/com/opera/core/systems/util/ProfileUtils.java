@@ -165,7 +165,9 @@ public class ProfileUtils {
           ok = deleteFolder(current_dir);
           retry_count++;
           if (retry_count > retry_max_count)
+          {
             break;
+          }
 
         } while (!ok);
 
