@@ -722,14 +722,8 @@ public class WaitState {
     return null;
   }
 
-  /*
-  public void waitForRequest(int windowId, long timeout) {
-    waitAndParseResult(timeout, windowId, null, ResponseType.REQUEST_FIRED);
-  }
-  */
-
-  public int waitForDesktopWindowShown(String win_name, long timeout) {
-    ResultItem item = waitAndParseResult(timeout, 0, win_name, ResponseType.DESKTOP_WINDOW_SHOWN);
+  public int waitForDesktopWindowShown(String windowName, long timeout) {
+    ResultItem item = waitAndParseResult(timeout, 0, windowName, ResponseType.DESKTOP_WINDOW_SHOWN);
 
     if (item != null) {
       return item.desktopWindowInfo.getWindowID();
@@ -738,8 +732,11 @@ public class WaitState {
     return 0;
   }
 
-  public int waitForDesktopWindowUpdated(String win_name, long timeout) {
-    ResultItem item = waitAndParseResult(timeout, 0, win_name, ResponseType.DESKTOP_WINDOW_UPDATED);
+  public int waitForDesktopWindowUpdated(String windowName, long timeout) {
+    ResultItem item = waitAndParseResult(timeout,
+                                         0,
+                                         windowName,
+                                         ResponseType.DESKTOP_WINDOW_UPDATED);
 
     if (item != null) {
       return item.desktopWindowInfo.getWindowID();
@@ -748,10 +745,11 @@ public class WaitState {
     return 0;
   }
 
-  public int waitForDesktopWindowActivated(String win_name, long timeout) {
-    ResultItem
-        item =
-        waitAndParseResult(timeout, 0, win_name, ResponseType.DESKTOP_WINDOW_ACTIVATED);
+  public int waitForDesktopWindowActivated(String windowName, long timeout) {
+    ResultItem item = waitAndParseResult(timeout,
+                                         0,
+                                         windowName,
+                                         ResponseType.DESKTOP_WINDOW_ACTIVATED);
 
     if (item != null) {
       return item.desktopWindowInfo.getWindowID();
@@ -760,8 +758,11 @@ public class WaitState {
     return 0;
   }
 
-  public int waitForDesktopWindowClosed(String win_name, long timeout) {
-    ResultItem item = waitAndParseResult(timeout, 0, win_name, ResponseType.DESKTOP_WINDOW_CLOSED);
+  public int waitForDesktopWindowClosed(String windowName, long timeout) {
+    ResultItem item = waitAndParseResult(timeout,
+                                         0,
+                                         windowName,
+                                         ResponseType.DESKTOP_WINDOW_CLOSED);
 
     if (item != null) {
       return item.desktopWindowInfo.getWindowID();
@@ -770,8 +771,11 @@ public class WaitState {
     return 0;
   }
 
-  public int waitForDesktopWindowLoaded(String win_name, long timeout) {
-    ResultItem item = waitAndParseResult(timeout, 0, win_name, ResponseType.DESKTOP_WINDOW_LOADED);
+  public int waitForDesktopWindowLoaded(String windowName, long timeout) {
+    ResultItem item = waitAndParseResult(timeout,
+                                         0,
+                                         windowName,
+                                         ResponseType.DESKTOP_WINDOW_LOADED);
 
     if (item != null) {
       return item.desktopWindowInfo.getWindowID();
@@ -780,8 +784,12 @@ public class WaitState {
     return 0;
   }
 
-  public int waitForWindowPageChanged(String win_name, long timeout) {
-    ResultItem item = waitAndParseResult(timeout, 0, win_name, ResponseType.DESKTOP_WINDOW_PAGE_CHANGED);
+  public int waitForWindowPageChanged(String windowName, long timeout) {
+    ResultItem item = waitAndParseResult(timeout,
+                                         0,
+                                         windowName,
+                                         ResponseType.DESKTOP_WINDOW_PAGE_CHANGED);
+
     if (item != null) {
       return item.desktopWindowInfo.getWindowID();
     }
