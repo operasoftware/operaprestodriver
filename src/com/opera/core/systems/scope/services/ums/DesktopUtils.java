@@ -106,75 +106,67 @@ public class DesktopUtils extends AbstractService implements IDesktopUtils {
    */
   public String getSubstitutedString(String[] args, boolean stripAmpersand)
   {
-    String string_id = args[0];
-    String raw_string = getString(string_id, stripAmpersand);
+    String stringId = args[0];
+    String rawString = getString(stringId, stripAmpersand);
 
-    logger.finer("String '" + string_id + "' fetched as '" + raw_string + "'");
+    logger.finer("String '" + stringId + "' fetched as '" + rawString + "'");
 
     StringBuffer buf = new StringBuffer();
-    int cur_arg = 0;
-    int formatters_count = 0;
-    boolean ordered_mode = false;
+    int curArg = 0;
+    int formattersCount = 0;
+    boolean orderedMode = false;
     // Matches %1, %2, ...
-    String ordered_formatter_regexp = "%(\\d+)";
+    String orderedFormatterRegexp = "%(\\d+)";
     // Matches possibly all printf formatters, i.e. %s, %d, %1.3f
-    String standard_formatter_regexp = "(%[\\+\\#\\-\\ 0]?(?:\\d+)?(?:\\.\\d)?[hlL]?[cdieEfgGosuxXpn%])";
+    String standardFormatterRegexp = "(%[\\+\\#\\-\\ 0]?(?:\\d+)?(?:\\.\\d)?[hlL]?[cdieEfgGosuxXpn%])";
 
-    Pattern pattern = Pattern.compile(standard_formatter_regexp);
-    Matcher matcher = pattern.matcher(raw_string);
+    Pattern pattern = Pattern.compile(standardFormatterRegexp);
+    Matcher matcher = pattern.matcher(rawString);
 
     // Check if there is at least one "standard" formatter
-    if (matcher.find())
-    {
+    if (matcher.find()) {
       // There is, assume there are no ordered formatters in the string
       logger.finer("Parsing with standard formatters");
       // Reset the search since we'll also need to substitute the first occurrence later on.
       matcher.reset();
-      ordered_mode = false;
+      orderedMode = false;
     }
-    else
-    {
+    else {
       // There is none, assume there are only ordered formatters in the string
       logger.finer("Parsing with ordered formatters");
-      pattern = Pattern.compile(ordered_formatter_regexp);
-      matcher = pattern.matcher(raw_string);
-      ordered_mode = true;
+      pattern = Pattern.compile(orderedFormatterRegexp);
+      matcher = pattern.matcher(rawString);
+      orderedMode = true;
     }
 
     // For each formatter occurrence found in string...
-    while (matcher.find())
-    {
-      formatters_count++;
+    while (matcher.find()) {
+      formattersCount++;
       String replaceStr = matcher.group();
       String substitution = "";
 
-      if (replaceStr.equals("%%"))
-      {
+      if (replaceStr.equals("%%")) {
         substitution = "%";
       }
-      else
-      {
-        if (ordered_mode)
-        {
+      else {
+        if (orderedMode) {
           // Choose the argument basing on the ordered argument number, i.e. %3 will fetch the third element from args
-          cur_arg = Integer.parseInt(replaceStr.substring(1));
+          curArg = Integer.parseInt(replaceStr.substring(1));
         }
-        else
-        {
+        else {
           // Just go one by one
-          cur_arg++;
+          curArg++;
         }
 
-        if (cur_arg < args.length)
-        {
+        if (curArg < args.length) {
           // If args is long enough to contain the argument we want, substitute it
-          substitution = args[cur_arg];
+          substitution = args[curArg];
 
-          if (substitution.isEmpty())
+          if (substitution.isEmpty()) {
             substitution = WatirUtils.ANY_MATCHER;
+          }
         }
-        else
-        {
+        else {
           // If args is too short, leave the formatter intact
           substitution = replaceStr;
         }
@@ -185,8 +177,9 @@ public class DesktopUtils extends AbstractService implements IDesktopUtils {
     }
     matcher.appendTail(buf);
 
-    if (formatters_count != args.length - 1)
-      logger.warning("Argument count incorrect for " + string_id + ", got " + (args.length - 1) + " expected " + formatters_count);
+    if (formattersCount != args.length - 1) {
+      logger.warning("Argument count incorrect for " + stringId + ", got " + (args.length - 1) + " expected " + formattersCount);
+    }
 
     String result = buf.toString();
     logger.finer("Final string: '" + result + "'");
