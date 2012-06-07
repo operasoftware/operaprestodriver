@@ -31,8 +31,9 @@ import java.util.regex.Matcher;
  */
 public class WatirUtils {
 
+  public static final String ANY_MATCHER = "_ANY_";
+
   private static final Logger logger = Logger.getLogger(WatirUtils.class.getName());
-  private static final String ANY_MATCHER = "_ANY_";
 
   /**
    * Returns the platform double click timeout, that is the time that separates two clicks treated
