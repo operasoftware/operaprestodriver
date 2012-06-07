@@ -155,8 +155,8 @@ public class OperaDesktopDriver extends OperaDriver {
    * @return required services and their minimum versions
    */
   @Override
-  protected Map<String, String> getServicesList() {
-    Map<String, String> versions = super.getServicesList();
+  protected Map<String, String> getRequiredServices() {
+    Map<String, String> versions = super.getRequiredServices();
     ImmutableMap.Builder<String, String> builder = ImmutableMap.builder();
     builder.putAll(versions);
     builder.put("desktop-window-manager", "2.0");
@@ -169,7 +169,7 @@ public class OperaDesktopDriver extends OperaDriver {
    * Shuts down the driver (but not Opera)
    */
   public void quitDriver() {
-    logger.fine("Opera Desktop Driver shutting down");
+    logger.fine("OperaDesktopDriver shutting down");
     getScopeServices().shutdown();
     if (runner != null) {
       runner.shutdown();

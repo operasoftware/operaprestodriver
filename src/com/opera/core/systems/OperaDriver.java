@@ -229,9 +229,11 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
   }
 
   /**
-   * @return a map of service names to the minimum versions we require.
+   * List of required services for this version of OperaDriver to function.
+   *
+   * @return a map of service names to the minimum versions we require
    */
-  protected Map<String, String> getServicesList() {
+  protected Map<String, String> getRequiredServices() {
     ImmutableMap.Builder<String, String> versions = ImmutableMap.builder();
     versions.put("ecmascript-debugger", "5.0");
     versions.put("window-manager", "2.0");
@@ -248,7 +250,9 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
    */
   private void createScopeServices() {
     try {
-      services = new ScopeServices(getServicesList(), settings.getPort(), !settings.autostart());
+      services = new ScopeServices(getRequiredServices(),
+                                   settings.getPort(),
+                                   !settings.autostart());
       services.startStpThread();
     } catch (IOException e) {
       throw new WebDriverException(e);
