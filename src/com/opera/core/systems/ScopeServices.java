@@ -16,6 +16,7 @@ limitations under the License.
 
 package com.opera.core.systems;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.protobuf.AbstractMessage.Builder;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
@@ -95,6 +96,7 @@ public class ScopeServices implements IConnectionHandler {
   private List<String> listedServices;
   private StringBuilder selftestOutput;
   private boolean shutdown = false;
+  private Map<String, String> availableServices;
 
   /**
    * Creates the Scope server on specified address and port, as well as enabling the required Scope
@@ -120,6 +122,14 @@ public class ScopeServices implements IConnectionHandler {
     waitForHandshake();
 
     hostInfo = getHostInfo();
+
+    // TODO(andreastt): OPDRV-75 (Clean up service version management)
+    ImmutableMap.Builder<String, String> builder = ImmutableMap.builder();
+    for (Service service : hostInfo.getServiceListList()) {
+      builder.put(service.getName(), service.getVersion());
+    }
+    availableServices = builder.build();
+
     createUmsServices(OperaFlags.ENABLE_DEBUGGER, hostInfo);
 
     connect();
@@ -253,7 +263,7 @@ public class ScopeServices implements IConnectionHandler {
   }
 
   /**
-   * Creates all of the services that we requested and are available. If the debugger is disabled
+   * Creates all of the services that we requested and are available.  If the debugger is disabled
    * (which currently never happens) then it creates a dummy class.
    */
   private void createUmsServices(boolean enableDebugger, HostInfo info) {
@@ -426,6 +436,10 @@ public class ScopeServices implements IConnectionHandler {
         logger.severe("Opera is still running!");
       }
     }
+  }
+
+  public Map<String, String> getAvailableServices() {
+    return availableServices;
   }
 
   public void quit() {

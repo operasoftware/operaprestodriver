@@ -36,7 +36,7 @@ import org.openqa.selenium.Platform;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.logging.Level;
 
 public class TestRunner extends BlockJUnit4ClassRunner {
@@ -71,12 +71,13 @@ public class TestRunner extends BlockJUnit4ClassRunner {
         driver = base.getWrappedDriver();
       }
 
-      ignorance = new TestIgnorance(driver.getServices().getListedServices(),
+      ignorance = new TestIgnorance(driver.getServices().getAvailableServices(),
                                     driver.getRunner() != null,
                                     driver.getServices().isOperaIdleAvailable(),
-                                    driver.utils().getPlatform(), driver.utils().getProduct());
+                                    driver.utils().getPlatform(),
+                                    driver.utils().getProduct());
     } else {
-      ignorance = new TestIgnorance(new ArrayList<String>(),
+      ignorance = new TestIgnorance(new LinkedHashMap<String, String>(),
                                     false,
                                     false,
                                     Platform.getCurrent(),
