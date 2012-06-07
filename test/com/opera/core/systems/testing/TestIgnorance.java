@@ -47,22 +47,20 @@ public class TestIgnorance {
 
   // JUnit 4
   public boolean isIgnored(FrameworkMethod method, Object test) {
-    boolean ignored = ignoreComparator.shouldIgnore(test.getClass().getAnnotation(Ignore.class)) ||
-                      ignoreComparator.shouldIgnore(method.getMethod().getAnnotation(Ignore.class));
+    return ignoreComparator.shouldIgnore(test.getClass().getAnnotation(Ignore.class)) ||
+           ignoreComparator.shouldIgnore(method.getMethod().getAnnotation(Ignore.class)) ||
 
-    ignored |= isIgnoredBecauseOfJUnit4Ignore(test.getClass().getAnnotation(org.junit.Ignore.class));
-    ignored |= isIgnoredBecauseOfJUnit4Ignore(method.getMethod().getAnnotation(org.junit.Ignore.class));
+           isIgnoredBecauseOfJUnit4Ignore(test.getClass().getAnnotation(org.junit.Ignore.class)) ||
+           isIgnoredBecauseOfJUnit4Ignore(method.getMethod().getAnnotation(org.junit.Ignore.class)) ||
 
-    ignored |= isIgnoredDueToIdle(test.getClass().getAnnotation(IdleEnabled.class));
-    ignored |= isIgnoredDueToIdle(method.getMethod().getAnnotation(IdleEnabled.class));
+           isIgnoredDueToIdle(test.getClass().getAnnotation(IdleEnabled.class)) ||
+           isIgnoredDueToIdle(method.getMethod().getAnnotation(IdleEnabled.class)) ||
 
-    ignored |= isIgnoredDueToLackingService(test.getClass().getAnnotation(RequiresService.class));
-    ignored |= isIgnoredDueToLackingService(method.getClass().getAnnotation(RequiresService.class));
+           isIgnoredDueToLackingService(test.getClass().getAnnotation(RequiresService.class)) ||
+           isIgnoredDueToLackingService(method.getClass().getAnnotation(RequiresService.class)) ||
 
-    ignored |= isIgnoredBecauseOfLackingLocalEnvironment(test.getClass().getAnnotation(NeedsLocalEnvironment.class));
-    ignored |= isIgnoredBecauseOfLackingLocalEnvironment(method.getClass().getAnnotation(NeedsLocalEnvironment.class));
-
-    return ignored;
+           isIgnoredBecauseOfLackingLocalEnvironment(test.getClass().getAnnotation(NeedsLocalEnvironment.class)) ||
+           isIgnoredBecauseOfLackingLocalEnvironment(method.getClass().getAnnotation(NeedsLocalEnvironment.class));
   }
 
   private boolean isIgnoredBecauseOfJUnit4Ignore(org.junit.Ignore annotation) {
