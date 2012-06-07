@@ -398,8 +398,7 @@ public class StpConnection implements SocketListener {
           String handShake = new String(dst);
           if (!handShake.equals("STP/1\n")) {
             close();
-            connectionHandler.onException(new WebDriverException(
-                "Scope Transport Protocol Error : Handshake"));
+            connectionHandler.onException(new CommunicationException("STP/1 not supported!"));
           } else {
             setState(State.EMPTY);
             connectionHandler.onHandshake(true);
