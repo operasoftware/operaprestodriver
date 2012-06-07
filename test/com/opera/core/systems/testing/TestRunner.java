@@ -39,6 +39,10 @@ import java.lang.reflect.Method;
 import java.util.LinkedHashMap;
 import java.util.logging.Level;
 
+/**
+ * Custom JUnit test runner that allows test igorance based on both test classes and methods based
+ * on given conditions.
+ */
 public class TestRunner extends BlockJUnit4ClassRunner {
 
   private final TestIgnorance ignorance;
@@ -46,6 +50,12 @@ public class TestRunner extends BlockJUnit4ClassRunner {
   private Object test;
   private Throwable testException;
 
+  /**
+   * Creates a {@link BlockJUnit4ClassRunner} to run {@code testClass}.
+   *
+   * @param testClass the class under test
+   * @throws InitializationError if the test class is malformed
+   */
   public TestRunner(Class<?> testClass) throws InitializationError {
     super(testClass);
 
