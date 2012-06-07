@@ -74,7 +74,7 @@ import java.util.logging.Logger;
  */
 public class ScopeServices implements IConnectionHandler {
 
-  private final Logger logger = Logger.getLogger(this.getClass().getName());
+  private final Logger logger = Logger.getLogger(getClass().getName());
   private final Map<String, String> versions;
   private final StpThread stpThread;
   private final AtomicInteger tagCounter;
@@ -383,8 +383,7 @@ public class ScopeServices implements IConnectionHandler {
     }
   }
 
-  private ServiceResult enable(String serviceName)
-      throws InvalidProtocolBufferException {
+  private ServiceResult enable(String serviceName) throws InvalidProtocolBufferException {
     ServiceSelection.Builder selection = ServiceSelection.newBuilder();
     selection.setName(serviceName);
     Response response = executeCommand(ScopeCommand.ENABLE, selection);
@@ -403,8 +402,8 @@ public class ScopeServices implements IConnectionHandler {
         exec.action("Exit");
       }
     } catch (Exception e) {
-      // We expect a CommunicationException here, because as Opera is shutting
-      // down the connection will be closed.
+      // We expect a CommunicationException here, because as Opera is shutting down the connection
+      // will be closed.
       if (!(e instanceof CommunicationException)) {
         logger.warning("Caught exception on shut down: " + e.getMessage());
       }
