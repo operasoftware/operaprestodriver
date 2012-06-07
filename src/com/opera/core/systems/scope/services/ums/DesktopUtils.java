@@ -36,16 +36,19 @@ import java.util.regex.Pattern;
  */
 public class DesktopUtils extends AbstractService implements IDesktopUtils {
 
-  protected final Logger logger = Logger.getLogger(this.getClass().getName());
+  private static final String SERVICE_NAME = "desktop-utils";
+  // Matches possibly all printf formatters, i.e. %s, %d, %1.3f
+  private static final String SUBSTITUTED_STRING_REGEXP =
+      "(%[\\+\\#\\-\\ 0]?(?:\\d+)?(?:\\.\\d)?[hlL]?[cdieEfgGosuxXpn%])";
+
+  private final Logger logger = Logger.getLogger(getClass().getName());
 
   public DesktopUtils(ScopeServices services, String version) {
     super(services, version);
 
-    String serviceName = "desktop-utils";
-
-    if (!isVersionInRange(version, "3.0", serviceName)) {
+    if (!isVersionInRange(version, "3.0", SERVICE_NAME)) {
       throw new UnsupportedOperationException(
-          serviceName + " version " + version + " is not supported");
+          String.format("%s version %s is not supported", SERVICE_NAME, version));
     }
 
     services.setDesktopUtils(this);
@@ -55,59 +58,60 @@ public class DesktopUtils extends AbstractService implements IDesktopUtils {
   }
 
   public String getString(String enumText, boolean stripAmpersand) {
-    String str = "";
+    String string = "";
 
     DesktopStringID.Builder stringBuilder = DesktopStringID.newBuilder();
     stringBuilder.setEnumText(enumText);
     Response response = executeCommand(DesktopUtilsCommand.GET_STRING, stringBuilder);
 
     if (response == null) {
-      logger.warning("Could not fetch string for ID '" + enumText + "', returning an empty string");
-    }
-    else {
+      logger.warning(String.format("Could not fetch string for ID: %s", enumText));
+    } else {
       DesktopStringText.Builder stringTextBuilder = DesktopStringText.newBuilder();
       buildPayload(response, stringTextBuilder);
       DesktopStringText stringText = stringTextBuilder.build();
 
       // Remember to remove all CRLF
-      str = removeCR(stringText.getText());
+      string = removeCR(stringText.getText());
 
-      if (stripAmpersand && str.contains("(&")) {
-        return str.replaceAll("\\(&.\\)", "");
+      if (stripAmpersand && string.contains("(&")) {
+        return string.replaceAll("\\(&.\\)", "");
       }
-      if (stripAmpersand && str.contains("&")) {
-        return str.replace("&", "");
+      if (stripAmpersand && string.contains("&")) {
+        return string.replace("&", "");
       }
     }
 
-    return str;
+    return string;
   }
 
   /**
-   * Fetches a translated string fetched basing on a string id and substitutes the printf formatters in it.
-   * Each substitution argument needs to be a string. The printf formatter types are ignored, and the given
-   * string argument is substituted.
-   * The method distinguishes between ordered substitution (i.e. %1, %2) and a standard substitution (i.e.
-   * %s, %d).
-   * In case the given argument list is too long or too short for the number of arguments in the fetched
-   * translated string, this method triggers a warning. In case the given argument list is too short,
-   * the method substitutes as many formatters as possible and leaves the rest of them intact.
-   * "%%" is substituted to "%".
-   * If a given argument is empty, i.e. "", it will be substituted to ANY_MATCHER, allowing later searching
-   * for the text without specific formatter values, i.e. matching "Show _ANY_ more..." to any string like
-   * "Show 1 more...", "Show 2 more...".
+   * Fetches a translated string fetched basing on a string id and substitutes the printf formatters
+   * in it. Each substitution argument needs to be a string.  The printf formatter types are
+   * ignored, and the given string argument is substituted.
    *
-   * @param args An array containing the printf substitution arguments, all of string type, and the string id
-   *             as the first element.
-   * @param stripAmpersand Whether to strip the "&" character from the fetched string.
-   * @return The final substituted string.
+   * The method distinguishes between ordered substitution (i.e. %1, %2) and a standard substitution
+   * (i.e. %s, %d).
+   *
+   * In case the given argument list is too long or too short for the number of arguments in the
+   * fetched translated string, this method triggers a warning. In case the given argument list is
+   * too short, the method substitutes as many formatters as possible and leaves the rest of them
+   * intact. "%%" is substituted to "%".
+   *
+   * If a given argument is empty, i.e. "", it will be substituted to ANY_MATCHER, allowing later
+   * searching for the text without specific formatter values, i.e. matching "Show _ANY_ more..." to
+   * any string like "Show 1 more...", "Show 2 more...".
+   *
+   * @param args           an array containing the printf substitution arguments, all of string
+   *                       type, and the string id as the first element
+   * @param stripAmpersand whether to strip the "&" character from the fetched string
+   * @return the final substituted string
    */
-  public String getSubstitutedString(String[] args, boolean stripAmpersand)
-  {
+  public String getSubstitutedString(String[] args, boolean stripAmpersand) {
     String stringId = args[0];
     String rawString = getString(stringId, stripAmpersand);
 
-    logger.finer("String '" + stringId + "' fetched as '" + rawString + "'");
+    logger.finer(String.format("String \"%s\" fetched as \"%s\"", stringId, rawString));
 
     StringBuffer buf = new StringBuffer();
     int curArg = 0;
@@ -115,10 +119,8 @@ public class DesktopUtils extends AbstractService implements IDesktopUtils {
     boolean orderedMode;
     // Matches %1, %2, ...
     String orderedFormatterRegexp = "%(\\d+)";
-    // Matches possibly all printf formatters, i.e. %s, %d, %1.3f
-    String standardFormatterRegexp = "(%[\\+\\#\\-\\ 0]?(?:\\d+)?(?:\\.\\d)?[hlL]?[cdieEfgGosuxXpn%])";
 
-    Pattern pattern = Pattern.compile(standardFormatterRegexp);
+    Pattern pattern = Pattern.compile(SUBSTITUTED_STRING_REGEXP);
     Matcher matcher = pattern.matcher(rawString);
 
     // Check if there is at least one "standard" formatter
@@ -128,8 +130,7 @@ public class DesktopUtils extends AbstractService implements IDesktopUtils {
       // Reset the search since we'll also need to substitute the first occurrence later on.
       matcher.reset();
       orderedMode = false;
-    }
-    else {
+    } else {
       // There is none, assume there are only ordered formatters in the string
       logger.finer("Parsing with ordered formatters");
       pattern = Pattern.compile(orderedFormatterRegexp);
@@ -145,13 +146,12 @@ public class DesktopUtils extends AbstractService implements IDesktopUtils {
 
       if (replaceStr.equals("%%")) {
         substitution = "%";
-      }
-      else {
+      } else {
         if (orderedMode) {
-          // Choose the argument basing on the ordered argument number, i.e. %3 will fetch the third element from args
+          // Choose the argument basing on the ordered argument number, i.e. %3 will fetch the third
+          // element from args
           curArg = Integer.parseInt(replaceStr.substring(1));
-        }
-        else {
+        } else {
           // Just go one by one
           curArg++;
         }
@@ -163,20 +163,19 @@ public class DesktopUtils extends AbstractService implements IDesktopUtils {
           if (substitution.isEmpty()) {
             substitution = WatirUtils.ANY_MATCHER;
           }
-        }
-        else {
+        } else {
           // If args is too short, leave the formatter intact
           substitution = replaceStr;
         }
       }
 
       matcher.appendReplacement(buf, substitution);
-
     }
     matcher.appendTail(buf);
 
-    if (formattersCount != args.length - 1) {
-      logger.warning("Argument count incorrect for " + stringId + ", got " + (args.length - 1) + " expected " + formattersCount);
+    if (formattersCount != (args.length - 1)) {
+      logger.warning(String.format("Argument count incorrect for %s, got %d, expected %d",
+                                   stringId, (args.length - 1), formattersCount));
     }
 
     String result = buf.toString();
@@ -185,8 +184,8 @@ public class DesktopUtils extends AbstractService implements IDesktopUtils {
   }
 
   public String removeCR(String text) {
-    // Hack to remove all the \r's as we sometimes get just \n and sometimes
-    // \r\n then the string comparison doesn't work
+    // Hack to remove all the \r's as we sometimes get just \n and sometimes \r\n then the string
+    // comparison doesn't work
     return text.replaceAll("(\\r)", "");
   }
 
@@ -201,8 +200,7 @@ public class DesktopUtils extends AbstractService implements IDesktopUtils {
   }
 
   public String getLargePreferencesPath() {
-    Response response = executeCommand(
-        DesktopUtilsCommand.GET_LARGE_PREFERENCES_PATH, null);
+    Response response = executeCommand(DesktopUtilsCommand.GET_LARGE_PREFERENCES_PATH, null);
 
     DesktopPath.Builder pathBuilder = DesktopPath.newBuilder();
     buildPayload(response, pathBuilder);
@@ -212,8 +210,7 @@ public class DesktopUtils extends AbstractService implements IDesktopUtils {
   }
 
   public String getSmallPreferencesPath() {
-    Response response = executeCommand(
-        DesktopUtilsCommand.GET_SMALL_PREFERENCES_PATH, null);
+    Response response = executeCommand(DesktopUtilsCommand.GET_SMALL_PREFERENCES_PATH, null);
 
     DesktopPath.Builder pathBuilder = DesktopPath.newBuilder();
     buildPayload(response, pathBuilder);
@@ -223,8 +220,7 @@ public class DesktopUtils extends AbstractService implements IDesktopUtils {
   }
 
   public String getCachePreferencesPath() {
-    Response response = executeCommand(
-        DesktopUtilsCommand.GET_CACHE_PREFERENCES_PATH, null);
+    Response response = executeCommand(DesktopUtilsCommand.GET_CACHE_PREFERENCES_PATH, null);
 
     DesktopPath.Builder pathBuilder = DesktopPath.newBuilder();
     buildPayload(response, pathBuilder);
