@@ -96,8 +96,8 @@ public class WatirUtils {
       String[] items;
       items = source.list();
       for (String item : items) {
-        File itemSource = new File(source.getPath() + File.separator + item);
-        File itemDestination = new File(destination.getPath() + File.separator + item);
+        File itemSource = new File(source.getPath(), item);
+        File itemDestination = new File(destination.getPath(), item);
         boolean res = copyDirAndFiles(itemSource, itemDestination);
         if (!res) {
           logger.severe(String.format("Could not copy \"%s\" to \"%s\"",
