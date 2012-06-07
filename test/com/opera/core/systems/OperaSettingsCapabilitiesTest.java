@@ -4,6 +4,7 @@ import com.opera.core.systems.runner.launcher.OperaLauncherRunner;
 import com.opera.core.systems.testing.NoDriver;
 import com.opera.core.systems.testing.OperaDriverTestCase;
 
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -49,7 +50,12 @@ import static org.junit.matchers.JUnitMatchers.containsString;
 public class OperaSettingsCapabilitiesTest extends OperaDriverTestCase {
 
   @Rule
-  public TemporaryFolder tmp = new TemporaryFolder();
+  public TemporaryFolder tmp;
+
+  @Before
+  public void beforeEach() {
+    tmp = new TemporaryFolder();
+  }
 
   @Test
   public void loggingLevelHasLoggingLevelInfoAsDefaultValue() {

@@ -21,6 +21,7 @@ import com.opera.core.systems.testing.OperaDriverTestCase;
 import com.opera.core.systems.testing.drivers.TestOperaDriver;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -34,7 +35,12 @@ import static org.junit.Assert.assertTrue;
 public class OperaDriverTest extends OperaDriverTestCase {
 
   @Rule
-  public TemporaryFolder temporaryProfile = new TemporaryFolder();
+  public TemporaryFolder temporaryProfile;
+
+  @Before
+  public void beforeEach() {
+    temporaryProfile = new TemporaryFolder();
+  }
 
   @Test
   public void testWithoutSettingsObject() {

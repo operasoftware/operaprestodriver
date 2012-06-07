@@ -51,10 +51,12 @@ public class OperaFilePreferencesTest extends OperaDriverTestCase {
   public File profileDirectory;
 
   @Rule
-  public TemporaryFolder temporaryFolder = new TemporaryFolder();
+  public TemporaryFolder temporaryFolder;
 
   @Before
   public void beforeEach() throws IOException {
+    temporaryFolder = new TemporaryFolder();
+
     if (driver.utils().getProduct().is(OperaProduct.DESKTOP)) {
       iniFile = temporaryFolder.newFile("operaprefs.ini");
       profileDirectory = temporaryFolder.getRoot();
