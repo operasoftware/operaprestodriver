@@ -30,6 +30,7 @@ import com.opera.core.systems.scope.services.ISystemInput;
 import com.opera.core.systems.util.ProfileUtils;
 
 import org.openqa.selenium.Capabilities;
+import org.openqa.selenium.Platform;
 
 import java.io.File;
 import java.util.Collections;
@@ -855,9 +856,14 @@ public class OperaDesktopDriver extends OperaDriver {
         quitOpera();
 
         try {
-          Thread.sleep(2000);
+          if (Platform.getCurrent().is(Platform.WINDOWS)) {
+            // Due to problems with quitting the Opera desktop applicatoion on Windows we introduce this
+            // workaround. This should be fixed in some other way that would allow us to determine in a
+            // reliable way if Opera quit already.
+            Thread.sleep(2000);
+          }
         } catch (InterruptedException e) {
-          e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+          // Fall through.
         }
 
         // Cleanup old profile

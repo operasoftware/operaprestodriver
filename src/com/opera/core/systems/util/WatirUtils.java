@@ -31,100 +31,92 @@ import com.google.common.io.Files;
  */
 public class WatirUtils {
 
-	protected static final Logger logger = Logger.getLogger("WatirUtils");
+  protected static final Logger logger = Logger.getLogger("WatirUtils");
   public static final String ANY_MATCHER = "_ANY_";
 
-	/**
-	 * Returns the platform double click timeout, that is the time that separates two clicks
-	 * treated as a double click from two clicks treated as two single clicks.
-	 *
-	 */
-	public static final Integer GetSystemDoubleClickTimeMs()
-	{
-		final Integer DEFAULT_INTERVAL_MS = 500;
-		Toolkit t = Toolkit.getDefaultToolkit();
-		if (t == null)
-			return DEFAULT_INTERVAL_MS;
+  /**
+   * Returns the platform double click timeout, that is the time that separates two clicks
+   * treated as a double click from two clicks treated as two single clicks.
+   *
+   */
+  public static final Integer getSystemDoubleClickTimeMs() {
+    final Integer DEFAULT_INTERVAL_MS = 500;
+    Toolkit t = Toolkit.getDefaultToolkit();
 
-		Object o = t.getDesktopProperty("awt.multiClickInterval");
-		if (o == null)
-			return DEFAULT_INTERVAL_MS;
+    if (t == null) {
+      return DEFAULT_INTERVAL_MS;
+    }
 
-		return (Integer)o;
-	}
+    Object o = t.getDesktopProperty("awt.multiClickInterval");
+    if (o == null) {
+      return DEFAULT_INTERVAL_MS;
+    }
 
-	/**
-	 * Sanitize the given filename/path, so that:
-	 * 1. It is not surrounded with quotation marks ""
-	 * 2. All occurences of "\\" are changed to a "/"
-	 * 3. All occurences of "\" are changed to a "/"
-	 *
-	 * @param input - the input path
-	 * @return A StringBuffer containing the sanitized input path
-	 */
-	public static StringBuffer SanitizePath(String input)
-	{
-		StringBuffer buf = new StringBuffer();
+    return (Integer)o;
+  }
 
-		/*
-		Strip any surrounding quotation marks, that might have came with the file name from
-		any external source like the Windows environment variable.
-		 */
-		if (input.matches("^\".+\"$"))
-			input = input.substring(1, input.length() - 1);
+  /**
+   * Sanitize the given filename/path, so that:
+   * 1. It is not surrounded with quotation marks ""
+   * 2. All occurences of "\\" are changed to a "/"
+   * 3. All occurences of "\" are changed to a "/"
+   *
+   * @param input - the input path
+   * @return A StringBuffer containing the sanitized input path
+   */
+  public static StringBuffer sanitizePath(String input)
+  {
+    StringBuffer buf = new StringBuffer();
 
-		/*
-		Make sure we use "/" as the path separator, seems to be the best solution.
-		Also, strip double "\\" used as separators.
-		 */
-		input = input.replaceAll("\\\\\\\\", "/");
-		input = input.replaceAll("\\\\", "/");
+    // Strip any surrounding quotation marks, that might have came with the file name from
+    // any external source like the Windows environment variable.
+    if (input.matches("^\".+\"$")) {
+      input = input.substring(1, input.length() - 1);
+    }
 
-		buf.append(input);
-		return buf;
-	}
+    // Make sure we use "/" as the path separator, seems to be the best solution.
+    // Also, strip double "\\" used as separators.
+    input = input.replaceAll("\\\\\\\\", "/");
+    input = input.replaceAll("\\\\", "/");
 
-	/**
-	 * Copies the whole disk directory/file structure starting from the source path to the
-	 * destination path.
-	 *
-	 * @param source - The source path, may designate either a file or a directory
-	 * @param destination - The destination path
-	 */
-	public static boolean CopyDirAndFiles(String source, String destination)
-	{
-		logger.finest(String.format("WatirUtils::CopyDirAndFiles(%s, %s)", source, destination));
-		File src = new File(source);
-		File dst = new File(destination);
+    buf.append(input);
+    return buf;
+  }
 
-		if (src.isDirectory())
-		{
-			String[] items;
-			items = src.list();
-			for (int i=0; i<items.length; i++)
-			{
-				String this_src = src.getPath() + File.separator + items[i];
-				String this_dst = dst.getPath() + File.separator + items[i];
-				boolean res = CopyDirAndFiles(this_src, this_dst);
-        if (res == false)
-        {
-          logger.severe("Could not copy '" + this_src + "' to '" + this_dst + "'!");
+  /**
+   * Copies the whole disk directory/file structure starting from the source path to the
+   * destination path.
+   *
+   * @param source - The source path, may designate either a file or a directory
+   * @param destination - The destination path
+   */
+  public static boolean copyDirAndFiles(File source, File destination) {
+    logger.finest(String.format("WatirUtils::copyDirAndFiles(%s, %s)", source.getAbsolutePath(), destination.getAbsolutePath()));
+
+    if (source.isDirectory()) {
+      String[] items;
+      items = source.list();
+      for (String item: items) {
+        File itemSource = new File(source.getPath() + File.separator + item);
+        File itemDestination = new File(destination.getPath() + File.separator + item);
+        boolean res = copyDirAndFiles(itemSource, itemDestination);
+        if (res == false) {
+          logger.severe("Could not copy '" + itemSource.getAbsolutePath() + "' to '" + itemDestination.getAbsolutePath() + "'!");
           return false;
         }
-			}
-		}
-		else
-		{
-			try {
-				Files.createParentDirs(dst);
-				Files.copy(src, dst);
-			} catch (IOException e) {
-				logger.severe(String.format("Could not copy files from \"%s\" to \"%s\"", source, destination));
+      }
+    }
+    else {
+      try {
+        Files.createParentDirs(destination);
+        Files.copy(source, destination);
+      } catch (IOException e) {
+        logger.severe(String.format("Could not copy files from \"%s\" to \"%s\"", source, destination));
         return false;
-			}
-		}
-		return true;
-	}
+      }
+    }
+    return true;
+  }
 
   /**
    * Compares haystack and needle taking into the account that the needle may contain
@@ -158,8 +150,9 @@ public class WatirUtils {
     String pattern = needle.replaceAll(ANY_MATCHER, "(?:.+)");
     logger.finest("Looking for pattern '"+ pattern +"' in '" + haystack + "'");
 
-    if (haystack.matches(pattern))
+    if (haystack.matches(pattern)) {
       return true;
+    }
 
     return false;
   }

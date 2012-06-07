@@ -33,7 +33,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 /**
- * The tests assume the there is a following widget available after starting Opera with a clean
+ * The tests assume that there is a following widget available after starting Opera with a clean
  * profile:
  *
  * <pre>

@@ -175,13 +175,15 @@ class ClickDelayer
         if (button.equals(lastClickMouseButton)) {
           if (location.equals(lastClickLocation)) {
             long currentTime = System.currentTimeMillis();
-            long doubleClickTime = WatirUtils.GetSystemDoubleClickTimeMs();
+            long doubleClickTime = WatirUtils.getSystemDoubleClickTimeMs();
             long timeSinceLastClick = currentTime - lastClickTime;
+            long remainingTime = doubleClickTime - timeSinceLastClick;
 
-            if (timeSinceLastClick < doubleClickTime) {
+            if (remainingTime > 0) {
               logger.fine(String.format("Delaying click in order to avoid double-click - check your test (last click was %d ms ago, OS double click timeout is %d ms)", timeSinceLastClick, doubleClickTime));
               try {
-                Thread.sleep(doubleClickTime);
+                // 100 ms chosen as a safe value for avoiding the double click, this may need adapting.
+                Thread.sleep(remainingTime + 100);
               }
               catch (InterruptedException e) {
                 logger.warning("*** Delay was interrupted ***");
