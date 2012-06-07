@@ -376,7 +376,7 @@ public class StpConnection implements SocketListener {
     // recurse);
 
     buffer.position(0);
-    int bytesWeHaveBeenreading = 0;
+    int bytesWeHaveBeenReading = 0;
 
     switch (state) {
       case SERVICELIST:
@@ -384,7 +384,7 @@ public class StpConnection implements SocketListener {
         builder.append(buffer.asCharBuffer());
         parseServiceList(builder.toString());
         buffer.position(0);// reset position!
-        bytesWeHaveBeenreading = buffer.limit(); // bytesWeHaveBeenreading = all
+        bytesWeHaveBeenReading = buffer.limit(); // bytesWeHaveBeenreading = all
         // bytes in buffer!
         break;
 
@@ -394,24 +394,24 @@ public class StpConnection implements SocketListener {
           buffer.position(0);// read from start!
           buffer.get(dst);
           buffer.position(0);// reset position!
-          bytesWeHaveBeenreading = 6; // 6 bytes will be removed from buffer
+          bytesWeHaveBeenReading = 6; // 6 bytes will be removed from buffer
           String handShake = new String(dst);
           if (!handShake.equals("STP/1\n")) {
             close();
-            connectionHandler.onException(new CommunicationException("STP/1 not supported!"));
-          } else {
-            setState(State.EMPTY);
-            connectionHandler.onHandshake(true);
+            connectionHandler.onException(
+                new CommunicationException("Expected STP/1, got: " + handShake));
           }
+          setState(State.EMPTY);
+          connectionHandler.onHandshake(true);
         }
         break;
 
-      case EMPTY: // read 4 byte header: STP\0
+      case EMPTY: // read 4 byte header: STP/0
         if (buffer.limit() >= 4) {
           byte[] headerPrefix = new byte[4];
           buffer.get(headerPrefix);
           buffer.position(0);
-          bytesWeHaveBeenreading = 4;
+          bytesWeHaveBeenReading = 4;
           ByteString incomingPrefix = ByteString.copyFrom(headerPrefix);
           if (stpPrefix.equals(incomingPrefix)) {
             setState(State.STP);
@@ -425,8 +425,8 @@ public class StpConnection implements SocketListener {
             */
           } else {
             close();
-            connectionHandler.onException(new WebDriverException(
-                "Scope Transport Protocol Error : Header"));
+            connectionHandler.onException(
+                new CommunicationException("Expected empty header"));
           }
         }
         break;
@@ -439,22 +439,22 @@ public class StpConnection implements SocketListener {
           break;
         }
         int messageSize = readRawVarint32(buffer);// read part of buffer
-        bytesWeHaveBeenreading = buffer.position();
+        bytesWeHaveBeenReading = buffer.position();
         buffer.position(0);
 
         // If we got size, read more, if not just leave it!
-        if (buffer.limit() >= bytesWeHaveBeenreading + messageSize) {
-          buffer.position(bytesWeHaveBeenreading);
+        if (buffer.limit() >= bytesWeHaveBeenReading + messageSize) {
+          buffer.position(bytesWeHaveBeenReading);
 
           // Read type and Payload!
           int messageType = buffer.get();
-          bytesWeHaveBeenreading += 1;
+          bytesWeHaveBeenReading += 1;
 
           byte[] payload = new byte[--messageSize];
           buffer.get(payload);
           buffer.position(0);
 
-          bytesWeHaveBeenreading += messageSize; // 32 bits = 4 bytes :-)
+          bytesWeHaveBeenReading += messageSize; // 32 bits = 4 bytes :-)
 
           setState(State.EMPTY);
 
@@ -462,33 +462,33 @@ public class StpConnection implements SocketListener {
             processMessage(messageType, payload);
           } catch (IOException e) {
             close();
-            connectionHandler.onException(new WebDriverException(
+            connectionHandler.onException(new CommunicationException(
                 "Error while processing the message: " + e.getMessage()));
           }
         } else {
           // 4 + messageSize because of the int at the beginning
-          logger.finest("tried to read a message, but expected " + (4 + messageSize)
-                        + " bytes, and only got " + buffer.limit());
+          logger.finest(String.format("Tried to read a message and expected %d bytes, but got %d",
+                                      (4 + messageSize), buffer.limit()));
 
           buffer.position(0);
-          bytesWeHaveBeenreading = 0;
+          bytesWeHaveBeenReading = 0;
         }
         break;
 
     }
 
     // Pop number of read bytes from
-    if (bytesWeHaveBeenreading > 0) {
+    if (bytesWeHaveBeenReading > 0) {
 
       // Pop X bytes, and keep message for the rest
-      int rest = buffer.limit() - bytesWeHaveBeenreading;
+      int rest = buffer.limit() - bytesWeHaveBeenReading;
       if (rest <= 0) {
         buffer.clear();
         buffer.limit(0);
       } else {
         byte[] temp = new byte[rest];
 
-        buffer.position(bytesWeHaveBeenreading);
+        buffer.position(bytesWeHaveBeenReading);
         buffer.get(temp, 0, rest);
 
         buffer.clear();
@@ -498,14 +498,13 @@ public class StpConnection implements SocketListener {
         buffer.position(0);// set position back to start!
       }
 
-      logger.finest("Did read message of " + bytesWeHaveBeenreading
-                    + " bytes, new buffer size = " + buffer.limit());
+      logger.finest(String.format("Did read message of %d bytes, new buffer size is %d",
+                                  bytesWeHaveBeenReading, buffer.limit()));
 
       return true; // We did read a message :-)
     } else {
       if (buffer.limit() > 0) {
-        logger.finest("did NOT read message from buffer of size = "
-                      + buffer.limit());
+        logger.finest("did NOT read message from buffer of size = " + buffer.limit());
       } else {
         logger.finest("no messages in empty buffer");
       }
