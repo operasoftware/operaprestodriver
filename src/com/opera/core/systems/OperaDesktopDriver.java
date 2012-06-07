@@ -855,15 +855,15 @@ public class OperaDesktopDriver extends OperaDriver {
         // Quit and wait for opera to quit properly
         quitOpera();
 
-        try {
-          if (Platform.getCurrent().is(Platform.WINDOWS)) {
-            // Due to problems with quitting the Opera desktop applicatoion on Windows we introduce this
-            // workaround. This should be fixed in some other way that would allow us to determine in a
-            // reliable way if Opera quit already.
+        // Due to problems with quitting the Opera desktop application on Windows we introduce this
+        // workaround.  This should be fixed in some other way that would allow us to determine in a
+        // reliable way if Opera quit already.
+        if (Platform.getCurrent().is(Platform.WINDOWS)) {
+          try {
             Thread.sleep(2000);
+          } catch (InterruptedException e) {
+            // fall through
           }
-        } catch (InterruptedException e) {
-          // Fall through.
         }
 
         // Cleanup old profile
