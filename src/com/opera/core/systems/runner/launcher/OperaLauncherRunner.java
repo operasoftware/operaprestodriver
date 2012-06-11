@@ -231,7 +231,7 @@ public class OperaLauncherRunner extends OperaRunner
       res = protocol.sendRequest(MessageType.MSG_STATUS, request);
 
       if (handleStatusMessage(res.getResponse()) != StatusType.RUNNING) {
-        throw new OperaRunnerException(
+        throw new IOException(
             "Opera exited immediately; possibly incorrect arguments?  Command: " +
             binary.getCommands());
       }

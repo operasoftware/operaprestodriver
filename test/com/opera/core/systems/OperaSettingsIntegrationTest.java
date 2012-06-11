@@ -33,6 +33,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertTrue;
+import static org.openqa.selenium.Platform.LINUX;
 import static org.openqa.selenium.Platform.WINDOWS;
 
 /**
@@ -195,6 +196,7 @@ public class OperaSettingsIntegrationTest extends OperaDriverTestCase {
    * on Debian.
    */
   @Test
+  @Ignore(platforms = LINUX)
   public void environmentalBinaryPathWorks() throws IOException {
     File binary = new File(OperaPaths.findOperaInstallationPath());
     environment.set(OperaPaths.OPERA_PATH_ENV_VAR, binary.getPath());

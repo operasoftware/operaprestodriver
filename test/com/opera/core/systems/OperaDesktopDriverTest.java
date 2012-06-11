@@ -31,6 +31,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.openqa.selenium.Capabilities;
+import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
@@ -53,6 +54,7 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.junit.matchers.JUnitMatchers.containsString;
+import static org.openqa.selenium.Platform.LINUX;
 
 @NoDriver
 @Ignore(products = {CORE, MINI, MOBILE, SDK})
@@ -131,7 +133,6 @@ public class OperaDesktopDriverTest extends OperaDesktopDriverTestCase {
     } catch (WebDriverException e) {
       assertThat(e.getCause(), instanceOf(OperaRunnerException.class));
       assertThat(e.getMessage(), containsString("Could not start Opera"));
-      assertThat(e.getMessage(), containsString("launcher unable to start binary"));
     }
   }
 
@@ -140,6 +141,7 @@ public class OperaDesktopDriverTest extends OperaDesktopDriverTestCase {
    * on Debian.
    */
   @Test
+  @Ignore(platforms = LINUX)
   public void environmentalBinaryPathWorks() throws IOException {
     File binary = new File(OperaPaths.findOperaInstallationPath());
     environment.set(OperaPaths.OPERA_PATH_ENV_VAR, binary.getPath());
