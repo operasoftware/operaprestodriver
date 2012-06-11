@@ -23,6 +23,8 @@ import com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopPath;
 import com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopPid;
 import com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopStringID;
 import com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopStringText;
+import com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopProduct;
+import com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopVersion;
 import com.opera.core.systems.scope.protos.UmsProtos.Response;
 import com.opera.core.systems.scope.services.IDesktopUtils;
 import com.opera.core.systems.util.WatirUtils;
@@ -254,4 +256,63 @@ public class DesktopUtils extends AbstractService implements IDesktopUtils {
     return desktopPid.getPid();
   }
 
+  public Integer getDesktopProductType() {
+    Response response = executeCommand(DesktopUtilsCommand.GET_DESKTOP_PRODUCT, null);
+
+    DesktopProduct.Builder productBuilder = DesktopProduct.newBuilder();
+    buildPayload(response, productBuilder);
+    DesktopProduct desktopProduct = productBuilder.build();
+
+    return desktopProduct.getProductType();
+  }
+
+  public String getDesktopLabsProductName() {
+    Response response = executeCommand(DesktopUtilsCommand.GET_DESKTOP_PRODUCT, null);
+
+    DesktopProduct.Builder productBuilder = DesktopProduct.newBuilder();
+    buildPayload(response, productBuilder);
+    DesktopProduct desktopProduct = productBuilder.build();
+
+    return desktopProduct.getLabsProductName();
+  }
+
+  public String getDesktopProductPackageType() {
+    Response response = executeCommand(DesktopUtilsCommand.GET_DESKTOP_PRODUCT, null);
+
+    DesktopProduct.Builder productBuilder = DesktopProduct.newBuilder();
+    buildPayload(response, productBuilder);
+    DesktopProduct desktopProduct = productBuilder.build();
+
+    return desktopProduct.getPackageType();
+  }
+
+  public Integer getDesktopVersionMajor() {
+    Response response = executeCommand(DesktopUtilsCommand.GET_DESKTOP_VERSION, null);
+
+    DesktopVersion.Builder productBuilder = DesktopVersion.newBuilder();
+    buildPayload(response, productBuilder);
+    DesktopVersion desktopVersion = productBuilder.build();
+
+    return desktopVersion.getMajorVer();
+  }
+
+  public Integer getDesktopVersionMinor() {
+    Response response = executeCommand(DesktopUtilsCommand.GET_DESKTOP_VERSION, null);
+
+    DesktopVersion.Builder productBuilder = DesktopVersion.newBuilder();
+    buildPayload(response, productBuilder);
+    DesktopVersion desktopVersion = productBuilder.build();
+
+    return desktopVersion.getMinorVer();
+  }
+
+  public Integer getDesktopVersionBuildNo() {
+    Response response = executeCommand(DesktopUtilsCommand.GET_DESKTOP_VERSION, null);
+
+    DesktopVersion.Builder productBuilder = DesktopVersion.newBuilder();
+    buildPayload(response, productBuilder);
+    DesktopVersion desktopVersion = productBuilder.build();
+
+    return desktopVersion.getBuildNo();
+  }
 }

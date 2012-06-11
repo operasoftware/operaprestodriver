@@ -33,6 +33,8 @@ public enum DesktopUtilsCommand implements ICommand {
   GET_SMALL_PREFERENCES_PATH ( 4),
   GET_CACHE_PREFERENCES_PATH ( 5),
   GET_OPERA_PID              ( 6),
+  GET_DESKTOP_PRODUCT        ( 7),
+  GET_DESKTOP_VERSION        ( 8),
   DEFAULT                    (-1);
 
   private int code;

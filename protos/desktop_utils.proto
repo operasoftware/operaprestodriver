@@ -20,11 +20,46 @@ message DesktopPid
     required uint32 pid = 1;
 }
 
+message DesktopProduct
+{
+    /**
+     * The product type as an integer, i.e.:
+     * 0: Opera
+     * 1: Opera Next
+     * 2: Opera Labs
+     */
+    required uint32 productType = 1;
+
+    /**
+     * The Opera Labs product name, if any, i.e. "Camera API".
+     */
+    required string labsProductName = 2;
+
+    /**
+     * The Opera package type, i.e. "exe".
+     */
+    required string packageType = 3;
+}
+
+message DesktopVersion
+{
+    /**
+     * The Opera Desktop version number has the following format:
+     * MM.NN.BBBB, where:
+     *
+     * MM   is the major version number, i.e. 11
+     * NN   is the minor version number, i.e. 51
+     * BBBB is the build number, i.e. 3423
+     */
+    required uint32 majorVer = 1;
+    required uint32 minorVer = 2;
+    required uint32 buildNo = 3;
+}
+
 /**
  */
 service DesktopUtils
 {
-    option (cpp_hfile) = "adjunct/desktop_scope/scope_desktop_utils.h";
     option (core_release) = "2.5";
     option (version) = "2.0";
     option (cpp_class) = OpScopeDesktopUtils;
@@ -61,7 +96,16 @@ service DesktopUtils
      * Gets the pid 
      */
     command GetCurrentProcessId(Default) returns (DesktopPid) = 6;
+
+    /**
+     * Fetches the Opera Desktop product description from the binary.
+     * See DesktopProduct message above for more information.
+     */
+    command GetDesktopProduct(Default) returns (DesktopProduct) = 7;
+
+    /**
+     * Fetches the Opera Desktop version from the binary.
+     * See DesktopVersion message above for more information.
+     */
+    command GetDesktopVersion(Default) returns (DesktopVersion) = 8;
 }
-
-
-
