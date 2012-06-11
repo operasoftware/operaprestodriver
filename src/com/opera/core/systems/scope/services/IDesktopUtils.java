@@ -66,5 +66,77 @@ public interface IDesktopUtils {
    */
   int getOperaPid();
 
-  String getSubstitutedString(String[] arg, boolean stripAmpersand);
+  /**
+   * Fetches a translated string fetched basing on a string id and substitutes the printf formatters in it.
+   * Each substitution argument needs to be a string. The printf formatter types are ignored, and the given
+   * string argument is substituted.
+   * The method distinguishes between ordered substitution (i.e. %1, %2) and a standard substitution (i.e.
+   * %s, %d).
+   * In case the given argument list is too long or too short for the number of arguments in the fetched
+   * translated string, this method triggers a warning. In case the given argument list is too short,
+   * the method substitutes as many formatters as possible and leaves the rest of them intact.
+   * "%%" is substituted to "%".
+   * If a given argument is empty, i.e. "", it will be substituted to ANY_MATCHER, allowing later searching
+   * for the text without specific formatter values, i.e. matching "Show _ANY_ more..." to any string like
+   * "Show 1 more...", "Show 2 more...".
+   *
+   * @param args An array containing the printf substitution arguments, all of string type, and the string id
+   *             as the first element.
+   * @param stripAmpersand Whether to strip the "&" character from the fetched string.
+   * @return The final substituted string.
+   */
+  String getSubstitutedString(String[] args, boolean stripAmpersand);
+
+  /**
+   * Fetches the integer describing the Opera Desktop product type. This may, however doesn't have to,
+   * be available via the System|OperaProduct preference.
+   *
+   * The currently known values are:
+   * 0: Opera
+   * 1: Opera Next
+   * 2: Opera Labs
+   *
+   * @return One of the known integer values.
+   */
+  Integer getDesktopProductType();
+
+  /**
+   * In case the desktop product type is 2 (i.e. Opera Labs), this method returns the string
+   * describing the labs release, i.e. "Camera API".
+   *
+   * @return String describing the Labs release or an empty string in case the connected Opera
+   * browser is not a Labs product, or the string has not been set for the given Labs release.
+   */
+  String getDesktopLabsProductName();
+
+  /**
+   * The desktop package type as string, i.e. "exe" for Windows.
+   *
+   * @return The package type string.
+   */
+  String getDesktopProductPackageType();
+
+  /**
+   * The Opera Desktop version number has the format MM.NN.BBBB, where MM is the major version
+   * number, NN is the minor version number and BBBB is the actual build number, i.e. 11.50.4202.
+   *
+   * @return The major version number as an integer.
+   */
+  Integer getDesktopVersionMajor();
+
+  /**
+   * The Opera Desktop version number has the format MM.NN.BBBB, where MM is the major version
+   * number, NN is the minor version number and BBBB is the actual build number, i.e. 11.50.4202.
+   *
+   * @return The minor version number as an integer.
+   */
+  Integer getDesktopVersionMinor();
+
+  /**
+   * The Opera Desktop version number has the format MM.NN.BBBB, where MM is the major version
+   * number, NN is the minor version number and BBBB is the actual build number, i.e. 11.50.4202.
+   *
+   * @return The build number as an integer.
+   */
+  Integer getDesktopVersionBuildNo();
 }

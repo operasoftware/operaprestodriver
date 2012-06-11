@@ -967,4 +967,54 @@ public class OperaDesktopDriver extends OperaDriver {
     return runner != null && isOperaRunning();
   }
 
+  public Integer getDesktopProductType() {
+    return desktopUtils.getDesktopProductType();
+  }
+
+  public String getDesktopLabsProductName() {
+    return desktopUtils.getDesktopLabsProductName();
+  }
+
+  public String getDesktopProductPackageType() {
+    return desktopUtils.getDesktopProductPackageType();
+  }
+
+  public Integer getDesktopVersionMajor() {
+    return desktopUtils.getDesktopVersionMajor();
+  }
+
+  public Integer getDesktopVersionMinor() {
+    return desktopUtils.getDesktopVersionMinor();
+  }
+
+  public Integer getDesktopVersionBuildNo() {
+    return desktopUtils.getDesktopVersionBuildNo();
+  }
+
+  public String getDesktopProductTypeString() {
+    String[] productNames = {"Opera", "Opera Next", "Opera Labs"};
+    try {
+      return productNames[getDesktopProductType()];
+    }
+    catch (ArrayIndexOutOfBoundsException a) {
+      return String.format("Unknown (%d)", getDesktopProductType());
+    }
+  }
+
+  public String getDesktopProductFullString() {
+    if (getDesktopProductType() == 2) {
+      return String.format("%s %s", getDesktopProductTypeString(), getDesktopLabsProductName());
+    }
+    else {
+      return getDesktopProductTypeString();
+    }
+  }
+
+  public String getDesktopVersionString() {
+    return String.format("%2d.%02d.%d", getDesktopVersionMajor(), getDesktopVersionMinor(), getDesktopVersionBuildNo());
+  }
+
+  public String getDesktopBrowserDescriptionFullString() {
+    return String.format("%s %s [%s]", getDesktopProductTypeString(), getDesktopVersionString(), getDesktopProductPackageType());
+  }
 }
