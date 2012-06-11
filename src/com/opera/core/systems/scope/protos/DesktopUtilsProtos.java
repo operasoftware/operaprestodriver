@@ -1503,6 +1503,1032 @@ public final class DesktopUtilsProtos {
     // @@protoc_insertion_point(class_scope:scope.DesktopPid)
   }
   
+  public interface DesktopProductOrBuilder
+      extends com.google.protobuf.MessageOrBuilder {
+    
+    // required uint32 productType = 1;
+    boolean hasProductType();
+    int getProductType();
+    
+    // required string labsProductName = 2;
+    boolean hasLabsProductName();
+    String getLabsProductName();
+    
+    // required string packageType = 3;
+    boolean hasPackageType();
+    String getPackageType();
+  }
+  public static final class DesktopProduct extends
+      com.google.protobuf.GeneratedMessage
+      implements DesktopProductOrBuilder {
+    // Use DesktopProduct.newBuilder() to construct.
+    private DesktopProduct(Builder builder) {
+      super(builder);
+    }
+    private DesktopProduct(boolean noInit) {}
+    
+    private static final DesktopProduct defaultInstance;
+    public static DesktopProduct getDefaultInstance() {
+      return defaultInstance;
+    }
+    
+    public DesktopProduct getDefaultInstanceForType() {
+      return defaultInstance;
+    }
+    
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return com.opera.core.systems.scope.protos.DesktopUtilsProtos.internal_static_scope_DesktopProduct_descriptor;
+    }
+    
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return com.opera.core.systems.scope.protos.DesktopUtilsProtos.internal_static_scope_DesktopProduct_fieldAccessorTable;
+    }
+    
+    private int bitField0_;
+    // required uint32 productType = 1;
+    public static final int PRODUCTTYPE_FIELD_NUMBER = 1;
+    private int productType_;
+    public boolean hasProductType() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
+    }
+    public int getProductType() {
+      return productType_;
+    }
+    
+    // required string labsProductName = 2;
+    public static final int LABSPRODUCTNAME_FIELD_NUMBER = 2;
+    private java.lang.Object labsProductName_;
+    public boolean hasLabsProductName() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    public String getLabsProductName() {
+      java.lang.Object ref = labsProductName_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
+          labsProductName_ = s;
+        }
+        return s;
+      }
+    }
+    private com.google.protobuf.ByteString getLabsProductNameBytes() {
+      java.lang.Object ref = labsProductName_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
+        labsProductName_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    
+    // required string packageType = 3;
+    public static final int PACKAGETYPE_FIELD_NUMBER = 3;
+    private java.lang.Object packageType_;
+    public boolean hasPackageType() {
+      return ((bitField0_ & 0x00000004) == 0x00000004);
+    }
+    public String getPackageType() {
+      java.lang.Object ref = packageType_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
+          packageType_ = s;
+        }
+        return s;
+      }
+    }
+    private com.google.protobuf.ByteString getPackageTypeBytes() {
+      java.lang.Object ref = packageType_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
+        packageType_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    
+    private void initFields() {
+      productType_ = 0;
+      labsProductName_ = "";
+      packageType_ = "";
+    }
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized != -1) return isInitialized == 1;
+      
+      if (!hasProductType()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasLabsProductName()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasPackageType()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      memoizedIsInitialized = 1;
+      return true;
+    }
+    
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      getSerializedSize();
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        output.writeUInt32(1, productType_);
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        output.writeBytes(2, getLabsProductNameBytes());
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        output.writeBytes(3, getPackageTypeBytes());
+      }
+      getUnknownFields().writeTo(output);
+    }
+    
+    private int memoizedSerializedSize = -1;
+    public int getSerializedSize() {
+      int size = memoizedSerializedSize;
+      if (size != -1) return size;
+    
+      size = 0;
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeUInt32Size(1, productType_);
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(2, getLabsProductNameBytes());
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(3, getPackageTypeBytes());
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSerializedSize = size;
+      return size;
+    }
+    
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
+    }
+    
+    public static com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopProduct parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data).buildParsed();
+    }
+    public static com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopProduct parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data, extensionRegistry)
+               .buildParsed();
+    }
+    public static com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopProduct parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data).buildParsed();
+    }
+    public static com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopProduct parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data, extensionRegistry)
+               .buildParsed();
+    }
+    public static com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopProduct parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input).buildParsed();
+    }
+    public static com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopProduct parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input, extensionRegistry)
+               .buildParsed();
+    }
+    public static com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopProduct parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      Builder builder = newBuilder();
+      if (builder.mergeDelimitedFrom(input)) {
+        return builder.buildParsed();
+      } else {
+        return null;
+      }
+    }
+    public static com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopProduct parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      Builder builder = newBuilder();
+      if (builder.mergeDelimitedFrom(input, extensionRegistry)) {
+        return builder.buildParsed();
+      } else {
+        return null;
+      }
+    }
+    public static com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopProduct parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input).buildParsed();
+    }
+    public static com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopProduct parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input, extensionRegistry)
+               .buildParsed();
+    }
+    
+    public static Builder newBuilder() { return Builder.create(); }
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder(com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopProduct prototype) {
+      return newBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() { return newBuilder(this); }
+    
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessage.Builder<Builder>
+       implements com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopProductOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return com.opera.core.systems.scope.protos.DesktopUtilsProtos.internal_static_scope_DesktopProduct_descriptor;
+      }
+      
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return com.opera.core.systems.scope.protos.DesktopUtilsProtos.internal_static_scope_DesktopProduct_fieldAccessorTable;
+      }
+      
+      // Construct using com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopProduct.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+      
+      private Builder(BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+        }
+      }
+      private static Builder create() {
+        return new Builder();
+      }
+      
+      public Builder clear() {
+        super.clear();
+        productType_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000001);
+        labsProductName_ = "";
+        bitField0_ = (bitField0_ & ~0x00000002);
+        packageType_ = "";
+        bitField0_ = (bitField0_ & ~0x00000004);
+        return this;
+      }
+      
+      public Builder clone() {
+        return create().mergeFrom(buildPartial());
+      }
+      
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopProduct.getDescriptor();
+      }
+      
+      public com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopProduct getDefaultInstanceForType() {
+        return com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopProduct.getDefaultInstance();
+      }
+      
+      public com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopProduct build() {
+        com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopProduct result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+      
+      private com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopProduct buildParsed()
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopProduct result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(
+            result).asInvalidProtocolBufferException();
+        }
+        return result;
+      }
+      
+      public com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopProduct buildPartial() {
+        com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopProduct result = new com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopProduct(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+          to_bitField0_ |= 0x00000001;
+        }
+        result.productType_ = productType_;
+        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+          to_bitField0_ |= 0x00000002;
+        }
+        result.labsProductName_ = labsProductName_;
+        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
+          to_bitField0_ |= 0x00000004;
+        }
+        result.packageType_ = packageType_;
+        result.bitField0_ = to_bitField0_;
+        onBuilt();
+        return result;
+      }
+      
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopProduct) {
+          return mergeFrom((com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopProduct)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+      
+      public Builder mergeFrom(com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopProduct other) {
+        if (other == com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopProduct.getDefaultInstance()) return this;
+        if (other.hasProductType()) {
+          setProductType(other.getProductType());
+        }
+        if (other.hasLabsProductName()) {
+          setLabsProductName(other.getLabsProductName());
+        }
+        if (other.hasPackageType()) {
+          setPackageType(other.getPackageType());
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        return this;
+      }
+      
+      public final boolean isInitialized() {
+        if (!hasProductType()) {
+          
+          return false;
+        }
+        if (!hasLabsProductName()) {
+          
+          return false;
+        }
+        if (!hasPackageType()) {
+          
+          return false;
+        }
+        return true;
+      }
+      
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder(
+            this.getUnknownFields());
+        while (true) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              this.setUnknownFields(unknownFields.build());
+              onChanged();
+              return this;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                this.setUnknownFields(unknownFields.build());
+                onChanged();
+                return this;
+              }
+              break;
+            }
+            case 8: {
+              bitField0_ |= 0x00000001;
+              productType_ = input.readUInt32();
+              break;
+            }
+            case 18: {
+              bitField0_ |= 0x00000002;
+              labsProductName_ = input.readBytes();
+              break;
+            }
+            case 26: {
+              bitField0_ |= 0x00000004;
+              packageType_ = input.readBytes();
+              break;
+            }
+          }
+        }
+      }
+      
+      private int bitField0_;
+      
+      // required uint32 productType = 1;
+      private int productType_ ;
+      public boolean hasProductType() {
+        return ((bitField0_ & 0x00000001) == 0x00000001);
+      }
+      public int getProductType() {
+        return productType_;
+      }
+      public Builder setProductType(int value) {
+        bitField0_ |= 0x00000001;
+        productType_ = value;
+        onChanged();
+        return this;
+      }
+      public Builder clearProductType() {
+        bitField0_ = (bitField0_ & ~0x00000001);
+        productType_ = 0;
+        onChanged();
+        return this;
+      }
+      
+      // required string labsProductName = 2;
+      private java.lang.Object labsProductName_ = "";
+      public boolean hasLabsProductName() {
+        return ((bitField0_ & 0x00000002) == 0x00000002);
+      }
+      public String getLabsProductName() {
+        java.lang.Object ref = labsProductName_;
+        if (!(ref instanceof String)) {
+          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
+          labsProductName_ = s;
+          return s;
+        } else {
+          return (String) ref;
+        }
+      }
+      public Builder setLabsProductName(String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000002;
+        labsProductName_ = value;
+        onChanged();
+        return this;
+      }
+      public Builder clearLabsProductName() {
+        bitField0_ = (bitField0_ & ~0x00000002);
+        labsProductName_ = getDefaultInstance().getLabsProductName();
+        onChanged();
+        return this;
+      }
+      void setLabsProductName(com.google.protobuf.ByteString value) {
+        bitField0_ |= 0x00000002;
+        labsProductName_ = value;
+        onChanged();
+      }
+      
+      // required string packageType = 3;
+      private java.lang.Object packageType_ = "";
+      public boolean hasPackageType() {
+        return ((bitField0_ & 0x00000004) == 0x00000004);
+      }
+      public String getPackageType() {
+        java.lang.Object ref = packageType_;
+        if (!(ref instanceof String)) {
+          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
+          packageType_ = s;
+          return s;
+        } else {
+          return (String) ref;
+        }
+      }
+      public Builder setPackageType(String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000004;
+        packageType_ = value;
+        onChanged();
+        return this;
+      }
+      public Builder clearPackageType() {
+        bitField0_ = (bitField0_ & ~0x00000004);
+        packageType_ = getDefaultInstance().getPackageType();
+        onChanged();
+        return this;
+      }
+      void setPackageType(com.google.protobuf.ByteString value) {
+        bitField0_ |= 0x00000004;
+        packageType_ = value;
+        onChanged();
+      }
+      
+      // @@protoc_insertion_point(builder_scope:scope.DesktopProduct)
+    }
+    
+    static {
+      defaultInstance = new DesktopProduct(true);
+      defaultInstance.initFields();
+    }
+    
+    // @@protoc_insertion_point(class_scope:scope.DesktopProduct)
+  }
+  
+  public interface DesktopVersionOrBuilder
+      extends com.google.protobuf.MessageOrBuilder {
+    
+    // required uint32 majorVer = 1;
+    boolean hasMajorVer();
+    int getMajorVer();
+    
+    // required uint32 minorVer = 2;
+    boolean hasMinorVer();
+    int getMinorVer();
+    
+    // required uint32 buildNo = 3;
+    boolean hasBuildNo();
+    int getBuildNo();
+  }
+  public static final class DesktopVersion extends
+      com.google.protobuf.GeneratedMessage
+      implements DesktopVersionOrBuilder {
+    // Use DesktopVersion.newBuilder() to construct.
+    private DesktopVersion(Builder builder) {
+      super(builder);
+    }
+    private DesktopVersion(boolean noInit) {}
+    
+    private static final DesktopVersion defaultInstance;
+    public static DesktopVersion getDefaultInstance() {
+      return defaultInstance;
+    }
+    
+    public DesktopVersion getDefaultInstanceForType() {
+      return defaultInstance;
+    }
+    
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return com.opera.core.systems.scope.protos.DesktopUtilsProtos.internal_static_scope_DesktopVersion_descriptor;
+    }
+    
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return com.opera.core.systems.scope.protos.DesktopUtilsProtos.internal_static_scope_DesktopVersion_fieldAccessorTable;
+    }
+    
+    private int bitField0_;
+    // required uint32 majorVer = 1;
+    public static final int MAJORVER_FIELD_NUMBER = 1;
+    private int majorVer_;
+    public boolean hasMajorVer() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
+    }
+    public int getMajorVer() {
+      return majorVer_;
+    }
+    
+    // required uint32 minorVer = 2;
+    public static final int MINORVER_FIELD_NUMBER = 2;
+    private int minorVer_;
+    public boolean hasMinorVer() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    public int getMinorVer() {
+      return minorVer_;
+    }
+    
+    // required uint32 buildNo = 3;
+    public static final int BUILDNO_FIELD_NUMBER = 3;
+    private int buildNo_;
+    public boolean hasBuildNo() {
+      return ((bitField0_ & 0x00000004) == 0x00000004);
+    }
+    public int getBuildNo() {
+      return buildNo_;
+    }
+    
+    private void initFields() {
+      majorVer_ = 0;
+      minorVer_ = 0;
+      buildNo_ = 0;
+    }
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized != -1) return isInitialized == 1;
+      
+      if (!hasMajorVer()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasMinorVer()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasBuildNo()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      memoizedIsInitialized = 1;
+      return true;
+    }
+    
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      getSerializedSize();
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        output.writeUInt32(1, majorVer_);
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        output.writeUInt32(2, minorVer_);
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        output.writeUInt32(3, buildNo_);
+      }
+      getUnknownFields().writeTo(output);
+    }
+    
+    private int memoizedSerializedSize = -1;
+    public int getSerializedSize() {
+      int size = memoizedSerializedSize;
+      if (size != -1) return size;
+    
+      size = 0;
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeUInt32Size(1, majorVer_);
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeUInt32Size(2, minorVer_);
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeUInt32Size(3, buildNo_);
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSerializedSize = size;
+      return size;
+    }
+    
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
+    }
+    
+    public static com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopVersion parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data).buildParsed();
+    }
+    public static com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopVersion parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data, extensionRegistry)
+               .buildParsed();
+    }
+    public static com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopVersion parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data).buildParsed();
+    }
+    public static com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopVersion parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data, extensionRegistry)
+               .buildParsed();
+    }
+    public static com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopVersion parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input).buildParsed();
+    }
+    public static com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopVersion parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input, extensionRegistry)
+               .buildParsed();
+    }
+    public static com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopVersion parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      Builder builder = newBuilder();
+      if (builder.mergeDelimitedFrom(input)) {
+        return builder.buildParsed();
+      } else {
+        return null;
+      }
+    }
+    public static com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopVersion parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      Builder builder = newBuilder();
+      if (builder.mergeDelimitedFrom(input, extensionRegistry)) {
+        return builder.buildParsed();
+      } else {
+        return null;
+      }
+    }
+    public static com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopVersion parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input).buildParsed();
+    }
+    public static com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopVersion parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input, extensionRegistry)
+               .buildParsed();
+    }
+    
+    public static Builder newBuilder() { return Builder.create(); }
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder(com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopVersion prototype) {
+      return newBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() { return newBuilder(this); }
+    
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessage.Builder<Builder>
+       implements com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopVersionOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return com.opera.core.systems.scope.protos.DesktopUtilsProtos.internal_static_scope_DesktopVersion_descriptor;
+      }
+      
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return com.opera.core.systems.scope.protos.DesktopUtilsProtos.internal_static_scope_DesktopVersion_fieldAccessorTable;
+      }
+      
+      // Construct using com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopVersion.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+      
+      private Builder(BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+        }
+      }
+      private static Builder create() {
+        return new Builder();
+      }
+      
+      public Builder clear() {
+        super.clear();
+        majorVer_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000001);
+        minorVer_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000002);
+        buildNo_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000004);
+        return this;
+      }
+      
+      public Builder clone() {
+        return create().mergeFrom(buildPartial());
+      }
+      
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopVersion.getDescriptor();
+      }
+      
+      public com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopVersion getDefaultInstanceForType() {
+        return com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopVersion.getDefaultInstance();
+      }
+      
+      public com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopVersion build() {
+        com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopVersion result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+      
+      private com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopVersion buildParsed()
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopVersion result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(
+            result).asInvalidProtocolBufferException();
+        }
+        return result;
+      }
+      
+      public com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopVersion buildPartial() {
+        com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopVersion result = new com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopVersion(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+          to_bitField0_ |= 0x00000001;
+        }
+        result.majorVer_ = majorVer_;
+        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+          to_bitField0_ |= 0x00000002;
+        }
+        result.minorVer_ = minorVer_;
+        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
+          to_bitField0_ |= 0x00000004;
+        }
+        result.buildNo_ = buildNo_;
+        result.bitField0_ = to_bitField0_;
+        onBuilt();
+        return result;
+      }
+      
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopVersion) {
+          return mergeFrom((com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopVersion)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+      
+      public Builder mergeFrom(com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopVersion other) {
+        if (other == com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopVersion.getDefaultInstance()) return this;
+        if (other.hasMajorVer()) {
+          setMajorVer(other.getMajorVer());
+        }
+        if (other.hasMinorVer()) {
+          setMinorVer(other.getMinorVer());
+        }
+        if (other.hasBuildNo()) {
+          setBuildNo(other.getBuildNo());
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        return this;
+      }
+      
+      public final boolean isInitialized() {
+        if (!hasMajorVer()) {
+          
+          return false;
+        }
+        if (!hasMinorVer()) {
+          
+          return false;
+        }
+        if (!hasBuildNo()) {
+          
+          return false;
+        }
+        return true;
+      }
+      
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder(
+            this.getUnknownFields());
+        while (true) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              this.setUnknownFields(unknownFields.build());
+              onChanged();
+              return this;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                this.setUnknownFields(unknownFields.build());
+                onChanged();
+                return this;
+              }
+              break;
+            }
+            case 8: {
+              bitField0_ |= 0x00000001;
+              majorVer_ = input.readUInt32();
+              break;
+            }
+            case 16: {
+              bitField0_ |= 0x00000002;
+              minorVer_ = input.readUInt32();
+              break;
+            }
+            case 24: {
+              bitField0_ |= 0x00000004;
+              buildNo_ = input.readUInt32();
+              break;
+            }
+          }
+        }
+      }
+      
+      private int bitField0_;
+      
+      // required uint32 majorVer = 1;
+      private int majorVer_ ;
+      public boolean hasMajorVer() {
+        return ((bitField0_ & 0x00000001) == 0x00000001);
+      }
+      public int getMajorVer() {
+        return majorVer_;
+      }
+      public Builder setMajorVer(int value) {
+        bitField0_ |= 0x00000001;
+        majorVer_ = value;
+        onChanged();
+        return this;
+      }
+      public Builder clearMajorVer() {
+        bitField0_ = (bitField0_ & ~0x00000001);
+        majorVer_ = 0;
+        onChanged();
+        return this;
+      }
+      
+      // required uint32 minorVer = 2;
+      private int minorVer_ ;
+      public boolean hasMinorVer() {
+        return ((bitField0_ & 0x00000002) == 0x00000002);
+      }
+      public int getMinorVer() {
+        return minorVer_;
+      }
+      public Builder setMinorVer(int value) {
+        bitField0_ |= 0x00000002;
+        minorVer_ = value;
+        onChanged();
+        return this;
+      }
+      public Builder clearMinorVer() {
+        bitField0_ = (bitField0_ & ~0x00000002);
+        minorVer_ = 0;
+        onChanged();
+        return this;
+      }
+      
+      // required uint32 buildNo = 3;
+      private int buildNo_ ;
+      public boolean hasBuildNo() {
+        return ((bitField0_ & 0x00000004) == 0x00000004);
+      }
+      public int getBuildNo() {
+        return buildNo_;
+      }
+      public Builder setBuildNo(int value) {
+        bitField0_ |= 0x00000004;
+        buildNo_ = value;
+        onChanged();
+        return this;
+      }
+      public Builder clearBuildNo() {
+        bitField0_ = (bitField0_ & ~0x00000004);
+        buildNo_ = 0;
+        onChanged();
+        return this;
+      }
+      
+      // @@protoc_insertion_point(builder_scope:scope.DesktopVersion)
+    }
+    
+    static {
+      defaultInstance = new DesktopVersion(true);
+      defaultInstance.initFields();
+    }
+    
+    // @@protoc_insertion_point(class_scope:scope.DesktopVersion)
+  }
+  
   private static com.google.protobuf.Descriptors.Descriptor
     internal_static_scope_DesktopStringID_descriptor;
   private static
@@ -1523,6 +2549,16 @@ public final class DesktopUtilsProtos {
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_scope_DesktopPid_fieldAccessorTable;
+  private static com.google.protobuf.Descriptors.Descriptor
+    internal_static_scope_DesktopProduct_descriptor;
+  private static
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_scope_DesktopProduct_fieldAccessorTable;
+  private static com.google.protobuf.Descriptors.Descriptor
+    internal_static_scope_DesktopVersion_descriptor;
+  private static
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_scope_DesktopVersion_fieldAccessorTable;
   
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -1535,9 +2571,13 @@ public final class DesktopUtilsProtos {
       "\n\ntemp.proto\022\005scope\"#\n\017DesktopStringID\022\020" +
       "\n\010enumText\030\001 \002(\t\"!\n\021DesktopStringText\022\014\n" +
       "\004text\030\001 \002(\t\"\033\n\013DesktopPath\022\014\n\004path\030\001 \002(\t" +
-      "\"\031\n\nDesktopPid\022\013\n\003pid\030\001 \002(\rB;\n#com.opera" +
-      ".core.systems.scope.protosB\022DesktopUtils" +
-      "ProtosH\001"
+      "\"\031\n\nDesktopPid\022\013\n\003pid\030\001 \002(\r\"S\n\016DesktopPr" +
+      "oduct\022\023\n\013productType\030\001 \002(\r\022\027\n\017labsProduc" +
+      "tName\030\002 \002(\t\022\023\n\013packageType\030\003 \002(\t\"E\n\016Desk" +
+      "topVersion\022\020\n\010majorVer\030\001 \002(\r\022\020\n\010minorVer" +
+      "\030\002 \002(\r\022\017\n\007buildNo\030\003 \002(\rB;\n#com.opera.cor" +
+      "e.systems.scope.protosB\022DesktopUtilsProt" +
+      "osH\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -1576,6 +2616,22 @@ public final class DesktopUtilsProtos {
               new java.lang.String[] { "Pid", },
               com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopPid.class,
               com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopPid.Builder.class);
+          internal_static_scope_DesktopProduct_descriptor =
+            getDescriptor().getMessageTypes().get(4);
+          internal_static_scope_DesktopProduct_fieldAccessorTable = new
+            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+              internal_static_scope_DesktopProduct_descriptor,
+              new java.lang.String[] { "ProductType", "LabsProductName", "PackageType", },
+              com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopProduct.class,
+              com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopProduct.Builder.class);
+          internal_static_scope_DesktopVersion_descriptor =
+            getDescriptor().getMessageTypes().get(5);
+          internal_static_scope_DesktopVersion_fieldAccessorTable = new
+            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+              internal_static_scope_DesktopVersion_descriptor,
+              new java.lang.String[] { "MajorVer", "MinorVer", "BuildNo", },
+              com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopVersion.class,
+              com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopVersion.Builder.class);
           return null;
         }
       };
