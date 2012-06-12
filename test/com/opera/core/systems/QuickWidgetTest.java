@@ -85,7 +85,7 @@ public class QuickWidgetTest extends OperaDesktopDriverTestCase {
   }
 
   @Test
-  //@Ignore
+  @Ignore // TODO(andreastt): Needs investigation
   // TODO(andreastt): Wouldn't it be better to match two lists here?
   public void getQuickWidgetListHasSameInformationAsFindWidgetByName() {
     Integer windowID = driver.getActiveQuickWindowID();
