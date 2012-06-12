@@ -92,6 +92,7 @@ public abstract class AbstractTestCase implements TestCase {
   @AfterClass
   public static void resetSettings() {
     settings = new OperaSettings();
+    spawnDriver = true;
   }
 
   public TestDriver createFreshDriver() {
