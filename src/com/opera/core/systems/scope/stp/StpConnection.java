@@ -540,8 +540,7 @@ public class StpConnection implements SocketListener {
 
         // We get exceptions when, in the ECMAScript services, we use a runtime that doesn't exist.
         // We can ignore these exceptions and carry on.
-        if ((service.equals("ecmascript-debugger") &&
-             status == Status.INTERNAL_ERROR.getNumber()) ||
+        if (((service.equals("ecmascript-debugger") || service.equals("ecmascript")) && status == Status.INTERNAL_ERROR.getNumber()) ||
             (service.equals("ecmascript") && status == Status.BAD_REQUEST.getNumber())) {
           signalResponse(error.getTag(), null);
         } else {
