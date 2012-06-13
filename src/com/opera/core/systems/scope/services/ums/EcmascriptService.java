@@ -399,12 +399,9 @@ public class EcmascriptService extends AbstractEcmascriptService implements
 
   protected Runtime findRuntime(int windowId) {
     createAllRuntimes();
-    Runtime runtime =
-        (Runtime) xpathPointer(runtimesList.values(),
-                               "/.[htmlFramePath='" + currentFramePath + "' and windowID='"
-                               + windowId + "']")
-            .getValue();
-    return runtime;
+    return (Runtime) xpathPointer(runtimesList.values(),
+                                  String.format("/.[htmlFramePath='%s' and windowID='%d']",
+                                                currentFramePath, windowId)).getValue();
   }
 
   /**
