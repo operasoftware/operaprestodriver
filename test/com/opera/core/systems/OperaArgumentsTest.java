@@ -137,6 +137,14 @@ public class OperaArgumentsTest {
   }
 
   @Test
+  public void testParsingGeometrySetting() {
+    OperaArguments parsed = OperaArguments.parse("-geometry 1600x1200+0+0");
+    assertEquals("geometry", parsed.get(0).getArgument());
+    assertEquals("1600x1200+0+0", parsed.get(0).getValue());
+    assertEquals(1, parsed.size());
+  }
+
+  @Test
   public void testMerge() {
     arguments.add("foo");
     OperaArguments extraArguments = new OperaArguments();
