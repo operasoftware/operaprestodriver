@@ -374,11 +374,9 @@ public class EcmaScriptDebugger extends AbstractEcmascriptService implements
 
   protected RuntimeInfo findRuntime(int windowId) {
     createAllRuntimes();
-    RuntimeInfo runtime = (RuntimeInfo) xpathPointer(
-        runtimesList.values(),
-        "/.[htmlFramePath='" + currentFramePath + "' and windowID='" + windowId
-        + "']").getValue();
-    return runtime;
+    return (RuntimeInfo) xpathPointer(runtimesList.values(),
+                                      String.format("/.[htmlFramePath='%s' and windowID='%d']",
+                                                    currentFramePath, windowId)).getValue();
   }
 
   /**
