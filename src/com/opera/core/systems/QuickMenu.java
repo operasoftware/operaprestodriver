@@ -58,6 +58,16 @@ public class QuickMenu {
   }
 
   /**
+   * It's assumed here that a menu won't be passed to Watir if it is not visible. This is probably
+   * not entirely true and probably will need changing.
+   *
+   * @return Always returns true.
+   */
+  public boolean isVisible() {
+    return true;
+  }
+
+  /**
    * Get the windowId of the window the Menu is attached to. Note: Only set for menubars, and only
    * on windows and *nix.
    *

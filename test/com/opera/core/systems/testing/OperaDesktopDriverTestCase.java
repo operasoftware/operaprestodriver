@@ -14,30 +14,29 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package com.opera.core.systems.testing.drivers;
+package com.opera.core.systems.testing;
 
-import com.opera.core.systems.OperaDriver;
-import com.opera.core.systems.OperaSettings;
+import com.opera.core.systems.testing.drivers.TestOperaDesktopDriver;
+import com.opera.core.systems.testing.drivers.TestOperaDesktopDriverSupplier;
 
 /**
- * Provides a plain, default {@link OperaDriver} with popup blocking disabled.
+ * Test framework for {@link com.opera.core.systems.OperaDesktopDriver}.
  *
  * @author Andreas Tolf Tolfsen <andreastt@opera.com>
+ * @see OperaDriverTestCase
  */
-public class DefaultOperaDriverSupplier extends AbstractOperaDriverSupplier {
+public abstract class OperaDesktopDriverTestCase extends AbstractTestCase {
 
-  public DefaultOperaDriverSupplier() {
-    super();
+  protected TestOperaDesktopDriver driver;
+
+  public OperaDesktopDriverTestCase() {
+    super(new TestOperaDesktopDriverSupplier());
   }
 
-  public DefaultOperaDriverSupplier(OperaSettings settings) {
-    super(settings);
-  }
-
-  public OperaDriver get() {
-    OperaDriver driver = new OperaDriver(getSettings());
-    driver.preferences().set("User Prefs", "Ignore Unrequested Popups", false);
-    return driver;
+  @Override
+  public void createDriverIfNecessary() {
+    super.createDriverIfNecessary();
+    driver = (TestOperaDesktopDriver) super.driver;
   }
 
 }

@@ -16,6 +16,8 @@ limitations under the License.
 
 package com.opera.core.systems;
 
+import com.google.common.collect.ImmutableMap;
+
 import com.opera.core.systems.runner.launcher.OperaLauncherRunner;
 import com.opera.core.systems.scope.exceptions.CommunicationException;
 import com.opera.core.systems.scope.internal.OperaIntervals;
@@ -28,6 +30,7 @@ import com.opera.core.systems.scope.services.ISystemInput;
 import com.opera.core.systems.util.ProfileUtils;
 
 import org.openqa.selenium.Capabilities;
+import org.openqa.selenium.Platform;
 
 import java.io.File;
 import java.util.Collections;
@@ -55,19 +58,26 @@ public class OperaDesktopDriver extends OperaDriver {
   private String cachePreferencesPath;
 
   public OperaDesktopDriver() {
-    super();
-    initDesktopDriver();
+    this(new OperaSettings());
   }
 
   /**
-   * Constructor that starts Opera if it's not running.
+   * Starts Opera with the given set of desired capabilities.
    *
-   * @param c Settings for binary path to Opera, prefs directory, arguments and more.
+   * @param capabilities a {@link org.openqa.selenium.remote.DesiredCapabilities} object containing
+   *                     various settings for the driver and the browser
    */
-  public OperaDesktopDriver(Capabilities c) {
-    // OperaDriver constructor will initialize services and start Opera
-    // if the binaryPath is set in settings (by calling init in OperaDriver)
-    super(c);
+  public OperaDesktopDriver(Capabilities capabilities) {
+    this(new OperaSettings().merge(capabilities));
+  }
+
+  /**
+   * Starts Opera with the given settings.
+   *
+   * @param settings Opera specific settings
+   */
+  public OperaDesktopDriver(OperaSettings settings) {
+    super(settings);
     initDesktopDriver();
   }
 
@@ -116,7 +126,7 @@ public class OperaDesktopDriver extends OperaDriver {
 
       String operaPath = getOperaPath();
 
-      logger.info("OperaBinaryLocation retrieved from Opera: " + operaPath);
+      logger.fine("OperaBinaryLocation retrieved from Opera: " + operaPath);
 
       if (operaPath.length() > 0) {
         settings.setBinary(new File(operaPath));
@@ -128,7 +138,9 @@ public class OperaDesktopDriver extends OperaDriver {
         getScopeServices().quit(runner);
 
         // Delete the profile to start the first test with a clean profile
-        profileUtils.deleteProfile();
+        if (!profileUtils.deleteProfile()) {
+          logger.severe("Could not delete profile");
+        }
 
         // Work around stop and restart Opera so the Launcher has control of it now
         // Initialising the services will start Opera if the OperaLauncherRunner is
@@ -138,22 +150,27 @@ public class OperaDesktopDriver extends OperaDriver {
     }
   }
 
+  /**
+   * Required service dependencies mapped to minimum version for OperaDesktopDriver to work.
+   *
+   * @return required services and their minimum versions
+   */
   @Override
-  protected Map<String, String> getServicesList() {
-    Map<String, String> versions = super.getServicesList();
-    // This is the minimum versions of the services this version
-    // of the web-driver require work
-    versions.put("desktop-window-manager", "2.0");
-    versions.put("system-input", "1.0");
-    versions.put("desktop-utils", "2.0");
-    return versions;
+  protected Map<String, String> getRequiredServices() {
+    Map<String, String> versions = super.getRequiredServices();
+    ImmutableMap.Builder<String, String> builder = ImmutableMap.builder();
+    builder.putAll(versions);
+    builder.put("desktop-window-manager", "2.0");
+    builder.put("system-input", "1.0");
+    builder.put("desktop-utils", "2.0");
+    return builder.build();
   }
 
   /**
    * Shuts down the driver (but not Opera)
    */
   public void quitDriver() {
-    logger.fine("Opera Desktop Driver shutting down");
+    logger.fine("OperaDesktopDriver shutting down");
     getScopeServices().shutdown();
     if (runner != null) {
       runner.shutdown();
@@ -174,7 +191,6 @@ public class OperaDesktopDriver extends OperaDriver {
         runner.stopOpera();
       }
     } else {
-
       // Quit with action as opera wasn't started with the launcher
       String operaPath = desktopUtils.getOperaPath();
       logger.info("OperaBinaryLocation retrieved from Opera: " + operaPath);
@@ -357,6 +373,7 @@ public class OperaDesktopDriver extends OperaDriver {
    * @return QuickWidget or null if no matching widget found
    */
   public QuickWidget findWidgetByStringId(QuickWidgetType type, int windowId, String stringId) {
+
     String text = desktopUtils.getString(stringId, true);
     return findWidgetByText(type, windowId, text);
   }
@@ -534,6 +551,10 @@ public class OperaDesktopDriver extends OperaDriver {
    */
   public String getString(String enumText, boolean stripAmpersand) {
     return desktopUtils.getString(enumText, stripAmpersand);
+  }
+
+  public String getSubstitutedString(String[] arg, boolean stripAmpersand) {
+    return desktopUtils.getSubstitutedString(arg, stripAmpersand);
   }
 
   /**
@@ -723,6 +744,26 @@ public class OperaDesktopDriver extends OperaDriver {
                                                              .getValue());
   }
 
+  // TODO: RETURN SOMETHING ELSE THAN WINDOW ID??
+
+  /**
+   * Waits until new page is shown in the window is shown, and then returns the window id of the
+   * window
+   *
+   * @param windowName - window to wait for shown event on
+   * @return id of window
+   */
+  public int waitForWindowPageChanged(String windowName) {
+    if (getScopeServices().getConnection() == null) {
+      throw new CommunicationException(
+          "waiting for a window failed because Opera is not connected.");
+    }
+
+    return getScopeServices().waitForDesktopWindowPageChanged(windowName,
+                                                              OperaIntervals.WINDOW_EVENT_TIMEOUT
+                                                                  .getValue());
+  }
+
   /**
    * Waits until the window is loaded and then returns the window id of the window.
    *
@@ -808,20 +849,37 @@ public class OperaDesktopDriver extends OperaDriver {
     // Always delete and copy over a test profile except for when running
     // the first test which doesn't have a profile to copy over
     if (!firstTestRun || new File(newPrefs).exists()) {
-      if (!profileUtils.isMainProfile(smallPreferencesPath)
-          && !profileUtils.isMainProfile(largePreferencesPath)
-          && !profileUtils.isMainProfile(cachePreferencesPath)) {
+      if (!profileUtils.isMainProfile(smallPreferencesPath) &&
+          !profileUtils.isMainProfile(largePreferencesPath) &&
+          !profileUtils.isMainProfile(cachePreferencesPath)) {
         // Quit and wait for opera to quit properly
         quitOpera();
 
-        // Cleanup old profile
-        /* boolean deleted = */
-        profileUtils.deleteProfile();
+        // Due to problems with quitting the Opera desktop application on Windows we introduce this
+        // workaround.  This should be fixed in some other way that would allow us to determine in a
+        // reliable way if Opera quit already.
+        if (Platform.getCurrent().is(Platform.WINDOWS)) {
+          try {
+            Thread.sleep(2000);
+          } catch (InterruptedException e) {
+            // fall through
+          }
+        }
 
-        // Copy in the profile for the test (only if it exists)
-        // returns true if copied, else false
-        /* deleted = */
-        profileUtils.copyProfile(newPrefs);
+        // Cleanup old profile
+        if (!profileUtils.deleteProfile()) {
+          logger.severe("Could not delete profile");
+        }
+
+        // Copy the profile for the test. This method will return false in case the copying fails or
+        // if there is no profile to be copied, so we should check that first here.
+        if (!new File(newPrefs).exists()) {
+          logger.finer("The '" + newPrefs + "' directory doesn't exist, omitting profile copying.");
+        } else if (!profileUtils.copyProfile(newPrefs)) {
+          logger.severe("Failed to copy profile from '" + newPrefs);
+        } else {
+          logger.finer("Profile from '" + newPrefs + "' copied OK");
+        }
 
         // Relaunch Opera and the webdriver service connection
         startOpera();
@@ -845,7 +903,9 @@ public class OperaDesktopDriver extends OperaDriver {
     // Don't delete in no-launcher mode
     if (runner != null && !runner.isOperaRunning()) {
       // Will only delete profile if it's not a default main profile
-      profileUtils.deleteProfile();
+      if (!profileUtils.deleteProfile()) {
+        logger.severe("Could not delete profile");
+      }
     } else {
       logger.warning("Cannot delete profile while Opera is running");
     }

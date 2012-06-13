@@ -774,7 +774,6 @@ public class OperaSettings {
    * @return the Opera profile
    */
   public OperaProfile profile() {
-
     return (OperaProfile) options.get(PROFILE).getValue();
   }
 

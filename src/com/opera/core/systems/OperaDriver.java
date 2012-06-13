@@ -163,10 +163,10 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
   /**
    * Starts Opera with the given settings.
    *
-   * @param s Opera specific settings
+   * @param settings Opera specific settings
    */
-  public OperaDriver(OperaSettings s) {
-    settings = s;
+  public OperaDriver(OperaSettings settings) {
+    this.settings = settings;
 
     if (settings.autostart()) {
       runner = new OperaLauncherRunner(settings);
@@ -229,9 +229,11 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
   }
 
   /**
-   * @return a map of service names to the minimum versions we require.
+   * List of required services for this version of OperaDriver to function.
+   *
+   * @return a map of service names to the minimum versions we require
    */
-  protected Map<String, String> getServicesList() {
+  protected Map<String, String> getRequiredServices() {
     ImmutableMap.Builder<String, String> versions = ImmutableMap.builder();
     versions.put("ecmascript-debugger", "5.0");
     versions.put("window-manager", "2.0");
@@ -248,7 +250,9 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
    */
   private void createScopeServices() {
     try {
-      services = new ScopeServices(getServicesList(), settings.getPort(), !settings.autostart());
+      services = new ScopeServices(getRequiredServices(),
+                                   settings.getPort(),
+                                   !settings.autostart());
       services.startStpThread();
     } catch (IOException e) {
       throw new WebDriverException(e);
@@ -262,15 +266,25 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
   public void quit() {
     try {
       gc();
-      services.quit();
+
+      if (!settings.hasDetach()) {
+        services.quit();
+      } else {
+        services.shutdown();
+      }
+
       if (runner != null) {
-        runner.stopOpera();
+        if (!settings.hasDetach()) {
+          runner.stopOpera();
+        }
         runner.shutdown();
       }
     } catch (Exception e) {
       // nothing we can do
     } finally {
-      settings.profile().cleanUp();
+      if (!settings.hasDetach()) {
+        settings.profile().cleanUp();
+      }
       Closeables.closeQuietly(logFile);
     }
   }

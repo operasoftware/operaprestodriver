@@ -18,7 +18,7 @@ package com.opera.core.systems;
 
 
 import com.opera.core.systems.scope.exceptions.CommunicationException;
-import com.opera.core.systems.testing.drivers.OperaDriverBuilder;
+import com.opera.core.systems.testing.drivers.TestDriverBuilder;
 import com.opera.core.systems.testing.drivers.TestOperaDriver;
 import com.opera.core.systems.testing.drivers.TestOperaDriverSupplier;
 
@@ -38,7 +38,7 @@ public class CrashTest {
 
   @Before
   public void beforeEach() {
-    driver = (TestOperaDriver) new OperaDriverBuilder(new TestOperaDriverSupplier()).get();
+    driver = (TestOperaDriver) new TestDriverBuilder(new TestOperaDriverSupplier()).get();
   }
 
   @After

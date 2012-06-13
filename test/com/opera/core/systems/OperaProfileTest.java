@@ -26,7 +26,6 @@ import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.json.JSONException;
-import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -53,13 +52,17 @@ public class OperaProfileTest extends OperaDriverTestCase {
   public File existingProfile;
 
   @Rule
-  public TemporaryFolder existingProfileDirectory = new TemporaryFolder();
+  public TemporaryFolder existingProfileDirectory;
 
   @Rule
-  public TemporaryFolder temporaryProfileDirectory = new TemporaryFolder();
+  public TemporaryFolder temporaryProfileDirectory;
 
   @Before
   public void beforeEach() throws IOException {
+    existingProfileDirectory = new TemporaryFolder();
+    temporaryProfileDirectory = new TemporaryFolder();
+    existingProfileDirectory.create();
+    temporaryProfileDirectory.create();
     existingProfile = existingProfileDirectory.getRoot();
     temporaryProfile = temporaryProfileDirectory.getRoot();
 

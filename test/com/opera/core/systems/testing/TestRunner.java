@@ -20,7 +20,9 @@ package com.opera.core.systems.testing;
 
 import com.google.common.base.Throwables;
 
+import com.opera.core.systems.OperaProduct;
 import com.opera.core.systems.OperaSettings;
+import com.opera.core.systems.testing.drivers.TestDriver;
 
 import org.junit.internal.runners.model.ReflectiveCallable;
 import org.junit.internal.runners.statements.Fail;
@@ -30,23 +32,32 @@ import org.junit.runners.BlockJUnit4ClassRunner;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.InitializationError;
 import org.junit.runners.model.Statement;
+import org.openqa.selenium.Platform;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.LinkedHashMap;
 import java.util.logging.Level;
 
-public class OperaDriverTestRunner extends BlockJUnit4ClassRunner {
+/**
+ * Custom JUnit test runner that allows test igorance based on both test classes and methods based
+ * on given conditions.
+ */
+public class TestRunner extends BlockJUnit4ClassRunner {
 
-  private final TestIgnorance ignorance = new TestIgnorance();
+  private final TestIgnorance ignorance;
 
-  public OperaDriverTestRunner(Class<?> testClass) throws InitializationError {
+  private Object test;
+  private Throwable testException;
+
+  /**
+   * Creates a {@link BlockJUnit4ClassRunner} to run {@code testClass}.
+   *
+   * @param testClass the class under test
+   * @throws InitializationError if the test class is malformed
+   */
+  public TestRunner(Class<?> testClass) throws InitializationError {
     super(testClass);
-  }
-
-  @Override
-  protected void runChild(final FrameworkMethod method, RunNotifier notifier) {
-    Object test = null;
-    Description description = describeChild(method);
 
     try {
       test = new ReflectiveCallable() {
@@ -56,7 +67,40 @@ public class OperaDriverTestRunner extends BlockJUnit4ClassRunner {
         }
       }.run();
     } catch (Throwable e) {
-      runLeaf(new Fail(e), description, notifier);
+      testException = e;
+    }
+
+    if (test instanceof TestCase) {
+      TestCase base = (TestCase) test;
+      TestDriver driver = base.getWrappedDriver();
+
+      // If any driver is present we don't need a different supplier's driver to initialize
+      // TestIgnorance.  This skips the supplies(klass) check in createDriverIfNecessary().
+      if (driver == null || !driver.isRunning()) {
+        base.createDriverIfNecessary();
+        driver = base.getWrappedDriver();
+      }
+
+      ignorance = new TestIgnorance(driver.getServices().getAvailableServices(),
+                                    driver.getRunner() != null,
+                                    driver.getServices().isOperaIdleAvailable(),
+                                    driver.utils().getPlatform(),
+                                    driver.utils().getProduct());
+    } else {
+      ignorance = new TestIgnorance(new LinkedHashMap<String, String>(),
+                                    false,
+                                    false,
+                                    Platform.getCurrent(),
+                                    OperaProduct.ALL);
+    }
+  }
+
+  @Override
+  protected void runChild(final FrameworkMethod method, RunNotifier notifier) {
+    Description description = describeChild(method);
+
+    if (test == null) {
+      runLeaf(new Fail(testException), description, notifier);
     }
 
     // There is a difference between ignore annotations and annotations performing an action.
@@ -82,7 +126,7 @@ public class OperaDriverTestRunner extends BlockJUnit4ClassRunner {
     if (test instanceof OperaDriverTestCase) {
       OperaDriverTestCase base = (OperaDriverTestCase) test;
       statement = withNoDriver(base, statement);
-      statement = withNoDriverAfterTest(method, statement);
+      statement = withNoDriverAfterTest(method, base, statement);
       statement = withFreshDriver(method, base, statement);
       statement = withSettings(base, statement);
     }
@@ -90,25 +134,27 @@ public class OperaDriverTestRunner extends BlockJUnit4ClassRunner {
     return statement;
   }
 
-  private Statement withNoDriver(OperaDriverTestCase test, final Statement statement) {
+  private Statement withNoDriver(final TestCase test, final Statement statement) {
     final NoDriver annotation = test.getClass().getAnnotation(NoDriver.class);
 
     if (annotation == null) {
-      OperaDriverTestCase.setCreateDriver(true);
+      test.setCreateDriver(true);
+
       return statement;
     }
 
     return new Statement() {
       @Override
       public void evaluate() throws Throwable {
-        OperaDriverTestCase.setCreateDriver(false);
-        OperaDriverTestCase.removeDriver();
+        test.setCreateDriver(false);
+        test.removeDriver();
         statement.evaluate();
       }
     };
   }
 
-  private Statement withNoDriverAfterTest(FrameworkMethod method, final Statement statement) {
+  private Statement withNoDriverAfterTest(FrameworkMethod method, final TestCase test,
+                                          final Statement statement) {
     NoDriverAfter annotation = method.getAnnotation(NoDriverAfter.class);
     if (annotation == null) {
       return statement;
@@ -120,13 +166,13 @@ public class OperaDriverTestRunner extends BlockJUnit4ClassRunner {
         try {
           statement.evaluate();
         } finally {
-          OperaDriverTestCase.removeDriver();
+          test.removeDriver();
         }
       }
     };
   }
 
-  private Statement withFreshDriver(FrameworkMethod method, final OperaDriverTestCase test,
+  private Statement withFreshDriver(FrameworkMethod method, final TestCase test,
                                     final Statement statement) {
     FreshDriver annotation = method.getAnnotation(FreshDriver.class);
 
@@ -137,15 +183,15 @@ public class OperaDriverTestRunner extends BlockJUnit4ClassRunner {
     return new Statement() {
       @Override
       public void evaluate() throws Throwable {
-        OperaDriverTestCase.setSettings(new OperaSettings());
-        OperaDriverTestCase.removeDriver();
+        test.setSettings(new OperaSettings());
+        test.removeDriver();
         test.createDriverIfNecessary();
         statement.evaluate();
       }
     };
   }
 
-  private Statement withSettings(OperaDriverTestCase test, final Statement statement) {
+  private Statement withSettings(final TestCase test, final Statement statement) {
     final Settings annotation = test.getClass().getAnnotation(Settings.class);
 
     if (annotation == null) {
@@ -155,7 +201,7 @@ public class OperaDriverTestRunner extends BlockJUnit4ClassRunner {
     return new Statement() {
       @Override
       public void evaluate() throws Throwable {
-        OperaSettings currentSettings = OperaDriverTestCase.getSettings();
+        OperaSettings currentSettings = test.getSettings();
 
         OperaSettings newSettings = new OperaSettings();
         newSettings.setIdle(annotation.idle());
@@ -164,8 +210,8 @@ public class OperaDriverTestRunner extends BlockJUnit4ClassRunner {
         // We only need to restart the driver if the settings are different
         if (currentSettings.useIdle() != newSettings.useIdle() ||
             currentSettings.logging().getLevel() != newSettings.logging().getLevel()) {
-          OperaDriverTestCase.setSettings(newSettings);
-          OperaDriverTestCase.removeDriver();
+          test.setSettings(newSettings);
+          test.removeDriver();
         }
 
         statement.evaluate();

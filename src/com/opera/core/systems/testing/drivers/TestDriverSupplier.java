@@ -21,18 +21,16 @@ import com.google.common.base.Supplier;
 import com.opera.core.systems.OperaDriver;
 import com.opera.core.systems.OperaSettings;
 
-import org.openqa.selenium.Capabilities;
-
 /**
- * OperaDriverSupplier extends the Google Guava {@link Supplier<OperaDriver>} interface to make it
+ * TestDriverSupplier extends the Google Guava {@link Supplier<OperaDriver>} interface to make it
  * possible to specify capabilities on a supplier.
  *
  * A driver supplier allows easy construction of differently configured drivers.
  *
  * @author Andreas Tolf Tolfsen <andreastt@opera.com>
- * @see OperaDriverBuilder
+ * @see TestDriverBuilder
  */
-public interface OperaDriverSupplier extends Supplier<OperaDriver> {
+public interface TestDriverSupplier extends Supplier<TestDriver> {
 
   /**
    * Changes the settings for this supplier.
@@ -48,19 +46,6 @@ public interface OperaDriverSupplier extends Supplier<OperaDriver> {
    */
   OperaSettings getSettings();
 
-  /**
-   * Changes the capabilities for this supplier.
-   *
-   * @param capabilities new capabilities
-   */
-  void setCapabilities(Capabilities capabilities);
-
-  /**
-   * Gets the capabilities of this supplier.
-   *
-   * @return a set of capabilities
-   */
-  @SuppressWarnings("unused")
-  Capabilities getCapabilities();
+  boolean supplies(Class<? extends TestDriver> klass);
 
 }

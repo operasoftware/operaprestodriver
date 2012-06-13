@@ -18,10 +18,13 @@ limitations under the License.
 
 package com.opera.core.systems.testing;
 
-import com.opera.core.systems.ScopeServices;
+import com.opera.core.systems.OperaProduct;
 import com.opera.core.systems.util.VersionUtil;
 
 import org.junit.runners.model.FrameworkMethod;
+import org.openqa.selenium.Platform;
+
+import java.util.Map;
 
 /**
  * Decides whether a test class or a method should be ignored.
@@ -29,31 +32,35 @@ import org.junit.runners.model.FrameworkMethod;
 public class TestIgnorance {
 
   private final IgnoreComparator ignoreComparator = new IgnoreComparator();
-  private final ScopeServices services;
-  private final Boolean idleEnabled;
+  private final Map<String, String> services;
+  private final boolean hasLauncher;
+  private final boolean idleEnabled;
 
-  public TestIgnorance() {
-    services = OperaDriverTestCase.currentServices();
-    idleEnabled = OperaDriverTestCase.currentHasIdle();
-    ignoreComparator.setCurrentPlatform(OperaDriverTestCase.currentPlatform());
-    ignoreComparator.setCurrentProduct(OperaDriverTestCase.currentProduct());
+  public TestIgnorance(Map<String, String> availableServices, boolean hasLauncher, boolean hasIdle,
+                       Platform platform, OperaProduct product) {
+    services = availableServices;
+    idleEnabled = hasIdle;
+    this.hasLauncher = hasLauncher;
+    ignoreComparator.setCurrentPlatform(platform);
+    ignoreComparator.setCurrentProduct(product);
   }
 
   // JUnit 4
   public boolean isIgnored(FrameworkMethod method, Object test) {
-    boolean ignored = ignoreComparator.shouldIgnore(test.getClass().getAnnotation(Ignore.class)) ||
-                      ignoreComparator.shouldIgnore(method.getMethod().getAnnotation(Ignore.class));
+    return ignoreComparator.shouldIgnore(test.getClass().getAnnotation(Ignore.class)) ||
+           ignoreComparator.shouldIgnore(method.getMethod().getAnnotation(Ignore.class)) ||
 
-    ignored |= isIgnoredBecauseOfJUnit4Ignore(test.getClass().getAnnotation(org.junit.Ignore.class));
-    ignored |= isIgnoredBecauseOfJUnit4Ignore(method.getMethod().getAnnotation(org.junit.Ignore.class));
+           isIgnoredBecauseOfJUnit4Ignore(test.getClass().getAnnotation(org.junit.Ignore.class)) ||
+           isIgnoredBecauseOfJUnit4Ignore(method.getMethod().getAnnotation(org.junit.Ignore.class)) ||
 
-    ignored |= isIgnoredDueToIdle(test.getClass().getAnnotation(IdleEnabled.class));
-    ignored |= isIgnoredDueToIdle(method.getMethod().getAnnotation(IdleEnabled.class));
+           isIgnoredDueToIdle(test.getClass().getAnnotation(IdleEnabled.class)) ||
+           isIgnoredDueToIdle(method.getMethod().getAnnotation(IdleEnabled.class)) ||
 
-    ignored |= isIgnoredDueToLackingService(test.getClass().getAnnotation(RequiresService.class));
-    ignored |= isIgnoredDueToLackingService(method.getClass().getAnnotation(RequiresService.class));
+           isIgnoredDueToLackingService(test.getClass().getAnnotation(RequiresService.class)) ||
+           isIgnoredDueToLackingService(method.getClass().getAnnotation(RequiresService.class)) ||
 
-    return ignored;
+           isIgnoredBecauseOfLackingLocalEnvironment(test.getClass().getAnnotation(NeedsLocalEnvironment.class)) ||
+           isIgnoredBecauseOfLackingLocalEnvironment(method.getClass().getAnnotation(NeedsLocalEnvironment.class));
   }
 
   private boolean isIgnoredBecauseOfJUnit4Ignore(org.junit.Ignore annotation) {
@@ -69,15 +76,21 @@ public class TestIgnorance {
       return false;
     }
 
-    if (!services.getListedServices().contains(annotation.service())) {
+    // If service is not available, ignore test.  If a version requirement has not been specified,
+    // ignore the test regardless of version.
+    if (!services.containsKey(annotation.service())) {
       return true;
-    } else if (services.getListedServices().contains(annotation.service()) &&
+    } else if (services.containsKey(annotation.service()) &&
                annotation.version() == null) {
       return false;
     }
 
-    return VersionUtil.compare(annotation.version(), "maxVersion") >= 0 ||
-           VersionUtil.compare(annotation.version(), services.getMinVersionFor(annotation.service())) < 0;
+    // Is available service version greater than the test's required version?
+    return VersionUtil.compare(services.get(annotation.service()), annotation.version()) < 0;
+  }
+
+  private boolean isIgnoredBecauseOfLackingLocalEnvironment(NeedsLocalEnvironment annotation) {
+    return annotation != null && hasLauncher;
   }
 
 }

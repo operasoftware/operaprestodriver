@@ -18,43 +18,39 @@ package com.opera.core.systems.testing.drivers;
 
 import com.opera.core.systems.OperaSettings;
 
-import org.openqa.selenium.Capabilities;
-import org.openqa.selenium.remote.DesiredCapabilities;
+import java.util.logging.Level;
 
 /**
- * Implements shared functionality across the various {@link OperaDriverSupplier} implementations.
+ * Implements shared functionality across the various {@link TestDriverSupplier} implementations.
  * Specifically it allows you to get and set the capabilities for a particular driver supplier.
  *
  * @author Andreas Tolf Tolfsen <andreastt@opera.com>
  */
-public abstract class AbstractOperaDriverSupplier implements OperaDriverSupplier {
+public abstract class AbstractTestDriverSupplier implements TestDriverSupplier {
 
   protected OperaSettings settings;
-  protected Capabilities capabilities;
 
-  public AbstractOperaDriverSupplier() {
+  public AbstractTestDriverSupplier() {
     setSettings(new OperaSettings());
-    setCapabilities(DesiredCapabilities.opera());
   }
 
-  public AbstractOperaDriverSupplier(OperaSettings settings) {
+  public AbstractTestDriverSupplier(OperaSettings settings) {
     setSettings(settings);
   }
 
+  // TODO(andreastt): Consider using reflection for get() as well, although inheritance is bad
+
   public void setSettings(OperaSettings newSettings) {
     settings = newSettings;
+
+    // Only override logging level if it has the default value
+    if (new OperaSettings().logging().getLevel() == settings.logging().getLevel()) {
+      settings.logging().setLevel(Level.FINE);
+    }
   }
 
   public OperaSettings getSettings() {
     return settings;
-  }
-
-  public void setCapabilities(Capabilities newCapabilities) {
-    capabilities = newCapabilities;
-  }
-
-  public Capabilities getCapabilities() {
-    return capabilities;
   }
 
 }

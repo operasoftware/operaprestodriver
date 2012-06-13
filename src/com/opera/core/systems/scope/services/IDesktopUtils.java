@@ -65,4 +65,6 @@ public interface IDesktopUtils {
    */
   int getOperaPid();
 
+  String getSubstitutedString(String[] arg, boolean stripAmpersand);
+
 }

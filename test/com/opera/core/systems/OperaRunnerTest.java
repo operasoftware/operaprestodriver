@@ -49,7 +49,7 @@ public class OperaRunnerTest extends OperaDriverTestCase {
   public String profile;
 
   @Rule
-  public TemporaryFolder temporaryProfile = new TemporaryFolder();
+  public TemporaryFolder temporaryProfile;
 
   // Replace OperaDriverTestCase setup and tear down so that we don't launch Opera
   @BeforeClass
@@ -61,8 +61,10 @@ public class OperaRunnerTest extends OperaDriverTestCase {
   }
 
   @Before
-  public void beforeEach() {
+  public void beforeEach() throws IOException {
     settings = new OperaSettings();
+    temporaryProfile = new TemporaryFolder();
+    temporaryProfile.create();
     runner = null;
 
     // Make a new copy in a temporary file system so we don't overwrite our fixture

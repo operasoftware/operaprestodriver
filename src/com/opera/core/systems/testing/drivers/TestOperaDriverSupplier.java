@@ -16,33 +16,20 @@ limitations under the License.
 
 package com.opera.core.systems.testing.drivers;
 
-import com.opera.core.systems.OperaSettings;
-
-import java.util.logging.Level;
-
 /**
  * @author Andreas Tolf Tolfsen <andreastt@opera.com>
  */
-public class TestOperaDriverSupplier extends DefaultOperaDriverSupplier {
-
-  public TestOperaDriverSupplier() {
-    super();
-  }
-
-  @SuppressWarnings("unused")
-  public TestOperaDriverSupplier(OperaSettings settings) {
-    super(settings);
-  }
+public class TestOperaDriverSupplier extends AbstractTestDriverSupplier {
 
   public TestOperaDriver get() {
-    // Only override logging level if it has the default value
-    if (new OperaSettings().logging().getLevel() == settings.logging().getLevel()) {
-      settings.logging().setLevel(Level.FINE);
-    }
-
+    // Uncomment this if you wish to connect Opera manually:
     //settings.autostart(false);
 
     return new TestOperaDriver(settings);
+  }
+
+  public boolean supplies(Class<? extends TestDriver> klass) {
+    return TestOperaDriver.class.equals(klass);
   }
 
 }

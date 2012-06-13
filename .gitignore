@@ -1,10 +1,14 @@
 *.class
 *.pyc
 .DS_Store
+.idea/codeStyleSettings.xml
+.idea/misc.xml
+.idea/scopes/scope_settings.xml
 bin/*
 pkg/*
 out/*
 probedata/
+protos/temp.proto
 release/
 src/com/opera/core/systems/test/**/*
 test_apc.txt
@@ -12,7 +16,6 @@ test-output/
 test-reports/
 doc/
 VERSION
-*.orig
 .idea/workspace.xml
 .idea/dictionaries/
 maven/src

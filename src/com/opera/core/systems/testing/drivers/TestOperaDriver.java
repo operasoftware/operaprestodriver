@@ -27,18 +27,22 @@ import com.opera.core.systems.scope.services.IWindowManager;
 import org.openqa.selenium.Capabilities;
 
 import static com.opera.core.systems.OperaProduct.CORE;
-import static com.opera.core.systems.OperaProduct.DESKTOP;
 
 /**
  * Provides access to the {@link com.opera.core.systems.runner.OperaRunner}, so we can detect
  * crashes.
  */
-public class TestOperaDriver extends OperaDriver {
-
-  public static enum ClosingStrategy {SWITCH_TO, ACTION}
+public class TestOperaDriver extends OperaDriver implements TestDriver {
 
   private final IWindowManager windowManager;
   private OperaProduct currentProduct = null;
+
+  /**
+   * Creates a new TestOperaDriver with the default settings.
+   */
+  public TestOperaDriver() {
+    this(new OperaSettings());
+  }
 
   /**
    * Creates a new TestOperaDriver with the given capabilities.
@@ -59,11 +63,6 @@ public class TestOperaDriver extends OperaDriver {
     windowManager = getScopeServices().getWindowManager();
   }
 
-  /**
-   * Provides access to {@link OperaRunner} which is used for monitoring the Opera process.
-   *
-   * @return instance of runner control interface for this driver instance
-   */
   public OperaRunner getRunner() {
     return runner;
   }
@@ -72,11 +71,6 @@ public class TestOperaDriver extends OperaDriver {
     return settings;
   }
 
-  /**
-   * Return the currently used set of capabilities.
-   *
-   * @return currently used capabilities
-   */
   @Override
   public Capabilities getCapabilities() {
     return settings.toCapabilities();
@@ -106,21 +100,6 @@ public class TestOperaDriver extends OperaDriver {
    */
   public void createWindow() {
     windowManager.createWindow();
-  }
-
-  /**
-   * Closes all windows consistently across all products and platforms.
-   */
-  public void closeAll() {
-    if (!isRunning()) {
-      return;
-    }
-
-    windowManager.closeAllWindows();
-    if (utils().getProduct().is(DESKTOP)) {
-      windowManager.createWindow();
-    }
-    switchTo().defaultContent();
   }
 
   public TestOperaUtils utils() {

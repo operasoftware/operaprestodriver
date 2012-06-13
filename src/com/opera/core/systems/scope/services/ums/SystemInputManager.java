@@ -24,9 +24,11 @@ import com.opera.core.systems.scope.protos.SystemInputProtos.ModifierPressed;
 import com.opera.core.systems.scope.protos.SystemInputProtos.MouseInfo;
 import com.opera.core.systems.scope.protos.SystemInputProtos.MouseInfo.MouseButton;
 import com.opera.core.systems.scope.services.ISystemInput;
+import com.opera.core.systems.util.WatirUtils;
 
 import java.awt.*;
 import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * SystemInputManager handles systemInput simulating real clicks, and key presses.
@@ -34,6 +36,9 @@ import java.util.List;
  * @author Adam Minchinton, Karianne Ekern
  */
 public class SystemInputManager extends AbstractService implements ISystemInput {
+
+  protected final Logger logger = Logger.getLogger(this.getClass().getName());
+  protected final ClickDelayer clickDelayer = new ClickDelayer();
 
   SystemInputManager(ScopeServices services, String version) {
     super(services, version);
@@ -53,6 +58,8 @@ public class SystemInputManager extends AbstractService implements ISystemInput 
 
   public void click(Point location, MouseButton button, int numClicks,
                     List<ModifierPressed> modifiers) {
+    clickDelayer.delayClickIfNeeded(location, button, numClicks);
+
     MouseInfo.Builder actionBuilder = MouseInfo.newBuilder();
     actionBuilder.setX(location.x);
     actionBuilder.setY(location.y);
@@ -143,5 +150,52 @@ public class SystemInputManager extends AbstractService implements ISystemInput 
     actionBuilder.setModifier(modifier);
     executeCommand(SystemInputCommand.KEYUP, actionBuilder.clone());
   }
+}
 
+/**
+ * DSK-348590 shows that two single clicks might be interpreted as a double click.
+ * Since we can't really expect the test authors to put a delay after each single click
+ * we delay a click if less time than constitutes the OS double click interval passed
+ * since the last click.
+ *
+ * This may introduce new failures to tests that actually expect that two clicks will
+ * make a double click, but that should be fixed by the test authors.
+ */
+class ClickDelayer
+{
+  protected final Logger logger = Logger.getLogger(this.getClass().getName());
+
+  protected long lastClickTime = 0;
+  protected Point lastClickLocation = null;
+  protected MouseButton lastClickMouseButton = null;
+
+  public final void delayClickIfNeeded(Point location, MouseButton button, int numClicks) {
+    if (lastClickTime > 0) {
+      if (numClicks == 1) {
+        if (button.equals(lastClickMouseButton)) {
+          if (location.equals(lastClickLocation)) {
+            long currentTime = System.currentTimeMillis();
+            long doubleClickTime = WatirUtils.getSystemDoubleClickTimeMs();
+            long timeSinceLastClick = currentTime - lastClickTime;
+            long remainingTime = doubleClickTime - timeSinceLastClick;
+
+            if (remainingTime > 0) {
+              logger.fine(String.format("Delaying click in order to avoid double-click - check your test (last click was %d ms ago, OS double click timeout is %d ms)", timeSinceLastClick, doubleClickTime));
+              try {
+                // 100 ms chosen as a safe value for avoiding the double click, this may need adapting.
+                Thread.sleep(remainingTime + 100);
+              }
+              catch (InterruptedException e) {
+                logger.warning("*** Delay was interrupted ***");
+              }
+            }
+          }
+        }
+      }
+    }
+
+    lastClickMouseButton = button;
+    lastClickLocation = location;
+    lastClickTime = System.currentTimeMillis();
+  }
 }

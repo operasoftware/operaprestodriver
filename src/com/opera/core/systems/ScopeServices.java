@@ -16,6 +16,7 @@ limitations under the License.
 
 package com.opera.core.systems;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.protobuf.AbstractMessage.Builder;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
@@ -74,7 +75,7 @@ import java.util.logging.Logger;
  */
 public class ScopeServices implements IConnectionHandler {
 
-  private final Logger logger = Logger.getLogger(this.getClass().getName());
+  private final Logger logger = Logger.getLogger(getClass().getName());
   private final Map<String, String> versions;
   private final StpThread stpThread;
   private final AtomicInteger tagCounter;
@@ -95,6 +96,7 @@ public class ScopeServices implements IConnectionHandler {
   private List<String> listedServices;
   private StringBuilder selftestOutput;
   private boolean shutdown = false;
+  private Map<String, String> availableServices;
 
   /**
    * Creates the Scope server on specified address and port, as well as enabling the required Scope
@@ -120,6 +122,14 @@ public class ScopeServices implements IConnectionHandler {
     waitForHandshake();
 
     hostInfo = getHostInfo();
+
+    // TODO(andreastt): OPDRV-75 (Clean up service version management)
+    ImmutableMap.Builder<String, String> builder = ImmutableMap.builder();
+    for (Service service : hostInfo.getServiceListList()) {
+      builder.put(service.getName(), service.getVersion());
+    }
+    availableServices = builder.build();
+
     createUmsServices(OperaFlags.ENABLE_DEBUGGER, hostInfo);
 
     connect();
@@ -207,7 +217,7 @@ public class ScopeServices implements IConnectionHandler {
   }
 
   public boolean isConnected() {
-    return connection != null;
+    return connection != null && connection.isConnected();
   }
 
   public void shutdown() {
@@ -253,7 +263,7 @@ public class ScopeServices implements IConnectionHandler {
   }
 
   /**
-   * Creates all of the services that we requested and are available. If the debugger is disabled
+   * Creates all of the services that we requested and are available.  If the debugger is disabled
    * (which currently never happens) then it creates a dummy class.
    */
   private void createUmsServices(boolean enableDebugger, HostInfo info) {
@@ -383,8 +393,7 @@ public class ScopeServices implements IConnectionHandler {
     }
   }
 
-  private ServiceResult enable(String serviceName)
-      throws InvalidProtocolBufferException {
+  private ServiceResult enable(String serviceName) throws InvalidProtocolBufferException {
     ServiceSelection.Builder selection = ServiceSelection.newBuilder();
     selection.setName(serviceName);
     Response response = executeCommand(ScopeCommand.ENABLE, selection);
@@ -403,8 +412,8 @@ public class ScopeServices implements IConnectionHandler {
         exec.action("Exit");
       }
     } catch (Exception e) {
-      // We expect a CommunicationException here, because as Opera is shutting
-      // down the connection will be closed.
+      // We expect a CommunicationException here, because as Opera is shutting down the connection
+      // will be closed.
       if (!(e instanceof CommunicationException)) {
         logger.warning("Caught exception on shut down: " + e.getMessage());
       }
@@ -422,7 +431,15 @@ public class ScopeServices implements IConnectionHandler {
         }
         timeout -= interval;
       }
+
+      if (runner.isOperaRunning()) {
+        logger.severe("Opera is still running!");
+      }
     }
+  }
+
+  public Map<String, String> getAvailableServices() {
+    return availableServices;
   }
 
   public void quit() {
@@ -482,6 +499,11 @@ public class ScopeServices implements IConnectionHandler {
   public void onDesktopWindowLoaded(DesktopWindowInfo info) {
     logger.finest("DesktopWindow loaded: windowId=" + info.getWindowID());
     waitState.onDesktopWindowLoaded(info);
+  }
+
+  public void onDesktopWindowPageChanged(DesktopWindowInfo info) {
+    logger.fine("DesktopWindow page changed: windowId=" + info.getWindowID());
+    waitState.onDesktopWindowPageChanged(info);
   }
 
   public void onQuickMenuShown(QuickMenuInfo info) {
@@ -637,6 +659,15 @@ public class ScopeServices implements IConnectionHandler {
     waitState.setWaitEvents(false);
     try {
       return waitState.waitForDesktopWindowClosed(windowName, timeout);
+    } catch (Exception e) {
+      return 0;
+    }
+  }
+
+  public int waitForDesktopWindowPageChanged(String windowName, long timeout) {
+    waitState.setWaitEvents(false);
+    try {
+      return waitState.waitForWindowPageChanged(windowName, timeout);
     } catch (Exception e) {
       return 0;
     }

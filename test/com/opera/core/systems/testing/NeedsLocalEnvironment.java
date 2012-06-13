@@ -1,5 +1,5 @@
 /*
-Copyright 2008-2012 Opera Software ASA
+Copyright 2012 Opera Software ASA
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,23 +14,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package com.opera.core.systems.scope.exceptions;
+package com.opera.core.systems.testing;
 
-import org.openqa.selenium.WebDriverException;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-/**
- * Thrown when the response is not received in the given amount of time.
- *
- * @author Deniz Turkoglu <dturkoglu@opera.com>
- */
-public class ResponseNotReceivedException extends WebDriverException {
-
-  public ResponseNotReceivedException() {
-    super();
-  }
-
-  public ResponseNotReceivedException(String message) {
-    super(message);
-  }
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.METHOD)
+public @interface NeedsLocalEnvironment {
 
 }
