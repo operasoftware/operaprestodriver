@@ -71,6 +71,7 @@ public class QuickMenuTest extends OperaDesktopDriverTestCase {
   }
 
   @Test
+  @Ignore(value = "Fails when mouse is not moved into browser viewport")
   public void clickMenuItemToOpenMenu() {
     QuickMenuItem fileMenuItem = driver.getQuickMenuItemByName("Browser View Menu");
     assertNotNull(fileMenuItem);

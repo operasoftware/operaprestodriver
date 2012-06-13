@@ -56,6 +56,7 @@ public class OperaFilePreferencesTest extends OperaDriverTestCase {
   @Before
   public void beforeEach() throws IOException {
     temporaryFolder = new TemporaryFolder();
+    temporaryFolder.create();
 
     if (driver.utils().getProduct().is(OperaProduct.DESKTOP)) {
       iniFile = temporaryFolder.newFile("operaprefs.ini");
