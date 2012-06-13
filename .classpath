@@ -14,13 +14,8 @@
 	<classpathentry kind="lib" path="lib/selenium-java-2.21.0.jar"/>
 	<classpathentry kind="lib" path="lib/guava-12.0.jar"/>
 	<classpathentry kind="lib" path="lib/gson-2.2.jar"/>
-	<classpathentry kind="lib" path="lib/jetty-6.1.26.jar"/>
-	<classpathentry kind="lib" path="lib/jetty-lite-7.2.0-repackaged-for-android.jar"/>
-	<classpathentry kind="lib" path="lib/jetty-server-7.2.0.v20101020.jar"/>
-	<classpathentry kind="lib" path="lib/jetty-servlet-7.2.0.v20101020.jar"/>
-	<classpathentry kind="lib" path="lib/jetty-servlets-7.2.0.v20101020.jar"/>
-	<classpathentry kind="lib" path="lib/jetty-webapp-7.2.0.v20101020.jar"/>
 	<classpathentry kind="lib" path="lib/servlet-api-2.5-6.1.9.jar"/>
 	<classpathentry kind="lib" path="lib/servlet-api.jar"/>
+	<classpathentry kind="lib" path="lib/webbit-0.4.8-SNAPSHOT.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
