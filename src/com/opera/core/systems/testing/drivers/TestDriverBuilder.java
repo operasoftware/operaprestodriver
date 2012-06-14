@@ -92,6 +92,7 @@ public class TestDriverBuilder implements Supplier<TestDriver> {
    * @param level the logging level you wish the driver to use
    * @return a self reference
    */
+  @SuppressWarnings("unused")
   public TestDriverBuilder modifyLogLevel(Level level) {
     loggingLevel = level;
     return this;

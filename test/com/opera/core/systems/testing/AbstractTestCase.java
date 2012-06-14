@@ -96,7 +96,7 @@ public abstract class AbstractTestCase implements TestCase {
   }
 
   public TestDriver createFreshDriver() {
-    return new TestDriverBuilder(supplier).using(settings).modifyLogLevel(Level.CONFIG).get();
+    return new TestDriverBuilder(supplier).using(settings).get();
   }
 
   public void createDriverIfNecessary() {
