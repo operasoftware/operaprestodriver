@@ -22,10 +22,11 @@ import com.opera.core.systems.OperaDriver;
 import com.opera.core.systems.OperaSettings;
 
 /**
- * TestDriverSupplier extends the Google Guava {@link Supplier<OperaDriver>} interface to make it
- * possible to specify capabilities on a supplier.
+ * A driver supplier allows easy construction of differently configured OperaDriver's.
  *
- * A driver supplier allows easy construction of differently configured drivers.
+ * TestDriverSupplier extends {@link Supplier<OperaDriver>} interface to make it possible to specify
+ * settings on a supplier and query programmatically whether it supplies a driver of the given
+ * type.
  *
  * @author Andreas Tolf Tolfsen <andreastt@opera.com>
  * @see TestDriverBuilder
@@ -40,12 +41,11 @@ public interface TestDriverSupplier extends Supplier<TestDriver> {
   void setSettings(OperaSettings settings);
 
   /**
-   * Gets the settings of this supplier.
+   * Does this supplier supply a driver of the given class?
    *
-   * @return a set of settings
+   * @param klass class to to check if this supplier supplies
+   * @return true if supplier supplies <code>klass</code>, false otherwise
    */
-  OperaSettings getSettings();
-
   boolean supplies(Class<? extends TestDriver> klass);
 
 }

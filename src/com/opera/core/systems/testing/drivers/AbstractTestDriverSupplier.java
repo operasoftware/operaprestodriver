@@ -34,10 +34,6 @@ public abstract class AbstractTestDriverSupplier implements TestDriverSupplier {
     setSettings(new OperaSettings());
   }
 
-  public AbstractTestDriverSupplier(OperaSettings settings) {
-    setSettings(settings);
-  }
-
   // TODO(andreastt): Consider using reflection for get() as well, although inheritance is bad
 
   public void setSettings(OperaSettings newSettings) {
@@ -47,10 +43,6 @@ public abstract class AbstractTestDriverSupplier implements TestDriverSupplier {
     if (new OperaSettings().logging().getLevel() == settings.logging().getLevel()) {
       settings.logging().setLevel(Level.FINE);
     }
-  }
-
-  public OperaSettings getSettings() {
-    return settings;
   }
 
 }
