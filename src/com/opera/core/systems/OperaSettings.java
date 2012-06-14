@@ -38,9 +38,11 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.ConsoleHandler;
 import java.util.logging.FileHandler;
 import java.util.logging.Handler;
 import java.util.logging.Level;
+import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
@@ -631,7 +633,8 @@ public class OperaSettings {
       checkNotNull(level);
       options.get(LOGGING_LEVEL).setValue(level);
 
-      Logger root = Logger.getLogger("");
+      Logger root = Logger.getLogger(OperaDriver.class.getPackage().getName());
+      root.addHandler(new ConsoleHandler());
       root.setLevel(level);
 
       // Set logging levels on all handlers
@@ -672,7 +675,7 @@ public class OperaSettings {
         }
 
         logFile.setLevel(getLevel());
-        Logger.getLogger("").addHandler(logFile);
+        Logger.getLogger(OperaDriver.class.getPackage().getName()).addHandler(logFile);
       }
     }
   }
