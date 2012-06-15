@@ -78,15 +78,15 @@ public class TestIgnorance {
 
     // If service is not available, ignore test.  If a version requirement has not been specified,
     // ignore the test regardless of version.
-    if (!services.containsKey(annotation.service())) {
+    if (!services.containsKey(annotation.value())) {
       return true;
-    } else if (services.containsKey(annotation.service()) &&
+    } else if (services.containsKey(annotation.value()) &&
                annotation.version() == null) {
       return false;
     }
 
     // Is available service version greater than the test's required version?
-    return VersionUtil.compare(services.get(annotation.service()), annotation.version()) < 0;
+    return VersionUtil.compare(services.get(annotation.value()), annotation.version()) < 0;
   }
 
   private boolean isIgnoredBecauseOfLackingLocalEnvironment(NeedsLocalEnvironment annotation) {

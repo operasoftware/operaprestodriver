@@ -16,6 +16,8 @@ limitations under the License.
 
 package com.opera.core.systems.scope.services.ums;
 
+import com.google.common.collect.ImmutableList;
+
 import com.opera.core.systems.ScopeServices;
 import com.opera.core.systems.scope.AbstractService;
 import com.opera.core.systems.scope.SelftestCommand;
@@ -23,7 +25,6 @@ import com.opera.core.systems.scope.protos.SelftestProtos.RunModulesArg;
 import com.opera.core.systems.scope.protos.UmsProtos.Response;
 import com.opera.core.systems.scope.services.ISelftest;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -31,37 +32,37 @@ import java.util.regex.Pattern;
 
 public class Selftest extends AbstractService implements ISelftest {
 
-  private final Logger logger = Logger.getLogger(this.getClass().getName());
+  public static final String SERVICE_NAME = "selftest";
+
+  private static Pattern errorPattern =
+      Pattern.compile("Warning: Pattern '([^']+)' did not match any tests\n" +
+                      "Warning: There is no module named '([^']+)'\n");
+
+  private final Logger logger = Logger.getLogger(getClass().getName());
 
   public Selftest(ScopeServices services, String version) {
     super(services, version);
-    String serviceName = "selftest";
 
-    if (!isVersionInRange(version, "2.0", serviceName)) {
-      logger.info(serviceName + " version " + version + " is not supported");
-    } else {
-      services.setSelftest(this);
+    if (!isVersionInRange(version, "2.0", SERVICE_NAME)) {
+      logger.info(String.format("%s version %s is not supported", SERVICE_NAME, version));
     }
+
+    services.setSelftest(this);
   }
 
   public void runSelftests(List<String> modules) {
-    logger.fine(String.format("runSelftests(%s)", modules.toString()));
+    logger.finest(String.format("runSelftests: %s", modules));
+
     RunModulesArg.Builder builder = RunModulesArg.newBuilder();
     builder.addAllModuleList(modules);
     builder.setOutputType(RunModulesArg.OutputType.MACHINE_READABLE);
 
     Response response = executeCommand(SelftestCommand.RUN_MODULES, builder);
-    logger.fine(String.format("Selftest response: %s", response));
+    logger.finest(String.format("Selftest response: %s", response));
   }
 
-  static private
-  Pattern
-      errorPattern =
-      Pattern.compile("Warning: Pattern '([^']+)' did not match any tests\n" +
-                      "Warning: There is no module named '([^']+)'\n");
-
-  static public List<SelftestResult> parseSelftests(String output) {
-    List<SelftestResult> results = new ArrayList<SelftestResult>();
+  public static List<SelftestResult> parseSelftests(String output) {
+    ImmutableList.Builder<SelftestResult> results = ImmutableList.builder();
 
     // Check for non-existent module.
     Matcher matcher = errorPattern.matcher(output);
@@ -98,7 +99,74 @@ public class Selftest extends AbstractService implements ISelftest {
       results.add(new SelftestResult(tag, description, result, more));
     }
 
-    return results;
+    return results.build();
+  }
+
+  public static class SelftestResult implements ISelftestResult {
+
+    private final String tag;
+    private final String description;
+    private final ResultType result;
+    private final String more;
+
+    public SelftestResult(String tag, String description, ResultType result) {
+      this(tag, description, result, null);
+    }
+
+    public SelftestResult(String tag, String description, ResultType result, String more) {
+      this.tag = tag;
+      this.description = description;
+      this.result = result;
+      this.more = more;
+    }
+
+    public String getTag() {
+      return tag;
+    }
+
+    public String getDescription() {
+      return description;
+    }
+
+    public ResultType getResult() {
+      return result;
+    }
+
+    public String getMore() {
+      return more;
+    }
+
+    @Override
+    public String toString() {
+      StringBuilder format = new StringBuilder();
+
+      format.append("%s:%s\t%s");
+      if (more != null) {
+        format.append("\t%s");
+      }
+
+      return String.format(format.toString(), tag, description, result, more);
+    }
+
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof SelftestResult)) {
+        return false;
+      }
+
+      SelftestResult result = (SelftestResult) other;
+      return result.tag.equals(this.tag) &&
+             result.description.equals(this.description) &&
+             result.result == this.result &&
+             (result.more == null || result.more.equals(this.more));
+    }
+
+    // TODO(andreastt): Should match equals()
+    @Override
+    public int hashCode() {
+      return super.hashCode();
+    }
+
   }
 
 }

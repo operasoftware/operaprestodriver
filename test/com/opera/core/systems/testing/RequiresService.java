@@ -14,7 +14,7 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 public @interface RequiresService {
 
-  String service();
+  String value();
 
   String version() default "";
 
