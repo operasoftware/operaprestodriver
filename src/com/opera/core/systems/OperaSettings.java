@@ -152,7 +152,8 @@ public class OperaSettings {
      */
     BINARY() {
       File getDefaultValue() {
-        return new File(OperaPaths.operaPath());
+        String path = OperaPaths.operaPath();
+        return path == null ? null : new File(path);
       }
 
       Object sanitize(Object path) {
