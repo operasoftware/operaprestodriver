@@ -131,7 +131,7 @@ public enum OperaIntervals {
   /**
    * The timeout for selftests.
    */
-  SELFTEST_TIMEOUT(90000);
+  SELFTEST_TIMEOUT(200000);
 
   private long value;
 
