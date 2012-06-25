@@ -16,13 +16,11 @@ limitations under the License.
 
 package com.opera.core.systems.scope.internal;
 
-import java.awt.*;
-
 /**
  * Enumerator for delay values in milliseconds.
  */
 public enum OperaIntervals {
-
+  
   /**
    * The response timeout specifies for how long OperaDriver should wait before timing out when it
    * has not received a callback confirmation message from Scope after executing a command.  This
@@ -120,14 +118,14 @@ public enum OperaIntervals {
    * This should be removed when support is added to the exec service for setValue() so that we can
    * tell Opera to override this interval.
    */
-  MULTIPLE_CLICK_SLEEP(getSystemMultiClickTimeout()),
+  MULTIPLE_CLICK_SLEEP(640),
 
   /**
    * Different products have different animations when closing windows, and sometimes it might take
    * a little while.
    */
   WINDOW_CLOSE_SLEEP(100);
-
+  
   private long value;
 
   private OperaIntervals(long value) {
@@ -156,21 +154,6 @@ public enum OperaIntervals {
       intervals.append(item.toString());
     }
     return String.format("Intervals [%s]", intervals.toString());
-  }
-
-  /**
-   * Returns the platform multi click interval, that is the time that separates two clicks treated
-   * as a double click from two clicks treated as two single clicks.
-   */
-  private static long getSystemMultiClickTimeout() {
-    final long timeout = 640;
-
-    try {
-      Toolkit toolkit = Toolkit.getDefaultToolkit();
-      return ((Integer) toolkit.getDesktopProperty("awt.multiClickInterval")).longValue();
-    } catch (Exception e) {
-      return timeout;
-    }
   }
 
 }
