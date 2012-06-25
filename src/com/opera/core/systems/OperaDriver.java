@@ -351,9 +351,13 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
   }
 
   public void close() {
+    if (!getScopeServices().isConnected()) {
+      return;
+    }
+
     int windowCountBeforeClose = getWindowCount();
     if (windowCountBeforeClose >= 1) {
-      closeWindow();
+      windowManager.closeWindow(windowManager.getActiveWindowId());
     }
 
     // Gogi and Desktop on Windows does not close its last window, but we need to follow the
@@ -1182,10 +1186,6 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
   private void gc() {
     debugger.releaseObjects();
     objectIds.clear();
-  }
-
-  private void closeWindow() {
-    windowManager.closeWindow(windowManager.getActiveWindowId());
   }
 
   private WebElement findActiveElement() {
