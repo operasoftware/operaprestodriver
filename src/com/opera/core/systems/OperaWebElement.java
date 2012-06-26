@@ -641,7 +641,7 @@ public class OperaWebElement extends RemoteWebElement {
       return getLocation();
     }
 
-    public Object getAuxiliry() {
+    public Object getAuxiliary() {
       throw new UnsupportedOperationException();
     }
   };
