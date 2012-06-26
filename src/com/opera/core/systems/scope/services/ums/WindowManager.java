@@ -17,6 +17,7 @@ limitations under the License.
 package com.opera.core.systems.scope.services.ums;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 
 import com.opera.core.systems.ScopeServices;
 import com.opera.core.systems.scope.AbstractService;
@@ -31,6 +32,7 @@ import com.opera.core.systems.scope.protos.WmProtos.WindowID;
 import com.opera.core.systems.scope.protos.WmProtos.WindowInfo;
 import com.opera.core.systems.scope.protos.WmProtos.WindowList;
 import com.opera.core.systems.scope.services.IWindowManager;
+import com.opera.core.systems.scope.internal.ImplicitWait;
 import com.opera.core.systems.util.StackHashMap;
 import com.opera.core.systems.util.VersionUtil;
 
@@ -38,21 +40,34 @@ import org.apache.commons.jxpath.CompiledExpression;
 import org.apache.commons.jxpath.JXPathContext;
 import org.openqa.selenium.NoSuchWindowException;
 import org.openqa.selenium.WebDriverException;
+import org.openqa.selenium.support.ui.Duration;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static java.util.concurrent.TimeUnit.MILLISECONDS;
+import static com.opera.core.systems.scope.internal.OperaIntervals.WINDOW_CLOSE_TIMEOUT;
+
 /**
- * window-manager service handles events such as opening a URL, filtering and closing windows, and
- * tracks windows being loaded.
+ * The Window Manager service handles events such as opening a URL, filtering and closing windows,
+ * and tracks windows being loaded.
  *
- * @author Deniz Turkoglu <dturkoglu@opera.com>
+ * We want to be able to work with windows on a higher level than before.  One important goal is to
+ * opt-in on the messages you get instead of being flooded.
+ *
+ * This protocol will prevent a lot of flooding from the other services, but it will on the other
+ * hand flood a bit itself.  There is no way to stop it from sending OnWindowActivated messages for
+ * example.
+ *
+ * @author Deniz Turkoglu <dturkoglu@opera.com>, Andreas Tolf Tolfsen <andreastt@opera.com>
  */
 public class WindowManager extends AbstractService implements IWindowManager {
 
   private static final String SERVICE_NAME = "window-manager";
-  private static final CompiledExpression windowFinder =
+  private static final String CLOSE_ALL_PAGES_ACTION = "Close all pages";
+  private static final CompiledExpression WINDOW_FINDER_EXPRESSION =
       JXPathContext.compile("/.[windowType='normal']/windowID");
 
   private final StackHashMap<Integer, WindowInfo> windows = new StackHashMap<Integer, WindowInfo>();
@@ -108,7 +123,7 @@ public class WindowManager extends AbstractService implements IWindowManager {
     WindowInfo window = windows.peek();
 
     if (window == null || !window.getWindowType().equals("normal")) {
-      Integer windowId = (Integer) windowFinder.getValue(pathContext);
+      Integer windowId = (Integer) WINDOW_FINDER_EXPRESSION.getValue(pathContext);
 
       if (windowId != null) {
         setActiveWindowId(windowId);
@@ -178,26 +193,6 @@ public class WindowManager extends AbstractService implements IWindowManager {
     openUrl(builder.build().getWindowID(), "opera:debug");
   }
 
-  public void closeAllWindows() {
-    LinkedList<Integer> list = new LinkedList<Integer>(windows.asStack());
-    boolean canCloseAll = services.getExec().getActionList().contains("Close all pages");
-
-    if (canCloseAll) {
-      services.getExec().action("Close all pages");
-    } else {
-      while (!list.isEmpty()) {
-        closeWindow(list.removeFirst());
-      }
-    }
-
-    // BAD HACK! DELAYING CLOSE-WINDOW
-    try {
-      Thread.sleep(OperaIntervals.WINDOW_CLOSE_SLEEP.getValue());
-    } catch (InterruptedException e) {
-      // ignore
-    }
-  }
-
   public List<Integer> getWindowHandles() {
     return ImmutableList.copyOf(windows.asStack());  // handles
   }
@@ -220,12 +215,6 @@ public class WindowManager extends AbstractService implements IWindowManager {
     executeCommand(WindowManagerCommand.MODIFY_FILTER, filterBuilder);
   }
 
-  /*
-  public String getActiveWindowTitle() {
-    return windows.peek().getTitle();
-  }
-  */
-
   public void openUrl(int windowId, String url) {
     // Opera Mobile still uses WM 2.0
     if (VersionUtil.compare(getVersion(), "2.1") < 0) {
@@ -244,21 +233,53 @@ public class WindowManager extends AbstractService implements IWindowManager {
     }
   }
 
-  public void closeWindow(int windowId) {
-    // Opera Mobile still uses WM 2.0
-    if (VersionUtil.compare(getVersion(), "2.1") < 0) {
-      throw new UnsupportedOperationException(
-          "Window Manager version " + getVersion() + "does not support closeWindow()");
-    }
+  public void closeWindow(final int windowId) {
+    assertSupportsClosingWindows();
 
     CloseWindowArg.Builder closeWindowBuilder = CloseWindowArg.newBuilder();
     closeWindowBuilder.setWindowID(windowId);
 
     Response response = executeCommand(WindowManagerCommand.CLOSE_WINDOW, closeWindowBuilder);
-    removeWindow(windowId);
+
+    // TODO(andreastt): OPDRV-195
+    new ImplicitWait(new Duration(WINDOW_CLOSE_TIMEOUT.getValue(), MILLISECONDS))
+        .until(new Callable<Boolean>() {
+          public Boolean call() {
+            return !windows.containsKey(windowId);
+          }
+        });
 
     if (response == null) {
       throw new WebDriverException("Internal error while closing window");
+    }
+  }
+
+  public void closeAllWindows() {
+    int toBeClosed = windows.size();
+
+    if (supportsClosingWindows()) {
+      LinkedList<Integer> list = Lists.newLinkedList(windows.asStack());
+      while (!list.isEmpty()) {
+        closeWindow(list.removeFirst());
+      }
+    } else if (services.getExec().getActionList().contains(CLOSE_ALL_PAGES_ACTION)) {
+      services.getExec().action(CLOSE_ALL_PAGES_ACTION);
+      sleep(OperaIntervals.WINDOW_CLOSE_USING_ACTION_SLEEP.getValue() * toBeClosed);
+    } else {
+      // This is a different type of exception than the one in closeWindow(i)
+      throw new UnsupportedOperationException("Product does not support closing windows");
+    }
+  }
+
+  // Opera Mobile still uses WM 2.0
+  private boolean supportsClosingWindows() {
+    return VersionUtil.compare(getVersion(), "2.1") >= 0;
+  }
+
+  private void assertSupportsClosingWindows() {
+    if (!supportsClosingWindows()) {
+      throw new UnsupportedOperationException(String.format(
+          "Window Manager version %s does not support closing windows", getVersion()));
     }
   }
 
