@@ -18,17 +18,15 @@ package com.opera.core.systems.scope.internal;
 
 import org.openqa.selenium.support.ui.Duration;
 
-import java.util.concurrent.TimeUnit;
-
+import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static java.util.concurrent.TimeUnit.MINUTES;
 import static java.util.concurrent.TimeUnit.SECONDS;
-import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
 /**
  * Enumerator for delay values in milliseconds.
  */
 public enum OperaIntervals {
-  
+
   /**
    * The response timeout specifies for how long OperaDriver should wait before timing out when it
    * has not received a callback confirmation message from Scope after executing a command.  This
@@ -115,7 +113,7 @@ public enum OperaIntervals {
    * a little while.
    */
   WINDOW_CLOSE_SLEEP(new Duration(100, MILLISECONDS));
-  
+
   private Duration duration;
 
   private OperaIntervals(Duration duration) {
