@@ -39,6 +39,15 @@ public class OperaColor {
   private Integer lowBlue;
   private Integer highBlue;
 
+  public OperaColor(int r, int g, int b) {
+    setLowRed(r);
+    setHighRed(r);
+    setLowGreen(g);
+    setHighGreen(g);
+    setLowBlue(b);
+    setHighBlue(b);
+  }
+
   public Integer getLowRed() {
     return lowRed;
   }
