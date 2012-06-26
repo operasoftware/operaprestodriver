@@ -37,7 +37,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * All scope services derive from this base class for generic operations
+ * All scope services derive from this base class for generic operations.
  *
  * @author Deniz Turkoglu
  */
@@ -49,21 +49,13 @@ public abstract class AbstractService {
 
   private final String version;
 
-  public String getVersion() {
-    return version;
-  }
-
   public AbstractService(ScopeServices services, String version) {
     this.services = services;
     this.version = version;
   }
 
-  public static void sleep(long timeInMillis) {
-    try {
-      Thread.sleep(timeInMillis);
-    } catch (InterruptedException ignored) {
-      // ignore
-    }
+  public String getVersion() {
+    return version;
   }
 
   /**
@@ -92,71 +84,89 @@ public abstract class AbstractService {
     if (services.getConnection() == null) {
       return Response.getDefaultInstance();
     }
+
     return services.executeCommand(command, builder, timeout);
   }
 
   /**
-   * Query a collection with JXPath and return value of node
+   * Query a collection with JXPath and return value of node.
    *
    * @param query a valid XPath query
    * @return result
    */
+  // TODO(andreastt): unused?
   public Object xpathQuery(Collection<?> collection, String query) {
     JXPathContext pathContext = JXPathContext.newContext(collection);
     Object result = null;
+
     try {
       result = pathContext.getValue(query);
     } catch (JXPathNotFoundException e) {
       logger.log(Level.WARNING, "JXPath exception: {0}", e.getMessage());
     }
+
     return result;
   }
 
   /**
-   * Query a collection JXPath and return a pointer FIXME: This does not belong here!
+   * Query a collection JXPath and return a pointer.
    *
-   * @return Pointer to node
+   * @return pointer to node
    */
+  // TODO: This does not belong here!
   public Pointer xpathPointer(Collection<?> collection, String query) {
     JXPathContext pathContext = JXPathContext.newContext(collection);
     Pointer result = null;
+
     try {
       result = pathContext.getPointer(query);
     } catch (JXPathNotFoundException e) {
-      logger.log(Level.WARNING, "JXPath exception: {0}", e.getMessage());
+      logger.warning(String.format("JXPath exception: %s", e.getMessage()));
     }
+
     return result;
   }
 
   /**
-   * Query a collection JXPath and return a pointer FIXME: This does not belong here!
+   * Query a collection JXPath and return a pointer.
    *
-   * @return Pointer to node
+   * @return pointer to node
    */
+  // TODO: This does not belong here!
   public Iterator<?> xpathIterator(Collection<?> collection, String query) {
     JXPathContext pathContext = JXPathContext.newContext(collection);
     Iterator<?> result = null;
+
     try {
       result = pathContext.iteratePointers(query);
     } catch (JXPathNotFoundException e) {
       logger.log(Level.WARNING, "JXPath exception: {0}", e.getMessage());
     }
+
     return result;
   }
 
-  public static final GeneratedMessage.Builder<?> buildPayload(
+  public static GeneratedMessage.Builder<?> buildPayload(
       Response response, GeneratedMessage.Builder<?> builder) {
     return buildMessage(builder, response.getPayload().toByteArray());
   }
 
-  private static final GeneratedMessage.Builder<?> buildMessage(
+  private static GeneratedMessage.Builder<?> buildMessage(
       GeneratedMessage.Builder<?> builder, byte[] message) {
     try {
       return builder.mergeFrom(message);
-    } catch (InvalidProtocolBufferException ex) {
-      throw new WebDriverException("Could not build "
-                                   + builder.getDescriptorForType().getFullName() + ": "
-                                   + ex.getMessage());
+    } catch (InvalidProtocolBufferException e) {
+      throw new WebDriverException(String.format("Could not build %s: %s",
+                                                 builder.getDescriptorForType().getFullName(),
+                                                 e.getMessage()));
+    }
+  }
+
+  protected static void sleep(long ms) {
+    try {
+      Thread.sleep(ms);
+    } catch (InterruptedException ignored) {
+      Thread.currentThread().interrupt();
     }
   }
 
