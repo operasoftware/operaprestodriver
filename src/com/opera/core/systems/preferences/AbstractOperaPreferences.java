@@ -125,9 +125,7 @@ public abstract class AbstractOperaPreferences implements OperaPreferences {
      */
     public Object getValue(boolean operaCompatible) {
       if (operaCompatible) {
-        if (value instanceof OperaColor) {
-          return ((OperaColor) value).getHex();
-        } else if (value instanceof File) {
+        if (value instanceof File) {
           return ((File) value).getPath();
         } else if (value instanceof Boolean) {
           return ((Boolean) value) ? "1" : "0";

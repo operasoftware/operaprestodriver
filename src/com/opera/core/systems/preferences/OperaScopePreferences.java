@@ -21,6 +21,7 @@ import com.opera.core.systems.scope.protos.PrefsProtos;
 import com.opera.core.systems.scope.services.IPrefs;
 
 import org.openqa.selenium.WebDriverException;
+import org.openqa.selenium.support.Color;
 
 import java.io.File;
 import java.lang.reflect.Type;
@@ -152,7 +153,7 @@ public class OperaScopePreferences extends AbstractOperaPreferences {
         case BOOLEAN:
           return Boolean.parseBoolean(value);
         case COLOR:
-          return OperaColor.decode(value);
+          return Color.fromString(value).asHex();
         case FILE:
           return new File(value);
         case INTEGER:
@@ -191,12 +192,11 @@ public class OperaScopePreferences extends AbstractOperaPreferences {
       switch (PrefType.toJava(pref.getType())) {
         case BOOLEAN:
           return Boolean.class;
-        case COLOR:
-          return OperaColor.class;
         case FILE:
           return File.class;
         case INTEGER:
           return Integer.class;
+        case COLOR:
         case STRING:
         default:
           return String.class;

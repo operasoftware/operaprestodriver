@@ -99,9 +99,8 @@ public class OperaScopePreferencesTest extends OperaDriverTestCase {
 
   @Test
   public void testSetWithColor() {
-    OperaColor color = new OperaColor(120, 120, 120);
-    preferences.set("Colors", "Color.Normal", color);
-    assertEquals(color, preferences.get("Colors", "Color.Normal").getValue());
+    preferences.set("Colors", "Color.Normal", "#cccccc");
+    assertEquals("#cccccc", preferences.get("Colors", "Color.Normal").getValue());
   }
 
   @Test
@@ -155,7 +154,7 @@ public class OperaScopePreferencesTest extends OperaDriverTestCase {
 
   @Test
   public void testGetTypeColor() {
-    assertEquals(OperaColor.class, preferences.get("Colors", "Color.H1").getType());
+    assertEquals(String.class, preferences.get("Colors", "Color.H1").getType());
   }
 
   @Test
