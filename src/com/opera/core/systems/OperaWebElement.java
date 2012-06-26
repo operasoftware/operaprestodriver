@@ -40,6 +40,7 @@ import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.internal.Coordinates;
 import org.openqa.selenium.remote.RemoteWebElement;
+import org.openqa.selenium.support.Color;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -651,10 +652,9 @@ public class OperaWebElement extends RemoteWebElement {
     String value =
         callMethod("return " + OperaAtom.GET_EFFECTIVE_STYLE + "(locator, '" + property + "')");
 
-    // Opera returns a colour in RGB format.  WebDriver specifies that the output from getCssValue()
-    // must be in HEX format.
+    // WebDriver specifies that the output from getCssValue() must be in RGBA format
     if (property.contains("color") && value.contains("rgb")) {
-      return new OperaColor(value).getHex();
+      return Color.fromString(value).asRgba();
     }
 
     return value;

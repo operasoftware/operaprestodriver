@@ -25,51 +25,6 @@ import static org.junit.Assert.assertEquals;
 public class OperaColorTest {
 
   @Test
-  public void testConstructingOperaColorWithRGBString() {
-    OperaColor color = new OperaColor("rgb(120, 110, 100)");
-
-    // java.awt.Color
-    assertEquals(120, color.getRed());
-    assertEquals(110, color.getGreen());
-    assertEquals(100, color.getBlue());
-
-    // OperaColor
-    assertEquals((Integer) 120, color.getHighRed());
-    assertEquals((Integer) 120, color.getLowRed());
-    assertEquals((Integer) 110, color.getHighGreen());
-    assertEquals((Integer) 110, color.getLowGreen());
-    assertEquals((Integer) 100, color.getHighBlue());
-    assertEquals((Integer) 100, color.getLowBlue());
-  }
-
-  @Test
-  public void testToHex() {
-    String color = OperaColor.toHex(120,110,100);
-    assertEquals(7, color.length());
-    assertEquals("#786E64", color);
-  }
-
-  @Test
-  public void testToHexWithBlack() {
-    assertEquals("#00FFFF", OperaColor.toHex(0,255,255));
-    assertEquals("#FF00FF", OperaColor.toHex(255,0,255));
-    assertEquals("#FFFF00", OperaColor.toHex(255,255,0));
-  }
-
-  @Test
-  public void testToHexWithComplexColour() {
-    assertEquals("#00FF96", OperaColor.toHex(0,255,150));
-  }
-
-  @Test
-  public void testGetHex() {
-    OperaColor color = new OperaColor("rgb(120, 110, 100");
-    String hex = color.getHex();
-    assertEquals(7, hex.length());
-    assertEquals("#786E64", hex);
-  }
-
-  @Test
   public void testSetHighRed() {
     OperaColor color = new OperaColor(120,110,100);
     color.setHighRed(255);

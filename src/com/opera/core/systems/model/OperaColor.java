@@ -29,7 +29,7 @@ import java.awt.*;
  *
  * @author Deniz Turkoglu <dturkoglu@opera.com>, Andreas Tolf Tolfsen <andreastt@opera.com>
  */
-public class OperaColor extends Color {
+public class OperaColor {
 
   private int id;
   private Integer lowRed;
@@ -38,26 +38,6 @@ public class OperaColor extends Color {
   private Integer highGreen;
   private Integer lowBlue;
   private Integer highBlue;
-
-  public OperaColor(int r, int g, int b) {
-    super(r, g, b);
-
-    setLowRed(r);
-    setHighRed(r);
-    setLowGreen(g);
-    setHighGreen(g);
-    setLowBlue(b);
-    setHighBlue(b);
-  }
-
-  /**
-   * @param rgb string of the format "rgb(120, 120, 120)"
-   */
-  public OperaColor(String rgb) {
-    this(Integer.valueOf(rgb.replace("rgb(", "").replace(")", "").split(",")[0].trim()),
-         Integer.valueOf(rgb.replace("rgb(", "").replace(")", "").split(",")[1].trim()),
-         Integer.valueOf(rgb.replace("rgb(", "").replace(")", "").split(",")[2].trim()));
-  }
 
   public Integer getLowRed() {
     return lowRed;
@@ -105,36 +85,6 @@ public class OperaColor extends Color {
 
   public void setHighBlue(Integer highBlue) {
     this.highBlue = highBlue;
-  }
-
-  /**
-   * Returns the HEX value representing the colour in the default sRGB ColorModel.
-   *
-   * @return the HEX value of the colour in the default sRGB ColorModel
-   */
-  public String getHex() {
-    return toHex(getRed(), getGreen(), getBlue());
-  }
-
-  /**
-   * Returns a web browser-friendly HEX value representing the colour in the default sRGB
-   * ColorModel.
-   *
-   * @param r red
-   * @param g green
-   * @param b blue
-   * @return a browser-friendly HEX value
-   */
-  public static String toHex(int r, int g, int b) {
-    return "#" + toBrowserHexValue(r) + toBrowserHexValue(g) + toBrowserHexValue(b);
-  }
-
-  private static String toBrowserHexValue(int number) {
-    StringBuilder builder = new StringBuilder(Integer.toHexString(number & 0xff));
-    while (builder.length() < 2) {
-      builder.append("0");
-    }
-    return builder.toString().toUpperCase();
   }
 
 }
