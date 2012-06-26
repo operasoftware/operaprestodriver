@@ -17,8 +17,10 @@ limitations under the License.
 package com.opera.core.systems;
 
 import com.google.common.base.CaseFormat;
+import com.google.common.base.Predicate;
 import com.google.common.base.Throwables;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Iterators;
 
 import com.opera.core.systems.arguments.OperaCoreArguments;
 import com.opera.core.systems.arguments.OperaDesktopArguments;
@@ -36,13 +38,13 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.FileHandler;
 import java.util.logging.Handler;
 import java.util.logging.Level;
-import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
@@ -283,10 +285,10 @@ public class OperaSettings {
           return value;
         } else if (value instanceof Map) {
           @SuppressWarnings("rawtypes")
-          Map map = (Map)value;
+          Map map = (Map) value;
           if (map.containsKey("base64")) {
             try {
-              return OperaProfile.fromJson((String)map.get("base64"));
+              return OperaProfile.fromJson((String) map.get("base64"));
             } catch (IOException e) {
               Throwables.propagate(e);
             }
@@ -635,7 +637,16 @@ public class OperaSettings {
       options.get(LOGGING_LEVEL).setValue(level);
 
       Logger root = Logger.getLogger(OperaDriver.class.getPackage().getName());
-      root.addHandler(new ConsoleHandler());
+
+      // We only need one console handler
+      if (!Iterators.any(Arrays.asList(root.getHandlers()).iterator(), new Predicate<Handler>() {
+        public boolean apply(Handler handler) {
+          return handler instanceof ConsoleHandler;
+        }
+      })) {
+        root.addHandler(new ConsoleHandler());
+      }
+
       root.setLevel(level);
 
       // Set logging levels on all handlers
