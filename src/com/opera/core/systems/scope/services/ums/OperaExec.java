@@ -16,6 +16,10 @@ limitations under the License.
 
 package com.opera.core.systems.scope.services.ums;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
+
 import com.opera.core.systems.ScopeServices;
 import com.opera.core.systems.model.Canvas;
 import com.opera.core.systems.model.ColorResult;
@@ -306,15 +310,15 @@ public class OperaExec extends AbstractService implements IOperaExec {
       builder.addColorSpecList(colorSpec);
     }
 
+    // TODO(andreastt): Unsafe long to int cast
     ScreenWatcherResult result = executeScreenWatcher(builder, (int) timeout);
 
-    List<ColorResult> matches = new ArrayList<ColorResult>();
-
+    ImmutableList.Builder<ColorResult> matches = ImmutableList.builder();
     for (ColorMatch match : result.getColorMatchListList()) {
-      matches.add(new ColorResult(match.getCount(), match.getId()));
+      matches.add(new ColorResult(match.getId(), match.getCount()));
     }
 
-    return new ScreenShotReply(result.getMd5(), matches);
+    return new ScreenShotReply(result.getMd5(), matches.build());
   }
 
   /**

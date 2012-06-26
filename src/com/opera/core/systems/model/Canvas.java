@@ -105,7 +105,7 @@ public class Canvas {
 
   @Override
   public String toString() {
-    return String.format("Canvas [x=%d, y=%d, width=%d, height=%d, viewPortRelative=%s",
+    return String.format("Canvas [x=%d, y=%d, width=%d, height=%d, viewPortRelative=%s]",
                          x, y, width, height, viewPortRelative);
   }
 

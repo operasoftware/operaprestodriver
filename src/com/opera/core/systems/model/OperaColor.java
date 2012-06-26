@@ -16,7 +16,7 @@ limitations under the License.
 
 package com.opera.core.systems.model;
 
-import java.awt.Color;
+import java.awt.*;
 
 /**
  * The OperaColor class is used to encapsulate colours in the default sRGB colour space.
@@ -29,19 +29,18 @@ import java.awt.Color;
  *
  * @author Deniz Turkoglu <dturkoglu@opera.com>, Andreas Tolf Tolfsen <andreastt@opera.com>
  */
-@SuppressWarnings("serial")
 public class OperaColor extends Color {
 
-  protected int id;
-  protected Integer lowRed;
-  protected Integer highRed;
-  protected Integer lowGreen;
-  protected Integer highGreen;
-  protected Integer lowBlue;
-  protected Integer highBlue;
+  private int id;
+  private Integer lowRed;
+  private Integer highRed;
+  private Integer lowGreen;
+  private Integer highGreen;
+  private Integer lowBlue;
+  private Integer highBlue;
 
   public OperaColor(int r, int g, int b) {
-    super(r,g,b);
+    super(r, g, b);
 
     setLowRed(r);
     setHighRed(r);
@@ -58,14 +57,6 @@ public class OperaColor extends Color {
     this(Integer.valueOf(rgb.replace("rgb(", "").replace(")", "").split(",")[0].trim()),
          Integer.valueOf(rgb.replace("rgb(", "").replace(")", "").split(",")[1].trim()),
          Integer.valueOf(rgb.replace("rgb(", "").replace(")", "").split(",")[2].trim()));
-  }
-
-  public int getId() {
-    return id;
-  }
-
-  public void setId(int id) {
-    this.id = id;
   }
 
   public Integer getLowRed() {

@@ -87,7 +87,7 @@ public class CanvasTest {
   public void equalityEmptyCanvas() {
     canvas = new Canvas();
     Canvas secondCanvas = new Canvas();
-    assertSame(canvas, secondCanvas);
+    assertEquals(canvas, secondCanvas);
   }
 
   @Test
