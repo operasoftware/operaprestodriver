@@ -25,10 +25,6 @@ import org.openqa.selenium.WebDriverException;
  */
 public class ResponseNotReceivedException extends WebDriverException {
 
-  public ResponseNotReceivedException() {
-    super();
-  }
-
   public ResponseNotReceivedException(String message) {
     super(message);
   }
