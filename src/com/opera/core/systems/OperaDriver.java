@@ -828,7 +828,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
     @Beta
     public Logs logs() {
-      return new RemoteLogs(getExecuteMethod());
+      return new RemoteLogs(getExecuteMethod(), null);
     }
 
   }
