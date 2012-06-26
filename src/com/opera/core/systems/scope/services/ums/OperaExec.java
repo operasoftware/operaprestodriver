@@ -40,7 +40,7 @@ import com.opera.core.systems.scope.protos.ExecProtos.ScreenWatcherResult;
 import com.opera.core.systems.scope.protos.ExecProtos.ScreenWatcherResult.ColorMatch;
 import com.opera.core.systems.scope.protos.UmsProtos.Response;
 import com.opera.core.systems.scope.services.IOperaExec;
-import com.opera.core.systems.util.CaseInsensitiveStringSet;
+import com.opera.core.systems.common.collect.CaseInsensitiveStringSet;
 import com.opera.core.systems.util.VersionUtil;
 
 import org.openqa.selenium.UnsupportedCommandException;
