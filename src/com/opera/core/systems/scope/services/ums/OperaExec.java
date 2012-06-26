@@ -197,7 +197,7 @@ public class OperaExec extends AbstractService implements IOperaExec {
       // consider two consecutive double click's a quadruple click.
       if (count > 1) {
         try {
-          Thread.sleep(OperaIntervals.MULTIPLE_CLICK_SLEEP.getValue());
+          Thread.sleep(OperaIntervals.MULTIPLE_CLICK_SLEEP.getMs());
         } catch (InterruptedException e) {
           // nothing
         }
@@ -331,7 +331,7 @@ public class OperaExec extends AbstractService implements IOperaExec {
 
     Response response = executeCommand(ExecCommand.SETUP_SCREEN_WATCHER,
                                        builder,
-                                       OperaIntervals.RESPONSE_TIMEOUT.getValue() + timeout);
+                                       OperaIntervals.RESPONSE_TIMEOUT.getMs() + timeout);
 
     ScreenWatcherResult.Builder watcherBuilder = ScreenWatcherResult.newBuilder();
     buildPayload(response, watcherBuilder);

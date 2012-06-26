@@ -192,7 +192,7 @@ public class WindowManager extends AbstractService implements IWindowManager {
 
     // BAD HACK! DELAYING CLOSE-WINDOW
     try {
-      Thread.sleep(OperaIntervals.WINDOW_CLOSE_SLEEP.getValue());
+      Thread.sleep(OperaIntervals.WINDOW_CLOSE_SLEEP.getMs());
     } catch (InterruptedException e) {
       // ignore
     }

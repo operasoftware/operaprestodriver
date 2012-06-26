@@ -238,7 +238,7 @@ public class ScopeServices implements IConnectionHandler {
 
   private void waitForHandshake() throws WebDriverException {
     try {
-      waitState.waitForHandshake(OperaIntervals.HANDSHAKE_TIMEOUT.getValue());
+      waitState.waitForHandshake(OperaIntervals.HANDSHAKE_TIMEOUT.getMs());
     } catch (WebDriverException e) {
       shutdown();
       throw e;
@@ -420,8 +420,8 @@ public class ScopeServices implements IConnectionHandler {
     }
 
     if (runner != null) {
-      long interval = OperaIntervals.QUIT_POLL_INTERVAL.getValue();
-      long timeout = OperaIntervals.QUIT_RESPONSE_TIMEOUT.getValue();
+      long interval = OperaIntervals.QUIT_POLL_INTERVAL.getMs();
+      long timeout = OperaIntervals.QUIT_RESPONSE_TIMEOUT.getMs();
 
       while (runner.isOperaRunning() && timeout > 0) {
         try {
@@ -766,7 +766,7 @@ public class ScopeServices implements IConnectionHandler {
    */
   public Response executeCommand(ICommand command, Builder<?> builder) {
     return executeCommand(command, builder,
-                          OperaIntervals.RESPONSE_TIMEOUT.getValue());
+                          OperaIntervals.RESPONSE_TIMEOUT.getMs());
   }
 
   public Response executeCommand(ICommand command, Builder<?> builder,

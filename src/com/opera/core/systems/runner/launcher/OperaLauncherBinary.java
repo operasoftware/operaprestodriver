@@ -74,7 +74,7 @@ public class OperaLauncherBinary extends Thread {
     }
 
     try {
-      waitFor(OperaIntervals.PROCESS_START_SLEEP.getValue());
+      waitFor(OperaIntervals.PROCESS_START_SLEEP.getMs());
       if (process.exitValue() > 0) {
         throw new IOException("exited immediately; possibly incorrect command-line arguments?  " +
                               "Commands: " + commands);

@@ -60,6 +60,7 @@ import org.openqa.selenium.logging.Logs;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteLogs;
 import org.openqa.selenium.remote.RemoteWebDriver;
+import org.openqa.selenium.support.ui.Duration;
 
 import java.io.IOException;
 import java.net.URL;
@@ -171,7 +172,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     if (settings.autostart()) {
       runner = new OperaLauncherRunner(settings);
     } else {
-      settings.setPort((int) OperaIntervals.SERVER_DEFAULT_PORT_IDENTIFIER.getValue());
+      settings.setPort(OperaFlags.SERVER_DEFAULT_PORT_IDENTIFIER);
     }
 
     logger.config(settings.toString());
@@ -290,7 +291,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
   }
 
   public void get(String url) {
-    get(url, OperaIntervals.PAGE_LOAD_TIMEOUT.getValue());
+    get(url, OperaIntervals.PAGE_LOAD_TIMEOUT.getMs());
   }
 
   public int get(String url, long timeout) {
@@ -320,8 +321,8 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
       if (settings.useIdle() && services.isOperaIdleAvailable()) {
         try {
           // Use idle timeout (which is lower) if timeout has not been manually set.
-          if (timeout == OperaIntervals.PAGE_LOAD_TIMEOUT.getValue()) {
-            timeout = OperaIntervals.OPERA_IDLE_TIMEOUT.getValue();
+          if (timeout == OperaIntervals.PAGE_LOAD_TIMEOUT.getMs()) {
+            timeout = OperaIntervals.OPERA_IDLE_TIMEOUT.getMs();
           }
           services.waitForOperaIdle(timeout);
         } catch (WebDriverException e) {
@@ -492,7 +493,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
       }
 
       if (count == 0 && hasTimeRemaining(start)) {
-        sleep(OperaIntervals.IMPLICIT_WAIT.getValue());
+        sleep(OperaIntervals.IMPLICIT_WAIT.getMs());
       } else {
         break;
       }
@@ -836,12 +837,12 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
   public static class OperaTimeouts implements Timeouts {
 
     public Timeouts implicitlyWait(long time, TimeUnit unit) {
-      OperaIntervals.IMPLICIT_WAIT.setValue(TimeUnit.MILLISECONDS.convert(time, unit));
+      OperaIntervals.IMPLICIT_WAIT.setValue(new Duration(time, unit));
       return this;
     }
 
     public Timeouts setScriptTimeout(long time, TimeUnit unit) {
-      OperaIntervals.SCRIPT_TIMEOUT.setValue(TimeUnit.MILLISECONDS.convert(time, unit));
+      OperaIntervals.SCRIPT_TIMEOUT.setValue(new Duration(time, unit));
       return this;
     }
 
@@ -854,7 +855,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
      * @return a self reference
      */
     public Timeouts pageLoadTimeout(long time, TimeUnit unit) {
-      OperaIntervals.PAGE_LOAD_TIMEOUT.setValue(TimeUnit.MILLISECONDS.convert(time, unit));
+      OperaIntervals.PAGE_LOAD_TIMEOUT.setValue(new Duration(time, unit));
       return this;
     }
 
@@ -867,7 +868,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
      * @return a self reference
      */
     public Timeouts responseTimeout(long time, TimeUnit unit) {
-      OperaIntervals.RESPONSE_TIMEOUT.setValue(TimeUnit.MILLISECONDS.convert(time, unit));
+      OperaIntervals.RESPONSE_TIMEOUT.setValue(new Duration(time, unit));
       return this;
     }
 
@@ -1093,17 +1094,17 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
   protected void waitForLoadToComplete() throws ResponseNotReceivedException {
     if (settings.useIdle() && services.isOperaIdleAvailable()) {
-      services.waitForOperaIdle(OperaIntervals.OPERA_IDLE_TIMEOUT.getValue());
+      services.waitForOperaIdle(OperaIntervals.OPERA_IDLE_TIMEOUT.getMs());
     } else {
       // Sometimes we get here before the next page has even *started* loading, and so return too
       // quickly. This sleep is enough to make sure readyState has been set to "loading".
       sleep(5);
 
-      long endTime = System.currentTimeMillis() + OperaIntervals.PAGE_LOAD_TIMEOUT.getValue();
+      long endTime = System.currentTimeMillis() + OperaIntervals.PAGE_LOAD_TIMEOUT.getMs();
 
       while (!"complete".equals(debugger.executeJavascript("return document.readyState"))) {
         if (System.currentTimeMillis() < endTime) {
-          sleep(OperaIntervals.POLL_INTERVAL.getValue());
+          sleep(OperaIntervals.POLL_INTERVAL.getMs());
         } else {
           throw new ResponseNotReceivedException("No response in a timely fashion");
         }
@@ -1122,7 +1123,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
    * @return a non-null value if condition is met within implicit wait timeout, null otherwise
    */
   protected <X> X implicitlyWaitFor(Callable<X> condition) {
-    long end = System.currentTimeMillis() + OperaIntervals.IMPLICIT_WAIT.getValue();
+    long end = System.currentTimeMillis() + OperaIntervals.IMPLICIT_WAIT.getMs();
     Exception lastException = null;
 
     do {
@@ -1142,7 +1143,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
         return toReturn;
       }
 
-      sleep(OperaIntervals.POLL_INTERVAL.getValue());
+      sleep(OperaIntervals.POLL_INTERVAL.getMs());
     } while (System.currentTimeMillis() < end);
 
     if (lastException != null) {
@@ -1171,7 +1172,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
   // Following methods are used internally:
 
   private boolean hasTimeRemaining(long start) {
-    return System.currentTimeMillis() - start < OperaIntervals.IMPLICIT_WAIT.getValue();
+    return System.currentTimeMillis() - start < OperaIntervals.IMPLICIT_WAIT.getMs();
   }
 
   /**
@@ -1209,7 +1210,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
       }
 
       if (count == 0 && hasTimeRemaining(start)) {
-        sleep(OperaIntervals.POLL_INTERVAL.getValue());
+        sleep(OperaIntervals.POLL_INTERVAL.getMs());
       } else {
         break;
       }
@@ -1233,7 +1234,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
       isAvailable = (id != null);
 
       if (!isAvailable) {
-        sleep(OperaIntervals.POLL_INTERVAL.getValue());
+        sleep(OperaIntervals.POLL_INTERVAL.getMs());
       }
     } while (!isAvailable && hasTimeRemaining(start));
 

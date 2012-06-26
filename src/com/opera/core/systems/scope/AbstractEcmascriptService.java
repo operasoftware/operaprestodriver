@@ -86,7 +86,7 @@ public abstract class AbstractEcmascriptService extends AbstractService
    */
   protected void resetCounters() {
     retries = 0;
-    sleepDuration = SCRIPT_RETRY_INTERVAL.getValue();
+    sleepDuration = SCRIPT_RETRY_INTERVAL.getMs();
   }
 
   /**

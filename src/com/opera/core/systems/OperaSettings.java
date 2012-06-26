@@ -65,9 +65,9 @@ import static com.opera.core.systems.OperaSettings.Capability.PORT;
 import static com.opera.core.systems.OperaSettings.Capability.PRODUCT;
 import static com.opera.core.systems.OperaSettings.Capability.PROFILE;
 import static com.opera.core.systems.runner.launcher.OperaLauncherRunner.LAUNCHER_ENV_VAR;
-import static com.opera.core.systems.scope.internal.OperaIntervals.SERVER_DEFAULT_PORT;
-import static com.opera.core.systems.scope.internal.OperaIntervals.SERVER_DEFAULT_PORT_IDENTIFIER;
-import static com.opera.core.systems.scope.internal.OperaIntervals.SERVER_RANDOM_PORT_IDENTIFIER;
+import static com.opera.core.systems.scope.internal.OperaFlags.SERVER_DEFAULT_PORT;
+import static com.opera.core.systems.scope.internal.OperaFlags.SERVER_DEFAULT_PORT_IDENTIFIER;
+import static com.opera.core.systems.scope.internal.OperaFlags.SERVER_RANDOM_PORT_IDENTIFIER;
 import static org.openqa.selenium.Platform.LINUX;
 
 /**
@@ -225,10 +225,10 @@ public class OperaSettings {
         int port = Integer.parseInt(String.valueOf(value));
 
         // 0 = random, -1 = Opera default (7001) (for use with Opera < 11.60)
-        if (port == SERVER_RANDOM_PORT_IDENTIFIER.getValue()) {
+        if (port == SERVER_RANDOM_PORT_IDENTIFIER) {
           return PortProber.findFreePort();
-        } else if (port == SERVER_DEFAULT_PORT_IDENTIFIER.getValue()) {
-          return (int) SERVER_DEFAULT_PORT.getValue();
+        } else if (port == SERVER_DEFAULT_PORT_IDENTIFIER) {
+          return (int) SERVER_DEFAULT_PORT;
         }
 
         return port;
@@ -875,7 +875,7 @@ public class OperaSettings {
     options.get(AUTOSTART).setValue(enabled);
 
     if (!enabled) {
-      setPort((int) SERVER_DEFAULT_PORT_IDENTIFIER.getValue());
+      setPort((int) SERVER_DEFAULT_PORT_IDENTIFIER);
     }
   }
 
@@ -993,7 +993,7 @@ public class OperaSettings {
    *         false otherwise
    */
   public boolean supportsDebugProxy() {
-    return getPort() != SERVER_DEFAULT_PORT.getValue();
+    return getPort() != SERVER_DEFAULT_PORT;
   }
 
   /**

@@ -39,8 +39,8 @@ import static com.opera.core.systems.OperaProduct.CORE;
 import static com.opera.core.systems.OperaProduct.DESKTOP;
 import static com.opera.core.systems.OperaSettings.Capability.AUTOSTART;
 import static com.opera.core.systems.runner.launcher.OperaLauncherRunner.LAUNCHER_ENV_VAR;
-import static com.opera.core.systems.scope.internal.OperaIntervals.SERVER_DEFAULT_PORT;
-import static com.opera.core.systems.scope.internal.OperaIntervals.SERVER_DEFAULT_PORT_IDENTIFIER;
+import static com.opera.core.systems.scope.internal.OperaFlags.SERVER_DEFAULT_PORT;
+import static com.opera.core.systems.scope.internal.OperaFlags.SERVER_DEFAULT_PORT_IDENTIFIER;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -133,7 +133,7 @@ public class OperaSettingsTest extends OperaDriverTestCase {
   @Test
   public void portIsRandom() {
     // Of course, it might still happen that it assigns it to 7001...
-    assertNotSame((int) SERVER_DEFAULT_PORT.getValue(), settings.getPort());
+    assertNotSame(SERVER_DEFAULT_PORT, settings.getPort());
   }
 
   @Test
@@ -238,7 +238,7 @@ public class OperaSettingsTest extends OperaDriverTestCase {
   @Test
   public void autostartSetToFalseSetsPortToDefault() {
     settings.autostart(false);
-    assertEquals(SERVER_DEFAULT_PORT.getValue(), settings.getPort());
+    assertEquals(SERVER_DEFAULT_PORT, settings.getPort());
   }
 
   @Test
@@ -292,7 +292,7 @@ public class OperaSettingsTest extends OperaDriverTestCase {
 
   @Test
   public void supportsDebugProxyIsFalseIfDefaultServerPort() {
-    settings.setPort((int) SERVER_DEFAULT_PORT_IDENTIFIER.getValue());
+    settings.setPort(SERVER_DEFAULT_PORT_IDENTIFIER);
     assertFalse(settings.supportsDebugProxy());
   }
 

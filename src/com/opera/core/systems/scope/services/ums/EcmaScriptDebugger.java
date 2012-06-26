@@ -256,15 +256,15 @@ public class EcmaScriptDebugger extends AbstractEcmascriptService implements
     builder.addAllVariableList(Arrays.asList(variables));
 
     Response response = executeCommand(ESDebuggerCommand.EVAL, builder,
-                                       OperaIntervals.SCRIPT_TIMEOUT.getValue());
+                                       OperaIntervals.SCRIPT_TIMEOUT.getMs());
 
-    if (response == null && retries < OperaIntervals.SCRIPT_RETRY_INTERVAL.getValue()) {
+    if (response == null && retries < OperaIntervals.SCRIPT_RETRY_INTERVAL.getMs()) {
       retries++;
       sleepDuration += sleepDuration;
       sleep(sleepDuration);
       recover();
       return eval(using, variables);
-    } else if (retries >= OperaIntervals.SCRIPT_RETRY_INTERVAL.getValue()) {
+    } else if (retries >= OperaIntervals.SCRIPT_RETRY_INTERVAL.getMs()) {
       resetCounters();
       throw new WebDriverException("No response on executing JS command");
     }

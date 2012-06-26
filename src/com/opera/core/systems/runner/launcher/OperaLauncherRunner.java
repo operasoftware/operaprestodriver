@@ -136,7 +136,8 @@ public class OperaLauncherRunner extends OperaRunner
     try {
       // Setup listener server
       listenerServer = new ServerSocket(launcherPort);
-      listenerServer.setSoTimeout((int) OperaIntervals.LAUNCHER_CONNECT_TIMEOUT.getValue());
+      // TODO(andreastt): Unsafe int cast
+      listenerServer.setSoTimeout((int) OperaIntervals.LAUNCHER_CONNECT_TIMEOUT.getMs());
 
       // Try to connect
       protocol = new OperaLauncherProtocol(listenerServer.accept());
@@ -223,7 +224,7 @@ public class OperaLauncherRunner extends OperaRunner
 
       // Check Opera hasn't immediately exited (e.g. due to unknown arguments)
       try {
-        Thread.sleep(OperaIntervals.PROCESS_START_SLEEP.getValue());
+        Thread.sleep(OperaIntervals.PROCESS_START_SLEEP.getMs());
       } catch (InterruptedException e) {
         // nothing
       }

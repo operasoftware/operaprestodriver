@@ -43,7 +43,7 @@ public class IdleTest extends OperaDriverTestCase {
   private static long start, end;
 
   // Make sure we're actually using idle, and not hitting the timeout
-  private static final long timeout = OperaIntervals.OPERA_IDLE_TIMEOUT.getValue();
+  private static final long timeout = OperaIntervals.OPERA_IDLE_TIMEOUT.getMs();
 
   @Before
   public void beforeEach() {

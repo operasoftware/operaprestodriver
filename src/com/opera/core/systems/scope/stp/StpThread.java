@@ -57,7 +57,7 @@ public class StpThread extends Thread {
   public void run() {
     logger.finer("Started StpThread");
     while (!cancelled) {
-      monitor.poll(OperaIntervals.RESPONSE_TIMEOUT.getValue());
+      monitor.poll(OperaIntervals.RESPONSE_TIMEOUT.getMs());
     }
     logger.finer("Stopping StpThread");
   }
