@@ -676,7 +676,7 @@ public class OperaWebElement extends RemoteWebElement {
 
   private void assertElementDisplayed(String message) {
     Boolean displayed = parent.implicitlyWaitFor(new Callable<Boolean>() {
-      public Boolean call() throws Exception {
+      public Boolean call() {
         return isDisplayed();
       }
     });
