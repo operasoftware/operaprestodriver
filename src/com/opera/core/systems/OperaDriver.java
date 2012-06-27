@@ -56,6 +56,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.internal.WrapsElement;
+import org.openqa.selenium.logging.LocalLogs;
 import org.openqa.selenium.logging.Logs;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteLogs;
@@ -828,7 +829,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
 
     @Beta
     public Logs logs() {
-      return new RemoteLogs(getExecuteMethod());
+      return new RemoteLogs(getExecuteMethod(), LocalLogs.NULL_LOGGER);
     }
 
   }
