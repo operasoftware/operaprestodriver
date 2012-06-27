@@ -95,6 +95,7 @@ public abstract class AbstractService {
    * @return result
    */
   // TODO(andreastt): unused?
+  /*
   public Object xpathQuery(Collection<?> collection, String query) {
     JXPathContext pathContext = JXPathContext.newContext(collection);
     Object result = null;
@@ -107,6 +108,7 @@ public abstract class AbstractService {
 
     return result;
   }
+  */
 
   /**
    * Query a collection JXPath and return a pointer.
