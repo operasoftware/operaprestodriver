@@ -114,6 +114,7 @@ public class OperaWebElement extends RemoteWebElement {
     return debugger.callFunctionOnObject(script, objectId, true);
   }
 
+  // TODO(andreastt): OPDRV-199
   public void click() {
     assertElementNotStale();
     assertElementDisplayed();
