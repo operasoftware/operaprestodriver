@@ -73,7 +73,7 @@ public class WindowPage extends Page {
     // Trigger new window load and wait for window to open
     windowLink.click();
     try {
-      Thread.sleep(OperaIntervals.WINDOW_CLOSE_SLEEP.getValue());
+      Thread.sleep(100);
     } catch (InterruptedException e) {
       fail("Interrupted");
     }

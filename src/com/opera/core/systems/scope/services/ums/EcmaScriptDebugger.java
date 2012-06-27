@@ -117,7 +117,7 @@ public class EcmaScriptDebugger extends AbstractEcmascriptService implements
   }
 
   public void setRuntime(RuntimeInfo runtime) {
-    if( runtime != null ) {
+    if (runtime != null) {
       this.runtime.set(runtime, runtime.getRuntimeID());
       activeWindowId = runtime.getWindowID();
     }

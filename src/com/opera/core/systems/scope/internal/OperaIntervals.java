@@ -44,7 +44,19 @@ public enum OperaIntervals {
 
   WINDOW_EVENT_TIMEOUT(5000),
   OPERA_IDLE_TIMEOUT(5000),
+
+  /**
+   * The default poll interval for queries that are made across a network.  Sleep intervals are not
+   * needed for local polling, but we don't want to spam the network.
+   */
   POLL_INTERVAL(10),
+
+  /**
+   * The frequency rate at which to poll internal data structures.  Seeing as the data structures
+   * are local and we in most cases wait for some condition to be true when polling, it's highly
+   * advised to leave this at 0 to maximize the throughput.
+   */
+  INTERNAL_FREQUENCY(0),
 
   /**
    * The handshake timeout defines how long the Scope server (OperaDriver) should wait for a
@@ -114,17 +126,16 @@ public enum OperaIntervals {
    * When clicking several times in a row (e.g. for a double, triple or quadruple click) 640 ms is
    * the hardcoded interval Opera must wait before loosing the previous click state, not joining
    * clicks together.
-   *
-   * This should be removed when support is added to the exec service for setValue() so that we can
-   * tell Opera to override this interval.
    */
   MULTIPLE_CLICK_SLEEP(640),
 
+  WINDOW_CLOSE_TIMEOUT(500),
+
   /**
    * Different products have different animations when closing windows, and sometimes it might take
-   * a little while.
+   * a little while if using an Opera action to close a window.
    */
-  WINDOW_CLOSE_SLEEP(100);
+  WINDOW_CLOSE_USING_ACTION_SLEEP(10);
   
   private long value;
 

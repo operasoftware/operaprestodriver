@@ -32,14 +32,16 @@ import java.util.LinkedList;
 import java.util.logging.Logger;
 
 /**
- * This class handles a queue of events to be handled from multiple threads. One thread can wait for
- * events to happen while other threads can post these events by calling the on{Event} handlers.
+ * This class handles a queue of events to be handled from multiple threads.  One thread can wait
+ * for events to happen while other threads can post these events by calling the on{Event}
+ * handlers.
  *
  * @author Jan Vidar Krey <janv@opera.com>
  */
 public class WaitState {
 
-  private final Logger logger = Logger.getLogger(this.getClass().getName());
+  private final Logger logger = Logger.getLogger(getClass().getName());
+
   private boolean connected;
   private boolean waitEvents;
 
@@ -188,9 +190,10 @@ public class WaitState {
     public Exception getException() {
       return exception;
     }
+
   }
 
-  // TODO: Replace with BlockingQueue
+  // TODO(andreastt): Replace with BlockingQueue, this is a very expensive call
   private final LinkedList<ResultItem> events = new LinkedList<ResultItem>();
 
   enum ResponseType {
