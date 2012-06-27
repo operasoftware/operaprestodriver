@@ -20,7 +20,7 @@ package com.opera.core.systems.scope.internal;
  * Enumerator for delay values in milliseconds.
  */
 public enum OperaIntervals {
-  
+
   /**
    * The response timeout specifies for how long OperaDriver should wait before timing out when it
    * has not received a callback confirmation message from Scope after executing a command.  This
@@ -136,7 +136,7 @@ public enum OperaIntervals {
    * a little while if using an Opera action to close a window.
    */
   WINDOW_CLOSE_USING_ACTION_SLEEP(10);
-  
+
   private long value;
 
   private OperaIntervals(long value) {
