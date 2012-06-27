@@ -92,8 +92,10 @@ public class EcmascriptService extends AbstractEcmascriptService implements
   }
 
   public void setRuntime(Runtime runtime) {
-    this.runtime.set(runtime, runtime.getRuntimeID());
-    activeWindowId = runtime.getWindowID();
+    if (runtime != null) {
+      this.runtime.set(runtime, runtime.getRuntimeID());
+      activeWindowId = runtime.getWindowID();
+    }
   }
 
   public void setRuntime(EsdbgProtos.RuntimeInfo runtime) {
