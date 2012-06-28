@@ -534,13 +534,12 @@ public class OperaLauncherRunner extends OperaRunner
    * @return the launcher's binary file name
    */
   private static String launcherNameForOS() {
-    boolean is64 = "64".equals(System.getProperty("sun.arch.data.model"));
     Platform currentPlatform = Platform.getCurrent();
 
     switch (currentPlatform) {
       case LINUX:
       case UNIX:
-        return (is64 ? "launcher-linux-x86_64" : "launcher-linux-i686");
+        return "launcher-linux-" + System.getProperty("os.arch").toLowerCase();
       case MAC:
         return "launcher-mac";
       case WINDOWS:
