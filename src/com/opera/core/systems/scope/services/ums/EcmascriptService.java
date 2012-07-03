@@ -267,13 +267,13 @@ public class EcmascriptService extends AbstractEcmascriptService implements
 
     Response response = executeCommand(ESCommand.EVAL, builder, SCRIPT_TIMEOUT.getMs());
 
-    if (response == null && retries < SCRIPT_RETRY_INTERVAL.getMs()) {
+    if (response == null && retries < 5) {
       retries++;
-      sleepDuration += sleepDuration;
+      sleepDuration += SCRIPT_RETRY_INTERVAL.getValue();
       sleep(sleepDuration);
       recover();
       return eval(using, variables);
-    } else if (retries >= SCRIPT_RETRY_INTERVAL.getMs()) {
+    } else if (retries >= 5) {
       resetCounters();
       throw new WebDriverException("No response on executing ECMAScript evaluation command");
     }
