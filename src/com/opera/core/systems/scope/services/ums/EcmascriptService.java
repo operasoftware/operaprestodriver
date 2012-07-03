@@ -262,6 +262,12 @@ public class EcmascriptService extends AbstractEcmascriptService implements
     // high memory usage in Opera, so the method might need to be updated in the future.
     //processQueues();
 
+    // If ecmascript is turned off there is no point trying to eval
+    // in these cases null will be returned
+    if(driver.preferences().get("Extensions", "Scripting").getValue().equals(false)) {
+      return EvalResult.getDefaultInstance();
+    }
+
     EvalArg.Builder builder = buildEval(using, runtimeId);
     builder.addAllVariableList(Arrays.asList(variables));
 
