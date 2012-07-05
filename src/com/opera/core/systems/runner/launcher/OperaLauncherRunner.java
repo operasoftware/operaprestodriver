@@ -102,16 +102,19 @@ public class OperaLauncherRunner extends OperaRunner
       throw new OperaRunnerException("Not able to locate bundled launcher: " + bundledLauncher);
     }
 
+    File launcher = settings.getLauncher();
     try {
       if (settings.getLauncher().getCanonicalPath().equals(LAUNCHER_DEFAULT_LOCATION.getCanonicalPath()) &&
-          (!settings.getLauncher().exists() || isLauncherOutdated(settings.getLauncher()))) {
+          (!settings.getLauncher().exists() || isLauncherOutdated(launcher))) {
         extractLauncher(bundledLauncher, settings.getLauncher());
       }
     } catch (IOException e) {
       throw new OperaRunnerException(e);
     }
 
-    makeLauncherExecutable(settings.getLauncher());
+    if (!launcher.canExecute()) {
+      makeLauncherExecutable(settings.getLauncher());
+    }
 
     // Find an available Opera if present
     if (settings.getBinary() == null) {
@@ -490,6 +493,10 @@ public class OperaLauncherRunner extends OperaRunner
 
   private boolean isLauncherRunning() {
     return binary != null && binary.isRunning();
+  }
+
+  public static File launcherDefaultLocation() {
+    return new File(System.getProperty("user.home") + "/.launcher/" + launcherNameForOS());
   }
 
   /**
