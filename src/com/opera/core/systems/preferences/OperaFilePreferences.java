@@ -16,6 +16,7 @@ limitations under the License.
 
 package com.opera.core.systems.preferences;
 
+import org.ini4j.Config;
 import org.ini4j.Ini;
 import org.ini4j.Profile;
 import org.ini4j.Wini;
@@ -98,7 +99,14 @@ public class OperaFilePreferences extends AbstractOperaPreferences {
         }
       });
   
-      return new Ini(new StringReader(Joiner.on("\n").join(filteredLines)));
+      Config config = new Config();
+      // This config setting makes sure we can handle pref lines without
+      // '=' chars in them. Such prefs will be treated as having value "".
+      config.setEmptyOption(true);
+      Ini ini = new Ini();
+      ini.setConfig(config);
+      ini.load(new StringReader(Joiner.on("\n").join(filteredLines)));
+      return ini;
     } catch (IOException e) {
       throw Throwables.propagate(e);
     }
