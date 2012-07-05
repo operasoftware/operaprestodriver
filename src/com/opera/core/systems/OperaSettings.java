@@ -40,6 +40,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.FileHandler;
@@ -537,7 +538,10 @@ public class OperaSettings {
     public CapabilityInstance(final Capability capability) {
       identifier = capability.getIdentifier();
       capabilityName = capability.getCapability();
-      value = capability.getDefaultValue();
+
+      if (skipDefaultValueInit == null || !skipDefaultValueInit.contains(capability)) {
+        value = capability.getDefaultValue();
+      }
     }
 
     public final String getIdentifier() {
@@ -568,16 +572,36 @@ public class OperaSettings {
   private final OperaLogging logging = new OperaLogging();
 
   private boolean supportsPd = true;
+  
+  private List<Capability> skipDefaultValueInit = null;
 
   /**
    * Constructs a new set of settings for {@link OperaDriver} and Opera to use.  The default
    * settings are populated from {@link Capability}.
    */
   public OperaSettings() {
+    initializeOperaSettings();
+  }
+  
+  /**
+   * Constructs a new set of settings for {@link OperaDriver} and Opera to use. All capabilities
+   * are initialized to their default values, except for those in the list which are left null.
+   * 
+   * @param list List of capabilities not to be initialized to their default values
+   */
+  public OperaSettings(List<Capability> list) {
+    skipDefaultValueInit = list;
+    initializeOperaSettings();
+  }
+  
+  /**
+   * Populate default settings from {@link Capability} and initialize logging.
+   */
+  public void initializeOperaSettings() {    
     for (Capability capability : Capability.values()) {
       options.put(capability, new CapabilityInstance(capability));
     }
-
+    
     initializeLogging();
   }
 
