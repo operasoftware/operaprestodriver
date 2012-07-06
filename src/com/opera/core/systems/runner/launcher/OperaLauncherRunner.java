@@ -47,7 +47,6 @@ import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.io.FileHandler;
 import org.openqa.selenium.net.PortProber;
-import org.openqa.selenium.os.CommandLine;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -113,7 +112,9 @@ public class OperaLauncherRunner extends OperaRunner
     }
 
     if (!launcher.canExecute()) {
-      makeLauncherExecutable(settings.getLauncher());
+      if (!launcher.setExecutable(true)) {
+        throw new OperaRunnerException("Not able to make launcher executable");
+      }
     }
 
     // Find an available Opera if present
@@ -516,20 +517,6 @@ public class OperaLauncherRunner extends OperaRunner
 
     if (!FileHandler.canExecute(launcher)) {
       throw new IOException("Not executable: " + launcher.getPath());
-    }
-  }
-
-  /**
-   * Makes the launcher executable by chmod'ing the file at given path (GNU/Linux and Mac only).
-   *
-   * @param launcher the file to make executable
-   */
-  private static void makeLauncherExecutable(File launcher) {
-    Platform current = Platform.getCurrent();
-
-    if (current.is(Platform.UNIX) || current.is(Platform.MAC)) {
-      CommandLine line = new CommandLine("chmod", "u+x", launcher.getAbsolutePath());
-      line.execute();
     }
   }
 
