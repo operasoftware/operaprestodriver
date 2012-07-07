@@ -57,11 +57,11 @@ import java.net.ServerSocket;
 import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.opera.core.systems.runner.OperaLaunchers.LAUNCHER_CHECKSUMS;
 
 /**
  * OperaLauncherRunner implements an interface in C++ with a Java API for controlling the Opera
@@ -76,7 +76,6 @@ public class OperaLauncherRunner extends OperaRunner
       new File(System.getProperty("user.home"), ".launcher");
   public static final File LAUNCHER_DEFAULT_LOCATION = new File(LAUNCHER_DIRECTORY, LAUNCHER_NAME);
 
-  private final URL bundledLauncher;
   private final int launcherPort = PortProber.findFreePort();
   private final List<String> arguments;
 
@@ -94,7 +93,7 @@ public class OperaLauncherRunner extends OperaRunner
 
     // Locate the bundled launcher from OperaLaunchers project and copy it to its default location
     // on users system if it's not there or outdated
-    bundledLauncher =
+    URL bundledLauncher =
         OperaLaunchers.class.getClassLoader().getResource("launchers/" + LAUNCHER_NAME);
 
     if (bundledLauncher == null) {
@@ -477,7 +476,7 @@ public class OperaLauncherRunner extends OperaRunner
 
   private boolean isLauncherOutdated(File launcher) {
     try {
-      return !Arrays.equals(md5(bundledLauncher.openStream()), md5(launcher));
+      return !md5sum(md5(launcher)).equals(LAUNCHER_CHECKSUMS.get(launcher.getName()));
     } catch (NoSuchAlgorithmException e) {
       throw new OperaRunnerException(
           "Algorithm is not available in your environment: " + e.getMessage());
@@ -547,6 +546,20 @@ public class OperaLauncherRunner extends OperaRunner
         throw new WebDriverException(
             "Could not find a platform that supports bundled launchers, please set it manually");
     }
+  }
+
+  /*
+   * Return the HEX sum of an MD5 byte array.
+   *
+   * @param b the md5 byte array to hex
+   * @return hex version of the byte array
+   */
+  private static String md5sum(byte[] b) {
+    String result = "";
+    for (byte aB : b) {
+      result += Integer.toString((aB & 0xff) + 0x100, 16).substring(1);
+    }
+    return result;
   }
 
   /**
