@@ -103,6 +103,8 @@ public class OperaFilePreferences extends AbstractOperaPreferences {
       // This config setting makes sure we can handle pref lines without
       // '=' chars in them. Such prefs will be treated as having value "".
       config.setEmptyOption(true);
+      // This config setting makes sure we can handle pref lines with '\' in them.
+      config.setEscape(false);
       Ini ini = new Ini();
       ini.setConfig(config);
       ini.load(new StringReader(Joiner.on("\n").join(filteredLines)));
