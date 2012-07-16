@@ -103,7 +103,8 @@ public class OperaLauncherProtocol {
     socket = client;
     os = socket.getOutputStream();
     // Just to make sure we don't block forever if something goes wrong
-    socket.setSoTimeout((int) OperaIntervals.LAUNCHER_RESPONSE_TIMEOUT.getValue());
+    // TODO(andreastt): Unsafe int cast
+    socket.setSoTimeout((int) OperaIntervals.LAUNCHER_RESPONSE_TIMEOUT.getMs());
     logger.finer("Setting launcher protocol timeout to " + socket.getSoTimeout() + " ms");
     logger.fine("Got launcher connection from " + socket.getRemoteSocketAddress().toString());
   }

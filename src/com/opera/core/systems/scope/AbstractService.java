@@ -76,7 +76,7 @@ public abstract class AbstractService {
       return Response.getDefaultInstance();
     }
     return executeCommand(command, builder,
-                          OperaIntervals.DEFAULT_RESPONSE_TIMEOUT.getValue());
+                          OperaIntervals.DEFAULT_RESPONSE_TIMEOUT.getMs());
   }
 
   public Response executeCommand(ICommand command, Builder<?> builder,

@@ -32,8 +32,7 @@ import static java.util.concurrent.TimeUnit.MILLISECONDS;
 public class ImplicitWait extends CallbackWait {
 
   // TODO(andreastt): OPDRV-195
-  public static final Duration DEFAULT_INTERVAL =
-      new Duration(OperaIntervals.POLL_INTERVAL.getValue(), MILLISECONDS);
+  public static final Duration DEFAULT_INTERVAL = OperaIntervals.POLL_INTERVAL.getValue();
 
   public ImplicitWait(Duration timeout) {
     this(timeout, DEFAULT_INTERVAL);

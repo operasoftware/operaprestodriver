@@ -16,6 +16,12 @@ limitations under the License.
 
 package com.opera.core.systems.scope.internal;
 
+import org.openqa.selenium.support.ui.Duration;
+
+import static java.util.concurrent.TimeUnit.MILLISECONDS;
+import static java.util.concurrent.TimeUnit.MINUTES;
+import static java.util.concurrent.TimeUnit.SECONDS;
+
 /**
  * Enumerator for delay values in milliseconds.
  */
@@ -27,132 +33,124 @@ public enum OperaIntervals {
    * typically happens when it looses connection to Opera or when a triggered command takes too long
    * to finish.
    */
-  RESPONSE_TIMEOUT(60000),
+  RESPONSE_TIMEOUT(new Duration(1, MINUTES)),
 
   /**
    * An implicit wait is to tell WebDriver to poll the DOM for a certain amount of time when trying
    * to find an element or elements if they are not immediately available.  The default setting is
    * 0.  Once set, the implicit wait is set for the life of the WebDriver object instance.
    */
-  IMPLICIT_WAIT(0),
+  IMPLICIT_WAIT(new Duration(0, MILLISECONDS)),
 
   /**
    * The page load timeout specifies how long the driver waits for a page to finish loading before
    * returning the control to the user.
    */
-  PAGE_LOAD_TIMEOUT(30000),
-
-  WINDOW_EVENT_TIMEOUT(5000),
-  OPERA_IDLE_TIMEOUT(5000),
+  PAGE_LOAD_TIMEOUT(new Duration(30, SECONDS)),
 
   /**
    * The default poll interval for queries that are made across a network.  Sleep intervals are not
    * needed for local polling, but we don't want to spam the network.
    */
-  POLL_INTERVAL(10),
+  POLL_INTERVAL(new Duration(10, MILLISECONDS)),
+
+  WINDOW_EVENT_TIMEOUT(new Duration(5, SECONDS)),
+  OPERA_IDLE_TIMEOUT(new Duration(5, SECONDS)),
 
   /**
    * The frequency rate at which to poll internal data structures.  Seeing as the data structures
    * are local and we in most cases wait for some condition to be true when polling, it's highly
    * advised to leave this at 0 to maximize the throughput.
    */
-  INTERNAL_FREQUENCY(0),
+  INTERNAL_FREQUENCY(new Duration(0, MILLISECONDS)),
 
   /**
    * The handshake timeout defines how long the Scope server (OperaDriver) should wait for a
    * connection from a client (Opera) before shutting down.  If set to 0, it will wait
    * indefinitely.
    */
-  HANDSHAKE_TIMEOUT(60000),
+  HANDSHAKE_TIMEOUT(new Duration(1, MINUTES)),
 
-  /**
-   * The default Opera debug proxy server port for OperaDriver to connect to.
-   */
-  SERVER_DEFAULT_PORT(7001),
+  KILL_GRACE_TIMEOUT(new Duration(1, SECONDS)),
 
-  /**
-   * For backwards compatibility with Operas without <code>-debugproxy</code> support, if the user
-   * specifies 0 as the port it will use a random port.
-   */
-  SERVER_RANDOM_PORT_IDENTIFIER(0),
+  DEFAULT_RESPONSE_TIMEOUT(new Duration(10, SECONDS)),
 
-  /**
-   * For backwards compatibility with Operas without <code>-debugproxy</code> support, if the user
-   * specifies -1 as the port it will use the default server proxy port specified in {@link
-   * #SERVER_DEFAULT_PORT}.
-   */
-  SERVER_DEFAULT_PORT_IDENTIFIER(-1),
-
-  KILL_GRACE_TIMEOUT(1000),
-  BACKWARDS_COMPATIBLE(1),
-  DEFAULT_RESPONSE_TIMEOUT(10000),
-
-  QUIT_POLL_INTERVAL(100),
-  QUIT_RESPONSE_TIMEOUT(10000),
+  QUIT_POLL_INTERVAL(new Duration(100, MILLISECONDS)),
+  QUIT_RESPONSE_TIMEOUT(new Duration(10, SECONDS)),
 
   /**
    * Sets the amount of time to wait for an asynchronous script to finish execution before throwing
    * an error.  If the timeout is negative, then the script will be allowed to run indefinitely.
    */
-  SCRIPT_TIMEOUT(10000),
+  SCRIPT_TIMEOUT(new Duration(10, SECONDS)),
 
   /**
    * The interval at which an ECMAScript should be attempted reevaluated in the case of it for some
    * reason failing.  A script reevaluation will time out on {@link #SCRIPT_TIMEOUT}.
    */
-  SCRIPT_RETRY_INTERVAL(50),
+  SCRIPT_RETRY_INTERVAL(new Duration(50, MILLISECONDS)),
 
   /**
    * After starting the launcher we need to wait for the launcher to connect to our listener.  If
    * the launcher does not connect within this timeout, we assume something has gone wrong.
    */
-  LAUNCHER_CONNECT_TIMEOUT(5000),
+  LAUNCHER_CONNECT_TIMEOUT(new Duration(5, SECONDS)),
 
   /**
    * If anything goes wrong while connected to the launcher, don't block forever.
    */
-  LAUNCHER_RESPONSE_TIMEOUT(180000),
+  LAUNCHER_RESPONSE_TIMEOUT(new Duration(3, MINUTES)),
 
   /**
    * If programs such as the launcher exits immediately with an improper exit value (> 0) we can
    * assume something went wrong during initialization.  We need to wait for a short period before
    * checking the exit value as it may take some time to start the program.
    */
-  PROCESS_START_SLEEP(100),
+  PROCESS_START_SLEEP(new Duration(100, MILLISECONDS)),
 
-  MENU_EVENT_TIMEOUT(1000),
+  MENU_EVENT_TIMEOUT(new Duration(1, SECONDS)),
 
   /**
    * When clicking several times in a row (e.g. for a double, triple or quadruple click) 640 ms is
    * the hardcoded interval Opera must wait before loosing the previous click state, not joining
    * clicks together.
    */
-  MULTIPLE_CLICK_SLEEP(640),
+  MULTIPLE_CLICK_SLEEP(new Duration(640, MILLISECONDS)),
 
-  WINDOW_CLOSE_TIMEOUT(500),
+  WINDOW_CLOSE_TIMEOUT(new Duration(100, MILLISECONDS)),
 
   /**
    * Different products have different animations when closing windows, and sometimes it might take
    * a little while if using an Opera action to close a window.
    */
-  WINDOW_CLOSE_USING_ACTION_SLEEP(10);
+  WINDOW_CLOSE_USING_ACTION_SLEEP(new Duration(10, MILLISECONDS));
 
-  private long value;
+  private Duration duration;
 
-  private OperaIntervals(long value) {
-    this.value = value;
+  private OperaIntervals(Duration duration) {
+    this.duration = duration;
   }
 
-  public void setValue(long value) {
-    this.value = value;
+  public void setValue(Duration duration) {
+    this.duration = duration;
   }
 
-  public long getValue() {
-    return value;
+  public Duration getValue() {
+    return duration;
   }
 
+  /**
+   * Converts the duration of the enum value as milliseconds.
+   *
+   * @return duration value in milliseconds
+   */
+  public long getMs() {
+    return duration.in(MILLISECONDS);
+  }
+
+  @Override
   public String toString() {
-    return String.format("%s: %d", super.toString(), getValue());
+    return duration.toString();
   }
 
   @SuppressWarnings("unused")

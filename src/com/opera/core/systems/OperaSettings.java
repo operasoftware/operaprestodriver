@@ -26,7 +26,7 @@ import com.opera.core.systems.arguments.OperaCoreArguments;
 import com.opera.core.systems.arguments.OperaDesktopArguments;
 import com.opera.core.systems.common.lang.OperaBoolean;
 import com.opera.core.systems.runner.launcher.OperaLauncherRunner;
-import com.opera.core.systems.scope.internal.OperaFlags;
+import com.opera.core.systems.scope.internal.OperaDefaults;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -67,9 +67,9 @@ import static com.opera.core.systems.OperaSettings.Capability.PORT;
 import static com.opera.core.systems.OperaSettings.Capability.PRODUCT;
 import static com.opera.core.systems.OperaSettings.Capability.PROFILE;
 import static com.opera.core.systems.runner.launcher.OperaLauncherRunner.LAUNCHER_ENV_VAR;
-import static com.opera.core.systems.scope.internal.OperaIntervals.SERVER_DEFAULT_PORT;
-import static com.opera.core.systems.scope.internal.OperaIntervals.SERVER_DEFAULT_PORT_IDENTIFIER;
-import static com.opera.core.systems.scope.internal.OperaIntervals.SERVER_RANDOM_PORT_IDENTIFIER;
+import static com.opera.core.systems.scope.internal.OperaDefaults.SERVER_DEFAULT_PORT;
+import static com.opera.core.systems.scope.internal.OperaDefaults.SERVER_DEFAULT_PORT_IDENTIFIER;
+import static com.opera.core.systems.scope.internal.OperaDefaults.SERVER_RANDOM_PORT_IDENTIFIER;
 import static org.openqa.selenium.Platform.LINUX;
 
 /**
@@ -227,10 +227,10 @@ public class OperaSettings {
         int port = Integer.parseInt(String.valueOf(value));
 
         // 0 = random, -1 = Opera default (7001) (for use with Opera < 11.60)
-        if (port == SERVER_RANDOM_PORT_IDENTIFIER.getValue()) {
+        if (port == SERVER_RANDOM_PORT_IDENTIFIER) {
           return PortProber.findFreePort();
-        } else if (port == SERVER_DEFAULT_PORT_IDENTIFIER.getValue()) {
-          return (int) SERVER_DEFAULT_PORT.getValue();
+        } else if (port == SERVER_DEFAULT_PORT_IDENTIFIER) {
+          return (int) SERVER_DEFAULT_PORT;
         }
 
         return port;
@@ -308,7 +308,7 @@ public class OperaSettings {
      */
     OPERAIDLE("idle") {
       Boolean getDefaultValue() {
-        return OperaFlags.ENABLE_IDLE;
+        return OperaDefaults.ENABLE_IDLE;
       }
 
       Boolean sanitize(Object enabled) {
@@ -335,7 +335,7 @@ public class OperaSettings {
      */
     AUTOSTART() {
       Boolean getDefaultValue() {
-        return OperaFlags.ENABLE_AUTOSTART;
+        return OperaDefaults.ENABLE_AUTOSTART;
       }
 
       Boolean sanitize(Object enabled) {
@@ -680,7 +680,7 @@ public class OperaSettings {
         FileHandler logFile;
 
         try {
-          logFile = new FileHandler(file.getPath(), OperaFlags.APPEND_TO_LOGFILE);
+          logFile = new FileHandler(file.getPath(), OperaDefaults.APPEND_TO_LOGFILE);
           logFile.setFormatter(new SimpleFormatter());
         } catch (IOException e) {
           throw new WebDriverException("Unable to write to log file: " + e.getMessage(), e);
@@ -886,7 +886,7 @@ public class OperaSettings {
     options.get(AUTOSTART).setValue(enabled);
 
     if (!enabled) {
-      setPort((int) SERVER_DEFAULT_PORT_IDENTIFIER.getValue());
+      setPort((int) SERVER_DEFAULT_PORT_IDENTIFIER);
     }
   }
 
@@ -1004,7 +1004,7 @@ public class OperaSettings {
    *         false otherwise
    */
   public boolean supportsDebugProxy() {
-    return getPort() != SERVER_DEFAULT_PORT.getValue();
+    return getPort() != SERVER_DEFAULT_PORT;
   }
 
   /**

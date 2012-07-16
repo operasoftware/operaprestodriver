@@ -31,9 +31,9 @@ import static com.opera.core.systems.OperaSettings.Capability.OPERAIDLE;
 import static com.opera.core.systems.OperaSettings.Capability.PORT;
 import static com.opera.core.systems.OperaSettings.Capability.PRODUCT;
 import static com.opera.core.systems.OperaSettings.Capability.PROFILE;
-import static com.opera.core.systems.scope.internal.OperaIntervals.SERVER_DEFAULT_PORT;
-import static com.opera.core.systems.scope.internal.OperaIntervals.SERVER_DEFAULT_PORT_IDENTIFIER;
-import static com.opera.core.systems.scope.internal.OperaIntervals.SERVER_RANDOM_PORT_IDENTIFIER;
+import static com.opera.core.systems.scope.internal.OperaDefaults.SERVER_DEFAULT_PORT;
+import static com.opera.core.systems.scope.internal.OperaDefaults.SERVER_DEFAULT_PORT_IDENTIFIER;
+import static com.opera.core.systems.scope.internal.OperaDefaults.SERVER_RANDOM_PORT_IDENTIFIER;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -197,11 +197,11 @@ public class OperaSettingsCapabilitiesTest extends OperaDriverTestCase {
     int port = (Integer) PORT.getDefaultValue();
 
     // In the highly unlikely case that it assigns the random port to 7001...
-    if (port == SERVER_DEFAULT_PORT.getValue()) {
+    if (port == SERVER_DEFAULT_PORT) {
       return;
     }
 
-    assertNotSame((int) SERVER_DEFAULT_PORT.getValue(), PORT.getDefaultValue());
+    assertNotSame((int) SERVER_DEFAULT_PORT, PORT.getDefaultValue());
   }
 
   @Test(expected = NullPointerException.class)
@@ -221,14 +221,14 @@ public class OperaSettingsCapabilitiesTest extends OperaDriverTestCase {
 
   @Test
   public void portSanitizeRandomPortIdentifier() {
-    assertNotSame((int) SERVER_RANDOM_PORT_IDENTIFIER.getValue(),
-                  PORT.sanitize(SERVER_RANDOM_PORT_IDENTIFIER.getValue()));
+    assertNotSame(SERVER_RANDOM_PORT_IDENTIFIER,
+                  PORT.sanitize(SERVER_RANDOM_PORT_IDENTIFIER));
   }
 
   @Test
   public void portSanitizeDefaultPortIdentifier() {
-    assertEquals((int) SERVER_DEFAULT_PORT.getValue(),
-                 PORT.sanitize(SERVER_DEFAULT_PORT_IDENTIFIER.getValue()));
+    assertEquals(SERVER_DEFAULT_PORT,
+                 PORT.sanitize(SERVER_DEFAULT_PORT_IDENTIFIER));
   }
 
   @Test

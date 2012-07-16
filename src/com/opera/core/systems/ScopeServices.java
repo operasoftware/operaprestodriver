@@ -27,7 +27,7 @@ import com.opera.core.systems.scope.ScopeCommand;
 import com.opera.core.systems.scope.exceptions.CommunicationException;
 import com.opera.core.systems.scope.handlers.IConnectionHandler;
 import com.opera.core.systems.scope.handlers.ScopeEventHandler;
-import com.opera.core.systems.scope.internal.OperaFlags;
+import com.opera.core.systems.scope.internal.OperaDefaults;
 import com.opera.core.systems.scope.internal.OperaIntervals;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID;
@@ -130,7 +130,7 @@ public class ScopeServices implements IConnectionHandler {
     }
     availableServices = builder.build();
 
-    createUmsServices(OperaFlags.ENABLE_DEBUGGER, hostInfo);
+    createUmsServices(OperaDefaults.ENABLE_DEBUGGER, hostInfo);
 
     connect();
 
@@ -179,7 +179,7 @@ public class ScopeServices implements IConnectionHandler {
 
     enableServices(wantedServices);
 
-    initializeServices(OperaFlags.ENABLE_DEBUGGER);
+    initializeServices(OperaDefaults.ENABLE_DEBUGGER);
   }
 
   /**
@@ -238,7 +238,7 @@ public class ScopeServices implements IConnectionHandler {
 
   private void waitForHandshake() throws WebDriverException {
     try {
-      waitState.waitForHandshake(OperaIntervals.HANDSHAKE_TIMEOUT.getValue());
+      waitState.waitForHandshake(OperaIntervals.HANDSHAKE_TIMEOUT.getMs());
     } catch (WebDriverException e) {
       shutdown();
       throw e;
@@ -420,8 +420,8 @@ public class ScopeServices implements IConnectionHandler {
     }
 
     if (runner != null) {
-      long interval = OperaIntervals.QUIT_POLL_INTERVAL.getValue();
-      long timeout = OperaIntervals.QUIT_RESPONSE_TIMEOUT.getValue();
+      long interval = OperaIntervals.QUIT_POLL_INTERVAL.getMs();
+      long timeout = OperaIntervals.QUIT_RESPONSE_TIMEOUT.getMs();
 
       while (runner.isOperaRunning() && timeout > 0) {
         try {
@@ -766,7 +766,7 @@ public class ScopeServices implements IConnectionHandler {
    */
   public Response executeCommand(ICommand command, Builder<?> builder) {
     return executeCommand(command, builder,
-                          OperaIntervals.RESPONSE_TIMEOUT.getValue());
+                          OperaIntervals.RESPONSE_TIMEOUT.getMs());
   }
 
   public Response executeCommand(ICommand command, Builder<?> builder,

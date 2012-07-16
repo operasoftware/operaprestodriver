@@ -16,6 +16,8 @@ limitations under the License.
 
 package com.opera.core.systems.scope.services.ums;
 
+import com.google.common.collect.Lists;
+
 import com.opera.core.systems.OperaWebElement;
 import com.opera.core.systems.ScopeServices;
 import com.opera.core.systems.model.RuntimeNode;
@@ -78,8 +80,8 @@ public class EcmascriptService extends AbstractEcmascriptService implements
   private AtomicStampedReference<Runtime> runtime = new AtomicStampedReference<Runtime>(null, 0);
   private ConcurrentMap<Integer, Runtime> runtimesList = new ConcurrentHashMap<Integer, Runtime>();
 
-  private Queue<Integer> runtimesQueue = new LinkedList<Integer>();
-  private Queue<Integer> garbageQueue = new LinkedList<Integer>();
+  private Queue<Integer> runtimesQueue = Lists.newLinkedList();
+  private Queue<Integer> garbageQueue = Lists.newLinkedList();
 
   public EcmascriptService(ScopeServices services, String version) {
     super(services, version);
@@ -261,15 +263,15 @@ public class EcmascriptService extends AbstractEcmascriptService implements
     EvalArg.Builder builder = buildEval(using, runtimeId);
     builder.addAllVariableList(Arrays.asList(variables));
 
-    Response response = executeCommand(ESCommand.EVAL, builder, SCRIPT_TIMEOUT.getValue());
+    Response response = executeCommand(ESCommand.EVAL, builder, SCRIPT_TIMEOUT.getMs());
 
-    if (response == null && retries < SCRIPT_RETRY_INTERVAL.getValue()) {
+    if (response == null && retries < SCRIPT_RETRY_INTERVAL.getMs()) {
       retries++;
       sleepDuration += sleepDuration;
       sleep(sleepDuration);
       recover();
       return eval(using, variables);
-    } else if (retries >= SCRIPT_RETRY_INTERVAL.getValue()) {
+    } else if (retries >= SCRIPT_RETRY_INTERVAL.getMs()) {
       resetCounters();
       throw new WebDriverException("No response on executing ECMAScript evaluation command");
     }

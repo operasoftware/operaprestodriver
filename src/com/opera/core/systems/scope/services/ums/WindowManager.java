@@ -47,6 +47,7 @@ import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static com.opera.core.systems.scope.internal.OperaIntervals.INTERNAL_FREQUENCY;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static com.opera.core.systems.scope.internal.OperaIntervals.WINDOW_CLOSE_TIMEOUT;
 
@@ -242,12 +243,12 @@ public class WindowManager extends AbstractService implements IWindowManager {
     Response response = executeCommand(WindowManagerCommand.CLOSE_WINDOW, closeWindowBuilder);
 
     // TODO(andreastt): OPDRV-195
-    new ImplicitWait(new Duration(WINDOW_CLOSE_TIMEOUT.getValue(), MILLISECONDS))
+    new ImplicitWait(WINDOW_CLOSE_TIMEOUT.getValue(), INTERNAL_FREQUENCY.getValue())
         .until(new Callable<Boolean>() {
-          public Boolean call() {
-            return !windows.containsKey(windowId);
-          }
-        });
+      public Boolean call() {
+        return !windows.containsKey(windowId);
+      }
+    });
 
     if (response == null) {
       throw new WebDriverException("Internal error while closing window");
@@ -264,7 +265,7 @@ public class WindowManager extends AbstractService implements IWindowManager {
       }
     } else if (services.getExec().getActionList().contains(CLOSE_ALL_PAGES_ACTION)) {
       services.getExec().action(CLOSE_ALL_PAGES_ACTION);
-      sleep(OperaIntervals.WINDOW_CLOSE_USING_ACTION_SLEEP.getValue() * toBeClosed);
+      sleep(OperaIntervals.WINDOW_CLOSE_USING_ACTION_SLEEP.getMs() * toBeClosed);
     } else {
       // This is a different type of exception than the one in closeWindow(i)
       throw new UnsupportedOperationException("Product does not support closing windows");

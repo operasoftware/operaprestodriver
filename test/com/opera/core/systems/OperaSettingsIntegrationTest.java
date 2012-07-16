@@ -19,15 +19,17 @@ import org.junit.rules.TemporaryFolder;
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.net.NetworkUtils;
+import org.openqa.selenium.support.ui.Duration;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 
 import static com.opera.core.systems.OperaProduct.CORE;
-import static com.opera.core.systems.scope.internal.OperaIntervals.SERVER_DEFAULT_PORT;
-import static com.opera.core.systems.scope.internal.OperaIntervals.SERVER_DEFAULT_PORT_IDENTIFIER;
-import static com.opera.core.systems.scope.internal.OperaIntervals.SERVER_RANDOM_PORT_IDENTIFIER;
+import static com.opera.core.systems.scope.internal.OperaDefaults.SERVER_DEFAULT_PORT;
+import static com.opera.core.systems.scope.internal.OperaDefaults.SERVER_DEFAULT_PORT_IDENTIFIER;
+import static com.opera.core.systems.scope.internal.OperaDefaults.SERVER_RANDOM_PORT_IDENTIFIER;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -43,7 +45,7 @@ import static org.openqa.selenium.Platform.WINDOWS;
 public class OperaSettingsIntegrationTest extends OperaDriverTestCase {
 
   public static final NetworkUtils NETWORK_UTILS = new NetworkUtils();
-  public final long defaultHandshakeTimeout = OperaIntervals.HANDSHAKE_TIMEOUT.getValue();
+  public final Duration defaultHandshakeTimeout = OperaIntervals.HANDSHAKE_TIMEOUT.getValue();
 
   public OperaSettings settings;
 
@@ -58,7 +60,7 @@ public class OperaSettingsIntegrationTest extends OperaDriverTestCase {
 
   @Before
   public void setup() {
-    OperaIntervals.HANDSHAKE_TIMEOUT.setValue(2000);
+    OperaIntervals.HANDSHAKE_TIMEOUT.setValue(new Duration(2, TimeUnit.SECONDS));
   }
 
   @After
@@ -170,15 +172,15 @@ public class OperaSettingsIntegrationTest extends OperaDriverTestCase {
 
   @Test
   public void portSetToRandomIdentifier() {
-    settings.setPort((int) SERVER_RANDOM_PORT_IDENTIFIER.getValue());
-    assertNotSame((int) SERVER_DEFAULT_PORT.getValue(), settings.getPort());
+    settings.setPort(SERVER_RANDOM_PORT_IDENTIFIER);
+    assertNotSame(SERVER_DEFAULT_PORT, settings.getPort());
     assertDriverCreated(settings);
   }
 
   @Test
   public void portSetToDefaultIdentifier() {
-    settings.setPort((int) SERVER_DEFAULT_PORT_IDENTIFIER.getValue());
-    assertEquals((int) SERVER_DEFAULT_PORT.getValue(), settings.getPort());
+    settings.setPort(SERVER_DEFAULT_PORT_IDENTIFIER);
+    assertEquals(SERVER_DEFAULT_PORT, settings.getPort());
     assertDriverCreated(settings);
   }
 

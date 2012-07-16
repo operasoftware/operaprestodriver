@@ -44,9 +44,8 @@ public class NavigationTest extends OperaDriverTestCase {
   @After
   public void resetPageLoadTimeout() {
     // Make sure page load timeout is reset after each test, if one happens to fail
-    driver.manage().timeouts().pageLoadTimeout(OperaIntervals.PAGE_LOAD_TIMEOUT.getValue(),
+    driver.manage().timeouts().pageLoadTimeout(OperaIntervals.PAGE_LOAD_TIMEOUT.getMs(),
                                                TimeUnit.MILLISECONDS);
-
   }
 
   @Test
@@ -83,7 +82,7 @@ public class NavigationTest extends OperaDriverTestCase {
     driver.navigate().to(fetchedUrl);
 
     // Wait for redirect
-    Wait<WebDriver> wait = new WebDriverWait(driver, OperaIntervals.PAGE_LOAD_TIMEOUT.getValue());
+    Wait<WebDriver> wait = new WebDriverWait(driver, OperaIntervals.PAGE_LOAD_TIMEOUT.getMs());
     wait.until(new ExpectedCondition<Object>() {
       public Boolean apply(WebDriver driver) {
         return !driver.getCurrentUrl().equals(fetchedUrl);

@@ -31,12 +31,13 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.openqa.selenium.Capabilities;
-import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.support.ui.Duration;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 import static com.opera.core.systems.OperaProduct.CORE;
 import static com.opera.core.systems.OperaProduct.MINI;
@@ -60,7 +61,8 @@ import static org.openqa.selenium.Platform.LINUX;
 @Ignore(products = {CORE, MINI, MOBILE, SDK})
 public class OperaDesktopDriverTest extends OperaDesktopDriverTestCase {
 
-  public final long defaultHandshakeTimeout = OperaIntervals.HANDSHAKE_TIMEOUT.getValue();
+  public static final Duration
+      DEFAULT_HANDSHAKE_TIMEOUT = OperaIntervals.HANDSHAKE_TIMEOUT.getValue();
 
   public TestOperaDesktopDriver driver;
   public DesiredCapabilities capabilities = DesiredCapabilities.opera();
@@ -68,7 +70,7 @@ public class OperaDesktopDriverTest extends OperaDesktopDriverTestCase {
 
   @Before
   public void setup() throws IOException {
-    OperaIntervals.HANDSHAKE_TIMEOUT.setValue(2000);
+    OperaIntervals.HANDSHAKE_TIMEOUT.setValue(new Duration(2, TimeUnit.SECONDS));
     profileDirectory = new TemporaryFolder().newFolder();
     capabilities.setCapability(PROFILE.getCapability(), profileDirectory.getPath());
   }
@@ -82,7 +84,7 @@ public class OperaDesktopDriverTest extends OperaDesktopDriverTestCase {
 
   @After
   public void reset() {
-    OperaIntervals.HANDSHAKE_TIMEOUT.setValue(defaultHandshakeTimeout);
+    OperaIntervals.HANDSHAKE_TIMEOUT.setValue(DEFAULT_HANDSHAKE_TIMEOUT);
     environment.unset(OperaPaths.OPERA_PATH_ENV_VAR);
   }
 
