@@ -43,9 +43,6 @@ public class ImplicitWait extends CallbackWait {
     super();
     withTimeout(timeout);
     pollingEvery(interval);
-
-    System.out.println(timeout);
-    System.out.println(interval);
   }
 
 }

@@ -71,6 +71,7 @@ public class WindowPage extends Page {
     String currentWindow = driver.getWindowHandle();
 
     // Trigger new window load and wait for window to open
+    // TODO: OPDRV-199
     windowLink.click();
     try {
       Thread.sleep(100);
