@@ -997,8 +997,8 @@ public class OperaSettings {
   /**
    * Whether or not the currently specified Opera configuration supports the
    * <code>-debugproxy</code> command-line argument.  If the specified port is not equal to the
-   * default proxy server port specified in {@link com.opera.core.systems.scope.internal.OperaIntervals#SERVER_DEFAULT_PORT},
-   * this will be true.
+   * default proxy server port specified in {@link OperaDefaults#SERVER_DEFAULT_PORT}, this will be
+   * true.
    *
    * @return true if this configuration supports the <code>-debugproxy</code> command-line argument,
    *         false otherwise
