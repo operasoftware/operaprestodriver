@@ -45,7 +45,7 @@ import static org.junit.matchers.JUnitMatchers.containsString;
 @RequiresService("selftest")
 public class SelftestTest extends OperaDriverTestCase {
 
-  public static final long DEFAULT_SELFTEST_TIMEOUT = OperaIntervals.SELFTEST_TIMEOUT.getValue();
+  public static final long DEFAULT_SELFTEST_TIMEOUT = OperaIntervals.SELFTEST_TIMEOUT.getMs();
 
   @Before
   public void resetTimeout() {
