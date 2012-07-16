@@ -120,18 +120,22 @@ public class Selftest extends AbstractService implements ISelftest {
       this.more = more;
     }
 
+    @Override
     public String getTag() {
       return tag;
     }
 
+    @Override
     public String getDescription() {
       return description;
     }
 
+    @Override
     public ResultType getResult() {
       return result;
     }
 
+    @Override
     public String getMore() {
       return more;
     }
