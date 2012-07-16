@@ -156,20 +156,21 @@ public class OperaSettings {
      */
     BINARY() {
       File getDefaultValue() {
-        String path = OperaPaths.operaPath();
-        return path == null ? null : new File(path);
+        return OperaBinary.find((OperaProduct) PRODUCT.getDefaultValue());
       }
 
-      Object sanitize(Object path) {
-        if (path == null) {
-          return getDefaultValue();
+      Object sanitize(Object binary) {
+        if (binary == null) {
+          return binary;
         }
 
-        if (path instanceof String) {
-          return new File(String.valueOf(path));
+        if (binary instanceof String) {
+          return new OperaBinary(String.valueOf(binary)).getFile();
+        } else if (binary instanceof File) {
+          return new OperaBinary((File) binary).getFile();
         }
 
-        return path;
+        throw new IllegalArgumentException("Unknown type: " + binary.getClass().getSimpleName());
       }
     },
 
@@ -224,13 +225,13 @@ public class OperaSettings {
 
       Integer sanitize(Object value) {
         checkNotNull(value);
-        int port = Integer.parseInt(String.valueOf(value));
+        int port = Integer.valueOf(String.valueOf(value));
 
         // 0 = random, -1 = Opera default (7001) (for use with Opera < 11.60)
         if (port == SERVER_RANDOM_PORT_IDENTIFIER) {
-          return PortProber.findFreePort();
+          port = PortProber.findFreePort();
         } else if (port == SERVER_DEFAULT_PORT_IDENTIFIER) {
-          return (int) SERVER_DEFAULT_PORT;
+          port = SERVER_DEFAULT_PORT;
         }
 
         return port;
@@ -693,7 +694,9 @@ public class OperaSettings {
   }
 
   /**
-   * Returns the browser binary executable.
+   * Returns the browser binary executable.  If binary is set to null, it will attempt to find a
+   * suitable Opera binary on your system based on {@link #getProduct()} (which defaults to {@link
+   * OperaProduct#DESKTOP}.
    *
    * @return the Opera binary
    */
@@ -702,12 +705,14 @@ public class OperaSettings {
   }
 
   /**
-   * Sets Opera's binary executable location.
+   * Sets Opera's binary executable location.  If set to null, it will attempt to find a suitable
+   * Opera binary on your system based on {@link #getProduct()} (which defaults to {@link
+   * OperaProduct#DESKTOP}.
    *
    * @param binary the Opera binary
    */
   public void setBinary(File binary) {
-    options.get(BINARY).setValue(binary);
+    options.get(BINARY).setValue(BINARY.sanitize(binary));
   }
 
   /**
@@ -801,9 +806,7 @@ public class OperaSettings {
    */
   public void setProfile(String profileDirectory) {
     options.get(PROFILE).setValue(PROFILE.sanitize(profileDirectory));
-    if (profileDirectory != null && profileDirectory.isEmpty()) {  // "" (empty string)
-      supportsPd = false;
-    }
+    supportsPd = !(profileDirectory != null && profileDirectory.isEmpty());
   }
 
   /**
@@ -813,6 +816,7 @@ public class OperaSettings {
    */
   public void setProfile(OperaProfile profile) {
     options.get(PROFILE).setValue(profile);
+    supportsPd = true;
   }
 
   /**
@@ -886,7 +890,7 @@ public class OperaSettings {
     options.get(AUTOSTART).setValue(enabled);
 
     if (!enabled) {
-      setPort((int) SERVER_DEFAULT_PORT_IDENTIFIER);
+      setPort(SERVER_DEFAULT_PORT_IDENTIFIER);
     }
   }
 

@@ -34,6 +34,8 @@ import static com.opera.core.systems.OperaSettings.Capability.PROFILE;
 import static com.opera.core.systems.scope.internal.OperaDefaults.SERVER_DEFAULT_PORT;
 import static com.opera.core.systems.scope.internal.OperaDefaults.SERVER_DEFAULT_PORT_IDENTIFIER;
 import static com.opera.core.systems.scope.internal.OperaDefaults.SERVER_RANDOM_PORT_IDENTIFIER;
+import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -104,7 +106,7 @@ public class OperaSettingsCapabilitiesTest extends OperaDriverTestCase {
     assertTrue("Expected log file to be of type File, got: " +
                sanitizedLogFile.getClass().getName(),
                sanitizedLogFile instanceof File);
-    assertEquals(logFile.getAbsolutePath(), ((File) sanitizedLogFile).getAbsolutePath());
+    assertEquals(logFile.getCanonicalPath(), ((File) sanitizedLogFile).getCanonicalPath());
   }
 
   @Test
@@ -113,32 +115,41 @@ public class OperaSettingsCapabilitiesTest extends OperaDriverTestCase {
     assertTrue("Expected log file to by of type File, got: " +
                sanitizedLogFile.getClass().getName(),
                sanitizedLogFile instanceof File);
-    assertEquals(resources.fakeFile().getAbsolutePath(),
-                 ((File) sanitizedLogFile).getAbsolutePath());
+    assertEquals(resources.fakeFile().getCanonicalPath(),
+                 ((File) sanitizedLogFile).getCanonicalPath());
   }
 
+  // This presumes Opera is installed on the system, which it should
   @Test
-  public void binaryHasNullAsDefaultValue() {
+  public void binaryDoesNotHaveNullAsDefaultValue() {
     assertNotNull(BINARY.getDefaultValue());
   }
 
   @Test
   public void binarySanitizeNull() {
-    assertEquals(new File(OperaPaths.operaPath()).getAbsolutePath(),
-                 ((File) BINARY.sanitize(null)).getAbsolutePath());
+    assertNull(BINARY.sanitize(null));
   }
 
   @Test
-  public void binarySanitizeValidStringPath() {
-    assertEquals(new File(OperaPaths.operaPath()).getAbsolutePath(),
-                 ((File) BINARY.sanitize(OperaPaths.operaPath())).getAbsolutePath());
+  public void binarySanitizeValidStringPath() throws IOException {
+    assertEquals(new OperaBinary(OperaProduct.DESKTOP).getFile().getCanonicalPath(),
+                 ((File) BINARY.sanitize(OperaBinary.find(OperaProduct.DESKTOP)))
+                     .getCanonicalPath());
   }
 
   @Test
   public void binarySanitizeInvalidStringPath() {
-    assertEquals(resources.fakeFile().getAbsolutePath(),
-                 ((File) BINARY.sanitize(resources.fakeFile().getAbsolutePath()))
-                     .getAbsolutePath());
+    Exception exception = null;
+
+    try {
+      BINARY.sanitize(resources.fakeFile());
+    } catch (RuntimeException e) {
+      exception = e;
+    }
+
+    assertThat(exception, is(instanceOf(WebDriverException.class)));
+    assertThat(exception.getMessage(),
+               containsString("Opera binary does not exist or is not a real file"));
   }
 
   @Test
@@ -201,12 +212,20 @@ public class OperaSettingsCapabilitiesTest extends OperaDriverTestCase {
       return;
     }
 
-    assertNotSame((int) SERVER_DEFAULT_PORT, PORT.getDefaultValue());
+    assertNotSame(SERVER_DEFAULT_PORT, PORT.getDefaultValue());
   }
 
-  @Test(expected = NullPointerException.class)
+  @Test
   public void portSanitizeNull() {
-    PORT.sanitize(null);
+    Exception exception = null;
+
+    try {
+      PORT.sanitize(null);
+    } catch (RuntimeException e) {
+      exception = e;
+    }
+
+    assertThat(exception, is(instanceOf(NullPointerException.class)));
   }
 
   @Test
@@ -243,16 +262,16 @@ public class OperaSettingsCapabilitiesTest extends OperaDriverTestCase {
   }
 
   @Test
-  public void launcherSanitizeStringPath() {
-    assertEquals(resources.executableBinary().getAbsolutePath(),
-                 ((File) LAUNCHER.sanitize(resources.executableBinary().getAbsolutePath()))
-                     .getAbsolutePath());
+  public void launcherSanitizeStringPath() throws IOException {
+    assertEquals(resources.executableBinary().getCanonicalPath(),
+                 ((File) LAUNCHER.sanitize(resources.executableBinary().getCanonicalPath()))
+                     .getCanonicalPath());
   }
 
   @Test
-  public void launcherSanitizeFile() {
-    assertEquals(resources.executableBinary().getAbsolutePath(),
-                 ((File) LAUNCHER.sanitize(resources.executableBinary())).getAbsolutePath());
+  public void launcherSanitizeFile() throws IOException {
+    assertEquals(resources.executableBinary().getCanonicalPath(),
+                 ((File) LAUNCHER.sanitize(resources.executableBinary())).getCanonicalPath());
   }
 
   @Test
@@ -265,17 +284,17 @@ public class OperaSettingsCapabilitiesTest extends OperaDriverTestCase {
     File path = tmp.newFolder();
     Object profile = PROFILE.sanitize(path.getPath());
     assertTrue(profile instanceof OperaProfile);
-    assertEquals(path.getAbsolutePath(),
-                 ((OperaProfile) profile).getDirectory().getAbsolutePath());
+    assertEquals(path.getCanonicalPath(),
+                 ((OperaProfile) profile).getDirectory().getCanonicalPath());
   }
 
   @Test
-  public void profileSanitizeOperaProfileInstance() {
+  public void profileSanitizeOperaProfileInstance() throws IOException {
     OperaProfile reference = new OperaProfile();
     Object profile = PROFILE.sanitize(reference);
     assertTrue(profile instanceof OperaProfile);
-    assertEquals(reference.getDirectory().getAbsolutePath(),
-                 ((OperaProfile) profile).getDirectory().getAbsolutePath());
+    assertEquals(reference.getDirectory().getCanonicalPath(),
+                 ((OperaProfile) profile).getDirectory().getCanonicalPath());
   }
 
   @Test
@@ -296,9 +315,17 @@ public class OperaSettingsCapabilitiesTest extends OperaDriverTestCase {
     assertFalse((Boolean) OPERAIDLE.getDefaultValue());
   }
 
-  @Test(expected = NullPointerException.class)
+  @Test
   public void operaIdleSanitizeNull() {
-    OPERAIDLE.sanitize(null);
+    Exception exception = null;
+
+    try {
+      OPERAIDLE.sanitize(null);
+    } catch (RuntimeException e) {
+      exception = e;
+    }
+
+    assertThat(exception, is(instanceOf(NullPointerException.class)));
   }
 
   @Test
@@ -322,9 +349,17 @@ public class OperaSettingsCapabilitiesTest extends OperaDriverTestCase {
     assertNull(DISPLAY.getDefaultValue());
   }
 
-  @Test(expected = NullPointerException.class)
+  @Test
   public void displaySanitizeNull() {
-    DISPLAY.sanitize(null);
+    Exception exception = null;
+
+    try {
+      DISPLAY.sanitize(null);
+    } catch (RuntimeException e) {
+      exception = e;
+    }
+
+    assertThat(exception, is(instanceOf(NullPointerException.class)));
   }
 
   @Test
@@ -343,9 +378,17 @@ public class OperaSettingsCapabilitiesTest extends OperaDriverTestCase {
     assertTrue((Boolean) AUTOSTART.getDefaultValue());
   }
 
-  @Test(expected = NullPointerException.class)
+  @Test
   public void autostartSanitizeNull() {
-    AUTOSTART.sanitize(null);
+    Exception exception = null;
+
+    try {
+      AUTOSTART.sanitize(null);
+    } catch (RuntimeException e) {
+      exception = e;
+    }
+
+    assertThat(exception, is(instanceOf(NullPointerException.class)));
   }
 
   @Test
@@ -370,9 +413,17 @@ public class OperaSettingsCapabilitiesTest extends OperaDriverTestCase {
     assertFalse((Boolean) NO_RESTART.getDefaultValue());
   }
 
-  @Test(expected = NullPointerException.class)
+  @Test
   public void noRestartSanitizeNull() {
-    NO_RESTART.sanitize(null);
+    Exception exception = null;
+
+    try {
+      NO_RESTART.sanitize(null);
+    } catch (RuntimeException e) {
+      exception = e;
+    }
+
+    assertThat(exception, is(instanceOf(NullPointerException.class)));
   }
 
   @Test
@@ -397,9 +448,17 @@ public class OperaSettingsCapabilitiesTest extends OperaDriverTestCase {
     assertFalse((Boolean) NO_QUIT.getDefaultValue());
   }
 
-  @Test(expected = NullPointerException.class)
+  @Test
   public void noQuitSanitizeNull() {
-    NO_QUIT.sanitize(null);
+    Exception exception = null;
+
+    try {
+      NO_QUIT.sanitize(null);
+    } catch (RuntimeException e) {
+      exception = e;
+    }
+
+    assertThat(exception, is(instanceOf(NullPointerException.class)));
   }
 
   @Test
@@ -424,9 +483,17 @@ public class OperaSettingsCapabilitiesTest extends OperaDriverTestCase {
     assertFalse((Boolean) DETACH.getDefaultValue());
   }
 
-  @Test(expected = NullPointerException.class)
+  @Test
   public void detachSanitizeNull() {
-    DETACH.sanitize(null);
+    Exception exception = null;
+
+    try {
+      DETACH.sanitize(null);
+    } catch (RuntimeException e) {
+      exception = e;
+    }
+
+    assertThat(exception, is(instanceOf(NullPointerException.class)));
   }
 
   @Test
@@ -462,9 +529,18 @@ public class OperaSettingsCapabilitiesTest extends OperaDriverTestCase {
     assertEquals(OperaProduct.MOBILE, product);
   }
 
-  @Test(expected = WebDriverException.class)
+  @Test
   public void productSanitizeInvalidString() {
-    PRODUCT.sanitize("hoobaflooba");
+    Exception exception = null;
+
+    try {
+      PRODUCT.sanitize("hoobaflooba");
+    } catch (RuntimeException e) {
+      exception = e;
+    }
+
+    assertThat(exception, is(instanceOf(WebDriverException.class)));
+    // TODO(andreastt): Add more checks here
   }
 
   @Test

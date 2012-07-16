@@ -41,13 +41,17 @@ import static com.opera.core.systems.OperaSettings.Capability.AUTOSTART;
 import static com.opera.core.systems.runner.launcher.OperaLauncherRunner.LAUNCHER_ENV_VAR;
 import static com.opera.core.systems.scope.internal.OperaDefaults.SERVER_DEFAULT_PORT;
 import static com.opera.core.systems.scope.internal.OperaDefaults.SERVER_DEFAULT_PORT_IDENTIFIER;
+import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+import static org.junit.matchers.JUnitMatchers.containsString;
 import static org.openqa.selenium.Platform.LINUX;
 import static org.openqa.selenium.Platform.WINDOWS;
 
@@ -105,13 +109,23 @@ public class OperaSettingsTest extends OperaDriverTestCase {
   @Test
   public void binaryDefaultOpera() {
     assertNotNull(settings.getBinary());
+    System.out.println(settings.getBinary());
     assertTrue(settings.getBinary().exists());
   }
 
   @Test
   public void binaryCanBeSet() {
-    settings.setBinary(resources.fakeFile());
-    assertEquals(resources.fakeFile(), settings.getBinary());
+    Exception exception = null;
+
+    try {
+      settings.setBinary(resources.fakeFile());
+    } catch (RuntimeException e) {
+      exception = e;
+    }
+
+    assertThat(exception, is(instanceOf(WebDriverException.class)));
+    assertThat(exception.getMessage(),
+               containsString("Opera binary does not exist or is not a real file"));
   }
 
   @Test

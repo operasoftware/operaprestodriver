@@ -85,7 +85,7 @@ public class OperaDesktopDriverTest extends OperaDesktopDriverTestCase {
   @After
   public void reset() {
     OperaIntervals.HANDSHAKE_TIMEOUT.setValue(DEFAULT_HANDSHAKE_TIMEOUT);
-    environment.unset(OperaPaths.OPERA_PATH_ENV_VAR);
+    environment.unset(OperaBinary.OPERA_PATH_ENV_VAR);
   }
 
   @Test
@@ -127,7 +127,7 @@ public class OperaDesktopDriverTest extends OperaDesktopDriverTestCase {
 
   @Test
   public void environmentalBinaryPathIsRespected() {
-    environment.set(OperaPaths.OPERA_PATH_ENV_VAR, resources.executableBinary().getPath());
+    environment.set(OperaBinary.OPERA_PATH_ENV_VAR, resources.executableBinary().getPath());
 
     try {
       new TestOperaDesktopDriver();
@@ -145,8 +145,8 @@ public class OperaDesktopDriverTest extends OperaDesktopDriverTestCase {
   @Test
   @Ignore(platforms = LINUX)
   public void environmentalBinaryPathWorks() throws IOException {
-    File binary = new File(OperaPaths.findOperaInstallationPath());
-    environment.set(OperaPaths.OPERA_PATH_ENV_VAR, binary.getPath());
+    File binary = new OperaBinary(OperaProduct.DESKTOP).getFile();
+    environment.set(OperaBinary.OPERA_PATH_ENV_VAR, binary.getPath());
 
     driver = new TestOperaDesktopDriver();
     assertEquals(binary.getCanonicalPath(), driver.getSettings().getBinary().getCanonicalPath());

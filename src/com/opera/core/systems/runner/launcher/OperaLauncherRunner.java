@@ -22,7 +22,7 @@ import com.google.common.io.ByteStreams;
 import com.google.common.io.Files;
 import com.google.protobuf.GeneratedMessage;
 
-import com.opera.core.systems.OperaPaths;
+import com.opera.core.systems.OperaBinary;
 import com.opera.core.systems.OperaProduct;
 import com.opera.core.systems.OperaSettings;
 import com.opera.core.systems.arguments.OperaArgument;
@@ -112,7 +112,7 @@ public class OperaLauncherRunner extends OperaRunner
 
     // Find an available Opera if present
     if (settings.getBinary() == null) {
-      settings.setBinary(new File(OperaPaths.operaPath()));
+      settings.setBinary(OperaBinary.find(settings.getProduct()));
     }
 
     // Create list of arguments for launcher binary

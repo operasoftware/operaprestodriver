@@ -86,7 +86,7 @@ public class OperaLauncherRunnerTest extends OperaDriverTestCase {
 
   @Test
   public void testConstructorWithSettingsBinary() {
-    settings.setBinary(new File(OperaPaths.operaPath()));
+    settings.setBinary(OperaBinary.find());
     runner = new TestOperaLauncherRunner(settings);
     assertNotNull(runner);
   }
