@@ -14,10 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package com.opera.core.systems.util;
+package com.opera.core.systems.common.collect;
+
+import com.google.common.collect.Sets;
 
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -28,7 +29,7 @@ import java.util.Set;
  */
 public class CaseInsensitiveStringSet implements Set<String> {
 
-  HashSet<String> set = new HashSet<String>();
+  private final Set<String> set = Sets.newHashSet();
 
   public boolean add(String e) {
     return set.add(e.toLowerCase());
