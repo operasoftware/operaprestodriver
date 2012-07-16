@@ -53,6 +53,7 @@ import com.opera.core.systems.scope.services.IOperaExec;
 import com.opera.core.systems.scope.services.IPrefs;
 import com.opera.core.systems.scope.services.ISelftest;
 import com.opera.core.systems.scope.services.IWindowManager;
+import com.opera.core.systems.scope.services.ums.Selftest;
 import com.opera.core.systems.scope.services.ums.SystemInputManager;
 import com.opera.core.systems.scope.services.ums.UmsServices;
 import com.opera.core.systems.scope.stp.StpConnection;
@@ -79,6 +80,7 @@ public class ScopeServices implements IConnectionHandler {
   private final Map<String, String> versions;
   private final StpThread stpThread;
   private final AtomicInteger tagCounter;
+  private final WaitState waitState = new WaitState();
 
   private ICoreUtils coreUtils;
   private IEcmaScriptDebugger debugger;
@@ -91,7 +93,6 @@ public class ScopeServices implements IConnectionHandler {
   private HostInfo hostInfo;
   private ICookieManager cookieManager;
   private ISelftest selftest;
-  private WaitState waitState = new WaitState();
   private StpConnection connection = null;
   private List<String> listedServices;
   private StringBuilder selftestOutput;
@@ -550,18 +551,16 @@ public class ScopeServices implements IConnectionHandler {
     waitState.onSelftestDone(results);
   }
 
-  public String selftest(List<String> modules, long timeout) {
+  public List<Selftest.SelftestResult> selftest(List<String> modules, long timeout) {
     if (selftest == null) {
       throw new UnsupportedOperationException("selftest service is not supported");
     }
 
     selftest.runSelftests(modules);
-    return waitState.waitForSelftestDone(timeout);
+    return Selftest.parseSelftests(waitState.waitForSelftestDone(timeout));
   }
 
   public void waitForWindowLoaded(int activeWindowId, long timeout) {
-    logger.finest("waitForWindowLoaded with params activeWindowId=" +
-                  activeWindowId + " timeout=" + timeout);
     waitState.waitForWindowLoaded(activeWindowId, timeout);
   }
 

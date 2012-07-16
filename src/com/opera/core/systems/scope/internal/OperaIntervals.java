@@ -123,7 +123,12 @@ public enum OperaIntervals {
    * Different products have different animations when closing windows, and sometimes it might take
    * a little while if using an Opera action to close a window.
    */
-  WINDOW_CLOSE_USING_ACTION_SLEEP(new Duration(10, MILLISECONDS));
+  WINDOW_CLOSE_USING_ACTION_SLEEP(new Duration(10, MILLISECONDS)),
+
+  /**
+   * The timeout for selftests.
+   */
+  SELFTEST_TIMEOUT(new Duration(200, SECONDS));
 
   private Duration duration;
 

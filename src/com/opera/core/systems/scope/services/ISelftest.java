@@ -18,7 +18,14 @@ package com.opera.core.systems.scope.services;
 
 import java.util.List;
 
+/**
+ * Runs Opera's selftests through Scope.
+ */
 public interface ISelftest {
+
+  public enum ResultType {
+    PASS, FAIL, SKIP
+  }
 
   /**
    * Run the selftests for the specified modules.
@@ -27,78 +34,18 @@ public interface ISelftest {
    */
   void runSelftests(List<String> modules);
 
-  public enum ResultType {
-    PASS, FAIL, SKIP
-  }
+  /**
+   * Represents a single result from a selftest.
+   */
+  public interface ISelftestResult {
 
-  class SelftestResult {
+    String getTag();
 
-    private final String tag;
-    private final String description;
-    private final ResultType result;
-    private final String more;
+    String getDescription();
 
-    public SelftestResult(String tag, String description, ResultType result) {
-      this(tag, description, result, null);
-    }
+    ResultType getResult();
 
-    public SelftestResult(String tag, String description, ResultType result, String more) {
-      this.tag = tag;
-      this.description = description;
-      this.result = result;
-      this.more = more;
-    }
-
-    public String getTag() {
-      return tag;
-    }
-
-    public String getDescription() {
-      return description;
-    }
-
-    public ResultType getResult() {
-      return result;
-    }
-
-    public String getMore() {
-      return more;
-    }
-
-    @Override
-    public String toString() {
-      String format;
-      Object[] args;
-
-      if (more != null) {
-        format = "%s:%s\t%s\t%s";
-        args = new Object[]{tag, description, result, more};
-      } else {
-        format = "%s:%s\t%s";
-        args = new Object[]{tag, description, result};
-      }
-
-      return String.format(format, args);
-    }
-
-    @Override
-    public boolean equals(Object other) {
-      if (!(other instanceof SelftestResult)) {
-        return false;
-      }
-
-      SelftestResult result = (SelftestResult) other;
-      return result.tag.equals(this.tag) &&
-             result.description.equals(this.description) &&
-             result.result == this.result &&
-             (result.more == null || result.more.equals(this.more));
-    }
-
-    // TODO(andreastt): Should match equals()
-    @Override
-    public int hashCode() {
-      return super.hashCode();
-    }
+    String getMore();
 
   }
 

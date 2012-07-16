@@ -16,6 +16,7 @@ limitations under the License.
 
 package com.opera.core.systems;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 
@@ -81,6 +82,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static com.opera.core.systems.OperaProduct.CORE;
 import static com.opera.core.systems.OperaProduct.DESKTOP;
 import static com.opera.core.systems.OperaProduct.MOBILE;
+import static com.opera.core.systems.scope.services.ums.Selftest.SelftestResult;
 import static org.openqa.selenium.Platform.WINDOWS;
 
 /**
@@ -877,6 +879,19 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
       return this;
     }
 
+    /**
+     * Defines the amount of time to wait before aborting a running selftest executed by {@link
+     * OperaDriver#selftest(String)}.
+     *
+     * @param time the amount of time to wait
+     * @param unit the unit of measure for {@code time}
+     * @return a self reference
+     */
+    public Timeouts selftestTimeout(long time, TimeUnit unit) {
+      OperaIntervals.SELFTEST_TIMEOUT.setValue(TimeUnit.MILLISECONDS.convert(time, unit));
+      return this;
+    }
+
   }
 
   // TODO: CORE-39436 areas outside of the current viewport is black, this is a problem with Opera not OperaDriver
@@ -1039,14 +1054,12 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
   }
 
   /**
-   * Executes selftests for the given module.
-   *
-   * @param modules the list of modules to run selftests for
-   * @param timeout the time out before aborting the operation
-   * @return results of the selftests
+   * Executes the selftests for the given module.  WebDriver generally has a blocking API so this
+   * method will return when the test is complete, or when {@link OperaIntervals#SELFTEST_TIMEOUT}
+   * is reached.
    */
-  public String selftest(List<String> modules, long timeout) {
-    return services.selftest(modules, timeout);
+  public List<SelftestResult> selftest(String module) {
+    return services.selftest(ImmutableList.of(module), OperaIntervals.SELFTEST_TIMEOUT.getValue());
   }
 
   /**

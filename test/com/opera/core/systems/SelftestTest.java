@@ -16,39 +16,46 @@ limitations under the License.
 
 package com.opera.core.systems;
 
+import com.google.common.collect.ImmutableList;
+
+import com.opera.core.systems.scope.exceptions.ResponseNotReceivedException;
+import com.opera.core.systems.scope.internal.OperaIntervals;
 import com.opera.core.systems.scope.services.ISelftest.ResultType;
-import com.opera.core.systems.scope.services.ISelftest.SelftestResult;
 import com.opera.core.systems.scope.services.ums.Selftest;
 import com.opera.core.systems.testing.OperaDriverTestCase;
+import com.opera.core.systems.testing.RequiresService;
 
+import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
+import static com.opera.core.systems.scope.services.ums.Selftest.SelftestResult;
+import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+import static org.junit.matchers.JUnitMatchers.containsString;
 
+@RequiresService("selftest")
 public class SelftestTest extends OperaDriverTestCase {
 
-  @Test
-  public void testSelftests() {
-    if (driver.utils().getProduct().is(OperaProduct.CORE)) {
-      String results;
-      try {
-        results = driver.selftest(Arrays.asList("about"), 30000);
-      } catch (UnsupportedOperationException e) {
-        // This service isn't available everywhere, don't fail if we get that exception
-        if (e.getMessage().contains("selftest is not supported")) {
-          return;
-        } else {
-          throw e;
-        }
-      }
+  public static final long DEFAULT_SELFTEST_TIMEOUT = OperaIntervals.SELFTEST_TIMEOUT.getValue();
 
-      assertNotNull("Running selftests doesn't blow up, returns non-null result.", results);
-    }
+  @Before
+  public void resetTimeout() {
+    driver.manage().timeouts().selftestTimeout(DEFAULT_SELFTEST_TIMEOUT, TimeUnit.MILLISECONDS);
+  }
+
+  @Test
+  public void selftestDoesNotBlowUp() {
+    assertNotNull("Running selftests doesn't blow up, returns non-null result",
+                  driver.selftest("about"));
   }
 
   @Test
@@ -66,35 +73,39 @@ public class SelftestTest extends OperaDriverTestCase {
 
   @Test
   public void parsing() {
-    String
-        data =
+    String data =
         "foo:bar\tPASS\nlorem:ipsum dolor sit amet\tFAIL\tmore\nmore:tests here\tSKIP\treason\n";
-    List<SelftestResult> results;
 
-    if (driver.utils().getProduct().equals("core-gogi")) {
-      try {
-        results = Selftest.parseSelftests(driver.selftest(Arrays.asList("nosuchmodule"), 30000));
-      } catch (UnsupportedOperationException e) {
-        // This service isn't available everywhere. Don't fail if we get that
-        // exception.
-        if (e.getMessage().contains("selftest is not supported")) {
-          return;
-        } else {
-          throw e;
-        }
-      }
+    List<SelftestResult> expected = ImmutableList.of(
+        new SelftestResult("foo", "bar", ResultType.PASS),
+        new SelftestResult("lorem",
+                           "ipsum dolor sit amet",
+                           ResultType.FAIL,
+                           "more"),
+        new SelftestResult("more", "tests here",
+                           ResultType.SKIP,
+                           "reason"));
 
-      assertNull("Running selftests for non-existent module parsed as null", results);
-    }
-
-    List<SelftestResult> expected = Arrays.asList(new SelftestResult("foo", "bar", ResultType.PASS),
-                                                  new SelftestResult("lorem",
-                                                                     "ipsum dolor sit amet",
-                                                                     ResultType.FAIL, "more"),
-                                                  new SelftestResult("more", "tests here",
-                                                                     ResultType.SKIP, "reason"));
-    results = Selftest.parseSelftests(data);
+    List<SelftestResult> results = Selftest.parseSelftests(data);
     assertEquals("Sample output parsed correctly", expected, results);
+  }
+
+  private static void assertEmptyList(final String message, final Collection<?> collection) {
+    assertNotNull(message + " null", collection);
+    assertTrue(message + " nonempty " + collection, collection.isEmpty());
+  }
+
+  @Test
+  public void respectsTimeout() {
+    driver.manage().timeouts().selftestTimeout(10, TimeUnit.MILLISECONDS);
+
+    try {
+      driver.selftest("about");
+      fail("Expected selftest to time out");
+    } catch (Exception e) {
+      assertThat(e, is(instanceOf(ResponseNotReceivedException.class)));
+      assertThat(e.getMessage(), containsString("No response in a timely fashion"));
+    }
   }
 
 }

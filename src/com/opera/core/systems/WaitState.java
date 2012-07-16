@@ -678,6 +678,8 @@ public class WaitState {
   }
 
   public void waitForWindowLoaded(int windowId, long timeout) {
+    logger.finest(String.format("waitForWindowLoaded: activeWindowId=%d, timeout=%d",
+                                windowId, timeout));
     waitAndParseResult(timeout, windowId, null, ResponseType.WINDOW_LOADED);
   }
 
