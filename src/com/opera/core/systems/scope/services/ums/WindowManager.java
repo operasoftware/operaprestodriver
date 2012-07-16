@@ -242,7 +242,6 @@ public class WindowManager extends AbstractService implements IWindowManager {
 
     Response response = executeCommand(WindowManagerCommand.CLOSE_WINDOW, closeWindowBuilder);
 
-    // TODO(andreastt): OPDRV-195
     new ImplicitWait(WINDOW_CLOSE_TIMEOUT.getValue(), INTERNAL_FREQUENCY.getValue())
         .until(new Callable<Boolean>() {
       public Boolean call() {
