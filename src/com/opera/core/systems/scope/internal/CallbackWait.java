@@ -53,8 +53,7 @@ public abstract class CallbackWait {
   private final Sleeper sleeper;
 
   private Duration timeout = FluentWait.FIVE_HUNDRED_MILLIS;
-  // TODO(andreastt): OPDRV-195
-  private Duration interval = new Duration(INTERNAL_FREQUENCY.getValue(), MILLISECONDS);
+  private Duration interval = INTERNAL_FREQUENCY.getValue();
   private String message = null;
 
   private List<Class<? extends RuntimeException>> ignoredExceptions = Lists.newLinkedList();
