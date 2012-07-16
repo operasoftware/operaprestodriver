@@ -39,24 +39,7 @@ import com.opera.core.systems.scope.services.IOperaExec;
 import com.opera.core.systems.scope.services.IWindowManager;
 import com.opera.core.systems.scope.services.ums.CoreUtils;
 
-import org.openqa.selenium.Alert;
-import org.openqa.selenium.Beta;
-import org.openqa.selenium.By;
-import org.openqa.selenium.Capabilities;
-import org.openqa.selenium.Cookie;
-import org.openqa.selenium.InvalidSelectorException;
-import org.openqa.selenium.Keyboard;
-import org.openqa.selenium.Mouse;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.NoSuchFrameException;
-import org.openqa.selenium.NoSuchWindowException;
-import org.openqa.selenium.OutputType;
-import org.openqa.selenium.Platform;
-import org.openqa.selenium.StaleElementReferenceException;
-import org.openqa.selenium.TakesScreenshot;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebDriverException;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.internal.WrapsElement;
 import org.openqa.selenium.logging.LocalLogs;
 import org.openqa.selenium.logging.Logs;
@@ -225,10 +208,36 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     // Enable popups for testing purposes
     preferences().set("User Prefs", "Ignore Unrequested Popups", false);
 
+    // Setting proxy settings in browser
+    setProxyPrefs(settings.getProxy());
+
     // Mobile needs to be able to autofocus elements for form input currently.  This is an ugly
     // workaround which should get solved by implementing a standalone bream Scope service.
     if (utils().getProduct().is(MOBILE)) {
       preferences().set("User Prefs", "Allow Autofocus Form Element", true);
+    }
+  }
+
+  protected void setProxyPrefs(Proxy proxy) {
+    if (proxy == null) return;
+    switch (proxy.getProxyType()) {
+      case DIRECT: {
+        preferences().set("Proxy", "Enable Proxy", false);
+      } break;
+      case MANUAL: {
+        if (proxy.getHttpProxy() != null) {
+          preferences().set("Proxy", "Enable Proxy", true);
+          preferences().set("Proxy", "HTTP Server", proxy.getHttpProxy());
+          preferences().set("Proxy", "Use HTTP", true);
+        }
+      } break;
+      case PAC: {
+        if (proxy.getProxyAutoconfigUrl() != null) {
+          preferences().set("Proxy", "Enable Proxy", true);
+          preferences().set("Proxy", "Automatic Proxy Configuration URL", proxy.getProxyAutoconfigUrl());
+          preferences().set("Proxy", "Use Automatic Proxy Configuration", true);
+        }
+      }
     }
   }
 

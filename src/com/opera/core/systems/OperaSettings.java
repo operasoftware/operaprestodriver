@@ -32,6 +32,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.Platform;
+import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.net.PortProber;
 import org.openqa.selenium.remote.DesiredCapabilities;
@@ -53,6 +54,7 @@ import static com.opera.core.systems.OperaProduct.CORE;
 import static com.opera.core.systems.OperaProduct.DESKTOP;
 import static com.opera.core.systems.OperaSettings.Capability.ARGUMENTS;
 import static com.opera.core.systems.OperaSettings.Capability.AUTOSTART;
+import static com.opera.core.systems.OperaSettings.Capability.PROXY;
 import static com.opera.core.systems.OperaSettings.Capability.BACKEND;
 import static com.opera.core.systems.OperaSettings.Capability.BINARY;
 import static com.opera.core.systems.OperaSettings.Capability.DETACH;
@@ -342,6 +344,19 @@ public class OperaSettings {
       Boolean sanitize(Object enabled) {
         checkNotNull(enabled);
         return OperaBoolean.parseBoolean(String.valueOf(enabled));
+      }
+    },
+
+    /**
+     * (Proxy) Proxy-server settings.
+     */
+    PROXY("proxy") {
+      Proxy sanitize(Object proxy) {
+        if (proxy == null || !(proxy instanceof Proxy)) {
+            return null;
+        } else {
+            return (Proxy) proxy;
+        }
       }
     },
 
@@ -892,6 +907,24 @@ public class OperaSettings {
     if (!enabled) {
       setPort(SERVER_DEFAULT_PORT_IDENTIFIER);
     }
+  }
+
+  /**
+   * Returns current proxy settings
+   *
+   * @return current proxy settings
+   */
+  public Proxy getProxy() {
+    return (Proxy) options.get(PROXY).getValue();
+  }
+
+  /**
+   * Sets proxy settings
+   *
+   * @param proxy proxy settings
+   */
+  public void setProxy(Proxy proxy) {
+    options.get(PROXY).setValue(proxy);
   }
 
   /**
