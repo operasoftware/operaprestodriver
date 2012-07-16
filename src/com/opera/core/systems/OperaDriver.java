@@ -888,7 +888,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
      * @return a self reference
      */
     public Timeouts selftestTimeout(long time, TimeUnit unit) {
-      OperaIntervals.SELFTEST_TIMEOUT.setValue(TimeUnit.MILLISECONDS.convert(time, unit));
+      OperaIntervals.SELFTEST_TIMEOUT.setValue(new Duration(time, unit));
       return this;
     }
 
@@ -1059,7 +1059,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
    * is reached.
    */
   public List<SelftestResult> selftest(String module) {
-    return services.selftest(ImmutableList.of(module), OperaIntervals.SELFTEST_TIMEOUT.getValue());
+    return services.selftest(ImmutableList.of(module), OperaIntervals.SELFTEST_TIMEOUT.getMs());
   }
 
   /**
