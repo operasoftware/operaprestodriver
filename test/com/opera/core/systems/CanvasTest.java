@@ -40,8 +40,6 @@ public class CanvasTest {
   public void construction() {
     canvas = new Canvas();
 
-    assertNotNull(canvas);
-
     assertEquals(0, canvas.getX());
     assertEquals(0, canvas.getY());
     assertEquals(0, canvas.getWidth());
@@ -53,8 +51,6 @@ public class CanvasTest {
   @Test
   public void constructionWithArguments() {
     canvas = new Canvas(1, 2, 3, 4);
-
-    assertNotNull(canvas);
 
     assertEquals(1, canvas.getX());
     assertEquals(2, canvas.getY());
