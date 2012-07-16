@@ -16,13 +16,17 @@ limitations under the License.
 
 package com.opera.core.systems;
 
+import com.google.common.base.Function;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Maps;
+
 import org.openqa.selenium.WebDriverException;
 
-import java.util.HashMap;
 import java.util.Map;
 
 /**
- * A list of all Opera products.  Use the {@link #is(OperaProduct)} to compare and check products.
+ * A collection of all Opera products.  Use the {@link #is(OperaProduct)} to compare and check
+ * products.
  */
 public enum OperaProduct {
 
@@ -42,14 +46,14 @@ public enum OperaProduct {
     }
   };
 
-  private final String product;
-  private static final Map<String, OperaProduct> lookup = new HashMap<String, OperaProduct>();
+  private static final Map<String, OperaProduct> lookup =
+      Maps.uniqueIndex(ImmutableList.copyOf(values()), new Function<OperaProduct, String>() {
+        public String apply(OperaProduct product) {
+          return product.toString();
+        }
+      });
 
-  static {
-    for (OperaProduct p : OperaProduct.values()) {
-      lookup.put(p.toString(), p);
-    }
-  }
+  private final String product;
 
   OperaProduct(String product) {
     this.product = product;
