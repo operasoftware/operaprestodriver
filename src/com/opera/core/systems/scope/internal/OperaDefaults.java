@@ -16,7 +16,7 @@ limitations under the License.
 
 package com.opera.core.systems.scope.internal;
 
-public class OperaFlags {
+public class OperaDefaults {
 
   /**
    * Whether the ecmascript-debugger should be enabled or not.

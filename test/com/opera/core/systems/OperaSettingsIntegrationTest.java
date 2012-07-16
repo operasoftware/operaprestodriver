@@ -27,9 +27,9 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 
 import static com.opera.core.systems.OperaProduct.CORE;
-import static com.opera.core.systems.scope.internal.OperaFlags.SERVER_DEFAULT_PORT;
-import static com.opera.core.systems.scope.internal.OperaFlags.SERVER_DEFAULT_PORT_IDENTIFIER;
-import static com.opera.core.systems.scope.internal.OperaFlags.SERVER_RANDOM_PORT_IDENTIFIER;
+import static com.opera.core.systems.scope.internal.OperaDefaults.SERVER_DEFAULT_PORT;
+import static com.opera.core.systems.scope.internal.OperaDefaults.SERVER_DEFAULT_PORT_IDENTIFIER;
+import static com.opera.core.systems.scope.internal.OperaDefaults.SERVER_RANDOM_PORT_IDENTIFIER;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;

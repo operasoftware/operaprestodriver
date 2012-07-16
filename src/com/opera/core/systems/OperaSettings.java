@@ -24,7 +24,7 @@ import com.opera.core.systems.arguments.OperaCoreArguments;
 import com.opera.core.systems.arguments.OperaDesktopArguments;
 import com.opera.core.systems.common.lang.OperaBoolean;
 import com.opera.core.systems.runner.launcher.OperaLauncherRunner;
-import com.opera.core.systems.scope.internal.OperaFlags;
+import com.opera.core.systems.scope.internal.OperaDefaults;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -42,7 +42,6 @@ import java.util.logging.ConsoleHandler;
 import java.util.logging.FileHandler;
 import java.util.logging.Handler;
 import java.util.logging.Level;
-import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
@@ -65,9 +64,9 @@ import static com.opera.core.systems.OperaSettings.Capability.PORT;
 import static com.opera.core.systems.OperaSettings.Capability.PRODUCT;
 import static com.opera.core.systems.OperaSettings.Capability.PROFILE;
 import static com.opera.core.systems.runner.launcher.OperaLauncherRunner.LAUNCHER_ENV_VAR;
-import static com.opera.core.systems.scope.internal.OperaFlags.SERVER_DEFAULT_PORT;
-import static com.opera.core.systems.scope.internal.OperaFlags.SERVER_DEFAULT_PORT_IDENTIFIER;
-import static com.opera.core.systems.scope.internal.OperaFlags.SERVER_RANDOM_PORT_IDENTIFIER;
+import static com.opera.core.systems.scope.internal.OperaDefaults.SERVER_DEFAULT_PORT;
+import static com.opera.core.systems.scope.internal.OperaDefaults.SERVER_DEFAULT_PORT_IDENTIFIER;
+import static com.opera.core.systems.scope.internal.OperaDefaults.SERVER_RANDOM_PORT_IDENTIFIER;
 import static org.openqa.selenium.Platform.LINUX;
 
 /**
@@ -306,7 +305,7 @@ public class OperaSettings {
      */
     OPERAIDLE("idle") {
       Boolean getDefaultValue() {
-        return OperaFlags.ENABLE_IDLE;
+        return OperaDefaults.ENABLE_IDLE;
       }
 
       Boolean sanitize(Object enabled) {
@@ -333,7 +332,7 @@ public class OperaSettings {
      */
     AUTOSTART() {
       Boolean getDefaultValue() {
-        return OperaFlags.ENABLE_AUTOSTART;
+        return OperaDefaults.ENABLE_AUTOSTART;
       }
 
       Boolean sanitize(Object enabled) {
@@ -669,7 +668,7 @@ public class OperaSettings {
         FileHandler logFile;
 
         try {
-          logFile = new FileHandler(file.getPath(), OperaFlags.APPEND_TO_LOGFILE);
+          logFile = new FileHandler(file.getPath(), OperaDefaults.APPEND_TO_LOGFILE);
           logFile.setFormatter(new SimpleFormatter());
         } catch (IOException e) {
           throw new WebDriverException("Unable to write to log file: " + e.getMessage(), e);

@@ -28,7 +28,7 @@ import com.opera.core.systems.runner.OperaRunner;
 import com.opera.core.systems.runner.launcher.OperaLauncherRunner;
 import com.opera.core.systems.scope.exceptions.CommunicationException;
 import com.opera.core.systems.scope.exceptions.ResponseNotReceivedException;
-import com.opera.core.systems.scope.internal.OperaFlags;
+import com.opera.core.systems.scope.internal.OperaDefaults;
 import com.opera.core.systems.scope.internal.OperaIntervals;
 import com.opera.core.systems.scope.services.ICookieManager;
 import com.opera.core.systems.scope.services.ICoreUtils;
@@ -172,7 +172,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     if (settings.autostart()) {
       runner = new OperaLauncherRunner(settings);
     } else {
-      settings.setPort(OperaFlags.SERVER_DEFAULT_PORT_IDENTIFIER);
+      settings.setPort(OperaDefaults.SERVER_DEFAULT_PORT_IDENTIFIER);
     }
 
     logger.config(settings.toString());
@@ -340,7 +340,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
       }
     }
 
-    if (OperaFlags.ENABLE_DEBUGGER) {
+    if (OperaDefaults.ENABLE_DEBUGGER) {
       switchTo().defaultContent();
     }
 
@@ -536,7 +536,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     List<Integer> windowIds = windowManager.getWindowHandles();
     Set<String> handles = new TreeSet<String>();
 
-    if (!OperaFlags.ENABLE_DEBUGGER) {
+    if (!OperaDefaults.ENABLE_DEBUGGER) {
       for (Integer windowId : windowIds) {
         handles.add(windowId.toString());
       }
