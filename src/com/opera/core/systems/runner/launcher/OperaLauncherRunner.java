@@ -72,6 +72,10 @@ public class OperaLauncherRunner extends OperaRunner
     implements com.opera.core.systems.runner.interfaces.OperaRunner {
 
   public static final String LAUNCHER_ENV_VAR = "OPERA_LAUNCHER";
+  public static final String LAUNCHER_NAME = launcherNameForOS();
+  public static final File LAUNCHER_DIRECTORY =
+      new File(System.getProperty("user.home"), ".launcher");
+  public static final File LAUNCHER_DEFAULT_LOCATION = new File(LAUNCHER_DIRECTORY, LAUNCHER_NAME);
 
   private final URL bundledLauncher;
   private final int launcherPort = PortProber.findFreePort();
@@ -92,15 +96,14 @@ public class OperaLauncherRunner extends OperaRunner
     // Locate the bundled launcher from OperaLaunchers project and copy it to its default location
     // on users system if it's not there or outdated
     bundledLauncher =
-        OperaLaunchers.class.getClassLoader().getResource("launchers/" + launcherNameForOS());
+        OperaLaunchers.class.getClassLoader().getResource("launchers/" + LAUNCHER_NAME);
 
     if (bundledLauncher == null) {
       throw new OperaRunnerException("Not able to locate bundled launcher: " + bundledLauncher);
     }
 
     try {
-      if (settings.getLauncher().getCanonicalPath().equals(
-          launcherDefaultLocation().getCanonicalPath()) &&
+      if (settings.getLauncher().getCanonicalPath().equals(LAUNCHER_DEFAULT_LOCATION.getCanonicalPath()) &&
           (!settings.getLauncher().exists() || isLauncherOutdated(settings.getLauncher()))) {
         extractLauncher(bundledLauncher, settings.getLauncher());
       }
@@ -489,10 +492,6 @@ public class OperaLauncherRunner extends OperaRunner
     return binary != null && binary.isRunning();
   }
 
-  public static File launcherDefaultLocation() {
-    return new File(System.getProperty("user.home") + "/.launcher/" + launcherNameForOS());
-  }
-
   /**
    * Asserts whether given launcher exists, is a file and that it's executable.
    *
@@ -505,7 +504,7 @@ public class OperaLauncherRunner extends OperaRunner
     }
 
     if (!launcher.isFile()) {
-      throw new IOException("Not a file: " + launcher.getPath());
+      throw new IOException("Not a real file: " + launcher.getPath());
     }
 
     if (!FileHandler.canExecute(launcher)) {
