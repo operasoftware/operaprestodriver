@@ -34,7 +34,7 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.logging.Level;
 
-import static com.opera.core.systems.OperaPaths.OPERA_PATH_ENV_VAR;
+import static com.opera.core.systems.OperaBinary.OPERA_PATH_ENV_VAR;
 import static com.opera.core.systems.OperaProduct.CORE;
 import static com.opera.core.systems.OperaProduct.DESKTOP;
 import static com.opera.core.systems.OperaSettings.Capability.AUTOSTART;
