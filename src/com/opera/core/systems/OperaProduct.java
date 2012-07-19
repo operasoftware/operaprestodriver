@@ -32,7 +32,7 @@ public enum OperaProduct {
 
   CORE("core-gogi"),
   DESKTOP("desktop"),
-  SDK("sdk"),
+  SDK("devices"),
   MOBILE("mobile"),
   MINI("mini"),
 
