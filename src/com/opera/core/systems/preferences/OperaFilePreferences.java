@@ -101,7 +101,7 @@ public class OperaFilePreferences extends AbstractOperaPreferences {
   
       Config config = new Config();
       // This config setting makes sure we can handle pref lines without
-      // '=' chars in them. Such prefs will be treated as having value "".
+      // '=' chars in them. Such prefs will be treated as having value null.
       config.setEmptyOption(true);
       // This config setting makes sure we can handle pref lines with '\' in them.
       config.setEscape(false);

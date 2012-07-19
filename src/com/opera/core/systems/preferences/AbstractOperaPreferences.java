@@ -124,7 +124,7 @@ public abstract class AbstractOperaPreferences implements OperaPreferences {
      */
     public Object getValue(boolean operaCompatible) {
       if (value == null) {
-        return "";
+        return null;
       }
 
       if (operaCompatible) {

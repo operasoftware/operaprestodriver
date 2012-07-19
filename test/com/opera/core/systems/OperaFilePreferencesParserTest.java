@@ -15,6 +15,7 @@
 package com.opera.core.systems;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 import java.io.File;
 import java.io.IOException;
@@ -59,7 +60,7 @@ public class OperaFilePreferencesParserTest {
   public void testPreferenceWithNoValue() throws IOException {
     OperaFilePreferences prefs =
         new OperaFilePreferences(resourceCopy("profile/opera_no_value_pref.ini"));
-    assertEquals("", prefs.get("Test", "PrefWithNoValue").getValue());
+    assertNull(prefs.get("Test", "PrefWithNoValue").getValue());
     assertEquals(true, prefs.get("Test", "PrefWithValue").getValue());
   }
 
