@@ -95,7 +95,7 @@ public class OperaSettingsIntegrationTest extends OperaDriverTestCase {
   public void launcherIsUsedWhenSet() throws IOException {
     tmp.create();
     File newLauncher = tmp.newFile("newLauncher");
-    Files.copy(OperaLauncherRunner.launcherDefaultLocation(), newLauncher);
+    Files.copy(OperaLauncherRunner.LAUNCHER_DEFAULT_LOCATION, newLauncher);
     if (!Platform.getCurrent().is(WINDOWS)) {
       newLauncher.setExecutable(true);
     }

@@ -153,7 +153,7 @@ public class OperaSettingsTest extends OperaDriverTestCase {
   @Test
   public void launcherReturnsLauncherLocationByDefault() {
     assertNotNull(settings.getLauncher());
-    assertEquals(OperaLauncherRunner.launcherDefaultLocation(), settings.getLauncher());
+    assertEquals(OperaLauncherRunner.LAUNCHER_DEFAULT_LOCATION, settings.getLauncher());
   }
 
   @Test

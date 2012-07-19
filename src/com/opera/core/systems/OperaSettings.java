@@ -249,7 +249,7 @@ public class OperaSettings {
           return new File(System.getenv(LAUNCHER_ENV_VAR));
         }
 
-        return OperaLauncherRunner.launcherDefaultLocation();
+        return OperaLauncherRunner.LAUNCHER_DEFAULT_LOCATION;
       }
 
       Object sanitize(Object path) {
