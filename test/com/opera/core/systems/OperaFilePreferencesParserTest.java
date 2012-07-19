@@ -48,10 +48,10 @@ public class OperaFilePreferencesParserTest {
    * @throws IOException If we could not find or copy the file
    */
   private File resourceCopy(String resource) throws IOException {
-    File iniFileSource = resources.locate(resource);
-    File iniFileDest = temporaryFolder.newFile("operaprefs.ini");
-    Files.copy(iniFileSource, iniFileDest);
-    return iniFileDest;
+    File fileSource = resources.locate(resource);
+    File fileDest = temporaryFolder.newFile("resource_copy");
+    Files.copy(fileSource, fileDest);
+    return fileDest;
   }
 
   // Make sure we can handle/parse a pref that has no value (i.e. it lacks a = in the line)
