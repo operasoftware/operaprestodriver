@@ -1,25 +1,25 @@
 import com.opera.core.systems.OperaDriver;
+
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
-class ProxyExample {
+public class ProxyExample {
 
-    public static void main(String... args) throws Exception {
-        // creating proxy settings
-        Proxy proxy = new Proxy();
-        proxy.setHttpProxy("localhost:48000");
+  public static void main(String... args) {
+    // Set your proxy settings:
+    Proxy proxy = new Proxy();
+    proxy.setHttpProxy("localhost:48000");
 
-        // creating capabilities
-        DesiredCapabilities cap = new DesiredCapabilities();
-        cap.setCapability("opera.proxy", proxy);
+    // Put them into our requested capabilities:
+    DesiredCapabilities capabilities = new DesiredCapabilities();
+    capabilities.setCapability("proxy", proxy);
 
-        WebDriver wd = new OperaDriver(cap);
+    // This Opera instance should use a proxy:
+    WebDriver driver = new OperaDriver(capabilities);
 
-        wd.get("http://www.opera.com");
-
-        Thread.sleep(10000);
-        wd.quit();
-    }
+    driver.get("http://opera.com/");
+    driver.quit();
+  }
 
 }
