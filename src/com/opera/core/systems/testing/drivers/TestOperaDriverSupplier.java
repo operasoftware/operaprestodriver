@@ -16,6 +16,8 @@ limitations under the License.
 
 package com.opera.core.systems.testing.drivers;
 
+import java.util.logging.Level;
+
 /**
  * @author Andreas Tolf Tolfsen <andreastt@opera.com>
  */
@@ -23,7 +25,8 @@ public class TestOperaDriverSupplier extends AbstractTestDriverSupplier {
 
   public TestOperaDriver get() {
     // Uncomment this if you wish to connect Opera manually:
-    //settings.autostart(false);
+    settings.autostart(false);
+    settings.logging().setLevel(Level.ALL);
 
     return new TestOperaDriver(settings);
   }
