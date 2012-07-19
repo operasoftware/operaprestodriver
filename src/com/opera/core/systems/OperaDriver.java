@@ -225,10 +225,18 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
         preferences().set("Proxy", "Enable Proxy", false);
       } break;
       case MANUAL: {
+        preferences().set("Proxy", "Enable Proxy", true);
         if (proxy.getHttpProxy() != null) {
-          preferences().set("Proxy", "Enable Proxy", true);
-          preferences().set("Proxy", "HTTP Server", proxy.getHttpProxy());
+          preferences().set("Proxy", "HTTP server", proxy.getHttpProxy());
           preferences().set("Proxy", "Use HTTP", true);
+        }
+        if (proxy.getFtpProxy() != null) {
+          preferences().set("Proxy", "FTP server", proxy.getFtpProxy());
+          preferences().set("Proxy", "Use FTP", true);
+        }
+        if (proxy.getSslProxy() != null) {
+          preferences().set("Proxy", "HTTPS server", proxy.getSslProxy());
+          preferences().set("Proxy", "Use HTTPS", true);
         }
       } break;
       case PAC: {

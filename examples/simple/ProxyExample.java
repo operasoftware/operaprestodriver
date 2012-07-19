@@ -9,6 +9,8 @@ class ProxyExample {
         // creating proxy settings
         Proxy proxy = new Proxy();
         proxy.setHttpProxy("localhost:48000");
+        proxy.setFtpProxy("localhost:21");
+        proxy.setSslProxy("localhost:443");
 
         // creating capabilities
         DesiredCapabilities cap = new DesiredCapabilities();
