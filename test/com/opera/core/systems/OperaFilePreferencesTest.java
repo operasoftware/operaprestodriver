@@ -18,6 +18,7 @@ package com.opera.core.systems;
 
 import com.google.common.base.Charsets;
 import com.google.common.base.Throwables;
+import com.google.common.base.Charsets;
 import com.google.common.io.Files;
 
 import com.opera.core.systems.preferences.OperaFilePreferences;
@@ -219,16 +220,6 @@ public class OperaFilePreferencesTest extends OperaDriverTestCase {
     OperaSettings settings = new OperaSettings(profile);
     driver = new TestDriverBuilder().using(settings).get();
     assertEquals("Norway", driver.preferences().get("Personal Info", "Country").getValue());
-  }
-
-  // Make sure we can handle/parse a pref that has no value (i.e. it lacks a = in the line)
-  @Test
-  public void testPreferenceWithNoValue() throws IOException {
-    File prefsFile = temporaryFolder.newFile();
-    Files.write("[Test]\nPrefWithNoValue\nPrefWithValue=1\n", prefsFile, Charsets.UTF_8);
-    OperaFilePreferences prefs = new OperaFilePreferences(prefsFile);
-    assertEquals("", prefs.get("Test", "PrefWithNoValue").getValue());
-    assertEquals(true, prefs.get("Test", "PrefWithValue").getValue());
   }
 
   // Make sure we can handle/parse a pref that has backslash(es) in it
