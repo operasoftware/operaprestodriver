@@ -22,7 +22,7 @@ import com.google.common.io.ByteStreams;
 import com.google.common.io.Files;
 import com.google.protobuf.GeneratedMessage;
 
-import com.opera.core.systems.OperaPaths;
+import com.opera.core.systems.OperaBinary;
 import com.opera.core.systems.OperaProduct;
 import com.opera.core.systems.OperaSettings;
 import com.opera.core.systems.arguments.OperaArgument;
@@ -47,7 +47,6 @@ import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.io.FileHandler;
 import org.openqa.selenium.net.PortProber;
-import org.openqa.selenium.os.CommandLine;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -72,6 +71,10 @@ public class OperaLauncherRunner extends OperaRunner
     implements com.opera.core.systems.runner.interfaces.OperaRunner {
 
   public static final String LAUNCHER_ENV_VAR = "OPERA_LAUNCHER";
+  public static final String LAUNCHER_NAME = launcherNameForOS();
+  public static final File LAUNCHER_DIRECTORY =
+      new File(System.getProperty("user.home"), ".launcher");
+  public static final File LAUNCHER_DEFAULT_LOCATION = new File(LAUNCHER_DIRECTORY, LAUNCHER_NAME);
 
   private final URL bundledLauncher;
   private final int launcherPort = PortProber.findFreePort();
@@ -92,27 +95,31 @@ public class OperaLauncherRunner extends OperaRunner
     // Locate the bundled launcher from OperaLaunchers project and copy it to its default location
     // on users system if it's not there or outdated
     bundledLauncher =
-        OperaLaunchers.class.getClassLoader().getResource("launchers/" + launcherNameForOS());
+        OperaLaunchers.class.getClassLoader().getResource("launchers/" + LAUNCHER_NAME);
 
     if (bundledLauncher == null) {
       throw new OperaRunnerException("Not able to locate bundled launcher: " + bundledLauncher);
     }
 
+    File launcher = settings.getLauncher();
     try {
-      if (settings.getLauncher().getCanonicalPath().equals(
-          launcherDefaultLocation().getCanonicalPath()) &&
-          (!settings.getLauncher().exists() || isLauncherOutdated(settings.getLauncher()))) {
+      if (settings.getLauncher().getCanonicalPath().equals(LAUNCHER_DEFAULT_LOCATION.getCanonicalPath()) &&
+          (!settings.getLauncher().exists() || isLauncherOutdated(launcher))) {
         extractLauncher(bundledLauncher, settings.getLauncher());
       }
     } catch (IOException e) {
       throw new OperaRunnerException(e);
     }
 
-    makeLauncherExecutable(settings.getLauncher());
+    if (!launcher.canExecute()) {
+      if (!launcher.setExecutable(true)) {
+        throw new OperaRunnerException("Not able to make launcher executable");
+      }
+    }
 
     // Find an available Opera if present
     if (settings.getBinary() == null) {
-      settings.setBinary(new File(OperaPaths.operaPath()));
+      settings.setBinary(OperaBinary.find(settings.getProduct()));
     }
 
     // Create list of arguments for launcher binary
@@ -505,25 +512,11 @@ public class OperaLauncherRunner extends OperaRunner
     }
 
     if (!launcher.isFile()) {
-      throw new IOException("Not a file: " + launcher.getPath());
+      throw new IOException("Not a real file: " + launcher.getPath());
     }
 
     if (!FileHandler.canExecute(launcher)) {
       throw new IOException("Not executable: " + launcher.getPath());
-    }
-  }
-
-  /**
-   * Makes the launcher executable by chmod'ing the file at given path (GNU/Linux and Mac only).
-   *
-   * @param launcher the file to make executable
-   */
-  private static void makeLauncherExecutable(File launcher) {
-    Platform current = Platform.getCurrent();
-
-    if (current.is(Platform.UNIX) || current.is(Platform.MAC)) {
-      CommandLine line = new CommandLine("chmod", "u+x", launcher.getAbsolutePath());
-      line.execute();
     }
   }
 

@@ -99,13 +99,13 @@
 
     <!-- MYSQL -->
     <property name="sonar.jdbc.url"
-              value="jdbc:mysql://10.20.15.64:3306/sonar?useUnicode=true&amp;characterEncoding=utf8" />
+              value="jdbc:mysql://ci.qa.oslo.osa:3306/sonar?useUnicode=true&amp;characterEncoding=utf8" />
     <property name="sonar.jdbc.driverClassName" value="com.mysql.jdbc.Driver" />
     <property name="sonar.jdbc.username" value="sonar" />
     <property name="sonar.jdbc.password" value="sonar" />
 
     <!-- SERVER ON A REMOTE HOST -->
-    <property name="sonar.host.url" value="http://10.20.15.64:9000" />
+    <property name="sonar.host.url" value="http://ci.qa.oslo.osa:9000" />
     <!-- list of mandatories Sonar properties -->
     <property name="sonar.sources" value="src" />
     <property name="sonar.exclusions" value="com/opera/core/systems/scope/protos/*,com/opera/core/systems/runner/launcher/OperaLauncherProtos.java,,com/opera/core/systems/OperaAtoms.java" />

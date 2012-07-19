@@ -124,6 +124,11 @@ public abstract class AbstractOperaPreferences implements OperaPreferences {
      * @return the value of this preference
      */
     public Object getValue(boolean operaCompatible) {
+
+      if (value == null) {
+        return "";
+      }
+
       if (operaCompatible) {
         if (value instanceof File) {
           return ((File) value).getPath();

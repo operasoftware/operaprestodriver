@@ -188,8 +188,7 @@ public class StpConnection implements SocketListener {
     }
 
     if (socketChannel == null) {
-      throw new IOException(
-          "We dont have a socket :-)");
+      throw new IOException("Socket lost");
     }
 
     // Read as much data as possible into buffer.
@@ -240,7 +239,7 @@ public class StpConnection implements SocketListener {
 
           // Double buffer size if needed!
           if (recvBuffer.limit() + readBuffer.limit() >= recvBuffer.capacity()) {
-            logger.finest("Doubled the size of our recv buffer!");
+            logger.finest("Doubled the size of our recv buffer");
             ByteBuffer newRecvBuffer = ByteBuffer.allocate(recvBuffer.capacity() * 2);
             newRecvBuffer.clear();
             recvBuffer.position(0);
@@ -254,8 +253,8 @@ public class StpConnection implements SocketListener {
           recvBuffer.position(recvBuffer.limit());
           recvBuffer.limit(recvBuffer.limit() + readSize);// increase limit!
           recvBuffer.put(readBuffer);
-          logger.finest("did read " + readSize + " bytes, new buffer size = "
-                        + recvBuffer.limit());
+          logger.finest(String.format("Read %d bytes, new buffer size is %d",
+                                      readSize, recvBuffer.limit()));
         }
       } while (readSize > 0);
 
@@ -269,10 +268,8 @@ public class StpConnection implements SocketListener {
   }
 
   public boolean canWrite(SelectableChannel channel) throws IOException {
-    logger.finest("canWrite");
-
     if (socketChannel == null) {
-      throw new IOException("We don't have a socket :-)");
+      throw new IOException("Socket lost");
     }
 
     int totalWritten = 0;
@@ -504,9 +501,9 @@ public class StpConnection implements SocketListener {
       return true; // We did read a message :-)
     } else {
       if (buffer.limit() > 0) {
-        logger.finest("did NOT read message from buffer of size = " + buffer.limit());
+        logger.finest("Did NOT read message from buffer of size " + buffer.limit());
       } else {
-        logger.finest("no messages in empty buffer");
+        logger.finest("No messages in empty buffer");
       }
       return false;
     }
@@ -552,7 +549,7 @@ public class StpConnection implements SocketListener {
 
       default:
         connectionHandler.onException(new CommunicationException(
-            String.format("Unhandled STP type: %d" + stpType)));
+            String.format("Unhandled STP type: %d", stpType)));
     }
   }
 
@@ -584,8 +581,7 @@ public class StpConnection implements SocketListener {
                 return result;
               }
             }
-            connectionHandler.onException(new WebDriverException(
-                "Error while reading raw int"));
+            connectionHandler.onException(new WebDriverException("Error while reading raw int"));
           }
         }
       }

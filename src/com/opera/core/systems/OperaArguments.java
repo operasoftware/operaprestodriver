@@ -110,7 +110,7 @@ public class OperaArguments implements com.opera.core.systems.arguments.interfac
     }
 
     Pattern p =
-        Pattern.compile("(?:-{1,2}|\\/)([\\w]+)(?:=|\\s*)(?:\"?([^-][\\w:=\\-+_\\.\\/\\\\]*)\"?)?");
+        Pattern.compile("(?:-{1,2}|\\/)([\\w-]+)(?:=|\\s*)(?:\"?([^-][\\w:=\\-+_\\.\\/\\\\]*)\"?)?");
     Matcher m = p.matcher(string);
 
     while (m.find()) {

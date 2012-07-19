@@ -70,7 +70,7 @@ public class OperaSettingsIntegrationTest extends OperaDriverTestCase {
 
   @Test
   public void binaryIsCorrectlyLaunched() {
-    settings.setBinary(new File(OperaPaths.operaPath()));
+    settings.setBinary(OperaBinary.find());
     TestOperaDriver driver = new TestOperaDriver(settings);
 
     assertNotNull(driver);
@@ -95,7 +95,7 @@ public class OperaSettingsIntegrationTest extends OperaDriverTestCase {
   public void launcherIsUsedWhenSet() throws IOException {
     tmp.create();
     File newLauncher = tmp.newFile("newLauncher");
-    Files.copy(OperaLauncherRunner.launcherDefaultLocation(), newLauncher);
+    Files.copy(OperaLauncherRunner.LAUNCHER_DEFAULT_LOCATION, newLauncher);
     if (!Platform.getCurrent().is(WINDOWS)) {
       newLauncher.setExecutable(true);
     }
@@ -200,8 +200,8 @@ public class OperaSettingsIntegrationTest extends OperaDriverTestCase {
   @Test
   @Ignore(platforms = LINUX)
   public void environmentalBinaryPathWorks() throws IOException {
-    File binary = new File(OperaPaths.findOperaInstallationPath());
-    environment.set(OperaPaths.OPERA_PATH_ENV_VAR, binary.getPath());
+    File binary = OperaBinary.find();
+    environment.set(OperaBinary.OPERA_PATH_ENV_VAR, binary.getPath());
 
     TestOperaDriver driver = new TestOperaDriver();
 

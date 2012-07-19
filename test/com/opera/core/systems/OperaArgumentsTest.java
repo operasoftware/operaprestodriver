@@ -145,6 +145,14 @@ public class OperaArgumentsTest {
   }
 
   @Test
+  public void testParsingMultipleDashArgument() {
+    OperaArguments parsed = OperaArguments.parse("-hide-mouse-cursor");
+    assertEquals("hide-mouse-cursor", parsed.get(0).getArgument());
+    assertNull(parsed.get(0).getValue());
+    assertEquals(1, parsed.size());
+  }
+
+  @Test
   public void testMerge() {
     arguments.add("foo");
     OperaArguments extraArguments = new OperaArguments();

@@ -16,6 +16,7 @@ limitations under the License.
 
 package com.opera.core.systems;
 
+import com.google.common.base.Charsets;
 import com.google.common.io.Files;
 
 import com.opera.core.systems.preferences.OperaFilePreferences;
@@ -34,7 +35,6 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.io.File;
 import java.io.IOException;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -212,4 +212,13 @@ public class OperaFilePreferencesTest extends OperaDriverTestCase {
         .getValue());
   }
 
+  // Make sure we can handle/parse a pref that has no value (i.e. it lacks a = in the line)
+  @Test
+  public void testPreferenceWithNoValue() throws IOException {
+    File prefsFile = temporaryFolder.newFile();
+    Files.write("[Test]\nPrefWithNoValue\nPrefWithValue=1\n", prefsFile, Charsets.UTF_8);
+    OperaFilePreferences prefs = new OperaFilePreferences(prefsFile);
+    assertEquals("",prefs.get("Test", "PrefWithNoValue").getValue());
+    assertEquals(true,prefs.get("Test", "PrefWithValue").getValue());
+  }
 }

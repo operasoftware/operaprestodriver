@@ -92,8 +92,10 @@ public class EcmascriptService extends AbstractEcmascriptService implements
   }
 
   public void setRuntime(Runtime runtime) {
-    this.runtime.set(runtime, runtime.getRuntimeID());
-    activeWindowId = runtime.getWindowID();
+    if (runtime != null) {
+      this.runtime.set(runtime, runtime.getRuntimeID());
+      activeWindowId = runtime.getWindowID();
+    }
   }
 
   public void setRuntime(EsdbgProtos.RuntimeInfo runtime) {
@@ -260,18 +262,24 @@ public class EcmascriptService extends AbstractEcmascriptService implements
     // high memory usage in Opera, so the method might need to be updated in the future.
     //processQueues();
 
+    // If ecmascript is turned off there is no point trying to eval
+    // in these cases null will be returned
+    if(driver.preferences().get("Extensions", "Scripting").getValue().equals(false)) {
+      return EvalResult.getDefaultInstance();
+    }
+
     EvalArg.Builder builder = buildEval(using, runtimeId);
     builder.addAllVariableList(Arrays.asList(variables));
 
     Response response = executeCommand(ESCommand.EVAL, builder, SCRIPT_TIMEOUT.getMs());
 
-    if (response == null && retries < SCRIPT_RETRY_INTERVAL.getMs()) {
+    if (response == null && retries < 5) {
       retries++;
-      sleepDuration += sleepDuration;
+      sleepDuration += SCRIPT_RETRY_INTERVAL.getValue();
       sleep(sleepDuration);
       recover();
       return eval(using, variables);
-    } else if (retries >= SCRIPT_RETRY_INTERVAL.getMs()) {
+    } else if (retries >= 5) {
       resetCounters();
       throw new WebDriverException("No response on executing ECMAScript evaluation command");
     }

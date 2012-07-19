@@ -86,7 +86,7 @@ public class OperaLauncherRunnerTest extends OperaDriverTestCase {
 
   @Test
   public void testConstructorWithSettingsBinary() {
-    settings.setBinary(new File(OperaPaths.operaPath()));
+    settings.setBinary(OperaBinary.find());
     runner = new TestOperaLauncherRunner(settings);
     assertNotNull(runner);
   }
@@ -95,13 +95,13 @@ public class OperaLauncherRunnerTest extends OperaDriverTestCase {
   public void launcherInDefaultLocationIsOverwritten()
       throws IOException, NoSuchAlgorithmException {
     File outdatedLauncher = resources.executableBinary();
-    Files.copy(outdatedLauncher, OperaLauncherRunner.launcherDefaultLocation());
+    Files.copy(outdatedLauncher, OperaLauncherRunner.LAUNCHER_DEFAULT_LOCATION);
 
     try {
       runner = new TestOperaLauncherRunner(settings);
       assertFalse("launcher should have been replaced by extracted launcher",
                   Arrays.equals(md5(outdatedLauncher),
-                                md5(OperaLauncherRunner.launcherDefaultLocation())));
+                                md5(OperaLauncherRunner.LAUNCHER_DEFAULT_LOCATION)));
     } catch (OperaRunnerException e) {
       if (e.getMessage().contains("Timeout")) {
         fail("launcher was not replaced");
