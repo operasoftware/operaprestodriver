@@ -102,6 +102,12 @@ public class OperaLauncherRunner extends OperaRunner
       if (settings.getLauncher().getCanonicalPath().equals(
           launcherDefaultLocation().getCanonicalPath()) &&
           (!settings.getLauncher().exists() || isLauncherOutdated(settings.getLauncher()))) {
+        File[] launchers = launcherDefaultLocation().getParentFile().listFiles();
+        for (int i = 0; i < launchers.length; ++i) {
+          logger.info("Deleting stale launcher:" + launchers[i]);
+          launchers[i].delete();
+        }
+
         extractLauncher(bundledLauncher, settings.getLauncher());
       }
     } catch (IOException e) {
