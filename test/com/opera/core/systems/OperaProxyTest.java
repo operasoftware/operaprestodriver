@@ -48,14 +48,13 @@ public class OperaProxyTest extends OperaDriverTestCase {
   @After
   public void resetProxy() {
     proxy.reset();
-    proxy.setEnabled(false);  // picks up system proxy by default, make sure it's off
   }
 
   @Test
   public void httpProxy() {
     proxy.setHttpProxy(host);
     assertEquals(host, proxy.getHttpProxy());
-    assertFalse(proxy.isEnabled());
+    assertTrue(proxy.isEnabled());
     assertFalse(proxy.isUsePAC());
   }
 
@@ -68,7 +67,7 @@ public class OperaProxyTest extends OperaDriverTestCase {
   public void httpsProxy() {
     proxy.setHttpsProxy(host);
     assertEquals(host, proxy.getHttpsProxy());
-    assertFalse(proxy.isEnabled());
+    assertTrue(proxy.isEnabled());
     assertFalse(proxy.isUsePAC());
   }
 
@@ -81,7 +80,7 @@ public class OperaProxyTest extends OperaDriverTestCase {
   public void ftpProxy() {
     proxy.setFtpProxy(host);
     assertEquals(host, proxy.getFtpProxy());
-    assertFalse(proxy.isEnabled());
+    assertTrue(proxy.isEnabled());
     assertFalse(proxy.isUsePAC());
   }
 
@@ -94,7 +93,7 @@ public class OperaProxyTest extends OperaDriverTestCase {
   public void socksProxy() {
     proxy.setSocksProxy(host);
     assertEquals(host, proxy.getSocksProxy());
-    assertFalse(proxy.isEnabled());
+    assertTrue(proxy.isEnabled());
     assertFalse(proxy.isUsePAC());
     assertNull(proxy.getSocksUsername());
     assertNull(proxy.getSocksPassword());
@@ -121,7 +120,7 @@ public class OperaProxyTest extends OperaDriverTestCase {
     proxy.setSocksUsername(username);
     assertEquals(host, proxy.getSocksProxy());
     assertEquals(username, proxy.getSocksUsername());
-    assertFalse(proxy.isEnabled());
+    assertTrue(proxy.isEnabled());
     assertFalse(proxy.isUsePAC());
     assertNull(proxy.getSocksPassword());
   }
@@ -132,7 +131,7 @@ public class OperaProxyTest extends OperaDriverTestCase {
     proxy.setSocksPassword(password);
     assertEquals(host, proxy.getSocksProxy());
     assertEquals(password, proxy.getSocksPassword());
-    assertFalse(proxy.isEnabled());
+    assertTrue(proxy.isEnabled());
     assertFalse(proxy.isUsePAC());
     assertNull(proxy.getSocksUsername());
   }
@@ -145,7 +144,7 @@ public class OperaProxyTest extends OperaDriverTestCase {
     assertEquals(host, proxy.getSocksProxy());
     assertEquals(username, proxy.getSocksUsername());
     assertEquals(password, proxy.getSocksPassword());
-    assertFalse(proxy.isEnabled());
+    assertTrue(proxy.isEnabled());
     assertFalse(proxy.isUsePAC());
   }
 
@@ -177,7 +176,7 @@ public class OperaProxyTest extends OperaDriverTestCase {
     proxy.setAutoconfigUrl(url);
     assertEquals(url, proxy.getAutoconfigUrl());
     assertFalse(proxy.isUsePAC());
-    assertFalse(proxy.isEnabled());
+    assertTrue(proxy.isEnabled());
   }
 
   @Test
@@ -185,18 +184,18 @@ public class OperaProxyTest extends OperaDriverTestCase {
     proxy.setAutoconfigUrl(localUrl);
     assertEquals(localUrl, proxy.getAutoconfigUrl());
     assertFalse(proxy.isUsePAC());
-    assertFalse(proxy.isEnabled());
+    assertTrue(proxy.isEnabled());
   }
 
   @Test
   public void proxyDisabledByDefault() {
-    assertFalse(proxy.isEnabled());
+    assertTrue(proxy.isEnabled());
   }
 
   @Test
   public void proxyEnable() {
-    proxy.setEnabled(true);
-    assertTrue(proxy.isEnabled());
+    proxy.setEnabled(false);
+    assertFalse(proxy.isEnabled());
   }
 
   @Test
