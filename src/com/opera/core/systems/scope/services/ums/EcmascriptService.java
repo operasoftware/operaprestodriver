@@ -281,7 +281,7 @@ public class EcmascriptService extends AbstractEcmascriptService implements
       return eval(using, variables);
     } else if (retries >= 5) {
       resetCounters();
-      throw new WebDriverException("No response on executing ECMAScript evaluation command");
+      throw new WebDriverException("No response on ECMAScript evaluation command");
     }
 
     resetCounters();
