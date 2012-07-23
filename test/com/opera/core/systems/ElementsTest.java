@@ -44,7 +44,7 @@ public class ElementsTest extends OperaDriverTestCase {
   @Test
   public void testGetCssValue() {
     driver.get(pages.test);
-    assertEquals("#000000",
+    assertEquals("rgba(0, 0, 0, 1)",
                  driver.findElementByClassName("invert").getCssValue("background-color"));
   }
 
