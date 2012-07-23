@@ -76,8 +76,8 @@
 
     <copy includeemptydirs="false" todir="bin">
       <fileset dir="src">
-      	<exclude name="**/*.launch" />
-      	<exclude name="**/*.java" />
+        <exclude name="**/*.launch" />
+        <exclude name="**/*.java" />
       </fileset>
     </copy>
 
@@ -128,8 +128,8 @@
       <zipgroupfileset dir="lib" includes="operalaunchers*.jar" />
 
       <manifest>
-      	<attribute name="Main-Class" value="com.opera.core.systems.OperaDriver" />
-      	<attribute name="Implementation-Version" value="${version}" />
+        <attribute name="Main-Class" value="com.opera.core.systems.OperaDriver" />
+        <attribute name="Implementation-Version" value="${version}" />
       </manifest>
     </jar>
   </target>
@@ -191,12 +191,12 @@
   </target>
 
   <!-- Generate the docs. This will output lots of errors and warnings, but
-  that's okay because they're (mostly) from selenium, not OperaDriver -->
+       that's okay because they're (mostly) from selenium, not OperaDriver -->
   <target name="doc" description="Generate the Javadocs">
     <javadoc destdir="docs" doctitle="OperaDriver" access="public" author="true">
       <classpath>
         <!-- Include all the jars except selenium, as we're getting the docs
-        straight from the source -->
+             straight from the source -->
         <dirset dir="lib">
           <include name="*.jar"/>
           <exclude name="selenium-common.jar"/>
@@ -204,7 +204,7 @@
       </classpath>
 
       <!-- include our source, and the selenium source so that we can inherit
-      the javadocs -->
+           the javadocs -->
       <sourcepath>
         <pathelement location="src" />
         <pathelement location="${selenium.src}" />
