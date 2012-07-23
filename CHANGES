@@ -154,6 +154,8 @@ v0.15     (not released)
 
   * Updated URL of Sonar server.  (danielb)
 
+  * Upgraded opera-launchers dependency to 0.9.  (andreastt)
+
 
 v0.14     (2012-05-29)
 
