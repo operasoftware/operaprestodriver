@@ -103,9 +103,10 @@ public class OperaLauncherRunner extends OperaRunner
 
     File launcher = settings.getLauncher();
     try {
-      if (settings.getLauncher().getCanonicalPath().equals(LAUNCHER_DEFAULT_LOCATION.getCanonicalPath()) &&
-          (!settings.getLauncher().exists() || isLauncherOutdated(launcher))) {
-        extractLauncher(bundledLauncher, settings.getLauncher());
+      if (launcher.getCanonicalPath().equals(LAUNCHER_DEFAULT_LOCATION.getCanonicalPath()) &&
+          (!launcher.exists() || isLauncherOutdated(launcher))) {
+        deleteFiles(LAUNCHER_DEFAULT_LOCATION.getParentFile().listFiles());
+        extractLauncher(bundledLauncher, launcher);
       }
     } catch (IOException e) {
       throw new OperaRunnerException(e);
@@ -486,6 +487,14 @@ public class OperaLauncherRunner extends OperaRunner
     }
   }
 
+  private void deleteFiles(File[] files) {
+    for (File file : files) {
+      if (!file.delete()) {
+        logger.warning("Unable to delete file: " + file.getPath());
+      }
+    }
+  }
+
   private void assertLauncherAlive() {
     if (!isLauncherRunning()) {
       throw new OperaRunnerException("launcher was shutdown");
@@ -494,10 +503,6 @@ public class OperaLauncherRunner extends OperaRunner
 
   private boolean isLauncherRunning() {
     return binary != null && binary.isRunning();
-  }
-
-  public static File launcherDefaultLocation() {
-    return new File(System.getProperty("user.home") + "/.launcher/" + launcherNameForOS());
   }
 
   /**
@@ -527,13 +532,12 @@ public class OperaLauncherRunner extends OperaRunner
    * @return the launcher's binary file name
    */
   private static String launcherNameForOS() {
-    boolean is64 = "64".equals(System.getProperty("sun.arch.data.model"));
     Platform currentPlatform = Platform.getCurrent();
 
     switch (currentPlatform) {
       case LINUX:
       case UNIX:
-        return (is64 ? "launcher-linux-x86_64" : "launcher-linux-i686");
+        return "launcher-linux-" + System.getProperty("os.arch").toLowerCase();
       case MAC:
         return "launcher-mac";
       case WINDOWS:
