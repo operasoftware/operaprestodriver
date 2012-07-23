@@ -113,7 +113,7 @@ public class OperaLauncherRunner extends OperaRunner
 
     if (!launcher.canExecute()) {
       if (!launcher.setExecutable(true)) {
-        throw new OperaRunnerException("Not able to make launcher executable");
+        throw new OperaRunnerException("Unable to make launcher executable: " + launcher.getPath());
       }
     }
 
