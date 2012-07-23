@@ -1,6 +1,7 @@
 com.opera.core.systems
 com.opera.core.systems.arguments
 com.opera.core.systems.arguments.interfaces
+com.opera.core.systems.common.collect
 com.opera.core.systems.common.io
 com.opera.core.systems.common.lang
 com.opera.core.systems.model
