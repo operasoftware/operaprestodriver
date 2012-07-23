@@ -57,4 +57,10 @@ public class OperaDefaults {
    */
   public static final int SERVER_DEFAULT_PORT_IDENTIFIER = -1;
 
+  /**
+   * The number of times to attempt retrieving a response from injected ECMAscript sent to the
+   * browser.
+   */
+  public static final int SCRIPT_RETRIES = 5;
+
 }

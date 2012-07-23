@@ -53,7 +53,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -63,6 +62,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicStampedReference;
 
+import static com.opera.core.systems.scope.internal.OperaDefaults.SCRIPT_RETRIES;
 import static com.opera.core.systems.scope.internal.OperaIntervals.SCRIPT_RETRY_INTERVAL;
 import static com.opera.core.systems.scope.internal.OperaIntervals.SCRIPT_TIMEOUT;
 
@@ -262,9 +262,8 @@ public class EcmascriptService extends AbstractEcmascriptService implements
     // high memory usage in Opera, so the method might need to be updated in the future.
     //processQueues();
 
-    // If ecmascript is turned off there is no point trying to eval
-    // in these cases null will be returned
-    if(driver.preferences().get("Extensions", "Scripting").getValue().equals(false)) {
+    // If ECMAscript is turned off there is no point trying to eval, return null
+    if (!(Boolean) driver.preferences().get("Extensions", "Scripting").getValue()) {
       return EvalResult.getDefaultInstance();
     }
 
@@ -273,13 +272,13 @@ public class EcmascriptService extends AbstractEcmascriptService implements
 
     Response response = executeCommand(ESCommand.EVAL, builder, SCRIPT_TIMEOUT.getMs());
 
-    if (response == null && retries < 5) {
+    if (response == null && retries < SCRIPT_RETRIES) {
       retries++;
       sleepDuration += SCRIPT_RETRY_INTERVAL.getMs();
       sleep(sleepDuration);
       recover();
       return eval(using, variables);
-    } else if (retries >= 5) {
+    } else if (retries >= SCRIPT_RETRIES) {
       resetCounters();
       throw new WebDriverException("No response on ECMAScript evaluation command");
     }
