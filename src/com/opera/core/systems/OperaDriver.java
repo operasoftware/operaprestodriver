@@ -19,6 +19,7 @@ package com.opera.core.systems;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Sets;
 
 import com.opera.core.systems.common.io.Closeables;
 import com.opera.core.systems.common.lang.OperaStrings;
@@ -68,7 +69,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -132,7 +132,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
   private OperaMouse mouse;
   private OperaKeyboard keyboard;
 
-  protected Set<Integer> objectIds = new HashSet<Integer>();
+  protected Set<Integer> objectIds = Sets.newHashSet();
   private int assignedWindowIds = 0;
 
   protected final Logger logger = Logger.getLogger(getClass().getName());
