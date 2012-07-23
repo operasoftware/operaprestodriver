@@ -94,6 +94,7 @@ public class QuickMenuTest extends OperaDesktopDriverTestCase {
   }
 
   @Test
+  @Ignore
   public void quickMenuItemByAction() {
     QuickMenuItem menuItemByName = driver.getQuickMenuItemByName("Show popup menu, Developer Menu");
     assertNotNull(menuItemByName);
@@ -103,18 +104,21 @@ public class QuickMenuTest extends OperaDesktopDriverTestCase {
   }
 
   @Test
+  @Ignore
   public void quickMenuBySubmenu() {
     assertEquals(driver.getQuickMenuItemByName("Show popup menu, Developer Menu").toFullString(),
                  driver.getQuickMenuItemBySubmenu("Developer Menu").toFullString());
   }
 
   @Test
+  @Ignore
   public void quickMenuItemByText() {
     assertEquals(driver.getQuickMenuItemByName("Show popup menu, Developer Menu").toFullString(),
                  driver.getQuickMenuItemByText("Developer Tools").toFullString());
   }
 
   @Test
+  @Ignore
   public void quickMenuItemByPosition() {
     assertEquals(driver.getQuickMenuItemByName("Show popup menu, Developer Menu").toFullString(),
                  driver.getQuickMenuItemByPosition(currentPlatform().is(MAC) ? 10 : 9,
