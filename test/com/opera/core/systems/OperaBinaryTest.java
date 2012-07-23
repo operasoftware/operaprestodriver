@@ -3,6 +3,7 @@ package com.opera.core.systems;
 import com.opera.core.systems.testing.OperaDriverTestCase;
 
 import org.junit.After;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.openqa.selenium.WebDriverException;
 
@@ -94,8 +95,7 @@ public class OperaBinaryTest extends OperaDriverTestCase {
 
   @Test
   public void findBasedOnPlatformAll() {
-    assertNotNull(OperaBinary.find(OperaProduct.ALL));
-    assertEquals(OperaBinary.find(OperaProduct.DESKTOP), OperaBinary.find(OperaProduct.DESKTOP));
+    assertNull(OperaBinary.find(OperaProduct.ALL));
   }
 
   @Test
@@ -114,6 +114,7 @@ public class OperaBinaryTest extends OperaDriverTestCase {
   }
 
   @Test
+  @Ignore("requires operamobile to be installed")
   public void findBasedOnPlatformMobile() {
     assertNotNull(OperaBinary.find(OperaProduct.MOBILE));
   }
