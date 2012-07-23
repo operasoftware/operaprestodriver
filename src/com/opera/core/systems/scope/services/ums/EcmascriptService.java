@@ -275,7 +275,7 @@ public class EcmascriptService extends AbstractEcmascriptService implements
 
     if (response == null && retries < 5) {
       retries++;
-      sleepDuration += SCRIPT_RETRY_INTERVAL.getValue();
+      sleepDuration += SCRIPT_RETRY_INTERVAL.getMs();
       sleep(sleepDuration);
       recover();
       return eval(using, variables);

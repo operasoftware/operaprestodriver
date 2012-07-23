@@ -25,8 +25,7 @@ public class TestOperaDriverSupplier extends AbstractTestDriverSupplier {
 
   public TestOperaDriver get() {
     // Uncomment this if you wish to connect Opera manually:
-    settings.autostart(false);
-    settings.logging().setLevel(Level.ALL);
+    //settings.autostart(false);
 
     return new TestOperaDriver(settings);
   }
