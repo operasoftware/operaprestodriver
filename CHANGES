@@ -35,6 +35,9 @@ v0.15     (not released)
 
   * Rewrite binary lookup code.  (andreastt)
 
+  * Implemented launcher for ARM and changed naming scheme of
+    launchers.  (farre)
+
   [BUG FIXES]
 
   * Service version comparison based on actual available service
