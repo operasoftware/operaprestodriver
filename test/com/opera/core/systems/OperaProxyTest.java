@@ -1,0 +1,226 @@
+/*
+Copyright 2012 Opera Software ASA
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+package com.opera.core.systems;
+
+import com.opera.core.systems.testing.OperaDriverTestCase;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.openqa.selenium.Proxy;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
+public class OperaProxyTest extends OperaDriverTestCase {
+
+  public static final String host = "4.4.4.4";
+  public static final String hostWithPort = "4.4.4.4:1234";
+  public static final String nullHost = null;
+  public static final String username = "foo";
+  public static final String password = "bar";
+  public static final String url = "http://localhost/foo.pac";
+  public static final String localUrl = "file://localhost/foo.pac";
+
+  public OperaProxy proxy;
+
+  @Before
+  public void assignProxy() {
+    proxy = driver.proxy();
+  }
+
+  @After
+  public void resetProxy() {
+    proxy.reset();
+    proxy.setEnabled(false);  // picks up system proxy by default, make sure it's off
+  }
+
+  @Test
+  public void httpProxy() {
+    proxy.setHttpProxy(host);
+    assertEquals(host, proxy.getHttpProxy());
+    assertFalse(proxy.isEnabled());
+    assertFalse(proxy.isUsePAC());
+  }
+
+  @Test
+  public void httpProxyDefault() {
+    assertNull(proxy.getHttpProxy());
+  }
+
+  @Test
+  public void httpsProxy() {
+    proxy.setHttpsProxy(host);
+    assertEquals(host, proxy.getHttpsProxy());
+    assertFalse(proxy.isEnabled());
+    assertFalse(proxy.isUsePAC());
+  }
+
+  @Test
+  public void httpsProxyDefault() {
+    assertNull(proxy.getHttpsProxy());
+  }
+
+  @Test
+  public void ftpProxy() {
+    proxy.setFtpProxy(host);
+    assertEquals(host, proxy.getFtpProxy());
+    assertFalse(proxy.isEnabled());
+    assertFalse(proxy.isUsePAC());
+  }
+
+  @Test
+  public void ftpProxyDefault() {
+    assertNull(proxy.getFtpProxy());
+  }
+
+  @Test
+  public void socksProxy() {
+    proxy.setSocksProxy(host);
+    assertEquals(host, proxy.getSocksProxy());
+    assertFalse(proxy.isEnabled());
+    assertFalse(proxy.isUsePAC());
+    assertNull(proxy.getSocksUsername());
+    assertNull(proxy.getSocksPassword());
+  }
+
+  @Test
+  public void socksProxyDefault() {
+    assertNull(proxy.getSocksProxy());
+  }
+
+  @Test
+  public void socksUsernameDefault() {
+    assertNull(proxy.getSocksUsername());
+  }
+
+  @Test
+  public void socksPasswordDefault() {
+    assertNull(proxy.getSocksPassword());
+  }
+
+  @Test
+  public void socksProxyWithUsername() {
+    proxy.setSocksProxy(host);
+    proxy.setSocksUsername(username);
+    assertEquals(host, proxy.getSocksProxy());
+    assertEquals(username, proxy.getSocksUsername());
+    assertFalse(proxy.isEnabled());
+    assertFalse(proxy.isUsePAC());
+    assertNull(proxy.getSocksPassword());
+  }
+
+  @Test
+  public void socksProxyWithPassword() {
+    proxy.setSocksProxy(host);
+    proxy.setSocksPassword(password);
+    assertEquals(host, proxy.getSocksProxy());
+    assertEquals(password, proxy.getSocksPassword());
+    assertFalse(proxy.isEnabled());
+    assertFalse(proxy.isUsePAC());
+    assertNull(proxy.getSocksUsername());
+  }
+
+  @Test
+  public void socksProxyWithUsernameAndPassword() {
+    proxy.setSocksProxy(host);
+    proxy.setSocksUsername(username);
+    proxy.setSocksPassword(password);
+    assertEquals(host, proxy.getSocksProxy());
+    assertEquals(username, proxy.getSocksUsername());
+    assertEquals(password, proxy.getSocksPassword());
+    assertFalse(proxy.isEnabled());
+    assertFalse(proxy.isUsePAC());
+  }
+
+  @Test
+  public void hostWithPort() {
+    proxy.setHttpProxy(hostWithPort);
+    assertEquals(hostWithPort, proxy.getHttpProxy());
+  }
+
+  @Test
+  public void nullHost() {
+    proxy.setHttpProxy(nullHost);
+    assertNull(proxy.getHttpProxy());
+  }
+
+  @Test
+  public void proxyLocalServersDefault() {
+    assertFalse(proxy.isProxyLocal());
+  }
+
+  @Test
+  public void proxyLocalServers() {
+    proxy.setProxyLocal(true);
+    assertTrue(proxy.isProxyLocal());
+  }
+
+  @Test
+  public void autoconfigUrl() {
+    proxy.setAutoconfigUrl(url);
+    assertEquals(url, proxy.getAutoconfigUrl());
+    assertFalse(proxy.isUsePAC());
+    assertFalse(proxy.isEnabled());
+  }
+
+  @Test
+  public void autoconfigLocalUrl() {
+    proxy.setAutoconfigUrl(localUrl);
+    assertEquals(localUrl, proxy.getAutoconfigUrl());
+    assertFalse(proxy.isUsePAC());
+    assertFalse(proxy.isEnabled());
+  }
+
+  @Test
+  public void proxyDisabledByDefault() {
+    assertFalse(proxy.isEnabled());
+  }
+
+  @Test
+  public void proxyEnable() {
+    proxy.setEnabled(true);
+    assertTrue(proxy.isEnabled());
+  }
+
+  @Test
+  public void parseManualProxies() {
+    Proxy p = new Proxy()
+        .setHttpProxy(host)
+        .setFtpProxy(host)
+        .setAutodetect(false);
+
+    proxy.parse(p);
+
+    assertEquals(host, proxy.getHttpProxy());
+    assertEquals(host, proxy.getFtpProxy());
+    assertFalse(proxy.isUsePAC());
+    assertTrue(proxy.isEnabled());
+  }
+
+  @Test
+  public void parseAutomaticProxies() {
+    Proxy p = new Proxy().setProxyAutoconfigUrl(url);
+    proxy.parse(p);
+
+    assertTrue(proxy.isUsePAC());
+    assertTrue(proxy.isEnabled());
+  }
+
+}

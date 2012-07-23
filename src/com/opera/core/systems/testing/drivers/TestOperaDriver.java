@@ -18,6 +18,7 @@ package com.opera.core.systems.testing.drivers;
 
 import com.opera.core.systems.OperaDriver;
 import com.opera.core.systems.OperaProduct;
+import com.opera.core.systems.OperaProxy;
 import com.opera.core.systems.OperaSettings;
 import com.opera.core.systems.ScopeServices;
 import com.opera.core.systems.runner.OperaRunner;

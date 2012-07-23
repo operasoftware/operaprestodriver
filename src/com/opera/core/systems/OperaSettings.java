@@ -54,7 +54,6 @@ import static com.opera.core.systems.OperaProduct.CORE;
 import static com.opera.core.systems.OperaProduct.DESKTOP;
 import static com.opera.core.systems.OperaSettings.Capability.ARGUMENTS;
 import static com.opera.core.systems.OperaSettings.Capability.AUTOSTART;
-import static com.opera.core.systems.OperaSettings.Capability.PROXY;
 import static com.opera.core.systems.OperaSettings.Capability.BACKEND;
 import static com.opera.core.systems.OperaSettings.Capability.BINARY;
 import static com.opera.core.systems.OperaSettings.Capability.DETACH;
@@ -68,6 +67,7 @@ import static com.opera.core.systems.OperaSettings.Capability.OPERAIDLE;
 import static com.opera.core.systems.OperaSettings.Capability.PORT;
 import static com.opera.core.systems.OperaSettings.Capability.PRODUCT;
 import static com.opera.core.systems.OperaSettings.Capability.PROFILE;
+import static com.opera.core.systems.OperaSettings.Capability.PROXY;
 import static com.opera.core.systems.runner.launcher.OperaLauncherRunner.LAUNCHER_ENV_VAR;
 import static com.opera.core.systems.scope.internal.OperaDefaults.SERVER_DEFAULT_PORT;
 import static com.opera.core.systems.scope.internal.OperaDefaults.SERVER_DEFAULT_PORT_IDENTIFIER;
@@ -124,7 +124,7 @@ public class OperaSettings {
      * Level} reference, or null.  If the value is neither of a known name nor an integer, an {@link
      * IllegalArgumentException} will be thrown.
      */
-    LOGGING_LEVEL("logging.level") {
+    LOGGING_LEVEL("opera.logging.level") {
       Level getDefaultValue() {
         return Level.INFO;
       }
@@ -141,7 +141,7 @@ public class OperaSettings {
     /**
      * (String/File) Where to send the output of the logging.  Default is to not write to file.
      */
-    LOGGING_FILE("logging.file") {
+    LOGGING_FILE("opera.logging.file") {
       Object sanitize(Object path) {
         if (path != null && path instanceof String) {
           return new File(String.valueOf(path));
@@ -309,7 +309,7 @@ public class OperaSettings {
      * useful for very simple test cases, but not designed for real-world testing.  It is disabled
      * by default.
      */
-    OPERAIDLE("idle") {
+    OPERAIDLE("opera.idle") {
       Boolean getDefaultValue() {
         return OperaDefaults.ENABLE_IDLE;
       }
@@ -348,15 +348,46 @@ public class OperaSettings {
     },
 
     /**
-     * (Proxy) Proxy-server settings.
+     * (Proxy/Proxy JSON object) Details of any proxy to use.  If no proxy is specified, whatever
+     * the system's current or default state is used.  Accepted types are {@link Proxy} or a proxy
+     * JSON object like this:
+     *
+     * <pre><dl>
+     *   <dt>proxyType (string)</dt>
+     *   <dd>(Required) The type of proxy being used.  Possible values are: <em>direct</em>, a
+     * direct connection where no proxy in use; <em>manual</em>, a manual proxy settings
+     * configured,
+     * e.g. setting a proxy for HTTP, a proxy for FTP, etc; <em>pac</em>, proxy auto configuration
+     * from a URL); <em>autodetect</em>, proxy auto detection, probably with WPAD; <em>system</em>,
+     * use system settings.</dd>
+     *
+     *   <dt>proxyAutoconfigUrl (string)</dt>
+     *   <dd>(Required if <em>proxyType</em> is "pac", ignored otherwise) Specifies the URL to be
+     * used for proxy auto configuration.  Expected format example:
+     * <code>http://hostname.com:1234/pacfile</code></dd>
+     *
+     *   <dt>ftpProxy, httpProxy, sslProxy (string)</dt>
+     *   <dd>(Optional, ignored if proxyType is not "manual") Specifies the proxies to be used for
+     * FTP, HTTP and HTTPS requests respectively.  Behaviour is undefined if a request is made,
+     * where the proxy for the particular protocol is undefined, if <em>proxyType</em> is manual.
+     * Expected format example: <code>hostname.com:1234</code></dd>
+     * </dl></pre>
      */
     PROXY("proxy") {
+      Proxy getDefaultValue() {
+        return new Proxy();
+      }
+
       Proxy sanitize(Object proxy) {
-        if (proxy == null || !(proxy instanceof Proxy)) {
-            return null;
-        } else {
+        if (proxy != null) {
+          if (proxy instanceof Proxy) {
             return (Proxy) proxy;
+          } else if (proxy instanceof Map) {
+            return new Proxy((Map) proxy);
+          }
         }
+
+        return null;
       }
     },
 
@@ -475,7 +506,7 @@ public class OperaSettings {
 
     private Capability(String capabilityName) {
       identifier = CaseFormat.UPPER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, name());
-      capability = CAPABILITY_PREFIX + capabilityName;
+      capability = capabilityName;
     }
 
     /**
@@ -1057,8 +1088,9 @@ public class OperaSettings {
 
   /**
    * Merge a set of capabilities in to these settings.  The settings corresponding to the
-   * <code>opera. capability prefix will be updated, while surplus/unknown capabilities will be
-   * stored. They can later be retrieved using the {@link #toCapabilities()} method on this object.
+   * <code>opera.</code> capability prefix will be updated, while surplus/unknown capabilities will
+   * be stored.  They can later be retrieved using the {@link #toCapabilities()} method on this
+   * object.
    *
    * @param capabilities capabilities to merge into these settings
    * @return reference to self
