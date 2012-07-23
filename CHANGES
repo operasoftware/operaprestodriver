@@ -1,3 +1,155 @@
+v0.15     (not released)
+
+  [API CHANGES]
+
+  * DSK-354630: Add QuickMenu#isVisible().  (mzajaczkowski)
+
+  * DSK-348592: Allowing retrieval of elements that contain format
+    identifiers.  (mzajaczkowski)
+
+  * Colours in OperaPreferences are now returned as strings instead of
+    instances of OperaColor.  (andreastt)
+
+  * OPDRV-188: Selftest API refactor.
+
+    OperaDriver#selftest() no longer accepts a list of modules.  It
+    now accepts exactly one module instead.  (andreastt)
+
+  * Added API for altering the selftest timeout:
+    OperaTimeouts#selftestTimeout().  (andreastt)
+
+  [ENHANCEMENTS]
+
+  * Improving performance of the WM's window close code.  (andreastt)
+
+  * OPDRV-201: Improving performance of executable location algorithm.
+    (andreastt)
+
+  * Relying on Selenium's Color class to do colour conversions.
+    Thanks to Bob Silverberg.  (andreastt)
+
+  * OPDRV-195: Converting OperaIntervals to use Duration, and renaming
+    OperaFlags to OperaDefaults.  (andreastt)
+
+  * Introduce a generic CallbackWait for use everywhere.  (andreastt)
+
+  [BUG FIXES]
+
+  * Service version comparison based on actual available service
+    versions given by Opera.  (andreastt)
+
+  * OPDRV-185: Fixes fatal error when evaluating in a non-existent
+    runtime.  (andreastt)
+
+  * DSK-358129: Make sure JARs aren't put in a subdirectory in case
+    `git describe` returns a string with a slash.  (mzajaczkowski)
+
+  * DSK-354628: Fix profile handling in OperaDesktopDriver.
+    (mzajaczkowski)
+
+  * DSK-348590: Delay if two consequtive clicks are sent in a shorter
+    time period than the OS double-click timeout.  (mzajaczkowski)
+
+  * DSK-355527: Respecting opera.no_quit in OperaDesktopDriver.
+    (mzajaczkowski)
+
+  * DSK-355552: Consider all special characters in regular expression
+    for WatirUtils.  (mzajaczkowski)
+
+  * DSK-357520: Improve have_ui_string error handling.
+    (mzajaczkowski)
+
+  * DSK-346471: Items in folderdropdown in bookmark star dialogue
+    cannot be clicked on *nix.  (mzajaczkowski)
+
+  * DSK-346770: change_page_with_click method returns success if
+    dialogue page changed.  (mzajaczkowski)
+
+  * DSK-358152: Improve logging in problematic places for
+    OperaDesktopDriver.  (mzajaczkowski)
+
+  * DSK-360865: Create Scope services after starting Opera to prevent
+    crash in OperaDesktopDriver.  (mzajaczkowski)
+
+  * DSK-360264: Fixes issue with clicking checkboxes in some
+    dialogues.  (mzajaczkowski)
+
+  * Only quit Opera if told not to detach the process.  (andreastt)
+
+  * Handle + (plus) and - (dash) when parsing command-line arguments.
+    (danielb)
+
+  * Don't modify the logging level in AbstractTestCase, let the
+    suppliers decide.  (andreastt)
+
+  * OPDRV-187: Restrict logging to com.opera.core.systems package.
+    (andreastt)
+
+  * Null pointer fix for OperaSettings#setBinary().  (danielb)
+
+  * OPDRV-190: Prevent excessive console logging.  (andreastt)
+
+  * Fix for equality bug in Canvas.  (andreastt)
+
+  * Only close a window if we are connected to Opera.  (andreastt)
+
+  * Some selftests can take up to 200s to finish, increased the
+    overall selftest timeout to 200 s.  (andreastt)
+
+  * Null pointer fix in EcmascriptService#setRuntime().  (danielb,
+    virgild)
+
+  * Opera SDK builds identify themselves as "devices", not "sdk".
+    (andreastt)
+
+  * Cleaned up retry and sleeps when failing to evaluate ECMAscript.
+    (danielb)
+
+  * Don't attempt to eval ECMAscript if script injection is not
+    available.  (danielb)
+
+  * Handle preferences with no values.  (danielb)
+
+  * Don't make launcher executable if it already is.  (virgild)
+
+  * Use java.io.File#setExecutable() to make files executable.
+    (virgild)
+
+  [TESTS]
+
+  * OPDRV-13: Tests for OperaDesktopDriver (mzajaczkowski, andreastt)
+
+  * Integration of OperaDesktopDriver as a natural part of the test
+    framework.  (andreastt)
+
+  * Added NeedsLocalEnvironment annotation for tests that needs to be
+    run locally.  (andreastt)
+
+  * Ensuring runner shutdown for OperaLauncherRunnerTest.  (andreastt)
+
+  * Add process manager to allow probing and force killing on
+    GNU/Linux and Windows.  (andreastt)
+
+  * Test for OPERA_PATH and for detaching browser correctly.
+    (andreastt)
+
+  [OTHER]
+
+  * Much, much cleaning.  (andreastt)
+
+  * Corrected documentation for OperaDefaults#APPEND_TO_LOGFILE.
+    (danielb)
+
+  * Updated Selenium dependency to 2.24.1.  (andreastt)
+
+  * OPDRV-191: Removing unused class ScopeActions.  (andreastt)
+
+  * OPDRV-193: Moving CaseInsensitiveStringSet to common.collect.
+    (andreastt)
+
+  * Updated URL of Sonar server.  (danielb)
+
+
 v0.14     (2012-05-29)
 
   [API CHANGES]
@@ -204,7 +356,7 @@ v0.12     (2012-05-04)
     This can be disabled by doing:
 
         preferences().set("User Prefs", "Ignore Unrequested Popups",
-	                  true);
+                          true);
 
     (andreastt)
 
@@ -1035,7 +1187,7 @@ v0.7.2    2011-09-08
 
 
 v0.7.1    2011-09-06
- 
+
   [API CHANGES]
 
   * Remove deprecated method OperaDriver.stop().  (andreastt)
@@ -1095,7 +1247,7 @@ v0.7    2011-09-02
     what the method is actually doing.  (andreastt)
 
   * Remove OperaDriver.shutdown().  (stuartk)
- 
+
   [NEW FEATURES]
 
   * Support DesiredCapabilities. Capabilities include "opera.binary" and
@@ -1144,7 +1296,7 @@ v0.7    2011-09-02
   * Don't timeout when a window is closed by Javascript.  (stuartk)
 
   * Check services isn't null before shutting it down.  (stuartk)
- 
+
   [TESTS]
 
   * Add tests for modifier keys.  (stuartk)
@@ -1545,7 +1697,7 @@ v0.4.2.pre5    2011-03-14
   [TESTS]
 
   * Added and updated unit tests for:
- 
+
     - Frames
     - OperaDriver core
     - OperaLauncherRunner
