@@ -145,7 +145,7 @@ v0.15     (2012-07-23)
   * Corrected documentation for OperaDefaults#APPEND_TO_LOGFILE.
     (danielb)
 
-  * Updated Selenium dependency to 2.24.1.  (andreastt)
+  * Updated Selenium dependency to 2.25.0.  (andreastt)
 
   * OPDRV-191: Removing unused class ScopeActions.  (andreastt)
 
