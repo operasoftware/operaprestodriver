@@ -20,6 +20,7 @@ import com.opera.core.systems.testing.OperaDriverTestCase;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.openqa.selenium.By;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebElement;
 
@@ -30,7 +31,7 @@ public class StaleElementsSamePageTest extends OperaDriverTestCase {
   @Before
   public void beforeEach() {
     driver.navigate().to(pages.test);
-    test = driver.findElementById("header");
+    test = driver.findElement(By.id("header"));
     driver.navigate().to(pages.test);
   }
 

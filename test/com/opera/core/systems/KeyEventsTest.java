@@ -17,11 +17,13 @@ limitations under the License.
 package com.opera.core.systems;
 
 import com.opera.core.systems.scope.exceptions.ResponseNotReceivedException;
+import com.opera.core.systems.testing.Ignore;
 import com.opera.core.systems.testing.OperaDriverTestCase;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
 import static org.junit.Assert.assertFalse;
@@ -34,7 +36,7 @@ public class KeyEventsTest extends OperaDriverTestCase {
   @Before
   public void beforeEach() {
     driver.navigate().to(pages.keys);
-    logEl = driver.findElementById("log");
+    logEl = driver.findElement(By.id("log"));
   }
 
   @After
@@ -43,6 +45,7 @@ public class KeyEventsTest extends OperaDriverTestCase {
   }
 
   @Test
+  @Ignore(products = OperaProduct.MOBILE, value = "Needs investigation")
   public void testKey() {
     key("a");
 
@@ -80,6 +83,7 @@ public class KeyEventsTest extends OperaDriverTestCase {
   }
 
   @Test
+  @Ignore(products = OperaProduct.MOBILE, value = "Needs investigation")
   public void testSpecialKeys() {
     key("f5");
     assertTrue("F5", logContains("press, 116"));
@@ -132,7 +136,7 @@ public class KeyEventsTest extends OperaDriverTestCase {
 
   private void key(String key) {
     if (key.equalsIgnoreCase("enter")) {
-      driver.getScopeServices().captureOperaIdle();
+      driver.getServices().captureOperaIdle();
     }
 
     keyDown(key);
@@ -148,19 +152,19 @@ public class KeyEventsTest extends OperaDriverTestCase {
   }
 
   private void keyDown(String key) {
-    driver.getExecService().key(key, false);
+    driver.getServices().getExec().key(key, false);
   }
 
   public void keyUp(String key) {
-    driver.getExecService().key(key, true);
+    driver.getServices().getExec().key(key, true);
   }
 
   public void releaseKeys() {
-    driver.getExecService().releaseKeys();
+    driver.getServices().getExec().releaseKeys();
   }
 
   public void type(String using) {
-    driver.getExecService().type(using);
+    driver.getServices().getExec().type(using);
   }
 
   // For verifying test outcome:

@@ -26,9 +26,11 @@ import com.opera.core.systems.testing.Settings;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.interactions.Actions;
 
+import static com.opera.core.systems.OperaProduct.MOBILE;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.openqa.selenium.Platform.LINUX;
@@ -91,7 +93,7 @@ public class IdleTest extends OperaDriverTestCase {
   }
 
   @Test
-  @Ignore(platforms = WINDOWS)
+  @Ignore(platforms = WINDOWS, products = MOBILE)
   public void back() {
     assertIdleEnabledAndAvailable();
 
@@ -106,7 +108,7 @@ public class IdleTest extends OperaDriverTestCase {
   }
 
   @Test
-  @Ignore(platforms = WINDOWS)
+  @Ignore(platforms = WINDOWS, products = MOBILE)
   public void forward() {
     assertIdleEnabledAndAvailable();
 
@@ -121,7 +123,7 @@ public class IdleTest extends OperaDriverTestCase {
   }
 
   @Test
-  @Ignore(platforms = WINDOWS)
+  @Ignore(platforms = WINDOWS, products = MOBILE)
   public void back2() {
     assertIdleEnabledAndAvailable();
 
@@ -142,13 +144,13 @@ public class IdleTest extends OperaDriverTestCase {
     assertIdleEnabledAndAvailable();
 
     driver.navigate().to(pages.test);
-    driver.findElementById("input_email").sendKeys("before refresh");
+    driver.findElement(By.id("input_email")).sendKeys("before refresh");
 
     start();
     driver.navigate().refresh();
     stop();
 
-    assertEquals("", driver.findElementById("input_email").getAttribute("value"));
+    assertEquals("", driver.findElement(By.id("input_email")).getAttribute("value"));
   }
 
   @Test
@@ -159,21 +161,21 @@ public class IdleTest extends OperaDriverTestCase {
     driver.navigate().to(pages.test);
 
     start();
-    driver.findElementById("local").click();
+    driver.findElement(By.id("local")).click();
     stop();
 
     assertTrue(driver.getCurrentUrl().endsWith("two_input_fields.html"));
   }
 
   @Test
-  @Ignore(platforms = WINDOWS)
+  @Ignore(platforms = WINDOWS, products = MOBILE)
   public void keyEnter() {
     assertIdleEnabledAndAvailable();
 
     driver.navigate().to(pages.javascript);
 
     // Focus textbox
-    driver.findElementById("one").click();
+    driver.findElement(By.id("one")).click();
 
     // submit form
     start();
@@ -185,7 +187,7 @@ public class IdleTest extends OperaDriverTestCase {
   }
 
   @Test
-  @Ignore(platforms = WINDOWS)
+  @Ignore(platforms = WINDOWS, products = MOBILE)
   public void sendKeysNewline() {
     assertIdleEnabledAndAvailable();
 
@@ -193,7 +195,7 @@ public class IdleTest extends OperaDriverTestCase {
 
     // Focus textbox
     start();
-    driver.findElementById("one").sendKeys("\n");
+    driver.findElement(By.id("one")).sendKeys("\n");
     stop();
 
     // +"?" for submitted query string
@@ -208,7 +210,7 @@ public class IdleTest extends OperaDriverTestCase {
 
     // Check checkbox, fires a submit even on the form
     start();
-    driver.findElementById("check").click();
+    driver.findElement(By.id("check")).click();
     stop();
 
     // +"?" for submitted query string
@@ -223,7 +225,7 @@ public class IdleTest extends OperaDriverTestCase {
 
     // Check checkbox, fires a submit even on the form
     start();
-    driver.findElementById("test_form").submit();
+    driver.findElement(By.id("test_form")).submit();
     stop();
 
     // +"?" for submitted query string
@@ -241,7 +243,7 @@ public class IdleTest extends OperaDriverTestCase {
     driver.navigate().to(pages.ecmascriptLoop);
     stop();
 
-    assertEquals("done", driver.findElementById("out").getText());
+    assertEquals("done", driver.findElement(By.id("out")).getText());
   }
 
   @Test
@@ -253,7 +255,7 @@ public class IdleTest extends OperaDriverTestCase {
     driver.navigate().to(pages.ecmascriptTimeout);
     stop();
 
-    assertEquals("done", driver.findElementById("out").getText());
+    assertEquals("done", driver.findElement(By.id("out")).getText());
   }
 
   @Test
@@ -265,7 +267,7 @@ public class IdleTest extends OperaDriverTestCase {
     driver.navigate().to(pages.ecmascriptTimeoutLoop);
     stop();
 
-    assertEquals("done", driver.findElementById("out").getText());
+    assertEquals("done", driver.findElement(By.id("out")).getText());
   }
 
   @Test
@@ -296,7 +298,7 @@ public class IdleTest extends OperaDriverTestCase {
 
     driver.navigate().to(pages.timer);
     // Idle will wait for timeout before firing
-    assertEquals("default", driver.findElementById("one").getAttribute("value"));
+    assertEquals("default", driver.findElement(By.id("one")).getAttribute("value"));
   }
 
 }

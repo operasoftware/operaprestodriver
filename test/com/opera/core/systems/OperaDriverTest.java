@@ -18,17 +18,20 @@ package com.opera.core.systems;
 
 import com.opera.core.systems.testing.Ignore;
 import com.opera.core.systems.testing.OperaDriverTestCase;
-import com.opera.core.systems.testing.drivers.TestOperaDriver;
+import com.opera.core.systems.testing.drivers.TestDriver;
+import com.opera.core.systems.testing.drivers.TestDriverBuilder;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import static com.opera.core.systems.OperaProduct.CORE;
+import static com.opera.core.systems.OperaProduct.MOBILE;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -49,7 +52,7 @@ public class OperaDriverTest extends OperaDriverTestCase {
 
   @Test
   public void testDefaultWindowCount() {
-    assertTrue(driver.getWindowCount() >= 1);
+    assertTrue(driver.getWindowHandles().size() >= 1);
   }
 
   @Test
@@ -62,10 +65,11 @@ public class OperaDriverTest extends OperaDriverTestCase {
   public void testGetText() {
     driver.navigate().to(pages.none);
     assertEquals("You should see nothing below.",
-                 driver.findElementByTagName("body").getText().trim());
+                 driver.findElement(By.tagName("body")).getText().trim());
   }
 
   @Test
+  @Ignore(products = MOBILE, value = "Needs investigation")
   public void testOperaAction() {
     driver.navigate().to(pages.javascript);
     driver.navigate().to(pages.test);
@@ -76,6 +80,7 @@ public class OperaDriverTest extends OperaDriverTestCase {
   }
 
   @Test
+  @Ignore(products = MOBILE, value = "Needs investigation")
   public void testOperaActionCaseInsensitive() {
     driver.navigate().to(pages.javascript);
     driver.navigate().to(pages.test);
@@ -97,7 +102,7 @@ public class OperaDriverTest extends OperaDriverTestCase {
     DesiredCapabilities c = new DesiredCapabilities();
     c.setCapability(OperaSettings.Capability.PORT.getCapability(), -1);
 
-    TestOperaDriver a = new TestOperaDriver(c);
+    TestDriver a = new TestDriverBuilder().using(c).get();
     assertEquals(7001, a.preferences().get("Developer Tools", "Proxy Port").getValue());
     a.quit();
   }
@@ -107,9 +112,9 @@ public class OperaDriverTest extends OperaDriverTestCase {
     DesiredCapabilities c = new DesiredCapabilities();
     c.setCapability(OperaSettings.Capability.PORT.getCapability(), 0);
 
-    TestOperaDriver a;
+    TestDriver a;
     try {
-      a = new TestOperaDriver(c);
+      a = new TestDriverBuilder().using(c).get();
     } catch (Exception e) {
       // If immediately exited, then it doesn't support the flags
       if (e.getMessage().contains("Opera exited immediately")) {
@@ -129,9 +134,9 @@ public class OperaDriverTest extends OperaDriverTestCase {
     OperaSettings settings = new OperaSettings();
     settings.setPort(9876);
 
-    TestOperaDriver a;
+    TestDriver a;
     try {
-      a = new TestOperaDriver(settings);
+      a = new TestDriverBuilder().using(settings).get();
     } catch (Exception e) {
       // If immediately exited, then it doesn't support the flags
       if (e.getMessage().contains("Opera exited immediately")) {
@@ -152,13 +157,13 @@ public class OperaDriverTest extends OperaDriverTestCase {
                                (String) null);  // random profile
     capabilities.setCapability(OperaSettings.Capability.PORT.getCapability(), 0);  // random port
 
-    OperaDriver a;
-    OperaDriver b;
-    OperaDriver c;
+    TestDriver a;
+    TestDriver b;
+    TestDriver c;
     try {
-      a = new OperaDriver(capabilities);
-      b = new OperaDriver(capabilities);
-      c = new OperaDriver(capabilities);
+      a = new TestDriverBuilder().using(capabilities).get();
+      b = new TestDriverBuilder().using(capabilities).get();
+      c = new TestDriverBuilder().using(capabilities).get();
     } catch (WebDriverException e) {
       // If immediately exited, then it doesn't support the flags
       if (e.getMessage().contains("Opera exited immediately")) {

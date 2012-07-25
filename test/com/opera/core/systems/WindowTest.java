@@ -72,7 +72,7 @@ public class WindowTest extends OperaDriverTestCase {
       windowPage.openNewTargetedWindow();
     }
 
-    assertEquals(newWindows(1), driver.getWindowCount());
+    assertEquals(newWindows(1), driver.getWindowHandles().size());
   }
 
   @Test
@@ -113,7 +113,7 @@ public class WindowTest extends OperaDriverTestCase {
   public void closeLastWindowWithHTTPAuthQuitsBrowser() {
     driver.navigate().to(pages.basicAuth);
     driver.close();
-    assertEquals(0, driver.getWindowCount());
+    assertEquals(0, driver.getWindowHandles().size());
     assertFalse(driver.isRunning());
   }
 
@@ -121,14 +121,14 @@ public class WindowTest extends OperaDriverTestCase {
   @FreshDriver
   @Ignore(products = {CORE, MINI, MOBILE, SDK})
   public void resetWindowStateOnDesktop() {
-    driver.createWindow();
+    createWindow();
     assertEquals(2, driver.getWindowHandles().size());
 
     driver.navigate().to(pages.basicAuth);
     assertEquals(2, driver.getWindowHandles().size());
 
-    driver.getServices().getWindowManager().closeAllWindows();
-    driver.createWindow();
+    closeAllWindows();
+    createWindow();
 
     assertEquals(1, driver.getWindowHandles().size());
   }
@@ -137,13 +137,13 @@ public class WindowTest extends OperaDriverTestCase {
   @FreshDriver
   @Ignore(products = {DESKTOP, MINI, MOBILE, SDK})
   public void resetWindowStateOnCore() {
-    driver.createWindow();
+    createWindow();
     assertEquals(2, driver.getWindowHandles().size());
 
     driver.navigate().to(pages.basicAuth);
     assertEquals(3, driver.getWindowHandles().size());
 
-    driver.getServices().getWindowManager().closeAllWindows();
+    closeAllWindows();
 
     assertEquals(1, driver.getWindowHandles().size());
   }
@@ -157,6 +157,14 @@ public class WindowTest extends OperaDriverTestCase {
    */
   private int newWindows(int totalNumberNewWindows) {
     return totalNumberNewWindows + 1;
+  }
+
+  private void closeAllWindows() {
+    driver.getServices().getWindowManager().closeAllWindows();
+  }
+
+  private void createWindow() {
+    driver.getServices().getWindowManager().createWindow();
   }
 
 }

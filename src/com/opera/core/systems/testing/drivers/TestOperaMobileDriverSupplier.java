@@ -18,24 +18,21 @@ package com.opera.core.systems.testing.drivers;
 
 import com.opera.core.systems.OperaProduct;
 
-/**
- * @author Andreas Tolf Tolfsen <andreastt@opera.com>
- */
-public class TestOperaDesktopDriverSupplier extends AbstractTestDriverSupplier {
+public class TestOperaMobileDriverSupplier extends AbstractTestDriverSupplier {
 
-  public TestOperaDesktopDriverSupplier() {
-    super(OperaProduct.DESKTOP);
+  public TestOperaMobileDriverSupplier() {
+    super(OperaProduct.MOBILE);
   }
 
-  public TestOperaDesktopDriver get() {
+  public TestOperaMobileDriver get() {
     // Uncomment this if you wish to connect Opera manually:
     //settings.autostart(false);
 
-    return new TestOperaDesktopDriver(getSettings());
+    return new TestOperaMobileDriver(getSettings());
   }
 
   public boolean supplies(Class<? extends TestDriver> klass) {
-    return TestOperaDesktopDriver.class.equals(klass);
+    return TestOperaMobileDriver.class.equals(klass);
   }
 
 }

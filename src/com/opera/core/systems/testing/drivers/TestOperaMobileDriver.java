@@ -16,7 +16,7 @@ limitations under the License.
 
 package com.opera.core.systems.testing.drivers;
 
-import com.opera.core.systems.OperaDesktopDriver;
+import com.opera.core.systems.OperaMobileDriver;
 import com.opera.core.systems.OperaSettings;
 import com.opera.core.systems.ScopeServices;
 import com.opera.core.systems.runner.interfaces.OperaRunner;
@@ -24,17 +24,17 @@ import com.opera.core.systems.scope.exceptions.ResponseNotReceivedException;
 
 import org.openqa.selenium.Capabilities;
 
-public class TestOperaDesktopDriver extends OperaDesktopDriver implements TestDriver {
+public class TestOperaMobileDriver extends OperaMobileDriver implements TestDriver {
 
-  public TestOperaDesktopDriver() {
+  public TestOperaMobileDriver() {
     super();
   }
 
-  public TestOperaDesktopDriver(Capabilities capabilities) {
+  public TestOperaMobileDriver(Capabilities capabilities) {
     super(capabilities);
   }
 
-  public TestOperaDesktopDriver(OperaSettings settings) {
+  public TestOperaMobileDriver(OperaSettings settings) {
     super(settings);
   }
 

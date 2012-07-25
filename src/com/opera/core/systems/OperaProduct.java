@@ -49,7 +49,7 @@ public enum OperaProduct {
   private static final Map<String, OperaProduct> lookup =
       Maps.uniqueIndex(ImmutableList.copyOf(values()), new Function<OperaProduct, String>() {
         public String apply(OperaProduct product) {
-          return product.toString();
+          return product.getDescriptionString();
         }
       });
 
@@ -59,8 +59,23 @@ public enum OperaProduct {
     this.product = product;
   }
 
-  public String toString() {
+  public String getDescriptionString() {
     return product;
+  }
+
+  public String toString() {
+    switch (OperaProduct.get(product)) {
+      case CORE:
+        return "gogi";
+      case SDK:
+        return "SDK";
+      case DESKTOP:
+      case MOBILE:
+      case MINI:
+        return "Opera " + Character.toUpperCase(product.charAt(0)) + product.substring(1);
+      default:
+        return "(not specified)";
+    }
   }
 
   /**
@@ -75,6 +90,12 @@ public enum OperaProduct {
   }
 
   public static OperaProduct get(String product) {
+    if (product == null) {
+      return ALL;
+    }
+
+    System.out.println("product: " + product);
+
     if (!lookup.containsKey(product)) {
       throw new WebDriverException("Unknown product: " + product);
     }

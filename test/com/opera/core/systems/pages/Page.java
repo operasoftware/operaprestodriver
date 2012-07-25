@@ -17,21 +17,19 @@ limitations under the License.
 package com.opera.core.systems.pages;
 
 import com.opera.core.systems.testing.Pages;
-import com.opera.core.systems.testing.drivers.TestOperaDriver;
+import com.opera.core.systems.testing.drivers.TestDriver;
 
 /**
  * Helper functionality for holding commonly used fields for page object pages.  Extend this class
  * and call <code>super(driver, pages)</code> to instantiate the fields <code>driver</code> and
  * <code>pages</code> to your page object.
- *
- * @author Andreas Tolf Tolfsen <andreastt@opera.com>
  */
 public abstract class Page {
 
-  protected TestOperaDriver driver;
+  protected TestDriver driver;
   protected Pages pages;
 
-  public Page(TestOperaDriver driver, Pages pages) {
+  public Page(TestDriver driver, Pages pages) {
     this.driver = driver;
     this.pages = pages;
   }

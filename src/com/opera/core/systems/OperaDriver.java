@@ -16,6 +16,7 @@ limitations under the License.
 
 package com.opera.core.systems;
 
+import com.google.common.base.Throwables;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
@@ -93,7 +94,7 @@ import static org.openqa.selenium.Platform.WINDOWS;
  * The driver implements the Scope protocol in Java to enable communication with Opera directly from
  * Java.
  */
-public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
+public class OperaDriver extends RemoteWebDriver implements TakesScreenshot, RunsSelftest {
 
   /**
    * Different types of data stored by Opera.
@@ -137,7 +138,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
   private int assignedWindowIds = 0;
 
   protected final Logger logger = Logger.getLogger(getClass().getName());
-  private FileHandler logFile = null;
+  protected static FileHandler logFile = null;
 
   /**
    * Constructor that starts Opera with the default set of capabilities.
@@ -172,13 +173,6 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
    */
   public OperaDriver(OperaSettings settings) {
     this.settings = settings;
-
-    if (settings.autostart()) {
-      runner = new OperaLauncherRunner(settings);
-    } else {
-      settings.setPort(OperaDefaults.SERVER_DEFAULT_PORT_IDENTIFIER);
-    }
-
     logger.config(settings.toString());
     start();
   }
@@ -199,6 +193,12 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
    * Initialize required Scope services.
    */
   protected void init() {
+    if (settings.autostart()) {
+      runner = new OperaLauncherRunner(settings);
+    } else {
+      settings.setPort(OperaDefaults.SERVER_DEFAULT_PORT_IDENTIFIER);
+    }
+
     createScopeServices();
 
     // Launch Opera if the runner has been setup
@@ -230,8 +230,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     // Update browser's proxy configuration
     proxy.parse(settings.getProxy());
 
-    // Mobile needs to be able to autofocus elements for form input currently.  This is an ugly
-    // workaround which should get solved by implementing a standalone bream Scope service.
+    // Mobile has disabled JavaScript autofocus for usability reasons
     if (utils().getProduct().is(MOBILE)) {
       preferences().set("User Prefs", "Allow Autofocus Form Element", true);
     }
@@ -264,7 +263,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
                                    !settings.autostart());
       services.startStpThread();
     } catch (IOException e) {
-      throw new WebDriverException(e);
+      throw new CommunicationException(e);
     }
   }
 
@@ -273,24 +272,38 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
   }
 
   public void quit() {
-    try {
-      gc();
+    gc();
 
+    try {
       if (!settings.hasDetach()) {
-        services.quit();
+        // Instruct Opera to quit and close the Scope connection.  If not successful, force Opera to
+        // stop using the runner if available
+        try {
+          if (runner != null) {
+            services.quit(runner);
+          } else {
+            services.quit();
+          }
+        } catch (Throwable t) {
+          if (runner != null) {
+            runner.stopOpera();
+          } else {
+            Throwables.propagateIfPossible(t);
+          }
+        }
       } else {
+        // Just close the Scope connection, leave Opera running
         services.shutdown();
       }
 
+      // Shutdown runner if one is present
       if (runner != null) {
-        if (!settings.hasDetach()) {
-          runner.stopOpera();
-        }
         runner.shutdown();
       }
-    } catch (Exception e) {
-      // nothing we can do
+    } catch (RuntimeException e) {
+      throw new WebDriverException(e);
     } finally {
+      // Don't clean the profile if we were asked to detach the browser
       if (!settings.hasDetach()) {
         settings.profile().cleanUp();
       }
@@ -827,7 +840,32 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     }
 
     public OperaTimeouts timeouts() {
-      return new OperaTimeouts();
+      return new OperaTimeouts() {
+        public Timeouts implicitlyWait(long time, TimeUnit unit) {
+          OperaIntervals.IMPLICIT_WAIT.setValue(new Duration(time, unit));
+          return this;
+        }
+
+        public Timeouts setScriptTimeout(long time, TimeUnit unit) {
+          OperaIntervals.SCRIPT_TIMEOUT.setValue(new Duration(time, unit));
+          return this;
+        }
+
+        public Timeouts pageLoadTimeout(long time, TimeUnit unit) {
+          OperaIntervals.PAGE_LOAD_TIMEOUT.setValue(new Duration(time, unit));
+          return this;
+        }
+
+        public Timeouts responseTimeout(long time, TimeUnit unit) {
+          OperaIntervals.RESPONSE_TIMEOUT.setValue(new Duration(time, unit));
+          return this;
+        }
+
+        public Timeouts selftestTimeout(long time, TimeUnit unit) {
+          OperaIntervals.SELFTEST_TIMEOUT.setValue(new Duration(time, unit));
+          return this;
+        }
+      };
     }
 
     public ImeHandler ime() {
@@ -842,59 +880,6 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     @Beta
     public Logs logs() {
       return new RemoteLogs(getExecuteMethod(), LocalLogs.NULL_LOGGER);
-    }
-
-  }
-
-  public static class OperaTimeouts implements Timeouts {
-
-    public Timeouts implicitlyWait(long time, TimeUnit unit) {
-      OperaIntervals.IMPLICIT_WAIT.setValue(new Duration(time, unit));
-      return this;
-    }
-
-    public Timeouts setScriptTimeout(long time, TimeUnit unit) {
-      OperaIntervals.SCRIPT_TIMEOUT.setValue(new Duration(time, unit));
-      return this;
-    }
-
-    /**
-     * Sets the amount of time to wait for a page to finish loading before returning control of the
-     * browser to the user.
-     *
-     * @param time the amount of time to wait
-     * @param unit the unit of measure for {@code time}
-     * @return a self reference
-     */
-    public Timeouts pageLoadTimeout(long time, TimeUnit unit) {
-      OperaIntervals.PAGE_LOAD_TIMEOUT.setValue(new Duration(time, unit));
-      return this;
-    }
-
-    /**
-     * Sets the amount of time to wait for a response from Opera/the Scope client before throwing an
-     * error.
-     *
-     * @param time the amount of time to wait
-     * @param unit the unit of measure for {@code time}
-     * @return a self reference
-     */
-    public Timeouts responseTimeout(long time, TimeUnit unit) {
-      OperaIntervals.RESPONSE_TIMEOUT.setValue(new Duration(time, unit));
-      return this;
-    }
-
-    /**
-     * Defines the amount of time to wait before aborting a running selftest executed by {@link
-     * OperaDriver#selftest(String)}.
-     *
-     * @param time the amount of time to wait
-     * @param unit the unit of measure for {@code time}
-     * @return a self reference
-     */
-    public Timeouts selftestTimeout(long time, TimeUnit unit) {
-      OperaIntervals.SELFTEST_TIMEOUT.setValue(new Duration(time, unit));
-      return this;
     }
 
   }
@@ -977,89 +962,36 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
     return preferences;
   }
 
-  /**
-   * Gets the {@link OperaDriver.OperaUtils} interface which is used for accessing the browser's
-   * meta- and utility information, such as the operating system it's running on, its user agent
-   * string, &c.
-   *
-   * @return utility methods for Opera
-   */
   public OperaUtils utils() {
-    return new OperaUtils();
-  }
+    return new OperaUtils() {
+      public String getCoreVersion() {
+        return coreUtils.getCoreVersion();
+      }
 
-  /**
-   * Interface for accessing the browser's meta- and utility information.
-   */
-  public class OperaUtils {
+      public Platform getPlatform() {
+        return Platform.extractFromSysProperty(coreUtils.getOperatingSystem());
+      }
 
-    /**
-     * Which Core version this instance of the browser is using, e.g. "2.8.119".
-     *
-     * @return version number
-     */
-    public String getCoreVersion() {
-      return coreUtils.getCoreVersion();
-    }
+      public OperaProduct getProduct() {
+        return OperaProduct.get(coreUtils.getProduct());
+      }
 
-    /**
-     * The platform currently used.
-     *
-     * @return operating system identifier
-     */
-    public Platform getPlatform() {
-      return Platform.extractFromSysProperty(coreUtils.getOperatingSystem());
-    }
+      public String getBinaryPath() {
+        return coreUtils.getBinaryPath();
+      }
 
-    /**
-     * Gets the current product.  For regular desktop builds this will be {@link
-     * OperaProduct#DESKTOP} Other examples are {@link OperaProduct#MOBILE} and {@link
-     * OperaProduct#CORE}.
-     *
-     * @return browser's product type
-     */
-    public OperaProduct getProduct() {
-      return OperaProduct.get(coreUtils.getProduct());
-    }
+      public String getUserAgent() {
+        return coreUtils.getUserAgent();
+      }
 
-    /**
-     * The full path to the currently running binary.
-     *
-     * @return full path to browser
-     */
-    public String getBinaryPath() {
-      return coreUtils.getBinaryPath();
-    }
+      public Integer getPID() {
+        return coreUtils.getProcessID();
+      }
 
-    /**
-     * The User-Agent string.  Typically something like <code>Opera/9.80 (Windows NT 6.1; U; en)
-     * Presto/2.7.62 Version/11.01</code>.
-     *
-     * @return User-Agent string
-     */
-    public String getUserAgent() {
-      return coreUtils.getUserAgent();
-    }
-
-    /**
-     * The ID of the process we're currently talking to.  Might not be present if the build does not
-     * support retrieving process IDs.
-     *
-     * @return process ID, or null if not available
-     */
-    public Integer getPID() {
-      return coreUtils.getProcessID();
-    }
-
-    /**
-     * Clear private data stored by Opera by type of data or by all.
-     *
-     * @param flags a variable list of flags can be used, or the value ALL to clean all stored data
-     */
-    public void clearPrivateData(PrivateData... flags) {
-      ((CoreUtils) coreUtils).clearPrivateData(flags);
-    }
-
+      public void clearPrivateData(PrivateData... flags) {
+        ((CoreUtils) coreUtils).clearPrivateData(flags);
+      }
+    };
   }
 
   /**
@@ -1208,7 +1140,9 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
    * immediately.
    */
   private void gc() {
-    debugger.releaseObjects();
+    if ((services != null && services.isConnected()) && debugger != null) {
+      debugger.releaseObjects();
+    }
     objectIds.clear();
   }
 

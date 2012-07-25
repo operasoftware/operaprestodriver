@@ -14,22 +14,20 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package com.opera.core.systems.testing.drivers;
+package com.opera.core.systems;
 
-/**
- * @author Andreas Tolf Tolfsen <andreastt@opera.com>
- */
-public class TestOperaDriverSupplier extends AbstractTestDriverSupplier {
+import com.opera.core.systems.testing.OperaMobileDriverTestCase;
 
-  public TestOperaDriver get() {
-    // Uncomment this if you wish to connect Opera manually:
-    //settings.autostart(false);
+import org.junit.Test;
+import org.openqa.selenium.ScreenOrientation;
 
-    return new TestOperaDriver(settings);
-  }
+import static org.junit.Assert.assertEquals;
 
-  public boolean supplies(Class<? extends TestDriver> klass) {
-    return TestOperaDriver.class.equals(klass);
+public class MobileRotationTest extends OperaMobileDriverTestCase {
+
+  @Test
+  public void rotation() {
+    assertEquals(ScreenOrientation.PORTRAIT, driver.getOrientation());
   }
 
 }

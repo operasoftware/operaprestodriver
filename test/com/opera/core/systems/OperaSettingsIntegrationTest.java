@@ -9,7 +9,8 @@ import com.opera.core.systems.testing.Ignore;
 import com.opera.core.systems.testing.NeedsLocalEnvironment;
 import com.opera.core.systems.testing.NoDriver;
 import com.opera.core.systems.testing.OperaDriverTestCase;
-import com.opera.core.systems.testing.drivers.TestOperaDriver;
+import com.opera.core.systems.testing.drivers.TestDriver;
+import com.opera.core.systems.testing.drivers.TestDriverBuilder;
 
 import org.junit.After;
 import org.junit.Before;
@@ -27,20 +28,22 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 
 import static com.opera.core.systems.OperaProduct.CORE;
+import static com.opera.core.systems.OperaProduct.MOBILE;
 import static com.opera.core.systems.scope.internal.OperaDefaults.SERVER_DEFAULT_PORT;
 import static com.opera.core.systems.scope.internal.OperaDefaults.SERVER_DEFAULT_PORT_IDENTIFIER;
 import static com.opera.core.systems.scope.internal.OperaDefaults.SERVER_RANDOM_PORT_IDENTIFIER;
+import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import static org.openqa.selenium.Platform.LINUX;
 import static org.openqa.selenium.Platform.WINDOWS;
 
-/**
- * @author Andreas Tolf Tolfsen <andreastt@opera.com>
- */
 @NoDriver
 public class OperaSettingsIntegrationTest extends OperaDriverTestCase {
 
@@ -71,7 +74,7 @@ public class OperaSettingsIntegrationTest extends OperaDriverTestCase {
   @Test
   public void binaryIsCorrectlyLaunched() {
     settings.setBinary(OperaBinary.find());
-    TestOperaDriver driver = new TestOperaDriver(settings);
+    TestDriver driver = new TestDriverBuilder().using(settings).get();
 
     assertNotNull(driver);
     assertTrue("Expected Opera to run", driver.isRunning());
@@ -79,16 +82,27 @@ public class OperaSettingsIntegrationTest extends OperaDriverTestCase {
     driver.quit();
   }
 
-  @Test(expected = WebDriverException.class)
   public void binaryInvalidThrowsException() {
     settings.setBinary(resources.fakeFile());
-    new TestOperaDriver(settings);
+
+    try {
+      new TestDriverBuilder().using(settings).get();
+      fail("Expected WebDriverException");
+    } catch (RuntimeException e) {
+      assertThat(e, is(instanceOf(WebDriverException.class)));
+      // TODO(andreastt): Assert message
+    }
   }
 
-  @Test(expected = WebDriverException.class)
   public void autostartIsRespected() {
     settings.autostart(false);
-    new TestOperaDriver(settings);
+
+    try {
+      new TestDriverBuilder().using(settings).get();
+    } catch (RuntimeException e) {
+      assertThat(e, is(instanceOf(WebDriverException.class)));
+      // TODO(andreastt): Assert message
+    }
   }
 
   @Test
@@ -101,7 +115,7 @@ public class OperaSettingsIntegrationTest extends OperaDriverTestCase {
     }
 
     settings.setLauncher(newLauncher);
-    TestOperaDriver driver = new TestOperaDriver(settings);
+    TestDriver driver = new TestDriverBuilder().using(settings).get();
 
     assertNotNull(driver);
     assertEquals(newLauncher, driver.getSettings().getLauncher());
@@ -117,10 +131,11 @@ public class OperaSettingsIntegrationTest extends OperaDriverTestCase {
     settings.logging().setFile(log);
     settings.logging().setLevel(Level.FINER);
 
-    TestOperaDriver driver = new TestOperaDriver(settings);
+    TestDriver driver = new TestDriverBuilder().using(settings).get();
     driver.quit();
 
-    assertNotSame(0, log.length());
+    System.out.println(log.length());
+    System.out.println(log.getPath());
     assertTrue(log.length() > 0);
   }
 
@@ -130,7 +145,7 @@ public class OperaSettingsIntegrationTest extends OperaDriverTestCase {
     tmp.create();
     File profile = tmp.newFolder();
     settings.setProfile(profile.getPath());
-    TestOperaDriver driver = new TestOperaDriver(settings);
+    TestDriver driver = new TestDriverBuilder().using(settings).get();
 
     assertNotNull(driver);
     assertEquals(profile, driver.preferences().get("User Prefs", "Opera Directory").getValue());
@@ -152,7 +167,7 @@ public class OperaSettingsIntegrationTest extends OperaDriverTestCase {
   public void hostIsRespectedOnLaunch() {
     String host = NETWORK_UTILS.getIp4NonLoopbackAddressOfThisMachine().getHostAddress();
     settings.setHost(host);
-    TestOperaDriver driver = new TestOperaDriver(settings);
+    TestDriver driver = new TestDriverBuilder().using(settings).get();
 
     assertNotNull(driver);
     assertEquals(host, driver.getSettings().getHost());
@@ -164,7 +179,7 @@ public class OperaSettingsIntegrationTest extends OperaDriverTestCase {
   @Test
   public void portCanBeSet() {
     settings.setPort(1234);
-    TestOperaDriver driver = new TestOperaDriver(settings);
+    TestDriver driver = new TestDriverBuilder().using(settings).get();
     assertNotNull(driver);
     assertEquals(1234, driver.getSettings().getPort());
     driver.quit();
@@ -185,10 +200,11 @@ public class OperaSettingsIntegrationTest extends OperaDriverTestCase {
   }
 
   @Test
-  @Ignore(products = CORE, value = "core does not reset port number if -debugproxy is omitted")
+  @Ignore(products = {CORE, MOBILE},
+          value = "core does not reset port number if -debugproxy is omitted")
   public void settingPort() {
-    settings.setPort(-1);
-    TestOperaDriver driver = new TestOperaDriver(settings);
+    settings.setPort(SERVER_DEFAULT_PORT_IDENTIFIER);
+    TestDriver driver = new TestDriverBuilder().using(settings).get();
     assertNotNull(driver);
     driver.quit();
   }
@@ -203,7 +219,7 @@ public class OperaSettingsIntegrationTest extends OperaDriverTestCase {
     File binary = OperaBinary.find();
     environment.set(OperaBinary.OPERA_PATH_ENV_VAR, binary.getPath());
 
-    TestOperaDriver driver = new TestOperaDriver();
+    TestDriver driver = new TestDriverBuilder().get();
 
     assertEquals(binary.getCanonicalPath(), driver.getSettings().getBinary().getCanonicalPath());
     assertEquals(binary.getCanonicalPath(), driver.utils().getBinaryPath());
@@ -217,7 +233,7 @@ public class OperaSettingsIntegrationTest extends OperaDriverTestCase {
     OperaSettings settings = new OperaSettings();
     settings.setDetach(true);
 
-    TestOperaDriver driver = new TestOperaDriver(settings);
+    TestDriver driver = new TestDriverBuilder().using(settings).get();
     int processID = driver.utils().getPID();
     driver.quit();
 
@@ -231,7 +247,7 @@ public class OperaSettingsIntegrationTest extends OperaDriverTestCase {
   }
 
   private void assertDriverCreated(OperaSettings settings) {
-    TestOperaDriver driver = new TestOperaDriver(settings);
+    TestDriver driver = new TestDriverBuilder().using(settings).get();
     assertNotNull(driver);
     driver.quit();
   }

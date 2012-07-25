@@ -27,6 +27,7 @@ import com.opera.core.systems.scope.ScopeCommand;
 import com.opera.core.systems.scope.exceptions.CommunicationException;
 import com.opera.core.systems.scope.handlers.IConnectionHandler;
 import com.opera.core.systems.scope.handlers.ScopeEventHandler;
+import com.opera.core.systems.scope.internal.ImplicitWait;
 import com.opera.core.systems.scope.internal.OperaDefaults;
 import com.opera.core.systems.scope.internal.OperaIntervals;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo;
@@ -66,6 +67,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Logger;
 
@@ -259,7 +261,7 @@ public class ScopeServices implements IConnectionHandler {
     try {
       return HostInfo.parseFrom(response.getPayload());
     } catch (InvalidProtocolBufferException e) {
-      throw new WebDriverException("Error while parsing host info", e);
+      throw new CommunicationException("Error while parsing host info", e);
     }
   }
 
@@ -401,7 +403,7 @@ public class ScopeServices implements IConnectionHandler {
     return ServiceResult.parseFrom(response.getPayload());
   }
 
-  public void quitOpera(OperaRunner runner) {
+  public void quitOpera(final OperaRunner runner) throws IOException {
     if (!isConnected()) {
       return;
     }
@@ -409,32 +411,24 @@ public class ScopeServices implements IConnectionHandler {
     try {
       if (exec.getActionList().contains("Quit")) {
         exec.action("Quit");
-      } else {
+      } else if (exec.getActionList().contains("Exit")) {
         exec.action("Exit");
       }
-    } catch (Exception e) {
-      // We expect a CommunicationException here, because as Opera is shutting down the connection
-      // will be closed.
-      if (!(e instanceof CommunicationException)) {
-        logger.warning("Caught exception on shut down: " + e.getMessage());
-      }
+    } catch (CommunicationException e) {
+      throw new IOException("Exception on shutdown: " + e.getMessage());
     }
 
+    // Wait for Opera to quit
     if (runner != null) {
-      long interval = OperaIntervals.QUIT_POLL_INTERVAL.getMs();
-      long timeout = OperaIntervals.QUIT_RESPONSE_TIMEOUT.getMs();
-
-      while (runner.isOperaRunning() && timeout > 0) {
-        try {
-          Thread.sleep(interval);
-        } catch (InterruptedException e) {
-          // ignore
-        }
-        timeout -= interval;
-      }
+      new ImplicitWait(OperaIntervals.QUIT_RESPONSE_TIMEOUT.getValue())
+          .until(new Callable<Boolean>() {
+            public Boolean call() {
+              return runner.isOperaRunning();
+            }
+          });
 
       if (runner.isOperaRunning()) {
-        logger.severe("Opera is still running!");
+        throw new IOException("Opera is still running!");
       }
     }
   }
@@ -443,11 +437,11 @@ public class ScopeServices implements IConnectionHandler {
     return availableServices;
   }
 
-  public void quit() {
+  public void quit() throws IOException {
     quit(null);
   }
 
-  public void quit(OperaRunner runner) {
+  public void quit(OperaRunner runner) throws IOException {
     quitOpera(runner);
     shutdown();
   }

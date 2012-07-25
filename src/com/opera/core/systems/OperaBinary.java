@@ -11,6 +11,7 @@ import java.io.File;
 import java.util.List;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.checkState;
 import static com.google.common.collect.ImmutableList.of;
 import static org.openqa.selenium.Platform.WINDOWS;
 
@@ -36,15 +37,7 @@ public class OperaBinary {
 
   public OperaBinary(File userSpecifiedBinary) {
     binary = checkNotNull(userSpecifiedBinary);
-
-    if (!binary.exists() || !binary.isFile()) {
-      throw new WebDriverException("Opera binary does not exist or is not a real file: " +
-                                   binary.getPath());
-    }
-
-    if (!binary.canExecute()) {
-      throw new WebDriverException("Opera binary is not an executable: " + binary.getPath());
-    }
+    checkExecutable(binary);
   }
 
   public File getFile() {
@@ -114,6 +107,7 @@ public class OperaBinary {
     final List<String> binaries;
 
     switch (product) {
+      case ALL:
       case DESKTOP:
         paths = buildDesktopPaths();
         binaries = buildDesktopBinaries();
@@ -202,6 +196,16 @@ public class OperaBinary {
 
   private static List<String> buildMobileBinaries() {
     return platform.is(WINDOWS) ? of("OperaMobileEmu.exe") : of("operamobile");
+  }
+
+
+  private static void checkExecutable(File executable) {
+    checkState(executable.exists(),
+               "The executable does not exist: %s", executable.getPath());
+    checkState(!executable.isDirectory(),
+               "The executable is a directory: %s", executable.getPath());
+    checkState(executable.canExecute(),
+               "The is not executable: %s", executable.getPath());
   }
 
 }

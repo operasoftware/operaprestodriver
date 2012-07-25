@@ -21,6 +21,7 @@ import com.google.common.base.Predicate;
 import com.google.common.base.Throwables;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterators;
+import com.google.common.collect.Maps;
 
 import com.opera.core.systems.arguments.OperaCoreArguments;
 import com.opera.core.systems.arguments.OperaDesktopArguments;
@@ -40,7 +41,6 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.FileHandler;
@@ -157,9 +157,11 @@ public class OperaSettings {
      * Files\Opera\opera.exe</code>, or similar).
      */
     BINARY() {
+      /*
       File getDefaultValue() {
         return OperaBinary.find((OperaProduct) PRODUCT.getDefaultValue());
       }
+      */
 
       Object sanitize(Object binary) {
         if (binary == null) {
@@ -182,7 +184,7 @@ public class OperaSettings {
      */
     ARGUMENTS() {
       OperaArguments getDefaultValue() {
-        return new OperaArguments();
+        return new OperaCoreArguments();
       }
 
       OperaArguments sanitize(Object arguments) {
@@ -608,8 +610,7 @@ public class OperaSettings {
 
   }
 
-  private final Map<Capability, CapabilityInstance> options =
-      new HashMap<Capability, CapabilityInstance>();
+  private final Map<Capability, CapabilityInstance> options = Maps.newHashMap();
   private final DesiredCapabilities surplusCapabilities = new DesiredCapabilities();
   private final OperaLogging logging = new OperaLogging();
 
@@ -695,6 +696,7 @@ public class OperaSettings {
       }
 
       root.setLevel(level);
+      root.setUseParentHandlers(false);
 
       // Set logging levels on all handlers
       for (Handler handler : root.getHandlers()) {
@@ -722,7 +724,6 @@ public class OperaSettings {
     public void setFile(File file) {
       options.get(LOGGING_FILE).setValue(file);
 
-      // Write to log file?
       if (file != null) {
         FileHandler logFile;
 
@@ -735,6 +736,8 @@ public class OperaSettings {
 
         logFile.setLevel(getLevel());
         Logger.getLogger(OperaDriver.class.getPackage().getName()).addHandler(logFile);
+
+        OperaDriver.logFile = logFile;
       }
     }
   }
@@ -747,6 +750,12 @@ public class OperaSettings {
    * @return the Opera binary
    */
   public File getBinary() {
+    //return (File) options.get(BINARY).getValue();
+
+    File binary = (File) options.get(BINARY).getValue();
+    if (binary == null) {
+      setBinary(OperaBinary.find(getProduct()));
+    }
     return (File) options.get(BINARY).getValue();
   }
 
@@ -1221,6 +1230,11 @@ public class OperaSettings {
      */
     public Builder usingProfile(OperaProfile profile) {
       settings.setProfile(profile);
+      return this;
+    }
+
+    public Builder product(OperaProduct product) {
+      settings.setProduct(product);
       return this;
     }
 

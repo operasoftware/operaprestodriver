@@ -20,6 +20,7 @@ import com.opera.core.systems.testing.OperaDriverTestCase;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriverException;
 
 import java.util.List;
@@ -53,7 +54,7 @@ public class EcmaScriptTest extends OperaDriverTestCase {
     Exception exception = null;
 
     try {
-      driver.findElementsByXPath(xpath);
+      driver.findElements(By.xpath(xpath));
     } catch (WebDriverException e) {
       exception = e;
     }

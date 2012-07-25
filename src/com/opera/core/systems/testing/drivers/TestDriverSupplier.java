@@ -34,6 +34,13 @@ import com.opera.core.systems.OperaSettings;
 public interface TestDriverSupplier extends Supplier<TestDriver> {
 
   /**
+   * Gets the settings used for this supplier.
+   *
+   * @return currently set settings
+   */
+  OperaSettings getSettings();
+
+  /**
    * Changes the settings for this supplier.
    *
    * @param settings new settings

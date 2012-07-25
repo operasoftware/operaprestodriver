@@ -17,11 +17,13 @@ limitations under the License.
 package com.opera.core.systems;
 
 import com.opera.core.systems.scope.internal.OperaIntervals;
+import com.opera.core.systems.testing.Ignore;
 import com.opera.core.systems.testing.OperaDriverTestCase;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.Wait;
@@ -29,6 +31,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.concurrent.TimeUnit;
 
+import static com.opera.core.systems.OperaProduct.MOBILE;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -49,12 +52,14 @@ public class NavigationTest extends OperaDriverTestCase {
   }
 
   @Test
+  @Ignore(products = MOBILE)
   public void back() {
     driver.navigate().back();
     assertTrue(driver.getCurrentUrl().endsWith("test.html"));
   }
 
   @Test
+  @Ignore(products = MOBILE)
   public void forward() {
     back();
     driver.navigate().forward();
@@ -62,6 +67,7 @@ public class NavigationTest extends OperaDriverTestCase {
   }
 
   @Test
+  @Ignore(products = MOBILE)
   public void backTwice() {
     driver.navigate().back();
     driver.navigate().back();
@@ -69,6 +75,7 @@ public class NavigationTest extends OperaDriverTestCase {
   }
 
   @Test
+  @Ignore(products = MOBILE)
   public void forwardTwice() {
     backTwice();
     driver.navigate().forward();
@@ -97,18 +104,18 @@ public class NavigationTest extends OperaDriverTestCase {
   public void handBackControlAfterPageLoadTimeout() {
     driver.manage().timeouts().pageLoadTimeout(100, TimeUnit.MILLISECONDS);
     driver.navigate().to(pages.ecmascriptTimeout);
-    assertEquals("Waiting", driver.findElementById("out").getText());
+    assertEquals("Waiting", driver.findElement(By.id("out")).getText());
     sleep(1000);
-    assertEquals("done", driver.findElementById("out").getText());
+    assertEquals("done", driver.findElement(By.id("out")).getText());
   }
 
   // If this fails, there's a high likelihood that idle is enabled
   @Test
   public void handBackControlAfterPageLoadTimeoutByOverload() {
     driver.get(pages.ecmascriptTimeout, 100);
-    assertEquals("Waiting", driver.findElementById("out").getText());
+    assertEquals("Waiting", driver.findElement(By.id("out")).getText());
     sleep(1000);
-    assertEquals("done", driver.findElementById("out").getText());
+    assertEquals("done", driver.findElement(By.id("out")).getText());
   }
 
   private void sleep(long ms) {

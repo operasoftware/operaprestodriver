@@ -20,6 +20,7 @@ import com.opera.core.systems.testing.OperaDriverTestCase;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.openqa.selenium.By;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -40,25 +41,25 @@ public class FramesTest extends OperaDriverTestCase {
   @Test
   public void switchById() throws Exception {
     driver.switchTo().frame("a");
-    assertNotNull(driver.findElementById("one"));
+    assertNotNull(driver.findElement(By.id("one")));
   }
 
   @Test
   public void switchById2() throws Exception {
     driver.switchTo().frame("b");
-    assertNotNull(driver.findElementById("radio_little"));
+    assertNotNull(driver.findElement(By.id("radio_little")));
   }
 
   @Test
   public void switchByIndex() {
     driver.switchTo().frame(0);
-    assertNotNull(driver.findElementById("one"));
+    assertNotNull(driver.findElement(By.id("one")));
   }
 
   @Test
   public void switchByIndex2() {
     driver.switchTo().frame(2);
-    assertNotNull(driver.findElementById("img_container"));
+    assertNotNull(driver.findElement(By.id(("img_container"))));
   }
 
 }

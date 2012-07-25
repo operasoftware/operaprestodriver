@@ -18,7 +18,10 @@ package com.opera.core.systems.testing.drivers;
 
 import com.google.common.base.Supplier;
 
+import com.opera.core.systems.OperaProduct;
 import com.opera.core.systems.OperaSettings;
+
+import org.openqa.selenium.Capabilities;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.logging.Level;
@@ -50,7 +53,8 @@ public class TestDriverBuilder implements Supplier<TestDriver> {
    */
   @SuppressWarnings("unused")
   public TestDriverBuilder() {
-    this(new TestOperaDriverSupplier());
+    //this(new TestOperaDriverSupplier());
+    this(detect());
   }
 
   /**
@@ -76,13 +80,24 @@ public class TestDriverBuilder implements Supplier<TestDriver> {
   }
 
   /**
-   * Allows you to specify using which capabilities you'd like the driver to be instantiated with.
+   * Specify which settings you'd like the driver to be instantiated with.
    *
-   * @param settings capabilities for the driver
+   * @param settings settings for the driver
    * @return a self reference
    */
   public TestDriverBuilder using(OperaSettings settings) {
     this.settings = settings;
+    return this;
+  }
+
+  /**
+   * Specify which capabilities you'd like the driver to be instantiated with.
+   *
+   * @param capabilities capabilities for the driver
+   * @return a self reference
+   */
+  public TestDriverBuilder using(Capabilities capabilities) {
+    this.settings = new OperaSettings().merge(capabilities);
     return this;
   }
 
@@ -133,6 +148,21 @@ public class TestDriverBuilder implements Supplier<TestDriver> {
     }
 
     return driver;
+  }
+
+  public static TestDriverSupplier detect() {
+    OperaProduct product = OperaProduct.get(System.getProperty("test.opera.product"));
+
+    switch (product) {
+      case DESKTOP:
+        return new TestOperaDesktopDriverSupplier();
+
+      case MOBILE:
+        return new TestOperaMobileDriverSupplier();
+
+      default:
+        return new TestOperaDriverSupplier();
+    }
   }
 
 }
