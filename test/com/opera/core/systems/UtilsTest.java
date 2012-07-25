@@ -16,7 +16,6 @@ limitations under the License.
 
 package com.opera.core.systems;
 
-import com.opera.core.systems.OperaDriver.OperaUtils;
 import com.opera.core.systems.testing.Ignore;
 import com.opera.core.systems.testing.OperaDriverTestCase;
 import com.opera.core.systems.testing.RequiresService;
@@ -54,7 +53,9 @@ public class UtilsTest extends OperaDriverTestCase {
   @Test
   public void testProductIsKnown() {
     OperaProduct product = driver.utils().getProduct();
-    assertTrue(product.is(OperaProduct.CORE) || product.is(OperaProduct.DESKTOP));
+    assertTrue(product.is(OperaProduct.CORE) ||
+               product.is(OperaProduct.DESKTOP) ||
+               product.is(OperaProduct.MOBILE));
   }
 
   @Test

@@ -25,6 +25,7 @@ import com.opera.core.systems.testing.OperaDriverTestCase;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.openqa.selenium.By;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -53,10 +54,10 @@ public class MouseTest extends OperaDriverTestCase {
   public void beforeEach() {
     driver.navigate().to(pages.mouse);
 
-    paragraph = (OperaWebElement) driver.findElementById("paragraph");
-    sentence = (OperaWebElement) driver.findElementById("sentence");
-    outside = (OperaWebElement) driver.findElementById("outside");
-    test = (OperaWebElement) driver.findElementById("test");
+    paragraph = (OperaWebElement) driver.findElement(By.id("paragraph"));
+    sentence = (OperaWebElement) driver.findElement(By.id("sentence"));
+    outside = (OperaWebElement) driver.findElement(By.id("outside"));
+    test = (OperaWebElement) driver.findElement(By.id("test"));
     testHash = test.getImageHash();
 
     assertEquals(0, getMonitor().outs());

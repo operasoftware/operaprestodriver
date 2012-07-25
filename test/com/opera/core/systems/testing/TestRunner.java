@@ -139,7 +139,6 @@ public class TestRunner extends BlockJUnit4ClassRunner {
 
     if (annotation == null) {
       test.setCreateDriver(true);
-
       return statement;
     }
 

@@ -16,9 +16,8 @@ limitations under the License.
 
 package com.opera.core.systems.pages;
 
-import com.opera.core.systems.scope.internal.OperaIntervals;
 import com.opera.core.systems.testing.Pages;
-import com.opera.core.systems.testing.drivers.TestOperaDriver;
+import com.opera.core.systems.testing.drivers.TestDriver;
 
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -34,7 +33,7 @@ public class WindowPage extends Page {
   @FindBy(linkText = "Open new anonymous window")
   public WebElement anonymousWindow;
 
-  public WindowPage(TestOperaDriver driver, Pages pages) {
+  public WindowPage(TestDriver driver, Pages pages) {
     super(driver, pages);
     driver.navigate().to(pages.windows);
   }
@@ -44,9 +43,10 @@ public class WindowPage extends Page {
    * to it.
    */
   public void openNewAnonymousWindow() {
-    int openWindows = driver.getWindowCount();
+    int openWindows = driver.getWindowHandles().size();
     openNewWindow(anonymousWindow);
-    assertEquals("One more window should be present", openWindows + 1, driver.getWindowCount());
+    assertEquals("One more window should be present", openWindows + 1,
+                 driver.getWindowHandles().size());
   }
 
   /**

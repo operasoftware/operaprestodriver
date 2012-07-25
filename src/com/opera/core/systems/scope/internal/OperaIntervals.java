@@ -75,7 +75,9 @@ public enum OperaIntervals {
 
   DEFAULT_RESPONSE_TIMEOUT(new Duration(10, SECONDS)),
 
-  QUIT_POLL_INTERVAL(new Duration(100, MILLISECONDS)),
+  /**
+   * The amount of time to wait for Opera to quit before throwing.
+   */
   QUIT_RESPONSE_TIMEOUT(new Duration(10, SECONDS)),
 
   /**

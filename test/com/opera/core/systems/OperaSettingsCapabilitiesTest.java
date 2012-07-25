@@ -119,10 +119,17 @@ public class OperaSettingsCapabilitiesTest extends OperaDriverTestCase {
                  ((File) sanitizedLogFile).getCanonicalPath());
   }
 
-  // This presumes Opera is installed on the system, which it should
+  /*
+  // This presumes Opera is installed on the system, which it should be if running these tests
   @Test
   public void binaryDoesNotHaveNullAsDefaultValue() {
     assertNotNull(BINARY.getDefaultValue());
+  }
+  */
+
+  @Test
+  public void binaryHasNullAsDefaultValue() {
+    assertNull(BINARY.getDefaultValue());
   }
 
   @Test
@@ -147,9 +154,8 @@ public class OperaSettingsCapabilitiesTest extends OperaDriverTestCase {
       exception = e;
     }
 
-    assertThat(exception, is(instanceOf(WebDriverException.class)));
-    assertThat(exception.getMessage(),
-               containsString("Opera binary does not exist or is not a real file"));
+    assertThat(exception, is(instanceOf(IllegalStateException.class)));
+    assertThat(exception.getMessage(), containsString("The executable does not exist"));
   }
 
   @Test

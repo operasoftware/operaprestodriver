@@ -31,8 +31,10 @@ import com.opera.core.systems.util.ProfileUtils;
 
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.Platform;
+import org.openqa.selenium.WebDriverException;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -135,7 +137,11 @@ public class OperaDesktopDriver extends OperaDriver {
         runner = new OperaLauncherRunner(settings);
 
         // Quit and wait for opera to quit properly
-        getScopeServices().quit(runner);
+        try {
+          getScopeServices().quit(runner);
+        } catch (IOException e) {
+          throw new WebDriverException(e);
+        }
 
         // Delete the profile to start the first test with a clean profile
         if (!profileUtils.deleteProfile()) {
@@ -204,7 +210,11 @@ public class OperaDesktopDriver extends OperaDriver {
       runner = new OperaLauncherRunner(settings);
 
       // Quit and wait for opera to quit properly (calls getScopeServices().shutdown)
-      getScopeServices().quit(runner);
+      try {
+        getScopeServices().quit(runner);
+      } catch (IOException e) {
+        throw new WebDriverException(e);
+      }
 
     }
   }

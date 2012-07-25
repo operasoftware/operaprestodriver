@@ -16,6 +16,7 @@ limitations under the License.
 
 package com.opera.core.systems.testing.drivers;
 
+import com.opera.core.systems.OperaProduct;
 import com.opera.core.systems.OperaSettings;
 
 import java.util.logging.Level;
@@ -30,8 +31,19 @@ public abstract class AbstractTestDriverSupplier implements TestDriverSupplier {
 
   protected OperaSettings settings;
 
+  private final OperaProduct product;
+
   public AbstractTestDriverSupplier() {
-    setSettings(new OperaSettings());
+    this(new OperaSettings());
+  }
+
+  public AbstractTestDriverSupplier(OperaProduct product) {
+    this(new OperaSettings.Builder().product(product).get());
+  }
+
+  public AbstractTestDriverSupplier(OperaSettings settings) {
+    setSettings(settings);
+    product = settings.getProduct();
   }
 
   // TODO(andreastt): Consider using reflection for get() as well, although inheritance is bad
@@ -43,6 +55,11 @@ public abstract class AbstractTestDriverSupplier implements TestDriverSupplier {
     if (new OperaSettings().logging().getLevel() == settings.logging().getLevel()) {
       settings.logging().setLevel(Level.FINE);
     }
+  }
+
+  public OperaSettings getSettings() {
+    settings.setProduct(product);
+    return settings;
   }
 
 }

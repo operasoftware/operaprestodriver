@@ -25,6 +25,7 @@ import com.opera.core.systems.runner.launcher.OperaLauncherRunner;
 import com.opera.core.systems.testing.Ignore;
 import com.opera.core.systems.testing.NoDriver;
 import com.opera.core.systems.testing.OperaDriverTestCase;
+import com.opera.core.systems.testing.drivers.TestDriverBuilder;
 
 import org.junit.After;
 import org.junit.Before;
@@ -32,6 +33,7 @@ import org.junit.Test;
 import org.openqa.selenium.Platform;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
@@ -39,6 +41,8 @@ import java.util.List;
 import java.util.logging.Level;
 
 import static com.opera.core.systems.OperaProduct.DESKTOP;
+import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -47,6 +51,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+import static org.junit.matchers.JUnitMatchers.containsString;
 import static org.junit.matchers.JUnitMatchers.hasItem;
 
 @NoDriver
@@ -58,12 +63,14 @@ public class OperaLauncherRunnerTest extends OperaDriverTestCase {
   @Before
   public void beforeEach() {
     settings = new OperaSettings();
+    settings.setBinary(TestDriverBuilder.detect().getSettings().getBinary());
     settings.logging().setLevel(Level.FINE);
   }
 
   @After
   public void afterEach() {
     try {
+      runner.stopOpera();
       if (runner != null && runner.isOperaRunning()) {
         runner.stopOpera();
         assertFalse(runner.isOperaRunning());
@@ -75,27 +82,40 @@ public class OperaLauncherRunnerTest extends OperaDriverTestCase {
         runner.shutdown();
       }
       runner = null;
+      settings = null;
     }
   }
 
   @Test
-  public void testConstructor() {
+  public void constructor() {
     runner = new TestOperaLauncherRunner();
     assertNotNull(runner);
   }
 
   @Test
-  public void testConstructorWithSettingsBinary() {
+  public void constructorWithSettingsBinary() {
     settings.setBinary(OperaBinary.find());
     runner = new TestOperaLauncherRunner(settings);
     assertNotNull(runner);
   }
 
   @Test
+  public void verifyDefaultStateOfOperaRunning() {
+    runner = new TestOperaLauncherRunner(settings);
+    assertFalse(runner.isOperaRunning());
+  }
+
+  @Test
   public void launcherInDefaultLocationIsOverwritten()
       throws IOException, NoSuchAlgorithmException {
     File outdatedLauncher = resources.executableBinary();
-    Files.copy(outdatedLauncher, OperaLauncherRunner.LAUNCHER_DEFAULT_LOCATION);
+
+    try {
+      Files.copy(outdatedLauncher, OperaLauncherRunner.LAUNCHER_DEFAULT_LOCATION);
+    } catch (FileNotFoundException e) {
+      fail("Opera instance from previous was not shutdown, and leaked over into this test: " +
+           e.getMessage());
+    }
 
     try {
       runner = new TestOperaLauncherRunner(settings);
@@ -115,6 +135,21 @@ public class OperaLauncherRunnerTest extends OperaDriverTestCase {
   }
 
   @Test
+  public void unableToFindProductForGogi() {
+    settings.setBinary(null);
+    settings.setProduct(OperaProduct.CORE);
+
+    try {
+      runner = new TestOperaLauncherRunner(settings);
+      fail("Expected exception");
+    } catch (RuntimeException e) {
+      assertThat(e, is(instanceOf(OperaRunnerException.class)));
+      assertThat(e.getMessage(), containsString("Unable to find executable for product " +
+                                                OperaProduct.CORE.toString()));
+    }
+  }
+
+  @Test
   public void profileArgumentNotSetIfProductIsAll() {
     settings.setProduct(OperaProduct.ALL);
     runner = new TestOperaLauncherRunner(settings);
@@ -129,12 +164,14 @@ public class OperaLauncherRunnerTest extends OperaDriverTestCase {
 
     List<String> arguments = runner.buildArguments();
     assertThat(arguments, hasItem("-profile"));
-    assertThat(arguments, hasItem(product.toString()));
+    assertThat(arguments, hasItem(product.getDescriptionString()));
   }
 
   @Test
   public void profileArgumentNotSetIfProductIsCore() {
     settings.setProduct(OperaProduct.CORE);
+    settings.setBinary(OperaBinary.find(OperaProduct.ALL));
+    System.out.println(settings.getBinary());
     runner = new TestOperaLauncherRunner(settings);
     assertThat(runner.buildArguments(), hasItem(not("-profile")));
   }
@@ -160,14 +197,20 @@ public class OperaLauncherRunnerTest extends OperaDriverTestCase {
     assertFalse(runner.isOperaRunning());
   }
 
-  @Test(expected = OperaRunnerException.class)
   public void startAfterShutdownShouldThrow() {
     runner = new TestOperaLauncherRunner(settings);
     runner.startOpera();
     assertTrue(runner.isOperaRunning());
     runner.shutdown();
     assertFalse(runner.isOperaRunning());
-    runner.startOpera();
+
+    try {
+      runner.startOpera();
+      fail("Expected OperaRunnerException");
+    } catch (RuntimeException e) {
+      assertThat(e, is(instanceOf(OperaRunnerException.class)));
+      // TODO(andreastt): Assert string
+    }
   }
 
   @Test(expected = OperaRunnerException.class)
@@ -219,14 +262,13 @@ public class OperaLauncherRunnerTest extends OperaDriverTestCase {
 
     try {
       runner = new TestOperaLauncherRunner(settings);
-      fail("Did not throw OperaRunnerException");
-    } catch (OperaRunnerException e) {
+      fail("Expected OperaRunnerException");
+    } catch (RuntimeException e) {
+      assertThat(e, is(instanceOf(OperaRunnerException.class)));
       if (Platform.getCurrent().is(Platform.WINDOWS)) {
-        assertTrue("Expected a immediate exit, got: " + e,
-                   e.getMessage().toLowerCase().contains("exited immediately"));
+        assertThat(e.getMessage(), containsString("exited immediately"));
       } else {
-        assertTrue("Expected a timeout exception, got: " + e,
-                   e.getMessage().toLowerCase().contains("timeout"));
+        assertThat(e.getMessage(), containsString("Timeout waiting for launcher to connect"));
       }
     }
   }
@@ -262,11 +304,17 @@ public class OperaLauncherRunnerTest extends OperaDriverTestCase {
     assertNotNull(screenshot);
   }
 
-  @Test(expected = OperaRunnerException.class)
   public void saveScreenshotAfterShutdownShouldThrow() {
     runner = new TestOperaLauncherRunner(settings);
     runner.shutdown();
-    runner.saveScreenshot(0);
+
+    try {
+      runner.saveScreenshot(0);
+      fail("Expected OperaRunnerException");
+    } catch (RuntimeException e) {
+      assertThat(e, is(instanceOf(OperaRunnerException.class)));
+      // TODO(andreastt): Check string
+    }
   }
 
   @Test

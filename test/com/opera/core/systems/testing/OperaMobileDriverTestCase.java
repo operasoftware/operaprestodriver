@@ -1,5 +1,5 @@
 /*
-Copyright 2011-2012 Opera Software ASA
+Copyright 2012 Opera Software ASA
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,25 +16,29 @@ limitations under the License.
 
 package com.opera.core.systems.testing;
 
-import com.opera.core.systems.OperaDriver;
-import com.opera.core.systems.testing.drivers.TestDriver;
-import com.opera.core.systems.testing.drivers.TestOperaDriver;
-import com.opera.core.systems.testing.drivers.TestOperaDriverSupplier;
+import com.opera.core.systems.testing.drivers.TestOperaDesktopDriver;
+import com.opera.core.systems.testing.drivers.TestOperaDesktopDriverSupplier;
+import com.opera.core.systems.testing.drivers.TestOperaMobileDriver;
+import com.opera.core.systems.testing.drivers.TestOperaMobileDriverSupplier;
 
 /**
- * Test framework for {@link com.opera.core.systems.OperaDriver}.
+ * Test framework for {@link com.opera.core.systems.OperaMobileDriver}.
  *
  * @author Andreas Tolf Tolfsen <andreastt@opera.com>
- * @see OperaDesktopDriverTestCase
+ * @see OperaDriverTestCase, OperaDesktopDriverTestCase
  */
-public abstract class OperaDriverTestCase extends AbstractTestCase {
+public abstract class OperaMobileDriverTestCase extends AbstractTestCase {
 
-  protected TestDriver driver;
+  protected TestOperaMobileDriver driver;
+
+  public OperaMobileDriverTestCase() {
+    super(new TestOperaMobileDriverSupplier());
+  }
 
   @Override
   public void createDriverIfNecessary() {
     super.createDriverIfNecessary();
-    driver = super.driver;
+    driver = (TestOperaMobileDriver) super.driver;
   }
 
 }

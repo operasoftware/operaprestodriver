@@ -21,6 +21,7 @@ import com.opera.core.systems.testing.OperaDriverTestCase;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebElement;
@@ -28,6 +29,7 @@ import org.openqa.selenium.interactions.Actions;
 
 import static org.junit.Assert.assertEquals;
 import static org.openqa.selenium.Platform.MAC;
+import static com.opera.core.systems.OperaProduct.MOBILE;
 
 public class DriverKeysTest extends OperaDriverTestCase {
 
@@ -38,8 +40,8 @@ public class DriverKeysTest extends OperaDriverTestCase {
   public void beforeEach() {
     driver.navigate().to(pages.twoInputFields);
 
-    fieldOne = driver.findElementByName("one");
-    fieldTwo = driver.findElementByName("two");
+    fieldOne = driver.findElement(By.name("one"));
+    fieldTwo = driver.findElement(By.name("two"));
     fieldOne.click();
   }
 
@@ -100,12 +102,14 @@ public class DriverKeysTest extends OperaDriverTestCase {
   }
 
   @Test
+  @Ignore(products = MOBILE, value = "Needs investigation")
   public void testLeftArrow() {
     new Actions(driver).sendKeys("ac" + Keys.LEFT + "b").build().perform();
     assertEquals("abc", fieldOne.getAttribute("value"));
   }
 
   @Test
+  @Ignore(products = MOBILE, value = "Needs investigation")
   public void testCaseInsensitiveLeftArrow() {
     new Actions(driver).sendKeys("ac" + Keys.LEFT + "b").build().perform();
     assertEquals("abc", fieldOne.getAttribute("value"));
@@ -119,6 +123,7 @@ public class DriverKeysTest extends OperaDriverTestCase {
   }
 
   @Test
+  @Ignore(products = MOBILE, value = "Needs investigation")
   public void testHoldShift() {
     new Actions(driver).sendKeys("acd")
         .sendKeys(Keys.LEFT_SHIFT + "" + Keys.LEFT + Keys.LEFT)
@@ -134,6 +139,7 @@ public class DriverKeysTest extends OperaDriverTestCase {
   }
 
   @Test
+  @Ignore(products = MOBILE, value = "Needs investigation")
   public void testHoldControl() {
     // Control + A
     new Actions(driver).sendKeys("a" + Keys.CONTROL + "a" + Keys.CONTROL + "bc").build().perform();
@@ -141,7 +147,7 @@ public class DriverKeysTest extends OperaDriverTestCase {
   }
 
   @Test
-  @Ignore(platforms = MAC, value = "Needs investigation")
+  @Ignore(value = "MAC and MOBILE needs investigation")
   public void testMultipleModifiers() {
     if (Platform.getCurrent().is(Platform.MAC)) {
       new Actions(driver).sendKeys("abc defghij")
@@ -159,6 +165,7 @@ public class DriverKeysTest extends OperaDriverTestCase {
   }
 
   @Test
+  @Ignore(products = MOBILE, value = "Needs investigation")
   public void testCopyPaste() throws Exception {
     new Actions(driver).sendKeys("hello world")
         .sendKeys(Keys.CONTROL + "a")
@@ -170,6 +177,7 @@ public class DriverKeysTest extends OperaDriverTestCase {
   }
 
   @Test
+  @Ignore(products = MOBILE, value = "Needs investigation")
   public void testCopyPasteLeftControl() throws Exception {
     new Actions(driver).sendKeys("hello world")
         .sendKeys(Keys.LEFT_CONTROL + "a")

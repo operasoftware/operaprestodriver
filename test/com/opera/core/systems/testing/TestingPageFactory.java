@@ -16,7 +16,8 @@ limitations under the License.
 
 package com.opera.core.systems.testing;
 
-import org.openqa.selenium.WebDriver;
+import com.opera.core.systems.testing.drivers.TestDriver;
+
 import org.openqa.selenium.support.PageFactory;
 
 import java.lang.reflect.Constructor;
@@ -24,13 +25,13 @@ import java.lang.reflect.InvocationTargetException;
 
 public class TestingPageFactory extends PageFactory {
 
-  public static <T> T initElements(WebDriver driver, Pages pages, Class<T> pageClassToProxy) {
+  public static <T> T initElements(TestDriver driver, Pages pages, Class<T> pageClassToProxy) {
     T page = instantiatePage(driver, pages, pageClassToProxy);
     initElements(driver, page);
     return page;
   }
 
-  private static <T> T instantiatePage(WebDriver driver, Pages pages, Class<T> pageClassToProxy) {
+  private static <T> T instantiatePage(TestDriver driver, Pages pages, Class<T> pageClassToProxy) {
     try {
       try {
         Constructor<T>

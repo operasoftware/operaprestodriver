@@ -31,8 +31,6 @@ import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.Platform;
 
-import java.util.logging.Level;
-
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
@@ -61,6 +59,10 @@ public abstract class AbstractTestCase implements TestCase {
   private final TestDriverSupplier supplier;
   private OperaProduct currentProduct;
   private Platform currentPlatform;
+
+  public AbstractTestCase() {
+    supplier = TestDriverBuilder.detect();
+  }
 
   public AbstractTestCase(TestDriverSupplier supplier) {
     this.supplier = supplier;

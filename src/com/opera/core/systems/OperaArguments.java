@@ -42,7 +42,6 @@ public class OperaArguments implements com.opera.core.systems.arguments.interfac
    * Provides a key/value storage of arguments related to the Opera product binary.
    */
   public OperaArguments() {
-    merge(parse(System.getenv("OPERA_ARGS")));
   }
 
   /**

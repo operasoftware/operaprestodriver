@@ -61,7 +61,7 @@ public class OperaBinaryTest extends OperaDriverTestCase {
       exception = e;
     }
 
-    assertThat(exception, is(instanceOf(WebDriverException.class)));
+    assertThat(exception, is(instanceOf(IllegalStateException.class)));
     assertThat(exception.getMessage(),
                containsString("Opera binary does not exist or is not a real file"));
   }
@@ -76,7 +76,7 @@ public class OperaBinaryTest extends OperaDriverTestCase {
       exception = e;
     }
 
-    assertThat(exception, is(instanceOf(WebDriverException.class)));
+    assertThat(exception, is(instanceOf(IllegalStateException.class)));
     assertThat(exception.getMessage(), containsString("Opera binary is not an executable"));
   }
 

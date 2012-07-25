@@ -21,8 +21,10 @@ import com.opera.core.systems.OperaProduct;
 import com.opera.core.systems.OperaSettings;
 import com.opera.core.systems.ScopeServices;
 import com.opera.core.systems.runner.OperaRunner;
+import com.opera.core.systems.scope.exceptions.ResponseNotReceivedException;
 import com.opera.core.systems.scope.services.IOperaExec;
 import com.opera.core.systems.scope.services.IWindowManager;
+import com.opera.core.systems.scope.services.ums.WindowManager;
 
 import org.openqa.selenium.Capabilities;
 
@@ -95,13 +97,11 @@ public class TestOperaDriver extends OperaDriver implements TestDriver {
     return runner != null ? runner.isOperaRunning() : getScopeServices().isConnected();
   }
 
-  /**
-   * Creates a new window.
-   */
-  public void createWindow() {
-    windowManager.createWindow();
+  public void waitForLoadToComplete() throws ResponseNotReceivedException {
+    super.waitForLoadToComplete();
   }
 
+  /*
   public TestOperaUtils utils() {
     return new TestOperaUtils();
   }
@@ -113,7 +113,7 @@ public class TestOperaDriver extends OperaDriver implements TestDriver {
      * environmental variable <code>OPERA_PRODUCT</code> into account, which can be used for
      *
      * @return browser's product type
-     */
+     *
     public OperaProduct getProduct() {
       if (currentProduct == null) {
         currentProduct = CORE;  // default
@@ -137,5 +137,6 @@ public class TestOperaDriver extends OperaDriver implements TestDriver {
     }
 
   }
+  */
 
 }

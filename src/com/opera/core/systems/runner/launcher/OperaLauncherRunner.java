@@ -118,9 +118,19 @@ public class OperaLauncherRunner extends OperaRunner
       }
     }
 
-    // Find an available Opera if present
+    // Find a suitable Opera executable based on requested product if no binary has already been
+    // specified
     if (settings.getBinary() == null) {
-      settings.setBinary(OperaBinary.find(settings.getProduct()));
+      // Do check for null here since OperaBinary's sanitization throws a cryptic null pointer
+      File binary = OperaBinary.find(settings.getProduct());
+      if (binary == null) {
+        throw new OperaRunnerException(String.format(
+            "Unable to find executable for product %s", settings.getProduct()));
+      }
+
+      // Calls new OperaBinary(b) which will check that the binary is executable and that it's not a
+      // directory
+      settings.setBinary(binary);
     }
 
     // Create list of arguments for launcher binary
@@ -129,6 +139,7 @@ public class OperaLauncherRunner extends OperaRunner
 
     init();
   }
+
 
   private void init() {
     try {
@@ -189,7 +200,7 @@ public class OperaLauncherRunner extends OperaRunner
           .add(toLauncherLoggingLevel(settings.logging().getLevel()).toString());
     }
     if (settings.getProduct() != OperaProduct.ALL) {
-      builder.add("-profile").add(settings.getProduct().toString());
+      builder.add("-profile").add(settings.getProduct().getDescriptionString());
     }
     if (settings.getBackend() != null && !settings.getBackend().isEmpty()) {
       builder.add("-backend").add(settings.getBackend());
@@ -219,8 +230,6 @@ public class OperaLauncherRunner extends OperaRunner
   public void startOpera() throws OperaRunnerException {
     assertLauncherAlive();
 
-    logger.fine("Instructing launcher to start Opera...");
-
     try {
       byte[] request = LauncherStartRequest.newBuilder().build().toByteArray();
 
@@ -247,8 +256,6 @@ public class OperaLauncherRunner extends OperaRunner
     } catch (IOException e) {
       throw new OperaRunnerException("Could not start Opera: " + e.getMessage());
     }
-
-    logger.fine("Opera launched through launcher");
   }
 
   /**
@@ -264,8 +271,6 @@ public class OperaLauncherRunner extends OperaRunner
       return;
     }
 
-    logger.fine("Instructing launcher to stop Opera...");
-
     try {
       LauncherStopRequest.Builder request = LauncherStopRequest.newBuilder();
 
@@ -279,8 +284,6 @@ public class OperaLauncherRunner extends OperaRunner
     } catch (IOException e) {
       throw new OperaRunnerException("Could not stop Opera: " + e.getMessage());
     }
-
-    logger.fine("Opera stopped through launcher");
   }
 
   @Override
@@ -326,8 +329,6 @@ public class OperaLauncherRunner extends OperaRunner
       return;
     }
 
-    logger.fine("Shutting down launcher");
-
     try {
       // Send a shutdown command to the launcher
       protocol.sendRequestWithoutResponse(MessageType.MSG_SHUTDOWN, null);
@@ -361,8 +362,6 @@ public class OperaLauncherRunner extends OperaRunner
     String resultMd5;
     byte[] resultBytes;
     boolean blank = false;
-
-    logger.fine("Instructing launcher to take screenshot");
 
     try {
       LauncherScreenshotRequest.Builder request = LauncherScreenshotRequest.newBuilder();

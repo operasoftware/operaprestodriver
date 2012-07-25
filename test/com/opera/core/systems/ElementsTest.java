@@ -19,6 +19,7 @@ package com.opera.core.systems;
 import com.opera.core.systems.testing.OperaDriverTestCase;
 
 import org.junit.Test;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
 import static org.junit.Assert.assertEquals;
@@ -29,14 +30,14 @@ public class ElementsTest extends OperaDriverTestCase {
   @Test
   public void testClear() {
     driver.get(pages.javascript);
-    driver.findElementById("input_email").clear();
-    assertTrue(driver.findElementById("log").getAttribute("value").contains("email changed"));
+    driver.findElement(By.id("input_email")).clear();
+    assertTrue(driver.findElement(By.id("log")).getAttribute("value").contains("email changed"));
   }
 
   @Test
   public void testSelect() {
     driver.get(pages.select);
-    WebElement el = driver.findElementById("dog");
+    WebElement el = driver.findElement(By.id("dog"));
     el.click();
     assertTrue(el.isSelected());
   }
@@ -45,14 +46,14 @@ public class ElementsTest extends OperaDriverTestCase {
   public void testGetCssValue() {
     driver.get(pages.test);
     assertEquals("rgba(0, 0, 0, 1)",
-                 driver.findElementByClassName("invert").getCssValue("background-color"));
+                 driver.findElement(By.className("invert")).getCssValue("background-color"));
   }
 
   @Test
   public void testGetCssValueWithNonRGBValue() {
     driver.get(pages.test);
     assertEquals("transparent",
-                 driver.findElementById("transparent").getCssValue("background-color"));
+                 driver.findElement(By.id("transparent")).getCssValue("background-color"));
   }
 
 }
