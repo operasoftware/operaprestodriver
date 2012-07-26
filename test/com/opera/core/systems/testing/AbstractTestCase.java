@@ -111,6 +111,10 @@ public abstract class AbstractTestCase implements TestCase {
     if (driver == null && spawnDriver || (driver != null && !driver.isRunning())) {
       driver = createFreshDriver();
       storedDriver.set(driver);
+
+      // Ensure that product and platform are cached in case a test uses @NoDriver
+      currentProduct();
+      currentPlatform();
     }
   }
 
