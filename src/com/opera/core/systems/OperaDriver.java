@@ -271,7 +271,11 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot, Run
   }
 
   public void quit() {
-    gc();
+    try {
+      gc();
+    } catch (ResponseNotReceivedException e) {
+      // fall through
+    }
 
     try {
       if (services != null) {
@@ -308,6 +312,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot, Run
       if (!settings.hasDetach()) {
         settings.profile().cleanUp();
       }
+      services = null;
       Closeables.closeQuietly(logFile);
     }
   }
