@@ -94,8 +94,6 @@ public enum OperaProduct {
       return ALL;
     }
 
-    System.out.println("product: " + product);
-
     if (!lookup.containsKey(product)) {
       throw new WebDriverException("Unknown product: " + product);
     }
