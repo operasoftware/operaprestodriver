@@ -37,7 +37,7 @@ public interface ISelftest {
   /**
    * Represents a single result from a selftest.
    */
-  public interface ISelftestResult {
+  interface ISelftestResult {
 
     String getTag();
 

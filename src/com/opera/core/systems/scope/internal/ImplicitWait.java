@@ -16,18 +16,11 @@ limitations under the License.
 
 package com.opera.core.systems.scope.internal;
 
-import com.opera.core.systems.scope.internal.CallbackWait;
-import com.opera.core.systems.scope.internal.OperaIntervals;
-
 import org.openqa.selenium.support.ui.Duration;
-
-import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
 /**
  * Generalizes HtmlUnitDriver's wait code, inspired by {@link org.openqa.selenium.support.ui.WebDriverWait},
  * but does not aim to provide a public support class.
- *
- * @author Andreas Tolf Tolfsen <andreastt@opera.com>
  */
 public class ImplicitWait extends CallbackWait {
 

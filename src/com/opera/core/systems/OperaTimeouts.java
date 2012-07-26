@@ -30,7 +30,7 @@ public interface OperaTimeouts extends Timeouts {
    * @param unit the unit of measure for {@code time}
    * @return a self reference
    */
-  public Timeouts responseTimeout(long time, TimeUnit unit);
+  Timeouts responseTimeout(long time, TimeUnit unit);
 
   /**
    * Defines the amount of time to wait before aborting a running selftest executed by {@link
@@ -40,6 +40,6 @@ public interface OperaTimeouts extends Timeouts {
    * @param unit the unit of measure for {@code time}
    * @return a self reference
    */
-  public Timeouts selftestTimeout(long time, TimeUnit unit);
+  Timeouts selftestTimeout(long time, TimeUnit unit);
 
 }

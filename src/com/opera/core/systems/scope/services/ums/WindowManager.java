@@ -23,6 +23,7 @@ import com.opera.core.systems.ScopeServices;
 import com.opera.core.systems.scope.AbstractService;
 import com.opera.core.systems.scope.WindowManagerCommand;
 import com.opera.core.systems.scope.exceptions.WindowNotFoundException;
+import com.opera.core.systems.scope.internal.ImplicitWait;
 import com.opera.core.systems.scope.internal.OperaIntervals;
 import com.opera.core.systems.scope.protos.UmsProtos.Response;
 import com.opera.core.systems.scope.protos.WmProtos.CloseWindowArg;
@@ -32,7 +33,6 @@ import com.opera.core.systems.scope.protos.WmProtos.WindowID;
 import com.opera.core.systems.scope.protos.WmProtos.WindowInfo;
 import com.opera.core.systems.scope.protos.WmProtos.WindowList;
 import com.opera.core.systems.scope.services.IWindowManager;
-import com.opera.core.systems.scope.internal.ImplicitWait;
 import com.opera.core.systems.util.StackHashMap;
 import com.opera.core.systems.util.VersionUtil;
 
@@ -40,7 +40,6 @@ import org.apache.commons.jxpath.CompiledExpression;
 import org.apache.commons.jxpath.JXPathContext;
 import org.openqa.selenium.NoSuchWindowException;
 import org.openqa.selenium.WebDriverException;
-import org.openqa.selenium.support.ui.Duration;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -48,7 +47,6 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.opera.core.systems.scope.internal.OperaIntervals.INTERNAL_FREQUENCY;
-import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static com.opera.core.systems.scope.internal.OperaIntervals.WINDOW_CLOSE_TIMEOUT;
 
 /**
@@ -61,8 +59,6 @@ import static com.opera.core.systems.scope.internal.OperaIntervals.WINDOW_CLOSE_
  * This protocol will prevent a lot of flooding from the other services, but it will on the other
  * hand flood a bit itself.  There is no way to stop it from sending OnWindowActivated messages for
  * example.
- *
- * @author Deniz Turkoglu <dturkoglu@opera.com>, Andreas Tolf Tolfsen <andreastt@opera.com>
  */
 public class WindowManager extends AbstractService implements IWindowManager {
 
@@ -244,10 +240,10 @@ public class WindowManager extends AbstractService implements IWindowManager {
 
     new ImplicitWait(WINDOW_CLOSE_TIMEOUT.getValue(), INTERNAL_FREQUENCY.getValue())
         .until(new Callable<Boolean>() {
-      public Boolean call() {
-        return !windows.containsKey(windowId);
-      }
-    });
+          public Boolean call() {
+            return !windows.containsKey(windowId);
+          }
+        });
 
     if (response == null) {
       throw new WebDriverException("Internal error while closing window");

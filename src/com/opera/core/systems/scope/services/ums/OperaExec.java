@@ -17,10 +17,9 @@ limitations under the License.
 package com.opera.core.systems.scope.services.ums;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Lists;
 
 import com.opera.core.systems.ScopeServices;
+import com.opera.core.systems.common.collect.CaseInsensitiveStringSet;
 import com.opera.core.systems.model.Canvas;
 import com.opera.core.systems.model.ColorResult;
 import com.opera.core.systems.model.OperaColor;
@@ -44,13 +43,11 @@ import com.opera.core.systems.scope.protos.ExecProtos.ScreenWatcherResult;
 import com.opera.core.systems.scope.protos.ExecProtos.ScreenWatcherResult.ColorMatch;
 import com.opera.core.systems.scope.protos.UmsProtos.Response;
 import com.opera.core.systems.scope.services.IOperaExec;
-import com.opera.core.systems.common.collect.CaseInsensitiveStringSet;
 import com.opera.core.systems.util.VersionUtil;
 
 import org.openqa.selenium.UnsupportedCommandException;
 import org.openqa.selenium.WebDriverException;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
@@ -71,21 +68,10 @@ public class OperaExec extends AbstractService implements IOperaExec {
   private ScopeServices services;
 
   // TODO: Remove me, VERY UGLY HACK FOR window-id bug
-  private List<String> excludedActions;
-
-  /*
-  command Exec(ActionList) returns (Default) = 1;
-  command GetActionInfoList(Default) returns (ActionInfoList) = 2;
-  command SetupScreenWatcher(ScreenWatcher) returns (ScreenWatcherResult) = 3
-  command SendMouseAction(MouseAction) returns (Default) = 5;
-  */
+  private List<String> excludedActions = ImmutableList.of("Select all", "Delete");
 
   public OperaExec(ScopeServices services, String version) {
     super(services, version);
-    excludedActions = new ArrayList<String>();
-    excludedActions.add("Select all");
-    excludedActions.add("Delete");
-
     String serviceName = "exec";
 
     if (!isVersionInRange(version, "3.0", serviceName)) {

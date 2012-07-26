@@ -31,28 +31,28 @@ public interface OperaUtils {
    *
    * @return version number
    */
-  public String getCoreVersion();
+  String getCoreVersion();
 
   /**
    * The platform currently used.
    *
    * @return operating system identifier
    */
-  public Platform getPlatform();
+  Platform getPlatform();
 
   /**
    * Gets the current product.  For regular desktop builds this will be {@link
    * OperaProduct#DESKTOP}.  Other examples are {@link OperaProduct#MOBILE} and {@link
    * OperaProduct#CORE}.
    */
-  public OperaProduct getProduct();
+  OperaProduct getProduct();
 
   /**
    * The full path to the currently running binary.
    *
    * @return full path to browser
    */
-  public String getBinaryPath();
+  String getBinaryPath();
 
   /**
    * The User-Agent string.  Typically something like <code>Opera/9.80 (Windows NT 6.1; U; en)
@@ -60,7 +60,7 @@ public interface OperaUtils {
    *
    * @return User-Agent string
    */
-  public String getUserAgent();
+  String getUserAgent();
 
   /**
    * The ID of the process we're currently talking to.  Might not be present if the build does not
@@ -68,13 +68,13 @@ public interface OperaUtils {
    *
    * @return process ID, or null if not available
    */
-  public Integer getPID();
+  Integer getPID();
 
   /**
    * Clear private data stored by Opera by type of data or by all.
    *
    * @param flags a variable list of flags can be used, or the value ALL to clean all stored data
    */
-  public void clearPrivateData(PrivateData... flags);
+  void clearPrivateData(PrivateData... flags);
 
 }

@@ -32,6 +32,6 @@ public interface RunsSelftest {
    * method will return when the test is complete, or when {@link com.opera.core.systems.scope.internal.OperaIntervals#SELFTEST_TIMEOUT}
    * is reached.
    */
-  public List<Selftest.SelftestResult> selftest(String module);
+  List<Selftest.SelftestResult> selftest(String module);
 
 }
