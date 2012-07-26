@@ -22,8 +22,10 @@ import com.google.common.io.Files;
 import com.opera.core.systems.preferences.OperaFilePreferences;
 import com.opera.core.systems.preferences.OperaGenericPreferences;
 import com.opera.core.systems.preferences.OperaPreferences;
+import com.opera.core.systems.testing.NoDriver;
 import com.opera.core.systems.testing.OperaDriverTestCase;
-import com.opera.core.systems.testing.drivers.TestOperaDriver;
+import com.opera.core.systems.testing.drivers.TestDriver;
+import com.opera.core.systems.testing.drivers.TestDriverBuilder;
 
 import org.junit.After;
 import org.junit.Before;
@@ -35,15 +37,17 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.io.File;
 import java.io.IOException;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.fail;
 
+@NoDriver
 public class OperaFilePreferencesTest extends OperaDriverTestCase {
 
-  public static TestOperaDriver newDriver;
+  public static TestDriver driver;
   public OperaPreferences preferences;
   public int prefCountBefore = 0;
   public File iniFile;
@@ -58,12 +62,19 @@ public class OperaFilePreferencesTest extends OperaDriverTestCase {
     temporaryFolder = new TemporaryFolder();
     temporaryFolder.create();
 
-    if (driver.utils().getProduct().is(OperaProduct.DESKTOP)) {
-      iniFile = temporaryFolder.newFile("operaprefs.ini");
-      profileDirectory = temporaryFolder.getRoot();
-    } else {
-      profileDirectory = new File(driver.utils().getBinaryPath()).getParentFile();
-      iniFile = new File(profileDirectory + File.separator + "opera.ini");
+    switch (currentProduct()) {
+      case DESKTOP:
+        iniFile = temporaryFolder.newFile("operaprefs.ini");
+        profileDirectory = temporaryFolder.getRoot();
+        break;
+      case CORE:
+        profileDirectory = new File(driver.utils().getBinaryPath()).getParentFile();
+        iniFile = new File(profileDirectory + File.separator + "opera.ini");
+        break;
+      default:
+        iniFile = temporaryFolder.newFile("opera.ini");
+        profileDirectory = temporaryFolder.getRoot();
+        break;
     }
 
     // Make a new copy in a temporary filesystem so we don't overwrite our fixture
@@ -82,15 +93,17 @@ public class OperaFilePreferencesTest extends OperaDriverTestCase {
   @After
   public void afterEach() {
     if (driver != null && driver.isRunning()) {
-      driver.quit();
-    }
-
-    if (newDriver != null && newDriver.isRunning()) {
-      if (!newDriver.utils().getProduct().is(OperaProduct.DESKTOP)) {
-        newDriver.preferences().resetAll();
+      if (!driver.utils().getProduct().is(OperaProduct.DESKTOP)) {
+        driver.preferences().resetAll();
       }
 
-      newDriver.quit();
+      try {
+        driver.quit();
+      } catch (RuntimeException e) {
+        // nothing we can do
+      } finally {
+        driver = null;
+      }
     }
   }
 
@@ -182,8 +195,8 @@ public class OperaFilePreferencesTest extends OperaDriverTestCase {
     profile.preferences().set("User Prefs", "Ignore Unrequested Popups", false);
     DesiredCapabilities capabilities = DesiredCapabilities.opera();
     capabilities.setCapability(OperaSettings.Capability.PROFILE.getCapability(), profile);
-    newDriver = new TestOperaDriver(capabilities);
-    assertFalse((Boolean) newDriver.preferences().get("User Prefs", "Ignore Unrequested Popups")
+    driver = new TestDriverBuilder().using(capabilities).get();
+    assertFalse((Boolean) driver.preferences().get("User Prefs", "Ignore Unrequested Popups")
         .getValue());
   }
 
@@ -193,8 +206,8 @@ public class OperaFilePreferencesTest extends OperaDriverTestCase {
     profile.setPreferences(preferences);
     DesiredCapabilities capabilities = DesiredCapabilities.opera();
     capabilities.setCapability(OperaSettings.Capability.PROFILE.getCapability(), profile);
-    newDriver = new TestOperaDriver(capabilities);
-    assertFalse((Boolean) newDriver.preferences().get("User Prefs", "Ignore Unrequested Popups")
+    driver = new TestDriverBuilder().using(capabilities).get();
+    assertFalse((Boolean) driver.preferences().get("User Prefs", "Ignore Unrequested Popups")
         .getValue());
   }
 
@@ -207,8 +220,8 @@ public class OperaFilePreferencesTest extends OperaDriverTestCase {
     profile.setPreferences(preferences);
     DesiredCapabilities capabilities = DesiredCapabilities.opera();
     capabilities.setCapability(OperaSettings.Capability.PROFILE.getCapability(), profile);
-    newDriver = new TestOperaDriver(capabilities);
-    assertFalse((Boolean) newDriver.preferences().get("User Prefs", "Ignore Unrequested Popups")
+    driver = new TestDriverBuilder().using(capabilities).get();
+    assertFalse((Boolean) driver.preferences().get("User Prefs", "Ignore Unrequested Popups")
         .getValue());
   }
 
@@ -218,7 +231,7 @@ public class OperaFilePreferencesTest extends OperaDriverTestCase {
     File prefsFile = temporaryFolder.newFile();
     Files.write("[Test]\nPrefWithNoValue\nPrefWithValue=1\n", prefsFile, Charsets.UTF_8);
     OperaFilePreferences prefs = new OperaFilePreferences(prefsFile);
-    assertEquals("",prefs.get("Test", "PrefWithNoValue").getValue());
-    assertEquals(true,prefs.get("Test", "PrefWithValue").getValue());
+    assertEquals("", prefs.get("Test", "PrefWithNoValue").getValue());
+    assertEquals(true, prefs.get("Test", "PrefWithValue").getValue());
   }
 }
