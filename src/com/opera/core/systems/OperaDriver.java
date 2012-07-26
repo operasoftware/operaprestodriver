@@ -284,11 +284,11 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot, Run
           } else {
             services.quit();
           }
-        } catch (Throwable t) {
+        } catch (Exception e) {
           if (runner != null) {
             runner.stopOpera();
           } else {
-            Throwables.propagateIfPossible(t);
+            Throwables.propagateIfPossible(e);
           }
         }
       } else {
@@ -300,7 +300,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot, Run
       if (runner != null) {
         runner.shutdown();
       }
-    } catch (RuntimeException e) {
+    } catch (Exception e) {
       throw new WebDriverException(e);
     } finally {
       // Don't clean the profile if we were asked to detach the browser
@@ -504,9 +504,8 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot, Run
         id = debugger.executeScriptOnObject(script, el.getObjectId());
       }
 
-      String error =
-          debugger.callFunctionOnObject("return (locator instanceof Error) ? locator.message : ''",
-                                        id);
+      String error = debugger.callFunctionOnObject(
+          "return (locator instanceof Error) ? locator.message : ''", id);
       if (!error.isEmpty()) {
         throw new InvalidSelectorException(error);
       }
@@ -1126,6 +1125,10 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot, Run
   @SuppressWarnings("unused")
   protected void setUseOperaIdle(boolean enabled) {
     settings.setIdle(enabled);
+  }
+
+  protected static void setLogFile(FileHandler log) {
+    logFile = log;
   }
 
   // Following methods are used internally:
