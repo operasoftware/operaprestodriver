@@ -19,52 +19,53 @@ package com.opera.core.systems;
 import org.openqa.selenium.TouchScreen;
 import org.openqa.selenium.interactions.internal.Coordinates;
 
+// TODO(andreastt): This will eventually use the new bream-input service
 public class OperaTouchScreen implements TouchScreen {
 
-  private final OperaMobileDriver driver;
+  private final OperaMouse mouse;
 
   public OperaTouchScreen(OperaMobileDriver driver) {
-    this.driver = driver;
+    this.mouse = (OperaMouse) driver.getMouse();
   }
 
   public void singleTap(Coordinates where) {
-
+    mouse.click(where);
   }
 
   public void down(int x, int y) {
-
+    throw new UnsupportedOperationException();
   }
 
   public void up(int x, int y) {
-
+    throw new UnsupportedOperationException();
   }
 
   public void move(int x, int y) {
-
-  }
-
-  public void scroll(Coordinates where, int xOffset, int yOffset) {
-
-  }
-
-  public void doubleTap(Coordinates where) {
-
-  }
-
-  public void longPress(Coordinates where) {
-
+    throw new UnsupportedOperationException();
   }
 
   public void scroll(int xOffset, int yOffset) {
+    throw new UnsupportedOperationException();
+  }
 
+  public void scroll(Coordinates where, int xOffset, int yOffset) {
+    throw new UnsupportedOperationException();
+  }
+
+  public void doubleTap(Coordinates where) {
+    mouse.doubleClick(where);
+  }
+
+  public void longPress(Coordinates where) {
+    throw new UnsupportedOperationException();
   }
 
   public void flick(int xSpeed, int ySpeed) {
-
+    throw new UnsupportedOperationException();
   }
 
   public void flick(Coordinates where, int xOffset, int yOffset, int speed) {
-
+    throw new UnsupportedOperationException();
   }
 
 }

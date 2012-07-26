@@ -25,11 +25,8 @@ import com.opera.core.systems.runner.OperaRunner;
 import com.opera.core.systems.scope.exceptions.ResponseNotReceivedException;
 import com.opera.core.systems.scope.services.IOperaExec;
 import com.opera.core.systems.scope.services.IWindowManager;
-import com.opera.core.systems.scope.services.ums.WindowManager;
 
 import org.openqa.selenium.Capabilities;
-
-import static com.opera.core.systems.OperaProduct.CORE;
 
 /**
  * Provides access to the {@link com.opera.core.systems.runner.OperaRunner}, so we can detect
@@ -101,43 +98,5 @@ public class TestOperaDriver extends OperaDriver implements TestDriver {
   public void waitForLoadToComplete() throws ResponseNotReceivedException {
     super.waitForLoadToComplete();
   }
-
-  /*
-  public TestOperaUtils utils() {
-    return new TestOperaUtils();
-  }
-
-  public class TestOperaUtils extends OperaUtils {
-
-    /**
-     * Overrides the default {@link OperaDriver.OperaUtils#getProduct()} to also take the
-     * environmental variable <code>OPERA_PRODUCT</code> into account, which can be used for
-     *
-     * @return browser's product type
-     *
-    public OperaProduct getProduct() {
-      if (currentProduct == null) {
-        currentProduct = CORE;  // default
-        String requestedProduct = System.getenv("OPERA_PRODUCT");
-
-        if (requestedProduct == null || requestedProduct.isEmpty()) {
-          requestedProduct = super.getProduct().toString();
-        } else {
-          logger.warning("Driver is not running, defaulting to " + currentProduct);
-        }
-
-        try {
-          currentProduct = OperaProduct.get(requestedProduct);
-        } catch (IllegalArgumentException e) {
-          logger.warning(String.format("Product `%s' not found, defaulting to %s",
-                                       requestedProduct, currentProduct));
-        }
-      }
-
-      return currentProduct;
-    }
-
-  }
-  */
 
 }

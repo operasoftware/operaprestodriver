@@ -51,9 +51,7 @@ public class TestDriverBuilder implements Supplier<TestDriver> {
    * By default, this class provides a plain {@link TestOperaDriver} instance object with the
    * default capabilities.
    */
-  @SuppressWarnings("unused")
   public TestDriverBuilder() {
-    //this(new TestOperaDriverSupplier());
     this(detect());
   }
 
@@ -74,7 +72,6 @@ public class TestDriverBuilder implements Supplier<TestDriver> {
    *
    * @param driverImplementation class reference to driver implementation
    */
-  @SuppressWarnings("unused")
   public TestDriverBuilder(Class<? extends TestDriver> driverImplementation) {
     driverClass = driverImplementation;
   }

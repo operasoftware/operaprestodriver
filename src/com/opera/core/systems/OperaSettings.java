@@ -157,12 +157,6 @@ public class OperaSettings {
      * Files\Opera\opera.exe</code>, or similar).
      */
     BINARY() {
-      /*
-      File getDefaultValue() {
-        return OperaBinary.find((OperaProduct) PRODUCT.getDefaultValue());
-      }
-      */
-
       Object sanitize(Object binary) {
         if (binary == null) {
           return binary;
@@ -750,12 +744,11 @@ public class OperaSettings {
    * @return the Opera binary
    */
   public File getBinary() {
-    //return (File) options.get(BINARY).getValue();
-
     File binary = (File) options.get(BINARY).getValue();
     if (binary == null) {
       setBinary(OperaBinary.find(getProduct()));
     }
+
     return (File) options.get(BINARY).getValue();
   }
 
