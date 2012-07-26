@@ -108,7 +108,7 @@
     <property name="sonar.host.url" value="http://ci.qa.oslo.osa:9000" />
     <!-- list of mandatories Sonar properties -->
     <property name="sonar.sources" value="src" />
-    <property name="sonar.exclusions" value="com/opera/core/systems/scope/protos/*,com/opera/core/systems/runner/launcher/OperaLauncherProtos.java,,com/opera/core/systems/OperaAtoms.java" />
+    <property name="sonar.exclusions" value="com/opera/core/systems/scope/protos/*,com/opera/core/systems/runner/launcher/OperaLauncherProtos.java,com/opera/core/systems/OperaAtom.java" />
     <!-- list of optional Sonar properties -->
     <property name="sonar.projectName" value="OperaDriver" />
     <property name="sonar.binaries" value="bin" />
