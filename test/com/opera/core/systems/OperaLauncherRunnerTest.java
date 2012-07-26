@@ -70,7 +70,6 @@ public class OperaLauncherRunnerTest extends OperaDriverTestCase {
   @After
   public void afterEach() {
     try {
-      runner.stopOpera();
       if (runner != null && runner.isOperaRunning()) {
         runner.stopOpera();
         assertFalse(runner.isOperaRunning());
