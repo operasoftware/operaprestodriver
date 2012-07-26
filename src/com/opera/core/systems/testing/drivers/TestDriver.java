@@ -17,6 +17,7 @@ limitations under the License.
 package com.opera.core.systems.testing.drivers;
 
 import com.opera.core.systems.OperaDriver;
+import com.opera.core.systems.OperaProxy;
 import com.opera.core.systems.OperaSettings;
 import com.opera.core.systems.OperaUtils;
 import com.opera.core.systems.RunsSelftest;
@@ -47,6 +48,8 @@ public interface TestDriver
   ScopeServices getServices();
 
   OperaUtils utils();
+
+  OperaProxy proxy();
 
   OperaScopePreferences preferences();
 
