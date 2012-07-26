@@ -303,6 +303,7 @@ public class OperaLauncherRunnerTest extends OperaDriverTestCase {
     assertNotNull(screenshot);
   }
 
+  @Test
   public void saveScreenshotAfterShutdownShouldThrow() {
     runner = new TestOperaLauncherRunner(settings);
     runner.shutdown();
@@ -312,7 +313,7 @@ public class OperaLauncherRunnerTest extends OperaDriverTestCase {
       fail("Expected OperaRunnerException");
     } catch (RuntimeException e) {
       assertThat(e, is(instanceOf(OperaRunnerException.class)));
-      // TODO(andreastt): Check string
+      assertThat(e.getMessage(), containsString("launcher was shutdown"));
     }
   }
 
