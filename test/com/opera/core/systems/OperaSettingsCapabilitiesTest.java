@@ -116,14 +116,6 @@ public class OperaSettingsCapabilitiesTest extends OperaDriverTestCase {
                  ((File) sanitizedLogFile).getCanonicalPath());
   }
 
-  /*
-  // This presumes Opera is installed on the system, which it should be if running these tests
-  @Test
-  public void binaryDoesNotHaveNullAsDefaultValue() {
-    assertNotNull(BINARY.getDefaultValue());
-  }
-  */
-
   @Test
   public void binaryHasNullAsDefaultValue() {
     assertNull(BINARY.getDefaultValue());
