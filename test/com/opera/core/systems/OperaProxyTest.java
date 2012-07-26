@@ -22,11 +22,17 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.Proxy;
+import org.openqa.selenium.WebDriverException;
 
+import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+import static org.junit.matchers.JUnitMatchers.containsString;
 
 public class OperaProxyTest extends OperaDriverTestCase {
 
@@ -47,7 +53,9 @@ public class OperaProxyTest extends OperaDriverTestCase {
 
   @After
   public void resetProxy() {
-    proxy.reset();
+    if (driver != null && driver.isRunning()) {
+      proxy.reset();
+    }
   }
 
   @Test
@@ -220,6 +228,34 @@ public class OperaProxyTest extends OperaDriverTestCase {
 
     assertTrue(proxy.isUsePAC());
     assertTrue(proxy.isEnabled());
+  }
+
+  @Test
+  public void cannotResetWhenDisconnected() {
+    driver.quit();
+
+    try {
+      driver.proxy().reset();
+      fail("Expected WebDriverException");
+    } catch (RuntimeException e) {
+      assertThat(e, is(instanceOf(WebDriverException.class)));
+      assertThat(e.getMessage(),
+                 containsString("Unable to update proxy configuration; not connected!"));
+    }
+  }
+
+  @Test
+  public void cannotSetProxyValueWhenDisconnected() {
+    driver.quit();
+
+    try {
+      driver.proxy().setHttpProxy(url);
+      fail("Expected WebDriverException");
+    } catch (RuntimeException e) {
+      assertThat(e, is(instanceOf(WebDriverException.class)));
+      assertThat(e.getMessage(),
+                 containsString("Unable to update proxy configuration; not connected!"));
+    }
   }
 
 }
