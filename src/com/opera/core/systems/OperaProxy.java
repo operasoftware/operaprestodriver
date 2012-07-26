@@ -213,10 +213,20 @@ public class OperaProxy {
     setProxyValue(PROXY_LOCAL_SERVERS, proxyLocalServers);
   }
 
+  /**
+   * Get the URL of the automatic proxy configuration file.
+   *
+   * @return URL to proxy configuration file
+   */
   public String getAutoconfigUrl() {
     return (String) getProxyValue(AUTOMATIC_PROXY_CONFIGURATION_URL);
   }
 
+  /**
+   * Specify the automatic proxy configuration file as a URL.
+   *
+   * @param url url to the automatic proxy configuration file
+   */
   public void setAutoconfigUrl(String url) {
     setProxyValue(AUTOMATIC_PROXY_CONFIGURATION_URL, url);
   }
