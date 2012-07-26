@@ -333,14 +333,10 @@ public class EcmaScriptDebugger extends AbstractEcmascriptService implements IEc
       } else if (status.equals("cancelled-by-scheduler")) {
         // TODO: what is the best approach here?
         return null;
-      } else if (status.equals("aborted")) {
-
       }
-
     }
 
     String dataType = result.getType();
-
     if (dataType.equals("object")) {
       return result.getObjectValue();
     } else {
@@ -580,7 +576,7 @@ public class EcmaScriptDebugger extends AbstractEcmascriptService implements IEc
     if (className.endsWith("Element")) {
       return new OperaWebElement(driver, id);
     } else if (className.equals("Array")) {
-      List<Object> result = new ArrayList<Object>();
+      List<Object> result = Lists.newArrayList();
 
       for (Property property : properties) {
         if (property.getType().equals("number")
@@ -595,7 +591,7 @@ public class EcmaScriptDebugger extends AbstractEcmascriptService implements IEc
       return result;
     } else {
       // we have a map
-      Map<String, Object> result = new HashMap<String, Object>();
+      Map<String, Object> result = Maps.newHashMap();
 
       for (Property property : properties) {
         if (property.getType().equals("number")
@@ -605,8 +601,7 @@ public class EcmaScriptDebugger extends AbstractEcmascriptService implements IEc
           result.put(property.getName(),
                      examineScriptResult(property.getObjectValue().getObjectID(), visitedIDs));
         } else {
-          result.put(property.getName(), parseValue(property.getType(),
-                                                    property.getValue()));
+          result.put(property.getName(), parseValue(property.getType(), property.getValue()));
         }
       }
       return result;
@@ -617,8 +612,7 @@ public class EcmaScriptDebugger extends AbstractEcmascriptService implements IEc
     ExamineList.Builder examine = ExamineList.newBuilder();
     examine.setRuntimeID(getRuntimeId());
     examine.addObjectList(id);
-    Response response = executeCommand(ESDebuggerCommand.EXAMINE_OBJECTS,
-                                       examine);
+    Response response = executeCommand(ESDebuggerCommand.EXAMINE_OBJECTS, examine);
 
     ObjectList.Builder builder = ObjectList.newBuilder();
     buildPayload(response, builder);

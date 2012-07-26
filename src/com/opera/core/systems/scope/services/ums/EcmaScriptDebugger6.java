@@ -16,6 +16,8 @@ limitations under the License.
 
 package com.opera.core.systems.scope.services.ums;
 
+import com.google.common.collect.Lists;
+
 import com.opera.core.systems.OperaWebElement;
 import com.opera.core.systems.ScopeServices;
 import com.opera.core.systems.model.ScriptResult;
@@ -33,7 +35,6 @@ import com.opera.core.systems.util.VersionUtil;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -53,15 +54,16 @@ public class EcmaScriptDebugger6 extends EcmaScriptDebugger {
     super(services, version);
     if (VersionUtil.compare(version, "7.0") >= 0) {
       throw new UnsupportedOperationException("ecmascript-debugger version " + version
-          + " is not supported");
+                                              + " is not supported");
     }
 
   }
 
   @Override
   public Object scriptExecutor(String script, Object... params) {
-    List<WebElement> elements = new ArrayList<WebElement>();
+    List<WebElement> elements = Lists.newArrayList();
     String toSend;
+
     if (params != null && params.length > 0) {
       StringBuilder builder = new StringBuilder();
       for (Object object : params) {
@@ -194,13 +196,10 @@ public class EcmaScriptDebugger6 extends EcmaScriptDebugger {
         // Throw the ecmascript exception
         throw new WebDriverException("Ecmascript exception:\n" + message);
       }
-      // FIXME what is the best approach here?
+      // TODO: What is the best approach here?
       else if (status.equals("cancelled-by-scheduler")) {
         return null;
-      } else if (status.equals("aborted")) {
-
       }
-
     }
 
     String dataType = result.getType();
@@ -222,7 +221,7 @@ public class EcmaScriptDebugger6 extends EcmaScriptDebugger {
 
   @Override
   public List<Integer> examineObjects(Integer id) {
-    List<Integer> ids = new ArrayList<Integer>();
+    List<Integer> ids = Lists.newArrayList();
 
     ObjectChainList list = getChainList(id);
     List<Property> properties =
@@ -258,7 +257,7 @@ public class EcmaScriptDebugger6 extends EcmaScriptDebugger {
     if (className.endsWith("Element")) {
       return new OperaWebElement(driver, id);
     } else if (className.equals("Array")) {
-      List<Object> result = new ArrayList<Object>();
+      List<Object> result = Lists.newArrayList();
 
       for (Property property : properties) {
         if (property.getType().equals("number") && property.getName().equals("length")) {
@@ -278,7 +277,8 @@ public class EcmaScriptDebugger6 extends EcmaScriptDebugger {
         if (property.getType().equals("number") && property.getName().equals("length")) {
           // ignore ?!?
         } else if (property.getType().equals("object")) {
-          result.put(property.getName(), examineScriptResult(property.getObjectValue().getObjectID(), visitedIDs));
+          result.put(property.getName(),
+                     examineScriptResult(property.getObjectValue().getObjectID(), visitedIDs));
         } else {
           result.put(property.getName(), parseValue(property.getType(), property.getValue()));
         }
