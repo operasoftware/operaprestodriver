@@ -170,7 +170,6 @@ public class OperaLauncherRunnerTest extends OperaDriverTestCase {
   public void profileArgumentNotSetIfProductIsCore() {
     settings.setProduct(OperaProduct.CORE);
     settings.setBinary(OperaBinary.find(OperaProduct.ALL));
-    System.out.println(settings.getBinary());
     runner = new TestOperaLauncherRunner(settings);
     assertThat(runner.buildArguments(), hasItem(not("-profile")));
   }
