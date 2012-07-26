@@ -16,6 +16,9 @@ limitations under the License.
 
 package com.opera.core.systems.scope.services.ums;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+
 import com.opera.core.systems.OperaWebElement;
 import com.opera.core.systems.ScopeServices;
 import com.opera.core.systems.model.ScriptResult;
@@ -51,27 +54,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicStampedReference;
 
 /**
- * Manages the ecmascript-debugger service Handles runtime management and script injection
- *
- * @author Deniz Turkoglu <dturkoglu@opera.com>
+ * Manages the ecmascript-debugger service Handles runtime management and script injection.
  */
-public class EcmaScriptDebugger extends AbstractEcmascriptService implements
-                                                                  IEcmaScriptDebugger {
+public class EcmaScriptDebugger extends AbstractEcmascriptService implements IEcmaScriptDebugger {
 
-  private
-  AtomicStampedReference<RuntimeInfo>
-      runtime =
+  private AtomicStampedReference<RuntimeInfo> runtime =
       new AtomicStampedReference<RuntimeInfo>(null, 0);
 
-  private
-  ConcurrentMap<Integer, RuntimeInfo>
-      runtimesList =
-      new ConcurrentHashMap<Integer, RuntimeInfo>();
+  private ConcurrentMap<Integer, RuntimeInfo> runtimesList = Maps.newConcurrentMap();
 
   private RuntimeNode root;
 
@@ -101,6 +95,7 @@ public class EcmaScriptDebugger extends AbstractEcmascriptService implements
     public Map<Integer, RuntimeNode> getNodes() {
       return nodes;
     }
+
   }
 
   public EcmaScriptDebugger(ScopeServices services, String version) {
@@ -157,7 +152,8 @@ public class EcmaScriptDebugger extends AbstractEcmascriptService implements
       throw new WebDriverException(
           "Could not find a runtime for script injection");
     }
-    // FIXME workaround for internal dialog
+
+    // TODO: Workaround for internal dialogue
     // The dialog is finally removed but just keeping this here
     // until every platform upgrades to core 2.7+
     executeJavascript("return 1;", true);
@@ -184,7 +180,7 @@ public class EcmaScriptDebugger extends AbstractEcmascriptService implements
 
   /**
    * Gets a list of runtimes and keeps the list, create runtimes for all pages so even if the pages
-   * dont have script we can still inject to a 'fake' runtime
+   * don't have script we can still inject to a "fake" runtime.
    */
   protected void createAllRuntimes() {
     List<RuntimeInfo> runtimes = listRuntimes(true);
@@ -195,7 +191,7 @@ public class EcmaScriptDebugger extends AbstractEcmascriptService implements
   }
 
   public Object scriptExecutor(String script, Object... params) {
-    List<WebElement> elements = new ArrayList<WebElement>();
+    List<WebElement> elements = Lists.newArrayList();
 
     String toSend = buildEvalString(elements, script, params);
     EvalData.Builder evalBuilder = buildEval(toSend, getRuntimeId());
@@ -270,7 +266,6 @@ public class EcmaScriptDebugger extends AbstractEcmascriptService implements
     }
 
     resetCounters();
-
     return response;
   }
 
