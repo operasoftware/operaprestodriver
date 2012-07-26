@@ -384,7 +384,7 @@ public class WaitState {
     synchronized (lock) {
       logger.fine("Event: onDesktopPageChanged");
       events.add(new ResultItem(WaitResult.EVENT_DESKTOP_WINDOW_PAGE_CHANGED, info));
-      lock.notify();
+      lock.notifyAll();
     }
   }
 
