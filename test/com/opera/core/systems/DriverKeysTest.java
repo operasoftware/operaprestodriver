@@ -27,9 +27,9 @@ import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 
+import static com.opera.core.systems.OperaProduct.MOBILE;
 import static org.junit.Assert.assertEquals;
 import static org.openqa.selenium.Platform.MAC;
-import static com.opera.core.systems.OperaProduct.MOBILE;
 
 public class DriverKeysTest extends OperaDriverTestCase {
 
@@ -147,7 +147,7 @@ public class DriverKeysTest extends OperaDriverTestCase {
   }
 
   @Test
-  @Ignore(value = "MAC and MOBILE needs investigation")
+  @Ignore(products = MOBILE, platforms = MAC, value = "Needs investigation")
   public void testMultipleModifiers() {
     if (Platform.getCurrent().is(Platform.MAC)) {
       new Actions(driver).sendKeys("abc defghij")
