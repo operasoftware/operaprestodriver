@@ -22,6 +22,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.Proxy;
+import org.openqa.selenium.Proxy.ProxyType;
 import org.openqa.selenium.WebDriverException;
 
 import static org.hamcrest.CoreMatchers.instanceOf;
@@ -228,6 +229,15 @@ public class OperaProxyTest extends OperaDriverTestCase {
 
     assertTrue(proxy.isUsePAC());
     assertTrue(proxy.isEnabled());
+  }
+
+  @Test
+  public void parseDirectProxyConnection() {
+    Proxy p = new Proxy().setProxyType(ProxyType.DIRECT);
+    proxy.parse(p);
+
+    assertFalse(proxy.isEnabled());
+    assertFalse(proxy.isUsePAC());
   }
 
   @Test
