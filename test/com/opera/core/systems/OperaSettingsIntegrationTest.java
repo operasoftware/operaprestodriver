@@ -157,8 +157,6 @@ public class OperaSettingsIntegrationTest extends OperaDriverTestCase {
     TestDriver driver = new TestDriverBuilder().using(settings).get();
     driver.quit();
 
-    System.out.println(log.length());
-    System.out.println(log.getPath());
     assertTrue(log.length() > 0);
   }
 
