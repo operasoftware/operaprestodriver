@@ -125,7 +125,7 @@ public class OperaArguments implements com.opera.core.systems.arguments.interfac
       com.opera.core.systems.arguments.interfaces.OperaArguments extraArguments) {
     checkNotNull(extraArguments);
 
-    if (extraArguments.getArguments() != null || !extraArguments.getArguments().isEmpty()) {
+    if (extraArguments.getArguments() != null && !extraArguments.getArguments().isEmpty()) {
       arguments.addAll(extraArguments.getArguments());
     }
 

@@ -42,7 +42,6 @@ import java.nio.channels.SocketChannel;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class StpConnection implements SocketListener {
@@ -55,7 +54,7 @@ public class StpConnection implements SocketListener {
   private ByteBuffer recvBuffer;
 
   // For STP1
-  final byte[] prefix = {'S', 'T', 'P', 1};
+  private final byte[] prefix = {'S', 'T', 'P', 1};
   private ByteString stpPrefix = ByteString.copyFrom(prefix);
 
   private EventHandler eventHandler;
@@ -220,18 +219,15 @@ public class StpConnection implements SocketListener {
 
           }
 
-        } catch (IOException ex) {
-          logger.warning("Channel closed, causing exception: " + ex.getMessage());
-          readSize = -1; // Same as error from socketChannel.read
+        } catch (IOException e) {
+          logger.warning("Channel closed, causing exception: " + e.getMessage());
+          readSize = -1;  // same as error from socketChannel.read
         }
 
         if (readSize < 0) {
-          try {
-            logger.log(Level.FINER, "Channel closed: {0}",
-                       socketChannel.socket().getInetAddress().getHostName());
-          } catch (NullPointerException e) {
-            // ignore
-          }
+          logger.finer(String.format("Channel closed: %s",
+                                     socketChannel.socket().getInetAddress().getHostName()));
+
           connectionHandler.onDisconnect();
           monitor.remove(socketChannel);
           return false;
@@ -332,7 +328,7 @@ public class StpConnection implements SocketListener {
   public void parseServiceList(String message) {
     logger.finer("parseServiceList: \"" + message + "\"");
 
-    int split = message.indexOf(" ");
+    int split = message.indexOf(' ');
 
     if (split < 0) {
       connectionHandler.onException(new WebDriverException("Invalid service list received."));
@@ -536,9 +532,11 @@ public class StpConnection implements SocketListener {
 
         // We get exceptions when, in the ECMAScript services, we use a runtime that doesn't exist.
         // We can ignore these exceptions and carry on.
-        if (((service.equals("ecmascript-debugger") || service.equals("ecmascript")) && status == Status.INTERNAL_ERROR.getNumber()) ||
+        if (((service.equals("ecmascript-debugger") || service.equals("ecmascript"))
+             && status == Status.INTERNAL_ERROR.getNumber()) ||
             (service.equals("ecmascript") && status == Status.BAD_REQUEST.getNumber()) ||
-            (service.equals("desktop-utils") &&  error.getCommandID() == DesktopUtilsCommand.GET_STRING.getCommandID())) {
+            (service.equals("desktop-utils") && error.getCommandID() == DesktopUtilsCommand
+                .GET_STRING.getCommandID())) {
           signalResponse(error.getTag(), null);
         } else {
           connectionHandler.onException(

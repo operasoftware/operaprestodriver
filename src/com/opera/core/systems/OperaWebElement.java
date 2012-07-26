@@ -16,9 +16,10 @@ limitations under the License.
 
 package com.opera.core.systems;
 
+import com.google.common.collect.Maps;
+
 import com.opera.core.systems.model.Canvas;
 import com.opera.core.systems.model.ColorResult;
-import com.opera.core.systems.model.OperaColor;
 import com.opera.core.systems.model.ScreenShotReply;
 import com.opera.core.systems.scope.exceptions.ResponseNotReceivedException;
 import com.opera.core.systems.scope.internal.OperaColors;
@@ -47,8 +48,8 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.logging.Logger;
 
@@ -71,7 +72,7 @@ public class OperaWebElement extends RemoteWebElement {
    *
    * TODO(andreastt): Move this to OperaKeyboard?
    */
-  private static final HashMap<Character, String> keysLookup = new HashMap<Character, String>();
+  private static final Map<Character, String> keysLookup = Maps.newHashMap();
 
   /**
    * @param parent   driver that this element belongs to
@@ -440,7 +441,7 @@ public class OperaWebElement extends RemoteWebElement {
         stream.write(ByteBuffer.wrap(reply.getPng()));
         stream.close();
       } catch (IOException e) {
-        throw new WebDriverException("Failed to write file: " + e.getMessage());
+        throw new WebDriverException("Failed to write file: " + e.getMessage(), e);
       }
     }
 
@@ -570,7 +571,7 @@ public class OperaWebElement extends RemoteWebElement {
     final OperaWebElement el = this;
 
     return parent.implicitlyWaitFor(new Callable<WebElement>() {
-      public WebElement call() throws Exception {
+      public WebElement call() {
         return parent.findElement(by, using, el);
       }
     });

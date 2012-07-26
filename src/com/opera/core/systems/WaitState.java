@@ -87,7 +87,9 @@ public class WaitState {
     EVENT_DESKTOP_WINDOW_PAGE_CHANGED /* new Page shown in a dialog/window */
   }
 
-  private class ResultItem {
+  private static class ResultItem {
+
+    private static final Logger logger = Logger.getLogger(ResultItem.class.getName());
 
     private int data;
     private final WaitResult waitResult;
@@ -211,7 +213,7 @@ public class WaitState {
     QUICK_MENU_CLOSED,
     QUICK_MENU_ITEM_PRESSED,
     SELFTEST_DONE,
-    DESKTOP_WINDOW_PAGE_CHANGED;
+    DESKTOP_WINDOW_PAGE_CHANGED
   }
 
   public WaitState() {
@@ -219,8 +221,8 @@ public class WaitState {
     waitEvents = false;
   }
 
-  public void setWaitEvents(boolean wait_events) {
-    this.waitEvents = wait_events;
+  public void setWaitEvents(boolean waitEvents) {
+    this.waitEvents = waitEvents;
   }
 
   private void internalWait(long timeout) {

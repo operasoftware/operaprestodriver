@@ -401,7 +401,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot, Run
 
   protected WebElement findElement(final String by, final String using) {
     return implicitlyWaitFor(new Callable<WebElement>() {
-      public WebElement call() throws Exception {
+      public WebElement call() {
         return findElement(by, using, null);
       }
     });
