@@ -46,7 +46,7 @@ v0.16     (not released)
   * Fix OperaDriver#quit() to not hide any recursive exceptions,
     especially dealing with garbage collection.
 
-    The OperaDriver 0.15 may have left Opera instances running on the
+    OperaDriver 0.15 may have left Opera instances running on the
     system, and this patch should address that problem by more
     reliably dealing with exceptions during shutdown.
 
@@ -92,6 +92,10 @@ v0.15     (2012-07-23)
 
   * Added API for altering the selftest timeout:
     OperaTimeouts#selftestTimeout().  (andreastt)
+
+  [NEW FEATURES]
+
+  * Add support for the ARM platform.  (farre)
 
   [ENHANCEMENTS]
 
