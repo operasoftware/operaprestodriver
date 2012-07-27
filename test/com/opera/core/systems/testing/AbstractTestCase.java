@@ -101,7 +101,7 @@ public abstract class AbstractTestCase implements TestCase {
   }
 
   public void createDriverIfNecessary() {
-    driver = storedDriver.get();
+    driver = getWrappedDriver();
 
     if (driver != null && !supplier.supplies(driver.getClass())) {
       removeDriver();
@@ -111,9 +111,15 @@ public abstract class AbstractTestCase implements TestCase {
       driver = createFreshDriver();
       storedDriver.set(driver);
 
-      // Ensure that product and platform are cached in case a test uses @NoDriver
       currentProduct();
       currentPlatform();
+    }
+  }
+
+  public void removeDriverIfNecessary() {
+    TestDriver driver = getWrappedDriver();
+    if (!spawnDriver && (driver != null && driver.isRunning())) {
+      removeDriver();
     }
   }
 

@@ -17,6 +17,7 @@ limitations under the License.
 package com.opera.core.systems;
 
 import com.google.common.base.Charsets;
+import com.google.common.base.Throwables;
 import com.google.common.io.Files;
 
 import com.opera.core.systems.preferences.OperaFilePreferences;
@@ -37,22 +38,26 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.logging.Logger;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 @NoDriver
 public class OperaFilePreferencesTest extends OperaDriverTestCase {
 
-  public static TestDriver driver;
+  public TestDriver driver;
   public OperaPreferences preferences;
   public int prefCountBefore = 0;
   public File iniFile;
   public OperaProfile profile;
   public File profileDirectory;
+
+  private final Logger logger = Logger.getLogger(getClass().getName());
 
   @Rule
   public TemporaryFolder temporaryFolder;
@@ -62,7 +67,12 @@ public class OperaFilePreferencesTest extends OperaDriverTestCase {
     temporaryFolder = new TemporaryFolder();
     temporaryFolder.create();
 
-    switch (currentProduct()) {
+    OperaProduct assumedProduct = OperaProduct.ALL;
+    if (driver != null && driver.isRunning()) {
+      assumedProduct = driver.utils().getProduct();
+    }
+
+    switch (assumedProduct) {
       case DESKTOP:
         iniFile = temporaryFolder.newFile("operaprefs.ini");
         profileDirectory = temporaryFolder.getRoot();
@@ -71,6 +81,7 @@ public class OperaFilePreferencesTest extends OperaDriverTestCase {
         profileDirectory = new File(driver.utils().getBinaryPath()).getParentFile();
         iniFile = new File(profileDirectory + File.separator + "opera.ini");
         break;
+      case ALL:
       default:
         iniFile = temporaryFolder.newFile("opera.ini");
         profileDirectory = temporaryFolder.getRoot();
@@ -93,14 +104,10 @@ public class OperaFilePreferencesTest extends OperaDriverTestCase {
   @After
   public void afterEach() {
     if (driver != null && driver.isRunning()) {
-      if (!driver.utils().getProduct().is(OperaProduct.DESKTOP)) {
-        driver.preferences().resetAll();
-      }
-
-      try {
+       try {
         driver.quit();
       } catch (RuntimeException e) {
-        // nothing we can do
+        logger.warning(Throwables.getStackTraceAsString(e));
       } finally {
         driver = null;
       }
@@ -130,7 +137,7 @@ public class OperaFilePreferencesTest extends OperaDriverTestCase {
     assertEquals("1.2.3.4", preferences.get("Developer Tools", "Proxy Host").getValue());
     assertEquals(1234, preferences.get("Developer Tools", "Proxy Port").getValue());
     assertEquals(true, preferences.get("Developer Tools", "Proxy Auto Connect").getValue());
-    assertEquals(prefCountBefore, preferences.size()); // make sure it didn't add more prefs
+    assertEquals(prefCountBefore, preferences.size());  // make sure it didn't add more prefs
   }
 
   @Test
@@ -192,23 +199,21 @@ public class OperaFilePreferencesTest extends OperaDriverTestCase {
 
   @Test
   public void testPreferencesAreSet() {
-    profile.preferences().set("User Prefs", "Ignore Unrequested Popups", false);
+    profile.preferences().set("Personal Info", "Country", "Norway");
     DesiredCapabilities capabilities = DesiredCapabilities.opera();
     capabilities.setCapability(OperaSettings.Capability.PROFILE.getCapability(), profile);
     driver = new TestDriverBuilder().using(capabilities).get();
-    assertFalse((Boolean) driver.preferences().get("User Prefs", "Ignore Unrequested Popups")
-        .getValue());
+    assertEquals("Norway", driver.preferences().get("Personal Info", "Country").getValue());
   }
 
   @Test
   public void testPreferencesAreSetWithExistingObject() {
-    preferences.set("User Prefs", "Ignore Unrequested Popups", false);
+    profile.preferences().set("Personal Info", "Country", "Norway");
     profile.setPreferences(preferences);
     DesiredCapabilities capabilities = DesiredCapabilities.opera();
     capabilities.setCapability(OperaSettings.Capability.PROFILE.getCapability(), profile);
     driver = new TestDriverBuilder().using(capabilities).get();
-    assertFalse((Boolean) driver.preferences().get("User Prefs", "Ignore Unrequested Popups")
-        .getValue());
+    assertEquals("Norway", driver.preferences().get("Personal Info", "Country").getValue());
   }
 
   // If we have an existing OperaGenericPreferences object this will not write the preferences to
@@ -216,13 +221,12 @@ public class OperaFilePreferencesTest extends OperaDriverTestCase {
   @Test
   public void testPreferencesAreSetWithGenericPreferenceObject() {
     OperaPreferences preferences = new OperaGenericPreferences();
-    preferences.set("User Prefs", "Ignore Unrequested Popups", false);
+    profile.preferences().set("Personal Info", "Country", "Norway");
     profile.setPreferences(preferences);
     DesiredCapabilities capabilities = DesiredCapabilities.opera();
     capabilities.setCapability(OperaSettings.Capability.PROFILE.getCapability(), profile);
     driver = new TestDriverBuilder().using(capabilities).get();
-    assertFalse((Boolean) driver.preferences().get("User Prefs", "Ignore Unrequested Popups")
-        .getValue());
+    assertEquals("Norway", driver.preferences().get("Personal Info", "Country").getValue());
   }
 
   // Make sure we can handle/parse a pref that has no value (i.e. it lacks a = in the line)
