@@ -17,6 +17,7 @@ limitations under the License.
 package com.opera.core.systems;
 
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
 import com.google.protobuf.AbstractMessage.Builder;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
@@ -64,7 +65,6 @@ import com.opera.core.systems.util.VersionUtil;
 import org.openqa.selenium.WebDriverException;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
@@ -135,7 +135,7 @@ public class ScopeServices implements IConnectionHandler {
 
     connect();
 
-    List<String> wantedServices = new ArrayList<String>();
+    List<String> wantedServices = Lists.newArrayList();
 
     boolean ecmascriptService = false;
     for (Service service : hostInfo.getServiceListList()) {
@@ -179,7 +179,6 @@ public class ScopeServices implements IConnectionHandler {
     wantedServices.add("cookie-manager");
 
     enableServices(wantedServices);
-
     initializeServices(OperaDefaults.ENABLE_DEBUGGER);
   }
 
@@ -760,10 +759,8 @@ public class ScopeServices implements IConnectionHandler {
                           OperaIntervals.RESPONSE_TIMEOUT.getMs());
   }
 
-  public Response executeCommand(ICommand command, Builder<?> builder,
-                                 long timeout) {
-    ByteString payload = (builder != null) ? builder.build().toByteString()
-                                           : ByteString.EMPTY;
+  public Response executeCommand(ICommand command, Builder<?> builder, long timeout) {
+    ByteString payload = (builder != null) ? builder.build().toByteString() : ByteString.EMPTY;
     Command.Builder commandBuilder = buildCommand(command, payload);
     int tag = commandBuilder.getTag();
     connection.send(commandBuilder.build());

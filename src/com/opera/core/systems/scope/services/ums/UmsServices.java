@@ -48,26 +48,6 @@ public class UmsServices {
   protected final IPrefs prefs;
   private final ICookieManager cookieManager;
 
-  public IEcmaScriptDebugger getDebugger() {
-    return debugger;
-  }
-
-  public IOperaExec getExec() {
-    return exec;
-  }
-
-  public IWindowManager getWindowManager() {
-    return windowManager;
-  }
-
-  public ICoreUtils getCoreUtils() {
-    return coreUtils;
-  }
-
-  public ICookieManager getCookieManager() {
-    return cookieManager;
-  }
-
   public UmsServices(ScopeServices services, HostInfo info) {
     List<Service> serviceList = info.getServiceListList();
     windowManager =

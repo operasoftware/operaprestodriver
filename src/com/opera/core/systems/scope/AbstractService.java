@@ -69,20 +69,21 @@ public abstract class AbstractService {
              || VersionUtil.compare(version, services.getMinVersionFor(serviceName)) < 0);
   }
 
+  public Response executeCommand(ICommand command) {
+    return executeCommand(command, null);
+  }
+
   public Response executeCommand(ICommand command, Builder<?> builder) {
     if (services.getConnection() == null) {
       return Response.getDefaultInstance();
     }
-    return executeCommand(command, builder,
-                          OperaIntervals.DEFAULT_RESPONSE_TIMEOUT.getMs());
+    return executeCommand(command, builder, OperaIntervals.DEFAULT_RESPONSE_TIMEOUT.getMs());
   }
 
-  public Response executeCommand(ICommand command, Builder<?> builder,
-                                 long timeout) {
+  public Response executeCommand(ICommand command, Builder<?> builder, long timeout) {
     if (services.getConnection() == null) {
       return Response.getDefaultInstance();
     }
-
     return services.executeCommand(command, builder, timeout);
   }
 

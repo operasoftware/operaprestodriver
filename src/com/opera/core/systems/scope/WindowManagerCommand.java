@@ -16,10 +16,12 @@ limitations under the License.
 
 package com.opera.core.systems.scope;
 
+import com.google.common.base.Function;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Maps;
+
 import com.opera.core.systems.model.ICommand;
 
-import java.util.EnumSet;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -47,17 +49,15 @@ public enum WindowManagerCommand implements ICommand {
 
   DEFAULT(-1);
 
-  private int code;
-  private static final
-  Map<Integer, WindowManagerCommand>
-      lookup =
-      new HashMap<Integer, WindowManagerCommand>();
+  private static final Map<Integer, WindowManagerCommand> lookup =
+      Maps.uniqueIndex(ImmutableList.copyOf(values()),
+                       new Function<WindowManagerCommand, Integer>() {
+                         public Integer apply(WindowManagerCommand command) {
+                           return command.getCommandID();
+                         }
+                       });
 
-  static {
-    for (WindowManagerCommand command : EnumSet.allOf(WindowManagerCommand.class)) {
-      lookup.put(command.getCommandID(), command);
-    }
-  }
+  private final int code;
 
   private WindowManagerCommand(int code) {
     this.code = code;
