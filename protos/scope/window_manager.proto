@@ -48,6 +48,11 @@ message WindowInfo
      * @since 2.2
      */
     optional string extensionName = 5;
+    /**
+     * true if the window is in Privacy Mode.
+     * @since 2.3
+     */
+    optional bool isPrivate = 6;
 }
 
 /**
@@ -69,13 +74,14 @@ message WindowInfo
 service WindowManager
 {
     option (cpp_hfile) = "modules/scope/src/scope_window_manager.h";
-    option (version) = "2.2";
+    option (version) = "2.3";
     option (cpp_class) = OpScopeWindowManager;
 
     /**
      * Request the currently active window.
      */
     command GetActiveWindow(Default) returns (WindowID) = 1;
+    command ListWindows(Default) returns (WindowList) = 2;
     /**
      * The default `WindowFilter` used to be `includePatternList` `"*"`.
      * After this command was introduced, the default filter is `includeIDList` 0 (unknown).
@@ -192,6 +198,13 @@ message CreateWindowArg
      * - "devtools"
      */
     optional string windowType = 1;
+
+    /**
+     * If set then it forces Privacy Mode of a window
+     * else the default setting will be used.
+     * @since 2.3
+     */
+    optional bool isPrivate = 2;
 }
 
 message CloseWindowArg
