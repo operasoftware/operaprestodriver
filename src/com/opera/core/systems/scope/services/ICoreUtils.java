@@ -23,13 +23,6 @@ import java.util.List;
 /**
  * Core utility service exposing metadata about the browser core in general, i.e. information which
  * can not be associated to any one window, document, or object.
- *
- * Version changelog:
- *
- * 1.0  First release. 1.1  Idle detection now handles invalidation and SVG painting/animation. 1.2
- * Added GetBrowserInformation command. 1.3  Added ClearPrivateData.
- *
- * @author Andreas Tolf Tolfsen <andreastt@opera.com>
  */
 public interface ICoreUtils {
 

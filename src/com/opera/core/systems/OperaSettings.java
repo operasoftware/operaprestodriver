@@ -104,7 +104,6 @@ import static org.openqa.selenium.Platform.LINUX;
  *                                                capabilities);
  * </code></pre>
  *
- * @author Andreas Tolf Tolfsen <andreastt@opera.com>
  * @since 0.12
  */
 public class OperaSettings {

@@ -33,8 +33,6 @@ import java.util.logging.Logger;
 /**
  * A mocked OperaDriver for testing startup, shutdown and generally anything not related to the
  * WebDriver specific implementation at all.
- *
- * @author Andreas Tolf Tolfsen <andreastt@opera.com>
  */
 public class MockOperaDriver extends OperaDriver {
 

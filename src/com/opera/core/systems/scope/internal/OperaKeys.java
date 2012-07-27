@@ -16,14 +16,14 @@ limitations under the License.
 
 package com.opera.core.systems.scope.internal;
 
+import com.google.common.collect.Maps;
+
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Maps OperaKeys to WebDriver keys
- *
- * @author Deniz Turkoglu <dturkoglu@opera.com>
+ * Maps OperaKeys to WebDriver keys.
  */
 public enum OperaKeys {
 
@@ -103,7 +103,7 @@ public enum OperaKeys {
     this.value = value;
   }
 
-  private static final Map<String, String> lookup = new HashMap<String, String>();
+  private static final Map<String, String> lookup = Maps.newHashMap();
 
   static {
     for (OperaKeys key : EnumSet.allOf(OperaKeys.class)) {

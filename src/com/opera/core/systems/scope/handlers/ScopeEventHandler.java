@@ -29,8 +29,6 @@ import com.opera.core.systems.scope.protos.WmProtos.WindowInfo;
 
 /**
  * Provides an event handler to the Scope protocol.
- *
- * @author Deniz Turkoglu <dturkoglu@opera.com>
  */
 public class ScopeEventHandler implements EventHandler {
 

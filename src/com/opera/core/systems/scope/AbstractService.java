@@ -38,8 +38,6 @@ import java.util.logging.Logger;
 
 /**
  * All scope services derive from this base class for generic operations.
- *
- * @author Deniz Turkoglu
  */
 public abstract class AbstractService {
 

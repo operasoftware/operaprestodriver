@@ -22,9 +22,6 @@ import org.openqa.selenium.Platform;
 import java.io.File;
 import java.io.IOException;
 
-/**
- * @author Andreas Tolf Tolfsen <andreastt@opera.com>
- */
 public class Resources {
 
   private final TemporaryFolder temporaryFolder = new TemporaryFolder();

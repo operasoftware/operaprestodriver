@@ -28,8 +28,6 @@ import com.opera.core.systems.scope.protos.WmProtos.WindowInfo;
 
 /**
  * Event handler for Scope events and network exceptions.
- *
- * @author Deniz Turkoglu <dturkoglu@opera.com>
  */
 public interface EventHandler {
 

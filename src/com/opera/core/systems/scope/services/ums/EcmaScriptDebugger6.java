@@ -45,8 +45,6 @@ import java.util.Set;
 /**
  * EcmaScript debugger 6.0 implementation handles injection and runtime management to the new
  * version of debugger.
- *
- * @author Deniz Turkoglu <dturkoglu@opera.com>
  */
 public class EcmaScriptDebugger6 extends EcmaScriptDebugger {
 

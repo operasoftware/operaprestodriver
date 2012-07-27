@@ -33,8 +33,6 @@ import java.util.logging.Logger;
  * This class handles accepting STP connections. STP connections are accepted in the {@link
  * SocketListener#canRead(java.nio.channels.SelectableChannel)} method, which then spawns an {@link
  * StpConnection}.
- *
- * @author Jan Vidar Krey <janv@opera.com>
  */
 public class StpConnectionListener implements SocketListener {
 

@@ -24,8 +24,6 @@ import java.util.logging.Level;
 /**
  * Implements shared functionality across the various {@link TestDriverSupplier} implementations.
  * Specifically it allows you to get and set the capabilities for a particular driver supplier.
- *
- * @author Andreas Tolf Tolfsen <andreastt@opera.com>
  */
 public abstract class AbstractTestDriverSupplier implements TestDriverSupplier {
 

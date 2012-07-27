@@ -45,9 +45,6 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.junit.matchers.JUnitMatchers.containsString;
 
-/**
- * @author Andreas Tolf Tolfsen <andreastt@opera.com>
- */
 @NoDriver
 public class OperaSettingsCapabilitiesTest extends OperaDriverTestCase {
 

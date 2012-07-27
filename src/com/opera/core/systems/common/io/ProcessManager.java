@@ -13,8 +13,6 @@ import static org.openqa.selenium.Platform.WINDOWS;
 /**
  * Should eventually be merged with {@link org.openqa.selenium.os.ProcessUtils} to make it platform-
  * independent.
- *
- * @author Andreas Tolf Tolfsen <andreastt@opera.com>
  */
 public final class ProcessManager {
 

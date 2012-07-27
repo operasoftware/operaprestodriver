@@ -34,9 +34,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Cookie manager to manage cookies via scope
- *
- * @author Deniz Turkoglu <dturkoglu@opera.com>
+ * Cookie manager to manage cookies via Scope.
  */
 public class CookieManager extends AbstractService implements ICookieManager {
 

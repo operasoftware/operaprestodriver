@@ -40,8 +40,6 @@ import org.openqa.selenium.Platform;
  *
  * This test setup mimics the characteristics of the Selenium test framework making it easier to
  * exchange tests.
- *
- * @author Andreas Tolf Tolfsen <andreastt@opera.com>
  */
 public interface TestCase {
 

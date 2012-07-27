@@ -16,18 +16,9 @@ limitations under the License.
 
 package com.opera.core.systems.model;
 
-import java.awt.*;
-
 /**
- * The OperaColor class is used to encapsulate colours in the default sRGB colour space.
- * Specifically OperaColor extends {@link Color} and adds the functionality of parsing internal
- * Opera RGB strings to the {@link Color} object.
- *
- * It also holds colour values.
- *
- * It accepts a string for the format "rgb(120, 120, 120)" as a constructor argument.
- *
- * @author Deniz Turkoglu <dturkoglu@opera.com>, Andreas Tolf Tolfsen <andreastt@opera.com>
+ * The OperaColor class is used to encapsulate colours in the default sRGB colour space for
+ * determining colour characteristics in screen captures.
  */
 public class OperaColor {
 

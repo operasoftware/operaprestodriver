@@ -21,8 +21,6 @@ import java.util.Map;
 
 /**
  * Holds a tree of references to runtimes.  Used in EcmaScriptDebugger and EcmascriptService.
- *
- * @author Deniz Turkoglu <dturkoglu@opera.com>
  */
 public class RuntimeNode {
 

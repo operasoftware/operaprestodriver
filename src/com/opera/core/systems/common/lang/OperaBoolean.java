@@ -22,8 +22,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 /**
  * Extension to {@link java.lang.Boolean} which implements some convenience methods for interacting
  * with "truthy" values from other, typically weakly typed, languages.
- *
- * @author Andreas Tolf Tolfsen <andreastt@opera.com>
  */
 public final class OperaBoolean {
 

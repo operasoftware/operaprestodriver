@@ -42,8 +42,6 @@ import java.util.logging.Logger;
 
 /**
  * An extension of OperaDriver for testing the interface of the Opera desktop browser.
- *
- * @author Adam Minchinton, Karianne Ekern
  */
 public class OperaDesktopDriver extends OperaDriver {
 

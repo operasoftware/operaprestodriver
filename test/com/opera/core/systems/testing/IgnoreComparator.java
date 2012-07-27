@@ -22,9 +22,6 @@ import com.opera.core.systems.OperaProduct;
 
 import org.openqa.selenium.Platform;
 
-/**
- * @author Simon Stewart
- */
 public class IgnoreComparator {
 
   private OperaProduct currentProduct = OperaProduct.DESKTOP;

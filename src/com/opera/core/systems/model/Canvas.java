@@ -19,8 +19,6 @@ package com.opera.core.systems.model;
 /**
  * A canvas object to use in taking screenshots of Opera's viewport.  The screenshot can be relative
  * to viewport or to the window.
- *
- * @author Deniz Turkoglu <dturkoglu@opera.com>
  */
 public class Canvas {
 

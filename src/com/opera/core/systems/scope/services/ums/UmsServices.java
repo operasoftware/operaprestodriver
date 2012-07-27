@@ -33,9 +33,6 @@ import com.opera.core.systems.util.VersionUtil;
 import java.util.List;
 import java.util.logging.Logger;
 
-/**
- * @author Deniz Turkoglu <dturkoglu@opera.com>, Andreas Tolf Tolfsen <andreastt@opera.com>
- */
 public class UmsServices {
 
   protected final Logger logger = Logger.getLogger(this.getClass().getName());

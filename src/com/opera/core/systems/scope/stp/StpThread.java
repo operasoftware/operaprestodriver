@@ -30,8 +30,6 @@ import java.util.logging.Logger;
  *
  * This thread also owns the {@link SocketMonitor} instances so all network traffic and
  * communication is happening on this thread.
- *
- * @author Jan Vidar Krey <janv@opera.com>
  */
 public class StpThread extends Thread {
 

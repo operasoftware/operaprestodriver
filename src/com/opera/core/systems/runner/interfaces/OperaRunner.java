@@ -23,8 +23,6 @@ import com.opera.core.systems.runner.OperaRunnerException;
  * OperaRunner is an interface for controlling the Opera browser binary.  It allows you to start,
  * stop, take screenshots of, and catch crash logs from Opera.  OperaRunner implements a pure-Java
  * process manager, OperaLauncherRunner implements one in C++ with a Java API.
- *
- * @author Andreas Tolf Tolfsen <andreastt@opera.com>
  */
 public interface OperaRunner {
 

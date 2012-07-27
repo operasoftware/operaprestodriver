@@ -18,8 +18,6 @@ package com.opera.core.systems.arguments;
 
 /**
  * Handles a list of strings/arguments for the Opera Desktop binary.
- *
- * @author Andreas Tolf Tolfsen <andreastt@opera.com>
  */
 public class OperaDesktopArguments extends OperaCoreArguments {
 

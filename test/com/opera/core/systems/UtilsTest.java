@@ -27,9 +27,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.openqa.selenium.Platform.WINDOWS;
 
-/**
- * @author Andreas Tolf Tolfsen <andreastt@opera.com>
- */
 @RequiresService(value = "core", version = "1.2")
 public class UtilsTest extends OperaDriverTestCase {
 

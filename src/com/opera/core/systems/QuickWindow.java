@@ -16,18 +16,14 @@ limitations under the License.
 
 package com.opera.core.systems;
 
-import java.awt.Dimension;
-import java.awt.Point;
-
 import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo.DesktopWindowType;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect;
 
+import java.awt.*;
+
 /**
- * Represents a window in the Desktop UI. 
- *
- * @author Adam Minchinton, Karianne Ekern
- *
+ * Represents a window in the Desktop UI.
  */
 public class QuickWindow {
 
@@ -67,9 +63,9 @@ public class QuickWindow {
    * @return true if window is active
    */
   public boolean isActive() {
-	  return info.getActive();
+    return info.getActive();
   }
-  
+
   /**
    * @return true if the window is on screen, otherwise false
    */
@@ -110,7 +106,7 @@ public class QuickWindow {
   @Override
   public String toString() {
     return "QuickWindow " + getWindowID() + ", " + getName() + ", "
-        + getTitle();
+           + getTitle();
   }
 
 }

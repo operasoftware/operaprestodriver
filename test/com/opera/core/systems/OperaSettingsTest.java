@@ -55,9 +55,6 @@ import static org.junit.matchers.JUnitMatchers.containsString;
 import static org.openqa.selenium.Platform.LINUX;
 import static org.openqa.selenium.Platform.WINDOWS;
 
-/**
- * @author Andreas Tolf Tolfsen <andreastt@opera.com>
- */
 @NoDriver
 public class OperaSettingsTest extends OperaDriverTestCase {
 

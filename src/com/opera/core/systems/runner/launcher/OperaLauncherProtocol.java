@@ -37,8 +37,6 @@ import java.util.logging.Logger;
 
 /**
  * Implements the launcher protocol.
- *
- * @author Jan Vidar Krey <janv@opera.com>
  */
 public class OperaLauncherProtocol {
 

@@ -27,8 +27,6 @@ import java.util.logging.Logger;
 
 /**
  * OperaRunner implements a pure-Java process manager for controlling the Opera binary.
- *
- * @author Andreas Tolf Tolfsen <andreastt@opera.com>
  */
 public class OperaRunner implements com.opera.core.systems.runner.interfaces.OperaRunner {
 

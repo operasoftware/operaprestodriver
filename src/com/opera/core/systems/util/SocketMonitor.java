@@ -35,8 +35,6 @@ import java.util.logging.Logger;
  * {@link java.nio.channels.ServerSocketChannel} and fire {@link SocketListener#canWrite(java.nio.channels.SelectableChannel)}
  * or {@link SocketListener#canRead(java.nio.channels.SelectableChannel)} events when such events
  * are detected by {@link #poll()}.
- *
- * @author Jan Vidar Krey <janv@opera.com>
  */
 public class SocketMonitor {
 

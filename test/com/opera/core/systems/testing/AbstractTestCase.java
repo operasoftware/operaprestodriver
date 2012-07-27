@@ -39,7 +39,6 @@ import static org.junit.Assert.assertThat;
 /**
  * Shared functionality of different {@link TestCase} implementations.
  *
- * @author Andreas Tolf Tolfsen <andreastt@opera.com>
  * @see OperaDriverTestCase
  * @see OperaDesktopDriverTestCase
  */

@@ -16,34 +16,30 @@
 
 package com.opera.core.systems.scope;
 
+import com.google.common.base.Function;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Maps;
+
 import com.opera.core.systems.model.ICommand;
 
-import java.util.EnumSet;
-import java.util.HashMap;
 import java.util.Map;
 
-/**
- * @author Andreas Tolf Tolfsen <andreastt@opera.com>
- */
 public enum CoreUtilsCommand implements ICommand {
 
-  ONACTIVE                ( 1),
-  ONIDLE                  ( 2),
-  GET_BROWSER_INFORMATION ( 3),
-  CLEAR_PRIVATE_DATA      ( 4),
-  DEFAULT                 (-1);
+  ONACTIVE(1),
+  ONIDLE(2),
+  GET_BROWSER_INFORMATION(3),
+  CLEAR_PRIVATE_DATA(4),
+  DEFAULT(-1);
 
-  private int code;
-  private static final
-  Map<Integer, CoreUtilsCommand>
-      lookup =
-      new HashMap<Integer, CoreUtilsCommand>();
+  private static final Map<Integer, CoreUtilsCommand> lookup =
+      Maps.uniqueIndex(ImmutableList.copyOf(values()), new Function<CoreUtilsCommand, Integer>() {
+        public Integer apply(CoreUtilsCommand command) {
+          return command.getCommandID();
+        }
+      });
 
-  static {
-    for (CoreUtilsCommand command : EnumSet.allOf(CoreUtilsCommand.class)) {
-      lookup.put(command.getCommandID(), command);
-    }
-  }
+  private final int code;
 
   private CoreUtilsCommand(int code) {
     this.code = code;

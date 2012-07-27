@@ -26,7 +26,6 @@ import java.util.List;
  * OperaArguments represents a command-line argument list and contains individual arguments
  * represented by {@link OperaArgument}'s.
  *
- * @author Andreas Tolf Tolfsen <andreastt@opera.com>
  * @see com.opera.core.systems.arguments.OperaDesktopArguments , com.opera.core.systems.runner.arguments.OperaCoreArguments,
  *      OperaArgument
  */

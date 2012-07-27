@@ -21,8 +21,6 @@ import java.nio.channels.SelectableChannel;
 
 /**
  * Interface for use with SocketMonitor for being notified about read/write events.
- *
- * @author Jan Vidar Krey
  */
 public interface SocketListener {
 

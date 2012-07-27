@@ -32,8 +32,6 @@ import java.util.logging.Logger;
 
 /**
  * SystemInputManager handles systemInput simulating real clicks, and key presses.
- *
- * @author Adam Minchinton, Karianne Ekern
  */
 public class SystemInputManager extends AbstractService implements ISystemInput {
 
@@ -153,16 +151,15 @@ public class SystemInputManager extends AbstractService implements ISystemInput 
 }
 
 /**
- * DSK-348590 shows that two single clicks might be interpreted as a double click.
- * Since we can't really expect the test authors to put a delay after each single click
- * we delay a click if less time than constitutes the OS double click interval passed
- * since the last click.
+ * DSK-348590 shows that two single clicks might be interpreted as a double click. Since we can't
+ * really expect the test authors to put a delay after each single click we delay a click if less
+ * time than constitutes the OS double click interval passed since the last click.
  *
- * This may introduce new failures to tests that actually expect that two clicks will
- * make a double click, but that should be fixed by the test authors.
+ * This may introduce new failures to tests that actually expect that two clicks will make a double
+ * click, but that should be fixed by the test authors.
  */
-class ClickDelayer
-{
+class ClickDelayer {
+
   protected final Logger logger = Logger.getLogger(this.getClass().getName());
 
   protected long lastClickTime = 0;
@@ -180,12 +177,13 @@ class ClickDelayer
             long remainingTime = doubleClickTime - timeSinceLastClick;
 
             if (remainingTime > 0) {
-              logger.fine(String.format("Delaying click in order to avoid double-click - check your test (last click was %d ms ago, OS double click timeout is %d ms)", timeSinceLastClick, doubleClickTime));
+              logger.fine(String.format(
+                  "Delaying click in order to avoid double-click - check your test (last click was %d ms ago, OS double click timeout is %d ms)",
+                  timeSinceLastClick, doubleClickTime));
               try {
                 // 100 ms chosen as a safe value for avoiding the double click, this may need adapting.
                 Thread.sleep(remainingTime + 100);
-              }
-              catch (InterruptedException e) {
+              } catch (InterruptedException e) {
                 logger.warning("*** Delay was interrupted ***");
               }
             }

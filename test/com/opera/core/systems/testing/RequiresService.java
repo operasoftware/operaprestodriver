@@ -7,8 +7,6 @@ import java.lang.annotation.Target;
 
 /**
  * Ensures that the core service is version 2.1 or higher (which includes meta information).
- *
- * @author Andreas Tolf Tolfsen <andreastt@opera.com>
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)

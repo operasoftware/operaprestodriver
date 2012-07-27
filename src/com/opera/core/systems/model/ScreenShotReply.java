@@ -20,9 +20,7 @@ import java.util.List;
 
 /**
  * A wrapper object for screenshot reply, is used to overcome the problem of two different protocols
- * (XML/PB)
- *
- * @author Deniz Turkoglu <dturkoglu@opera.com>
+ * (XML/PB).
  */
 public class ScreenShotReply {
 

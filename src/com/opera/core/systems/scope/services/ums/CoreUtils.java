@@ -33,9 +33,6 @@ import org.openqa.selenium.WebDriverException;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * @author Andreas Tolf Tolfsen <andreastt@opera.com>
- */
 public class CoreUtils extends AbstractService implements ICoreUtils {
 
   private boolean supportsMeta = false;

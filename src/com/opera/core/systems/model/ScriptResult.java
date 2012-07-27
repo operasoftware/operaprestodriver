@@ -20,8 +20,6 @@ package com.opera.core.systems.model;
  * Holds the result of a script execution, namely for an object.  The Scope protocol assigns an
  * object ID for each object retrieved through the protocol, this ID can be used later to release
  * the object.
- *
- * @author Deniz Turkoglu <dturkoglu@opera.com>
  */
 public class ScriptResult {
 

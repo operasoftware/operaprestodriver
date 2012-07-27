@@ -73,8 +73,6 @@ import java.util.logging.Logger;
 
 /**
  * Implements the interface to the Scope protocol.
- *
- * @author Deniz Turkoglu <dturkoglu@opera.com>, Andreas Tolf Tolfsen <andreastt@opera.com>
  */
 public class ScopeServices implements IConnectionHandler {
 

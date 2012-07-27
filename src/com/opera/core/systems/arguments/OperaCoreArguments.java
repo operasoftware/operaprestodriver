@@ -20,8 +20,6 @@ import com.opera.core.systems.OperaArguments;
 
 /**
  * Handles a list of strings/arguments for the Opera core binary.
- *
- * @author Andreas Tolf Tolfsen <andreastt@opera.com>
  */
 public class OperaCoreArguments extends OperaArguments {
 

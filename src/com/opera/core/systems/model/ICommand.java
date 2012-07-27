@@ -18,9 +18,7 @@ package com.opera.core.systems.model;
 
 /**
  * A Scope command that is assigned by an id (int) and a service name (string), as specified by the
- * scope protocol.
- *
- * @author Deniz Turkoglu <dturkoglu@opera.com>
+ * Scope protocol.
  */
 public interface ICommand {
 

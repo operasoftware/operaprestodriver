@@ -35,9 +35,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.openqa.selenium.Platform.WINDOWS;
 
-/**
- * @author Andreas Tolf Tolfsen <andreastt@opera.com>
- */
 public class WindowTest extends OperaDriverTestCase {
 
   public WindowPage windowPage;

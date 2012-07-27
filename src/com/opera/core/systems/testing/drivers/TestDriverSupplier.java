@@ -28,7 +28,6 @@ import com.opera.core.systems.OperaSettings;
  * settings on a supplier and query programmatically whether it supplies a driver of the given
  * type.
  *
- * @author Andreas Tolf Tolfsen <andreastt@opera.com>
  * @see TestDriverBuilder
  */
 public interface TestDriverSupplier extends Supplier<TestDriver> {

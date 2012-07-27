@@ -27,9 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * OperaUIElement
- *
- * @author Karianne Ekern <karie@opera.com>
+ * Represents a user-interface element in the Opera Desktop browser.
  */
 public abstract class OperaUIElement {
 

@@ -21,9 +21,7 @@ import org.openqa.selenium.Cookie;
 import java.util.Set;
 
 /**
- * New cookie manager service (work in progress)
- *
- * @author Deniz Turkoglu <dturkoglu@opera.com>
+ * New cookie manager service (work in progress).
  */
 public interface ICookieManager {
 

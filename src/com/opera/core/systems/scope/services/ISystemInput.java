@@ -24,8 +24,6 @@ import java.util.List;
 
 /**
  * Interface for SystemInput.
- *
- * @author Adam Minchinton <adamm@opera.com>, Karianne Ekern <karie@opera.com>
  */
 public interface ISystemInput {
 

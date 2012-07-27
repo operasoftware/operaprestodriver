@@ -31,9 +31,6 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/**
- * @author Adam Minchinton, Karianne Ekern
- */
 public class DesktopUtils extends AbstractService implements IDesktopUtils {
 
   private static final String SERVICE_NAME = "desktop-utils";

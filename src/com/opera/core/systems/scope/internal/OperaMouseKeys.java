@@ -17,9 +17,7 @@ limitations under the License.
 package com.opera.core.systems.scope.internal;
 
 /**
- * Enumerator for native mouse key events
- *
- * @author Deniz Turkoglu <dturkoglu@opera.com>
+ * Enumerator for native mouse key events.
  */
 public enum OperaMouseKeys {
 

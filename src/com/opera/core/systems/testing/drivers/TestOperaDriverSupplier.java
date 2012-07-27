@@ -16,9 +16,6 @@ limitations under the License.
 
 package com.opera.core.systems.testing.drivers;
 
-/**
- * @author Andreas Tolf Tolfsen <andreastt@opera.com>
- */
 public class TestOperaDriverSupplier extends AbstractTestDriverSupplier {
 
   public TestOperaDriver get() {

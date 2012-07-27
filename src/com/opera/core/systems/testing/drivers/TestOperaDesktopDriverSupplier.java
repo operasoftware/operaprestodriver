@@ -18,9 +18,6 @@ package com.opera.core.systems.testing.drivers;
 
 import com.opera.core.systems.OperaProduct;
 
-/**
- * @author Andreas Tolf Tolfsen <andreastt@opera.com>
- */
 public class TestOperaDesktopDriverSupplier extends AbstractTestDriverSupplier {
 
   public TestOperaDesktopDriverSupplier() {

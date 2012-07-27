@@ -16,15 +16,12 @@ limitations under the License.
 
 package com.opera.core.systems.testing;
 
-import com.opera.core.systems.testing.drivers.TestOperaDesktopDriver;
-import com.opera.core.systems.testing.drivers.TestOperaDesktopDriverSupplier;
 import com.opera.core.systems.testing.drivers.TestOperaMobileDriver;
 import com.opera.core.systems.testing.drivers.TestOperaMobileDriverSupplier;
 
 /**
  * Test framework for {@link com.opera.core.systems.OperaMobileDriver}.
  *
- * @author Andreas Tolf Tolfsen <andreastt@opera.com>
  * @see OperaDriverTestCase, OperaDesktopDriverTestCase
  */
 public abstract class OperaMobileDriverTestCase extends AbstractTestCase {

@@ -44,10 +44,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Logger;
 
-/**
- * @author Adam Minchinton, Karianne Ekern
- */
-
 public class DesktopWindowManager extends AbstractService implements IDesktopWindowManager {
 
   protected final Logger logger = Logger.getLogger(this.getClass().getName());
@@ -97,10 +93,11 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
     for (QuickWindow window : windows) {
       if (property.equals(QuickWidgetSearchType.NAME)) {
         if (window.getName().equals(value)) {
-          if (window.isOnScreen())
+          if (window.isOnScreen()) {
             return window;
-          else
+          } else {
             lastFound = window;
+          }
         }
       }
     }

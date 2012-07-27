@@ -25,9 +25,6 @@ import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearch.Qui
 
 import java.util.List;
 
-/**
- * @author Adam Minchinton <adamm@opera.com>, Karianne Ekern <karie@opera.com>
- */
 public interface IDesktopWindowManager {
 
   /**

@@ -24,8 +24,6 @@ import java.util.Set;
 
 /**
  * A set that stores strings and compares them case-insensitively.
- *
- * @author Stuart Knightley <stuartk@opera.com>
  */
 public class CaseInsensitiveStringSet implements Set<String> {
 

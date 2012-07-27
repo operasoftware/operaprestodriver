@@ -37,8 +37,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
  *
  * The {@link Supplier} class supplies objects of a single type.  Semantically that could be
  * factories, generators, builders, closures, or something else entirely.
- *
- * @author Andreas Tolf Tolfsen <andreastt@opera.com>
  */
 public class TestDriverBuilder implements Supplier<TestDriver> {
 

@@ -18,8 +18,6 @@ package com.opera.core.systems.util;
 
 /**
  * A replacement for a subset of {@link com.sun.xml.internal.ws.util.VersionUtil}.
- *
- * @author Jan Vidar Krey
  */
 public class VersionUtil {
 

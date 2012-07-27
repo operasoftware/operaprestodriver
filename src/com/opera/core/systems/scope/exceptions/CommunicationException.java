@@ -24,10 +24,6 @@ import org.openqa.selenium.WebDriverException;
  */
 public class CommunicationException extends WebDriverException {
 
-  public CommunicationException() {
-    super();
-  }
-
   public CommunicationException(Exception e) {
     super(e);
   }

@@ -22,7 +22,6 @@ import com.opera.core.systems.testing.drivers.TestOperaDesktopDriverSupplier;
 /**
  * Test framework for {@link com.opera.core.systems.OperaDesktopDriver}.
  *
- * @author Andreas Tolf Tolfsen <andreastt@opera.com>
  * @see OperaDriverTestCase
  */
 public abstract class OperaDesktopDriverTestCase extends AbstractTestCase {

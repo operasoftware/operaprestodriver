@@ -27,8 +27,6 @@ import java.util.List;
 
 /**
  * Represents a menu in the Opera desktop UI.
- *
- * @author Karianne Ekern
  */
 public class QuickMenu {
 

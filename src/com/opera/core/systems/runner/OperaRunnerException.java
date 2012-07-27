@@ -19,10 +19,7 @@ package com.opera.core.systems.runner;
 /**
  * Used whenever the runner implementation has problems.  We are _not_ supposed to fix launcher
  * problems.  Just pass them upwards.
- *
- * @author Anders Oredsson <anderso@opera.com>
  */
-@SuppressWarnings("serial")
 public class OperaRunnerException extends RuntimeException {
 
   public OperaRunnerException(Exception e) {
