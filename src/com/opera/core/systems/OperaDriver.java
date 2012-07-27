@@ -285,7 +285,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot, Run
             services.quit();
           }
         } catch (Exception e) {
-          if (runner != null) {
+          if (runner != null && runner.isOperaRunning()) {
             runner.stopOpera();
           } else {
             Throwables.propagateIfPossible(e);
