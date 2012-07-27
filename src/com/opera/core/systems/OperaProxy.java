@@ -272,9 +272,11 @@ public class OperaProxy {
    * instance.
    */
   public void parse(Proxy proxy) {
-    if (proxy.getProxyType() != Proxy.ProxyType.UNSPECIFIED) {
-      reset();
+    if (proxy.getProxyType() == Proxy.ProxyType.UNSPECIFIED) {
+      return;
     }
+
+    reset();
 
     switch (proxy.getProxyType()) {
       case DIRECT:
