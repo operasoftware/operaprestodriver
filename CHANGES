@@ -1,3 +1,69 @@
+v0.16     (not released)
+
+  [API CHANGES]
+
+  * Introduced OperaMobileDriver class, exposing the following
+    additional APIs (inherits from OperaDriver):
+
+      - void rotate(ScreenOrientation orientation)
+      - ScreenOrientation getOrientation()
+      - TouchScreen getTouch()
+
+  * Several Opera specific features are now declared in role-based
+    interfaces, and the different products in OperaDriver implements
+    different sets of these interfaces.  This should help future
+    compatibility with the Selenium remote driver.  (andreastt)
+
+  * OperaProduct#toString() will now return an actual string
+    representation of the product, and not the identifier string.  To
+    get the identifier, please use
+    OperaProduct#getDescriptionString().
+
+  [NEW FEATURES]
+
+  * Support for Opera Mobile:
+
+    - Partial support for TouchScreen.  down(), up(), move(), scroll()
+      and flick() will currently throw UnsupportedOperationExceptions.
+
+    - Partial support for Rotatable.
+      OperaMobileDriver#rotate(orientation) will throw
+      UnsupportedOperationException.
+
+    (andreastt)
+
+  * Support for Selenium's Proxy configuration.  (mexicano, andreastt)
+
+  [ENHANCEMENTS]
+
+  [BUG FIXES]
+
+  * Fix OPERA_ARGS not being parsed always.  (andreastt)
+
+  * Fix OperaDriver#quit() to not hide any recursive exceptions,
+    especially dealing with garbage collection.  (virgild, andreastt)
+
+  * Fix some cases of double-wrapped WebDriverExceptions.  (andreastt)
+
+  * Checks for connection and null pointers in OperaDriver#get().
+    (virgild)
+
+  [TESTS]
+
+  * Adapt test framework to support OperaMobileDriver.  (andreastt)
+
+  * Run configuration for FindElementsTest.  (andreastt)
+
+  * Fix OperaFilePreferencesTest for Mobile and cache
+    product/platform.  (andreastt)
+
+  [OTHER]
+
+  * Upgraded the WebDriver atoms.  (andreastt)
+
+  * Fix static analysis exclusions.  (danielb)
+
+
 v0.15     (2012-07-23)
 
   [API CHANGES]
