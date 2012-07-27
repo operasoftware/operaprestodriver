@@ -31,7 +31,6 @@ public class OperaMobileDriver extends OperaDriver implements HasTouchScreen, Ro
   private TouchScreen touchScreen;
 
   public OperaMobileDriver() {
-    //super();
     this(new OperaSettings.Builder().product(OperaProduct.MOBILE).get());
   }
 
