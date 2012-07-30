@@ -23,6 +23,7 @@ import org.openqa.selenium.WebDriverException;
 
 import java.util.logging.Logger;
 
+import static com.opera.core.systems.OperaProduct.MOBILE;
 import static com.opera.core.systems.OperaProxy.ProxyToPreference.AUTOMATIC_PROXY_CONFIGURATION_URL;
 import static com.opera.core.systems.OperaProxy.ProxyToPreference.ENABLE_PROXY;
 import static com.opera.core.systems.OperaProxy.ProxyToPreference.FTP_SERVER;
@@ -75,10 +76,12 @@ public class OperaProxy {
 
   private final Logger logger = Logger.getLogger(getClass().getName());
   private final OperaDriver driver;
+  private final OperaProduct product;
   private final OperaScopePreferences preferences;
 
   public OperaProxy(OperaDriver parent) {
     driver = parent;
+    product = driver.utils().getProduct();
     preferences = driver.preferences();
   }
 
@@ -145,6 +148,7 @@ public class OperaProxy {
    * @return the SOCKS proxy if present, null otherwise
    */
   public String getSocksProxy() {
+    assertNotMobile();
     return (String) getProxyValue(SOCKS_SERVER);
   }
 
@@ -155,6 +159,7 @@ public class OperaProxy {
    * @param host the proxy host, expected format is <code>hostname.com:1234</code>
    */
   public void setSocksProxy(String host) {
+    assertNotMobile();
     setProxyValue(SOCKS_SERVER, host);
     setProxyValue(USE_SOCKS, host != null);
   }
@@ -165,6 +170,7 @@ public class OperaProxy {
    * @return the SOCKS proxy's username
    */
   public String getSocksUsername() {
+    assertNotMobile();
     return (String) getProxyValue(SOCKS_USERNAME);
   }
 
@@ -174,6 +180,7 @@ public class OperaProxy {
    * @param username username for the SOCKS proxy
    */
   public void setSocksUsername(String username) {
+    assertNotMobile();
     setProxyValue(SOCKS_USERNAME, username);
   }
 
@@ -183,6 +190,7 @@ public class OperaProxy {
    * @return the SOCKS proxy's password
    */
   public String getSocksPassword() {
+    assertNotMobile();
     return (String) getProxyValue(SOCKS_PASSWORD);
   }
 
@@ -192,6 +200,7 @@ public class OperaProxy {
    * @param password password for the SOCKS proxy
    */
   public void setSocksPassword(String password) {
+    assertNotMobile();
     setProxyValue(SOCKS_PASSWORD, password);
   }
 
@@ -255,6 +264,9 @@ public class OperaProxy {
    * @return true if proxy is enabled, false otherwise
    */
   public boolean isEnabled() {
+    if (product.is(MOBILE)) {
+      return true;
+    }
     return (Boolean) getProxyValue(ENABLE_PROXY);
   }
 
@@ -264,6 +276,7 @@ public class OperaProxy {
    * @param enabled set to true to enable, false to disable
    */
   public void setEnabled(boolean enabled) {
+    assertNotMobile();
     setProxyValue(ENABLE_PROXY, enabled);
   }
 
@@ -280,12 +293,16 @@ public class OperaProxy {
 
     switch (proxy.getProxyType()) {
       case DIRECT:
-        setEnabled(false);
+        if (!product.is(MOBILE)) {
+          setEnabled(false);
+        }
         setUsePAC(false);
         break;
 
       case MANUAL:
-        setEnabled(true);
+        if (!product.is(MOBILE)) {
+          setEnabled(true);
+        }
         setUsePAC(false);
 
         // TODO(andreastt): HTTPS proxy
@@ -301,7 +318,9 @@ public class OperaProxy {
         break;
 
       case PAC:
-        setEnabled(true);
+        if (!product.is(MOBILE)) {
+          setEnabled(true);
+        }
         setUsePAC(true);
 
         if (proxy.getProxyAutoconfigUrl() != null) {
@@ -319,7 +338,11 @@ public class OperaProxy {
     assertIsConnected();
 
     for (ProxyToPreference preference : ProxyToPreference.values()) {
-      preferences.get(PROXY_SECTION, preference.getPreferenceKey()).reset();
+      OperaScopePreferences.ScopePreference p = preferences.get(PROXY_SECTION,
+                                                                preference.getPreferenceKey());
+      if (p != null) {
+        p.reset();
+      }
     }
   }
 
@@ -339,6 +362,13 @@ public class OperaProxy {
   private void assertIsConnected() {
     if (!driver.getScopeServices().isConnected()) {
       throw new WebDriverException("Unable to update proxy configuration; not connected!");
+    }
+  }
+
+  private void assertNotMobile() {
+    if (product.is(MOBILE)) {
+      throw new UnsupportedOperationException(String.format(
+          "Proxy setting not supported by product %s", product));
     }
   }
 
