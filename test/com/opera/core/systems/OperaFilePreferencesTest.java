@@ -43,8 +43,6 @@ import java.util.logging.Logger;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 @NoDriver
@@ -104,7 +102,7 @@ public class OperaFilePreferencesTest extends OperaDriverTestCase {
   @After
   public void afterEach() {
     if (driver != null && driver.isRunning()) {
-       try {
+      try {
         driver.quit();
       } catch (RuntimeException e) {
         logger.warning(Throwables.getStackTraceAsString(e));
@@ -238,4 +236,5 @@ public class OperaFilePreferencesTest extends OperaDriverTestCase {
     assertEquals("", prefs.get("Test", "PrefWithNoValue").getValue());
     assertEquals(true, prefs.get("Test", "PrefWithValue").getValue());
   }
+
 }
