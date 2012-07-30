@@ -17,11 +17,10 @@ limitations under the License.
 package com.opera.core.systems.pages;
 
 import com.opera.core.systems.testing.Pages;
-import com.opera.core.systems.testing.drivers.TestOperaDriver;
+import com.opera.core.systems.testing.drivers.TestDriver;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 
 public class IFramePage extends Page {
@@ -29,7 +28,7 @@ public class IFramePage extends Page {
   @FindBy(name = "the-iframe")
   WebElement iFrame;
 
-  public IFramePage(TestOperaDriver driver, Pages pages) {
+  public IFramePage(TestDriver driver, Pages pages) {
     super(driver, pages);
     driver.navigate().to(pages.iframes);
   }
