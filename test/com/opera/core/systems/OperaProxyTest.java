@@ -16,6 +16,7 @@ limitations under the License.
 
 package com.opera.core.systems;
 
+import com.opera.core.systems.testing.Ignore;
 import com.opera.core.systems.testing.OperaDriverTestCase;
 
 import org.junit.After;
@@ -25,6 +26,7 @@ import org.openqa.selenium.Proxy;
 import org.openqa.selenium.Proxy.ProxyType;
 import org.openqa.selenium.WebDriverException;
 
+import static com.opera.core.systems.OperaProduct.MOBILE;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
@@ -100,30 +102,71 @@ public class OperaProxyTest extends OperaDriverTestCase {
 
   @Test
   public void socksProxy() {
-    proxy.setSocksProxy(host);
-    assertEquals(host, proxy.getSocksProxy());
-    assertTrue(proxy.isEnabled());
-    assertFalse(proxy.isUsePAC());
-    assertNull(proxy.getSocksUsername());
-    assertNull(proxy.getSocksPassword());
+    if (currentProduct().is(MOBILE)) {
+      try {
+        proxy.setSocksProxy(host);
+        fail("Expected UnsupportedOperationException");
+      } catch (RuntimeException e) {
+        assertThat(e, is(instanceOf(UnsupportedOperationException.class)));
+        assertThat(e.getMessage(), containsString("Proxy setting not supported by product"));
+      }
+    } else {
+      proxy.setSocksProxy(host);
+      assertEquals(host, proxy.getSocksProxy());
+      assertTrue(proxy.isEnabled());
+      assertFalse(proxy.isUsePAC());
+      assertNull(proxy.getSocksUsername());
+      assertNull(proxy.getSocksPassword());
+    }
   }
 
   @Test
   public void socksProxyDefault() {
-    assertNull(proxy.getSocksProxy());
+    if (currentProduct().is(MOBILE)) {
+      try {
+        proxy.getSocksProxy();
+        fail("Expected UnsupportedOperationException");
+      } catch (RuntimeException e) {
+        assertThat(e, is(instanceOf(UnsupportedOperationException.class)));
+        assertThat(e.getMessage(), containsString("Proxy setting not supported by product"));
+      }
+    } else {
+      assertNull(proxy.getSocksProxy());
+    }
   }
 
   @Test
   public void socksUsernameDefault() {
-    assertNull(proxy.getSocksUsername());
+    if (currentProduct().is(MOBILE)) {
+      try {
+        proxy.getSocksUsername();
+        fail("Expected UnsupportedOperationException");
+      } catch (RuntimeException e) {
+        assertThat(e, is(instanceOf(UnsupportedOperationException.class)));
+        assertThat(e.getMessage(), containsString("Proxy setting not supported by product"));
+      }
+    } else {
+      assertNull(proxy.getSocksUsername());
+    }
   }
 
   @Test
   public void socksPasswordDefault() {
-    assertNull(proxy.getSocksPassword());
+    if (currentProduct().is(MOBILE)) {
+      try {
+        proxy.getSocksPassword();
+        fail("Expected UnsupportedOperationException");
+      } catch (RuntimeException e) {
+        assertThat(e, is(instanceOf(UnsupportedOperationException.class)));
+        assertThat(e.getMessage(), containsString("Proxy setting not supported by product"));
+      }
+    } else {
+      assertNull(proxy.getSocksPassword());
+    }
   }
 
   @Test
+  @Ignore(products = MOBILE)
   public void socksProxyWithUsername() {
     proxy.setSocksProxy(host);
     proxy.setSocksUsername(username);
@@ -135,6 +178,7 @@ public class OperaProxyTest extends OperaDriverTestCase {
   }
 
   @Test
+  @Ignore(products = MOBILE)
   public void socksProxyWithPassword() {
     proxy.setSocksProxy(host);
     proxy.setSocksPassword(password);
@@ -146,6 +190,7 @@ public class OperaProxyTest extends OperaDriverTestCase {
   }
 
   @Test
+  @Ignore(products = MOBILE)
   public void socksProxyWithUsernameAndPassword() {
     proxy.setSocksProxy(host);
     proxy.setSocksUsername(username);
@@ -171,13 +216,22 @@ public class OperaProxyTest extends OperaDriverTestCase {
 
   @Test
   public void proxyLocalServersDefault() {
-    assertFalse(proxy.isProxyLocal());
+    if (currentProduct().is(MOBILE)) {
+      assertTrue(proxy.isProxyLocal());
+    } else {
+      assertFalse(proxy.isProxyLocal());
+    }
   }
 
   @Test
   public void proxyLocalServers() {
-    proxy.setProxyLocal(true);
-    assertTrue(proxy.isProxyLocal());
+    if (currentProduct().is(MOBILE)) {
+      proxy.setProxyLocal(false);
+      assertFalse(proxy.isProxyLocal());
+    } else {
+      proxy.setProxyLocal(true);
+      assertTrue(proxy.isProxyLocal());
+    }
   }
 
   @Test
@@ -203,8 +257,18 @@ public class OperaProxyTest extends OperaDriverTestCase {
 
   @Test
   public void proxyEnable() {
-    proxy.setEnabled(false);
-    assertFalse(proxy.isEnabled());
+    if (currentProduct().is(MOBILE)) {
+      try {
+        proxy.setEnabled(false);
+        fail("Expected UnsupportedOperationException");
+      } catch (RuntimeException e) {
+        assertThat(e, is(instanceOf(UnsupportedOperationException.class)));
+        assertThat(e.getMessage(), containsString("Proxy setting not supported by product"));
+      }
+    } else {
+      proxy.setEnabled(false);
+      assertFalse(proxy.isEnabled());
+    }
   }
 
   @Test
@@ -232,6 +296,7 @@ public class OperaProxyTest extends OperaDriverTestCase {
   }
 
   @Test
+  @Ignore(products = MOBILE)
   public void parseDirectProxyConnection() {
     Proxy p = new Proxy().setProxyType(ProxyType.DIRECT);
     proxy.parse(p);
