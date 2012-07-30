@@ -17,7 +17,6 @@ limitations under the License.
 package com.opera.core.systems;
 
 import com.opera.core.systems.scope.internal.OperaIntervals;
-import com.opera.core.systems.testing.Ignore;
 import com.opera.core.systems.testing.OperaDriverTestCase;
 
 import org.junit.After;
@@ -31,7 +30,6 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.concurrent.TimeUnit;
 
-import static com.opera.core.systems.OperaProduct.MOBILE;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -52,14 +50,12 @@ public class NavigationTest extends OperaDriverTestCase {
   }
 
   @Test
-  @Ignore(products = MOBILE)
   public void back() {
     driver.navigate().back();
     assertTrue(driver.getCurrentUrl().endsWith("test.html"));
   }
 
   @Test
-  @Ignore(products = MOBILE)
   public void forward() {
     back();
     driver.navigate().forward();
@@ -67,7 +63,6 @@ public class NavigationTest extends OperaDriverTestCase {
   }
 
   @Test
-  @Ignore(products = MOBILE)
   public void backTwice() {
     driver.navigate().back();
     driver.navigate().back();
@@ -75,7 +70,6 @@ public class NavigationTest extends OperaDriverTestCase {
   }
 
   @Test
-  @Ignore(products = MOBILE)
   public void forwardTwice() {
     backTwice();
     driver.navigate().forward();
