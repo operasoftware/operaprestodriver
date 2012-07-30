@@ -113,8 +113,7 @@ public class OperaBinaryTest extends OperaDriverTestCase {
     assertNull(OperaBinary.find(OperaProduct.MINI));
   }
 
-  @Test
-  @Ignore("requires operamobile to be installed")
+  @Test  // Important: Requires operamobile to be installed!
   public void findBasedOnPlatformMobile() {
     assertNotNull(OperaBinary.find(OperaProduct.MOBILE));
   }

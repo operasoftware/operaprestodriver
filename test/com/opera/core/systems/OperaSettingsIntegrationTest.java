@@ -69,6 +69,18 @@ public class OperaSettingsIntegrationTest extends OperaDriverTestCase {
   @After
   public void reset() {
     OperaIntervals.HANDSHAKE_TIMEOUT.setValue(defaultHandshakeTimeout);
+    settings = null;
+  }
+
+  @After
+  public void removeDriver() {
+    try {
+      if (driver != null && driver.isRunning()) {
+        driver.quit();
+      }
+    } finally {
+      driver = null;
+    }
   }
 
   @Test
@@ -82,18 +94,29 @@ public class OperaSettingsIntegrationTest extends OperaDriverTestCase {
     driver.quit();
   }
 
+  @Test
   public void binaryInvalidThrowsException() {
-    settings.setBinary(resources.fakeFile());
-
     try {
-      new TestDriverBuilder().using(settings).get();
-      fail("Expected WebDriverException");
+      settings.setBinary(resources.fakeFile());
+      fail("Expected IllegalStateException");
     } catch (RuntimeException e) {
-      assertThat(e, is(instanceOf(WebDriverException.class)));
+      assertThat(e, is(instanceOf(IllegalStateException.class)));
       // TODO(andreastt): Assert message
     }
   }
 
+  public void binaryRegistersProduct() {
+    settings.setBinary(OperaBinary.find(OperaProduct.MOBILE));
+
+    TestDriver driver = new TestDriverBuilder().using(settings).get();
+
+    assertEquals(OperaProduct.MOBILE, driver.utils().getProduct());
+    assertEquals(OperaProduct.MOBILE, driver.getSettings().getProduct());
+
+    driver.quit();
+  }
+
+  @Test
   public void autostartIsRespected() {
     settings.autostart(false);
 
@@ -167,36 +190,35 @@ public class OperaSettingsIntegrationTest extends OperaDriverTestCase {
   public void hostIsRespectedOnLaunch() {
     String host = NETWORK_UTILS.getIp4NonLoopbackAddressOfThisMachine().getHostAddress();
     settings.setHost(host);
-    TestDriver driver = new TestDriverBuilder().using(settings).get();
+    driver = new TestDriverBuilder().using(settings).get();
 
     assertNotNull(driver);
     assertEquals(host, driver.getSettings().getHost());
     assertEquals(host, driver.preferences().get("Developer Tools", "Proxy Host").getValue());
-
-    driver.quit();
   }
 
   @Test
   public void portCanBeSet() {
     settings.setPort(1234);
-    TestDriver driver = new TestDriverBuilder().using(settings).get();
+    driver = new TestDriverBuilder().using(settings).get();
     assertNotNull(driver);
     assertEquals(1234, driver.getSettings().getPort());
-    driver.quit();
   }
 
   @Test
   public void portSetToRandomIdentifier() {
     settings.setPort(SERVER_RANDOM_PORT_IDENTIFIER);
     assertNotSame(SERVER_DEFAULT_PORT, settings.getPort());
-    assertDriverCreated(settings);
+    driver = new TestDriverBuilder().using(settings).get();
+    assertNotNull(driver);
   }
 
   @Test
   public void portSetToDefaultIdentifier() {
     settings.setPort(SERVER_DEFAULT_PORT_IDENTIFIER);
     assertEquals(SERVER_DEFAULT_PORT, settings.getPort());
-    assertDriverCreated(settings);
+    driver = new TestDriverBuilder().using(settings).get();
+    assertNotNull(driver);
   }
 
   @Test
@@ -204,9 +226,8 @@ public class OperaSettingsIntegrationTest extends OperaDriverTestCase {
           value = "core does not reset port number if -debugproxy is omitted")
   public void settingPort() {
     settings.setPort(SERVER_DEFAULT_PORT_IDENTIFIER);
-    TestDriver driver = new TestDriverBuilder().using(settings).get();
+    driver = new TestDriverBuilder().using(settings).get();
     assertNotNull(driver);
-    driver.quit();
   }
 
   /**
@@ -219,25 +240,22 @@ public class OperaSettingsIntegrationTest extends OperaDriverTestCase {
     File binary = OperaBinary.find();
     environment.set(OperaBinary.OPERA_PATH_ENV_VAR, binary.getPath());
 
-    TestDriver driver = new TestDriverBuilder().get();
+    driver = new TestDriverBuilder().get();
 
     assertEquals(binary.getCanonicalPath(), driver.getSettings().getBinary().getCanonicalPath());
     assertEquals(binary.getCanonicalPath(), driver.utils().getBinaryPath());
-
-    driver.quit();
   }
 
   @Test
   @NeedsLocalEnvironment
   public void detachBrowser() {
-    OperaSettings settings = new OperaSettings();
     settings.setDetach(true);
 
-    TestDriver driver = new TestDriverBuilder().using(settings).get();
+    driver = new TestDriverBuilder().using(settings).get();
     int processID = driver.utils().getPID();
-    driver.quit();
 
     // Driver should be shut down, and there should be no connection to browser
+    driver.quit();
     assertFalse(driver.getServices().isConnected());
 
     // But browser should be running
@@ -246,10 +264,30 @@ public class OperaSettingsIntegrationTest extends OperaDriverTestCase {
     ProcessManager.killPID(processID);
   }
 
-  private void assertDriverCreated(OperaSettings settings) {
-    TestDriver driver = new TestDriverBuilder().using(settings).get();
-    assertNotNull(driver);
-    driver.quit();
+  @Test
+  public void defaultProductIsRegistered() {
+    driver = new TestDriverBuilder().using(settings).get();
+
+    assertEquals(OperaProduct.DESKTOP, driver.utils().getProduct());
+    assertEquals(OperaProduct.DESKTOP, driver.getSettings().getProduct());
+  }
+
+  @Test
+  public void desktopProductIsRegistered() {
+    settings.setProduct(OperaProduct.DESKTOP);
+    driver = new TestDriverBuilder().using(settings).get();
+
+    assertEquals(OperaProduct.DESKTOP, driver.utils().getProduct());
+    assertEquals(OperaProduct.DESKTOP, driver.getSettings().getProduct());
+  }
+
+  @Test
+  public void mobileProductIsRegistered() {
+    settings.setProduct(OperaProduct.MOBILE);
+    driver = new TestDriverBuilder().using(settings).get();
+
+    assertEquals(OperaProduct.MOBILE, driver.utils().getProduct());
+    assertEquals(OperaProduct.MOBILE, driver.getSettings().getProduct());
   }
 
 }

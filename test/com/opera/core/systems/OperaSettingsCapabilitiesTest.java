@@ -527,7 +527,7 @@ public class OperaSettingsCapabilitiesTest extends OperaDriverTestCase {
 
   @Test
   public void productSanitizeValidString() {
-    Object product = PRODUCT.sanitize("mobile");
+    Object product = PRODUCT.sanitize(OperaProduct.MOBILE.getDescriptionString());
     assertTrue(product instanceof OperaProduct);
     assertEquals(OperaProduct.MOBILE, product);
   }
