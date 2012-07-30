@@ -15,7 +15,9 @@
     <option name="TEST_SEARCH_SCOPE">
       <value defaultName="moduleWithDependencies" />
     </option>
-    <envs />
+    <envs>
+      <env name="OPERA_PATH" value="$PROJECT_DIR$/../bream-work/platforms/qtbream/opera/operamobile" />
+    </envs>
     <patterns />
     <RunnerSettings RunnerId="Debug">
       <option name="DEBUG_PORT" value="" />

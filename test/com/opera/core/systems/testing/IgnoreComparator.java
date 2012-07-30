@@ -42,11 +42,13 @@ public class IgnoreComparator {
 
     for (OperaProduct product : ignoreAnnotation.products()) {
       if (product.is(currentProduct)) {
-        for (Platform platform : ignoreAnnotation.platforms()) {
-          if (platform.is(currentPlatform)) {
-            return true;
-          }
-        }
+        return true;
+      }
+    }
+
+    for (Platform platform : ignoreAnnotation.platforms()) {
+      if (platform.is(currentPlatform)) {
+        return true;
       }
     }
 

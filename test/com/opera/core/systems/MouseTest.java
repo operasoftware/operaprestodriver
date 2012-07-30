@@ -33,6 +33,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.opera.core.systems.OperaProduct.MOBILE;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertTrue;
@@ -125,7 +126,8 @@ public class MouseTest extends OperaDriverTestCase {
   }
 
   @Test
-  @Ignore(platforms = {MAC, WINDOWS},
+  @Ignore(products = MOBILE,
+          platforms = {MAC, WINDOWS},
           value = "Need investigation, probably related to OS native events")
   public void doubleClick() {
     getMouse().doubleClick(test.getCoordinates());
