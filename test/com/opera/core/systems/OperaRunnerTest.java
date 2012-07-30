@@ -22,6 +22,7 @@ import com.opera.core.systems.arguments.OperaArgument;
 import com.opera.core.systems.arguments.OperaCoreArguments;
 import com.opera.core.systems.arguments.OperaDesktopArguments;
 import com.opera.core.systems.runner.OperaRunner;
+import com.opera.core.systems.testing.NoDriver;
 import com.opera.core.systems.testing.OperaDriverTestCase;
 
 import org.junit.AfterClass;
@@ -41,6 +42,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+@NoDriver
 public class OperaRunnerTest extends OperaDriverTestCase {
 
   public static TestOperaRunner runner;
@@ -50,15 +52,6 @@ public class OperaRunnerTest extends OperaDriverTestCase {
 
   @Rule
   public TemporaryFolder temporaryProfile;
-
-  // Replace OperaDriverTestCase setup and tear down so that we don't launch Opera
-  @BeforeClass
-  public static void setUpBeforeClass() {
-  }
-
-  @AfterClass
-  public static void tearDownAfterClass() {
-  }
 
   @Before
   public void beforeEach() throws IOException {
