@@ -40,6 +40,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 public class TestDriverBuilder implements Supplier<TestDriver> {
 
+  public static final String TEST_PRODUCT_OPTION_KEY = "selenium.browser.product";
+
   private Class<? extends TestDriver> driverClass = null;
   private TestDriverSupplier driverSupplier;
   private OperaSettings settings = new OperaSettings();
@@ -146,7 +148,7 @@ public class TestDriverBuilder implements Supplier<TestDriver> {
   }
 
   public static TestDriverSupplier detect() {
-    OperaProduct product = OperaProduct.get(System.getProperty("test.opera.product"));
+    OperaProduct product = OperaProduct.get(System.getProperty(TEST_PRODUCT_OPTION_KEY));
 
     switch (product) {
       case DESKTOP:
