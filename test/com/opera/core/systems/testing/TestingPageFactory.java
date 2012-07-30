@@ -22,8 +22,11 @@ import org.openqa.selenium.support.PageFactory;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.logging.Logger;
 
 public class TestingPageFactory extends PageFactory {
+
+  private static final Logger logger = Logger.getLogger(TestingPageFactory.class.getName());
 
   public static <T> T initElements(TestDriver driver, Pages pages, Class<T> pageClassToProxy) {
     T page = instantiatePage(driver, pages, pageClassToProxy);
@@ -33,11 +36,12 @@ public class TestingPageFactory extends PageFactory {
 
   private static <T> T instantiatePage(TestDriver driver, Pages pages, Class<T> pageClassToProxy) {
     try {
+      Constructor<T> constructor = null;
       try {
-        Constructor<T>
-            constructor = pageClassToProxy.getConstructor(driver.getClass(), pages.getClass());
+        constructor = pageClassToProxy.getConstructor(TestDriver.class, pages.getClass());
         return constructor.newInstance(driver, pages);
       } catch (NoSuchMethodException e) {
+        logger.warning(String.format("Unable to find constructor: %s", constructor));
         return pageClassToProxy.newInstance();
       }
     } catch (InstantiationException e) {
