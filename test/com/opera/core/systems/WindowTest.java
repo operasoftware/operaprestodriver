@@ -25,6 +25,7 @@ import com.opera.core.systems.testing.TestingPageFactory;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.openqa.selenium.TimeoutException;
 
 import static com.opera.core.systems.OperaProduct.CORE;
 import static com.opera.core.systems.OperaProduct.DESKTOP;
@@ -33,21 +34,28 @@ import static com.opera.core.systems.OperaProduct.MOBILE;
 import static com.opera.core.systems.OperaProduct.SDK;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.fail;
 import static org.openqa.selenium.Platform.WINDOWS;
 
+@Ignore(products = OperaProduct.MOBILE)
 public class WindowTest extends OperaDriverTestCase {
 
   public WindowPage windowPage;
 
   @Before
   public void bindPage() {
+    createDriverIfNecessary();
     windowPage = TestingPageFactory.initElements(driver, pages, WindowPage.class);
   }
 
   @After
   public void prepareNextTest() {
-    while (driver.getWindowHandles().size() > 1) {
-      driver.close();
+    try {
+      while (driver.getWindowHandles().size() > 1) {
+        driver.close();
+      }
+    } catch (TimeoutException e) {
+      fail("Failed to close windows after test: " + e.getMessage());
     }
   }
 

@@ -74,7 +74,7 @@ public class WindowPage extends Page {
     // TODO: OPDRV-199
     windowLink.click();
     try {
-      Thread.sleep(100);
+      Thread.sleep(500);
     } catch (InterruptedException e) {
       fail("Interrupted");
     }

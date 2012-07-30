@@ -382,12 +382,13 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot, Run
       windowManager.closeWindow(windowManager.getActiveWindowId());
     }
 
-    // Gogi and Desktop on Windows does not close its last window, but we need to follow the
-    // WebDriver spec
+    // Gogi and Desktop on Windows, and Mobile, does not close its last window, but we need to
+    // follow the WebDriver spec and quit the browser when the last open window is closed
     OperaProduct product = utils().getProduct();
 
     if (getWindowCount() == 0 ||
-        ((product.is(CORE) || (product.is(DESKTOP) && Platform.getCurrent().is(WINDOWS)))
+        (((product.is(CORE) || (product.is(DESKTOP) && Platform.getCurrent().is(WINDOWS)))
+          || product.is(MOBILE))
          && windowCountBeforeClose == 1)) {
       quit();
     } else {
