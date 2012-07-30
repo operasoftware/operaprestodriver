@@ -23,10 +23,7 @@ import com.opera.core.systems.OperaSettings;
 
 import org.openqa.selenium.Capabilities;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.logging.Level;
-
-import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * TestDriverBuilder is a builder that supplies you with instances of {@link TestDriver} through the
@@ -67,16 +64,6 @@ public class TestDriverBuilder implements Supplier<TestDriver> {
   }
 
   /**
-   * You may build a new Opera instance by specifying a custom driver class.  The class must extend
-   * the {@link TestDriver} interface.
-   *
-   * @param driverImplementation class reference to driver implementation
-   */
-  public TestDriverBuilder(Class<? extends TestDriver> driverImplementation) {
-    driverClass = driverImplementation;
-  }
-
-  /**
    * Specify which settings you'd like the driver to be instantiated with.
    *
    * @param settings settings for the driver
@@ -104,7 +91,6 @@ public class TestDriverBuilder implements Supplier<TestDriver> {
    * @param level the logging level you wish the driver to use
    * @return a self reference
    */
-  @SuppressWarnings("unused")
   public TestDriverBuilder modifyLogLevel(Level level) {
     loggingLevel = level;
     return this;
@@ -123,26 +109,8 @@ public class TestDriverBuilder implements Supplier<TestDriver> {
       settings.logging().setLevel(loggingLevel);
     }
 
-    if (driverSupplier == null) {
-      checkNotNull(driverClass, "No driver class specified");
-
-      try {
-        Class constructor = driverClass
-            .getClass().getConstructor(Class.class).newInstance(settings);
-        driver = (TestDriver) constructor.newInstance();
-      } catch (NoSuchMethodException e) {
-        throw new RuntimeException("Unable to recognize implementation's constructor");
-      } catch (IllegalAccessException e) {
-        throw new RuntimeException("Illegal access: " + e.getMessage());
-      } catch (InvocationTargetException e) {
-        throw new RuntimeException(e);
-      } catch (InstantiationException e) {
-        throw new RuntimeException(e);
-      }
-    } else {
-      driverSupplier.setSettings(settings);
-      driver = driverSupplier.get();
-    }
+    driverSupplier.setSettings(settings);
+    driver = driverSupplier.get();
 
     return driver;
   }
