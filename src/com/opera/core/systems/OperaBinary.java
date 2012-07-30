@@ -205,7 +205,7 @@ public class OperaBinary {
     checkState(!executable.isDirectory(),
                "The executable is a directory: %s", executable.getPath());
     checkState(executable.canExecute(),
-               "The is not executable: %s", executable.getPath());
+               "The file is not executable: %s", executable.getPath());
   }
 
 }

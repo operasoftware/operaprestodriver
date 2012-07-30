@@ -3,15 +3,10 @@ package com.opera.core.systems;
 import com.opera.core.systems.testing.OperaDriverTestCase;
 
 import org.junit.After;
-import org.junit.Ignore;
 import org.junit.Test;
-import org.openqa.selenium.WebDriverException;
-
-import java.io.File;
 
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
@@ -63,7 +58,7 @@ public class OperaBinaryTest extends OperaDriverTestCase {
 
     assertThat(exception, is(instanceOf(IllegalStateException.class)));
     assertThat(exception.getMessage(),
-               containsString("Opera binary does not exist or is not a real file"));
+               containsString("The executable does not exist: does/not/exist"));
   }
 
   @Test
@@ -77,7 +72,7 @@ public class OperaBinaryTest extends OperaDriverTestCase {
     }
 
     assertThat(exception, is(instanceOf(IllegalStateException.class)));
-    assertThat(exception.getMessage(), containsString("Opera binary is not an executable"));
+    assertThat(exception.getMessage(), containsString("The file is not executable"));
   }
 
   @Test
@@ -95,7 +90,7 @@ public class OperaBinaryTest extends OperaDriverTestCase {
 
   @Test
   public void findBasedOnPlatformAll() {
-    assertNull(OperaBinary.find(OperaProduct.ALL));
+    assertNotNull(OperaBinary.find(OperaProduct.ALL));
   }
 
   @Test
