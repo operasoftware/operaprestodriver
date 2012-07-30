@@ -182,8 +182,8 @@ public abstract class CallbackWait {
         String toAppend =
             (message == null) ? " waiting for " + condition.toString() : ": " + message;
 
-        String timeoutMessage = String.format("Timed out after %d seconds%s",
-                                              timeout.in(SECONDS), toAppend);
+        String timeoutMessage = String.format("Timed out after %d milliseconds%s",
+                                              timeout.in(MILLISECONDS), toAppend);
         throw timeoutException(timeoutMessage, lastException);
       }
 
