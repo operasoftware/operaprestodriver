@@ -134,7 +134,9 @@ public class WindowManager extends AbstractService implements IWindowManager {
 
   private WindowID findActiveWindow() {
     // TODO(andreastt): CORE-47781 (Mobile takes a little while to initialize UI thread)
-    sleep(30);
+    if (services.getCoreUtils().getProduct().equalsIgnoreCase("mobile")) {
+      sleep(100);
+    }
 
     Response response = executeCommand(WindowManagerCommand.GET_ACTIVE_WINDOW, null);
     WindowID.Builder builder = WindowID.newBuilder();
