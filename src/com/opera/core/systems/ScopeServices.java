@@ -188,12 +188,12 @@ public class ScopeServices implements IConnectionHandler {
    * @param enableDebugger whether or not to enable the ecmascript-debugger service
    */
   private void initializeServices(boolean enableDebugger) {
-    exec.init();
-    windowManager.init();
-
     if (versions.containsKey("core") && coreUtils != null) {
       coreUtils.init();
     }
+
+    windowManager.init();
+    exec.init();
 
     if (versions.containsKey("prefs") && prefs != null) {
       prefs.init();
