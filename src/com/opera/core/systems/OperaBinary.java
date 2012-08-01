@@ -122,8 +122,6 @@ public class OperaBinary {
         break;
     }
 
-    System.out.println(paths.build());
-
     for (String path : paths.build()) {
       File possibleBinary = new File(path);
       if (possibleBinary.exists()) {
