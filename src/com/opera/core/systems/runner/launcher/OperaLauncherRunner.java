@@ -104,7 +104,6 @@ public class OperaLauncherRunner extends OperaRunner
     try {
       if (launcher.getCanonicalPath().equals(LAUNCHER_DEFAULT_LOCATION.getCanonicalPath()) &&
           (!launcher.exists() || isLauncherOutdated(launcher))) {
-        deleteFiles(LAUNCHER_DEFAULT_LOCATION.getParentFile().listFiles());
         extractLauncher(bundledLauncher, launcher);
       }
     } catch (IOException e) {
@@ -482,14 +481,6 @@ public class OperaLauncherRunner extends OperaRunner
           "Algorithm is not available in your environment: " + e.getMessage());
     } catch (IOException e) {
       throw new OperaRunnerException("Unable to open stream or file: " + e.getMessage());
-    }
-  }
-
-  private void deleteFiles(File[] files) {
-    for (File file : files) {
-      if (!file.delete()) {
-        logger.warning("Unable to delete file: " + file.getPath());
-      }
     }
   }
 
