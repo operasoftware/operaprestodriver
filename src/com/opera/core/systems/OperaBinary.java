@@ -212,7 +212,24 @@ public class OperaBinary {
   }
 
   private static List<String> buildMobileBinaries() {
-    return platform.is(WINDOWS) ? of("OperaMobileEmu.exe") : of("operamobile");
+    ImmutableList.Builder<String> paths = ImmutableList.builder();
+
+    switch (platform) {
+      case WINDOWS:
+        paths.add("OperaMobileEmu.exe");
+        break;
+
+      case MAC:
+        paths.add("Opera Mobile Emulator");
+
+      case LINUX:
+      case UNIX:
+      default:
+        paths.add("operamobile");
+        break;
+    }
+
+    return paths.build();
   }
 
 
