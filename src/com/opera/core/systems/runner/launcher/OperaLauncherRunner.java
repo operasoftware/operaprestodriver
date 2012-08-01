@@ -462,12 +462,8 @@ public class OperaLauncherRunner extends OperaRunner
     } catch (IOException e) {
       throw new OperaRunnerException("Cannot write file to disk: " + e.getMessage());
     } finally {
-      if (is != null) {
-        Closeables.closeQuietly(is);
-      }
-      if (os != null) {
-        Closeables.closeQuietly(os);
-      }
+      Closeables.closeQuietly(is);
+      Closeables.closeQuietly(os);
     }
 
     logger.fine("New launcher copied to " + targetLauncher.getPath());
