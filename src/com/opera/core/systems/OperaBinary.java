@@ -111,10 +111,14 @@ public class OperaBinary {
         if (!binaryPath.endsWith(".app")) {
           binaryPath += ".app";
         }
-        binaryPath += "/Contents/MacOS/";
-        for (String b : buildMobileBinaries()) {
-          paths.add(binaryPath + b);
+
+        for (String internalMacDirectory : of("/Contents/MacOS",
+                                              "/Contents/Resources/Opera Mobile.app/Contents/MacOS")) {
+          for (String b : buildMobileBinaries()) {
+            paths.add(binaryPath + "/Contents/Resources/Opera Mobile.app/Contents/MacOS/" + b);
+          }
         }
+
         break;
     }
 
@@ -198,6 +202,12 @@ public class OperaBinary {
   private static List<String> buildMobilePaths() {
     ImmutableList.Builder<String> paths = ImmutableList.builder();
 
+    if (platform.is(Platform.WINDOWS)) {
+      paths
+          .addAll(WindowsUtils.getPathsInProgramFiles("Opera Mobile Emulator\\OperaMobileEmu.exe"));
+      return paths.build();
+    }
+
     String path = "";
     switch (platform) {
       case LINUX:
@@ -206,15 +216,9 @@ public class OperaBinary {
         break;
 
       case MAC:
-        path = "/Applications/Opera Mobile Emulator.app/Contents/Resources/Opera Mobile.app/Contents/MacOS";
+        path =
+            "/Applications/Opera Mobile Emulator.app/Contents/Resources/Opera Mobile.app/Contents/MacOS";
         break;
-
-      case WINDOWS:
-      case VISTA:
-      case XP:
-        paths.addAll(
-            WindowsUtils.getPathsInProgramFiles("Opera Mobile Emulator\\OperaMobileEmu.exe"));
-        return paths.build();
     }
 
     for (String binary : buildMobileBinaries()) {
