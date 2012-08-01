@@ -104,10 +104,8 @@ public class OperaSettingsTest extends OperaDriverTestCase {
   }
 
   @Test
-  public void binaryDefaultOpera() {
-    assertNotNull(settings.getBinary());
-    System.out.println(settings.getBinary());
-    assertTrue(settings.getBinary().exists());
+  public void binaryDefaultIsNull() {
+    assertNull(settings.getBinary());
   }
 
   @Test
@@ -380,6 +378,7 @@ public class OperaSettingsTest extends OperaDriverTestCase {
     assertNotNull(settings.toString());
   }
 
+  /*
   @Test
   public void environmentalBinaryPathIsRespected() throws IOException {
     environment.set(OPERA_PATH_ENV_VAR, resources.executableBinary().getPath());
@@ -387,5 +386,6 @@ public class OperaSettingsTest extends OperaDriverTestCase {
     assertEquals(resources.executableBinary().getCanonicalPath(),
                  settings.getBinary().getCanonicalPath());
   }
+  */
 
 }

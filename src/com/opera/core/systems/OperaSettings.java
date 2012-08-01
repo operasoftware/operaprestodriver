@@ -743,11 +743,6 @@ public class OperaSettings {
    * @return the Opera binary
    */
   public File getBinary() {
-    File binary = (File) options.get(BINARY).getValue();
-    if (binary == null) {
-      setBinary(OperaBinary.find(getProduct()));
-    }
-
     return (File) options.get(BINARY).getValue();
   }
 
