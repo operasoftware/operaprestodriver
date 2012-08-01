@@ -84,36 +84,45 @@ public class OperaBinary {
   }
 
   private static File findBinaryBasedOnEnvironmentVariable() {
-    String binaryName = System.getenv(OPERA_PATH_ENV_VAR);
-    if (binaryName == null) {
+    String binaryPath = System.getenv(OPERA_PATH_ENV_VAR);
+    if (binaryPath == null) {
       return null;
     }
 
-    File binary = new File(binaryName);
-    if (binary.exists()) {
+    File binary = new File(binaryPath);
+    if (binary.exists() && binary.isFile()) {
       return binary;
     }
+
+    ImmutableList.Builder<String> paths = ImmutableList.builder();
 
     switch (platform) {
       case WINDOWS:
       case VISTA:
       case XP:
-        if (!binaryName.endsWith(".exe")) {
-          binaryName += ".exe";
+        if (!binaryPath.endsWith(".exe")) {
+          paths.add(binaryPath + ".exe");
+        } else {
+          paths.add(binaryPath);
         }
         break;
 
       case MAC:
-        if (!binaryName.endsWith(".app")) {
-          binaryName += ".app";
+        if (!binaryPath.endsWith(".app")) {
+          binaryPath += ".app";
         }
-        binaryName += "/Contents/MacOS/opera";
+        binaryPath += "/Contents/MacOS/";
+        for (String b : buildMobileBinaries()) {
+          paths.add(binaryPath + b);
+        }
         break;
     }
 
-    binary = new File(binaryName);
-    if (binary.exists()) {
-      return binary;
+    for (String path : paths.build()) {
+      File possibleBinary = new File(path);
+      if (possibleBinary.exists()) {
+        return possibleBinary;
+      }
     }
 
     return null;
