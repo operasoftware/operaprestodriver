@@ -554,10 +554,10 @@ public class OperaLauncherRunner extends OperaRunner
    * @param b the md5 byte array to hex
    * @return hex version of the byte array
    */
-  private static String md5sum(byte[] b) {
+  private static String md5sum(byte[] bytes) {
     String result = "";
-    for (byte aB : b) {
-      result += Integer.toString((aB & 0xff) + 0x100, 16).substring(1);
+    for (byte b : bytes) {
+      result += Integer.toString((b & 0xff) + 0x100, 16).substring(1);
     }
     return result;
   }
