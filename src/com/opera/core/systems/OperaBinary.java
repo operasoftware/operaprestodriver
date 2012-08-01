@@ -112,10 +112,10 @@ public class OperaBinary {
           binaryPath += ".app";
         }
 
-        for (String internalAppDirectory : of("/Contents/MacOS",
-                                              "/Contents/Resources/Opera Mobile.app/Contents/MacOS")) {
+        for (String internalAppDirectory : of("Contents/MacOS",
+                                              "Contents/Resources/Opera Mobile.app/Contents/MacOS")) {
           for (String b : buildMobileBinaries()) {
-            paths.add(binaryPath + internalAppDirectory + b);
+            paths.add(String.format("%s/%s/%s", binaryPath, internalAppDirectory, b));
           }
         }
 
