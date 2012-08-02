@@ -142,10 +142,13 @@ capabilities supported are:
 | __opera.launcher__          | String   | null        | Path to the launcher binary to use.  The launcher is an external wrapper around the browser, and is used for controlling the binary and taking external screenshots.  If left blank, OperaDriver will use a launcher supplied with the package.
 
 OperaDriver also supports some of the
-[generic desired capabilities](http://code.google.com/p/selenium/wiki/DesiredCapabilities)
+[common desired capabilities](http://code.google.com/p/selenium/wiki/DesiredCapabilities)
 too:
 
-  * __proxy__: proxy JSON object
+  * [__proxy__](http://code.google.com/p/selenium/wiki/DesiredCapabilities#Proxy_JSON_Object)
+
+
+### Custom profile
 
 For instance the OperaDriver can be made to start the browser with
 specific command-line arguments using the `opera.arguments` key.  This
@@ -160,6 +163,9 @@ custom profile:
 
     WebDriver driver = new OperaDriver(capabilities);
 
+
+### Opera Mobile Emulator
+
 Or to tell the Opera Mobile Emulator to use the tablet UI and a
 specific screen resolution:
 
@@ -170,6 +176,9 @@ specific screen resolution:
 
     WebDriver driver = new OperaDriver(capabilities);
 
+
+### Logging and X display
+
 Similarly, to increase the logging verbosity and, for GNU/Linux, ask
 Opera to start on a different X display:
 
@@ -178,6 +187,22 @@ Opera to start on a different X display:
     capabilities.setCapability("opera.logging.level", Level.CONFIG);
     capabilities.setCapability("opera.logging.file", "/var/log/operadriver.log");
     capabilities.setCapability("opera.display", 8);
+
+    WebDriver driver = new OperaDriver(capabilities);
+
+
+### Proxy
+
+It is also possible to configure a proxy for use with Opera.  The
+proxy configuration is set through the capabilities.  You can use the
+[Proxy](http://selenium.googlecode.com/svn/trunk/docs/api/java/org/openqa/selenium/Proxy.html)
+helper in Selenium to manage it:
+
+    DesiredCapabilities capabilities = DesiredCapabilities.opera();
+
+    Proxy proxy = new Proxy();
+    proxy.setHttpProxy("127.0.0.1:1234");
+    capabilities.setCapability("proxy", proxy);
 
     WebDriver driver = new OperaDriver(capabilities);
 
