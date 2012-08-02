@@ -102,7 +102,7 @@ typically very useful in a distributed environment.  First, ensure
 that your Selenium server is running, then create a remote client as
 usual:
 
-    WebDriver driver = new RemoteWebDriver("http://localhost:9515", DesiredCapabilities.opera());
+    WebDriver driver = new RemoteWebDriver("http://localhost:4444", DesiredCapabilities.opera());
     driver.get("http://opera.com/");
 
 
@@ -122,13 +122,14 @@ requested.  To request a specific driver configuration you
 
 You can use the
 [DesiredCapabilities](http://selenium.googlecode.com/svn/trunk/docs/api/java/org/openqa/selenium/remote/DesiredCapabilities.html)
-class to request a specific driver configuration.  The capabilities
-supported by OperaDriver are:
+class to request a specific driver configuration.  The Opera-specific
+capabilities supported are:
 
 | __Capability__              | __Type__ | __Default__ | __Description__ |
 |-----------------------------|----------|-------------|-----------------|
 | __opera.logging.level__     | [Level](http://docs.oracle.com/javase/1.4.2/docs/api/java/util/logging/Level.html)/String/Integer | Level.INFO | (String/Level/Integer) How verbose the logging should be.  Available levels are: SEVERE (highest value), WARNING, INFO, CONFIG, FINE, FINER, FINEST (lowest value), ALL, OFF.<br /><br >The argument may consist of either a level name as a string, an integer value, a [Level reference](http://docs.oracle.com/javase/1.4.2/docs/api/java/util/logging/Level.html), or null.  If the value is neither of a known name nor an integer, an IllegalArgumentException will be thrown.
 | __opera.logging.file__      | [File](http://docs.oracle.com/javase/1.4.2/docs/api/java/io/File.html)/String | null     | Where to send the output of the logging.  Default is to not write to file.
+| __opera.product__           | [OperaProduct](http://operasoftware.github.com/operadriver/docs/com/opera/core/systems/OperaProduct.html)/String   | Desktop | The product to request, for example `OperaProduct#DESKTOP` or `OperaProduct#MOBILE`.  It will attempt to locate the product binary based on the operating system's default installation paths if _opera.binary_ is not set.
 | __opera.binary__            | String   | Default location of Opera on system | Path to the Opera binary to use.  If not specified, OperaDriver will guess the path to your Opera installation (typically */usr/bin/opera*, *C:\Program Files\Opera\opera.exe*, or similar).
 | __opera.arguments__         | String   | null        | Arguments to pass to Opera, separated by spaces.  See `opera -help` for available command-line switches.
 | __opera.host__              | String   | Non-loopback IP if available, loopback otherwise | The host Opera should connect to.  Since OperaDriver works in a client-server relationship to Opera (where Opera is the client, driver the server) you can also run remote instances of Opera on other devices; that be a phone, a TV or another computer.
@@ -138,8 +139,13 @@ supported by OperaDriver are:
 | __opera.detach__            | Boolean  | false       | Whether to detach the Opera browser when the driver shuts down.  This will leave Opera running.
 | __opera.display__           | Integer  | null        | The X display to use.  If set, Opera will be started on the specified display.  (Only works on GNU/Linux.)
 | __opera.idle__              | Boolean  | false       | Whether to use Opera's alternative implicit wait implementation.  It will use an in-browser heuristic to guess when a page has finished loading, allowing us with great accuracy tell whether there are any planned events in the document.  This functionality is useful for very simple test cases, but not designed for real-world testing.  It is disabled by default.
-| __opera.product__           | [OperaProduct](http://operasoftware.github.com/operadriver/docs/com/opera/core/systems/OperaProduct.html)/String   | Desktop | The product we are using, for example `OperaProduct#DESKTOP` or `OperaProduct#CORE`.
 | __opera.launcher__          | String   | null        | Path to the launcher binary to use.  The launcher is an external wrapper around the browser, and is used for controlling the binary and taking external screenshots.  If left blank, OperaDriver will use a launcher supplied with the package.
+
+OperaDriver also supports some of the
+[generic desired capabilities](http://code.google.com/p/selenium/wiki/DesiredCapabilities)
+too:
+
+  * __proxy__: proxy JSON object
 
 For instance the OperaDriver can be made to start the browser with
 specific command-line arguments using the `opera.arguments` key.  This
@@ -147,18 +153,28 @@ key should define a list of a command-line arguments that should be
 passed to the browser on startup.  For example, to start Opera with a
 custom profile:
 
-    OperaProfile profile = new OperaProfile();  // fresh, temporary profile
-    profile.preferences().set("User Prefs", "Ignore Unrequested Popups", false);
-
     DesiredCapabilities capabilities = DesiredCapabilities.opera();
-    capabilities.setCapability("opera.profiel", profile);
+
+    OperaProfile profile = new OperaProfile("/path/to/profile");  // prepared profile
+    capabilities.setCapability("opera.profile", profile);
 
     WebDriver driver = new OperaDriver(capabilities);
 
-Similarly, to set up more detailed logging and, for GNU/Linux, send
-ask Opera to start on a different X display:
+Or to tell the Opera Mobile Emulator to use the tablet UI and a
+specific screen resolution:
 
     DesiredCapabilities capabilities = DesiredCapabilities.opera();
+
+    capabilities.setCapability("opera.product", OperaProduct.MOBILE);
+    capabilities.setCapability("opera.arguments", "-tabletui -displaysize 860x600");
+
+    WebDriver driver = new OperaDriver(capabilities);
+
+Similarly, to increase the logging verbosity and, for GNU/Linux, ask
+Opera to start on a different X display:
+
+    DesiredCapabilities capabilities = DesiredCapabilities.opera();
+
     capabilities.setCapability("opera.logging.level", Level.CONFIG);
     capabilities.setCapability("opera.logging.file", "/var/log/operadriver.log");
     capabilities.setCapability("opera.display", 8);
@@ -174,12 +190,12 @@ the available variables:
 
 | __Name__          | __Description__                                                                                                                                                                                                              |
 |-------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| __OPERA_PATH__    | The absolute path to the Opera binary you want to use.  If not set OperaDriver will try to locate Opera on your system.                                                                                                      |
-| __OPERA_ARGS__    | A space-delimited list of arguments to pass on to Opera, e.g. `-nowindow`, `-dimensions 1600x1200`, &c.  See `opera -help` to see the available arguments.                                                                     |
+| __OPERA_PATH__    | The absolute path to the Opera binary you want to use.  If not set OperaDriver will try to locate an Opera (desktop or mobile) on your system.                                                                               |
+| __OPERA_ARGS__    | A space-delimited list of arguments to pass on to Opera, e.g. `-nowindow`, `-dimensions 1600x1200`, &c.  See `opera -help` or `operamobile -help` to see available arguments.                                                |
 
 To set environment variables:
 
-  * __Linux and Mac__: `export OPERA_PATH=...`, and add this line to `~/.bashrc` (or your shell's configuration file) to use in all future sessions.
+  * __GNU/Linux and Mac__: `export OPERA_PATH=...`, and add this line to `~/.bashrc` (or your shell's configuration file) to use in all future sessions.
   * __Windows__: Please follow this guide: http://support.microsoft.com/kb/310519
 
 
@@ -193,6 +209,8 @@ OperaDriver:
 
 | __Version__ | __Workaround/tweaks needed__                                                                                                |
 |-------------|-----------------------------------------------------------------------------------------------------------------------------|
+| 12.50       |                                                                                                                             |
+| 12.01       |                                                                                                                             |
 | 12.00       |                                                                                                                             |
 | 11.64       |                                                                                                                             |
 | 11.62       |                                                                                                                             |
@@ -205,6 +223,11 @@ OperaDriver:
 | 11.10       |                                                                                                                             |
 | 11.01       | `-autotestmode` command-line argument is not supported, use a wrapper script                                                |
 | 11.00       |                                                                                                                             |
+
+
+### Mobile
+
+(Not released yet.)
 
 
 #### Wrapper script
