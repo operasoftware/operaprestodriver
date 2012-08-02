@@ -7,6 +7,7 @@ option optimize_for         = SPEED;
 option java_outer_classname = "ExecProtos";
 option java_package         = "com.opera.core.systems.scope.protos";
 
+
 /**
  * List all valid `Action` `name`s
  */

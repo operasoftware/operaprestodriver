@@ -7,6 +7,7 @@ option optimize_for         = SPEED;
 option java_outer_classname = "CookieMngProtos";
 option java_package         = "com.opera.core.systems.scope.protos";
 
+
 message Cookie
 {
     required string domain     = 1;

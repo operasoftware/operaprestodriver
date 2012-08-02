@@ -7,6 +7,7 @@ option optimize_for         = SPEED;
 option java_outer_classname = "PrefsProtos";
 option java_package         = "com.opera.core.systems.scope.protos";
 
+
 message Pref
 {
     enum Type

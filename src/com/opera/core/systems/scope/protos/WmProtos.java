@@ -30,6 +30,10 @@ public final class WmProtos {
     // optional string extensionName = 5;
     boolean hasExtensionName();
     String getExtensionName();
+    
+    // optional bool isPrivate = 6;
+    boolean hasIsPrivate();
+    boolean getIsPrivate();
   }
   public static final class WindowInfo extends
       com.google.protobuf.GeneratedMessage
@@ -176,12 +180,23 @@ public final class WmProtos {
       }
     }
     
+    // optional bool isPrivate = 6;
+    public static final int ISPRIVATE_FIELD_NUMBER = 6;
+    private boolean isPrivate_;
+    public boolean hasIsPrivate() {
+      return ((bitField0_ & 0x00000020) == 0x00000020);
+    }
+    public boolean getIsPrivate() {
+      return isPrivate_;
+    }
+    
     private void initFields() {
       windowID_ = 0;
       title_ = "";
       windowType_ = "";
       openerID_ = 0;
       extensionName_ = "";
+      isPrivate_ = false;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -226,6 +241,9 @@ public final class WmProtos {
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
         output.writeBytes(5, getExtensionNameBytes());
       }
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+        output.writeBool(6, isPrivate_);
+      }
       getUnknownFields().writeTo(output);
     }
     
@@ -254,6 +272,10 @@ public final class WmProtos {
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
         size += com.google.protobuf.CodedOutputStream
           .computeBytesSize(5, getExtensionNameBytes());
+      }
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBoolSize(6, isPrivate_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -389,6 +411,8 @@ public final class WmProtos {
         bitField0_ = (bitField0_ & ~0x00000008);
         extensionName_ = "";
         bitField0_ = (bitField0_ & ~0x00000010);
+        isPrivate_ = false;
+        bitField0_ = (bitField0_ & ~0x00000020);
         return this;
       }
       
@@ -447,6 +471,10 @@ public final class WmProtos {
           to_bitField0_ |= 0x00000010;
         }
         result.extensionName_ = extensionName_;
+        if (((from_bitField0_ & 0x00000020) == 0x00000020)) {
+          to_bitField0_ |= 0x00000020;
+        }
+        result.isPrivate_ = isPrivate_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -477,6 +505,9 @@ public final class WmProtos {
         }
         if (other.hasExtensionName()) {
           setExtensionName(other.getExtensionName());
+        }
+        if (other.hasIsPrivate()) {
+          setIsPrivate(other.getIsPrivate());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -548,6 +579,11 @@ public final class WmProtos {
             case 42: {
               bitField0_ |= 0x00000010;
               extensionName_ = input.readBytes();
+              break;
+            }
+            case 48: {
+              bitField0_ |= 0x00000020;
+              isPrivate_ = input.readBool();
               break;
             }
           }
@@ -704,6 +740,27 @@ public final class WmProtos {
         bitField0_ |= 0x00000010;
         extensionName_ = value;
         onChanged();
+      }
+      
+      // optional bool isPrivate = 6;
+      private boolean isPrivate_ ;
+      public boolean hasIsPrivate() {
+        return ((bitField0_ & 0x00000020) == 0x00000020);
+      }
+      public boolean getIsPrivate() {
+        return isPrivate_;
+      }
+      public Builder setIsPrivate(boolean value) {
+        bitField0_ |= 0x00000020;
+        isPrivate_ = value;
+        onChanged();
+        return this;
+      }
+      public Builder clearIsPrivate() {
+        bitField0_ = (bitField0_ & ~0x00000020);
+        isPrivate_ = false;
+        onChanged();
+        return this;
       }
       
       // @@protoc_insertion_point(builder_scope:scope.WindowInfo)
@@ -2416,6 +2473,10 @@ public final class WmProtos {
     // optional string windowType = 1;
     boolean hasWindowType();
     String getWindowType();
+    
+    // optional bool isPrivate = 2;
+    boolean hasIsPrivate();
+    boolean getIsPrivate();
   }
   public static final class CreateWindowArg extends
       com.google.protobuf.GeneratedMessage
@@ -2478,8 +2539,19 @@ public final class WmProtos {
       }
     }
     
+    // optional bool isPrivate = 2;
+    public static final int ISPRIVATE_FIELD_NUMBER = 2;
+    private boolean isPrivate_;
+    public boolean hasIsPrivate() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    public boolean getIsPrivate() {
+      return isPrivate_;
+    }
+    
     private void initFields() {
       windowType_ = "";
+      isPrivate_ = false;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -2496,6 +2568,9 @@ public final class WmProtos {
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
         output.writeBytes(1, getWindowTypeBytes());
       }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        output.writeBool(2, isPrivate_);
+      }
       getUnknownFields().writeTo(output);
     }
     
@@ -2508,6 +2583,10 @@ public final class WmProtos {
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
         size += com.google.protobuf.CodedOutputStream
           .computeBytesSize(1, getWindowTypeBytes());
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBoolSize(2, isPrivate_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -2635,6 +2714,8 @@ public final class WmProtos {
         super.clear();
         windowType_ = "";
         bitField0_ = (bitField0_ & ~0x00000001);
+        isPrivate_ = false;
+        bitField0_ = (bitField0_ & ~0x00000002);
         return this;
       }
       
@@ -2677,6 +2758,10 @@ public final class WmProtos {
           to_bitField0_ |= 0x00000001;
         }
         result.windowType_ = windowType_;
+        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+          to_bitField0_ |= 0x00000002;
+        }
+        result.isPrivate_ = isPrivate_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -2695,6 +2780,9 @@ public final class WmProtos {
         if (other == com.opera.core.systems.scope.protos.WmProtos.CreateWindowArg.getDefaultInstance()) return this;
         if (other.hasWindowType()) {
           setWindowType(other.getWindowType());
+        }
+        if (other.hasIsPrivate()) {
+          setIsPrivate(other.getIsPrivate());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -2730,6 +2818,11 @@ public final class WmProtos {
             case 10: {
               bitField0_ |= 0x00000001;
               windowType_ = input.readBytes();
+              break;
+            }
+            case 16: {
+              bitField0_ |= 0x00000002;
+              isPrivate_ = input.readBool();
               break;
             }
           }
@@ -2772,6 +2865,27 @@ public final class WmProtos {
         bitField0_ |= 0x00000001;
         windowType_ = value;
         onChanged();
+      }
+      
+      // optional bool isPrivate = 2;
+      private boolean isPrivate_ ;
+      public boolean hasIsPrivate() {
+        return ((bitField0_ & 0x00000002) == 0x00000002);
+      }
+      public boolean getIsPrivate() {
+        return isPrivate_;
+      }
+      public Builder setIsPrivate(boolean value) {
+        bitField0_ |= 0x00000002;
+        isPrivate_ = value;
+        onChanged();
+        return this;
+      }
+      public Builder clearIsPrivate() {
+        bitField0_ = (bitField0_ & ~0x00000002);
+        isPrivate_ = false;
+        onChanged();
+        return this;
       }
       
       // @@protoc_insertion_point(builder_scope:scope.CreateWindowArg)
@@ -4123,21 +4237,22 @@ public final class WmProtos {
   static {
     java.lang.String[] descriptorData = {
       "\n\024window_manager.proto\022\005scope\032\"opera/sco" +
-      "pe/scope_descriptor.proto\"j\n\nWindowInfo\022" +
+      "pe/scope_descriptor.proto\"}\n\nWindowInfo\022" +
       "\020\n\010windowID\030\001 \002(\r\022\r\n\005title\030\002 \002(\t\022\022\n\nwind" +
       "owType\030\003 \002(\t\022\020\n\010openerID\030\004 \002(\r\022\025\n\rextens" +
-      "ionName\030\005 \001(\t\"\034\n\010WindowID\022\020\n\010windowID\030\001 " +
-      "\002(\r\"\220\001\n\014WindowFilter\022\032\n\013clearFilter\030\001 \002(" +
-      "\010:\005false\022\025\n\rincludeIDList\030\002 \003(\r\022\032\n\022inclu" +
-      "dePatternList\030\003 \003(\t\022\025\n\rexcludeIDList\030\004 \003" +
-      "(\r\022\032\n\022excludePatternList\030\005 \003(\t\"3\n\nWindow" +
-      "List\022%\n\nwindowList\030\001 \003(\0132\021.scope.WindowI",
-      "nfo\"%\n\017CreateWindowArg\022\022\n\nwindowType\030\001 \001" +
-      "(\t\"\"\n\016CloseWindowArg\022\020\n\010windowID\030\001 \002(\r\"+" +
-      "\n\nOpenURLArg\022\020\n\010windowID\030\001 \002(\r\022\013\n\003url\030\002 " +
-      "\002(\t\"5\n\023ModifyTypeFilterArg\022\014\n\004mode\030\002 \002(\t" +
-      "\022\020\n\010typeList\030\001 \003(\tB1\n#com.opera.core.sys" +
-      "tems.scope.protosB\010WmProtosH\001"
+      "ionName\030\005 \001(\t\022\021\n\tisPrivate\030\006 \001(\010\"\034\n\010Wind" +
+      "owID\022\020\n\010windowID\030\001 \002(\r\"\220\001\n\014WindowFilter\022" +
+      "\032\n\013clearFilter\030\001 \002(\010:\005false\022\025\n\rincludeID" +
+      "List\030\002 \003(\r\022\032\n\022includePatternList\030\003 \003(\t\022\025" +
+      "\n\rexcludeIDList\030\004 \003(\r\022\032\n\022excludePatternL" +
+      "ist\030\005 \003(\t\"3\n\nWindowList\022%\n\nwindowList\030\001 ",
+      "\003(\0132\021.scope.WindowInfo\"8\n\017CreateWindowAr" +
+      "g\022\022\n\nwindowType\030\001 \001(\t\022\021\n\tisPrivate\030\002 \001(\010" +
+      "\"\"\n\016CloseWindowArg\022\020\n\010windowID\030\001 \002(\r\"+\n\n" +
+      "OpenURLArg\022\020\n\010windowID\030\001 \002(\r\022\013\n\003url\030\002 \002(" +
+      "\t\"5\n\023ModifyTypeFilterArg\022\014\n\004mode\030\002 \002(\t\022\020" +
+      "\n\010typeList\030\001 \003(\tB1\n#com.opera.core.syste" +
+      "ms.scope.protosB\010WmProtosH\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -4149,7 +4264,7 @@ public final class WmProtos {
           internal_static_scope_WindowInfo_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_scope_WindowInfo_descriptor,
-              new java.lang.String[] { "WindowID", "Title", "WindowType", "OpenerID", "ExtensionName", },
+              new java.lang.String[] { "WindowID", "Title", "WindowType", "OpenerID", "ExtensionName", "IsPrivate", },
               com.opera.core.systems.scope.protos.WmProtos.WindowInfo.class,
               com.opera.core.systems.scope.protos.WmProtos.WindowInfo.Builder.class);
           internal_static_scope_WindowID_descriptor =
@@ -4181,7 +4296,7 @@ public final class WmProtos {
           internal_static_scope_CreateWindowArg_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_scope_CreateWindowArg_descriptor,
-              new java.lang.String[] { "WindowType", },
+              new java.lang.String[] { "WindowType", "IsPrivate", },
               com.opera.core.systems.scope.protos.WmProtos.CreateWindowArg.class,
               com.opera.core.systems.scope.protos.WmProtos.CreateWindowArg.Builder.class);
           internal_static_scope_CloseWindowArg_descriptor =

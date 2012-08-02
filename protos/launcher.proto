@@ -7,6 +7,7 @@ option optimize_for         = SPEED;
 option java_outer_classname = "OperaLauncherProtos";
 option java_package         = "com.opera.core.systems.runner.launcher";
 
+
 message LauncherHandshakeRequest
 {
 }

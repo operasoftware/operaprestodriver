@@ -7,6 +7,7 @@ option optimize_for         = SPEED;
 option java_outer_classname = "WmProtos";
 option java_package         = "com.opera.core.systems.scope.protos";
 
+
 /**
  * TODO: We probably want a lot more information about each window, like URL, shortcut
  *       icon, etc.
@@ -55,6 +56,11 @@ message WindowInfo
      * @since 2.2
      */
     optional string extensionName = 5;
+    /**
+     * true if the window is in Privacy Mode.
+     * @since 2.3
+     */
+    optional bool   isPrivate     = 6;
 }
 
 message WindowID
@@ -109,6 +115,12 @@ message CreateWindowArg
      * - "devtools"
      */
     optional string windowType = 1;
+    /**
+     * If set then it forces Privacy Mode of a window
+     * else the default setting will be used.
+     * @since 2.3
+     */
+    optional bool   isPrivate  = 2;
 }
 
 message CloseWindowArg
