@@ -97,7 +97,7 @@ public class OperaLauncherRunner extends OperaRunner
         OperaLaunchers.class.getClassLoader().getResource("launchers/" + LAUNCHER_NAME);
 
     if (bundledLauncher == null) {
-      throw new OperaRunnerException("Not able to locate bundled launcher: " + bundledLauncher);
+      throw new OperaRunnerException("Not able to locate bundled launcher: " + LAUNCHER_NAME);
     }
 
     File launcher = settings.getLauncher();
