@@ -302,7 +302,6 @@ public class OperaLauncherRunner extends OperaRunner
 
       ResponseEncapsulation res = protocol.sendRequest(
           MessageType.MSG_STATUS, request.build().toByteArray());
-      logger.finer("Getting Opera's status from launcher: " + res.getResponse().toString());
 
       return handleStatusMessage(res.getResponse()) == StatusType.RUNNING;
     } catch (IOException e) {
