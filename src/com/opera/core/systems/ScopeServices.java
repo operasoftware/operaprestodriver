@@ -447,8 +447,11 @@ public class ScopeServices implements IConnectionHandler {
   }
 
   public void quit(OperaRunner runner) throws IOException {
-    quitOpera(runner);
-    shutdown();
+    try {
+      quitOpera(runner);
+    } finally {
+      shutdown();
+    }
   }
 
   public boolean onConnected(StpConnection con) {
