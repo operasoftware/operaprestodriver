@@ -73,7 +73,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeSet;
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.FileHandler;
@@ -561,7 +560,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot, Run
     }
 
     List<Integer> windowIds = windowManager.getWindowHandles();
-    Set<String> handles = new TreeSet<String>();
+    Set<String> handles = Sets.newTreeSet();
 
     if (!OperaDefaults.ENABLE_DEBUGGER) {
       for (Integer windowId : windowIds) {
