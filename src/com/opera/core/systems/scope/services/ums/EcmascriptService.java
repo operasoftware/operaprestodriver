@@ -403,9 +403,13 @@ public class EcmascriptService extends AbstractEcmascriptService implements IEcm
 
   protected Runtime findRuntime(int windowId) {
     createAllRuntimes();
-    return (Runtime) xpathPointer(runtimesList.values(),
-                                  String.format("/.[htmlFramePath='%s' and windowID='%d']",
-                                                currentFramePath, windowId)).getValue();
+    Pointer pointer =
+        xpathPointer(runtimesList.values(),
+            String.format("/.[htmlFramePath='%s' and windowID='%d']", currentFramePath, windowId));
+    if (pointer != null) {
+      return (Runtime) pointer.getValue();
+    }
+    return null;
   }
 
   /**
