@@ -522,7 +522,8 @@ public class OperaLauncherRunner extends OperaRunner
     switch (currentPlatform) {
       case LINUX:
       case UNIX:
-        return "launcher-linux-" + System.getProperty("os.arch").toLowerCase();
+        return "64".equals(System.getProperty("sun.arch.data.model"))
+               ? "launcher-linux-amd64" : "launcher-linux-ia32";
       case MAC:
         return "launcher-mac";
       case WINDOWS:
