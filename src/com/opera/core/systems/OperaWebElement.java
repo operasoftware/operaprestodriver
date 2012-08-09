@@ -85,6 +85,7 @@ public class OperaWebElement extends RemoteWebElement {
     debugger = parent.getScriptDebugger();
     execService = parent.getExecService();
     runtimeId = debugger.getRuntimeId();
+    setId(String.valueOf(hashCode()));
   }
 
   /**
@@ -534,15 +535,6 @@ public class OperaWebElement extends RemoteWebElement {
 
   public int getRuntimeId() {
     return runtimeId;
-  }
-
-  @Override
-  public boolean equals(Object obj) {
-    if (obj instanceof OperaWebElement) {
-      OperaWebElement ref = (OperaWebElement) obj;
-      return (ref.getObjectId() == this.getObjectId() && ref.getRuntimeId() == this.getRuntimeId());
-    }
-    return false;
   }
 
   @Override
