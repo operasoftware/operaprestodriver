@@ -11,7 +11,7 @@
   <groupId>com.opera</groupId>
   <artifactId>operadriver</artifactId>
   <packaging>jar</packaging>
-  <version>0.17-SNAPSHOT</version>
+  <version>0.16.1</version>
   <name>OperaDriver</name>
   <description>OperaDriver is a vendor-supported WebDriver implementation developed by Opera Software and volunteers that implements WebDriver's wire protocol.</description>
   <url>http://opera.com/developer/tools/operadriver/</url>
