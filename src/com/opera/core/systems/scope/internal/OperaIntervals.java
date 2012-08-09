@@ -119,7 +119,7 @@ public enum OperaIntervals {
    */
   MULTIPLE_CLICK_SLEEP(new Duration(640, MILLISECONDS)),
 
-  WINDOW_CLOSE_TIMEOUT(new Duration(100, MILLISECONDS)),
+  WINDOW_CLOSE_TIMEOUT(new Duration(500, MILLISECONDS)),
 
   /**
    * Different products have different animations when closing windows, and sometimes it might take
