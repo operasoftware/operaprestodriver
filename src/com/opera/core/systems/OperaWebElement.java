@@ -16,6 +16,9 @@ limitations under the License.
 
 package com.opera.core.systems;
 
+import com.google.common.base.Joiner;
+import com.google.common.base.Strings;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
 
 import com.opera.core.systems.model.Canvas;
@@ -23,7 +26,6 @@ import com.opera.core.systems.model.ColorResult;
 import com.opera.core.systems.model.ScreenShotReply;
 import com.opera.core.systems.scope.exceptions.ResponseNotReceivedException;
 import com.opera.core.systems.scope.internal.OperaColors;
-import com.opera.core.systems.scope.internal.OperaKeys;
 import com.opera.core.systems.scope.internal.OperaMouseKeys;
 import com.opera.core.systems.scope.services.IEcmaScriptDebugger;
 import com.opera.core.systems.scope.services.IOperaExec;
@@ -32,22 +34,23 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.ElementNotVisibleException;
 import org.openqa.selenium.InvalidElementStateException;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.Point;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.interactions.internal.Coordinates;
 import org.openqa.selenium.remote.RemoteWebElement;
 import org.openqa.selenium.support.Color;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
@@ -59,6 +62,8 @@ import java.util.logging.Logger;
 public class OperaWebElement extends RemoteWebElement {
 
   protected final Logger logger = Logger.getLogger(this.getClass().getName());
+
+  private static final List<String> specialInputs = ImmutableList.of("datetime", "date", "month", "week", "time", "datetime-local", "range", "color", "file");
 
   private final int objectId;
   private final int runtimeId;
@@ -86,6 +91,7 @@ public class OperaWebElement extends RemoteWebElement {
     execService = parent.getExecService();
     runtimeId = debugger.getRuntimeId();
     setId(String.valueOf(hashCode()));
+    setFileDetector(parent.getFileDetector());
   }
 
   /**
@@ -205,13 +211,14 @@ public class OperaWebElement extends RemoteWebElement {
     }
   }
 
+  /*
   public void sendKeys(CharSequence... keysToSend) {
     verifyCanInteractWithElement();
 
     // A list of keys that should be held down, instead of pressed
     ArrayList<String> holdKeys = new ArrayList<String>();
-    holdKeys.add(OperaKeys.SHIFT.getValue());
-    holdKeys.add(OperaKeys.CONTROL.getValue());
+    holdKeys.add(OperaKey.SHIFT.getValue());
+    holdKeys.add(OperaKey.CONTROL.getValue());
     // Keys that have been held down, and need to be released
     ArrayList<String> heldKeys = new ArrayList<String>();
 
@@ -246,7 +253,7 @@ public class OperaWebElement extends RemoteWebElement {
     parent.getScopeServices().captureOperaIdle();
     for (CharSequence seq : keysToSend) {
       if (seq instanceof Keys) {
-        String key = OperaKeys.get(((Keys) seq).name());
+        String key = OperaKey.get(((Keys) seq).name());
         // Check if this is a key we hold down, and haven't already pressed, and press, but don't
         // release it. That's done at the end of this method.
         if (holdKeys.contains(key) && !heldKeys.contains(key) && !execService.keyIsPressed(key)) {
@@ -271,7 +278,7 @@ public class OperaWebElement extends RemoteWebElement {
           if (keyName == null) {
             execService.type(c.toString());
           } else {
-            String key = OperaKeys.get(keyName);
+            String key = OperaKey.get(keyName);
             // TODO: Code repeated from above
             if (holdKeys.contains(key) && !heldKeys.contains(key) && !execService
                 .keyIsPressed(key)) {
@@ -312,7 +319,7 @@ public class OperaWebElement extends RemoteWebElement {
    *
    * @param c the character that may be a special key
    * @return a string containing the name of the "special" key or null
-   */
+   *
   private static String charToKeyName(char c) { // TODO(andreastt): Move this to OperaKeyboard?
     if (keysLookup.isEmpty()) {
       for (Keys k : Keys.values()) {
@@ -320,6 +327,57 @@ public class OperaWebElement extends RemoteWebElement {
       }
     }
     return keysLookup.get(c);
+  }
+  */
+
+  public void sendKeys(CharSequence... keysToSend) {
+    verifyCanInteractWithElement();
+
+    // Handle special input types
+    String typeAttribute = getAttribute("type").toLowerCase();
+
+    if (getTagName().equals("INPUT") && specialInputs.contains(typeAttribute)) {
+      if (typeAttribute.equals("file")) {
+        File localFile = fileDetector.getLocalFile(keysToSend);
+
+        if (localFile != null) {
+          debugger.setFormElementValue(objectId, localFile.getAbsolutePath());
+        }
+      } else {
+        debugger.setFormElementValue(objectId, Joiner.on("").join(keysToSend));
+      }
+
+      return;
+    }
+
+    parent.getScopeServices().captureOperaIdle();
+
+    switchFocusToThisIfNeeded();
+    parent.getKeyboard().sendKeys(keysToSend);
+
+    try {
+      parent.waitForLoadToComplete();
+    } catch (ResponseNotReceivedException e) {
+      // return control to user
+    }
+  }
+
+  private void switchFocusToThisIfNeeded() {
+    // TODO(andreastt): Check if element is already focused, if not click
+
+    // When a TEXTAREA element is focused it returns the cursor to the last position was at, or
+    // places it last.  INPUT @type="text" (or any other textual input element) places the caret at
+    // the beginning.  Because of this we are forced to move the caret to the end of the input
+    // field.  We do this by setting the selection range through JavaScript, which should move the
+    // cursor to the end of the field upon the next focus event.
+    String type = callMethod("locator.type");
+
+    if (type.equals("text") || type.equals("textarea")) {
+      // TODO(andreastt): Fix this atom
+      executeMethod(OperaAtom.MOVE_CARET_TO_END + "(locator)");
+    }
+
+    click();
   }
 
   public void submit() {

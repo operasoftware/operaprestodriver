@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package com.opera.core.systems.util;
+package com.opera.core.systems.internal;
 
 /**
  * A replacement for a subset of {@link com.sun.xml.internal.ws.util.VersionUtil}.

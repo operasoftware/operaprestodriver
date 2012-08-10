@@ -19,7 +19,7 @@ limitations under the License.
 package com.opera.core.systems.testing;
 
 import com.opera.core.systems.OperaProduct;
-import com.opera.core.systems.util.VersionUtil;
+import com.opera.core.systems.internal.VersionUtil;
 
 import org.junit.runners.model.FrameworkMethod;
 import org.openqa.selenium.Platform;

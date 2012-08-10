@@ -37,7 +37,7 @@ import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearch.Qui
 import com.opera.core.systems.scope.protos.UmsProtos.Response;
 import com.opera.core.systems.scope.services.IDesktopUtils;
 import com.opera.core.systems.scope.services.IDesktopWindowManager;
-import com.opera.core.systems.util.WatirUtils;
+import com.opera.core.systems.internal.WatirUtils;
 
 import java.util.ArrayList;
 import java.util.LinkedList;

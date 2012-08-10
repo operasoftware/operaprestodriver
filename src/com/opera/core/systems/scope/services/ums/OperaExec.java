@@ -29,7 +29,7 @@ import com.opera.core.systems.scope.ExecCommand;
 import com.opera.core.systems.scope.exceptions.WindowNotFoundException;
 import com.opera.core.systems.scope.internal.OperaColors;
 import com.opera.core.systems.scope.internal.OperaIntervals;
-import com.opera.core.systems.scope.internal.OperaKeys;
+import com.opera.core.systems.scope.internal.OperaKey;
 import com.opera.core.systems.scope.internal.OperaMouseKeys;
 import com.opera.core.systems.scope.protos.ExecProtos.ActionInfoList;
 import com.opera.core.systems.scope.protos.ExecProtos.ActionInfoList.ActionInfo;
@@ -43,9 +43,8 @@ import com.opera.core.systems.scope.protos.ExecProtos.ScreenWatcherResult;
 import com.opera.core.systems.scope.protos.ExecProtos.ScreenWatcherResult.ColorMatch;
 import com.opera.core.systems.scope.protos.UmsProtos.Response;
 import com.opera.core.systems.scope.services.IOperaExec;
-import com.opera.core.systems.util.VersionUtil;
+import com.opera.core.systems.internal.VersionUtil;
 
-import org.openqa.selenium.UnsupportedCommandException;
 import org.openqa.selenium.WebDriverException;
 
 import java.util.Arrays;
@@ -54,19 +53,23 @@ import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Logger;
 
+import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkNotNull;
+
 /**
  * The exec service handles user interactions such as key presses, mouse clicks, screenshot grabbing
  * and executing actions on Opera.
  */
 public class OperaExec extends AbstractService implements IOperaExec {
 
-  private static Logger logger = Logger.getLogger(OperaExec.class.getName());
-  private List<String> keys;
+  private final Logger logger = Logger.getLogger(getClass().getName());
+  private final List<String> keys = new CopyOnWriteArrayList<String>();
+  private final ScopeServices services;
+
   private Set<String> actions;
-  private ScopeServices services;
 
   // TODO: Remove me, VERY UGLY HACK FOR window-id bug
-  private List<String> excludedActions = ImmutableList.of("Select all", "Delete");
+  private final List<String> excludedActions = ImmutableList.of("Select all", "Delete");
 
   public OperaExec(ScopeServices services, String version) {
     super(services, version);
@@ -84,7 +87,6 @@ public class OperaExec extends AbstractService implements IOperaExec {
 
     services.setExec(this);
     this.services = services;
-    keys = new CopyOnWriteArrayList<String>();
   }
 
   public void init() {
@@ -106,16 +108,12 @@ public class OperaExec extends AbstractService implements IOperaExec {
     return actions;
   }
 
+  /*
   public void type(String using) {
-    if (using == null) {
-      throw new NullPointerException("You must provide something to type");
-    }
+    checkNotNull("You must provide something to type", using);
+    checkArgument(using.length() > 0, "Cannot type empty string");
 
-    if (using.length() == 0) {
-      throw new IllegalArgumentException("Can't type empty string");
-    }
-
-    if (keyIsPressed(OperaKeys.SHIFT.getValue())) {
+    if (keyIsPressed(OperaKey.SHIFT.getValue())) {
       using = using.toUpperCase();
     }
 
@@ -127,28 +125,25 @@ public class OperaExec extends AbstractService implements IOperaExec {
         // types lower-case presumably they want to type upper-case characters.
         boolean releaseShift = false;
 
-        if (!keyIsPressed(OperaKeys.SHIFT.getValue())) {
-          key(OperaKeys.SHIFT.getValue(), false);
+        if (!keyIsPressed(OperaKey.SHIFT.getValue())) {
+          key(OperaKey.SHIFT.getValue(), false);
           releaseShift = true;
         }
 
         key(String.valueOf(ch));
 
         if (releaseShift) {
-          key(OperaKeys.SHIFT.getValue(), true);
+          key(OperaKey.SHIFT.getValue(), true);
         }
       } else {
         key(String.valueOf(ch));
       }
     }
-
-    /*
-    action("_type", using);
-    */
   }
+  */
 
   public void mouseAction(int x, int y, OperaMouseKeys... keys) {
-    this.mouseAction(x, y, 1, keys);
+    mouseAction(x, y, 1, keys);
   }
 
   public void mouseAction(int x, int y, int count, OperaMouseKeys... keys) {
@@ -197,11 +192,13 @@ public class OperaExec extends AbstractService implements IOperaExec {
     return actions;
   }
 
-  public void action(String using, int windowID, String... params) {
-    using = using.toLowerCase();
+  public void action(String using, String... params) {
+    action(using, services.getWindowManager().getActiveWindowId(), params);
+  }
 
+  public void action(String using, int windowID, String... params) {
     if (!actions.contains(using)) {
-      throw new WebDriverException("The requested action is not supported: " + using);
+      throw new UnsupportedOperationException("The requested action is not supported: " + using);
     }
 
     ActionList.Builder builder = ActionList.newBuilder();
@@ -229,7 +226,7 @@ public class OperaExec extends AbstractService implements IOperaExec {
 
   public void action(String using, int data, String dataString, String dataStringParam) {
     if (!actions.contains(using)) {
-      throw new UnsupportedCommandException("The requested action is not supported: " + using);
+      throw new UnsupportedOperationException("The requested action is not supported: " + using);
     }
 
     ActionList.Builder builder = ActionList.newBuilder();
@@ -244,11 +241,6 @@ public class OperaExec extends AbstractService implements IOperaExec {
     if (executeCommand(ExecCommand.EXEC, builder) == null) {
       throw new WebDriverException("Unexpected error while calling action: " + using);
     }
-  }
-
-  // TODO: Sending params, we have commas, spaces, what?
-  public void action(String using, String... params) {
-    action(using, services.getWindowManager().getActiveWindowId(), params);
   }
 
   public void key(String key) {
@@ -294,8 +286,7 @@ public class OperaExec extends AbstractService implements IOperaExec {
       builder.addColorSpecList(colorSpec);
     }
 
-    // TODO(andreastt): Unsafe long to int cast
-    ScreenWatcherResult result = executeScreenWatcher(builder, (int) timeout);
+    ScreenWatcherResult result = executeScreenWatcher(builder, timeout);
 
     ImmutableList.Builder<ColorResult> matches = ImmutableList.builder();
     for (ColorMatch match : result.getColorMatchListList()) {
@@ -308,12 +299,13 @@ public class OperaExec extends AbstractService implements IOperaExec {
   /**
    * Executes a screenwatcher with the given timeout and returns the result.
    */
-  private ScreenWatcherResult executeScreenWatcher(ScreenWatcher.Builder builder, int timeout) {
+  private ScreenWatcherResult executeScreenWatcher(ScreenWatcher.Builder builder, long timeout) {
     if (timeout <= 0) {
       timeout = 1;
     }
 
-    builder.setTimeOut(timeout);
+    // TODO(andreastt): Unsafe long to int cast
+    builder.setTimeOut((int) timeout);
 
     builder.setWindowID(services.getWindowManager().getActiveWindowId());
 

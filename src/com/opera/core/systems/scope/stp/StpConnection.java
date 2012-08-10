@@ -30,8 +30,8 @@ import com.opera.core.systems.scope.protos.UmsProtos.Error;
 import com.opera.core.systems.scope.protos.UmsProtos.Event;
 import com.opera.core.systems.scope.protos.UmsProtos.Response;
 import com.opera.core.systems.scope.protos.UmsProtos.Status;
-import com.opera.core.systems.util.SocketListener;
-import com.opera.core.systems.util.SocketMonitor;
+import com.opera.core.systems.internal.SocketListener;
+import com.opera.core.systems.internal.SocketMonitor;
 
 import org.openqa.selenium.WebDriverException;
 

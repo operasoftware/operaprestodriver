@@ -25,7 +25,7 @@ import com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopStringID;
 import com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopStringText;
 import com.opera.core.systems.scope.protos.UmsProtos.Response;
 import com.opera.core.systems.scope.services.IDesktopUtils;
-import com.opera.core.systems.util.WatirUtils;
+import com.opera.core.systems.internal.WatirUtils;
 
 import java.util.logging.Logger;
 import java.util.regex.Matcher;

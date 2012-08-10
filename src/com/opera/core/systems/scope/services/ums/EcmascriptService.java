@@ -38,6 +38,7 @@ import com.opera.core.systems.scope.protos.EcmascriptProtos.ReadyStateChange;
 import com.opera.core.systems.scope.protos.EcmascriptProtos.ReleaseObjectsArg;
 import com.opera.core.systems.scope.protos.EcmascriptProtos.Runtime;
 import com.opera.core.systems.scope.protos.EcmascriptProtos.RuntimeList;
+import com.opera.core.systems.scope.protos.EcmascriptProtos.SetFormElementValueArg;
 import com.opera.core.systems.scope.protos.EcmascriptProtos.Value;
 import com.opera.core.systems.scope.protos.EcmascriptProtos.Value.Type;
 import com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeInfo;
@@ -322,6 +323,13 @@ public class EcmascriptService extends AbstractEcmascriptService implements IEcm
       return null;
     }
     return ((EcmascriptProtos.Object) object).getObjectID();
+  }
+
+  public void setFormElementValue(int objectId, String value) {
+    SetFormElementValueArg.Builder args = SetFormElementValueArg.newBuilder();
+    args.setObjectID(objectId);
+    args.setValue(value);
+    executeCommand(ESCommand.SET_FORM_ELEMENT_VALUE, args);
   }
 
   /**

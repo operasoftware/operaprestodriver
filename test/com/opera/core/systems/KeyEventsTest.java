@@ -163,9 +163,11 @@ public class KeyEventsTest extends OperaDriverTestCase {
     driver.getServices().getExec().releaseKeys();
   }
 
+  /*
   public void type(String using) {
     driver.getServices().getExec().type(using);
   }
+  */
 
   // For verifying test outcome:
 

@@ -29,7 +29,7 @@ import com.opera.core.systems.scope.services.IOperaExec;
 import com.opera.core.systems.scope.services.IPrefs;
 import com.opera.core.systems.scope.services.ISelftest;
 import com.opera.core.systems.scope.services.IWindowManager;
-import com.opera.core.systems.util.VersionUtil;
+import com.opera.core.systems.internal.VersionUtil;
 
 import java.util.List;
 import java.util.logging.Logger;

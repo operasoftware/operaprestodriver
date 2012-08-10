@@ -7909,15 +7909,11 @@ public final class EcmascriptProtos {
       DOM_ENVIRONMENT_CREATED(0, 1),
       DOM_CONTENT_LOADED(1, 2),
       AFTER_ONLOAD(2, 3),
-      AFTER_DOM_CONTENT_LOADED(3, 4),
-      BEFORE_ONLOAD(4, 5),
       ;
       
       public static final int DOM_ENVIRONMENT_CREATED_VALUE = 1;
       public static final int DOM_CONTENT_LOADED_VALUE = 2;
       public static final int AFTER_ONLOAD_VALUE = 3;
-      public static final int AFTER_DOM_CONTENT_LOADED_VALUE = 4;
-      public static final int BEFORE_ONLOAD_VALUE = 5;
       
       
       public final int getNumber() { return value; }
@@ -7927,8 +7923,6 @@ public final class EcmascriptProtos {
           case 1: return DOM_ENVIRONMENT_CREATED;
           case 2: return DOM_CONTENT_LOADED;
           case 3: return AFTER_ONLOAD;
-          case 4: return AFTER_DOM_CONTENT_LOADED;
-          case 5: return BEFORE_ONLOAD;
           default: return null;
         }
       }
@@ -7959,7 +7953,7 @@ public final class EcmascriptProtos {
       }
       
       private static final State[] VALUES = {
-        DOM_ENVIRONMENT_CREATED, DOM_CONTENT_LOADED, AFTER_ONLOAD, AFTER_DOM_CONTENT_LOADED, BEFORE_ONLOAD, 
+        DOM_ENVIRONMENT_CREATED, DOM_CONTENT_LOADED, AFTER_ONLOAD, 
       };
       
       public static State valueOf(
@@ -8363,6 +8357,454 @@ public final class EcmascriptProtos {
     // @@protoc_insertion_point(class_scope:scope.ReadyStateChange)
   }
   
+  public interface SetFormElementValueArgOrBuilder
+      extends com.google.protobuf.MessageOrBuilder {
+    
+    // required uint32 objectID = 1;
+    boolean hasObjectID();
+    int getObjectID();
+    
+    // required string value = 2;
+    boolean hasValue();
+    String getValue();
+  }
+  public static final class SetFormElementValueArg extends
+      com.google.protobuf.GeneratedMessage
+      implements SetFormElementValueArgOrBuilder {
+    // Use SetFormElementValueArg.newBuilder() to construct.
+    private SetFormElementValueArg(Builder builder) {
+      super(builder);
+    }
+    private SetFormElementValueArg(boolean noInit) {}
+    
+    private static final SetFormElementValueArg defaultInstance;
+    public static SetFormElementValueArg getDefaultInstance() {
+      return defaultInstance;
+    }
+    
+    public SetFormElementValueArg getDefaultInstanceForType() {
+      return defaultInstance;
+    }
+    
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return com.opera.core.systems.scope.protos.EcmascriptProtos.internal_static_scope_SetFormElementValueArg_descriptor;
+    }
+    
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return com.opera.core.systems.scope.protos.EcmascriptProtos.internal_static_scope_SetFormElementValueArg_fieldAccessorTable;
+    }
+    
+    private int bitField0_;
+    // required uint32 objectID = 1;
+    public static final int OBJECTID_FIELD_NUMBER = 1;
+    private int objectID_;
+    public boolean hasObjectID() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
+    }
+    public int getObjectID() {
+      return objectID_;
+    }
+    
+    // required string value = 2;
+    public static final int VALUE_FIELD_NUMBER = 2;
+    private java.lang.Object value_;
+    public boolean hasValue() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    public String getValue() {
+      java.lang.Object ref = value_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
+          value_ = s;
+        }
+        return s;
+      }
+    }
+    private com.google.protobuf.ByteString getValueBytes() {
+      java.lang.Object ref = value_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
+        value_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    
+    private void initFields() {
+      objectID_ = 0;
+      value_ = "";
+    }
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized != -1) return isInitialized == 1;
+      
+      if (!hasObjectID()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasValue()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      memoizedIsInitialized = 1;
+      return true;
+    }
+    
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      getSerializedSize();
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        output.writeUInt32(1, objectID_);
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        output.writeBytes(2, getValueBytes());
+      }
+      getUnknownFields().writeTo(output);
+    }
+    
+    private int memoizedSerializedSize = -1;
+    public int getSerializedSize() {
+      int size = memoizedSerializedSize;
+      if (size != -1) return size;
+    
+      size = 0;
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeUInt32Size(1, objectID_);
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(2, getValueBytes());
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSerializedSize = size;
+      return size;
+    }
+    
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
+    }
+    
+    public static com.opera.core.systems.scope.protos.EcmascriptProtos.SetFormElementValueArg parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data).buildParsed();
+    }
+    public static com.opera.core.systems.scope.protos.EcmascriptProtos.SetFormElementValueArg parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data, extensionRegistry)
+               .buildParsed();
+    }
+    public static com.opera.core.systems.scope.protos.EcmascriptProtos.SetFormElementValueArg parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data).buildParsed();
+    }
+    public static com.opera.core.systems.scope.protos.EcmascriptProtos.SetFormElementValueArg parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data, extensionRegistry)
+               .buildParsed();
+    }
+    public static com.opera.core.systems.scope.protos.EcmascriptProtos.SetFormElementValueArg parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input).buildParsed();
+    }
+    public static com.opera.core.systems.scope.protos.EcmascriptProtos.SetFormElementValueArg parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input, extensionRegistry)
+               .buildParsed();
+    }
+    public static com.opera.core.systems.scope.protos.EcmascriptProtos.SetFormElementValueArg parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      Builder builder = newBuilder();
+      if (builder.mergeDelimitedFrom(input)) {
+        return builder.buildParsed();
+      } else {
+        return null;
+      }
+    }
+    public static com.opera.core.systems.scope.protos.EcmascriptProtos.SetFormElementValueArg parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      Builder builder = newBuilder();
+      if (builder.mergeDelimitedFrom(input, extensionRegistry)) {
+        return builder.buildParsed();
+      } else {
+        return null;
+      }
+    }
+    public static com.opera.core.systems.scope.protos.EcmascriptProtos.SetFormElementValueArg parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input).buildParsed();
+    }
+    public static com.opera.core.systems.scope.protos.EcmascriptProtos.SetFormElementValueArg parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input, extensionRegistry)
+               .buildParsed();
+    }
+    
+    public static Builder newBuilder() { return Builder.create(); }
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder(com.opera.core.systems.scope.protos.EcmascriptProtos.SetFormElementValueArg prototype) {
+      return newBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() { return newBuilder(this); }
+    
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessage.Builder<Builder>
+       implements com.opera.core.systems.scope.protos.EcmascriptProtos.SetFormElementValueArgOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return com.opera.core.systems.scope.protos.EcmascriptProtos.internal_static_scope_SetFormElementValueArg_descriptor;
+      }
+      
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return com.opera.core.systems.scope.protos.EcmascriptProtos.internal_static_scope_SetFormElementValueArg_fieldAccessorTable;
+      }
+      
+      // Construct using com.opera.core.systems.scope.protos.EcmascriptProtos.SetFormElementValueArg.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+      
+      private Builder(BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+        }
+      }
+      private static Builder create() {
+        return new Builder();
+      }
+      
+      public Builder clear() {
+        super.clear();
+        objectID_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000001);
+        value_ = "";
+        bitField0_ = (bitField0_ & ~0x00000002);
+        return this;
+      }
+      
+      public Builder clone() {
+        return create().mergeFrom(buildPartial());
+      }
+      
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return com.opera.core.systems.scope.protos.EcmascriptProtos.SetFormElementValueArg.getDescriptor();
+      }
+      
+      public com.opera.core.systems.scope.protos.EcmascriptProtos.SetFormElementValueArg getDefaultInstanceForType() {
+        return com.opera.core.systems.scope.protos.EcmascriptProtos.SetFormElementValueArg.getDefaultInstance();
+      }
+      
+      public com.opera.core.systems.scope.protos.EcmascriptProtos.SetFormElementValueArg build() {
+        com.opera.core.systems.scope.protos.EcmascriptProtos.SetFormElementValueArg result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+      
+      private com.opera.core.systems.scope.protos.EcmascriptProtos.SetFormElementValueArg buildParsed()
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        com.opera.core.systems.scope.protos.EcmascriptProtos.SetFormElementValueArg result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(
+            result).asInvalidProtocolBufferException();
+        }
+        return result;
+      }
+      
+      public com.opera.core.systems.scope.protos.EcmascriptProtos.SetFormElementValueArg buildPartial() {
+        com.opera.core.systems.scope.protos.EcmascriptProtos.SetFormElementValueArg result = new com.opera.core.systems.scope.protos.EcmascriptProtos.SetFormElementValueArg(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+          to_bitField0_ |= 0x00000001;
+        }
+        result.objectID_ = objectID_;
+        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+          to_bitField0_ |= 0x00000002;
+        }
+        result.value_ = value_;
+        result.bitField0_ = to_bitField0_;
+        onBuilt();
+        return result;
+      }
+      
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof com.opera.core.systems.scope.protos.EcmascriptProtos.SetFormElementValueArg) {
+          return mergeFrom((com.opera.core.systems.scope.protos.EcmascriptProtos.SetFormElementValueArg)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+      
+      public Builder mergeFrom(com.opera.core.systems.scope.protos.EcmascriptProtos.SetFormElementValueArg other) {
+        if (other == com.opera.core.systems.scope.protos.EcmascriptProtos.SetFormElementValueArg.getDefaultInstance()) return this;
+        if (other.hasObjectID()) {
+          setObjectID(other.getObjectID());
+        }
+        if (other.hasValue()) {
+          setValue(other.getValue());
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        return this;
+      }
+      
+      public final boolean isInitialized() {
+        if (!hasObjectID()) {
+          
+          return false;
+        }
+        if (!hasValue()) {
+          
+          return false;
+        }
+        return true;
+      }
+      
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder(
+            this.getUnknownFields());
+        while (true) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              this.setUnknownFields(unknownFields.build());
+              onChanged();
+              return this;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                this.setUnknownFields(unknownFields.build());
+                onChanged();
+                return this;
+              }
+              break;
+            }
+            case 8: {
+              bitField0_ |= 0x00000001;
+              objectID_ = input.readUInt32();
+              break;
+            }
+            case 18: {
+              bitField0_ |= 0x00000002;
+              value_ = input.readBytes();
+              break;
+            }
+          }
+        }
+      }
+      
+      private int bitField0_;
+      
+      // required uint32 objectID = 1;
+      private int objectID_ ;
+      public boolean hasObjectID() {
+        return ((bitField0_ & 0x00000001) == 0x00000001);
+      }
+      public int getObjectID() {
+        return objectID_;
+      }
+      public Builder setObjectID(int value) {
+        bitField0_ |= 0x00000001;
+        objectID_ = value;
+        onChanged();
+        return this;
+      }
+      public Builder clearObjectID() {
+        bitField0_ = (bitField0_ & ~0x00000001);
+        objectID_ = 0;
+        onChanged();
+        return this;
+      }
+      
+      // required string value = 2;
+      private java.lang.Object value_ = "";
+      public boolean hasValue() {
+        return ((bitField0_ & 0x00000002) == 0x00000002);
+      }
+      public String getValue() {
+        java.lang.Object ref = value_;
+        if (!(ref instanceof String)) {
+          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
+          value_ = s;
+          return s;
+        } else {
+          return (String) ref;
+        }
+      }
+      public Builder setValue(String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000002;
+        value_ = value;
+        onChanged();
+        return this;
+      }
+      public Builder clearValue() {
+        bitField0_ = (bitField0_ & ~0x00000002);
+        value_ = getDefaultInstance().getValue();
+        onChanged();
+        return this;
+      }
+      void setValue(com.google.protobuf.ByteString value) {
+        bitField0_ |= 0x00000002;
+        value_ = value;
+        onChanged();
+      }
+      
+      // @@protoc_insertion_point(builder_scope:scope.SetFormElementValueArg)
+    }
+    
+    static {
+      defaultInstance = new SetFormElementValueArg(true);
+      defaultInstance.initFields();
+    }
+    
+    // @@protoc_insertion_point(class_scope:scope.SetFormElementValueArg)
+  }
+  
   private static com.google.protobuf.Descriptors.Descriptor
     internal_static_scope_ListRuntimesArg_descriptor;
   private static
@@ -8433,6 +8875,11 @@ public final class EcmascriptProtos {
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_scope_ReadyStateChange_fieldAccessorTable;
+  private static com.google.protobuf.Descriptors.Descriptor
+    internal_static_scope_SetFormElementValueArg_descriptor;
+  private static
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_scope_SetFormElementValueArg_fieldAccessorTable;
   
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -8476,14 +8923,14 @@ public final class EcmascriptProtos {
       "\003\022\007\n\003NAN\020\004\022\021\n\rPLUS_INFINITY\020\005\022\022\n\016MINUS_I" +
       "NFINITY\020\006\022\n\n\006NUMBER\020\007\022\n\n\006STRING\020\010\022\n\n\006OBJ" +
       "ECT\020\t\")\n\021ReleaseObjectsArg\022\024\n\014objectIDLi" +
-      "st\030\001 \003(\r\"\324\001\n\020ReadyStateChange\022\021\n\truntime" +
+      "st\030\001 \003(\r\"\243\001\n\020ReadyStateChange\022\021\n\truntime" +
       "ID\030\001 \002(\r\022,\n\005state\030\002 \002(\0162\035.scope.ReadySta" +
-      "teChange.State\"\177\n\005State\022\033\n\027DOM_ENVIRONME" +
+      "teChange.State\"N\n\005State\022\033\n\027DOM_ENVIRONME" +
       "NT_CREATED\020\001\022\026\n\022DOM_CONTENT_LOADED\020\002\022\020\n\014" +
-      "AFTER_ONLOAD\020\003\022\034\n\030AFTER_DOM_CONTENT_LOAD" +
-      "ED\020\004\022\021\n\rBEFORE_ONLOAD\020\005B9\n#com.opera.cor",
-      "e.systems.scope.protosB\020EcmascriptProtos" +
-      "H\001"
+      "AFTER_ONLOAD\020\003\"9\n\026SetFormElementValueArg" +
+      "\022\020\n\010objectID\030\001 \002(\r\022\r\n\005value\030\002 \002(\tB9\n#com",
+      ".opera.core.systems.scope.protosB\020Ecmasc" +
+      "riptProtosH\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -8602,6 +9049,14 @@ public final class EcmascriptProtos {
               new java.lang.String[] { "RuntimeID", "State", },
               com.opera.core.systems.scope.protos.EcmascriptProtos.ReadyStateChange.class,
               com.opera.core.systems.scope.protos.EcmascriptProtos.ReadyStateChange.Builder.class);
+          internal_static_scope_SetFormElementValueArg_descriptor =
+            getDescriptor().getMessageTypes().get(12);
+          internal_static_scope_SetFormElementValueArg_fieldAccessorTable = new
+            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+              internal_static_scope_SetFormElementValueArg_descriptor,
+              new java.lang.String[] { "ObjectID", "Value", },
+              com.opera.core.systems.scope.protos.EcmascriptProtos.SetFormElementValueArg.class,
+              com.opera.core.systems.scope.protos.EcmascriptProtos.SetFormElementValueArg.Builder.class);
           return null;
         }
       };
