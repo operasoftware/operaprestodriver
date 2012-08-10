@@ -41,6 +41,7 @@ import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+import static org.junit.matchers.JUnitMatchers.containsString;
 import static org.openqa.selenium.Platform.LINUX;
 import static org.openqa.selenium.Platform.WINDOWS;
 
