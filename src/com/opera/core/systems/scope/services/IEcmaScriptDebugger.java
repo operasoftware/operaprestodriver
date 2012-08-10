@@ -106,8 +106,7 @@ public interface IEcmaScriptDebugger {
    */
   String callFunctionOnObject(String using, int objectId);
 
-  Object callFunctionOnObject(String using, int objectId,
-                              boolean responseExpected);
+  Object callFunctionOnObject(String using, int objectId, boolean responseExpected);
 
   Integer executeScriptOnObject(String using, int objectId);
 
@@ -178,5 +177,13 @@ public interface IEcmaScriptDebugger {
   String executeJavascript(String using, Integer windowId);
 
   Object examineScriptResult(Integer id);
+
+  /**
+   * Set value of a form element.
+   *
+   * @param objectId the ID of the object to set value
+   * @param value the value to set
+   */
+  void setFormElementValue(int objectId, String value);
 
 }

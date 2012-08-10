@@ -1,5 +1,5 @@
 /*
-Copyright 2008-2011 Opera Software ASA
+Copyright 2008-2012 Opera Software ASA
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,24 +16,33 @@ limitations under the License.
 
 package com.opera.core.systems.scope;
 
+import com.google.common.base.Function;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Maps;
+
 import com.opera.core.systems.model.ICommand;
 
-import java.util.EnumSet;
-import java.util.HashMap;
 import java.util.Map;
 
 public enum ESCommand implements ICommand {
-  LIST_RUNTIMES(1), EVAL(2), EXAMINE_OBJECTS(3), RELEASE_OBJECTS(4), ON_READY_STATE_CHANGED(
-      5), DEFAULT(-1);
 
-  private int code;
-  private static final Map<Integer, ESCommand> lookup = new HashMap<Integer, ESCommand>();
+  LIST_RUNTIMES(1),
+  EVAL(2),
+  EXAMINE_OBJECTS(3),
+  RELEASE_OBJECTS(4),
+  ON_READY_STATE_CHANGED(5),
+  SET_FORM_ELEMENT_VALUE(6),
 
-  static {
-    for (ESCommand command : EnumSet.allOf(ESCommand.class)) {
-      lookup.put(command.getCommandID(), command);
-    }
-  }
+  DEFAULT(-1);
+
+  private static final Map<Integer, ESCommand> lookup =
+      Maps.uniqueIndex(ImmutableList.copyOf(values()), new Function<ESCommand, Integer>() {
+        public Integer apply(ESCommand command) {
+          return command.getCommandID();
+        }
+      });
+
+  private final int code;
 
   private ESCommand(int code) {
     this.code = code;

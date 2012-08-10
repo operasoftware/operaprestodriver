@@ -37,6 +37,7 @@ import com.opera.core.systems.scope.protos.EcmascriptProtos.ReadyStateChange;
 import com.opera.core.systems.scope.protos.EcmascriptProtos.ReleaseObjectsArg;
 import com.opera.core.systems.scope.protos.EcmascriptProtos.Runtime;
 import com.opera.core.systems.scope.protos.EcmascriptProtos.RuntimeList;
+import com.opera.core.systems.scope.protos.EcmascriptProtos.SetFormElementValueArg;
 import com.opera.core.systems.scope.protos.EcmascriptProtos.Value;
 import com.opera.core.systems.scope.protos.EcmascriptProtos.Value.Type;
 import com.opera.core.systems.scope.protos.EsdbgProtos;
@@ -121,7 +122,7 @@ public class EcmascriptService extends AbstractEcmascriptService implements
   private List<Runtime> getRuntimesList() {
     int windowId = services.getWindowManager().getActiveWindowId();
     Iterator<?> iterator = xpathIterator(runtimesList.values(), "/.[windowID='" + windowId + "']");
-    List<Runtime> runtimes = new ArrayList<Runtime>();
+    List<Runtime> runtimes = Lists.newArrayList();
     while (iterator.hasNext()) {
       runtimes.add((Runtime) ((Pointer) iterator.next()).getNode());
     }
@@ -167,7 +168,7 @@ public class EcmascriptService extends AbstractEcmascriptService implements
   public Object scriptExecutor(String script, Object... params) {
     processQueues();
 
-    List<WebElement> elements = new ArrayList<WebElement>();
+    List<WebElement> elements = Lists.newArrayList();
 
     String toSend = buildEvalString(elements, script, params);
     EvalArg.Builder evalBuilder = buildEval(toSend, getRuntimeId());
@@ -324,6 +325,13 @@ public class EcmascriptService extends AbstractEcmascriptService implements
       return null;
     }
     return ((EcmascriptProtos.Object) object).getObjectID();
+  }
+
+  public void setFormElementValue(int objectId, String value) {
+    SetFormElementValueArg.Builder args = SetFormElementValueArg.newBuilder();
+    args.setObjectID(objectId);
+    args.setValue(value);
+    executeCommand(ESCommand.SET_FORM_ELEMENT_VALUE, args);
   }
 
   /**

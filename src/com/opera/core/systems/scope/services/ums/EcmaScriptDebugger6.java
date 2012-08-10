@@ -30,7 +30,7 @@ import com.opera.core.systems.scope.protos.Esdbg6Protos.ObjectValue;
 import com.opera.core.systems.scope.protos.EsdbgProtos.EvalData;
 import com.opera.core.systems.scope.protos.EsdbgProtos.EvalData.Variable;
 import com.opera.core.systems.scope.protos.UmsProtos.Response;
-import com.opera.core.systems.util.VersionUtil;
+import com.opera.core.systems.internal.VersionUtil;
 
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;

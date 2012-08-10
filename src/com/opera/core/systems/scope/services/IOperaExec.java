@@ -31,7 +31,7 @@ public interface IOperaExec {
    * Type a string, preserving space, sent to active window This command doesn't return a response
    * in STP/0 hence we sleep to be on the safe side.
    */
-  void type(String using);
+  //void type(String using);
 
   /**
    * Create a mouse action on coordinates x,y with key(s) as specified in {@link OperaMouseKeys}.
@@ -50,13 +50,39 @@ public interface IOperaExec {
   Set<String> getActionList();
 
   /**
-   * Execute an opera action with parameters (parameters are sent with commas).
+   * Execute an Opera action with parameters.
+   *
+   * @param using  the name of the action to execute
+   * @param params the string parameters for extra string data to be sent with the action, e.g.
+   *               "opera.com" to the command "go"
    */
-  void action(String using, String... param);
+  void action(String using, String... params);
 
+  /**
+   * Execute an Opera action with parameters to a specific window.  If you specify the wrong window,
+   * the action will fail.  Specifying window as 0 will send the command to the currently active
+   * window.
+   *
+   * @param using    the name of the action to execute
+   * @param windowID window to send the action to, 0 for the currently active window
+   * @param params   the string parameters for extra string data to be sent with the action, e.g.
+   *                 "opera.com" to the command "go"
+   */
   void action(String using, int windowID, String... params);
 
-  void action(String using, int data, String dataString, String dataStringParam);
+  /**
+   * Execute an Opera action with a data parameters for extra integer data to be sent with the
+   * action.  In some actions the data parameters is interpreted as a pointer rather than an
+   * integer.  In these cases the action will fail.
+   *
+   * @param using           the name of the action to execute
+   * @param data            data parameter for extra integer data to be sent with the action
+   * @param value           string parameter for extra string data to be sent with the action, e.g.
+   *                        "opera.com" to the command "go"
+   * @param dataStringParam extra string parameter for action, sent in addition to the {@code value}
+   *                        parameter for actions that need two strings
+   */
+  void action(String using, int data, String value, String dataStringParam);
 
   /**
    * Execute a key press (immediately send key down and up).

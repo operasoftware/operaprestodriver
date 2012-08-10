@@ -16,7 +16,7 @@ limitations under the License.
 
 package com.opera.core.systems;
 
-import com.opera.core.systems.util.VersionUtil;
+import com.opera.core.systems.internal.VersionUtil;
 
 import org.junit.Test;
 

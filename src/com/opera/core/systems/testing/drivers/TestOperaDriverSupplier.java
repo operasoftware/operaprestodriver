@@ -16,13 +16,17 @@ limitations under the License.
 
 package com.opera.core.systems.testing.drivers;
 
+import org.openqa.selenium.remote.LocalFileDetector;
+
 public class TestOperaDriverSupplier extends AbstractTestDriverSupplier {
 
   public TestOperaDriver get() {
     // Uncomment this if you wish to connect Opera manually:
     //settings.autostart(false);
 
-    return new TestOperaDriver(settings);
+    TestOperaDriver driver = new TestOperaDriver(settings);
+    driver.setFileDetector(new LocalFileDetector());
+    return driver;
   }
 
   public boolean supplies(Class<? extends TestDriver> klass) {

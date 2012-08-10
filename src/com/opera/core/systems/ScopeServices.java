@@ -60,7 +60,7 @@ import com.opera.core.systems.scope.services.ums.SystemInputManager;
 import com.opera.core.systems.scope.services.ums.UmsServices;
 import com.opera.core.systems.scope.stp.StpConnection;
 import com.opera.core.systems.scope.stp.StpThread;
-import com.opera.core.systems.util.VersionUtil;
+import com.opera.core.systems.internal.VersionUtil;
 
 import org.openqa.selenium.WebDriverException;
 
@@ -365,6 +365,9 @@ public class ScopeServices implements IConnectionHandler {
 
         public Object examineScriptResult(Integer id) {
           return null;
+        }
+
+        public void setFormElementValue(int objectId, String value) {
         }
 
         public void setDriver(OperaDriver driver) {

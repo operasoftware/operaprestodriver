@@ -33,8 +33,8 @@ import com.opera.core.systems.scope.protos.WmProtos.WindowID;
 import com.opera.core.systems.scope.protos.WmProtos.WindowInfo;
 import com.opera.core.systems.scope.protos.WmProtos.WindowList;
 import com.opera.core.systems.scope.services.IWindowManager;
-import com.opera.core.systems.util.StackHashMap;
-import com.opera.core.systems.util.VersionUtil;
+import com.opera.core.systems.internal.StackHashMap;
+import com.opera.core.systems.internal.VersionUtil;
 
 import org.apache.commons.jxpath.CompiledExpression;
 import org.apache.commons.jxpath.JXPathContext;

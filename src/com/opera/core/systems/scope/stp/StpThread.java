@@ -19,7 +19,7 @@ package com.opera.core.systems.scope.stp;
 import com.opera.core.systems.scope.handlers.EventHandler;
 import com.opera.core.systems.scope.handlers.IConnectionHandler;
 import com.opera.core.systems.scope.internal.OperaIntervals;
-import com.opera.core.systems.util.SocketMonitor;
+import com.opera.core.systems.internal.SocketMonitor;
 
 import java.io.IOException;
 import java.util.logging.Logger;

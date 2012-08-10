@@ -562,6 +562,10 @@ public class EcmaScriptDebugger extends AbstractEcmascriptService implements IEc
     return examineScriptResult(id, new HashSet<Integer>());
   }
 
+  public void setFormElementValue(int objectId, String value) {
+    throw new UnsupportedOperationException();
+  }
+
   private Object examineScriptResult(Integer id, Set<Integer> visitedIDs) {
     if (visitedIDs.contains(id)) {
       // cyclic reference - returning null for the inner most reference

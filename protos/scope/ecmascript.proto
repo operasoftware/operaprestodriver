@@ -70,6 +70,12 @@ service Ecmascript
      * See message 'ReadyStateChange' for details.
      */
     event OnReadyStateChanged returns (ReadyStateChange) = 5;
+
+    /**
+     * Set value of a form element.
+     * @since 1.1
+     */
+    command SetFormElementValue(SetFormElementValueArg) returns (Default) = 6;
 }
 
 // command ListRuntimes(ListRuntimesArg) returns (RuntimeList) = 1;
@@ -453,36 +459,32 @@ message ReadyStateChange
 
         /**
          * This state indicates that the HTML tree is done (for now). The event
-         * happens before the DOMContentLoaded event fires on the document
+         * happens immediately after the DOMContentLoaded event fires on the window 
          * object. Useful for figuring out when we can inspect the DOM.
          */
         DOM_CONTENT_LOADED = 2;
 
         /**
-         * Occurs after onload is finished, and after external resources are loaded.
+         * Occurs after onload is finished, and after external resources are loaded. 
          * When this event is observed, it should be safe to take a screenshot.
          */
         AFTER_ONLOAD = 3;
-
-        /**
-         * Occurs after DOMContentLoaded event has been processed. If there was
-         * no DOMContentLoaded registered, occurs immediately after the matching
-         * "before" event.
-         *
-         * @since 1.1
-         */
-        AFTER_DOM_CONTENT_LOADED = 4;
-
-        /**
-         * Occurs before onload has fired, and after external resources
-         * are loaded.
-         *
-         * @since 1.1
-         */
-        BEFORE_ONLOAD = 5;
-
     }
 
     required uint32 runtimeID = 1;
     required State state = 2;
 }
+
+message SetFormElementValueArg
+{
+    /**
+     * ID of object to set value.
+     */
+    required uint32 objectID = 1;
+
+    /**
+     * Value to set.
+     */
+    required string value = 2;
+}
+
