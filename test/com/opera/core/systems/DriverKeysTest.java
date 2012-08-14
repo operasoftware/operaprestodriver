@@ -135,7 +135,14 @@ public class DriverKeysTest extends OperaDriverTestCase {
   @Test
   public void testShiftCapitals() {
     new Actions(driver).sendKeys("a").sendKeys(Keys.SHIFT + "bc").sendKeys("d").build().perform();
-    assertEquals("aBCd", fieldOne.getAttribute("value"));
+    assertEquals("aBCD", fieldOne.getAttribute("value"));
+  }
+
+  @Test
+  public void depressShift() {
+    new Actions(driver).sendKeys(Keys.SHIFT).sendKeys("a").keyUp(Keys.SHIFT).sendKeys("b")
+        .build().perform();
+    assertEquals("Ab", fieldOne.getAttribute("value"));
   }
 
   @Test
