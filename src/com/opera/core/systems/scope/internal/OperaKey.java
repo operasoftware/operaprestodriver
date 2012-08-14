@@ -108,14 +108,13 @@ public enum OperaKey {
     this.value = value;
   }
 
-  // TODO: rename to something better
-  public String getValue() {
+  public String toScope() {
     return value;
   }
 
   @Override
   public String toString() {
-    return String.format("%s -> %s", name(), getValue());
+    return String.format("%s -> %s", name(), toScope());
   }
 
   /*
@@ -132,8 +131,15 @@ public enum OperaKey {
   }
   */
 
+  /*
   public static OperaKey get(Keys key) {
     return lookup.get(key);
   }
+  */
+
+  public static OperaKey get(Keys key) {
+    return lookup.get(key);
+  }
+
 
 }

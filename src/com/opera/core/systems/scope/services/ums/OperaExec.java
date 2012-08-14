@@ -249,6 +249,10 @@ public class OperaExec extends AbstractService implements IOperaExec {
   }
 
   public void key(String key, boolean up) {
+    if (key == null) {
+      return;
+    }
+
     if (up) {
       action("_keyup", key);
       keys.remove(key.toLowerCase());

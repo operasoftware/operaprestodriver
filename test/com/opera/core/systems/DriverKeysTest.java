@@ -27,9 +27,8 @@ import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 
-import static org.junit.Assert.assertEquals;
-import static org.openqa.selenium.Platform.MAC;
 import static com.opera.core.systems.OperaProduct.MOBILE;
+import static org.junit.Assert.assertEquals;
 
 public class DriverKeysTest extends OperaDriverTestCase {
 
@@ -135,14 +134,21 @@ public class DriverKeysTest extends OperaDriverTestCase {
   @Test
   public void testShiftCapitals() {
     new Actions(driver).sendKeys("a").sendKeys(Keys.SHIFT + "bc").sendKeys("d").build().perform();
-    assertEquals("aBCd", fieldOne.getAttribute("value"));
+    assertEquals("aBCD", fieldOne.getAttribute("value"));
+  }
+
+  @Test
+  public void depressShift() {
+    new Actions(driver).sendKeys(Keys.SHIFT).sendKeys("a").keyUp(Keys.SHIFT).sendKeys("b")
+        .build().perform();
+    assertEquals("Ab", fieldOne.getAttribute("value"));
   }
 
   @Test
   @Ignore(products = MOBILE, value = "Needs investigation")
   public void testHoldControl() {
     // Control + A
-    new Actions(driver).sendKeys("a" + Keys.CONTROL + "a" + Keys.CONTROL + "bc").build().perform();
+    new Actions(driver).sendKeys("a" + Keys.CONTROL + "a" + Keys.CONTROL + "bc").perform();
     assertEquals("bc", fieldOne.getAttribute("value"));
   }
 

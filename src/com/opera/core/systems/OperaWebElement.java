@@ -169,6 +169,7 @@ public class OperaWebElement extends RemoteWebElement {
   public String getAttribute(String attribute) {
     assertElementNotStale();
 
+    /*
     // TODO(andreastt): Investigate whether this check is still needed
     if (attribute.equalsIgnoreCase("value")) {
       return callMethod("if(/^input|select|option|textarea$/i.test(locator.nodeName)){"
@@ -177,6 +178,10 @@ public class OperaWebElement extends RemoteWebElement {
       return callMethod("return " + OperaAtom.GET_ATTRIBUTE + "(locator, '" + attribute
                         + "')");
     }
+    */
+
+    return callMethod(String.format("return %s(locator, '%s')",
+                                    OperaAtom.GET_ATTRIBUTE, attribute));
   }
 
   private boolean hasAttribute(String attr) {
@@ -373,8 +378,25 @@ public class OperaWebElement extends RemoteWebElement {
     String type = callMethod("locator.type");
 
     if (type.equals("text") || type.equals("textarea")) {
-      // TODO(andreastt): Fix this atom
       executeMethod(OperaAtom.MOVE_CARET_TO_END + "(locator)");
+
+      /*
+      executeMethod("function(elem) {" + "  var doc = elem.ownerDocument || elem;"
+                    + "  var prevActiveElem = doc.activeElement;"
+                    + "  if (elem != prevActiveElem && prevActiveElem)"
+                    + "    prevActiveElem.blur();"
+                    + "  elem.focus();"
+                    + "  if (elem != prevActiveElem && elem.value && elem.value.length &&"
+                    + "      elem.setSelectionRange) {"
+                    + "    elem.setSelectionRange(elem.value.length, elem.value.length);" + "  }"
+                    + "  if (elem != doc.activeElement)"
+                    + "    throw new Error('Failed to send keys because cannot focus element');"
+                    + "}(locator)");
+                    */
+
+      //executeMethod("locator.setSelectionRange(locator.value.length, locator.value.length)");
+
+
     }
 
     click();

@@ -17,9 +17,9 @@ limitations under the License.
 package com.opera.core.systems;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Maps;
 
-import com.opera.core.systems.internal.KeyboardModifiers;
+import com.opera.core.systems.internal.input.KeyEvent;
+import com.opera.core.systems.internal.input.KeyboardModifiers;
 import com.opera.core.systems.scope.internal.OperaKey;
 import com.opera.core.systems.scope.services.IOperaExec;
 
@@ -27,7 +27,6 @@ import org.openqa.selenium.Keyboard;
 import org.openqa.selenium.Keys;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * Opera uses the "exec" Scope service to trigger key events in Opera.  This service is available on
@@ -36,32 +35,77 @@ import java.util.Map;
  */
 public class OperaKeyboard implements Keyboard {
 
-  //private static final List<OperaKey> holdKeys = ImmutableList.of(OperaKey.SHIFT, OperaKey.CONTROL);
-
-  /*
-  private static final Map<Character, Keys> specialKeysLookup =
-      Maps.uniqueIndex(ImmutableList.copyOf(Keys.values()), new Function<Keys, Character>() {
-        public Character apply(Keys key) {
-          return key.charAt(0);
-        }
-      });
-      */
-
-  private final Map<Character, Keys> specialKeysLookup = Maps.newHashMap();
-
   private final IOperaExec exec;
-  //private final List<String> heldKeys = Lists.newArrayList();
   private final KeyboardModifiers modifiers = new KeyboardModifiers();
 
   public OperaKeyboard(OperaDriver parent) {
     exec = parent.getExecService();
-
-    for (Keys key : Keys.values()) {
-      specialKeysLookup.put(key.charAt(0), key);
-    }
   }
 
 
+  public void sendKeys(CharSequence... keysToSend) {
+    ImmutableList.Builder<KeyEvent> builder = ImmutableList.builder();
+
+    // The keys to send resembles what you could roughly call a multidimensional map.  To make the
+    // algorithm for sending keys and key combinations to the browser easier we first want to
+    // normalize array we receive.
+
+    for (CharSequence sequence : keysToSend) {
+      for (int i = 0; i < sequence.length(); ++i) {
+        builder.add(new KeyEvent(sequence.charAt(i)));
+      }
+    }
+
+    sendKeys(builder.build());
+    releaseModifiers();
+  }
+
+  private void sendKeys(List<KeyEvent> events) {
+    for (KeyEvent event : events) {
+      if (event.isNewLine()) {
+        exec.key(OperaKey.ENTER.toScope());
+      } else if (event.isModifierRelease()) {
+        releaseModifiers();
+      } else if (event.isModifier()) {
+        pressOrReleaseModifier(event.getKey());
+      } else if (event.isSpecial()) {
+        exec.key(OperaKey.get(event.getKey()).toScope());
+      } else {
+        type(event.getCharacter());
+      }
+    }
+  }
+
+  private void releaseModifiers() {
+    for (Keys modifierKey : modifiers) {
+      releaseKey(modifierKey);
+    }
+  }
+
+  private void pressOrReleaseModifier(Keys modifier) {
+    if (modifiers.contains(modifier)) {
+      releaseKey(modifier);
+    } else {
+      pressKey(modifier);
+    }
+  }
+
+  private void type(char key) {
+    String string = String.valueOf(key);
+
+    if (modifiers.contains(Keys.LEFT_SHIFT) || modifiers.contains(Keys.SHIFT)) {
+      //exec.key(string.toUpperCase());
+      //pressKey(Keys.SHIFT);
+      exec.key(OperaKey.SHIFT.toScope(), false);
+      exec.key(string.toUpperCase());
+      //releaseKey(Keys.SHIFT);
+      exec.key(OperaKey.SHIFT.toScope(), true);
+    } else {
+      exec.key(string);
+    }
+  }
+
+  /*
   public void sendKeys(CharSequence... keysToSend) {
     // The keys to send resembles what you could roughly call a multidimensional map.  To make the
     // algorithm for sending keys and key combinations to the browser easier we first want to
@@ -83,21 +127,22 @@ public class OperaKeyboard implements Keyboard {
 
   private void sendKeys(List<Character> characters) {
     for (final char c : characters) {
+      Keys key = OperaKey.getKeyFromUnicode(c);
+      OperaKey operaKey = OperaKey.get(key);
+
       if (c == '\n') {
         exec.key(OperaKey.ENTER.getValue());
-      } else if (specialKeysLookup.containsKey(c)) {
-        Keys key = specialKeysLookup.get(c);
-        OperaKey operaKey = OperaKey.get(key);
-
+      } else if (operaKey != null) {
         if (key == Keys.NULL) {
           for (Keys modifierKey : modifiers) {
-            exec.key(operaKey.getValue(), true);
-            modifiers.keyUp(modifierKey);
+            releaseKey(modifierKey);
           }
-        //} else if (KeyboardModifiers.MODIFIERS.contains(key) && !modifiers.contains(key)) {
-        } else if (KeyboardModifiers.isModifier(key) && !modifiers.contains(key)) {
-          exec.key(operaKey.getValue(), false);
-          modifiers.keyDown(key);
+        } else if (KeyboardModifiers.isModifier(key)) {
+          if (modifiers.contains(key)) {
+            releaseKey(key);
+          } else {
+            pressKey(key);
+          }
         } else {
           exec.key(operaKey.getValue());
         }
@@ -109,7 +154,12 @@ public class OperaKeyboard implements Keyboard {
         exec.key(keyAsString);
       }
     }
+
+    for (Keys modifierKey : modifiers) {
+      releaseKey(modifierKey);
+    }
   }
+  */
 
   /*
 
@@ -217,31 +267,16 @@ public void asendKeys(CharSequence... keysToSend) {
 
   public void pressKey(Keys keyToPress) {
     //exec.key(OperaKey.get((keyToPress).name()), false);
-    exec.key(OperaKey.get(keyToPress).getValue(), false);
+    //modifiers.keyDown(keyToPress);
+    modifiers.add(keyToPress);
+    exec.key(OperaKey.get(keyToPress).toScope(), false);
   }
 
   public void releaseKey(Keys keyToRelease) {
     //exec.key(OperaKey.get((keyToRelease).name()), true);
-    exec.key(OperaKey.get(keyToRelease).getValue(), true);
-  }
-
-  private static final Map<Character, Keys> keysLookup = Maps.newHashMap();
-
-  /**
-   * Converts a character in the PUA to the name of the key, as given by {@link
-   * org.openqa.selenium.Keys}. If the character doesn't appear in that class then null is
-   * returned.
-   *
-   * @param c the character that may be a special key
-   * @return a string containing the name of the "special" key or null
-   */
-  private static Keys charToKeyName(char c) { // TODO(andreastt): Move this to OperaKeyboard?
-    if (keysLookup.isEmpty()) {
-      for (Keys k : Keys.values()) {
-        keysLookup.put(k.charAt(0), k);
-      }
-    }
-    return keysLookup.get(c);
+    //modifiers.keyUp(keyToRelease);
+    modifiers.remove(keyToRelease);
+    exec.key(OperaKey.get(keyToRelease).toScope(), true);
   }
 
 }
