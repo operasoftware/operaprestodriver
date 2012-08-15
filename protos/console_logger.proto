@@ -65,3 +65,13 @@ message ConsoleMessage
     optional string severity    = 7;
 }
 
+/**
+ * A list of ConsoleMessages.
+ * 
+ * @since 2.1
+ */
+message ConsoleMessageList
+{
+    repeated ConsoleMessage consoleMessageList = 1;
+}
+

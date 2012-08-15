@@ -897,11 +897,579 @@ public final class ConsoleLoggerProtos {
     // @@protoc_insertion_point(class_scope:scope.ConsoleMessage)
   }
   
+  public interface ConsoleMessageListOrBuilder
+      extends com.google.protobuf.MessageOrBuilder {
+    
+    // repeated .scope.ConsoleMessage consoleMessageList = 1;
+    java.util.List<com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessage> 
+        getConsoleMessageListList();
+    com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessage getConsoleMessageList(int index);
+    int getConsoleMessageListCount();
+    java.util.List<? extends com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessageOrBuilder> 
+        getConsoleMessageListOrBuilderList();
+    com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessageOrBuilder getConsoleMessageListOrBuilder(
+        int index);
+  }
+  public static final class ConsoleMessageList extends
+      com.google.protobuf.GeneratedMessage
+      implements ConsoleMessageListOrBuilder {
+    // Use ConsoleMessageList.newBuilder() to construct.
+    private ConsoleMessageList(Builder builder) {
+      super(builder);
+    }
+    private ConsoleMessageList(boolean noInit) {}
+    
+    private static final ConsoleMessageList defaultInstance;
+    public static ConsoleMessageList getDefaultInstance() {
+      return defaultInstance;
+    }
+    
+    public ConsoleMessageList getDefaultInstanceForType() {
+      return defaultInstance;
+    }
+    
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return com.opera.core.systems.scope.protos.ConsoleLoggerProtos.internal_static_scope_ConsoleMessageList_descriptor;
+    }
+    
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return com.opera.core.systems.scope.protos.ConsoleLoggerProtos.internal_static_scope_ConsoleMessageList_fieldAccessorTable;
+    }
+    
+    // repeated .scope.ConsoleMessage consoleMessageList = 1;
+    public static final int CONSOLEMESSAGELIST_FIELD_NUMBER = 1;
+    private java.util.List<com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessage> consoleMessageList_;
+    public java.util.List<com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessage> getConsoleMessageListList() {
+      return consoleMessageList_;
+    }
+    public java.util.List<? extends com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessageOrBuilder> 
+        getConsoleMessageListOrBuilderList() {
+      return consoleMessageList_;
+    }
+    public int getConsoleMessageListCount() {
+      return consoleMessageList_.size();
+    }
+    public com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessage getConsoleMessageList(int index) {
+      return consoleMessageList_.get(index);
+    }
+    public com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessageOrBuilder getConsoleMessageListOrBuilder(
+        int index) {
+      return consoleMessageList_.get(index);
+    }
+    
+    private void initFields() {
+      consoleMessageList_ = java.util.Collections.emptyList();
+    }
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized != -1) return isInitialized == 1;
+      
+      for (int i = 0; i < getConsoleMessageListCount(); i++) {
+        if (!getConsoleMessageList(i).isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
+      memoizedIsInitialized = 1;
+      return true;
+    }
+    
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      getSerializedSize();
+      for (int i = 0; i < consoleMessageList_.size(); i++) {
+        output.writeMessage(1, consoleMessageList_.get(i));
+      }
+      getUnknownFields().writeTo(output);
+    }
+    
+    private int memoizedSerializedSize = -1;
+    public int getSerializedSize() {
+      int size = memoizedSerializedSize;
+      if (size != -1) return size;
+    
+      size = 0;
+      for (int i = 0; i < consoleMessageList_.size(); i++) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(1, consoleMessageList_.get(i));
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSerializedSize = size;
+      return size;
+    }
+    
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
+    }
+    
+    public static com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessageList parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data).buildParsed();
+    }
+    public static com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessageList parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data, extensionRegistry)
+               .buildParsed();
+    }
+    public static com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessageList parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data).buildParsed();
+    }
+    public static com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessageList parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data, extensionRegistry)
+               .buildParsed();
+    }
+    public static com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessageList parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input).buildParsed();
+    }
+    public static com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessageList parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input, extensionRegistry)
+               .buildParsed();
+    }
+    public static com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessageList parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      Builder builder = newBuilder();
+      if (builder.mergeDelimitedFrom(input)) {
+        return builder.buildParsed();
+      } else {
+        return null;
+      }
+    }
+    public static com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessageList parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      Builder builder = newBuilder();
+      if (builder.mergeDelimitedFrom(input, extensionRegistry)) {
+        return builder.buildParsed();
+      } else {
+        return null;
+      }
+    }
+    public static com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessageList parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input).buildParsed();
+    }
+    public static com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessageList parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input, extensionRegistry)
+               .buildParsed();
+    }
+    
+    public static Builder newBuilder() { return Builder.create(); }
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder(com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessageList prototype) {
+      return newBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() { return newBuilder(this); }
+    
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessage.Builder<Builder>
+       implements com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessageListOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return com.opera.core.systems.scope.protos.ConsoleLoggerProtos.internal_static_scope_ConsoleMessageList_descriptor;
+      }
+      
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return com.opera.core.systems.scope.protos.ConsoleLoggerProtos.internal_static_scope_ConsoleMessageList_fieldAccessorTable;
+      }
+      
+      // Construct using com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessageList.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+      
+      private Builder(BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+          getConsoleMessageListFieldBuilder();
+        }
+      }
+      private static Builder create() {
+        return new Builder();
+      }
+      
+      public Builder clear() {
+        super.clear();
+        if (consoleMessageListBuilder_ == null) {
+          consoleMessageList_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000001);
+        } else {
+          consoleMessageListBuilder_.clear();
+        }
+        return this;
+      }
+      
+      public Builder clone() {
+        return create().mergeFrom(buildPartial());
+      }
+      
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessageList.getDescriptor();
+      }
+      
+      public com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessageList getDefaultInstanceForType() {
+        return com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessageList.getDefaultInstance();
+      }
+      
+      public com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessageList build() {
+        com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessageList result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+      
+      private com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessageList buildParsed()
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessageList result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(
+            result).asInvalidProtocolBufferException();
+        }
+        return result;
+      }
+      
+      public com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessageList buildPartial() {
+        com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessageList result = new com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessageList(this);
+        int from_bitField0_ = bitField0_;
+        if (consoleMessageListBuilder_ == null) {
+          if (((bitField0_ & 0x00000001) == 0x00000001)) {
+            consoleMessageList_ = java.util.Collections.unmodifiableList(consoleMessageList_);
+            bitField0_ = (bitField0_ & ~0x00000001);
+          }
+          result.consoleMessageList_ = consoleMessageList_;
+        } else {
+          result.consoleMessageList_ = consoleMessageListBuilder_.build();
+        }
+        onBuilt();
+        return result;
+      }
+      
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessageList) {
+          return mergeFrom((com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessageList)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+      
+      public Builder mergeFrom(com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessageList other) {
+        if (other == com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessageList.getDefaultInstance()) return this;
+        if (consoleMessageListBuilder_ == null) {
+          if (!other.consoleMessageList_.isEmpty()) {
+            if (consoleMessageList_.isEmpty()) {
+              consoleMessageList_ = other.consoleMessageList_;
+              bitField0_ = (bitField0_ & ~0x00000001);
+            } else {
+              ensureConsoleMessageListIsMutable();
+              consoleMessageList_.addAll(other.consoleMessageList_);
+            }
+            onChanged();
+          }
+        } else {
+          if (!other.consoleMessageList_.isEmpty()) {
+            if (consoleMessageListBuilder_.isEmpty()) {
+              consoleMessageListBuilder_.dispose();
+              consoleMessageListBuilder_ = null;
+              consoleMessageList_ = other.consoleMessageList_;
+              bitField0_ = (bitField0_ & ~0x00000001);
+              consoleMessageListBuilder_ = 
+                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
+                   getConsoleMessageListFieldBuilder() : null;
+            } else {
+              consoleMessageListBuilder_.addAllMessages(other.consoleMessageList_);
+            }
+          }
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        return this;
+      }
+      
+      public final boolean isInitialized() {
+        for (int i = 0; i < getConsoleMessageListCount(); i++) {
+          if (!getConsoleMessageList(i).isInitialized()) {
+            
+            return false;
+          }
+        }
+        return true;
+      }
+      
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder(
+            this.getUnknownFields());
+        while (true) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              this.setUnknownFields(unknownFields.build());
+              onChanged();
+              return this;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                this.setUnknownFields(unknownFields.build());
+                onChanged();
+                return this;
+              }
+              break;
+            }
+            case 10: {
+              com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessage.Builder subBuilder = com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessage.newBuilder();
+              input.readMessage(subBuilder, extensionRegistry);
+              addConsoleMessageList(subBuilder.buildPartial());
+              break;
+            }
+          }
+        }
+      }
+      
+      private int bitField0_;
+      
+      // repeated .scope.ConsoleMessage consoleMessageList = 1;
+      private java.util.List<com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessage> consoleMessageList_ =
+        java.util.Collections.emptyList();
+      private void ensureConsoleMessageListIsMutable() {
+        if (!((bitField0_ & 0x00000001) == 0x00000001)) {
+          consoleMessageList_ = new java.util.ArrayList<com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessage>(consoleMessageList_);
+          bitField0_ |= 0x00000001;
+         }
+      }
+      
+      private com.google.protobuf.RepeatedFieldBuilder<
+          com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessage, com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessage.Builder, com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessageOrBuilder> consoleMessageListBuilder_;
+      
+      public java.util.List<com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessage> getConsoleMessageListList() {
+        if (consoleMessageListBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(consoleMessageList_);
+        } else {
+          return consoleMessageListBuilder_.getMessageList();
+        }
+      }
+      public int getConsoleMessageListCount() {
+        if (consoleMessageListBuilder_ == null) {
+          return consoleMessageList_.size();
+        } else {
+          return consoleMessageListBuilder_.getCount();
+        }
+      }
+      public com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessage getConsoleMessageList(int index) {
+        if (consoleMessageListBuilder_ == null) {
+          return consoleMessageList_.get(index);
+        } else {
+          return consoleMessageListBuilder_.getMessage(index);
+        }
+      }
+      public Builder setConsoleMessageList(
+          int index, com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessage value) {
+        if (consoleMessageListBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureConsoleMessageListIsMutable();
+          consoleMessageList_.set(index, value);
+          onChanged();
+        } else {
+          consoleMessageListBuilder_.setMessage(index, value);
+        }
+        return this;
+      }
+      public Builder setConsoleMessageList(
+          int index, com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessage.Builder builderForValue) {
+        if (consoleMessageListBuilder_ == null) {
+          ensureConsoleMessageListIsMutable();
+          consoleMessageList_.set(index, builderForValue.build());
+          onChanged();
+        } else {
+          consoleMessageListBuilder_.setMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      public Builder addConsoleMessageList(com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessage value) {
+        if (consoleMessageListBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureConsoleMessageListIsMutable();
+          consoleMessageList_.add(value);
+          onChanged();
+        } else {
+          consoleMessageListBuilder_.addMessage(value);
+        }
+        return this;
+      }
+      public Builder addConsoleMessageList(
+          int index, com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessage value) {
+        if (consoleMessageListBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureConsoleMessageListIsMutable();
+          consoleMessageList_.add(index, value);
+          onChanged();
+        } else {
+          consoleMessageListBuilder_.addMessage(index, value);
+        }
+        return this;
+      }
+      public Builder addConsoleMessageList(
+          com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessage.Builder builderForValue) {
+        if (consoleMessageListBuilder_ == null) {
+          ensureConsoleMessageListIsMutable();
+          consoleMessageList_.add(builderForValue.build());
+          onChanged();
+        } else {
+          consoleMessageListBuilder_.addMessage(builderForValue.build());
+        }
+        return this;
+      }
+      public Builder addConsoleMessageList(
+          int index, com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessage.Builder builderForValue) {
+        if (consoleMessageListBuilder_ == null) {
+          ensureConsoleMessageListIsMutable();
+          consoleMessageList_.add(index, builderForValue.build());
+          onChanged();
+        } else {
+          consoleMessageListBuilder_.addMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      public Builder addAllConsoleMessageList(
+          java.lang.Iterable<? extends com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessage> values) {
+        if (consoleMessageListBuilder_ == null) {
+          ensureConsoleMessageListIsMutable();
+          super.addAll(values, consoleMessageList_);
+          onChanged();
+        } else {
+          consoleMessageListBuilder_.addAllMessages(values);
+        }
+        return this;
+      }
+      public Builder clearConsoleMessageList() {
+        if (consoleMessageListBuilder_ == null) {
+          consoleMessageList_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000001);
+          onChanged();
+        } else {
+          consoleMessageListBuilder_.clear();
+        }
+        return this;
+      }
+      public Builder removeConsoleMessageList(int index) {
+        if (consoleMessageListBuilder_ == null) {
+          ensureConsoleMessageListIsMutable();
+          consoleMessageList_.remove(index);
+          onChanged();
+        } else {
+          consoleMessageListBuilder_.remove(index);
+        }
+        return this;
+      }
+      public com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessage.Builder getConsoleMessageListBuilder(
+          int index) {
+        return getConsoleMessageListFieldBuilder().getBuilder(index);
+      }
+      public com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessageOrBuilder getConsoleMessageListOrBuilder(
+          int index) {
+        if (consoleMessageListBuilder_ == null) {
+          return consoleMessageList_.get(index);  } else {
+          return consoleMessageListBuilder_.getMessageOrBuilder(index);
+        }
+      }
+      public java.util.List<? extends com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessageOrBuilder> 
+           getConsoleMessageListOrBuilderList() {
+        if (consoleMessageListBuilder_ != null) {
+          return consoleMessageListBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(consoleMessageList_);
+        }
+      }
+      public com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessage.Builder addConsoleMessageListBuilder() {
+        return getConsoleMessageListFieldBuilder().addBuilder(
+            com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessage.getDefaultInstance());
+      }
+      public com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessage.Builder addConsoleMessageListBuilder(
+          int index) {
+        return getConsoleMessageListFieldBuilder().addBuilder(
+            index, com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessage.getDefaultInstance());
+      }
+      public java.util.List<com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessage.Builder> 
+           getConsoleMessageListBuilderList() {
+        return getConsoleMessageListFieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilder<
+          com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessage, com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessage.Builder, com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessageOrBuilder> 
+          getConsoleMessageListFieldBuilder() {
+        if (consoleMessageListBuilder_ == null) {
+          consoleMessageListBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
+              com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessage, com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessage.Builder, com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessageOrBuilder>(
+                  consoleMessageList_,
+                  ((bitField0_ & 0x00000001) == 0x00000001),
+                  getParentForChildren(),
+                  isClean());
+          consoleMessageList_ = null;
+        }
+        return consoleMessageListBuilder_;
+      }
+      
+      // @@protoc_insertion_point(builder_scope:scope.ConsoleMessageList)
+    }
+    
+    static {
+      defaultInstance = new ConsoleMessageList(true);
+      defaultInstance.initFields();
+    }
+    
+    // @@protoc_insertion_point(class_scope:scope.ConsoleMessageList)
+  }
+  
   private static com.google.protobuf.Descriptors.Descriptor
     internal_static_scope_ConsoleMessage_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_scope_ConsoleMessage_fieldAccessorTable;
+  private static com.google.protobuf.Descriptors.Descriptor
+    internal_static_scope_ConsoleMessageList_descriptor;
+  private static
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_scope_ConsoleMessageList_fieldAccessorTable;
   
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -916,8 +1484,10 @@ public final class ConsoleLoggerProtos {
       "sage\022\020\n\010windowID\030\001 \002(\r\022\014\n\004time\030\002 \002(\r\022\023\n\013" +
       "description\030\003 \002(\t\022\013\n\003uri\030\004 \001(\t\022\017\n\007contex" +
       "t\030\005 \001(\t\022\016\n\006source\030\006 \001(\t\022\020\n\010severity\030\007 \001(" +
-      "\tB<\n#com.opera.core.systems.scope.protos" +
-      "B\023ConsoleLoggerProtosH\001"
+      "\t\"G\n\022ConsoleMessageList\0221\n\022consoleMessag" +
+      "eList\030\001 \003(\0132\025.scope.ConsoleMessageB<\n#co" +
+      "m.opera.core.systems.scope.protosB\023Conso" +
+      "leLoggerProtosH\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -932,6 +1502,14 @@ public final class ConsoleLoggerProtos {
               new java.lang.String[] { "WindowID", "Time", "Description", "Uri", "Context", "Source", "Severity", },
               com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessage.class,
               com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessage.Builder.class);
+          internal_static_scope_ConsoleMessageList_descriptor =
+            getDescriptor().getMessageTypes().get(1);
+          internal_static_scope_ConsoleMessageList_fieldAccessorTable = new
+            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+              internal_static_scope_ConsoleMessageList_descriptor,
+              new java.lang.String[] { "ConsoleMessageList", },
+              com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessageList.class,
+              com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessageList.Builder.class);
           return null;
         }
       };
