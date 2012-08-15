@@ -29,6 +29,7 @@ import org.openqa.selenium.interactions.Actions;
 
 import static com.opera.core.systems.OperaProduct.MOBILE;
 import static org.junit.Assert.assertEquals;
+import static org.openqa.selenium.Platform.MAC;
 
 public class DriverKeysTest extends OperaDriverTestCase {
 
@@ -133,14 +134,13 @@ public class DriverKeysTest extends OperaDriverTestCase {
 
   @Test
   public void testShiftCapitals() {
-    new Actions(driver).sendKeys("a").sendKeys(Keys.SHIFT + "bc").sendKeys("d").build().perform();
+    driver.getKeyboard().sendKeys("a", Keys.SHIFT + "bc", "d");
     assertEquals("aBCD", fieldOne.getAttribute("value"));
   }
 
   @Test
   public void depressShift() {
-    new Actions(driver).sendKeys(Keys.SHIFT).sendKeys("a").keyUp(Keys.SHIFT).sendKeys("b")
-        .build().perform();
+    driver.getKeyboard().sendKeys(Keys.SHIFT, "a", Keys.SHIFT, "b");
     assertEquals("Ab", fieldOne.getAttribute("value"));
   }
 
@@ -153,16 +153,16 @@ public class DriverKeysTest extends OperaDriverTestCase {
   }
 
   @Test
-  @Ignore(value = "MAC and MOBILE needs investigation")
+  @Ignore(products = MOBILE, platforms = MAC, value = "MAC and MOBILE needs investigation")
   public void testMultipleModifiers() {
     if (Platform.getCurrent().is(Platform.MAC)) {
       new Actions(driver).sendKeys("abc defghij")
-          .sendKeys(Keys.ALT + "" + Keys.LEFT_SHIFT + Keys.LEFT)
+          .sendKeys(Keys.ALT, Keys.LEFT_SHIFT, Keys.LEFT)
           .sendKeys(Keys.BACK_SPACE)
           .build().perform();
     } else {
       new Actions(driver).sendKeys("abc defghij")
-          .sendKeys(Keys.CONTROL + "" + Keys.LEFT_SHIFT + Keys.LEFT)
+          .sendKeys(Keys.CONTROL, Keys.LEFT_SHIFT, Keys.LEFT)
           .sendKeys(Keys.BACK_SPACE)
           .build().perform();
     }

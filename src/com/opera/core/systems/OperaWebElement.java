@@ -378,7 +378,9 @@ public class OperaWebElement extends RemoteWebElement {
     String type = callMethod("locator.type");
 
     if (type.equals("text") || type.equals("textarea")) {
-      executeMethod(OperaAtom.MOVE_CARET_TO_END + "(locator)");
+      System.out.println("Executing atom!");
+      //executeMethod("locator.blur()");
+      //executeMethod(OperaAtom.MOVE_CARET_TO_END + "(locator)");
 
       /*
       executeMethod("function(elem) {" + "  var doc = elem.ownerDocument || elem;"
@@ -395,11 +397,11 @@ public class OperaWebElement extends RemoteWebElement {
                     */
 
       //executeMethod("locator.setSelectionRange(locator.value.length, locator.value.length)");
-
-
+      executeMethod(OperaAtom.MOVE_CARET_TO_END + "(locator)");
     }
 
-    click();
+    //click();
+    executeMethod("locator.focus()");
   }
 
   public void submit() {
