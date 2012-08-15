@@ -46,9 +46,9 @@ public class OperaKeyboard implements Keyboard {
   public void sendKeys(CharSequence... keysToSend) {
     ImmutableList.Builder<KeyEvent> builder = ImmutableList.builder();
 
-    // The keys to send resembles what you could roughly call a multidimensional map.  To make the
-    // algorithm for sending keys and key combinations to the browser easier we first want to
-    // normalize array we receive.
+    // The array with keys resemble what you could roughly call a multidimensional list.  To make
+    // the algorithm for sending keys and key combinations to the browser easier we first want to
+    // flatten it.
 
     for (CharSequence sequence : keysToSend) {
       for (int i = 0; i < sequence.length(); ++i) {
@@ -94,15 +94,10 @@ public class OperaKeyboard implements Keyboard {
     String string = String.valueOf(key);
 
     if (modifiers.contains(Keys.LEFT_SHIFT) || modifiers.contains(Keys.SHIFT)) {
-      //exec.key(string.toUpperCase());
-      //pressKey(Keys.SHIFT);
-      exec.key(OperaKey.SHIFT.toScope(), false);
-      exec.key(string.toUpperCase());
-      //releaseKey(Keys.SHIFT);
-      exec.key(OperaKey.SHIFT.toScope(), true);
-    } else {
-      exec.key(string);
+      string = string.toUpperCase();
     }
+
+    exec.key(string);
   }
 
   /*

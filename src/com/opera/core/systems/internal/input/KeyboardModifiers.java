@@ -22,11 +22,12 @@ import org.openqa.selenium.Keys;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 /**
  * Holds the state of the keyboard's modifier keys (shift, control, meta keys) for OperaDriver.
  */
-public class KeyboardModifiers extends HashSet<Keys> implements Iterable<Keys> {
+public class KeyboardModifiers extends CopyOnWriteArraySet<Keys> implements Iterable<Keys> {
 
   public static final Set<Keys> MODIFIERS = new ImmutableSet.Builder<Keys>() {{
     add(Keys.LEFT_SHIFT);
@@ -40,24 +41,6 @@ public class KeyboardModifiers extends HashSet<Keys> implements Iterable<Keys> {
   public KeyboardModifiers() {
     super(new HashSet<Keys>());
   }
-
-  /*
-  public void keyDown(Keys key) {
-    if (!KeyboardModifiers.isModifier(key)) {
-      return;
-    }
-
-    add(key);
-  }
-
-  public void keyUp(Keys key) {
-    if (!KeyboardModifiers.isModifier(key)) {
-      return;
-    }
-
-    remove(key);
-  }
-  */
 
   public static boolean isModifier(Keys key) {
     return MODIFIERS.contains(key);
