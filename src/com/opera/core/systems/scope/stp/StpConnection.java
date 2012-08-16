@@ -16,6 +16,9 @@ limitations under the License.
 
 package com.opera.core.systems.scope.stp;
 
+import com.google.common.base.Splitter;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.CodedOutputStream;
 
@@ -326,18 +329,16 @@ public class StpConnection implements SocketListener {
    * (probably response to command).
    */
   public void parseServiceList(String message) {
-    logger.finer("parseServiceList: \"" + message + "\"");
+    List<String> services = ImmutableList.copyOf(Splitter.on(',').split(message.split(" ")[2]));
 
-    int split = message.indexOf(' ');
-
-    if (split < 0) {
-      connectionHandler.onException(new WebDriverException("Invalid service list received."));
+    if (services.size() <= 0) {
+      connectionHandler.onException(
+          new WebDriverException(String.format("Invalid service list received: %s", services)));
       return;
     }
 
-    List<String> services = Arrays.asList(message.substring(split + 1).split(","));
+    logger.fine(String.format("Available services: %s", services));
     connectionHandler.onServiceList(services);
-    logger.fine("Service list ok");
 
     if (!services.contains("stp-1")) {
       connectionHandler.onException(new WebDriverException("STP/0 is not supported!"));

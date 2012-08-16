@@ -51,7 +51,7 @@ public interface EventHandler {
    *
    * @param message the incoming message
    */
-  void onMessage(ConsoleMessage message);
+  void onConsoleMessage(ConsoleMessage message);
 
   /**
    * Fired when a new window is created or window has incoming changes (such as title change).

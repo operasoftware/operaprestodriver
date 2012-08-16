@@ -167,14 +167,14 @@ public class EcmascriptService extends AbstractEcmascriptService implements
   public Object scriptExecutor(String script, Object... params) {
     processQueues();
 
-    List<WebElement> elements = new ArrayList<WebElement>();
+    List<WebElement> elements = Lists.newArrayList();
 
     String toSend = buildEvalString(elements, script, params);
     EvalArg.Builder evalBuilder = buildEval(toSend, getRuntimeId());
 
     for (WebElement webElement : elements) {
-      Variable variable =
-          buildVariable(webElement.toString(), ((OperaWebElement) webElement).getObjectId());
+      Variable variable = buildVariable(webElement.toString(),
+                                        ((OperaWebElement) webElement).getObjectId());
       evalBuilder.addVariableList(variable);
     }
 
@@ -185,8 +185,8 @@ public class EcmascriptService extends AbstractEcmascriptService implements
     }
 
     EvalResult result = parseEvalData(response);
-
     Object parsed = parseEvalReply(result);
+
     if (parsed instanceof EcmascriptProtos.Object) {
       EcmascriptProtos.Object data = (EcmascriptProtos.Object) parsed;
       return new ScriptResult(data.getObjectID(), data.getClassName());
