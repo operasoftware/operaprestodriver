@@ -284,8 +284,8 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot, Run
     try {
       if (services != null) {
         if (!settings.hasDetach()) {
-          // Instruct Opera to quit and close the Scope connection.  If not successful, force Opera to
-          // stop using the runner if available
+          // Instruct Opera to quit and close the Scope connection.  If not successful, force Opera
+          // to stop using the runner if available.
           try {
             if (runner != null) {
               services.quit(runner);
