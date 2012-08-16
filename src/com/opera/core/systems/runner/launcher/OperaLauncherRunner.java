@@ -22,6 +22,7 @@ import com.google.common.io.ByteStreams;
 import com.google.common.io.Files;
 import com.google.protobuf.GeneratedMessage;
 
+import com.opera.core.systems.Architecture;
 import com.opera.core.systems.OperaBinary;
 import com.opera.core.systems.OperaProduct;
 import com.opera.core.systems.OperaSettings;
@@ -516,13 +517,25 @@ public class OperaLauncherRunner extends OperaRunner
    * @return the launcher's binary file name
    */
   private static String launcherNameForOS() {
-    Platform currentPlatform = Platform.getCurrent();
-
-    switch (currentPlatform) {
+    // TODO(andreastt): It would be nice for OperaLaunchers and OperaDriver to both use Platform
+    switch (Platform.getCurrent()) {
       case LINUX:
       case UNIX:
-        return "64".equals(System.getProperty("sun.arch.data.model"))
-               ? "launcher-linux-amd64" : "launcher-linux-ia32";
+        // TODO(andreastt): It would be _really nice_ if OperaLaunchers and OperaDriver could both use Architecture:
+        //return String.format("launcher-linux-%s", Architecture.getCurrent());
+
+        Architecture architecture = Architecture.getCurrent();
+        String launcherPrefix = "launcher-linux-%s";
+        switch (architecture) {
+          case X86:
+            return String.format(launcherPrefix, "ia32");
+          case X64:
+            return String.format(launcherPrefix, "amd64");
+          case ARM:
+            return String.format(launcherPrefix, "arm");
+          default:
+            throw new WebDriverException("Unsupported processor architecture: " + architecture);
+        }
       case MAC:
         return "launcher-mac";
       case WINDOWS:
