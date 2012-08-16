@@ -270,9 +270,11 @@ public class WindowManager extends AbstractService implements IWindowManager {
     }
   }
 
-  // Opera Mobile still uses WM 2.0
+  // SDK's WM doesn't work as expected
   private boolean supportsClosingWindows() {
-    return VersionUtil.compare(getVersion(), "2.1") >= 0;
+    return !services.getCoreUtils().getProduct().equals("devices") &&
+           VersionUtil.compare(getVersion(), "2.1") >= 0;
+
   }
 
   private void assertSupportsClosingWindows() {
