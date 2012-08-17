@@ -528,7 +528,7 @@ public class OperaLauncherRunner extends OperaRunner
         String launcherPrefix = "launcher-linux-%s";
         switch (architecture) {
           case X86:
-            return String.format(launcherPrefix, "ia32");
+            return String.format(launcherPrefix, "i386");
           case X64:
             return String.format(launcherPrefix, "amd64");
           case ARM:
