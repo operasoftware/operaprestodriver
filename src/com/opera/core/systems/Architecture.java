@@ -37,7 +37,7 @@ public enum Architecture {
     }
   },
 
-  X64("amd64", "ia64"),
+  X64("amd64", "ia64", "x86_64"),
 
   ARM("arm"),
 
