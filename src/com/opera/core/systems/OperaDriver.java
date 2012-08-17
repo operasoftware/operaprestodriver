@@ -22,6 +22,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 
+import com.opera.core.systems.OperaLogs.ConsoleMessageConverter;
 import com.opera.core.systems.common.io.Closeables;
 import com.opera.core.systems.common.lang.OperaStrings;
 import com.opera.core.systems.model.ScreenShotReply;
@@ -59,10 +60,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.internal.WrapsElement;
-import org.openqa.selenium.logging.LocalLogs;
 import org.openqa.selenium.logging.Logs;
 import org.openqa.selenium.remote.DesiredCapabilities;
-import org.openqa.selenium.remote.RemoteLogs;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.Duration;
 
@@ -134,10 +133,10 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot, Run
   private OperaKeyboard keyboard;
   private OperaScopePreferences preferences;
   private OperaProxy proxy;
-  private final OperaLogs logs = new OperaLogs();
 
   private int assignedWindowIds = 0;
 
+  protected static final OperaLogs logs = new OperaLogs();
   protected static FileHandler logFile = null;  // TODO(andreastt): Make private
 
   /**
@@ -216,12 +215,11 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot, Run
     cookieManager = services.getCookieManager();
     //cookieManager.updateCookieSettings();
 
-
     mouse = new OperaMouse(this);
     keyboard = new OperaKeyboard(this);
     proxy = new OperaProxy(this);
     preferences = new OperaScopePreferences(services.getPrefs());
-    services.getConsoleLogger().onConsoleMessage(logs.getConverter());
+    services.getConsoleLogger().onConsoleMessage(new ConsoleMessageConverter(logs));
 
     // Get product from Opera
     settings.setProduct(utils().getProduct());
@@ -884,8 +882,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot, Run
 
     @Beta
     public Logs logs() {
-      //return new RemoteLogs(getExecuteMethod(), LocalLogs.NULL_LOGGER);
-      return logs.get();
+      return logs;
     }
 
   }
@@ -1154,7 +1151,6 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot, Run
       debugger.releaseObjects();
     }
     objectIds.clear();
-    logs.clear();
   }
 
   private WebElement findActiveElement() {

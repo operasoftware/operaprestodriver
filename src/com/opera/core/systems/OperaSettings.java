@@ -23,6 +23,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterators;
 import com.google.common.collect.Maps;
 
+import com.opera.core.systems.OperaLogs.DriverLogsHandler;
 import com.opera.core.systems.arguments.OperaCoreArguments;
 import com.opera.core.systems.arguments.OperaDesktopArguments;
 import com.opera.core.systems.common.lang.OperaBoolean;
@@ -688,12 +689,25 @@ public class OperaSettings {
         root.addHandler(new ConsoleHandler());
       }
 
+      // We only need one WebDriver logs handler
+      if (!Iterators.any(Arrays.asList(root.getHandlers()).iterator(), new Predicate<Handler>() {
+        public boolean apply(Handler handler) {
+          return handler instanceof DriverLogsHandler;
+        }
+      })) {
+        root.addHandler(new DriverLogsHandler(OperaDriver.logs));
+      }
+
       root.setLevel(level);
       root.setUseParentHandlers(false);
 
       // Set logging levels on all handlers
       for (Handler handler : root.getHandlers()) {
-        handler.setLevel(level);
+        if (handler instanceof DriverLogsHandler) {
+          handler.setLevel(Level.ALL);
+        } else {
+          handler.setLevel(level);
+        }
       }
     }
 
