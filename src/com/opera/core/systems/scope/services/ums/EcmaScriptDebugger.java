@@ -102,7 +102,6 @@ public class EcmaScriptDebugger extends AbstractEcmascriptService implements IEc
     super(services, version);
     services.setDebugger(this);
     this.windowManager = services.getWindowManager();
-    this.services = services;
     resetCounters();
     currentFramePath = "_top";
   }

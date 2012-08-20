@@ -16,20 +16,11 @@ import java.util.List;
 public class ConsoleLogger extends AbstractService implements IConsoleLogger {
 
   private final List<ConsoleMessage> messages = Lists.newArrayList();
+  private ServiceCallback<ConsoleMessage> callback = null;
 
   public ConsoleLogger(ScopeServices services, String version) {
     super(services, version);
-    String serviceName = "console-logger";
-
-    /*
-    if (!isVersionInRange(version, "2.1", serviceName)) {
-      throw new UnsupportedOperationException(
-          serviceName + " version " + version + " is not supported");
-    }
-    */
-
     services.setConsoleLogger(this);
-    this.services = services;
   }
 
   public void init() {
@@ -53,8 +44,6 @@ public class ConsoleLogger extends AbstractService implements IConsoleLogger {
     buildPayload(response, builder);
     return builder.build().getConsoleMessageListList();
   }
-
-  private ServiceCallback<ConsoleMessage> callback = null;
 
   public void onConsoleMessage(ServiceCallback<ConsoleMessage> callback) {
     this.callback = callback;
