@@ -331,7 +331,8 @@ public class StpConnection implements SocketListener {
     int split = message.indexOf(' ');
 
     if (split < 0) {
-      connectionHandler.onException(new WebDriverException("Invalid service list received."));
+      connectionHandler.onException(
+          new IllegalStateException("Invalid service list received: " + message));
       return;
     }
 
@@ -340,7 +341,7 @@ public class StpConnection implements SocketListener {
     logger.fine("Service list ok");
 
     if (!services.contains("stp-1")) {
-      connectionHandler.onException(new WebDriverException("STP/0 is not supported!"));
+      connectionHandler.onException(new IllegalStateException("STP/0 is not supported!"));
       return;
     }
 
