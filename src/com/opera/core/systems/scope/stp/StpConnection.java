@@ -326,8 +326,8 @@ public class StpConnection implements SocketListener {
    * (probably response to command).
    */
   public void parseServiceList(String message) {
-    logger.finer("parseServiceList: \"" + message + "\"");
-
+    // We expect the service list to be in this format:
+    //   *245 service-list window-manager core ecmascript-service
     int split = message.indexOf(' ');
 
     if (split < 0) {
