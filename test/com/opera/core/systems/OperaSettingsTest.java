@@ -41,8 +41,10 @@ import static com.opera.core.systems.OperaSettings.Capability.AUTOSTART;
 import static com.opera.core.systems.runner.launcher.OperaLauncherRunner.LAUNCHER_ENV_VAR;
 import static com.opera.core.systems.scope.internal.OperaDefaults.SERVER_DEFAULT_PORT;
 import static com.opera.core.systems.scope.internal.OperaDefaults.SERVER_DEFAULT_PORT_IDENTIFIER;
+import static com.opera.core.systems.scope.internal.OperaDefaults.SERVER_RANDOM_PORT_IDENTIFIER;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -145,6 +147,24 @@ public class OperaSettingsTest extends OperaDriverTestCase {
   }
 
   @Test
+  public void portSetToDefaultPortIdentifier() {
+    settings.setPort(SERVER_DEFAULT_PORT_IDENTIFIER);
+    assertThat(settings.getPort(), is(SERVER_DEFAULT_PORT));
+  }
+
+  @Test
+  public void portSetToRandomPortIdentifier() {
+    settings.setPort(SERVER_RANDOM_PORT_IDENTIFIER);
+    assertThat(settings.getPort(), is(not(SERVER_DEFAULT_PORT)));
+  }
+
+  @Test
+  public void portSetToSomethingElseIsRespected() {
+    settings.setPort(1234);
+    assertThat(settings.getPort(), is(1234));
+  }
+
+  @Test
   public void launcherReturnsLauncherLocationByDefault() {
     assertNotNull(settings.getLauncher());
     assertEquals(OperaLauncherRunner.LAUNCHER_DEFAULT_LOCATION, settings.getLauncher());
@@ -178,7 +198,7 @@ public class OperaSettingsTest extends OperaDriverTestCase {
   }
 
   @Test
-  public void profileIsOperaProfileObject() {
+  public void profileIsOperaProfileObjectByDefault() {
     assertNotNull(settings.profile());
   }
 
@@ -190,9 +210,23 @@ public class OperaSettingsTest extends OperaDriverTestCase {
   }
 
   @Test
-  public void profileCanBeSetUsingNull() {
-    settings.setProfile((String) null);
-    assertNotNull(settings.profile());
+  public void profileSetToNullThrows() {
+    try {
+      settings.setProfile((OperaProfile) null);
+      fail("Expected NullPointerException");
+    } catch (RuntimeException e) {
+      assertThat(e, is(instanceOf(NullPointerException.class)));
+    }
+  }
+
+  @Test
+  public void profileSetToNullStringThrows() {
+    try {
+      settings.setProfile((String) null);
+      fail("Expected NullPointerException");
+    } catch (RuntimeException e) {
+      assertThat(e, is(instanceOf(NullPointerException.class)));
+    }
   }
 
   @Test

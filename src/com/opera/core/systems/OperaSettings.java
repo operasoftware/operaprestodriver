@@ -271,14 +271,12 @@ public class OperaSettings {
       }
 
       Object sanitize(Object value) {
+        checkNotNull(value);
+
         if (value instanceof String && String.valueOf(value) != null) {
           String profileDirectory = String.valueOf(value);
-
-          if (!profileDirectory.isEmpty()) {  // use this profile
+          if (!profileDirectory.isEmpty()) {
             return new OperaProfile(profileDirectory);
-          } else {  // "" (empty string), use ~/.autotest
-            return new OperaProfile(new File(System.getProperty("user.home") +
-                                             File.separator + ".autotest"));
           }
         } else if (value instanceof OperaProfile) {
           return value;
@@ -854,11 +852,13 @@ public class OperaSettings {
   }
 
   /**
-   * Sets the directory to use for the Opera profile.  If null, generate a temporary directory.  If
-   * not empty use the given directory.  To not create a temporary directory for backwards
-   * compatibility reasons, set it to an empty string (""), such as for Opera < 11.60.
+   * Sets the directory to use for the Opera profile.  If string is not empty use the given
+   * directory.  If string is empty, the <code>-debugproxy</code> command-line argument will be
+   * disabled for backwards compatibility reasons with older products, such as Opera < 11.60 and
+   * core-mini.
    *
    * @param profileDirectory the path to the profile directory
+   * @throws NullPointerException if argument is null
    */
   public void setProfile(String profileDirectory) {
     options.get(PROFILE).setValue(PROFILE.sanitize(profileDirectory));
@@ -869,9 +869,10 @@ public class OperaSettings {
    * Sets the profile to use as an Opera profile represented as an object.
    *
    * @param profile the Opera profile to use
+   * @throws NullPointerException if argument is null
    */
   public void setProfile(OperaProfile profile) {
-    options.get(PROFILE).setValue(profile);
+    options.get(PROFILE).setValue(PROFILE.sanitize(profile));
     supportsPd = true;
   }
 
