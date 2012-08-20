@@ -302,7 +302,7 @@ public class StpConnection implements SocketListener {
     try {
       socketChannel.close();
     } catch (IOException ignored) {
-      /* nothing to be done */
+      // nothing to be done
     } finally {
       socketChannel = null;
     }
