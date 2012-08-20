@@ -74,7 +74,6 @@ import static com.opera.core.systems.scope.internal.OperaIntervals.SCRIPT_TIMEOU
  * EcmascriptService is a lightweight service to enable JavaScript injection.  Unlike {@link
  * EcmaScriptDebugger} it does not disable JIT.
  */
-
 public class EcmascriptService extends AbstractEcmascriptService implements IEcmaScriptDebugger {
 
   private final AtomicStampedReference<Runtime> runtime =

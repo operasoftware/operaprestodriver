@@ -105,16 +105,16 @@ public abstract class AbstractEcmascriptService extends AbstractService
 
       for (Object object : params) {
         if (builder.toString().length() > 0) {
-          builder.append(",");
+          builder.append(',');
         }
 
         if (object instanceof Collection<?>) {
-          builder.append("[");
+          builder.append('[');
           Collection<?> collection = (Collection<?>) object;
 
           for (Object argument : collection) {
             processArgument(argument, builder, elements);
-            builder.append(",");
+            builder.append(',');
           }
 
           int lastCharIndex = builder.length() - 1;
@@ -122,7 +122,7 @@ public abstract class AbstractEcmascriptService extends AbstractService
             builder.deleteCharAt(lastCharIndex);
           }
 
-          builder.append("]");
+          builder.append(']');
         } else {
           processArgument(object, builder, elements);
         }

@@ -45,9 +45,7 @@ import org.openqa.selenium.NoSuchFrameException;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -62,19 +60,18 @@ import java.util.concurrent.atomic.AtomicStampedReference;
  */
 public class EcmaScriptDebugger extends AbstractEcmascriptService implements IEcmaScriptDebugger {
 
-  private AtomicStampedReference<RuntimeInfo> runtime =
+  private final AtomicStampedReference<RuntimeInfo> runtime =
       new AtomicStampedReference<RuntimeInfo>(null, 0);
-
-  private ConcurrentMap<Integer, RuntimeInfo> runtimesList = Maps.newConcurrentMap();
+  private final ConcurrentMap<Integer, RuntimeInfo> runtimesList = Maps.newConcurrentMap();
 
   private RuntimeNode root;
 
   private static class RuntimeNode {
 
+    private final Map<Integer, RuntimeNode> nodes = Maps.newHashMap();
+
     private String frameName;
     private int runtimeID;
-
-    private Map<Integer, RuntimeNode> nodes = new HashMap<Integer, RuntimeNode>();
 
     public String getFrameName() {
       return frameName;
@@ -128,9 +125,10 @@ public class EcmaScriptDebugger extends AbstractEcmascriptService implements IEc
 
   private List<RuntimeInfo> getRuntimesList() {
     int windowId = services.getWindowManager().getActiveWindowId();
-    Iterator<?> iterator = xpathIterator(runtimesList.values(), "/.[windowID='"
-                                                                + windowId + "']");
-    List<RuntimeInfo> runtimes = new ArrayList<RuntimeInfo>();
+    Iterator<?> iterator = xpathIterator(runtimesList.values(),
+                                         String.format("/.[windowID='%d'", windowId));
+
+    List<RuntimeInfo> runtimes = Lists.newArrayList();
     while (iterator.hasNext()) {
       runtimes.add((RuntimeInfo) ((Pointer) iterator.next()).getNode());
     }
@@ -386,8 +384,7 @@ public class EcmaScriptDebugger extends AbstractEcmascriptService implements IEc
     root.setFrameName(rootPath);
     root.setRuntimeID(rootInfo.getRuntimeID());
 
-    List<RuntimeInfo> runtimesInfos = new ArrayList<RuntimeInfo>(
-        runtimesList.values());
+    List<RuntimeInfo> runtimesInfos = Lists.newArrayList(runtimesList.values());
     runtimesInfos.remove(rootInfo);
 
     for (RuntimeInfo runtimeInfo : runtimesInfos) {
@@ -464,13 +461,14 @@ public class EcmaScriptDebugger extends AbstractEcmascriptService implements IEc
 
     String[] values = relFramePath.split("/");
     RuntimeNode curr = root;
-    for (int i = 0; i < values.length; ++i) {
-      int index = framePathToIndex(values[i]);
+
+    for (String value : values) {
+      int index = framePathToIndex(value);
       if (curr.getNodes().get(index) == null) {
         // add to this node
         RuntimeNode node = new RuntimeNode();
-        int end = values[i].indexOf('[');
-        node.setFrameName(values[i].substring(0, end));
+        int end = value.indexOf('[');
+        node.setFrameName(value.substring(0, end));
         curr.getNodes().put(index, node);
         curr = node;
       } else {
@@ -478,6 +476,7 @@ public class EcmaScriptDebugger extends AbstractEcmascriptService implements IEc
       }
       // else we already know about this node, skip it
     }
+
     // last node gets the runtime id
     curr.setRuntimeID(info.getRuntimeID());
   }
@@ -501,8 +500,9 @@ public class EcmaScriptDebugger extends AbstractEcmascriptService implements IEc
   // TODO needs retry approach?
   public List<Integer> examineObjects(Integer id) {
     ObjectList list = getObjectList(id);
-    List<Integer> ids = new ArrayList<Integer>();
+    List<Integer> ids = Lists.newArrayList();
     List<Property> properties = list.getObjectList(0).getPropertyListList();
+
     for (Property property : properties) {
       if (property.getType().equals("object")) {
         ids.add(property.getObjectValue().getObjectID());
@@ -514,10 +514,12 @@ public class EcmaScriptDebugger extends AbstractEcmascriptService implements IEc
 
   public List<String> listFramePaths() {
     List<RuntimeInfo> runtimes = getRuntimesList();
-    List<String> frameNames = new ArrayList<String>();
+    List<String> frameNames = Lists.newArrayList();
+
     for (RuntimeInfo runtime : runtimes) {
       frameNames.add(runtime.getHtmlFramePath());
     }
+
     return frameNames;
   }
 
