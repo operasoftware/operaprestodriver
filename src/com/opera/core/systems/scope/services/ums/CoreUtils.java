@@ -104,7 +104,7 @@ public class CoreUtils extends AbstractService implements ICoreUtils {
   // Private methods follow
 
   private BrowserInformation getBrowserInformation() {
-    Response response = executeCommand(CoreUtilsCommand.GET_BROWSER_INFORMATION, null);
+    Response response = executeCommand(CoreUtilsCommand.GET_BROWSER_INFORMATION);
     BrowserInformation.Builder builder = BrowserInformation.newBuilder();
     buildPayload(response, builder);
     return builder.build();

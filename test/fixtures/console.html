@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<meta charset="utf-8" />
+<title>console-logger test</title>
+
+<p>
+  <button id="trigger_log" onclick="logSomething()">Log something</button>
+  <button id="clear" onclick="clear()">Clear</button>
+</p>
+
+<pre id="webconsole"></pre>
+
+<script>
+  var webconsole = document.getElementById("webconsole");
+
+  console.log = function(message) {
+    webconsole.textContent = webconsole.textContent + message + "\n";
+    Console.prototype.log(message);
+  }
+
+  function logSomething() {
+    console.log("something");
+  }
+
+  function log(message) {
+    console.log(message);
+  }
+
+  function clear() {
+    webconsole.textContent = "";
+  }
+</script>
+
+<script>
+  // This has an intentional syntax error
+  var foo =
+</script>
+
+<!-- This has an intentional syntax error -->
+<style>
+  .foo {
+</style>

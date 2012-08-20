@@ -19,6 +19,7 @@ package com.opera.core.systems.scope.services.ums;
 import com.opera.core.systems.ScopeServices;
 import com.opera.core.systems.scope.protos.ScopeProtos.HostInfo;
 import com.opera.core.systems.scope.protos.ScopeProtos.Service;
+import com.opera.core.systems.scope.services.IConsoleLogger;
 import com.opera.core.systems.scope.services.ICookieManager;
 import com.opera.core.systems.scope.services.ICoreUtils;
 import com.opera.core.systems.scope.services.IDesktopUtils;
@@ -40,6 +41,7 @@ public class UmsServices {
   protected final IEcmaScriptDebugger debugger;
   protected final IOperaExec exec;
   protected final IWindowManager windowManager;
+  protected final IConsoleLogger consoleLogger;
   protected final ICoreUtils coreUtils;
   protected final IDesktopWindowManager desktopWindowManager;
   protected final IDesktopUtils desktopUtils;
@@ -52,6 +54,8 @@ public class UmsServices {
     List<Service> serviceList = info.getServiceListList();
     windowManager =
         new WindowManager(services, getVersionForService(serviceList, "window-manager"));
+    consoleLogger =
+        new ConsoleLogger(services, getVersionForService(serviceList, "console-logger"));
 
     if (findServiceNamed(serviceList, "prefs") != null && services.getVersions()
         .containsKey("prefs")) {

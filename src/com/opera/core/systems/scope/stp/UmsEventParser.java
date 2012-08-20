@@ -161,7 +161,7 @@ public class UmsEventParser {
       // console logger only sends one message
       ConsoleMessage.Builder messageBuilder = ConsoleMessage.newBuilder();
       buildPayload(event, messageBuilder);
-      eventHandler.onMessage(messageBuilder.build());
+      eventHandler.onConsoleMessage(messageBuilder.build());
     } else if (service.equals("ecmascript")) {
       // we have only one event for this one
       ReadyStateChange.Builder builder = ReadyStateChange.newBuilder();

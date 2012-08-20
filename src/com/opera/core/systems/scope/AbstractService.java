@@ -41,10 +41,9 @@ import java.util.logging.Logger;
  */
 public abstract class AbstractService {
 
-  protected ScopeServices services;
+  protected final ScopeServices services;
 
-  private static final Logger logger = Logger.getLogger(AbstractService.class.getName());
-
+  private final Logger logger = Logger.getLogger(getClass().getName());
   private final String version;
 
   public AbstractService(ScopeServices services, String version) {

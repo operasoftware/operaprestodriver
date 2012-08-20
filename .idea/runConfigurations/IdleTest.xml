@@ -7,7 +7,7 @@
     <option name="MAIN_CLASS_NAME" value="com.opera.core.systems.IdleTest" />
     <option name="METHOD_NAME" value="" />
     <option name="TEST_OBJECT" value="class" />
-    <option name="VM_PARAMETERS" value="-ea" />
+    <option name="VM_PARAMETERS" value="" />
     <option name="PARAMETERS" value="" />
     <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
     <option name="ENV_VARIABLES" />
@@ -15,7 +15,9 @@
     <option name="TEST_SEARCH_SCOPE">
       <value defaultName="moduleWithDependencies" />
     </option>
-    <envs />
+    <envs>
+      <env name="OPERA_PATH" value="$USER_HOME$/gogilauncher/builds/opera-next-12.00-1076.i386.linux/opera-next" />
+    </envs>
     <patterns />
     <RunnerSettings RunnerId="Debug">
       <option name="DEBUG_PORT" value="47164" />

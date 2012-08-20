@@ -171,8 +171,8 @@ public class EcmascriptService extends AbstractEcmascriptService implements IEcm
     EvalArg.Builder evalBuilder = buildEval(toSend, getRuntimeId());
 
     for (WebElement webElement : elements) {
-      Variable variable =
-          buildVariable(webElement.toString(), ((OperaWebElement) webElement).getObjectId());
+      Variable variable = buildVariable(webElement.toString(),
+                                        ((OperaWebElement) webElement).getObjectId());
       evalBuilder.addVariableList(variable);
     }
 
@@ -183,8 +183,8 @@ public class EcmascriptService extends AbstractEcmascriptService implements IEcm
     }
 
     EvalResult result = parseEvalData(response);
-
     Object parsed = parseEvalReply(result);
+
     if (parsed instanceof EcmascriptProtos.Object) {
       EcmascriptProtos.Object data = (EcmascriptProtos.Object) parsed;
       return new ScriptResult(data.getObjectID(), data.getClassName());

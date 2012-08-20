@@ -16,6 +16,9 @@ limitations under the License.
 
 package com.opera.core.systems.scope.stp;
 
+import com.google.common.base.Splitter;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.CodedOutputStream;
 
@@ -302,7 +305,7 @@ public class StpConnection implements SocketListener {
     try {
       socketChannel.close();
     } catch (IOException ignored) {
-      // nothing to be done
+      /* nothing to be done */
     } finally {
       socketChannel = null;
     }
@@ -327,18 +330,17 @@ public class StpConnection implements SocketListener {
    */
   public void parseServiceList(String message) {
     // We expect the service list to be in this format:
-    //   *245 service-list window-manager core ecmascript-service
-    int split = message.indexOf(' ');
+    //   *245 service-list window-manager,core,ecmascript-service
+    List<String> services = ImmutableList.copyOf(Splitter.on(',').split(message.split(" ")[2]));
 
-    if (split < 0) {
+    if (services.size() <= 0) {
       connectionHandler.onException(
-          new IllegalStateException("Invalid service list received: " + message));
+          new IllegalStateException(String.format("Invalid service list received: %s", services)));
       return;
     }
 
-    List<String> services = Arrays.asList(message.substring(split + 1).split(","));
+    logger.fine(String.format("Available services: %s", services));
     connectionHandler.onServiceList(services);
-    logger.fine("Service list ok");
 
     if (!services.contains("stp-1")) {
       connectionHandler.onException(new IllegalStateException("STP/0 is not supported!"));

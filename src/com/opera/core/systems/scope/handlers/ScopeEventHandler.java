@@ -84,8 +84,8 @@ public class ScopeEventHandler implements EventHandler {
     services.getWindowManager().addWindow(info);
   }
 
-  public void onMessage(ConsoleMessage message) {
-    throw new UnsupportedOperationException();
+  public void onConsoleMessage(ConsoleMessage message) {
+    services.getConsoleLogger().addMessage(message);
   }
 
   public void onHttpResponse(int responseCode) {

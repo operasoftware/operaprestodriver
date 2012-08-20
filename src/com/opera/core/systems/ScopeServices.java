@@ -46,6 +46,7 @@ import com.opera.core.systems.scope.protos.ScopeProtos.ServiceSelection;
 import com.opera.core.systems.scope.protos.SelftestProtos.SelftestOutput;
 import com.opera.core.systems.scope.protos.UmsProtos.Command;
 import com.opera.core.systems.scope.protos.UmsProtos.Response;
+import com.opera.core.systems.scope.services.IConsoleLogger;
 import com.opera.core.systems.scope.services.ICookieManager;
 import com.opera.core.systems.scope.services.ICoreUtils;
 import com.opera.core.systems.scope.services.IDesktopUtils;
@@ -86,6 +87,7 @@ public class ScopeServices implements IConnectionHandler {
   private IEcmaScriptDebugger debugger;
   private IOperaExec exec;
   private IWindowManager windowManager;
+  private IConsoleLogger consoleLogger;
   private IDesktopWindowManager desktopWindowManager;
   private IDesktopUtils desktopUtils;
   private IPrefs prefs;
@@ -152,6 +154,7 @@ public class ScopeServices implements IConnectionHandler {
 
     wantedServices.add("exec");
     wantedServices.add("window-manager");
+    wantedServices.add("console-logger");
     wantedServices.add("core");
 
     if (versions.containsKey("prefs")) {
@@ -193,6 +196,7 @@ public class ScopeServices implements IConnectionHandler {
     }
 
     windowManager.init();
+    consoleLogger.init();
     exec.init();
 
     if (versions.containsKey("prefs") && prefs != null) {
@@ -271,6 +275,10 @@ public class ScopeServices implements IConnectionHandler {
 
     if (!enableDebugger) {
       debugger = new IEcmaScriptDebugger() {
+        public void init() {
+          logger.warning("Using mock ecmascript-debugger");
+        }
+
         public void setRuntime(RuntimeInfo runtime) {
         }
 
@@ -283,9 +291,6 @@ public class ScopeServices implements IConnectionHandler {
 
         public List<String> listFramePaths() {
           return null;
-        }
-
-        public void init() {
         }
 
         public int getRuntimeId() {
@@ -325,8 +330,7 @@ public class ScopeServices implements IConnectionHandler {
         public void changeRuntime(String framePath) {
         }
 
-        public Object callFunctionOnObject(String using, int objectId,
-                                           boolean responseExpected) {
+        public Object callFunctionOnObject(String using, int objectId, boolean responseExpected) {
           return null;
         }
 
@@ -808,6 +812,14 @@ public class ScopeServices implements IConnectionHandler {
 
   public void setWindowManager(IWindowManager windowManager) {
     this.windowManager = windowManager;
+  }
+
+  public IConsoleLogger getConsoleLogger() {
+    return consoleLogger;
+  }
+
+  public void setConsoleLogger(IConsoleLogger consoleLogger) {
+    this.consoleLogger = consoleLogger;
   }
 
   public ICoreUtils getCoreUtils() {

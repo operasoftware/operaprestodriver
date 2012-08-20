@@ -22,6 +22,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 
+import com.opera.core.systems.OperaLogs.ConsoleMessageConverter;
 import com.opera.core.systems.common.io.Closeables;
 import com.opera.core.systems.common.lang.OperaStrings;
 import com.opera.core.systems.model.ScreenShotReply;
@@ -59,10 +60,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.internal.WrapsElement;
-import org.openqa.selenium.logging.LocalLogs;
 import org.openqa.selenium.logging.Logs;
 import org.openqa.selenium.remote.DesiredCapabilities;
-import org.openqa.selenium.remote.RemoteLogs;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.Duration;
 
@@ -119,6 +118,9 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot, Run
 
   protected final OperaSettings settings;
   protected OperaRunner runner = null;
+  protected Set<Integer> objectIds = Sets.newHashSet();
+
+  private final Logger logger = Logger.getLogger(getClass().getName());
 
   private ScopeServices services;
   private IEcmaScriptDebugger debugger;
@@ -127,17 +129,15 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot, Run
   private ICoreUtils coreUtils;
   private ICookieManager cookieManager;
 
-  private OperaScopePreferences preferences;
-
   private OperaMouse mouse;
   private OperaKeyboard keyboard;
+  private OperaScopePreferences preferences;
   private OperaProxy proxy;
 
-  protected Set<Integer> objectIds = Sets.newHashSet();
   private int assignedWindowIds = 0;
 
-  protected final Logger logger = Logger.getLogger(getClass().getName());
-  protected static FileHandler logFile = null;
+  protected static final OperaLogs logs = new OperaLogs();
+  protected static FileHandler logFile = null;  // TODO(andreastt): Make private
 
   /**
    * Constructor that starts Opera with the default set of capabilities.
@@ -214,11 +214,12 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot, Run
     coreUtils = services.getCoreUtils();
     cookieManager = services.getCookieManager();
     //cookieManager.updateCookieSettings();
-    preferences = new OperaScopePreferences(services.getPrefs());
 
     mouse = new OperaMouse(this);
     keyboard = new OperaKeyboard(this);
     proxy = new OperaProxy(this);
+    preferences = new OperaScopePreferences(services.getPrefs());
+    services.getConsoleLogger().onConsoleMessage(new ConsoleMessageConverter(logs));
 
     // Get product from Opera
     settings.setProduct(utils().getProduct());
@@ -244,6 +245,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot, Run
     ImmutableMap.Builder<String, String> versions = ImmutableMap.builder();
     versions.put("ecmascript-debugger", "5.0");
     versions.put("window-manager", "2.0");
+    versions.put("console-logger", "2.1");
     versions.put("exec", "2.0");
     versions.put("core", "1.0");
     versions.put("cookie-manager", "1.0");
@@ -885,7 +887,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot, Run
 
     @Beta
     public Logs logs() {
-      return new RemoteLogs(getExecuteMethod(), LocalLogs.NULL_LOGGER);
+      return logs;
     }
 
   }

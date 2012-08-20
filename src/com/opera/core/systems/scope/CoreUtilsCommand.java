@@ -30,6 +30,7 @@ public enum CoreUtilsCommand implements ICommand {
   ONIDLE(2),
   GET_BROWSER_INFORMATION(3),
   CLEAR_PRIVATE_DATA(4),
+
   DEFAULT(-1);
 
   private static final Map<Integer, CoreUtilsCommand> lookup =

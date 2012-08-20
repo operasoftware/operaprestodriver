@@ -18,8 +18,6 @@ doc/
 VERSION
 .idea/workspace.xml
 .idea/dictionaries/
-maven/src
-maven/target
 .*.swp
 test/com/opera/core/systems/GenericTest.java
 .idea/runConfigurations/GenericTest.xml

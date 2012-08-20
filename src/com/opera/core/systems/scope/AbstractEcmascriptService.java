@@ -71,7 +71,6 @@ public abstract class AbstractEcmascriptService extends AbstractService
     super(services, version);
     services.setDebugger(this);
     this.windowManager = services.getWindowManager();
-    this.services = services;
     resetCounters();
     currentFramePath = "_top";
   }

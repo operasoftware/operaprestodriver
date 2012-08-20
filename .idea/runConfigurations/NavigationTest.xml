@@ -7,7 +7,7 @@
     <option name="MAIN_CLASS_NAME" value="com.opera.core.systems.NavigationTest" />
     <option name="METHOD_NAME" value="" />
     <option name="TEST_OBJECT" value="class" />
-    <option name="VM_PARAMETERS" value="-ea" />
+    <option name="VM_PARAMETERS" value="" />
     <option name="PARAMETERS" value="" />
     <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
     <option name="ENV_VARIABLES" />
@@ -16,7 +16,8 @@
       <value defaultName="moduleWithDependencies" />
     </option>
     <envs>
-      <env name="OPERA_PATH" value="$PROJECT_DIR$/../bream-work/platforms/qtbream/opera/operamobile" />
+      <env name="OPERA_PATH2" value="$USER_HOME$/gogilauncher/builds/opera-core-integration-232-buildsetid_39451-core_2_11-lingogi/profiles/release_desktop/lingogi_release_desktop" />
+      <env name="OPERA_PATH" value="$USER_HOME$/gogilauncher/builds/opera-next-12.00-1076.i386.linux/opera-next" />
     </envs>
     <patterns />
     <RunnerSettings RunnerId="Debug">

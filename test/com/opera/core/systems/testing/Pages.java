@@ -22,6 +22,7 @@ public class Pages {
 
   public String alert;
   public String basicAuth;
+  public String console;
   public String windows;
   public String download;
   public String ecmascriptEvent;
@@ -48,6 +49,7 @@ public class Pages {
   public Pages(AppServer server) {
     alert = server.whereIs("alert.html");
     basicAuth = server.whereIs("basic_auth.html");
+    console = server.whereIs("console.html");
     windows = server.whereIs("windows.html");
     download = server.whereIs("download.html");
     ecmascriptEvent = server.whereIs("idle/ecmascript-event.html");
