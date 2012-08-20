@@ -18,7 +18,6 @@ package com.opera.core.systems.scope.stp;
 
 import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.CodedOutputStream;
 
@@ -42,7 +41,6 @@ import java.nio.ByteBuffer;
 import java.nio.channels.SelectableChannel;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.SocketChannel;
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.logging.Logger;
@@ -331,11 +329,13 @@ public class StpConnection implements SocketListener {
   public void parseServiceList(String message) {
     // We expect the service list to be in this format:
     //   *245 service-list window-manager,core,ecmascript-service
-    List<String> services = ImmutableList.copyOf(Splitter.on(',').split(message.split(" ")[2]));
+    List<String> services;
 
-    if (services.size() <= 0) {
+    try {
+      services = ImmutableList.copyOf(Splitter.on(',').split(message.split(" ")[2]));
+    } catch (ArrayIndexOutOfBoundsException e) {
       connectionHandler.onException(
-          new IllegalStateException(String.format("Invalid service list received: %s", services)));
+          new IllegalStateException(String.format("Invalid service list received: %s", message)));
       return;
     }
 
