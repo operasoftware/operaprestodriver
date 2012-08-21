@@ -894,7 +894,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot, Run
 
   // TODO: CORE-39436 areas outside of the current viewport is black, this is a problem with Opera not OperaDriver
   public <X> X getScreenshotAs(OutputType<X> target) throws WebDriverException {
-    OperaWebElement body = (OperaWebElement) findElementByTagName("body");
+    OperaWebElement body = (OperaWebElement) findElementByCssSelector(":root");
     return target.convertFromPngBytes(body.saveScreenshot(0).getPng());
   }
 
