@@ -17,7 +17,6 @@ limitations under the License.
 package com.opera.core.systems;
 
 import com.google.common.base.Joiner;
-import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
 
@@ -40,7 +39,6 @@ import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.interactions.internal.Coordinates;
 import org.openqa.selenium.remote.RemoteWebElement;
 import org.openqa.selenium.support.Color;
@@ -50,7 +48,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
@@ -63,7 +60,9 @@ public class OperaWebElement extends RemoteWebElement {
 
   protected final Logger logger = Logger.getLogger(this.getClass().getName());
 
-  private static final List<String> specialInputs = ImmutableList.of("datetime", "date", "month", "week", "time", "datetime-local", "range", "color", "file");
+  private static final List<String> specialInputs =
+      ImmutableList.of("datetime", "date", "month", "week", "time", "datetime-local", "range",
+                       "color", "file");
 
   private final int objectId;
   private final int runtimeId;
@@ -168,18 +167,6 @@ public class OperaWebElement extends RemoteWebElement {
 
   public String getAttribute(String attribute) {
     assertElementNotStale();
-
-    /*
-    // TODO(andreastt): Investigate whether this check is still needed
-    if (attribute.equalsIgnoreCase("value")) {
-      return callMethod("if(/^input|select|option|textarea$/i.test(locator.nodeName)){"
-                        + "return locator.value;" + "}" + "return locator.textContent;");
-    } else {
-      return callMethod("return " + OperaAtom.GET_ATTRIBUTE + "(locator, '" + attribute
-                        + "')");
-    }
-    */
-
     return callMethod(String.format("return %s(locator, '%s')",
                                     OperaAtom.GET_ATTRIBUTE, attribute));
   }

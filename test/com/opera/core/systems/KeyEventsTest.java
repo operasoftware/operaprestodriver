@@ -122,7 +122,7 @@ public class KeyEventsTest extends OperaDriverTestCase {
 
     keyDown("control");
 
-    assertTrue("released", logEl.getAttribute("value").endsWith("down, 17, , ctrl\n"));
+    assertTrue("released", logEl.getText().endsWith("down, 17, , ctrl"));
   }
 
   // Pressing enter will wait for a page to load, check what happens when it doesn't
@@ -163,16 +163,10 @@ public class KeyEventsTest extends OperaDriverTestCase {
     driver.getServices().getExec().releaseKeys();
   }
 
-  /*
-  public void type(String using) {
-    driver.getServices().getExec().type(using);
-  }
-  */
-
   // For verifying test outcome:
 
   private boolean logContains(CharSequence s) {
-    return logEl.getAttribute("value").contains(s);
+    return logEl.getText().contains(s);
   }
 
 }
