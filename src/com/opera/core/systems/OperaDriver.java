@@ -77,10 +77,10 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 
+import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.opera.core.systems.OperaProduct.CORE;
 import static com.opera.core.systems.OperaProduct.DESKTOP;
-import static com.opera.core.systems.OperaProduct.MINI;
 import static com.opera.core.systems.OperaProduct.MOBILE;
 import static com.opera.core.systems.scope.services.ums.Selftest.SelftestResult;
 import static org.openqa.selenium.Platform.WINDOWS;
@@ -333,9 +333,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot, Run
       throw new NullPointerException("Invalid URL");
     }
 
-    if (services.getConnection() == null) {
-      throw new CommunicationException("Unable to open URL because Opera is not connected");
-    }
+    assertConnected("Unable to open URL because Opera is not connected");
 
     gc();
 
@@ -430,6 +428,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot, Run
    * @return an element
    */
   protected WebElement findElement(String by, String using, OperaWebElement el) {
+    assertConnected();
     checkNotNull(using, "Cannot find elements when the selector is null");
 
     using = OperaStrings.escapeJsString(using);
@@ -486,9 +485,8 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot, Run
   }
 
   protected List<WebElement> findElements(String by, String using, OperaWebElement el) {
-    if (using == null) {
-      throw new IllegalArgumentException("Cannot find elements when the selector is null");
-    }
+    assertConnected();
+    checkNotNull(using, "Cannot find elements when the selector is null");
 
     using = OperaStrings.escapeJsString(using);
 
@@ -553,12 +551,14 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot, Run
    * @return source code of document
    */
   public String getPageSource() {
+    assertConnected();
     return debugger
         .executeJavascript(
             "return document.documentElement.outerHTML || (typeof window.XMLSerializer != 'undefined') ? (new window.XMLSerializer()).serializeToString(document) : ''");
   }
 
   public String getTitle() {
+    assertConnected();
     return debugger.executeJavascript("return top.document.title ? top.document.title : '';");
   }
 
@@ -594,6 +594,8 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot, Run
   }
 
   private String getWindowHandle(Integer windowId) {
+    assertConnected();
+
     String windowName;
     String script = "return top.window.name;";
 
@@ -622,6 +624,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot, Run
   }
 
   public TargetLocator switchTo() {
+    assertConnected();
     return new OperaTargetLocator();
   }
 
@@ -1127,6 +1130,16 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot, Run
     }
 
     return null;
+  }
+
+  protected void assertConnected() {
+    assertConnected("Browser is not connected to driver");
+  }
+
+  protected void assertConnected(String message) {
+    if (services == null || !services.isConnected()) {
+      throw new CommunicationException(message);
+    }
   }
 
   // Following methods are used in SpartanRunner:

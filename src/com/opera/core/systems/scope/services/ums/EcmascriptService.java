@@ -25,6 +25,7 @@ import com.opera.core.systems.model.RuntimeNode;
 import com.opera.core.systems.model.ScriptResult;
 import com.opera.core.systems.scope.AbstractEcmascriptService;
 import com.opera.core.systems.scope.ESCommand;
+import com.opera.core.systems.scope.exceptions.CommunicationException;
 import com.opera.core.systems.scope.protos.EcmascriptProtos;
 import com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg;
 import com.opera.core.systems.scope.protos.EcmascriptProtos.EvalArg.Variable;
@@ -260,11 +261,6 @@ public class EcmascriptService extends AbstractEcmascriptService implements IEcm
     // high memory usage in Opera, so the method might need to be updated in the future.
     //processQueues();
 
-    // If ECMAscript is turned off there is no point trying to eval
-    if (findRuntime() == null) {
-      throw new WebDriverException("Could not find a runtime for script evaluation");
-    }
-
     EvalArg.Builder builder = buildEval(using, runtimeId);
     builder.addAllVariableList(Arrays.asList(variables));
 
@@ -278,7 +274,7 @@ public class EcmascriptService extends AbstractEcmascriptService implements IEcm
       return eval(using, variables);
     } else if (retries >= SCRIPT_RETRIES) {
       resetCounters();
-      throw new WebDriverException("No response on ECMAScript evaluation command");
+      throw new CommunicationException("No response on ECMAScript evaluation command");
     }
 
     resetCounters();

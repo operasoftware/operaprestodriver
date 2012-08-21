@@ -95,6 +95,7 @@ public class OperaWebElement extends RemoteWebElement {
    * @return response of EcmaScript in string presentation
    */
   public final String callMethod(String method) {
+    parent.assertConnected();
     return debugger.callFunctionOnObject(method, objectId);
   }
 
@@ -104,6 +105,7 @@ public class OperaWebElement extends RemoteWebElement {
    * @param script the script to execute
    */
   private void executeMethod(String script) {
+    parent.assertConnected();
     debugger.callFunctionOnObject(script, objectId, false);
   }
 

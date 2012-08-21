@@ -16,7 +16,9 @@ limitations under the License.
 
 package com.opera.core.systems;
 
+import com.opera.core.systems.scope.exceptions.CommunicationException;
 import com.opera.core.systems.testing.Ignore;
+import com.opera.core.systems.testing.NoDriverAfter;
 import com.opera.core.systems.testing.OperaDriverTestCase;
 
 import org.junit.Before;
@@ -25,8 +27,13 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.interactions.Actions;
 
 import static com.opera.core.systems.OperaProduct.MOBILE;
+import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+import static org.junit.matchers.JUnitMatchers.containsString;
 import static org.openqa.selenium.Platform.MAC;
 
 public class JavascriptTest extends OperaDriverTestCase {
@@ -69,23 +76,17 @@ public class JavascriptTest extends OperaDriverTestCase {
   }
 
   @Test
-  public void testWindowCount() throws Exception {
-    int numWindows = driver.getWindowHandles().size();
+  @NoDriverAfter
+  public void scriptInjectionDisabled() {
+    driver.preferences().set("Extensions", "Scripting", false);
 
-    driver.findElement(By.id("open_window")).click();
-
-    assertEquals(numWindows + 1, driver.getWindowHandles().size());
-  }
-
-  @Test
-  @Ignore
-  public void testWindowCount2() throws Exception {
-    int numWindows = driver.getWindowHandles().size();
-
-    driver.close();
-
-    assertTrue(driver.getCurrentUrl().endsWith("javascript.html"));
-    assertEquals(numWindows - 1, driver.getWindowHandles().size());
+    try {
+      driver.getTitle();
+      fail("Expected CommunicationException");
+    } catch (RuntimeException e) {
+      assertThat(e, is(instanceOf(CommunicationException.class)));
+      assertThat(e.getMessage(), containsString("No response on ECMAScript evaluation command"));
+    }
   }
 
 }
