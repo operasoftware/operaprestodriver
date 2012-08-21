@@ -40,7 +40,7 @@ import com.opera.core.systems.scope.protos.EcmascriptProtos.Runtime;
 import com.opera.core.systems.scope.protos.EcmascriptProtos.RuntimeList;
 import com.opera.core.systems.scope.protos.EcmascriptProtos.Value;
 import com.opera.core.systems.scope.protos.EcmascriptProtos.Value.Type;
-import com.opera.core.systems.scope.protos.EsdbgProtos;
+import com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeInfo;
 import com.opera.core.systems.scope.protos.UmsProtos.Response;
 import com.opera.core.systems.scope.services.IEcmaScriptDebugger;
 
@@ -49,9 +49,7 @@ import org.openqa.selenium.NoSuchFrameException;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -63,6 +61,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicStampedReference;
 
+import static com.google.common.base.Preconditions.checkNotNull;
 import static com.opera.core.systems.scope.internal.OperaDefaults.SCRIPT_RETRIES;
 import static com.opera.core.systems.scope.internal.OperaIntervals.SCRIPT_RETRY_INTERVAL;
 import static com.opera.core.systems.scope.internal.OperaIntervals.SCRIPT_TIMEOUT;
@@ -75,9 +74,6 @@ import static com.opera.core.systems.scope.internal.OperaIntervals.SCRIPT_TIMEOU
  * EcmascriptService is a lightweight service to enable JavaScript injection.  Unlike {@link
  * EcmaScriptDebugger} it does not disable JIT.
  */
-public class EcmascriptService extends AbstractEcmascriptService implements
-                                                                 IEcmaScriptDebugger {
-
 public class EcmascriptService extends AbstractEcmascriptService implements IEcmaScriptDebugger {
 
   private final AtomicStampedReference<Runtime> runtime =
@@ -431,7 +427,7 @@ public class EcmascriptService extends AbstractEcmascriptService implements IEcm
     List<Runtime> runtimeInfos = Lists.newArrayList(runtimesList.values());
     runtimeInfos.remove(rootInfo);
 
-    for (Runtime runtimeInfo : runtimesInfos) {
+    for (Runtime runtimeInfo : runtimeInfos) {
       addNode(runtimeInfo, root);
     }
   }
