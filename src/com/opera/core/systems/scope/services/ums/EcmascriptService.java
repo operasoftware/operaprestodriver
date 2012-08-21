@@ -40,7 +40,7 @@ import com.opera.core.systems.scope.protos.EcmascriptProtos.Runtime;
 import com.opera.core.systems.scope.protos.EcmascriptProtos.RuntimeList;
 import com.opera.core.systems.scope.protos.EcmascriptProtos.Value;
 import com.opera.core.systems.scope.protos.EcmascriptProtos.Value.Type;
-import com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeInfo;
+import com.opera.core.systems.scope.protos.EsdbgProtos;
 import com.opera.core.systems.scope.protos.UmsProtos.Response;
 import com.opera.core.systems.scope.services.IEcmaScriptDebugger;
 
@@ -49,7 +49,9 @@ import org.openqa.selenium.NoSuchFrameException;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -61,7 +63,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicStampedReference;
 
-import static com.google.common.base.Preconditions.checkNotNull;
 import static com.opera.core.systems.scope.internal.OperaDefaults.SCRIPT_RETRIES;
 import static com.opera.core.systems.scope.internal.OperaIntervals.SCRIPT_RETRY_INTERVAL;
 import static com.opera.core.systems.scope.internal.OperaIntervals.SCRIPT_TIMEOUT;
@@ -74,6 +75,9 @@ import static com.opera.core.systems.scope.internal.OperaIntervals.SCRIPT_TIMEOU
  * EcmascriptService is a lightweight service to enable JavaScript injection.  Unlike {@link
  * EcmaScriptDebugger} it does not disable JIT.
  */
+public class EcmascriptService extends AbstractEcmascriptService implements
+                                                                 IEcmaScriptDebugger {
+
 public class EcmascriptService extends AbstractEcmascriptService implements IEcmaScriptDebugger {
 
   private final AtomicStampedReference<Runtime> runtime =
@@ -171,8 +175,8 @@ public class EcmascriptService extends AbstractEcmascriptService implements IEcm
     EvalArg.Builder evalBuilder = buildEval(toSend, getRuntimeId());
 
     for (WebElement webElement : elements) {
-      Variable variable = buildVariable(webElement.toString(),
-                                        ((OperaWebElement) webElement).getObjectId());
+      Variable variable =
+          buildVariable(webElement.toString(), ((OperaWebElement) webElement).getObjectId());
       evalBuilder.addVariableList(variable);
     }
 
@@ -183,8 +187,8 @@ public class EcmascriptService extends AbstractEcmascriptService implements IEcm
     }
 
     EvalResult result = parseEvalData(response);
-    Object parsed = parseEvalReply(result);
 
+    Object parsed = parseEvalReply(result);
     if (parsed instanceof EcmascriptProtos.Object) {
       EcmascriptProtos.Object data = (EcmascriptProtos.Object) parsed;
       return new ScriptResult(data.getObjectID(), data.getClassName());
@@ -406,13 +410,9 @@ public class EcmascriptService extends AbstractEcmascriptService implements IEcm
 
   protected Runtime findRuntime(int windowId) {
     createAllRuntimes();
-    Pointer pointer =
-        xpathPointer(runtimesList.values(),
-            String.format("/.[htmlFramePath='%s' and windowID='%d']", currentFramePath, windowId));
-    if (pointer != null) {
-      return (Runtime) pointer.getValue();
-    }
-    return null;
+    return (Runtime) xpathPointer(runtimesList.values(),
+                                  String.format("/.[htmlFramePath='%s' and windowID='%d']",
+                                                currentFramePath, windowId)).getValue();
   }
 
   /**
@@ -431,7 +431,7 @@ public class EcmascriptService extends AbstractEcmascriptService implements IEcm
     List<Runtime> runtimeInfos = Lists.newArrayList(runtimesList.values());
     runtimeInfos.remove(rootInfo);
 
-    for (Runtime runtimeInfo : runtimeInfos) {
+    for (Runtime runtimeInfo : runtimesInfos) {
       addNode(runtimeInfo, root);
     }
   }
@@ -657,9 +657,9 @@ public class EcmascriptService extends AbstractEcmascriptService implements IEcm
   private Object parseValue(Type type, Value value, Set<Integer> visitedIDs) {
     switch (type) {
       case TRUE:
-        return true;
+        return Boolean.valueOf(true);
       case FALSE:
-        return false;
+        return Boolean.valueOf(false);
       case PLUS_INFINITY:
         return Double.POSITIVE_INFINITY;
       case MINUS_INFINITY:
@@ -670,6 +670,7 @@ public class EcmascriptService extends AbstractEcmascriptService implements IEcm
         return value.getStr();
       case OBJECT:
         return examineScriptResult(value.getObject().getObjectID(), visitedIDs);
+
       case UNDEFINED:
       case NULL:
       case NAN:
