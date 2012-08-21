@@ -3,7 +3,11 @@ v0.17     (2012-08-21)
   [API CHANGES]
 
   * Implemented WebDriver's Logs interface.  Options#logs() will no
-    longer throw an UnsupportedOperationException.  (andreastt)
+    longer throw an UnsupportedOperationException.
+
+  * Introduced OperaLogType which lists the available logs you may
+    fetch from Opera through WebDriver's Logs API.  In addition to the
+    ones listed there, OperaDriver supports LogType.DRIVER.
 
   [NEW FEATURES]
 
