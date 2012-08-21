@@ -81,6 +81,7 @@ import java.util.logging.Logger;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.opera.core.systems.OperaProduct.CORE;
 import static com.opera.core.systems.OperaProduct.DESKTOP;
+import static com.opera.core.systems.OperaProduct.MINI;
 import static com.opera.core.systems.OperaProduct.MOBILE;
 import static com.opera.core.systems.scope.services.ums.Selftest.SelftestResult;
 import static org.openqa.selenium.Platform.WINDOWS;
@@ -214,7 +215,6 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot, Run
     coreUtils = services.getCoreUtils();
     cookieManager = services.getCookieManager();
     //cookieManager.updateCookieSettings();
-    preferences = new OperaScopePreferences(services.getPrefs());
 
     mouse = new OperaMouse(this);
     keyboard = new OperaKeyboard(this);
@@ -223,16 +223,20 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot, Run
     // Get product from Opera
     settings.setProduct(utils().getProduct());
 
-    // Enable popups for testing purposes
-    preferences().set("User Prefs", "Ignore Unrequested Popups", false);
+    if (!utils().getUserAgent().contains("Mini")) {
+      preferences = new OperaScopePreferences(services.getPrefs());
+
+      // Enable popups for testing purposes
+      preferences().set("User Prefs", "Ignore Unrequested Popups", false);
+
+      // Mobile has disabled JavaScript autofocus for usability reasons
+      if (utils().getProduct().is(MOBILE)) {
+        preferences().set("User Prefs", "Allow Autofocus Form Element", true);
+      }
+    }
 
     // Update browser's proxy configuration
     proxy.parse(settings.getProxy());
-
-    // Mobile has disabled JavaScript autofocus for usability reasons
-    if (utils().getProduct().is(MOBILE)) {
-      preferences().set("User Prefs", "Allow Autofocus Form Element", true);
-    }
   }
 
   /**
