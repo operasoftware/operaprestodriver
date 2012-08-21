@@ -46,10 +46,8 @@ public class OperaKeyboard implements Keyboard {
   public void sendKeys(CharSequence... keysToSend) {
     ImmutableList.Builder<KeyEvent> builder = ImmutableList.builder();
 
-    // The array with keys resemble what you could roughly call a multidimensional list.  To make
-    // the algorithm for sending keys and key combinations to the browser easier we first want to
-    // flatten it.
-
+    // The array with keysToSend is a multidimensional list.  To make the algorithm for sending keys
+    // and key combinations to the browser easier we flatten it first.
     for (CharSequence sequence : keysToSend) {
       for (int i = 0; i < sequence.length(); ++i) {
         builder.add(new KeyEvent(sequence.charAt(i)));
@@ -100,176 +98,12 @@ public class OperaKeyboard implements Keyboard {
     exec.key(string);
   }
 
-  /*
-  public void sendKeys(CharSequence... keysToSend) {
-    // The keys to send resembles what you could roughly call a multidimensional map.  To make the
-    // algorithm for sending keys and key combinations to the browser easier we first want to
-    // normalize array we receive.
-    ImmutableList.Builder<Character> normalized = ImmutableList.builder();
-
-    for (CharSequence sequence : keysToSend) {
-      if (sequence instanceof Keys) {
-        normalized.add(sequence.charAt(0));
-      } else {
-        for (final char c : sequence.toString().toCharArray()) {
-          normalized.add(c);
-        }
-      }
-    }
-
-    sendKeys(normalized.build());
-  }
-
-  private void sendKeys(List<Character> characters) {
-    for (final char c : characters) {
-      Keys key = OperaKey.getKeyFromUnicode(c);
-      OperaKey operaKey = OperaKey.get(key);
-
-      if (c == '\n') {
-        exec.key(OperaKey.ENTER.getValue());
-      } else if (operaKey != null) {
-        if (key == Keys.NULL) {
-          for (Keys modifierKey : modifiers) {
-            releaseKey(modifierKey);
-          }
-        } else if (KeyboardModifiers.isModifier(key)) {
-          if (modifiers.contains(key)) {
-            releaseKey(key);
-          } else {
-            pressKey(key);
-          }
-        } else {
-          exec.key(operaKey.getValue());
-        }
-      } else {
-        String keyAsString = String.valueOf(c);
-        if (modifiers.contains(Keys.SHIFT) || modifiers.contains(Keys.LEFT_SHIFT)) {
-          keyAsString = keyAsString.toUpperCase();
-        }
-        exec.key(keyAsString);
-      }
-    }
-
-    for (Keys modifierKey : modifiers) {
-      releaseKey(modifierKey);
-    }
-  }
-  */
-
-  /*
-
-  public void bsendKeys(CharSequence... keysToSend) {
-
-    // The keys to send is an array, and might look like this: [ Keys.SHIFT, "foo" + Keys.SHIFT ]
-    for (CharSequence sequence : keysToSend) {
-      if (sequence instanceof Keys) {
-        Keys key = (Keys) sequence;
-        modifiers.storeKeyDown(key);
-        exec.key(OperaKey.get(key).getValue(), false);
-      } else {
-        for (final char c : sequence.toString().toCharArray()) {
-          if (c == '\n') {
-            exec.key(OperaKey.ENTER.getValue());
-            continue;
-          }
-
-          if (specialKeysLookup.containsKey(c)) {
-            Keys key = specialKeysLookup.get(c);
-
-            if (key == Keys.NULL) {
-              for (Keys modifierKey : modifiers) {
-                exec.key(OperaKey.get(modifierKey).getValue(), true);
-              }
-            } else if (!modifiers.isPressed(key)) {
-              exec.key(OperaKey.get(key).getValue(), false);
-              modifiers.storeKeyDown(key);
-            }
-
-            continue;
-          }
-
-          exec.key(String.valueOf(c));
-        }
-      }
-    }
-
-
-    for (final char c : builder.toString().toCharArray()) {
-
-    }
-
-  }
-
-
-  */
-
-  /*
-
-public void asendKeys(CharSequence... keysToSend) {
-  for (CharSequence seq : keysToSend) {
-    if (seq instanceof Keys) {
-      String key = OperaKey.get(((Keys) seq).name());
-      // Check if this is a key we hold down, and haven't already pressed, and press, but don't
-      // release it. That's done at the end of this method.
-      if (holdKeys.contains(key) && !heldKeys.contains(key) && !exec.keyIsPressed(key)) {
-        exec.key(key, false);
-        heldKeys.add(key);
-      } else if (key.equals("null")) {
-        for (String hkey : heldKeys) {
-          exec.key(hkey, true);
-        }
-      } else {
-        exec.key(key);
-      }
-    } else if (seq.toString().equals("\n")) {
-      exec.key("enter");
-    } else {
-      // We need to check each character to see if it is a "special" key
-      for (int i = 0; i < seq.length(); i++) {
-        Character c = seq.charAt(i);
-        String keyName = charToKeyName(c);
-
-        // Buffer normal keys for a single type() call
-        if (keyName == null) {
-          exec.type(c.toString());
-        } else {
-          String key = OperaKey.get(keyName);
-          // TODO: Code repeated from above
-          if (holdKeys.contains(key) && !heldKeys.contains(key) && !exec
-              .keyIsPressed(key)) {
-            exec.key(key, false);
-            heldKeys.add(key);
-          } else if (key.equals("null")) {
-            for (String hkey : heldKeys) {
-              exec.key(hkey, true);
-            }
-          } else {
-            exec.key(key);
-          }
-        }
-      }
-    }
-  }
-  */
-  /*
-  if (heldKeys.size() > 0) {
-    for (String key : heldKeys) {
-      exec.key(key, true);
-    }
-  }
-  */
-  //}
-
   public void pressKey(Keys keyToPress) {
-    //exec.key(OperaKey.get((keyToPress).name()), false);
-    //modifiers.keyDown(keyToPress);
     modifiers.add(keyToPress);
     exec.key(OperaKey.get(keyToPress).toScope(), false);
   }
 
   public void releaseKey(Keys keyToRelease) {
-    //exec.key(OperaKey.get((keyToRelease).name()), true);
-    //modifiers.keyUp(keyToRelease);
     modifiers.remove(keyToRelease);
     exec.key(OperaKey.get(keyToRelease).toScope(), true);
   }

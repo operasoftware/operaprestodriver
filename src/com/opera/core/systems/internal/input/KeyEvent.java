@@ -89,11 +89,4 @@ public class KeyEvent {
     return getCharacter() == '\n';
   }
 
-  /*
-  @Override
-  public String toString() {
-    return String.valueOf(getCharacter());
-  }
-  */
-
 }
