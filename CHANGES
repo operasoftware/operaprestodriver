@@ -1,3 +1,86 @@
+v0.17     (2012-08-21)
+
+  [API CHANGES]
+
+  * Implemented WebDriver's Logs interface.  Options#logs() will no
+    longer throw an UnsupportedOperationException.  (andreastt)
+
+  [NEW FEATURES]
+
+  * Add Architecture utility to help smoothen over JDK
+    incompatibilities.
+
+  * Implement Scope console logger service, which allows fetching
+    different types of console logs through OperaDriver.  (andreastt)
+
+  [BUG FIXES]
+
+  * OperaSettings#setProfile("") now properly disabled -debugproxy.
+    (andreastt)
+
+  * Fix issue with element equality when using the OperaDriver as a
+    remote driver.  (andreastt)
+
+  * Fix possible exception recursion in OperaDriver#gc().  (andreastt,
+    virgild)
+
+  * Cover all cases of invalid service lists.  (andreastt)
+
+  * Allow ES init of windows without runtimes, but instead throw on
+    eval().
+
+    SDK has tests that disable scripting, therefore there will be no
+    runtime.  Instead of using the prefs API to check for
+    scriptability, we use findRuntime() because it should be faster.
+
+    (andreastt)
+
+  * Fall back to quit Opera with OperaRunner if all else fails during
+    quit.  (andreastt)
+
+  * Fix OperaDriver#getScreenshotAs() for non-HTML type documents.
+    (andreastt)
+
+  * Fix compile issues in Eclipse.  (danielb)
+
+  * Exclude SDK product from new window closing mechanism.
+    (andreastt)
+
+  * Handle preferences with backslashes in OperaFilePreferences.
+    (virgild)
+
+  * Mention which bundled launcher was not found.  (danielb)
+
+  * NPE check in EcmascriptService in findRuntime().  (danielb)
+
+  * Fixes for double-wrapped WebDriverExceptions in StpConnection.
+    (andreastt)
+
+  [TESTS]
+
+  * Fix exception message assertions for OperaSettingsIntegrationTest
+    and OperaLauncherRunnerTest.  (andreastt)
+
+  * Remove outdated tests from OperaSettingsCapabilitiesTest.
+    (andreastt)
+
+  * Fix double call to OperaRunner#stopOpera() without null pointer
+    check.  (andreastt)
+
+  [OTHER]
+
+  * Remove spammy log message called in a loop in OperaLauncherRunner.
+    (danielb)
+
+  * Set WINDOW_CLOSE_TIMEOUT to 500 ms.  (danielb)
+
+  * 32-bit GNU/Linux launchers are named "i386" now.  (andreastt)
+
+  * Update operalaunchers to 1.1.  (andreastt)
+
+  * Update Selenium to daily snapshot 2.25.0-20120817.  (andreastt)
+
+
 v0.16.1   (2012-08-09)
 
   [BUG FIXES]
