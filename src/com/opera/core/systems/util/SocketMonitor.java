@@ -19,6 +19,7 @@ package com.opera.core.systems.util;
 import com.opera.core.systems.common.io.Closeables;
 
 import java.io.IOException;
+import java.nio.channels.AsynchronousCloseException;
 import java.nio.channels.CancelledKeyException;
 import java.nio.channels.ClosedChannelException;
 import java.nio.channels.SelectableChannel;
@@ -130,8 +131,10 @@ public class SocketMonitor {
       for (SelectionKey key : selector.selectedKeys()) {
         try {
           processSelectionKey(key);
-        } catch (CancelledKeyException cke) {
-          cke.printStackTrace();
+        } catch (AsynchronousCloseException e) {
+          // ignore
+        } catch (CancelledKeyException e) {
+          e.printStackTrace();
         } catch (IOException e) {
           // what are you doing with the channel variable here?
           //SelectableChannel channel = key.channel();
@@ -231,7 +234,7 @@ public class SocketMonitor {
 
   private String debugMask(int mask) {
     StringBuilder builder = new StringBuilder();
-    builder.append("{");
+    builder.append('{');
 
     if ((mask & SelectionKey.OP_READ) == SelectionKey.OP_READ) {
       builder.append(" READ");
@@ -249,7 +252,7 @@ public class SocketMonitor {
       builder.append(" CONNECT");
     }
 
-    builder.append("}");
+    builder.append('}');
     return builder.toString();
   }
 
