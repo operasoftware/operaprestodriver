@@ -31,13 +31,15 @@ import static org.junit.matchers.JUnitMatchers.containsString;
 
 public class SessionTest extends OperaDriverTestCase {
 
+  public static final String BROWSER_NOT_CONNECTED_STRING = "Browser is not connected to driver";
+
   @Before
   public void setup() {
     driver.get(pages.javascript);
   }
 
   @Test
-  public void callingQuiteMoreThanOnceOnASessionIsANoOp() {
+  public void callingQuitMoreThanOnceOnASessionIsANoOp() {
     driver.quit();
 
     try {
@@ -55,7 +57,7 @@ public class SessionTest extends OperaDriverTestCase {
       driver.getTitle();
     } catch (RuntimeException e) {
       assertThat(e, is(instanceOf(CommunicationException.class)));
-      assertThat(e.getMessage(), containsString("Browser is not connected to driver"));
+      assertThat(e.getMessage(), containsString(BROWSER_NOT_CONNECTED_STRING));
     }
   }
 
@@ -80,7 +82,7 @@ public class SessionTest extends OperaDriverTestCase {
       driver.getPageSource();
     } catch (RuntimeException e) {
       assertThat(e, is(instanceOf(CommunicationException.class)));
-      assertThat(e.getMessage(), containsString("Browser is not connected to driver"));
+      assertThat(e.getMessage(), containsString(BROWSER_NOT_CONNECTED_STRING));
     }
   }
 
@@ -92,7 +94,7 @@ public class SessionTest extends OperaDriverTestCase {
       driver.getWindowHandle();
     } catch (RuntimeException e) {
       assertThat(e, is(instanceOf(CommunicationException.class)));
-      assertThat(e.getMessage(), containsString("Browser is not connected to driver"));
+      assertThat(e.getMessage(), containsString(BROWSER_NOT_CONNECTED_STRING));
     }
   }
 
@@ -104,7 +106,7 @@ public class SessionTest extends OperaDriverTestCase {
       driver.switchTo();
     } catch (RuntimeException e) {
       assertThat(e, is(instanceOf(CommunicationException.class)));
-      assertThat(e.getMessage(), containsString("Browser is not connected to driver"));
+      assertThat(e.getMessage(), containsString(BROWSER_NOT_CONNECTED_STRING));
     }
   }
 
@@ -116,7 +118,7 @@ public class SessionTest extends OperaDriverTestCase {
       driver.findElements(By.id("foo"));
     } catch (RuntimeException e) {
       assertThat(e, is(instanceOf(CommunicationException.class)));
-      assertThat(e.getMessage(), containsString("Browser is not connected to driver"));
+      assertThat(e.getMessage(), containsString(BROWSER_NOT_CONNECTED_STRING));
     }
   }
 
@@ -128,7 +130,7 @@ public class SessionTest extends OperaDriverTestCase {
       driver.findElement(By.id("foo"));
     } catch (RuntimeException e) {
       assertThat(e, is(instanceOf(CommunicationException.class)));
-      assertThat(e.getMessage(), containsString("Browser is not connected to driver"));
+      assertThat(e.getMessage(), containsString(BROWSER_NOT_CONNECTED_STRING));
     }
   }
 
