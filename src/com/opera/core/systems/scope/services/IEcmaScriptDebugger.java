@@ -30,6 +30,11 @@ public interface IEcmaScriptDebugger {
    */
   void setDriver(OperaDriver driver);
 
+  /**
+   * Get the current runtime ID.
+   *
+   * @return runtime ID
+   */
   int getRuntimeId();
 
   /**
@@ -58,8 +63,8 @@ public interface IEcmaScriptDebugger {
   /**
    * Executes the given javascript via eval call
    *
-   * @param script The script to be executed on host
-   * @param params Array of params, can be string, long or web element(s)
+   * @param script the script to be executed on host
+   * @param params array of params, can be string, long or web element(s)
    */
   Object scriptExecutor(String script, Object... params);
 
@@ -76,16 +81,16 @@ public interface IEcmaScriptDebugger {
    *
    * @param using            script to execute
    * @param responseExpected if true parse the response
-   * @return String representation of the response
+   * @return string representation of the response
    */
   String executeJavascript(String using, boolean responseExpected);
 
   /**
    * Executes a script and returns the response (based on responseExpected)
    *
-   * @param using            The script to be injected
-   * @param responseExpected The flag to enable/disable parsing response
-   * @return The raw result object if response is expected, <code>null</code> otherwise
+   * @param using            the script to be injected
+   * @param responseExpected the flag to enable/disable parsing response
+   * @return the raw result object if response is expected, <code>null</code> otherwise
    */
   Object executeScript(String using, boolean responseExpected);
 
@@ -178,5 +183,12 @@ public interface IEcmaScriptDebugger {
   String executeJavascript(String using, Integer windowId);
 
   Object examineScriptResult(Integer id);
+
+  /**
+   * Queries the current runtime to see if it's script injectable.
+   *
+   * @return true if runtime is script injectable, false otherwise
+   */
+  boolean isScriptInjectable();
 
 }

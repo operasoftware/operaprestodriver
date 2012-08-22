@@ -373,6 +373,10 @@ public class ScopeServices implements IConnectionHandler {
 
         public void setDriver(OperaDriver driver) {
         }
+
+        public boolean isScriptInjectable() {
+          return false;
+        }
       };
     }
   }

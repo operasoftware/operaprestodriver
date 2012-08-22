@@ -16,8 +16,6 @@ limitations under the License.
 
 package com.opera.core.systems.scope;
 
-import com.google.common.base.Throwables;
-
 import com.opera.core.systems.OperaDriver;
 import com.opera.core.systems.ScopeServices;
 import com.opera.core.systems.model.RuntimeNode;
@@ -163,16 +161,7 @@ public abstract class AbstractEcmascriptService extends AbstractService
   }
 
   public String executeJavascript(String using, boolean responseExpected) {
-    Object result = null;
-
-    try {
-      result = executeScript(using, responseExpected);
-    } catch (CommunicationException e) {
-      if (responseExpected) {
-        Throwables.propagate(e);
-      }
-    }
-
+    Object result = executeScript(using, responseExpected);
     return (result == null) ? null : String.valueOf(result);
   }
 
@@ -213,6 +202,16 @@ public abstract class AbstractEcmascriptService extends AbstractService
   public void cleanUpRuntimes() {
     int windowId = windowManager.getActiveWindowId();
     cleanUpRuntimes(windowId);
+  }
+
+  public boolean isScriptInjectable() {
+    try {
+      executeJavascript("return true", false);
+    } catch (CommunicationException e) {
+      return false;
+    }
+
+    return true;
   }
 
 }

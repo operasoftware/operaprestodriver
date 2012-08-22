@@ -253,6 +253,7 @@ public class EcmascriptService extends AbstractEcmascriptService implements IEcm
    * @param variables a list of objects to place in the execution environment when evaluating
    *                  <code>using</code>
    * @return result of script execution
+   * @throws CommunicationException if browser does not respond
    * @see ESCommand#EVAL
    */
   private EvalResult eval(String using, int runtimeId, Variable... variables) {
@@ -649,9 +650,9 @@ public class EcmascriptService extends AbstractEcmascriptService implements IEcm
   private Object parseValue(Type type, Value value, Set<Integer> visitedIDs) {
     switch (type) {
       case TRUE:
-        return Boolean.valueOf(true);
+        return true;
       case FALSE:
-        return Boolean.valueOf(false);
+        return false;
       case PLUS_INFINITY:
         return Double.POSITIVE_INFINITY;
       case MINUS_INFINITY:
@@ -662,7 +663,6 @@ public class EcmascriptService extends AbstractEcmascriptService implements IEcm
         return value.getStr();
       case OBJECT:
         return examineScriptResult(value.getObject().getObjectID(), visitedIDs);
-
       case UNDEFINED:
       case NULL:
       case NAN:

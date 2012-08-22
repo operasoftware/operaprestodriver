@@ -77,7 +77,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
 
-import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.opera.core.systems.OperaProduct.CORE;
 import static com.opera.core.systems.OperaProduct.DESKTOP;
@@ -136,6 +135,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot, Run
   private OperaProxy proxy;
 
   private int assignedWindowIds = 0;
+  private String requestedUrl = null;
 
   protected static final OperaLogs logs = new OperaLogs();
   protected static FileHandler logFile = null;  // TODO(andreastt): Make private
@@ -339,11 +339,11 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot, Run
     exec.releaseKeys();
 
     int activeWindowId = windowManager.getActiveWindowId();
-
     String oldUrl = getCurrentUrl();
 
     services.captureOperaIdle();
     windowManager.openUrl(activeWindowId, url);
+    requestedUrl = url;
 
     if (oldUrl == null ||
         (url.replace(oldUrl, "").isEmpty() || url.replace(oldUrl, "").charAt(0) != '#')) {
@@ -378,7 +378,12 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot, Run
 
   public String getCurrentUrl() {
     assertConnected();
-    return debugger.executeJavascript("return document.location.href", false);
+
+    if (debugger.isScriptInjectable()) {
+      return debugger.executeJavascript("return document.location.href");
+    }
+
+    return requestedUrl;
   }
 
   public void close() {
