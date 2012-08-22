@@ -329,10 +329,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot, Run
   }
 
   public int get(String url, long timeout) {
-    if (url == null) {
-      throw new NullPointerException("Invalid URL");
-    }
-
+    checkNotNull(url, "Invalid URL");
     assertConnected("Unable to open URL because Opera is not connected");
 
     gc();
@@ -380,7 +377,8 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot, Run
   }
 
   public String getCurrentUrl() {
-    return debugger.executeJavascript("return document.location.href");
+    assertConnected();
+    return debugger.executeJavascript("return document.location.href", false);
   }
 
   public void close() {
@@ -428,8 +426,8 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot, Run
    * @return an element
    */
   protected WebElement findElement(String by, String using, OperaWebElement el) {
-    assertConnected();
     checkNotNull(using, "Cannot find elements when the selector is null");
+    assertConnected();
 
     using = OperaStrings.escapeJsString(using);
     boolean isAvailable;

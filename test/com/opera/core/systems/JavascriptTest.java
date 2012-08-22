@@ -77,7 +77,7 @@ public class JavascriptTest extends OperaDriverTestCase {
 
   @Test
   @NoDriverAfter
-  public void scriptInjectionDisabled() {
+  public void getTitleThrowsWhenScriptInjectionDisabled() {
     driver.preferences().set("Extensions", "Scripting", false);
 
     try {
@@ -86,6 +86,18 @@ public class JavascriptTest extends OperaDriverTestCase {
     } catch (RuntimeException e) {
       assertThat(e, is(instanceOf(CommunicationException.class)));
       assertThat(e.getMessage(), containsString("No response on ECMAScript evaluation command"));
+    }
+  }
+
+  @Test
+  @NoDriverAfter
+  public void getDoesNotThrowWhenScriptInjectionDisabled() {
+    driver.preferences().set("Extensions", "Scripting", false);
+
+    try {
+      driver.get(pages.javascript);
+    } catch (RuntimeException e) {
+      fail("Did not expect exception, got: " + e);
     }
   }
 

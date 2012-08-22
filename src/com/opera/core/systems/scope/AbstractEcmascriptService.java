@@ -16,9 +16,12 @@ limitations under the License.
 
 package com.opera.core.systems.scope;
 
+import com.google.common.base.Throwables;
+
 import com.opera.core.systems.OperaDriver;
 import com.opera.core.systems.ScopeServices;
 import com.opera.core.systems.model.RuntimeNode;
+import com.opera.core.systems.scope.exceptions.CommunicationException;
 import com.opera.core.systems.scope.internal.OperaIntervals;
 import com.opera.core.systems.scope.services.IEcmaScriptDebugger;
 import com.opera.core.systems.scope.services.IWindowManager;
@@ -160,7 +163,16 @@ public abstract class AbstractEcmascriptService extends AbstractService
   }
 
   public String executeJavascript(String using, boolean responseExpected) {
-    Object result = executeScript(using, responseExpected);
+    Object result = null;
+
+    try {
+      result = executeScript(using, responseExpected);
+    } catch (CommunicationException e) {
+      if (responseExpected) {
+        Throwables.propagate(e);
+      }
+    }
+
     return (result == null) ? null : String.valueOf(result);
   }
 
