@@ -71,9 +71,9 @@ public interface IOperaExec {
   void action(String using, int windowID, String... params);
 
   /**
-   * Execute an Opera action with a data parameters for extra integer data to be sent with the
-   * action.  In some actions the data parameters is interpreted as a pointer rather than an
-   * integer.  In these cases the action will fail.
+   * Execute an Opera action with a data parameter for extra integer data to be sent with the
+   * action.  In some actions the data parameter is interpreted as a pointer rather than an integer.
+   * In these cases the action will fail.
    *
    * @param using           the name of the action to execute
    * @param data            data parameter for extra integer data to be sent with the action
