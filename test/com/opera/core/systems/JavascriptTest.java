@@ -69,8 +69,8 @@ public class JavascriptTest extends OperaDriverTestCase {
     new Actions(driver).sendKeys("hi").perform();
 
     String log = driver.findElement(By.id("log")).getAttribute("value");
-    assertTrue(log.contains("press, 104, h,"));
-    assertTrue(log.contains("up, 73, I,"));
+    assertThat(log, containsString("press, 104, h,"));
+    assertThat(log, containsString("up, 73, I,"));
   }
 
   @Test
