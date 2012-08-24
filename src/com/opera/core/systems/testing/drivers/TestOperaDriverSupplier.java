@@ -18,12 +18,15 @@ package com.opera.core.systems.testing.drivers;
 
 import org.openqa.selenium.remote.LocalFileDetector;
 
+import java.io.File;
+
 public class TestOperaDriverSupplier extends AbstractTestDriverSupplier {
 
   public TestOperaDriver get() {
     // Uncomment this if you wish to connect Opera manually:
     //settings.autostart(false);
 
+    settings.setBinary(new File("/home/andreastt/operas/opera-core-integration-242-buildsetid_40299-core_2_11-lingogi64/profiles/release_desktop/lingogi_release_desktop"));
     TestOperaDriver driver = new TestOperaDriver(settings);
     driver.setFileDetector(new LocalFileDetector());
     return driver;

@@ -692,7 +692,6 @@ public class WaitState {
    * immediately.
    */
   public void captureOperaIdle() {
-    logger.finer("captureIdleEvents is now true!");
     captureIdleEvents = true;
   }
 

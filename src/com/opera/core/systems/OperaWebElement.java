@@ -18,7 +18,6 @@ package com.opera.core.systems;
 
 import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Maps;
 
 import com.opera.core.systems.model.Canvas;
 import com.opera.core.systems.model.ColorResult;
@@ -49,7 +48,6 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.logging.Logger;
 
@@ -160,12 +158,15 @@ public class OperaWebElement extends RemoteWebElement {
 
   public String getAttribute(String attribute) {
     assertElementNotStale();
-    return callMethod(String.format("return %s(locator, '%s')",
-                                    OperaAtom.GET_ATTRIBUTE, attribute));
-  }
 
-  private boolean hasAttribute(String attr) {
-    return getAttribute(attr) != null;
+    // TODO(andreastt): Investigate whether this check is still needed
+    if (attribute.equalsIgnoreCase("value")) {
+      return callMethod("if(/^input|select|option|textarea$/i.test(locator.nodeName)){"
+                        + "return locator.value;" + "}" + "return locator.textContent;");
+    } else {
+      return callMethod("return " + OperaAtom.GET_ATTRIBUTE + "(locator, '" + attribute
+                        + "')");
+    }
   }
 
   public String getText() {
