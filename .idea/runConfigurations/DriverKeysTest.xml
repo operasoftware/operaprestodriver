@@ -15,9 +15,7 @@
     <option name="TEST_SEARCH_SCOPE">
       <value defaultName="moduleWithDependencies" />
     </option>
-    <envs>
-      <env name="OPERA_PATH" value="$USER_HOME$/operas/opera-core-integration-376-buildsetid_50923-core_2_13-lingogi64/profiles/release_desktop/lingogi_release_desktop" />
-    </envs>
+    <envs />
     <patterns />
     <method />
   </configuration>

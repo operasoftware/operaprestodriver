@@ -108,40 +108,6 @@ public class OperaExec extends AbstractService implements IOperaExec {
     return actions;
   }
 
-  /*
-  public void type(String using) {
-    checkNotNull("You must provide something to type", using);
-    checkArgument(using.length() > 0, "Cannot type empty string");
-
-    if (keyIsPressed(OperaKey.SHIFT.getValue())) {
-      using = using.toUpperCase();
-    }
-
-    for (int i = 0; i < using.length(); ++i) {
-      char ch = using.charAt(i);
-      if (Character.isUpperCase(ch)) {
-        // If shift is already pressed down, we don't need to press it for capitals.  We don't
-        // release it if we're typing lower-case, because if the user has pressed shift and then
-        // types lower-case presumably they want to type upper-case characters.
-        boolean releaseShift = false;
-
-        if (!keyIsPressed(OperaKey.SHIFT.getValue())) {
-          key(OperaKey.SHIFT.getValue(), false);
-          releaseShift = true;
-        }
-
-        key(String.valueOf(ch));
-
-        if (releaseShift) {
-          key(OperaKey.SHIFT.getValue(), true);
-        }
-      } else {
-        key(String.valueOf(ch));
-      }
-    }
-  }
-  */
-
   public void mouseAction(int x, int y, OperaMouseKeys... keys) {
     mouseAction(x, y, 1, keys);
   }

@@ -117,29 +117,8 @@ public enum OperaKey {
     return String.format("%s -> %s", name(), toScope());
   }
 
-  /*
-  private static final Map<String, String> lookup = Maps.newHashMap();
-
-  static {
-    for (OperaKey key : EnumSet.allOf(OperaKey.class)) {
-      lookup.put(key.name(), key.value);
-    }
-  }
-
-  public static String get(String key) {
-    return lookup.get(key);
-  }
-  */
-
-  /*
   public static OperaKey get(Keys key) {
     return lookup.get(key);
   }
-  */
-
-  public static OperaKey get(Keys key) {
-    return lookup.get(key);
-  }
-
 
 }
