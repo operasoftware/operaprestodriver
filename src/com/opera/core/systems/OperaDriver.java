@@ -218,8 +218,6 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot, Run
 
     mouse = new OperaMouse(this);
     keyboard = new OperaKeyboard(this);
-    proxy = new OperaProxy(this);
-    preferences = new OperaScopePreferences(services.getPrefs());
     services.getConsoleLogger().onConsoleMessage(new ConsoleMessageConverter(logs));
 
     // Get product from Opera
@@ -239,6 +237,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot, Run
     }
 
     // Update browser's proxy configuration
+    proxy = new OperaProxy(this);
     proxy.parse(settings.getProxy());
   }
 
@@ -320,7 +319,6 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot, Run
       if (!settings.hasDetach()) {
         settings.profile().cleanUp();
       }
-      services = null;
       Closeables.closeQuietly(logFile);
     }
   }
