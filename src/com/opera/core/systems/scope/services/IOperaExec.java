@@ -98,20 +98,7 @@ public interface IOperaExec {
   void key(String key, boolean up);
 
   /**
-   * Whether the given key is currently pressed down.
-   *
-   * @return true if the key is currently down, false if not.
-   */
-  boolean keyIsPressed(String key);
-
-  /**
-   * Release all the pressed keys
-   */
-  void releaseKeys();
-
-  /**
-   * Check if the page contains color(s) as specified in {@link OperaColors}. <p/> TODO: Needs
-   * abstraction layer
+   * Check if the page contains color(s) as specified in {@link OperaColors}.
    */
   ScreenShotReply containsColor(Canvas canvas, long timeout, OperaColors... colors);
 

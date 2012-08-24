@@ -20,6 +20,7 @@ import com.google.common.collect.ImmutableList;
 
 import com.opera.core.systems.ScopeServices;
 import com.opera.core.systems.common.collect.CaseInsensitiveStringSet;
+import com.opera.core.systems.internal.VersionUtil;
 import com.opera.core.systems.model.Canvas;
 import com.opera.core.systems.model.ColorResult;
 import com.opera.core.systems.model.OperaColor;
@@ -29,7 +30,6 @@ import com.opera.core.systems.scope.ExecCommand;
 import com.opera.core.systems.scope.exceptions.WindowNotFoundException;
 import com.opera.core.systems.scope.internal.OperaColors;
 import com.opera.core.systems.scope.internal.OperaIntervals;
-import com.opera.core.systems.scope.internal.OperaKey;
 import com.opera.core.systems.scope.internal.OperaMouseKeys;
 import com.opera.core.systems.scope.protos.ExecProtos.ActionInfoList;
 import com.opera.core.systems.scope.protos.ExecProtos.ActionInfoList.ActionInfo;
@@ -43,18 +43,13 @@ import com.opera.core.systems.scope.protos.ExecProtos.ScreenWatcherResult;
 import com.opera.core.systems.scope.protos.ExecProtos.ScreenWatcherResult.ColorMatch;
 import com.opera.core.systems.scope.protos.UmsProtos.Response;
 import com.opera.core.systems.scope.services.IOperaExec;
-import com.opera.core.systems.internal.VersionUtil;
 
 import org.openqa.selenium.WebDriverException;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Logger;
-
-import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * The exec service handles user interactions such as key presses, mouse clicks, screenshot grabbing
@@ -63,7 +58,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 public class OperaExec extends AbstractService implements IOperaExec {
 
   private final Logger logger = Logger.getLogger(getClass().getName());
-  private final List<String> keys = new CopyOnWriteArrayList<String>();
   private final ScopeServices services;
 
   private Set<String> actions;
@@ -221,20 +215,8 @@ public class OperaExec extends AbstractService implements IOperaExec {
 
     if (up) {
       action("_keyup", key);
-      keys.remove(key.toLowerCase());
     } else {
       action("_keydown", key);
-      keys.add(key.toLowerCase());
-    }
-  }
-
-  public boolean keyIsPressed(String key) {
-    return keys.contains(key.toLowerCase());
-  }
-
-  public void releaseKeys() {
-    for (String key : keys) {
-      this.key(key, true);
     }
   }
 

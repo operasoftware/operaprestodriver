@@ -74,7 +74,7 @@ public class OperaKeyboard implements Keyboard {
     }
   }
 
-  private void releaseModifiers() {
+  protected void releaseModifiers() {
     for (Keys modifierKey : modifiers) {
       releaseKey(modifierKey);
     }

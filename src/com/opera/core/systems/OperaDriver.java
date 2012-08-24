@@ -335,7 +335,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot, Run
 
     // As this is an artificial page load we release all the held keys. If the user clicks a link,
     // any keys remain held.
-    exec.releaseKeys();
+    keyboard.releaseModifiers();
 
     int activeWindowId = windowManager.getActiveWindowId();
     String oldUrl = getCurrentUrl();
