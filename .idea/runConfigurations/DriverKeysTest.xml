@@ -17,6 +17,8 @@
     </option>
     <envs />
     <patterns />
+    <RunnerSettings RunnerId="Run" />
+    <ConfigurationWrapper RunnerId="Run" />
     <method />
   </configuration>
 </component>
