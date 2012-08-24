@@ -21,6 +21,7 @@ import com.opera.core.systems.testing.Ignore;
 import com.opera.core.systems.testing.NoDriverAfter;
 import com.opera.core.systems.testing.OperaDriverTestCase;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
@@ -41,6 +42,11 @@ public class JavascriptTest extends OperaDriverTestCase {
   @Before
   public void beforeEach() {
     driver.navigate().to(pages.javascript);
+  }
+
+  @After
+  public void enableScripting() {
+    driver.preferences().set("Extensions", "Scripting", true);
   }
 
   @Test
