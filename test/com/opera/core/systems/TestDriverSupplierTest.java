@@ -104,7 +104,7 @@ public class TestDriverSupplierTest {
   @Test
   public void testDriverSupplierOnlyOverridesLoggingLevelIfDefaultValue() {
     supplier = new TestOperaDriverSupplier();
-    assertEquals(Level.FINE, supplier.getSettings().logging().getLevel());
+    assertEquals(Level.INFO, supplier.getSettings().logging().getLevel());
 
     supplier.setSettings(customSettings);
     assertEquals(Level.CONFIG, supplier.getSettings().logging().getLevel());
