@@ -17,13 +17,17 @@ limitations under the License.
 package com.opera.core.systems.runner;
 
 import com.opera.core.systems.OperaSettings;
+import com.opera.core.systems.arguments.OperaArgument;
 import com.opera.core.systems.model.ScreenShotReply;
 
+import org.openqa.selenium.Platform;
 import org.openqa.selenium.os.CommandLine;
 
 import java.util.List;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.logging.Logger;
+
+import static com.opera.core.systems.OperaProduct.DESKTOP;
 
 /**
  * OperaRunner implements a pure-Java process manager for controlling the Opera binary.
@@ -66,6 +70,14 @@ public class OperaRunner implements com.opera.core.systems.runner.interfaces.Ope
     }
 
     settings.arguments().add("autotestmode");
+
+    // Hack - if we are testing desktop mac the fullscreen argument must be after -pd
+    // otherwise the pd setting does not have any effect. So putting it last.
+    if (settings.getProduct().is(DESKTOP) && Platform.getCurrent().is(Platform.MAC)) {
+      OperaArgument fullscreen = new OperaArgument("fullscreen");
+      settings.arguments().remove(fullscreen);
+      settings.arguments().add(fullscreen);
+    }
 
     logger.config("Opera arguments: " + settings.arguments().getArgumentsAsStringList());
   }

@@ -17,6 +17,7 @@ limitations under the License.
 package com.opera.core.systems;
 
 import com.google.common.base.Joiner;
+import com.google.common.collect.Lists;
 
 import com.opera.core.systems.arguments.OperaArgument;
 import com.opera.core.systems.arguments.OperaArgument.OperaArgumentSign;
@@ -24,7 +25,6 @@ import com.opera.core.systems.arguments.OperaArgument.OperaArgumentSign;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -36,7 +36,7 @@ public class OperaArguments implements com.opera.core.systems.arguments.interfac
 
   public static String DEFAULT_SIGN = OperaArgumentSign.POSIX_SIGN.getValue();
 
-  protected List<OperaArgument> arguments = new ArrayList<OperaArgument>();
+  protected List<OperaArgument> arguments = Lists.newArrayList();
 
   /**
    * Provides a key/value storage of arguments related to the Opera product binary.
@@ -68,6 +68,10 @@ public class OperaArguments implements com.opera.core.systems.arguments.interfac
     arguments.add(argument);
   }
 
+  public void remove(OperaArgument argument) {
+    arguments.remove(argument);
+  }
+
   public OperaArgument get(int index) {
     return arguments.get(index);
   }
@@ -81,7 +85,7 @@ public class OperaArguments implements com.opera.core.systems.arguments.interfac
   }
 
   public List<String> getArgumentsAsStringList() {
-    List<String> stringList = new ArrayList<String>();
+    List<String> stringList = Lists.newArrayList();
 
     for (OperaArgument argument : this) {
       stringList.add(sign() + argument.getArgument());

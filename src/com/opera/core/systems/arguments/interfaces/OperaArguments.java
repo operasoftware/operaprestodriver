@@ -57,6 +57,13 @@ public interface OperaArguments extends Iterable<OperaArgument> {
   void add(OperaArgument argument);
 
   /**
+   * Removes the specified argument from the command-line argument list representation.
+   *
+   * @param argument the argument to remove
+   */
+  void remove(OperaArgument argument);
+
+  /**
    * Convenience method to access the given indexed argument in the command-line list
    * representation.  This maps to <code>OperaArguments.getArguments().get(x)</code>.
    *
