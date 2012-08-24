@@ -22,17 +22,20 @@ import com.opera.core.systems.testing.OperaDriverTestCase;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keyboard;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 import static org.openqa.selenium.Platform.MAC;
 import static com.opera.core.systems.OperaProduct.MOBILE;
 
 public class DriverKeysTest extends OperaDriverTestCase {
 
+  public Keyboard keyboard;
   public WebElement fieldOne;
   public WebElement fieldTwo;
 
@@ -40,6 +43,7 @@ public class DriverKeysTest extends OperaDriverTestCase {
   public void beforeEach() {
     driver.navigate().to(pages.twoInputFields);
 
+    keyboard = driver.getKeyboard();
     fieldOne = driver.findElement(By.name("one"));
     fieldTwo = driver.findElement(By.name("two"));
     fieldOne.click();
@@ -47,7 +51,7 @@ public class DriverKeysTest extends OperaDriverTestCase {
 
   @Test
   public void testSingleCharacter() {
-    new Actions(driver).sendKeys("a").build().perform();
+    keyboard.sendKeys("a");
     assertEquals("a", fieldOne.getAttribute("value"));
   }
 
@@ -79,13 +83,13 @@ public class DriverKeysTest extends OperaDriverTestCase {
 
   @Test
   public void testTypeSingle() {
-    new Actions(driver).sendKeys("a").build().perform();
+    keyboard.sendKeys("a");
     assertEquals("a", fieldOne.getAttribute("value"));
   }
 
   @Test
   public void testTypeMulti() {
-    new Actions(driver).sendKeys("abcdef").build().perform();
+    keyboard.sendKeys("abcdef");
     assertEquals("abcdef", fieldOne.getAttribute("value"));
   }
 
@@ -97,27 +101,27 @@ public class DriverKeysTest extends OperaDriverTestCase {
 
   @Test
   public void testTypeNotModify() throws Exception {
-    new Actions(driver).sendKeys("ac" + "left" + "b").build().perform();
+    keyboard.sendKeys("ac" + "left" + "b");
     assertEquals("acleftb", fieldOne.getAttribute("value"));
   }
 
   @Test
   @Ignore(products = MOBILE, value = "Needs investigation")
   public void testLeftArrow() {
-    new Actions(driver).sendKeys("ac" + Keys.LEFT + "b").build().perform();
+    keyboard.sendKeys("ac" + Keys.LEFT + "b");
     assertEquals("abc", fieldOne.getAttribute("value"));
   }
 
   @Test
   @Ignore(products = MOBILE, value = "Needs investigation")
   public void testCaseInsensitiveLeftArrow() {
-    new Actions(driver).sendKeys("ac" + Keys.LEFT + "b").build().perform();
+    keyboard.sendKeys("ac" + Keys.LEFT + "b");
     assertEquals("abc", fieldOne.getAttribute("value"));
   }
 
   @Test
   public void testTab() {
-    new Actions(driver).sendKeys("ab" + Keys.TAB + "c").build().perform();
+    keyboard.sendKeys("ab" + Keys.TAB + "c");
     assertEquals("ab", fieldOne.getAttribute("value"));
     assertEquals("c", fieldTwo.getAttribute("value"));
   }
@@ -134,13 +138,13 @@ public class DriverKeysTest extends OperaDriverTestCase {
 
   @Test
   public void testShiftCapitals() {
-    driver.getKeyboard().sendKeys("a", Keys.SHIFT + "bc", "d");
+    keyboard.sendKeys("a", Keys.SHIFT + "bc", "d");
     assertEquals("aBCD", fieldOne.getAttribute("value"));
   }
 
   @Test
   public void depressShift() {
-    driver.getKeyboard().sendKeys(Keys.SHIFT, "a", Keys.SHIFT, "b");
+    keyboard.sendKeys(Keys.SHIFT, "a", Keys.SHIFT, "b");
     assertEquals("Ab", fieldOne.getAttribute("value"));
   }
 
@@ -148,7 +152,7 @@ public class DriverKeysTest extends OperaDriverTestCase {
   @Ignore(products = MOBILE, value = "Needs investigation")
   public void testHoldControl() {
     // Control + A
-    new Actions(driver).sendKeys("a" + Keys.CONTROL + "a" + Keys.CONTROL + "bc").build().perform();
+    keyboard.sendKeys("a" + Keys.CONTROL + "a" + Keys.CONTROL + "bc");
     assertEquals("bc", fieldOne.getAttribute("value"));
   }
 
