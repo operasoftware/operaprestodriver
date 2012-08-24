@@ -225,6 +225,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot, Run
     // Get product from Opera
     settings.setProduct(utils().getProduct());
 
+    // TODO(andreastt): Expose profile on core service
     if (!utils().getUserAgent().contains("Mini")) {
       preferences = new OperaScopePreferences(services.getPrefs());
 
