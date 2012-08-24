@@ -39,7 +39,8 @@ public class HTML5FormTest extends OperaDriverTestCase {
   public void setInputFileValue() {
     WebElement fileField = driver.findElement(By.id("file"));
     fileField.sendKeys(resources.textFile().getAbsolutePath());
-    assertThat(fileField.getAttribute("value"), is(resources.textFile().getAbsolutePath()));
+    assertThat(fileField.getAttribute("value"),
+               is("C:\\fakepath\\" + resources.textFile().getName()));
   }
 
   @Test
