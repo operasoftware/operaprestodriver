@@ -24,7 +24,7 @@ import com.opera.core.systems.scope.protos.SystemInputProtos.ModifierPressed;
 import com.opera.core.systems.scope.protos.SystemInputProtos.MouseInfo;
 import com.opera.core.systems.scope.protos.SystemInputProtos.MouseInfo.MouseButton;
 import com.opera.core.systems.scope.services.ISystemInput;
-import com.opera.core.systems.util.WatirUtils;
+import com.opera.core.systems.internal.WatirUtils;
 
 import java.awt.*;
 import java.util.List;

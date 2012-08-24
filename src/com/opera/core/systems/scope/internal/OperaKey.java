@@ -16,16 +16,18 @@ limitations under the License.
 
 package com.opera.core.systems.scope.internal;
 
+import com.google.common.base.Function;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
 
-import java.util.EnumSet;
-import java.util.HashMap;
+import org.openqa.selenium.Keys;
+
 import java.util.Map;
 
 /**
- * Maps OperaKeys to WebDriver keys.
+ * Maps Selenium WebDriver {@link Keys} to keys supported and recognized by Opera.
  */
-public enum OperaKeys {
+public enum OperaKey {
 
   NULL("null"),
   CANCEL("cancel"),  // ^break
@@ -93,25 +95,29 @@ public enum OperaKeys {
   F11("f11"),
   F12("f12");
 
-  private String value;
+  private static final Map<Keys, OperaKey> lookup =
+      Maps.uniqueIndex(ImmutableList.copyOf(values()), new Function<OperaKey, Keys>() {
+        public Keys apply(OperaKey key) {
+          return Keys.valueOf(key.name());
+        }
+      });
 
-  public String getValue() {
-    return value;
-  }
+  private final String value;
 
-  private OperaKeys(String value) {
+  private OperaKey(String value) {
     this.value = value;
   }
 
-  private static final Map<String, String> lookup = Maps.newHashMap();
-
-  static {
-    for (OperaKeys key : EnumSet.allOf(OperaKeys.class)) {
-      lookup.put(key.name(), key.value);
-    }
+  public String toScope() {
+    return value;
   }
 
-  public static String get(String key) {
+  @Override
+  public String toString() {
+    return String.format("%s -> %s", name(), toScope());
+  }
+
+  public static OperaKey get(Keys key) {
     return lookup.get(key);
   }
 

@@ -16,6 +16,8 @@ limitations under the License.
 
 package com.opera.core.systems;
 
+import com.google.common.base.Joiner;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
 
 import com.opera.core.systems.model.Canvas;
@@ -23,7 +25,6 @@ import com.opera.core.systems.model.ColorResult;
 import com.opera.core.systems.model.ScreenShotReply;
 import com.opera.core.systems.scope.exceptions.ResponseNotReceivedException;
 import com.opera.core.systems.scope.internal.OperaColors;
-import com.opera.core.systems.scope.internal.OperaKeys;
 import com.opera.core.systems.scope.internal.OperaMouseKeys;
 import com.opera.core.systems.scope.services.IEcmaScriptDebugger;
 import com.opera.core.systems.scope.services.IOperaExec;
@@ -32,7 +33,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.ElementNotVisibleException;
 import org.openqa.selenium.InvalidElementStateException;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.Point;
 import org.openqa.selenium.StaleElementReferenceException;
@@ -43,11 +43,11 @@ import org.openqa.selenium.interactions.internal.Coordinates;
 import org.openqa.selenium.remote.RemoteWebElement;
 import org.openqa.selenium.support.Color;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
@@ -58,21 +58,16 @@ import java.util.logging.Logger;
  */
 public class OperaWebElement extends RemoteWebElement {
 
-  protected final Logger logger = Logger.getLogger(this.getClass().getName());
+  private static final List<String> specialInputs =
+      ImmutableList.of("datetime", "date", "month", "week", "time", "datetime-local", "range",
+                       "color", "file");
 
+  private final Logger logger = Logger.getLogger(getClass().getName());
   private final int objectId;
   private final int runtimeId;
   private final OperaDriver parent;
   private final IOperaExec execService;
   private final IEcmaScriptDebugger debugger;
-
-  /**
-   * Stores a map of special character codes to the string representation. For example "\uE00E" maps
-   * to "page_up".
-   *
-   * TODO(andreastt): Move this to OperaKeyboard?
-   */
-  private static final Map<Character, String> keysLookup = Maps.newHashMap();
 
   /**
    * @param parent   driver that this element belongs to
@@ -86,6 +81,7 @@ public class OperaWebElement extends RemoteWebElement {
     execService = parent.getExecService();
     runtimeId = debugger.getRuntimeId();
     setId(String.valueOf(hashCode()));
+    setFileDetector(parent.getFileDetector());
   }
 
   /**
@@ -164,15 +160,8 @@ public class OperaWebElement extends RemoteWebElement {
 
   public String getAttribute(String attribute) {
     assertElementNotStale();
-
-    // TODO(andreastt): Investigate whether this check is still needed
-    if (attribute.equalsIgnoreCase("value")) {
-      return callMethod("if(/^input|select|option|textarea$/i.test(locator.nodeName)){"
-                        + "return locator.value;" + "}" + "return locator.textContent;");
-    } else {
-      return callMethod("return " + OperaAtom.GET_ATTRIBUTE + "(locator, '" + attribute
-                        + "')");
-    }
+    return callMethod(String.format("return %s(locator, '%s')",
+                                    OperaAtom.GET_ATTRIBUTE, attribute));
   }
 
   private boolean hasAttribute(String attr) {
@@ -210,118 +199,50 @@ public class OperaWebElement extends RemoteWebElement {
   public void sendKeys(CharSequence... keysToSend) {
     verifyCanInteractWithElement();
 
-    // A list of keys that should be held down, instead of pressed
-    ArrayList<String> holdKeys = new ArrayList<String>();
-    holdKeys.add(OperaKeys.SHIFT.getValue());
-    holdKeys.add(OperaKeys.CONTROL.getValue());
-    // Keys that have been held down, and need to be released
-    ArrayList<String> heldKeys = new ArrayList<String>();
+    // Handle special input types
+    String typeAttribute = getAttribute("type").toLowerCase();
 
-    if (getTagName().equals("INPUT")
-        && (hasAttribute("type") && getAttribute("type").equalsIgnoreCase("file"))) {
-      click();
-    } else {
-      executeMethod("locator.focus()");
-      // When focused textareas return the cursor to the last position it was at. Inputs place the
-      // cursor at the beginning, and so we need to move it to the end. We do this by pre-pending an
-      // "End" key to the keys to send (in a round-about way).
-      if (getTagName().equals("INPUT")) {
-        // Javascript from webdriver_session.cc in ChromeDriver
-        executeMethod("function(elem) {" + "  var doc = elem.ownerDocument || elem;"
-                      + "  var prevActiveElem = doc.activeElement;"
-                      + "  if (elem != prevActiveElem && prevActiveElem)"
-                      + "    prevActiveElem.blur();"
-                      + "  elem.focus();"
-                      + "  if (elem != prevActiveElem && elem.value && elem.value.length &&"
-                      + "      elem.setSelectionRange) {"
-                      + "    elem.setSelectionRange(elem.value.length, elem.value.length);" + "  }"
-                      + "  if (elem != doc.activeElement)"
-                      + "    throw new Error('Failed to send keys because cannot focus element');"
-                      + "}(locator)");
+    if (getTagName().equals("INPUT") && specialInputs.contains(typeAttribute)) {
+      if (typeAttribute.equals("file")) {
+        File localFile = fileDetector.getLocalFile(keysToSend);
+
+        if (localFile != null) {
+          debugger.setFormElementValue(objectId, localFile.getAbsolutePath());
+        }
+      } else {
+        debugger.setFormElementValue(objectId, Joiner.on("").join(keysToSend));
       }
-    }
 
-    // This code is a bit ugly. Because "special" keys can be sent either as an individual
-    // argument, or in the middle of a string of "normal" characters, we have to loop through the
-    // string and check each against a list of special keys.
+      return;
+    }
 
     parent.getScopeServices().captureOperaIdle();
-    for (CharSequence seq : keysToSend) {
-      if (seq instanceof Keys) {
-        String key = OperaKeys.get(((Keys) seq).name());
-        // Check if this is a key we hold down, and haven't already pressed, and press, but don't
-        // release it. That's done at the end of this method.
-        if (holdKeys.contains(key) && !heldKeys.contains(key) && !execService.keyIsPressed(key)) {
-          execService.key(key, false);
-          heldKeys.add(key);
-        } else if (key.equals("null")) {
-          for (String hkey : heldKeys) {
-            execService.key(hkey, true);
-          }
-        } else {
-          execService.key(key);
-        }
-      } else if (seq.toString().equals("\n")) {
-        execService.key("enter");
-      } else {
-        // We need to check each character to see if it is a "special" key
-        for (int i = 0; i < seq.length(); i++) {
-          Character c = seq.charAt(i);
-          String keyName = charToKeyName(c);
 
-          // Buffer normal keys for a single type() call
-          if (keyName == null) {
-            execService.type(c.toString());
-          } else {
-            String key = OperaKeys.get(keyName);
-            // TODO: Code repeated from above
-            if (holdKeys.contains(key) && !heldKeys.contains(key) && !execService
-                .keyIsPressed(key)) {
-              execService.key(key, false);
-              heldKeys.add(key);
-            } else if (key.equals("null")) {
-              for (String hkey : heldKeys) {
-                execService.key(hkey, true);
-              }
-            } else {
-              execService.key(key);
-            }
-          }
-        }
-      }
-    }
-
-    if (heldKeys.size() > 0) {
-      for (String key : heldKeys) {
-        execService.key(key, true);
-      }
-    }
+    switchFocusToThisIfNeeded();
+    parent.getKeyboard().sendKeys(keysToSend);
 
     try {
       parent.waitForLoadToComplete();
     } catch (ResponseNotReceivedException e) {
-      // This might be expected
-      logger.fine("Response not received, returning control to user");
+      // return control to user
     }
-
-    // executeMethod("locator.blur()");
   }
 
-  /**
-   * Converts a character in the PUA to the name of the key, as given by {@link
-   * org.openqa.selenium.Keys}. If the character doesn't appear in that class then null is
-   * returned.
-   *
-   * @param c the character that may be a special key
-   * @return a string containing the name of the "special" key or null
-   */
-  private static String charToKeyName(char c) { // TODO(andreastt): Move this to OperaKeyboard?
-    if (keysLookup.isEmpty()) {
-      for (Keys k : Keys.values()) {
-        keysLookup.put(k.charAt(0), k.name());
-      }
+  private void switchFocusToThisIfNeeded() {
+    // TODO(andreastt): Check if element is already focused, if not click
+
+    // When a TEXTAREA element is focused it returns the cursor to the last position was at, or
+    // places it last.  INPUT @type="text" (or any other textual input element) places the caret at
+    // the beginning.  Because of this we are forced to move the caret to the end of the input
+    // field.  We do this by setting the selection range through JavaScript, which should move the
+    // cursor to the end of the field upon the next focus event.
+    String type = callMethod("locator.type");
+
+    if (type.equals("text") || type.equals("textarea")) {
+      executeMethod(OperaAtom.MOVE_CARET_TO_END + "(locator)");
     }
-    return keysLookup.get(c);
+
+    executeMethod("locator.focus()");
   }
 
   public void submit() {

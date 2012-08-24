@@ -27,9 +27,9 @@ import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 
-import static com.opera.core.systems.OperaProduct.MOBILE;
 import static org.junit.Assert.assertEquals;
 import static org.openqa.selenium.Platform.MAC;
+import static com.opera.core.systems.OperaProduct.MOBILE;
 
 public class DriverKeysTest extends OperaDriverTestCase {
 
@@ -134,8 +134,14 @@ public class DriverKeysTest extends OperaDriverTestCase {
 
   @Test
   public void testShiftCapitals() {
-    new Actions(driver).sendKeys("a").sendKeys(Keys.SHIFT + "bc").sendKeys("d").build().perform();
-    assertEquals("aBCd", fieldOne.getAttribute("value"));
+    driver.getKeyboard().sendKeys("a", Keys.SHIFT + "bc", "d");
+    assertEquals("aBCD", fieldOne.getAttribute("value"));
+  }
+
+  @Test
+  public void depressShift() {
+    driver.getKeyboard().sendKeys(Keys.SHIFT, "a", Keys.SHIFT, "b");
+    assertEquals("Ab", fieldOne.getAttribute("value"));
   }
 
   @Test
@@ -151,12 +157,12 @@ public class DriverKeysTest extends OperaDriverTestCase {
   public void testMultipleModifiers() {
     if (Platform.getCurrent().is(Platform.MAC)) {
       new Actions(driver).sendKeys("abc defghij")
-          .sendKeys(Keys.ALT + "" + Keys.LEFT_SHIFT + Keys.LEFT)
+          .sendKeys(Keys.ALT, Keys.LEFT_SHIFT, Keys.LEFT)
           .sendKeys(Keys.BACK_SPACE)
           .build().perform();
     } else {
       new Actions(driver).sendKeys("abc defghij")
-          .sendKeys(Keys.CONTROL + "" + Keys.LEFT_SHIFT + Keys.LEFT)
+          .sendKeys(Keys.CONTROL, Keys.LEFT_SHIFT, Keys.LEFT)
           .sendKeys(Keys.BACK_SPACE)
           .build().perform();
     }

@@ -27,7 +27,7 @@ import com.opera.core.systems.scope.protos.SystemInputProtos.ModifierPressed;
 import com.opera.core.systems.scope.services.IDesktopUtils;
 import com.opera.core.systems.scope.services.IDesktopWindowManager;
 import com.opera.core.systems.scope.services.ISystemInput;
-import com.opera.core.systems.util.ProfileUtils;
+import com.opera.core.systems.internal.ProfileUtils;
 
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.Platform;
