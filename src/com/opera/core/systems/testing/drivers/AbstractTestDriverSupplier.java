@@ -51,7 +51,7 @@ public abstract class AbstractTestDriverSupplier implements TestDriverSupplier {
 
     // Only override logging level if it has the default value
     if (new OperaSettings().logging().getLevel() == settings.logging().getLevel()) {
-      settings.logging().setLevel(Level.FINE);
+      settings.logging().setLevel(Level.INFO);
     }
   }
 
