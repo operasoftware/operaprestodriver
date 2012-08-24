@@ -30,15 +30,18 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.interactions.Actions;
 
+import static com.opera.core.systems.OperaProduct.CORE;
 import static com.opera.core.systems.OperaProduct.MOBILE;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
+import static org.junit.matchers.JUnitMatchers.containsString;
 import static org.openqa.selenium.Platform.LINUX;
 import static org.openqa.selenium.Platform.MAC;
 import static org.openqa.selenium.Platform.WINDOWS;
 
 @IdleEnabled
-@Settings(idle = true, logLevel = Settings.Level.FINER)
+@Settings(idle = true, logLevel = Settings.Level.FINE)  // idle messages are logged to FINE
 public class IdleTest extends OperaDriverTestCase {
 
   // Timeout vars for every test
@@ -168,7 +171,7 @@ public class IdleTest extends OperaDriverTestCase {
   }
 
   @Test
-  @Ignore(platforms = WINDOWS, products = MOBILE)
+  @Ignore(platforms = {WINDOWS, LINUX}, products = {MOBILE, CORE})
   public void keyEnter() {
     assertIdleEnabledAndAvailable();
 
@@ -183,7 +186,7 @@ public class IdleTest extends OperaDriverTestCase {
     stop();
 
     // +"?" for submitted query string
-    assertTrue(driver.getCurrentUrl().endsWith("test.html?"));
+    assertThat(driver.getCurrentUrl(), containsString("test.html?"));
   }
 
   @Test
