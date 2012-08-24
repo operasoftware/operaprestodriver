@@ -43,6 +43,7 @@ import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import static org.junit.matchers.JUnitMatchers.containsString;
 
 @NoDriver
@@ -294,14 +295,19 @@ public class OperaSettingsCapabilitiesTest extends OperaDriverTestCase {
 
   @Test
   public void profileSanitizeNull() {
-    assertTrue(PROFILE.sanitize(null) instanceof OperaProfile);
+    try {
+      PROFILE.sanitize(null);
+      fail("Expected NullPointerException");
+    } catch (RuntimeException e) {
+      assertThat(e, is(instanceOf(NullPointerException.class)));
+    }
   }
 
   @Test
   public void profileSanitizeEmptyString() {
-    assertTrue(PROFILE.sanitize("") instanceof OperaProfile);
-    assertThat(((OperaProfile) PROFILE.sanitize("")).getDirectory().getPath(),
-               containsString("autotest"));
+    OperaProfile sanitized = (OperaProfile) PROFILE.sanitize("");
+    assertThat(sanitized.getDirectory().getPath(), containsString("opera"));
+    assertThat(sanitized.getDirectory().getPath(), containsString("profile"));
   }
 
   @Test
@@ -312,15 +318,12 @@ public class OperaSettingsCapabilitiesTest extends OperaDriverTestCase {
 
   @Test
   public void operaIdleSanitizeNull() {
-    Exception exception = null;
-
     try {
       OPERAIDLE.sanitize(null);
+      fail("Expected NullPointerException");
     } catch (RuntimeException e) {
-      exception = e;
+      assertThat(e, is(instanceOf(NullPointerException.class)));
     }
-
-    assertThat(exception, is(instanceOf(NullPointerException.class)));
   }
 
   @Test
