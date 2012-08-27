@@ -47,7 +47,7 @@ public class IgnoreComparator {
     }
 
     for (Platform platform : ignoreAnnotation.platforms()) {
-      if (platform.is(currentPlatform)) {
+      if (platform == currentPlatform) {
         return true;
       }
     }
