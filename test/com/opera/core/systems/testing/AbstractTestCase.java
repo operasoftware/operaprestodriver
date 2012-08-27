@@ -54,10 +54,10 @@ public abstract class AbstractTestCase implements TestCase {
   private static final ThreadLocal<TestDriver> storedDriver = new ThreadLocal<TestDriver>();
   private static OperaSettings settings = new OperaSettings();
   private static boolean spawnDriver = true;
+  private static OperaProduct currentProduct;
+  private static Platform currentPlatform;
 
   private final TestDriverSupplier supplier;
-  private OperaProduct currentProduct;
-  private Platform currentPlatform;
 
   public AbstractTestCase() {
     supplier = TestDriverBuilder.detect();

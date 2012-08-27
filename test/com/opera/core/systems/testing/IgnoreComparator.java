@@ -35,20 +35,18 @@ public class IgnoreComparator {
     currentPlatform = platform;
   }
 
-  public boolean shouldIgnore(Ignore ignoreAnnotation) {
-    if (ignoreAnnotation == null) {
+  public boolean shouldIgnore(Ignore annotation) {
+    if (annotation == null) {
       return false;
     }
 
-    for (OperaProduct product : ignoreAnnotation.products()) {
-      if (product.is(currentProduct)) {
-        return true;
-      }
-    }
-
-    for (Platform platform : ignoreAnnotation.platforms()) {
-      if (platform == currentPlatform) {
-        return true;
+    for (Platform platform : annotation.platforms()) {
+      if (platform.is(currentPlatform)) {
+        for (OperaProduct product : annotation.products()) {
+          if (product.is(currentProduct)) {
+            return true;
+          }
+        }
       }
     }
 
