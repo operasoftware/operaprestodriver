@@ -2,6 +2,7 @@ package com.opera.core.systems;
 
 import com.opera.core.systems.testing.OperaDriverTestCase;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -9,6 +10,8 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.logging.LogType;
 import org.openqa.selenium.logging.Logs;
+
+import java.util.logging.Level;
 
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
@@ -19,11 +22,19 @@ import static org.junit.Assert.assertTrue;
 public class LogsTest extends OperaDriverTestCase {
 
   public WebElement triggerLog;
+  public static Level oldLoggingLevel;
 
   @Before
   public void setup() {
+    oldLoggingLevel = driver.getSettings().logging().getLevel();
+    driver.getSettings().logging().setLevel(Level.FINE);
     driver.get(pages.console);
     triggerLog = driver.findElement(By.id("trigger_log"));
+  }
+
+  @After
+  public void resetLoggingLevel() {
+    driver.getSettings().logging().setLevel(oldLoggingLevel);
   }
 
   @Test

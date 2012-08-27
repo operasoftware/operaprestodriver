@@ -19,15 +19,25 @@ package com.opera.core.systems;
 import com.opera.core.systems.scope.internal.ServiceCallback;
 import com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessage;
 
-import org.openqa.selenium.logging.LocalLogs;
 import org.openqa.selenium.logging.LogEntry;
 import org.openqa.selenium.logging.LogType;
 import org.openqa.selenium.logging.Logs;
+import org.openqa.selenium.logging.StoringLocalLogs;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.logging.Handler;
 import java.util.logging.LogRecord;
 
-public class OperaLogs extends LocalLogs implements Logs {
+public class OperaLogs extends StoringLocalLogs implements Logs {
+
+  public OperaLogs() {
+    super(new HashSet<String>());
+  }
+
+  public OperaLogs(Set<String> logTypesToIgnore) {
+    super(logTypesToIgnore);
+  }
 
   /**
    * Converts the console messages we receive through Scope to {@link LogEntry}'s for use with
