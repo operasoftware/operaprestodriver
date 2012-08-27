@@ -20,6 +20,7 @@ import com.opera.core.systems.model.ScreenShotReply;
 import com.opera.core.systems.testing.Ignore;
 import com.opera.core.systems.testing.OperaDriverTestCase;
 
+import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
@@ -32,6 +33,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.concurrent.TimeUnit;
 import java.util.zip.Adler32;
 
 import javax.imageio.ImageIO;
@@ -50,13 +52,19 @@ public class ScreenshotTest extends OperaDriverTestCase {
   private OperaWebElement radioLots;
 
   @Before
-  public void beforeEach() {
+  public void setup() {
+    driver.manage().timeouts().implicitlyWait(2500, TimeUnit.SECONDS);
     driver.navigate().to(pages.test);
 
     text = (OperaWebElement) driver.findElement(By.id("input_email"));
     radioSome = (OperaWebElement) driver.findElement(By.id("radio_some"));
     radioLittle = (OperaWebElement) driver.findElement(By.id("radio_little"));
     radioLots = (OperaWebElement) driver.findElement(By.id("radio_lots"));
+  }
+
+  @After
+  public void resetImplicitWait() {
+    driver.manage().timeouts().implicitlyWait(0, TimeUnit.MILLISECONDS);
   }
 
   @AfterClass
