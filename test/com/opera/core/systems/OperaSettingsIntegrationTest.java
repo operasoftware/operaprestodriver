@@ -247,14 +247,14 @@ public class OperaSettingsIntegrationTest extends OperaDriverTestCase {
     settings.setDetach(true);
 
     TestDriver driver = new TestDriverBuilder().using(settings).get();
-    int processID = driver.utils().getPID();
+
+    Integer processID = driver.utils().getPID();
+    assertNotNull("Failed to get process ID from driver", processID);
+
     driver.quit();
 
-    // Driver should be shut down, and there should be no connection to browser
-    assertFalse(driver.getServices().isConnected());
-
-    // But browser should be running
-    assertTrue(ProcessManager.isPidRunning(processID));
+    assertFalse("OperaDriver should not be connected to Opera", driver.getServices().isConnected());
+    assertTrue("Opera should be running", ProcessManager.isPidRunning(processID));
 
     ProcessManager.killPID(processID);
   }
