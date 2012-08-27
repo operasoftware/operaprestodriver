@@ -39,6 +39,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import static com.opera.core.systems.OperaProduct.DESKTOP;
 import static org.hamcrest.CoreMatchers.instanceOf;
@@ -57,8 +58,9 @@ import static org.junit.matchers.JUnitMatchers.hasItem;
 @NoDriver
 public class OperaLauncherRunnerTest extends OperaDriverTestCase {
 
-  private OperaSettings settings;
-  private TestOperaLauncherRunner runner;
+  public Logger logger = Logger.getLogger(getClass().getName());
+  public OperaSettings settings;
+  public TestOperaLauncherRunner runner;
 
   @Before
   public void beforeEach() {
@@ -75,7 +77,7 @@ public class OperaLauncherRunnerTest extends OperaDriverTestCase {
         assertFalse(runner.isOperaRunning());
       }
     } catch (Exception e) {
-      // ignore
+      logger.warning("Got exception while attempting to stop Opera: " + e);
     } finally {
       if (runner != null) {
         runner.shutdown();
