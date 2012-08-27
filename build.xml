@@ -136,7 +136,7 @@
 
   <!-- Compile any modified classes including test classes -->
   <target name="compile_tests" depends="jar">
-    <javac source="1.5" target="1.5" debug="true" destdir="bin" includeantruntime="false">
+    <javac source="1.6" target="1.6" debug="true" destdir="bin" includeantruntime="false">
       <src path="test" />
       <classpath refid="test.classpath.path" />
     </javac>
@@ -216,12 +216,12 @@
 
       <!-- Link to online selenium documentation, and the Java docs -->
       <link href="http://webdriver.googlecode.com/svn/javadoc/"/>
-      <link href="http://download.oracle.com/javase/1.5.0/docs/api/"/>
+      <link href="http://download.oracle.com/javase/1.6.0/docs/api/"/>
     </javadoc>
   </target>
 
   <target name="example" description="Run the simple example" depends="jar">
-    <javac source="1.5" target="1.5" debug="true" includeantruntime="false">
+    <javac source="1.6" target="1.6" debug="true" includeantruntime="false">
       <classpath refid="test.classpath.path" />
       <src path="examples/simple" />
     </javac>
