@@ -1,3 +1,69 @@
+v0.18     (2012-08-27)
+
+  [NEW FEATURES]
+
+  * Support for HTML5 forms interaction on modern Opera builds (not
+    released).  (andreastt)
+
+  [ENHANCEMENTS]
+
+  * Refactored typing code.  This should address issue with typing
+    when using OperaDriver as a remote driver.  (andreastt)
+
+  * Connection checks before calling eval() in most cases, also
+    removes runtime check for eval().  (andreastt)
+
+  [BUG FIXES]
+
+  * WebDriver PUA key mappings for PAGE_UP and PAGE_DOWN were wrongly
+    interpreted in OperaDriver.  They should now be recognized.
+    (andreastt)
+
+  * Fix disabling of -pd argument sent to Opera.  (andreastt)
+
+  * Disable preferences system on core mini profile.  (andreastt)
+
+  * Allow ES init of windows without runtimes, but instead throw on
+    eval().  (andreastt)
+
+  * Fix issue with subsequent OperaDriver#get() calls non script
+    injectable pages.  Requested URLs are now cached under these
+    circumstances.  (andreastt)
+
+  * Refactor OperaDriver#getCurrentUrl() for non script injectable
+    runtimes.  (andreastt)
+
+  * Always call OperaRunner#shutdown() on ScopeServices#quit() in case
+    of an exception.  (danielb)
+
+  * Ignore AsynchronousCloseExceptions which sometimes occur on
+    shutdown.  (andreastt)
+
+  * NPE check in EcmascriptService#findRuntime() in case XPath pointer
+    returns null.  This happens when the XPath matches no properties
+    in the graph, and is documented by the library.  (danielb)
+
+  * Workaround for -fullscreen argument must be sent last on Opera
+    Desktop on Mac.  (danielb, andreastt)
+
+  * Fix OperaProxy init for disconnected tests.  (andreastt)
+
+  [TESTS]
+
+  * Fix issue with disabling JavaScript injection in JavascriptTest.
+    (andreastt)
+
+  * Set default logging level in tests to Level.INFO.  (andreastt)
+
+  * Use Keyboard directly for DriverKeysTest.  (andreastt)
+
+  [OTHER]
+
+  * Update WebDriver atoms to latest Selenium HEAD.  (andreastt)
+
+  * Update Selenium dependencies to latest Selenium HEAD.  (andreastt)
+
+
 v0.17     (2012-08-21)
 
   [API CHANGES]
