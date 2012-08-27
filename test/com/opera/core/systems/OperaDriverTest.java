@@ -27,13 +27,13 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import static com.opera.core.systems.OperaProduct.CORE;
 import static com.opera.core.systems.OperaProduct.MOBILE;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 public class OperaDriverTest extends OperaDriverTestCase {
 
@@ -98,7 +98,7 @@ public class OperaDriverTest extends OperaDriverTestCase {
 
   @Test
   @Ignore(products = CORE, value = "core does not reset port number if -debugproxy is omitted")
-  public void testDefaultPort() throws Exception {
+  public void testDefaultPort() {
     DesiredCapabilities c = new DesiredCapabilities();
     c.setCapability(OperaSettings.Capability.PORT.getCapability(), -1);
 
@@ -108,7 +108,7 @@ public class OperaDriverTest extends OperaDriverTestCase {
   }
 
   @Test
-  public void testRandomPort() throws Exception {
+  public void testRandomPort() {
     DesiredCapabilities c = new DesiredCapabilities();
     c.setCapability(OperaSettings.Capability.PORT.getCapability(), 0);
 
@@ -120,7 +120,8 @@ public class OperaDriverTest extends OperaDriverTestCase {
       if (e.getMessage().contains("Opera exited immediately")) {
         return;
       } else {
-        throw e;
+        fail("Unexpected exception: " + e);
+        return;
       }
     }
     Assert.assertNotSame("7001", a.preferences().get("Developer Tools", "Proxy Port").toString());
@@ -130,7 +131,7 @@ public class OperaDriverTest extends OperaDriverTestCase {
   @Test
   @Ignore(products = CORE,
           value = "Once this is set the autotestmode profile no longer connects on 7001, breaking future tests")
-  public void testSetPort() throws Exception {
+  public void testSetPort() {
     OperaSettings settings = new OperaSettings();
     settings.setPort(9876);
 
@@ -142,44 +143,13 @@ public class OperaDriverTest extends OperaDriverTestCase {
       if (e.getMessage().contains("Opera exited immediately")) {
         return;
       } else {
-        throw e;
+        fail("Unexpected exception: " + e);
+        return;
       }
     }
 
     assertEquals(9876, a.preferences().get("Developer Tools", "Proxy Port").getValue());
     a.quit();
-  }
-
-  @Test
-  public void testMultipleOperas() throws Exception {
-    TestDriver a;
-    TestDriver b;
-    TestDriver c;
-
-    try {
-      a = new TestDriverBuilder().get();
-      b = new TestDriverBuilder().get();
-      c = new TestDriverBuilder().get();
-    } catch (WebDriverException e) {
-      // If immediately exited, then it doesn't support the flags
-      if (e.getMessage().contains("Opera exited immediately")) {
-        return;
-      } else {
-        throw e;
-      }
-    }
-
-    a.navigate().to(pages.test);
-    b.navigate().to(pages.javascript);
-    c.navigate().to(pages.keys);
-
-    assertTrue("Instance a has url test.html", a.getCurrentUrl().endsWith("test.html"));
-    assertTrue("Instance a has url javascript.html", b.getCurrentUrl().endsWith("javascript.html"));
-    assertTrue("Instance a has url keys.html", c.getCurrentUrl().endsWith("keys.html"));
-
-    a.quit();
-    b.quit();
-    c.quit();
   }
 
 }

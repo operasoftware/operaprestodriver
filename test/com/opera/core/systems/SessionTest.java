@@ -18,10 +18,13 @@ package com.opera.core.systems;
 
 import com.opera.core.systems.scope.exceptions.CommunicationException;
 import com.opera.core.systems.testing.OperaDriverTestCase;
+import com.opera.core.systems.testing.drivers.TestDriver;
+import com.opera.core.systems.testing.drivers.TestDriverBuilder;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriverException;
 
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
@@ -132,6 +135,38 @@ public class SessionTest extends OperaDriverTestCase {
       assertThat(e, is(instanceOf(CommunicationException.class)));
       assertThat(e.getMessage(), containsString(BROWSER_NOT_CONNECTED_STRING));
     }
+  }
+
+  @Test
+  public void multipleInstances() {
+    TestDriver a;
+    TestDriver b;
+    TestDriver c;
+
+    try {
+      a = new TestDriverBuilder().get();
+      b = new TestDriverBuilder().get();
+      c = new TestDriverBuilder().get();
+    } catch (WebDriverException e) {
+      // If immediately exited, then it doesn't support the flags
+      if (e.getMessage().contains("Opera exited immediately")) {
+        return;
+      } else {
+        throw e;
+      }
+    }
+
+    a.navigate().to(pages.test);
+    b.navigate().to(pages.javascript);
+    c.navigate().to(pages.keys);
+
+    assertThat(a.getCurrentUrl(), containsString("test.html"));
+    assertThat(b.getCurrentUrl(), containsString("javascript.html"));
+    assertThat(c.getCurrentUrl(), containsString("keys.html"));
+
+    a.quit();
+    b.quit();
+    c.quit();
   }
 
 }
