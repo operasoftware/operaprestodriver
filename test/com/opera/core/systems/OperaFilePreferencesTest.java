@@ -34,7 +34,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.openqa.selenium.WebDriverException;
-import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.io.File;
 import java.io.IOException;
@@ -65,12 +64,7 @@ public class OperaFilePreferencesTest extends OperaDriverTestCase {
     temporaryFolder = new TemporaryFolder();
     temporaryFolder.create();
 
-    OperaProduct assumedProduct = OperaProduct.ALL;
-    if (driver != null && driver.isRunning()) {
-      assumedProduct = driver.utils().getProduct();
-    }
-
-    switch (assumedProduct) {
+    switch (currentProduct()) {
       case DESKTOP:
         iniFile = temporaryFolder.newFile("operaprefs.ini");
         profileDirectory = temporaryFolder.getRoot();
@@ -198,9 +192,9 @@ public class OperaFilePreferencesTest extends OperaDriverTestCase {
   @Test
   public void testPreferencesAreSet() {
     profile.preferences().set("Personal Info", "Country", "Norway");
-    DesiredCapabilities capabilities = DesiredCapabilities.opera();
-    capabilities.setCapability(OperaSettings.Capability.PROFILE.getCapability(), profile);
-    driver = new TestDriverBuilder().using(capabilities).get();
+
+    OperaSettings settings = new OperaSettings(profile);
+    driver = new TestDriverBuilder().using(settings).get();
     assertEquals("Norway", driver.preferences().get("Personal Info", "Country").getValue());
   }
 
@@ -208,9 +202,9 @@ public class OperaFilePreferencesTest extends OperaDriverTestCase {
   public void testPreferencesAreSetWithExistingObject() {
     profile.preferences().set("Personal Info", "Country", "Norway");
     profile.setPreferences(preferences);
-    DesiredCapabilities capabilities = DesiredCapabilities.opera();
-    capabilities.setCapability(OperaSettings.Capability.PROFILE.getCapability(), profile);
-    driver = new TestDriverBuilder().using(capabilities).get();
+
+    OperaSettings settings = new OperaSettings(profile);
+    driver = new TestDriverBuilder().using(settings).get();
     assertEquals("Norway", driver.preferences().get("Personal Info", "Country").getValue());
   }
 
@@ -221,9 +215,9 @@ public class OperaFilePreferencesTest extends OperaDriverTestCase {
     OperaPreferences preferences = new OperaGenericPreferences();
     profile.preferences().set("Personal Info", "Country", "Norway");
     profile.setPreferences(preferences);
-    DesiredCapabilities capabilities = DesiredCapabilities.opera();
-    capabilities.setCapability(OperaSettings.Capability.PROFILE.getCapability(), profile);
-    driver = new TestDriverBuilder().using(capabilities).get();
+
+    OperaSettings settings = new OperaSettings(profile);
+    driver = new TestDriverBuilder().using(settings).get();
     assertEquals("Norway", driver.preferences().get("Personal Info", "Country").getValue());
   }
 
