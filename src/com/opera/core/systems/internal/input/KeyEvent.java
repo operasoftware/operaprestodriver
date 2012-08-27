@@ -16,8 +16,6 @@ limitations under the License.
 
 package com.opera.core.systems.internal.input;
 
-import com.opera.core.systems.internal.input.KeyboardModifiers;
-
 import org.openqa.selenium.Keys;
 
 /**
