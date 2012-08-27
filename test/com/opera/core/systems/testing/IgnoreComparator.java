@@ -41,7 +41,7 @@ public class IgnoreComparator {
     }
 
     for (OperaProduct product : ignoreAnnotation.products()) {
-      if (product.is(currentProduct)) {
+      if (product == currentProduct) {
         return true;
       }
     }
