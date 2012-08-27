@@ -28,7 +28,8 @@ public class KeyEvent {
 
   public KeyEvent(char ch) {
     character = ch;
-    unicodeKey = Keys.getKeyFromUnicode(character);
+    // TODO(andreastt): Use Keys.getKeyFromUnicode(c) when Selenium 2.26 is released
+    unicodeKey = getKeyFromUnicode(character);
   }
 
   /**
@@ -85,6 +86,23 @@ public class KeyEvent {
    */
   public boolean isNewLine() {
     return getCharacter() == '\n';
+  }
+
+  /**
+   * Get the special key representation, {@link Keys}, of the supplied character if there is one. If
+   * there is no special key tied to this character, null will be returned.
+   *
+   * @param key unicode character code
+   * @return special key linked to the character code, or null if character is not a special key
+   */
+  private static Keys getKeyFromUnicode(char key) {
+    for (Keys unicodeKey : Keys.values()) {
+      if (unicodeKey.charAt(0) == key) {
+        return unicodeKey;
+      }
+    }
+
+    return null;
   }
 
 }
