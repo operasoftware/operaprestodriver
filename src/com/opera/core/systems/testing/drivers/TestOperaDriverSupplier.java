@@ -19,6 +19,7 @@ package com.opera.core.systems.testing.drivers;
 import org.openqa.selenium.remote.LocalFileDetector;
 
 import java.io.File;
+import java.util.logging.Level;
 
 public class TestOperaDriverSupplier extends AbstractTestDriverSupplier {
 
@@ -26,6 +27,7 @@ public class TestOperaDriverSupplier extends AbstractTestDriverSupplier {
     // Uncomment this if you wish to connect Opera manually:
     //settings.autostart(false);
 
+    settings.logging().setLevel(Level.CONFIG);
     TestOperaDriver driver = new TestOperaDriver(settings);
     driver.setFileDetector(new LocalFileDetector());
     return driver;

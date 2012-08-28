@@ -23,7 +23,8 @@ import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
 
 import com.opera.core.systems.model.ICommand;
-import com.opera.core.systems.runner.OperaRunner;
+import com.opera.core.systems.runner.AbstractOperaRunner;
+import com.opera.core.systems.runner.interfaces.OperaRunner;
 import com.opera.core.systems.scope.ScopeCommand;
 import com.opera.core.systems.scope.exceptions.CommunicationException;
 import com.opera.core.systems.scope.handlers.IConnectionHandler;

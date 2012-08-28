@@ -16,44 +16,49 @@ limitations under the License.
 
 package com.opera.core.systems.runner;
 
+import com.opera.core.systems.OperaBinary;
 import com.opera.core.systems.OperaSettings;
 import com.opera.core.systems.arguments.OperaArgument;
-import com.opera.core.systems.model.ScreenShotReply;
+import com.opera.core.systems.runner.interfaces.OperaRunner;
+import com.opera.core.systems.scope.internal.OperaIntervals;
 
 import org.openqa.selenium.Platform;
-import org.openqa.selenium.os.CommandLine;
 
-import java.util.List;
-import java.util.concurrent.locks.ReentrantLock;
+import java.io.File;
 import java.util.logging.Logger;
 
 import static com.opera.core.systems.OperaProduct.DESKTOP;
 
 /**
- * OperaRunner implements a pure-Java process manager for controlling the Opera binary.
+ * AbstractOperaRunner defines the command-line arguments to give to Opera shared between the
+ * different {@link OperaRunner} implementations.
  */
-public class OperaRunner implements com.opera.core.systems.runner.interfaces.OperaRunner {
+public abstract class AbstractOperaRunner implements OperaRunner {
 
   protected final Logger logger = Logger.getLogger(getClass().getName());
   protected final OperaSettings settings;
 
-  /**
-   * Controls access to {@link #process}.
-   */
-  private final ReentrantLock lock = new ReentrantLock();
-
-  /**
-   * A reference to the current child process. Will be {@code null} whenever this service is not
-   * running.  Protected by {@link #lock}.
-   */
-  private CommandLine process = null;
-
-  public OperaRunner() {
+  public AbstractOperaRunner() {
     this(new OperaSettings());
   }
 
-  public OperaRunner(OperaSettings s) {
+  public AbstractOperaRunner(OperaSettings s) {
     settings = s;
+
+    // Find a suitable Opera executable based on requested product if no binary has already been
+    // specified
+    if (settings.getBinary() == null) {
+      // Do check for null here since OperaBinary's sanitization throws a cryptic null pointer
+      File binary = OperaBinary.find(settings.getProduct());
+      if (binary == null) {
+        throw new OperaRunnerException(String.format(
+            "Unable to find executable for product %s", settings.getProduct()));
+      }
+
+      // Calls new OperaBinary(b) which will check that the binary is executable and that it's not a
+      // directory
+      settings.setBinary(binary);
+    }
 
     // This can't be last, otherwise it might get interpreted as the page to open, and the file
     // listing page doesn't have a JS context to inject into.
@@ -82,78 +87,16 @@ public class OperaRunner implements com.opera.core.systems.runner.interfaces.Ope
     logger.config("Opera arguments: " + settings.arguments().getArgumentsAsStringList());
   }
 
-  public void startOpera() throws OperaRunnerException {
-    lock.lock();
+  public OperaSettings getSettings() {
+    return settings;
+  }
 
-    List<String> arguments = settings.arguments().getArgumentsAsStringList();
-
+  protected void sleep(OperaIntervals interval) {
     try {
-      if (process != null) {
-        return;
-      }
-
-      process = new CommandLine(
-          settings.getBinary().getPath(),
-          arguments.toArray(new String[arguments.size()])
-      );
-
-      // TODO(andreastt): Do we need to forward the environment to CommandLine?
-      //process.setEnvironmentVariables(environment);
-      process.copyOutputTo(System.err);
-      process.executeAsync();
-    } finally {
-      lock.unlock();
+      Thread.sleep(interval.getMs());
+    } catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
     }
-  }
-
-  public void stopOpera() throws OperaRunnerException {
-    lock.lock();
-
-    try {
-      if (process == null) {
-        return;
-      }
-
-      process.destroy();
-    } finally {
-      lock.unlock();
-      process = null;
-    }
-  }
-
-  public boolean isOperaRunning() {
-    lock.lock();
-
-    try {
-      if (process == null) {
-        return false;
-      }
-
-      process.destroy();
-      return false;
-    } catch (IllegalThreadStateException e) {
-      return true;
-    } finally {
-      lock.unlock();
-    }
-  }
-
-  public boolean hasOperaCrashed() {
-    throw new UnsupportedOperationException("not implemented");
-  }
-
-  public String getOperaCrashlog() {
-    throw new UnsupportedOperationException("not implemented");
-  }
-
-  /**
-   * Handles safe shutdown of the OperaRunner class.
-   */
-  public void shutdown() {
-  }
-
-  public ScreenShotReply saveScreenshot(long timeout, String... hashes) {
-    throw new UnsupportedOperationException("not implemented");
   }
 
 }

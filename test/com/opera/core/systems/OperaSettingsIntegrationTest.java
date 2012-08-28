@@ -213,6 +213,14 @@ public class OperaSettingsIntegrationTest extends OperaDriverTestCase {
   }
 
   @Test
+  public void runnerIsUsed() {
+    settings.setRunner(OperaLauncherRunner.class);
+    TestDriver driver = new TestDriverBuilder().using(settings).get();
+    assertNotNull(driver);
+    assertEquals(driver.getRunner().getClass(), settings.getRunner().getClass());
+  }
+
+  @Test
   @Ignore(products = {CORE, MOBILE},
           value = "core does not reset port number if -debugproxy is omitted")
   public void settingPort() {

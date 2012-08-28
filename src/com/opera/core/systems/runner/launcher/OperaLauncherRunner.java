@@ -17,21 +17,22 @@ limitations under the License.
 package com.opera.core.systems.runner.launcher;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterables;
 import com.google.common.hash.Hashing;
 import com.google.common.io.ByteStreams;
 import com.google.common.io.Files;
 import com.google.protobuf.GeneratedMessage;
 
 import com.opera.core.systems.Architecture;
-import com.opera.core.systems.OperaBinary;
 import com.opera.core.systems.OperaProduct;
 import com.opera.core.systems.OperaSettings;
 import com.opera.core.systems.arguments.OperaArgument;
 import com.opera.core.systems.common.io.Closeables;
 import com.opera.core.systems.model.ScreenShotReply;
+import com.opera.core.systems.runner.AbstractOperaRunner;
 import com.opera.core.systems.runner.OperaLaunchers;
-import com.opera.core.systems.runner.OperaRunner;
 import com.opera.core.systems.runner.OperaRunnerException;
+import com.opera.core.systems.runner.interfaces.OperaRunner;
 import com.opera.core.systems.runner.launcher.OperaLauncherProtocol.MessageType;
 import com.opera.core.systems.runner.launcher.OperaLauncherProtocol.ResponseEncapsulation;
 import com.opera.core.systems.runner.launcher.OperaLauncherProtos.LauncherHandshakeRequest;
@@ -60,16 +61,16 @@ import java.net.URL;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.opera.core.systems.runner.OperaLaunchers.LAUNCHER_CHECKSUMS;
 
 /**
- * OperaLauncherRunner implements an interface in C++ with a Java API for controlling the Opera
- * binary.
+ * OperaLauncherRunner implements a Java interface to communicate with the <em>opera-launcher</em>
+ * utility to launch and manage Opera instances.
  */
-public class OperaLauncherRunner extends OperaRunner
-    implements com.opera.core.systems.runner.interfaces.OperaRunner {
+public class OperaLauncherRunner extends AbstractOperaRunner implements OperaRunner {
 
   public static final String LAUNCHER_ENV_VAR = "OPERA_LAUNCHER";
   public static final String LAUNCHER_NAME = launcherNameForOS();
@@ -77,12 +78,12 @@ public class OperaLauncherRunner extends OperaRunner
       new File(System.getProperty("user.home"), ".launcher");
   public static final File LAUNCHER_DEFAULT_LOCATION = new File(LAUNCHER_DIRECTORY, LAUNCHER_NAME);
 
+  private final Logger logger = Logger.getLogger(getClass().getName());
   private final int launcherPort = PortProber.findFreePort();
   private final List<String> arguments;
 
   private OperaLauncherBinary binary = null;
   private OperaLauncherProtocol protocol = null;
-
   private String crashlog = null;
 
   public OperaLauncherRunner() {
@@ -117,21 +118,6 @@ public class OperaLauncherRunner extends OperaRunner
       }
     }
 
-    // Find a suitable Opera executable based on requested product if no binary has already been
-    // specified
-    if (settings.getBinary() == null) {
-      // Do check for null here since OperaBinary's sanitization throws a cryptic null pointer
-      File binary = OperaBinary.find(settings.getProduct());
-      if (binary == null) {
-        throw new OperaRunnerException(String.format(
-            "Unable to find executable for product %s", settings.getProduct()));
-      }
-
-      // Calls new OperaBinary(b) which will check that the binary is executable and that it's not a
-      // directory
-      settings.setBinary(binary);
-    }
-
     // Create list of arguments for launcher binary
     arguments = buildArguments();
     logger.config("launcher arguments: " + arguments);
@@ -142,8 +128,8 @@ public class OperaLauncherRunner extends OperaRunner
 
   private void init() {
     try {
-      binary = new OperaLauncherBinary(settings.getLauncher().getPath(),
-                                       arguments.toArray(new String[arguments.size()]));
+      binary = new OperaLauncherBinary(settings.getLauncher().getCanonicalPath(),
+                                       Iterables.toArray(arguments, String.class));
     } catch (IOException e) {
       throw new OperaRunnerException("Unable to start launcher: " + e.getMessage());
     }
@@ -239,11 +225,7 @@ public class OperaLauncherRunner extends OperaRunner
       }
 
       // Check Opera hasn't immediately exited (e.g. due to unknown arguments)
-      try {
-        Thread.sleep(OperaIntervals.PROCESS_START_SLEEP.getMs());
-      } catch (InterruptedException e) {
-        // nothing
-      }
+      sleep(OperaIntervals.PROCESS_START_SLEEP);
 
       res = protocol.sendRequest(MessageType.MSG_STATUS, request);
 

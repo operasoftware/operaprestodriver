@@ -104,11 +104,18 @@ public enum OperaIntervals {
   LAUNCHER_RESPONSE_TIMEOUT(new Duration(3, MINUTES)),
 
   /**
-   * If programs such as the launcher exits immediately with an improper exit value (> 0) we can
+   * If programs such as the launcher exits immediately with an improper exit value (!= 0) we can
    * assume something went wrong during initialization.  We need to wait for a short period before
    * checking the exit value as it may take some time to start the program.
    */
   PROCESS_START_SLEEP(new Duration(100, MILLISECONDS)),
+
+  /**
+   * {@link com.opera.core.systems.runner.inprocess.OperaInProcessRunner} doesn't know when the
+   * executable is running.  If an exit code is returned within this timeout, we assume the browser
+   * has exited immediately (possibly with invalid command-line arguments, &c.).
+   */
+  PROCESS_START_TIMEOUT(new Duration(300, MILLISECONDS)),
 
   MENU_EVENT_TIMEOUT(new Duration(1, SECONDS)),
 

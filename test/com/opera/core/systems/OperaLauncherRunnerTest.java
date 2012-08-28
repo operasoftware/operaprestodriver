@@ -65,6 +65,7 @@ public class OperaLauncherRunnerTest extends OperaDriverTestCase {
   @Before
   public void beforeEach() {
     settings = new OperaSettings();
+    settings.setRunner(OperaLauncherRunner.class);
     settings.setBinary(TestDriverBuilder.detect().getSettings().getBinary());
     settings.logging().setLevel(Level.FINE);
   }

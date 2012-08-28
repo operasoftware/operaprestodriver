@@ -17,41 +17,19 @@ limitations under the License.
 package com.opera.core.systems.testing.drivers;
 
 import com.opera.core.systems.OperaDriver;
-import com.opera.core.systems.OperaProduct;
-import com.opera.core.systems.OperaProxy;
 import com.opera.core.systems.OperaSettings;
 import com.opera.core.systems.ScopeServices;
-import com.opera.core.systems.runner.OperaRunner;
+import com.opera.core.systems.runner.interfaces.OperaRunner;
 import com.opera.core.systems.scope.exceptions.ResponseNotReceivedException;
 import com.opera.core.systems.scope.services.IOperaExec;
-import com.opera.core.systems.scope.services.IWindowManager;
 
 import org.openqa.selenium.Capabilities;
 
 /**
- * Provides access to the {@link com.opera.core.systems.runner.OperaRunner}, so we can detect
- * crashes.
+ * Provides access to the {@link com.opera.core.systems.runner.AbstractOperaRunner}, so we can
+ * detect crashes.
  */
 public class TestOperaDriver extends OperaDriver implements TestDriver {
-
-  private final IWindowManager windowManager;
-  private OperaProduct currentProduct = null;
-
-  /**
-   * Creates a new TestOperaDriver with the default settings.
-   */
-  public TestOperaDriver() {
-    this(new OperaSettings());
-  }
-
-  /**
-   * Creates a new TestOperaDriver with the given capabilities.
-   *
-   * @param capabilities the set of capabilities to use
-   */
-  public TestOperaDriver(Capabilities capabilities) {
-    this(new OperaSettings().merge(capabilities));
-  }
 
   /**
    * Creates a new TestOperaDriver with the given settings.
@@ -60,7 +38,6 @@ public class TestOperaDriver extends OperaDriver implements TestDriver {
    */
   public TestOperaDriver(OperaSettings settings) {
     super(settings);
-    windowManager = getScopeServices().getWindowManager();
   }
 
   public OperaRunner getRunner() {
@@ -86,8 +63,9 @@ public class TestOperaDriver extends OperaDriver implements TestDriver {
   }
 
   /**
-   * Determines if Opera is running or not.  If Opera is not run locally using {@link OperaRunner}
-   * it will check for a Scope connection instead.
+   * Determines if Opera is running or not.  If Opera is not run locally using {@link
+   * com.opera.core.systems.runner.AbstractOperaRunner} it will check for a Scope connection
+   * instead.
    *
    * @return true if Opera is running, false otherwise
    */

@@ -28,8 +28,7 @@ import com.opera.core.systems.common.lang.OperaStrings;
 import com.opera.core.systems.model.ScreenShotReply;
 import com.opera.core.systems.model.ScriptResult;
 import com.opera.core.systems.preferences.OperaScopePreferences;
-import com.opera.core.systems.runner.OperaRunner;
-import com.opera.core.systems.runner.launcher.OperaLauncherRunner;
+import com.opera.core.systems.runner.interfaces.OperaRunner;
 import com.opera.core.systems.scope.exceptions.CommunicationException;
 import com.opera.core.systems.scope.exceptions.ResponseNotReceivedException;
 import com.opera.core.systems.scope.internal.OperaDefaults;
@@ -194,7 +193,8 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot, Run
    */
   protected void init() {
     if (settings.autostart()) {
-      runner = new OperaLauncherRunner(settings);
+      runner = settings.getRunner();
+      logger.config("Using runner " + runner.getClass().getSimpleName());
     } else {
       settings.setPort(OperaDefaults.SERVER_DEFAULT_PORT_IDENTIFIER);
     }

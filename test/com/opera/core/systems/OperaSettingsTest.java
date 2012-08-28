@@ -16,6 +16,11 @@ limitations under the License.
 
 package com.opera.core.systems;
 
+import com.opera.core.systems.model.ScreenShotReply;
+import com.opera.core.systems.runner.AbstractOperaRunner;
+import com.opera.core.systems.runner.OperaRunnerException;
+import com.opera.core.systems.runner.inprocess.OperaInProcessRunner;
+import com.opera.core.systems.runner.interfaces.OperaRunner;
 import com.opera.core.systems.runner.launcher.OperaLauncherRunner;
 import com.opera.core.systems.testing.Ignore;
 import com.opera.core.systems.testing.NoDriver;
@@ -284,6 +289,48 @@ public class OperaSettingsTest extends OperaDriverTestCase {
   }
 
   @Test
+  public void runnerReturnsInstanceOfOperaInProcessRunner() {
+    AbstractOperaRunner runner = (AbstractOperaRunner) settings.getRunner();
+    assertThat(runner, is(instanceOf(OperaInProcessRunner.class)));
+    assertEquals(settings, runner.getSettings());
+  }
+
+  @Test
+  public void runnerCanBeSet() {
+    settings.setRunner(OperaLauncherRunner.class);
+
+    AbstractOperaRunner runner = (AbstractOperaRunner) settings.getRunner();
+    assertThat(runner, is(instanceOf(OperaLauncherRunner.class)));
+    assertEquals(settings, runner.getSettings());
+  }
+
+  @Test
+  public void runnerWithInvalidConstructor() {
+    settings.setRunner(BadConstructorRunner.class);
+
+    try {
+      settings.getRunner();
+      fail("Expected WebDriverException");
+    } catch (RuntimeException e) {
+      assertThat(e, is(instanceOf(WebDriverException.class)));
+      assertThat(e.getMessage(), containsString("Invalid constructor in runner"));
+    }
+  }
+
+  @Test
+  public void runnerThatThrowsDuringConstruction() {
+    settings.setRunner(ExceptionOnConstructionRunner.class);
+
+    try {
+      settings.getRunner();
+      fail("Expected WebDriverException");
+    } catch (RuntimeException e) {
+      assertThat(e, is(instanceOf(WebDriverException.class)));
+      assertThat(e.getMessage(), containsString("Runner threw exception on construction"));
+    }
+  }
+
+  @Test
   public void noRestartIsFalse() {
     assertFalse(settings.noRestart());
   }
@@ -421,5 +468,47 @@ public class OperaSettingsTest extends OperaDriverTestCase {
                  settings.getBinary().getCanonicalPath());
   }
   */
+
+  public static abstract class MockRunner implements OperaRunner {
+
+    public void startOpera() throws OperaRunnerException {
+    }
+
+    public void stopOpera() throws OperaRunnerException {
+    }
+
+    public boolean isOperaRunning() {
+      return false;
+    }
+
+    public boolean hasOperaCrashed() {
+      return false;
+    }
+
+    public String getOperaCrashlog() {
+      return null;
+    }
+
+    public void shutdown() {
+    }
+
+    public ScreenShotReply saveScreenshot(long timeout, String... hashes)
+        throws OperaRunnerException {
+      return null;
+    }
+
+  }
+
+  public static class BadConstructorRunner extends MockRunner {
+
+  }
+
+  public static class ExceptionOnConstructionRunner extends MockRunner {
+
+    public ExceptionOnConstructionRunner(OperaSettings settings) {
+      throw new UnsupportedOperationException("hoobaflooba");
+    }
+
+  }
 
 }

@@ -203,7 +203,7 @@ public abstract class CallbackWait {
       }
     }
 
-    throw new WebDriverException(e);
+    throw new TimeoutException(e);
   }
 
   /**

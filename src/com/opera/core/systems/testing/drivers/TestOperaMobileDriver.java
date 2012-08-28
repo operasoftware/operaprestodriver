@@ -40,7 +40,7 @@ public class TestOperaMobileDriver extends OperaMobileDriver implements TestDriv
 
   /**
    * Determines if Opera is running or not.  If Opera is not run locally using {@link
-   * com.opera.core.systems.runner.OperaRunner} it will check for a Scope connection instead.
+   * com.opera.core.systems.runner.AbstractOperaRunner} it will check for a Scope connection instead.
    *
    * @return true if Opera is running, false otherwise
    */

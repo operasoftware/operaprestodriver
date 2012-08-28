@@ -27,6 +27,7 @@ import com.opera.core.systems.OperaLogs.DriverLogsHandler;
 import com.opera.core.systems.arguments.OperaCoreArguments;
 import com.opera.core.systems.arguments.OperaDesktopArguments;
 import com.opera.core.systems.common.lang.OperaBoolean;
+import com.opera.core.systems.runner.interfaces.OperaRunner;
 import com.opera.core.systems.runner.launcher.OperaLauncherRunner;
 import com.opera.core.systems.scope.internal.OperaDefaults;
 
@@ -41,6 +42,8 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.logging.ConsoleHandler;
@@ -69,6 +72,7 @@ import static com.opera.core.systems.OperaSettings.Capability.PORT;
 import static com.opera.core.systems.OperaSettings.Capability.PRODUCT;
 import static com.opera.core.systems.OperaSettings.Capability.PROFILE;
 import static com.opera.core.systems.OperaSettings.Capability.PROXY;
+import static com.opera.core.systems.OperaSettings.Capability.RUNNER;
 import static com.opera.core.systems.runner.launcher.OperaLauncherRunner.LAUNCHER_ENV_VAR;
 import static com.opera.core.systems.scope.internal.OperaDefaults.SERVER_DEFAULT_PORT;
 import static com.opera.core.systems.scope.internal.OperaDefaults.SERVER_DEFAULT_PORT_IDENTIFIER;
@@ -382,6 +386,22 @@ public class OperaSettings {
         }
 
         return null;
+      }
+    },
+
+    RUNNER("opera.runner") {
+      Class sanitize(Object runner) {
+        if (runner instanceof Class) {
+          return (Class) runner;
+        } else if (runner instanceof String) {
+          try {
+            return (Class) Class.forName(String.valueOf(runner));
+          } catch (ClassNotFoundException e) {
+            // caught below
+          }
+        }
+
+        throw new WebDriverException("Unknown runner: " + runner);
       }
     },
 
@@ -997,6 +1017,50 @@ public class OperaSettings {
     }
 
     options.get(ARGUMENTS).setValue(arguments.merge(arguments()));
+  }
+
+  /**
+   * Get the runner to use for starting and managing the Opera instance.
+   *
+   * @return the current runner
+   */
+  public OperaRunner getRunner() {
+    Class klass = (Class) options.get(RUNNER).getValue();
+
+    // If no runner is set, use the default one
+    if (klass == null) {
+      setRunner(OperaLauncherRunner.class);
+      return getRunner();
+    }
+
+    Constructor constructor;
+    try {
+      constructor = klass.getDeclaredConstructor(OperaSettings.class);
+    } catch (NoSuchMethodException e) {
+      throw new WebDriverException("Invalid constructor in runner: " + klass.getName());
+    }
+
+    OperaRunner runner;
+    try {
+      runner = (OperaRunner) constructor.newInstance(this);
+    } catch (InstantiationException e) {
+      throw new WebDriverException("Unable to create new instance of runner", e);
+    } catch (IllegalAccessException e) {
+      throw new WebDriverException("Denied access to runner: " + klass.getName());
+    } catch (InvocationTargetException e) {
+      throw new WebDriverException("Runner threw exception on construction", e);
+    }
+
+    return runner;
+  }
+
+  /**
+   * Specify which runner to use for starting and managing the Opera instance.
+   *
+   * @param runner the runner to use
+   */
+  public void setRunner(Class<? extends OperaRunner> runner) {
+    options.get(RUNNER).setValue(runner);
   }
 
   /**

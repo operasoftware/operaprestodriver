@@ -31,6 +31,7 @@ import static com.opera.core.systems.OperaSettings.Capability.OPERAIDLE;
 import static com.opera.core.systems.OperaSettings.Capability.PORT;
 import static com.opera.core.systems.OperaSettings.Capability.PRODUCT;
 import static com.opera.core.systems.OperaSettings.Capability.PROFILE;
+import static com.opera.core.systems.OperaSettings.Capability.RUNNER;
 import static com.opera.core.systems.scope.internal.OperaDefaults.SERVER_DEFAULT_PORT;
 import static com.opera.core.systems.scope.internal.OperaDefaults.SERVER_DEFAULT_PORT_IDENTIFIER;
 import static com.opera.core.systems.scope.internal.OperaDefaults.SERVER_RANDOM_PORT_IDENTIFIER;
@@ -403,6 +404,27 @@ public class OperaSettingsCapabilitiesTest extends OperaDriverTestCase {
   @Test
   public void autostartSanitizeInteger() {
     assertTrue((Boolean) AUTOSTART.sanitize(1));
+  }
+
+  @Test
+  public void runnerSanitizeValidClass() {
+    assertEquals(OperaLauncherRunner.class, RUNNER.sanitize(OperaLauncherRunner.class));
+  }
+
+  @Test
+  public void runnerSanitizeValidClassAsString() {
+    assertEquals(OperaLauncherRunner.class, RUNNER.sanitize(OperaLauncherRunner.class.getName()));
+  }
+
+  @Test
+  public void runnerSanitizeInvalidClassThrows() {
+    try {
+      RUNNER.sanitize("hoobaflooba");
+      fail("Expected WebDriverException");
+    } catch (RuntimeException e) {
+      assertThat(e, is(instanceOf(WebDriverException.class)));
+      assertThat(e.getMessage(), containsString("Unknown runner"));
+    }
   }
 
   @Test

@@ -19,65 +19,51 @@ package com.opera.core.systems;
 import com.google.common.io.Files;
 
 import com.opera.core.systems.arguments.OperaArgument;
-import com.opera.core.systems.arguments.OperaCoreArguments;
 import com.opera.core.systems.arguments.OperaDesktopArguments;
-import com.opera.core.systems.runner.OperaRunner;
+import com.opera.core.systems.runner.OperaRunnerException;
+import com.opera.core.systems.runner.inprocess.OperaInProcessRunner;
 import com.opera.core.systems.testing.NoDriver;
 import com.opera.core.systems.testing.OperaDriverTestCase;
 
-import org.junit.AfterClass;
+import org.junit.After;
 import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Ignore;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+import static org.junit.matchers.JUnitMatchers.containsString;
 
 @NoDriver
 public class OperaRunnerTest extends OperaDriverTestCase {
 
-  public static TestOperaRunner runner;
+  public TestOperaRunner runner;
   public OperaSettings settings;
-  public File iniFile;
-  public String profile;
-
-  @Rule
-  public TemporaryFolder temporaryProfile;
 
   @Before
-  public void beforeEach() throws IOException {
+  public void setupSettings() {
     settings = new OperaSettings();
-    temporaryProfile = new TemporaryFolder();
-    temporaryProfile.create();
+  }
+
+  @After
+  public void dereferenceFields() {
     runner = null;
-
-    // Make a new copy in a temporary file system so we don't overwrite our fixture
-    // TODO(andreastt): This should be done more elegantly in OperaDriverTestCase
-    try {
-      iniFile = temporaryProfile.newFile("operaprefs.ini");
-      Files.copy(resources.locate("profile/opera.ini"), iniFile);
-    } catch (IOException e) {
-      fail("Unable to copy preference fixture: " + e.getMessage());
-    }
-
-    profile = temporaryProfile.getRoot().getAbsolutePath();
+    settings = null;
   }
 
   @Test
-  public void testConstruction() {
+  public void construction() {
     runner = new TestOperaRunner();
     List<OperaArgument> arguments = runner.getSettings().arguments().getArguments();
 
-    // TODO(andreastt): Problems with core-gogi disallows us to have -autotestmode as the first argument
     assertNotNull(runner);
     assertNotNull(runner.getSettings().profile());
     assertEquals("autotestmode", arguments.get(2).getArgument());  // 0
@@ -87,15 +73,21 @@ public class OperaRunnerTest extends OperaDriverTestCase {
   }
 
   @Test
-  public void testConstructionWithProductCore() {
+  public void constructionWithProductCore() {
+    settings.setBinary(null);
     settings.setProduct(OperaProduct.CORE);
-    runner = new TestOperaRunner(settings);
-    assertNotNull(runner);
-    assertTrue(runner.getSettings().arguments() instanceof OperaCoreArguments);
+
+    try {
+      runner = new TestOperaRunner(settings);
+      fail("Expected OperaRunnerException");
+    } catch (RuntimeException e) {
+      assertThat(e, is(instanceOf(OperaRunnerException.class)));
+      assertThat(e.getMessage(), containsString("Unable to find executable for product"));
+    }
   }
 
   @Test
-  public void testConstructionWithProductDesktop() {
+  public void constructionWithProductDesktop() {
     settings.setProduct(OperaProduct.DESKTOP);
     runner = new TestOperaRunner(settings);
     assertNotNull(runner);
@@ -103,14 +95,29 @@ public class OperaRunnerTest extends OperaDriverTestCase {
   }
 
   @Test
-  public void testConstructionWithProfile() {
-    settings.setProfile(profile);
+  public void constructionWithProfile() throws IOException {
+    TemporaryFolder temporaryProfile = new TemporaryFolder();
+    temporaryProfile.create();
+
+    // Make a new copy in a temporary file system so we don't overwrite our fixture
+    String profilePath;
+
+    try {
+      Files.copy(resources.locate("profile/opera.ini"), temporaryProfile.newFile("operaprefs.ini"));
+    } catch (IOException e) {
+      fail("Unable to copy preference fixture: " + e.getMessage());
+    }
+
+    profilePath = temporaryProfile.getRoot().getAbsolutePath();
+
+    settings.setProfile(profilePath);
     runner = new TestOperaRunner(settings);
-    assertEquals(profile, runner.getSettings().arguments().getArguments().get(0).getValue());  // 1
+    assertEquals(profilePath,
+                 runner.getSettings().arguments().getArguments().get(0).getValue());  // 1
   }
 
   @Test
-  public void testConstructionWithPort() {
+  public void constructionWithPort() {
     settings.setPort(0);
     runner = new TestOperaRunner(settings);
     assertNotNull(runner);
@@ -119,7 +126,7 @@ public class OperaRunnerTest extends OperaDriverTestCase {
   }
 
   @Test
-  public void testConstructionWithArguments() {
+  public void constructionWithArguments() {
     OperaArguments arguments = new OperaArguments();
     arguments.add("foo");
     arguments.add("bar", "bah");
@@ -133,49 +140,7 @@ public class OperaRunnerTest extends OperaDriverTestCase {
                    .containsAll(arguments.getArguments()));
   }
 
-  @Test
-  @Ignore
-  public void testStartOpera() {
-
-  }
-
-  @Test
-  @Ignore
-  public void testStopOpera() {
-
-  }
-
-  @Test
-  @Ignore
-  public void testIsOperaRunning() {
-
-  }
-
-  @Test
-  @Ignore
-  public void testHasOperaCrashed() {
-
-  }
-
-  @Test
-  @Ignore
-  public void testGetOperaCrashlog() {
-
-  }
-
-  @Test
-  @Ignore
-  public void testShutdown() {
-
-  }
-
-  @Test
-  @Ignore
-  public void testSaveScreenshot() {
-
-  }
-
-  public class TestOperaRunner extends OperaRunner {
+  public class TestOperaRunner extends OperaInProcessRunner {
 
     public TestOperaRunner() {
       super();
