@@ -18,6 +18,7 @@ package com.opera.core.systems.scope.handlers;
 
 import com.opera.core.systems.ScopeServices;
 import com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessage;
+import com.opera.core.systems.scope.protos.DesktopWmProtos;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo;
@@ -150,4 +151,5 @@ public abstract class AbstractEventHandler {
 
   public abstract void onRequest(int windowId);
 
+  public abstract void onDragAndDropped(DesktopWmProtos.QuickWidgetInfo quickWidgetInfo);
 }

@@ -869,6 +869,18 @@ public class OperaDesktopDriver extends OperaDriver {
         .waitForMenuItemPressed(menuItemText, OperaIntervals.MENU_EVENT_TIMEOUT.getValue());
   }
 
+  public String waitForDragAndDropped(String widget_name) {
+    if (services.getConnection() == null) {
+      throw new CommunicationException("Can't wait for widget dropped, Opera is not connected.");
+    }
+    String draggedWidgetName = services.waitForDragAndDropped(widget_name, OperaIntervals.DRAG_AND_DROP_TIMEOUT.getValue());
+
+    if (draggedWidgetName.isEmpty() || !draggedWidgetName.equals(widget_name))
+      logger.warning("Unexpected widget was dragged: '" + draggedWidgetName + "' Expected: '" + widget_name + "'");
+
+    return draggedWidgetName;
+  }
+
   /**
    * resetOperaPrefs - restarts Opera after copying over newPrefs to profile, if newPrefs folder
    * exists.

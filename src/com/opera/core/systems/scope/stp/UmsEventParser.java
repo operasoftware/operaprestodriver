@@ -15,6 +15,7 @@ limitations under the License.
 */
 package com.opera.core.systems.scope.stp;
 
+import com.opera.core.systems.scope.protos.DesktopWmProtos;
 import org.openqa.selenium.WebDriverException;
 
 import com.google.protobuf.GeneratedMessage;
@@ -39,9 +40,12 @@ import com.opera.core.systems.scope.protos.UmsProtos.Event;
 import com.opera.core.systems.scope.protos.WmProtos.WindowID;
 import com.opera.core.systems.scope.protos.WmProtos.WindowInfo;
 
+import java.util.logging.Logger;
+
 public class UmsEventParser {
 
   private AbstractEventHandler eventHandler;
+  private final Logger logger = Logger.getLogger(this.getClass().getName());
 
   public UmsEventParser(AbstractEventHandler eventHandler) {
     this.eventHandler = eventHandler;
@@ -135,24 +139,31 @@ public class UmsEventParser {
         eventHandler.onDesktopWindowLoaded(info_loaded);
         break;
       case MENU_SHOWN:
-    	QuickMenuInfo.Builder shownQMBuilder = QuickMenuInfo.newBuilder();
-    	buildPayload(event, shownQMBuilder);
-    	QuickMenuInfo menuInfoShown = shownQMBuilder.build();
-    	eventHandler.onQuickMenuShown(menuInfoShown);
-    	break;
+        QuickMenuInfo.Builder shownQMBuilder = QuickMenuInfo.newBuilder();
+        buildPayload(event, shownQMBuilder);
+        QuickMenuInfo menuInfoShown = shownQMBuilder.build();
+        eventHandler.onQuickMenuShown(menuInfoShown);
+        break;
       case MENU_CLOSED:
-    	QuickMenuID.Builder closedQMBuilder = QuickMenuID.newBuilder();
-      	buildPayload(event, closedQMBuilder);
-      	QuickMenuID menuId = closedQMBuilder.build();
-      	eventHandler.onQuickMenuClosed(menuId);
-      	break;
+        QuickMenuID.Builder closedQMBuilder = QuickMenuID.newBuilder();
+        buildPayload(event, closedQMBuilder);
+        QuickMenuID menuId = closedQMBuilder.build();
+        eventHandler.onQuickMenuClosed(menuId);
+        break;
       case MENU_PRESSED:
-    	QuickMenuItemID.Builder pressedQMIBuilder = QuickMenuItemID.newBuilder();
-      	buildPayload(event, pressedQMIBuilder);
-      	QuickMenuItemID menuItemID = pressedQMIBuilder.build();
-      	eventHandler.onQuickMenuItemPressed(menuItemID);
-      	break;
+        QuickMenuItemID.Builder pressedQMIBuilder = QuickMenuItemID.newBuilder();
+        buildPayload(event, pressedQMIBuilder);
+        QuickMenuItemID menuItemID = pressedQMIBuilder.build();
+        eventHandler.onQuickMenuItemPressed(menuItemID);
+        break;
+      case DRAG_AND_DROPPED:
+        DesktopWmProtos.QuickWidgetInfo.Builder droppedQWBuilder = DesktopWmProtos.QuickWidgetInfo.newBuilder();
+        buildPayload(event, droppedQWBuilder);
+        DesktopWmProtos.QuickWidgetInfo quickWidget = droppedQWBuilder.build();
+        eventHandler.onDragAndDropped(quickWidget);
+        break;
       default:
+        logger.warning("Unexpected event received: " + event.getCommandID() + " " + DesktopWindowManagerCommand.get(event.getCommandID()));
         break;
       }
     } else if (service.equals("console-logger")) {

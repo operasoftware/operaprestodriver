@@ -18,6 +18,7 @@ package com.opera.core.systems;
 
 import com.opera.core.systems.scope.exceptions.CommunicationException;
 import com.opera.core.systems.scope.exceptions.ResponseNotReceivedException;
+import com.opera.core.systems.scope.protos.DesktopWmProtos;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo;
@@ -84,7 +85,8 @@ public class WaitState {
     EVENT_QUICK_MENU_CLOSED,         // Quick menu was closed
     EVENT_QUICK_MENU_ITEM_PRESSED,   // Quick menu item was pressed
     EVENT_SELFTEST_DONE,             // Selftest service finishes testing
-    EVENT_DESKTOP_WINDOW_PAGE_CHANGED /* new Page shown in a dialog/window */
+    EVENT_DESKTOP_WINDOW_PAGE_CHANGED, /* new Page shown in a dialog/window */
+    EVENT_DRAG_AND_DROPPED            // A widget was dragged and then it was dropped
   }
 
   private class ResultItem {
@@ -99,6 +101,7 @@ public class WaitState {
     private QuickMenuInfo quickMenuInfo;
     private QuickMenuID quickMenuId;
     private QuickMenuItemID quickMenuItemID;
+    private DesktopWmProtos.QuickWidgetInfo quickWidgetInfo;
 
     // Store the data for now, but it seems wasteful
     String selftestResults;
@@ -153,6 +156,11 @@ public class WaitState {
       logger.finest("EVENT: " + result.toString() + ", quick_menu_item=" + info.getMenuText());
     }
 
+    public ResultItem(WaitResult result, DesktopWmProtos.QuickWidgetInfo info) {
+      this.waitResult = result;
+      this.quickWidgetInfo = info;
+      logger.finest("EVENT: " + result.toString() + ", quick_widget=" + info.getName());
+    }
 
     public ResultItem(Response response, int tag) {
       this.response = response;
@@ -206,7 +214,8 @@ public class WaitState {
     QUICK_MENU_CLOSED,
     QUICK_MENU_ITEM_PRESSED,
     SELFTEST_DONE,
-    DESKTOP_WINDOW_PAGE_CHANGED;
+    DESKTOP_WINDOW_PAGE_CHANGED,
+    DRAG_AND_DROPPED;
   }
 
   public WaitState() {
@@ -364,6 +373,14 @@ public class WaitState {
     synchronized (lock) {
       logger.finest("Event: onQuickMenuItemPressed");
       events.add(new ResultItem(WaitResult.EVENT_QUICK_MENU_ITEM_PRESSED, menuItemID));
+      lock.notify();
+    }
+  }
+
+  void onDragAndDropped(DesktopWmProtos.QuickWidgetInfo quickWidgetInfo) {
+    synchronized (lock) {
+      logger.finest("Event: onDragAndDropped");
+      events.add(new ResultItem(WaitResult.EVENT_DRAG_AND_DROPPED, quickWidgetInfo));
       lock.notify();
     }
   }
@@ -702,6 +719,28 @@ public class WaitState {
               return result;
             }
             break;
+
+          case EVENT_DRAG_AND_DROPPED:
+            logger.finest("RECV EVENT_DRAG_AND_DROPPED");
+            if (type == ResponseType.DRAG_AND_DROPPED) {
+              if (stringMatch.length() == 0) {
+                return result;
+              } else {
+                logger.fine("EVENT_DRAG_AND_DROPPED: " +
+                        " Got name: " + result.quickWidgetInfo.getName() +
+                        " Got text: " + result.quickWidgetInfo.getText() +
+                        " Waiting for: " + stringMatch);
+
+                if (result.quickWidgetInfo.getName().equals(stringMatch)) {
+                  return result;
+                }
+              }
+            }
+            break;
+
+          default:
+            logger.warning("Unknown event recieved: " + type);
+            break;
         }
       }
     }
@@ -773,6 +812,16 @@ public class WaitState {
     }
 
     return 0;
+  }
+
+  public String waitForDragAndDropped(String widget_name, long timeout) {
+    ResultItem item = waitAndParseResult(timeout, 0, widget_name, ResponseType.DRAG_AND_DROPPED);
+
+    if (item != null) {
+      return item.quickWidgetInfo.getName();
+    }
+
+    return "";
   }
 
   public int waitForDesktopWindowUpdated(String win_name, long timeout) {
