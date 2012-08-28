@@ -17,6 +17,7 @@ limitations under the License.
 import java.awt.Point;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.logging.Logger;
 
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect;
@@ -36,20 +37,12 @@ public class QuickWidget extends OperaUIElement {
 		private final QuickWidgetInfo info;
 		private final int parentWindowId;
 
+		protected final Logger logger = Logger.getLogger(this.getClass().getName());
+
 		public enum DropPosition {
-			CENTER(0),
-			EDGE(1),
-			BETWEEN(2),
-			;
-			private DropPosition(int value) {
-				this.value = value;
-			}
-
-			private Integer value;
-
-			public Integer getValue() {
-				return value;
-			}
+			CENTER,
+			EDGE,
+			BETWEEN
 		}
 
 		/**
@@ -93,22 +86,38 @@ public class QuickWidget extends OperaUIElement {
 
 		// Intersect a line and a DesktopWindowRect
 		private Point intersection(int x1,int y1,int x2,int y2, DesktopWindowRect rect) {
-			Point bottom = intersection(x1, y1, x2, y2, rect.getX(), rect.getY(), rect.getX() + rect.getHeight(), rect.getY());
+
+			logger.fine("Line segment: (" + x1 + "," + y1 + ")->(" + x2 + "," + y2 + "); Rectangle: (" + rect.getX() + "," + rect.getY() + ")x(" + rect.getWidth() + "," + rect.getHeight() + ")");
+
+			Point bottom = intersection(x1, y1, x2, y2, rect.getX(), rect.getY(), rect.getX(), rect.getY() + rect.getHeight());
 			if (bottom != null)
+			{
+				logger.fine("Intersection found: bottom = " + bottom);
 				return bottom;
+			}
 
 			Point right = intersection(x1, y1, x2, y2, rect.getX() + rect.getWidth(), rect.getY(), rect.getX() + rect.getWidth(), rect.getY() + rect.getHeight());
 			if (right != null)
+			{
+				logger.fine("Intersection found: right = " + right);
 				return right;
+			}
 
 			Point top = intersection(x1, y1, x2, y2, rect.getX(), rect.getY() + rect.getHeight(), rect.getX() + rect.getWidth(), rect.getY() + rect.getHeight());
 			if (top != null)
+			{
+				logger.fine("Intersection found: top = " + top);
 				return top;
+			}
 
 			Point left = intersection(x1, y1, x2, y2, rect.getX(), rect.getY(), rect.getX(), rect.getY() + rect.getHeight());
 			if (left != null)
+			{
+				logger.fine("Intersection found: left = " + left);
 				return left;
+			}
 
+			logger.fine("No intersection found");
 			return null;
 		}
 
@@ -125,11 +134,55 @@ public class QuickWidget extends OperaUIElement {
 			Point currentLocation = getCenterLocation();
 			Point dropPoint = getDropPoint(widget, dropPos);
 
+			if (null == dropPoint)
+			{
+				logger.warning("Could not drop " + this + " onto " + widget + " at " + dropPos + ". The drop point could not be found.");
+				return;
+			}
+
 			List<ModifierPressed> alist = new ArrayList<ModifierPressed>();
 			alist.add(ModifierPressed.NONE);
 
 			getSystemInputManager().mouseDown(currentLocation, MouseButton.LEFT, alist);
-			getSystemInputManager().mouseMove(dropPoint, MouseButton.LEFT, alist);
+
+			/*
+			This has to actually emulate the full drag, not just the end points. The UI may and will
+			behave differently if you don't do this.
+			*/
+			final Integer xDragDistance = dropPoint.x - currentLocation.x;
+			final Integer yDragDistance = dropPoint.y - currentLocation.y;
+			final Integer xDragDistanceAbs = Math.abs(xDragDistance);
+			final Integer yDragDistanceAbs = Math.abs(yDragDistance);
+
+			Double shorterStep = 0.0;
+			final Integer xDirection = (xDragDistance >= 0)?1:-1;
+			final Integer yDirection = (yDragDistance >= 0)?1:-1;
+
+			if (xDragDistanceAbs >= yDragDistanceAbs)
+			{
+				shorterStep = (double)yDragDistanceAbs / xDragDistanceAbs;
+				for (int i = 1; i <= xDragDistanceAbs; i++)
+				{
+					int curX = currentLocation.x + (xDirection*i);
+					int curY = currentLocation.y + (int)((yDirection*i) * shorterStep);
+					Point curPoint = new Point(curX, curY);
+
+					getSystemInputManager().mouseMove(curPoint, MouseButton.LEFT, alist);
+				}
+			}
+			else
+			{
+				shorterStep = (double)xDragDistanceAbs / yDragDistanceAbs;
+				for (int i = 1; i <= yDragDistanceAbs; i++)
+				{
+					int curY = currentLocation.y + (yDirection*i);
+					int curX = currentLocation.x + (int)((xDirection*i) * shorterStep);
+					Point curPoint = new Point(curX, curY);
+
+					getSystemInputManager().mouseMove(curPoint, MouseButton.LEFT, alist);
+				}
+			}
+
 			getSystemInputManager().mouseUp(dropPoint, MouseButton.LEFT, alist);
 		}
 
@@ -148,6 +201,8 @@ public class QuickWidget extends OperaUIElement {
 			if (dragIntersectPoint != null) {
 				Point dropIntersectPoint = intersection(dragPoint.x, dragPoint.y, dropPoint.x, dropPoint.y, element.getRect());
 
+				logger.fine("dropIntersectPoint=" + dropIntersectPoint);
+
 				if (dropIntersectPoint != null) {
 					if (pos == DropPosition.EDGE)
 					{
@@ -155,9 +210,13 @@ public class QuickWidget extends OperaUIElement {
 					}
 
 					// Get the mid point of the line
-					return new Point((dragIntersectPoint.x + dropIntersectPoint.x) / 2, (dragIntersectPoint.y + dropIntersectPoint.y) / 2);
+					Point midPoint = new Point((dragIntersectPoint.x + dropIntersectPoint.x) / 2, (dragIntersectPoint.y + dropIntersectPoint.y) / 2);
+					return midPoint;
 				}
 			}
+			logger.warning("Could not drop " + this + " onto " + element + " at " + pos + ". The drop point could not be found.");
+			logger.warning("start=" + asString(dragPoint) + " drop=" + asString(dropPoint) + " rect=" + asString(this.getRect()));
+
 
 			return null;
 		}
@@ -168,6 +227,18 @@ public class QuickWidget extends OperaUIElement {
 	     */
 		public String getName() {
 			return info.getName();
+		}
+
+		protected String asString(Point point)
+		{
+			String ret = "(" + point.getX() + "," + point.getY() + ")";
+			return ret;
+		}
+
+		protected String asString(DesktopWindowRect rect)
+		{
+			String ret = "(" + rect.getX() + "," + rect.getY() + ")x(" + rect.getWidth() + "," + rect.getHeight() + ")";
+			return ret;
 		}
 
 		/**

@@ -27,6 +27,7 @@ import com.opera.core.systems.scope.exceptions.CommunicationException;
 import com.opera.core.systems.scope.handlers.IConnectionHandler;
 import com.opera.core.systems.scope.internal.OperaFlags;
 import com.opera.core.systems.scope.internal.OperaIntervals;
+import com.opera.core.systems.scope.protos.DesktopWmProtos;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo;
@@ -588,6 +589,11 @@ public class ScopeServices implements IConnectionHandler {
     waitState.onQuickMenuItemPressed(menuItemID);
   }
 
+  public void onDragAndDropped(DesktopWmProtos.QuickWidgetInfo quickWidgetInfo) {
+    logger.finest("Widget was dropped after drag=" + quickWidgetInfo.getName());
+    waitState.onDragAndDropped(quickWidgetInfo);
+  }
+
   // TODO ADD PARAM AGAIN, or just name?
   public void onQuickMenuClosed(QuickMenuID id) {
     logger.finest("QuickMenu closed");//: menuName=" + info.getMenuId().getMenuName());
@@ -709,6 +715,15 @@ public class ScopeServices implements IConnectionHandler {
       return waitState.waitForDesktopWindowShown(win_name, timeout);
     } catch (Exception e) {
       return 0;
+    }
+  }
+
+  public String waitForDragAndDropped(String widget_name, long timeout) {
+    waitState.setWaitEvents(false);
+    try {
+      return waitState.waitForDragAndDropped(widget_name, timeout);
+    } catch (Exception e) {
+      return "";
     }
   }
 

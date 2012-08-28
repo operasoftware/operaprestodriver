@@ -17,6 +17,7 @@ package com.opera.core.systems;
 
 import com.opera.core.systems.scope.handlers.AbstractEventHandler;
 import com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessage;
+import com.opera.core.systems.scope.protos.DesktopWmProtos;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo;
@@ -162,13 +163,16 @@ public class EventHandler extends AbstractEventHandler {
   @Override
   public void onQuickMenuClosed(QuickMenuID menuId) {
 	  services.onQuickMenuClosed(menuId);
-
   }
 
   @Override
   public void onQuickMenuItemPressed(QuickMenuItemID menuItemID) {
 	  services.onQuickMenuItemPressed(menuItemID);
+  }
 
+  @Override
+  public void onDragAndDropped(DesktopWmProtos.QuickWidgetInfo quickWidgetInfo) {
+    services.onDragAndDropped(quickWidgetInfo);
   }
 
   public void onSelftestOutput(SelftestOutput output) {

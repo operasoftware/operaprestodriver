@@ -240,6 +240,11 @@ service DesktopWindowManager
 	*   Sent when new page in a dialog is shown
 	*/
 	event OnWindowPageChanged returns (DesktopWindowInfo) = 15;
+
+	/**
+	* 
+	*/
+	event OnDragAndDropped returns (QuickWidgetInfo) = 16;
 }
 
 message DesktopWindowID
