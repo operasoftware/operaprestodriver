@@ -70,7 +70,7 @@ public class QuickWidget extends OperaUIElement {
 		}
 
 		// Intersect two lines
-		private Point intersection(int x1,int y1,int x2,int y2, int x3, int y3, int x4,int y4) {
+		private Point intersection(int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4) {
 			double dem = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4);
 
 			// Solve the intersect point
@@ -81,6 +81,9 @@ public class QuickWidget extends OperaUIElement {
 			if ((x1 - xi) * (xi - x2) >= 0 && (x3 - xi) * (xi - x4) >= 0 && (y1 - yi) * (yi - y2) >= 0 && (y3 - yi) * (yi - y4) >= 0) {
 				return new Point((int) xi, (int) yi);
 			}
+
+			logger.finest(String.format("Line segments (%dx%d)->(%dx%d) and (%d,%d)x(%d,%d) don't seem to intersect.", x1, y1, x2, y2, x3, y3, x4, y4));
+
 			return null;
 		}
 
@@ -89,13 +92,15 @@ public class QuickWidget extends OperaUIElement {
 
 			logger.fine("Line segment: (" + x1 + "," + y1 + ")->(" + x2 + "," + y2 + "); Rectangle: (" + rect.getX() + "," + rect.getY() + ")x(" + rect.getWidth() + "," + rect.getHeight() + ")");
 
-			Point bottom = intersection(x1, y1, x2, y2, rect.getX(), rect.getY(), rect.getX(), rect.getY() + rect.getHeight());
+			logger.fine("Checking bottom");
+			Point bottom = intersection(x1, y1, x2, y2, rect.getX(), rect.getY() + rect.getHeight(), rect.getX() + rect.getWidth(), rect.getY() + rect.getHeight());
 			if (bottom != null)
 			{
 				logger.fine("Intersection found: bottom = " + bottom);
 				return bottom;
 			}
 
+			logger.fine("Checking right");
 			Point right = intersection(x1, y1, x2, y2, rect.getX() + rect.getWidth(), rect.getY(), rect.getX() + rect.getWidth(), rect.getY() + rect.getHeight());
 			if (right != null)
 			{
@@ -103,13 +108,15 @@ public class QuickWidget extends OperaUIElement {
 				return right;
 			}
 
-			Point top = intersection(x1, y1, x2, y2, rect.getX(), rect.getY() + rect.getHeight(), rect.getX() + rect.getWidth(), rect.getY() + rect.getHeight());
+			logger.fine("Checking top");
+			Point top = intersection(x1, y1, x2, y2, rect.getX(), rect.getY(), rect.getX() + rect.getWidth(), rect.getY());
 			if (top != null)
 			{
 				logger.fine("Intersection found: top = " + top);
 				return top;
 			}
 
+			logger.fine("Checking left");
 			Point left = intersection(x1, y1, x2, y2, rect.getX(), rect.getY(), rect.getX(), rect.getY() + rect.getHeight());
 			if (left != null)
 			{
@@ -117,7 +124,7 @@ public class QuickWidget extends OperaUIElement {
 				return left;
 			}
 
-			logger.fine("No intersection found");
+			logger.warning("NO intersection found! Line segment: (" + x1 + "," + y1 + ")->(" + x2 + "," + y2 + "); Rectangle: (" + rect.getX() + "," + rect.getY() + ")x(" + rect.getWidth() + "," + rect.getHeight() + ")");
 			return null;
 		}
 
@@ -137,6 +144,7 @@ public class QuickWidget extends OperaUIElement {
 			if (null == dropPoint)
 			{
 				logger.warning("Could not drop " + this + " onto " + widget + " at " + dropPos + ". The drop point could not be found.");
+				logger.warning("Attempted drag from " + asString(currentLocation) + " to " + asString(widget.getRect()) + "@" + dropPos);
 				return;
 			}
 
@@ -196,9 +204,11 @@ public class QuickWidget extends OperaUIElement {
 			Point dragPoint = new Point(this.getCenterLocation().x, this.getCenterLocation().y);
 
 			// Find the side of the DesktopWindowRect of the widget that as the intersect
+			logger.fine("Looking for drag intersection point...");
 			Point dragIntersectPoint = intersection(dragPoint.x, dragPoint.y, dropPoint.x, dropPoint.y, this.getRect());
 
 			if (dragIntersectPoint != null) {
+				logger.fine("Looking for drop intersection point...");
 				Point dropIntersectPoint = intersection(dragPoint.x, dragPoint.y, dropPoint.x, dropPoint.y, element.getRect());
 
 				logger.fine("dropIntersectPoint=" + dropIntersectPoint);
@@ -231,13 +241,21 @@ public class QuickWidget extends OperaUIElement {
 
 		protected String asString(Point point)
 		{
-			String ret = "(" + point.getX() + "," + point.getY() + ")";
+			String ret;
+			if (point == null)
+				ret = "<NULL>";
+			else
+			  ret = "(" + point.getX() + "," + point.getY() + ")";
 			return ret;
 		}
 
 		protected String asString(DesktopWindowRect rect)
 		{
-			String ret = "(" + rect.getX() + "," + rect.getY() + ")x(" + rect.getWidth() + "," + rect.getHeight() + ")";
+			String ret;
+			if (rect == null)
+				ret = "<NULL>";
+			else
+			  ret = "(" + rect.getX() + "," + rect.getY() + ")x(" + rect.getWidth() + "," + rect.getHeight() + ")";
 			return ret;
 		}
 
