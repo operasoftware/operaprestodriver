@@ -47,6 +47,10 @@ public class QuickWindow {
     return info.getWindowID();
   }
 
+  public int getParentWindowID() {
+    return info.getParentWindowID();
+  }
+
   /**
    * @return title of this window
    */

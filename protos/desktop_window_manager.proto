@@ -48,6 +48,8 @@ message DesktopWindowInfo
     required DesktopWindowRect rect 		= 7;
 
     required bool active = 8;
+
+	required uint32 parentWindowID = 9;
 }
 
 message DesktopWindowRect
