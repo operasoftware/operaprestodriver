@@ -39,9 +39,8 @@ public class OperaKeyboard implements Keyboard {
   private final KeyboardModifiers modifiers = new KeyboardModifiers();
 
   public OperaKeyboard(OperaDriver parent) {
-    exec = parent.getExecService();
+    exec = parent.getScopeServices().getExec();
   }
-
 
   public void sendKeys(CharSequence... keysToSend) {
     ImmutableList.Builder<KeyEvent> builder = ImmutableList.builder();

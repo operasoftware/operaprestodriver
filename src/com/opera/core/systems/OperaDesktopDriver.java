@@ -644,7 +644,7 @@ public class OperaDesktopDriver extends OperaDriver {
    */
   public void operaDesktopAction(String using, int data, String dataString,
                                  String dataStringParam) {
-    super.getExecService().action(using, data, dataString, dataStringParam);
+    getScopeServices().getExec().action(using, data, dataString, dataStringParam);
   }
 
   /**

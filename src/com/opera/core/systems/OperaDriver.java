@@ -124,10 +124,10 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot, Run
   private final Logger logger = Logger.getLogger(getClass().getName());
 
   private ScopeServices services;
-  private EcmascriptDebugger debugger;
   private Exec exec;
-  private WindowManager windowManager;
   private Core core;
+  private EcmascriptDebugger debugger;
+  private WindowManager windowManager;
   private CookieManager cookieManager;
 
   private OperaMouse mouse;
@@ -139,7 +139,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot, Run
   private String requestedUrl = null;
 
   protected static final OperaLogs logs = new OperaLogs();
-  protected static FileHandler logFile = null;  // TODO(andreastt): Make private
+  protected static FileHandler logFile = null;
 
   /**
    * Constructor that starts Opera with the default set of capabilities.
@@ -1054,10 +1054,6 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot, Run
     return debugger;
   }
 
-  protected Exec getExecService() {
-    return exec;
-  }
-
   protected ScopeServices getScopeServices() {
     return services;
   }
@@ -1065,9 +1061,11 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot, Run
   protected List<WebElement> processElements(Integer id) {
     List<Integer> ids = debugger.examineObjects(id);
     List<WebElement> toReturn = Lists.newArrayList();
+
     for (Integer objectId : ids) {
       toReturn.add(new OperaWebElement(this, objectId));
     }
+
     return toReturn;
   }
 
@@ -1076,7 +1074,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot, Run
       services.waitForOperaIdle(OperaIntervals.OPERA_IDLE_TIMEOUT.getMs());
     } else {
       // Sometimes we get here before the next page has even *started* loading, and so return too
-      // quickly. This sleep is enough to make sure readyState has been set to "loading".
+      // quickly.  This sleep is enough to make sure readyState has been set to "loading".
       sleep(5);
 
       long endTime = System.currentTimeMillis() + OperaIntervals.PAGE_LOAD_TIMEOUT.getMs();
@@ -1144,22 +1142,6 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot, Run
     if (services == null || !services.isConnected()) {
       throw new CommunicationException(message);
     }
-  }
-
-  // Following methods are used in SpartanRunner:
-
-  /**
-   * Enable or disable idle functionality during runtime.
-   *
-   * @param enabled true if idle should be switched on, false if it should be switched off
-   */
-  @SuppressWarnings("unused")
-  protected void setUseOperaIdle(boolean enabled) {
-    settings.setIdle(enabled);
-  }
-
-  protected static void setLogFile(FileHandler log) {
-    logFile = log;
   }
 
   // Following methods are used internally:

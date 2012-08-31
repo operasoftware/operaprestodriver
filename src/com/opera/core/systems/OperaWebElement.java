@@ -64,7 +64,7 @@ public class OperaWebElement extends RemoteWebElement {
   private final int objectId;
   private final int runtimeId;
   private final OperaDriver parent;
-  private final Exec execService;
+  private final Exec exec;
   private final EcmascriptDebugger debugger;
 
   /**
@@ -76,7 +76,7 @@ public class OperaWebElement extends RemoteWebElement {
     this.objectId = objectId;
     parent.objectIds.add(objectId);
     debugger = parent.getDebugger();
-    execService = parent.getExecService();
+    exec = parent.getScopeServices().getExec();
     runtimeId = debugger.getRuntimeId();
     setId(String.valueOf(hashCode()));
     setFileDetector(parent.getFileDetector());
@@ -145,7 +145,7 @@ public class OperaWebElement extends RemoteWebElement {
   @SuppressWarnings("unused")
   public void middleClick() {  // TODO(andreastt): Add this to Actions
     Point point = coordinates.getLocationInViewPort();
-    execService.mouseAction(point.x, point.y, OperaMouseKeys.MIDDLE);
+    exec.mouseAction(point.x, point.y, OperaMouseKeys.MIDDLE);
   }
 
   public WebElement findElement(By by) {
@@ -356,7 +356,7 @@ public class OperaWebElement extends RemoteWebElement {
     assertElementNotStale();
 
     Canvas canvas = buildCanvas();
-    ScreenShotReply reply = execService.screenWatcher(canvas, timeout, includeImage, hashes);
+    ScreenShotReply reply = exec.screenWatcher(canvas, timeout, includeImage, hashes);
 
     if (includeImage && reply.getPng() != null) {
       FileChannel stream;
@@ -384,7 +384,7 @@ public class OperaWebElement extends RemoteWebElement {
   public ScreenShotReply saveScreenshot(long timeout, String... hashes) {
     assertElementNotStale();
     Canvas canvas = buildCanvas();
-    return execService.screenWatcher(canvas, timeout, true, hashes);
+    return exec.screenWatcher(canvas, timeout, true, hashes);
   }
 
   /**
@@ -401,7 +401,7 @@ public class OperaWebElement extends RemoteWebElement {
     assertElementNotStale();
 
     Canvas canvas = buildCanvas();
-    ScreenShotReply reply = execService.containsColor(canvas, 100L, colors);
+    ScreenShotReply reply = exec.containsColor(canvas, 100L, colors);
 
     List<ColorResult> results = reply.getColorResult();
 

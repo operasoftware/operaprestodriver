@@ -48,18 +48,12 @@ public class TestOperaDriver extends OperaDriver implements TestDriver {
     return settings;
   }
 
-  @Override
-  public Capabilities getCapabilities() {
-    return settings.toCapabilities();
-  }
-
   public ScopeServices getServices() {
     return getScopeServices();
   }
 
-  @Override
   public Exec getExecService() {
-    return super.getExecService();
+    return getServices().getExec();
   }
 
   /**

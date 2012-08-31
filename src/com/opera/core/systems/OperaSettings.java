@@ -762,7 +762,7 @@ public class OperaSettings {
         logFile.setLevel(getLevel());
         Logger.getLogger(OperaDriver.class.getPackage().getName()).addHandler(logFile);
 
-        OperaDriver.setLogFile(logFile);
+        OperaDriver.logFile = logFile;
       }
     }
   }
