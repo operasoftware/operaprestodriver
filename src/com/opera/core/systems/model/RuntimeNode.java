@@ -16,18 +16,19 @@ limitations under the License.
 
 package com.opera.core.systems.model;
 
-import java.util.HashMap;
+import com.google.common.collect.Maps;
+
 import java.util.Map;
 
 /**
- * Holds a tree of references to runtimes.  Used in EcmaScriptDebugger and EcmascriptService.
+ * Holds a tree of references to runtimes.  Used in {@link com.opera.core.systems.scope.services.EcmascriptDebugger}.
  */
 public class RuntimeNode {
 
   private String frameName;
   private int runtimeID;
 
-  private Map<Integer, RuntimeNode> nodes = new HashMap<Integer, RuntimeNode>();
+  private Map<Integer, RuntimeNode> nodes = Maps.newHashMap();
 
   public String getFrameName() {
     return frameName;

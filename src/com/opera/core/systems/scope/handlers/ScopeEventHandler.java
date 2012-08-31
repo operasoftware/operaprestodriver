@@ -16,7 +16,7 @@ limitations under the License.
 
 package com.opera.core.systems.scope.handlers;
 
-import com.opera.core.systems.ScopeServices;
+import com.opera.core.systems.scope.ScopeServices;
 import com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessage;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID;

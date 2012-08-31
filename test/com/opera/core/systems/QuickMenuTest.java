@@ -44,7 +44,7 @@ public class QuickMenuTest extends OperaDesktopDriverTestCase {
   public void setupEnvironment() {
     // Show the top menu bar, right after a fresh start it is disabled in favour of the "O-menu
     // button".
-    driver.preferences().set("User Prefs", "Show Menu", true);
+    driver.preferences().set("User ScopePrefs", "Show Menu", true);
   }
 
   @Test

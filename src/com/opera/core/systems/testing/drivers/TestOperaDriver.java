@@ -18,10 +18,10 @@ package com.opera.core.systems.testing.drivers;
 
 import com.opera.core.systems.OperaDriver;
 import com.opera.core.systems.OperaSettings;
-import com.opera.core.systems.ScopeServices;
+import com.opera.core.systems.scope.ScopeServices;
 import com.opera.core.systems.runner.interfaces.OperaRunner;
 import com.opera.core.systems.scope.exceptions.ResponseNotReceivedException;
-import com.opera.core.systems.scope.services.IOperaExec;
+import com.opera.core.systems.scope.services.Exec;
 
 import org.openqa.selenium.Capabilities;
 
@@ -58,7 +58,7 @@ public class TestOperaDriver extends OperaDriver implements TestDriver {
   }
 
   @Override
-  public IOperaExec getExecService() {
+  public Exec getExecService() {
     return super.getExecService();
   }
 

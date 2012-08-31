@@ -20,11 +20,9 @@ import com.google.protobuf.AbstractMessage.Builder;
 import com.google.protobuf.GeneratedMessage;
 import com.google.protobuf.InvalidProtocolBufferException;
 
-import com.opera.core.systems.ScopeServices;
-import com.opera.core.systems.model.ICommand;
+import com.opera.core.systems.internal.VersionUtil;
 import com.opera.core.systems.scope.internal.OperaIntervals;
 import com.opera.core.systems.scope.protos.UmsProtos.Response;
-import com.opera.core.systems.internal.VersionUtil;
 
 import org.apache.commons.jxpath.JXPathContext;
 import org.apache.commons.jxpath.JXPathNotFoundException;
@@ -37,22 +35,36 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * All scope services derive from this base class for generic operations.
+ * All Scope services derive from this abstract base class for generic operations.
  */
-public abstract class AbstractService {
+public abstract class AbstractService implements Service {
 
   protected final ScopeServices services;
 
   private final Logger logger = Logger.getLogger(getClass().getName());
+  private final String name;
   private final String version;
 
-  public AbstractService(ScopeServices services, String version) {
-    this.services = services;
-    this.version = version;
+  public AbstractService(ScopeServices services, String name, String currentVersion) {
+    this(services, name, currentVersion, null);
   }
 
-  public String getVersion() {
-    return version;
+  public AbstractService(ScopeServices services, String name, String currentVersion,
+                         String requiredVersion) {
+    this.services = services;
+    this.name = name;
+    this.version = currentVersion;
+
+    checkRequiredVersion(requiredVersion);
+  }
+
+  private void checkRequiredVersion(String requiredVersion) {
+    if (requiredVersion != null) {
+      if (!isVersionInRange(getServiceVersion(), requiredVersion, getServiceName())) {
+        throw new UnsupportedOperationException(
+            String.format("%s version %s is not supported", getServiceName(), getServiceVersion()));
+      }
+    }
   }
 
   /**
@@ -63,27 +75,35 @@ public abstract class AbstractService {
    * @param maxVersion  maximum version for the service
    * @param serviceName name of the service to check
    */
-  public boolean isVersionInRange(String version, String maxVersion, String serviceName) {
+  protected boolean isVersionInRange(String version, String maxVersion, String serviceName) {
     return !(VersionUtil.compare(version, maxVersion) >= 0
              || VersionUtil.compare(version, services.getMinVersionFor(serviceName)) < 0);
   }
 
-  public Response executeCommand(ICommand command) {
-    return executeCommand(command, null);
+  public String getServiceName() {
+    return name;
   }
 
-  public Response executeCommand(ICommand command, Builder<?> builder) {
+  public String getServiceVersion() {
+    return version;
+  }
+
+  public Response executeMessage(Message message) {
+    return executeMessage(message, null);
+  }
+
+  public Response executeMessage(Message message, Builder<?> builder) {
     if (services.getConnection() == null) {
       return Response.getDefaultInstance();
     }
-    return executeCommand(command, builder, OperaIntervals.DEFAULT_RESPONSE_TIMEOUT.getMs());
+    return executeMessage(message, builder, OperaIntervals.DEFAULT_RESPONSE_TIMEOUT.getMs());
   }
 
-  public Response executeCommand(ICommand command, Builder<?> builder, long timeout) {
+  public Response executeMessage(Message message, Builder<?> builder, long timeout) {
     if (services.getConnection() == null) {
       return Response.getDefaultInstance();
     }
-    return services.executeCommand(command, builder, timeout);
+    return services.executeMessage(message, builder, timeout);
   }
 
   /**

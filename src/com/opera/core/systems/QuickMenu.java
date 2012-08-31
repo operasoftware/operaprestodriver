@@ -19,8 +19,9 @@ package com.opera.core.systems;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo;
-import com.opera.core.systems.scope.services.IDesktopUtils;
-import com.opera.core.systems.scope.services.ums.SystemInputManager;
+import com.opera.core.systems.scope.services.desktop.DesktopUtils;
+import com.opera.core.systems.scope.services.desktop.SystemInput;
+import com.opera.core.systems.scope.services.stp1.desktop.ScopeSystemInputManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,16 +32,15 @@ import java.util.List;
 public class QuickMenu {
 
   private final QuickMenuInfo info;
-  private final IDesktopUtils desktopUtils;
-  private final SystemInputManager systemInputManager;
+  private final DesktopUtils desktopUtils;
+  private final SystemInput systemInputManager;
 
   /**
    * Constructor.
    *
    * @param info QuickMenuInfo of the menu
    */
-  public QuickMenu(QuickMenuInfo info, IDesktopUtils desktopUtils,
-                   SystemInputManager inputManager) {
+  public QuickMenu(QuickMenuInfo info, DesktopUtils desktopUtils, SystemInput inputManager) {
     this.info = info;
     this.desktopUtils = desktopUtils;
     this.systemInputManager = inputManager;

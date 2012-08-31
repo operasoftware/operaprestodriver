@@ -24,9 +24,9 @@ import com.opera.core.systems.scope.internal.OperaIntervals;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo.QuickWidgetType;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearch.QuickWidgetSearchType;
 import com.opera.core.systems.scope.protos.SystemInputProtos.ModifierPressed;
-import com.opera.core.systems.scope.services.IDesktopUtils;
-import com.opera.core.systems.scope.services.IDesktopWindowManager;
-import com.opera.core.systems.scope.services.ISystemInput;
+import com.opera.core.systems.scope.services.desktop.DesktopUtils;
+import com.opera.core.systems.scope.services.desktop.DesktopWindowManager;
+import com.opera.core.systems.scope.services.desktop.SystemInput;
 import com.opera.core.systems.internal.ProfileUtils;
 
 import org.openqa.selenium.Capabilities;
@@ -47,9 +47,9 @@ public class OperaDesktopDriver extends OperaDriver {
 
   private final Logger logger = Logger.getLogger(getClass().getName());
 
-  private IDesktopWindowManager desktopWindowManager;
-  private ISystemInput systemInputManager;
-  private IDesktopUtils desktopUtils;
+  private DesktopWindowManager desktopWindowManager;
+  private SystemInput systemInputManager;
+  private DesktopUtils desktopUtils;
   private ProfileUtils profileUtils;
   private boolean firstTestRun = true;
 

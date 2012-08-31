@@ -18,8 +18,9 @@ package com.opera.core.systems;
 
 import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo;
-import com.opera.core.systems.scope.services.IDesktopUtils;
-import com.opera.core.systems.scope.services.ums.SystemInputManager;
+import com.opera.core.systems.scope.services.desktop.DesktopUtils;
+import com.opera.core.systems.scope.services.desktop.SystemInput;
+import com.opera.core.systems.scope.services.stp1.desktop.ScopeSystemInputManager;
 
 /**
  * Represents a menu item in a menu in the Opera desktop UI.
@@ -34,8 +35,8 @@ public class QuickMenuItem extends OperaUIElement {
    *
    * @param info QuickMenuItemInfo of the menu item
    */
-  public QuickMenuItem(QuickMenuItemInfo info, String menu, IDesktopUtils desktopUtils,
-                       SystemInputManager systemInputManager) {
+  public QuickMenuItem(QuickMenuItemInfo info, String menu, DesktopUtils desktopUtils,
+                       SystemInput systemInputManager) {
     super(systemInputManager, desktopUtils);
     this.info = info;
     this.menu = menu;

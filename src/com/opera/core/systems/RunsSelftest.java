@@ -16,14 +16,12 @@ limitations under the License.
 
 package com.opera.core.systems;
 
-import com.opera.core.systems.scope.services.ums.Selftest;
+import com.opera.core.systems.scope.services.Selftest;
 
 import java.util.List;
 
 /**
  * Indicates that an OperaDriver can run selftests.
- *
- * @see Selftest.SelftestResult
  */
 public interface RunsSelftest {
 

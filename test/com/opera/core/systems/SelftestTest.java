@@ -20,8 +20,9 @@ import com.google.common.collect.ImmutableList;
 
 import com.opera.core.systems.scope.exceptions.ResponseNotReceivedException;
 import com.opera.core.systems.scope.internal.OperaIntervals;
-import com.opera.core.systems.scope.services.ISelftest.ResultType;
-import com.opera.core.systems.scope.services.ums.Selftest;
+import com.opera.core.systems.scope.services.Selftest;
+import com.opera.core.systems.scope.services.Selftest.ResultType;
+import com.opera.core.systems.scope.services.stp1.ScopeSelftest;
 import com.opera.core.systems.testing.OperaDriverTestCase;
 import com.opera.core.systems.testing.RequiresService;
 
@@ -32,7 +33,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import static com.opera.core.systems.scope.services.ums.Selftest.SelftestResult;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
@@ -41,6 +41,8 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.junit.matchers.JUnitMatchers.containsString;
+import static com.opera.core.systems.scope.services.Selftest.SelftestResult;
+import static com.opera.core.systems.scope.services.stp1.ScopeSelftest.ScopeSelftestResult;
 
 @RequiresService("selftest")
 public class SelftestTest extends OperaDriverTestCase {
@@ -60,10 +62,10 @@ public class SelftestTest extends OperaDriverTestCase {
 
   @Test
   public void stringification() {
-    SelftestResult pass = new SelftestResult("tag", "description", ResultType.PASS);
-    SelftestResult fail = new SelftestResult("tag", "description", ResultType.FAIL);
-    SelftestResult skip = new SelftestResult("tag", "description", ResultType.SKIP);
-    SelftestResult skipWhy = new SelftestResult("tag", "description", ResultType.SKIP, "why");
+    SelftestResult pass = new ScopeSelftestResult("tag", "description", ResultType.PASS);
+    SelftestResult fail = new ScopeSelftestResult("tag", "description", ResultType.FAIL);
+    SelftestResult skip = new ScopeSelftestResult("tag", "description", ResultType.SKIP);
+    SelftestResult skipWhy = new ScopeSelftestResult("tag", "description", ResultType.SKIP, "why");
 
     assertEquals("PASS stringification", pass.toString(), "tag:description\tPASS");
     assertEquals("FAIL stringification", fail.toString(), "tag:description\tFAIL");
@@ -76,17 +78,13 @@ public class SelftestTest extends OperaDriverTestCase {
     String data =
         "foo:bar\tPASS\nlorem:ipsum dolor sit amet\tFAIL\tmore\nmore:tests here\tSKIP\treason\n";
 
-    List<SelftestResult> expected = ImmutableList.of(
-        new SelftestResult("foo", "bar", ResultType.PASS),
-        new SelftestResult("lorem",
-                           "ipsum dolor sit amet",
-                           ResultType.FAIL,
-                           "more"),
-        new SelftestResult("more", "tests here",
-                           ResultType.SKIP,
-                           "reason"));
+    ImmutableList<ScopeSelftestResult> expected = ImmutableList.of(
+        new ScopeSelftestResult("foo", "bar", ResultType.PASS),
+        new ScopeSelftestResult("lorem", "ipsum dolor sit amet", ResultType.FAIL, "more"),
+        new ScopeSelftestResult("more", "tests here", ResultType.SKIP, "reason")
+    );
 
-    List<SelftestResult> results = Selftest.parseSelftests(data);
+    List<SelftestResult> results = ScopeSelftest.parseSelftests(data);
     assertEquals("Sample output parsed correctly", expected, results);
   }
 

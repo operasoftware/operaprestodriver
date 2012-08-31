@@ -1,0 +1,900 @@
+/*
+Copyright 2008-2012 Opera Software ASA
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+package com.opera.core.systems.scope;
+
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
+import com.google.protobuf.AbstractMessage.Builder;
+import com.google.protobuf.ByteString;
+import com.google.protobuf.InvalidProtocolBufferException;
+
+import com.opera.core.systems.OperaDriver;
+import com.opera.core.systems.internal.VersionUtil;
+import com.opera.core.systems.runner.interfaces.OperaRunner;
+import com.opera.core.systems.scope.exceptions.CommunicationException;
+import com.opera.core.systems.scope.handlers.IConnectionHandler;
+import com.opera.core.systems.scope.handlers.ScopeEventHandler;
+import com.opera.core.systems.scope.internal.ImplicitWait;
+import com.opera.core.systems.scope.internal.OperaDefaults;
+import com.opera.core.systems.scope.internal.OperaIntervals;
+import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo;
+import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID;
+import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo;
+import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemID;
+import com.opera.core.systems.scope.protos.EcmascriptProtos.ReadyStateChange;
+import com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeInfo;
+import com.opera.core.systems.scope.protos.ScopeProtos;
+import com.opera.core.systems.scope.protos.ScopeProtos.ClientInfo;
+import com.opera.core.systems.scope.protos.ScopeProtos.HostInfo;
+import com.opera.core.systems.scope.protos.ScopeProtos.Service;
+import com.opera.core.systems.scope.protos.ScopeProtos.ServiceResult;
+import com.opera.core.systems.scope.protos.ScopeProtos.ServiceSelection;
+import com.opera.core.systems.scope.protos.SelftestProtos.SelftestOutput;
+import com.opera.core.systems.scope.protos.UmsProtos.Command;
+import com.opera.core.systems.scope.protos.UmsProtos.Response;
+import com.opera.core.systems.scope.services.ConsoleLogger;
+import com.opera.core.systems.scope.services.CookieManager;
+import com.opera.core.systems.scope.services.Core;
+import com.opera.core.systems.scope.services.EcmascriptDebugger;
+import com.opera.core.systems.scope.services.Exec;
+import com.opera.core.systems.scope.services.Prefs;
+import com.opera.core.systems.scope.services.Selftest;
+import com.opera.core.systems.scope.services.WindowManager;
+import com.opera.core.systems.scope.services.desktop.DesktopUtils;
+import com.opera.core.systems.scope.services.desktop.DesktopWindowManager;
+import com.opera.core.systems.scope.services.messages.ScopeMessage;
+import com.opera.core.systems.scope.services.stp1.ScopeSelftest;
+import com.opera.core.systems.scope.services.stp1.UmsServices;
+import com.opera.core.systems.scope.services.stp1.desktop.ScopeSystemInputManager;
+import com.opera.core.systems.scope.stp.StpConnection;
+import com.opera.core.systems.scope.stp.StpThread;
+
+import org.openqa.selenium.WebDriverException;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.Callable;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.logging.Logger;
+
+/**
+ * Implements the interface to the Scope protocol.
+ */
+public class ScopeServices implements IConnectionHandler {
+
+  private final Logger logger = Logger.getLogger(getClass().getName());
+  private final Map<String, String> versions;
+  private final StpThread stpThread;
+  private final AtomicInteger tagCounter;
+  private final WaitState waitState = new WaitState();
+
+  private Core core;
+  private EcmascriptDebugger debugger;
+  private Exec exec;
+  private WindowManager windowManager;
+  private ConsoleLogger consoleLogger;
+  private DesktopWindowManager desktopWindowManager;
+  private DesktopUtils desktopUtils;
+  private Prefs prefs;
+  private ScopeSystemInputManager systemInputManager;
+  private HostInfo hostInfo;
+  private CookieManager cookieManager;
+  private Selftest selftest;
+  private StpConnection connection = null;
+  private List<String> listedServices;
+  private StringBuilder selftestOutput;
+  private boolean shutdown = false;
+  private Map<String, String> availableServices;
+
+  /**
+   * Creates the Scope server on specified address and port, as well as enabling the required Scope
+   * services.
+   *
+   * @param requiredServices list of required services and their minimum required version
+   * @param port             the port on which to start the Scope server
+   * @param manualConnect    whether to output ready message with port number when starting
+   * @throws IOException if an I/O error occurs
+   */
+  public ScopeServices(Map<String, String> requiredServices, int port, boolean manualConnect)
+      throws IOException {
+    versions = requiredServices;
+    tagCounter = new AtomicInteger();
+    stpThread = new StpThread(port, this, new ScopeEventHandler(this), manualConnect);
+    selftestOutput = new StringBuilder();
+  }
+
+  /**
+   * Gets the supported services from Opera and calls methods to enable the ones we requested.
+   */
+  public void init() {
+    waitForHandshake();
+
+    hostInfo = getHostInfo();
+
+    // TODO(andreastt): OPDRV-75 (Clean up service version management)
+    ImmutableMap.Builder<String, String> builder = ImmutableMap.builder();
+    for (Service service : hostInfo.getServiceListList()) {
+      builder.put(service.getName(), service.getVersion());
+    }
+    availableServices = builder.build();
+
+    createUmsServices(OperaDefaults.ENABLE_DEBUGGER, hostInfo);
+
+    connect();
+
+    List<String> wantedServices = Lists.newArrayList();
+
+    boolean ecmascriptService = false;
+    for (Service service : hostInfo.getServiceListList()) {
+      if (service.getName().equals("ecmascript")) {
+        ecmascriptService = true;
+        break;
+      }
+    }
+    if (ecmascriptService) {
+      wantedServices.add("ecmascript");
+    } else {
+      wantedServices.add("ecmascript-debugger");
+    }
+
+    wantedServices.add("exec");
+    wantedServices.add("window-manager");
+    wantedServices.add("console-logger");
+    wantedServices.add("core");
+
+    if (versions.containsKey("prefs")) {
+      wantedServices.add("prefs");
+    }
+
+    if (versions.containsKey("desktop-window-manager")) {
+      wantedServices.add("desktop-window-manager");
+    }
+
+    if (versions.containsKey("system-input")) {
+      wantedServices.add("system-input");
+    }
+
+    if (versions.containsKey("desktop-utils")) {
+      wantedServices.add("desktop-utils");
+    }
+
+    if (versions.containsKey("selftest")) {
+      wantedServices.add("selftest");
+    }
+
+    //wantedServices.add("console-logger");
+    //wantedServices.add("http-logger");
+    wantedServices.add("cookie-manager");
+
+    enableServices(wantedServices);
+    initializeServices(OperaDefaults.ENABLE_DEBUGGER);
+  }
+
+  /**
+   * Initializes the services that are available.
+   *
+   * @param enableDebugger whether or not to enable the ecmascript-debugger service
+   */
+  private void initializeServices(boolean enableDebugger) {
+    if (versions.containsKey("core") && core != null) {
+      core.init();
+    }
+
+    windowManager.init();
+    consoleLogger.init();
+    exec.init();
+
+    if (versions.containsKey("prefs") && prefs != null) {
+      prefs.init();
+    }
+
+    if (versions.containsKey("desktop-window-manager") && desktopWindowManager != null) {
+      desktopWindowManager.init();
+    }
+
+    if (versions.containsKey("system-input") && systemInputManager != null) {
+      systemInputManager.init();
+    }
+
+    if (versions.containsKey("desktop-utils") && desktopUtils != null) {
+      desktopUtils.init();
+    }
+
+    if (enableDebugger) {
+      debugger.init();
+    }
+  }
+
+  public boolean isConnected() {
+    return connection != null && connection.isConnected();
+  }
+
+  public void shutdown() {
+    shutdown = true;  // don't unlock this
+
+    if (isConnected()) {
+      connection.close();
+    }
+
+    stpThread.shutdown();
+
+    try {
+      stpThread.join();
+    } catch (InterruptedException ex) {
+      Thread.currentThread().interrupt();
+    }
+  }
+
+  private void waitForHandshake() throws WebDriverException {
+    try {
+      waitState.waitForHandshake(OperaIntervals.HANDSHAKE_TIMEOUT.getMs());
+    } catch (WebDriverException e) {
+      shutdown();
+      throw e;
+    }
+  }
+
+  /**
+   * Gets information on available services and their versions from Opera.  This includes the STP
+   * version, core version, platform, operating system, user agent string and a list of available
+   * services.
+   *
+   * @return information about the connected browser's debug capabilities
+   */
+  private HostInfo getHostInfo() {
+    Response response = executeMessage(ScopeMessage.HOST_INFO, null);
+
+    try {
+      return HostInfo.parseFrom(response.getPayload());
+    } catch (InvalidProtocolBufferException e) {
+      throw new CommunicationException("Error while parsing host info", e);
+    }
+  }
+
+  /**
+   * Creates all of the services that we requested and are available.  If the debugger is disabled
+   * (which currently never happens) then it creates a dummy class.
+   */
+  private void createUmsServices(boolean enableDebugger, HostInfo info) {
+    new UmsServices(this, info);
+
+    if (!enableDebugger) {
+      debugger = new EcmascriptDebugger() {
+        public void init() {
+          logger.warning("Using mock ecmascript-debugger");
+        }
+
+        public String getServiceName() {
+          return "ecmascript-debugger";
+        }
+
+        public String getServiceVersion() {
+          return null;
+        }
+
+        public void setRuntime(RuntimeInfo runtime) {
+        }
+
+        public Object scriptExecutor(String script, Object... params) {
+          return null;
+        }
+
+        public void removeRuntime(int runtimeId) {
+        }
+
+        public List<String> listFramePaths() {
+          return null;
+        }
+
+        public int getRuntimeId() {
+          return 0;
+        }
+
+        public Integer getObject(String using) {
+          return null;
+        }
+
+        public Integer executeScriptOnObject(String using, int objectId) {
+          return null;
+        }
+
+        public Object executeScript(String using, boolean responseExpected) {
+          return null;
+        }
+
+        public String executeJavascript(String using, boolean responseExpected) {
+          return null;
+        }
+
+        public String executeJavascript(String using) {
+          return null;
+        }
+
+        public List<Integer> examineObjects(Integer id) {
+          return null;
+        }
+
+        public void cleanUpRuntimes() {
+        }
+
+        public void cleanUpRuntimes(int windowId) {
+        }
+
+        public void changeRuntime(String framePath) {
+        }
+
+        public Object callFunctionOnObject(String using, int objectId, boolean responseExpected) {
+          return null;
+        }
+
+        public String callFunctionOnObject(String using, int objectId) {
+          return null;
+        }
+
+        public void addRuntime(RuntimeInfo info) {
+        }
+
+        public void releaseObjects() {
+        }
+
+        public boolean updateRuntime() {
+          return false;
+        }
+
+        public void resetRuntimesList() {
+        }
+
+        public void readyStateChanged(ReadyStateChange change) {
+        }
+
+        public void releaseObject(int objectId) {
+        }
+
+        public void resetFramePath() {
+        }
+
+        public void changeRuntime(int index) {
+        }
+
+        public String executeJavascript(String using, Integer windowId) {
+          return null;
+        }
+
+        public Object examineScriptResult(Integer id) {
+          return null;
+        }
+
+        public void setFormElementValue(int objectId, String value) {
+        }
+
+        public void setDriver(OperaDriver driver) {
+        }
+
+        public boolean isScriptInjectable() {
+          return false;
+        }
+      };
+    }
+  }
+
+  /**
+   * Connects and resets any settings and services that the client used earlier.
+   */
+  private void connect() {
+    ClientInfo.Builder info = ClientInfo.newBuilder().setFormat("protobuf");
+    executeMessage(ScopeMessage.CONNECT, info);
+  }
+
+  public void enableServices(List<String> requiredServices) {
+    for (String requiredService : requiredServices) {
+      try {
+        if (getListedServices().contains(requiredService)) {
+          enable(requiredService);
+        }
+      } catch (InvalidProtocolBufferException e) {
+        throw new WebDriverException("Could not parse the message", e);
+      }
+    }
+  }
+
+  private ServiceResult enable(String serviceName) throws InvalidProtocolBufferException {
+    ServiceSelection.Builder selection = ServiceSelection.newBuilder();
+    selection.setName(serviceName);
+    Response response = executeMessage(ScopeMessage.ENABLE, selection);
+    return ServiceResult.parseFrom(response.getPayload());
+  }
+
+  public void quitOpera(final OperaRunner runner) throws IOException {
+    if (!isConnected()) {
+      return;
+    }
+
+    try {
+      if (exec.getActionList().contains("Quit")) {
+        exec.action("Quit");
+      } else if (exec.getActionList().contains("Exit")) {
+        exec.action("Exit");
+      }
+    } catch (CommunicationException e) {
+      throw new IOException("Exception on shutdown: " + e.getMessage());
+    }
+
+    // Wait for Opera to quit
+    if (runner != null) {
+      new ImplicitWait(OperaIntervals.QUIT_RESPONSE_TIMEOUT.getValue())
+          .until(new Callable<Boolean>() {
+            public Boolean call() {
+              return runner.isOperaRunning();
+            }
+          });
+
+      if (runner.isOperaRunning()) {
+        throw new IOException("Opera is still running!");
+      }
+    }
+  }
+
+  public Map<String, String> getAvailableServices() {
+    return availableServices;
+  }
+
+  public void quit() throws IOException {
+    quit(null);
+  }
+
+  public void quit(OperaRunner runner) throws IOException {
+    try {
+      quitOpera(runner);
+    } finally {
+      shutdown();
+    }
+  }
+
+  public boolean onConnected(StpConnection con) {
+    logger.finest("onConnect fired");
+    if (connection == null) {
+      logger.finest("Got StpConnection");
+      connection = con;
+      return true;
+    }
+    logger.warning("StpConnection already attached - closing incoming connection.");
+    return false;
+  }
+
+  public void onServiceList(List<String> services) {
+    setListedServices(services);
+  }
+
+  public void onWindowLoaded(int id) {
+    logger.finest("Window loaded: windowId=" + id);
+    waitState.onWindowLoaded(id);
+  }
+
+  public void onWindowClosed(int id) {
+    logger.finest("Window closed: windowId=" + id);
+    waitState.onWindowClosed(id);
+  }
+
+  public void onDesktopWindowShown(DesktopWindowInfo info) {
+    logger.finest("DesktopWindow shown: windowId=" + info.getWindowID());
+    waitState.onDesktopWindowShown(info);
+  }
+
+  public void onDesktopWindowUpdated(DesktopWindowInfo info) {
+    logger.finest("DesktopWindow updated: windowId=" + info.getWindowID());
+    waitState.onDesktopWindowUpdated(info);
+  }
+
+  public void onDesktopWindowClosed(DesktopWindowInfo info) {
+    logger.finest("DesktopWindow closed: windowId=" + info.getWindowID());
+    waitState.onDesktopWindowClosed(info);
+  }
+
+  public void onDesktopWindowActivated(DesktopWindowInfo info) {
+    logger.finest("DesktopWindow active: windowId=" + info.getWindowID());
+    waitState.onDesktopWindowActivated(info);
+  }
+
+  public void onDesktopWindowLoaded(DesktopWindowInfo info) {
+    logger.finest("DesktopWindow loaded: windowId=" + info.getWindowID());
+    waitState.onDesktopWindowLoaded(info);
+  }
+
+  public void onDesktopWindowPageChanged(DesktopWindowInfo info) {
+    logger.fine("DesktopWindow page changed: windowId=" + info.getWindowID());
+    waitState.onDesktopWindowPageChanged(info);
+  }
+
+  public void onQuickMenuShown(QuickMenuInfo info) {
+    logger.finest("QuickMenu shown: menuName=" + info.getMenuId().getMenuName());
+    waitState.onQuickMenuShown(info);
+  }
+
+  public void onQuickMenuItemPressed(QuickMenuItemID menuItemID) {
+    logger.finest("QuickMenu shown: menuItem=" + menuItemID.getMenuText());
+    waitState.onQuickMenuItemPressed(menuItemID);
+  }
+
+  // TODO ADD PARAM AGAIN, or just name?
+  public void onQuickMenuClosed(QuickMenuID id) {
+    logger.finest("QuickMenu closed");//: menuName=" + info.getMenuId().getMenuName());
+    waitState.onQuickMenuClosed(id);
+  }
+
+  public void onHandshake(boolean stp1) {
+    logger.finest("Got Stp handshake!");
+    waitState.onHandshake();
+  }
+
+  public void onDisconnect() {
+    logger.fine("Disconnected, closing STP connection");
+    if (isConnected() && !shutdown) {
+      waitState.onDisconnected();
+      connection = null;
+    }
+  }
+
+  public void onOperaIdle() {
+    logger.finest("idle: Got idle event");
+    waitState.onOperaIdle();
+  }
+
+  public void onSelftestOutput(SelftestOutput output) {
+    selftestOutput = selftestOutput.append(output.getOutput());
+  }
+
+  public void onSelftestDone() {
+    String results = selftestOutput.toString();
+    selftestOutput = new StringBuilder();
+    waitState.onSelftestDone(results);
+  }
+
+  public List<Selftest.SelftestResult> selftest(List<String> modules, long timeout) {
+    if (selftest == null) {
+      throw new UnsupportedOperationException("selftest service is not supported");
+    }
+
+    selftest.runSelftests(modules);
+    return ScopeSelftest.parseSelftests(waitState.waitForSelftestDone(timeout));
+  }
+
+  public void waitForWindowLoaded(int activeWindowId, long timeout) {
+    waitState.waitForWindowLoaded(activeWindowId, timeout);
+  }
+
+  public boolean isOperaIdleAvailable() {
+    for (ScopeProtos.Service service : hostInfo.getServiceListList()) {
+      if (service.getName().equals("core")) {
+        String version = service.getVersion();
+
+        // Version 1.1 introduced some important fixes, and we don't want to use idle detection
+        // without this.
+        boolean ok = VersionUtil.compare(version, "1.1") >= 0;
+        logger.finest("core service version check: " + ok + " (" + version + ")");
+        return ok;
+      }
+    }
+
+    logger.severe("core service not found");
+    return false;
+  }
+
+  /**
+   * Enables the capturing on OperaIdle events.
+   *
+   * Sometimes when executing a command OperaIdle events will fire before the response is received
+   * for the sent command. This results in missing the Idle events, and later probably hitting a
+   * timeout.
+   *
+   * To prevent this you can call this function which will enable the tracking of any Idle events
+   * received between now and when you call waitForOperaIdle(). If Idle events have been received
+   * then waitForOperaIdle() will return immediately.
+   */
+  public void captureOperaIdle() {
+    logger.finer("idle: Capturing idle event");
+    waitState.captureOperaIdle();
+  }
+
+  /**
+   * Waits for an OperaIdle event before continuing.
+   *
+   * If captureOperaIdle() has been called since the last call of waitForOperaIdle(), and one or
+   * more OperaIdle events have occurred then this function will return immediately.
+   *
+   * After calling this function the capturing of OperaIdle events is disabled until the next call
+   * of captureOperaIdle()
+   *
+   * @param timeout Time in milliseconds to wait before aborting
+   */
+  public void waitForOperaIdle(long timeout) {
+    logger.finest("idle: Waiting for (timeout = " + timeout + ")");
+    waitState.waitForOperaIdle(timeout);
+    logger.finest("idle: Finished waiting");
+  }
+
+  public void waitStart() {
+    waitState.setWaitEvents(true);
+  }
+
+  public int waitForDesktopWindowLoaded(String windowName, long timeout) {
+    waitState.setWaitEvents(false);
+    try {
+      return waitState.waitForDesktopWindowLoaded(windowName, timeout);
+    } catch (Exception e) {
+      return 0;
+    }
+  }
+
+  public int waitForDesktopWindowShown(String windowName, long timeout) {
+    waitState.setWaitEvents(false);
+    try {
+      return waitState.waitForDesktopWindowShown(windowName, timeout);
+    } catch (Exception e) {
+      return 0;
+    }
+  }
+
+  public int waitForDesktopWindowUpdated(String windowName, long timeout) {
+    waitState.setWaitEvents(false);
+    try {
+      return waitState.waitForDesktopWindowUpdated(windowName, timeout);
+    } catch (Exception e) {
+      return 0;
+    }
+  }
+
+  public int waitForDesktopWindowActivated(String windowName, long timeout) {
+    waitState.setWaitEvents(false);
+    try {
+      return waitState.waitForDesktopWindowActivated(windowName, timeout);
+    } catch (Exception e) {
+      return 0;
+    }
+  }
+
+  public int waitForDesktopWindowClosed(String windowName, long timeout) {
+    waitState.setWaitEvents(false);
+    try {
+      return waitState.waitForDesktopWindowClosed(windowName, timeout);
+    } catch (Exception e) {
+      return 0;
+    }
+  }
+
+  public int waitForDesktopWindowPageChanged(String windowName, long timeout) {
+    waitState.setWaitEvents(false);
+    try {
+      return waitState.waitForWindowPageChanged(windowName, timeout);
+    } catch (Exception e) {
+      return 0;
+    }
+  }
+
+  public String waitForMenuShown(String menuName, long timeout) {
+    waitState.setWaitEvents(false);
+    try {
+      return waitState.waitForQuickMenuShown(menuName, timeout);
+    } catch (Exception e) {
+      return "";
+    }
+  }
+
+  public String waitForMenuClosed(String menuName, long timeout) {
+    waitState.setWaitEvents(false);
+    try {
+      return waitState.waitForQuickMenuClosed(menuName, timeout);
+
+    } catch (Exception e) {
+      return "";
+    }
+  }
+
+  public String waitForMenuItemPressed(String menuItemText, long timeout) {
+    waitState.setWaitEvents(false);
+    try {
+      return waitState.waitForQuickMenuItemPressed(menuItemText, timeout);
+
+    } catch (Exception e) {
+      return "";
+    }
+  }
+
+  public void onResponseReceived(int tag, Response response) {
+    if (isConnected()) {
+      logger.finest("Got response");
+      if (response != null) {
+        waitState.onResponse(tag, response);
+      } else {
+        waitState.onError(tag);
+      }
+    }
+  }
+
+  public void onException(Exception exception) {
+    if (isConnected()) {
+      waitState.onException(exception);
+      connection = null;
+    }
+  }
+
+  /**
+   * Gets the minimum version for this service, as provided by OperaDriver in the constructor.
+   */
+  public String getMinVersionFor(String service) {
+    return versions.get(service);
+  }
+
+  private Response waitForResponse(int tag, long timeout) {
+    try {
+      return waitState.waitFor(tag, timeout);
+    } catch (WebDriverException e) {
+      shutdown();
+      throw e;
+    }
+  }
+
+  public void setListedServices(java.util.List<String> services) {
+    listedServices = services;
+  }
+
+  public List<String> getListedServices() {
+    return listedServices;
+  }
+
+  /**
+   * Close the connection and cleanup the channel
+   */
+  public void close() {
+    connection.close();
+  }
+
+  private Command.Builder buildMessage(Message message, ByteString payload) {
+    Command.Builder cb = Command.newBuilder();
+    cb.setCommandID(message.getID());
+    cb.setFormat(0); // protobuf
+    cb.setService(message.getServiceName());
+    cb.setTag(tagCounter.incrementAndGet());
+    cb.setPayload(payload);
+    return cb;
+  }
+
+  /**
+   * Sends a message and wait for the response.
+   */
+  public Response executeMessage(Message message, Builder<?> builder) {
+    return executeMessage(message, builder,
+                          OperaIntervals.RESPONSE_TIMEOUT.getMs());
+  }
+
+  public Response executeMessage(Message message, Builder<?> builder, long timeout) {
+    ByteString payload = (builder != null) ? builder.build().toByteString() : ByteString.EMPTY;
+    Command.Builder messageBuilder = buildMessage(message, payload);
+    int tag = messageBuilder.getTag();
+    connection.send(messageBuilder.build());
+    return waitForResponse(tag, timeout);
+  }
+
+  public void startStpThread() {
+    stpThread.start();
+  }
+
+  public void onRequest(int windowId) {
+    logger.fine("Window closed: windowId=" + windowId);
+    waitState.onRequest(windowId);
+  }
+
+  public Map<String, String> getVersions() {
+    return versions;
+  }
+
+  public StpConnection getConnection() {
+    return connection;
+  }
+
+  public EcmascriptDebugger getDebugger() {
+    return debugger;
+  }
+
+  public void setDebugger(EcmascriptDebugger debugger) {
+    this.debugger = debugger;
+  }
+
+  // Getters and setters for the different Scope services:
+
+  public Exec getExec() {
+    return exec;
+  }
+
+  public void setExec(Exec exec) {
+    this.exec = exec;
+  }
+
+  public WindowManager getWindowManager() {
+    return windowManager;
+  }
+
+  public void setWindowManager(WindowManager windowManager) {
+    this.windowManager = windowManager;
+  }
+
+  public ConsoleLogger getConsoleLogger() {
+    return consoleLogger;
+  }
+
+  public void setConsoleLogger(ConsoleLogger consoleLogger) {
+    this.consoleLogger = consoleLogger;
+  }
+
+  public Core getCore() {
+    return core;
+  }
+
+  public void setCore(Core core) {
+    this.core = core;
+  }
+
+  public Prefs getPrefs() {
+    return prefs;
+  }
+
+  public void setPrefs(Prefs prefs) {
+    this.prefs = prefs;
+  }
+
+  public DesktopWindowManager getDesktopWindowManager() {
+    return desktopWindowManager;
+  }
+
+  public void setDesktopWindowManager(DesktopWindowManager desktopWindowManager) {
+    this.desktopWindowManager = desktopWindowManager;
+  }
+
+  public DesktopUtils getDesktopUtils() {
+    return desktopUtils;
+  }
+
+  public void setDesktopUtils(DesktopUtils desktopUtils) {
+    this.desktopUtils = desktopUtils;
+  }
+
+  public ScopeSystemInputManager getSystemInputManager() {
+    return systemInputManager;
+  }
+
+  public void setSystemInputManager(ScopeSystemInputManager manager) {
+    this.systemInputManager = manager;
+  }
+
+  public CookieManager getCookieManager() {
+    return cookieManager;
+  }
+
+  public void setCookieManager(CookieManager cookieManager) {
+    this.cookieManager = cookieManager;
+  }
+
+  @SuppressWarnings("unused")
+  public Selftest getSelftest() {
+    return selftest;
+  }
+
+  public void setSelftest(Selftest selftest) {
+    this.selftest = selftest;
+  }
+
+}

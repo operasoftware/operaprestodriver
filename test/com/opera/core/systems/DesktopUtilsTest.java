@@ -71,7 +71,7 @@ public class DesktopUtilsTest extends OperaDesktopDriverTestCase {
    */
   @Before
   public void verifyLanguageFileIsEnLng() {
-    assertThat(((File) driver.preferences().get("User Prefs", "Language File").getValue())
+    assertThat(((File) driver.preferences().get("User ScopePrefs", "Language File").getValue())
                    .getAbsolutePath(),
                containsString("en.lng"));
   }

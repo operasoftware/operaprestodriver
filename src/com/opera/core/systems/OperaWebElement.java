@@ -25,8 +25,8 @@ import com.opera.core.systems.model.ScreenShotReply;
 import com.opera.core.systems.scope.exceptions.ResponseNotReceivedException;
 import com.opera.core.systems.scope.internal.OperaColors;
 import com.opera.core.systems.scope.internal.OperaMouseKeys;
-import com.opera.core.systems.scope.services.IEcmaScriptDebugger;
-import com.opera.core.systems.scope.services.IOperaExec;
+import com.opera.core.systems.scope.services.EcmascriptDebugger;
+import com.opera.core.systems.scope.services.Exec;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
@@ -64,8 +64,8 @@ public class OperaWebElement extends RemoteWebElement {
   private final int objectId;
   private final int runtimeId;
   private final OperaDriver parent;
-  private final IOperaExec execService;
-  private final IEcmaScriptDebugger debugger;
+  private final Exec execService;
+  private final EcmascriptDebugger debugger;
 
   /**
    * @param parent   driver that this element belongs to
@@ -75,7 +75,7 @@ public class OperaWebElement extends RemoteWebElement {
     this.parent = parent;
     this.objectId = objectId;
     parent.objectIds.add(objectId);
-    debugger = parent.getScriptDebugger();
+    debugger = parent.getDebugger();
     execService = parent.getExecService();
     runtimeId = debugger.getRuntimeId();
     setId(String.valueOf(hashCode()));

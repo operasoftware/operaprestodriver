@@ -19,11 +19,11 @@ package com.opera.core.systems.scope.stp;
 import com.google.protobuf.GeneratedMessage;
 import com.google.protobuf.InvalidProtocolBufferException;
 
-import com.opera.core.systems.scope.CoreUtilsCommand;
-import com.opera.core.systems.scope.DesktopWindowManagerCommand;
-import com.opera.core.systems.scope.ESDebuggerCommand;
-import com.opera.core.systems.scope.SelftestCommand;
-import com.opera.core.systems.scope.WindowManagerCommand;
+import com.opera.core.systems.scope.services.messages.CoreMessage;
+import com.opera.core.systems.scope.services.messages.DesktopWindowManagerMessage;
+import com.opera.core.systems.scope.services.messages.EcmascriptDebuggerMessage;
+import com.opera.core.systems.scope.services.messages.SelftestMessage;
+import com.opera.core.systems.scope.services.messages.WindowManagerMessage;
 import com.opera.core.systems.scope.handlers.EventHandler;
 import com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessage;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo;
@@ -54,7 +54,7 @@ public class UmsEventParser {
     int eventId = event.getCommandID();
 
     if (service.equals("ecmascript-debugger")) {
-      switch (ESDebuggerCommand.get(eventId)) {
+      switch (EcmascriptDebuggerMessage.get(eventId)) {
         case RUNTIME_STARTED:
           RuntimeInfo.Builder infoBuilder = RuntimeInfo.newBuilder();
           buildPayload(event, infoBuilder);
@@ -70,7 +70,7 @@ public class UmsEventParser {
           break;
       }
     } else if (service.equals("window-manager")) {
-      switch (WindowManagerCommand.get(eventId)) {
+      switch (WindowManagerMessage.get(eventId)) {
         case WINDOW_ACTIVATED:
           WindowID.Builder activeWindowIdBuilder = WindowID.newBuilder();
           buildPayload(event, activeWindowIdBuilder);
@@ -99,7 +99,7 @@ public class UmsEventParser {
           break;
       }
     } else if (service.equals("desktop-window-manager")) {
-      switch (DesktopWindowManagerCommand.get(eventId)) {
+      switch (DesktopWindowManagerMessage.get(eventId)) {
         case WINDOW_SHOWN:
           DesktopWindowInfo.Builder shownDWBuilder = DesktopWindowInfo.newBuilder();
           buildPayload(event, shownDWBuilder);
@@ -178,7 +178,7 @@ public class UmsEventParser {
       }
       eventHandler.onRequest(header.getWindowID());
     } else if (service.equals("core")) {
-      switch (CoreUtilsCommand.get(eventId)) {
+      switch (CoreMessage.get(eventId)) {
         case ONACTIVE:
           // No active event handler...
           // Opera only becomes active as reaction on other event
@@ -189,7 +189,7 @@ public class UmsEventParser {
           break;
       }
     } else if (service.equals("selftest")) {
-      switch (SelftestCommand.get(eventId)) {
+      switch (SelftestMessage.get(eventId)) {
         case OUTPUT:
           SelftestOutput.Builder builder = SelftestOutput.newBuilder();
           buildPayload(event, builder);

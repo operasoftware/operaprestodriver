@@ -21,7 +21,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.CodedOutputStream;
 
-import com.opera.core.systems.scope.DesktopUtilsCommand;
+import com.opera.core.systems.scope.services.messages.DesktopUtilsMessage;
 import com.opera.core.systems.scope.exceptions.CommunicationException;
 import com.opera.core.systems.scope.handlers.EventHandler;
 import com.opera.core.systems.scope.handlers.IConnectionHandler;
@@ -47,7 +47,7 @@ import java.util.logging.Logger;
 
 public class StpConnection implements SocketListener {
 
-  private final Logger logger = Logger.getLogger(this.getClass().getName());
+  private final Logger logger = Logger.getLogger(getClass().getName());
   private SocketChannel socketChannel;
 
   // Outgoing send queue
@@ -92,9 +92,8 @@ public class StpConnection implements SocketListener {
   /**
    * Initializes variables in object scope, sets 'count known' to false to read byte count (STP/0).
    */
-  public StpConnection(SocketChannel socket, IConnectionHandler handler,
-                       EventHandler eventHandler, SocketMonitor monitor)
-      throws IOException {
+  public StpConnection(SocketChannel socket, IConnectionHandler handler, EventHandler eventHandler,
+                       SocketMonitor monitor)  throws IOException {
     connectionHandler = handler;
     socketChannel = socket;
     this.eventHandler = eventHandler;
@@ -143,7 +142,7 @@ public class StpConnection implements SocketListener {
     buffer.put(payload);
 
     // Log what is being sent.
-    logger.finest("SEND: " + command.toString());
+    logger.finest("SEND: " + command);
 
     requests.add(buffer);
     monitor.modify(socketChannel, this, SelectionKey.OP_READ | SelectionKey.OP_WRITE);
@@ -538,8 +537,8 @@ public class StpConnection implements SocketListener {
         if (((service.equals("ecmascript-debugger") || service.equals("ecmascript"))
              && status == Status.INTERNAL_ERROR.getNumber()) ||
             (service.equals("ecmascript") && status == Status.BAD_REQUEST.getNumber()) ||
-            (service.equals("desktop-utils") && error.getCommandID() == DesktopUtilsCommand
-                .GET_STRING.getCommandID())) {
+            (service.equals("desktop-utils") && error.getCommandID() == DesktopUtilsMessage
+                .GET_STRING.getID())) {
           signalResponse(error.getTag(), null);
         } else {
           connectionHandler.onException(

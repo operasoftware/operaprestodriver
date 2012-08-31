@@ -161,7 +161,7 @@ public class OperaSettingsIntegrationTest extends OperaDriverTestCase {
     TestDriver driver = new TestDriverBuilder().using(settings).get();
 
     assertNotNull(driver);
-    assertEquals(profile, driver.preferences().get("User Prefs", "Opera Directory").getValue());
+    assertEquals(profile, driver.preferences().get("User ScopePrefs", "Opera Directory").getValue());
     assertEquals(profile, driver.getSettings().profile().getDirectory());
 
     driver.quit();
