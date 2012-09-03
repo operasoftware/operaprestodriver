@@ -19,12 +19,14 @@ package com.opera.core.systems.scope.services;
 import com.opera.core.systems.model.Canvas;
 import com.opera.core.systems.model.ScreenShotReply;
 import com.opera.core.systems.scope.Service;
-import com.opera.core.systems.scope.internal.OperaColors;
+import com.opera.core.systems.internal.OperaColors;
 import com.opera.core.systems.scope.internal.OperaMouseKeys;
 
 import java.util.Set;
 
 public interface Exec extends Service {
+
+  static final String SERVICE_NAME = "exec";
 
   /**
    * Type a string, preserving space, sent to active window This command doesn't return a response

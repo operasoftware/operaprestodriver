@@ -20,9 +20,8 @@ import com.google.common.collect.ImmutableList;
 
 import com.opera.core.systems.scope.exceptions.ResponseNotReceivedException;
 import com.opera.core.systems.scope.internal.OperaIntervals;
-import com.opera.core.systems.scope.services.Selftest;
 import com.opera.core.systems.scope.services.Selftest.ResultType;
-import com.opera.core.systems.scope.services.stp1.ScopeSelftest;
+import com.opera.core.systems.scope.stp.services.ScopeSelftest;
 import com.opera.core.systems.testing.OperaDriverTestCase;
 import com.opera.core.systems.testing.RequiresService;
 
@@ -42,7 +41,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.junit.matchers.JUnitMatchers.containsString;
 import static com.opera.core.systems.scope.services.Selftest.SelftestResult;
-import static com.opera.core.systems.scope.services.stp1.ScopeSelftest.ScopeSelftestResult;
+import static com.opera.core.systems.scope.stp.services.ScopeSelftest.ScopeSelftestResult;
 
 @RequiresService("selftest")
 public class SelftestTest extends OperaDriverTestCase {

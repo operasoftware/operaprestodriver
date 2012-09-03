@@ -23,9 +23,9 @@ import com.opera.core.systems.model.Canvas;
 import com.opera.core.systems.model.ColorResult;
 import com.opera.core.systems.model.ScreenShotReply;
 import com.opera.core.systems.scope.exceptions.ResponseNotReceivedException;
-import com.opera.core.systems.scope.internal.OperaColors;
+import com.opera.core.systems.internal.OperaColors;
 import com.opera.core.systems.scope.internal.OperaMouseKeys;
-import com.opera.core.systems.scope.services.EcmascriptDebugger;
+import com.opera.core.systems.scope.services.Debugger;
 import com.opera.core.systems.scope.services.Exec;
 
 import org.openqa.selenium.By;
@@ -65,7 +65,7 @@ public class OperaWebElement extends RemoteWebElement {
   private final int runtimeId;
   private final OperaDriver parent;
   private final Exec exec;
-  private final EcmascriptDebugger debugger;
+  private final Debugger debugger;
 
   /**
    * @param parent   driver that this element belongs to

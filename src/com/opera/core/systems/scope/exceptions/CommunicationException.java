@@ -16,13 +16,11 @@ limitations under the License.
 
 package com.opera.core.systems.scope.exceptions;
 
-import org.openqa.selenium.WebDriverException;
-
 /**
  * This event is to be used when the STP communication fails in an unrecoverable fashion and the
  * connection has been closed.
  */
-public class CommunicationException extends WebDriverException {
+public class CommunicationException extends ScopeException {
 
   public CommunicationException(Exception e) {
     super(e);

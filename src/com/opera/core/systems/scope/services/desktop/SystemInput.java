@@ -16,6 +16,7 @@ limitations under the License.
 
 package com.opera.core.systems.scope.services.desktop;
 
+import com.opera.core.systems.scope.Service;
 import com.opera.core.systems.scope.protos.SystemInputProtos.ModifierPressed;
 import com.opera.core.systems.scope.protos.SystemInputProtos.MouseInfo.MouseButton;
 
@@ -25,7 +26,9 @@ import java.util.List;
 /**
  * Interface for SystemInput.
  */
-public interface SystemInput {
+public interface SystemInput extends Service {
+
+  static final String SERVICE_NAME = "system-input";
 
   /**
    * Clicks MouseButton a specified number of times with zero or more modifiers held down.

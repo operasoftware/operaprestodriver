@@ -21,7 +21,8 @@ import com.google.common.collect.ImmutableList;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.CodedOutputStream;
 
-import com.opera.core.systems.scope.services.messages.DesktopUtilsMessage;
+import com.opera.core.systems.scope.exceptions.ScopeException;
+import com.opera.core.systems.scope.stp.services.messages.DesktopUtilsMessage;
 import com.opera.core.systems.scope.exceptions.CommunicationException;
 import com.opera.core.systems.scope.handlers.EventHandler;
 import com.opera.core.systems.scope.handlers.IConnectionHandler;
@@ -581,7 +582,7 @@ public class StpConnection implements SocketListener {
                 return result;
               }
             }
-            connectionHandler.onException(new WebDriverException("Error while reading raw int"));
+            connectionHandler.onException(new ScopeException("Error while reading raw int"));
           }
         }
       }

@@ -21,6 +21,9 @@ package com.opera.core.systems.scope;
  */
 public interface Service {
 
+  /**
+   * Initialize the service.
+   */
   public void init();
 
   /**

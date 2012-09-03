@@ -20,12 +20,15 @@ import com.opera.core.systems.QuickMenu;
 import com.opera.core.systems.QuickMenuItem;
 import com.opera.core.systems.QuickWidget;
 import com.opera.core.systems.QuickWindow;
+import com.opera.core.systems.scope.Service;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo.QuickWidgetType;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearch.QuickWidgetSearchType;
 
 import java.util.List;
 
-public interface DesktopWindowManager {
+public interface DesktopWindowManager extends Service {
+
+  static final String SERVICE_NAME = "desktop-window-manager";
 
   /**
    * Does initialization necessary to set up the service.

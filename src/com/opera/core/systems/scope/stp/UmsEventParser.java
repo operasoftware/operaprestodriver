@@ -19,11 +19,7 @@ package com.opera.core.systems.scope.stp;
 import com.google.protobuf.GeneratedMessage;
 import com.google.protobuf.InvalidProtocolBufferException;
 
-import com.opera.core.systems.scope.services.messages.CoreMessage;
-import com.opera.core.systems.scope.services.messages.DesktopWindowManagerMessage;
-import com.opera.core.systems.scope.services.messages.EcmascriptDebuggerMessage;
-import com.opera.core.systems.scope.services.messages.SelftestMessage;
-import com.opera.core.systems.scope.services.messages.WindowManagerMessage;
+import com.opera.core.systems.scope.exceptions.ScopeException;
 import com.opera.core.systems.scope.handlers.EventHandler;
 import com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessage;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo;
@@ -38,8 +34,11 @@ import com.opera.core.systems.scope.protos.SelftestProtos.SelftestOutput;
 import com.opera.core.systems.scope.protos.UmsProtos.Event;
 import com.opera.core.systems.scope.protos.WmProtos.WindowID;
 import com.opera.core.systems.scope.protos.WmProtos.WindowInfo;
-
-import org.openqa.selenium.WebDriverException;
+import com.opera.core.systems.scope.stp.services.messages.CoreMessage;
+import com.opera.core.systems.scope.stp.services.messages.DesktopWindowManagerMessage;
+import com.opera.core.systems.scope.stp.services.messages.EcmascriptDebuggerMessage;
+import com.opera.core.systems.scope.stp.services.messages.SelftestMessage;
+import com.opera.core.systems.scope.stp.services.messages.WindowManagerMessage;
 
 public class UmsEventParser {
 
@@ -174,7 +173,7 @@ public class UmsEventParser {
       try {
         header = Header.parseFrom(event.getPayload());
       } catch (InvalidProtocolBufferException e) {
-        throw new WebDriverException("Exception while parsing event");
+        throw new ScopeException("Exception while parsing event");
       }
       eventHandler.onRequest(header.getWindowID());
     } else if (service.equals("core")) {
@@ -202,19 +201,19 @@ public class UmsEventParser {
     }
   }
 
-  private final GeneratedMessage.Builder<?> buildPayload(Event event,
-                                                         GeneratedMessage.Builder<?> builder) {
+  private GeneratedMessage.Builder<?> buildPayload(Event event,
+                                                   GeneratedMessage.Builder<?> builder) {
     return buildMessage(builder, event.getPayload().toByteArray());
   }
 
-  private final GeneratedMessage.Builder<?> buildMessage(
+  private GeneratedMessage.Builder<?> buildMessage(
       GeneratedMessage.Builder<?> builder, byte[] message) {
     try {
       return builder.mergeFrom(message);
     } catch (InvalidProtocolBufferException ex) {
-      throw new WebDriverException("Could not build "
-                                   + builder.getDescriptorForType().getFullName() + " : "
-                                   + ex.getMessage());
+      throw new ScopeException("Could not build "
+                               + builder.getDescriptorForType().getFullName() + " : "
+                               + ex.getMessage());
     }
   }
 

@@ -24,6 +24,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public interface WindowManager extends Service {
 
+  static final String SERVICE_NAME = "window-manager";
+
   /**
    * Sets the active window if the window is of type 'normal' discards any other window such as
    * 'dialog' or 'unknown'.

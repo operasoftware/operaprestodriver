@@ -25,6 +25,8 @@ import java.util.List;
  */
 public interface Selftest extends Service {
 
+  static final String SERVICE_NAME = "selftest";
+
   enum ResultType {
     PASS, FAIL, SKIP
   }

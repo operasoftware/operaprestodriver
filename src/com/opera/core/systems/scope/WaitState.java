@@ -21,13 +21,12 @@ import com.google.common.collect.Lists;
 
 import com.opera.core.systems.scope.exceptions.CommunicationException;
 import com.opera.core.systems.scope.exceptions.ResponseNotReceivedException;
+import com.opera.core.systems.scope.exceptions.ScopeException;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemID;
 import com.opera.core.systems.scope.protos.UmsProtos.Response;
-
-import org.openqa.selenium.WebDriverException;
 
 import java.util.LinkedList;
 import java.util.logging.Logger;
@@ -231,7 +230,7 @@ public class WaitState {
       }
       lock.wait(timeout);
     } catch (InterruptedException e) {
-      throw new WebDriverException(e);
+      throw new ScopeException(e);
     }
   }
 

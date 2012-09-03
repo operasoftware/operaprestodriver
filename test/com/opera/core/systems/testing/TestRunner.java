@@ -22,6 +22,7 @@ import com.google.common.base.Throwables;
 
 import com.opera.core.systems.OperaProduct;
 import com.opera.core.systems.OperaSettings;
+import com.opera.core.systems.scope.ScopeService;
 import com.opera.core.systems.testing.drivers.TestDriver;
 
 import org.junit.internal.runners.model.ReflectiveCallable;
@@ -87,7 +88,7 @@ public class TestRunner extends BlockJUnit4ClassRunner {
                                     driver.utils().getPlatform(),
                                     driver.utils().getProduct());
     } else {
-      ignorance = new TestIgnorance(new LinkedHashMap<String, String>(),
+      ignorance = new TestIgnorance(new LinkedHashMap<ScopeService, String>(),
                                     false,
                                     false,
                                     Platform.getCurrent(),

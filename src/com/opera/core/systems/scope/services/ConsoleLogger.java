@@ -28,6 +28,8 @@ import java.util.List;
  */
 public interface ConsoleLogger extends Service {
 
+  static final String SERVICE_NAME = "console-logger";
+
   /**
    * Add a new message to the internal cache of console messages in the Scope server.
    */

@@ -24,6 +24,8 @@ import java.util.List;
 
 public interface Prefs extends Service {
 
+  static final String SERVICE_NAME = "prefs";
+
   /**
    * Gets a preference from the <var>operaprefs.ini</var> from a specific section. Optionally it can
    * get the default setting of the preference.

@@ -21,7 +21,6 @@ import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo;
 import com.opera.core.systems.scope.services.desktop.DesktopUtils;
 import com.opera.core.systems.scope.services.desktop.SystemInput;
-import com.opera.core.systems.scope.services.stp1.desktop.ScopeSystemInputManager;
 
 import java.util.ArrayList;
 import java.util.List;

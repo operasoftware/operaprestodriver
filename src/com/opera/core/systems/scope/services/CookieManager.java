@@ -27,6 +27,8 @@ import java.util.Set;
  */
 public interface CookieManager extends Service {
 
+  static final String SERVICE_NAME = "cookie-manager";
+
   Set<Cookie> getCookie(String domain, String path);
 
   void removeCookie(String domain, String path, String name);

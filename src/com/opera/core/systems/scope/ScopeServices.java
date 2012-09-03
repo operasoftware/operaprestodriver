@@ -17,30 +17,27 @@ limitations under the License.
 package com.opera.core.systems.scope;
 
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.google.protobuf.AbstractMessage.Builder;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
 
-import com.opera.core.systems.OperaDriver;
+import com.opera.core.systems.internal.ImplicitWait;
+import com.opera.core.systems.internal.OperaDefaults;
 import com.opera.core.systems.internal.VersionUtil;
 import com.opera.core.systems.runner.interfaces.OperaRunner;
 import com.opera.core.systems.scope.exceptions.CommunicationException;
+import com.opera.core.systems.scope.exceptions.ScopeException;
 import com.opera.core.systems.scope.handlers.IConnectionHandler;
 import com.opera.core.systems.scope.handlers.ScopeEventHandler;
-import com.opera.core.systems.scope.internal.ImplicitWait;
-import com.opera.core.systems.scope.internal.OperaDefaults;
 import com.opera.core.systems.scope.internal.OperaIntervals;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemID;
-import com.opera.core.systems.scope.protos.EcmascriptProtos.ReadyStateChange;
-import com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeInfo;
 import com.opera.core.systems.scope.protos.ScopeProtos;
 import com.opera.core.systems.scope.protos.ScopeProtos.ClientInfo;
 import com.opera.core.systems.scope.protos.ScopeProtos.HostInfo;
-import com.opera.core.systems.scope.protos.ScopeProtos.Service;
 import com.opera.core.systems.scope.protos.ScopeProtos.ServiceResult;
 import com.opera.core.systems.scope.protos.ScopeProtos.ServiceSelection;
 import com.opera.core.systems.scope.protos.SelftestProtos.SelftestOutput;
@@ -49,6 +46,7 @@ import com.opera.core.systems.scope.protos.UmsProtos.Response;
 import com.opera.core.systems.scope.services.ConsoleLogger;
 import com.opera.core.systems.scope.services.CookieManager;
 import com.opera.core.systems.scope.services.Core;
+import com.opera.core.systems.scope.services.Debugger;
 import com.opera.core.systems.scope.services.EcmascriptDebugger;
 import com.opera.core.systems.scope.services.Exec;
 import com.opera.core.systems.scope.services.Prefs;
@@ -56,18 +54,19 @@ import com.opera.core.systems.scope.services.Selftest;
 import com.opera.core.systems.scope.services.WindowManager;
 import com.opera.core.systems.scope.services.desktop.DesktopUtils;
 import com.opera.core.systems.scope.services.desktop.DesktopWindowManager;
-import com.opera.core.systems.scope.services.messages.ScopeMessage;
-import com.opera.core.systems.scope.services.stp1.ScopeSelftest;
-import com.opera.core.systems.scope.services.stp1.UmsServices;
-import com.opera.core.systems.scope.services.stp1.desktop.ScopeSystemInputManager;
 import com.opera.core.systems.scope.stp.StpConnection;
 import com.opera.core.systems.scope.stp.StpThread;
-
-import org.openqa.selenium.WebDriverException;
+import com.opera.core.systems.scope.stp.services.MockEcmascriptDebugger;
+import com.opera.core.systems.scope.stp.services.ScopeSelftest;
+import com.opera.core.systems.scope.stp.services.desktop.ScopeSystemInputManager;
+import com.opera.core.systems.scope.stp.services.messages.ScopeMessage;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.SortedSet;
 import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Logger;
@@ -78,13 +77,13 @@ import java.util.logging.Logger;
 public class ScopeServices implements IConnectionHandler {
 
   private final Logger logger = Logger.getLogger(getClass().getName());
-  private final Map<String, String> versions;
+  private final SortedSet<ScopeService> requiredServices;
   private final StpThread stpThread;
   private final AtomicInteger tagCounter;
   private final WaitState waitState = new WaitState();
 
   private Core core;
-  private EcmascriptDebugger debugger;
+  private Debugger debugger;
   private Exec exec;
   private WindowManager windowManager;
   private ConsoleLogger consoleLogger;
@@ -92,131 +91,97 @@ public class ScopeServices implements IConnectionHandler {
   private DesktopUtils desktopUtils;
   private Prefs prefs;
   private ScopeSystemInputManager systemInputManager;
-  private HostInfo hostInfo;
   private CookieManager cookieManager;
   private Selftest selftest;
   private StpConnection connection = null;
-  private List<String> listedServices;
   private StringBuilder selftestOutput;
   private boolean shutdown = false;
-  private Map<String, String> availableServices;
+  private Map<ScopeService, Service> services = ImmutableMap.of();
+  private Map<ScopeService, String> availableServices = ImmutableMap.of();
 
   /**
    * Creates the Scope server on specified address and port, as well as enabling the required Scope
    * services.
    *
-   * @param requiredServices list of required services and their minimum required version
+   * @param requiredServices set of required services
    * @param port             the port on which to start the Scope server
    * @param manualConnect    whether to output ready message with port number when starting
    * @throws IOException if an I/O error occurs
    */
-  public ScopeServices(Map<String, String> requiredServices, int port, boolean manualConnect)
-      throws IOException {
-    versions = requiredServices;
+  public ScopeServices(final SortedSet<ScopeService> requiredServices, int port,
+                       boolean manualConnect) throws IOException {
+    this.requiredServices = requiredServices;
     tagCounter = new AtomicInteger();
     stpThread = new StpThread(port, this, new ScopeEventHandler(this), manualConnect);
     selftestOutput = new StringBuilder();
   }
 
-  /**
-   * Gets the supported services from Opera and calls methods to enable the ones we requested.
-   */
+
   public void init() {
     waitForHandshake();
 
-    hostInfo = getHostInfo();
-
-    // TODO(andreastt): OPDRV-75 (Clean up service version management)
-    ImmutableMap.Builder<String, String> builder = ImmutableMap.builder();
-    for (Service service : hostInfo.getServiceListList()) {
-      builder.put(service.getName(), service.getVersion());
-    }
-    availableServices = builder.build();
-
-    createUmsServices(OperaDefaults.ENABLE_DEBUGGER, hostInfo);
+    availableServices = buildAvailableServices(getHostInfo());
 
     connect();
 
-    List<String> wantedServices = Lists.newArrayList();
+    // We always need a debugger, and it should never be included in the set of required services
+    if (OperaDefaults.ENABLE_DEBUGGER &&
+        !(requiredServices.contains(ScopeService.ECMASCRIPT) ||
+          requiredServices.contains(ScopeService.ECMASCRIPT_DEBUGGER))) {
+      if (availableServices.containsKey(ScopeService.ECMASCRIPT)) {
+        requiredServices.add(ScopeService.ECMASCRIPT);
+      } else {
+        requiredServices.add(ScopeService.ECMASCRIPT_DEBUGGER);
+      }
+    } else {
+      debugger = new MockEcmascriptDebugger();
+    }
 
-    boolean ecmascriptService = false;
-    for (Service service : hostInfo.getServiceListList()) {
-      if (service.getName().equals("ecmascript")) {
-        ecmascriptService = true;
-        break;
+    services = createServices(requiredServices);
+    enableServices(services.values());
+    initializeServices(services.values());
+  }
+
+  private Map<ScopeService, String> buildAvailableServices(HostInfo info) {
+    ImmutableMap.Builder<ScopeService, String> services = ImmutableMap.builder();
+
+    for (ScopeProtos.Service service : info.getServiceListList()) {
+      ScopeService scopeService = ScopeService.get(service.getName());
+      if (scopeService != null) {
+        services.put(scopeService, service.getVersion());
       }
     }
-    if (ecmascriptService) {
-      wantedServices.add("ecmascript");
-    } else {
-      wantedServices.add("ecmascript-debugger");
-    }
 
-    wantedServices.add("exec");
-    wantedServices.add("window-manager");
-    wantedServices.add("console-logger");
-    wantedServices.add("core");
-
-    if (versions.containsKey("prefs")) {
-      wantedServices.add("prefs");
-    }
-
-    if (versions.containsKey("desktop-window-manager")) {
-      wantedServices.add("desktop-window-manager");
-    }
-
-    if (versions.containsKey("system-input")) {
-      wantedServices.add("system-input");
-    }
-
-    if (versions.containsKey("desktop-utils")) {
-      wantedServices.add("desktop-utils");
-    }
-
-    if (versions.containsKey("selftest")) {
-      wantedServices.add("selftest");
-    }
-
-    //wantedServices.add("console-logger");
-    //wantedServices.add("http-logger");
-    wantedServices.add("cookie-manager");
-
-    enableServices(wantedServices);
-    initializeServices(OperaDefaults.ENABLE_DEBUGGER);
+    return services.build();
   }
 
   /**
-   * Initializes the services that are available.
+   * Build and construct the given services.
    *
-   * @param enableDebugger whether or not to enable the ecmascript-debugger service
+   * @param services a map of required services and their minimum version
+   * @return list of services actually created
    */
-  private void initializeServices(boolean enableDebugger) {
-    if (versions.containsKey("core") && core != null) {
-      core.init();
+  private Map<ScopeService, Service> createServices(Set<ScopeService> services) {
+    Map<ScopeService, Service> actualServices = Maps.newTreeMap();
+
+    for (ScopeService requiredService : services) {
+      if (availableServices.containsKey(requiredService)) {
+        for (ScopeService availableService : availableServices.keySet()) {
+          if (availableService == requiredService) {
+            actualServices.put(requiredService, requiredService.newInstance(this));
+          }
+        }
+      }
     }
 
-    windowManager.init();
-    consoleLogger.init();
-    exec.init();
+    return actualServices;
+  }
 
-    if (versions.containsKey("prefs") && prefs != null) {
-      prefs.init();
-    }
-
-    if (versions.containsKey("desktop-window-manager") && desktopWindowManager != null) {
-      desktopWindowManager.init();
-    }
-
-    if (versions.containsKey("system-input") && systemInputManager != null) {
-      systemInputManager.init();
-    }
-
-    if (versions.containsKey("desktop-utils") && desktopUtils != null) {
-      desktopUtils.init();
-    }
-
-    if (enableDebugger) {
-      debugger.init();
+  private void initializeServices(Collection<Service> services) {
+    for (Service service : services) {
+      logger.finer(String.format("Initializing service %s (version %s)",
+                                 service.getServiceName(), service.getServiceVersion()));
+      service.init();
     }
   }
 
@@ -240,10 +205,10 @@ public class ScopeServices implements IConnectionHandler {
     }
   }
 
-  private void waitForHandshake() throws WebDriverException {
+  private void waitForHandshake() throws ScopeException {
     try {
       waitState.waitForHandshake(OperaIntervals.HANDSHAKE_TIMEOUT.getMs());
-    } catch (WebDriverException e) {
+    } catch (ScopeException e) {
       shutdown();
       throw e;
     }
@@ -267,132 +232,6 @@ public class ScopeServices implements IConnectionHandler {
   }
 
   /**
-   * Creates all of the services that we requested and are available.  If the debugger is disabled
-   * (which currently never happens) then it creates a dummy class.
-   */
-  private void createUmsServices(boolean enableDebugger, HostInfo info) {
-    new UmsServices(this, info);
-
-    if (!enableDebugger) {
-      debugger = new EcmascriptDebugger() {
-        public void init() {
-          logger.warning("Using mock ecmascript-debugger");
-        }
-
-        public String getServiceName() {
-          return "ecmascript-debugger";
-        }
-
-        public String getServiceVersion() {
-          return null;
-        }
-
-        public void setRuntime(RuntimeInfo runtime) {
-        }
-
-        public Object scriptExecutor(String script, Object... params) {
-          return null;
-        }
-
-        public void removeRuntime(int runtimeId) {
-        }
-
-        public List<String> listFramePaths() {
-          return null;
-        }
-
-        public int getRuntimeId() {
-          return 0;
-        }
-
-        public Integer getObject(String using) {
-          return null;
-        }
-
-        public Integer executeScriptOnObject(String using, int objectId) {
-          return null;
-        }
-
-        public Object executeScript(String using, boolean responseExpected) {
-          return null;
-        }
-
-        public String executeJavascript(String using, boolean responseExpected) {
-          return null;
-        }
-
-        public String executeJavascript(String using) {
-          return null;
-        }
-
-        public List<Integer> examineObjects(Integer id) {
-          return null;
-        }
-
-        public void cleanUpRuntimes() {
-        }
-
-        public void cleanUpRuntimes(int windowId) {
-        }
-
-        public void changeRuntime(String framePath) {
-        }
-
-        public Object callFunctionOnObject(String using, int objectId, boolean responseExpected) {
-          return null;
-        }
-
-        public String callFunctionOnObject(String using, int objectId) {
-          return null;
-        }
-
-        public void addRuntime(RuntimeInfo info) {
-        }
-
-        public void releaseObjects() {
-        }
-
-        public boolean updateRuntime() {
-          return false;
-        }
-
-        public void resetRuntimesList() {
-        }
-
-        public void readyStateChanged(ReadyStateChange change) {
-        }
-
-        public void releaseObject(int objectId) {
-        }
-
-        public void resetFramePath() {
-        }
-
-        public void changeRuntime(int index) {
-        }
-
-        public String executeJavascript(String using, Integer windowId) {
-          return null;
-        }
-
-        public Object examineScriptResult(Integer id) {
-          return null;
-        }
-
-        public void setFormElementValue(int objectId, String value) {
-        }
-
-        public void setDriver(OperaDriver driver) {
-        }
-
-        public boolean isScriptInjectable() {
-          return false;
-        }
-      };
-    }
-  }
-
-  /**
    * Connects and resets any settings and services that the client used earlier.
    */
   private void connect() {
@@ -400,21 +239,20 @@ public class ScopeServices implements IConnectionHandler {
     executeMessage(ScopeMessage.CONNECT, info);
   }
 
-  public void enableServices(List<String> requiredServices) {
-    for (String requiredService : requiredServices) {
+  public void enableServices(Collection<Service> services) {
+    for (com.opera.core.systems.scope.Service service : services) {
       try {
-        if (getListedServices().contains(requiredService)) {
-          enable(requiredService);
-        }
+        enable(service);
       } catch (InvalidProtocolBufferException e) {
-        throw new WebDriverException("Could not parse the message", e);
+        throw new ScopeException("Could not parse the message", e);
       }
     }
   }
 
-  private ServiceResult enable(String serviceName) throws InvalidProtocolBufferException {
+  private ServiceResult enable(com.opera.core.systems.scope.Service service)
+      throws InvalidProtocolBufferException {
     ServiceSelection.Builder selection = ServiceSelection.newBuilder();
-    selection.setName(serviceName);
+    selection.setName(service.getServiceName());
     Response response = executeMessage(ScopeMessage.ENABLE, selection);
     return ServiceResult.parseFrom(response.getPayload());
   }
@@ -424,14 +262,16 @@ public class ScopeServices implements IConnectionHandler {
       return;
     }
 
-    try {
-      if (exec.getActionList().contains("Quit")) {
-        exec.action("Quit");
-      } else if (exec.getActionList().contains("Exit")) {
-        exec.action("Exit");
+    if (exec != null) {
+      try {
+        if (exec.getActionList().contains("Quit")) {
+          exec.action("Quit");
+        } else if (exec.getActionList().contains("Exit")) {
+          exec.action("Exit");
+        }
+      } catch (CommunicationException e) {
+        throw new IOException("Exception on shutdown: " + e.getMessage());
       }
-    } catch (CommunicationException e) {
-      throw new IOException("Exception on shutdown: " + e.getMessage());
     }
 
     // Wait for Opera to quit
@@ -449,7 +289,7 @@ public class ScopeServices implements IConnectionHandler {
     }
   }
 
-  public Map<String, String> getAvailableServices() {
+  public Map<ScopeService, String> getAvailableServices() {
     return availableServices;
   }
 
@@ -477,7 +317,7 @@ public class ScopeServices implements IConnectionHandler {
   }
 
   public void onServiceList(List<String> services) {
-    setListedServices(services);
+    // Not needed, we also receive them through host info
   }
 
   public void onWindowLoaded(int id) {
@@ -578,20 +418,11 @@ public class ScopeServices implements IConnectionHandler {
   }
 
   public boolean isOperaIdleAvailable() {
-    for (ScopeProtos.Service service : hostInfo.getServiceListList()) {
-      if (service.getName().equals("core")) {
-        String version = service.getVersion();
+    // core version 1.1 introduced some important fixes, and we don't want to use the idle loading
+    // scheme without this
+    return services.containsKey(ScopeService.CORE) &&
+           VersionUtil.compare(services.get(ScopeService.CORE).getServiceVersion(), "1.1") >= 0;
 
-        // Version 1.1 introduced some important fixes, and we don't want to use idle detection
-        // without this.
-        boolean ok = VersionUtil.compare(version, "1.1") >= 0;
-        logger.finest("core service version check: " + ok + " (" + version + ")");
-        return ok;
-      }
-    }
-
-    logger.severe("core service not found");
-    return false;
   }
 
   /**
@@ -732,28 +563,13 @@ public class ScopeServices implements IConnectionHandler {
     }
   }
 
-  /**
-   * Gets the minimum version for this service, as provided by OperaDriver in the constructor.
-   */
-  public String getMinVersionFor(String service) {
-    return versions.get(service);
-  }
-
   private Response waitForResponse(int tag, long timeout) {
     try {
       return waitState.waitFor(tag, timeout);
-    } catch (WebDriverException e) {
+    } catch (CommunicationException e) {
       shutdown();
       throw e;
     }
-  }
-
-  public void setListedServices(java.util.List<String> services) {
-    listedServices = services;
-  }
-
-  public List<String> getListedServices() {
-    return listedServices;
   }
 
   /**
@@ -798,15 +614,11 @@ public class ScopeServices implements IConnectionHandler {
     waitState.onRequest(windowId);
   }
 
-  public Map<String, String> getVersions() {
-    return versions;
-  }
-
   public StpConnection getConnection() {
     return connection;
   }
 
-  public EcmascriptDebugger getDebugger() {
+  public Debugger getDebugger() {
     return debugger;
   }
 

@@ -21,7 +21,6 @@ import com.opera.core.systems.scope.protos.SystemInputProtos.ModifierPressed;
 import com.opera.core.systems.scope.protos.SystemInputProtos.MouseInfo.MouseButton;
 import com.opera.core.systems.scope.services.desktop.DesktopUtils;
 import com.opera.core.systems.scope.services.desktop.SystemInput;
-import com.opera.core.systems.scope.services.stp1.desktop.ScopeSystemInputManager;
 
 import java.awt.*;
 import java.util.ArrayList;

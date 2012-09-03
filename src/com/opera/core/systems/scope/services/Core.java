@@ -27,12 +27,7 @@ import java.util.List;
  */
 public interface Core extends Service {
 
-  /**
-   * Whether this version of the ScopeCore service supports getting metadata.
-   *
-   * @return true if meta information is available
-   */
-  boolean hasMetaInformation();
+  static final String SERVICE_NAME = "core";
 
   /**
    * Which Core version this instance is running, e.g. "2.8.119".

@@ -16,9 +16,11 @@ limitations under the License.
 
 package com.opera.core.systems.scope.services.desktop;
 
-public interface DesktopUtils {
+import com.opera.core.systems.scope.Service;
 
-  void init();
+public interface DesktopUtils extends Service {
+
+  static final String SERVICE_NAME = "desktop-utils";
 
   /**
    * @return Full path to the Opera binary

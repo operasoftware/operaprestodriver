@@ -23,7 +23,7 @@ import com.opera.core.systems.model.ScreenShotReply;
 import com.opera.core.systems.runner.AbstractOperaRunner;
 import com.opera.core.systems.runner.OperaRunnerException;
 import com.opera.core.systems.runner.interfaces.OperaRunner;
-import com.opera.core.systems.scope.internal.ImplicitWait;
+import com.opera.core.systems.internal.ImplicitWait;
 import com.opera.core.systems.scope.internal.OperaIntervals;
 
 import org.openqa.selenium.os.CommandLine;

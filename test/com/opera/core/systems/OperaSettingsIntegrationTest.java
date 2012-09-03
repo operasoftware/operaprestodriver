@@ -29,9 +29,9 @@ import java.util.logging.Level;
 
 import static com.opera.core.systems.OperaProduct.CORE;
 import static com.opera.core.systems.OperaProduct.MOBILE;
-import static com.opera.core.systems.scope.internal.OperaDefaults.SERVER_DEFAULT_PORT;
-import static com.opera.core.systems.scope.internal.OperaDefaults.SERVER_DEFAULT_PORT_IDENTIFIER;
-import static com.opera.core.systems.scope.internal.OperaDefaults.SERVER_RANDOM_PORT_IDENTIFIER;
+import static com.opera.core.systems.internal.OperaDefaults.SERVER_DEFAULT_PORT;
+import static com.opera.core.systems.internal.OperaDefaults.SERVER_DEFAULT_PORT_IDENTIFIER;
+import static com.opera.core.systems.internal.OperaDefaults.SERVER_RANDOM_PORT_IDENTIFIER;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;

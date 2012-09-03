@@ -18,8 +18,8 @@ package com.opera.core.systems;
 
 import com.google.common.base.Throwables;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.ImmutableSortedSet;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
@@ -30,19 +30,19 @@ import com.opera.core.systems.model.ScreenShotReply;
 import com.opera.core.systems.model.ScriptResult;
 import com.opera.core.systems.preferences.OperaScopePreferences;
 import com.opera.core.systems.runner.interfaces.OperaRunner;
+import com.opera.core.systems.scope.ScopeService;
 import com.opera.core.systems.scope.ScopeServices;
 import com.opera.core.systems.scope.exceptions.CommunicationException;
 import com.opera.core.systems.scope.exceptions.ResponseNotReceivedException;
-import com.opera.core.systems.scope.internal.OperaDefaults;
+import com.opera.core.systems.internal.OperaDefaults;
 import com.opera.core.systems.scope.internal.OperaIntervals;
 import com.opera.core.systems.scope.services.CookieManager;
 import com.opera.core.systems.scope.services.Core;
-import com.opera.core.systems.scope.services.EcmascriptDebugger;
+import com.opera.core.systems.scope.services.Debugger;
 import com.opera.core.systems.scope.services.Exec;
 import com.opera.core.systems.scope.services.Selftest;
 import com.opera.core.systems.scope.services.WindowManager;
-import com.opera.core.systems.scope.services.stp1.ScopeCore;
-import com.opera.core.systems.scope.services.stp1.ScopeSelftest;
+import com.opera.core.systems.scope.stp.services.ScopeCore;
 
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.Beta;
@@ -72,8 +72,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
+import java.util.SortedSet;
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.FileHandler;
@@ -126,7 +126,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot, Run
   private ScopeServices services;
   private Exec exec;
   private Core core;
-  private EcmascriptDebugger debugger;
+  private Debugger debugger;
   private WindowManager windowManager;
   private CookieManager cookieManager;
 
@@ -244,21 +244,24 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot, Run
   }
 
   /**
-   * List of required services for this version of OperaDriver to function.
+   * A sorted set of required services for this OperaDriver to function.  The services listed will
+   * be built and initialized in the specified order.
    *
-   * @return a map of service names to the minimum versions we require
+   * The minimum versions required are defined by the Scope implementation used by this
+   * OperaDriver.
+   *
+   * @return unique set of services to require
    */
-  protected Map<String, String> getRequiredServices() {
-    ImmutableMap.Builder<String, String> versions = ImmutableMap.builder();
-    versions.put("ecmascript-debugger", "5.0");
-    versions.put("window-manager", "2.0");
-    versions.put("console-logger", "2.1");
-    versions.put("exec", "2.0");
-    versions.put("core", "1.0");
-    versions.put("cookie-manager", "1.0");
-    versions.put("prefs", "1.0");
-    versions.put("selftest", "1.1");
-    return versions.build();
+  protected SortedSet<ScopeService> getRequiredServices() {
+    return ImmutableSortedSet.of(
+        ScopeService.ECMASCRIPT_DEBUGGER,
+        ScopeService.WINDOW_MANAGER,
+        ScopeService.EXEC,
+        ScopeService.CORE,
+        ScopeService.PREFS,
+        ScopeService.SELFTEST,
+        ScopeService.CONSOLE_LOGGER
+    );
   }
 
   /**
@@ -1050,7 +1053,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot, Run
 
   // Following methods are used in OperaWebElement:
 
-  protected EcmascriptDebugger getDebugger() {
+  protected Debugger getDebugger() {
     return debugger;
   }
 
