@@ -26,6 +26,9 @@ import com.opera.core.systems.scope.internal.OperaFlags;
 import com.opera.core.systems.scope.internal.OperaIntervals;
 import com.opera.core.systems.scope.internal.OperaKeys;
 import com.opera.core.systems.scope.internal.OperaMouseKeys;
+import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect;
+import com.opera.core.systems.scope.protos.SystemInputProtos.ModifierPressed;
+import com.opera.core.systems.scope.protos.SystemInputProtos.MouseInfo.MouseButton;
 import com.opera.core.systems.scope.services.IEcmaScriptDebugger;
 import com.opera.core.systems.scope.services.IOperaExec;
 
@@ -67,6 +70,8 @@ public class OperaWebElement extends RemoteWebElement {
 
   protected final Logger logger = Logger.getLogger(this.getClass().getName());
 
+  private final Boolean is_desktop_watir;
+
   public int getObjectId() {
     return objectId;
   }
@@ -87,6 +92,7 @@ public class OperaWebElement extends RemoteWebElement {
     debugger = parent.getScriptDebugger();
     execService = parent.getExecService();
     this.runtimeId = debugger.getRuntimeId();
+    is_desktop_watir = parent.getScopeServices().getCoreUtils().getProduct().equals("desktop");
   }
 
   /**
@@ -114,10 +120,40 @@ public class OperaWebElement extends RemoteWebElement {
   }
 
   /**
+   * Clicks element by DesktopSystemInputManager (it generates system mouse click event).
+   * @param button Mouse button which will be clicked.
+   * @param times Number of clicks.
+   * @param modifiers Additional modifiers which are pressed during click.
+   * @param x_offset X offset from the element top left corner.
+   * @param y_offset Y offset from the element top left corner.
+   */
+  private void desktopClick(MouseButton button, int times, List<ModifierPressed> modifiers, int x_offset, int y_offset) {
+    Point element_location_in_viewport = coordinates.getLocationInViewPort();
+    DesktopWindowRect view_port_rectangle = parent.getScopeServices().getDesktopWindowManager().getActiveBrowserView();
+    java.awt.Point screen_point = new java.awt.Point(view_port_rectangle.getX() + element_location_in_viewport.x + x_offset,
+                                                     view_port_rectangle.getY() + element_location_in_viewport.y + y_offset);
+    parent.getScopeServices().getSystemInputManager().click(screen_point, button, times, modifiers);
+  }
+
+  /**
    * Right clicks on the element.
    */
   public void rightClick() {
-    parent.actionHandler.rightClick(this);
+    rightClick(0, 0);
+  }
+
+  /**
+   * Right clicks on the element with given offset from top left corner of the element.
+   * @param x_offset X offset from the element top left corner.
+   * @param y_offset Y offset from the element top left corner.
+   */
+  public void rightClick(int x_offset, int y_offset) {
+    if (is_desktop_watir) {
+      desktopClick(MouseButton.RIGHT, 1, new ArrayList<ModifierPressed>(), x_offset, y_offset);
+    }
+    else {
+      parent.actionHandler.rightClick(this);
+    }
   }
 
   /**
@@ -170,16 +206,26 @@ public class OperaWebElement extends RemoteWebElement {
    * @param times The number of times to click
    */
   public void click(int times) {
-    Point point = coordinates.getLocationInViewPort();
-    execService.mouseAction(point.x, point.y, times, OperaMouseKeys.LEFT);
+    if (is_desktop_watir) {
+      desktopClick(MouseButton.LEFT, times, new ArrayList<ModifierPressed>(), 0, 0);
+    }
+    else {
+      Point point = coordinates.getLocationInViewPort();
+      execService.mouseAction(point.x, point.y, times, OperaMouseKeys.LEFT);
+    }
   }
 
   /**
    * Click the middle mouse button at the top left of the element.
    */
   public void middleClick() {
-    Point point = coordinates.getLocationInViewPort();
-    execService.mouseAction(point.x, point.y, OperaMouseKeys.MIDDLE);
+    if (is_desktop_watir) {
+      desktopClick(MouseButton.MIDDLE, 1, new ArrayList<ModifierPressed>(), 0, 0);
+    }
+    else {
+      Point point = coordinates.getLocationInViewPort();
+      execService.mouseAction(point.x, point.y, OperaMouseKeys.MIDDLE);
+    }
   }
 
   public void click() {
@@ -202,7 +248,10 @@ public class OperaWebElement extends RemoteWebElement {
       toggle();
     } else if (this.getTagName().equals("OPTION")) {
       setSelected();
-    } else {
+    } else if (is_desktop_watir) {
+      desktopClick(MouseButton.LEFT, 1, new ArrayList<ModifierPressed>(), 1, 1);
+    }
+    else {
       parent.actionHandler.click(this, "");
     }
 
@@ -221,14 +270,19 @@ public class OperaWebElement extends RemoteWebElement {
    * @param y The distance from the top to click
    */
   public void click(int x, int y) {
-    parent.getScopeServices().captureOperaIdle();
-    parent.actionHandler.click(this, x, y);
+    if (is_desktop_watir) {
+      desktopClick(MouseButton.LEFT, 1, new ArrayList<ModifierPressed>(), x, y);
+    }
+	else {
+      parent.getScopeServices().captureOperaIdle();
+      parent.actionHandler.click(this, x, y);
 
-    try {
-      parent.waitForLoadToComplete();
-    } catch (ResponseNotReceivedException e) {
-      // This might be expected
-      logger.fine("Response not received, returning control to user");
+      try {
+        parent.waitForLoadToComplete();
+      } catch (ResponseNotReceivedException e) {
+        // This might be expected
+        logger.fine("Response not received, returning control to user");
+      }
     }
   }
 
