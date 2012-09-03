@@ -33,7 +33,6 @@ import java.util.regex.Pattern;
 
 public class ScopeDesktopUtils extends AbstractService implements DesktopUtils {
 
-  private static final String SERVICE_NAME = "desktop-utils";
   // Matches possibly all printf formatters, i.e. %s, %d, %1.3f
   private static final String SUBSTITUTED_STRING_REGEXP =
       "(%[\\+\\#\\-\\ 0]?(?:\\d+)?(?:\\.\\d)?[hlL]?[cdieEfgGosuxXpn%])";

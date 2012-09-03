@@ -62,7 +62,6 @@ import static com.opera.core.systems.scope.internal.OperaIntervals.WINDOW_CLOSE_
  */
 public class ScopeWindowManager extends AbstractService implements WindowManager {
 
-  public static final String SERVICE_NAME = "window-manager";
   public static final String CLOSE_ALL_PAGES_ACTION = "Close all pages";
   public static final CompiledExpression WINDOW_FINDER_EXPRESSION =
       JXPathContext.compile("/.[windowType='normal']/windowID");

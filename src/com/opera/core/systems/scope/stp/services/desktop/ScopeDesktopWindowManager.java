@@ -46,8 +46,6 @@ import java.util.logging.Logger;
 
 public class ScopeDesktopWindowManager extends AbstractService implements DesktopWindowManager {
 
-  private final Logger logger = Logger.getLogger(getClass().getName());
-
   private ScopeSystemInputManager systemInputManager;
   private DesktopUtils desktopUtils;
   private int activeWindowId = 0;
