@@ -42,7 +42,9 @@ public class QuickWidget extends OperaUIElement {
 		public enum DropPosition {
 			CENTER,
 			EDGE,
-			BETWEEN
+			BETWEEN,
+			BEFORE,
+			AFTER
 		}
 
 		/**
@@ -135,6 +137,12 @@ public class QuickWidget extends OperaUIElement {
 		 * @param dropPos the position to drop this widget into, CENTER, EDGE or BETWEEN
 		 */
 		public void dragAndDropOn(QuickWidget widget, DropPosition dropPos) {
+			if (dropPos == null)
+			{
+				logger.warning("Unknown drop position was requested, aborting Drag'n'Drop.");
+				return;
+			}
+
 			/*
 			 * FIXME: Handle MousePosition
 			 */
@@ -194,43 +202,108 @@ public class QuickWidget extends OperaUIElement {
 			getSystemInputManager().mouseUp(dropPoint, MouseButton.LEFT, alist);
 		}
 
-		// Gets the coordinates of the drop point between the two quick widgets
-		// The drop point is on the quick widget passed in
-		private Point getDropPoint(QuickWidget element, DropPosition pos) {
-			Point dropPoint = new Point(element.getCenterLocation().x, element.getCenterLocation().y);
-			if (pos == DropPosition.CENTER)
-				return dropPoint;
+	private Point getDropPointAfter(QuickWidget targetWidget)
+	{
+		QuickWidgetType targetType = targetWidget.getType();
+		DesktopWindowRect targetRect = targetWidget.getRect();
+		Point bottomRight = new Point(targetRect.getX() + targetRect.getWidth(), targetRect.getY() + targetRect.getHeight());
 
-			Point dragPoint = new Point(this.getCenterLocation().x, this.getCenterLocation().y);
+		switch (targetType)
+		{
+			case SEARCH:
+			case ADDRESSFIELD:
+				bottomRight.translate(0, 0);
+				break;
+			default:
+				bottomRight.translate(-1, -1);
+				break;
+		}
+		return bottomRight;
+	}
 
-			// Find the side of the DesktopWindowRect of the widget that as the intersect
-			logger.fine("Looking for drag intersection point...");
-			Point dragIntersectPoint = intersection(dragPoint.x, dragPoint.y, dropPoint.x, dropPoint.y, this.getRect());
+	private Point getDropPointBefore(QuickWidget targetWidget)
+	{
+		QuickWidgetType targetType = targetWidget.getType();
+		DesktopWindowRect targetRect = targetWidget.getRect();
+		Point topLeft = new Point(targetRect.getX(), targetRect.getY());
 
-			if (dragIntersectPoint != null) {
-				logger.fine("Looking for drop intersection point...");
-				Point dropIntersectPoint = intersection(dragPoint.x, dragPoint.y, dropPoint.x, dropPoint.y, element.getRect());
+		switch (targetType)
+		{
+			case SEARCH:
+			case ADDRESSFIELD:
+				topLeft.translate(0, 0);
+				break;
+			default:
+				topLeft.translate(1, 1);
+				break;
+		}
+		return topLeft;
+	}
 
-				logger.fine("dropIntersectPoint=" + dropIntersectPoint);
+	private Point getDropPointBetween(QuickWidget targetWidget)
+	{
+		Point dropPoint = targetWidget.getCenterLocation();
+		Point dragPoint = getCenterLocation();
+		Point dragIntersectPoint = intersection(dragPoint.x, dragPoint.y, dropPoint.x, dropPoint.y, this.getRect());
 
-				if (dropIntersectPoint != null) {
-					if (pos == DropPosition.EDGE)
-					{
-						return dropIntersectPoint;
-					}
-
-					// Get the mid point of the line
-					Point midPoint = new Point((dragIntersectPoint.x + dropIntersectPoint.x) / 2, (dragIntersectPoint.y + dropIntersectPoint.y) / 2);
-					return midPoint;
-				}
+		if (dragIntersectPoint != null) {
+			Point dropIntersectPoint = intersection(dragPoint.x, dragPoint.y, dropPoint.x, dropPoint.y, targetWidget.getRect());
+			if (dropIntersectPoint != null) {
+				Point midPoint = new Point((dragIntersectPoint.x + dropIntersectPoint.x) / 2, (dragIntersectPoint.y + dropIntersectPoint.y) / 2);
+				return midPoint;
 			}
-			logger.warning("Could not drop " + this + " onto " + element + " at " + pos + ". The drop point could not be found.");
-			logger.warning("start=" + asString(dragPoint) + " drop=" + asString(dropPoint) + " rect=" + asString(this.getRect()));
-
-
-			return null;
 		}
 
+		return null;
+	}
+
+	private Point getDropPointEdge(QuickWidget targetWidget)
+	{
+		Point dragPoint = getCenterLocation();
+		Point dropPoint = targetWidget.getCenterLocation();
+
+		// Find the side of the DesktopWindowRect of the widget that as the intersect
+		logger.fine("Looking for drag intersection point...");
+		Point dragIntersectPoint = intersection(dragPoint.x, dragPoint.y, dropPoint.x, dropPoint.y, this.getRect());
+
+		if (dragIntersectPoint != null) {
+			logger.fine("Looking for drop intersection point...");
+			Point dropIntersectPoint = intersection(dragPoint.x, dragPoint.y, dropPoint.x, dropPoint.y, targetWidget.getRect());
+
+			logger.fine("dropIntersectPoint=" + dropIntersectPoint);
+
+			return dropIntersectPoint;
+		}
+
+		return null;
+	}
+
+	private Point getDropPointCenter(QuickWidget targetWidget)
+	{
+		return targetWidget.getCenterLocation();
+	}
+
+		// Gets the coordinates of the drop point between the two quick widgets
+		// The drop point is on the quick widget passed in
+	private Point getDropPoint(QuickWidget targetWidget, DropPosition pos) {
+		switch (pos)
+		{
+			case AFTER:
+				return getDropPointAfter(targetWidget);
+			case BEFORE:
+				return getDropPointBefore(targetWidget);
+			case CENTER:
+				return getDropPointCenter(targetWidget);
+			case EDGE:
+				return getDropPointEdge(targetWidget);
+			case BETWEEN:
+				return getDropPointBetween(targetWidget);
+			default:
+				break;
+		}
+
+		return null;
+	}
 		/**
 	     *
 	     * @return name of widget

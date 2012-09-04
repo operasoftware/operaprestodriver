@@ -504,6 +504,9 @@ public class WaitState {
         timeout = result.remainingIdleTimeout;
         WaitResult waitResult = result.waitResult;
 
+//        if (waitResult != WaitResult.RESPONSE)
+//          logger.severe("waitResult=" + waitResult);
+
         switch (waitResult) {
           case HANDSHAKE:
             if (type == ResponseType.HANDSHAKE) {
@@ -717,7 +720,7 @@ public class WaitState {
               if (stringMatch.length() == 0) {
                 return result;
               } else {
-                logger.fine("EVENT_DRAG_AND_DROPPED: " +
+                logger.finest("EVENT_DRAG_AND_DROPPED: " +
                         " Got name: " + result.quickWidgetInfo.getName() +
                         " Got text: " + result.quickWidgetInfo.getText() +
                         " Waiting for: " + stringMatch);
