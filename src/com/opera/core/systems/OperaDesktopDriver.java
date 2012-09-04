@@ -875,8 +875,10 @@ public class OperaDesktopDriver extends OperaDriver {
     }
     String draggedWidgetName = services.waitForDragAndDropped(widget_name, OperaIntervals.DRAG_AND_DROP_TIMEOUT.getValue());
 
-    if (draggedWidgetName.isEmpty() || !draggedWidgetName.equals(widget_name))
-      logger.warning("Unexpected widget was dragged: '" + draggedWidgetName + "' Expected: '" + widget_name + "'");
+    if (draggedWidgetName.isEmpty())
+      logger.warning("The browser didn't report anything dragged. Expected '" + widget_name + "' to be dragged.");
+    else if (!draggedWidgetName.equals(widget_name))
+      logger.warning("The browser reported unexpected widget as dragged: '" + draggedWidgetName + "' Expected: '" + widget_name + "'");
 
     return draggedWidgetName;
   }
