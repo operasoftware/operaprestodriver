@@ -323,6 +323,15 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot, Run
     }
   }
 
+  @Override
+  public void finalize() throws Throwable {
+    try {
+      quit();
+    } finally {
+      super.finalize();
+    }
+  }
+
   public void get(String url) {
     get(url, OperaIntervals.PAGE_LOAD_TIMEOUT.getMs());
   }
