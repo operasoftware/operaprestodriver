@@ -513,9 +513,6 @@ public class WaitState {
         timeout = result.remainingIdleTimeout;
         WaitResult waitResult = result.waitResult;
 
-//        if (waitResult != WaitResult.RESPONSE)
-//          logger.severe("waitResult=" + waitResult);
-
         switch (waitResult) {
           case HANDSHAKE:
             if (type == ResponseType.HANDSHAKE) {
