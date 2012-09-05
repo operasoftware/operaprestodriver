@@ -18,7 +18,6 @@ package com.opera.core.systems;
 
 import com.google.common.base.CaseFormat;
 import com.google.common.base.Predicate;
-import com.google.common.base.Throwables;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterators;
 import com.google.common.collect.Maps;
@@ -291,7 +290,7 @@ public class OperaSettings {
             try {
               return OperaProfile.fromJson((String) map.get("base64"));
             } catch (IOException e) {
-              Throwables.propagate(e);
+              throw new WebDriverException(e);
             }
           }
         }
@@ -371,6 +370,7 @@ public class OperaSettings {
      * Expected format example: <code>hostname.com:1234</code></dd>
      * </dl></pre>
      */
+    @SuppressWarnings("unchecked")
     PROXY("proxy") {
       Proxy getDefaultValue() {
         return new Proxy();
@@ -381,7 +381,7 @@ public class OperaSettings {
           if (proxy instanceof Proxy) {
             return (Proxy) proxy;
           } else if (proxy instanceof Map) {
-            return new Proxy((Map) proxy);
+            return new Proxy((Map<String, ?>) proxy);
           }
         }
 
