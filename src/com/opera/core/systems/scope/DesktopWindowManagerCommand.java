@@ -42,6 +42,7 @@ public enum DesktopWindowManagerCommand implements ICommand {
   MENU_PRESSED(14), // event
   WINDOW_PAGE_CHANGED(15), // event
   DRAG_AND_DROPPED(16), // event
+  GET_ACTIVE_BROWSER_VIEW(17),
   DEFAULT(-1);
 
   private int code;

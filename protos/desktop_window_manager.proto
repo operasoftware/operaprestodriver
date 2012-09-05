@@ -247,6 +247,12 @@ service DesktopWindowManager
 	* 
 	*/
 	event OnDragAndDropped returns (QuickWidgetInfo) = 16;
+
+    /**
+     * Gets active browser view rectangle in which web page is being displayed.
+     */
+    command GetActiveBrowserView(Default) returns (DesktopWindowRect) = 17;
+
 }
 
 message DesktopWindowID

@@ -20,6 +20,7 @@ import com.opera.core.systems.QuickMenu;
 import com.opera.core.systems.QuickMenuItem;
 import com.opera.core.systems.QuickWidget;
 import com.opera.core.systems.QuickWindow;
+import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo.QuickWidgetType;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearch.QuickWidgetSearchType;
 
@@ -251,4 +252,5 @@ public interface IDesktopWindowManager {
    */
   QuickMenuItem getQuickMenuItemByName(String name, int window_id);
 
+  DesktopWindowRect getActiveBrowserView();
 }

@@ -26,6 +26,7 @@ import com.opera.core.systems.scope.DesktopWindowManagerCommand;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowID;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowList;
+import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemID;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemInfo;
@@ -466,6 +467,13 @@ public class DesktopWindowManager extends AbstractService implements IDesktopWin
       }
     }
     return null;
+  }
+
+  public DesktopWindowRect getActiveBrowserView() {
+	Response response = executeCommand(DesktopWindowManagerCommand.GET_ACTIVE_BROWSER_VIEW, null);
+	DesktopWindowRect.Builder builder = DesktopWindowRect.newBuilder();
+	buildPayload(response, builder);
+	return builder.build();
   }
 
 }
