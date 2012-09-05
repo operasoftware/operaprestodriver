@@ -32,6 +32,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.Platform;
+import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
@@ -289,18 +290,39 @@ public class OperaSettingsTest extends OperaDriverTestCase {
   }
 
   @Test
-  public void runnerReturnsInstanceOfOperaInProcessRunner() {
+  public void proxyIsSetByDefault() {
+    assertThat(settings.getProxy(), is(instanceOf(Proxy.class)));
+  }
+
+  @Test
+  public void proxyCanBeSet() {
+    Proxy proxy = new Proxy();
+    proxy.setHttpProxy("4.4.4.4");
+
+    settings.setProxy(proxy);
+    assertEquals(proxy, settings.getProxy());
+    assertEquals("4.4.4.4", settings.getProxy().getHttpProxy());
+  }
+
+  @Test
+  public void proxyCanBeSetToNull() {
+    settings.setProxy(null);
+    assertNull(settings.getProxy());
+  }
+
+  @Test
+  public void runnerReturnsInstanceOfOperaLauncherRunner() {
     AbstractOperaRunner runner = (AbstractOperaRunner) settings.getRunner();
-    assertThat(runner, is(instanceOf(OperaInProcessRunner.class)));
+    assertThat(runner, is(instanceOf(OperaLauncherRunner.class)));
     assertEquals(settings, runner.getSettings());
   }
 
   @Test
   public void runnerCanBeSet() {
-    settings.setRunner(OperaLauncherRunner.class);
+    settings.setRunner(OperaInProcessRunner.class);
 
     AbstractOperaRunner runner = (AbstractOperaRunner) settings.getRunner();
-    assertThat(runner, is(instanceOf(OperaLauncherRunner.class)));
+    assertThat(runner, is(instanceOf(OperaInProcessRunner.class)));
     assertEquals(settings, runner.getSettings());
   }
 

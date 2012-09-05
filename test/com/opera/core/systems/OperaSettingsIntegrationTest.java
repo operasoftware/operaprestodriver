@@ -120,6 +120,13 @@ public class OperaSettingsIntegrationTest extends OperaDriverTestCase {
   }
 
   @Test
+  public void proxyIsRecognized() {
+    settings.getProxy().setHttpProxy("4.4.4.4");
+    TestDriver driver = new TestDriverBuilder().using(settings).get();
+    assertEquals("4.4.4.4", driver.getSettings().getProxy().getHttpProxy());
+  }
+
+  @Test
   public void launcherIsUsedWhenSet() throws IOException {
     tmp.create();
     File newLauncher = tmp.newFile("newLauncher");

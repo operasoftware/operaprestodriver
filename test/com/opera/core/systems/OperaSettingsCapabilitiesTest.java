@@ -1,5 +1,7 @@
 package com.opera.core.systems;
 
+import com.google.common.collect.ImmutableMap;
+
 import com.opera.core.systems.runner.launcher.OperaLauncherRunner;
 import com.opera.core.systems.testing.NoDriver;
 import com.opera.core.systems.testing.OperaDriverTestCase;
@@ -8,10 +10,12 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
+import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriverException;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Map;
 import java.util.logging.Level;
 
 import static com.opera.core.systems.OperaProduct.DESKTOP;
@@ -31,6 +35,7 @@ import static com.opera.core.systems.OperaSettings.Capability.OPERAIDLE;
 import static com.opera.core.systems.OperaSettings.Capability.PORT;
 import static com.opera.core.systems.OperaSettings.Capability.PRODUCT;
 import static com.opera.core.systems.OperaSettings.Capability.PROFILE;
+import static com.opera.core.systems.OperaSettings.Capability.PROXY;
 import static com.opera.core.systems.OperaSettings.Capability.RUNNER;
 import static com.opera.core.systems.scope.internal.OperaDefaults.SERVER_DEFAULT_PORT;
 import static com.opera.core.systems.scope.internal.OperaDefaults.SERVER_DEFAULT_PORT_IDENTIFIER;
@@ -399,6 +404,33 @@ public class OperaSettingsCapabilitiesTest extends OperaDriverTestCase {
   @Test
   public void autostartSanitizeString() {
     assertTrue((Boolean) AUTOSTART.sanitize("true"));
+  }
+
+  @Test
+  public void proxySanitizeProxyObject() {
+    Proxy proxy = new Proxy();
+    proxy.setHttpProxy("4.4.4.4");
+
+    Proxy sanitizedProxy = (Proxy) PROXY.sanitize(proxy);
+    assertNotNull(sanitizedProxy);
+    assertThat(sanitizedProxy, is(instanceOf(Proxy.class)));
+    assertEquals(proxy, sanitizedProxy);
+    assertEquals("4.4.4.4", sanitizedProxy.getHttpProxy());
+  }
+
+  @Test
+  public void proxySanitizeMap() {
+    Map<String, ?> jsonProxy = ImmutableMap.of("httpProxy", "4.4.4.4");
+
+    Proxy sanitizedProxy = (Proxy) PROXY.sanitize(jsonProxy);
+    assertNotNull(sanitizedProxy);
+    assertThat(sanitizedProxy, is(instanceOf(Proxy.class)));
+    assertEquals("4.4.4.4", sanitizedProxy.getHttpProxy());
+  }
+
+  @Test
+  public void proxySanitizeNull() {
+    assertNull(PROXY.sanitize(null));
   }
 
   @Test
