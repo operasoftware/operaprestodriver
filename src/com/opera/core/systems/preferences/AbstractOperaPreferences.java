@@ -20,7 +20,6 @@ import com.opera.core.systems.common.lang.OperaStrings;
 import com.opera.core.systems.model.OperaColor;
 
 import java.io.File;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 
@@ -33,7 +32,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 public abstract class AbstractOperaPreferences implements OperaPreferences {
 
-  protected Collection<OperaPreference> preferences = new LinkedHashSet<OperaPreference>();
+  protected LinkedHashSet<OperaPreference> preferences = new LinkedHashSet<OperaPreference>();
 
   public Iterator<OperaPreference> iterator() {
     return preferences.iterator();
