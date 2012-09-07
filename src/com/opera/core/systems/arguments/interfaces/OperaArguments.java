@@ -46,7 +46,7 @@ public interface OperaArguments extends Iterable<OperaArgument> {
    * @param argument the argument key to add
    * @param value    the value the argument should hold
    */
-  void add(String argument, String value);
+  void add(String argument, Object value);
 
   /**
    * Adds a new argument to the command-line argument list representation.  The {@link
