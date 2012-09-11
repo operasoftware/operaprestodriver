@@ -21,9 +21,10 @@ import com.google.common.collect.ImmutableList;
 
 import com.opera.core.systems.model.Canvas;
 import com.opera.core.systems.model.ColorResult;
-import com.opera.core.systems.model.ScreenShotReply;
+import com.opera.core.systems.model.ScreenCaptureReply;
 import com.opera.core.systems.scope.exceptions.ResponseNotReceivedException;
 import com.opera.core.systems.scope.internal.OperaColors;
+import com.opera.core.systems.scope.internal.OperaIntervals;
 import com.opera.core.systems.scope.internal.OperaMouseKeys;
 import com.opera.core.systems.scope.services.IEcmaScriptDebugger;
 import com.opera.core.systems.scope.services.IOperaExec;
@@ -54,7 +55,7 @@ import java.util.logging.Logger;
 /**
  * Implements WebDriver's {@link WebElement}, but also extends it with Opera specific methods.
  */
-public class OperaWebElement extends RemoteWebElement {
+public class OperaWebElement extends RemoteWebElement implements CapturesScreen {
 
   private static final List<String> specialInputs =
       ImmutableList.of("datetime", "date", "month", "week", "time", "datetime-local", "range",
@@ -356,7 +357,7 @@ public class OperaWebElement extends RemoteWebElement {
     assertElementNotStale();
 
     Canvas canvas = buildCanvas();
-    ScreenShotReply reply = execService.screenWatcher(canvas, timeout, includeImage, hashes);
+    ScreenCaptureReply reply = execService.screenWatcher(canvas, timeout, includeImage, hashes);
 
     if (includeImage && reply.getPng() != null) {
       FileChannel stream;
@@ -373,26 +374,26 @@ public class OperaWebElement extends RemoteWebElement {
     return reply.getMd5();
   }
 
-  /**
-   * Take a screenshot of the area this element's bounding-box covers.
-   *
-   * @param timeout The number of milliseconds to wait before taking the screenshot
-   * @param hashes  A previous screenshot MD5 hash. If it matches the hash of this screenshot then
-   *                no image data is returned.
-   * @return a screenshot instance object
-   */
-  public ScreenShotReply saveScreenshot(long timeout, String... hashes) {
+  public ScreenCaptureReply captureScreen() {
+    return captureScreen(OperaIntervals.RUNNER_SCREEN_CAPTURE_TIMEOUT.getMs());
+  }
+
+  public ScreenCaptureReply captureScreen(long timeout) {
+    return captureScreen(timeout, (String) null);
+  }
+
+  public ScreenCaptureReply captureScreen(long timeout, String... knownMD5s) {
     assertElementNotStale();
     Canvas canvas = buildCanvas();
-    return execService.screenWatcher(canvas, timeout, true, hashes);
+    return execService.screenWatcher(canvas, timeout, true, knownMD5s);
   }
 
   /**
-   * Check if the current webpage contains any of the given colors. Used on tests that use red to
-   * show a failure.
+   * Check if the current page contains any of the given colors.  Used on tests that use red to show
+   * a failure.
    *
-   * @param colors list of colors to check for.
-   * @return true if the page contains any of the given colors, false otherwise.
+   * @param colors list of colors to check for
+   * @return true if the page contains any of the given colors, false otherwise
    * @deprecated
    */
   @SuppressWarnings("unused")
@@ -401,9 +402,9 @@ public class OperaWebElement extends RemoteWebElement {
     assertElementNotStale();
 
     Canvas canvas = buildCanvas();
-    ScreenShotReply reply = execService.containsColor(canvas, 100L, colors);
+    ScreenCaptureReply reply = execService.containsColor(canvas, 100L, colors);
 
-    List<ColorResult> results = reply.getColorResult();
+    List<ColorResult> results = reply.getColorResults();
 
     for (ColorResult result : results) {
       if (result.getCount() > 0) {

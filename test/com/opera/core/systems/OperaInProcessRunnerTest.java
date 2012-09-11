@@ -16,6 +16,7 @@ limitations under the License.
 
 package com.opera.core.systems;
 
+import com.opera.core.systems.runner.OperaRunnerException;
 import com.opera.core.systems.runner.inprocess.OperaInProcessRunner;
 import com.opera.core.systems.runner.interfaces.OperaRunner;
 import com.opera.core.systems.testing.NoDriver;
@@ -32,6 +33,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+import static org.junit.matchers.JUnitMatchers.containsString;
 
 @NoDriver
 public class OperaInProcessRunnerTest extends OperaDriverTestCase {
@@ -140,14 +142,22 @@ public class OperaInProcessRunnerTest extends OperaDriverTestCase {
   }
 
   @Test
-  public void saveScreenshotNotImplemented() {
+  public void saveScreenshot() {
     runner = new OperaInProcessRunner();
+    assertNotNull(runner.captureScreen());
+  }
+
+  @Test
+  public void saveScreenshotAfterShutdownShouldThrow() {
+    runner = new OperaInProcessRunner();
+    runner.shutdown();
 
     try {
-      runner.saveScreenshot(0, "");
-      fail("Expected UnsupportedOperationException");
+      runner.captureScreen();
+      fail("Expected OperaRunnerException");
     } catch (RuntimeException e) {
-      assertThat(e, is(instanceOf(UnsupportedOperationException.class)));
+      assertThat(e, is(instanceOf(OperaRunnerException.class)));
+      assertThat(e.getMessage(), containsString("Opera was shutdown"));
     }
   }
 

@@ -19,7 +19,7 @@ package com.opera.core.systems.runner.inprocess;
 import com.google.common.collect.Iterables;
 
 import com.opera.core.systems.OperaSettings;
-import com.opera.core.systems.model.ScreenShotReply;
+import com.opera.core.systems.model.ScreenCaptureReply;
 import com.opera.core.systems.runner.AbstractOperaRunner;
 import com.opera.core.systems.runner.OperaRunnerException;
 import com.opera.core.systems.runner.interfaces.OperaRunner;
@@ -27,9 +27,11 @@ import com.opera.core.systems.scope.internal.ImplicitWait;
 import com.opera.core.systems.scope.internal.OperaIntervals;
 
 import org.openqa.selenium.os.CommandLine;
+import org.openqa.selenium.support.ui.Duration;
 
 import java.io.IOException;
 import java.util.concurrent.Callable;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
@@ -40,6 +42,7 @@ public class OperaInProcessRunner extends AbstractOperaRunner implements OperaRu
 
   private final ReentrantLock lock = new ReentrantLock();
   private CommandLine process = null;
+  private boolean shutdown = false;
 
   public OperaInProcessRunner() {
     this(new OperaSettings());
@@ -114,18 +117,48 @@ public class OperaInProcessRunner extends AbstractOperaRunner implements OperaRu
   }
 
   public boolean hasOperaCrashed() {
+    assertNotShutdown();
     throw new UnsupportedOperationException();
   }
 
   public String getOperaCrashlog() {
+    assertNotShutdown();
     throw new UnsupportedOperationException();
   }
 
   public void shutdown() {
+    shutdown = true;
   }
 
-  public ScreenShotReply saveScreenshot(long timeout, String... hashes) {
-    throw new UnsupportedOperationException();
+  public ScreenCaptureReply captureScreen() {
+    return captureScreen(OperaIntervals.RUNNER_SCREEN_CAPTURE_TIMEOUT.getMs());
+  }
+
+  public ScreenCaptureReply captureScreen(long timeout) {
+    return captureScreen(timeout, (String) null);
+  }
+
+  public ScreenCaptureReply captureScreen(long timeout, String... knownMD5s) {
+    assertNotShutdown();
+
+    ScreenCapture capture = new ImplicitWait(new Duration(timeout, TimeUnit.MILLISECONDS))
+        .until(new Callable<ScreenCapture>() {
+          public ScreenCapture call() throws Exception {
+            return ScreenCapture.of();
+          }
+        });
+
+    try {
+      return new ScreenCaptureReply(capture.getMD5(), capture.getData());
+    } catch (IOException e) {
+      throw new OperaRunnerException("Unable to do screen capture: " + e.getMessage());
+    }
+  }
+
+  private void assertNotShutdown() {
+    if (shutdown) {
+      throw new OperaRunnerException("Opera was shutdown");
+    }
   }
 
 }

@@ -16,7 +16,7 @@ limitations under the License.
 
 package com.opera.core.systems;
 
-import com.opera.core.systems.model.ScreenShotReply;
+import com.opera.core.systems.model.ScreenCaptureReply;
 import com.opera.core.systems.testing.Ignore;
 import com.opera.core.systems.testing.OperaDriverTestCase;
 
@@ -155,7 +155,7 @@ public class ScreenshotTest extends OperaDriverTestCase {
   @Test
   @Ignore(platforms = MAC, value = "Needs investigation, doesn't return anything")
   public void realPng() throws Exception {
-    ScreenShotReply reply = driver.saveScreenshot(0);
+    ScreenCaptureReply reply = driver.saveScreenshot(0);
     byte[] png = reply.getPng();
 
     assertTrue("PNG magic bytes match",
@@ -171,12 +171,12 @@ public class ScreenshotTest extends OperaDriverTestCase {
   }
 
   /**
-   * Tests the saveScreenshot method that returns a ScreenShotReply
+   * Tests the captureScreen method that returns a ScreenCaptureReply
    */
   @Test
   public void expectsScreenshotReply() throws Exception {
-    ScreenShotReply one = radioLittle.saveScreenshot(0);
-    ScreenShotReply two = radioSome.saveScreenshot(0);
+    ScreenCaptureReply one = radioLittle.captureScreen();
+    ScreenCaptureReply two = radioSome.captureScreen();
 
     assertEquals(one.getMd5(), two.getMd5());
     assertTrue("PNG data is the same", Arrays.equals(one.getPng(), two.getPng()));

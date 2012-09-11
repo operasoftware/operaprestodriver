@@ -17,7 +17,7 @@ limitations under the License.
 package com.opera.core.systems.scope.services;
 
 import com.opera.core.systems.model.Canvas;
-import com.opera.core.systems.model.ScreenShotReply;
+import com.opera.core.systems.model.ScreenCaptureReply;
 import com.opera.core.systems.scope.internal.OperaColors;
 import com.opera.core.systems.scope.internal.OperaMouseKeys;
 
@@ -100,13 +100,13 @@ public interface IOperaExec {
   /**
    * Check if the page contains color(s) as specified in {@link OperaColors}.
    */
-  ScreenShotReply containsColor(Canvas canvas, long timeout, OperaColors... colors);
+  ScreenCaptureReply containsColor(Canvas canvas, long timeout, OperaColors... colors);
 
   /**
    * Take a screenshot of specified {@link com.opera.core.systems.scope.protos.ExecProtos.Area} and
    * compare it with the given hashes (keys).
    */
-  ScreenShotReply screenWatcher(Canvas canvas, long timeout, boolean includeImage,
+  ScreenCaptureReply screenWatcher(Canvas canvas, long timeout, boolean includeImage,
                                 String... hashes);
 
 }

@@ -137,7 +137,13 @@ public enum OperaIntervals {
   /**
    * The timeout for selftests.
    */
-  SELFTEST_TIMEOUT(new Duration(200, SECONDS));
+  SELFTEST_TIMEOUT(new Duration(200, SECONDS)),
+
+  /**
+   * The default timeout of taking an external screen capture using a {@link
+   * com.opera.core.systems.runner.interfaces.OperaRunner} implementation.
+   */
+  RUNNER_SCREEN_CAPTURE_TIMEOUT(new Duration(20, MILLISECONDS));
 
   private Duration duration;
 

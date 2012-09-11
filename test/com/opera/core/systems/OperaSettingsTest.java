@@ -16,12 +16,13 @@ limitations under the License.
 
 package com.opera.core.systems;
 
-import com.opera.core.systems.model.ScreenShotReply;
+import com.opera.core.systems.model.ScreenCaptureReply;
 import com.opera.core.systems.runner.AbstractOperaRunner;
 import com.opera.core.systems.runner.OperaRunnerException;
 import com.opera.core.systems.runner.inprocess.OperaInProcessRunner;
 import com.opera.core.systems.runner.interfaces.OperaRunner;
 import com.opera.core.systems.runner.launcher.OperaLauncherRunner;
+import com.opera.core.systems.scope.internal.OperaIntervals;
 import com.opera.core.systems.testing.Ignore;
 import com.opera.core.systems.testing.NoDriver;
 import com.opera.core.systems.testing.OperaDriverTestCase;
@@ -511,7 +512,15 @@ public class OperaSettingsTest extends OperaDriverTestCase {
     public void shutdown() {
     }
 
-    public ScreenShotReply saveScreenshot(long timeout, String... hashes)
+    public ScreenCaptureReply captureScreen() throws OperaRunnerException {
+      return captureScreen(OperaIntervals.RUNNER_SCREEN_CAPTURE_TIMEOUT.getMs());
+    }
+
+    public ScreenCaptureReply captureScreen(long timeout) throws OperaRunnerException {
+      return captureScreen(timeout, (String) null);
+    }
+
+    public ScreenCaptureReply captureScreen(long timeout, String... knownMD5s)
         throws OperaRunnerException {
       return null;
     }

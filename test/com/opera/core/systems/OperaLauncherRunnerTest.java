@@ -19,7 +19,7 @@ package com.opera.core.systems;
 import com.google.common.hash.Hashing;
 import com.google.common.io.Files;
 
-import com.opera.core.systems.model.ScreenShotReply;
+import com.opera.core.systems.model.ScreenCaptureReply;
 import com.opera.core.systems.runner.OperaRunnerException;
 import com.opera.core.systems.runner.launcher.OperaLauncherRunner;
 import com.opera.core.systems.testing.Ignore;
@@ -302,7 +302,7 @@ public class OperaLauncherRunnerTest extends OperaDriverTestCase {
   @Test
   public void saveScreenshot() {
     runner = new TestOperaLauncherRunner(settings);
-    ScreenShotReply screenshot = runner.saveScreenshot(0);
+    ScreenCaptureReply screenshot = runner.captureScreen();
     assertNotNull(screenshot);
   }
 
@@ -312,7 +312,7 @@ public class OperaLauncherRunnerTest extends OperaDriverTestCase {
     runner.shutdown();
 
     try {
-      runner.saveScreenshot(0);
+      runner.captureScreen();
       fail("Expected OperaRunnerException");
     } catch (RuntimeException e) {
       assertThat(e, is(instanceOf(OperaRunnerException.class)));

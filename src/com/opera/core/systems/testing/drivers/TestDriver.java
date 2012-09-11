@@ -22,7 +22,7 @@ import com.opera.core.systems.OperaSettings;
 import com.opera.core.systems.OperaUtils;
 import com.opera.core.systems.RunsSelftest;
 import com.opera.core.systems.ScopeServices;
-import com.opera.core.systems.model.ScreenShotReply;
+import com.opera.core.systems.model.ScreenCaptureReply;
 import com.opera.core.systems.preferences.OperaScopePreferences;
 import com.opera.core.systems.runner.interfaces.OperaRunner;
 import com.opera.core.systems.scope.exceptions.ResponseNotReceivedException;
@@ -60,7 +60,7 @@ public interface TestDriver
 
   List<String> listFrames();
 
-  ScreenShotReply saveScreenshot(long timeout, String... hashes);
+  ScreenCaptureReply saveScreenshot(long timeout, String... hashes);
 
   void waitForLoadToComplete() throws ResponseNotReceivedException;
 

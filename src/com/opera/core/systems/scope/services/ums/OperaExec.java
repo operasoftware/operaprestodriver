@@ -24,7 +24,7 @@ import com.opera.core.systems.internal.VersionUtil;
 import com.opera.core.systems.model.Canvas;
 import com.opera.core.systems.model.ColorResult;
 import com.opera.core.systems.model.OperaColor;
-import com.opera.core.systems.model.ScreenShotReply;
+import com.opera.core.systems.model.ScreenCaptureReply;
 import com.opera.core.systems.scope.AbstractService;
 import com.opera.core.systems.scope.ExecCommand;
 import com.opera.core.systems.scope.exceptions.WindowNotFoundException;
@@ -220,7 +220,7 @@ public class OperaExec extends AbstractService implements IOperaExec {
     }
   }
 
-  public ScreenShotReply containsColor(Canvas canvas, long timeout, OperaColors... colors) {
+  public ScreenCaptureReply containsColor(Canvas canvas, long timeout, OperaColors... colors) {
     ScreenWatcher.Builder builder = ScreenWatcher.newBuilder();
     Area.Builder areaBuilder = Area.newBuilder();
 
@@ -245,7 +245,7 @@ public class OperaExec extends AbstractService implements IOperaExec {
       matches.add(new ColorResult(match.getId(), match.getCount()));
     }
 
-    return new ScreenShotReply(result.getMd5(), matches.build());
+    return new ScreenCaptureReply(result.getMd5(), matches.build());
   }
 
   /**
@@ -282,7 +282,7 @@ public class OperaExec extends AbstractService implements IOperaExec {
     return builder;
   }
 
-  public ScreenShotReply screenWatcher(Canvas canvas, long timeout, boolean includeImage,
+  public ScreenCaptureReply screenWatcher(Canvas canvas, long timeout, boolean includeImage,
                                        String... hashes) {
     ScreenWatcher.Builder builder = ScreenWatcher.newBuilder();
     Area.Builder areaBuilder = Area.newBuilder();
@@ -303,7 +303,7 @@ public class OperaExec extends AbstractService implements IOperaExec {
 
     ScreenWatcherResult result = executeScreenWatcher(builder, (int) timeout);
 
-    return new ScreenShotReply(result.getMd5(), result.getPng().toByteArray());
+    return new ScreenCaptureReply(result.getMd5(), result.getPng().toByteArray());
   }
 
 }

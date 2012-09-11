@@ -16,13 +16,14 @@ limitations under the License.
 
 package com.opera.core.systems.runner.interfaces;
 
-import com.opera.core.systems.model.ScreenShotReply;
+import com.opera.core.systems.model.ScreenCaptureReply;
 import com.opera.core.systems.runner.OperaRunnerException;
 
 /**
- * AbstractOperaRunner is an interface for controlling the Opera browser binary.  It allows you to start,
- * stop, take screenshots of, and catch crash logs from Opera.  AbstractOperaRunner implements a pure-Java
- * process manager, OperaLauncherRunner implements one in C++ with a Java API.
+ * AbstractOperaRunner is an interface for controlling the Opera browser binary.  It allows you to
+ * start, stop, take screenshots of, and catch crash logs from Opera.  AbstractOperaRunner
+ * implements a pure-Java process manager, OperaLauncherRunner implements one in C++ with a Java
+ * API.
  */
 public interface OperaRunner {
 
@@ -70,11 +71,37 @@ public interface OperaRunner {
   /**
    * Take a screenshot of the full screen.
    *
+   * @return a reply with various information on the captured area
+   * @throws OperaRunnerException if a communication error occurs
+   */
+  ScreenCaptureReply captureScreen() throws OperaRunnerException;
+
+  /**
+   * Take a screenshot of the full screen with a timeout.
+   *
+   * @param timeout attempt to take the screen capture until the timeout is reached
+   * @return a reply with various information on the captured area
+   * @throws OperaRunnerException if a communication error occurs
+   */
+  ScreenCaptureReply captureScreen(long timeout) throws OperaRunnerException;
+
+  /**
+   * Take a screenshot of the full screen.
+   *
    * @param timeout attempt to take the screenshot until the timeout is reached
    * @param hashes  an arbitrary list of hashes to compare with
    * @return a ScreenshotReply object containing MD5 hash sums and bytes
    * @throws OperaRunnerException if launcher is shutdown or not running
    */
-  ScreenShotReply saveScreenshot(long timeout, String... hashes) throws OperaRunnerException;
+
+  /**
+   * Take a screenshot of the full screen with a timeout.
+   *
+   * @param timeout   attempt to take the screen capture until the timeout is reached
+   * @param knownMD5s an arbitrary list of hashes of known MD5's
+   * @return a reply with various information on the captured area
+   * @throws OperaRunnerException if a communication error occurs
+   */
+  ScreenCaptureReply captureScreen(long timeout, String... knownMD5s) throws OperaRunnerException;
 
 }

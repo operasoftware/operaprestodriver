@@ -25,7 +25,7 @@ import com.google.common.collect.Sets;
 import com.opera.core.systems.OperaLogs.ConsoleMessageConverter;
 import com.opera.core.systems.common.io.Closeables;
 import com.opera.core.systems.common.lang.OperaStrings;
-import com.opera.core.systems.model.ScreenShotReply;
+import com.opera.core.systems.model.ScreenCaptureReply;
 import com.opera.core.systems.model.ScriptResult;
 import com.opera.core.systems.preferences.OperaScopePreferences;
 import com.opera.core.systems.runner.interfaces.OperaRunner;
@@ -91,7 +91,8 @@ import static org.openqa.selenium.Platform.WINDOWS;
  * The driver implements the Scope protocol in Java to enable communication with Opera directly from
  * Java.
  */
-public class OperaDriver extends RemoteWebDriver implements TakesScreenshot, RunsSelftest {
+public class OperaDriver extends RemoteWebDriver implements TakesScreenshot, RunsSelftest,
+                                                            CapturesScreen {
 
   /**
    * Different types of data stored by Opera.
@@ -914,7 +915,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot, Run
   // TODO: CORE-39436 areas outside of the current viewport is black, this is a problem with Opera not OperaDriver
   public <X> X getScreenshotAs(OutputType<X> target) throws WebDriverException {
     OperaWebElement body = (OperaWebElement) findElementByCssSelector(":root");
-    return target.convertFromPngBytes(body.saveScreenshot(0).getPng());
+    return target.convertFromPngBytes(body.captureScreen().getPng());
   }
 
   public Object executeScript(String script, Object... args) {
@@ -966,16 +967,16 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot, Run
     return debugger.listFramePaths();
   }
 
-  /**
-   * Takes a screenshot of the whole screen, including areas outside of the Opera browser window.
-   *
-   * @param timeout the number of milliseconds to wait before taking the screenshot
-   * @param hashes  A previous screenshot MD5 hash. If it matches the hash of this screenshot then
-   *                no image data is returned.
-   * @return a ScreenShotReply object
-   */
-  public ScreenShotReply saveScreenshot(long timeout, String... hashes) {
-    return runner.saveScreenshot(timeout, hashes);
+  public ScreenCaptureReply captureScreen() {
+    return captureScreen(OperaIntervals.RUNNER_SCREEN_CAPTURE_TIMEOUT.getMs());
+  }
+
+  public ScreenCaptureReply captureScreen(long timeout) {
+    return captureScreen(timeout, (String) null);
+  }
+
+  public ScreenCaptureReply captureScreen(long timeout, String... hashes) {
+    return runner.captureScreen(timeout, hashes);
   }
 
   /**

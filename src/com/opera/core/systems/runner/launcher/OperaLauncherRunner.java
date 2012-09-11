@@ -28,7 +28,7 @@ import com.opera.core.systems.OperaProduct;
 import com.opera.core.systems.OperaSettings;
 import com.opera.core.systems.arguments.OperaArgument;
 import com.opera.core.systems.common.io.Closeables;
-import com.opera.core.systems.model.ScreenShotReply;
+import com.opera.core.systems.model.ScreenCaptureReply;
 import com.opera.core.systems.runner.AbstractOperaRunner;
 import com.opera.core.systems.runner.OperaLaunchers;
 import com.opera.core.systems.runner.OperaRunnerException;
@@ -326,9 +326,30 @@ public class OperaLauncherRunner extends AbstractOperaRunner implements OperaRun
   /**
    * Take screenshot using external program.  Will not trigger a screen repaint.
    *
-   * @throws OperaRunnerException if launcher is shutdown or not running
+   * @throws OperaRunnerException if runner is shutdown or not running
+   * @inheritDoc
    */
-  public ScreenShotReply saveScreenshot(long timeout, String... hashes)
+  public ScreenCaptureReply captureScreen() throws OperaRunnerException {
+    return captureScreen(OperaIntervals.RUNNER_SCREEN_CAPTURE_TIMEOUT.getMs());
+  }
+
+  /**
+   * Take screenshot using external program.  Will not trigger a screen repaint.
+   *
+   * @throws OperaRunnerException if runner is shutdown or not running
+   * @inheritDoc
+   */
+  public ScreenCaptureReply captureScreen(long timeout) throws OperaRunnerException {
+    return captureScreen(timeout, (String) null);
+  }
+
+  /**
+   * Take screenshot using external program.  Will not trigger a screen repaint.
+   *
+   * @throws OperaRunnerException if runner is shutdown or not running
+   * @inheritDoc
+   */
+  public ScreenCaptureReply captureScreen(long timeout, String... knownMD5s)
       throws OperaRunnerException {
     assertLauncherAlive();
 
@@ -338,7 +359,7 @@ public class OperaLauncherRunner extends AbstractOperaRunner implements OperaRun
 
     try {
       LauncherScreenshotRequest.Builder request = LauncherScreenshotRequest.newBuilder();
-      for (String hash : hashes) {
+      for (String hash : knownMD5s) {
         request.addKnownMD5S(hash);
       }
       request.setKnownMD5STimeoutMs((int) timeout);
@@ -353,18 +374,18 @@ public class OperaLauncherRunner extends AbstractOperaRunner implements OperaRun
       if (response.hasBlank()) {
         blank = response.getBlank();
       }
-
     } catch (SocketTimeoutException e) {
       throw new OperaRunnerException("Could not get screenshot from launcher", e);
     } catch (IOException e) {
       throw new OperaRunnerException("Could not get screenshot from launcher", e);
     }
 
-    ScreenShotReply screenshotreply = new ScreenShotReply(resultMd5, resultBytes);
-    screenshotreply.setBlank(blank);
-    screenshotreply.setCrashed(this.hasOperaCrashed());
-
-    return screenshotreply;
+    ScreenCaptureReply.Builder builder = ScreenCaptureReply.builder();
+    builder.setMD5(resultMd5);
+    builder.setPNG(resultBytes);
+    builder.setBlank(blank);
+    builder.setCrashed(this.hasOperaCrashed());
+    return builder.build();
   }
 
   /**
@@ -526,8 +547,8 @@ public class OperaLauncherRunner extends AbstractOperaRunner implements OperaRun
   /*
    * Return the HEX sum of an MD5 byte array.
    *
-   * @param b the md5 byte array to hex
-   * @return hex version of the byte array
+   * @param bytes the md5 byte array to hex
+   * @return HEX version of the byte array
    */
   private static String md5sum(byte[] bytes) {
     String result = "";
@@ -542,9 +563,8 @@ public class OperaLauncherRunner extends AbstractOperaRunner implements OperaRun
    *
    * @param fis the input stream to use
    * @return a byte array of the MD5 hash
-   * @throws java.security.NoSuchAlgorithmException
-   *                     if MD5 is not available
-   * @throws IOException if an I/O error occurs
+   * @throws NoSuchAlgorithmException if MD5 is not available
+   * @throws IOException              if an I/O error occurs
    */
   private static byte[] md5(InputStream fis) throws NoSuchAlgorithmException, IOException {
     return ByteStreams.hash(ByteStreams.newInputStreamSupplier(ByteStreams.toByteArray(fis)),
