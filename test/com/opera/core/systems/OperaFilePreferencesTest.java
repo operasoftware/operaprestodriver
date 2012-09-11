@@ -222,15 +222,4 @@ public class OperaFilePreferencesTest extends OperaDriverTestCase {
     assertEquals("Norway", driver.preferences().get("Personal Info", "Country").getValue());
   }
 
-  // Make sure we can handle/parse a pref that has backslash(es) in it
-  @Test
-  public void testPreferenceWithBackslash() throws IOException {
-    File prefsFile = temporaryFolder.newFile();
-    final String prefName = "Local CSS FILE";
-    final String prefValue = "C:\\tmp\\user.css";
-    Files.write(String.format("[Test]\n%s=%s\n", prefName, prefValue), prefsFile, Charsets.UTF_8);
-    OperaFilePreferences prefs = new OperaFilePreferences(prefsFile);
-    assertEquals(prefs.get("Test", prefName).getValue(), prefValue);
-  }
-
 }
