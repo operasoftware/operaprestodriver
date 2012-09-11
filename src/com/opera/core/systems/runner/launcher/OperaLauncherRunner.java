@@ -211,7 +211,6 @@ public class OperaLauncherRunner extends AbstractOperaRunner implements OperaRun
    *
    * @throws OperaRunnerException if launcher is shut down or not running
    */
-  @Override
   public void startOpera() throws OperaRunnerException {
     assertLauncherAlive();
 
@@ -244,7 +243,6 @@ public class OperaLauncherRunner extends AbstractOperaRunner implements OperaRun
    *
    * @throws OperaRunnerException if launcher is shut down or not running
    */
-  @Override
   public void stopOpera() throws OperaRunnerException {
     assertLauncherAlive();
 
@@ -267,7 +265,6 @@ public class OperaLauncherRunner extends AbstractOperaRunner implements OperaRun
     }
   }
 
-  @Override
   public boolean isOperaRunning() {
     return isOperaRunning(0);
   }
@@ -293,17 +290,14 @@ public class OperaLauncherRunner extends AbstractOperaRunner implements OperaRun
     }
   }
 
-  @Override
   public boolean hasOperaCrashed() {
     return crashlog != null;
   }
 
-  @Override
   public String getOperaCrashlog() {
     return crashlog;
   }
 
-  @Override
   public void shutdown() {
     if (!isLauncherRunning()) {
       return;
@@ -334,7 +328,6 @@ public class OperaLauncherRunner extends AbstractOperaRunner implements OperaRun
    *
    * @throws OperaRunnerException if launcher is shutdown or not running
    */
-  @Override
   public ScreenShotReply saveScreenshot(long timeout, String... hashes)
       throws OperaRunnerException {
     assertLauncherAlive();
