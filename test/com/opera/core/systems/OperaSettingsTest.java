@@ -260,15 +260,15 @@ public class OperaSettingsTest extends OperaDriverTestCase {
 
   @Test
   public void displayCanBeSetOnLinuxOnly() {
-    Exception ex = null;
     try {
       settings.setDisplay(7);
-    } catch (UnsupportedOperationException e) {
-      ex = e;
-    }
-
-    if (!Platform.getCurrent().is(LINUX) && ex == null) {
-      fail("Expected exception on setting the framebuffer display");
+      if (Platform.getCurrent().is(LINUX)) {
+        fail("Expected exception on setting the framebuffer display");
+      }
+    } catch (RuntimeException e) {
+      if (!Platform.getCurrent().is(LINUX)) {
+        assertThat(e, is(instanceOf(UnsupportedOperationException.class)));
+      }
     }
   }
 
