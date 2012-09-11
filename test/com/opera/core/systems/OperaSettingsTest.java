@@ -118,16 +118,13 @@ public class OperaSettingsTest extends OperaDriverTestCase {
 
   @Test
   public void binaryCanBeSet() {
-    Exception exception = null;
-
     try {
       settings.setBinary(resources.fakeFile());
+      fail("Expected IllegalStateException");
     } catch (RuntimeException e) {
-      exception = e;
+      assertThat(exception, is(instanceOf(IllegalStateException.class)));
+      assertThat(exception.getMessage(), containsString("The executable does not exist"));
     }
-
-    assertThat(exception, is(instanceOf(IllegalStateException.class)));
-    assertThat(exception.getMessage(), containsString("The executable does not exist"));
   }
 
   @Test
