@@ -123,7 +123,7 @@ public abstract class AbstractTestCase implements TestCase {
     }
   }
 
-  public void removeDriver() {
+  public static void removeDriver() {
     TestDriver current = storedDriver.get();
 
     if (current == null) {
