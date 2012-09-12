@@ -141,7 +141,12 @@ public class ScreenCaptureReply {
      * @return a self-reference
      */
     public Builder setPNG(byte[] data) {
-      reply.png = data.clone();
+      if (data != null) {
+        reply.png = data.clone();
+      } else {
+        reply.png = null;
+      }
+
       return this;
     }
 
