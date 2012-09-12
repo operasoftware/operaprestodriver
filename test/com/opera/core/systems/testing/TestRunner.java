@@ -210,7 +210,6 @@ public class TestRunner extends BlockJUnit4ClassRunner {
         if (currentSettings.useIdle() != newSettings.useIdle() ||
             currentSettings.logging().getLevel() != newSettings.logging().getLevel()) {
           test.setSettings(newSettings);
-//          test.removeDriver();
           AbstractTestCase.removeDriver();
         }
 
