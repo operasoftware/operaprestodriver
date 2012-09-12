@@ -19,6 +19,8 @@ package com.opera.core.systems.runner.inprocess;
 import com.google.common.hash.Hashing;
 import com.google.common.io.ByteStreams;
 
+import com.opera.core.systems.common.hash.MD5;
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
@@ -78,7 +80,7 @@ public class ScreenCapture {
     checkCaptureTaken();
 
     try {
-      return md5sum(md5(getData()));
+      return MD5.of(getData());
     } catch (NoSuchAlgorithmException e) {
       throw new IOException("Algorithm is not available in your environment: " + e.getMessage(), e);
     } catch (IOException e) {
@@ -146,32 +148,6 @@ public class ScreenCapture {
     }
 
     return stream.toByteArray();
-  }
-
-  /*
-  * Return the HEX sum of an MD5 byte array.
-  *
-  * @param bytes the md5 byte array to hex
-  * @return HEX version of the byte array
-  */
-  private static String md5sum(byte[] bytes) {
-    String result = "";
-    for (byte b : bytes) {
-      result += Integer.toString((b & 0xff) + 0x100, 16).substring(1);
-    }
-    return result;
-  }
-
-  /**
-   * Get the MD5 hash of the given stream.
-   *
-   * @param bytes a byte stream
-   * @return a byte array of the MD5 hash
-   * @throws NoSuchAlgorithmException if MD5 is not available
-   * @throws IOException              if an I/O error occurs
-   */
-  private static byte[] md5(byte[] bytes) throws NoSuchAlgorithmException, IOException {
-    return ByteStreams.hash(ByteStreams.newInputStreamSupplier(bytes), Hashing.md5()).asBytes();
   }
 
 }

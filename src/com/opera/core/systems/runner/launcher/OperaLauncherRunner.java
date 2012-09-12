@@ -18,7 +18,6 @@ package com.opera.core.systems.runner.launcher;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
-import com.google.common.hash.Hashing;
 import com.google.common.io.ByteStreams;
 import com.google.common.io.Files;
 import com.google.protobuf.GeneratedMessage;
@@ -27,6 +26,7 @@ import com.opera.core.systems.Architecture;
 import com.opera.core.systems.OperaProduct;
 import com.opera.core.systems.OperaSettings;
 import com.opera.core.systems.arguments.OperaArgument;
+import com.opera.core.systems.common.hash.MD5;
 import com.opera.core.systems.common.io.Closeables;
 import com.opera.core.systems.model.ScreenCaptureReply;
 import com.opera.core.systems.runner.AbstractOperaRunner;
@@ -467,7 +467,7 @@ public class OperaLauncherRunner extends AbstractOperaRunner implements OperaRun
 
   private boolean isLauncherOutdated(File launcher) {
     try {
-      return !md5sum(md5(launcher)).equals(LAUNCHER_CHECKSUMS.get(launcher.getName()));
+      return !MD5.of(launcher).equals(LAUNCHER_CHECKSUMS.get(launcher.getName()));
     } catch (NoSuchAlgorithmException e) {
       throw new OperaRunnerException(
           "Algorithm is not available in your environment: " + e.getMessage());
@@ -542,45 +542,6 @@ public class OperaLauncherRunner extends AbstractOperaRunner implements OperaRun
         throw new WebDriverException(
             "Could not find a platform that supports bundled launchers, please set it manually");
     }
-  }
-
-  /*
-   * Return the HEX sum of an MD5 byte array.
-   *
-   * @param bytes the md5 byte array to hex
-   * @return HEX version of the byte array
-   */
-  private static String md5sum(byte[] bytes) {
-    String result = "";
-    for (byte b : bytes) {
-      result += Integer.toString((b & 0xff) + 0x100, 16).substring(1);
-    }
-    return result;
-  }
-
-  /**
-   * Get the MD5 hash of the given stream.
-   *
-   * @param fis the input stream to use
-   * @return a byte array of the MD5 hash
-   * @throws NoSuchAlgorithmException if MD5 is not available
-   * @throws IOException              if an I/O error occurs
-   */
-  private static byte[] md5(InputStream fis) throws NoSuchAlgorithmException, IOException {
-    return ByteStreams.hash(ByteStreams.newInputStreamSupplier(ByteStreams.toByteArray(fis)),
-                            Hashing.md5()).asBytes();
-  }
-
-  /**
-   * Get the MD5 hash of the given file.
-   *
-   * @param file file to compute a hash on
-   * @return a byte array of the MD5 hash
-   * @throws IOException              if file cannot be found
-   * @throws NoSuchAlgorithmException if MD5 is not available
-   */
-  private static byte[] md5(File file) throws NoSuchAlgorithmException, IOException {
-    return Files.hash(file, Hashing.md5()).asBytes();
   }
 
   /**
