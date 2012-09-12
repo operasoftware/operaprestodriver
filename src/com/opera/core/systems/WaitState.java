@@ -454,24 +454,25 @@ public class WaitState {
   private final ResultItem waitAndParseResult(long timeout, int match,
                                               String stringMatch, final ResponseType type) {
 
-    // desktop-specific workaround which is _only_ triggered when variable
-    // "profile" is set by SpartanRunner.
-    //
-    // This essentially alters the timeout when running Desktop and overrides
-    // whatever the user has set before.
-    //
+    // There is a problem with the Linux Spartan slaves, that seem to have a hiccup from time to time, that
+    // results in raising the response times to even 45 seconds. The result of that are random test results,
+    // since we can never know when the hiccup will hit us.
+    // In order to be able to use the GEM on slaves also for debugging, i.e. running the tests via the
+    // "desktopwatir" command directly, we remove the "profile" hack and always use the new, huge timeout.
+
     // TODO: Review timeout setters in SpartanRunner and remove this hack.
-    if (profile != null && profile.toLowerCase().equals("desktop")) {
-      if ((type == ResponseType.WINDOW_LOADED) && (timeout < 30000)) {
-        long newTimeout = 30000;
-        logger.warning("WARNING: desktop-specific workaround for waitAndParseResult.  " +
-                       "Changing timeout from " + timeout + " to " + newTimeout);
-        timeout = newTimeout;
-      }
-    }
+
+    // Set the ultimate huge timeout to 2 minutes
+    long extendedTimeout = 2 * 60 * 1000;
+    // Remember the original timeout for this very response
+    long originalTimeout = timeout;
+    timeout = extendedTimeout;
 
     synchronized (lock) {
       while (true) {
+
+        long startTime = System.currentTimeMillis();
+
         ResultItem result = null;
         try
         {
@@ -479,10 +480,17 @@ public class WaitState {
         }
         catch (ResponseNotReceivedException e)
         {
+          logger.warning("Did not receive a " + type + " response after " + timeout + " ms");
           logger.fine("ResponseNotReceivedException for type " + type);
           logger.fine(e.toString());
           throw e;
         };
+
+        long stopTime = System.currentTimeMillis();
+        long diffTime = stopTime - startTime;
+
+        if (diffTime > originalTimeout)
+          logger.warning("Response with type " + type + " came extremely late: original timeout = " + originalTimeout + " ms, time taken = " + diffTime + " ms");
 
         timeout = result.remainingIdleTimeout;
         WaitResult waitResult = result.waitResult;
