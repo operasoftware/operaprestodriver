@@ -90,15 +90,18 @@ public interface OperaRunner {
    *
    * @param timeout attempt to take the screenshot until the timeout is reached
    * @param hashes  an arbitrary list of hashes to compare with
-   * @return a ScreenshotReply object containing MD5 hash sums and bytes
+   * @return an object containing MD5 hash sums and bytes
    * @throws OperaRunnerException if launcher is shutdown or not running
    */
 
   /**
-   * Take a screenshot of the full screen with a timeout.
+   * Take a screenshot of the full screen with a timeout and a list of previously known MD5 hash sum
+   * results.  If the screen capture matches one of the MD5 hash sums, the capture's image data will
+   * not be stored.
    *
    * @param timeout   attempt to take the screen capture until the timeout is reached
-   * @param knownMD5s an arbitrary list of hashes of known MD5's
+   * @param knownMD5s an arbitrary list of hashes of known MD5's, causing no image data to be
+   *                  stored
    * @return a reply with various information on the captured area
    * @throws OperaRunnerException if a communication error occurs
    */

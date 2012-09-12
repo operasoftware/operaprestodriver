@@ -71,7 +71,7 @@ public class ScreenCapture {
   /**
    * Get the MD5 hash sum of the byte array of the data of the screen capture.
    *
-   * @return the MD% hash sum of this capture
+   * @return the MD5 hash sum of this capture
    * @throws IOException if an I/O exception occurs
    */
   public String getMD5() throws IOException {
