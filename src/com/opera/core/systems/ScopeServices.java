@@ -93,7 +93,8 @@ public class ScopeServices implements IConnectionHandler {
   private StpConnection connection = null;
 
   private StpThread stpThread;
-  boolean shuttingDown = false;
+  private boolean shuttingDown = false;
+  private long customTimeoutMiliSec = -1;
 
   private List<String> listedServices;
 
@@ -194,12 +195,18 @@ public class ScopeServices implements IConnectionHandler {
    * Creates the Scope server on specified address and port, as well as enabling the required
    * services for OperaDriver.
    */
-  public ScopeServices(Map<String, String> versions, int port, boolean manualConnect)
+  public ScopeServices(Map<String, String> versions, int port, boolean manualConnect, int newCustomTimeoutSec)
       throws IOException {
     this.versions = versions;
     tagCounter = new AtomicInteger();
     stpThread = new StpThread(port, this, new UmsEventHandler(this), manualConnect);
     selftestOutput = new StringBuilder();
+    if (newCustomTimeoutSec > 0)
+    {
+      logger.fine("Timeout value overriden to " + newCustomTimeoutSec + " s");
+      customTimeoutMiliSec = newCustomTimeoutSec * 1000;
+    }
+    waitState.setCustomTimeoutMiliSec(customTimeoutMiliSec);
   }
 
   /**

@@ -41,6 +41,8 @@ public class WaitState {
   private boolean connected;
   private boolean waitEvents;
 
+  private long customTimeoutMiliSec = -1;
+
   /**
    * Whether we should keep a note of any idle events received.
    *
@@ -460,13 +462,13 @@ public class WaitState {
     // In order to be able to use the GEM on slaves also for debugging, i.e. running the tests via the
     // "desktopwatir" command directly, we remove the "profile" hack and always use the new, huge timeout.
 
-    // TODO: Review timeout setters in SpartanRunner and remove this hack.
+    // TODO: Review timeout setters in SpartanRunner and remove this hack. (??)
 
-    // Set the ultimate huge timeout to 2 minutes
-    long extendedTimeout = 2 * 60 * 1000;
-    // Remember the original timeout for this very response
     long originalTimeout = timeout;
-    timeout = extendedTimeout;
+    if (customTimeoutMiliSec > 0)
+    {
+      timeout = customTimeoutMiliSec;
+    }
 
     synchronized (lock) {
       while (true) {
@@ -481,7 +483,6 @@ public class WaitState {
         catch (ResponseNotReceivedException e)
         {
           logger.warning("Did not receive a " + type + " response after " + timeout + " ms");
-          logger.fine("ResponseNotReceivedException for type " + type);
           logger.fine(e.toString());
           throw e;
         };
@@ -490,7 +491,7 @@ public class WaitState {
         long diffTime = stopTime - startTime;
 
         if (diffTime > originalTimeout)
-          logger.warning("Response with type " + type + " came extremely late: original timeout = " + originalTimeout + " ms, time taken = " + diffTime + " ms");
+          logger.warning("Response with type " + type + " was late: original timeout = " + originalTimeout + " ms, time taken = " + diffTime + " ms");
 
         timeout = result.remainingIdleTimeout;
         WaitResult waitResult = result.waitResult;
@@ -868,6 +869,11 @@ public class WaitState {
 
   public void setProfile(String profile) {
     this.profile = profile;
+  }
+
+  public void setCustomTimeoutMiliSec(long newCustomTimeoutMiliSec)
+  {
+    this.customTimeoutMiliSec = newCustomTimeoutMiliSec;
   }
 
 }

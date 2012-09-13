@@ -193,6 +193,11 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
    */
   public static final String ANY_PROFILE = "opera.any_profile";
 
+  /**
+   * (Long)
+   */
+  public static final String CUSTOM_TIMEOUT = "opera.custom_timeout";
+
   /*
    * These are "protected" and not "private" so that we can extend this class
    * and add methods to access these variable in tests.
@@ -460,7 +465,14 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot {
       if (services != null)
         services.shutdown();
 
-      services = new ScopeServices(versions, (Integer) capabilities.getCapability(PORT), manualStart);
+      String customTimeout = (String) capabilities.getCapability(CUSTOM_TIMEOUT);
+      int customTimeoutInt = -1;
+      if (customTimeout != null)
+      {
+        customTimeoutInt = Integer.parseInt(customTimeout);
+      }
+
+      services = new ScopeServices(versions, (Integer) capabilities.getCapability(PORT), manualStart, customTimeoutInt);
 
       // for profile-specific workarounds inside ScopeServives, WaitState ...
       services.setProduct((String) capabilities.getCapability(PRODUCT));
