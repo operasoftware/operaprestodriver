@@ -1,5 +1,6 @@
 package com.opera.core.systems;
 
+import com.opera.core.systems.testing.NoDriver;
 import com.opera.core.systems.testing.OperaDriverTestCase;
 
 import org.junit.After;
@@ -13,6 +14,7 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.junit.matchers.JUnitMatchers.containsString;
 
+@NoDriver
 public class OperaBinaryTest extends OperaDriverTestCase {
 
   @After

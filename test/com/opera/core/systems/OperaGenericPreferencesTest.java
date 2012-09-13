@@ -18,28 +18,19 @@ package com.opera.core.systems;
 
 import com.opera.core.systems.preferences.OperaGenericPreferences;
 import com.opera.core.systems.preferences.OperaPreferences;
+import com.opera.core.systems.testing.NoDriver;
 import com.opera.core.systems.testing.OperaDriverTestCase;
 
 import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+@NoDriver
 public class OperaGenericPreferencesTest extends OperaDriverTestCase {
-  
+
   public static final OperaGenericPreferences preferences = new OperaGenericPreferences();
-
-  // Replace OperaDriverTestCase setup and teardown so that we don't launch Opera
-  @BeforeClass
-  public static void setUpBeforeClass() {
-  }
-
-  @AfterClass
-  public static void tearDownAfterClass() {
-  }
 
   @After
   public void afterEach() {
@@ -78,5 +69,5 @@ public class OperaGenericPreferencesTest extends OperaDriverTestCase {
     preferences.set(new OperaGenericPreferences.GenericPreference("foo", "bar", "baz"));
     assertEquals(1, preferences.size());
   }
-  
+
 }

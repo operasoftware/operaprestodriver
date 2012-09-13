@@ -146,7 +146,7 @@ public class TestRunner extends BlockJUnit4ClassRunner {
       @Override
       public void evaluate() throws Throwable {
         test.setCreateDriver(false);
-        test.removeDriver();
+        AbstractTestCase.removeDriver();
         statement.evaluate();
       }
     };
@@ -165,7 +165,7 @@ public class TestRunner extends BlockJUnit4ClassRunner {
         try {
           statement.evaluate();
         } finally {
-          test.removeDriver();
+          AbstractTestCase.removeDriver();
         }
       }
     };
@@ -183,7 +183,7 @@ public class TestRunner extends BlockJUnit4ClassRunner {
       @Override
       public void evaluate() throws Throwable {
         test.setSettings(new OperaSettings());
-        test.removeDriver();
+        AbstractTestCase.removeDriver();
         test.createDriverIfNecessary();
         statement.evaluate();
       }
@@ -210,7 +210,7 @@ public class TestRunner extends BlockJUnit4ClassRunner {
         if (currentSettings.useIdle() != newSettings.useIdle() ||
             currentSettings.logging().getLevel() != newSettings.logging().getLevel()) {
           test.setSettings(newSettings);
-          test.removeDriver();
+          AbstractTestCase.removeDriver();
         }
 
         statement.evaluate();

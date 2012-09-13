@@ -58,12 +58,6 @@ public interface TestCase {
   TestDriver createFreshDriver();
 
   /**
-   * Quit and remove the current driver from storage.  If no driver exists, this method will do
-   * nothing.
-   */
-  void removeDriver();
-
-  /**
    * Temporarily disable the creation of new drivers.
    *
    * @param enabled true if drivers should be created, false otherwise
