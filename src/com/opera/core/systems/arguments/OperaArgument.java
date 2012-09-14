@@ -84,9 +84,9 @@ public class OperaArgument {
    * @param argument the argument to create, without any prepended signs
    * @param value    the value of the argument
    */
-  public OperaArgument(String argument, String value) {
+  public OperaArgument(String argument, Object value) {
     this.argument = OperaArgument.sanitize(argument);
-    this.value = value;
+    this.value = String.valueOf(value);
   }
 
   /**

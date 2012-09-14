@@ -59,7 +59,7 @@ public class OperaArguments implements com.opera.core.systems.arguments.interfac
     arguments.add(argument);
   }
 
-  public void add(String key, String value) {
+  public void add(String key, Object value) {
     OperaArgument argument = new OperaArgument(key, value);
     arguments.add(argument);
   }
@@ -106,25 +106,6 @@ public class OperaArguments implements com.opera.core.systems.arguments.interfac
     return arguments.size();
   }
 
-  public static OperaArguments parse(String string) {
-    OperaArguments parsed = new OperaArguments();
-
-    if (string == null || string.isEmpty()) {
-      return parsed;
-    }
-
-    Pattern p =
-        Pattern
-            .compile("(?:-{1,2}|\\/)([\\w-]+)(?:=|\\s*)(?:\"?([^-][\\w:=\\-+_\\.\\/\\\\]*)\"?)?");
-    Matcher m = p.matcher(string);
-
-    while (m.find()) {
-      parsed.add(m.group(1), m.group(2));
-    }
-
-    return parsed;
-  }
-
   public final OperaArguments merge(
       com.opera.core.systems.arguments.interfaces.OperaArguments extraArguments) {
     checkNotNull(extraArguments);
@@ -154,6 +135,25 @@ public class OperaArguments implements com.opera.core.systems.arguments.interfac
     }
 
     return json;
+  }
+
+  public static OperaArguments parse(String string) {
+    OperaArguments parsed = new OperaArguments();
+
+    if (string == null || string.isEmpty()) {
+      return parsed;
+    }
+
+    Pattern p =
+        Pattern
+            .compile("(?:-{1,2}|\\/)([\\w-]+)(?:=|\\s*)(?:\"?([^-][\\w:=\\-+_\\.\\/\\\\]*)\"?)?");
+    Matcher m = p.matcher(string);
+
+    while (m.find()) {
+      parsed.add(m.group(1), m.group(2));
+    }
+
+    return parsed;
   }
 
 }

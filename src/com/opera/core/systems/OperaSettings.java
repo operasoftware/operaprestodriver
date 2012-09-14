@@ -23,9 +23,11 @@ import com.google.common.collect.Iterators;
 import com.google.common.collect.Maps;
 
 import com.opera.core.systems.OperaLogs.DriverLogsHandler;
+import com.opera.core.systems.arguments.OperaArgument;
 import com.opera.core.systems.arguments.OperaCoreArguments;
 import com.opera.core.systems.arguments.OperaDesktopArguments;
 import com.opera.core.systems.common.lang.OperaBoolean;
+import com.opera.core.systems.mobile.MobileDevices;
 import com.opera.core.systems.runner.interfaces.OperaRunner;
 import com.opera.core.systems.runner.launcher.OperaLauncherRunner;
 import com.opera.core.systems.scope.internal.OperaDefaults;
@@ -33,6 +35,7 @@ import com.opera.core.systems.scope.internal.OperaDefaults;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.openqa.selenium.Capabilities;
+import org.openqa.selenium.Dimension;
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriverException;
@@ -61,6 +64,7 @@ import static com.opera.core.systems.OperaSettings.Capability.BACKEND;
 import static com.opera.core.systems.OperaSettings.Capability.BINARY;
 import static com.opera.core.systems.OperaSettings.Capability.DETACH;
 import static com.opera.core.systems.OperaSettings.Capability.DISPLAY;
+import static com.opera.core.systems.OperaSettings.Capability.EMULATION_PROFILE;
 import static com.opera.core.systems.OperaSettings.Capability.HOST;
 import static com.opera.core.systems.OperaSettings.Capability.LAUNCHER;
 import static com.opera.core.systems.OperaSettings.Capability.LOGGING_FILE;
@@ -389,7 +393,26 @@ public class OperaSettings {
       }
     },
 
+    /**
+     * (Class/String) Allows you to specify which mechanism to use for managing and controlling the
+     * Opera binary process from OperaDriver.  The value must be set to the qualified classpath for
+     * a class implementing the {@link OperaRunner} interface.
+     *
+     * OperaDriver ships with two implementations that can be used:
+     *
+     * <pre><dl>
+     *   <dt><code>com.opera.core.systems.runner.launcher.OperaLauncherRunner</code> (default)</dt>
+     *   <dd>Uses an external C++ wrapper to control the Opera binary.</dd>
+     *
+     *   <dt><code>com.opera.core.systems.runner.inprocess.OperaInProcessRunner</code></dt>
+     *   <dd>Uses a Java wrapper implementation to control the Opera binary.</dd>
+     * </dl></pre>
+     */
     RUNNER("opera.runner") {
+      Class getDefaultValue() {
+        return OperaLauncherRunner.class;
+      }
+
       Class sanitize(Object runner) {
         if (runner instanceof Class) {
           return (Class) runner;
@@ -402,6 +425,52 @@ public class OperaSettings {
         }
 
         throw new WebDriverException("Unknown runner: " + runner);
+      }
+    },
+
+    /**
+     * (EmulationProfile/MobileDevices/String) Allows emulation of specific devices for (currently
+     * only) Opera Mobile.  You can either provide your own profile configuration using the
+     * following JSON object:
+     *
+     * <pre><code>
+     *   {
+     *     width: INTEGER,
+     *     height: INTEGER,
+     *     ppi: INTEGER,
+     *     input: "native", "touch", "keypad", or "tablet"
+     *     userAgent: "Android", "Desktop", "MeeGo", or "S60"
+     *   }
+     * </code></pre>
+     *
+     * Or use one of the predefined emulation profiles found in {@link MobileDevices}:
+     *
+     * <pre><code>
+     *   capabilities.set("opera.emulationProfile", MobileDevices.SAMSUNG_GALAXY_NEXUS);
+     * </code></pre>
+     *
+     * Or provide your own profile using the Java builder:
+     *
+     * <pre><code>
+     *   capabilities.set("opera.emulationProfile", OperaMobileEmulation.builder()
+     *     .setResolution(new Dimension(480, 800)
+     *     .setPPI(123)
+     *     .setUserAgent(UserAgent.ANDROID)
+     *     .setIME(IME.TABLET)
+     *     .build());
+     * </code></pre>
+     */
+    EMULATION_PROFILE("opera.emulationProfile") {
+      EmulationProfile sanitize(Object config) {
+        if (config instanceof String) {
+          return MobileDevices.find(String.valueOf(config)).getProfile();
+        } else if (config instanceof EmulationProfile) {
+          return (EmulationProfile) config;
+        } else if (config instanceof MobileDevices) {
+          return ((MobileDevices) config).getProfile();
+        }
+
+        return null;
       }
     },
 
@@ -1103,6 +1172,49 @@ public class OperaSettings {
    */
   public void setDetach(boolean enabled) {
     options.get(DETACH).setValue(enabled);
+  }
+
+  /**
+   * Gets the mobile configuration specified in this settings object.
+   *
+   * @return mobile configuration
+   */
+  public EmulationProfile getEmulationProfile() {
+    return (EmulationProfile) options.get(EMULATION_PROFILE).getValue();
+  }
+
+  /**
+   * Shorthand for {@link #emulate(EmulationProfile)}.  The {@link EmulationProfile} of the given
+   * device will be extracted.
+   *
+   * @param device the device to emulate
+   */
+  public void emulate(MobileDevices device) {
+    emulate(device.getProfile());
+  }
+
+  /**
+   * Specify a prepared configuration for Opera Mobile to use.  For this configuration to be
+   * recognized, {@link #getProduct()} must evaluate to {@link OperaProduct#MOBILE}.
+   *
+   * @param profile the mobile configuration to use
+   */
+  public void emulate(EmulationProfile profile) {
+    options.get(EMULATION_PROFILE).setValue(profile);
+
+    if (profile != null) {
+      Dimension resolution = profile.getResolution();
+      arguments().add("-windowsize",
+                      String.format("%dx%d", resolution.getWidth(), resolution.getHeight()));
+      arguments().add(new OperaArgument("-ppi", profile.getPPI()));
+      if (profile.getIME() == EmulationProfile.IME.KEYPAD) {
+        arguments().add("-notouchwithtouchevents");
+      } else if (profile.getIME() == EmulationProfile.IME.TABLET) {
+        arguments().add(new OperaArgument("-tabletui"));
+      }
+      arguments().add("-user-agent-string", profile.getUserAgent());
+      arguments().add(new OperaArgument("-profile-name", profile.getProfileName()));
+    }
   }
 
   /**
