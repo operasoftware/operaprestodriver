@@ -270,7 +270,7 @@ public class ScopeServices implements IConnectionHandler {
           exec.action("Exit");
         }
       } catch (CommunicationException e) {
-        throw new IOException("Exception on shutdown: " + e.getMessage());
+        throw new IOException("Exception on shutdown: " + e.getMessage(), e);
       }
     }
 
