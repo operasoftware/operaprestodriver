@@ -34,7 +34,8 @@ public interface Service {
   public String getServiceName();
 
   /**
-   * Gets the current version of the service in use in the browser.
+   * Gets the current version of the service.  Versions are defined as "X.Y", where X is the major
+   * version, and Y the minor version.
    *
    * @return the current version of the service
    */
