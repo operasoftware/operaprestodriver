@@ -26,6 +26,7 @@ import com.google.common.collect.Sets;
 import com.opera.core.systems.OperaLogs.ConsoleMessageConverter;
 import com.opera.core.systems.common.io.Closeables;
 import com.opera.core.systems.common.lang.OperaStrings;
+import com.opera.core.systems.internal.OperaDefaults;
 import com.opera.core.systems.model.ScreenShotReply;
 import com.opera.core.systems.model.ScriptResult;
 import com.opera.core.systems.preferences.OperaScopePreferences;
@@ -34,7 +35,6 @@ import com.opera.core.systems.scope.ScopeService;
 import com.opera.core.systems.scope.ScopeServices;
 import com.opera.core.systems.scope.exceptions.CommunicationException;
 import com.opera.core.systems.scope.exceptions.ResponseNotReceivedException;
-import com.opera.core.systems.internal.OperaDefaults;
 import com.opera.core.systems.scope.internal.OperaIntervals;
 import com.opera.core.systems.scope.services.CookieManager;
 import com.opera.core.systems.scope.services.Core;
@@ -1145,6 +1145,18 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot, Run
     if (services == null || !services.isConnected()) {
       throw new CommunicationException(message);
     }
+  }
+
+  // Following methods are used in SpartanRunner:
+
+  /**
+   * Enable or disable idle functionality during runtime.
+   *
+   * @param enabled true if idle should be switched on, false if it should be switched off
+   */
+  @SuppressWarnings("unused")
+  protected void setUseOperaIdle(boolean enabled) {
+    settings.setIdle(enabled);
   }
 
   // Following methods are used internally:
