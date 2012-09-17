@@ -173,7 +173,7 @@ public class UmsEventParser {
       try {
         header = Header.parseFrom(event.getPayload());
       } catch (InvalidProtocolBufferException e) {
-        throw new ScopeException("Exception while parsing event");
+        throw new ScopeException("Exception while parsing event", e);
       }
       eventHandler.onRequest(header.getWindowID());
     } else if (service.equals("core")) {
@@ -210,10 +210,10 @@ public class UmsEventParser {
       GeneratedMessage.Builder<?> builder, byte[] message) {
     try {
       return builder.mergeFrom(message);
-    } catch (InvalidProtocolBufferException ex) {
-      throw new ScopeException("Could not build "
-                               + builder.getDescriptorForType().getFullName() + " : "
-                               + ex.getMessage());
+    } catch (InvalidProtocolBufferException e) {
+      throw new ScopeException(String.format("Could not build %s: %s",
+                                             builder.getDescriptorForType().getFullName(),
+                                             e.getMessage()), e);
     }
   }
 
