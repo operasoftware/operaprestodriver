@@ -622,6 +622,7 @@ public class ScopeEcmascriptService extends AbstractEcmascriptService implements
       // cyclic reference - returning null for the inner most reference
       return null;
     }
+
     visitedIDs.add(id);
     ObjectList list = getObjectList(id);
     EcmascriptProtos.Object obj = list.getPrototypeList(0).getObjectList(0);
@@ -642,6 +643,7 @@ public class ScopeEcmascriptService extends AbstractEcmascriptService implements
           result.add(parseValue(type, property.getValue(), visitedIDs));
         }
       }
+
       return result;
     } else {
       // we have a map
@@ -655,6 +657,7 @@ public class ScopeEcmascriptService extends AbstractEcmascriptService implements
           result.put(property.getName(), parseValue(type, property.getValue(), visitedIDs));
         }
       }
+
       return result;
     }
   }

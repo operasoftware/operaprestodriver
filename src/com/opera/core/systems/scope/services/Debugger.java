@@ -162,10 +162,33 @@ public interface Debugger extends Service {
    */
   void releaseObject(int objectId);
 
+  /**
+   * Resets the frame path context to the top level frame and reinitializes the debugger runtime.
+   */
   void resetFramePath();
 
+  /**
+   * Executes an arbitrary block of JavaScript on a given window, and returns the result of the
+   * evaluation.
+   *
+   * @param using    the code to evaluate
+   * @param windowId the runtime ID, previously retrieved from the {@link WindowManager}
+   * @return the result of the evaluation
+   */
   String executeJavascript(String using, Integer windowId);
 
+  /**
+   * Recursively iterates through the property hierarchies of underneath the given object and
+   * unwraps the node elements into suitable types.
+   *
+   * DOM elements will be coerced into {@link com.opera.core.systems.OperaWebElement}'s, arrays into
+   * Java {@link List}'s, hashes into {@link java.util.Map}'s, numbers into {@link Integer}'s, and
+   * the remaining properties into {@link String}'s.
+   *
+   * @param id the object to examine the hierarchy of
+   * @return the unwrapped object tree
+   */
+  // TODO(andreastt): Consider rename?
   Object examineScriptResult(Integer id);
 
   /**
