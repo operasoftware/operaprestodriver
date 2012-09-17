@@ -76,7 +76,6 @@ public enum ScopeService {
   }
 
   public static ScopeService get(String name) {
-//    return checkNotNull(lookup.get(name), "Unknown service: " + name);
     return lookup.get(name);
   }
 
