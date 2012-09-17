@@ -16,6 +16,7 @@ limitations under the License.
 
 package com.opera.core.systems.scope.stp.services;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
@@ -551,27 +552,24 @@ public class ScopeEcmascriptService extends AbstractEcmascriptService implements
   }
 
   public List<Integer> examineObjects(Integer id) {
-    List<Integer> ids = Lists.newArrayList();
+    ImmutableList.Builder<Integer> objects = ImmutableList.builder();
 
-    ObjectList list = getObjectList(id);
-    List<Property> objects =
-        list.getPrototypeListList().get(0).getObjectListList().get(0).getPropertyListList();
-    for (Property obj : objects) {
+    for (Property obj : getObjectList(id)
+        .getPrototypeListList().get(0).getObjectListList().get(0).getPropertyListList()) {
       if (obj.getValue().getType().equals(Value.Type.OBJECT)) {
-        ids.add(obj.getValue().getObject().getObjectID());
+        objects.add(obj.getValue().getObject().getObjectID());
       }
     }
 
-    return ids;
+    return objects.build();
   }
 
   public List<String> listFramePaths() {
-    List<Runtime> runtimes = getRuntimesList();
-    List<String> frameNames = Lists.newArrayList();
-    for (Runtime runtime : runtimes) {
+    ImmutableList.Builder<String> frameNames = ImmutableList.builder();
+    for (Runtime runtime : getRuntimesList()) {
       frameNames.add(runtime.getHtmlFramePath());
     }
-    return frameNames;
+    return frameNames.build();
   }
 
   public void releaseObjects() {

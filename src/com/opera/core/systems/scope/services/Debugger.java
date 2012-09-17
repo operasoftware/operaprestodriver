@@ -83,9 +83,9 @@ public interface Debugger extends Service {
   /**
    * The script to be executed on/using an object
    *
-   * @param using    Script with reference to the object "locator"
-   * @param objectId The object to be used for injection
-   * @return The string value returned by the executed Javascript
+   * @param using    script with reference to the object "locator"
+   * @param objectId the object to be used for injection
+   * @return the string value returned by the executed Javascript
    */
   String callFunctionOnObject(String using, int objectId);
 
@@ -113,7 +113,13 @@ public interface Debugger extends Service {
    */
   void cleanUpRuntimes();
 
-  // TODO needs retry approach?
+  /**
+   * Request additional information about an object, such as its prototype or its properties.
+   *
+   * @param id object ID previously returned from an eval call to the debugger
+   * @return list of ID's of object's which are considered web elements
+   */
+  // TODO(andreastt): This method does not do what it's meant to do, see Scope doc
   List<Integer> examineObjects(Integer id);
 
   /**
