@@ -155,7 +155,7 @@ public class ScreenshotTest extends OperaDriverTestCase {
   @Test
   @Ignore(platforms = MAC, value = "Needs investigation, doesn't return anything")
   public void realPng() throws Exception {
-    ScreenCaptureReply reply = driver.saveScreenshot(0);
+    ScreenCaptureReply reply = driver.captureScreen();
     byte[] png = reply.getPng();
 
     assertTrue("PNG magic bytes match",

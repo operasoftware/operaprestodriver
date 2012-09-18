@@ -16,6 +16,7 @@ limitations under the License.
 
 package com.opera.core.systems.testing.drivers;
 
+import com.opera.core.systems.CapturesScreen;
 import com.opera.core.systems.OperaDriver;
 import com.opera.core.systems.OperaProxy;
 import com.opera.core.systems.OperaSettings;
@@ -34,8 +35,8 @@ import org.openqa.selenium.WebDriver;
 
 import java.util.List;
 
-public interface TestDriver
-    extends WebDriver, HasInputDevices, JavascriptExecutor, TakesScreenshot, RunsSelftest {
+public interface TestDriver extends WebDriver, HasInputDevices, JavascriptExecutor, TakesScreenshot,
+                                    RunsSelftest, CapturesScreen {
 
   int get(String url, long timeout);
 
@@ -59,8 +60,6 @@ public interface TestDriver
   void operaAction(String using, String... params);
 
   List<String> listFrames();
-
-  ScreenCaptureReply saveScreenshot(long timeout, String... hashes);
 
   void waitForLoadToComplete() throws ResponseNotReceivedException;
 
