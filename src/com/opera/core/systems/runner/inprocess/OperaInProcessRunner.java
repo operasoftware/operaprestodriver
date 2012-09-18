@@ -64,6 +64,7 @@ public class OperaInProcessRunner extends AbstractOperaRunner implements OperaRu
           settings.getBinary().getCanonicalPath(),
           Iterables.toArray(settings.arguments().getArgumentsAsStringList(), String.class)
       );
+      logger.config(String.format("runner arguments: %s", process));
 
       // TODO(andreastt): Do we need to forward the environment to CommandLine?
       //process.setEnvironmentVariables(environment);
