@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<meta charset="utf-8" />
+<title>Form submission</title>
+
+<p id="result"></p>
+
+<script>
+  function getUrlVars() {
+    var vars = {};
+    var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+        vars[key] = value;
+    });
+    return vars;
+  }
+
+  var result = document.getElementById("result");
+  result.innerHTML = getUrlVars()["result"] ? "PASS" : "FAIL";
+</script>
+
+<form action="./form.html" method="get">
+  <p>
+    <input name="result" type="text" />
+    <input id="submit" type="submit" />
+  </p>
+</form>

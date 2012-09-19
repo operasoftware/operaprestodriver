@@ -30,6 +30,7 @@ public class Pages {
   public String ecmascriptTimeout;
   public String ecmascriptTimeoutLoop;
   public String flash;
+  public String form;
   public String frames;
   public String html5form;
   public String iframes;
@@ -58,6 +59,7 @@ public class Pages {
     ecmascriptTimeout = server.whereIs("idle/ecmascript-timeout.html");
     ecmascriptTimeoutLoop = server.whereIs("idle/ecmascript-timeout-loop.html");
     flash = server.whereIs("flash.html");
+    form = server.whereIs("form.html");
     frames = server.whereIs("frames.html");
     html5form = server.whereIs("html5form.html");
     iframes = server.whereIs("iframes.html");
