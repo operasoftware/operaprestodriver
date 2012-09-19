@@ -65,7 +65,8 @@ public abstract class AbstractOperaRunner implements OperaRunner {
 
     // Only append -pd if compatibility mode is enabled (for Opera < 11.60)
     if (settings.supportsPd()) {
-      settings.arguments().add("-pd", settings.profile().getDirectory().getAbsolutePath());
+      String pdPath = String.format("\"%s\"", settings.profile().getDirectory().getAbsolutePath());
+      settings.arguments().add("-pd", pdPath);
     }
 
     // If port is set to -1 it means we're in compatibility mode as Opera < 11.60 does not support
