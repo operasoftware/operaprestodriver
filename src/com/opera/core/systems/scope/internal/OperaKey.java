@@ -35,8 +35,8 @@ public enum OperaKey {
   BACK_SPACE("backspace"),
   TAB("Tab"),
   CLEAR("clear"),
-  RETURN("return"),
   ENTER("enter"),
+  RETURN(ENTER.value),  // alias
   SHIFT("Shift"),
   LEFT_SHIFT(SHIFT.value),  // alias
   CONTROL("control"),

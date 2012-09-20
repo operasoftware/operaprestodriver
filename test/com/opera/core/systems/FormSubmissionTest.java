@@ -51,6 +51,12 @@ public class FormSubmissionTest extends OperaDriverTestCase {
   }
 
   @Test
+  public void keysReturnSubmitsForm() {
+    input.sendKeys("foo", Keys.RETURN);
+    assertPassed();
+  }
+
+  @Test
   public void submitButtonSubmitsForm() throws Exception {
     input.sendKeys("foo");
     submit.click();
