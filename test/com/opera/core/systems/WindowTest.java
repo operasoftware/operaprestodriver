@@ -37,7 +37,6 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.fail;
 import static org.openqa.selenium.Platform.WINDOWS;
 
-@Ignore(products = OperaProduct.MOBILE)
 public class WindowTest extends OperaDriverTestCase {
 
   public WindowPage windowPage;
@@ -147,6 +146,21 @@ public class WindowTest extends OperaDriverTestCase {
 
     driver.navigate().to(pages.basicAuth);
     assertEquals(3, driver.getWindowHandles().size());
+
+    closeAllWindows();
+
+    assertEquals(1, driver.getWindowHandles().size());
+  }
+
+  @Test
+  @FreshDriver
+  @Ignore(products = {DESKTOP, CORE, MINI, SDK})
+  public void resetWindowStateOnMobile() {
+    createWindow();
+    assertEquals(2, driver.getWindowHandles().size());
+
+    driver.navigate().to(pages.basicAuth);
+    assertEquals(2, driver.getWindowHandles().size());
 
     closeAllWindows();
 
