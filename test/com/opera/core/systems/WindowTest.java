@@ -30,7 +30,6 @@ import org.openqa.selenium.TimeoutException;
 import static com.opera.core.systems.OperaProduct.CORE;
 import static com.opera.core.systems.OperaProduct.DESKTOP;
 import static com.opera.core.systems.OperaProduct.MINI;
-import static com.opera.core.systems.OperaProduct.MOBILE;
 import static com.opera.core.systems.OperaProduct.SDK;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -123,46 +122,26 @@ public class WindowTest extends OperaDriverTestCase {
 
   @Test
   @FreshDriver
-  @Ignore(products = {CORE, MINI, MOBILE, SDK})
-  public void resetWindowStateOnDesktop() {
+  @Ignore(products = {MINI, SDK})
+  public void resetWindowState() {
     createWindow();
     assertEquals(2, driver.getWindowHandles().size());
 
     driver.navigate().to(pages.basicAuth);
-    assertEquals(2, driver.getWindowHandles().size());
 
-    closeAllWindows();
-    createWindow();
-
-    assertEquals(1, driver.getWindowHandles().size());
-  }
-
-  @Test
-  @FreshDriver
-  @Ignore(products = {DESKTOP, MINI, MOBILE, SDK})
-  public void resetWindowStateOnCore() {
-    createWindow();
-    assertEquals(2, driver.getWindowHandles().size());
-
-    driver.navigate().to(pages.basicAuth);
-    assertEquals(3, driver.getWindowHandles().size());
+    // core-gogi uses non-native popup dialogues with runtimes.  These windows are not hidden from
+    // the window manager and must be taken into account.
+    if (currentProduct().is(CORE)) {
+      assertEquals(3, driver.getWindowHandles().size());
+    } else {
+      assertEquals(2, driver.getWindowHandles().size());
+    }
 
     closeAllWindows();
 
-    assertEquals(1, driver.getWindowHandles().size());
-  }
-
-  @Test
-  @FreshDriver
-  @Ignore(products = {DESKTOP, CORE, MINI, SDK})
-  public void resetWindowStateOnMobile() {
-    createWindow();
-    assertEquals(2, driver.getWindowHandles().size());
-
-    driver.navigate().to(pages.basicAuth);
-    assertEquals(2, driver.getWindowHandles().size());
-
-    closeAllWindows();
+    if (currentProduct().is(DESKTOP)) {
+      createWindow();
+    }
 
     assertEquals(1, driver.getWindowHandles().size());
   }
