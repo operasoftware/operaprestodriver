@@ -227,7 +227,7 @@ public class StpConnection implements SocketListener {
 
         if (readSize < 0) {
           logger.finer(String.format("Channel closed: %s", socketChannel != null ? socketChannel
-              .socket().getInetAddress().getHostName() : ""));
+              .socket().getInetAddress().getHostName() : "(unknown)"));
 
           connectionHandler.onDisconnect();
           monitor.remove(socketChannel);
