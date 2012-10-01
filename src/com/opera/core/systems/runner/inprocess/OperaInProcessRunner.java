@@ -150,7 +150,7 @@ public class OperaInProcessRunner extends AbstractOperaRunner implements OperaRu
         });
 
     try {
-      return new ScreenCaptureReply(capture.getMD5(), capture.getData());
+      return new ScreenCaptureReply(capture.getMd5(), capture.getData());
     } catch (IOException e) {
       throw new OperaRunnerException("Unable to do screen capture: " + e.getMessage());
     }

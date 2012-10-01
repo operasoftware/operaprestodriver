@@ -16,9 +16,6 @@ limitations under the License.
 
 package com.opera.core.systems.runner.inprocess;
 
-import com.google.common.hash.Hashing;
-import com.google.common.io.ByteStreams;
-
 import com.opera.core.systems.common.hash.MD5;
 
 import java.awt.*;
@@ -76,7 +73,7 @@ public class ScreenCapture {
    * @return the MD5 hash sum of this capture
    * @throws IOException if an I/O exception occurs
    */
-  public String getMD5() throws IOException {
+  public String getMd5() throws IOException {
     checkCaptureTaken();
 
     try {
