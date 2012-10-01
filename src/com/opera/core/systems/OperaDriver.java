@@ -229,8 +229,11 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot, Run
       preferences = new OperaScopePreferences(services.getPrefs());
 
       // Enable popups for testing purposes
-      if (!utils().getProduct().is(MOBILE)) {
-        preferences().set("User Prefs", "Ignore Unrequested Popups", false);
+      preferences().set("User Prefs", "Ignore Unrequested Popups", false);
+
+      // Mobile has disabled JavaScript autofocus for usability reasons
+      if (utils().getProduct().is(MOBILE)) {
+        preferences().set("User Prefs", "Allow Autofocus Form Element", true);
       }
     }
 
