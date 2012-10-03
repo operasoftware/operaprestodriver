@@ -49,10 +49,9 @@ public class Selftest extends AbstractService implements ISelftest {
   public Selftest(ScopeServices services, String version) {
     super(services, version);
 
-    // Note: Version 2.0 of selftest is not backwards compatible with the previous version 1.1.
+    // Note: Version 2.0 of selftest is not backwards compatible with the previous version 1.1
     if (!isVersionInRange(version, "3.0", SERVICE_NAME)) {
-      throw new UnsupportedOperationException(String.format("%s version %s is not supported",
-                                                            SERVICE_NAME, version));
+      return;
     }
 
     services.setSelftest(this);
