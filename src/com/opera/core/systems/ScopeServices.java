@@ -408,7 +408,7 @@ public class ScopeServices implements IConnectionHandler {
   }
 
   public void quitOpera(final OperaRunner runner) throws IOException {
-    if (!isConnected()) {
+    if (!isConnected() || exec == null) {
       return;
     }
 
