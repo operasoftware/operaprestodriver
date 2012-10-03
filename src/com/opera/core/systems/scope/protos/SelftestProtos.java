@@ -8,143 +8,150 @@ public final class SelftestProtos {
   public static void registerAllExtensions(
       com.google.protobuf.ExtensionRegistry registry) {
   }
-  public interface RunModulesArgOrBuilder
+  public interface RunTestsArgOrBuilder
       extends com.google.protobuf.MessageOrBuilder {
     
-    // repeated string moduleList = 1;
-    java.util.List<String> getModuleListList();
-    int getModuleListCount();
-    String getModuleList(int index);
+    // optional string moduleList = 1;
+    boolean hasModuleList();
+    String getModuleList();
     
-    // optional .scope.RunModulesArg.OutputType outputType = 2 [default = HUMAN_READABLE];
-    boolean hasOutputType();
-    com.opera.core.systems.scope.protos.SelftestProtos.RunModulesArg.OutputType getOutputType();
+    // optional string testPattern = 2;
+    boolean hasTestPattern();
+    String getTestPattern();
+    
+    // optional string excludePattern = 3;
+    boolean hasExcludePattern();
+    String getExcludePattern();
   }
-  public static final class RunModulesArg extends
+  public static final class RunTestsArg extends
       com.google.protobuf.GeneratedMessage
-      implements RunModulesArgOrBuilder {
-    // Use RunModulesArg.newBuilder() to construct.
-    private RunModulesArg(Builder builder) {
+      implements RunTestsArgOrBuilder {
+    // Use RunTestsArg.newBuilder() to construct.
+    private RunTestsArg(Builder builder) {
       super(builder);
     }
-    private RunModulesArg(boolean noInit) {}
+    private RunTestsArg(boolean noInit) {}
     
-    private static final RunModulesArg defaultInstance;
-    public static RunModulesArg getDefaultInstance() {
+    private static final RunTestsArg defaultInstance;
+    public static RunTestsArg getDefaultInstance() {
       return defaultInstance;
     }
     
-    public RunModulesArg getDefaultInstanceForType() {
+    public RunTestsArg getDefaultInstanceForType() {
       return defaultInstance;
     }
     
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return com.opera.core.systems.scope.protos.SelftestProtos.internal_static_scope_RunModulesArg_descriptor;
+      return com.opera.core.systems.scope.protos.SelftestProtos.internal_static_scope_RunTestsArg_descriptor;
     }
     
     protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return com.opera.core.systems.scope.protos.SelftestProtos.internal_static_scope_RunModulesArg_fieldAccessorTable;
-    }
-    
-    public enum OutputType
-        implements com.google.protobuf.ProtocolMessageEnum {
-      HUMAN_READABLE(0, 1),
-      MACHINE_READABLE(1, 2),
-      ;
-      
-      public static final int HUMAN_READABLE_VALUE = 1;
-      public static final int MACHINE_READABLE_VALUE = 2;
-      
-      
-      public final int getNumber() { return value; }
-      
-      public static OutputType valueOf(int value) {
-        switch (value) {
-          case 1: return HUMAN_READABLE;
-          case 2: return MACHINE_READABLE;
-          default: return null;
-        }
-      }
-      
-      public static com.google.protobuf.Internal.EnumLiteMap<OutputType>
-          internalGetValueMap() {
-        return internalValueMap;
-      }
-      private static com.google.protobuf.Internal.EnumLiteMap<OutputType>
-          internalValueMap =
-            new com.google.protobuf.Internal.EnumLiteMap<OutputType>() {
-              public OutputType findValueByNumber(int number) {
-                return OutputType.valueOf(number);
-              }
-            };
-      
-      public final com.google.protobuf.Descriptors.EnumValueDescriptor
-          getValueDescriptor() {
-        return getDescriptor().getValues().get(index);
-      }
-      public final com.google.protobuf.Descriptors.EnumDescriptor
-          getDescriptorForType() {
-        return getDescriptor();
-      }
-      public static final com.google.protobuf.Descriptors.EnumDescriptor
-          getDescriptor() {
-        return com.opera.core.systems.scope.protos.SelftestProtos.RunModulesArg.getDescriptor().getEnumTypes().get(0);
-      }
-      
-      private static final OutputType[] VALUES = {
-        HUMAN_READABLE, MACHINE_READABLE, 
-      };
-      
-      public static OutputType valueOf(
-          com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
-        if (desc.getType() != getDescriptor()) {
-          throw new java.lang.IllegalArgumentException(
-            "EnumValueDescriptor is not for this type.");
-        }
-        return VALUES[desc.getIndex()];
-      }
-      
-      private final int index;
-      private final int value;
-      
-      private OutputType(int index, int value) {
-        this.index = index;
-        this.value = value;
-      }
-      
-      // @@protoc_insertion_point(enum_scope:scope.RunModulesArg.OutputType)
+      return com.opera.core.systems.scope.protos.SelftestProtos.internal_static_scope_RunTestsArg_fieldAccessorTable;
     }
     
     private int bitField0_;
-    // repeated string moduleList = 1;
+    // optional string moduleList = 1;
     public static final int MODULELIST_FIELD_NUMBER = 1;
-    private com.google.protobuf.LazyStringList moduleList_;
-    public java.util.List<String>
-        getModuleListList() {
-      return moduleList_;
-    }
-    public int getModuleListCount() {
-      return moduleList_.size();
-    }
-    public String getModuleList(int index) {
-      return moduleList_.get(index);
-    }
-    
-    // optional .scope.RunModulesArg.OutputType outputType = 2 [default = HUMAN_READABLE];
-    public static final int OUTPUTTYPE_FIELD_NUMBER = 2;
-    private com.opera.core.systems.scope.protos.SelftestProtos.RunModulesArg.OutputType outputType_;
-    public boolean hasOutputType() {
+    private java.lang.Object moduleList_;
+    public boolean hasModuleList() {
       return ((bitField0_ & 0x00000001) == 0x00000001);
     }
-    public com.opera.core.systems.scope.protos.SelftestProtos.RunModulesArg.OutputType getOutputType() {
-      return outputType_;
+    public String getModuleList() {
+      java.lang.Object ref = moduleList_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
+          moduleList_ = s;
+        }
+        return s;
+      }
+    }
+    private com.google.protobuf.ByteString getModuleListBytes() {
+      java.lang.Object ref = moduleList_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
+        moduleList_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    
+    // optional string testPattern = 2;
+    public static final int TESTPATTERN_FIELD_NUMBER = 2;
+    private java.lang.Object testPattern_;
+    public boolean hasTestPattern() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    public String getTestPattern() {
+      java.lang.Object ref = testPattern_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
+          testPattern_ = s;
+        }
+        return s;
+      }
+    }
+    private com.google.protobuf.ByteString getTestPatternBytes() {
+      java.lang.Object ref = testPattern_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
+        testPattern_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    
+    // optional string excludePattern = 3;
+    public static final int EXCLUDEPATTERN_FIELD_NUMBER = 3;
+    private java.lang.Object excludePattern_;
+    public boolean hasExcludePattern() {
+      return ((bitField0_ & 0x00000004) == 0x00000004);
+    }
+    public String getExcludePattern() {
+      java.lang.Object ref = excludePattern_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
+          excludePattern_ = s;
+        }
+        return s;
+      }
+    }
+    private com.google.protobuf.ByteString getExcludePatternBytes() {
+      java.lang.Object ref = excludePattern_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
+        excludePattern_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
     }
     
     private void initFields() {
-      moduleList_ = com.google.protobuf.LazyStringArrayList.EMPTY;
-      outputType_ = com.opera.core.systems.scope.protos.SelftestProtos.RunModulesArg.OutputType.HUMAN_READABLE;
+      moduleList_ = "";
+      testPattern_ = "";
+      excludePattern_ = "";
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -158,11 +165,14 @@ public final class SelftestProtos {
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       getSerializedSize();
-      for (int i = 0; i < moduleList_.size(); i++) {
-        output.writeBytes(1, moduleList_.getByteString(i));
-      }
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        output.writeEnum(2, outputType_.getNumber());
+        output.writeBytes(1, getModuleListBytes());
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        output.writeBytes(2, getTestPatternBytes());
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        output.writeBytes(3, getExcludePatternBytes());
       }
       getUnknownFields().writeTo(output);
     }
@@ -173,18 +183,17 @@ public final class SelftestProtos {
       if (size != -1) return size;
     
       size = 0;
-      {
-        int dataSize = 0;
-        for (int i = 0; i < moduleList_.size(); i++) {
-          dataSize += com.google.protobuf.CodedOutputStream
-            .computeBytesSizeNoTag(moduleList_.getByteString(i));
-        }
-        size += dataSize;
-        size += 1 * getModuleListList().size();
-      }
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(2, outputType_.getNumber());
+          .computeBytesSize(1, getModuleListBytes());
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(2, getTestPatternBytes());
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(3, getExcludePatternBytes());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -198,41 +207,41 @@ public final class SelftestProtos {
       return super.writeReplace();
     }
     
-    public static com.opera.core.systems.scope.protos.SelftestProtos.RunModulesArg parseFrom(
+    public static com.opera.core.systems.scope.protos.SelftestProtos.RunTestsArg parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data).buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.SelftestProtos.RunModulesArg parseFrom(
+    public static com.opera.core.systems.scope.protos.SelftestProtos.RunTestsArg parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data, extensionRegistry)
                .buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.SelftestProtos.RunModulesArg parseFrom(byte[] data)
+    public static com.opera.core.systems.scope.protos.SelftestProtos.RunTestsArg parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data).buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.SelftestProtos.RunModulesArg parseFrom(
+    public static com.opera.core.systems.scope.protos.SelftestProtos.RunTestsArg parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data, extensionRegistry)
                .buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.SelftestProtos.RunModulesArg parseFrom(java.io.InputStream input)
+    public static com.opera.core.systems.scope.protos.SelftestProtos.RunTestsArg parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return newBuilder().mergeFrom(input).buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.SelftestProtos.RunModulesArg parseFrom(
+    public static com.opera.core.systems.scope.protos.SelftestProtos.RunTestsArg parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return newBuilder().mergeFrom(input, extensionRegistry)
                .buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.SelftestProtos.RunModulesArg parseDelimitedFrom(java.io.InputStream input)
+    public static com.opera.core.systems.scope.protos.SelftestProtos.RunTestsArg parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       Builder builder = newBuilder();
       if (builder.mergeDelimitedFrom(input)) {
@@ -241,7 +250,7 @@ public final class SelftestProtos {
         return null;
       }
     }
-    public static com.opera.core.systems.scope.protos.SelftestProtos.RunModulesArg parseDelimitedFrom(
+    public static com.opera.core.systems.scope.protos.SelftestProtos.RunTestsArg parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -252,12 +261,12 @@ public final class SelftestProtos {
         return null;
       }
     }
-    public static com.opera.core.systems.scope.protos.SelftestProtos.RunModulesArg parseFrom(
+    public static com.opera.core.systems.scope.protos.SelftestProtos.RunTestsArg parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return newBuilder().mergeFrom(input).buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.SelftestProtos.RunModulesArg parseFrom(
+    public static com.opera.core.systems.scope.protos.SelftestProtos.RunTestsArg parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -267,7 +276,7 @@ public final class SelftestProtos {
     
     public static Builder newBuilder() { return Builder.create(); }
     public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(com.opera.core.systems.scope.protos.SelftestProtos.RunModulesArg prototype) {
+    public static Builder newBuilder(com.opera.core.systems.scope.protos.SelftestProtos.RunTestsArg prototype) {
       return newBuilder().mergeFrom(prototype);
     }
     public Builder toBuilder() { return newBuilder(this); }
@@ -280,18 +289,18 @@ public final class SelftestProtos {
     }
     public static final class Builder extends
         com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements com.opera.core.systems.scope.protos.SelftestProtos.RunModulesArgOrBuilder {
+       implements com.opera.core.systems.scope.protos.SelftestProtos.RunTestsArgOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return com.opera.core.systems.scope.protos.SelftestProtos.internal_static_scope_RunModulesArg_descriptor;
+        return com.opera.core.systems.scope.protos.SelftestProtos.internal_static_scope_RunTestsArg_descriptor;
       }
       
       protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return com.opera.core.systems.scope.protos.SelftestProtos.internal_static_scope_RunModulesArg_fieldAccessorTable;
+        return com.opera.core.systems.scope.protos.SelftestProtos.internal_static_scope_RunTestsArg_fieldAccessorTable;
       }
       
-      // Construct using com.opera.core.systems.scope.protos.SelftestProtos.RunModulesArg.newBuilder()
+      // Construct using com.opera.core.systems.scope.protos.SelftestProtos.RunTestsArg.newBuilder()
       private Builder() {
         maybeForceBuilderInitialization();
       }
@@ -310,10 +319,12 @@ public final class SelftestProtos {
       
       public Builder clear() {
         super.clear();
-        moduleList_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+        moduleList_ = "";
         bitField0_ = (bitField0_ & ~0x00000001);
-        outputType_ = com.opera.core.systems.scope.protos.SelftestProtos.RunModulesArg.OutputType.HUMAN_READABLE;
+        testPattern_ = "";
         bitField0_ = (bitField0_ & ~0x00000002);
+        excludePattern_ = "";
+        bitField0_ = (bitField0_ & ~0x00000004);
         return this;
       }
       
@@ -323,24 +334,24 @@ public final class SelftestProtos {
       
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return com.opera.core.systems.scope.protos.SelftestProtos.RunModulesArg.getDescriptor();
+        return com.opera.core.systems.scope.protos.SelftestProtos.RunTestsArg.getDescriptor();
       }
       
-      public com.opera.core.systems.scope.protos.SelftestProtos.RunModulesArg getDefaultInstanceForType() {
-        return com.opera.core.systems.scope.protos.SelftestProtos.RunModulesArg.getDefaultInstance();
+      public com.opera.core.systems.scope.protos.SelftestProtos.RunTestsArg getDefaultInstanceForType() {
+        return com.opera.core.systems.scope.protos.SelftestProtos.RunTestsArg.getDefaultInstance();
       }
       
-      public com.opera.core.systems.scope.protos.SelftestProtos.RunModulesArg build() {
-        com.opera.core.systems.scope.protos.SelftestProtos.RunModulesArg result = buildPartial();
+      public com.opera.core.systems.scope.protos.SelftestProtos.RunTestsArg build() {
+        com.opera.core.systems.scope.protos.SelftestProtos.RunTestsArg result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return result;
       }
       
-      private com.opera.core.systems.scope.protos.SelftestProtos.RunModulesArg buildParsed()
+      private com.opera.core.systems.scope.protos.SelftestProtos.RunTestsArg buildParsed()
           throws com.google.protobuf.InvalidProtocolBufferException {
-        com.opera.core.systems.scope.protos.SelftestProtos.RunModulesArg result = buildPartial();
+        com.opera.core.systems.scope.protos.SelftestProtos.RunTestsArg result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(
             result).asInvalidProtocolBufferException();
@@ -348,48 +359,46 @@ public final class SelftestProtos {
         return result;
       }
       
-      public com.opera.core.systems.scope.protos.SelftestProtos.RunModulesArg buildPartial() {
-        com.opera.core.systems.scope.protos.SelftestProtos.RunModulesArg result = new com.opera.core.systems.scope.protos.SelftestProtos.RunModulesArg(this);
+      public com.opera.core.systems.scope.protos.SelftestProtos.RunTestsArg buildPartial() {
+        com.opera.core.systems.scope.protos.SelftestProtos.RunTestsArg result = new com.opera.core.systems.scope.protos.SelftestProtos.RunTestsArg(this);
         int from_bitField0_ = bitField0_;
         int to_bitField0_ = 0;
-        if (((bitField0_ & 0x00000001) == 0x00000001)) {
-          moduleList_ = new com.google.protobuf.UnmodifiableLazyStringList(
-              moduleList_);
-          bitField0_ = (bitField0_ & ~0x00000001);
+        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+          to_bitField0_ |= 0x00000001;
         }
         result.moduleList_ = moduleList_;
         if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
-          to_bitField0_ |= 0x00000001;
+          to_bitField0_ |= 0x00000002;
         }
-        result.outputType_ = outputType_;
+        result.testPattern_ = testPattern_;
+        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
+          to_bitField0_ |= 0x00000004;
+        }
+        result.excludePattern_ = excludePattern_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
       }
       
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof com.opera.core.systems.scope.protos.SelftestProtos.RunModulesArg) {
-          return mergeFrom((com.opera.core.systems.scope.protos.SelftestProtos.RunModulesArg)other);
+        if (other instanceof com.opera.core.systems.scope.protos.SelftestProtos.RunTestsArg) {
+          return mergeFrom((com.opera.core.systems.scope.protos.SelftestProtos.RunTestsArg)other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
       
-      public Builder mergeFrom(com.opera.core.systems.scope.protos.SelftestProtos.RunModulesArg other) {
-        if (other == com.opera.core.systems.scope.protos.SelftestProtos.RunModulesArg.getDefaultInstance()) return this;
-        if (!other.moduleList_.isEmpty()) {
-          if (moduleList_.isEmpty()) {
-            moduleList_ = other.moduleList_;
-            bitField0_ = (bitField0_ & ~0x00000001);
-          } else {
-            ensureModuleListIsMutable();
-            moduleList_.addAll(other.moduleList_);
-          }
-          onChanged();
+      public Builder mergeFrom(com.opera.core.systems.scope.protos.SelftestProtos.RunTestsArg other) {
+        if (other == com.opera.core.systems.scope.protos.SelftestProtos.RunTestsArg.getDefaultInstance()) return this;
+        if (other.hasModuleList()) {
+          setModuleList(other.getModuleList());
         }
-        if (other.hasOutputType()) {
-          setOutputType(other.getOutputType());
+        if (other.hasTestPattern()) {
+          setTestPattern(other.getTestPattern());
+        }
+        if (other.hasExcludePattern()) {
+          setExcludePattern(other.getExcludePattern());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -423,19 +432,18 @@ public final class SelftestProtos {
               break;
             }
             case 10: {
-              ensureModuleListIsMutable();
-              moduleList_.add(input.readBytes());
+              bitField0_ |= 0x00000001;
+              moduleList_ = input.readBytes();
               break;
             }
-            case 16: {
-              int rawValue = input.readEnum();
-              com.opera.core.systems.scope.protos.SelftestProtos.RunModulesArg.OutputType value = com.opera.core.systems.scope.protos.SelftestProtos.RunModulesArg.OutputType.valueOf(rawValue);
-              if (value == null) {
-                unknownFields.mergeVarintField(2, rawValue);
-              } else {
-                bitField0_ |= 0x00000002;
-                outputType_ = value;
-              }
+            case 18: {
+              bitField0_ |= 0x00000002;
+              testPattern_ = input.readBytes();
+              break;
+            }
+            case 26: {
+              bitField0_ |= 0x00000004;
+              excludePattern_ = input.readBytes();
               break;
             }
           }
@@ -444,174 +452,249 @@ public final class SelftestProtos {
       
       private int bitField0_;
       
-      // repeated string moduleList = 1;
-      private com.google.protobuf.LazyStringList moduleList_ = com.google.protobuf.LazyStringArrayList.EMPTY;
-      private void ensureModuleListIsMutable() {
-        if (!((bitField0_ & 0x00000001) == 0x00000001)) {
-          moduleList_ = new com.google.protobuf.LazyStringArrayList(moduleList_);
-          bitField0_ |= 0x00000001;
-         }
+      // optional string moduleList = 1;
+      private java.lang.Object moduleList_ = "";
+      public boolean hasModuleList() {
+        return ((bitField0_ & 0x00000001) == 0x00000001);
       }
-      public java.util.List<String>
-          getModuleListList() {
-        return java.util.Collections.unmodifiableList(moduleList_);
+      public String getModuleList() {
+        java.lang.Object ref = moduleList_;
+        if (!(ref instanceof String)) {
+          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
+          moduleList_ = s;
+          return s;
+        } else {
+          return (String) ref;
+        }
       }
-      public int getModuleListCount() {
-        return moduleList_.size();
-      }
-      public String getModuleList(int index) {
-        return moduleList_.get(index);
-      }
-      public Builder setModuleList(
-          int index, String value) {
+      public Builder setModuleList(String value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  ensureModuleListIsMutable();
-        moduleList_.set(index, value);
-        onChanged();
-        return this;
-      }
-      public Builder addModuleList(String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  ensureModuleListIsMutable();
-        moduleList_.add(value);
-        onChanged();
-        return this;
-      }
-      public Builder addAllModuleList(
-          java.lang.Iterable<String> values) {
-        ensureModuleListIsMutable();
-        super.addAll(values, moduleList_);
+  bitField0_ |= 0x00000001;
+        moduleList_ = value;
         onChanged();
         return this;
       }
       public Builder clearModuleList() {
-        moduleList_ = com.google.protobuf.LazyStringArrayList.EMPTY;
         bitField0_ = (bitField0_ & ~0x00000001);
+        moduleList_ = getDefaultInstance().getModuleList();
         onChanged();
         return this;
       }
-      void addModuleList(com.google.protobuf.ByteString value) {
-        ensureModuleListIsMutable();
-        moduleList_.add(value);
+      void setModuleList(com.google.protobuf.ByteString value) {
+        bitField0_ |= 0x00000001;
+        moduleList_ = value;
         onChanged();
       }
       
-      // optional .scope.RunModulesArg.OutputType outputType = 2 [default = HUMAN_READABLE];
-      private com.opera.core.systems.scope.protos.SelftestProtos.RunModulesArg.OutputType outputType_ = com.opera.core.systems.scope.protos.SelftestProtos.RunModulesArg.OutputType.HUMAN_READABLE;
-      public boolean hasOutputType() {
+      // optional string testPattern = 2;
+      private java.lang.Object testPattern_ = "";
+      public boolean hasTestPattern() {
         return ((bitField0_ & 0x00000002) == 0x00000002);
       }
-      public com.opera.core.systems.scope.protos.SelftestProtos.RunModulesArg.OutputType getOutputType() {
-        return outputType_;
-      }
-      public Builder setOutputType(com.opera.core.systems.scope.protos.SelftestProtos.RunModulesArg.OutputType value) {
-        if (value == null) {
-          throw new NullPointerException();
+      public String getTestPattern() {
+        java.lang.Object ref = testPattern_;
+        if (!(ref instanceof String)) {
+          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
+          testPattern_ = s;
+          return s;
+        } else {
+          return (String) ref;
         }
-        bitField0_ |= 0x00000002;
-        outputType_ = value;
+      }
+      public Builder setTestPattern(String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000002;
+        testPattern_ = value;
         onChanged();
         return this;
       }
-      public Builder clearOutputType() {
+      public Builder clearTestPattern() {
         bitField0_ = (bitField0_ & ~0x00000002);
-        outputType_ = com.opera.core.systems.scope.protos.SelftestProtos.RunModulesArg.OutputType.HUMAN_READABLE;
+        testPattern_ = getDefaultInstance().getTestPattern();
         onChanged();
         return this;
+      }
+      void setTestPattern(com.google.protobuf.ByteString value) {
+        bitField0_ |= 0x00000002;
+        testPattern_ = value;
+        onChanged();
       }
       
-      // @@protoc_insertion_point(builder_scope:scope.RunModulesArg)
+      // optional string excludePattern = 3;
+      private java.lang.Object excludePattern_ = "";
+      public boolean hasExcludePattern() {
+        return ((bitField0_ & 0x00000004) == 0x00000004);
+      }
+      public String getExcludePattern() {
+        java.lang.Object ref = excludePattern_;
+        if (!(ref instanceof String)) {
+          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
+          excludePattern_ = s;
+          return s;
+        } else {
+          return (String) ref;
+        }
+      }
+      public Builder setExcludePattern(String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000004;
+        excludePattern_ = value;
+        onChanged();
+        return this;
+      }
+      public Builder clearExcludePattern() {
+        bitField0_ = (bitField0_ & ~0x00000004);
+        excludePattern_ = getDefaultInstance().getExcludePattern();
+        onChanged();
+        return this;
+      }
+      void setExcludePattern(com.google.protobuf.ByteString value) {
+        bitField0_ |= 0x00000004;
+        excludePattern_ = value;
+        onChanged();
+      }
+      
+      // @@protoc_insertion_point(builder_scope:scope.RunTestsArg)
     }
     
     static {
-      defaultInstance = new RunModulesArg(true);
+      defaultInstance = new RunTestsArg(true);
       defaultInstance.initFields();
     }
     
-    // @@protoc_insertion_point(class_scope:scope.RunModulesArg)
+    // @@protoc_insertion_point(class_scope:scope.RunTestsArg)
   }
   
-  public interface SelftestOutputOrBuilder
+  public interface RunStatusOrBuilder
       extends com.google.protobuf.MessageOrBuilder {
     
-    // required string output = 2;
-    boolean hasOutput();
-    String getOutput();
+    // required .scope.RunStatus.RunTestStatus status = 1;
+    boolean hasStatus();
+    com.opera.core.systems.scope.protos.SelftestProtos.RunStatus.RunTestStatus getStatus();
   }
-  public static final class SelftestOutput extends
+  public static final class RunStatus extends
       com.google.protobuf.GeneratedMessage
-      implements SelftestOutputOrBuilder {
-    // Use SelftestOutput.newBuilder() to construct.
-    private SelftestOutput(Builder builder) {
+      implements RunStatusOrBuilder {
+    // Use RunStatus.newBuilder() to construct.
+    private RunStatus(Builder builder) {
       super(builder);
     }
-    private SelftestOutput(boolean noInit) {}
+    private RunStatus(boolean noInit) {}
     
-    private static final SelftestOutput defaultInstance;
-    public static SelftestOutput getDefaultInstance() {
+    private static final RunStatus defaultInstance;
+    public static RunStatus getDefaultInstance() {
       return defaultInstance;
     }
     
-    public SelftestOutput getDefaultInstanceForType() {
+    public RunStatus getDefaultInstanceForType() {
       return defaultInstance;
     }
     
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return com.opera.core.systems.scope.protos.SelftestProtos.internal_static_scope_SelftestOutput_descriptor;
+      return com.opera.core.systems.scope.protos.SelftestProtos.internal_static_scope_RunStatus_descriptor;
     }
     
     protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return com.opera.core.systems.scope.protos.SelftestProtos.internal_static_scope_SelftestOutput_fieldAccessorTable;
+      return com.opera.core.systems.scope.protos.SelftestProtos.internal_static_scope_RunStatus_fieldAccessorTable;
+    }
+    
+    public enum RunTestStatus
+        implements com.google.protobuf.ProtocolMessageEnum {
+      RUNNING(0, 1),
+      NOT_AVAILABLE(1, 2),
+      ;
+      
+      public static final int RUNNING_VALUE = 1;
+      public static final int NOT_AVAILABLE_VALUE = 2;
+      
+      
+      public final int getNumber() { return value; }
+      
+      public static RunTestStatus valueOf(int value) {
+        switch (value) {
+          case 1: return RUNNING;
+          case 2: return NOT_AVAILABLE;
+          default: return null;
+        }
+      }
+      
+      public static com.google.protobuf.Internal.EnumLiteMap<RunTestStatus>
+          internalGetValueMap() {
+        return internalValueMap;
+      }
+      private static com.google.protobuf.Internal.EnumLiteMap<RunTestStatus>
+          internalValueMap =
+            new com.google.protobuf.Internal.EnumLiteMap<RunTestStatus>() {
+              public RunTestStatus findValueByNumber(int number) {
+                return RunTestStatus.valueOf(number);
+              }
+            };
+      
+      public final com.google.protobuf.Descriptors.EnumValueDescriptor
+          getValueDescriptor() {
+        return getDescriptor().getValues().get(index);
+      }
+      public final com.google.protobuf.Descriptors.EnumDescriptor
+          getDescriptorForType() {
+        return getDescriptor();
+      }
+      public static final com.google.protobuf.Descriptors.EnumDescriptor
+          getDescriptor() {
+        return com.opera.core.systems.scope.protos.SelftestProtos.RunStatus.getDescriptor().getEnumTypes().get(0);
+      }
+      
+      private static final RunTestStatus[] VALUES = {
+        RUNNING, NOT_AVAILABLE, 
+      };
+      
+      public static RunTestStatus valueOf(
+          com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
+        if (desc.getType() != getDescriptor()) {
+          throw new java.lang.IllegalArgumentException(
+            "EnumValueDescriptor is not for this type.");
+        }
+        return VALUES[desc.getIndex()];
+      }
+      
+      private final int index;
+      private final int value;
+      
+      private RunTestStatus(int index, int value) {
+        this.index = index;
+        this.value = value;
+      }
+      
+      // @@protoc_insertion_point(enum_scope:scope.RunStatus.RunTestStatus)
     }
     
     private int bitField0_;
-    // required string output = 2;
-    public static final int OUTPUT_FIELD_NUMBER = 2;
-    private java.lang.Object output_;
-    public boolean hasOutput() {
+    // required .scope.RunStatus.RunTestStatus status = 1;
+    public static final int STATUS_FIELD_NUMBER = 1;
+    private com.opera.core.systems.scope.protos.SelftestProtos.RunStatus.RunTestStatus status_;
+    public boolean hasStatus() {
       return ((bitField0_ & 0x00000001) == 0x00000001);
     }
-    public String getOutput() {
-      java.lang.Object ref = output_;
-      if (ref instanceof String) {
-        return (String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        String s = bs.toStringUtf8();
-        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
-          output_ = s;
-        }
-        return s;
-      }
-    }
-    private com.google.protobuf.ByteString getOutputBytes() {
-      java.lang.Object ref = output_;
-      if (ref instanceof String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
-        output_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
+    public com.opera.core.systems.scope.protos.SelftestProtos.RunStatus.RunTestStatus getStatus() {
+      return status_;
     }
     
     private void initFields() {
-      output_ = "";
+      status_ = com.opera.core.systems.scope.protos.SelftestProtos.RunStatus.RunTestStatus.RUNNING;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized != -1) return isInitialized == 1;
       
-      if (!hasOutput()) {
+      if (!hasStatus()) {
         memoizedIsInitialized = 0;
         return false;
       }
@@ -623,7 +706,7 @@ public final class SelftestProtos {
                         throws java.io.IOException {
       getSerializedSize();
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        output.writeBytes(2, getOutputBytes());
+        output.writeEnum(1, status_.getNumber());
       }
       getUnknownFields().writeTo(output);
     }
@@ -636,7 +719,7 @@ public final class SelftestProtos {
       size = 0;
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(2, getOutputBytes());
+          .computeEnumSize(1, status_.getNumber());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -650,41 +733,41 @@ public final class SelftestProtos {
       return super.writeReplace();
     }
     
-    public static com.opera.core.systems.scope.protos.SelftestProtos.SelftestOutput parseFrom(
+    public static com.opera.core.systems.scope.protos.SelftestProtos.RunStatus parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data).buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.SelftestProtos.SelftestOutput parseFrom(
+    public static com.opera.core.systems.scope.protos.SelftestProtos.RunStatus parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data, extensionRegistry)
                .buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.SelftestProtos.SelftestOutput parseFrom(byte[] data)
+    public static com.opera.core.systems.scope.protos.SelftestProtos.RunStatus parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data).buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.SelftestProtos.SelftestOutput parseFrom(
+    public static com.opera.core.systems.scope.protos.SelftestProtos.RunStatus parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data, extensionRegistry)
                .buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.SelftestProtos.SelftestOutput parseFrom(java.io.InputStream input)
+    public static com.opera.core.systems.scope.protos.SelftestProtos.RunStatus parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return newBuilder().mergeFrom(input).buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.SelftestProtos.SelftestOutput parseFrom(
+    public static com.opera.core.systems.scope.protos.SelftestProtos.RunStatus parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return newBuilder().mergeFrom(input, extensionRegistry)
                .buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.SelftestProtos.SelftestOutput parseDelimitedFrom(java.io.InputStream input)
+    public static com.opera.core.systems.scope.protos.SelftestProtos.RunStatus parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       Builder builder = newBuilder();
       if (builder.mergeDelimitedFrom(input)) {
@@ -693,7 +776,7 @@ public final class SelftestProtos {
         return null;
       }
     }
-    public static com.opera.core.systems.scope.protos.SelftestProtos.SelftestOutput parseDelimitedFrom(
+    public static com.opera.core.systems.scope.protos.SelftestProtos.RunStatus parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -704,12 +787,12 @@ public final class SelftestProtos {
         return null;
       }
     }
-    public static com.opera.core.systems.scope.protos.SelftestProtos.SelftestOutput parseFrom(
+    public static com.opera.core.systems.scope.protos.SelftestProtos.RunStatus parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return newBuilder().mergeFrom(input).buildParsed();
     }
-    public static com.opera.core.systems.scope.protos.SelftestProtos.SelftestOutput parseFrom(
+    public static com.opera.core.systems.scope.protos.SelftestProtos.RunStatus parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -719,7 +802,7 @@ public final class SelftestProtos {
     
     public static Builder newBuilder() { return Builder.create(); }
     public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(com.opera.core.systems.scope.protos.SelftestProtos.SelftestOutput prototype) {
+    public static Builder newBuilder(com.opera.core.systems.scope.protos.SelftestProtos.RunStatus prototype) {
       return newBuilder().mergeFrom(prototype);
     }
     public Builder toBuilder() { return newBuilder(this); }
@@ -732,18 +815,18 @@ public final class SelftestProtos {
     }
     public static final class Builder extends
         com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements com.opera.core.systems.scope.protos.SelftestProtos.SelftestOutputOrBuilder {
+       implements com.opera.core.systems.scope.protos.SelftestProtos.RunStatusOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return com.opera.core.systems.scope.protos.SelftestProtos.internal_static_scope_SelftestOutput_descriptor;
+        return com.opera.core.systems.scope.protos.SelftestProtos.internal_static_scope_RunStatus_descriptor;
       }
       
       protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return com.opera.core.systems.scope.protos.SelftestProtos.internal_static_scope_SelftestOutput_fieldAccessorTable;
+        return com.opera.core.systems.scope.protos.SelftestProtos.internal_static_scope_RunStatus_fieldAccessorTable;
       }
       
-      // Construct using com.opera.core.systems.scope.protos.SelftestProtos.SelftestOutput.newBuilder()
+      // Construct using com.opera.core.systems.scope.protos.SelftestProtos.RunStatus.newBuilder()
       private Builder() {
         maybeForceBuilderInitialization();
       }
@@ -762,7 +845,7 @@ public final class SelftestProtos {
       
       public Builder clear() {
         super.clear();
-        output_ = "";
+        status_ = com.opera.core.systems.scope.protos.SelftestProtos.RunStatus.RunTestStatus.RUNNING;
         bitField0_ = (bitField0_ & ~0x00000001);
         return this;
       }
@@ -773,24 +856,24 @@ public final class SelftestProtos {
       
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return com.opera.core.systems.scope.protos.SelftestProtos.SelftestOutput.getDescriptor();
+        return com.opera.core.systems.scope.protos.SelftestProtos.RunStatus.getDescriptor();
       }
       
-      public com.opera.core.systems.scope.protos.SelftestProtos.SelftestOutput getDefaultInstanceForType() {
-        return com.opera.core.systems.scope.protos.SelftestProtos.SelftestOutput.getDefaultInstance();
+      public com.opera.core.systems.scope.protos.SelftestProtos.RunStatus getDefaultInstanceForType() {
+        return com.opera.core.systems.scope.protos.SelftestProtos.RunStatus.getDefaultInstance();
       }
       
-      public com.opera.core.systems.scope.protos.SelftestProtos.SelftestOutput build() {
-        com.opera.core.systems.scope.protos.SelftestProtos.SelftestOutput result = buildPartial();
+      public com.opera.core.systems.scope.protos.SelftestProtos.RunStatus build() {
+        com.opera.core.systems.scope.protos.SelftestProtos.RunStatus result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return result;
       }
       
-      private com.opera.core.systems.scope.protos.SelftestProtos.SelftestOutput buildParsed()
+      private com.opera.core.systems.scope.protos.SelftestProtos.RunStatus buildParsed()
           throws com.google.protobuf.InvalidProtocolBufferException {
-        com.opera.core.systems.scope.protos.SelftestProtos.SelftestOutput result = buildPartial();
+        com.opera.core.systems.scope.protos.SelftestProtos.RunStatus result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(
             result).asInvalidProtocolBufferException();
@@ -798,39 +881,39 @@ public final class SelftestProtos {
         return result;
       }
       
-      public com.opera.core.systems.scope.protos.SelftestProtos.SelftestOutput buildPartial() {
-        com.opera.core.systems.scope.protos.SelftestProtos.SelftestOutput result = new com.opera.core.systems.scope.protos.SelftestProtos.SelftestOutput(this);
+      public com.opera.core.systems.scope.protos.SelftestProtos.RunStatus buildPartial() {
+        com.opera.core.systems.scope.protos.SelftestProtos.RunStatus result = new com.opera.core.systems.scope.protos.SelftestProtos.RunStatus(this);
         int from_bitField0_ = bitField0_;
         int to_bitField0_ = 0;
         if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
           to_bitField0_ |= 0x00000001;
         }
-        result.output_ = output_;
+        result.status_ = status_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
       }
       
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof com.opera.core.systems.scope.protos.SelftestProtos.SelftestOutput) {
-          return mergeFrom((com.opera.core.systems.scope.protos.SelftestProtos.SelftestOutput)other);
+        if (other instanceof com.opera.core.systems.scope.protos.SelftestProtos.RunStatus) {
+          return mergeFrom((com.opera.core.systems.scope.protos.SelftestProtos.RunStatus)other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
       
-      public Builder mergeFrom(com.opera.core.systems.scope.protos.SelftestProtos.SelftestOutput other) {
-        if (other == com.opera.core.systems.scope.protos.SelftestProtos.SelftestOutput.getDefaultInstance()) return this;
-        if (other.hasOutput()) {
-          setOutput(other.getOutput());
+      public Builder mergeFrom(com.opera.core.systems.scope.protos.SelftestProtos.RunStatus other) {
+        if (other == com.opera.core.systems.scope.protos.SelftestProtos.RunStatus.getDefaultInstance()) return this;
+        if (other.hasStatus()) {
+          setStatus(other.getStatus());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
       
       public final boolean isInitialized() {
-        if (!hasOutput()) {
+        if (!hasStatus()) {
           
           return false;
         }
@@ -860,9 +943,15 @@ public final class SelftestProtos {
               }
               break;
             }
-            case 18: {
-              bitField0_ |= 0x00000001;
-              output_ = input.readBytes();
+            case 8: {
+              int rawValue = input.readEnum();
+              com.opera.core.systems.scope.protos.SelftestProtos.RunStatus.RunTestStatus value = com.opera.core.systems.scope.protos.SelftestProtos.RunStatus.RunTestStatus.valueOf(rawValue);
+              if (value == null) {
+                unknownFields.mergeVarintField(1, rawValue);
+              } else {
+                bitField0_ |= 0x00000001;
+                status_ = value;
+              }
               break;
             }
           }
@@ -871,63 +960,1998 @@ public final class SelftestProtos {
       
       private int bitField0_;
       
-      // required string output = 2;
-      private java.lang.Object output_ = "";
-      public boolean hasOutput() {
+      // required .scope.RunStatus.RunTestStatus status = 1;
+      private com.opera.core.systems.scope.protos.SelftestProtos.RunStatus.RunTestStatus status_ = com.opera.core.systems.scope.protos.SelftestProtos.RunStatus.RunTestStatus.RUNNING;
+      public boolean hasStatus() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
-      public String getOutput() {
-        java.lang.Object ref = output_;
+      public com.opera.core.systems.scope.protos.SelftestProtos.RunStatus.RunTestStatus getStatus() {
+        return status_;
+      }
+      public Builder setStatus(com.opera.core.systems.scope.protos.SelftestProtos.RunStatus.RunTestStatus value) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        bitField0_ |= 0x00000001;
+        status_ = value;
+        onChanged();
+        return this;
+      }
+      public Builder clearStatus() {
+        bitField0_ = (bitField0_ & ~0x00000001);
+        status_ = com.opera.core.systems.scope.protos.SelftestProtos.RunStatus.RunTestStatus.RUNNING;
+        onChanged();
+        return this;
+      }
+      
+      // @@protoc_insertion_point(builder_scope:scope.RunStatus)
+    }
+    
+    static {
+      defaultInstance = new RunStatus(true);
+      defaultInstance.initFields();
+    }
+    
+    // @@protoc_insertion_point(class_scope:scope.RunStatus)
+  }
+  
+  public interface GroupInformationOrBuilder
+      extends com.google.protobuf.MessageOrBuilder {
+    
+    // required string name = 1;
+    boolean hasName();
+    String getName();
+    
+    // required string module = 2;
+    boolean hasModule();
+    String getModule();
+  }
+  public static final class GroupInformation extends
+      com.google.protobuf.GeneratedMessage
+      implements GroupInformationOrBuilder {
+    // Use GroupInformation.newBuilder() to construct.
+    private GroupInformation(Builder builder) {
+      super(builder);
+    }
+    private GroupInformation(boolean noInit) {}
+    
+    private static final GroupInformation defaultInstance;
+    public static GroupInformation getDefaultInstance() {
+      return defaultInstance;
+    }
+    
+    public GroupInformation getDefaultInstanceForType() {
+      return defaultInstance;
+    }
+    
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return com.opera.core.systems.scope.protos.SelftestProtos.internal_static_scope_GroupInformation_descriptor;
+    }
+    
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return com.opera.core.systems.scope.protos.SelftestProtos.internal_static_scope_GroupInformation_fieldAccessorTable;
+    }
+    
+    private int bitField0_;
+    // required string name = 1;
+    public static final int NAME_FIELD_NUMBER = 1;
+    private java.lang.Object name_;
+    public boolean hasName() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
+    }
+    public String getName() {
+      java.lang.Object ref = name_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
+          name_ = s;
+        }
+        return s;
+      }
+    }
+    private com.google.protobuf.ByteString getNameBytes() {
+      java.lang.Object ref = name_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
+        name_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    
+    // required string module = 2;
+    public static final int MODULE_FIELD_NUMBER = 2;
+    private java.lang.Object module_;
+    public boolean hasModule() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    public String getModule() {
+      java.lang.Object ref = module_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
+          module_ = s;
+        }
+        return s;
+      }
+    }
+    private com.google.protobuf.ByteString getModuleBytes() {
+      java.lang.Object ref = module_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
+        module_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    
+    private void initFields() {
+      name_ = "";
+      module_ = "";
+    }
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized != -1) return isInitialized == 1;
+      
+      if (!hasName()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasModule()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      memoizedIsInitialized = 1;
+      return true;
+    }
+    
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      getSerializedSize();
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        output.writeBytes(1, getNameBytes());
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        output.writeBytes(2, getModuleBytes());
+      }
+      getUnknownFields().writeTo(output);
+    }
+    
+    private int memoizedSerializedSize = -1;
+    public int getSerializedSize() {
+      int size = memoizedSerializedSize;
+      if (size != -1) return size;
+    
+      size = 0;
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(1, getNameBytes());
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(2, getModuleBytes());
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSerializedSize = size;
+      return size;
+    }
+    
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
+    }
+    
+    public static com.opera.core.systems.scope.protos.SelftestProtos.GroupInformation parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data).buildParsed();
+    }
+    public static com.opera.core.systems.scope.protos.SelftestProtos.GroupInformation parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data, extensionRegistry)
+               .buildParsed();
+    }
+    public static com.opera.core.systems.scope.protos.SelftestProtos.GroupInformation parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data).buildParsed();
+    }
+    public static com.opera.core.systems.scope.protos.SelftestProtos.GroupInformation parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data, extensionRegistry)
+               .buildParsed();
+    }
+    public static com.opera.core.systems.scope.protos.SelftestProtos.GroupInformation parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input).buildParsed();
+    }
+    public static com.opera.core.systems.scope.protos.SelftestProtos.GroupInformation parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input, extensionRegistry)
+               .buildParsed();
+    }
+    public static com.opera.core.systems.scope.protos.SelftestProtos.GroupInformation parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      Builder builder = newBuilder();
+      if (builder.mergeDelimitedFrom(input)) {
+        return builder.buildParsed();
+      } else {
+        return null;
+      }
+    }
+    public static com.opera.core.systems.scope.protos.SelftestProtos.GroupInformation parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      Builder builder = newBuilder();
+      if (builder.mergeDelimitedFrom(input, extensionRegistry)) {
+        return builder.buildParsed();
+      } else {
+        return null;
+      }
+    }
+    public static com.opera.core.systems.scope.protos.SelftestProtos.GroupInformation parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input).buildParsed();
+    }
+    public static com.opera.core.systems.scope.protos.SelftestProtos.GroupInformation parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input, extensionRegistry)
+               .buildParsed();
+    }
+    
+    public static Builder newBuilder() { return Builder.create(); }
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder(com.opera.core.systems.scope.protos.SelftestProtos.GroupInformation prototype) {
+      return newBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() { return newBuilder(this); }
+    
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessage.Builder<Builder>
+       implements com.opera.core.systems.scope.protos.SelftestProtos.GroupInformationOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return com.opera.core.systems.scope.protos.SelftestProtos.internal_static_scope_GroupInformation_descriptor;
+      }
+      
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return com.opera.core.systems.scope.protos.SelftestProtos.internal_static_scope_GroupInformation_fieldAccessorTable;
+      }
+      
+      // Construct using com.opera.core.systems.scope.protos.SelftestProtos.GroupInformation.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+      
+      private Builder(BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+        }
+      }
+      private static Builder create() {
+        return new Builder();
+      }
+      
+      public Builder clear() {
+        super.clear();
+        name_ = "";
+        bitField0_ = (bitField0_ & ~0x00000001);
+        module_ = "";
+        bitField0_ = (bitField0_ & ~0x00000002);
+        return this;
+      }
+      
+      public Builder clone() {
+        return create().mergeFrom(buildPartial());
+      }
+      
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return com.opera.core.systems.scope.protos.SelftestProtos.GroupInformation.getDescriptor();
+      }
+      
+      public com.opera.core.systems.scope.protos.SelftestProtos.GroupInformation getDefaultInstanceForType() {
+        return com.opera.core.systems.scope.protos.SelftestProtos.GroupInformation.getDefaultInstance();
+      }
+      
+      public com.opera.core.systems.scope.protos.SelftestProtos.GroupInformation build() {
+        com.opera.core.systems.scope.protos.SelftestProtos.GroupInformation result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+      
+      private com.opera.core.systems.scope.protos.SelftestProtos.GroupInformation buildParsed()
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        com.opera.core.systems.scope.protos.SelftestProtos.GroupInformation result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(
+            result).asInvalidProtocolBufferException();
+        }
+        return result;
+      }
+      
+      public com.opera.core.systems.scope.protos.SelftestProtos.GroupInformation buildPartial() {
+        com.opera.core.systems.scope.protos.SelftestProtos.GroupInformation result = new com.opera.core.systems.scope.protos.SelftestProtos.GroupInformation(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+          to_bitField0_ |= 0x00000001;
+        }
+        result.name_ = name_;
+        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+          to_bitField0_ |= 0x00000002;
+        }
+        result.module_ = module_;
+        result.bitField0_ = to_bitField0_;
+        onBuilt();
+        return result;
+      }
+      
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof com.opera.core.systems.scope.protos.SelftestProtos.GroupInformation) {
+          return mergeFrom((com.opera.core.systems.scope.protos.SelftestProtos.GroupInformation)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+      
+      public Builder mergeFrom(com.opera.core.systems.scope.protos.SelftestProtos.GroupInformation other) {
+        if (other == com.opera.core.systems.scope.protos.SelftestProtos.GroupInformation.getDefaultInstance()) return this;
+        if (other.hasName()) {
+          setName(other.getName());
+        }
+        if (other.hasModule()) {
+          setModule(other.getModule());
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        return this;
+      }
+      
+      public final boolean isInitialized() {
+        if (!hasName()) {
+          
+          return false;
+        }
+        if (!hasModule()) {
+          
+          return false;
+        }
+        return true;
+      }
+      
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder(
+            this.getUnknownFields());
+        while (true) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              this.setUnknownFields(unknownFields.build());
+              onChanged();
+              return this;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                this.setUnknownFields(unknownFields.build());
+                onChanged();
+                return this;
+              }
+              break;
+            }
+            case 10: {
+              bitField0_ |= 0x00000001;
+              name_ = input.readBytes();
+              break;
+            }
+            case 18: {
+              bitField0_ |= 0x00000002;
+              module_ = input.readBytes();
+              break;
+            }
+          }
+        }
+      }
+      
+      private int bitField0_;
+      
+      // required string name = 1;
+      private java.lang.Object name_ = "";
+      public boolean hasName() {
+        return ((bitField0_ & 0x00000001) == 0x00000001);
+      }
+      public String getName() {
+        java.lang.Object ref = name_;
         if (!(ref instanceof String)) {
           String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
-          output_ = s;
+          name_ = s;
           return s;
         } else {
           return (String) ref;
         }
       }
-      public Builder setOutput(String value) {
+      public Builder setName(String value) {
         if (value == null) {
     throw new NullPointerException();
   }
   bitField0_ |= 0x00000001;
-        output_ = value;
+        name_ = value;
         onChanged();
         return this;
       }
-      public Builder clearOutput() {
+      public Builder clearName() {
         bitField0_ = (bitField0_ & ~0x00000001);
-        output_ = getDefaultInstance().getOutput();
+        name_ = getDefaultInstance().getName();
         onChanged();
         return this;
       }
-      void setOutput(com.google.protobuf.ByteString value) {
+      void setName(com.google.protobuf.ByteString value) {
         bitField0_ |= 0x00000001;
-        output_ = value;
+        name_ = value;
         onChanged();
       }
       
-      // @@protoc_insertion_point(builder_scope:scope.SelftestOutput)
+      // required string module = 2;
+      private java.lang.Object module_ = "";
+      public boolean hasModule() {
+        return ((bitField0_ & 0x00000002) == 0x00000002);
+      }
+      public String getModule() {
+        java.lang.Object ref = module_;
+        if (!(ref instanceof String)) {
+          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
+          module_ = s;
+          return s;
+        } else {
+          return (String) ref;
+        }
+      }
+      public Builder setModule(String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000002;
+        module_ = value;
+        onChanged();
+        return this;
+      }
+      public Builder clearModule() {
+        bitField0_ = (bitField0_ & ~0x00000002);
+        module_ = getDefaultInstance().getModule();
+        onChanged();
+        return this;
+      }
+      void setModule(com.google.protobuf.ByteString value) {
+        bitField0_ |= 0x00000002;
+        module_ = value;
+        onChanged();
+      }
+      
+      // @@protoc_insertion_point(builder_scope:scope.GroupInformation)
     }
     
     static {
-      defaultInstance = new SelftestOutput(true);
+      defaultInstance = new GroupInformation(true);
       defaultInstance.initFields();
     }
     
-    // @@protoc_insertion_point(class_scope:scope.SelftestOutput)
+    // @@protoc_insertion_point(class_scope:scope.GroupInformation)
+  }
+  
+  public interface GroupListOrBuilder
+      extends com.google.protobuf.MessageOrBuilder {
+    
+    // repeated .scope.GroupInformation groupList = 1;
+    java.util.List<com.opera.core.systems.scope.protos.SelftestProtos.GroupInformation> 
+        getGroupListList();
+    com.opera.core.systems.scope.protos.SelftestProtos.GroupInformation getGroupList(int index);
+    int getGroupListCount();
+    java.util.List<? extends com.opera.core.systems.scope.protos.SelftestProtos.GroupInformationOrBuilder> 
+        getGroupListOrBuilderList();
+    com.opera.core.systems.scope.protos.SelftestProtos.GroupInformationOrBuilder getGroupListOrBuilder(
+        int index);
+  }
+  public static final class GroupList extends
+      com.google.protobuf.GeneratedMessage
+      implements GroupListOrBuilder {
+    // Use GroupList.newBuilder() to construct.
+    private GroupList(Builder builder) {
+      super(builder);
+    }
+    private GroupList(boolean noInit) {}
+    
+    private static final GroupList defaultInstance;
+    public static GroupList getDefaultInstance() {
+      return defaultInstance;
+    }
+    
+    public GroupList getDefaultInstanceForType() {
+      return defaultInstance;
+    }
+    
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return com.opera.core.systems.scope.protos.SelftestProtos.internal_static_scope_GroupList_descriptor;
+    }
+    
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return com.opera.core.systems.scope.protos.SelftestProtos.internal_static_scope_GroupList_fieldAccessorTable;
+    }
+    
+    // repeated .scope.GroupInformation groupList = 1;
+    public static final int GROUPLIST_FIELD_NUMBER = 1;
+    private java.util.List<com.opera.core.systems.scope.protos.SelftestProtos.GroupInformation> groupList_;
+    public java.util.List<com.opera.core.systems.scope.protos.SelftestProtos.GroupInformation> getGroupListList() {
+      return groupList_;
+    }
+    public java.util.List<? extends com.opera.core.systems.scope.protos.SelftestProtos.GroupInformationOrBuilder> 
+        getGroupListOrBuilderList() {
+      return groupList_;
+    }
+    public int getGroupListCount() {
+      return groupList_.size();
+    }
+    public com.opera.core.systems.scope.protos.SelftestProtos.GroupInformation getGroupList(int index) {
+      return groupList_.get(index);
+    }
+    public com.opera.core.systems.scope.protos.SelftestProtos.GroupInformationOrBuilder getGroupListOrBuilder(
+        int index) {
+      return groupList_.get(index);
+    }
+    
+    private void initFields() {
+      groupList_ = java.util.Collections.emptyList();
+    }
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized != -1) return isInitialized == 1;
+      
+      for (int i = 0; i < getGroupListCount(); i++) {
+        if (!getGroupList(i).isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
+      memoizedIsInitialized = 1;
+      return true;
+    }
+    
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      getSerializedSize();
+      for (int i = 0; i < groupList_.size(); i++) {
+        output.writeMessage(1, groupList_.get(i));
+      }
+      getUnknownFields().writeTo(output);
+    }
+    
+    private int memoizedSerializedSize = -1;
+    public int getSerializedSize() {
+      int size = memoizedSerializedSize;
+      if (size != -1) return size;
+    
+      size = 0;
+      for (int i = 0; i < groupList_.size(); i++) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(1, groupList_.get(i));
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSerializedSize = size;
+      return size;
+    }
+    
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
+    }
+    
+    public static com.opera.core.systems.scope.protos.SelftestProtos.GroupList parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data).buildParsed();
+    }
+    public static com.opera.core.systems.scope.protos.SelftestProtos.GroupList parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data, extensionRegistry)
+               .buildParsed();
+    }
+    public static com.opera.core.systems.scope.protos.SelftestProtos.GroupList parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data).buildParsed();
+    }
+    public static com.opera.core.systems.scope.protos.SelftestProtos.GroupList parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data, extensionRegistry)
+               .buildParsed();
+    }
+    public static com.opera.core.systems.scope.protos.SelftestProtos.GroupList parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input).buildParsed();
+    }
+    public static com.opera.core.systems.scope.protos.SelftestProtos.GroupList parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input, extensionRegistry)
+               .buildParsed();
+    }
+    public static com.opera.core.systems.scope.protos.SelftestProtos.GroupList parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      Builder builder = newBuilder();
+      if (builder.mergeDelimitedFrom(input)) {
+        return builder.buildParsed();
+      } else {
+        return null;
+      }
+    }
+    public static com.opera.core.systems.scope.protos.SelftestProtos.GroupList parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      Builder builder = newBuilder();
+      if (builder.mergeDelimitedFrom(input, extensionRegistry)) {
+        return builder.buildParsed();
+      } else {
+        return null;
+      }
+    }
+    public static com.opera.core.systems.scope.protos.SelftestProtos.GroupList parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input).buildParsed();
+    }
+    public static com.opera.core.systems.scope.protos.SelftestProtos.GroupList parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input, extensionRegistry)
+               .buildParsed();
+    }
+    
+    public static Builder newBuilder() { return Builder.create(); }
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder(com.opera.core.systems.scope.protos.SelftestProtos.GroupList prototype) {
+      return newBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() { return newBuilder(this); }
+    
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessage.Builder<Builder>
+       implements com.opera.core.systems.scope.protos.SelftestProtos.GroupListOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return com.opera.core.systems.scope.protos.SelftestProtos.internal_static_scope_GroupList_descriptor;
+      }
+      
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return com.opera.core.systems.scope.protos.SelftestProtos.internal_static_scope_GroupList_fieldAccessorTable;
+      }
+      
+      // Construct using com.opera.core.systems.scope.protos.SelftestProtos.GroupList.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+      
+      private Builder(BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+          getGroupListFieldBuilder();
+        }
+      }
+      private static Builder create() {
+        return new Builder();
+      }
+      
+      public Builder clear() {
+        super.clear();
+        if (groupListBuilder_ == null) {
+          groupList_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000001);
+        } else {
+          groupListBuilder_.clear();
+        }
+        return this;
+      }
+      
+      public Builder clone() {
+        return create().mergeFrom(buildPartial());
+      }
+      
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return com.opera.core.systems.scope.protos.SelftestProtos.GroupList.getDescriptor();
+      }
+      
+      public com.opera.core.systems.scope.protos.SelftestProtos.GroupList getDefaultInstanceForType() {
+        return com.opera.core.systems.scope.protos.SelftestProtos.GroupList.getDefaultInstance();
+      }
+      
+      public com.opera.core.systems.scope.protos.SelftestProtos.GroupList build() {
+        com.opera.core.systems.scope.protos.SelftestProtos.GroupList result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+      
+      private com.opera.core.systems.scope.protos.SelftestProtos.GroupList buildParsed()
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        com.opera.core.systems.scope.protos.SelftestProtos.GroupList result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(
+            result).asInvalidProtocolBufferException();
+        }
+        return result;
+      }
+      
+      public com.opera.core.systems.scope.protos.SelftestProtos.GroupList buildPartial() {
+        com.opera.core.systems.scope.protos.SelftestProtos.GroupList result = new com.opera.core.systems.scope.protos.SelftestProtos.GroupList(this);
+        int from_bitField0_ = bitField0_;
+        if (groupListBuilder_ == null) {
+          if (((bitField0_ & 0x00000001) == 0x00000001)) {
+            groupList_ = java.util.Collections.unmodifiableList(groupList_);
+            bitField0_ = (bitField0_ & ~0x00000001);
+          }
+          result.groupList_ = groupList_;
+        } else {
+          result.groupList_ = groupListBuilder_.build();
+        }
+        onBuilt();
+        return result;
+      }
+      
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof com.opera.core.systems.scope.protos.SelftestProtos.GroupList) {
+          return mergeFrom((com.opera.core.systems.scope.protos.SelftestProtos.GroupList)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+      
+      public Builder mergeFrom(com.opera.core.systems.scope.protos.SelftestProtos.GroupList other) {
+        if (other == com.opera.core.systems.scope.protos.SelftestProtos.GroupList.getDefaultInstance()) return this;
+        if (groupListBuilder_ == null) {
+          if (!other.groupList_.isEmpty()) {
+            if (groupList_.isEmpty()) {
+              groupList_ = other.groupList_;
+              bitField0_ = (bitField0_ & ~0x00000001);
+            } else {
+              ensureGroupListIsMutable();
+              groupList_.addAll(other.groupList_);
+            }
+            onChanged();
+          }
+        } else {
+          if (!other.groupList_.isEmpty()) {
+            if (groupListBuilder_.isEmpty()) {
+              groupListBuilder_.dispose();
+              groupListBuilder_ = null;
+              groupList_ = other.groupList_;
+              bitField0_ = (bitField0_ & ~0x00000001);
+              groupListBuilder_ = 
+                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
+                   getGroupListFieldBuilder() : null;
+            } else {
+              groupListBuilder_.addAllMessages(other.groupList_);
+            }
+          }
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        return this;
+      }
+      
+      public final boolean isInitialized() {
+        for (int i = 0; i < getGroupListCount(); i++) {
+          if (!getGroupList(i).isInitialized()) {
+            
+            return false;
+          }
+        }
+        return true;
+      }
+      
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder(
+            this.getUnknownFields());
+        while (true) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              this.setUnknownFields(unknownFields.build());
+              onChanged();
+              return this;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                this.setUnknownFields(unknownFields.build());
+                onChanged();
+                return this;
+              }
+              break;
+            }
+            case 10: {
+              com.opera.core.systems.scope.protos.SelftestProtos.GroupInformation.Builder subBuilder = com.opera.core.systems.scope.protos.SelftestProtos.GroupInformation.newBuilder();
+              input.readMessage(subBuilder, extensionRegistry);
+              addGroupList(subBuilder.buildPartial());
+              break;
+            }
+          }
+        }
+      }
+      
+      private int bitField0_;
+      
+      // repeated .scope.GroupInformation groupList = 1;
+      private java.util.List<com.opera.core.systems.scope.protos.SelftestProtos.GroupInformation> groupList_ =
+        java.util.Collections.emptyList();
+      private void ensureGroupListIsMutable() {
+        if (!((bitField0_ & 0x00000001) == 0x00000001)) {
+          groupList_ = new java.util.ArrayList<com.opera.core.systems.scope.protos.SelftestProtos.GroupInformation>(groupList_);
+          bitField0_ |= 0x00000001;
+         }
+      }
+      
+      private com.google.protobuf.RepeatedFieldBuilder<
+          com.opera.core.systems.scope.protos.SelftestProtos.GroupInformation, com.opera.core.systems.scope.protos.SelftestProtos.GroupInformation.Builder, com.opera.core.systems.scope.protos.SelftestProtos.GroupInformationOrBuilder> groupListBuilder_;
+      
+      public java.util.List<com.opera.core.systems.scope.protos.SelftestProtos.GroupInformation> getGroupListList() {
+        if (groupListBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(groupList_);
+        } else {
+          return groupListBuilder_.getMessageList();
+        }
+      }
+      public int getGroupListCount() {
+        if (groupListBuilder_ == null) {
+          return groupList_.size();
+        } else {
+          return groupListBuilder_.getCount();
+        }
+      }
+      public com.opera.core.systems.scope.protos.SelftestProtos.GroupInformation getGroupList(int index) {
+        if (groupListBuilder_ == null) {
+          return groupList_.get(index);
+        } else {
+          return groupListBuilder_.getMessage(index);
+        }
+      }
+      public Builder setGroupList(
+          int index, com.opera.core.systems.scope.protos.SelftestProtos.GroupInformation value) {
+        if (groupListBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureGroupListIsMutable();
+          groupList_.set(index, value);
+          onChanged();
+        } else {
+          groupListBuilder_.setMessage(index, value);
+        }
+        return this;
+      }
+      public Builder setGroupList(
+          int index, com.opera.core.systems.scope.protos.SelftestProtos.GroupInformation.Builder builderForValue) {
+        if (groupListBuilder_ == null) {
+          ensureGroupListIsMutable();
+          groupList_.set(index, builderForValue.build());
+          onChanged();
+        } else {
+          groupListBuilder_.setMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      public Builder addGroupList(com.opera.core.systems.scope.protos.SelftestProtos.GroupInformation value) {
+        if (groupListBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureGroupListIsMutable();
+          groupList_.add(value);
+          onChanged();
+        } else {
+          groupListBuilder_.addMessage(value);
+        }
+        return this;
+      }
+      public Builder addGroupList(
+          int index, com.opera.core.systems.scope.protos.SelftestProtos.GroupInformation value) {
+        if (groupListBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureGroupListIsMutable();
+          groupList_.add(index, value);
+          onChanged();
+        } else {
+          groupListBuilder_.addMessage(index, value);
+        }
+        return this;
+      }
+      public Builder addGroupList(
+          com.opera.core.systems.scope.protos.SelftestProtos.GroupInformation.Builder builderForValue) {
+        if (groupListBuilder_ == null) {
+          ensureGroupListIsMutable();
+          groupList_.add(builderForValue.build());
+          onChanged();
+        } else {
+          groupListBuilder_.addMessage(builderForValue.build());
+        }
+        return this;
+      }
+      public Builder addGroupList(
+          int index, com.opera.core.systems.scope.protos.SelftestProtos.GroupInformation.Builder builderForValue) {
+        if (groupListBuilder_ == null) {
+          ensureGroupListIsMutable();
+          groupList_.add(index, builderForValue.build());
+          onChanged();
+        } else {
+          groupListBuilder_.addMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      public Builder addAllGroupList(
+          java.lang.Iterable<? extends com.opera.core.systems.scope.protos.SelftestProtos.GroupInformation> values) {
+        if (groupListBuilder_ == null) {
+          ensureGroupListIsMutable();
+          super.addAll(values, groupList_);
+          onChanged();
+        } else {
+          groupListBuilder_.addAllMessages(values);
+        }
+        return this;
+      }
+      public Builder clearGroupList() {
+        if (groupListBuilder_ == null) {
+          groupList_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000001);
+          onChanged();
+        } else {
+          groupListBuilder_.clear();
+        }
+        return this;
+      }
+      public Builder removeGroupList(int index) {
+        if (groupListBuilder_ == null) {
+          ensureGroupListIsMutable();
+          groupList_.remove(index);
+          onChanged();
+        } else {
+          groupListBuilder_.remove(index);
+        }
+        return this;
+      }
+      public com.opera.core.systems.scope.protos.SelftestProtos.GroupInformation.Builder getGroupListBuilder(
+          int index) {
+        return getGroupListFieldBuilder().getBuilder(index);
+      }
+      public com.opera.core.systems.scope.protos.SelftestProtos.GroupInformationOrBuilder getGroupListOrBuilder(
+          int index) {
+        if (groupListBuilder_ == null) {
+          return groupList_.get(index);  } else {
+          return groupListBuilder_.getMessageOrBuilder(index);
+        }
+      }
+      public java.util.List<? extends com.opera.core.systems.scope.protos.SelftestProtos.GroupInformationOrBuilder> 
+           getGroupListOrBuilderList() {
+        if (groupListBuilder_ != null) {
+          return groupListBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(groupList_);
+        }
+      }
+      public com.opera.core.systems.scope.protos.SelftestProtos.GroupInformation.Builder addGroupListBuilder() {
+        return getGroupListFieldBuilder().addBuilder(
+            com.opera.core.systems.scope.protos.SelftestProtos.GroupInformation.getDefaultInstance());
+      }
+      public com.opera.core.systems.scope.protos.SelftestProtos.GroupInformation.Builder addGroupListBuilder(
+          int index) {
+        return getGroupListFieldBuilder().addBuilder(
+            index, com.opera.core.systems.scope.protos.SelftestProtos.GroupInformation.getDefaultInstance());
+      }
+      public java.util.List<com.opera.core.systems.scope.protos.SelftestProtos.GroupInformation.Builder> 
+           getGroupListBuilderList() {
+        return getGroupListFieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilder<
+          com.opera.core.systems.scope.protos.SelftestProtos.GroupInformation, com.opera.core.systems.scope.protos.SelftestProtos.GroupInformation.Builder, com.opera.core.systems.scope.protos.SelftestProtos.GroupInformationOrBuilder> 
+          getGroupListFieldBuilder() {
+        if (groupListBuilder_ == null) {
+          groupListBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
+              com.opera.core.systems.scope.protos.SelftestProtos.GroupInformation, com.opera.core.systems.scope.protos.SelftestProtos.GroupInformation.Builder, com.opera.core.systems.scope.protos.SelftestProtos.GroupInformationOrBuilder>(
+                  groupList_,
+                  ((bitField0_ & 0x00000001) == 0x00000001),
+                  getParentForChildren(),
+                  isClean());
+          groupList_ = null;
+        }
+        return groupListBuilder_;
+      }
+      
+      // @@protoc_insertion_point(builder_scope:scope.GroupList)
+    }
+    
+    static {
+      defaultInstance = new GroupList(true);
+      defaultInstance.initFields();
+    }
+    
+    // @@protoc_insertion_point(class_scope:scope.GroupList)
+  }
+  
+  public interface SelftestResultOrBuilder
+      extends com.google.protobuf.MessageOrBuilder {
+    
+    // required string testname = 1;
+    boolean hasTestname();
+    String getTestname();
+    
+    // required string groupname = 2;
+    boolean hasGroupname();
+    String getGroupname();
+    
+    // required string filename = 3;
+    boolean hasFilename();
+    String getFilename();
+    
+    // required .scope.SelftestResult.Result result = 4;
+    boolean hasResult();
+    com.opera.core.systems.scope.protos.SelftestProtos.SelftestResult.Result getResult();
+    
+    // optional string reason = 5;
+    boolean hasReason();
+    String getReason();
+    
+    // optional uint32 linenumber = 6 [default = 0];
+    boolean hasLinenumber();
+    int getLinenumber();
+  }
+  public static final class SelftestResult extends
+      com.google.protobuf.GeneratedMessage
+      implements SelftestResultOrBuilder {
+    // Use SelftestResult.newBuilder() to construct.
+    private SelftestResult(Builder builder) {
+      super(builder);
+    }
+    private SelftestResult(boolean noInit) {}
+    
+    private static final SelftestResult defaultInstance;
+    public static SelftestResult getDefaultInstance() {
+      return defaultInstance;
+    }
+    
+    public SelftestResult getDefaultInstanceForType() {
+      return defaultInstance;
+    }
+    
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return com.opera.core.systems.scope.protos.SelftestProtos.internal_static_scope_SelftestResult_descriptor;
+    }
+    
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return com.opera.core.systems.scope.protos.SelftestProtos.internal_static_scope_SelftestResult_fieldAccessorTable;
+    }
+    
+    public enum Result
+        implements com.google.protobuf.ProtocolMessageEnum {
+      PASS(0, 1),
+      FAIL(1, 2),
+      SKIP(2, 3),
+      ;
+      
+      public static final int PASS_VALUE = 1;
+      public static final int FAIL_VALUE = 2;
+      public static final int SKIP_VALUE = 3;
+      
+      
+      public final int getNumber() { return value; }
+      
+      public static Result valueOf(int value) {
+        switch (value) {
+          case 1: return PASS;
+          case 2: return FAIL;
+          case 3: return SKIP;
+          default: return null;
+        }
+      }
+      
+      public static com.google.protobuf.Internal.EnumLiteMap<Result>
+          internalGetValueMap() {
+        return internalValueMap;
+      }
+      private static com.google.protobuf.Internal.EnumLiteMap<Result>
+          internalValueMap =
+            new com.google.protobuf.Internal.EnumLiteMap<Result>() {
+              public Result findValueByNumber(int number) {
+                return Result.valueOf(number);
+              }
+            };
+      
+      public final com.google.protobuf.Descriptors.EnumValueDescriptor
+          getValueDescriptor() {
+        return getDescriptor().getValues().get(index);
+      }
+      public final com.google.protobuf.Descriptors.EnumDescriptor
+          getDescriptorForType() {
+        return getDescriptor();
+      }
+      public static final com.google.protobuf.Descriptors.EnumDescriptor
+          getDescriptor() {
+        return com.opera.core.systems.scope.protos.SelftestProtos.SelftestResult.getDescriptor().getEnumTypes().get(0);
+      }
+      
+      private static final Result[] VALUES = {
+        PASS, FAIL, SKIP, 
+      };
+      
+      public static Result valueOf(
+          com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
+        if (desc.getType() != getDescriptor()) {
+          throw new java.lang.IllegalArgumentException(
+            "EnumValueDescriptor is not for this type.");
+        }
+        return VALUES[desc.getIndex()];
+      }
+      
+      private final int index;
+      private final int value;
+      
+      private Result(int index, int value) {
+        this.index = index;
+        this.value = value;
+      }
+      
+      // @@protoc_insertion_point(enum_scope:scope.SelftestResult.Result)
+    }
+    
+    private int bitField0_;
+    // required string testname = 1;
+    public static final int TESTNAME_FIELD_NUMBER = 1;
+    private java.lang.Object testname_;
+    public boolean hasTestname() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
+    }
+    public String getTestname() {
+      java.lang.Object ref = testname_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
+          testname_ = s;
+        }
+        return s;
+      }
+    }
+    private com.google.protobuf.ByteString getTestnameBytes() {
+      java.lang.Object ref = testname_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
+        testname_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    
+    // required string groupname = 2;
+    public static final int GROUPNAME_FIELD_NUMBER = 2;
+    private java.lang.Object groupname_;
+    public boolean hasGroupname() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    public String getGroupname() {
+      java.lang.Object ref = groupname_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
+          groupname_ = s;
+        }
+        return s;
+      }
+    }
+    private com.google.protobuf.ByteString getGroupnameBytes() {
+      java.lang.Object ref = groupname_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
+        groupname_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    
+    // required string filename = 3;
+    public static final int FILENAME_FIELD_NUMBER = 3;
+    private java.lang.Object filename_;
+    public boolean hasFilename() {
+      return ((bitField0_ & 0x00000004) == 0x00000004);
+    }
+    public String getFilename() {
+      java.lang.Object ref = filename_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
+          filename_ = s;
+        }
+        return s;
+      }
+    }
+    private com.google.protobuf.ByteString getFilenameBytes() {
+      java.lang.Object ref = filename_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
+        filename_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    
+    // required .scope.SelftestResult.Result result = 4;
+    public static final int RESULT_FIELD_NUMBER = 4;
+    private com.opera.core.systems.scope.protos.SelftestProtos.SelftestResult.Result result_;
+    public boolean hasResult() {
+      return ((bitField0_ & 0x00000008) == 0x00000008);
+    }
+    public com.opera.core.systems.scope.protos.SelftestProtos.SelftestResult.Result getResult() {
+      return result_;
+    }
+    
+    // optional string reason = 5;
+    public static final int REASON_FIELD_NUMBER = 5;
+    private java.lang.Object reason_;
+    public boolean hasReason() {
+      return ((bitField0_ & 0x00000010) == 0x00000010);
+    }
+    public String getReason() {
+      java.lang.Object ref = reason_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
+          reason_ = s;
+        }
+        return s;
+      }
+    }
+    private com.google.protobuf.ByteString getReasonBytes() {
+      java.lang.Object ref = reason_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
+        reason_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    
+    // optional uint32 linenumber = 6 [default = 0];
+    public static final int LINENUMBER_FIELD_NUMBER = 6;
+    private int linenumber_;
+    public boolean hasLinenumber() {
+      return ((bitField0_ & 0x00000020) == 0x00000020);
+    }
+    public int getLinenumber() {
+      return linenumber_;
+    }
+    
+    private void initFields() {
+      testname_ = "";
+      groupname_ = "";
+      filename_ = "";
+      result_ = com.opera.core.systems.scope.protos.SelftestProtos.SelftestResult.Result.PASS;
+      reason_ = "";
+      linenumber_ = 0;
+    }
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized != -1) return isInitialized == 1;
+      
+      if (!hasTestname()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasGroupname()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasFilename()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasResult()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      memoizedIsInitialized = 1;
+      return true;
+    }
+    
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      getSerializedSize();
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        output.writeBytes(1, getTestnameBytes());
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        output.writeBytes(2, getGroupnameBytes());
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        output.writeBytes(3, getFilenameBytes());
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        output.writeEnum(4, result_.getNumber());
+      }
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        output.writeBytes(5, getReasonBytes());
+      }
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+        output.writeUInt32(6, linenumber_);
+      }
+      getUnknownFields().writeTo(output);
+    }
+    
+    private int memoizedSerializedSize = -1;
+    public int getSerializedSize() {
+      int size = memoizedSerializedSize;
+      if (size != -1) return size;
+    
+      size = 0;
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(1, getTestnameBytes());
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(2, getGroupnameBytes());
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(3, getFilenameBytes());
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeEnumSize(4, result_.getNumber());
+      }
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(5, getReasonBytes());
+      }
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeUInt32Size(6, linenumber_);
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSerializedSize = size;
+      return size;
+    }
+    
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
+    }
+    
+    public static com.opera.core.systems.scope.protos.SelftestProtos.SelftestResult parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data).buildParsed();
+    }
+    public static com.opera.core.systems.scope.protos.SelftestProtos.SelftestResult parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data, extensionRegistry)
+               .buildParsed();
+    }
+    public static com.opera.core.systems.scope.protos.SelftestProtos.SelftestResult parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data).buildParsed();
+    }
+    public static com.opera.core.systems.scope.protos.SelftestProtos.SelftestResult parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data, extensionRegistry)
+               .buildParsed();
+    }
+    public static com.opera.core.systems.scope.protos.SelftestProtos.SelftestResult parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input).buildParsed();
+    }
+    public static com.opera.core.systems.scope.protos.SelftestProtos.SelftestResult parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input, extensionRegistry)
+               .buildParsed();
+    }
+    public static com.opera.core.systems.scope.protos.SelftestProtos.SelftestResult parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      Builder builder = newBuilder();
+      if (builder.mergeDelimitedFrom(input)) {
+        return builder.buildParsed();
+      } else {
+        return null;
+      }
+    }
+    public static com.opera.core.systems.scope.protos.SelftestProtos.SelftestResult parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      Builder builder = newBuilder();
+      if (builder.mergeDelimitedFrom(input, extensionRegistry)) {
+        return builder.buildParsed();
+      } else {
+        return null;
+      }
+    }
+    public static com.opera.core.systems.scope.protos.SelftestProtos.SelftestResult parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input).buildParsed();
+    }
+    public static com.opera.core.systems.scope.protos.SelftestProtos.SelftestResult parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input, extensionRegistry)
+               .buildParsed();
+    }
+    
+    public static Builder newBuilder() { return Builder.create(); }
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder(com.opera.core.systems.scope.protos.SelftestProtos.SelftestResult prototype) {
+      return newBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() { return newBuilder(this); }
+    
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessage.Builder<Builder>
+       implements com.opera.core.systems.scope.protos.SelftestProtos.SelftestResultOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return com.opera.core.systems.scope.protos.SelftestProtos.internal_static_scope_SelftestResult_descriptor;
+      }
+      
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return com.opera.core.systems.scope.protos.SelftestProtos.internal_static_scope_SelftestResult_fieldAccessorTable;
+      }
+      
+      // Construct using com.opera.core.systems.scope.protos.SelftestProtos.SelftestResult.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+      
+      private Builder(BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+        }
+      }
+      private static Builder create() {
+        return new Builder();
+      }
+      
+      public Builder clear() {
+        super.clear();
+        testname_ = "";
+        bitField0_ = (bitField0_ & ~0x00000001);
+        groupname_ = "";
+        bitField0_ = (bitField0_ & ~0x00000002);
+        filename_ = "";
+        bitField0_ = (bitField0_ & ~0x00000004);
+        result_ = com.opera.core.systems.scope.protos.SelftestProtos.SelftestResult.Result.PASS;
+        bitField0_ = (bitField0_ & ~0x00000008);
+        reason_ = "";
+        bitField0_ = (bitField0_ & ~0x00000010);
+        linenumber_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000020);
+        return this;
+      }
+      
+      public Builder clone() {
+        return create().mergeFrom(buildPartial());
+      }
+      
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return com.opera.core.systems.scope.protos.SelftestProtos.SelftestResult.getDescriptor();
+      }
+      
+      public com.opera.core.systems.scope.protos.SelftestProtos.SelftestResult getDefaultInstanceForType() {
+        return com.opera.core.systems.scope.protos.SelftestProtos.SelftestResult.getDefaultInstance();
+      }
+      
+      public com.opera.core.systems.scope.protos.SelftestProtos.SelftestResult build() {
+        com.opera.core.systems.scope.protos.SelftestProtos.SelftestResult result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+      
+      private com.opera.core.systems.scope.protos.SelftestProtos.SelftestResult buildParsed()
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        com.opera.core.systems.scope.protos.SelftestProtos.SelftestResult result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(
+            result).asInvalidProtocolBufferException();
+        }
+        return result;
+      }
+      
+      public com.opera.core.systems.scope.protos.SelftestProtos.SelftestResult buildPartial() {
+        com.opera.core.systems.scope.protos.SelftestProtos.SelftestResult result = new com.opera.core.systems.scope.protos.SelftestProtos.SelftestResult(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+          to_bitField0_ |= 0x00000001;
+        }
+        result.testname_ = testname_;
+        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+          to_bitField0_ |= 0x00000002;
+        }
+        result.groupname_ = groupname_;
+        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
+          to_bitField0_ |= 0x00000004;
+        }
+        result.filename_ = filename_;
+        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
+          to_bitField0_ |= 0x00000008;
+        }
+        result.result_ = result_;
+        if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
+          to_bitField0_ |= 0x00000010;
+        }
+        result.reason_ = reason_;
+        if (((from_bitField0_ & 0x00000020) == 0x00000020)) {
+          to_bitField0_ |= 0x00000020;
+        }
+        result.linenumber_ = linenumber_;
+        result.bitField0_ = to_bitField0_;
+        onBuilt();
+        return result;
+      }
+      
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof com.opera.core.systems.scope.protos.SelftestProtos.SelftestResult) {
+          return mergeFrom((com.opera.core.systems.scope.protos.SelftestProtos.SelftestResult)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+      
+      public Builder mergeFrom(com.opera.core.systems.scope.protos.SelftestProtos.SelftestResult other) {
+        if (other == com.opera.core.systems.scope.protos.SelftestProtos.SelftestResult.getDefaultInstance()) return this;
+        if (other.hasTestname()) {
+          setTestname(other.getTestname());
+        }
+        if (other.hasGroupname()) {
+          setGroupname(other.getGroupname());
+        }
+        if (other.hasFilename()) {
+          setFilename(other.getFilename());
+        }
+        if (other.hasResult()) {
+          setResult(other.getResult());
+        }
+        if (other.hasReason()) {
+          setReason(other.getReason());
+        }
+        if (other.hasLinenumber()) {
+          setLinenumber(other.getLinenumber());
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        return this;
+      }
+      
+      public final boolean isInitialized() {
+        if (!hasTestname()) {
+          
+          return false;
+        }
+        if (!hasGroupname()) {
+          
+          return false;
+        }
+        if (!hasFilename()) {
+          
+          return false;
+        }
+        if (!hasResult()) {
+          
+          return false;
+        }
+        return true;
+      }
+      
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder(
+            this.getUnknownFields());
+        while (true) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              this.setUnknownFields(unknownFields.build());
+              onChanged();
+              return this;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                this.setUnknownFields(unknownFields.build());
+                onChanged();
+                return this;
+              }
+              break;
+            }
+            case 10: {
+              bitField0_ |= 0x00000001;
+              testname_ = input.readBytes();
+              break;
+            }
+            case 18: {
+              bitField0_ |= 0x00000002;
+              groupname_ = input.readBytes();
+              break;
+            }
+            case 26: {
+              bitField0_ |= 0x00000004;
+              filename_ = input.readBytes();
+              break;
+            }
+            case 32: {
+              int rawValue = input.readEnum();
+              com.opera.core.systems.scope.protos.SelftestProtos.SelftestResult.Result value = com.opera.core.systems.scope.protos.SelftestProtos.SelftestResult.Result.valueOf(rawValue);
+              if (value == null) {
+                unknownFields.mergeVarintField(4, rawValue);
+              } else {
+                bitField0_ |= 0x00000008;
+                result_ = value;
+              }
+              break;
+            }
+            case 42: {
+              bitField0_ |= 0x00000010;
+              reason_ = input.readBytes();
+              break;
+            }
+            case 48: {
+              bitField0_ |= 0x00000020;
+              linenumber_ = input.readUInt32();
+              break;
+            }
+          }
+        }
+      }
+      
+      private int bitField0_;
+      
+      // required string testname = 1;
+      private java.lang.Object testname_ = "";
+      public boolean hasTestname() {
+        return ((bitField0_ & 0x00000001) == 0x00000001);
+      }
+      public String getTestname() {
+        java.lang.Object ref = testname_;
+        if (!(ref instanceof String)) {
+          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
+          testname_ = s;
+          return s;
+        } else {
+          return (String) ref;
+        }
+      }
+      public Builder setTestname(String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000001;
+        testname_ = value;
+        onChanged();
+        return this;
+      }
+      public Builder clearTestname() {
+        bitField0_ = (bitField0_ & ~0x00000001);
+        testname_ = getDefaultInstance().getTestname();
+        onChanged();
+        return this;
+      }
+      void setTestname(com.google.protobuf.ByteString value) {
+        bitField0_ |= 0x00000001;
+        testname_ = value;
+        onChanged();
+      }
+      
+      // required string groupname = 2;
+      private java.lang.Object groupname_ = "";
+      public boolean hasGroupname() {
+        return ((bitField0_ & 0x00000002) == 0x00000002);
+      }
+      public String getGroupname() {
+        java.lang.Object ref = groupname_;
+        if (!(ref instanceof String)) {
+          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
+          groupname_ = s;
+          return s;
+        } else {
+          return (String) ref;
+        }
+      }
+      public Builder setGroupname(String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000002;
+        groupname_ = value;
+        onChanged();
+        return this;
+      }
+      public Builder clearGroupname() {
+        bitField0_ = (bitField0_ & ~0x00000002);
+        groupname_ = getDefaultInstance().getGroupname();
+        onChanged();
+        return this;
+      }
+      void setGroupname(com.google.protobuf.ByteString value) {
+        bitField0_ |= 0x00000002;
+        groupname_ = value;
+        onChanged();
+      }
+      
+      // required string filename = 3;
+      private java.lang.Object filename_ = "";
+      public boolean hasFilename() {
+        return ((bitField0_ & 0x00000004) == 0x00000004);
+      }
+      public String getFilename() {
+        java.lang.Object ref = filename_;
+        if (!(ref instanceof String)) {
+          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
+          filename_ = s;
+          return s;
+        } else {
+          return (String) ref;
+        }
+      }
+      public Builder setFilename(String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000004;
+        filename_ = value;
+        onChanged();
+        return this;
+      }
+      public Builder clearFilename() {
+        bitField0_ = (bitField0_ & ~0x00000004);
+        filename_ = getDefaultInstance().getFilename();
+        onChanged();
+        return this;
+      }
+      void setFilename(com.google.protobuf.ByteString value) {
+        bitField0_ |= 0x00000004;
+        filename_ = value;
+        onChanged();
+      }
+      
+      // required .scope.SelftestResult.Result result = 4;
+      private com.opera.core.systems.scope.protos.SelftestProtos.SelftestResult.Result result_ = com.opera.core.systems.scope.protos.SelftestProtos.SelftestResult.Result.PASS;
+      public boolean hasResult() {
+        return ((bitField0_ & 0x00000008) == 0x00000008);
+      }
+      public com.opera.core.systems.scope.protos.SelftestProtos.SelftestResult.Result getResult() {
+        return result_;
+      }
+      public Builder setResult(com.opera.core.systems.scope.protos.SelftestProtos.SelftestResult.Result value) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        bitField0_ |= 0x00000008;
+        result_ = value;
+        onChanged();
+        return this;
+      }
+      public Builder clearResult() {
+        bitField0_ = (bitField0_ & ~0x00000008);
+        result_ = com.opera.core.systems.scope.protos.SelftestProtos.SelftestResult.Result.PASS;
+        onChanged();
+        return this;
+      }
+      
+      // optional string reason = 5;
+      private java.lang.Object reason_ = "";
+      public boolean hasReason() {
+        return ((bitField0_ & 0x00000010) == 0x00000010);
+      }
+      public String getReason() {
+        java.lang.Object ref = reason_;
+        if (!(ref instanceof String)) {
+          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
+          reason_ = s;
+          return s;
+        } else {
+          return (String) ref;
+        }
+      }
+      public Builder setReason(String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000010;
+        reason_ = value;
+        onChanged();
+        return this;
+      }
+      public Builder clearReason() {
+        bitField0_ = (bitField0_ & ~0x00000010);
+        reason_ = getDefaultInstance().getReason();
+        onChanged();
+        return this;
+      }
+      void setReason(com.google.protobuf.ByteString value) {
+        bitField0_ |= 0x00000010;
+        reason_ = value;
+        onChanged();
+      }
+      
+      // optional uint32 linenumber = 6 [default = 0];
+      private int linenumber_ ;
+      public boolean hasLinenumber() {
+        return ((bitField0_ & 0x00000020) == 0x00000020);
+      }
+      public int getLinenumber() {
+        return linenumber_;
+      }
+      public Builder setLinenumber(int value) {
+        bitField0_ |= 0x00000020;
+        linenumber_ = value;
+        onChanged();
+        return this;
+      }
+      public Builder clearLinenumber() {
+        bitField0_ = (bitField0_ & ~0x00000020);
+        linenumber_ = 0;
+        onChanged();
+        return this;
+      }
+      
+      // @@protoc_insertion_point(builder_scope:scope.SelftestResult)
+    }
+    
+    static {
+      defaultInstance = new SelftestResult(true);
+      defaultInstance.initFields();
+    }
+    
+    // @@protoc_insertion_point(class_scope:scope.SelftestResult)
   }
   
   private static com.google.protobuf.Descriptors.Descriptor
-    internal_static_scope_RunModulesArg_descriptor;
+    internal_static_scope_RunTestsArg_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_scope_RunModulesArg_fieldAccessorTable;
+      internal_static_scope_RunTestsArg_fieldAccessorTable;
   private static com.google.protobuf.Descriptors.Descriptor
-    internal_static_scope_SelftestOutput_descriptor;
+    internal_static_scope_RunStatus_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_scope_SelftestOutput_fieldAccessorTable;
+      internal_static_scope_RunStatus_fieldAccessorTable;
+  private static com.google.protobuf.Descriptors.Descriptor
+    internal_static_scope_GroupInformation_descriptor;
+  private static
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_scope_GroupInformation_fieldAccessorTable;
+  private static com.google.protobuf.Descriptors.Descriptor
+    internal_static_scope_GroupList_descriptor;
+  private static
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_scope_GroupList_fieldAccessorTable;
+  private static com.google.protobuf.Descriptors.Descriptor
+    internal_static_scope_SelftestResult_descriptor;
+  private static
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_scope_SelftestResult_fieldAccessorTable;
   
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -938,35 +2962,67 @@ public final class SelftestProtos {
   static {
     java.lang.String[] descriptorData = {
       "\n\016selftest.proto\022\005scope\032\"opera/scope/sco" +
-      "pe_descriptor.proto\"\240\001\n\rRunModulesArg\022\022\n" +
-      "\nmoduleList\030\001 \003(\t\022C\n\noutputType\030\002 \001(\0162\037." +
-      "scope.RunModulesArg.OutputType:\016HUMAN_RE" +
-      "ADABLE\"6\n\nOutputType\022\022\n\016HUMAN_READABLE\020\001" +
-      "\022\024\n\020MACHINE_READABLE\020\002\" \n\016SelftestOutput" +
-      "\022\016\n\006output\030\002 \002(\tB7\n#com.opera.core.syste" +
-      "ms.scope.protosB\016SelftestProtosH\001"
+      "pe_descriptor.proto\"N\n\013RunTestsArg\022\022\n\nmo" +
+      "duleList\030\001 \001(\t\022\023\n\013testPattern\030\002 \001(\t\022\026\n\016e" +
+      "xcludePattern\030\003 \001(\t\"l\n\tRunStatus\022.\n\006stat" +
+      "us\030\001 \002(\0162\036.scope.RunStatus.RunTestStatus" +
+      "\"/\n\rRunTestStatus\022\013\n\007RUNNING\020\001\022\021\n\rNOT_AV" +
+      "AILABLE\020\002\"0\n\020GroupInformation\022\014\n\004name\030\001 " +
+      "\002(\t\022\016\n\006module\030\002 \002(\t\"7\n\tGroupList\022*\n\tgrou" +
+      "pList\030\001 \003(\0132\027.scope.GroupInformation\"\304\001\n" +
+      "\016SelftestResult\022\020\n\010testname\030\001 \002(\t\022\021\n\tgro",
+      "upname\030\002 \002(\t\022\020\n\010filename\030\003 \002(\t\022,\n\006result" +
+      "\030\004 \002(\0162\034.scope.SelftestResult.Result\022\016\n\006" +
+      "reason\030\005 \001(\t\022\025\n\nlinenumber\030\006 \001(\r:\0010\"&\n\006R" +
+      "esult\022\010\n\004PASS\020\001\022\010\n\004FAIL\020\002\022\010\n\004SKIP\020\003B7\n#c" +
+      "om.opera.core.systems.scope.protosB\016Self" +
+      "testProtosH\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
         public com.google.protobuf.ExtensionRegistry assignDescriptors(
             com.google.protobuf.Descriptors.FileDescriptor root) {
           descriptor = root;
-          internal_static_scope_RunModulesArg_descriptor =
+          internal_static_scope_RunTestsArg_descriptor =
             getDescriptor().getMessageTypes().get(0);
-          internal_static_scope_RunModulesArg_fieldAccessorTable = new
+          internal_static_scope_RunTestsArg_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_scope_RunModulesArg_descriptor,
-              new java.lang.String[] { "ModuleList", "OutputType", },
-              com.opera.core.systems.scope.protos.SelftestProtos.RunModulesArg.class,
-              com.opera.core.systems.scope.protos.SelftestProtos.RunModulesArg.Builder.class);
-          internal_static_scope_SelftestOutput_descriptor =
+              internal_static_scope_RunTestsArg_descriptor,
+              new java.lang.String[] { "ModuleList", "TestPattern", "ExcludePattern", },
+              com.opera.core.systems.scope.protos.SelftestProtos.RunTestsArg.class,
+              com.opera.core.systems.scope.protos.SelftestProtos.RunTestsArg.Builder.class);
+          internal_static_scope_RunStatus_descriptor =
             getDescriptor().getMessageTypes().get(1);
-          internal_static_scope_SelftestOutput_fieldAccessorTable = new
+          internal_static_scope_RunStatus_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_scope_SelftestOutput_descriptor,
-              new java.lang.String[] { "Output", },
-              com.opera.core.systems.scope.protos.SelftestProtos.SelftestOutput.class,
-              com.opera.core.systems.scope.protos.SelftestProtos.SelftestOutput.Builder.class);
+              internal_static_scope_RunStatus_descriptor,
+              new java.lang.String[] { "Status", },
+              com.opera.core.systems.scope.protos.SelftestProtos.RunStatus.class,
+              com.opera.core.systems.scope.protos.SelftestProtos.RunStatus.Builder.class);
+          internal_static_scope_GroupInformation_descriptor =
+            getDescriptor().getMessageTypes().get(2);
+          internal_static_scope_GroupInformation_fieldAccessorTable = new
+            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+              internal_static_scope_GroupInformation_descriptor,
+              new java.lang.String[] { "Name", "Module", },
+              com.opera.core.systems.scope.protos.SelftestProtos.GroupInformation.class,
+              com.opera.core.systems.scope.protos.SelftestProtos.GroupInformation.Builder.class);
+          internal_static_scope_GroupList_descriptor =
+            getDescriptor().getMessageTypes().get(3);
+          internal_static_scope_GroupList_fieldAccessorTable = new
+            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+              internal_static_scope_GroupList_descriptor,
+              new java.lang.String[] { "GroupList", },
+              com.opera.core.systems.scope.protos.SelftestProtos.GroupList.class,
+              com.opera.core.systems.scope.protos.SelftestProtos.GroupList.Builder.class);
+          internal_static_scope_SelftestResult_descriptor =
+            getDescriptor().getMessageTypes().get(4);
+          internal_static_scope_SelftestResult_fieldAccessorTable = new
+            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+              internal_static_scope_SelftestResult_descriptor,
+              new java.lang.String[] { "Testname", "Groupname", "Filename", "Result", "Reason", "Linenumber", },
+              com.opera.core.systems.scope.protos.SelftestProtos.SelftestResult.class,
+              com.opera.core.systems.scope.protos.SelftestProtos.SelftestResult.Builder.class);
           return null;
         }
       };

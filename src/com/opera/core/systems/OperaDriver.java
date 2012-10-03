@@ -17,7 +17,6 @@ limitations under the License.
 package com.opera.core.systems;
 
 import com.google.common.base.Throwables;
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
@@ -33,12 +32,16 @@ import com.opera.core.systems.scope.exceptions.CommunicationException;
 import com.opera.core.systems.scope.exceptions.ResponseNotReceivedException;
 import com.opera.core.systems.scope.internal.OperaDefaults;
 import com.opera.core.systems.scope.internal.OperaIntervals;
+import com.opera.core.systems.scope.internal.ServiceCallback;
+import com.opera.core.systems.scope.protos.SelftestProtos.SelftestResult;
 import com.opera.core.systems.scope.services.ICookieManager;
 import com.opera.core.systems.scope.services.ICoreUtils;
 import com.opera.core.systems.scope.services.IEcmaScriptDebugger;
 import com.opera.core.systems.scope.services.IOperaExec;
+import com.opera.core.systems.scope.services.ISelftest.ISelftestResult;
 import com.opera.core.systems.scope.services.IWindowManager;
 import com.opera.core.systems.scope.services.ums.CoreUtils;
+import com.opera.core.systems.scope.services.ums.Selftest;
 
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.Beta;
@@ -72,6 +75,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.Callable;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
@@ -80,7 +84,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static com.opera.core.systems.OperaProduct.CORE;
 import static com.opera.core.systems.OperaProduct.DESKTOP;
 import static com.opera.core.systems.OperaProduct.MOBILE;
-import static com.opera.core.systems.scope.services.ums.Selftest.SelftestResult;
 import static org.openqa.selenium.Platform.WINDOWS;
 
 /**
@@ -240,6 +243,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot, Run
     // Update browser's proxy configuration
     proxy = new OperaProxy(this);
     proxy.parse(settings.getProxy());
+
   }
 
   /**
@@ -256,7 +260,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot, Run
     versions.put("core", "1.0");
     versions.put("cookie-manager", "1.0");
     versions.put("prefs", "1.0");
-    versions.put("selftest", "1.1");
+    versions.put("selftest", "2.0");
     return versions.build();
   }
 
@@ -1022,13 +1026,50 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot, Run
     };
   }
 
-  /**
-   * Executes the selftests for the given module.  WebDriver generally has a blocking API so this
-   * method will return when the test is complete, or when {@link OperaIntervals#SELFTEST_TIMEOUT}
-   * is reached.
-   */
-  public List<SelftestResult> selftest(String module) {
-    return services.selftest(ImmutableList.of(module), OperaIntervals.SELFTEST_TIMEOUT.getMs());
+  public List<ISelftestResult> selftest(Set<String> modules, String groupPattern,
+                                        String excludePattern) {
+    if (services.getSelftest() == null) {
+      throw new UnsupportedOperationException("selftest service is not supported");
+    }
+
+    final List<ISelftestResult> results = new CopyOnWriteArrayList<ISelftestResult>();
+
+    services.getSelftest().onSelftestResult(new ServiceCallback<SelftestResult>() {
+      public void call(SelftestResult result) {
+        Selftest.SelftestResult.Builder builder = Selftest.SelftestResult.builder();
+        builder.setTestName(result.getTestname());
+        builder.setGroupName(result.getGroupname());
+        builder.setFileName(result.getFilename());
+        builder.setReason(result.getReason());
+        builder.setLineNumber(result.getLinenumber());
+        ISelftestResult.Result iresult;
+        switch (result.getResult()) {
+          case PASS:
+            iresult = ISelftestResult.Result.PASS;
+            break;
+          case SKIP:
+            iresult = ISelftestResult.Result.SKIP;
+            break;
+          case FAIL:
+          default:
+            iresult = ISelftestResult.Result.FAIL;
+        }
+        builder.setTestResult(iresult);
+        results.add(builder.build());
+      }
+    });
+
+    services.getSelftest().runSelftests(modules, groupPattern, excludePattern);
+    services.waitForSelftestDone(OperaIntervals.SELFTEST_TIMEOUT.getMs());
+    return results;
+  }
+
+  public List<ISelftestResult> selftest(Set<String> modules, String groupPattern) {
+    return selftest(modules, groupPattern, null);
+  }
+
+  public List<ISelftestResult> selftest(Set<String> modules) {
+    return selftest(modules, null, null);
   }
 
   /**

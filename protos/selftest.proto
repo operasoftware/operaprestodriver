@@ -7,36 +7,100 @@ option optimize_for         = SPEED;
 option java_outer_classname = "SelftestProtos";
 option java_package         = "com.opera.core.systems.scope.protos";
 
-
-message RunModulesArg
+message RunTestsArg
 {
     /**
-     * @since 1.1
-     */
-    enum OutputType
-    {
-        /**
-         * Output from selftest run should be human readable.
-         */
-        HUMAN_READABLE = 1;
-        /**
-         * Output from selftest run should be machine readable. The output will
-         * still be plain text, but in a form which is easy to process further.
-         */
-        MACHINE_READABLE = 2;
-    }
-
-    repeated string     moduleList = 1;
-    /**
-     * Specifies the output type for this selftest run.
+     * Comma-separated list of module names without spaces, for example:
+     * "url,util"
+     * Can be left blank, or combined with testPattern and excludePattern.
      * 
-     * @since 1.1
+     * @since 2.0
      */
-    optional OutputType outputType = 2 [default = HUMAN_READABLE];
+    optional string moduleList     = 1;
+    /**
+     * Specifies a glob-style pattern to filter tests. [group:testname]
+     * ie. "util.ZipCache:Check*"
+     * Can be left blank, or combined with moduleList and excludePattern.
+     * 
+     * @since 2.0
+     */
+    optional string testPattern    = 2;
+    /**
+     * Specifies a glob-style pattern to exclude tests. [group:testname]
+     * ie. "util.ZipCache:Check*". This will take precedence over testPattern
+     * if both are specified.
+     * 
+     * @since 2.0
+     */
+    optional string excludePattern = 3;
 }
 
-message SelftestOutput
+message RunStatus
 {
-    required string output = 2;
+    enum RunTestStatus
+    {
+        /**
+         * If we found any tests specified through RunTestsArg we will be RUNNING them.
+         */
+        RUNNING = 1;
+        /**
+         * Returned if no tests are found.
+         */
+        NOT_AVAILABLE = 2;
+    }
+
+    required RunTestStatus status = 1;
+}
+
+message GroupInformation
+{
+    required string name   = 1;
+    required string module = 2;
+}
+
+/**
+ * The list of available selftest groups
+ */
+message GroupList
+{
+    repeated GroupInformation groupList = 1;
+}
+
+/**
+ * Information about a testrun.
+ */
+message SelftestResult
+{
+    enum Result
+    {
+        PASS = 1;
+        FAIL = 2;
+        SKIP = 3;
+    }
+
+    /**
+     * Name of finished test.
+     */
+    required string testname   = 1;
+    /**
+     * Name of group.
+     */
+    required string groupname  = 2;
+    /**
+     * Filename the test is located in.
+     */
+    required string filename   = 3;
+    /**
+     * Result of test run.
+     */
+    required Result result     = 4;
+    /**
+     * If `result` is FAIL or SKIP a descriptive text is given.
+     */
+    optional string reason     = 5;
+    /**
+     * The linenumber, if available, where it failed.
+     */
+    optional uint32 linenumber = 6 [default = 0];
 }
 

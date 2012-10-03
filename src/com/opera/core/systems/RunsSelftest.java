@@ -16,22 +16,46 @@ limitations under the License.
 
 package com.opera.core.systems;
 
-import com.opera.core.systems.scope.services.ums.Selftest;
+import com.opera.core.systems.scope.services.ISelftest.ISelftestResult;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Indicates that an OperaDriver can run selftests.
  *
- * @see Selftest.SelftestResult
+ * @see ISelftestResult
  */
 public interface RunsSelftest {
 
   /**
-   * Executes the selftests for the given module.  WebDriver generally has a blocking API so this
-   * method will return when the test is complete, or when {@link com.opera.core.systems.scope.internal.OperaIntervals#SELFTEST_TIMEOUT}
-   * is reached.
+   * Makes a collection of selftests based on the parameters in and runs them.
+   * WebDriver generally has a blocking API so this method will return when the test is complete,
+   * or when {@link com.opera.core.systems.scope.internal.OperaIntervals#SELFTEST_TIMEOUT} is reached.
+   *
+   * @param modules        modules comma separated (ie. "util,about")
+   * @param groupPattern   glob-style pattern to match specific test groups (ie. "group:testname*")
+   * @param excludePattern glob-style pattern to create an exclusion rule as in `groupPattern`
    */
-  List<Selftest.SelftestResult> selftest(String module);
+  List<ISelftestResult> selftest(Set<String> modules, String groupPattern, String excludePattern);
+
+  /**
+   * Makes a collection of selftests based on the parameters in and runs them.
+   * WebDriver generally has a blocking API so this method will return when the test is complete,
+   * or when {@link com.opera.core.systems.scope.internal.OperaIntervals#SELFTEST_TIMEOUT} is reached.
+   *
+   * @param modules        modules comma separated (ie. "util,about")
+   * @param groupPattern   glob-style pattern to match specific test groups (ie. "group:testname*")
+   */
+  List<ISelftestResult> selftest(Set<String> modules, String groupPattern);
+
+  /**
+   * Makes a collection of selftests based on the parameters in and runs them.
+   * WebDriver generally has a blocking API so this method will return when the test is complete,
+   * or when {@link com.opera.core.systems.scope.internal.OperaIntervals#SELFTEST_TIMEOUT} is reached.
+   *
+   * @param modules        modules comma separated (ie. "util,about")
+   */
+  List<ISelftestResult> selftest(Set<String> modules);
 
 }

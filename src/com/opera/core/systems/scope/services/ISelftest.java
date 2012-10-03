@@ -16,36 +16,93 @@ limitations under the License.
 
 package com.opera.core.systems.scope.services;
 
+import com.opera.core.systems.scope.internal.ServiceCallback;
+import com.opera.core.systems.scope.protos.SelftestProtos.SelftestResult;
+
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
- * Runs Opera's selftests through Scope.
+ * Runs Opera's selftests through Scope. This is only compatible with Opera versions with
+ * core-integration-394 and higher.
  */
 public interface ISelftest {
 
-  public enum ResultType {
-    PASS, FAIL, SKIP
-  }
+  enum RunStatus {RUNNING, NOT_AVAILABLE}
 
   /**
-   * Run the selftests for the specified modules.
-   *
-   * @param modules the names of the modules to test
+   * Add a new selftest result to the internal cache kept in Operadriver#selftest
    */
-  void runSelftests(List<String> modules);
+  void addResult(SelftestResult message);
+
+  /**
+   * Run the selftests for the specified modules. Optionally you can limit the tests to be run by a
+   * group pattern and an exclude pattern.
+   *
+   * @param modules  module names
+   * @param groups   group names or pattern
+   * @param excludes pattern of groups or modules that should be excluded from testing
+   * @return {@link RunStatus#RUNNING} if tests are running, or {@link RunStatus#NOT_AVAILABLE} if
+   *         no tests matching the selection pattern are found
+   * @since 2.0
+   */
+  RunStatus runSelftests(Set<String> modules, String groups, String excludes);
+
+  /**
+   * Retrieves a list of available groups.
+   *
+   * @return map of modules and the test groups it contains
+   * @since 2.0
+   */
+  Map<String, List<String>> getAvailableGroups();
+
+  /**
+   * Specify a callback for when a selftest result is received.
+   *
+   * @param callback will be called on every selftest result that is received
+   * @since 2.0
+   */
+  void onSelftestResult(ServiceCallback<SelftestResult> callback);
 
   /**
    * Represents a single result from a selftest.
    */
   interface ISelftestResult {
 
-    String getTag();
+    enum Result {
+      PASS, FAIL, SKIP
+    }
 
-    String getDescription();
+    /**
+     * @return name of selftest
+     */
+    String getTestName();
 
-    ResultType getResult();
+    /**
+     * @return name of group the selftest belongs to
+     */
+    String getGroupName();
 
-    String getMore();
+    /**
+     * @return result of selftest, {@link Result#PASS}, {@link Result#FAIL} or {@link Result#SKIP}
+     */
+    Result getResult();
+
+    /**
+     * @return if result is FAIL or SKIP a reason migth be given
+     */
+    String getReason();
+
+    /**
+     * @return if result is FAIL or SKIP the filename where the test is located
+     */
+    String getFileName();
+
+    /**
+     * @return line number in selftestfile where it FAILED or was SKIPPED, this can be 0
+     */
+    int getLineNumber();
 
   }
 

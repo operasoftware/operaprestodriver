@@ -100,9 +100,6 @@ public class WaitState {
     private QuickMenuID quickMenuId;
     private QuickMenuItemID quickMenuItemID;
 
-    // Store the data for now, but it seems wasteful
-    private String selftestResults;
-
     public ResultItem(Exception ex) {
       waitResult = WaitResult.EXCEPTION;
       exception = ex;
@@ -161,9 +158,8 @@ public class WaitState {
       logger.finest("EVENT: " + waitResult.toString() + ", data=" + data);
     }
 
-    public ResultItem(String results) {
+    public ResultItem() {
       waitResult = WaitResult.EVENT_SELFTEST_DONE;
-      selftestResults = results;
     }
 
     public boolean isEventToWaitFor() {
@@ -372,10 +368,10 @@ public class WaitState {
     }
   }
 
-  void onSelftestDone(String results) {
+  void onSelftestDone() {
     synchronized (lock) {
       logger.finest("Event: onSelftestDone");
-      events.add(new ResultItem(results));
+      events.add(new ResultItem());
       lock.notifyAll();
     }
   }
@@ -662,10 +658,9 @@ public class WaitState {
             break;
 
           case EVENT_SELFTEST_DONE:
-            // TODO:
             logger.finest("RECV EVENT_SELFTEST_DONE");
             if (type == ResponseType.SELFTEST_DONE) {
-              return result;
+              return null;
             }
             break;
         }
@@ -834,14 +829,8 @@ public class WaitState {
     return "";
   }
 
-  public String waitForSelftestDone(long timeout) {
+  public void waitForSelftestDone(long timeout) {
     ResultItem item = waitAndParseResult(timeout, 0, null, ResponseType.SELFTEST_DONE);
-
-    if (item != null) {
-      return item.selftestResults;
-    }
-
-    return null;
   }
 
 }

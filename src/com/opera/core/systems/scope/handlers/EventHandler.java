@@ -23,7 +23,7 @@ import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemID;
 import com.opera.core.systems.scope.protos.EcmascriptProtos.ReadyStateChange;
 import com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeInfo;
-import com.opera.core.systems.scope.protos.SelftestProtos.SelftestOutput;
+import com.opera.core.systems.scope.protos.SelftestProtos.SelftestResult;
 import com.opera.core.systems.scope.protos.WmProtos.WindowInfo;
 
 /**
@@ -148,9 +148,9 @@ public interface EventHandler {
   /**
    * Fired when receiving the output of a selftest.
    *
-   * @param output the output of the selftest
+   * @param result the output of the selftest
    */
-  void onSelftestOutput(SelftestOutput output);
+  void onSelftestResult(SelftestResult result);
 
   /**
    * Fired when all selftests are done.

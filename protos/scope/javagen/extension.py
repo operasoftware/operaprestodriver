@@ -43,7 +43,7 @@ def java(ui, services, out, **kwargs):
         if not os.path.exists(out):
             os.makedirs(out)
     elif out:
-        f = open(out, 'w')
+        f = open(out, 'wb')
 
     if not services:
         services = list(ui.config.currentTarget().services())
@@ -78,7 +78,7 @@ def java(ui, services, out, **kwargs):
 
         if out:
             fname = os.path.join(out, os.path.basename(package.filename))
-            outfile = open(fname, 'w').write(text)
+            outfile = open(fname, 'wb').write(text)
             ui.outl('Wrote service %s to %s' % (package.services[0].name, fname))
         else:
             f.write(text)

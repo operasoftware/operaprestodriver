@@ -24,7 +24,7 @@ import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemID;
 import com.opera.core.systems.scope.protos.EcmascriptProtos.ReadyStateChange;
 import com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeInfo;
-import com.opera.core.systems.scope.protos.SelftestProtos.SelftestOutput;
+import com.opera.core.systems.scope.protos.SelftestProtos.SelftestResult;
 import com.opera.core.systems.scope.protos.WmProtos.WindowInfo;
 
 /**
@@ -132,8 +132,8 @@ public class ScopeEventHandler implements EventHandler {
     services.onQuickMenuItemPressed(menuItemID);
   }
 
-  public void onSelftestOutput(SelftestOutput output) {
-    services.onSelftestOutput(output);
+  public void onSelftestResult(SelftestResult result) {
+    services.getSelftest().addResult(result);
   }
 
   public void onSelftestDone() {

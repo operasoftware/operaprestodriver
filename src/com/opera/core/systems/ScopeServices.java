@@ -22,8 +22,8 @@ import com.google.protobuf.AbstractMessage.Builder;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
 
+import com.opera.core.systems.internal.VersionUtil;
 import com.opera.core.systems.model.ICommand;
-import com.opera.core.systems.runner.AbstractOperaRunner;
 import com.opera.core.systems.runner.interfaces.OperaRunner;
 import com.opera.core.systems.scope.ScopeCommand;
 import com.opera.core.systems.scope.exceptions.CommunicationException;
@@ -44,7 +44,6 @@ import com.opera.core.systems.scope.protos.ScopeProtos.HostInfo;
 import com.opera.core.systems.scope.protos.ScopeProtos.Service;
 import com.opera.core.systems.scope.protos.ScopeProtos.ServiceResult;
 import com.opera.core.systems.scope.protos.ScopeProtos.ServiceSelection;
-import com.opera.core.systems.scope.protos.SelftestProtos.SelftestOutput;
 import com.opera.core.systems.scope.protos.UmsProtos.Command;
 import com.opera.core.systems.scope.protos.UmsProtos.Response;
 import com.opera.core.systems.scope.services.IConsoleLogger;
@@ -57,12 +56,10 @@ import com.opera.core.systems.scope.services.IOperaExec;
 import com.opera.core.systems.scope.services.IPrefs;
 import com.opera.core.systems.scope.services.ISelftest;
 import com.opera.core.systems.scope.services.IWindowManager;
-import com.opera.core.systems.scope.services.ums.Selftest;
 import com.opera.core.systems.scope.services.ums.SystemInputManager;
 import com.opera.core.systems.scope.services.ums.UmsServices;
 import com.opera.core.systems.scope.stp.StpConnection;
 import com.opera.core.systems.scope.stp.StpThread;
-import com.opera.core.systems.internal.VersionUtil;
 
 import org.openqa.selenium.WebDriverException;
 
@@ -98,7 +95,6 @@ public class ScopeServices implements IConnectionHandler {
   private ISelftest selftest;
   private StpConnection connection = null;
   private List<String> listedServices;
-  private StringBuilder selftestOutput;
   private boolean shutdown = false;
   private Map<String, String> availableServices;
 
@@ -116,7 +112,6 @@ public class ScopeServices implements IConnectionHandler {
     versions = requiredServices;
     tagCounter = new AtomicInteger();
     stpThread = new StpThread(port, this, new ScopeEventHandler(this), manualConnect);
-    selftestOutput = new StringBuilder();
   }
 
   /**
@@ -547,23 +542,8 @@ public class ScopeServices implements IConnectionHandler {
     waitState.onOperaIdle();
   }
 
-  public void onSelftestOutput(SelftestOutput output) {
-    selftestOutput = selftestOutput.append(output.getOutput());
-  }
-
   public void onSelftestDone() {
-    String results = selftestOutput.toString();
-    selftestOutput = new StringBuilder();
-    waitState.onSelftestDone(results);
-  }
-
-  public List<Selftest.SelftestResult> selftest(List<String> modules, long timeout) {
-    if (selftest == null) {
-      throw new UnsupportedOperationException("selftest service is not supported");
-    }
-
-    selftest.runSelftests(modules);
-    return Selftest.parseSelftests(waitState.waitForSelftestDone(timeout));
+    waitState.onSelftestDone();
   }
 
   public void waitForWindowLoaded(int activeWindowId, long timeout) {
@@ -705,6 +685,10 @@ public class ScopeServices implements IConnectionHandler {
     } catch (Exception e) {
       return "";
     }
+  }
+
+  public void waitForSelftestDone(long timeout) {
+    waitState.waitForSelftestDone(timeout);
   }
 
   public void onResponseReceived(int tag, Response response) {

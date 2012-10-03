@@ -16,25 +16,31 @@ limitations under the License.
 
 package com.opera.core.systems.scope;
 
+import com.google.common.base.Function;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Maps;
+
 import com.opera.core.systems.model.ICommand;
 
-import java.util.EnumSet;
-import java.util.HashMap;
+import java.util.Map;
+
 
 public enum SelftestCommand implements ICommand {
 
-  RUN_MODULES(1),
-  OUTPUT(2),
-  FINISHED(3);
+  RUN_TESTS(1),
+  GET_TESTSGROUPS(2),
+  FINISHED(3),
+  RESULT(4);
 
-  private int command;
-  private static HashMap<Integer, SelftestCommand> lookup = new HashMap<Integer, SelftestCommand>();
+  private final int command;
 
-  static {
-    for (SelftestCommand command : EnumSet.allOf(SelftestCommand.class)) {
-      lookup.put(command.getCommandID(), command);
-    }
-  }
+  private static final Map<Integer, SelftestCommand> lookup = Maps.uniqueIndex(
+      ImmutableList.copyOf(values()),
+      new Function<SelftestCommand, Integer>() {
+        public Integer apply(SelftestCommand command) {
+          return command.getCommandID();
+        }
+      });
 
   private SelftestCommand(int command) {
     this.command = command;
