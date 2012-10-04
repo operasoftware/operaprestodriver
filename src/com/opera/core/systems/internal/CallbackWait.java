@@ -148,11 +148,8 @@ public abstract class CallbackWait {
    * Repeatedly applies this instance's input value to the given callable until one of the following
    * occurs:
    *
-   * <ol>
-   *   <li>the function returns neither null nor false.</li>
-   *   <li>the function throws an unignored exception.</li>
-   *   <li>the timeout expires.</li>
-   *   <li>the current thread is interrupted.</li>
+   * <ol> <li>the function returns neither null nor false.</li> <li>the function throws an unignored
+   * exception.</li> <li>the timeout expires.</li> <li>the current thread is interrupted.</li>
    * </ol>
    *
    * @param condition the {@link Callable} to evaluate

@@ -19,11 +19,9 @@ package com.opera.core.systems.testing.drivers;
 import com.opera.core.systems.OperaDriver;
 import com.opera.core.systems.OperaSettings;
 import com.opera.core.systems.scope.ScopeServices;
-import com.opera.core.systems.runner.interfaces.OperaRunner;
+import com.opera.core.systems.runner.OperaRunner;
 import com.opera.core.systems.scope.exceptions.ResponseNotReceivedException;
 import com.opera.core.systems.scope.services.Exec;
-
-import org.openqa.selenium.Capabilities;
 
 /**
  * Provides access to the {@link com.opera.core.systems.runner.AbstractOperaRunner}, so we can

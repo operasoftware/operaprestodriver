@@ -27,6 +27,7 @@ import java.util.logging.Logger;
  * Class to manage browser profile.
  */
 public class ProfileUtils {
+
   private String largePrefsFolder;
   private String smallPrefsFolder;
   private String cachePrefsFolder;
@@ -34,12 +35,13 @@ public class ProfileUtils {
 
   protected final Logger logger = Logger.getLogger(this.getClass().getName());
 
-  public ProfileUtils(String largePrefsFolder, String smallPrefsFolder, String cachePrefsFolder, OperaSettings settings) {
+  public ProfileUtils(String largePrefsFolder, String smallPrefsFolder, String cachePrefsFolder,
+                      OperaSettings settings) {
     this.settings = settings;
     this.largePrefsFolder = largePrefsFolder;
     this.smallPrefsFolder = smallPrefsFolder;
     this.cachePrefsFolder = cachePrefsFolder;
-   }
+  }
 
   public boolean isMac() {
     return System.getProperty("os.name").startsWith("Mac");
@@ -107,8 +109,7 @@ public class ProfileUtils {
       if (prefsFile.equals(profileFolder)) {
         return true;
       }
-    }
-    else {
+    } else {
       /* *nix */
       File dotOpera = new File(path + "/.opera");
       if (/*platform nix && */ prefsFile.equals(dotOpera)) {
@@ -120,21 +121,20 @@ public class ProfileUtils {
   }
 
   /**
-   * Deletes prefs folders for
-   * Does nothing if prefs folders are default main user profile
+   * Deletes prefs folders for Does nothing if prefs folders are default main user profile
    */
   public boolean deleteProfile() {
     String[] profileDirs = {smallPrefsFolder, largePrefsFolder, cachePrefsFolder};
 
     // Assuming if any of those are main profile, skip the whole delete
-    for (String profileDir: profileDirs) {
+    for (String profileDir : profileDirs) {
       if (isMainProfile(profileDir)) {
         logger.finer("Skipping profile deletion since '" + profileDir + "' is the main profile.");
         return false;
       }
     }
 
-    for (String profileDir: profileDirs) {
+    for (String profileDir : profileDirs) {
       File currentDirHandle = new File(profileDir);
 
       if (!currentDirHandle.exists()) {
@@ -167,14 +167,13 @@ public class ProfileUtils {
         } while (!ok);
 
         if (!ok) {
-          logger.severe("Could not delete profile in '" + profileDir + "'. Skipping further deletion.");
+          logger.severe(
+              "Could not delete profile in '" + profileDir + "'. Skipping further deletion.");
           return false;
-        }
-        else {
+        } else {
           logger.warning("Deleted profile, retry count = " + retryCount);
         }
-      }
-      else {
+      } else {
         logger.finer("Deleted profile in '" + profileDir + "'");
       }
     }
@@ -182,8 +181,6 @@ public class ProfileUtils {
   }
 
   /**
-   *
-   * @param newPrefs
    * @return true if profile was copied, else false
    */
   public boolean copyProfile(String newPrefs) {
@@ -200,11 +197,10 @@ public class ProfileUtils {
   }
 
   /**
-   *
-   * @param folderPath
    * @return true if folder was deleted, else false
    */
   private boolean deleteFolder(String folderPath) {
     return FileHandler.delete(new File(folderPath));
   }
+
 }

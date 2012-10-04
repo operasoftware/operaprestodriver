@@ -16,10 +16,6 @@ limitations under the License.
 
 package com.opera.core.systems.runner;
 
-/**
- * Used whenever the runner implementation has problems.  We are _not_ supposed to fix launcher
- * problems.  Just pass them upwards.
- */
 public class OperaRunnerException extends RuntimeException {
 
   public OperaRunnerException(Exception e) {

@@ -19,7 +19,7 @@ package com.opera.core.systems.testing.drivers;
 import com.opera.core.systems.OperaMobileDriver;
 import com.opera.core.systems.OperaSettings;
 import com.opera.core.systems.scope.ScopeServices;
-import com.opera.core.systems.runner.interfaces.OperaRunner;
+import com.opera.core.systems.runner.OperaRunner;
 import com.opera.core.systems.scope.exceptions.ResponseNotReceivedException;
 
 import org.openqa.selenium.Capabilities;

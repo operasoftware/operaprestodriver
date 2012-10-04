@@ -33,11 +33,11 @@ public enum OperaMouseKeys {
   MIDDLE_UP(32),
   MIDDLE(MIDDLE_DOWN.value | MIDDLE_UP.value);
 
+  private final Integer value;
+
   private OperaMouseKeys(int value) {
     this.value = value;
   }
-
-  private Integer value;
 
   public Integer getValue() {
     return value;

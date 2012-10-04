@@ -20,7 +20,7 @@ import com.opera.core.systems.model.ScreenCaptureReply;
 import com.opera.core.systems.runner.AbstractOperaRunner;
 import com.opera.core.systems.runner.OperaRunnerException;
 import com.opera.core.systems.runner.inprocess.OperaInProcessRunner;
-import com.opera.core.systems.runner.interfaces.OperaRunner;
+import com.opera.core.systems.runner.OperaRunner;
 import com.opera.core.systems.runner.launcher.OperaLauncherRunner;
 import com.opera.core.systems.scope.internal.OperaIntervals;
 import com.opera.core.systems.testing.Ignore;

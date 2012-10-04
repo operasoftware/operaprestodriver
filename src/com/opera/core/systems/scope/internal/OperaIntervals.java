@@ -141,7 +141,7 @@ public enum OperaIntervals {
 
   /**
    * The default timeout of taking an external screen capture using a {@link
-   * com.opera.core.systems.runner.interfaces.OperaRunner} implementation.
+   * com.opera.core.systems.runner.OperaRunner} implementation.
    */
   RUNNER_SCREEN_CAPTURE_TIMEOUT(new Duration(20, MILLISECONDS));
 

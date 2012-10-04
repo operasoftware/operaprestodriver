@@ -22,7 +22,7 @@ import com.opera.core.systems.OperaSettings;
 import com.opera.core.systems.model.ScreenCaptureReply;
 import com.opera.core.systems.runner.AbstractOperaRunner;
 import com.opera.core.systems.runner.OperaRunnerException;
-import com.opera.core.systems.runner.interfaces.OperaRunner;
+import com.opera.core.systems.runner.OperaRunner;
 import com.opera.core.systems.internal.ImplicitWait;
 import com.opera.core.systems.scope.internal.OperaIntervals;
 

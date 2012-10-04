@@ -27,8 +27,8 @@ import java.util.Map;
 
 public enum CoreMessage implements Message {
 
-  ONACTIVE(1),
-  ONIDLE(2),
+  ON_ACTIVE(1),
+  ON_IDLE(2),
   GET_BROWSER_INFORMATION(3),
   CLEAR_PRIVATE_DATA(4),
 

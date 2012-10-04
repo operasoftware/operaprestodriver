@@ -19,7 +19,6 @@ package com.opera.core.systems.runner;
 import com.opera.core.systems.OperaBinary;
 import com.opera.core.systems.OperaSettings;
 import com.opera.core.systems.arguments.OperaArgument;
-import com.opera.core.systems.runner.interfaces.OperaRunner;
 import com.opera.core.systems.scope.internal.OperaIntervals;
 
 import org.openqa.selenium.Platform;

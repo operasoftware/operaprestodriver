@@ -28,7 +28,7 @@ import com.opera.core.systems.arguments.OperaCoreArguments;
 import com.opera.core.systems.arguments.OperaDesktopArguments;
 import com.opera.core.systems.common.lang.OperaBoolean;
 import com.opera.core.systems.mobile.MobileDevices;
-import com.opera.core.systems.runner.interfaces.OperaRunner;
+import com.opera.core.systems.runner.OperaRunner;
 import com.opera.core.systems.runner.launcher.OperaLauncherRunner;
 import com.opera.core.systems.internal.OperaDefaults;
 
@@ -732,7 +732,7 @@ public class OperaSettings {
 
   /**
    * Manages settings related to logging in {@link OperaDriver} and related processes, such as
-   * {@link com.opera.core.systems.runner.interfaces.OperaRunner} and Opera itself.
+   * {@link com.opera.core.systems.runner.OperaRunner} and Opera itself.
    */
   public class OperaLogging {
 
@@ -740,7 +740,7 @@ public class OperaSettings {
      * Returns the logging level used in OperaDriver.
      *
      * Note that the individual logging levels for sub-processes used within OperaDriver, such as
-     * {@link com.opera.core.systems.runner.interfaces.OperaRunner} and for Opera itself, might
+     * {@link com.opera.core.systems.runner.OperaRunner} and for Opera itself, might
      * differ due to an unspecified heuristic of what the general desired level of chattiness the
      * user wants based on the value set here.
      *
@@ -755,7 +755,7 @@ public class OperaSettings {
      * before it is passed in to OperaDriver's constructor.
      *
      * Note that the individual logging levels for sub-processes used within OperaDriver, such as
-     * {@link com.opera.core.systems.runner.interfaces.OperaRunner} and for Opera itself, might
+     * {@link com.opera.core.systems.runner.OperaRunner} and for Opera itself, might
      * differ due to an unspecified heuristic of what the general desired level of chattiness the
      * user wants based on the value set here.
      *

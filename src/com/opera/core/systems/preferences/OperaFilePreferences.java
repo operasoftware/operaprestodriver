@@ -16,18 +16,18 @@ limitations under the License.
 
 package com.opera.core.systems.preferences;
 
-import org.ini4j.Config;
-import org.ini4j.Ini;
-import org.ini4j.Profile;
-import org.ini4j.Wini;
-import org.openqa.selenium.WebDriverException;
-
 import com.google.common.base.Charsets;
 import com.google.common.base.Joiner;
 import com.google.common.base.Predicate;
 import com.google.common.base.Throwables;
 import com.google.common.collect.Iterables;
 import com.google.common.io.Files;
+
+import org.ini4j.Config;
+import org.ini4j.Ini;
+import org.ini4j.Profile;
+import org.ini4j.Wini;
+import org.openqa.selenium.WebDriverException;
 
 import java.io.File;
 import java.io.IOException;
@@ -98,7 +98,7 @@ public class OperaFilePreferences extends AbstractOperaPreferences {
           return !line.contains("Opera Preferences version");
         }
       });
-  
+
       Config config = new Config();
       // This config setting makes sure we can handle pref lines without
       // '=' chars in them. Such prefs will be treated as having value null.

@@ -25,10 +25,10 @@ import com.google.protobuf.InvalidProtocolBufferException;
 import com.opera.core.systems.internal.ImplicitWait;
 import com.opera.core.systems.internal.OperaDefaults;
 import com.opera.core.systems.internal.VersionUtil;
-import com.opera.core.systems.runner.interfaces.OperaRunner;
+import com.opera.core.systems.runner.OperaRunner;
 import com.opera.core.systems.scope.exceptions.CommunicationException;
 import com.opera.core.systems.scope.exceptions.ScopeException;
-import com.opera.core.systems.scope.handlers.IConnectionHandler;
+import com.opera.core.systems.scope.handlers.ConnectionHandler;
 import com.opera.core.systems.scope.handlers.ScopeEventHandler;
 import com.opera.core.systems.scope.internal.OperaIntervals;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo;
@@ -72,7 +72,7 @@ import java.util.logging.Logger;
 /**
  * Implements the interface to the Scope protocol.
  */
-public class ScopeServices implements IConnectionHandler {
+public class ScopeServices implements ConnectionHandler {
 
   private final Logger logger = Logger.getLogger(getClass().getName());
   private final SortedSet<ScopeService> requiredServices;

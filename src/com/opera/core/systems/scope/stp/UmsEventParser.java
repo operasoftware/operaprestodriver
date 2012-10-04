@@ -178,12 +178,12 @@ public class UmsEventParser {
       eventHandler.onRequest(header.getWindowID());
     } else if (service.equals("core")) {
       switch (CoreMessage.get(eventId)) {
-        case ONACTIVE:
+        case ON_ACTIVE:
           // No active event handler...
           // Opera only becomes active as reaction on other event
           // sent from operadriver, so we already know.
           break;
-        case ONIDLE:
+        case ON_IDLE:
           eventHandler.onOperaIdle();
           break;
       }

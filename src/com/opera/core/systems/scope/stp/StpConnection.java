@@ -22,10 +22,10 @@ import com.google.protobuf.ByteString;
 import com.google.protobuf.CodedOutputStream;
 
 import com.opera.core.systems.scope.exceptions.ScopeException;
+import com.opera.core.systems.scope.handlers.ConnectionHandler;
 import com.opera.core.systems.scope.stp.services.messages.desktop.DesktopUtilsMessage;
 import com.opera.core.systems.scope.exceptions.CommunicationException;
 import com.opera.core.systems.scope.handlers.EventHandler;
-import com.opera.core.systems.scope.handlers.IConnectionHandler;
 import com.opera.core.systems.scope.protos.UmsProtos.Command;
 import com.opera.core.systems.scope.protos.UmsProtos.Error;
 import com.opera.core.systems.scope.protos.UmsProtos.Event;
@@ -59,7 +59,7 @@ public class StpConnection implements SocketListener {
 
   private EventHandler eventHandler;
   private UmsEventParser stp1EventHandler;
-  private IConnectionHandler connectionHandler;
+  private ConnectionHandler connectionHandler;
 
   public enum State {
     SERVICELIST, HANDSHAKE, EMPTY, STP
@@ -90,7 +90,7 @@ public class StpConnection implements SocketListener {
   /**
    * Initializes variables in object scope, sets 'count known' to false to read byte count (STP/0).
    */
-  public StpConnection(SocketChannel socket, IConnectionHandler handler, EventHandler eventHandler,
+  public StpConnection(SocketChannel socket, ConnectionHandler handler, EventHandler eventHandler,
                        SocketMonitor monitor)  throws IOException {
     connectionHandler = handler;
     socketChannel = socket;
@@ -107,7 +107,7 @@ public class StpConnection implements SocketListener {
     if (!handler.onConnected(this)) {
       close();
       throw new IOException(
-          "Connection not allowed from IConnectionHandler (already connected)");
+          "Connection not allowed from ConnectionHandler (already connected)");
     }
   }
 

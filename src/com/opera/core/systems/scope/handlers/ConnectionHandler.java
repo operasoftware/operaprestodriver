@@ -19,7 +19,7 @@ package com.opera.core.systems.scope.handlers;
 import com.opera.core.systems.scope.protos.UmsProtos.Response;
 import com.opera.core.systems.scope.stp.StpConnection;
 
-public interface IConnectionHandler {
+public interface ConnectionHandler {
 
   /**
    * This event is emitted if the STP connection thread has accepted a connection.  If an STP

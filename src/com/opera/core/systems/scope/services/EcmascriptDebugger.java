@@ -16,13 +16,6 @@ limitations under the License.
 
 package com.opera.core.systems.scope.services;
 
-import com.opera.core.systems.OperaDriver;
-import com.opera.core.systems.scope.Service;
-import com.opera.core.systems.scope.protos.EcmascriptProtos.ReadyStateChange;
-import com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeInfo;
-
-import java.util.List;
-
 public interface EcmascriptDebugger extends Debugger {
 
   static final String SERVICE_NAME = "ecmascript-debugger";

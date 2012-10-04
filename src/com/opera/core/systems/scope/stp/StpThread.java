@@ -18,7 +18,7 @@ package com.opera.core.systems.scope.stp;
 
 import com.opera.core.systems.internal.SocketMonitor;
 import com.opera.core.systems.scope.handlers.EventHandler;
-import com.opera.core.systems.scope.handlers.IConnectionHandler;
+import com.opera.core.systems.scope.handlers.ConnectionHandler;
 import com.opera.core.systems.scope.internal.OperaIntervals;
 
 import java.io.IOException;
@@ -38,7 +38,7 @@ public class StpThread extends Thread {
   private final SocketMonitor monitor;
   private volatile boolean cancelled;
 
-  public StpThread(int port, IConnectionHandler handler, EventHandler eventHandler,
+  public StpThread(int port, ConnectionHandler handler, EventHandler eventHandler,
                    boolean manualConnect) throws IOException {
     monitor = new SocketMonitor();
     listener = new StpConnectionListener(port, handler, eventHandler, manualConnect, monitor);

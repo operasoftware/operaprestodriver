@@ -14,10 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package com.opera.core.systems.runner.interfaces;
+package com.opera.core.systems.runner;
 
 import com.opera.core.systems.model.ScreenCaptureReply;
-import com.opera.core.systems.runner.OperaRunnerException;
 
 /**
  * AbstractOperaRunner is an interface for controlling the Opera browser binary.  It allows you to

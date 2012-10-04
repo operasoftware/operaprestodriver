@@ -18,7 +18,7 @@ package com.opera.core.systems;
 
 import com.opera.core.systems.runner.OperaRunnerException;
 import com.opera.core.systems.runner.inprocess.OperaInProcessRunner;
-import com.opera.core.systems.runner.interfaces.OperaRunner;
+import com.opera.core.systems.runner.OperaRunner;
 import com.opera.core.systems.testing.NoDriver;
 import com.opera.core.systems.testing.OperaDriverTestCase;
 

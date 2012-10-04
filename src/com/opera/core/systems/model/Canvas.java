@@ -29,14 +29,14 @@ public class Canvas {
 
   private boolean viewPortRelative = false;
 
+  public Canvas() {
+  }
+
   public Canvas(int x, int y, int width, int height) {
     this.x = x;
     this.y = y;
     this.width = width;
     this.height = height;
-  }
-
-  public Canvas() {
   }
 
   public boolean isViewPortRelative() {

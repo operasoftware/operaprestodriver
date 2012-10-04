@@ -23,7 +23,7 @@ import com.opera.core.systems.OperaSettings;
 import com.opera.core.systems.OperaUtils;
 import com.opera.core.systems.RunsSelftest;
 import com.opera.core.systems.preferences.OperaScopePreferences;
-import com.opera.core.systems.runner.interfaces.OperaRunner;
+import com.opera.core.systems.runner.OperaRunner;
 import com.opera.core.systems.scope.ScopeServices;
 import com.opera.core.systems.scope.exceptions.ResponseNotReceivedException;
 

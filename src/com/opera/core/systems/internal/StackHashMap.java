@@ -18,7 +18,6 @@ package com.opera.core.systems.internal;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -72,10 +71,7 @@ public class StackHashMap<K, V> implements ConcurrentMap<K, V> {
 
   public void putAll(Map<? extends K, ? extends V> t) {
     synchronized (map) {
-
-      Iterator<? extends Entry<? extends K, ? extends V>> itr = t.entrySet().iterator();
-      while (itr.hasNext()) {
-        Entry<? extends K, ? extends V> entry = itr.next();
+      for (Entry<? extends K, ? extends V> entry : t.entrySet()) {
         put(entry.getKey(), entry.getValue());
       }
     }

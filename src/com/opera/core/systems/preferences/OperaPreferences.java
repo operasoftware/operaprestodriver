@@ -22,13 +22,6 @@ package com.opera.core.systems.preferences;
 public interface OperaPreferences extends Iterable<OperaPreferences.OperaPreference> {
 
   /**
-   * Returns a hash map of all the preferences stored by their section key.
-   *
-   * @return a hash map containing preferences stored by their section
-   */
-  //public Set<Map.Entry<String,Set<OperaPreference>>> sections();
-
-  /**
    * Returns an iterable collection of all preferences present in the current object.
    *
    * @return iterable list of preferences

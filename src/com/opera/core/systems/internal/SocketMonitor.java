@@ -16,6 +16,8 @@ limitations under the License.
 
 package com.opera.core.systems.internal;
 
+import com.google.common.collect.Lists;
+
 import com.opera.core.systems.common.io.Closeables;
 
 import java.io.IOException;
@@ -26,7 +28,6 @@ import java.nio.channels.SelectableChannel;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.spi.SelectorProvider;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.logging.Logger;
@@ -41,7 +42,7 @@ public class SocketMonitor {
 
   private final Logger logger = Logger.getLogger(getClass().getName());
   private final ReentrantLock lock = new ReentrantLock();
-  private final List<SelectorChangeRequest> changes = new LinkedList<SelectorChangeRequest>();
+  private final List<SelectorChangeRequest> changes = Lists.newLinkedList();
   private Selector selector;
 
   private enum Operation {

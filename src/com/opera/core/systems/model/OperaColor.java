@@ -22,7 +22,6 @@ package com.opera.core.systems.model;
  */
 public class OperaColor {
 
-  private int id;
   private Integer lowRed;
   private Integer highRed;
   private Integer lowGreen;
