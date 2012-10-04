@@ -30,7 +30,7 @@ import com.opera.core.systems.scope.protos.EcmascriptProtos.ReadyStateChange;
 import com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeID;
 import com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeInfo;
 import com.opera.core.systems.scope.protos.HttpLoggerProtos.Header;
-import com.opera.core.systems.scope.protos.SelftestProtos.SelftestOutput;
+import com.opera.core.systems.scope.protos.SelftestProtos.SelftestResult;
 import com.opera.core.systems.scope.protos.UmsProtos.Event;
 import com.opera.core.systems.scope.protos.WmProtos.WindowID;
 import com.opera.core.systems.scope.protos.WmProtos.WindowInfo;
@@ -189,10 +189,10 @@ public class UmsEventParser {
       }
     } else if (service.equals("selftest")) {
       switch (SelftestMessage.get(eventId)) {
-        case OUTPUT:
-          SelftestOutput.Builder builder = SelftestOutput.newBuilder();
+        case RESULT:
+          SelftestResult.Builder builder = SelftestResult.newBuilder();
           buildPayload(event, builder);
-          eventHandler.onSelftestOutput(builder.build());
+          eventHandler.onSelftestResult(builder.build());
           break;
         case FINISHED:
           eventHandler.onSelftestDone();

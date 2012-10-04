@@ -26,7 +26,6 @@ import com.opera.core.systems.scope.AbstractService;
 import com.opera.core.systems.scope.ScopeServices;
 import com.opera.core.systems.scope.exceptions.ScopeException;
 import com.opera.core.systems.scope.exceptions.WindowNotFoundException;
-import com.opera.core.systems.scope.internal.ImplicitWait;
 import com.opera.core.systems.scope.internal.OperaIntervals;
 import com.opera.core.systems.scope.protos.UmsProtos.Response;
 import com.opera.core.systems.scope.protos.WmProtos.CloseWindowArg;

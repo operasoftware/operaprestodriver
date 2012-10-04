@@ -20,9 +20,9 @@ import com.google.common.collect.ImmutableSet;
 
 import com.opera.core.systems.scope.exceptions.ResponseNotReceivedException;
 import com.opera.core.systems.scope.internal.OperaIntervals;
-import com.opera.core.systems.scope.services.ISelftest;
-import com.opera.core.systems.scope.services.ISelftest.ISelftestResult;
-import com.opera.core.systems.scope.services.ums.Selftest;
+import com.opera.core.systems.scope.services.Selftest;
+import com.opera.core.systems.scope.services.Selftest.SelftestResult;
+import com.opera.core.systems.scope.stp.services.ScopeSelftest.ScopeSelftestResult;
 import com.opera.core.systems.testing.OperaDriverTestCase;
 import com.opera.core.systems.testing.RequiresService;
 
@@ -32,7 +32,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.support.ui.Duration;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -42,7 +41,6 @@ import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.junit.matchers.JUnitMatchers.containsString;
 
@@ -54,21 +52,22 @@ public class SelftestTest extends OperaDriverTestCase {
 
   @Before
   public void resetTimeout() {
-    driver.manage().timeouts().selftestTimeout(DEFAULT_SELFTEST_TIMEOUT.in(TimeUnit.MILLISECONDS),
-                                               TimeUnit.MILLISECONDS);
+    driver.manage().timeouts().selftestTimeout(
+        DEFAULT_SELFTEST_TIMEOUT.in(TimeUnit.MILLISECONDS), TimeUnit.MILLISECONDS);
   }
 
   @Test
   public void selftestDoesNotBlowUp() {
-    List<ISelftestResult> results = driver.selftest(ImmutableSet.of("accessibility",
-                                                                                  "about"), "", "");
+    List<SelftestResult> results =
+        driver.selftest(ImmutableSet.of("accessibility", "about"), "", "");
     assertFalse("Running selftests doesn't blow up, returns non-null result",
-                       results.isEmpty());
+                results.isEmpty());
   }
 
   @Test
   public void selftestOnlyGroup() {
-    List<ISelftestResult> results = driver.selftest(ImmutableSet.of(""), "about.generateddocuments.dom:*", "");
+    List<SelftestResult> results =
+        driver.selftest(ImmutableSet.of(""), "about.generateddocuments.dom:*", "");
     assertFalse(results.isEmpty());
   }
 
@@ -93,13 +92,13 @@ public class SelftestTest extends OperaDriverTestCase {
 
   @Test
   public void toJsonSerializesProperly() throws JSONException {
-    Selftest.SelftestResult.Builder builder = Selftest.SelftestResult.builder();
+    ScopeSelftestResult.Builder builder = ScopeSelftestResult.builder();
 
-    Selftest.SelftestResult expected = builder
+    ScopeSelftestResult expected = (ScopeSelftestResult) builder
         .setTestName("name")
         .setGroupName("group")
         .setFileName("filename.ot")
-        .setTestResult(ISelftest.ISelftestResult.Result.PASS)
+        .setTestResult(Selftest.SelftestResult.Result.PASS)
         .setReason("reason")
         .setLineNumber(2)
         .build();
@@ -120,16 +119,17 @@ public class SelftestTest extends OperaDriverTestCase {
     json.put("groupName", "group");
     json.put("fileName", "filename");
     json.put("reason", "reason");
-    json.put("result", ISelftest.ISelftestResult.Result.PASS);
+    json.put("result", SelftestResult.Result.PASS);
     json.put("lineNumber", 333);
 
-    Selftest.SelftestResult expected = Selftest.SelftestResult.builder().build().fromJson(json);
+    Selftest.SelftestResult expected =
+        ((ScopeSelftestResult) ScopeSelftestResult.builder().build()).fromJson(json);
 
     assertEquals("name", expected.getTestName());
     assertEquals("group", expected.getGroupName());
     assertEquals("filename", expected.getFileName());
     assertEquals("reason", expected.getReason());
-    assertEquals(ISelftest.ISelftestResult.Result.PASS, expected.getResult());
+    assertEquals(SelftestResult.Result.PASS, expected.getResult());
     assertEquals(333, expected.getLineNumber());
   }
 

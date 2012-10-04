@@ -22,10 +22,9 @@ import com.opera.core.systems.OperaProxy;
 import com.opera.core.systems.OperaSettings;
 import com.opera.core.systems.OperaUtils;
 import com.opera.core.systems.RunsSelftest;
-import com.opera.core.systems.ScopeServices;
-import com.opera.core.systems.model.ScreenCaptureReply;
 import com.opera.core.systems.preferences.OperaScopePreferences;
 import com.opera.core.systems.runner.interfaces.OperaRunner;
+import com.opera.core.systems.scope.ScopeServices;
 import com.opera.core.systems.scope.exceptions.ResponseNotReceivedException;
 
 import org.openqa.selenium.HasInputDevices;

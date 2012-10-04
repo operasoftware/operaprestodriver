@@ -16,14 +16,13 @@ limitations under the License.
 
 package com.opera.core.systems.scope.stp.services.messages;
 
-import com.opera.core.systems.scope.Message;
-
 import com.google.common.base.Function;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
 
-import java.util.Map;
+import com.opera.core.systems.scope.Message;
 
+import java.util.Map;
 
 public enum SelftestMessage implements Message {
 
@@ -32,11 +31,11 @@ public enum SelftestMessage implements Message {
   FINISHED(3),
   RESULT(4);
 
-  private static final Map<Integer, SelftestCommand> lookup = Maps.uniqueIndex(
+  private static final Map<Integer, SelftestMessage> lookup = Maps.uniqueIndex(
       ImmutableList.copyOf(values()),
-      new Function<SelftestCommand, Integer>() {
-        public Integer apply(SelftestCommand command) {
-          return command.getCommandID();
+      new Function<SelftestMessage, Integer>() {
+        public Integer apply(SelftestMessage command) {
+          return command.getID();
         }
       });
 

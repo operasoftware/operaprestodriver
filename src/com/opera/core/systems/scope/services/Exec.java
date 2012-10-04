@@ -16,9 +16,10 @@ limitations under the License.
 
 package com.opera.core.systems.scope.services;
 
+import com.opera.core.systems.internal.OperaColors;
 import com.opera.core.systems.model.Canvas;
 import com.opera.core.systems.model.ScreenCaptureReply;
-import com.opera.core.systems.scope.internal.OperaColors;
+import com.opera.core.systems.scope.Service;
 import com.opera.core.systems.scope.internal.OperaMouseKeys;
 
 import java.util.Set;
@@ -107,6 +108,6 @@ public interface Exec extends Service {
    * compare it with the given hashes (keys).
    */
   ScreenCaptureReply screenWatcher(Canvas canvas, long timeout, boolean includeImage,
-                                String... hashes);
+                                   String... hashes);
 
 }

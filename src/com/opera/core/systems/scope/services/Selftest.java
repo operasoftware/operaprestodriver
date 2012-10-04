@@ -16,8 +16,9 @@ limitations under the License.
 
 package com.opera.core.systems.scope.services;
 
+import com.opera.core.systems.scope.Service;
 import com.opera.core.systems.scope.internal.ServiceCallback;
-import com.opera.core.systems.scope.protos.SelftestProtos.SelftestResult;
+import com.opera.core.systems.scope.protos.SelftestProtos;
 
 import java.util.List;
 import java.util.Map;
@@ -29,12 +30,14 @@ import java.util.Set;
  */
 public interface Selftest extends Service {
 
+  static final String SERVICE_NAME = "selftest";
+
   enum RunStatus {RUNNING, NOT_AVAILABLE}
 
   /**
    * Add a new selftest result to the internal cache kept in Operadriver#selftest
    */
-  void addResult(SelftestResult message);
+  void addResult(SelftestProtos.SelftestResult message);
 
   /**
    * Run the selftests for the specified modules. Optionally you can limit the tests to be run by a
@@ -63,12 +66,12 @@ public interface Selftest extends Service {
    * @param callback will be called on every selftest result that is received
    * @since 2.0
    */
-  void onSelftestResult(ServiceCallback<SelftestResult> callback);
+  void onSelftestResult(ServiceCallback<SelftestProtos.SelftestResult> callback);
 
   /**
    * Represents a single result from a selftest.
    */
-  interface ISelftestResult {
+  interface SelftestResult {
 
     enum Result {
       PASS, FAIL, SKIP

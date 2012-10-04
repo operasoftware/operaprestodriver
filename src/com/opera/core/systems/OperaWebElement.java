@@ -24,6 +24,7 @@ import com.opera.core.systems.model.ColorResult;
 import com.opera.core.systems.model.ScreenCaptureReply;
 import com.opera.core.systems.scope.exceptions.ResponseNotReceivedException;
 import com.opera.core.systems.internal.OperaColors;
+import com.opera.core.systems.scope.internal.OperaIntervals;
 import com.opera.core.systems.scope.internal.OperaMouseKeys;
 import com.opera.core.systems.scope.services.Debugger;
 import com.opera.core.systems.scope.services.Exec;
@@ -356,7 +357,7 @@ public class OperaWebElement extends RemoteWebElement implements CapturesScreen 
     assertElementNotStale();
 
     Canvas canvas = buildCanvas();
-    ScreenCaptureReply reply = execService.screenWatcher(canvas, timeout, includeImage, hashes);
+    ScreenCaptureReply reply = exec.screenWatcher(canvas, timeout, includeImage, hashes);
 
     if (includeImage && reply.getPng() != null) {
       FileChannel stream;
@@ -401,7 +402,7 @@ public class OperaWebElement extends RemoteWebElement implements CapturesScreen 
     assertElementNotStale();
 
     Canvas canvas = buildCanvas();
-    ScreenCaptureReply reply = execService.containsColor(canvas, 100L, colors);
+    ScreenCaptureReply reply = exec.containsColor(canvas, 100L, colors);
 
     List<ColorResult> results = reply.getColorResults();
 

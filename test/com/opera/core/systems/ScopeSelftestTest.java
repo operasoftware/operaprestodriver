@@ -18,7 +18,7 @@ package com.opera.core.systems;
 
 import com.google.common.collect.ImmutableSet;
 
-import com.opera.core.systems.scope.services.ISelftest;
+import com.opera.core.systems.scope.services.Selftest;
 import com.opera.core.systems.testing.OperaDriverTestCase;
 import com.opera.core.systems.testing.RequiresService;
 
@@ -35,12 +35,13 @@ public class ScopeSelftestTest extends OperaDriverTestCase {
 
   @Test
   public void startNotExistingTests() {
-    assertEquals(startModuleSelftest("bogusModuleThatMostProbablyNeverWillExist"), ISelftest.RunStatus.NOT_AVAILABLE);
+    assertEquals(startModuleSelftest("bogusModuleThatMostProbablyNeverWillExist"),
+                 Selftest.RunStatus.NOT_AVAILABLE);
   }
 
   @Test
   public void startExistingTests() {
-    assertEquals(startModuleSelftest("accessibility"), ISelftest.RunStatus.RUNNING);
+    assertEquals(startModuleSelftest("accessibility"), Selftest.RunStatus.RUNNING);
   }
 
   @Test
@@ -48,7 +49,7 @@ public class ScopeSelftestTest extends OperaDriverTestCase {
     assertFalse(getAvailableGroups().isEmpty());
   }
 
-  private ISelftest.RunStatus startModuleSelftest(String module) {
+  private Selftest.RunStatus startModuleSelftest(String module) {
     return driver.getServices().getSelftest().runSelftests(ImmutableSet.of(module), null, null);
   }
 

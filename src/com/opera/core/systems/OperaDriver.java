@@ -17,8 +17,6 @@ limitations under the License.
 package com.opera.core.systems;
 
 import com.google.common.base.Throwables;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.ImmutableSortedSet;
 import com.google.common.collect.Lists;
@@ -28,6 +26,10 @@ import com.opera.core.systems.OperaLogs.ConsoleMessageConverter;
 import com.opera.core.systems.common.io.Closeables;
 import com.opera.core.systems.common.lang.OperaStrings;
 import com.opera.core.systems.model.ScreenCaptureReply;
+import com.opera.core.systems.scope.internal.ServiceCallback;
+import com.opera.core.systems.scope.protos.SelftestProtos;
+import com.opera.core.systems.scope.services.Selftest.SelftestResult;
+import com.opera.core.systems.scope.stp.services.ScopeSelftest.ScopeSelftestResult;
 import com.opera.core.systems.model.ScriptResult;
 import com.opera.core.systems.preferences.OperaScopePreferences;
 import com.opera.core.systems.runner.interfaces.OperaRunner;
@@ -35,13 +37,12 @@ import com.opera.core.systems.scope.ScopeService;
 import com.opera.core.systems.scope.ScopeServices;
 import com.opera.core.systems.scope.exceptions.CommunicationException;
 import com.opera.core.systems.scope.exceptions.ResponseNotReceivedException;
-import com.opera.core.systems.scope.internal.OperaDefaults;
+import com.opera.core.systems.internal.OperaDefaults;
 import com.opera.core.systems.scope.internal.OperaIntervals;
 import com.opera.core.systems.scope.services.CookieManager;
 import com.opera.core.systems.scope.services.Core;
 import com.opera.core.systems.scope.services.Debugger;
 import com.opera.core.systems.scope.services.Exec;
-import com.opera.core.systems.scope.services.Selftest;
 import com.opera.core.systems.scope.services.WindowManager;
 import com.opera.core.systems.scope.stp.services.ScopeCore;
 
@@ -71,10 +72,8 @@ import org.openqa.selenium.support.ui.Duration;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.concurrent.Callable;
@@ -87,7 +86,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static com.opera.core.systems.OperaProduct.CORE;
 import static com.opera.core.systems.OperaProduct.DESKTOP;
 import static com.opera.core.systems.OperaProduct.MOBILE;
-import static com.opera.core.systems.scope.services.ums.Selftest.SelftestResult;
 import static org.openqa.selenium.Platform.WINDOWS;
 
 /**
@@ -1032,49 +1030,37 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot, Run
     };
   }
 
-  public List<ISelftestResult> selftest(Set<String> modules, String groupPattern,
+  public List<SelftestResult> selftest(Set<String> modules, String groupPattern,
                                         String excludePattern) {
     if (services.getSelftest() == null) {
       throw new UnsupportedOperationException("selftest service is not supported");
     }
 
-    final List<ISelftestResult> results = new CopyOnWriteArrayList<ISelftestResult>();
+    final List<SelftestResult> results = new CopyOnWriteArrayList<SelftestResult>();
 
-    services.getSelftest().onSelftestResult(new ServiceCallback<SelftestResult>() {
-      public void call(SelftestResult result) {
-        Selftest.SelftestResult.Builder builder = Selftest.SelftestResult.builder();
+    services.getSelftest().onSelftestResult(new ServiceCallback<SelftestProtos.SelftestResult>() {
+      public void call(SelftestProtos.SelftestResult result) {
+        ScopeSelftestResult.Builder builder = ScopeSelftestResult.builder();
         builder.setTestName(result.getTestname());
         builder.setGroupName(result.getGroupname());
         builder.setFileName(result.getFilename());
         builder.setReason(result.getReason());
         builder.setLineNumber(result.getLinenumber());
-        ISelftestResult.Result iresult;
-        switch (result.getResult()) {
-          case PASS:
-            iresult = ISelftestResult.Result.PASS;
-            break;
-          case SKIP:
-            iresult = ISelftestResult.Result.SKIP;
-            break;
-          case FAIL:
-          default:
-            iresult = ISelftestResult.Result.FAIL;
-        }
-        builder.setTestResult(iresult);
+        builder.setTestResult(ScopeSelftestResult.convertProtoResult(result.getResult()));
         results.add(builder.build());
       }
     });
 
     services.getSelftest().runSelftests(modules, groupPattern, excludePattern);
-    services.waitForSelftestDone(OperaIntervals.SELFTEST_TIMEOUT.getMs());
+    services.waitFor().selftestDone(OperaIntervals.SELFTEST_TIMEOUT.getMs());
     return results;
   }
 
-  public List<ISelftestResult> selftest(Set<String> modules, String groupPattern) {
+  public List<SelftestResult> selftest(Set<String> modules, String groupPattern) {
     return selftest(modules, groupPattern, null);
   }
 
-  public List<ISelftestResult> selftest(Set<String> modules) {
+  public List<SelftestResult> selftest(Set<String> modules) {
     return selftest(modules, null, null);
   }
 
@@ -1107,10 +1093,6 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot, Run
 
   protected Debugger getDebugger() {
     return debugger;
-  }
-
-  protected IOperaExec getExecService() {
-    return exec;
   }
 
   protected ScopeServices getScopeServices() {

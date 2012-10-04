@@ -16,10 +16,7 @@ limitations under the License.
 
 package com.opera.core.systems.testing;
 
-import com.opera.core.systems.OperaDriver;
 import com.opera.core.systems.testing.drivers.TestDriver;
-import com.opera.core.systems.testing.drivers.TestOperaDriver;
-import com.opera.core.systems.testing.drivers.TestOperaDriverSupplier;
 
 /**
  * Test framework for {@link com.opera.core.systems.OperaDriver}.

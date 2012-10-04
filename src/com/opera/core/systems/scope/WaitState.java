@@ -818,9 +818,10 @@ public class WaitState {
   }
 
   public String waitForQuickMenuItemPressed(String menuItemText, long timeout) {
-    ResultItem
-        item =
-        waitAndParseResult(timeout, 0, menuItemText, ResponseType.QUICK_MENU_ITEM_PRESSED);
+    ResultItem item = waitAndParseResult(timeout,
+                                         0,
+                                         menuItemText,
+                                         ResponseType.QUICK_MENU_ITEM_PRESSED);
 
     if (item != null) {
       return item.quickMenuItemID.getMenuText();
@@ -829,8 +830,8 @@ public class WaitState {
     return "";
   }
 
-  public void waitForSelftestDone(long timeout) {
-    ResultItem item = waitAndParseResult(timeout, 0, null, ResponseType.SELFTEST_DONE);
+  public void selftestDone(long timeout) {
+    waitAndParseResult(timeout, 0, null, ResponseType.SELFTEST_DONE);
   }
 
 }

@@ -17,7 +17,7 @@ limitations under the License.
 package com.opera.core.systems.scope;
 
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.google.protobuf.AbstractMessage.Builder;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
@@ -26,26 +26,20 @@ import com.opera.core.systems.internal.ImplicitWait;
 import com.opera.core.systems.internal.OperaDefaults;
 import com.opera.core.systems.internal.VersionUtil;
 import com.opera.core.systems.runner.interfaces.OperaRunner;
-import com.opera.core.systems.scope.ScopeCommand;
 import com.opera.core.systems.scope.exceptions.CommunicationException;
+import com.opera.core.systems.scope.exceptions.ScopeException;
 import com.opera.core.systems.scope.handlers.IConnectionHandler;
 import com.opera.core.systems.scope.handlers.ScopeEventHandler;
-import com.opera.core.systems.scope.internal.ImplicitWait;
-import com.opera.core.systems.scope.internal.OperaDefaults;
 import com.opera.core.systems.scope.internal.OperaIntervals;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowInfo;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuID;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuInfo;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickMenuItemID;
-import com.opera.core.systems.scope.protos.EcmascriptProtos.ReadyStateChange;
-import com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeInfo;
 import com.opera.core.systems.scope.protos.ScopeProtos;
 import com.opera.core.systems.scope.protos.ScopeProtos.ClientInfo;
 import com.opera.core.systems.scope.protos.ScopeProtos.HostInfo;
-import com.opera.core.systems.scope.protos.ScopeProtos.Service;
 import com.opera.core.systems.scope.protos.ScopeProtos.ServiceResult;
 import com.opera.core.systems.scope.protos.ScopeProtos.ServiceSelection;
-import com.opera.core.systems.scope.protos.SelftestProtos.SelftestOutput;
 import com.opera.core.systems.scope.protos.UmsProtos.Command;
 import com.opera.core.systems.scope.protos.UmsProtos.Response;
 import com.opera.core.systems.scope.services.ConsoleLogger;
@@ -62,7 +56,6 @@ import com.opera.core.systems.scope.services.desktop.DesktopWindowManager;
 import com.opera.core.systems.scope.stp.StpConnection;
 import com.opera.core.systems.scope.stp.StpThread;
 import com.opera.core.systems.scope.stp.services.MockEcmascriptDebugger;
-import com.opera.core.systems.scope.stp.services.ScopeSelftest;
 import com.opera.core.systems.scope.stp.services.desktop.ScopeSystemInputManager;
 import com.opera.core.systems.scope.stp.services.messages.ScopeMessage;
 
@@ -238,124 +231,6 @@ public class ScopeServices implements IConnectionHandler {
   }
 
   /**
-   * Creates all of the services that we requested and are available.  If the debugger is disabled
-   * (which currently never happens) then it creates a dummy class.
-   */
-  private void createUmsServices(boolean enableDebugger, HostInfo info) {
-    new UmsServices(this, info);
-
-    if (!enableDebugger) {
-      debugger = new IEcmaScriptDebugger() {
-        public void init() {
-          logger.warning("Using mock ecmascript-debugger");
-        }
-
-        public void setRuntime(RuntimeInfo runtime) {
-        }
-
-        public Object scriptExecutor(String script, Object... params) {
-          return null;
-        }
-
-        public void removeRuntime(int runtimeId) {
-        }
-
-        public List<String> listFramePaths() {
-          return null;
-        }
-
-        public int getRuntimeId() {
-          return 0;
-        }
-
-        public Integer getObject(String using) {
-          return null;
-        }
-
-        public Integer executeScriptOnObject(String using, int objectId) {
-          return null;
-        }
-
-        public Object executeScript(String using, boolean responseExpected) {
-          return null;
-        }
-
-        public String executeJavascript(String using, boolean responseExpected) {
-          return null;
-        }
-
-        public String executeJavascript(String using) {
-          return null;
-        }
-
-        public List<Integer> examineObjects(Integer id) {
-          return null;
-        }
-
-        public void cleanUpRuntimes() {
-        }
-
-        public void cleanUpRuntimes(int windowId) {
-        }
-
-        public void changeRuntime(String framePath) {
-        }
-
-        public Object callFunctionOnObject(String using, int objectId, boolean responseExpected) {
-          return null;
-        }
-
-        public String callFunctionOnObject(String using, int objectId) {
-          return null;
-        }
-
-        public void addRuntime(RuntimeInfo info) {
-        }
-
-        public void releaseObjects() {
-        }
-
-        public boolean updateRuntime() {
-          return false;
-        }
-
-        public void resetRuntimesList() {
-        }
-
-        public void readyStateChanged(ReadyStateChange change) {
-        }
-
-        public void releaseObject(int objectId) {
-        }
-
-        public void resetFramePath() {
-        }
-
-        public void changeRuntime(int index) {
-        }
-
-        public String executeJavascript(String using, Integer windowId) {
-          return null;
-        }
-
-        public Object examineScriptResult(Integer id) {
-          return null;
-        }
-
-        public void setFormElementValue(int objectId, String value) {
-        }
-
-        public void setDriver(OperaDriver driver) {
-        }
-
-        public boolean isScriptInjectable() {
-          return false;
-        }
-      };
-    }
-  }
-
-  /**
    * Connects and resets any settings and services that the client used earlier.
    */
   private void connect() {
@@ -526,6 +401,10 @@ public class ScopeServices implements IConnectionHandler {
     waitState.waitForWindowLoaded(activeWindowId, timeout);
   }
 
+  public WaitState waitFor() {
+    return waitState;
+  }
+
   public boolean isOperaIdleAvailable() {
     // core version 1.1 introduced some important fixes, and we don't want to use the idle loading
     // scheme without this
@@ -669,6 +548,7 @@ public class ScopeServices implements IConnectionHandler {
       waitState.onException(exception);
       connection = null;
     }
+  }
 
   private Response waitForResponse(int tag, long timeout) {
     try {
