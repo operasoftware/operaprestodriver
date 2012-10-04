@@ -71,7 +71,7 @@ public abstract class AbstractService implements Service {
     }
   }
 
-  protected boolean isVersionInRange(String requiredVersion) {
+  public boolean isVersionInRange(String requiredVersion) {
     checkNotNull(requiredVersion);
     return VersionUtil.compare(getServiceVersion(), requiredVersion) >= 0;
   }
@@ -106,28 +106,6 @@ public abstract class AbstractService implements Service {
     }
     return services.executeMessage(message, builder, timeout);
   }
-
-  /**
-   * Query a collection with JXPath and return value of node.
-   *
-   * @param query a valid XPath query
-   * @return result
-   */
-  // TODO(andreastt): unused?
-  /*
-  public Object xpathQuery(Collection<?> collection, String query) {
-    JXPathContext pathContext = JXPathContext.newContext(collection);
-    Object result = null;
-
-    try {
-      result = pathContext.getValue(query);
-    } catch (JXPathNotFoundException e) {
-      logger.log(Level.WARNING, "JXPath exception: {0}", e.getMessage());
-    }
-
-    return result;
-  }
-  */
 
   /**
    * Query a collection JXPath and return a pointer.
@@ -183,7 +161,7 @@ public abstract class AbstractService implements Service {
     }
   }
 
-  protected static void sleep(long ms) {
+  public static void sleep(long ms) {
     try {
       Thread.sleep(ms);
     } catch (InterruptedException ignored) {

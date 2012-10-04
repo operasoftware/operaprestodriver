@@ -5,6 +5,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
 
 import com.opera.core.systems.scope.Message;
+import com.opera.core.systems.scope.services.ConsoleLogger;
 
 import java.util.Map;
 
@@ -16,13 +17,13 @@ public enum ConsoleLoggerMessage implements Message {
 
   DEFAULT(-1);
 
-  private static final Map<Integer, ConsoleLoggerMessage> lookup = Maps.uniqueIndex(
-      ImmutableList.copyOf(values()),
-      new Function<ConsoleLoggerMessage, Integer>() {
-        public Integer apply(ConsoleLoggerMessage message) {
-          return message.getID();
-        }
-      });
+  private static final Map<Integer, ConsoleLoggerMessage> lookup =
+      Maps.uniqueIndex(ImmutableList.copyOf(values()),
+                       new Function<ConsoleLoggerMessage, Integer>() {
+                         public Integer apply(ConsoleLoggerMessage message) {
+                           return message.getID();
+                         }
+                       });
 
   private final int code;
 
@@ -35,7 +36,7 @@ public enum ConsoleLoggerMessage implements Message {
   }
 
   public String getServiceName() {
-    return "console-logger";
+    return ConsoleLogger.SERVICE_NAME;
   }
 
   public static ConsoleLoggerMessage get(int code) {

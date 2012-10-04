@@ -16,31 +16,33 @@ limitations under the License.
 
 package com.opera.core.systems.scope.stp.services.messages;
 
-import com.opera.core.systems.scope.Message;
+import com.google.common.base.Function;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Maps;
 
-import java.util.EnumSet;
-import java.util.HashMap;
+import com.opera.core.systems.scope.Message;
+import com.opera.core.systems.scope.services.CookieManager;
+
 import java.util.Map;
 
 public enum CookieManagerMessage implements Message {
 
-  GET_COOKIE          ( 1),
-  REMOVE_COOKIE       ( 2),
-  REMOVE_ALL_COOKIES  ( 3),
-  GET_COOKIE_SETTINGS ( 4),
-  DEFAULT             (-1);
+  GET_COOKIE(1),
+  REMOVE_COOKIE(2),
+  REMOVE_ALL_COOKIES(3),
+  GET_COOKIE_SETTINGS(4),
 
-  private int code;
-  private static final
-  Map<Integer, CookieManagerMessage>
-      lookup =
-      new HashMap<Integer, CookieManagerMessage>();
+  DEFAULT(-1);
 
-  static {
-    for (CookieManagerMessage command : EnumSet.allOf(CookieManagerMessage.class)) {
-      lookup.put(command.getID(), command);
-    }
-  }
+  private static final Map<Integer, CookieManagerMessage> lookup =
+      Maps.uniqueIndex(ImmutableList.copyOf(values()),
+                       new Function<CookieManagerMessage, Integer>() {
+                         public Integer apply(CookieManagerMessage message) {
+                           return message.getID();
+                         }
+                       });
+
+  private final int code;
 
   private CookieManagerMessage(int code) {
     this.code = code;
@@ -51,7 +53,7 @@ public enum CookieManagerMessage implements Message {
   }
 
   public String getServiceName() {
-    return "cookie-manager";
+    return CookieManager.SERVICE_NAME;
   }
 
   public static CookieManagerMessage get(int code) {

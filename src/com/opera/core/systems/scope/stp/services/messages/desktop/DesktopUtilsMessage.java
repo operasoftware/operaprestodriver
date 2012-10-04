@@ -14,38 +14,36 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package com.opera.core.systems.scope.stp.services.messages;
+package com.opera.core.systems.scope.stp.services.messages.desktop;
+
+import com.google.common.base.Function;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Maps;
 
 import com.opera.core.systems.scope.Message;
 
-import java.util.EnumSet;
-import java.util.HashMap;
 import java.util.Map;
 
-/**
- * This enum maps the commands
- */
 public enum DesktopUtilsMessage implements Message {
 
-  GET_STRING                 ( 1),
-  GET_OPERA_PATH             ( 2),
-  GET_LARGE_PREFERENCES_PATH ( 3),
-  GET_SMALL_PREFERENCES_PATH ( 4),
-  GET_CACHE_PREFERENCES_PATH ( 5),
-  GET_OPERA_PID              ( 6),
-  DEFAULT                    (-1);
+  GET_STRING(1),
+  GET_OPERA_PATH(2),
+  GET_LARGE_PREFERENCES_PATH(3),
+  GET_SMALL_PREFERENCES_PATH(4),
+  GET_CACHE_PREFERENCES_PATH(5),
+  GET_OPERA_PID(6),
 
-  private int code;
-  private static final
-  Map<Integer, DesktopUtilsMessage>
-      lookup =
-      new HashMap<Integer, DesktopUtilsMessage>();
+  DEFAULT(-1);
 
-  static {
-    for (DesktopUtilsMessage message : EnumSet.allOf(DesktopUtilsMessage.class)) {
-      lookup.put(message.getID(), message);
-    }
-  }
+  private static final Map<Integer, DesktopUtilsMessage> lookup =
+      Maps.uniqueIndex(ImmutableList.copyOf(values()),
+                       new Function<DesktopUtilsMessage, Integer>() {
+                         public Integer apply(DesktopUtilsMessage message) {
+                           return message.getID();
+                         }
+                       });
+
+  private final int code;
 
   private DesktopUtilsMessage(int code) {
     this.code = code;

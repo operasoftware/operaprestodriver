@@ -92,7 +92,6 @@ public class ScopeServices implements IConnectionHandler {
   private CookieManager cookieManager;
   private Selftest selftest;
   private StpConnection connection = null;
-  private List<String> listedServices;
   private boolean shutdown = false;
   private Map<ScopeService, Service> services = ImmutableMap.of();
   private Map<ScopeService, String> availableServices = ImmutableMap.of();
@@ -369,7 +368,6 @@ public class ScopeServices implements IConnectionHandler {
     waitState.onQuickMenuItemPressed(menuItemID);
   }
 
-  // TODO ADD PARAM AGAIN, or just name?
   public void onQuickMenuClosed(QuickMenuID id) {
     logger.finest("QuickMenu closed");//: menuName=" + info.getMenuId().getMenuName());
     waitState.onQuickMenuClosed(id);
@@ -687,7 +685,6 @@ public class ScopeServices implements IConnectionHandler {
     this.cookieManager = cookieManager;
   }
 
-  @SuppressWarnings("unused")
   public Selftest getSelftest() {
     return selftest;
   }

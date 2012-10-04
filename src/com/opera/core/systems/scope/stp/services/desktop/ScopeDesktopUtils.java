@@ -18,7 +18,7 @@ package com.opera.core.systems.scope.stp.services.desktop;
 
 import com.opera.core.systems.scope.ScopeServices;
 import com.opera.core.systems.scope.AbstractService;
-import com.opera.core.systems.scope.stp.services.messages.DesktopUtilsMessage;
+import com.opera.core.systems.scope.stp.services.messages.desktop.DesktopUtilsMessage;
 import com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopPath;
 import com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopPid;
 import com.opera.core.systems.scope.protos.DesktopUtilsProtos.DesktopStringID;

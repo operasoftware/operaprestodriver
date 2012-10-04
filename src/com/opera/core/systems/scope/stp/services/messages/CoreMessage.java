@@ -21,6 +21,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
 
 import com.opera.core.systems.scope.Message;
+import com.opera.core.systems.scope.services.Core;
 
 import java.util.Map;
 
@@ -51,7 +52,7 @@ public enum CoreMessage implements Message {
   }
 
   public String getServiceName() {
-    return "core"; //"core-utils";
+    return Core.SERVICE_NAME;
   }
 
   public static CoreMessage get(int code) {

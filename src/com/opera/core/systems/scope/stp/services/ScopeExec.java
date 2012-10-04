@@ -59,7 +59,6 @@ import java.util.logging.Logger;
 public class ScopeExec extends AbstractService implements Exec {
 
   private final Logger logger = Logger.getLogger(getClass().getName());
-  // TODO: Remove me, VERY UGLY HACK FOR window-id bug
   private final List<String> excludedActions = Lists.newArrayList("Select all", "Delete");
 
   private Set<String> actions = ImmutableSet.of();
@@ -86,11 +85,9 @@ public class ScopeExec extends AbstractService implements Exec {
     ActionInfoList infoList = builder.build();
 
     Set<String> actions = new CaseInsensitiveStringSet();
-
     for (ActionInfo info : infoList.getActionInfoListList()) {
       actions.add(info.getName());
     }
-
     return actions;
   }
 
@@ -275,7 +272,7 @@ public class ScopeExec extends AbstractService implements Exec {
   }
 
   public ScreenCaptureReply screenWatcher(Canvas canvas, long timeout, boolean includeImage,
-                                       String... hashes) {
+                                          String... hashes) {
     ScreenWatcher.Builder builder = ScreenWatcher.newBuilder();
     Area.Builder areaBuilder = Area.newBuilder();
 

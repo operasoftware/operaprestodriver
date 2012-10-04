@@ -16,10 +16,13 @@ limitations under the License.
 
 package com.opera.core.systems.scope.stp.services.messages;
 
-import com.opera.core.systems.scope.Message;
+import com.google.common.base.Function;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Maps;
 
-import java.util.EnumSet;
-import java.util.HashMap;
+import com.opera.core.systems.scope.Message;
+import com.opera.core.systems.scope.services.EcmascriptDebugger;
+
 import java.util.Map;
 
 /**
@@ -28,22 +31,33 @@ import java.util.Map;
  */
 public enum EcmascriptDebuggerMessage implements Message {
 
-  LIST_RUNTIMES(1), EVAL(3), INSPECT_DOM(13), EXAMINE_OBJECTS(4), SET_CONFIGURATION(
-      10), RELEASE_OBJECTS(29), RUNTIME_STARTED(14), RUNTIME_STOPPED(15), NEW_SCRIPT(
-      16), THREAD_STARTED(17), THREAD_FINISHED(18), THREAD_STOPPED_AT(19), HANDLE_EVENT(
-      20), OBJECT_SELECTED(21), PARSE_ERROR(28), DEFAULT(-1);
+  LIST_RUNTIMES(1),
+  EVAL(3),
+  INSPECT_DOM(13),
+  EXAMINE_OBJECTS(4),
+  SET_CONFIGURATION(10),
+  RELEASE_OBJECTS(29),
+  RUNTIME_STARTED(14),
+  RUNTIME_STOPPED(15),
+  NEW_SCRIPT(16),
+  THREAD_STARTED(17),
+  THREAD_FINISHED(18),
+  THREAD_STOPPED_AT(19),
+  HANDLE_EVENT(20),
+  OBJECT_SELECTED(21),
+  PARSE_ERROR(28),
 
-  private int code;
-  private static final
-  Map<Integer, EcmascriptDebuggerMessage>
-      lookup =
-      new HashMap<Integer, EcmascriptDebuggerMessage>();
+  DEFAULT(-1);
 
-  static {
-    for (EcmascriptDebuggerMessage message : EnumSet.allOf(EcmascriptDebuggerMessage.class)) {
-      lookup.put(message.getID(), message);
-    }
-  }
+  private static final Map<Integer, EcmascriptDebuggerMessage> lookup =
+      Maps.uniqueIndex(ImmutableList.copyOf(values()),
+                       new Function<EcmascriptDebuggerMessage, Integer>() {
+                         public Integer apply(EcmascriptDebuggerMessage command) {
+                           return command.getID();
+                         }
+                       });
+
+  private final int code;
 
   private EcmascriptDebuggerMessage(int code) {
     this.code = code;
@@ -54,7 +68,7 @@ public enum EcmascriptDebuggerMessage implements Message {
   }
 
   public String getServiceName() {
-    return "ecmascript-debugger";
+    return EcmascriptDebugger.SERVICE_NAME;
   }
 
   public static EcmascriptDebuggerMessage get(int code) {

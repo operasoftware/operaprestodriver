@@ -16,10 +16,10 @@ limitations under the License.
 
 package com.opera.core.systems.scope.stp;
 
+import com.opera.core.systems.internal.SocketMonitor;
 import com.opera.core.systems.scope.handlers.EventHandler;
 import com.opera.core.systems.scope.handlers.IConnectionHandler;
 import com.opera.core.systems.scope.internal.OperaIntervals;
-import com.opera.core.systems.internal.SocketMonitor;
 
 import java.io.IOException;
 import java.util.logging.Logger;
@@ -33,7 +33,7 @@ import java.util.logging.Logger;
  */
 public class StpThread extends Thread {
 
-  private final Logger logger = Logger.getLogger(this.getClass().getName());
+  private final Logger logger = Logger.getLogger(getClass().getName());
   private final StpConnectionListener listener;
   private final SocketMonitor monitor;
   private volatile boolean cancelled;

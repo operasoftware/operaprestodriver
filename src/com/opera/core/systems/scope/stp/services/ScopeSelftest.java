@@ -42,7 +42,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 public class ScopeSelftest extends AbstractService implements Selftest {
 
-  private final Logger logger = Logger.getLogger(getClass().getName());
   private ServiceCallback<SelftestProtos.SelftestResult> callback = null;
 
   public ScopeSelftest(ScopeServices services) {

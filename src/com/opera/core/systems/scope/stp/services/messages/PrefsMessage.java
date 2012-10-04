@@ -16,10 +16,13 @@ limitations under the License.
 
 package com.opera.core.systems.scope.stp.services.messages;
 
-import com.opera.core.systems.scope.Message;
+import com.google.common.base.Function;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Maps;
 
-import java.util.EnumSet;
-import java.util.HashMap;
+import com.opera.core.systems.scope.Message;
+import com.opera.core.systems.scope.services.Prefs;
+
 import java.util.Map;
 
 public enum PrefsMessage implements Message {
@@ -29,13 +32,14 @@ public enum PrefsMessage implements Message {
   SET_PREF(3),
   DEFAULT(-1);
 
-  private int code;
-  private static final Map<Integer, PrefsMessage> lookup = new HashMap<Integer, PrefsMessage>();
+  private static final Map<Integer, PrefsMessage> lookup =
+      Maps.uniqueIndex(ImmutableList.copyOf(values()), new Function<PrefsMessage, Integer>() {
+        public Integer apply(PrefsMessage message) {
+          return message.getID();
+        }
+      });
 
-  static {
-    for (PrefsMessage message : EnumSet.allOf(PrefsMessage.class))
-      lookup.put(message.getID(), message);
-  }
+  private final int code;
 
   private PrefsMessage(int code) {
     this.code = code;
@@ -46,7 +50,7 @@ public enum PrefsMessage implements Message {
   }
 
   public String getServiceName() {
-    return "prefs";
+    return Prefs.SERVICE_NAME;
   }
 
   public static PrefsMessage get(int code) {

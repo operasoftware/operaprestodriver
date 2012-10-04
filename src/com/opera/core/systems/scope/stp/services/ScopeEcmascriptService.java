@@ -69,10 +69,6 @@ import static com.opera.core.systems.internal.OperaDefaults.SCRIPT_RETRIES;
 import static com.opera.core.systems.scope.internal.OperaIntervals.SCRIPT_RETRY_INTERVAL;
 import static com.opera.core.systems.scope.internal.OperaIntervals.SCRIPT_TIMEOUT;
 
-// Highlight when we're using EsdbgProtos, instead of importing them directly.  We can't import
-// this, because of the java "Object" class.  Leaving this commented out to help in the future!
-//import com.opera.core.systems.scope.protos.EcmascriptProtos.Object;
-
 /**
  * ScopeEcmascriptService is a lightweight service to enable JavaScript injection.  Unlike {@link
  * ScopeEcmascriptDebugger} it does not disable JIT.
@@ -424,10 +420,7 @@ public class ScopeEcmascriptService extends AbstractEcmascriptService implements
   }
 
   /**
-   * Updates the runtimes list to most recent version
-   *
-   * TODO this has to be kept up to date with events and as failover we should update It builds a
-   * tree to find the frame we are looking for TODO tree also must be kept up to date
+   * Updates the runtimes list to most recent version.
    */
   private void buildRuntimeTree() {
     updateRuntime();

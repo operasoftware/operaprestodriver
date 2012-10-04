@@ -22,7 +22,7 @@ import com.google.protobuf.ByteString;
 import com.google.protobuf.CodedOutputStream;
 
 import com.opera.core.systems.scope.exceptions.ScopeException;
-import com.opera.core.systems.scope.stp.services.messages.DesktopUtilsMessage;
+import com.opera.core.systems.scope.stp.services.messages.desktop.DesktopUtilsMessage;
 import com.opera.core.systems.scope.exceptions.CommunicationException;
 import com.opera.core.systems.scope.handlers.EventHandler;
 import com.opera.core.systems.scope.handlers.IConnectionHandler;
@@ -33,8 +33,6 @@ import com.opera.core.systems.scope.protos.UmsProtos.Response;
 import com.opera.core.systems.scope.protos.UmsProtos.Status;
 import com.opera.core.systems.internal.SocketListener;
 import com.opera.core.systems.internal.SocketMonitor;
-
-import org.openqa.selenium.WebDriverException;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -71,7 +69,6 @@ public class StpConnection implements SocketListener {
   private SocketMonitor monitor;
 
   private void setState(State state) {
-    // logger.fine("Setting state: " + state.toString());
     this.state = state;
   }
 

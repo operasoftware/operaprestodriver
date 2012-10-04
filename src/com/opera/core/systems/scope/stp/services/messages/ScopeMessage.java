@@ -16,10 +16,12 @@ limitations under the License.
 
 package com.opera.core.systems.scope.stp.services.messages;
 
+import com.google.common.base.Function;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Maps;
+
 import com.opera.core.systems.scope.Message;
 
-import java.util.EnumSet;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -38,14 +40,14 @@ public enum ScopeMessage implements Message {
   MESSAGE_INFO(11),
   DEFAULT(-1);
 
-  private int code;
-  private static final Map<Integer, ScopeMessage> lookup = new HashMap<Integer, ScopeMessage>();
+  private static final Map<Integer, ScopeMessage> lookup =
+      Maps.uniqueIndex(ImmutableList.copyOf(values()), new Function<ScopeMessage, Integer>() {
+        public Integer apply(ScopeMessage message) {
+          return message.getID();
+        }
+      });
 
-  static {
-    for (ScopeMessage message : EnumSet.allOf(ScopeMessage.class)) {
-      lookup.put(message.getID(), message);
-    }
-  }
+  private final int code;
 
   private ScopeMessage(int code) {
     this.code = code;

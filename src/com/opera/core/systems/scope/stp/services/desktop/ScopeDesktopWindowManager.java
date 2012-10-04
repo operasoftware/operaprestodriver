@@ -37,12 +37,11 @@ import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearch.Qui
 import com.opera.core.systems.scope.protos.UmsProtos.Response;
 import com.opera.core.systems.scope.services.desktop.DesktopUtils;
 import com.opera.core.systems.scope.services.desktop.DesktopWindowManager;
-import com.opera.core.systems.scope.stp.services.messages.DesktopWindowManagerMessage;
+import com.opera.core.systems.scope.stp.services.messages.desktop.DesktopWindowManagerMessage;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.logging.Logger;
 
 public class ScopeDesktopWindowManager extends AbstractService implements DesktopWindowManager {
 

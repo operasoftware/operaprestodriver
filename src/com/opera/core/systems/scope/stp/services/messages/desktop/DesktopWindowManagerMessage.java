@@ -14,12 +14,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package com.opera.core.systems.scope.stp.services.messages;
+package com.opera.core.systems.scope.stp.services.messages.desktop;
+
+import com.google.common.base.Function;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Maps;
 
 import com.opera.core.systems.scope.Message;
+import com.opera.core.systems.scope.services.desktop.DesktopWindowManager;
 
-import java.util.EnumSet;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -43,19 +46,18 @@ public enum DesktopWindowManagerMessage implements Message {
   PRESS_QUICK_MENU(13),
   MENU_PRESSED(14), // event
   WINDOW_PAGE_CHANGED(15),
+
   DEFAULT(-1);
 
-  private int code;
-  private static final
-  Map<Integer, DesktopWindowManagerMessage>
-      lookup =
-      new HashMap<Integer, DesktopWindowManagerMessage>();
+  private static final Map<Integer, DesktopWindowManagerMessage> lookup =
+      Maps.uniqueIndex(ImmutableList.copyOf(values()),
+                       new Function<DesktopWindowManagerMessage, Integer>() {
+                         public Integer apply(DesktopWindowManagerMessage message) {
+                           return message.getID();
+                         }
+                       });
 
-  static {
-    for (DesktopWindowManagerMessage message : EnumSet.allOf(DesktopWindowManagerMessage.class)) {
-      lookup.put(message.getID(), message);
-    }
-  }
+  private final int code;
 
   private DesktopWindowManagerMessage(int code) {
     this.code = code;
@@ -66,7 +68,7 @@ public enum DesktopWindowManagerMessage implements Message {
   }
 
   public String getServiceName() {
-    return "desktop-window-manager";
+    return DesktopWindowManager.SERVICE_NAME;
   }
 
   public static DesktopWindowManagerMessage get(int code) {

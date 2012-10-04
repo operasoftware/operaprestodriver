@@ -18,7 +18,7 @@ package com.opera.core.systems.scope.stp.services.desktop;
 
 import com.opera.core.systems.scope.ScopeServices;
 import com.opera.core.systems.scope.AbstractService;
-import com.opera.core.systems.scope.stp.services.messages.SystemInputCommand;
+import com.opera.core.systems.scope.stp.services.messages.desktop.SystemInputMessage;
 import com.opera.core.systems.scope.protos.SystemInputProtos.KeyPressInfo;
 import com.opera.core.systems.scope.protos.SystemInputProtos.ModifierPressed;
 import com.opera.core.systems.scope.protos.SystemInputProtos.MouseInfo;
@@ -60,7 +60,7 @@ public class ScopeSystemInputManager extends AbstractService implements SystemIn
       modifier |= mod.getNumber();
     }
     actionBuilder.setModifier(modifier);
-    executeMessage(SystemInputCommand.CLICK, actionBuilder.clone());
+    executeMessage(SystemInputMessage.CLICK, actionBuilder.clone());
   }
 
   public void mouseMove(Point location, MouseButton button,
@@ -75,7 +75,7 @@ public class ScopeSystemInputManager extends AbstractService implements SystemIn
       modifier |= mod.getNumber();
     }
     actionBuilder.setModifier(modifier);
-    executeMessage(SystemInputCommand.MOUSEMOVE, actionBuilder.clone());
+    executeMessage(SystemInputMessage.MOUSEMOVE, actionBuilder.clone());
   }
 
   public void mouseUp(Point location, MouseButton button,
@@ -90,7 +90,7 @@ public class ScopeSystemInputManager extends AbstractService implements SystemIn
       modifier |= mod.getNumber();
     }
     actionBuilder.setModifier(modifier);
-    executeMessage(SystemInputCommand.MOUSEUP, actionBuilder.clone());
+    executeMessage(SystemInputMessage.MOUSEUP, actionBuilder.clone());
   }
 
   public void mouseDown(Point location, MouseButton button,
@@ -105,7 +105,7 @@ public class ScopeSystemInputManager extends AbstractService implements SystemIn
       modifier |= mod.getNumber();
     }
     actionBuilder.setModifier(modifier);
-    executeMessage(SystemInputCommand.MOUSEDOWN, actionBuilder.clone());
+    executeMessage(SystemInputMessage.MOUSEDOWN, actionBuilder.clone());
   }
 
   public void keyPress(String key, List<ModifierPressed> modifiers) {
@@ -116,7 +116,7 @@ public class ScopeSystemInputManager extends AbstractService implements SystemIn
       modifier |= mod.getNumber();
     }
     actionBuilder.setModifier(modifier);
-    executeMessage(SystemInputCommand.KEYPRESS, actionBuilder.clone());
+    executeMessage(SystemInputMessage.KEYPRESS, actionBuilder.clone());
   }
 
   public void keyDown(String key, List<ModifierPressed> modifiers) {
@@ -127,7 +127,7 @@ public class ScopeSystemInputManager extends AbstractService implements SystemIn
       modifier |= mod.getNumber();
     }
     actionBuilder.setModifier(modifier);
-    executeMessage(SystemInputCommand.KEYDOWN, actionBuilder.clone());
+    executeMessage(SystemInputMessage.KEYDOWN, actionBuilder.clone());
   }
 
   public void keyUp(String key, List<ModifierPressed> modifiers) {
@@ -138,7 +138,7 @@ public class ScopeSystemInputManager extends AbstractService implements SystemIn
       modifier |= mod.getNumber();
     }
     actionBuilder.setModifier(modifier);
-    executeMessage(SystemInputCommand.KEYUP, actionBuilder.clone());
+    executeMessage(SystemInputMessage.KEYUP, actionBuilder.clone());
   }
 }
 

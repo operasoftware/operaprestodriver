@@ -21,6 +21,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
 
 import com.opera.core.systems.scope.Message;
+import com.opera.core.systems.scope.services.Selftest;
 
 import java.util.Map;
 
@@ -39,18 +40,18 @@ public enum SelftestMessage implements Message {
         }
       });
 
-  private final int command;
+  private final int code;
 
-  private SelftestMessage(int command) {
-    this.command = command;
+  private SelftestMessage(int code) {
+    this.code = code;
   }
 
   public int getID() {
-    return command;
+    return code;
   }
 
   public String getServiceName() {
-    return "selftest";
+    return Selftest.SERVICE_NAME;
   }
 
   public static SelftestMessage get(int id) {

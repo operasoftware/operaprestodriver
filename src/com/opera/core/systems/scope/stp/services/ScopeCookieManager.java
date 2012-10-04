@@ -51,6 +51,14 @@ public class ScopeCookieManager extends AbstractService implements CookieManager
     services.setCookieManager(this);
   }
 
+  public void init() {
+    CookieSettings settings = getCookieSettings();
+
+    maxCookies = settings.getMaxCookies();
+    maxCookiesPerDomain = settings.getMaxCookiesPerDomain();
+    maxCookieLength = settings.getMaxCookieLength();
+  }
+
   public int getMaxCookies() {
     return maxCookies;
   }
@@ -61,14 +69,6 @@ public class ScopeCookieManager extends AbstractService implements CookieManager
 
   public int getMaxCookieLength() {
     return maxCookieLength;
-  }
-
-  public void init() {
-    CookieSettings settings = getCookieSettings();
-
-    maxCookies = settings.getMaxCookies();
-    maxCookiesPerDomain = settings.getMaxCookiesPerDomain();
-    maxCookieLength = settings.getMaxCookieLength();
   }
 
   public Set<Cookie> getCookie(String domain, String path) {

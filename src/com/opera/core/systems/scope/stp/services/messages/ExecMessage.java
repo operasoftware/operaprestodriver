@@ -16,10 +16,13 @@ limitations under the License.
 
 package com.opera.core.systems.scope.stp.services.messages;
 
-import com.opera.core.systems.scope.Message;
+import com.google.common.base.Function;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Maps;
 
-import java.util.EnumSet;
-import java.util.HashMap;
+import com.opera.core.systems.scope.Message;
+import com.opera.core.systems.scope.services.Exec;
+
 import java.util.Map;
 
 /**
@@ -34,14 +37,14 @@ public enum ExecMessage implements Message {
   SEND_MOUSE_ACTION(5),
   DEFAULT(-1);
 
-  private int code;
-  private static final Map<Integer, ExecMessage> lookup = new HashMap<Integer, ExecMessage>();
+  private static final Map<Integer, ExecMessage> lookup =
+      Maps.uniqueIndex(ImmutableList.copyOf(values()), new Function<ExecMessage, Integer>() {
+        public Integer apply(ExecMessage message) {
+          return message.getID();
+        }
+      });
 
-  static {
-    for (ExecMessage message : EnumSet.allOf(ExecMessage.class)) {
-      lookup.put(message.getID(), message);
-    }
-  }
+  private final int code;
 
   private ExecMessage(int code) {
     this.code = code;
@@ -52,7 +55,7 @@ public enum ExecMessage implements Message {
   }
 
   public String getServiceName() {
-    return "exec";
+    return Exec.SERVICE_NAME;
   }
 
   public static ExecMessage get(int code) {

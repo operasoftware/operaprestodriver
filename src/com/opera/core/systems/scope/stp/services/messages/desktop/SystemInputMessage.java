@@ -14,15 +14,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package com.opera.core.systems.scope.stp.services.messages;
+package com.opera.core.systems.scope.stp.services.messages.desktop;
+
+import com.google.common.base.Function;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Maps;
 
 import com.opera.core.systems.scope.Message;
+import com.opera.core.systems.scope.services.desktop.SystemInput;
 
-import java.util.EnumSet;
-import java.util.HashMap;
 import java.util.Map;
 
-public enum SystemInputCommand implements Message {
+public enum SystemInputMessage implements Message {
 
   CLICK(1),
   KEYPRESS(2),
@@ -33,19 +36,16 @@ public enum SystemInputCommand implements Message {
   MOUSEMOVE(7),
   DEFAULT(-1);
 
-  private int code;
-  private static final
-  Map<Integer, SystemInputCommand>
-      lookup =
-      new HashMap<Integer, SystemInputCommand>();
+  private static final Map<Integer, SystemInputMessage> lookup =
+      Maps.uniqueIndex(ImmutableList.copyOf(values()), new Function<SystemInputMessage, Integer>() {
+        public Integer apply(SystemInputMessage message) {
+          return message.getID();
+        }
+      });
 
-  static {
-    for (SystemInputCommand command : EnumSet.allOf(SystemInputCommand.class)) {
-      lookup.put(command.getID(), command);
-    }
-  }
+  private final int code;
 
-  private SystemInputCommand(int code) {
+  private SystemInputMessage(int code) {
     this.code = code;
   }
 
@@ -54,11 +54,11 @@ public enum SystemInputCommand implements Message {
   }
 
   public String getServiceName() {
-    return "system-input";
+    return SystemInput.SERVICE_NAME;
   }
 
-  public static SystemInputCommand get(int code) {
-    SystemInputCommand command = lookup.get(code);
+  public static SystemInputMessage get(int code) {
+    SystemInputMessage command = lookup.get(code);
     return (command != null) ? command : DEFAULT;
   }
 

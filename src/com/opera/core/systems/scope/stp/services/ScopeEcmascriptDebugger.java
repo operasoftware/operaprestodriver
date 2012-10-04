@@ -58,8 +58,9 @@ import java.util.concurrent.atomic.AtomicStampedReference;
 /**
  * Manages the ecmascript-debugger service Handles runtime management and script injection.
  */
-public class ScopeEcmascriptDebugger extends AbstractEcmascriptService implements
-                                                                       EcmascriptDebugger {
+public class ScopeEcmascriptDebugger
+    extends AbstractEcmascriptService
+    implements EcmascriptDebugger {
 
   private final AtomicStampedReference<RuntimeInfo> runtime =
       new AtomicStampedReference<RuntimeInfo>(null, 0);
@@ -375,10 +376,10 @@ public class ScopeEcmascriptDebugger extends AbstractEcmascriptService implement
   }
 
   /**
-   * Updates the runtimes list to most recent version TODO this has to be kept up to date with
-   * events and as failover we should update It builds a tree to find the frame we are looking for
-   * It builds a tree to find the frame we are looking for TODO tree also must be kept up to date
+   * Updates the runtimes list to most recent version.
    */
+  // TODO this has to be kept up to date with events and as failover we should update It builds a tree to find the frame we are looking for
+  // TODO tree also must be kept up to date
   private void buildRuntimeTree() {
     updateRuntime();
     RuntimeInfo rootInfo = findRuntime();

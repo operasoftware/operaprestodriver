@@ -35,7 +35,7 @@ import com.opera.core.systems.scope.protos.UmsProtos.Event;
 import com.opera.core.systems.scope.protos.WmProtos.WindowID;
 import com.opera.core.systems.scope.protos.WmProtos.WindowInfo;
 import com.opera.core.systems.scope.stp.services.messages.CoreMessage;
-import com.opera.core.systems.scope.stp.services.messages.DesktopWindowManagerMessage;
+import com.opera.core.systems.scope.stp.services.messages.desktop.DesktopWindowManagerMessage;
 import com.opera.core.systems.scope.stp.services.messages.EcmascriptDebuggerMessage;
 import com.opera.core.systems.scope.stp.services.messages.SelftestMessage;
 import com.opera.core.systems.scope.stp.services.messages.WindowManagerMessage;
