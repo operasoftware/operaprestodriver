@@ -196,7 +196,6 @@ public class ScreenshotTest extends OperaDriverTestCase {
     ((OperaWebElement) driver.findElement(By.tagName("html"))).getImageHash();
   }
 
-  // Can cause problems on Windows, so moved to last
   @Test
   @Ignore("We don't support taking single element screenshots of plugins")
   public void flash() throws Exception {
