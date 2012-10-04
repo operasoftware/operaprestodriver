@@ -17,8 +17,11 @@ limitations under the License.
 package com.opera.core.systems;
 
 import com.google.common.base.Throwables;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.ImmutableSortedSet;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
 import com.opera.core.systems.OperaLogs.ConsoleMessageConverter;
@@ -28,20 +31,19 @@ import com.opera.core.systems.model.ScreenCaptureReply;
 import com.opera.core.systems.model.ScriptResult;
 import com.opera.core.systems.preferences.OperaScopePreferences;
 import com.opera.core.systems.runner.interfaces.OperaRunner;
+import com.opera.core.systems.scope.ScopeService;
+import com.opera.core.systems.scope.ScopeServices;
 import com.opera.core.systems.scope.exceptions.CommunicationException;
 import com.opera.core.systems.scope.exceptions.ResponseNotReceivedException;
 import com.opera.core.systems.scope.internal.OperaDefaults;
 import com.opera.core.systems.scope.internal.OperaIntervals;
-import com.opera.core.systems.scope.internal.ServiceCallback;
-import com.opera.core.systems.scope.protos.SelftestProtos.SelftestResult;
-import com.opera.core.systems.scope.services.ICookieManager;
-import com.opera.core.systems.scope.services.ICoreUtils;
-import com.opera.core.systems.scope.services.IEcmaScriptDebugger;
-import com.opera.core.systems.scope.services.IOperaExec;
-import com.opera.core.systems.scope.services.ISelftest.ISelftestResult;
-import com.opera.core.systems.scope.services.IWindowManager;
-import com.opera.core.systems.scope.services.ums.CoreUtils;
-import com.opera.core.systems.scope.services.ums.Selftest;
+import com.opera.core.systems.scope.services.CookieManager;
+import com.opera.core.systems.scope.services.Core;
+import com.opera.core.systems.scope.services.Debugger;
+import com.opera.core.systems.scope.services.Exec;
+import com.opera.core.systems.scope.services.Selftest;
+import com.opera.core.systems.scope.services.WindowManager;
+import com.opera.core.systems.scope.stp.services.ScopeCore;
 
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.Beta;
@@ -74,6 +76,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.SortedSet;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.TimeUnit;
@@ -84,6 +87,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static com.opera.core.systems.OperaProduct.CORE;
 import static com.opera.core.systems.OperaProduct.DESKTOP;
 import static com.opera.core.systems.OperaProduct.MOBILE;
+import static com.opera.core.systems.scope.services.ums.Selftest.SelftestResult;
 import static org.openqa.selenium.Platform.WINDOWS;
 
 /**
@@ -126,11 +130,11 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot, Run
   private final Logger logger = Logger.getLogger(getClass().getName());
 
   private ScopeServices services;
-  private IEcmaScriptDebugger debugger;
-  private IOperaExec exec;
-  private IWindowManager windowManager;
-  private ICoreUtils coreUtils;
-  private ICookieManager cookieManager;
+  private Exec exec;
+  private Core core;
+  private Debugger debugger;
+  private WindowManager windowManager;
+  private CookieManager cookieManager;
 
   private OperaMouse mouse;
   private OperaKeyboard keyboard;
@@ -141,7 +145,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot, Run
   private String requestedUrl = null;
 
   protected static final OperaLogs logs = new OperaLogs();
-  protected static FileHandler logFile = null;  // TODO(andreastt): Make private
+  protected static FileHandler logFile = null;
 
   /**
    * Constructor that starts Opera with the default set of capabilities.
@@ -216,7 +220,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot, Run
 
     windowManager = services.getWindowManager();
     exec = services.getExec();
-    coreUtils = services.getCoreUtils();
+    core = services.getCore();
     cookieManager = services.getCookieManager();
     //cookieManager.updateCookieSettings();
 
@@ -243,25 +247,27 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot, Run
     // Update browser's proxy configuration
     proxy = new OperaProxy(this);
     proxy.parse(settings.getProxy());
-
   }
 
   /**
-   * List of required services for this version of OperaDriver to function.
+   * A sorted set of required services for this OperaDriver to function.  The services listed will
+   * be built and initialized in the specified order.
    *
-   * @return a map of service names to the minimum versions we require
+   * The minimum versions required are defined by the Scope implementation used by this
+   * OperaDriver.
+   *
+   * @return unique set of services to require
    */
-  protected Map<String, String> getRequiredServices() {
-    ImmutableMap.Builder<String, String> versions = ImmutableMap.builder();
-    versions.put("ecmascript-debugger", "5.0");
-    versions.put("window-manager", "2.0");
-    versions.put("console-logger", "2.1");
-    versions.put("exec", "2.0");
-    versions.put("core", "1.0");
-    versions.put("cookie-manager", "1.0");
-    versions.put("prefs", "1.0");
-    versions.put("selftest", "2.0");
-    return versions.build();
+  protected SortedSet<ScopeService> getRequiredServices() {
+    return ImmutableSortedSet.of(
+        ScopeService.ECMASCRIPT_DEBUGGER,
+        ScopeService.WINDOW_MANAGER,
+        ScopeService.EXEC,
+        ScopeService.CORE,
+        ScopeService.PREFS,
+        ScopeService.SELFTEST,
+        ScopeService.CONSOLE_LOGGER
+    );
   }
 
   /**
@@ -997,31 +1003,31 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot, Run
   public OperaUtils utils() {
     return new OperaUtils() {
       public String getCoreVersion() {
-        return coreUtils.getCoreVersion();
+        return core.getCoreVersion();
       }
 
       public Platform getPlatform() {
-        return Platform.extractFromSysProperty(coreUtils.getOperatingSystem());
+        return Platform.extractFromSysProperty(core.getOperatingSystem());
       }
 
       public OperaProduct getProduct() {
-        return OperaProduct.get(coreUtils.getProduct());
+        return OperaProduct.get(core.getProduct());
       }
 
       public String getBinaryPath() {
-        return coreUtils.getBinaryPath();
+        return core.getBinaryPath();
       }
 
       public String getUserAgent() {
-        return coreUtils.getUserAgent();
+        return core.getUserAgent();
       }
 
       public Integer getPID() {
-        return coreUtils.getProcessID();
+        return core.getProcessID();
       }
 
       public void clearPrivateData(PrivateData... flags) {
-        ((CoreUtils) coreUtils).clearPrivateData(flags);
+        ((ScopeCore) core).clearPrivateData(flags);
       }
     };
   }
@@ -1099,7 +1105,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot, Run
 
   // Following methods are used in OperaWebElement:
 
-  protected IEcmaScriptDebugger getScriptDebugger() {
+  protected Debugger getDebugger() {
     return debugger;
   }
 
@@ -1113,10 +1119,12 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot, Run
 
   protected List<WebElement> processElements(Integer id) {
     List<Integer> ids = debugger.examineObjects(id);
-    List<WebElement> toReturn = new ArrayList<WebElement>();
+    List<WebElement> toReturn = Lists.newArrayList();
+
     for (Integer objectId : ids) {
       toReturn.add(new OperaWebElement(this, objectId));
     }
+
     return toReturn;
   }
 
@@ -1125,7 +1133,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot, Run
       services.waitForOperaIdle(OperaIntervals.OPERA_IDLE_TIMEOUT.getMs());
     } else {
       // Sometimes we get here before the next page has even *started* loading, and so return too
-      // quickly. This sleep is enough to make sure readyState has been set to "loading".
+      // quickly.  This sleep is enough to make sure readyState has been set to "loading".
       sleep(5);
 
       long endTime = System.currentTimeMillis() + OperaIntervals.PAGE_LOAD_TIMEOUT.getMs();
@@ -1205,10 +1213,6 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot, Run
   @SuppressWarnings("unused")
   protected void setUseOperaIdle(boolean enabled) {
     settings.setIdle(enabled);
-  }
-
-  protected static void setLogFile(FileHandler log) {
-    logFile = log;
   }
 
   // Following methods are used internally:

@@ -18,7 +18,7 @@ package com.opera.core.systems.preferences;
 
 import com.opera.core.systems.model.OperaColor;
 import com.opera.core.systems.scope.protos.PrefsProtos;
-import com.opera.core.systems.scope.services.IPrefs;
+import com.opera.core.systems.scope.services.Prefs;
 
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.support.Color;
@@ -35,7 +35,7 @@ import java.lang.reflect.Type;
  */
 public class OperaScopePreferences extends AbstractOperaPreferences {
 
-  protected IPrefs service;
+  protected Prefs service;
 
   /**
    * Opera stores preferences in more field types than what is considered idiomatic to Java.  This
@@ -65,7 +65,7 @@ public class OperaScopePreferences extends AbstractOperaPreferences {
 
   }
 
-  public OperaScopePreferences(IPrefs prefsService) {
+  public OperaScopePreferences(Prefs prefsService) {
     service = prefsService;
     updatePreferenceCache();  // might be slow on cores without speed patch
   }

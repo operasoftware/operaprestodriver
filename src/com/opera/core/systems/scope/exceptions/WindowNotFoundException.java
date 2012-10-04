@@ -16,9 +16,7 @@ limitations under the License.
 
 package com.opera.core.systems.scope.exceptions;
 
-import org.openqa.selenium.WebDriverException;
-
-public class WindowNotFoundException extends WebDriverException {
+public class WindowNotFoundException extends ScopeException {
 
   public WindowNotFoundException(String message) {
     super(message);

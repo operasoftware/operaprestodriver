@@ -19,8 +19,8 @@ package com.opera.core.systems;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.DesktopWindowRect;
 import com.opera.core.systems.scope.protos.SystemInputProtos.ModifierPressed;
 import com.opera.core.systems.scope.protos.SystemInputProtos.MouseInfo.MouseButton;
-import com.opera.core.systems.scope.services.IDesktopUtils;
-import com.opera.core.systems.scope.services.ums.SystemInputManager;
+import com.opera.core.systems.scope.services.desktop.DesktopUtils;
+import com.opera.core.systems.scope.services.desktop.SystemInput;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -31,20 +31,20 @@ import java.util.List;
  */
 public abstract class OperaUIElement {
 
-  private SystemInputManager systemInputManager;
-  private IDesktopUtils desktopUtils;
+  private SystemInput systemInputManager;
+  private DesktopUtils desktopUtils;
 
-  public OperaUIElement(SystemInputManager systemInputManager, IDesktopUtils desktopUtils) {
+  public OperaUIElement(SystemInput systemInputManager, DesktopUtils desktopUtils) {
     super();
     this.systemInputManager = systemInputManager;
     this.desktopUtils = desktopUtils;
   }
 
-  protected SystemInputManager getSystemInputManager() {
+  protected SystemInput getSystemInputManager() {
     return systemInputManager;
   }
 
-  protected IDesktopUtils getDesktopUtils() {
+  protected DesktopUtils getDesktopUtils() {
     return desktopUtils;
   }
 

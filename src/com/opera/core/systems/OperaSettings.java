@@ -30,7 +30,7 @@ import com.opera.core.systems.common.lang.OperaBoolean;
 import com.opera.core.systems.mobile.MobileDevices;
 import com.opera.core.systems.runner.interfaces.OperaRunner;
 import com.opera.core.systems.runner.launcher.OperaLauncherRunner;
-import com.opera.core.systems.scope.internal.OperaDefaults;
+import com.opera.core.systems.internal.OperaDefaults;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -77,9 +77,9 @@ import static com.opera.core.systems.OperaSettings.Capability.PROFILE;
 import static com.opera.core.systems.OperaSettings.Capability.PROXY;
 import static com.opera.core.systems.OperaSettings.Capability.RUNNER;
 import static com.opera.core.systems.runner.launcher.OperaLauncherRunner.LAUNCHER_ENV_VAR;
-import static com.opera.core.systems.scope.internal.OperaDefaults.SERVER_DEFAULT_PORT;
-import static com.opera.core.systems.scope.internal.OperaDefaults.SERVER_DEFAULT_PORT_IDENTIFIER;
-import static com.opera.core.systems.scope.internal.OperaDefaults.SERVER_RANDOM_PORT_IDENTIFIER;
+import static com.opera.core.systems.internal.OperaDefaults.SERVER_DEFAULT_PORT;
+import static com.opera.core.systems.internal.OperaDefaults.SERVER_DEFAULT_PORT_IDENTIFIER;
+import static com.opera.core.systems.internal.OperaDefaults.SERVER_RANDOM_PORT_IDENTIFIER;
 import static org.openqa.selenium.Platform.LINUX;
 
 /**
@@ -831,7 +831,7 @@ public class OperaSettings {
         logFile.setLevel(getLevel());
         Logger.getLogger(OperaDriver.class.getPackage().getName()).addHandler(logFile);
 
-        OperaDriver.setLogFile(logFile);
+        OperaDriver.logFile = logFile;
       }
     }
   }

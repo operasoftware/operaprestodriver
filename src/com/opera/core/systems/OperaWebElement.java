@@ -23,11 +23,10 @@ import com.opera.core.systems.model.Canvas;
 import com.opera.core.systems.model.ColorResult;
 import com.opera.core.systems.model.ScreenCaptureReply;
 import com.opera.core.systems.scope.exceptions.ResponseNotReceivedException;
-import com.opera.core.systems.scope.internal.OperaColors;
-import com.opera.core.systems.scope.internal.OperaIntervals;
+import com.opera.core.systems.internal.OperaColors;
 import com.opera.core.systems.scope.internal.OperaMouseKeys;
-import com.opera.core.systems.scope.services.IEcmaScriptDebugger;
-import com.opera.core.systems.scope.services.IOperaExec;
+import com.opera.core.systems.scope.services.Debugger;
+import com.opera.core.systems.scope.services.Exec;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
@@ -65,8 +64,8 @@ public class OperaWebElement extends RemoteWebElement implements CapturesScreen 
   private final int objectId;
   private final int runtimeId;
   private final OperaDriver parent;
-  private final IOperaExec execService;
-  private final IEcmaScriptDebugger debugger;
+  private final Exec exec;
+  private final Debugger debugger;
 
   /**
    * @param parent   driver that this element belongs to
@@ -76,8 +75,8 @@ public class OperaWebElement extends RemoteWebElement implements CapturesScreen 
     this.parent = parent;
     this.objectId = objectId;
     parent.objectIds.add(objectId);
-    debugger = parent.getScriptDebugger();
-    execService = parent.getExecService();
+    debugger = parent.getDebugger();
+    exec = parent.getScopeServices().getExec();
     runtimeId = debugger.getRuntimeId();
     setId(String.valueOf(hashCode()));
     setFileDetector(parent.getFileDetector());
@@ -146,7 +145,7 @@ public class OperaWebElement extends RemoteWebElement implements CapturesScreen 
   @SuppressWarnings("unused")
   public void middleClick() {  // TODO(andreastt): Add this to Actions
     Point point = coordinates.getLocationInViewPort();
-    execService.mouseAction(point.x, point.y, OperaMouseKeys.MIDDLE);
+    exec.mouseAction(point.x, point.y, OperaMouseKeys.MIDDLE);
   }
 
   public WebElement findElement(By by) {
@@ -385,7 +384,7 @@ public class OperaWebElement extends RemoteWebElement implements CapturesScreen 
   public ScreenCaptureReply captureScreen(long timeout, String... knownMD5s) {
     assertElementNotStale();
     Canvas canvas = buildCanvas();
-    return execService.screenWatcher(canvas, timeout, true, knownMD5s);
+    return exec.screenWatcher(canvas, timeout, true, knownMD5s);
   }
 
   /**

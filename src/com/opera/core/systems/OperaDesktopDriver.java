@@ -16,18 +16,19 @@ limitations under the License.
 
 package com.opera.core.systems;
 
-import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSortedSet;
 
+import com.opera.core.systems.internal.ProfileUtils;
 import com.opera.core.systems.runner.launcher.OperaLauncherRunner;
+import com.opera.core.systems.scope.ScopeService;
 import com.opera.core.systems.scope.exceptions.CommunicationException;
 import com.opera.core.systems.scope.internal.OperaIntervals;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo.QuickWidgetType;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetSearch.QuickWidgetSearchType;
 import com.opera.core.systems.scope.protos.SystemInputProtos.ModifierPressed;
-import com.opera.core.systems.scope.services.IDesktopUtils;
-import com.opera.core.systems.scope.services.IDesktopWindowManager;
-import com.opera.core.systems.scope.services.ISystemInput;
-import com.opera.core.systems.internal.ProfileUtils;
+import com.opera.core.systems.scope.services.desktop.DesktopUtils;
+import com.opera.core.systems.scope.services.desktop.DesktopWindowManager;
+import com.opera.core.systems.scope.services.desktop.SystemInput;
 
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.Platform;
@@ -37,7 +38,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
+import java.util.SortedSet;
 import java.util.logging.Logger;
 
 /**
@@ -47,9 +48,9 @@ public class OperaDesktopDriver extends OperaDriver {
 
   private final Logger logger = Logger.getLogger(getClass().getName());
 
-  private IDesktopWindowManager desktopWindowManager;
-  private ISystemInput systemInputManager;
-  private IDesktopUtils desktopUtils;
+  private DesktopWindowManager desktopWindowManager;
+  private SystemInput systemInputManager;
+  private DesktopUtils desktopUtils;
   private ProfileUtils profileUtils;
   private boolean firstTestRun = true;
 
@@ -154,20 +155,15 @@ public class OperaDesktopDriver extends OperaDriver {
     }
   }
 
-  /**
-   * Required service dependencies mapped to minimum version for OperaDesktopDriver to work.
-   *
-   * @return required services and their minimum versions
-   */
-  @Override
-  protected Map<String, String> getRequiredServices() {
-    Map<String, String> versions = super.getRequiredServices();
-    ImmutableMap.Builder<String, String> builder = ImmutableMap.builder();
-    builder.putAll(versions);
-    builder.put("desktop-window-manager", "2.0");
-    builder.put("system-input", "1.0");
-    builder.put("desktop-utils", "2.0");
-    return builder.build();
+  protected SortedSet<ScopeService> getRequiredServices() {
+    ImmutableSortedSet.Builder<ScopeService> services = ImmutableSortedSet.naturalOrder();
+    services.addAll(super.getRequiredServices());
+    services.add(
+        ScopeService.DESKTOP_WINDOW_MANAGER,
+        ScopeService.SYSTEM_INPUT,
+        ScopeService.DESKTOP_UTILS
+    );
+    return services.build();
   }
 
   /**
@@ -644,7 +640,7 @@ public class OperaDesktopDriver extends OperaDriver {
    */
   public void operaDesktopAction(String using, int data, String dataString,
                                  String dataStringParam) {
-    super.getExecService().action(using, data, dataString, dataStringParam);
+    getScopeServices().getExec().action(using, data, dataString, dataStringParam);
   }
 
   /**

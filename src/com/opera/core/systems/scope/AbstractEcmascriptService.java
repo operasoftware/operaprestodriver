@@ -17,14 +17,13 @@ limitations under the License.
 package com.opera.core.systems.scope;
 
 import com.opera.core.systems.OperaDriver;
-import com.opera.core.systems.ScopeServices;
 import com.opera.core.systems.model.RuntimeNode;
 import com.opera.core.systems.scope.exceptions.CommunicationException;
+import com.opera.core.systems.scope.exceptions.ScopeException;
 import com.opera.core.systems.scope.internal.OperaIntervals;
-import com.opera.core.systems.scope.services.IEcmaScriptDebugger;
-import com.opera.core.systems.scope.services.IWindowManager;
+import com.opera.core.systems.scope.services.EcmascriptDebugger;
+import com.opera.core.systems.scope.services.WindowManager;
 
-import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 
 import java.text.NumberFormat;
@@ -35,7 +34,7 @@ import java.util.List;
 import static com.opera.core.systems.scope.internal.OperaIntervals.SCRIPT_RETRY_INTERVAL;
 
 public abstract class AbstractEcmascriptService extends AbstractService
-    implements IEcmaScriptDebugger {
+    implements EcmascriptDebugger {
 
   /**
    * The number of times we've attempted to retrieve a response from an injected JavaScript sent to
@@ -52,7 +51,7 @@ public abstract class AbstractEcmascriptService extends AbstractService
   /**
    * The window manager we are using.
    */
-  protected IWindowManager windowManager;
+  protected WindowManager windowManager;
 
   /**
    * The frame our current runtime is contained in.
@@ -68,12 +67,18 @@ public abstract class AbstractEcmascriptService extends AbstractService
 
   protected RuntimeNode root;
 
-  public AbstractEcmascriptService(ScopeServices services, String version) {
-    super(services, version);
-    services.setDebugger(this);
-    this.windowManager = services.getWindowManager();
-    resetCounters();
+  public AbstractEcmascriptService(ScopeServices services, String name) {
+    this(services, name, null);
+  }
+
+  public AbstractEcmascriptService(ScopeServices services, String name, String requiredVersion) {
+    super(services, name, requiredVersion);
+
+    windowManager = services.getWindowManager();
     currentFramePath = "_top";
+    resetCounters();
+
+    services.setDebugger(this);
   }
 
   public void setDriver(OperaDriver driver) {
@@ -182,8 +187,8 @@ public abstract class AbstractEcmascriptService extends AbstractService
         return number.doubleValue();
       }
     } catch (ParseException e) {
-      throw new WebDriverException("A number result from the script can not be parsed: " +
-                                   e.getMessage());
+      throw new ScopeException("A number result from the script can not be parsed: " +
+                               e.getMessage());
     }
   }
 

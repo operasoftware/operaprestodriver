@@ -106,8 +106,8 @@ public class OperaScopePreferencesTest extends OperaDriverTestCase {
   @Test
   public void testSetWithFile() {
     File cssFile = new File("/no/file");
-    preferences.set("User Prefs", "Browser CSS File", cssFile);
-    assertEquals(cssFile, preferences.get("User Prefs", "Browser CSS File").getValue());
+    preferences.set("User ScopePrefs", "Browser CSS File", cssFile);
+    assertEquals(cssFile, preferences.get("User ScopePrefs", "Browser CSS File").getValue());
   }
 
   @Test
@@ -149,7 +149,7 @@ public class OperaScopePreferencesTest extends OperaDriverTestCase {
 
   @Test
   public void testGetTypeFile() {
-    assertEquals(File.class, preferences.get("User Prefs", "Browser CSS File").getType());
+    assertEquals(File.class, preferences.get("User ScopePrefs", "Browser CSS File").getType());
   }
 
   @Test

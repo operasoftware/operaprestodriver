@@ -17,6 +17,7 @@
 package com.opera.core.systems;
 
 import com.opera.core.systems.scope.internal.OperaMouseKeys;
+import com.opera.core.systems.scope.services.Exec;
 
 import org.openqa.selenium.Mouse;
 import org.openqa.selenium.Point;
@@ -25,26 +26,27 @@ import org.openqa.selenium.interactions.internal.Coordinates;
 
 public class OperaMouse implements Mouse {
 
-  private final OperaDriver parent;
+  private final Exec exec;
+
   private Point lastMousePosition;
 
   public OperaMouse(OperaDriver parent) {
-    this.parent = parent;
+    exec = parent.getScopeServices().getExec();
   }
 
   public void click(Coordinates where) {
     Point p = getPoint(where, "click");
-    parent.getExecService().mouseAction(p.x, p.y, OperaMouseKeys.LEFT);
+    exec.mouseAction(p.x, p.y, OperaMouseKeys.LEFT);
   }
 
   public void contextClick(Coordinates where) {
     Point p = getPoint(where, "context click");
-    parent.getExecService().mouseAction(p.x, p.y, OperaMouseKeys.RIGHT);
+    exec.mouseAction(p.x, p.y, OperaMouseKeys.RIGHT);
   }
 
   public void doubleClick(Coordinates where) {
     Point p = getPoint(where, "double click");
-    parent.getExecService().mouseAction(p.x, p.y, 2, OperaMouseKeys.LEFT);
+    exec.mouseAction(p.x, p.y, 2, OperaMouseKeys.LEFT);
   }
 
   /**
@@ -54,7 +56,7 @@ public class OperaMouse implements Mouse {
    */
   public void tripleClick(Coordinates where) {
     Point p = getPoint(where, "triple click");
-    parent.getExecService().mouseAction(p.x, p.y, 3, OperaMouseKeys.LEFT);
+    exec.mouseAction(p.x, p.y, 3, OperaMouseKeys.LEFT);
   }
 
   /**
@@ -64,22 +66,22 @@ public class OperaMouse implements Mouse {
    */
   public void quadrupleClick(Coordinates where) {
     Point p = getPoint(where, "quadruple click");
-    parent.getExecService().mouseAction(p.x, p.y, 4, OperaMouseKeys.LEFT);
+    exec.mouseAction(p.x, p.y, 4, OperaMouseKeys.LEFT);
   }
 
   public void mouseDown(Coordinates where) {
     Point p = getPoint(where, "mouse down");
-    parent.getExecService().mouseAction(p.x, p.y, OperaMouseKeys.LEFT_DOWN);
+    exec.mouseAction(p.x, p.y, OperaMouseKeys.LEFT_DOWN);
   }
 
   public void mouseUp(Coordinates where) {
     Point p = getPoint(where, "mouse up");
-    parent.getExecService().mouseAction(p.x, p.y, OperaMouseKeys.LEFT_UP);
+    exec.mouseAction(p.x, p.y, OperaMouseKeys.LEFT_UP);
   }
 
   public void mouseMove(Coordinates where) {
     Point p = getPoint(where, "mouse move");
-    parent.getExecService().mouseAction(p.x, p.y);
+    exec.mouseAction(p.x, p.y);
   }
 
   public void mouseMove(Coordinates where, long xOffset, long yOffset) {
@@ -91,7 +93,7 @@ public class OperaMouse implements Mouse {
     int yO = (int) yOffset;
 
     lastMousePosition = new Point(p.x + xO, p.y + yO);
-    parent.getExecService().mouseAction(p.x + xO, p.y + yO);
+    exec.mouseAction(p.x + xO, p.y + yO);
   }
 
   private Point getPoint(Coordinates where, String action) {

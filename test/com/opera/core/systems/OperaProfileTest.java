@@ -134,7 +134,7 @@ public class OperaProfileTest extends OperaDriverTestCase {
         throw e;
       }
     }
-    String profile = a.preferences().get("User Prefs", "Opera Directory").toString();
+    String profile = a.preferences().get("User ScopePrefs", "Opera Directory").toString();
     assertTrue("Temporary directory exists", (new File(profile)).exists());
     a.quit();
     assertFalse("Temporary directory does not exist after quit", (new File(profile)).exists());

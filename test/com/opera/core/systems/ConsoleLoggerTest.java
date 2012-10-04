@@ -16,7 +16,7 @@ limitations under the License.
 
 package com.opera.core.systems;
 
-import com.opera.core.systems.scope.services.IConsoleLogger;
+import com.opera.core.systems.scope.services.ConsoleLogger;
 import com.opera.core.systems.testing.OperaDriverTestCase;
 
 import org.junit.Before;
@@ -51,7 +51,7 @@ public class ConsoleLoggerTest extends OperaDriverTestCase {
     assertEquals(0, getConsole().listMessages().size());
   }
 
-  private IConsoleLogger getConsole() {
+  private ConsoleLogger getConsole() {
     return driver.getServices().getConsoleLogger();
   }
 

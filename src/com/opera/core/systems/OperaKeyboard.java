@@ -21,7 +21,7 @@ import com.google.common.collect.ImmutableList;
 import com.opera.core.systems.internal.input.KeyEvent;
 import com.opera.core.systems.internal.input.KeyboardModifiers;
 import com.opera.core.systems.scope.internal.OperaKey;
-import com.opera.core.systems.scope.services.IOperaExec;
+import com.opera.core.systems.scope.services.Exec;
 
 import org.openqa.selenium.Keyboard;
 import org.openqa.selenium.Keys;
@@ -35,13 +35,12 @@ import java.util.List;
  */
 public class OperaKeyboard implements Keyboard {
 
-  private final IOperaExec exec;
+  private final Exec exec;
   private final KeyboardModifiers modifiers = new KeyboardModifiers();
 
   public OperaKeyboard(OperaDriver parent) {
-    exec = parent.getExecService();
+    exec = parent.getScopeServices().getExec();
   }
-
 
   public void sendKeys(CharSequence... keysToSend) {
     ImmutableList.Builder<KeyEvent> builder = ImmutableList.builder();

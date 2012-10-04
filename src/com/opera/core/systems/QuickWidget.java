@@ -21,8 +21,8 @@ import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo;
 import com.opera.core.systems.scope.protos.DesktopWmProtos.QuickWidgetInfo.QuickWidgetType;
 import com.opera.core.systems.scope.protos.SystemInputProtos.ModifierPressed;
 import com.opera.core.systems.scope.protos.SystemInputProtos.MouseInfo.MouseButton;
-import com.opera.core.systems.scope.services.IDesktopUtils;
-import com.opera.core.systems.scope.services.ums.SystemInputManager;
+import com.opera.core.systems.scope.services.desktop.DesktopUtils;
+import com.opera.core.systems.scope.stp.services.desktop.ScopeSystemInputManager;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -58,7 +58,7 @@ public class QuickWidget extends OperaUIElement {
    * @param info           QuickWidgetInfo of the widget
    * @param parentWindowId id of parent window
    */
-  public QuickWidget(IDesktopUtils desktopUtils, SystemInputManager inputManager,
+  public QuickWidget(DesktopUtils desktopUtils, ScopeSystemInputManager inputManager,
                      QuickWidgetInfo info, int parentWindowId) {
     super(inputManager, desktopUtils);
     this.info = info;

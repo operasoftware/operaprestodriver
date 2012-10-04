@@ -16,12 +16,10 @@ limitations under the License.
 
 package com.opera.core.systems.scope.exceptions;
 
-import org.openqa.selenium.WebDriverException;
-
 /**
  * Thrown when the response is not received in the given amount of time.
  */
-public class ResponseNotReceivedException extends WebDriverException {
+public class ResponseNotReceivedException extends ScopeException {
 
   public ResponseNotReceivedException(String message) {
     super(message);

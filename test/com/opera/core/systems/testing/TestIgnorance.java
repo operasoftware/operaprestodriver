@@ -20,6 +20,7 @@ package com.opera.core.systems.testing;
 
 import com.opera.core.systems.OperaProduct;
 import com.opera.core.systems.internal.VersionUtil;
+import com.opera.core.systems.scope.ScopeService;
 
 import org.junit.runners.model.FrameworkMethod;
 import org.openqa.selenium.Platform;
@@ -32,11 +33,11 @@ import java.util.Map;
 public class TestIgnorance {
 
   private final IgnoreComparator ignoreComparator = new IgnoreComparator();
-  private final Map<String, String> services;
+  private final Map<ScopeService, String> services;
   private final boolean hasLauncher;
   private final boolean idleEnabled;
 
-  public TestIgnorance(Map<String, String> availableServices, boolean hasLauncher, boolean hasIdle,
+  public TestIgnorance(Map<ScopeService, String> availableServices, boolean hasLauncher, boolean hasIdle,
                        Platform platform, OperaProduct product) {
     services = availableServices;
     idleEnabled = hasIdle;

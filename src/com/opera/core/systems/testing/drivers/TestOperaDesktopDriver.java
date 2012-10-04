@@ -18,7 +18,7 @@ package com.opera.core.systems.testing.drivers;
 
 import com.opera.core.systems.OperaDesktopDriver;
 import com.opera.core.systems.OperaSettings;
-import com.opera.core.systems.ScopeServices;
+import com.opera.core.systems.scope.ScopeServices;
 import com.opera.core.systems.runner.interfaces.OperaRunner;
 import com.opera.core.systems.scope.exceptions.ResponseNotReceivedException;
 

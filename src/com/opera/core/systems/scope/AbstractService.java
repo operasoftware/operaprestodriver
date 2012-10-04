@@ -20,70 +20,91 @@ import com.google.protobuf.AbstractMessage.Builder;
 import com.google.protobuf.GeneratedMessage;
 import com.google.protobuf.InvalidProtocolBufferException;
 
-import com.opera.core.systems.ScopeServices;
-import com.opera.core.systems.model.ICommand;
+import com.opera.core.systems.internal.VersionUtil;
+import com.opera.core.systems.scope.exceptions.ScopeException;
 import com.opera.core.systems.scope.internal.OperaIntervals;
 import com.opera.core.systems.scope.protos.UmsProtos.Response;
-import com.opera.core.systems.internal.VersionUtil;
 
 import org.apache.commons.jxpath.JXPathContext;
 import org.apache.commons.jxpath.JXPathNotFoundException;
 import org.apache.commons.jxpath.Pointer;
-import org.openqa.selenium.WebDriverException;
 
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 /**
- * All scope services derive from this base class for generic operations.
+ * All Scope services derive from this abstract base class for generic operations.
  */
-public abstract class AbstractService {
+public abstract class AbstractService implements Service {
 
   protected final ScopeServices services;
 
   private final Logger logger = Logger.getLogger(getClass().getName());
+  private final ScopeService service;
   private final String version;
 
-  public AbstractService(ScopeServices services, String version) {
-    this.services = services;
-    this.version = version;
+  public AbstractService(ScopeServices services, String name) {
+    this(services, name, null);
   }
 
-  public String getVersion() {
+  public AbstractService(ScopeServices services, String name, String requiredVersion) {
+    this.services = services;
+    this.service = ScopeService.get(name);
+    this.version = services.getAvailableServices().get(ScopeService.get(name));
+
+    checkRequiredVersion(requiredVersion);
+  }
+
+  private void checkRequiredVersion(String requiredVersion) {
+    if (requiredVersion == null) {
+      return;
+    }
+
+    if (!isVersionInRange(requiredVersion)) {
+      throw new ScopeException(String.format(
+          "Unmet version dependency for Scope service %s: Requested version %s, but only has " +
+          "version %s", getServiceName(), requiredVersion, getServiceVersion()));
+    }
+  }
+
+  protected boolean isVersionInRange(String requiredVersion) {
+    checkNotNull(requiredVersion);
+    return VersionUtil.compare(getServiceVersion(), requiredVersion) >= 0;
+  }
+
+  public String getServiceName() {
+    return service.toOpera();
+  }
+
+  public String getServiceVersion() {
     return version;
   }
 
-  /**
-   * Returns true if the given version is less than the maximum given version and greater than the
-   * minimum required version for OperaDriver.
-   *
-   * @param version     service version
-   * @param maxVersion  maximum version for the service
-   * @param serviceName name of the service to check
-   */
-  public boolean isVersionInRange(String version, String maxVersion, String serviceName) {
-    return !(VersionUtil.compare(version, maxVersion) >= 0
-             || VersionUtil.compare(version, services.getMinVersionFor(serviceName)) < 0);
+  @Override
+  public String toString() {
+    return getClass().getSimpleName();
   }
 
-  public Response executeCommand(ICommand command) {
-    return executeCommand(command, null);
+  public Response executeMessage(Message message) {
+    return executeMessage(message, null);
   }
 
-  public Response executeCommand(ICommand command, Builder<?> builder) {
+  public Response executeMessage(Message message, Builder<?> builder) {
     if (services.getConnection() == null) {
       return Response.getDefaultInstance();
     }
-    return executeCommand(command, builder, OperaIntervals.DEFAULT_RESPONSE_TIMEOUT.getMs());
+    return executeMessage(message, builder, OperaIntervals.DEFAULT_RESPONSE_TIMEOUT.getMs());
   }
 
-  public Response executeCommand(ICommand command, Builder<?> builder, long timeout) {
+  public Response executeMessage(Message message, Builder<?> builder, long timeout) {
     if (services.getConnection() == null) {
       return Response.getDefaultInstance();
     }
-    return services.executeCommand(command, builder, timeout);
+    return services.executeMessage(message, builder, timeout);
   }
 
   /**
@@ -156,9 +177,9 @@ public abstract class AbstractService {
     try {
       return builder.mergeFrom(message);
     } catch (InvalidProtocolBufferException e) {
-      throw new WebDriverException(String.format("Could not build %s: %s",
-                                                 builder.getDescriptorForType().getFullName(),
-                                                 e.getMessage()));
+      throw new ScopeException(String.format("Could not build %s: %s",
+                                             builder.getDescriptorForType().getFullName(),
+                                             e.getMessage()));
     }
   }
 
