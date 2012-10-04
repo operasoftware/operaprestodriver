@@ -28,7 +28,6 @@ Documentation
 
 * [API documentation](http://operasoftware.github.com/operadriver/docs/)
 * [Selenium WebDriver documentation](http://seleniumhq.org/docs/03_webdriver.html)
-* [Java examples](https://github.com/operasoftware/operadriver/tree/master/examples)
 * [Python bindings API](http://selenium.googlecode.com/svn/trunk/docs/api/py/index.html)
 * [Ruby bindings API](http://selenium.googlecode.com/svn/trunk/docs/api/rb/index.html)
 * [Complete list of capabilities](https://code.google.com/p/selenium/wiki/DesiredCapabilities)
