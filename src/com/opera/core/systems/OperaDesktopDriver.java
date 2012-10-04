@@ -493,7 +493,7 @@ public class OperaDesktopDriver extends OperaDriver {
 
   /**
    * @param key      accelerator key in menu of item (the letter that's underlined in the menu item
-   *                 text) Note: not platform independant, as it cannot be used on mac.
+   *                 text) Note: not platform independent, as it cannot be used on mac.
    * @param menuName name of menu item is in
    */
   public QuickMenuItem getQuickMenuItemByAccKey(String key, String menuName) {
@@ -508,7 +508,7 @@ public class OperaDesktopDriver extends OperaDriver {
   }
 
   /**
-   * Get an item in a language independant way from its stringId.
+   * Get an item in a language independent way from its stringId.
    *
    * @param stringId StringId as found in standard_menu.ini
    */
@@ -691,9 +691,8 @@ public class OperaDesktopDriver extends OperaDriver {
           "waiting for a window failed because Opera is not connected.");
     }
 
-    return getScopeServices().waitForDesktopWindowShown(windowName,
-                                                        OperaIntervals.WINDOW_EVENT_TIMEOUT
-                                                            .getMs());
+    return getScopeServices()
+        .waitForDesktopWindowShown(windowName, OperaIntervals.WINDOW_EVENT_TIMEOUT.getMs());
   }
 
   /**
@@ -781,8 +780,7 @@ public class OperaDesktopDriver extends OperaDriver {
     }
 
     return getScopeServices().waitForDesktopWindowLoaded(windowName,
-                                                         OperaIntervals.PAGE_LOAD_TIMEOUT
-                                                             .getMs());
+                                                         OperaIntervals.PAGE_LOAD_TIMEOUT.getMs());
   }
 
   /**
@@ -894,7 +892,6 @@ public class OperaDesktopDriver extends OperaDriver {
 
     // No longer the first test run
     firstTestRun = false;
-
   }
 
   /**

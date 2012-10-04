@@ -40,7 +40,6 @@ import com.opera.core.systems.scope.stp.services.messages.WindowManagerMessage;
 import org.apache.commons.jxpath.CompiledExpression;
 import org.apache.commons.jxpath.JXPathContext;
 import org.openqa.selenium.NoSuchWindowException;
-import org.openqa.selenium.WebDriverException;
 
 import java.util.LinkedList;
 import java.util.List;

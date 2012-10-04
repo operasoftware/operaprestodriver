@@ -33,11 +33,9 @@ public interface RunsSelftest {
    * has a blocking API so this method will return when the test is complete, or when {@link
    * com.opera.core.systems.scope.internal.OperaIntervals#SELFTEST_TIMEOUT} is reached.
    *
-   * @param modules        modules comma separated (ie. "util,about")
-   * @param groupPattern   glob-style pattern to match specific test groups (ie. "group:testname*")
-   * @param excludePattern glob-style pattern to create an exclusion rule as in `groupPattern`
+   * @param modules modules comma separated (ie. "util,about")
    */
-  List<SelftestResult> selftest(Set<String> modules, String groupPattern, String excludePattern);
+  List<SelftestResult> selftest(Set<String> modules);
 
   /**
    * Makes a collection of selftests based on the parameters in and runs them. WebDriver generally
@@ -54,8 +52,10 @@ public interface RunsSelftest {
    * has a blocking API so this method will return when the test is complete, or when {@link
    * com.opera.core.systems.scope.internal.OperaIntervals#SELFTEST_TIMEOUT} is reached.
    *
-   * @param modules modules comma separated (ie. "util,about")
+   * @param modules        modules comma separated (ie. "util,about")
+   * @param groupPattern   glob-style pattern to match specific test groups (ie. "group:testname*")
+   * @param excludePattern glob-style pattern to create an exclusion rule as in `groupPattern`
    */
-  List<SelftestResult> selftest(Set<String> modules);
+  List<SelftestResult> selftest(Set<String> modules, String groupPattern, String excludePattern);
 
 }

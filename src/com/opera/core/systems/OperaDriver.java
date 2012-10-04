@@ -25,11 +25,8 @@ import com.google.common.collect.Sets;
 import com.opera.core.systems.OperaLogs.ConsoleMessageConverter;
 import com.opera.core.systems.common.io.Closeables;
 import com.opera.core.systems.common.lang.OperaStrings;
+import com.opera.core.systems.internal.OperaDefaults;
 import com.opera.core.systems.model.ScreenCaptureReply;
-import com.opera.core.systems.scope.internal.ServiceCallback;
-import com.opera.core.systems.scope.protos.SelftestProtos;
-import com.opera.core.systems.scope.services.Selftest.SelftestResult;
-import com.opera.core.systems.scope.stp.services.ScopeSelftest.ScopeSelftestResult;
 import com.opera.core.systems.model.ScriptResult;
 import com.opera.core.systems.preferences.OperaScopePreferences;
 import com.opera.core.systems.runner.interfaces.OperaRunner;
@@ -37,14 +34,17 @@ import com.opera.core.systems.scope.ScopeService;
 import com.opera.core.systems.scope.ScopeServices;
 import com.opera.core.systems.scope.exceptions.CommunicationException;
 import com.opera.core.systems.scope.exceptions.ResponseNotReceivedException;
-import com.opera.core.systems.internal.OperaDefaults;
 import com.opera.core.systems.scope.internal.OperaIntervals;
+import com.opera.core.systems.scope.internal.ServiceCallback;
+import com.opera.core.systems.scope.protos.SelftestProtos;
 import com.opera.core.systems.scope.services.CookieManager;
 import com.opera.core.systems.scope.services.Core;
 import com.opera.core.systems.scope.services.Debugger;
 import com.opera.core.systems.scope.services.Exec;
+import com.opera.core.systems.scope.services.Selftest.SelftestResult;
 import com.opera.core.systems.scope.services.WindowManager;
 import com.opera.core.systems.scope.stp.services.ScopeCore;
+import com.opera.core.systems.scope.stp.services.ScopeSelftest.ScopeSelftestResult;
 
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.Beta;
@@ -1030,8 +1030,16 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot, Run
     };
   }
 
+  public List<SelftestResult> selftest(Set<String> modules) {
+    return selftest(modules, null, null);
+  }
+
+  public List<SelftestResult> selftest(Set<String> modules, String groupPattern) {
+    return selftest(modules, groupPattern, null);
+  }
+
   public List<SelftestResult> selftest(Set<String> modules, String groupPattern,
-                                        String excludePattern) {
+                                       String excludePattern) {
     if (services.getSelftest() == null) {
       throw new UnsupportedOperationException("selftest service is not supported");
     }
@@ -1054,14 +1062,6 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot, Run
     services.getSelftest().runSelftests(modules, groupPattern, excludePattern);
     services.waitFor().selftestDone(OperaIntervals.SELFTEST_TIMEOUT.getMs());
     return results;
-  }
-
-  public List<SelftestResult> selftest(Set<String> modules, String groupPattern) {
-    return selftest(modules, groupPattern, null);
-  }
-
-  public List<SelftestResult> selftest(Set<String> modules) {
-    return selftest(modules, null, null);
   }
 
   /**
