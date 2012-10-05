@@ -21,6 +21,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import com.opera.core.systems.testing.Ignore;
+import com.opera.core.systems.testing.NoDriverAfter;
 import com.opera.core.systems.testing.OperaDriverTestCase;
 
 import org.junit.Before;
@@ -165,6 +166,7 @@ public class MouseTest extends OperaDriverTestCase {
   }
 
   @Test
+  @NoDriverAfter
   public void contextClick() {
     getMouse().contextClick(test.getCoordinates());
     assertEquals(1, getMonitor().rightClicks());

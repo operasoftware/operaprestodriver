@@ -57,6 +57,7 @@ import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+import static org.junit.Assume.assumeTrue;
 import static org.junit.matchers.JUnitMatchers.containsString;
 import static org.openqa.selenium.Platform.LINUX;
 import static org.openqa.selenium.Platform.WINDOWS;
@@ -112,6 +113,8 @@ public class OperaSettingsIntegrationTest extends OperaDriverTestCase {
 
   @Test
   public void binaryRegistersProduct() {
+    assumeTrue(System.getenv(OperaBinary.OPERA_PATH_ENV_VAR) == null);
+
     settings.setBinary(OperaBinary.find(OperaProduct.MOBILE));
 
     TestDriver driver = new TestDriverBuilder().using(settings).get();

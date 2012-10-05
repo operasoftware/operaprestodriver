@@ -59,6 +59,8 @@ import static org.junit.matchers.JUnitMatchers.hasItem;
 @NoDriver
 public class OperaLauncherRunnerTest extends OperaDriverTestCase {
 
+  public static final String OLD_OPERA_PATH = System.getenv(OperaBinary.OPERA_PATH_ENV_VAR);
+
   public Logger logger = Logger.getLogger(getClass().getName());
   public OperaSettings settings;
   public TestOperaLauncherRunner runner;
@@ -87,6 +89,11 @@ public class OperaLauncherRunnerTest extends OperaDriverTestCase {
       runner = null;
       settings = null;
     }
+  }
+
+  @After
+  public void resetEnvironmentPath() {
+    environment.set(OperaBinary.OPERA_PATH_ENV_VAR, OLD_OPERA_PATH);
   }
 
   @Test
@@ -142,6 +149,8 @@ public class OperaLauncherRunnerTest extends OperaDriverTestCase {
 
   @Test
   public void unableToFindProductForGogi() {
+    environment.unset(OperaBinary.OPERA_PATH_ENV_VAR);
+
     settings.setBinary(null);
     settings.setProduct(OperaProduct.CORE);
 

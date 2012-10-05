@@ -45,6 +45,8 @@ import static org.junit.matchers.JUnitMatchers.containsString;
 @NoDriver
 public class OperaRunnerTest extends OperaDriverTestCase {
 
+  public static final String OLD_OPERA_PATH = System.getenv(OperaBinary.OPERA_PATH_ENV_VAR);
+
   public TestOperaRunner runner;
   public OperaSettings settings;
 
@@ -57,6 +59,11 @@ public class OperaRunnerTest extends OperaDriverTestCase {
   public void dereferenceFields() {
     runner = null;
     settings = null;
+  }
+
+  @After
+  public void resetEnvironmentPath() {
+    environment.set(OperaBinary.OPERA_PATH_ENV_VAR, OLD_OPERA_PATH);
   }
 
   @Test
@@ -74,6 +81,8 @@ public class OperaRunnerTest extends OperaDriverTestCase {
 
   @Test
   public void constructionWithProductCore() {
+    environment.unset(OperaBinary.OPERA_PATH_ENV_VAR);
+
     settings.setBinary(null);
     settings.setProduct(OperaProduct.CORE);
 

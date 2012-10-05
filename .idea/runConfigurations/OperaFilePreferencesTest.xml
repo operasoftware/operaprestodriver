@@ -1,10 +1,10 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="OperaFilePreferencesParserTest" type="JUnit" factoryName="JUnit">
+  <configuration default="false" name="OperaFilePreferencesTest" type="JUnit" factoryName="JUnit">
     <module name="Webdriver-opera" />
     <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
     <option name="ALTERNATIVE_JRE_PATH" value="" />
     <option name="PACKAGE_NAME" value="com.opera.core.systems" />
-    <option name="MAIN_CLASS_NAME" value="com.opera.core.systems.OperaFilePreferencesParserTest" />
+    <option name="MAIN_CLASS_NAME" value="com.opera.core.systems.OperaFilePreferencesTest" />
     <option name="METHOD_NAME" value="" />
     <option name="TEST_OBJECT" value="class" />
     <option name="VM_PARAMETERS" value="-ea" />
@@ -15,7 +15,9 @@
     <option name="TEST_SEARCH_SCOPE">
       <value defaultName="moduleWithDependencies" />
     </option>
-    <envs />
+    <envs>
+      <env name="OPERA_PATH" value="$USER_HOME$/operas/opera-core-integration-395-buildsetid_52723-core_2_13-lingogi64/profiles/release_desktop/lingogi_release_desktop" />
+    </envs>
     <patterns />
     <RunnerSettings RunnerId="Debug">
       <option name="DEBUG_PORT" value="" />

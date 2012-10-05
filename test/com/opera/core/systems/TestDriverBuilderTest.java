@@ -33,6 +33,7 @@ import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assume.assumeTrue;
 
 @NoDriver
 public class TestDriverBuilderTest extends OperaDriverTestCase {
@@ -79,6 +80,8 @@ public class TestDriverBuilderTest extends OperaDriverTestCase {
 
   @Test
   public void testProductOption() throws IOException {
+    assumeTrue(System.getenv(OperaBinary.OPERA_PATH_ENV_VAR) == null);
+
     System.setProperty(TestDriverBuilder.TEST_PRODUCT_OPTION_KEY,
                        OperaProduct.MOBILE.getDescriptionString());
     driver = new TestDriverBuilder().get();

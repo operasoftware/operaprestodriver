@@ -16,14 +16,13 @@ limitations under the License.
 
 package com.opera.core.systems;
 
-import com.google.common.base.Charsets;
 import com.google.common.base.Throwables;
-import com.google.common.base.Charsets;
 import com.google.common.io.Files;
 
 import com.opera.core.systems.preferences.OperaFilePreferences;
 import com.opera.core.systems.preferences.OperaGenericPreferences;
 import com.opera.core.systems.preferences.OperaPreferences;
+import com.opera.core.systems.testing.Ignore;
 import com.opera.core.systems.testing.NoDriver;
 import com.opera.core.systems.testing.OperaDriverTestCase;
 import com.opera.core.systems.testing.drivers.TestDriver;
@@ -40,12 +39,14 @@ import java.io.File;
 import java.io.IOException;
 import java.util.logging.Logger;
 
+import static com.opera.core.systems.OperaProduct.CORE;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.fail;
 
 @NoDriver
+@Ignore(products = CORE)
 public class OperaFilePreferencesTest extends OperaDriverTestCase {
 
   public TestDriver driver;

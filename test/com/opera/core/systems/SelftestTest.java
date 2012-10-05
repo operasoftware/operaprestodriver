@@ -59,8 +59,7 @@ public class SelftestTest extends OperaDriverTestCase {
 
   @Test
   public void selftestDoesNotBlowUp() {
-    List<SelftestResult> results =
-        driver.selftest(ImmutableSet.of("accessibility", "about"), "", "");
+    List<SelftestResult> results = driver.selftest(ImmutableSet.of("accessibility", "about"));
     assertFalse("Running selftests doesn't blow up, returns non-null result",
                 results.isEmpty());
   }
@@ -68,7 +67,7 @@ public class SelftestTest extends OperaDriverTestCase {
   @Test
   public void selftestOnlyGroup() {
     List<SelftestResult> results =
-        driver.selftest(ImmutableSet.of(""), "about.generateddocuments.dom:*", "");
+        driver.selftest(ImmutableSet.of(""), "about.generateddocuments.dom:*");
     assertFalse(results.isEmpty());
   }
 
