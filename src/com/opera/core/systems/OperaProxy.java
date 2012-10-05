@@ -356,6 +356,9 @@ public class OperaProxy {
 
   private void setProxyValue(ProxyToPreference key, Object value) {
     assertIsConnected();
+    if (value == null) {
+      value = "";
+    }
     preferences.set(PROXY_SECTION, key.getPreferenceKey(), value);
   }
 
