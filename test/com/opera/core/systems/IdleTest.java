@@ -28,9 +28,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
-import org.openqa.selenium.interactions.Actions;
 
-import static com.opera.core.systems.OperaProduct.CORE;
 import static com.opera.core.systems.OperaProduct.MOBILE;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
@@ -171,18 +169,13 @@ public class IdleTest extends OperaDriverTestCase {
   }
 
   @Test
-  @Ignore(platforms = {WINDOWS, LINUX}, products = {MOBILE, CORE})
   public void keyEnter() {
     assertIdleEnabledAndAvailable();
-
     driver.navigate().to(pages.javascript);
-
-    // Focus textbox
-    driver.findElement(By.id("one")).click();
 
     // submit form
     start();
-    new Actions(driver).sendKeys(Keys.ENTER).build().perform();
+    driver.findElement(By.id("one")).sendKeys(Keys.ENTER);
     stop();
 
     // +"?" for submitted query string
@@ -190,13 +183,12 @@ public class IdleTest extends OperaDriverTestCase {
   }
 
   @Test
-  @Ignore(platforms = WINDOWS, products = MOBILE)
   public void sendKeysNewline() {
     assertIdleEnabledAndAvailable();
 
     driver.navigate().to(pages.javascript);
 
-    // Focus textbox
+    // Focus text box
     start();
     driver.findElement(By.id("one")).sendKeys("\n");
     stop();
