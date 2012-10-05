@@ -33,7 +33,7 @@ import java.util.Map;
 public class TestIgnorance {
 
   private final IgnoreComparator ignoreComparator = new IgnoreComparator();
-  private final Map<ScopeService, String> services;
+  private final Map<ScopeService, String> services;  // Scope service name + version
   private final boolean hasLauncher;
   private final boolean idleEnabled;
 

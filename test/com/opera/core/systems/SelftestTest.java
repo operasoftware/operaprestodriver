@@ -18,6 +18,7 @@ package com.opera.core.systems;
 
 import com.google.common.collect.ImmutableSet;
 
+import com.opera.core.systems.scope.ScopeService;
 import com.opera.core.systems.scope.exceptions.ResponseNotReceivedException;
 import com.opera.core.systems.scope.internal.OperaIntervals;
 import com.opera.core.systems.scope.services.Selftest;
@@ -44,7 +45,7 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 import static org.junit.matchers.JUnitMatchers.containsString;
 
-@RequiresService(value = "selftest", version = "2.0")
+@RequiresService(value = ScopeService.SELFTEST, version = "2.0")
 public class SelftestTest extends OperaDriverTestCase {
 
   public static final Duration DEFAULT_SELFTEST_TIMEOUT =

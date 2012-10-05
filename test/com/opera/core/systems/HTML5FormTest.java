@@ -16,6 +16,7 @@ limitations under the License.
 
 package com.opera.core.systems;
 
+import com.opera.core.systems.scope.ScopeService;
 import com.opera.core.systems.testing.OperaDriverTestCase;
 import com.opera.core.systems.testing.RequiresService;
 
@@ -27,7 +28,7 @@ import org.openqa.selenium.WebElement;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-@RequiresService(value = "ecmascript", version = "1.1")
+@RequiresService(value = ScopeService.ECMASCRIPT, version = "1.1")
 public class HTML5FormTest extends OperaDriverTestCase {
 
   @Before

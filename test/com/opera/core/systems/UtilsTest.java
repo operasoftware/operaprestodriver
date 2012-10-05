@@ -16,6 +16,8 @@ limitations under the License.
 
 package com.opera.core.systems;
 
+import com.opera.core.systems.scope.ScopeService;
+import com.opera.core.systems.scope.Service;
 import com.opera.core.systems.testing.Ignore;
 import com.opera.core.systems.testing.OperaDriverTestCase;
 import com.opera.core.systems.testing.RequiresService;
@@ -27,7 +29,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.openqa.selenium.Platform.WINDOWS;
 
-@RequiresService(value = "core", version = "1.2")
+@RequiresService(value = ScopeService.CORE, version = "1.2")
 public class UtilsTest extends OperaDriverTestCase {
 
   public OperaUtils utils;

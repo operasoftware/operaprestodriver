@@ -18,6 +18,7 @@ package com.opera.core.systems;
 
 import com.google.common.collect.ImmutableSet;
 
+import com.opera.core.systems.scope.ScopeService;
 import com.opera.core.systems.scope.services.Selftest;
 import com.opera.core.systems.testing.OperaDriverTestCase;
 import com.opera.core.systems.testing.RequiresService;
@@ -30,7 +31,7 @@ import java.util.Map;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
-@RequiresService(value = "selftest", version = "2.0")
+@RequiresService(value = ScopeService.SELFTEST, version = "2.0")
 public class ScopeSelftestTest extends OperaDriverTestCase {
 
   @Test
