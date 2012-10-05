@@ -109,6 +109,7 @@ public class OperaLauncherRunnerTest extends OperaDriverTestCase {
   }
 
   @Test
+  @Ignore
   public void launcherInDefaultLocationIsOverwritten()
       throws IOException, NoSuchAlgorithmException {
     OperaDriverTestCase.removeDriver();
