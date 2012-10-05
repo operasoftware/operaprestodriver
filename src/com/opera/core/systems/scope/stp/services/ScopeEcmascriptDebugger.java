@@ -23,6 +23,7 @@ import com.opera.core.systems.OperaWebElement;
 import com.opera.core.systems.model.ScriptResult;
 import com.opera.core.systems.scope.AbstractEcmascriptService;
 import com.opera.core.systems.scope.ScopeServices;
+import com.opera.core.systems.scope.exceptions.CommunicationException;
 import com.opera.core.systems.scope.exceptions.ScopeException;
 import com.opera.core.systems.scope.internal.OperaIntervals;
 import com.opera.core.systems.scope.protos.EcmascriptProtos.ReadyStateChange;
@@ -54,6 +55,9 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicStampedReference;
+
+import static com.opera.core.systems.internal.OperaDefaults.SCRIPT_RETRIES;
+import static com.opera.core.systems.scope.internal.OperaIntervals.SCRIPT_RETRY_INTERVAL;
 
 /**
  * Manages the ecmascript-debugger service Handles runtime management and script injection.
@@ -257,15 +261,15 @@ public class ScopeEcmascriptDebugger
     Response response = executeMessage(EcmascriptDebuggerMessage.EVAL, builder,
                                        OperaIntervals.SCRIPT_TIMEOUT.getMs());
 
-    if (response == null && retries < OperaIntervals.SCRIPT_RETRY_INTERVAL.getMs()) {
+    if (response == null && retries < SCRIPT_RETRIES) {
       retries++;
-      sleepDuration += sleepDuration;
+      sleepDuration += SCRIPT_RETRY_INTERVAL.getMs();
       sleep(sleepDuration);
       recover();
       return eval(using, variables);
-    } else if (retries >= OperaIntervals.SCRIPT_RETRY_INTERVAL.getMs()) {
+    } else if (retries >= SCRIPT_RETRIES) {
       resetCounters();
-      throw new ScopeException("No response on executing JS command");
+      throw new CommunicationException("No response on ECMAScript evaluation command");
     }
 
     resetCounters();
@@ -275,7 +279,6 @@ public class ScopeEcmascriptDebugger
   protected Response eval(String using, Variable... variables) {
     return eval(using, getRuntimeId(), variables);
   }
-
 
   public Object executeScript(String using, boolean responseExpected) {
     return executeScript(using, responseExpected, getRuntimeId());

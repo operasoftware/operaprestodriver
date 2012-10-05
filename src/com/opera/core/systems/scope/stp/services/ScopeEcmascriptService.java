@@ -278,7 +278,6 @@ public class ScopeEcmascriptService extends AbstractEcmascriptService implements
     }
 
     resetCounters();
-
     return parseEvalData(response);
   }
 
