@@ -44,8 +44,6 @@ public abstract class AbstractTestDriverSupplier implements TestDriverSupplier {
     product = settings.getProduct();
   }
 
-  // TODO(andreastt): Consider using reflection for get() as well, although inheritance is bad
-
   public void setSettings(OperaSettings newSettings) {
     settings = newSettings;
 

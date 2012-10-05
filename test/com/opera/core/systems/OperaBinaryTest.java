@@ -28,14 +28,17 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assume.assumeTrue;
 import static org.junit.matchers.JUnitMatchers.containsString;
 
 @NoDriver
 public class OperaBinaryTest extends OperaDriverTestCase {
 
+  public static final String OLD_OPERA_PATH = System.getenv(OperaBinary.OPERA_PATH_ENV_VAR);
+
   @After
   public void resetEnvironment() {
-    environment.unset(OperaBinary.OPERA_PATH_ENV_VAR);
+    environment.set(OperaBinary.OPERA_PATH_ENV_VAR, OLD_OPERA_PATH);
   }
 
   @Test
@@ -113,16 +116,19 @@ public class OperaBinaryTest extends OperaDriverTestCase {
 
   @Test
   public void findBasedOnPlatformCore() {
+    assumeOperaPathNotSet();
     assertNull(OperaBinary.find(OperaProduct.CORE));
   }
 
   @Test
   public void findBasedOnPlatformSDK() {
+    assumeOperaPathNotSet();
     assertNull(OperaBinary.find(OperaProduct.SDK));
   }
 
   @Test
   public void findBasedOnPlatformMini() {
+    assumeOperaPathNotSet();
     assertNull(OperaBinary.find(OperaProduct.MINI));
   }
 
@@ -134,5 +140,9 @@ public class OperaBinaryTest extends OperaDriverTestCase {
   // TODO(andreastt): Possibly mock build*Paths() for testing?
 
   // TODO(andreastt): Possibly mock build*Binaries() for testing?
+
+  private void assumeOperaPathNotSet() {
+    assumeTrue(System.getenv(OperaBinary.OPERA_PATH_ENV_VAR) == null);
+  }
 
 }

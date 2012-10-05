@@ -39,6 +39,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
+import static com.opera.core.systems.OperaBinary.OPERA_PATH_ENV_VAR;
 import static com.opera.core.systems.OperaProduct.CORE;
 import static com.opera.core.systems.OperaProduct.MINI;
 import static com.opera.core.systems.OperaProduct.MOBILE;
@@ -63,6 +64,7 @@ public class OperaDesktopDriverTest extends OperaDesktopDriverTestCase {
 
   public static final Duration
       DEFAULT_HANDSHAKE_TIMEOUT = OperaIntervals.HANDSHAKE_TIMEOUT.getValue();
+  public static final String OLD_OPERA_PATH = System.getenv(OPERA_PATH_ENV_VAR);
 
   public TestOperaDesktopDriver driver;
   public DesiredCapabilities capabilities = DesiredCapabilities.opera();
@@ -85,7 +87,7 @@ public class OperaDesktopDriverTest extends OperaDesktopDriverTestCase {
   @After
   public void reset() {
     OperaIntervals.HANDSHAKE_TIMEOUT.setValue(DEFAULT_HANDSHAKE_TIMEOUT);
-    environment.unset(OperaBinary.OPERA_PATH_ENV_VAR);
+    environment.set(OPERA_PATH_ENV_VAR, OLD_OPERA_PATH);
   }
 
   @Test

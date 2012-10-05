@@ -69,6 +69,8 @@ import static org.openqa.selenium.Platform.WINDOWS;
 @NoDriver
 public class OperaSettingsTest extends OperaDriverTestCase {
 
+  public static final String OLD_OPERA_PATH = System.getenv(OPERA_PATH_ENV_VAR);
+
   public OperaSettings settings;
 
   @Before
@@ -79,7 +81,7 @@ public class OperaSettingsTest extends OperaDriverTestCase {
   @After
   public void afterEach() {
     environment.unset(LAUNCHER_ENV_VAR);
-    environment.unset(OPERA_PATH_ENV_VAR);
+    environment.set(OPERA_PATH_ENV_VAR, OLD_OPERA_PATH);
   }
 
   @Test
