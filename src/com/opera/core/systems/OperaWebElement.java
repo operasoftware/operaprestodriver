@@ -19,11 +19,11 @@ package com.opera.core.systems;
 import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableList;
 
+import com.opera.core.systems.internal.OperaColors;
 import com.opera.core.systems.model.Canvas;
 import com.opera.core.systems.model.ColorResult;
 import com.opera.core.systems.model.ScreenCaptureReply;
 import com.opera.core.systems.scope.exceptions.ResponseNotReceivedException;
-import com.opera.core.systems.internal.OperaColors;
 import com.opera.core.systems.scope.internal.OperaIntervals;
 import com.opera.core.systems.scope.internal.OperaMouseKeys;
 import com.opera.core.systems.scope.services.Debugger;
@@ -48,6 +48,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.logging.Logger;
@@ -357,7 +359,8 @@ public class OperaWebElement extends RemoteWebElement implements CapturesScreen 
     assertElementNotStale();
 
     Canvas canvas = buildCanvas();
-    ScreenCaptureReply reply = exec.screenWatcher(canvas, timeout, includeImage, hashes);
+    ScreenCaptureReply reply =
+        exec.screenWatcher(canvas, timeout, includeImage, Arrays.asList(hashes));
 
     if (includeImage && reply.getPng() != null) {
       FileChannel stream;
@@ -379,10 +382,10 @@ public class OperaWebElement extends RemoteWebElement implements CapturesScreen 
   }
 
   public ScreenCaptureReply captureScreen(long timeout) {
-    return captureScreen(timeout, (String) null);
+    return captureScreen(timeout, new ArrayList<String>());
   }
 
-  public ScreenCaptureReply captureScreen(long timeout, String... knownMD5s) {
+  public ScreenCaptureReply captureScreen(long timeout, List<String> knownMD5s) {
     assertElementNotStale();
     Canvas canvas = buildCanvas();
     return exec.screenWatcher(canvas, timeout, true, knownMD5s);

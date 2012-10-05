@@ -59,6 +59,7 @@ import java.net.ServerSocket;
 import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -342,7 +343,7 @@ public class OperaLauncherRunner extends AbstractOperaRunner implements OperaRun
    * @inheritDoc
    */
   public ScreenCaptureReply captureScreen(long timeout) throws OperaRunnerException {
-    return captureScreen(timeout, (String) null);
+    return captureScreen(timeout, new ArrayList<String>());
   }
 
   /**
@@ -351,7 +352,7 @@ public class OperaLauncherRunner extends AbstractOperaRunner implements OperaRun
    * @throws OperaRunnerException if runner is shutdown or not running
    * @inheritDoc
    */
-  public ScreenCaptureReply captureScreen(long timeout, String... knownMD5s)
+  public ScreenCaptureReply captureScreen(long timeout, List<String> knownMD5s)
       throws OperaRunnerException {
     assertLauncherAlive();
 
@@ -361,11 +362,7 @@ public class OperaLauncherRunner extends AbstractOperaRunner implements OperaRun
 
     try {
       LauncherScreenshotRequest.Builder request = LauncherScreenshotRequest.newBuilder();
-      for (String hash : knownMD5s) {
-        if (hash != null) {
-          request.addKnownMD5S(hash);
-        }
-      }
+      request.addAllKnownMD5S(knownMD5s);
       request.setKnownMD5STimeoutMs((int) timeout);
 
       ResponseEncapsulation res = protocol.sendRequest(

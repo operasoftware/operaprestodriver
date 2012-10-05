@@ -19,17 +19,19 @@ package com.opera.core.systems.runner.inprocess;
 import com.google.common.collect.Iterables;
 
 import com.opera.core.systems.OperaSettings;
+import com.opera.core.systems.internal.ImplicitWait;
 import com.opera.core.systems.model.ScreenCaptureReply;
 import com.opera.core.systems.runner.AbstractOperaRunner;
-import com.opera.core.systems.runner.OperaRunnerException;
 import com.opera.core.systems.runner.OperaRunner;
-import com.opera.core.systems.internal.ImplicitWait;
+import com.opera.core.systems.runner.OperaRunnerException;
 import com.opera.core.systems.scope.internal.OperaIntervals;
 
 import org.openqa.selenium.os.CommandLine;
 import org.openqa.selenium.support.ui.Duration;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
@@ -136,10 +138,10 @@ public class OperaInProcessRunner extends AbstractOperaRunner implements OperaRu
   }
 
   public ScreenCaptureReply captureScreen(long timeout) {
-    return captureScreen(timeout, (String) null);
+    return captureScreen(timeout, new ArrayList<String>());
   }
 
-  public ScreenCaptureReply captureScreen(long timeout, String... knownMD5s) {
+  public ScreenCaptureReply captureScreen(long timeout, List<String> knownMD5s) {
     assertNotShutdown();
 
     ScreenCapture capture = new ImplicitWait(new Duration(timeout, TimeUnit.MILLISECONDS))

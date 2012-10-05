@@ -91,7 +91,7 @@ public class ScreenshotTest extends OperaDriverTestCase {
   }
 
   @Test
-  public void elementsMd5Same() throws Exception {
+  public void elementsMd5Same() {
     String one = radioLittle.saveScreenshot("one.png");
     String two = radioSome.saveScreenshot("two.png");
 
@@ -99,7 +99,7 @@ public class ScreenshotTest extends OperaDriverTestCase {
   }
 
   @Test
-  public void writtenFilesSame() throws Exception {
+  public void writtenFilesSame() throws IOException {
     String one = "one.png";
     String two = "two.png";
 
@@ -110,7 +110,7 @@ public class ScreenshotTest extends OperaDriverTestCase {
   }
 
   @Test
-  public void elementsMd5NotSame() throws Exception {
+  public void elementsMd5NotSame() {
     String one = radioLittle.saveScreenshot("one.png");
     String two = radioLots.saveScreenshot("two.png");
 
@@ -118,7 +118,7 @@ public class ScreenshotTest extends OperaDriverTestCase {
   }
 
   @Test
-  public void writtenFilesNotSame() throws Exception {
+  public void writtenFilesNotSame() throws IOException {
     String one = "one.png";
     String two = "two.png";
 
@@ -140,7 +140,7 @@ public class ScreenshotTest extends OperaDriverTestCase {
   }
 
   @Test
-  public void hashesCanBeProvided() throws Exception {
+  public void hashesCanBeProvided() {
     String md5 = text.saveScreenshot("one.png");
     text.saveScreenshot("two.png", 0, true, md5);
 
@@ -154,7 +154,7 @@ public class ScreenshotTest extends OperaDriverTestCase {
 
   @Test
   @Ignore(platforms = MAC, value = "Needs investigation, doesn't return anything")
-  public void realPng() throws Exception {
+  public void realPng() {
     ScreenCaptureReply reply = driver.captureScreen();
     byte[] png = reply.getPng();
 
@@ -174,7 +174,7 @@ public class ScreenshotTest extends OperaDriverTestCase {
    * Tests the captureScreen method that returns a ScreenCaptureReply
    */
   @Test
-  public void expectsScreenshotReply() throws Exception {
+  public void expectsScreenshotReply() {
     ScreenCaptureReply one = radioLittle.captureScreen();
     ScreenCaptureReply two = radioSome.captureScreen();
 
@@ -186,7 +186,7 @@ public class ScreenshotTest extends OperaDriverTestCase {
   }
 
   @Test
-  public void zeroHeight() throws Exception {
+  public void zeroHeight() {
     // Shouldn't throw exceptions
 
     driver.navigate().to(pages.zeroHeightStandards);
@@ -198,7 +198,7 @@ public class ScreenshotTest extends OperaDriverTestCase {
 
   @Test
   @Ignore("We don't support taking single element screenshots of plugins")
-  public void flash() throws Exception {
+  public void flash() {
     driver.navigate().to(pages.flash);
     OperaWebElement img = (OperaWebElement) driver.findElement(By.id("img_container"));
     OperaWebElement flash = (OperaWebElement) driver.findElement(By.id("flash_container"));
@@ -210,7 +210,7 @@ public class ScreenshotTest extends OperaDriverTestCase {
   }
 
   @Test
-  public void takesScreenshot() throws Exception {
+  public void takesScreenshot() throws IOException {
     driver.navigate().to(pages.tall);
     File file = driver.getScreenshotAs(OutputType.FILE);
 
@@ -224,7 +224,7 @@ public class ScreenshotTest extends OperaDriverTestCase {
 
   @Test
   @Ignore("Opera problem: Areas outside current viewport are black")
-  public void fullScreenshot() throws Exception {
+  public void fullScreenshot() throws IOException {
     driver.navigate().to(pages.tall);
     File file = driver.getScreenshotAs(OutputType.FILE);
 

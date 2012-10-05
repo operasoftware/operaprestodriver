@@ -22,6 +22,7 @@ import com.opera.core.systems.model.ScreenCaptureReply;
 import com.opera.core.systems.scope.Service;
 import com.opera.core.systems.scope.internal.OperaMouseKeys;
 
+import java.util.List;
 import java.util.Set;
 
 public interface Exec extends Service {
@@ -108,6 +109,6 @@ public interface Exec extends Service {
    * compare it with the given hashes (keys).
    */
   ScreenCaptureReply screenWatcher(Canvas canvas, long timeout, boolean includeImage,
-                                   String... hashes);
+                                   List<String> hashes);
 
 }

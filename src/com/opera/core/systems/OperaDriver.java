@@ -72,6 +72,7 @@ import org.openqa.selenium.support.ui.Duration;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -980,10 +981,10 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot, Run
   }
 
   public ScreenCaptureReply captureScreen(long timeout) {
-    return captureScreen(timeout, (String) null);
+    return captureScreen(timeout, new ArrayList<String>());
   }
 
-  public ScreenCaptureReply captureScreen(long timeout, String... hashes) {
+  public ScreenCaptureReply captureScreen(long timeout, List<String> hashes) {
     return runner.captureScreen(timeout, hashes);
   }
 

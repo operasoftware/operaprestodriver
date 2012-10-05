@@ -47,7 +47,6 @@ import com.opera.core.systems.scope.protos.UmsProtos.Response;
 import com.opera.core.systems.scope.services.Exec;
 import com.opera.core.systems.scope.stp.services.messages.ExecMessage;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
@@ -272,7 +271,7 @@ public class ScopeExec extends AbstractService implements Exec {
   }
 
   public ScreenCaptureReply screenWatcher(Canvas canvas, long timeout, boolean includeImage,
-                                          String... hashes) {
+                                          List<String> hashes) {
     ScreenWatcher.Builder builder = ScreenWatcher.newBuilder();
     Area.Builder areaBuilder = Area.newBuilder();
 
@@ -283,9 +282,7 @@ public class ScopeExec extends AbstractService implements Exec {
     areaBuilder.setW(canvas.getWidth());
 
     builder.setArea(areaBuilder);
-    if (hashes.length > 0) {
-      builder.addAllMd5List(Arrays.asList(hashes));
-    }
+    builder.addAllMd5List(hashes);
     if (!includeImage) {
       builder.setIncludeImage(false);
     }

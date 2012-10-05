@@ -18,6 +18,8 @@ package com.opera.core.systems.runner;
 
 import com.opera.core.systems.model.ScreenCaptureReply;
 
+import java.util.List;
+
 /**
  * AbstractOperaRunner is an interface for controlling the Opera browser binary.  It allows you to
  * start, stop, take screenshots of, and catch crash logs from Opera.  AbstractOperaRunner
@@ -85,25 +87,16 @@ public interface OperaRunner {
   ScreenCaptureReply captureScreen(long timeout) throws OperaRunnerException;
 
   /**
-   * Take a screenshot of the full screen.
-   *
-   * @param timeout attempt to take the screenshot until the timeout is reached
-   * @param hashes  an arbitrary list of hashes to compare with
-   * @return an object containing MD5 hash sums and bytes
-   * @throws OperaRunnerException if launcher is shutdown or not running
-   */
-
-  /**
    * Take a screenshot of the full screen with a timeout and a list of previously known MD5 hash sum
    * results.  If the screen capture matches one of the MD5 hash sums, the capture's image data will
    * not be stored.
    *
    * @param timeout   attempt to take the screen capture until the timeout is reached
-   * @param knownMD5s an arbitrary list of hashes of known MD5's, causing no image data to be
-   *                  stored
+   * @param knownMD5s a list of hashes of known MD5's, causing no image data to be stored
    * @return a reply with various information on the captured area
    * @throws OperaRunnerException if a communication error occurs
    */
-  ScreenCaptureReply captureScreen(long timeout, String... knownMD5s) throws OperaRunnerException;
+  ScreenCaptureReply captureScreen(long timeout, List<String> knownMD5s)
+      throws OperaRunnerException;
 
 }

@@ -18,9 +18,9 @@ package com.opera.core.systems;
 
 import com.opera.core.systems.model.ScreenCaptureReply;
 import com.opera.core.systems.runner.AbstractOperaRunner;
+import com.opera.core.systems.runner.OperaRunner;
 import com.opera.core.systems.runner.OperaRunnerException;
 import com.opera.core.systems.runner.inprocess.OperaInProcessRunner;
-import com.opera.core.systems.runner.OperaRunner;
 import com.opera.core.systems.runner.launcher.OperaLauncherRunner;
 import com.opera.core.systems.scope.internal.OperaIntervals;
 import com.opera.core.systems.testing.Ignore;
@@ -38,6 +38,8 @@ import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 
@@ -45,10 +47,10 @@ import static com.opera.core.systems.OperaBinary.OPERA_PATH_ENV_VAR;
 import static com.opera.core.systems.OperaProduct.CORE;
 import static com.opera.core.systems.OperaProduct.DESKTOP;
 import static com.opera.core.systems.OperaSettings.Capability.AUTOSTART;
-import static com.opera.core.systems.runner.launcher.OperaLauncherRunner.LAUNCHER_ENV_VAR;
 import static com.opera.core.systems.internal.OperaDefaults.SERVER_DEFAULT_PORT;
 import static com.opera.core.systems.internal.OperaDefaults.SERVER_DEFAULT_PORT_IDENTIFIER;
 import static com.opera.core.systems.internal.OperaDefaults.SERVER_RANDOM_PORT_IDENTIFIER;
+import static com.opera.core.systems.runner.launcher.OperaLauncherRunner.LAUNCHER_ENV_VAR;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
@@ -479,16 +481,6 @@ public class OperaSettingsTest extends OperaDriverTestCase {
     assertNotNull(settings.toString());
   }
 
-  /*
-  @Test
-  public void environmentalBinaryPathIsRespected() throws IOException {
-    environment.set(OPERA_PATH_ENV_VAR, resources.executableBinary().getPath());
-    OperaSettings settings = new OperaSettings();  // env var needs to be set before construction
-    assertEquals(resources.executableBinary().getCanonicalPath(),
-                 settings.getBinary().getCanonicalPath());
-  }
-  */
-
   public static abstract class MockRunner implements OperaRunner {
 
     public void startOpera() throws OperaRunnerException {
@@ -517,10 +509,10 @@ public class OperaSettingsTest extends OperaDriverTestCase {
     }
 
     public ScreenCaptureReply captureScreen(long timeout) throws OperaRunnerException {
-      return captureScreen(timeout, (String) null);
+      return captureScreen(timeout, new ArrayList<String>());
     }
 
-    public ScreenCaptureReply captureScreen(long timeout, String... knownMD5s)
+    public ScreenCaptureReply captureScreen(long timeout, List<String> knownMD5s)
         throws OperaRunnerException {
       return null;
     }

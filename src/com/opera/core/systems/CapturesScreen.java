@@ -18,6 +18,8 @@ package com.opera.core.systems;
 
 import com.opera.core.systems.model.ScreenCaptureReply;
 
+import java.util.List;
+
 /**
  * Indicates that an OperaDriver can capture the whole screen area.
  *
@@ -47,10 +49,10 @@ public interface CapturesScreen {
    * browser window.
    *
    * @param timeout   the number of milliseconds to wait before taking the screenshot
-   * @param knownMD5s a previous screenshot MD5 hash; if it matches the hash of this screenshot then
-   *                  no image data is returned
+   * @param knownMD5s a list of previous screenshots' MD5 hashes; if they match the hash of this
+   *                  screenshot then no image data is returned
    * @return a screen capture reply
    */
-  ScreenCaptureReply captureScreen(long timeout, String... knownMD5s);
+  ScreenCaptureReply captureScreen(long timeout, List<String> knownMD5s);
 
 }
