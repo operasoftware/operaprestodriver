@@ -54,7 +54,6 @@ public class ExecKeyTest extends OperaDriverTestCase {
     key("a");
 
     assertThat("keyDown event fired", log(), containsString("down, 65, A"));
-    assertThat("keyPress event fired", log(), containsString("press"));
     assertThat("keyUp event fired", log(), containsString("up, 65, A"));
   }
 
@@ -92,37 +91,43 @@ public class ExecKeyTest extends OperaDriverTestCase {
   @Ignore(products = OperaProduct.MOBILE)
   public void specialKeyF5() {
     key(OperaKey.F5);
-    assertThat("F5", log(), containsString("press, 116"));
+    assertThat("F5 (down)", log(), containsString("down, 116"));
+    assertThat("F5 (up)", log(), containsString("up, 116"));
   }
 
   @Test
   public void specialKeyHome() {
     key(OperaKey.HOME);
-    assertThat("Home", log(), containsString("press, 36"));
+    assertThat("Home (down)", log(), containsString("down, 36"));
+    assertThat("Home (up)", log(), containsString("up, 36"));
   }
 
   @Test
   public void specialKeyPageUp() {
     key(OperaKey.PAGE_UP);
-    assertThat("page down", log(), containsString("press, 33"));
+    assertThat("page up (down)", log(), containsString("down, 33"));
+    assertThat("page up (up)", log(), containsString("up, 33"));
   }
 
   @Test
   public void specialKeyPageDown() {
     key(OperaKey.PAGE_DOWN);
-    assertThat("page down", log(), containsString("press, 34"));
+    assertThat("page down (down)", log(), containsString("down, 34"));
+    assertThat("page down (up)", log(), containsString("up, 34"));
   }
 
   @Test
   public void specialKeyDelete() {
     key(OperaKey.DELETE);
-    assertThat("delete", log(), containsString("press, 46"));
+    assertThat("delete (down)", log(), containsString("down, 46"));
+    assertThat("delete (up)", log(), containsString("up, 46"));
   }
 
   @Test
   public void specialKeyBackspace() {
     key(OperaKey.BACK_SPACE);
-    assertThat("backspace", log(), containsString("press, 8"));
+    assertThat("backspace (down)", log(), containsString("down, 8"));
+    assertThat("backspace (up)", log(), containsString("up, 8"));
   }
 
   @Test
