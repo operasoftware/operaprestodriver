@@ -157,7 +157,7 @@ public class DriverKeysTest extends OperaDriverTestCase {
   }
 
   @Test
-  @Ignore(products = MOBILE, platforms = MAC, value = "Needs investigation")
+  @Ignore(products = MOBILE)
   public void testMultipleModifiers() {
     if (Platform.getCurrent().is(Platform.MAC)) {
       new Actions(driver).sendKeys("abc defghij")

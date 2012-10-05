@@ -169,6 +169,7 @@ public class IdleTest extends OperaDriverTestCase {
   }
 
   @Test
+  @Ignore(products = MOBILE)
   public void keyEnter() {
     assertIdleEnabledAndAvailable();
     driver.navigate().to(pages.javascript);
@@ -183,6 +184,7 @@ public class IdleTest extends OperaDriverTestCase {
   }
 
   @Test
+  @Ignore(products = MOBILE)
   public void sendKeysNewline() {
     assertIdleEnabledAndAvailable();
 
