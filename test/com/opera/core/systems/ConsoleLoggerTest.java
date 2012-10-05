@@ -17,6 +17,7 @@ limitations under the License.
 package com.opera.core.systems;
 
 import com.opera.core.systems.scope.services.ConsoleLogger;
+import com.opera.core.systems.testing.Ignore;
 import com.opera.core.systems.testing.OperaDriverTestCase;
 
 import org.junit.Before;
@@ -24,9 +25,11 @@ import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
+import static com.opera.core.systems.OperaProduct.MOBILE;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+@Ignore(products = MOBILE)
 public class ConsoleLoggerTest extends OperaDriverTestCase {
 
   public WebElement triggerLog;

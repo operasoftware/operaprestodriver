@@ -2,14 +2,14 @@ package com.opera.core.systems.scope.stp.services;
 
 import com.google.common.collect.Lists;
 
-import com.opera.core.systems.scope.ScopeServices;
 import com.opera.core.systems.scope.AbstractService;
-import com.opera.core.systems.scope.stp.services.messages.ConsoleLoggerMessage;
+import com.opera.core.systems.scope.ScopeServices;
 import com.opera.core.systems.scope.internal.ServiceCallback;
 import com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessage;
 import com.opera.core.systems.scope.protos.ConsoleLoggerProtos.ConsoleMessageList;
 import com.opera.core.systems.scope.protos.UmsProtos.Response;
 import com.opera.core.systems.scope.services.ConsoleLogger;
+import com.opera.core.systems.scope.stp.services.messages.ConsoleLoggerMessage;
 
 import java.util.List;
 
