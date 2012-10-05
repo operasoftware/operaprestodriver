@@ -111,6 +111,8 @@ public class OperaLauncherRunnerTest extends OperaDriverTestCase {
   @Test
   public void launcherInDefaultLocationIsOverwritten()
       throws IOException, NoSuchAlgorithmException {
+    OperaDriverTestCase.removeDriver();
+
     File outdatedLauncher = resources.executableBinary();
 
     try {
