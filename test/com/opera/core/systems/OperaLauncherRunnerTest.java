@@ -31,6 +31,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.Platform;
+import org.openqa.selenium.net.PortProber;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -154,17 +155,15 @@ public class OperaLauncherRunnerTest extends OperaDriverTestCase {
   @Test
   public void profileArgumentNotSetIfProductIsAll() {
     settings.setProduct(OperaProduct.ALL);
-    runner = new TestOperaLauncherRunner(settings);
-    assertThat(runner.buildArguments(), hasItem(not("-profile")));
+    assertThat(TestOperaLauncherRunner.buildArguments(settings), hasItem(not("-profile")));
   }
 
   @Test
   public void profileArgumentSetIfProductIsSpecified() {
     OperaProduct product = OperaProduct.DESKTOP;
     settings.setProduct(product);
-    runner = new TestOperaLauncherRunner(settings);
 
-    List<String> arguments = runner.buildArguments();
+    List<String> arguments = TestOperaLauncherRunner.buildArguments(settings);
     assertThat(arguments, hasItem("-profile"));
     assertThat(arguments, hasItem(product.getDescriptionString()));
   }
@@ -173,8 +172,7 @@ public class OperaLauncherRunnerTest extends OperaDriverTestCase {
   public void profileArgumentNotSetIfProductIsCore() {
     settings.setProduct(OperaProduct.CORE);
     settings.setBinary(OperaBinary.find(OperaProduct.ALL));
-    runner = new TestOperaLauncherRunner(settings);
-    assertThat(runner.buildArguments(), hasItem(not("-profile")));
+    assertThat(TestOperaLauncherRunner.buildArguments(settings), hasItem(not("-profile")));
   }
 
   @Test
@@ -321,6 +319,31 @@ public class OperaLauncherRunnerTest extends OperaDriverTestCase {
   }
 
   @Test
+  public void displayArgumentDoesNotContainColon() {
+    int display = 42;
+    settings.setDisplay(display);
+
+    List<String> arguments = TestOperaLauncherRunner.buildArguments(settings);
+
+    String displayArgument = null;
+    String displayArgumentValue = null;
+    for (int i = 0; i < arguments.size(); ++i) {
+      String argument = arguments.get(i);
+      if (argument.startsWith("-display")) {
+        displayArgument = argument;
+        displayArgumentValue = arguments.get(i + 1);
+      }
+    }
+
+    if (displayArgument == null) {
+      fail("List of launcher arguments did not contain -display");
+    }
+
+    assertThat(displayArgument, not(containsString(":")));
+    assertThat(displayArgumentValue, containsString(String.valueOf(display)));
+  }
+
+  @Test
   public void testLoggingLevel() {
     assertEquals(Level.SEVERE, TestOperaLauncherRunner.toLauncherLoggingLevel(Level.SEVERE));
   }
@@ -367,8 +390,8 @@ public class OperaLauncherRunnerTest extends OperaDriverTestCase {
       super(settings);
     }
 
-    public List<String> buildArguments() {
-      return super.buildArguments();
+    public static List<String> buildArguments(OperaSettings settings) {
+      return OperaLauncherRunner.buildArguments(settings, PortProber.findFreePort());
     }
 
     public static Level toLauncherLoggingLevel(Level javaLevel) {

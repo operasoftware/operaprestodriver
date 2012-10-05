@@ -119,7 +119,7 @@ public class OperaLauncherRunner extends AbstractOperaRunner implements OperaRun
     }
 
     // Create list of arguments for launcher binary
-    arguments = buildArguments();
+    arguments = buildArguments(settings, launcherPort);
     logger.config("launcher arguments: " + arguments);
 
     init();
@@ -171,16 +171,16 @@ public class OperaLauncherRunner extends AbstractOperaRunner implements OperaRun
     }
   }
 
-  protected List<String> buildArguments() {
+  public static List<String> buildArguments(OperaSettings settings, int launcherPort) {
     ImmutableList.Builder<String> builder = ImmutableList.builder();
 
     builder.add("-host").add(settings.getHost());
     builder.add("-port").add(String.format("%s", launcherPort));
     if (settings.getDisplay() != null && settings.getDisplay() > 0) {
-      builder.add("-display").add(String.format(":%s", settings.getDisplay()));
+      builder.add("-display").add(String.valueOf(settings.getDisplay()));
     }
     if (settings.logging().getLevel() != Level.OFF) {
-      builder.add("-console");  // TODO(andreastt): Allow for file logging
+      builder.add("-console");
       builder.add("-verbosity")
           .add(toLauncherLoggingLevel(settings.logging().getLevel()).toString());
     }
@@ -193,7 +193,9 @@ public class OperaLauncherRunner extends AbstractOperaRunner implements OperaRun
     if (settings.hasDetach()) {
       builder.add("-noquit");
     }
-    builder.add("-bin").add(settings.getBinary().getAbsolutePath());
+    if (settings.getBinary() != null) {
+      builder.add("-bin").add(settings.getBinary().getAbsolutePath());
+    }
 
     // The launcher will pass on any extra arguments to Opera
     for (OperaArgument argument : settings.arguments()) {
