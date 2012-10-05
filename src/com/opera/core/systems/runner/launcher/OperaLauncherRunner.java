@@ -362,7 +362,9 @@ public class OperaLauncherRunner extends AbstractOperaRunner implements OperaRun
     try {
       LauncherScreenshotRequest.Builder request = LauncherScreenshotRequest.newBuilder();
       for (String hash : knownMD5s) {
-        request.addKnownMD5S(hash);
+        if (hash != null) {
+          request.addKnownMD5S(hash);
+        }
       }
       request.setKnownMD5STimeoutMs((int) timeout);
 
