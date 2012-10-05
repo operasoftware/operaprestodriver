@@ -49,7 +49,6 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.logging.Logger;
@@ -59,7 +58,7 @@ import java.util.logging.Logger;
  */
 public class OperaWebElement extends RemoteWebElement implements CapturesScreen {
 
-  private static final List<String> specialInputs =
+  public static final List<String> SPECIAL_INPUTS =
       ImmutableList.of("datetime", "date", "month", "week", "time", "datetime-local", "range",
                        "color", "file");
 
@@ -71,12 +70,12 @@ public class OperaWebElement extends RemoteWebElement implements CapturesScreen 
   private final Debugger debugger;
 
   /**
-   * @param parent   driver that this element belongs to
-   * @param objectId the EcmaScript object ID of this element
+   * @param driver driver that this element belongs to
+   * @param id     the ECMAScript object ID of this element
    */
-  public OperaWebElement(OperaDriver parent, int objectId) {
-    this.parent = parent;
-    this.objectId = objectId;
+  public OperaWebElement(final OperaDriver driver, final int id) {
+    parent = driver;
+    objectId = id;
     parent.objectIds.add(objectId);
     debugger = parent.getDebugger();
     exec = parent.getScopeServices().getExec();
@@ -89,7 +88,7 @@ public class OperaWebElement extends RemoteWebElement implements CapturesScreen 
    * Calls the method and parses the result, the result must be a string
    *
    * @param method the method to call
-   * @return response of EcmaScript in string presentation
+   * @return response of ECMAScript in string presentation
    */
   public final String callMethod(String method) {
     parent.assertConnected();
@@ -206,7 +205,7 @@ public class OperaWebElement extends RemoteWebElement implements CapturesScreen 
     // Handle special input types
     String typeAttribute = getAttribute("type").toLowerCase();
 
-    if (getTagName().equals("INPUT") && specialInputs.contains(typeAttribute)) {
+    if (getTagName().equals("INPUT") && SPECIAL_INPUTS.contains(typeAttribute)) {
       if (typeAttribute.equals("file")) {
         File localFile = fileDetector.getLocalFile(keysToSend);
 
@@ -305,7 +304,7 @@ public class OperaWebElement extends RemoteWebElement implements CapturesScreen 
    * @return an MD5 hash as a string
    */
   public String getImageHash() {
-    return getImageHash(10L);
+    return getImageHash(10L, new ArrayList<String>());
   }
 
   /**
@@ -316,7 +315,7 @@ public class OperaWebElement extends RemoteWebElement implements CapturesScreen 
    * @param hashes  optional hashes to compare the hashes with
    * @return an MD5 hash as a string
    */
-  public String getImageHash(long timeout, String... hashes) {
+  public String getImageHash(long timeout, List<String> hashes) {
     return saveScreenshot("", timeout, false, hashes);
   }
 
@@ -328,7 +327,7 @@ public class OperaWebElement extends RemoteWebElement implements CapturesScreen 
    * @return the MD5 hash of the screenshot
    */
   public String saveScreenshot(String filename) {
-    return this.saveScreenshot(filename, 10L, true);
+    return saveScreenshot(filename, 10L);
   }
 
   /**
@@ -340,7 +339,7 @@ public class OperaWebElement extends RemoteWebElement implements CapturesScreen 
    * @return the MD5 hash of the screenshot
    */
   public String saveScreenshot(String filename, long timeout) {
-    return this.saveScreenshot(filename, timeout, true);
+    return saveScreenshot(filename, timeout, true, new ArrayList<String>());
   }
 
   /**
@@ -355,12 +354,12 @@ public class OperaWebElement extends RemoteWebElement implements CapturesScreen 
    * @return the MD5 hash of the screenshot
    */
   public String saveScreenshot(String filename, long timeout, boolean includeImage,
-                               String... hashes) {
+                               List<String> hashes) {
     assertElementNotStale();
 
     Canvas canvas = buildCanvas();
     ScreenCaptureReply reply =
-        exec.screenWatcher(canvas, timeout, includeImage, Arrays.asList(hashes));
+        exec.screenWatcher(canvas, timeout, includeImage, hashes);
 
     if (includeImage && reply.getPng() != null) {
       FileChannel stream;
@@ -457,10 +456,13 @@ public class OperaWebElement extends RemoteWebElement implements CapturesScreen 
     return null;
   }
 
+  // Used in RemoteWebDriveR:
+
   public int getObjectId() {
     return objectId;
   }
 
+  @SuppressWarnings("unused")
   public int getRuntimeId() {
     return runtimeId;
   }
