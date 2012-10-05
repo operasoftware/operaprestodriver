@@ -32,7 +32,6 @@ import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import static org.junit.matchers.JUnitMatchers.containsString;
 import static org.openqa.selenium.Platform.MAC;
@@ -60,16 +59,17 @@ public class JavascriptTest extends OperaDriverTestCase {
   }
 
   // Make sure that typing actually happens. When the focus switches half way
-  // through typing we should continue typing on the other textbox.
+  // through typing we should continue typing on the other text box.
   @Test
   @Ignore(products = MOBILE, value = "Needs investigation")
   public void testTypingKeyEvents() {
     driver.navigate().to(pages.keys);
-
-    new Actions(driver).sendKeys("hi").perform();
+    driver.getKeyboard().sendKeys("hi");
 
     String log = driver.findElement(By.id("log")).getAttribute("value");
-    assertThat(log, containsString("press, 104, h,"));
+    assertThat(log, containsString("down, 72, H,"));
+    assertThat(log, containsString("up, 72, H,"));
+    assertThat(log, containsString("down, 73, I,"));
     assertThat(log, containsString("up, 73, I,"));
   }
 
