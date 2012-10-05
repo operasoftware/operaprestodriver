@@ -62,8 +62,7 @@ import static com.opera.core.systems.scope.internal.OperaIntervals.SCRIPT_RETRY_
 /**
  * Manages the ecmascript-debugger service Handles runtime management and script injection.
  */
-public class ScopeEcmascriptDebugger
-    extends AbstractEcmascriptService
+public class ScopeEcmascriptDebugger extends AbstractEcmascriptService
     implements EcmascriptDebugger {
 
   private final AtomicStampedReference<RuntimeInfo> runtime =

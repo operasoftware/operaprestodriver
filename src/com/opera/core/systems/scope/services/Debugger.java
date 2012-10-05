@@ -23,7 +23,7 @@ import com.opera.core.systems.scope.protos.EsdbgProtos;
 
 import java.util.List;
 
-public interface Debugger extends Service {
+public abstract interface Debugger extends Service {
 
   /**
    * Set the driver this service belongs to. Needed so that we can create OperaWebElements in this

@@ -256,9 +256,9 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot, Run
    *
    * @return unique set of services to require
    */
+  @SuppressWarnings("unchecked")
   protected SortedSet<ScopeService> getRequiredServices() {
     return ImmutableSortedSet.of(
-        ScopeService.ECMASCRIPT_DEBUGGER,
         ScopeService.WINDOW_MANAGER,
         ScopeService.EXEC,
         ScopeService.CORE,

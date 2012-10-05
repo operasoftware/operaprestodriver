@@ -45,6 +45,7 @@ import com.opera.core.systems.scope.protos.EcmascriptProtos.Value;
 import com.opera.core.systems.scope.protos.EcmascriptProtos.Value.Type;
 import com.opera.core.systems.scope.protos.EsdbgProtos.RuntimeInfo;
 import com.opera.core.systems.scope.protos.UmsProtos.Response;
+import com.opera.core.systems.scope.services.Ecmascript;
 import com.opera.core.systems.scope.services.EcmascriptDebugger;
 import com.opera.core.systems.scope.stp.services.messages.EcmascriptMessage;
 
@@ -73,8 +74,7 @@ import static com.opera.core.systems.scope.internal.OperaIntervals.SCRIPT_TIMEOU
  * ScopeEcmascriptService is a lightweight service to enable JavaScript injection.  Unlike {@link
  * ScopeEcmascriptDebugger} it does not disable JIT.
  */
-public class ScopeEcmascriptService extends AbstractEcmascriptService implements
-                                                                      EcmascriptDebugger {
+public class ScopeEcmascriptService extends AbstractEcmascriptService implements Ecmascript {
 
   private final AtomicStampedReference<Runtime> runtime =
       new AtomicStampedReference<Runtime>(null, 0);
@@ -84,7 +84,7 @@ public class ScopeEcmascriptService extends AbstractEcmascriptService implements
   private final Queue<Integer> garbageQueue = Lists.newLinkedList();
 
   public ScopeEcmascriptService(ScopeServices services) {
-    super(services, SERVICE_NAME);
+    super(services, Ecmascript.SERVICE_NAME);
   }
 
   public int getRuntimeId() {

@@ -18,6 +18,7 @@ package com.opera.core.systems.scope;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 import com.google.protobuf.AbstractMessage.Builder;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
@@ -75,7 +76,7 @@ import java.util.logging.Logger;
 public class ScopeServices implements ConnectionHandler {
 
   private final Logger logger = Logger.getLogger(getClass().getName());
-  private final SortedSet<ScopeService> requiredServices;
+  private final SortedSet<ScopeService> requiredServices = Sets.newTreeSet();
   private final StpThread stpThread;
   private final AtomicInteger tagCounter;
   private final WaitState waitState = new WaitState();
@@ -105,9 +106,9 @@ public class ScopeServices implements ConnectionHandler {
    * @param manualConnect    whether to output ready message with port number when starting
    * @throws IOException if an I/O error occurs
    */
-  public ScopeServices(final SortedSet<ScopeService> requiredServices, int port,
-                       boolean manualConnect) throws IOException {
-    this.requiredServices = requiredServices;
+  public ScopeServices(final SortedSet<ScopeService> requiredServices, final int port,
+                       final boolean manualConnect) throws IOException {
+    this.requiredServices.addAll(requiredServices);
     tagCounter = new AtomicInteger();
     stpThread = new StpThread(port, this, new ScopeEventHandler(this), manualConnect);
   }
@@ -159,7 +160,7 @@ public class ScopeServices implements ConnectionHandler {
    * @param services a map of required services and their minimum version
    * @return list of services actually created
    */
-  private Map<ScopeService, Service> createServices(Set<ScopeService> services) {
+  private Map<ScopeService, Service> createServices(final Set<ScopeService> services) {
     Map<ScopeService, Service> actualServices = Maps.newTreeMap();
 
     for (ScopeService requiredService : services) {
@@ -175,7 +176,7 @@ public class ScopeServices implements ConnectionHandler {
     return actualServices;
   }
 
-  private void initializeServices(Collection<Service> services) {
+  private void initializeServices(final Collection<Service> services) {
     for (Service service : services) {
       logger.finer(String.format("Initializing service %s (version %s)",
                                  service.getServiceName(), service.getServiceVersion()));
