@@ -48,7 +48,7 @@ public class ScopeSelftest extends AbstractService implements Selftest {
     super(services, SERVICE_NAME);
 
     // Note: Version 2.0 of selftest is not backwards compatible with the previous version 1.1
-    if (!isVersionInRange("3.0")) {
+    if (!isVersionInRange("2.0")) {
       return;
     }
 
