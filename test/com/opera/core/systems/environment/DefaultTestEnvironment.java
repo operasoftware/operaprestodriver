@@ -32,6 +32,10 @@ public abstract class DefaultTestEnvironment implements TestEnvironment {
    */
   @SuppressWarnings("unchecked")
   public void set(String key, String value) {
+    if (value == null) {
+      value = "";
+    }
+
     try {
       Class<?>[] classes = Collections.class.getDeclaredClasses();
       Map<String, String> env = System.getenv();
