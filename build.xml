@@ -220,26 +220,13 @@
     </javadoc>
   </target>
 
-  <target name="example" description="Run the simple example" depends="jar">
-    <javac source="1.6" target="1.6" debug="true" includeantruntime="false">
-      <classpath refid="test.classpath.path" />
-      <src path="examples/simple" />
-    </javac>
-    <java classname="Example" fork="yes">
-      <classpath refid="test.classpath.path" />
-      <classpath location="examples/simple" />
-    </java>
-  </target>
-
-  <target name="release" description="Generate a ZIP for release including the JAR, docs and examples" depends="clean,jar,doc">
+  <target name="release" description="Generate a ZIP for release including the JAR and docs" depends="clean,jar,doc">
     <mkdir dir="release" />
     <property name="release-zip.name" value="operadriver-${version}" />
     <jar destfile="release/${release-zip.name}-source.jar" basedir="src" />
     <zip destfile="release/${release-zip.name}.zip">
       <!-- Add the docs -->
       <zipfileset prefix="${release-zip.name}/docs" dir="docs/" />
-      <!-- Add the examples -->
-      <zipfileset prefix="${release-zip.name}/examples" dir="examples/" />
       <!-- add OperaDriver (source) jar to the zip -->
       <zipfileset prefix="${release-zip.name}" dir="pkg" />
       <zipfileset prefix="${release-zip.name}" dir="release" includes="${release-zip.name}-source.jar" />
