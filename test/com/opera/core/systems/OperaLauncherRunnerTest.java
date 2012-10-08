@@ -331,7 +331,7 @@ public class OperaLauncherRunnerTest extends OperaDriverTestCase {
   }
 
   @Test
-  public void displayArgumentDoesNotContainColon() {
+  public void displayArgumentDoesContainColon() {
     int display = 42;
     settings.setDisplay(display);
 
@@ -351,7 +351,8 @@ public class OperaLauncherRunnerTest extends OperaDriverTestCase {
       fail("List of launcher arguments did not contain -display");
     }
 
-    assertThat(displayArgument, not(containsString(":")));
+    assertThat(displayArgument, containsString("display"));
+    assertThat(displayArgumentValue, containsString(":"));
     assertThat(displayArgumentValue, containsString(String.valueOf(display)));
   }
 

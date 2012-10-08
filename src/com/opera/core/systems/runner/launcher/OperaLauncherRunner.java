@@ -178,7 +178,7 @@ public class OperaLauncherRunner extends AbstractOperaRunner implements OperaRun
     builder.add("-host").add(settings.getHost());
     builder.add("-port").add(String.format("%s", launcherPort));
     if (settings.getDisplay() != null && settings.getDisplay() > 0) {
-      builder.add("-display").add(String.valueOf(settings.getDisplay()));
+      builder.add("-display").add(String.format(":%d", settings.getDisplay()));
     }
     if (settings.logging().getLevel() != Level.OFF) {
       builder.add("-console");
