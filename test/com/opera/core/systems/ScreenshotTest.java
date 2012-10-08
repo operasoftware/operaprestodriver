@@ -16,6 +16,8 @@ limitations under the License.
 
 package com.opera.core.systems;
 
+import com.google.common.collect.ImmutableList;
+
 import com.opera.core.systems.model.ScreenCaptureReply;
 import com.opera.core.systems.testing.Ignore;
 import com.opera.core.systems.testing.OperaDriverTestCase;
@@ -142,7 +144,7 @@ public class ScreenshotTest extends OperaDriverTestCase {
   @Test
   public void hashesCanBeProvided() {
     String md5 = text.saveScreenshot("one.png");
-    text.saveScreenshot("two.png", 0, true, md5);
+    text.saveScreenshot("two.png", 0, true, ImmutableList.of(md5));
 
     File one = new File("one.png");
     File two = new File("two.png");
