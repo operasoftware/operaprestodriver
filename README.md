@@ -131,6 +131,7 @@ capabilities supported are:
 | __opera.product__           | [OperaProduct](http://operasoftware.github.com/operadriver/docs/com/opera/core/systems/OperaProduct.html)/String   | Desktop | The product to request, for example `OperaProduct#DESKTOP` or `OperaProduct#MOBILE`.  It will attempt to locate the product binary based on the operating system's default installation paths if _opera.binary_ is not set.
 | __opera.binary__            | String   | Default location of Opera on system | Path to the Opera binary to use.  If not specified, OperaDriver will guess the path to your Opera installation (typically */usr/bin/opera*, *C:\Program Files\Opera\opera.exe*, or similar).
 | __opera.arguments__         | String   | null        | Arguments to pass to Opera, separated by spaces.  See `opera -help` for available command-line switches.
+| __opera.emulationProfile__  | [EmulationProfile](http://operasoftware.github.com/operadriver/docs/com/opera/core/systems/EmulationProfile.html)/JSON object | null | Allows you to specify an emulation profile to use with Opera Mobile.
 | __opera.host__              | String   | Non-loopback IP if available, loopback otherwise | The host Opera should connect to.  Since OperaDriver works in a client-server relationship to Opera (where Opera is the client, driver the server) you can also run remote instances of Opera on other devices; that be a phone, a TV or another computer.
 | __opera.port__              | Integer  | Random port | The port to Opera should connect to.  Setting this capability to 0 will probe for a free, random port, setting it to -1 will ensure compatibility mode using port the default port 7001 for Operas version 11.52 or older.
 | __opera.profile__           | [OperaProfile](http://operasoftware.github.com/operadriver/docs/com/opera/core/systems/operaprofile.html)/string | temporary profile | directory of the profile to use, or an [OperaProfile](http://operasoftware.github.com/operadriver/docs/com/opera/core/systems/operaprofile.html) instance object representing a profile.  if null is given, a random temporary directory is used.  if "", an empty string, then the default *~/.autotest* profile directory will be used (for backwards compatibility with opera < 11.60).
@@ -138,6 +139,7 @@ capabilities supported are:
 | __opera.detach__            | Boolean  | false       | Whether to detach the Opera browser when the driver shuts down.  This will leave Opera running.
 | __opera.display__           | Integer  | null        | The X display to use.  If set, Opera will be started on the specified display.  (Only works on GNU/Linux.)
 | __opera.idle__              | Boolean  | false       | Whether to use Opera's alternative implicit wait implementation.  It will use an in-browser heuristic to guess when a page has finished loading, allowing us with great accuracy tell whether there are any planned events in the document.  This functionality is useful for very simple test cases, but not designed for real-world testing.  It is disabled by default.
+| __opera.runner__            | [OperaRunner](http://operasoftware.github.com/operadriver/docs/com/opera/core/systems/runner/interfaces/OperaRunner.html)/String | com.opera.core.systems.runner.launcher.OperaLauncherRunner | Allows you to specify which runner to use to control the Opera browser binary process.
 | __opera.launcher__          | String   | null        | Path to the launcher binary to use.  The launcher is an external wrapper around the browser, and is used for controlling the binary and taking external screenshots.  If left blank, OperaDriver will use a launcher supplied with the package.
 
 OperaDriver also supports some of the
@@ -145,7 +147,6 @@ OperaDriver also supports some of the
 too:
 
   * [__proxy__](http://code.google.com/p/selenium/wiki/DesiredCapabilities#Proxy_JSON_Object)
-
 
 ### Custom profile
 
@@ -174,6 +175,27 @@ specific screen resolution:
     capabilities.setCapability("opera.arguments", "-tabletui -displaysize 860x600");
 
     WebDriver driver = new OperaDriver(capabilities);
+
+
+#### Emulation profile
+
+An
+[emulation profile](http://operasoftware.github.com/operadriver/docs/com/opera/core/systems/EmulationProfile.html)
+may be specified when interacting with Opera Mobile to instruct the
+emulator to use a certain configuration.  You may either give it an
+instance of
+[OperaMobileEmulation](http://operasoftware.github.com/operadriver/docs/com/opera/core/systems/mobile/OperaEmulationProfile.html)
+which transparently deserializes into a JSON object, or a JSON object
+directly:
+
+    {
+      profileName: "foo",
+      width: 800,
+      height: 600,
+      ppi: 230,
+      ime: "tablet",
+      userAgent: "Android"
+    }
 
 
 ### Logging and X display
@@ -233,7 +255,7 @@ OperaDriver:
 
 | __Version__ | __Workaround/tweaks needed__                                                                                                |
 |-------------|-----------------------------------------------------------------------------------------------------------------------------|
-| 12.50       |                                                                                                                             |
+| 12.10       |                                                                                                                             |
 | 12.01       |                                                                                                                             |
 | 12.00       |                                                                                                                             |
 | 11.64       |                                                                                                                             |
@@ -251,7 +273,9 @@ OperaDriver:
 
 ### Mobile
 
-(Not released yet.)
+Please use one of the
+[prepared builds](http://dev.opera.com/articles/view/introducing-mobile-browser-automation/)
+to use OperaDriver with Opera Mobile.
 
 
 #### Wrapper script
