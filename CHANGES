@@ -1,3 +1,117 @@
+v1.0      (unreleased)
+
+  [API CHANGES]
+
+  * ScreenCaptureReply has been renamed to ScreenCaptureReply.
+
+  * Introduced new capability, opera.runner, for specifying which
+    OperaRunner implementation to use.
+
+  * New capability, opera.emulationProfile, allows you to specify a
+    profile to use to emulate certain Opera Mobile configurations.
+
+  * Many internal classes have been renamed and moved around, but the
+    public implementations of WebDriver and WebElement should not be
+    affected.
+
+  [NEW FEATURES]
+
+  * OPDRV-223: Implement Opera Mobile emulation profiles.  (andreastt)
+
+  * In-process Java implementation of the OperaRunner interface.  It's
+    now possible to specify which runner to use by setting the
+    opera.runner capability to the full package path of the
+    implementing class, as such:
+
+      com.opera.core.systems.runner.inprocess.OperaInProcessRunner
+
+    (andreastt)
+
+  * OPDRV-225: Support for programmable soft keys.  OperaMobileKeys
+    implements SOFT_KEY_1 through 4 which can be used with #sendKeys()
+    for OperaMobileDriver.  (andreastt)
+
+  * Implement new selftest API.  (andre)
+
+  [ENHANCEMENTS]
+
+  * OPDRV-229: Refactor screen capture API and implement captures for
+    OperaInProcessRunner.  (andreastt)
+
+  * Generalize MD5 hashing functionality.  (andreastt)
+
+  [BUG FIXES]
+
+  * OperaDriver object is now cleaned up on the dereferencing of
+    itself.  (andreastt)
+
+  * Fix for warnings in OperaSettings.  (andreastt)
+
+  * Treat no value for a preference as null.  (danielb)
+
+  * Log finalized runner arguments when creating process.  (andreastt)
+
+  * Fix that Keys.RETURN was not recognized by Opera.  (andreastt)
+
+  * Don't set preferences on startup that are not recognized by Opera
+    Mobile.  (danielb)
+
+  * Null-pointer check for socketChannel in StpConnection.  (danielb)
+
+  * Extended wait time for mobile UI to become active (from 100 to 300
+    ms).  (danielb)
+
+  * Fix OperaArguments#remove().  The previous version suffered from
+    not implementing #equals() and #hashCode().  (danielb)
+
+  * On quitting Opera, make null-pointer check for whether exec has
+    been populated.  (andreastt)
+
+  * Fix Scope service version comparison.  (andreastt)
+
+  * Correct script retry code in ScopeEcmascriptDebugger.  (andreastt)
+
+  [TESTS]
+
+  * OPDRV-227: Allow parallelization of test suite.  The number of
+    parallel browsers can be specified using the parallelDrivers
+    system property when running against *Tests.java classes.
+    (andreastt)
+
+  * Tessts for Proxy interface integration to OperaSettings.
+    (andreastt)
+
+  * Split out parser tests for preferences from files to separate test
+    class, OperaFilePreferencesParserTest.  (andreastt)
+
+  * Moved in-test resources to separate files.  (danielb, andreastt)
+
+  * Tests for form submission.  (andreastt)
+
+  * HTTP authentication window tests for Mobile.  (andreastt)
+
+  * Clean up reset window state tests.  (andreastt)
+
+  * Change RequiresService annotation to use ScopeService enumeration
+    for services.  (andreastt)
+
+  * Fix key events for ExecKeyTest tests.  (andreastt)
+
+  * Page load is correctly only checked on input to an element now.
+    (andreastt)
+
+  * Fixes to OperaScopePreferencesTest.  (andreastt)
+
+  * Test setup now properly supports using OPERA_PATH to specify a
+    custom build to run the tests against.  (andreastt)
+
+  [OTHER]
+
+  * OPDRV-198: Major code cleanup and package renaming.  (andreastt)
+
+  * Upgraded to Guava 13.0.1.  (andreastt)
+
+
 v0.18     (2012-08-27)
 
   [NEW FEATURES]
