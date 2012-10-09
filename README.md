@@ -139,7 +139,7 @@ capabilities supported are:
 | __opera.detach__            | Boolean  | false       | Whether to detach the Opera browser when the driver shuts down.  This will leave Opera running.
 | __opera.display__           | Integer  | null        | The X display to use.  If set, Opera will be started on the specified display.  (Only works on GNU/Linux.)
 | __opera.idle__              | Boolean  | false       | Whether to use Opera's alternative implicit wait implementation.  It will use an in-browser heuristic to guess when a page has finished loading, allowing us with great accuracy tell whether there are any planned events in the document.  This functionality is useful for very simple test cases, but not designed for real-world testing.  It is disabled by default.
-| __opera.runner__            | [OperaRunner](http://operasoftware.github.com/operadriver/docs/com/opera/core/systems/runner/interfaces/OperaRunner.html)/String | OperaLauncherRunner | Allows you to specify which runner to use to control the Opera browser binary process.
+| __opera.runner__            | String | OperaLauncherRunner | Allows you to specify which runner to use to control the Opera browser binary process.
 | __opera.launcher__          | String   | null        | Path to the launcher binary to use.  The launcher is an external wrapper around the browser, and is used for controlling the binary and taking external screenshots.  If left blank, OperaDriver will use a launcher supplied with the package.
 
 OperaDriver also supports some of the
