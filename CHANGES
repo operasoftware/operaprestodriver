@@ -1,4 +1,20 @@
-v1.0      (unreleased)
+v1.1      (2012-10-09)
+
+  [API CHANGES]
+
+  * The capability opera.runner may now only be sent as a string.
+
+  [BUG FIXES]
+
+  * Enable the cookie manager service.  (andreastt)
+
+  * Fix for serialization problems of specifying the opera.runner
+    capability.  (andreastt)
+
+  * Fix for compile issues in ant build script.  (andreastt)
+
+
+v1.0      (2012-10-08)
 
   [API CHANGES]
 
