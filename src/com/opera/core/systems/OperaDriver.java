@@ -265,7 +265,8 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot, Run
         ScopeService.CORE,
         ScopeService.PREFS,
         ScopeService.SELFTEST,
-        ScopeService.CONSOLE_LOGGER
+        ScopeService.CONSOLE_LOGGER,
+        ScopeService.COOKIE_MANAGER
     );
   }
 
