@@ -409,8 +409,8 @@ public class OperaSettings {
      * </dl></pre>
      */
     RUNNER("opera.runner") {
-      Class getDefaultValue() {
-        return OperaLauncherRunner.class;
+      String getDefaultValue() {
+        return OperaLauncherRunner.class.getName();
       }
 
       Class sanitize(Object runner) {
@@ -1094,12 +1094,19 @@ public class OperaSettings {
    * @return the current runner
    */
   public OperaRunner getRunner() {
-    Class klass = (Class) options.get(RUNNER).getValue();
+    String klassName = (String) options.get(RUNNER).getValue();
 
     // If no runner is set, use the default one
-    if (klass == null) {
+    if (klassName == null) {
       setRunner(OperaLauncherRunner.class);
       return getRunner();
+    }
+
+    Class<?> klass;
+    try {
+      klass = Class.forName(klassName);
+    } catch (ClassNotFoundException e) {
+      throw new WebDriverException("Unable to find runner class on classpath: " + klassName);
     }
 
     Constructor constructor;
@@ -1129,7 +1136,7 @@ public class OperaSettings {
    * @param runner the runner to use
    */
   public void setRunner(Class<? extends OperaRunner> runner) {
-    options.get(RUNNER).setValue(runner);
+    options.get(RUNNER).setValue(runner.getName());
   }
 
   /**

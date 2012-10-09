@@ -479,6 +479,11 @@ public class OperaSettingsTest extends OperaDriverTestCase {
   }
 
   @Test
+  public void toJsonConvertsRunnerToString() throws IOException, JSONException {
+    assertEquals(settings.toJson().get("runner"), settings.getRunner().getClass().getName());
+  }
+
+  @Test
   public void stringRepresentation() {
     assertNotNull(settings.toString());
   }
