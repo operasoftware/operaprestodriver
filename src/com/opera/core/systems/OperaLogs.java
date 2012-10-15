@@ -119,7 +119,7 @@ public class OperaLogs implements Logs {
 
     public void publish(LogRecord record) {
       LogEntry entry = new LogEntry(record.getLevel(),
-                                    System.currentTimeMillis() / 1000L,
+                                    System.currentTimeMillis(),
                                     record.getMessage());
       logs.addEntry(LogType.DRIVER, entry);
     }
