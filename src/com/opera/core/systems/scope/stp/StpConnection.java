@@ -33,6 +33,7 @@ import com.opera.core.systems.scope.protos.UmsProtos.Response;
 import com.opera.core.systems.scope.protos.UmsProtos.Status;
 import com.opera.core.systems.internal.SocketListener;
 import com.opera.core.systems.internal.SocketMonitor;
+import com.opera.core.systems.scope.internal.OperaIntervals;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -210,6 +211,15 @@ public class StpConnection implements SocketListener {
           } else {
 
             readSize = socketChannel.read(readBuffer);
+
+            if (readSize == 0) {
+                 try {
+                     Thread.sleep(OperaIntervals.SOCKET_READ_RETRY_TIMEOUT.getMs());
+                     readSize = socketChannel.read(readBuffer);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+            }
             if (readSize > 0) {
               readBuffer.limit(readSize);
               readBuffer.position(0);
@@ -274,7 +284,8 @@ public class StpConnection implements SocketListener {
 
       do {
         written = socketChannel.write(buffer);
-        if (written <= 0) {
+        //for now assume written equals 0 only when previous write has not finished yet so retry will be successful and thus no endless loop
+        if (written < 0) {
           break;
         }
         if (written > 0) {

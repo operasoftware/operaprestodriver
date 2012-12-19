@@ -42,4 +42,23 @@ public interface OperaTimeouts extends Timeouts {
    */
   Timeouts selftestTimeout(long time, TimeUnit unit);
 
+  /**
+   * 
+   *
+   * @param time the amount of time to wait
+   * @param unit the unit of measure for {@code time}
+   * @return a self reference
+   */
+  Timeouts setDefaultResponseTimeout(long time, TimeUnit unit);
+
+  /**
+   * Sets the amount of time after which socket read operation is redone (useful for slow devices)
+   * This will not work as expected since SOCKET_READ_RETRY_TIMEOUT is used before it can be changed.
+   *
+   * @param time the amount of time to wait
+   * @param unit the unit of measure for {@code time}
+   * @return a self reference
+   */
+  //Timeouts setSocketReadRetryTimeout(long time, TimeUnit unit);
+
 }

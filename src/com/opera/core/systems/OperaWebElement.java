@@ -203,20 +203,24 @@ public class OperaWebElement extends RemoteWebElement implements CapturesScreen 
     verifyCanInteractWithElement();
 
     // Handle special input types
-    String typeAttribute = getAttribute("type").toLowerCase();
+    String typeAttribute = getAttribute("type");
 
-    if (getTagName().equals("INPUT") && SPECIAL_INPUTS.contains(typeAttribute)) {
-      if (typeAttribute.equals("file")) {
-        File localFile = fileDetector.getLocalFile(keysToSend);
+    if (typeAttribute != null) {
+      typeAttribute = typeAttribute.toLowerCase();
 
-        if (localFile != null) {
-          debugger.setFormElementValue(objectId, localFile.getAbsolutePath());
+      if (getTagName().equals("INPUT") && SPECIAL_INPUTS.contains(typeAttribute)) {
+        if (typeAttribute.equals("file")) {
+          File localFile = fileDetector.getLocalFile(keysToSend);
+
+          if (localFile != null) {
+            debugger.setFormElementValue(objectId, localFile.getAbsolutePath());
+          }
+        } else {
+          debugger.setFormElementValue(objectId, Joiner.on("").join(keysToSend));
         }
-      } else {
-        debugger.setFormElementValue(objectId, Joiner.on("").join(keysToSend));
-      }
 
-      return;
+        return;
+      }
     }
 
     parent.getScopeServices().captureOperaIdle();
@@ -241,7 +245,7 @@ public class OperaWebElement extends RemoteWebElement implements CapturesScreen 
     // cursor to the end of the field upon the next focus event.
     String type = callMethod("locator.type");
 
-    if (type.equals("text") || type.equals("textarea")) {
+    if (type != null && (type.equals("text") || type.equals("textarea"))) {
       executeMethod(OperaAtom.MOVE_CARET_TO_END + "(locator)");
     }
 

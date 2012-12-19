@@ -73,6 +73,9 @@ public enum OperaIntervals {
 
   KILL_GRACE_TIMEOUT(new Duration(1, SECONDS)),
 
+  /**
+   * Based on experiences with slow BCM7351 it is advaisable to set this to 50s for linuxsdk (devices).
+   */
   DEFAULT_RESPONSE_TIMEOUT(new Duration(10, SECONDS)),
 
   /**
@@ -83,6 +86,7 @@ public enum OperaIntervals {
   /**
    * Sets the amount of time to wait for an asynchronous script to finish execution before throwing
    * an error.  If the timeout is negative, then the script will be allowed to run indefinitely.
+   * Based on experiences with slow BCM7351 it is advaisable to set this to 60s for linuxsdk (devices).
    */
   SCRIPT_TIMEOUT(new Duration(10, SECONDS)),
 
@@ -138,6 +142,12 @@ public enum OperaIntervals {
    * The timeout for selftests.
    */
   SELFTEST_TIMEOUT(new Duration(200, SECONDS)),
+
+  /**
+   * While communicating with slow devices it may happean data is not received yet so retry read operation after this timeout
+   * Based on experiences with slow BCM7351 it is advaisable to set this to 150ms for linuxsdk (devices).
+   */
+  SOCKET_READ_RETRY_TIMEOUT(new Duration(150, MILLISECONDS)),
 
   /**
    * The default timeout of taking an external screen capture using a {@link

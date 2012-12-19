@@ -889,6 +889,18 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot, Run
           return this;
         }
 
+        public Timeouts setDefaultResponseTimeout(long time, TimeUnit unit) {
+          OperaIntervals.DEFAULT_RESPONSE_TIMEOUT.setValue(new Duration(time, unit));
+          return this;
+        }
+
+        /* this will not work as expected since SOCKET_READ_RETRY_TIMEOUT is used before it can be changed 
+        public Timeouts setSocketReadRetryTimeout(long time, TimeUnit unit) {
+          OperaIntervals.SOCKET_READ_RETRY_TIMEOUT.setValue(new Duration(time, unit));
+          return this;
+        }
+       */
+
         public Timeouts pageLoadTimeout(long time, TimeUnit unit) {
           OperaIntervals.PAGE_LOAD_TIMEOUT.setValue(new Duration(time, unit));
           return this;
