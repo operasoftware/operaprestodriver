@@ -451,7 +451,10 @@ public class OperaWebElement extends RemoteWebElement implements CapturesScreen 
     return callMethod("return (locator.tagName);");
   }
 
-  // TODO: We only return location on screen when scrolled? Isn't this a duplicate method?
+  /**
+   * @deprecated To be removed in selenium 2.31. Use {@link #getCoordinates()} instead
+   */
+  @Deprecated
   public Point getLocationOnScreenOnceScrolledIntoView() {
     if (isDisplayed()) {
       return getLocation();
@@ -545,11 +548,28 @@ public class OperaWebElement extends RemoteWebElement implements CapturesScreen 
   }
 
   private Coordinates coordinates = new Coordinates() {
+    
+    /**
+     * @deprecated To be removed in selenium 2.31. Use {@link #onScreen()} instead
+     */
+    @Deprecated
     public Point getLocationOnScreen() {
-      throw new UnsupportedOperationException();
+      return onScreen();
     }
 
+    public Point onScreen() {
+      throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    /**
+     * @deprecated To be removed in selenium 2.31. Use {@link #inViewPort()} instead
+     */
+    @Deprecated
     public Point getLocationInViewPort() {
+      return inViewPort();
+    }
+
+    public Point inViewPort() {
       String coordinates =
           debugger
               .callFunctionOnObject(
@@ -565,7 +585,15 @@ public class OperaWebElement extends RemoteWebElement implements CapturesScreen 
       return new Point(Integer.valueOf(location[0]), Integer.valueOf(location[1]));
     }
 
+    /**
+     * @deprecated To be removed in selenium 2.31. Use {@link #onPage()} instead
+     */
+    @Deprecated
     public Point getLocationInDOM() {
+      return onPage();
+    }
+
+    public Point onPage() {
       return getLocation();
     }
 
