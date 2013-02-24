@@ -1,5 +1,5 @@
 /*
-Copyright 2008-2012 Opera Software ASA
+Copyright 2008-2013 Opera Software ASA
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -50,15 +50,5 @@ public interface OperaTimeouts extends Timeouts {
    * @return a self reference
    */
   Timeouts setDefaultResponseTimeout(long time, TimeUnit unit);
-
-  /**
-   * Sets the amount of time after which socket read operation is redone (useful for slow devices)
-   * This will not work as expected since SOCKET_READ_RETRY_TIMEOUT is used before it can be changed.
-   *
-   * @param time the amount of time to wait
-   * @param unit the unit of measure for {@code time}
-   * @return a self reference
-   */
-  //Timeouts setSocketReadRetryTimeout(long time, TimeUnit unit);
 
 }

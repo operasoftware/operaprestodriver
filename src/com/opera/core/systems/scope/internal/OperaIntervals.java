@@ -144,10 +144,11 @@ public enum OperaIntervals {
   SELFTEST_TIMEOUT(new Duration(200, SECONDS)),
 
   /**
-   * While communicating with slow devices it may happean data is not received yet so retry read operation after this timeout
-   * Based on experiences with slow BCM7351 it is advaisable to set this to 150ms for linuxsdk (devices).
+   * While communicating with slow devices it may happean data is not received yet so retry read
+   * operation after this timeout Based on experiences with slow BCM7351 it is advaisable to set
+   * this to 150ms for linuxsdk (devices).
    */
-  SOCKET_READ_RETRY_TIMEOUT(new Duration(150, MILLISECONDS)),
+  SOCKET_READ_RETRY_TIMEOUT(new Duration(0, MILLISECONDS)),
 
   /**
    * The default timeout of taking an external screen capture using a {@link

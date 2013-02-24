@@ -20,3 +20,4 @@ test-output/
 test-reports/
 test/com/opera/core/systems/GenericTest.java
 test_apc.txt
+.tags

@@ -1,5 +1,5 @@
 /*
-Copyright 2008-2012 Opera Software ASA
+Copyright 2008-2013 Opera Software ASA
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -207,26 +207,24 @@ public class StpConnection implements SocketListener {
           if (socketChannel == null) {
             readSize = -1;
 
-            // do we have room in our buffer?
+          // do we have room in our buffer?
           } else {
-
             readSize = socketChannel.read(readBuffer);
 
             if (readSize == 0) {
-                 try {
-                     Thread.sleep(OperaIntervals.SOCKET_READ_RETRY_TIMEOUT.getMs());
-                     readSize = socketChannel.read(readBuffer);
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                }
+              try {
+                Thread.sleep(OperaIntervals.SOCKET_READ_RETRY_TIMEOUT.getMs());
+                readSize = socketChannel.read(readBuffer);
+              } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+              }
             }
+
             if (readSize > 0) {
               readBuffer.limit(readSize);
               readBuffer.position(0);
             }
-
           }
-
         } catch (IOException e) {
           logger.warning("Channel closed, causing exception: " + e.getMessage());
           readSize = -1;  // same as error from socketChannel.read
