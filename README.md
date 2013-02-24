@@ -4,9 +4,9 @@ OperaDriver
 OperaDriver is a vendor-supported
 [WebDriver](http://dvcs.w3.org/hg/webdriver/raw-file/tip/webdriver-spec.html)
 implementation developed by [Opera](http://opera.com/) and volunteers
-that enable programmatic automation of different Opera products.  It
-is a part of the [Selenium](http://code.google.com/p/selenium)
-project.
+that enable programmatic automation of different Presto-based Opera
+products.  It is a part of the
+[Selenium](http://code.google.com/p/selenium) project.
 
 WebDriver is a general purpose library for automating web browsers.
 It can drive the browser running various tests on your web pages, just
@@ -250,11 +250,15 @@ Supported Opera versions
 
 ### Desktop
 
-This is a list of the official Opera Desktop versions supported by
-OperaDriver:
+This is a list of the official Opera Desktop versions supported by OperaDriver.
+Please note that this Java version of OperaDriver will not support future
+Chromium-based Operas.
 
 | __Version__ | __Workaround/tweaks needed__                                                                                                |
 |-------------|-----------------------------------------------------------------------------------------------------------------------------|
+| 12.14       |                                                                                                                             |
+| 12.13       |                                                                                                                             |
+| 12.12       |                                                                                                                             |
 | 12.10       |                                                                                                                             |
 | 12.01       |                                                                                                                             |
 | 12.00       |                                                                                                                             |
