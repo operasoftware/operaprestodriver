@@ -1,3 +1,21 @@
+v1.2      (not released)
+
+  [API CHANGES]
+
+  * Implement new interface method of Cooridnates interface to address
+    Selenium 2.30 compatibility.  (barancev)
+
+  [BUG FIXES]
+
+  * LogEntry should have a timestamp in milliseconds, not seconds.
+    (andreastt)
+
+  * OPDRV-217: Adjusted socket read and write operations for slow
+    devices.  (mlech)
+
+  * Socket read retry by default should be immediately.  (andreastt)
+
+
 v1.1      (2012-10-09)
 
   [API CHANGES]
