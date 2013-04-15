@@ -820,7 +820,9 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot, Run
 
     public void deleteCookieNamed(String name) {
       Cookie cookie = getCookieNamed(name);
-      deleteCookie(cookie);
+      if (cookie != null) {
+        deleteCookie(cookie);
+      }
     }
 
     public void deleteCookie(Cookie cookie) {
