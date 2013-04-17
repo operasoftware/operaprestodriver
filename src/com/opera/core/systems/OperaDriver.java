@@ -822,6 +822,8 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot, Run
       Cookie cookie = getCookieNamed(name);
       if (cookie != null) {
         deleteCookie(cookie);
+      } else {
+        // deleting "invisible" cookie is no-op action
       }
     }
 
