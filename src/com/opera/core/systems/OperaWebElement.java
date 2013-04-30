@@ -146,7 +146,7 @@ public class OperaWebElement extends RemoteWebElement implements CapturesScreen 
   @Deprecated
   @SuppressWarnings("unused")
   public void middleClick() {  // TODO(andreastt): Add this to Actions
-    Point point = coordinates.getLocationInViewPort();
+    Point point = coordinates.inViewPort();
     exec.mouseAction(point.x, point.y, OperaMouseKeys.MIDDLE);
   }
 
@@ -429,7 +429,7 @@ public class OperaWebElement extends RemoteWebElement implements CapturesScreen 
   private Canvas buildCanvas() {
     Canvas canvas = new Canvas();
     Dimension dimension = getSize();
-    Point point = coordinates.getLocationInViewPort();
+    Point point = coordinates.inViewPort();
     int x = point.x;
     int y = point.y;
 
