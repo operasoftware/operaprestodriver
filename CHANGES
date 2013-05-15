@@ -4,6 +4,10 @@ v1.3      (2013-05-15)
 
   * Update to Selenium API 2.32.  (barancev)
 
+  [BUG FIXES]
+  
+  * Deleting "invisible" cookie should do nothing.  (a.u.savchuk)
+
 
 v1.2      (2013-02-27)
 
