@@ -256,6 +256,7 @@ Chromium-based Operas.
 
 | __Version__ | __Workaround/tweaks needed__                                                                                                |
 |-------------|-----------------------------------------------------------------------------------------------------------------------------|
+| 12.15       |                                                                                                                             |
 | 12.14       |                                                                                                                             |
 | 12.13       |                                                                                                                             |
 | 12.12       |                                                                                                                             |
@@ -280,6 +281,8 @@ Chromium-based Operas.
 Please use one of the
 [prepared builds](http://dev.opera.com/articles/view/introducing-mobile-browser-automation/)
 to use OperaDriver with Opera Mobile.
+
+OperaDriver does not support the Chromium-based Opera Mobile builds.
 
 
 #### Wrapper script

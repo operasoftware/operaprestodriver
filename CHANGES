@@ -1,4 +1,11 @@
-v1.2      (not released)
+v1.3      (2013-05-15)
+
+  [API CHANGES]
+
+  * Update to Selenium API 2.32.  (barancev)
+
+
+v1.2      (2013-02-27)
 
   [API CHANGES]
 
