@@ -17,12 +17,10 @@ limitations under the License.
 package com.opera.core.systems.common.hash;
 
 import com.google.common.hash.Hashing;
-import com.google.common.io.ByteStreams;
 import com.google.common.io.Files;
 
 import java.io.File;
 import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
 
 public class MD5 {
 
@@ -45,12 +43,10 @@ public class MD5 {
    *
    * @param bytes a byte array
    * @return a byte array of the MD5 hash
-   * @throws java.security.NoSuchAlgorithmException
-   *                             if MD5 is not available
    * @throws java.io.IOException if an I/O error occurs
    */
-  public static byte[] hash(byte[] bytes) throws NoSuchAlgorithmException, IOException {
-    return ByteStreams.hash(ByteStreams.newInputStreamSupplier(bytes), Hashing.md5()).asBytes();
+  public static byte[] hash(byte[] bytes) throws IOException {
+    return Hashing.md5().hashBytes(bytes).asBytes();
   }
 
   /**
@@ -59,9 +55,8 @@ public class MD5 {
    * @param file file to compute a hash on
    * @return a byte array of the MD5 hash
    * @throws IOException              if file cannot be found
-   * @throws NoSuchAlgorithmException if MD5 is not available
    */
-  public static byte[] hash(File file) throws NoSuchAlgorithmException, IOException {
+  public static byte[] hash(File file) throws IOException {
     return Files.hash(file, Hashing.md5()).asBytes();
   }
 
@@ -70,10 +65,9 @@ public class MD5 {
    *
    * @param bytes a byte array
    * @return HEX version of the hash of the byte array
-   * @throws NoSuchAlgorithmException if MD5 is not available
    * @throws IOException              if an I/O error occurs
    */
-  public static String of(byte[] bytes) throws NoSuchAlgorithmException, IOException {
+  public static String of(byte[] bytes) throws IOException {
     return sum(hash(bytes));
   }
 
@@ -82,10 +76,9 @@ public class MD5 {
    *
    * @param file the file to get the MD5 sum of
    * @return HEX version of the hash of the byte array
-   * @throws NoSuchAlgorithmException if MD5 is not available
    * @throws IOException              if an I/O error occurs
    */
-  public static String of(File file) throws NoSuchAlgorithmException, IOException {
+  public static String of(File file) throws IOException {
     return sum(hash(file));
   }
 

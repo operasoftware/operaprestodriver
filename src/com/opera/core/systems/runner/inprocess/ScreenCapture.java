@@ -78,8 +78,6 @@ public class ScreenCapture {
 
     try {
       return MD5.of(getData());
-    } catch (NoSuchAlgorithmException e) {
-      throw new IOException("Algorithm is not available in your environment: " + e.getMessage(), e);
     } catch (IOException e) {
       throw new IOException("Unable to open stream or file: " + e.getMessage(), e);
     }

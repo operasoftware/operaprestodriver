@@ -58,7 +58,6 @@ import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.SocketTimeoutException;
 import java.net.URL;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -469,9 +468,6 @@ public class OperaLauncherRunner extends AbstractOperaRunner implements OperaRun
   private boolean isLauncherOutdated(File launcher) {
     try {
       return !MD5.of(launcher).equals(LAUNCHER_CHECKSUMS.get(launcher.getName()));
-    } catch (NoSuchAlgorithmException e) {
-      throw new OperaRunnerException(
-          "Algorithm is not available in your environment: " + e.getMessage());
     } catch (IOException e) {
       throw new OperaRunnerException("Unable to open stream or file: " + e.getMessage());
     }
