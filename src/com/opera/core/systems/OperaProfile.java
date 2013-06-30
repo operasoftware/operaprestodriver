@@ -73,6 +73,7 @@ public class OperaProfile {
   private File preferenceFile;
   private boolean randomProfile = false;
   private OperaPreferences preferences;
+  private OperaExtensions oexManager;
 
   /**
    * Creates a new, fresh random profile for Opera to use.  The actual profile directory will not be
@@ -122,6 +123,17 @@ public class OperaProfile {
 
     // Load preferences from profile if preference file exists, or create a new preference file
     setPreferences(new OperaFilePreferences(preferenceFile));
+
+    // Create an instance to manage the installation of custom Opera extensions.
+    oexManager = new OperaExtensions(profileDirectory);
+  }
+
+  /**
+   * Install an Opera 12 extension to the profile
+   * @param extensionToInstall Location of the extension
+   */
+  public void addExtension(File extensionToInstall) throws IOException {
+    oexManager.addExtension(extensionToInstall);
   }
 
   /**
@@ -165,6 +177,7 @@ public class OperaProfile {
     if (randomProfile) {
       TemporaryFilesystem.getDefaultTmpFS().deleteTempDir(getDirectory());
     }
+    oexManager.cleanUp();
   }
 
   /**
