@@ -27,6 +27,7 @@ import org.junit.runners.Suite;
         ColorResultTest.class,
         OperaBinaryTest.class,
         OperaColorTest.class,
+        OperaExtensionsTest.class,
         OperaFilePreferencesParserTest.class,
         OperaGenericPreferencesTest.class,
         OperaProfileTest.class,

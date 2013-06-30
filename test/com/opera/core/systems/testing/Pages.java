@@ -39,6 +39,7 @@ public class Pages {
   public String metaRefresh;
   public String mouse;
   public String none;
+  public String oex;
   public String result;
   public String select;
   public String tall;
@@ -68,6 +69,7 @@ public class Pages {
     metaRefresh = server.whereIs("idle/metarefresh.html");
     mouse = server.whereIs("mouse.html");
     none = server.whereIs("none.html");
+    oex = server.whereIs("oex_trigger.html");
     result = server.whereIs("result_page.html");
     select = server.whereIs("select.html");
     tall = server.whereIs("tall.html");
