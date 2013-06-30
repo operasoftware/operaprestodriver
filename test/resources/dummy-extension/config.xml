@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<widget xmlns="http://www.w3.org/ns/widgets" id="http://example.com/operadriver/test" version="1.0">
+  <name>Dummy Opera extension</name>
+  <access origin="*"/>
+  <description>Used to test if a custom Opera extension is correctly installed.</description>
+</widget>
+
