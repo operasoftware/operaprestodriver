@@ -34,4 +34,26 @@ public class ImprovedStaticFileHandler extends StaticFileHandler {
     enableDirectoryListing(true);
   }
 
+  @Override
+  protected void serve(final String mimeType,
+                       final byte[] staticContents,
+                       HttpControl control,
+                       final HttpResponse response,
+                       final HttpRequest request,
+                       final String path) {
+    control.execute(new Runnable() {
+      public void run() {
+        if (mimeType != null) {
+          response.header("Content-Type", mimeType.split(";")[0]);
+        }
+        ByteBuffer contents = ByteBuffer.wrap(staticContents);
+
+        response
+            .header("Content-Length", contents.remaining())
+            .content(contents)
+            .end();
+      }
+    });
+  }
+
 }
