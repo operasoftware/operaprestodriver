@@ -101,8 +101,8 @@
     <property name="sonar.jdbc.url"
               value="jdbc:mysql://ci.qa.oslo.osa:3306/sonar?useUnicode=true&amp;characterEncoding=utf8" />
     <property name="sonar.jdbc.driverClassName" value="com.mysql.jdbc.Driver" />
-    <property name="sonar.jdbc.username" value="sonar" />
-    <property name="sonar.jdbc.password" value="sonar" />
+    <property name="sonar.jdbc.username" value="FILLMEIN" />
+    <property name="sonar.jdbc.password" value="FILLMEIN" />
 
     <!-- SERVER ON A REMOTE HOST -->
     <property name="sonar.host.url" value="http://ci.qa.oslo.osa:9000" />
