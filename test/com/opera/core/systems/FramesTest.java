@@ -22,7 +22,6 @@ import com.opera.core.systems.testing.OperaDriverTestCase;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -69,8 +68,10 @@ public class FramesTest extends OperaDriverTestCase {
   public void switchToFrameAndExecuteScript() {
     driver.switchTo().defaultContent();
     driver.switchTo().frame("a");
+
     // Bug: The following JavaScript code causes a switch to the top-level frame
-    String reportedFrameWindowName = ((JavascriptExecutor) driver).executeScript("return window.name;").toString();
+    String reportedFrameWindowName = driver.executeScript("return window.name;").toString();
+
     // Consequently, the following call will fail, unless the frame is switched back using
     //   driver.switchTo().defaultContent();
     //   driver.switchTo().frame("a");
