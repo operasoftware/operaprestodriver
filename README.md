@@ -9,7 +9,7 @@ products.  It is a part of the
 [Selenium](http://code.google.com/p/selenium) project.
 
 __Note that OperaDriver is only compatible with Presto-based Operas up
-until 12.16, and not for the Blink-basedd Opera 15 onwards.__
+until 12.16.  Blink-based Operas (15 and onwards) are not supported.__
 
 WebDriver is a general purpose library for automating web browsers.
 It can drive the browser running various tests on your web pages, just
