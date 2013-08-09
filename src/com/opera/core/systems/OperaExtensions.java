@@ -16,6 +16,9 @@ limitations under the License.
 
 package com.opera.core.systems;
 
+import com.google.common.base.Charsets;
+import com.google.common.io.Files;
+
 import org.openqa.selenium.WebDriverException;
 
 import java.io.File;
@@ -25,17 +28,14 @@ import java.util.UUID;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import com.google.common.base.Charsets;
-import com.google.common.io.Files;
-
 /**
- * OperaExtensions is a class which takes a profile directory path, and manages the installation
- * and custom extensions. It is fully responsible for the custom extensions, from installation to
+ * OperaExtensions is a class which takes a profile directory path, and manages the installation and
+ * custom extensions. It is fully responsible for the custom extensions, from installation to
  * uninstallation and clean-up. Its API is exposed through the {@link OperaProfile} class.
  *
  * @see OperaProfile
  */
-class OperaExtensions {
+public class OperaExtensions {
 
   private File directory;
   private File widgetsDat;
@@ -46,31 +46,31 @@ class OperaExtensions {
 
   private static final String WIDGET_DAT_CONTENT =
       "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n"
-    + "<preferences>\n"
-    + "</preferences>\n";
+      + "<preferences>\n"
+      + "</preferences>\n";
 
   private static final String WIDGET_DAT_ITEM =
       "  <section id=\"%s\">\n"                                                   // %s = widgetID
-    + "    <value id=\"path to widget data\" xml:space=\"preserve\">%s</value>\n" // %s = oex path
-    + "    <value id=\"download_URL\" null=\"yes\"/>\n"
-    + "    <value id=\"content-type\" xml:space=\"preserve\">3</value>\n"
-    + "    <value id=\"class state\" xml:space=\"preserve\">enabled</value>\n"
-    + "  </section>\n";
+      + "    <value id=\"path to widget data\" xml:space=\"preserve\">%s</value>\n" // %s = oex path
+      + "    <value id=\"download_URL\" null=\"yes\"/>\n"
+      + "    <value id=\"content-type\" xml:space=\"preserve\">3</value>\n"
+      + "    <value id=\"class state\" xml:space=\"preserve\">enabled</value>\n"
+      + "  </section>\n";
 
   private static final String WIDGET_PREFS_DAT_CONTENT =
       "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n"
-    + "<preferences>\n"
-    + "  <section id=\"ui\">\n"
-    + "    <value id=\"default-prefs-applied\" xml:space=\"preserve\">1</value>\n"
-    + "  </section>\n"
-    + "  <section id=\"%s\">\n"                                                   // %s = widgetID
-    + "    <value id=\"network_access\" xml:space=\"preserve\">24</value>\n"
-    + "  </section>\n"
-    + "  <section id=\"user\">\n"
-    + "    <value id=\"GadgetRunOnSecureConn\" xml:space=\"preserve\">yes</value>\n"
-    + "    <value id=\"GadgetEnabledOnStartup\" xml:space=\"preserve\">yes</value>\n"
-    + "  </section>\n"
-    + "</preferences>\n";
+      + "<preferences>\n"
+      + "  <section id=\"ui\">\n"
+      + "    <value id=\"default-prefs-applied\" xml:space=\"preserve\">1</value>\n"
+      + "  </section>\n"
+      + "  <section id=\"%s\">\n"                                                   // %s = widgetID
+      + "    <value id=\"network_access\" xml:space=\"preserve\">24</value>\n"
+      + "  </section>\n"
+      + "  <section id=\"user\">\n"
+      + "    <value id=\"GadgetRunOnSecureConn\" xml:space=\"preserve\">yes</value>\n"
+      + "    <value id=\"GadgetEnabledOnStartup\" xml:space=\"preserve\">yes</value>\n"
+      + "  </section>\n"
+      + "</preferences>\n";
 
   /**
    * Create a new manager for custom Opera extensions.
@@ -93,6 +93,7 @@ class OperaExtensions {
 
   /**
    * Adds an extension to the profile. The file is expected to be an Opera 12 extension file (OEX).
+   *
    * @throws IOException If the extension files cannot be written to the profile.
    */
   public void addExtension(File extensionToInstall) throws IOException {
@@ -139,7 +140,8 @@ class OperaExtensions {
 
   /**
    * Create initial widgets directory and extension configuration file (widgets.dat) if needed.
-   * @throws IOException If 
+   *
+   * @throws IOException If
    */
   private void createInitialDirectoryIfNecessary() throws IOException {
     if (!directory.exists()) {
@@ -154,7 +156,8 @@ class OperaExtensions {
 
   /**
    * Install the extension by writing to widgets.dat
-   * @param wuid Unique identifier of the widget.
+   *
+   * @param wuid    Unique identifier of the widget.
    * @param oexpath Location of .oex file within profile
    */
   private void writeOEXtoWidgetsDat(String wuid, File oexpath) throws IOException {
@@ -170,22 +173,24 @@ class OperaExtensions {
     String widgetDatSection = String.format(WIDGET_DAT_ITEM, wuid, oexpathRelative);
     // Insert the new <section ..> ... </section> before </preferences>
     widgetString = widgetString.substring(0, beforePreferencesEndTag)
-                 + widgetDatSection
-                 + widgetString.substring(beforePreferencesEndTag);
+                   + widgetDatSection
+                   + widgetString.substring(beforePreferencesEndTag);
     Files.write(widgetString, widgetsDat, Charsets.UTF_8);
   }
 
   /**
    * Create the minimal directory structure and prefs.dat for an Opera extension.
+   *
    * @param wuid ID of extension as known in widgets.dat
    */
   private void createOEXDirectory(String wuid) throws IOException {
     File oexDirectory = new File(directory, wuid);
     if (!oexDirectory.exists() && !oexDirectory.mkdirs()) {
-        throw new WebDriverException("Unable to create directory path: " + directory.getPath());
+      throw new WebDriverException("Unable to create directory path: " + directory.getPath());
     }
     File prefsDatPath = new File(oexDirectory, "prefs.dat");
     String prefContent = String.format(WIDGET_PREFS_DAT_CONTENT, wuid);
     Files.write(prefContent, prefsDatPath, Charsets.UTF_8);
   }
+
 }

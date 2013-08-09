@@ -24,17 +24,14 @@ import com.opera.core.systems.testing.Resources;
 import com.opera.core.systems.testing.drivers.TestDriver;
 import com.opera.core.systems.testing.drivers.TestDriverBuilder;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.openqa.selenium.By;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.openqa.selenium.TimeoutException;
-import org.openqa.selenium.WebDriverException;
-
 
 import java.io.File;
 import java.io.IOException;
@@ -46,16 +43,15 @@ import static org.junit.Assert.fail;
 @NoDriver
 public class OperaExtensionsTest extends OperaDriverTestCase {
 
-  private static Resources resources;
-
-  public OperaSettings settings;
+  private Resources resources;
+  private OperaSettings settings;
 
   @Rule
   public TemporaryFolder temporaryFolder = new TemporaryFolder();
 
   @Before
   public void prepare() throws IOException {
-    OperaExtensionsTest.resources = new Resources();
+    resources = new Resources();
   }
 
   /**
@@ -97,13 +93,12 @@ public class OperaExtensionsTest extends OperaDriverTestCase {
     try {
       // The dummy extension sets a HTML attribute on the <html> element.
       By by = By.cssSelector("html[isoexinstalled759='yes']");
-      (new WebDriverWait(driver, 2))
-        .until(ExpectedConditions.presenceOfElementLocated(by));
+      (new WebDriverWait(driver, 2)).until(ExpectedConditions.presenceOfElementLocated(by));
     } catch (TimeoutException e) {
-        try{Thread.sleep(1000000);}catch(Exception ex){}
       fail("Custom opera extension not detected!");
     }
 
     driver.quit();
   }
+
 }
