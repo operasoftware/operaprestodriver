@@ -16,6 +16,7 @@ limitations under the License.
 
 package com.opera.core.systems;
 
+import com.opera.core.systems.testing.Ignore;
 import com.opera.core.systems.testing.OperaDriverTestCase;
 
 import org.junit.Before;
@@ -64,6 +65,7 @@ public class FramesTest extends OperaDriverTestCase {
   }
 
   @Test
+  @Ignore("Not implemented")
   public void switchToFrameAndExecuteScript() {
     driver.switchTo().defaultContent();
     driver.switchTo().frame("a");
