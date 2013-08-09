@@ -8,6 +8,11 @@
 .idea/runConfigurations/GenericTest.xml
 .idea/scopes/scope_settings.xml
 .idea/workspace.xml
+.tags
+GPATH
+GRTAGS
+GSYMS
+GTAGS
 VERSION
 bin/*
 doc/
@@ -20,4 +25,3 @@ test-output/
 test-reports/
 test/com/opera/core/systems/GenericTest.java
 test_apc.txt
-.tags
