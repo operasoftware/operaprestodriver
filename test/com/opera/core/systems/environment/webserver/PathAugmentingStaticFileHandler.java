@@ -21,8 +21,6 @@ package com.opera.core.systems.environment.webserver;
 import org.webbitserver.HttpControl;
 import org.webbitserver.HttpRequest;
 import org.webbitserver.HttpResponse;
-import org.webbitserver.handler.AbstractResourceHandler;
-import org.webbitserver.handler.StaticFileHandler;
 
 import java.io.File;
 import java.io.IOException;
@@ -37,13 +35,13 @@ public class PathAugmentingStaticFileHandler extends ImprovedStaticFileHandler {
   }
 
   @Override
-  protected AbstractResourceHandler.IOWorker createIOWorker(HttpRequest request,
-                                                            HttpResponse response,
-                                                            HttpControl control) {
+  protected FileWorker createIOWorker(HttpRequest request,
+                                      HttpResponse response,
+                                      HttpControl control) {
     return new PathAugmentingFileWorker(request, response, control);
   }
 
-  protected class PathAugmentingFileWorker extends StaticFileHandler.FileWorker {
+  protected class PathAugmentingFileWorker extends FileWorker {
     private PathAugmentingFileWorker(HttpRequest request,
                                      HttpResponse response,
                                      HttpControl control) {

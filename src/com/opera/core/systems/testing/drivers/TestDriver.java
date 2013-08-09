@@ -27,10 +27,10 @@ import com.opera.core.systems.runner.OperaRunner;
 import com.opera.core.systems.scope.ScopeServices;
 import com.opera.core.systems.scope.exceptions.ResponseNotReceivedException;
 
-import org.openqa.selenium.HasInputDevices;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.interactions.HasInputDevices;
 
 import java.util.List;
 

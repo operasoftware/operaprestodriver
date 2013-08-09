@@ -22,15 +22,13 @@ import com.opera.core.systems.testing.OperaDriverTestCase;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
-import org.openqa.selenium.Keyboard;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.interactions.Keyboard;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
-import static org.openqa.selenium.Platform.MAC;
 import static com.opera.core.systems.OperaProduct.MOBILE;
 
 public class DriverKeysTest extends OperaDriverTestCase {

@@ -17,10 +17,10 @@ limitations under the License.
 package com.opera.core.systems;
 
 import org.openqa.selenium.Capabilities;
-import org.openqa.selenium.HasTouchScreen;
 import org.openqa.selenium.Rotatable;
 import org.openqa.selenium.ScreenOrientation;
-import org.openqa.selenium.TouchScreen;
+import org.openqa.selenium.interactions.HasTouchScreen;
+import org.openqa.selenium.interactions.TouchScreen;
 
 /**
  * A WebDriver implementation for Opera Mobile.  It relies heavily on {@link OperaDriver} and

@@ -97,14 +97,16 @@ public class OperaKeyboard implements Keyboard {
     exec.key(string);
   }
 
-  public void pressKey(Keys keyToPress) {
-    modifiers.add(keyToPress);
-    exec.key(OperaKey.get(keyToPress).toScope(), false);
+  public void pressKey(CharSequence keyToPress) {
+    Keys key = Keys.getKeyFromUnicode(keyToPress.charAt(0));
+    modifiers.add(key);
+    exec.key(OperaKey.get(key).toScope(), false);
   }
 
-  public void releaseKey(Keys keyToRelease) {
-    modifiers.remove(keyToRelease);
-    exec.key(OperaKey.get(keyToRelease).toScope(), true);
+  public void releaseKey(CharSequence keyToRelease) {
+    Keys key = Keys.getKeyFromUnicode(keyToRelease.charAt(0));
+    modifiers.remove(key);
+    exec.key(OperaKey.get(key).toScope(), true);
   }
 
 }

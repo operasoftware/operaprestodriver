@@ -16,7 +16,7 @@ limitations under the License.
 
 package com.opera.core.systems;
 
-import org.openqa.selenium.TouchScreen;
+import org.openqa.selenium.interactions.TouchScreen;
 import org.openqa.selenium.interactions.internal.Coordinates;
 
 // TODO(andreastt): This will eventually use the new bream-input service

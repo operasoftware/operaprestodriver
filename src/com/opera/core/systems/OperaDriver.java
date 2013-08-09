@@ -52,8 +52,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.Cookie;
 import org.openqa.selenium.InvalidSelectorException;
-import org.openqa.selenium.Keyboard;
-import org.openqa.selenium.Mouse;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.NoSuchFrameException;
 import org.openqa.selenium.NoSuchWindowException;
@@ -560,9 +558,9 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot, Run
 
     if (id != null) {
       return elements;
-    } else {
-      throw new NoSuchElementException("Cannot find element(s) with " + by);
     }
+
+    throw new NoSuchElementException("Cannot find element(s) with " + by);
   }
 
   /**
@@ -968,11 +966,15 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot, Run
     throw new UnsupportedOperationException();
   }
 
-  public Keyboard getKeyboard() {
+  // RemoteWebDriver still uses old Keyboard interface:
+  // https://code.google.com/p/selenium/source/detail?r=b29e19aeee0737fc42dbb68196bb1f16aadbedf9
+  public org.openqa.selenium.Keyboard getKeyboard() {
     return keyboard;
   }
 
-  public Mouse getMouse() {
+  // RemoteWebDriver still uses old Mouse interface:
+  // https://code.google.com/p/selenium/source/detail?r=b29e19aeee0737fc42dbb68196bb1f16aadbedf9
+  public org.openqa.selenium.Mouse getMouse() {
     return mouse;
   }
 
@@ -987,6 +989,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot, Run
    *
    * @return list of frames
    */
+  @SuppressWarnings("unused")
   public List<String> listFrames() {
     return debugger.listFramePaths();
   }
@@ -1090,6 +1093,7 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot, Run
    * @deprecated
    */
   @Deprecated
+  @SuppressWarnings("unused")
   public void operaAction(String using, String... params) {
     exec.action(using, params);
   }
