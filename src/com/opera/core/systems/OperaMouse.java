@@ -19,9 +19,9 @@ package com.opera.core.systems;
 import com.opera.core.systems.scope.internal.OperaMouseKeys;
 import com.opera.core.systems.scope.services.Exec;
 
-import org.openqa.selenium.Mouse;
 import org.openqa.selenium.Point;
 import org.openqa.selenium.interactions.InvalidCoordinatesException;
+import org.openqa.selenium.interactions.Mouse;
 import org.openqa.selenium.interactions.internal.Coordinates;
 
 public class OperaMouse implements Mouse {

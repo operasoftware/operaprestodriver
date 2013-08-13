@@ -62,6 +62,8 @@ import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Keyboard;
+import org.openqa.selenium.interactions.Mouse;
 import org.openqa.selenium.internal.WrapsElement;
 import org.openqa.selenium.logging.Logs;
 import org.openqa.selenium.remote.DesiredCapabilities;
@@ -968,13 +970,13 @@ public class OperaDriver extends RemoteWebDriver implements TakesScreenshot, Run
 
   // RemoteWebDriver still uses old Keyboard interface:
   // https://code.google.com/p/selenium/source/detail?r=b29e19aeee0737fc42dbb68196bb1f16aadbedf9
-  public org.openqa.selenium.Keyboard getKeyboard() {
+  public Keyboard getKeyboard() {
     return keyboard;
   }
 
   // RemoteWebDriver still uses old Mouse interface:
   // https://code.google.com/p/selenium/source/detail?r=b29e19aeee0737fc42dbb68196bb1f16aadbedf9
-  public org.openqa.selenium.Mouse getMouse() {
+  public Mouse getMouse() {
     return mouse;
   }
 

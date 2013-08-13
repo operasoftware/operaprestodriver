@@ -23,8 +23,8 @@ import com.opera.core.systems.internal.input.KeyboardModifiers;
 import com.opera.core.systems.scope.internal.OperaKey;
 import com.opera.core.systems.scope.services.Exec;
 
-import org.openqa.selenium.Keyboard;
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.interactions.Keyboard;
 
 import java.util.List;
 
