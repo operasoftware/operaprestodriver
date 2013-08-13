@@ -1,3 +1,30 @@
+v1.5      (2013-08-13)
+
+  [API CHANGES]
+
+  * Update to Selenium API 2.35.  (andreastt)
+
+
+v1.4      (2013-08-09)
+
+  [API CHANGES]
+
+  * Update to Selenium API 2.34.  (andreastt)
+
+  [NEW FEATURES]
+
+  * Support for installing extensions through OperaProfile using the
+    new OperaProfile#addExtension(java.io.File) API.  (robwu)
+
+  [BUG FIXES]
+
+  * Remove unnecessary casts.  (andreastt)
+
+  [TESTS]
+
+  * Test for switchTo().frame + executeScript breaks context.  (robwu)
+
+
 v1.3      (2013-05-15)
 
   [API CHANGES]
