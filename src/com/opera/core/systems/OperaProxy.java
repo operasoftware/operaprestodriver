@@ -305,15 +305,23 @@ public class OperaProxy {
         }
         setUsePAC(false);
 
-        // TODO(andreastt): HTTPS proxy
-        // TODO(andreastt): SOCKS proxy
-
         if (proxy.getHttpProxy() != null) {
           setHttpProxy(proxy.getHttpProxy());
         }
         if (proxy.getFtpProxy() != null) {
           setFtpProxy(proxy.getFtpProxy());
         }
+        if (proxy.getSslProxy() != null) {
+          setHttpsProxy(proxy.getSslProxy());
+        }
+        if (proxy.getSocksProxy() != null) {
+          setSocksProxy(proxy.getSocksProxy());
+          if ((proxy.getSocksUsername() != null) && (proxy.getSocksPassword() != null)) {
+            setSocksUsername(proxy.getSocksUsername());
+            setSocksPassword(proxy.getSocksPassword());
+          }
+        }
+        // setup of bypass proxy addresses (noProxy) is not implemented
 
         break;
 
