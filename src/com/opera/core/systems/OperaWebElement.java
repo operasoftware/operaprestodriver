@@ -178,7 +178,7 @@ public class OperaWebElement extends RemoteWebElement implements CapturesScreen 
 
   public boolean isDisplayed() {
     assertElementNotStale();
-    return (Boolean) evaluateMethod("return " + OperaAtom.IS_DISPLAYED + "(locator)");
+    return (Boolean) evaluateMethod("return " + OperaAtom.IS_DISPLAYED + "(locator, /*ignoreOpacity=*/true)");
   }
 
   public boolean isEnabled() {
