@@ -24,7 +24,7 @@ correctly without tedious manual testing routines.
 
 OperaDriver is usable out of the box from the [official Selenium
 packages](https://code.google.com/p/selenium/downloads/list), and can
-be used no extra setup on any modern version of Opera.
+be used no extra setup on any Presto-based version of Opera.
 
 
 Documentation
@@ -44,8 +44,7 @@ To get set up, first
 [download](http://code.google.com/p/selenium/downloads/list) either
 the *selenium-server-standalone* or *selenium-server* package and make
 sure you have a fairly recent version of Opera installed in a default
-location.  Finally, all you need to do is create a new
-[`OperaDriver`](http://operasoftware.github.com/operadriver/docs/com/opera/core/systems/OperaDriver.html)
+location.  Finally, all you need to do is create a new `OperaDriver`
 instance:
 
     WebDriver driver = new OperaDriver();
@@ -255,8 +254,10 @@ Supported Opera versions
 ### Desktop
 
 This is a list of the official Opera Desktop versions supported by OperaDriver.
-Please note that this Java version of OperaDriver will not support future
-Chromium-based Operas.
+Please note that this Java version of OperaDriver does not support
+Chromium-based Opera v15+ — for that, refer to [the OperaChromiumDriver
+project](https://github.com/operasoftware/operachromiumdriver).
+
 
 | __Version__ | __Workaround/tweaks needed__                                                                                                |
 |-------------|-----------------------------------------------------------------------------------------------------------------------------|
@@ -284,11 +285,10 @@ Chromium-based Operas.
 ### Mobile
 
 Please use one of the
-[prepared builds](http://dev.opera.com/articles/view/introducing-mobile-browser-automation/)
+[prepared builds](https://dev.opera.com/articles/mobile-browser-automation/)
 to use OperaDriver with Opera Mobile.
 
 OperaDriver does not support the Chromium-based Opera Mobile builds.
-
 
 #### Wrapper script
 
@@ -306,7 +306,7 @@ capability `opera.binary` to its absolute path:
 Development
 -----------
 
-While OperaDriver is officially maintained by Opera, it is [free
+While OperaPrestoDriver is officially maintained by Opera, it is [free
 software](http://fsfe.org/about/basics/freesoftware.en.html) and would
 only be possible thanks to [many volunteer
 contributors](https://github.com/operasoftware/operadriver/blob/master/AUTHORS).
@@ -319,7 +319,7 @@ follow the [Google Coding
 Standards](http://code.google.com/p/java-coding-standards/wiki/Introduction)
 and have test cases attached to them if you introduce a new feature.
 
-Much of OperaDriver's code is shared with the other WebDriver
+Much of OperaPrestoDriver’s code is shared with the other WebDriver
 implementations, and for working on this code base you should also
 familiarize yourself with the [Selenium code
 base](http://code.google.com/p/selenium/source/checkout).  There are
@@ -330,7 +330,7 @@ Selenium](http://code.google.com/p/selenium/wiki/DeveloperTips).
 Support
 -------
 
-If you have problems or questions regarding OperaDriver or Selenium,
+If you have problems or questions regarding OperaPrestoDriver or Selenium,
 there are many channels in which you can seek help:
 
 * __IRC__: The *#selenium* channel on the *irc.freenode.org* network
