@@ -4,12 +4,13 @@ OperaDriver
 OperaDriver is a vendor-supported
 [WebDriver](http://dvcs.w3.org/hg/webdriver/raw-file/tip/webdriver-spec.html)
 implementation developed by [Opera](http://opera.com/) and volunteers
-that enable programmatic automation of different Presto-based Opera
-products.  It is a part of the
+that enable programmatic automation of Presto-based Opera
+products (i.e. v12 and older). It is a part of the
 [Selenium](http://code.google.com/p/selenium) project.
 
-__Note that OperaDriver is only compatible with Presto-based Operas up
-until 12.16.  Blink-based Operas (15 and onwards) are not supported.__
+__Note that OperaPrestoDriver is only compatible with Presto-based Operas
+up until v12.16. For Blink-based Operas (v15 and onwards), refer to [the
+OperaChromiumDriver project](https://github.com/operasoftware/operachromiumdriver).__
 
 WebDriver is a general purpose library for automating web browsers.
 It can drive the browser running various tests on your web pages, just
