@@ -366,7 +366,7 @@ public class OperaWebElement extends RemoteWebElement implements CapturesScreen 
         exec.screenWatcher(canvas, timeout, includeImage, hashes);
 
     if (includeImage && reply.getPng() != null) {
-      FileChannel stream;
+      FileChannel stream = null;
 
       try {
         stream = new FileOutputStream(filename).getChannel();
@@ -374,6 +374,14 @@ public class OperaWebElement extends RemoteWebElement implements CapturesScreen 
         stream.close();
       } catch (IOException e) {
         throw new WebDriverException("Failed to write file: " + e.getMessage(), e);
+      } finally {
+        if (stream != null) {
+          try {
+            stream.close();
+          } catch (IOException e) {
+            throw new WebDriverException("Failed to close file channel stream: " + e.getMessage(), e);
+          }
+        }
       }
     }
 
